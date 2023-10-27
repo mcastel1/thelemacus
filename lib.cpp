@@ -14902,7 +14902,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_modify_sight = new wxBitmapButton(
                                              panel,
                                              wxID_ANY,
-                                             wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_pencil_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)),
+                                             Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button),
                                              wxDefaultPosition,
                                              wxGetApp().size_small_button,
                                              wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -14974,7 +14974,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_delete_sight = new wxBitmapButton(
                                              panel,
                                              wxID_ANY,
-                                             wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_trash_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)),
+                                             Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button),
                                              wxDefaultPosition,
                                              wxGetApp().size_small_button,
                                              wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -14986,7 +14986,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_delete_position = new wxBitmapButton(
                                                 panel,
                                                 wxID_ANY,
-                                                wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_trash_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)),
+                                                Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button),
                                                 wxDefaultPosition,
                                                 wxGetApp().size_small_button,
                                                 wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -14995,7 +14995,14 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_delete_position->Enable(false);
     
     //button to delete a route
-    button_delete_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_trash_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_delete_route = new wxBitmapButton(
+                                             panel,
+                                             wxID_ANY,
+                                             Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button),
+                                             wxDefaultPosition,
+                                             wxGetApp().size_small_button,
+                                             wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                             );
     button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute<wxCommandEvent>, this);
     button_delete_route->Enable(false);
     
@@ -15135,7 +15142,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_compute_position = new wxBitmapButton(
                                                  panel,
                                                  wxID_ANY,
-                                                 wxBitmap(    RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_position_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_large_button - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                                 Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value))),
                                                  wxDefaultPosition,
                                                  wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)),
                                                  wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -15147,7 +15154,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_add_sight = new wxBitmapButton(
                                           panel,
                                           wxID_ANY,
-                                          wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_plus_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)),
+                                          Bitmap(wxGetApp().path_file_plus_icon, wxGetApp().size_small_button),
                                           wxDefaultPosition,
                                           (wxGetApp().size_small_button),
                                           wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -16069,7 +16076,7 @@ bool SightFrame::is_ok(void){
     image_time_interval_status->SetBitmap(
                                           time_interval_ok ?
                                           wxNullBitmap :
-                                          wxBitmap( RescaleProportionally(wxBitmap(((wxGetApp().path_file_warning_icon).value), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button), wxBITMAP_SCREEN_DEPTH)
+                                          Bitmap(wxGetApp().path_file_warning_icon, wxGetApp().size_small_button)
                                           );
     
     return(

@@ -9529,6 +9529,13 @@ int Color::ToRGB(void){
     
 }
 
+
+//constructs a Bitmap object by setting no arguments
+Bitmap::Bitmap() : wxBitmap(){
+    
+}
+
+
 ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     stringstream s;

@@ -75,6 +75,14 @@ public:
     
 };
 
+//a class for Bitmap images
+class Bitmap: public wxBitmap{
+    
+public:
+    Bitmap();
+    
+};
+
 class String{
     
 public:

@@ -132,12 +132,15 @@ template <class T> void Reset(T* control){
 }
 
 //rescales *image to fit into size, by including the border given by length_border_over_length_screen, and by keeping its proprtions, and writes the result into *image
-void RescaleProportionally(wxImage* image, const wxSize size){
+wxImage RescaleProportionally(wxImage image, const wxSize size){
     
     wxSize original_size, size_minus_margins;
+    wxImage output;
     Double scaling_factor;
     
-    original_size = (image->GetSize());
+    output = image;
+    
+    original_size = (output.GetSize());
     size_minus_margins = wxSize((size.GetWidth()) - ((wxGetApp().border).value), (size.GetHeight()) - ((wxGetApp().border).value));
     
     scaling_factor.set(String(""),
@@ -150,11 +153,13 @@ void RescaleProportionally(wxImage* image, const wxSize size){
                        String("")
                        );
     
-    image->Rescale(
+    output.Rescale(
                    ((int)(((double)(original_size.GetWidth()))*(scaling_factor.value))),
                    ((int)(((double)(original_size.GetHeight()))*(scaling_factor.value))),
                    wxIMAGE_QUALITY_HIGH
                    );
+    
+    return output;
     
 }
 
@@ -9593,9 +9598,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize);
     
     //image for button_list
-    wxBitmap my_bitmap_list = wxBitmap(wxString(((wxGetApp().path_file_list_icon).value)), wxBITMAP_TYPE_PNG);
-    wxImage my_image_list = my_bitmap_list.ConvertToImage();
-    RescaleProportionally(&my_image_list, (wxGetApp().size_large_button) - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)));
+    ;
     
     
     //navigation buttons
@@ -9606,7 +9609,14 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     
     //button to show list
-    button_show_list = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_list), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_show_list = new wxBitmapButton(
+                                          panel,
+                                          wxID_ANY,
+                                          wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_list_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), (wxGetApp().size_large_button) - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                          wxDefaultPosition,
+                                          wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)),
+                                          wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                          );
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
     
     

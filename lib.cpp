@@ -14920,12 +14920,26 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_modify_position->Enable(false);
     
     //button to transport a position
-    button_transport_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_transport), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_transport_position = new wxBitmapButton(
+                                                   panel,
+                                                   wxID_ANY,
+                                                   wxBitmap(wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_arrow_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button))),
+                                                   wxDefaultPosition,
+                                                   wxGetApp().size_small_button,
+                                                   wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                   );
     button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
     button_transport_position->Enable(false);
 
     //button to transport a route
-    button_transport_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_transport), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_transport_route = new wxBitmapButton(
+                                                panel,
+                                                wxID_ANY,
+                                                wxBitmap(wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_arrow_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button))),
+                                                wxDefaultPosition,
+                                                wxGetApp().size_small_button,
+                                                wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                );
     button_transport_route->Bind(wxEVT_BUTTON, &ListFrame::OnTransportRoute, this);
     button_transport_route->Enable(false);
 

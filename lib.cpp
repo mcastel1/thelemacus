@@ -13567,10 +13567,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //message and image shown if the time entered by the user is not covered by ephemerides' data. Both are set to empty at the construction of SightFrame
     text_time_interval_not_ok = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     
-    image_time_interval_not_ok = new wxImage();
-    (*image_time_interval_not_ok) = (wxBitmap(((wxGetApp().path_file_warning_icon).value), wxBITMAP_TYPE_PNG).ConvertToImage());
-    RescaleProportionally(image_time_interval_not_ok, wxGetApp().size_small_button);
-    
     
     image_time_interval_status = new wxStaticBitmap(panel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize);
     
@@ -15994,7 +15990,11 @@ bool SightFrame::is_ok(void){
     
     text_time_interval_not_ok->SetLabel(wxString(time_interval_ok ? "" : "Time not enclosed in ephemerides' data!"));
     
-    image_time_interval_status->SetBitmap(time_interval_ok ? wxNullBitmap : wxBitmap(*image_time_interval_not_ok, wxBITMAP_SCREEN_DEPTH));
+    image_time_interval_status->SetBitmap(
+                                          time_interval_ok ?
+                                          wxNullBitmap :
+                                          wxBitmap( RescaleProportionally(wxBitmap(((wxGetApp().path_file_warning_icon).value), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button), wxBITMAP_SCREEN_DEPTH)
+                                          );
     
     return(
            (body->is_ok()) &&

@@ -84,12 +84,12 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event){
         //if the dark mode of the operating system has changed
         
         if((settings->GetAppearance().IsDark())){
-            //the system is in dark mode
-            
+            //the system is in dark mode -> set image path equal to the /Dark folder
+
             image_directory = run_directory.append(String("Contents/Resources/Images/Dark/"));
             
         }else{
-            //the system is in light mode
+            //the system is in light mode ->  set image path equal to the /Light folder
             
             image_directory = run_directory.append(String("Contents/Resources/Images/Light/"));
 

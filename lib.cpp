@@ -14883,13 +14883,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_box_sight = new wxStaticBoxSizer(wxVERTICAL, panel, "Sights");
     sizer_box_position = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
     sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
-    
-    
-    //image for button_map
-    wxBitmap my_bitmap_position = wxBitmap(wxString(((wxGetApp().path_file_position_icon).value)), wxBITMAP_TYPE_PNG);
-    wxImage my_image_position = my_bitmap_position.ConvertToImage();
 
-    RescaleProportionally(&my_image_position, wxGetApp().size_large_button - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)));
 
     //image for button_modify_sight
     wxBitmap my_bitmap = wxBitmap(wxString(((wxGetApp().path_file_pencil_icon).value)), wxBITMAP_TYPE_PNG);
@@ -15086,7 +15080,14 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowChart<wxCommandEvent>, &wxGetApp());
     
     //button to compute astronomical position
-    button_compute_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_position), wxDefaultPosition, wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)), wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_compute_position = new wxBitmapButton(
+                                                 panel,
+                                                 wxID_ANY,
+                                                 wxBitmap(    RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_position_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_large_button - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                                 wxDefaultPosition,
+                                                 wxSize(((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_large_button_over_width_screen).value)),
+                                                 wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                 );
     button_compute_position->Bind(wxEVT_BUTTON, &ListFrame::ComputePosition<wxCommandEvent>, this);
 
     

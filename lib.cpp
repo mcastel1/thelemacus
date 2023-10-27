@@ -14883,12 +14883,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_box_sight = new wxStaticBoxSizer(wxVERTICAL, panel, "Sights");
     sizer_box_position = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
     sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
-
-    //image for button_delete_sight
-    wxBitmap my_bitmap_delete_sight = wxBitmap(wxString(((wxGetApp().path_file_trash_icon).value)), wxBITMAP_TYPE_PNG);
-    wxImage my_image_delete = my_bitmap_delete_sight.ConvertToImage();
-    RescaleProportionally(&my_image_delete, wxGetApp().size_small_button);
-    
     
     //button to modify a sight
     button_modify_sight = new wxBitmapButton(
@@ -14935,17 +14929,31 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_modify_route->Enable(false);
     
     //button to delete a sight
-    button_delete_sight = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_delete_sight = new wxBitmapButton(
+                                             panel,
+                                             wxID_ANY,
+                                             wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_trash_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)),
+                                             wxDefaultPosition,
+                                             wxGetApp().size_small_button,
+                                             wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                             );
     button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight<wxCommandEvent>, this);
     button_delete_sight->Enable(false);
     
     //button to delete a position
-    button_delete_position = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_delete_position = new wxBitmapButton(
+                                                panel,
+                                                wxID_ANY,
+                                                wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_trash_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)),
+                                                wxDefaultPosition,
+                                                wxGetApp().size_small_button,
+                                                wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                );
     button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeletePosition<wxCommandEvent>, this);
     button_delete_position->Enable(false);
     
     //button to delete a route
-    button_delete_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(my_image_delete), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
+    button_delete_route = new wxBitmapButton(panel, wxID_ANY, wxBitmap(RescaleProportionally(wxBitmap(wxString(((wxGetApp().path_file_trash_icon).value)), wxBITMAP_TYPE_PNG).ConvertToImage(), wxGetApp().size_small_button)), wxDefaultPosition, wxGetApp().size_small_button, wxBU_EXACTFIT | wxSIMPLE_BORDER);
     button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute<wxCommandEvent>, this);
     button_delete_route->Enable(false);
     

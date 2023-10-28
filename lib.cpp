@@ -16705,13 +16705,17 @@ OnChangeSelectionInListControl::OnChangeSelectionInListControl(ListControl* call
 //check whether there are some selected items in ListControl *caller, and enables/disables disableable_buttons accordingly
 template<class T>void OnChangeSelectionInListControl::operator()(T& event){
     
-     int i;
+    long i;
+    //a pointer to the ListFrame
+    ListFrame* list_frame_pointer;
+    
+    list_frame_pointer = ((ListFrame*)(caller->GetParent()->GetParent()));
     
     for(i=0; i<(caller->disableable_buttons).size(); i++){
         (caller->disableable_buttons)[i]->Enable(caller->GetSelectedItemCount() != 0);
     }
     
-    i = caller->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    i = (caller->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
     
     if(i != -1){
         //one item is selected
@@ -16721,12 +16725,8 @@ template<class T>void OnChangeSelectionInListControl::operator()(T& event){
             case 's':{
                 //type.value = "sight"->caller is listcontrol_sights
                 
-                if((((((ListFrame*)(caller->GetParent()))->data->sight_list)[i]).related_route.value) != -1){
-                    //the selected Sight has a related Route -> enable the button to disconnect the selected Sight
-    
-                    ((ListFrame*)(caller->GetParent()))->button_disconnect_sight->Enable(true);
-                    
-                }
+                //the selected Sight has/does not have a related Route -> enable/disable the button to disconnect the selected Sight
+                list_frame_pointer->button_disconnect_sight->Enable(((((list_frame_pointer->data->sight_list)[i]).related_route.value) != -1));
                 
                 break;
                 
@@ -16735,12 +16735,8 @@ template<class T>void OnChangeSelectionInListControl::operator()(T& event){
             case 'r':{
                 //type.value = "route" -> caller is listcontrol_routes
                 
-                if((((((ListFrame*)(caller->GetParent()))->data->route_list)[i]).related_sight.value) != -1){
-                    //the selected Route has a related Sight -> enable the button to disconnect the selected Route
-    
-                    ((ListFrame*)(caller->GetParent()))->button_disconnect_route->Enable(true);
-                    
-                }                
+                //the selected Route has/does not have a related Sight -> enable/disable the button to disconnect the selected Route
+                list_frame_pointer->button_disconnect_route->Enable(((((list_frame_pointer->data->route_list)[i]).related_sight.value) != -1));
                 
                 break;
                 
@@ -16748,7 +16744,31 @@ template<class T>void OnChangeSelectionInListControl::operator()(T& event){
                 
         }
         
- 
+    }else{
+        //no item is selected -> disable the button to disconnect
+        
+        switch((type.value)[0]){
+                
+            case 's':{
+                //type.value = "sight"->caller is listcontrol_sights
+                
+                list_frame_pointer->button_disconnect_sight->Enable(false);
+                
+                break;
+                
+            }
+                
+            case 'r':{
+                //type.value = "route" -> caller is listcontrol_routes
+                
+                list_frame_pointer->button_disconnect_route->Enable(false);
+                
+                break;
+                
+            }
+                
+        }
+        
         
     }
     

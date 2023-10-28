@@ -15041,7 +15041,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     disableable_buttons.push_back(button_delete_sight);
     
     listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
-    on_change_selection_in_listcontrol_sights = new OnChangeSelectionInListControl(listcontrol_sights);
+    on_change_selection_in_listcontrol_sights = new OnChangeSelectionInListControl(listcontrol_sights, String("sight"));
     //SetColor(listcontrol_sights);
     //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_sights);
@@ -15077,7 +15077,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     
     listcontrol_positions = new ListControl(panel, disableable_buttons,  wxDefaultPosition, wxDefaultSize);
-    on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl(listcontrol_positions);
+    on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl(listcontrol_positions, String("position"));
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_positions);
     listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_positions);
     //    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
@@ -15098,7 +15098,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     disableable_buttons.push_back(button_delete_route);
     
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
-    on_change_selection_in_listcontrol_routes = new OnChangeSelectionInListControl(listcontrol_routes);
+    on_change_selection_in_listcontrol_routes = new OnChangeSelectionInListControl(listcontrol_routes, String("route"));
     //SetColor(listcontrol_routes);
     //    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
     listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_routes);
@@ -16695,9 +16695,10 @@ template<class T>void CheckRouteType::operator()(T& event){
 }
 
 
-OnChangeSelectionInListControl::OnChangeSelectionInListControl(ListControl* caller_in){
+OnChangeSelectionInListControl::OnChangeSelectionInListControl(ListControl* caller_in, String type_in){
     
     caller = caller_in;
+    type = type_in;
     
 }
 

@@ -235,14 +235,14 @@ void File::count_lines(String prefix){
     file_number_of_lines.set_name((wxGetApp().data_directory).append(String("output.dat")));
     file_number_of_lines.remove(new_prefix);
     
-//    cout << "****** I am about to run wc on " << (name.value) << "...";
+    //    cout << "****** I am about to run wc on " << (name.value) << "...";
     
     command.str("");
     //here I add ' because name.value and ((file_number_of_lines.name).value) may contain special characters
     command << "wc -l \"" << (name.value)  << "\" >> \"" << ((file_number_of_lines.name).value) << "\"";
     system(command.str().c_str());
     
-//    cout << "... done\n";
+    //    cout << "... done\n";
     
     file_number_of_lines.open(String("in"), new_prefix);
     
@@ -252,7 +252,7 @@ void File::count_lines(String prefix){
     
     file_number_of_lines.close(new_prefix);
     file_number_of_lines.remove(new_prefix);
-
+    
     cout << prefix.value << "Number of lines in file " << (name.value) << " = " << number_of_lines << "\n";
     
     
@@ -1531,23 +1531,23 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     listcontrol->SetItem(i, j++, wxString(lambda.to_string(String("EW"), (display_precision.value), true)));
     
     //update label column
-//    if(label != String("")){
-//        //the label in *this is not empty -> I write it int listcontrol
-//
+    //    if(label != String("")){
+    //        //the label in *this is not empty -> I write it int listcontrol
+    //
     listcontrol->SetItem(i, j++, wxString(label.value));
-        
-//    }else{
-//        //the label in *this is empty -> I write as label in listcontrol  and in *this the current date and time
-//
-//        Time now;
-//
-//        now.set_current(String(""));
-//
-//        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
-//        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
-//
-//    }
-//
+    
+    //    }else{
+    //        //the label in *this is empty -> I write as label in listcontrol  and in *this the current date and time
+    //
+    //        Time now;
+    //
+    //        now.set_current(String(""));
+    //
+    //        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
+    //        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
+    //
+    //    }
+    //
 }
 
 
@@ -1842,12 +1842,12 @@ void Route::Draw(unsigned int n_points, Color color, int width, DrawPanel* draw_
                 for(i=0; i<n_points; i++){
                     
                     
-                    //to avoid rounding problems, I set r exactly to s[j] (s[j+1]) for i=0 (i=n_points-2) and use the linear formula in between 
+                    //to avoid rounding problems, I set r exactly to s[j] (s[j+1]) for i=0 (i=n_points-2) and use the linear formula in between
                     if(i==0){
                         r = s[j];
                     }else{
                         if(i<n_points-1){
-                             r = Length(((s[j]).value) + (((s[j+1])-(s[j])).value)*((double)i)/((double)(n_points-1)));
+                            r = Length(((s[j]).value) + (((s[j+1])-(s[j])).value)*((double)i)/((double)(n_points-1)));
                         }else{
                             r = s[j+1];
                         }
@@ -2277,23 +2277,23 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     }
     
     //update label column
-//    if(label != String("")){
-//        //the label in *this is not empty -> I write it int listcontrol
-        
-        listcontrol->SetItem(i, j++, wxString(label.value));
-        
-//    }else{
-//        //the label in *this is empty -> I write as label in listcontrol the current date and time
-//
-//        Time now;
-//
-//        now.set_current(String(""));
-//
-//        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
-//        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
-//
-//    }
-
+    //    if(label != String("")){
+    //        //the label in *this is not empty -> I write it int listcontrol
+    
+    listcontrol->SetItem(i, j++, wxString(label.value));
+    
+    //    }else{
+    //        //the label in *this is empty -> I write as label in listcontrol the current date and time
+    //
+    //        Time now;
+    //
+    //        now.set_current(String(""));
+    //
+    //        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
+    //        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
+    //
+    //    }
+    
     
     if((related_sight.value) == -1){
         //if the route is not connected to a sight, I leave the column field empty
@@ -2529,7 +2529,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle> *t, [[maybe_unuse
                                 ((*t)[1]).set(String(""), 0.0, new_prefix);
                                 
                             }else{
-                                //the circles intersect: here you should compute t: method intersection called in the condition intersection(circle, true, t, new_prefix) == 0 has written in t the intersection angles 
+                                //the circles intersect: here you should compute t: method intersection called in the condition intersection(circle, true, t, new_prefix) == 0 has written in t the intersection angles
                                 
                                 
                                 
@@ -2951,13 +2951,13 @@ int Route::intersection(Route route, bool write_t, vector<Angle> *t, [[maybe_unu
                 if(type == String("l")){
                     
                     cout << new_prefix.value << RED << "Route is a loxodrome, I cannot compute intersection for loxodromes!\n" << RESET;
-
+                    
                     return -1;
                     
                 }else{
-
+                    
                     cout << new_prefix.value << RED << "Route type is invalid, I cannot compute intersection!\n" << RESET;
-
+                    
                     return -1;
                     
                 }
@@ -3031,7 +3031,7 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-
+    
     if(!((type == String("c")) && (route.type == String("c")))){
         
         cout << prefix.value << "Routes are not circles of equal altitude: this code only computes intersects between circles of equal altitudes\n";
@@ -3043,7 +3043,7 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
         Length r, s;
         
         check = true;
-
+        
         theta.set(String("angle between the two GPs"), acos(cos((reference_position .phi))*cos((route.reference_position).phi)*cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) + sin((reference_position.phi))*sin((route.reference_position).phi)), prefix);
         
         if((abs(((*this).omega.value)-(route.omega.value)) < (theta.value)) && ((theta.value) < ((*this).omega.value)+(route.omega.value))){
@@ -3109,10 +3109,10 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
         
         if(check){return 1;}
         else{return 0;}
-
+        
     }
     
-
+    
 }
 
 //append s to *this and returns the result
@@ -4953,23 +4953,23 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol){
     listcontrol->SetItem(i, j++, wxString((TAI_minus_UTC).to_string((display_precision.value), false)));
     
     //update label column
-//    if(label != String("")){
-//        //the label in *this is not empty -> I write it int listcontrol
-        
-        listcontrol->SetItem(i, j++, wxString(label.value));
-        
-//    }else{
-//        //the label in *this is empty -> I write as label in listcontrol the current date and time
-//
-//        Time now;
-//
-//        now.set_current(String(""));
-//
-//        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
-//        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
-//
-//    }
-
+    //    if(label != String("")){
+    //        //the label in *this is not empty -> I write it int listcontrol
+    
+    listcontrol->SetItem(i, j++, wxString(label.value));
+    
+    //    }else{
+    //        //the label in *this is empty -> I write as label in listcontrol the current date and time
+    //
+    //        Time now;
+    //
+    //        now.set_current(String(""));
+    //
+    //        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
+    //        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
+    //
+    //    }
+    
     if((related_route.value) == -1){
         //if the sight is not connected to a route, I leave the column field empty
         
@@ -5540,7 +5540,7 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix){
     //read n_points_plot_coastline_* from file_init
     n_points_plot_coastline_Mercator.read_from_file(String("number of points coastline Mercator"), file_init, true, new_prefix);
     n_points_plot_coastline_3D.read_from_file(String("number of points coastline 3D"), file_init, true, new_prefix);
- 
+    
     file_init.close(prefix);
     
 }
@@ -5566,7 +5566,7 @@ int Data::compute_position(String prefix){
         
         vector< vector<Position> > p;
         vector<Position> q, q_temp(2);
-
+        
         cout << prefix.value << "Computing crossings between routes :\n";
         for(i=0; i<crossing_route_list.size(); i++){
             cout << new_prefix.value << "\t" << (crossing_route_list[i]).label.value << "\n";
@@ -5712,7 +5712,7 @@ int Data::compute_position(String prefix){
                 return 0;
                 
             }
-
+            
         }else{
             
             cout << prefix.value << RED << "I could not compute the position because there are no valid crossings!\n" << RESET;
@@ -5726,7 +5726,7 @@ int Data::compute_position(String prefix){
         
     }else{
         //there are not enough Routes in crossing_route_list -> I cannot compute the crossing
-
+        
         cout << prefix.value << RED << "I could not compute the position because there are no valid Routes!\n" << RESET;
         return(-1);
         
@@ -7554,17 +7554,17 @@ void Date::print(String name, String prefix, ostream& ostr){
 
 //this function sets (*this) to the current UTC date and time
 void Time::set_current(void){
-
+    
     date.set_current();
     chrono.set_current((wxGetApp()).time_zone);
-        
+    
 }
 
 //this function sets (*this) to the current UTC date
 void Date::set_current(void){
     
     (wxGetApp().local_time) = (boost::posix_time::second_clock::local_time());
-
+    
     Y = (wxGetApp().local_time).date().year();
     M = (wxGetApp().local_time).date().month().as_number();
     D = (wxGetApp().local_time).date().day();
@@ -7574,13 +7574,13 @@ void Date::set_current(void){
 //this function sets (*this) to the current UTC time +- time_zone
 void Chrono::set_current(Int time_zone){
     
-
+    
     (wxGetApp().local_time) = (boost::posix_time::second_clock::local_time());
     
     
     h = ((unsigned int)((wxGetApp().local_time).time_of_day().hours()));
     m = ((unsigned int)((wxGetApp().local_time).time_of_day().minutes()));
-    s = (wxGetApp().local_time).time_of_day().seconds();    
+    s = (wxGetApp().local_time).time_of_day().seconds();
     
 }
 
@@ -7936,7 +7936,7 @@ void ChartFrame::GetCoastLineData_3D(void){
             if(check){
                 
                 
-         
+                
                 //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
                 n = ((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
                 
@@ -7949,7 +7949,7 @@ void ChartFrame::GetCoastLineData_3D(void){
                 //compute cos
                 gsl_blas_ddot(r, s, &cos);
                 if(cos == 0.0){cos = 1.0;}
-
+                
                 //I plot every 'every' data points. I include the factor 1/cos in such a way that the farther the point (i,j) from circle_observer.reference_position, the less data points I plot, because plotting more would be pointless. In this way, points (i,j) which are close to circle_observer.reference_position (which are nearly parallel to the plane of the screen and thus well visible) are plotted with a lot of points, and the other way around
                 every = (unsigned long)(((double)n)/((double)(((parent->data)->n_points_plot_coastline_3D).value))*((double)n_points_grid)/cos);
                 if(every == 0){every = 1;}
@@ -7965,16 +7965,16 @@ void ChartFrame::GetCoastLineData_3D(void){
                     }
                     
                 }
-            
+                
             }
             
         }
         
     }
-
+    
     gsl_vector_free(r);
     gsl_vector_free(s);
-
+    
 }
 
 
@@ -9105,7 +9105,7 @@ void DrawPanel::Draw_Mercator(void){
         memory_dc.DrawEllipse((parent->p_coastline_draw)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
     memory_dc.SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
-
+    
     
     TabulateRoutes();
     
@@ -9445,7 +9445,7 @@ void DrawPanel::Draw_3D(void){
         memory_dc.DrawEllipse((parent->p_coastline_draw)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
     memory_dc.SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
-
+    
     
     TabulateRoutes();
     
@@ -9552,10 +9552,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     wxCommandEvent dummy_event;
     
     parent = parent_input;
-        
+    
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-
+    
     //read lambda_min, ...., phi_max from file_init
     lambda_min.read_from_file(String("minimal longitude"), (wxGetApp().path_file_init), new_prefix);
     lambda_max.read_from_file(String("maximal longitude"), (wxGetApp().path_file_init), new_prefix);
@@ -11196,7 +11196,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             //when only a fraction of the Routes is Drawn, this will create a problem ---
             ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
             //when only a fraction of the Routes is Drawn, this will create a problem ---
-
+            
             if((((((parent->parent)->data)->route_list)[i]).related_sight).value != -1){
                 ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[i]).related_sight).value, wxGetApp().background_color);
             }
@@ -11258,12 +11258,12 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
         
         if((parent->parent->highlighted_route) == -1){
             //no Route is highlighted -> in listcontrol_sights and listcontrol_routes go back to showing the first respective items
-          
+            
             parent->parent->listcontrol_routes->EnsureVisible(0);
             parent->parent->listcontrol_sights->EnsureVisible(0);
             
         }
-                
+        
         
         //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
         for(((parent->parent)->highlighted_position) = -1, i=0; i<(((parent->parent)->data)->position_list).size(); i++){
@@ -11279,7 +11279,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                 
                 ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                 parent->parent->listcontrol_positions->EnsureVisible(i);
-
+                
                 
                 
             }else{
@@ -11287,7 +11287,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                 
                 ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxGetApp().background_color);
                 parent->parent->listcontrol_positions->EnsureVisible(0);
-
+                
             }
             
         }
@@ -11370,8 +11370,8 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent &event){
                 if((!((y_max+delta_y < (p_floor_max.y)) && (y_min+delta_y > (p_ceil_min.y))))){
                     //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset y_min, y_max to their original values
                     
-//                    x_min = x_min_start_drag;
-//                    x_max = x_max_start_drag;
+                    //                    x_min = x_min_start_drag;
+                    //                    x_max = x_max_start_drag;
                     y_min = y_min_start_drag;
                     y_max = y_max_start_drag;
                     
@@ -11611,7 +11611,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
                     PaintNow();
                     
                     parent->UpdateSlider();
-                    //the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen 
+                    //the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen
                     wxGetApp().ShowChart(event);
                     
                 }else{
@@ -11661,7 +11661,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent &event){
                 parent->UpdateSlider();
                 //the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen
                 wxGetApp().ShowChart(event);
-
+                
                 
             }
             
@@ -11705,9 +11705,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent &event){
                         if(((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value) != -1){
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
                             
-                            (parent->parent)->Disconnect(
-                                                         (((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value
-                                                         );
+                            (parent->parent->i_object_to_disconnect) = ((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value);
+                            
+                            (parent->parent)->Disconnect(event);
                             
                         }
                         
@@ -12290,7 +12290,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     //save data->route_list into route_list_saved
     (f->route_list_saved).resize(((f->data)->route_list).size());
     copy(((f->data)->route_list).begin(), ((f->data)->route_list).end(), (f->route_list_saved).begin());
-
+    
     //print an info message
     (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), (wxGetApp().path_file_warning_icon));
     
@@ -12313,10 +12313,10 @@ void ExistingRoute::operator()(wxCommandEvent& event){
     ((f->data)->route_list).resize((f->route_list_for_transport).size());
     copy((f->route_list_for_transport).begin(), (f->route_list_for_transport).end(), ((f->data)->route_list).begin());
     f->DrawAll();
-
+    
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
-
+    
     
     event.Skip(true);
     
@@ -12325,7 +12325,7 @@ void ExistingRoute::operator()(wxCommandEvent& event){
 void AllRoutes::operator()(wxCommandEvent& event){
     
     unsigned int j;
-
+    
     //there need to be at list two routes of type "c" to compute crossings. Here I include all routes of type "c" into crossing_route_list by writing their index into crossing_route_list
     for(((f->data)->crossing_route_list).clear(), j=0; j<((f->data)->route_list).size(); j++){
         
@@ -12336,18 +12336,18 @@ void AllRoutes::operator()(wxCommandEvent& event){
     }
     
     f->OnComputePosition();
-     
+    
     event.Skip(true);
-
+    
 }
 
 void SomeRoutes::operator()(wxCommandEvent& event){
     
     
     int i;
- 
+    
     (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position and press enter when done"), (wxGetApp().path_file_warning_icon));
-
+    
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
     for((f->crossing_route_list_temp.clear()), i=0; i<((f->data)->route_list).size(); i++){
         
@@ -12361,13 +12361,13 @@ void SomeRoutes::operator()(wxCommandEvent& event){
     (f->selecting_route_for_position) = true;
     (f->listcontrol_routes)->set(f->crossing_route_list_temp, false);
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_position in such a way that when the user will select an item in listcontrol, I perform the computation of the position
-//    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_position));
-
-
+    //    (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_position));
+    
+    
     
     
     event.Skip(true);
-
+    
 }
 
 
@@ -12437,14 +12437,14 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event){
         //remove the route from the non-GUI object data
         //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_route_and_related_sight. If no, it calls the functor delete_route.
         
-//        QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
-//                                                                                                              parent->delete_route_and_related_sight, String("Yes"),
-//                                                                                                              parent->delete_route, String("No"),
-//                                                                                                              "",
-//                                                                                                              "Do you want to remove the sight related to this route?",
-//                                                                                                              wxDefaultPosition,
-//                                                                                                              wxDefaultSize,
-//                                                                                                              String(""));
+        //        QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
+        //                                                                                                              parent->delete_route_and_related_sight, String("Yes"),
+        //                                                                                                              parent->delete_route, String("No"),
+        //                                                                                                              "",
+        //                                                                                                              "Do you want to remove the sight related to this route?",
+        //                                                                                                              wxDefaultPosition,
+        //                                                                                                              wxDefaultSize,
+        //                                                                                                              String(""));
         
         PrintQuestion<ListFrame, DeleteRoute, DeleteRoute>* print_question;
         
@@ -12452,7 +12452,7 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event){
         
         print_question->SetAndCall(NULL, String("The route that you are about to remove is related to a sight"), String("Do you want to remove the sight related to this route?"), String("Yes"), String("No"));
         
-//        question_frame->Show(true);
+        //        question_frame->Show(true);
         
     }else{
         //if not, I simply delete teh route
@@ -12481,16 +12481,16 @@ void AskRemoveRelatedRoute::operator()(wxCommandEvent& event){
         //if the sight which I am about to remove is related to a Route, I ask the user whether he wants to remove the related Route too by showing  question_frame
         
         PrintQuestion<ListFrame, DeleteRoute, DeleteSight >* print_question;
-      
+        
         ((parent->delete_route_and_related_sight)->i_route_to_remove) = (((((parent->data)->sight_list)[i_sight_to_remove]).related_route).value);
         
         //remove the route from the non-GUI object data
         //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_sight_and_related_sight. If no, it calls the functor delete_sight.
-     
+        
         print_question = new PrintQuestion<ListFrame, DeleteRoute, DeleteSight >(parent, parent->delete_route_and_related_sight, parent->delete_sight);
-
+        
         print_question->SetAndCall(NULL, String(""), String("Do you want to remove the route related to this sight??"), String("Yes"), String("No"));
-
+        
         
     }else{
         //if not, I simply delete teh sight
@@ -12621,14 +12621,14 @@ void DeletePosition::operator()(wxCommandEvent& event){
 
 //set *this to the current time
 void String::set_to_current_time(void){
-            
+    
     Time now;
     
     now.set_current();
     //I write in the non-GUI object *this
     
     set(String("String set to current time"), String(now.to_string(data_precision.value, true)), String(""));
-        
+    
 }
 
 
@@ -13198,18 +13198,18 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
             //the transported object is a Route
             
             //the id of the Route that will be transported has been written in i_object_to_transport before, so I do not overwrite i_object_to_transport
-  
+            
             
         }
         
-          
+        
         //tranport the Route
         ((((f->data)->route_list)[ (f->i_object_to_transport) ]).reference_position).transport(
-                                                                                          
-                                                                                          ((f->data)->route_list)[i_transporting_route],
-                                                                                          String("")
-                                                                                          
-                                                                                          );
+                                                                                               
+                                                                                               ((f->data)->route_list)[i_transporting_route],
+                                                                                               String("")
+                                                                                               
+                                                                                               );
         
         //the new label which will be given to the transported Route
         new_label = ((((f->data)->route_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->data)->route_list)[i_transporting_route]).label));
@@ -13222,7 +13222,8 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         if(transported_object == String("sight")){
             //I am transporting a Route related to a Sight -> disconnect the Route from the sight
             
-            f->Disconnect(((((f->data)->route_list)[(f->i_object_to_transport)]).related_sight).value);
+            (f->i_object_to_disconnect) = (((((f->data)->route_list)[(f->i_object_to_transport)]).related_sight).value);
+            f->Disconnect(event);
             
         }
         
@@ -13239,11 +13240,11 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
         //tranport the Position
         (((f->data)->position_list)[ (f->i_object_to_transport) ]).transport(
-                                                                        
-                                                                        ((f->data)->route_list)[i_transporting_route],
-                                                                        String("")
-                                                                        
-                                                                        );
+                                                                             
+                                                                             ((f->data)->route_list)[i_transporting_route],
+                                                                             String("")
+                                                                             
+                                                                             );
         
         //change the label of Position #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
         ((((f->data)->position_list)[(f->i_object_to_transport)]).label) = ((((f->data)->position_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->data)->route_list)[i_transporting_route]).label));
@@ -13257,7 +13258,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     (f->listcontrol_routes)->set<Route>((f->data)->route_list, false);
     f->Resize();
     f->DrawAll();
-
+    
     //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_change_selection_in_listcontrol_routes));
     (f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_DESELECTED, *(f->on_change_selection_in_listcontrol_routes));
@@ -13278,12 +13279,12 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     UnsetIdling<ListFrame>* unset_idling;
     
     unset_idling = new UnsetIdling<ListFrame>(f);
-
+    
     //the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
     i_transporting_route = ((f->listcontrol_routes)->GetItemCount())-1;
     //given that the transporting Route has no meaningful starting position, I write "" in its position field
     (f->listcontrol_routes)->SetItem(i_transporting_route, 2, wxString(""), -1);
-
+    
     if((transported_object == String("sight")) || (transported_object == String("route"))){
         
         if(transported_object == String("sight")){
@@ -13295,27 +13296,28 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
             
             
         }
-       
+        
         
         ((((f->data)->route_list)[i_transporting_route]).reference_position) = ((((f->data)->route_list)[ (f->i_object_to_transport) ]).reference_position);
         
         //tranport the Route
         ((((f->data)->route_list)[ (f->i_object_to_transport) ]).reference_position).transport(
-                                                                                          
-                                                                                          ((f->data)->route_list)[i_transporting_route],
-                                                                                          String("")
-                                                                                          
-                                                                                          );
+                                                                                               
+                                                                                               ((f->data)->route_list)[i_transporting_route],
+                                                                                               String("")
+                                                                                               
+                                                                                               );
         
         if((transported_object == String("sight")) || (((((f->data)->route_list)[(f->i_object_to_transport)]).related_sight.value) != -1)){
             //I am either transporting a Sight, or a Route related to a Sight -> I disconnect Route and respective Sight
             
             
             //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
-            f->Disconnect(((((f->data)->route_list)[(f->i_object_to_transport)]).related_sight).value);
+            (f->i_object_to_disconnect) = (((((f->data)->route_list)[(f->i_object_to_transport)]).related_sight).value);
+            f->Disconnect(event);
             
         }
-            
+        
         //change the label of Route #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
         ((((f->data)->route_list)[(f->i_object_to_transport)]).label) = ((((f->data)->route_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->data)->route_list)[i_transporting_route]).label));
         
@@ -13336,7 +13338,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         (f->i_object_to_transport) =  ((int)(f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
         
         ((((f->data)->route_list)[i_transporting_route]).reference_position) = (((f->data)->position_list)[ (f->i_object_to_transport) ]);
-    
+        
         
         //tranport the Position
         (((f->data)->position_list)[ (f->i_object_to_transport) ]).transport(((f->data)->route_list)[i_transporting_route], String(""));
@@ -13713,7 +13715,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
         cout << prefix.value << RED << "Cannot read sight!\n" << RESET;
     }
     
-
+    
     
     if(sight_in != NULL){set();}
     
@@ -14023,7 +14025,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
         omega->Enable(false);
         
     }else{
-
+        
         start_phi->Enable(for_transport);
         start_lambda->Enable(for_transport);
         
@@ -14171,7 +14173,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
         (label->set_to_current_time)(dummy);
         
     }
-
+    
     
     //writes the values of the GUI fields in the non-GUI fields
     get(event);
@@ -14213,7 +14215,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
         (label->set_to_current_time)(dummy);
         
     }
-
+    
     
     //writes the values of the GUI fields in the non-GUI fields
     get(event);
@@ -14234,7 +14236,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
             //the Route that I am moidifying is related to a Sight
             
             //because I am modifying and thus altering the Route, I disconnect it from its related sight
-            parent->Disconnect((route->related_sight).value);
+            (parent->i_object_to_disconnect) = ((route->related_sight).value);
+            parent->Disconnect(event);
             
         }
         
@@ -14369,7 +14372,7 @@ void RouteFrame::set(void){
         start_lambda->set();
         start_phi->Enable(!for_transport);
         start_lambda->Enable(!for_transport);
-
+        
         l->set();
         
         GP_phi->Enable(false);
@@ -14512,7 +14515,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
                              ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
                              ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
                       );
-
+    
     
     
     sizer_v->Add(text, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
@@ -14777,7 +14780,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     //read color list from file_init
     s.read_from_file(String("color list"), (wxGetApp().path_file_init), String(""));
-
+    
     //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
     (wxGetApp().color_list).resize(count((s.value).begin(), (s.value).end(), '('));
     
@@ -14860,7 +14863,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
     on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
-
+    
     //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
     delete_sight = new DeleteSight(this, Answer('n', String("")));
     //initialize delete_sight_and_related_route, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
@@ -14889,7 +14892,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_listcontrol_routes_plus_buttons = new wxBoxSizer(wxHORIZONTAL);
     sizer_big_buttons = new wxBoxSizer(wxVERTICAL);
-
+    
     sizer_buttons_sight = new wxBoxSizer(wxHORIZONTAL);
     sizer_buttons_position = new wxBoxSizer(wxHORIZONTAL);
     sizer_buttons_route = new wxBoxSizer(wxHORIZONTAL);
@@ -14920,18 +14923,18 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
                                                 );
     button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
     button_transport_sight->Enable(false);
-
+    
     //button to disconnect a sight
     button_disconnect_sight = new wxBitmapButton(
-                                                panel,
-                                                wxID_ANY,
-                                                Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button),
-                                                wxDefaultPosition, wxGetApp().size_small_button,
-                                                wxBU_EXACTFIT | wxSIMPLE_BORDER
-                                                );
+                                                 panel,
+                                                 wxID_ANY,
+                                                 Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button),
+                                                 wxDefaultPosition, wxGetApp().size_small_button,
+                                                 wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                 );
     button_disconnect_sight->Bind(wxEVT_BUTTON, &ListFrame::OnDisconnectSight, this);
     button_disconnect_sight->Enable(false);
-
+    
     
     //button to modify a position
     button_modify_position = new wxBitmapButton(
@@ -14956,7 +14959,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
                                                    );
     button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
     button_transport_position->Enable(false);
-
+    
     //button to transport a route
     button_transport_route = new wxBitmapButton(
                                                 panel,
@@ -14968,7 +14971,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
                                                 );
     button_transport_route->Bind(wxEVT_BUTTON, &ListFrame::OnTransportRoute, this);
     button_transport_route->Enable(false);
-
+    
     
     //button to modify a route
     button_modify_route = new wxBitmapButton(
@@ -15114,16 +15117,16 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     
     sizer_box_route->Add(listcontrol_routes, 0,  wxALL, ((wxGetApp().border).value));
-
+    
     //bing everything to KeyDown method, so when a key is pressed on *this, panel, listcontrol... then KeyDown is called
     Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
     panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
     listcontrol_sights->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
     listcontrol_routes->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
     listcontrol_positions->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
-
     
-
+    
+    
     
     //here I read a sample sight from file default_open_directory/sample_sight.nav, store into sight and set all the fields in this to the data in sight with set()
     //
@@ -15161,7 +15164,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
                                                  wxBU_EXACTFIT | wxSIMPLE_BORDER
                                                  );
     button_compute_position->Bind(wxEVT_BUTTON, &ListFrame::ComputePosition<wxCommandEvent>, this);
-
+    
     
     //button to add a sight
     button_add_sight = new wxBitmapButton(
@@ -15233,13 +15236,13 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //here I set the flag '0' to avoid button_show_map from being stretched
     sizer_big_buttons->Add(button_compute_position, 0, wxALL, ((wxGetApp().border).value));
     sizer_big_buttons->Add(button_show_map, 0, wxALL, ((wxGetApp().border).value));
-//    sizer_listcontrol_routes_plus_buttons->Add(sizer_big_buttons, 0);
+    //    sizer_listcontrol_routes_plus_buttons->Add(sizer_big_buttons, 0);
     //by adding the flag wxEXPAND here, I let the StretchSpacer in sizer_listcontrol_routes_plus_buttons expand, and thus I flush to the right button_show_map
     sizer_v->Add(sizer_listcontrol_routes_plus_buttons, 0,  wxALL | wxEXPAND, ((wxGetApp().border).value));
     sizer_h->Add(sizer_v, 0, wxALIGN_BOTTOM, ((wxGetApp().border).value));
     sizer_h->Add(sizer_big_buttons, 0, wxALIGN_TOP, ((wxGetApp().border).value));
     sizer_all->Add(sizer_h, 0,  wxALL | wxEXPAND, ((wxGetApp().border).value));
-
+    
     Maximize(panel);
     SetSizerAndFit(sizer_all);
     
@@ -15329,22 +15332,22 @@ void ListFrame::OnComputePosition(void){
     out = (data->compute_position(String("\t")));
     
     if(out == -1){
-            //the position could not be computed
-            
-            print_error_message->SetAndCall(NULL, String("I could not compute the astronomical position!"), String("No routes yield valid crossings"), (wxGetApp().path_file_error_icon));
-            
+        //the position could not be computed
+        
+        print_error_message->SetAndCall(NULL, String("I could not compute the astronomical position!"), String("No routes yield valid crossings"), (wxGetApp().path_file_error_icon));
+        
     }else{
         
         if(out == 0){
             //the position couldbe computed by using only some crossings/Routes
-              
+            
             print_error_message->SetAndCall(NULL, String("Not all routes could be used to compute the astronomical position!"), String("Rome routes yield invalid crossings"), (wxGetApp().path_file_warning_icon));
-     
+            
         }
         
         set();
         DrawAll();
-      
+        
     }
     
 }
@@ -15391,7 +15394,7 @@ void ListFrame::set(){
     listcontrol_routes->set(data->route_list, false);
     
     Resize();
-//    Maximize(panel);
+    //    Maximize(panel);
     
 }
 
@@ -15532,7 +15535,6 @@ template<class E> void ListFrame::OnModifyRoute(E& event){
         s << "Route #" << item+1;
         
         RouteFrame *route_frame = new RouteFrame(this, &((data->route_list)[item]), false, item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
-        //        (route_frame->button_ok)->Bind(wxEVT_BUTTON, &ListFrame::Disconnect, this);
         
         route_frame->Show(true);
         
@@ -15553,7 +15555,7 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event){
     i_object_to_transport = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
     //here set i_object_to_transport to the currently selected Route
-
+    
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
     print_question->SetAndCall(NULL, String("You want to transport a route"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
@@ -15570,12 +15572,12 @@ template<class E> void ListFrame::OnPressDeleteSight(E& event){
     
     //ask the user whether he/she really wants to remove the Sight: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_route. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
     PrintQuestion<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame> >* print_question;
-  
- 
+    
+    
     print_question = new PrintQuestion<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame> >(this, ask_remove_related_route, unset_idling);
-
+    
     print_question->SetAndCall(NULL, String(""), String("Do you really want to remove this sight?"), String("Yes"), String("No"));
-
+    
     
     event.Skip(true);
     
@@ -15590,9 +15592,9 @@ template<class E> void ListFrame::OnPressDeletePosition(E& event){
     PrintQuestion<ListFrame, DeletePosition, UnsetIdling<ListFrame> >* print_question;
     
     print_question = new PrintQuestion<ListFrame, DeletePosition,  UnsetIdling<ListFrame> >(this, delete_position, unset_idling);
-
+    
     print_question->SetAndCall(NULL, String(""), String("Do you really want to remove this position?"), String("Yes"), String("No"));
-
+    
     
     event.Skip(true);
     
@@ -15617,22 +15619,22 @@ template<class E> void ListFrame::OnPressDeleteRoute(E& event){
 }
 
 //disconnects sight i_sight from its related Route
-void ListFrame::Disconnect(int i_sight){
+template<class E> void ListFrame::Disconnect(E& event){
     
     int i_route;
     
-    i_route = (((data->sight_list)[i_sight]).related_route).value;
+    i_route = (((data->sight_list)[i_object_to_disconnect]).related_route).value;
     
     //disconnect route and sight
-    (((data->sight_list)[i_sight]).related_route).set(String(""), -1, String(""));
+    (((data->sight_list)[i_object_to_disconnect]).related_route).set(String(""), -1, String(""));
     (((data->route_list)[i_route]).related_sight).set(String(""), -1, String(""));
     
     //update the related wxListCtrls in ListFrame
-    ((data->sight_list)[i_sight]).update_wxListCtrl(i_sight, listcontrol_sights);
+    ((data->sight_list)[i_object_to_disconnect]).update_wxListCtrl(i_object_to_disconnect, listcontrol_sights);
     ((data->route_list)[i_route]).update_wxListCtrl(i_route, listcontrol_routes);
     
     //set the background color of the related sight to white
-    (listcontrol_sights)->SetItemBackgroundColour(i_sight, wxGetApp().background_color);
+    (listcontrol_sights)->SetItemBackgroundColour(i_object_to_disconnect, wxGetApp().background_color);
     
     //if an item is selected in listcontrol_sights, enable /disable button_transport_sight and button_disconnect_sight if the selected sight is related / unrelated to a Route
     if((listcontrol_sights->GetSelectedItemCount()) != 0){
@@ -15643,7 +15645,7 @@ void ListFrame::Disconnect(int i_sight){
         
         button_transport_sight->Enable(enable);
         button_disconnect_sight->Enable(enable);
-
+        
     }
     
     //print an info message
@@ -15651,6 +15653,8 @@ void ListFrame::Disconnect(int i_sight){
     
     //the Route has been disconnected from the sight -> a new Route which is not connected to any Sight is created -> the data of the file have been modified
     OnModifyFile();
+    
+    event.Skip(true);
     
 }
 
@@ -15660,8 +15664,8 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
     int i, j;
     
-//        cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
- 
+    //        cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
+    
     
     //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
     MousePositionOnListControl(listcontrol_sights, &highlighted_sight);
@@ -15924,7 +15928,7 @@ template<class E> void ListFrame::KeyDown(E& event){
     
     if(((event.GetKeyCode()) == WXK_DELETE) || ((event.GetKeyCode()) == WXK_BACK)){
         // the user pressed delete or backspace
-           
+        
         
         if((listcontrol_sights->HasFocus()) && ((listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)){
             //an item was selected in listcontrol_sights while listcontrol_sights has focus -> call OnPressDeleteSight
@@ -15932,7 +15936,7 @@ template<class E> void ListFrame::KeyDown(E& event){
             OnPressDeleteSight(event);
             
         }
-     
+        
         if((listcontrol_positions->HasFocus()) && ((listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)){
             //an item was selected in listcontrol_positions while listcontrol_positions has focus -> call OnPressDeleteposition
             
@@ -15946,8 +15950,8 @@ template<class E> void ListFrame::KeyDown(E& event){
             OnPressDeleteRoute(event);
             
         }
-     
-            
+        
+        
     }
     
     if((((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)) && selecting_route_for_position){
@@ -15962,7 +15966,7 @@ template<class E> void ListFrame::KeyDown(E& event){
             if(previous_item != -1){(data->crossing_route_list).push_back(crossing_route_list_temp[previous_item]);}
             
         }while(previous_item != -1);
-      
+        
         OnComputePosition();
         
     }
@@ -16753,7 +16757,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
         (label->set_to_current_time)(dummy);
         
     }
-
+    
     
     //writes the values of the GUI fields in the non-GUI fields
     get(event);
@@ -16773,17 +16777,17 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     }else{
         //if the constructor of SightFrame has been called with sight_in != NULL, then I am modifying an existing sight, and I reduce it and write the result in the related route, which already exists
         
-
+        
         if((sight->related_route.value) != -1){
             //sight has a related Route -> reduce sight and write the resulting Route into such related Route
-
+            
             sight->reduce(&((parent->data->route_list)[(sight->related_route).value]), String(""));
             
         }else{
             //sight has no related Route -> create a related Route and add it to listcontrol_routes
             
             ptrdiff_t sight_position;
-
+            
             sight_position = sight - (&((parent->data->sight_list)[0]));
             
             (parent->data->route_list).resize((parent->data->route_list).size()+1);
@@ -16792,8 +16796,8 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
             //I link the Sight to the Route, and the Route to the Sight
             (sight->related_route.value) = ((int)(parent->data->route_list).size())-1;
             ((((parent->data->route_list)[(parent->data->route_list).size()-1]).related_sight).value) = ((int)sight_position);
-          
-
+            
+            
         }
         
     }
@@ -18681,7 +18685,7 @@ void ListControl::GetSelectedItems(vector<long>* selected_items){
     do{
         item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
         if(item != -1){selected_items->push_back(item);}
-         
+        
     }while(item != -1);
     
     

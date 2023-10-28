@@ -12265,14 +12265,13 @@ void DeleteSight::operator()(wxCommandEvent& event){
     (f->listcontrol_sights)->set((f->data)->sight_list, false);
     (f->listcontrol_routes)->set((f->data)->route_list, false);
     
-    //given that I called set in listcontrol_sights, no item is selected in listcontrol_sights, I disable the modify_, transport_ and delete_sight buttons
-    (f->listcontrol_sights)->EnableButtons(false);
-    
-    if(remove_related_route == Answer('y', String(""))){
+    //given that I called set in listcontrol_sights, no item is selected in listcontrol_sights, I call:
+    (*(f->on_change_selection_in_listcontrol_sights))(event);
+      
+      if(remove_related_route == Answer('y', String(""))){
         
-        //given that I called set for listcontrol_routes, no item is selected in listcontrol_routes -> I disable the modify_, transport_ and delete_route buttons
-        (f->listcontrol_routes)->EnableButtons(false);
-        
+        //given that I called set for listcontrol_routes, no item is selected in listcontrol_routes -> I call:
+          (*(f->on_change_selection_in_listcontrol_routes))(event);
     }
     
     f->Resize();
@@ -12565,9 +12564,8 @@ void DeleteRoute::operator()(wxCommandEvent& event){
         
         //        (f->listcontrol_sights)->DeleteItem(i_related_sight);
         
-        //given that after one item is deleted in listcontrol_sights, no item is selected in listcontrol_sights, I disable the modify_, transport_ and delete_sight buttons
-        (f->listcontrol_sights)->EnableButtons(false);
-        
+        //given that after one item is deleted in listcontrol_sights, now no item is selected in listcontrol_sights, I call:
+        (*(f->on_change_selection_in_listcontrol_sights))(event);
         
         
     }
@@ -12578,8 +12576,8 @@ void DeleteRoute::operator()(wxCommandEvent& event){
     (f->listcontrol_sights)->set((f->data)->sight_list, false);
     (f->listcontrol_routes)->set((f->data)->route_list, false);
     
-    //given that I called set in listcontrol_routes, no item is selected in listcontrol_routes, I disable the modify_, transport_ and delete_route buttons
-    (f->listcontrol_routes)->EnableButtons(false);
+    //given that I called set in listcontrol_routes, now no item is selected in listcontrol_routes, I call:
+    (*(f->on_change_selection_in_listcontrol_routes))(event);
     f->Resize();
     //given that a Route has been removed, I re-draw everything
     f->DrawAll();
@@ -12607,8 +12605,8 @@ void DeletePosition::operator()(wxCommandEvent& event){
         (f->data)->remove_position(((unsigned int)i), String(""));
         (f->listcontrol_positions)->set((f->data)->position_list, false);
         
-        //given that I called set in listcontrol_positions, no item is selected in listcontrol_positions, I disable the modify_, transport_ and delete_position buttons
-        (f->listcontrol_positions)->EnableButtons(false);
+        //given that I called set in listcontrol_positions, now no item is selected in listcontrol_positions-> I call:
+        (*(f->on_change_selection_in_listcontrol_positions))(event);
         f->Resize();
         f->OnModifyFile();
         
@@ -14187,8 +14185,8 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     
     (parent->listcontrol_positions)->set((parent->data)->position_list, false);
     
-    //given that I have reset the content of listcontrol_positions, no items will be selected in this ListControl -> I disable its disableable buttons
-    (parent->listcontrol_positions)->EnableButtons(false);
+    //given that I have reset the content of listcontrol_positions, now no items are selected in this ListControl -> I call:
+    (*(f->on_change_selection_in_listcontrol_position))(event);
     
     (*(parent->unset_idling))();
     parent->Resize();
@@ -14260,9 +14258,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     (parent->listcontrol_positions)->set((parent->data)->position_list, true);
     (parent->listcontrol_routes)->set((parent->data)->route_list, false);
     
-    //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
-    (parent->listcontrol_sights)->EnableButtons(false);
-    (parent->listcontrol_routes)->EnableButtons(false);
+    //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
+    (*((f->listcontrol_sights)->on_change_selection_in_listcontrol_sigths))(event);
+    (*((f->listcontrol_routes)->on_change_selection_in_listcontrol_routes))(event);
     
     (*(parent->unset_idling))();
     parent->Resize();
@@ -16890,9 +16888,10 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     //I call listcontrol_routes->set with true because I want to keep the selection in listcontrol_routes
     (parent->listcontrol_routes)->set((parent->data)->route_list, true);
     
-    //given that I have reset the content of listcontrol_sights and listcontrol_routes, no items will be selected in these ListControls -> I disable their disableable buttons
-    (parent->listcontrol_sights)->EnableButtons(false);
-    (parent->listcontrol_routes)->EnableButtons(false);
+    //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
+    (*((parent->listcontrol_sights)->on_change_selection_in_listcontrol_sights))(event);
+    (*((parent->listcontrol_routes)->on_change_selection_in_listcontrol_routes))(event);
+    
     
     (*(parent->unset_idling))();
     parent->Resize();

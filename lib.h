@@ -1306,8 +1306,10 @@ class OnChangeSelectionInListControl{
 public:
     
     ListControl* caller;
+    //the type of listcontrol: "sight" if caller = listcontrol_sights, "position" if caller = listcontrol_positions, "route" if caller = listcontrol_routes
+    String type;
     
-    OnChangeSelectionInListControl(ListControl*);
+    OnChangeSelectionInListControl(ListControl*, String);
     template<class T> void operator()(T&);
         
 };

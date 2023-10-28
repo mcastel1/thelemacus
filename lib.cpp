@@ -15046,8 +15046,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_sights);
-    //    listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlSights), this);
-    
+
     i=0;
     
     listcontrol_sights->PushBackColumn(wxString("Number"));
@@ -16705,12 +16704,24 @@ OnChangeSelectionInListControl::OnChangeSelectionInListControl(ListControl* call
 //check whether there are some selected items in ListControl *caller, and enables/disables disableable_buttons accordingly
 template<class T>void OnChangeSelectionInListControl::operator()(T& event){
     
-    unsigned int i;
+     int i;
     
     for(i=0; i<(caller->disableable_buttons).size(); i++){
         (caller->disableable_buttons)[i]->Enable(caller->GetSelectedItemCount() != 0);
     }
     
+    i = caller->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    
+    if(i != -1){
+        //at least one item is selected
+        
+        if((((((ListFrame*)(caller->GetParent()))->data->sight_list)[i]).related_route.value) != -1){
+            //the selected item has a related Route
+            
+            
+        }
+        
+    }
     
     event.Skip(true);
     

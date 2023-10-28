@@ -117,3 +117,4 @@ name file pencil icon = pencil_icon.png
 name file trash icon = trash_icon.png
 name file arrow icon = arrow_icon.png
 name file position icon = position_icon.png
+name file disconnect icon = arrow_icon.png

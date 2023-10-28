@@ -350,7 +350,10 @@ bool MyApp::OnInit(){
     
     temp.read_from_file(String("name file arrow icon"), String(path_file_init), String(""));
     path_file_arrow_icon = image_directory.append(temp);
-    
+
+    temp.read_from_file(String("name file disconnect icon"), String(path_file_init), String(""));
+    path_file_disconnect_icon = image_directory.append(temp);
+
     
     data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
     display_precision.read_from_file(String("display precision"), String(path_file_init), String(""));

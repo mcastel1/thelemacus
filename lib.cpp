@@ -14920,6 +14920,18 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
                                                 );
     button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
     button_transport_sight->Enable(false);
+
+    //button to disconnect a sight
+    button_disconnect_sight = new wxBitmapButton(
+                                                panel,
+                                                wxID_ANY,
+                                                Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button),
+                                                wxDefaultPosition, wxGetApp().size_small_button,
+                                                wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                );
+    button_disconnect_sight->Bind(wxEVT_BUTTON, &ListFrame::OnDisconnectSight, this);
+    button_disconnect_sight->Enable(false);
+
     
     //button to modify a position
     button_modify_position = new wxBitmapButton(

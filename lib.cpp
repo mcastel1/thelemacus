@@ -15037,7 +15037,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_sight);
     disableable_buttons.push_back(button_transport_sight);
-    disableable_buttons.push_back(button_disconnect_sight);
+//    disableable_buttons.push_back(button_disconnect_sight);
     disableable_buttons.push_back(button_delete_sight);
     
     listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
@@ -15094,7 +15094,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_route);
     disableable_buttons.push_back(button_transport_route);
-    disableable_buttons.push_back(button_disconnect_route);
+//    disableable_buttons.push_back(button_disconnect_route);
     disableable_buttons.push_back(button_delete_route);
     
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
@@ -16714,13 +16714,41 @@ template<class T>void OnChangeSelectionInListControl::operator()(T& event){
     i = caller->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     
     if(i != -1){
-        //at least one item is selected
+        //one item is selected
         
-        if((((((ListFrame*)(caller->GetParent()))->data->sight_list)[i]).related_route.value) != -1){
-            //the selected item has a related Route
-            
-            
+        switch((type.value)[0]){
+                
+            case 's':{
+                //type.value = "sight"->caller is listcontrol_sights
+                
+                if((((((ListFrame*)(caller->GetParent()))->data->sight_list)[i]).related_route.value) != -1){
+                    //the selected Sight has a related Route -> enable the button to disconnect the selected Sight
+    
+                    ((ListFrame*)(caller->GetParent()))->button_disconnect_sight->Enable(true);
+                    
+                }
+                
+                break;
+                
+            }
+                
+            case 'r':{
+                //type.value = "route" -> caller is listcontrol_routes
+                
+                if((((((ListFrame*)(caller->GetParent()))->data->route_list)[i]).related_sight.value) != -1){
+                    //the selected Route has a related Sight -> enable the button to disconnect the selected Route
+    
+                    ((ListFrame*)(caller->GetParent()))->button_disconnect_route->Enable(true);
+                    
+                }                
+                
+                break;
+                
+            }
+                
         }
+        
+ 
         
     }
     

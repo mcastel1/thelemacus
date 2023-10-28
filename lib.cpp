@@ -14186,7 +14186,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event){
     (parent->listcontrol_positions)->set((parent->data)->position_list, false);
     
     //given that I have reset the content of listcontrol_positions, now no items are selected in this ListControl -> I call:
-    (*(f->on_change_selection_in_listcontrol_position))(event);
+    (*(parent->on_change_selection_in_listcontrol_positions))(event);
     
     (*(parent->unset_idling))();
     parent->Resize();
@@ -14259,8 +14259,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event){
     (parent->listcontrol_routes)->set((parent->data)->route_list, false);
     
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
-    (*((f->listcontrol_sights)->on_change_selection_in_listcontrol_sigths))(event);
-    (*((f->listcontrol_routes)->on_change_selection_in_listcontrol_routes))(event);
+    (*(parent->on_change_selection_in_listcontrol_sights))(event);
+    (*(parent->on_change_selection_in_listcontrol_routes))(event);
     
     (*(parent->unset_idling))();
     parent->Resize();
@@ -16889,8 +16889,8 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
     (parent->listcontrol_routes)->set((parent->data)->route_list, true);
     
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
-    (*((parent->listcontrol_sights)->on_change_selection_in_listcontrol_sights))(event);
-    (*((parent->listcontrol_routes)->on_change_selection_in_listcontrol_routes))(event);
+    (*(parent->on_change_selection_in_listcontrol_sights))(event);
+    (*(parent->on_change_selection_in_listcontrol_routes))(event);
     
     
     (*(parent->unset_idling))();

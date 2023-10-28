@@ -15023,6 +15023,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_sight);
     disableable_buttons.push_back(button_transport_sight);
+    disableable_buttons.push_back(button_disconnect_sight);
     disableable_buttons.push_back(button_delete_sight);
     
     listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
@@ -15201,6 +15202,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_buttons_sight->Add(button_add_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_modify_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_transport_sight, 0, wxALIGN_CENTER);
+    sizer_buttons_sight->Add(button_disconnect_sight, 0, wxALIGN_CENTER);
     sizer_buttons_sight->Add(button_delete_sight, 0, wxALIGN_CENTER);
     sizer_box_sight->Add(sizer_buttons_sight, 0, wxALIGN_LEFT | wxALL, ((wxGetApp().border).value));
     
@@ -15632,13 +15634,16 @@ void ListFrame::Disconnect(int i_sight){
     //set the background color of the related sight to white
     (listcontrol_sights)->SetItemBackgroundColour(i_sight, wxGetApp().background_color);
     
-    //if an item is selected in listcontrol_sights, enable /disable button_transport_sight if the selected sight is related / unrelated to a Route
+    //if an item is selected in listcontrol_sights, enable /disable button_transport_sight and button_disconnect_sight if the selected sight is related / unrelated to a Route
     if((listcontrol_sights->GetSelectedItemCount()) != 0){
         
-        button_transport_sight->Enable(
-                                       (((data->sight_list)[listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value != -1
-                                       );
+        bool enable;
         
+        enable = ((((data->sight_list)[listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value != -1);
+        
+        button_transport_sight->Enable(enable);
+        button_disconnect_sight->Enable(enable);
+
     }
     
     //print an info message

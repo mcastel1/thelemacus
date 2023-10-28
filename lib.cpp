@@ -14960,7 +14960,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
     button_transport_position->Enable(false);
     
-    //button to transport a route
+    //button to transport a Route
     button_transport_route = new wxBitmapButton(
                                                 panel,
                                                 wxID_ANY,
@@ -14972,6 +14972,17 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     button_transport_route->Bind(wxEVT_BUTTON, &ListFrame::OnTransportRoute, this);
     button_transport_route->Enable(false);
     
+    //button to disconect a Route
+    button_disconnect_route = new wxBitmapButton(
+                                                panel,
+                                                wxID_ANY,
+                                                Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button),
+                                                wxDefaultPosition,
+                                                wxGetApp().size_small_button,
+                                                wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                );
+    button_disconnect_route->Bind(wxEVT_BUTTON, &ListFrame::OnDisconnectRoute, this);
+    button_disconnect_route->Enable(false);
     
     //button to modify a route
     button_modify_route = new wxBitmapButton(
@@ -15084,6 +15095,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_route);
     disableable_buttons.push_back(button_transport_route);
+    disableable_buttons.push_back(button_disconnect_route);
     disableable_buttons.push_back(button_delete_route);
     
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
@@ -15218,6 +15230,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_buttons_route->Add(button_add_route, 0, wxALIGN_CENTER);
     sizer_buttons_route->Add(button_modify_route, 0, wxALIGN_CENTER);
     sizer_buttons_route->Add(button_transport_route, 0, wxALIGN_CENTER);
+    sizer_buttons_route->Add(button_disconnect_route, 0, wxALIGN_CENTER);
     sizer_buttons_route->Add(button_delete_route, 0, wxALIGN_CENTER);
     sizer_box_route->Add(sizer_buttons_route, 0, wxALIGN_LEFT | wxALL, ((wxGetApp().border).value));
     

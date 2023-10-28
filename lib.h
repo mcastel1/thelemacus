@@ -2165,25 +2165,26 @@ public:
 
     void GetAllCoastLineData(void);
     
-    void OnAddSight(wxCommandEvent& event);
+    void OnAddSight(wxCommandEvent&);
     template<class E> void OnModifySight(E&);
-    void OnTransportSight(wxCommandEvent& event);
+    void OnTransportSight(wxCommandEvent&);
+    void OnDisconnectSight(wxCommandEvent&);
     template<class E> void OnPressDeleteSight(E&);
     
     void OnAddPosition(wxCommandEvent& event);
     template<class E> void OnModifyPosition(E&);
-    void OnTransportPosition(wxCommandEvent& event);
+    void OnTransportPosition(wxCommandEvent&);
     template<class E> void OnPressDeletePosition(E&);
 
-    void OnAddRoute(wxCommandEvent& event);
-    void OnAddRouteForTransport(wxCommandEvent& event);
+    void OnAddRoute(wxCommandEvent&);
+    void OnAddRouteForTransport(wxCommandEvent&);
     template<class E> void OnModifyRoute(E&);
     void OnTransportRoute(wxCommandEvent&);
-    template<class E> void OnPressDeleteRoute(E& event);
+    template<class E> void OnPressDeleteRoute(E&);
     
     void Disconnect(int);
 
-    void OnAddChartFrame(wxCommandEvent& event);
+    void OnAddChartFrame(wxCommandEvent&);
     void OnCloseActiveChartFrame(wxCommandEvent&);
     void OnCloseAllChartFrames(wxCommandEvent&);
     void OnComputePosition(void);

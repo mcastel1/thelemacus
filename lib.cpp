@@ -15464,23 +15464,18 @@ void ListFrame::OnTransportSight(wxCommandEvent& event){
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
     print_question->SetAndCall(NULL, String("You want to transport a sight"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
     
-    //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
-    //    QuestionFrame<ExistingRoute, NewRoute>* question_frame = new QuestionFrame<ExistingRoute, NewRoute>(NULL,
-    //                                                                                                        existing_route,
-    //                                                                                                        String("Existing route"),
-    //                                                                                                        create_route, String("New route"),
-    //                                                                                                        "",
-    //                                                                                                        "With what route do you want to transport the sight?",
-    //                                                                                                        wxDefaultPosition,
-    //                                                                                                        wxDefaultSize,
-    //                                                                                                        String(""));
-    //    question_frame->Show(true);
-    
     OnModifyFile();
     
     event.Skip(true);
     
 }
+
+//this method is called when the useer wants to disconnect a Sight from its related Route
+void ListFrame::OnDisconnectSight(wxCommandEvent& event){
+    
+    
+}
+
 
 void ListFrame::OnTransportPosition(wxCommandEvent& event){
     

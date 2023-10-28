@@ -15484,6 +15484,14 @@ void ListFrame::OnDisconnectSight(wxCommandEvent& event){
   
 }
 
+//this method is called when the useer wants to disconnect a Route from its related Sight
+void ListFrame::OnDisconnectRoute(wxCommandEvent& event){
+    
+    //set i_object_to_disconnect to the currently selected Route in listcontrol_routes and call Disconnect to disconnect that Route from its related Sight
+    i_object_to_disconnect = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+    Disconnect(event);
+  
+}
 
 void ListFrame::OnTransportPosition(wxCommandEvent& event){
     

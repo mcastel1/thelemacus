@@ -2180,6 +2180,7 @@ public:
     void OnAddRouteForTransport(wxCommandEvent&);
     template<class E> void OnModifyRoute(E&);
     void OnTransportRoute(wxCommandEvent&);
+    void OnDisconnectRoute(wxCommandEvent&);
     template<class E> void OnPressDeleteRoute(E&);
     
     template<class E> void Disconnect(E&);

@@ -10598,7 +10598,7 @@ template<class T> void LimbField::get(T &event){
     
     if(ok){
         
-        if(name->IsEnabled()){
+        if(name_new->IsEnabled()){
             //if the limb is ok and the limb wxComboBox is enabled, I set the char in (limb->value) to the first letter in the string contained in the GUI field
             
             (limb->value) = ((String((name->GetValue().ToStdString()))).value)[0];
@@ -13489,7 +13489,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize);
     limb = new LimbField(this, &(sight->limb));
     (limb->name)->Enable(false);
-    
+    (limb->name_new)->Enable(false);
+
     //sextant altitude
     StaticText* text_H_s = new StaticText(panel, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize);
     H_s = new AngleField<SightFrame>(this, &(sight->H_s), String(""));
@@ -17140,12 +17141,27 @@ void LimbField::set(void){
     
     if((limb->value) == 'u'){
         name->SetValue("upper");
+        
+        name_new->Check(0, true);
+        name_new->Check(1, false);
+        name_new->Check(2, false);
+
     }
     if((limb->value) == 'l'){
         name->SetValue("lower");
+        
+        name_new->Check(0, false);
+        name_new->Check(1, false);
+        name_new->Check(2, true);
+
     }
     if((limb->value) == 'c'){
         name->SetValue("center");
+        
+        name_new->Check(0, false);
+        name_new->Check(1, true);
+        name_new->Check(2, false);
+
     }
     
     ok = true;

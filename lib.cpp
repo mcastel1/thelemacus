@@ -17351,12 +17351,19 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     check = new CheckLimb;
     (check->p) = this;
     
+    limbs_new = new wxString [3];
+    
     limbs.Clear();
     limbs.Add(wxT("upper"));
     limbs.Add(wxT("lower"));
     limbs.Add(wxT("center"));
     
-    
+    limbs_new[0] = wxString("upper");
+    limbs_new[1] = wxString("center");
+    limbs_new[2] = wxString("lower");
+
+
+    name_new = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs.GetCount(), limbs_new, 0, wxDefaultValidator, wxString("Limb choices"));
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     //SetColor(name);
@@ -17378,7 +17385,8 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(name, 0, wxALIGN_CENTER);
-    
+    sizer_h->Add(name_new, 0, wxALIGN_CENTER);
+
 }
 
 

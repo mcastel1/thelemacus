@@ -1803,8 +1803,10 @@ public:
     SightFrame* parent_frame;
     
     //this is the wxComboBox with the name of the bodies
+    wxCheckListBox* name_new;
     wxComboBox* name;
     wxArrayString limbs;
+    wxString* limbs_new;
     //this points to a Limn object, which contains the data written in the GUI field of this
     Limb* limb;
     wxBoxSizer *sizer_h, *sizer_v;

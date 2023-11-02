@@ -17172,7 +17172,8 @@ void LimbField::set(void){
 void LimbField::Enable(bool is_enabled){
     
     name->Enable(is_enabled);
-    
+    name_new->Enable(is_enabled);
+
 }
 
 //sets the value in the GUI object check equal to the value in the non-GUI limb object answer
@@ -17367,6 +17368,8 @@ template<class P> void StringField<P>::set(void){
 //constructor of a LimbField object, based on the parent frame frame
 LimbField::LimbField(SightFrame* frame, Limb* p){
     
+    long i;
+    
     parent_frame = frame;
     //I link the internal pointers p the respective Limb object
     limb = p;
@@ -17385,17 +17388,16 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     limbs_new[0] = wxString("upper");
     limbs_new[1] = wxString("center");
     limbs_new[2] = wxString("lower");
-
-
-    name_new = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs.GetCount(), limbs_new, 0, wxDefaultValidator, wxString("Limb choices"));
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
+    name_new = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs.GetCount(), limbs_new, 0, wxDefaultValidator, wxString("Limb choices"));
     //SetColor(name);
     
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
     //name->SetValue("");
     AdjustWidth(name);
     name->SetValue(wxString(""));
+    for(i=0; i<3; i++){name_new->Check(i, false);}
     ok = false;
     
     name->Bind(wxEVT_KILL_FOCUS, (*check));

@@ -73,7 +73,6 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
- - when listcontrol_sights or _routes is long enough that there is a scroll bar, the highlight due to mouse hovering over sight/route does not work 
  - buttons on bottom of ListFrame are cut on Enrico's computer (fixed it on mine, check whether it has been fixed on another computer too)
  - check that WXK_PLUS does not depend on the computer
  */

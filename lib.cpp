@@ -11163,7 +11163,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     //    cout << "\nMouse moved";
     //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
-    //        cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
+//            cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
     //    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
     
     //update the instantaneous position of the mouse on the chart
@@ -15685,7 +15685,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
     int i, j;
     
-    //        cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
+            cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
     
     
     //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights

@@ -14,26 +14,6 @@
 /*
  notes:
  =======
- - error message when running the app on another computer:
- 
- The default interactive shell is now zsh.
- To update your account to use zsh, please run `chsh -s /bin/zsh`.
- For more details, please visit https://support.apple.com/kb/HT208050.
- /Users/carlesblanch/Downloads/Thelemacus.app/Contents/MacOS/Thelemacus ; exit;
- (base) ICR-C02V907EHV2G:~ carlesblanch$ /Users/carlesblanch/Downloads/Thelemacus.app/Contents/MacOS/Thelemacus ; exit;
- dyld[25231]: Library not loaded: /usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib
- Referenced from: <4ED96060-7B5A-3EEB-9E52-015DE76E93C0> /Users/carlesblanch/Downloads/Thelemacus.app/Contents/MacOS/Thelemacus
- Reason: tried: '/usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib' (no such file), '/usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib' (no such file), '/usr/lib/libwx_osx_cocoau_xrc-3.1.dylib' (no such file, not in dyld cache)
- Abort trap: 6
- logout
- 
- Saving session...
- ...copying shared history...
- ...saving history...truncating history files...
- ...completed.
- Deleting expired sessions...10 completed.
- 
- 
  - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging 
  - if the running idrectory of the app contains a ' it does not work, but let us leave it like this
  >>>>>>> revise_make_app

@@ -18174,6 +18174,7 @@ template<class E> void BodyField::OnEdit(E& event){
         
         //I enable the limb field if and only if the selected body allows for a field and I run check on the existing text in the limb field
         ((parent_frame->limb)->name)->Enable((bodies[i] == wxString("sun")) || (bodies[i] == wxString("moon")));
+        ((parent_frame->limb)->name_new)->Enable((bodies[i] == wxString("sun")) || (bodies[i] == wxString("moon")));
         (*((parent_frame->limb)->check))(event);
         
         //because the text in name is valid, I set the background color of name to white
@@ -18184,6 +18185,7 @@ template<class E> void BodyField::OnEdit(E& event){
         //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body related to limb is invalid
         
         ((parent_frame->limb)->name)->Enable(false);
+        ((parent_frame->limb)->name_new)->Enable(false);
         ((parent_frame->limb)->ok) = false;
         
     }
@@ -18215,7 +18217,8 @@ bool LimbField::is_ok(void){
 template <typename EventTag, typename Method, typename Object> void LimbField::Bind(EventTag tag,  Method method, Object object){
     
     name->Bind(tag, method, object);
-    
+    name_new->Bind(tag, method, object);
+
 }
 
 
@@ -18235,6 +18238,9 @@ template<class E> void LimbField::OnEdit(E& event){
         name->SetForegroundColour(wxGetApp().foreground_color);
         name->SetFont(wxGetApp().default_font);
         
+        name_new->SetForegroundColour(wxGetApp().foreground_color);
+        name_new->SetFont(wxGetApp().default_font);
+  
     }
     
     //tries to enable button_reduce

@@ -28,13 +28,10 @@
  
  ********** THINGS TO ADD ************
  
- - adjust color of PNG images according to app color
- - when switching to dark mode, buttons with images must have white and black inverted 
- - remove ugly maximizaiton of panel that occurs in ListFrame::Resize() and beep
+ - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
  - fill up selection 'rectangle' in 3D projection by using a bundle of curves at fixed lat or lon
  - change     highlight_color = color_selected_item and     highlight_font = default_font;
  with a better  choice
- - the selection rectangle in the 3D projection should be filled with color
  - add + / - button in chartframe to zoom in / out
  - add instrumental error
  - add lambert projection and 3D sphere with no projection

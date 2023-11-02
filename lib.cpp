@@ -10479,11 +10479,13 @@ template<class T>void CheckBody::operator()(T& event){
                     //in this case, the selected body is a body which has a limb -> I enable the limb field
                     
                     ((f->limb)->name)->Enable(true);
-                    
+                    ((f->limb)->name_new)->Enable(true);
+
                 }else{
                     //in this case, the selected body is a body which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
                     
                     ((f->limb)->name)->Enable(false);
+                    ((f->limb)->name_new)->Enable(false);
                     ((f->limb)->ok) = true;
                     
                 }
@@ -10551,9 +10553,10 @@ template<class T> void CheckLimb::operator()(T &event){
         
         String s;
         bool check;
-        
-        
+        wxArrayInt checked_items;
+            
         s = String(((p->name)->GetValue().ToStdString()));
+//        s = (p->name_new)[(((p->name_new)->GetCheckedItems())[0])];
         //I check whether the name in the GUI field body matches one of the valid limb names
         
         check = ((s == String("upper")) || (s == String("lower")) || (s == String("center")));
@@ -10567,11 +10570,16 @@ template<class T> void CheckLimb::operator()(T &event){
             //the background color is set to white, because in this case there is no erroneous value in name
             (p->name)->SetForegroundColour(wxGetApp().foreground_color);
             (p->name)->SetFont(wxGetApp().default_font);
-            
+
+            (p->name_new)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->name_new)->SetFont(wxGetApp().default_font);
+
             
         }else{
             
             (f->print_error_message)->SetAndCall(p->name, String("Limb not valid!"), String("Limb must be upper, lower or center."), (wxGetApp().path_file_error_icon));
+            (f->print_error_message)->SetAndCall(p->name_new, String("Limb not valid!"), String("Limb must be upper, lower or center."), (wxGetApp().path_file_error_icon));
+ 
             (p->ok) = false;
             
         }

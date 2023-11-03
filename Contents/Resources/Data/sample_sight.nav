@@ -1,10 +1,10 @@
 Sights in the data:
 	Sight #1:
 		body:
-			Type = star
-			Name = vega
-			Right ascension = 279° 13.92611999999986'
-			Declination = 38° 46.93896000000009'
+			Type = moon
+			Name = moon
+			Radius = 938.1209503239741 nm
+		limb = l
 		sextant altitude = 4° 2.999999999999989'
 		index error = 0° 1.9'
 		artificial horizon = n
@@ -21,7 +21,7 @@ Routes in the data:
 		ground position:
 			latitude = 41° 21.93470177150274'
 			longitude = 234° 29.06597042875035'
-			label = 
+			label = 2023-11-03 13:39:14 UTC+2
 		aperture angle = 86° 13.0596208610325'
 		label = vega 2023-09-19 10:20:12 TAI, 2023-10-16 13:28:18 UTC+2
 	Route #2:

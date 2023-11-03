@@ -10597,7 +10597,7 @@ template<class T> void LimbField::get(T &event){
             //if the limb is ok and the limb wxComboBox is enabled, I set the char in (limb->value) to the first letter in the string contained in the GUI field
             
             //            (limb->value) = ((String((name->GetValue().ToStdString()))).value)[0];
-            (limb->value) = ((String(((limbs.Item(checked_items.Item(0))).ToStdString()))).value)[0];
+            (limb->value) = ((String(((limbs[checked_items.Item(0)]).ToStdString()))).value)[0];
 
         }else{
             //if the limb is ok and the limb wxComboBox is disabled, then the limb is irrelevant, and I set the char in limb->value to the null char.
@@ -16828,14 +16828,14 @@ template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
     if((caller->checked_items.GetCount()) == 0){
         //checked_items is empty->uncheck everythig in name
         
-        for(i=0; i<(caller->limbs.GetCount()); i++){
+        for(i=0; i<(caller->limbs->size()); i++){
             caller->name->Check(((unsigned int)i), false);
         }
         
     }else{
         //checked_items is not empty->check, in name, only the first element in checked_items
         
-        for(i=0; i<(caller->limbs.GetCount()); i++){
+        for(i=0; i<(caller->limbs->size()); i++){
             caller->name->Check(((unsigned int)i), (i == (caller->checked_items.Item(0))));
         }
         
@@ -17466,18 +17466,13 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     check = new CheckLimb;
     (check->p) = this;
     
-    limbs_new = new wxString [3];
+    limbs = new wxString [3];
     
-    limbs.Clear();
-    limbs.Add(wxT("upper"));
-    limbs.Add(wxT("lower"));
-    limbs.Add(wxT("center"));
+    limbs[0] = wxString("upper");
+    limbs[1] = wxString("center");
+    limbs[2] = wxString("lower");
     
-    limbs_new[0] = wxString("upper");
-    limbs_new[1] = wxString("center");
-    limbs_new[2] = wxString("lower");
-    
-    name = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs.GetCount(), limbs_new, 0, wxDefaultValidator, wxString("Limb choices"));
+    name = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs->size(), limbs, 0, wxDefaultValidator, wxString("Limb choices"));
     
     change_selection = new OnChangeSelectionInLimbField(this);
 

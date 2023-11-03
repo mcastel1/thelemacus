@@ -16802,9 +16802,9 @@ OnChangeSelectionInLimbField::OnChangeSelectionInLimbField(LimbField* caller_in)
     
 }
 
-//when an item is selected/deselcted in *caller, make sure that only one item stays selected in *calller 
+//when an item is selected/deselcted in *caller, make sure that only one item stays selected in *calller
 template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
-    
+        
     caller->checked_items.Clear();
     caller->name_new->GetCheckedItems(caller->checked_items);
 
@@ -17437,7 +17437,9 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     //name->SetValue("");
     AdjustWidth(name);
     name->SetValue(wxString(""));
+    //deselect all items and empty cecked_items accordingly
     for(i=0; i<3; i++){name_new->Check(((unsigned int)i), false);}
+    checked_items.Clear();
     ok = false;
     
     name->Bind(wxEVT_KILL_FOCUS, (*check));

@@ -1318,6 +1318,18 @@ public:
         
 };
 
+//if an item is selected/deselected in caller, call operator() to make sure that only one item is selected at a time 
+class OnChangeSelectionInCheckListBox{
+    
+public:
+    
+    wxCheckListBox* caller;
+    
+    OnChangeSelectionInCheckListBox(wxCheckListBox*);
+    template<class T> void operator()(T&);
+        
+};
+
 
 
 class SetStringToCurrentTime{

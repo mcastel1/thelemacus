@@ -10553,11 +10553,10 @@ template<class T> void CheckLimb::operator()(T &event){
         
         String s;
         bool check;
-        wxArrayInt checked_items;
         
         s = String(((p->name)->GetValue().ToStdString()));
         
-        ((p->name_new)->GetCheckedItems(checked_items));
+        ((p->name_new)->GetCheckedItems(p->checked_items));
         
 //        s = (p->name_new)[(((p->name_new)->GetCheckedItems())[0])];
         //I check whether the name in the GUI field body matches one of the valid limb names

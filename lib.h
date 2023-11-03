@@ -1806,6 +1806,7 @@ public:
     wxCheckListBox* name_new;
     wxComboBox* name;
     wxArrayString limbs;
+    wxArrayInt checked_items;
     wxString* limbs_new;
     //this points to a Limn object, which contains the data written in the GUI field of this
     Limb* limb;

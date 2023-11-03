@@ -10479,7 +10479,7 @@ template<class T>void CheckBody::operator()(T& event){
                     //in this case, the selected body is a body which has a limb -> I enable the limb field
                     
                     ((f->limb)->name)->Enable(true);
-
+                    
                 }else{
                     //in this case, the selected body is a body which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
                     
@@ -10551,12 +10551,12 @@ template<class T> void CheckLimb::operator()(T &event){
         
         bool check;
         
-
-    
-//        s = String(((p->name)->GetValue().ToStdString()));
         
         
-//        p->checked_items->Item(0)]
+        //        s = String(((p->name)->GetValue().ToStdString()));
+        
+        
+        //        p->checked_items->Item(0)]
         //        s = (p->name)[(((p->name)->GetCheckedItems())[0])];
         //I check whether the name in the GUI field body matches one of the valid limb names
         
@@ -10598,7 +10598,7 @@ template<class T> void LimbField::get(T &event){
             
             //            (limb->value) = ((String((name->GetValue().ToStdString()))).value)[0];
             (limb->value) = ((String(((limbs[checked_items.Item(0)]).ToStdString()))).value)[0];
-
+            
         }else{
             //if the limb is ok and the limb wxComboBox is disabled, then the limb is irrelevant, and I set the char in limb->value to the null char.
             
@@ -11166,7 +11166,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
     
     //    cout << "\nMouse moved";
     //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
-//            cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
+    //            cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
     //    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
     
     //update the instantaneous position of the mouse on the chart
@@ -12270,11 +12270,11 @@ void DeleteSight::operator()(wxCommandEvent& event){
     
     //given that I called set in listcontrol_sights, no item is selected in listcontrol_sights, I call:
     (*(f->on_change_selection_in_listcontrol_sights))(event);
-      
-      if(remove_related_route == Answer('y', String(""))){
+    
+    if(remove_related_route == Answer('y', String(""))){
         
         //given that I called set for listcontrol_routes, no item is selected in listcontrol_routes -> I call:
-          (*(f->on_change_selection_in_listcontrol_routes))(event);
+        (*(f->on_change_selection_in_listcontrol_routes))(event);
     }
     
     f->Resize();
@@ -13484,7 +13484,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize);
     limb = new LimbField(this, &(sight->limb));
     (limb->name)->Enable(false);
-
+    
     //sextant altitude
     StaticText* text_H_s = new StaticText(panel, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize);
     H_s = new AngleField<SightFrame>(this, &(sight->H_s), String(""));
@@ -14975,13 +14975,13 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     //button to disconect a Route
     button_disconnect_route = new wxBitmapButton(
-                                                panel,
-                                                wxID_ANY,
-                                                Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button),
-                                                wxDefaultPosition,
-                                                wxGetApp().size_small_button,
-                                                wxBU_EXACTFIT | wxSIMPLE_BORDER
-                                                );
+                                                 panel,
+                                                 wxID_ANY,
+                                                 Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button),
+                                                 wxDefaultPosition,
+                                                 wxGetApp().size_small_button,
+                                                 wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                 );
     button_disconnect_route->Bind(wxEVT_BUTTON, &ListFrame::OnDisconnectRoute, this);
     button_disconnect_route->Enable(false);
     
@@ -15038,7 +15038,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_sight);
     disableable_buttons.push_back(button_transport_sight);
-//    disableable_buttons.push_back(button_disconnect_sight);
+    //    disableable_buttons.push_back(button_disconnect_sight);
     disableable_buttons.push_back(button_delete_sight);
     
     listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
@@ -15047,7 +15047,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_sights);
     listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_sights);
-
+    
     i=0;
     
     listcontrol_sights->PushBackColumn(wxString("Number"));
@@ -15095,7 +15095,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     disableable_buttons.clear();
     disableable_buttons.push_back(button_modify_route);
     disableable_buttons.push_back(button_transport_route);
-//    disableable_buttons.push_back(button_disconnect_route);
+    //    disableable_buttons.push_back(button_disconnect_route);
     disableable_buttons.push_back(button_delete_route);
     
     listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
@@ -15494,7 +15494,7 @@ void ListFrame::OnDisconnectSight(wxCommandEvent& event){
     //set i_object_to_disconnect to the currently selected Sight in listcontrol_sights and call Disconnect to disconnect that Sight from its related Route
     i_object_to_disconnect = ((int)(listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     Disconnect(event);
-  
+    
 }
 
 //this method is called when the useer wants to disconnect a Route from its related Sight
@@ -15503,7 +15503,7 @@ void ListFrame::OnDisconnectRoute(wxCommandEvent& event){
     //set i_object_to_disconnect to the currently selected Route in listcontrol_routes and call Disconnect to disconnect that Route from its related Sight
     i_object_to_disconnect = (((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight.value);
     Disconnect(event);
-  
+    
 }
 
 void ListFrame::OnTransportPosition(wxCommandEvent& event){
@@ -15688,7 +15688,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event){
     
     int i, j;
     
-            cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
+    //            cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
     
     
     //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
@@ -16061,7 +16061,7 @@ void SightFrame::set(void){
         //if  body is not sun or moon, then I set the limb GUI field to empty and disable it
         
         long i;
-                
+        
         for(i=0; i<3; i++){limb->name->Check(((unsigned int)i), false);}
         limb->checked_items.Clear();
         
@@ -16793,11 +16793,11 @@ template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
     
     wxArrayInt temp;
     long i, j;
-        
+    
     temp.Clear();
     caller->name->GetCheckedItems(temp);
-
-     
+    
+    
     if((temp.GetCount()) <= 1){
         //only one item is selected -> write temp into caller->selected_items
         
@@ -16841,31 +16841,31 @@ template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
         
     }
     
-  
-
+    
+    
     (caller->ok) = ((caller->checked_items.GetCount()) == 1);
     
     if(caller->ok){
         
         caller->name->SetForegroundColour(wxGetApp().foreground_color);
         caller->name->SetFont(wxGetApp().default_font);
-  
+        
     }
     
     //tries to enable button_reduce
     caller->parent_frame->AllOk();
- 
-        
-//    cout << "checked_items : ";
-//    for(int i=0; i<caller->checked_items.GetCount(); ++i){
-//        cout << " " << caller->checked_items.Item(i);
-//    }
-//    cout << "\n";
-
+    
+    
+    //    cout << "checked_items : ";
+    //    for(int i=0; i<caller->checked_items.GetCount(); ++i){
+    //        cout << " " << caller->checked_items.Item(i);
+    //    }
+    //    cout << "\n";
+    
     
     
     event.Skip(true);
-
+    
     
 }
 
@@ -17230,7 +17230,7 @@ void LimbField::set(void){
         name->Check(1, false);
         name->Check(2, false);
         checked_items.Add(0, 1);
-
+        
     }
     
     if((limb->value) == 'l'){
@@ -17240,7 +17240,7 @@ void LimbField::set(void){
         name->Check(2, true);
         
         checked_items.Add(2, 1);
-
+        
     }
     
     if((limb->value) == 'c'){
@@ -17250,7 +17250,7 @@ void LimbField::set(void){
         name->Check(2, false);
         
         checked_items.Add(1, 1);
-
+        
     }
     
     ok = true;
@@ -17261,7 +17261,7 @@ void LimbField::set(void){
 void LimbField::Enable(bool is_enabled){
     
     name->Enable(is_enabled);
-
+    
 }
 
 //sets the value in the GUI object check equal to the value in the non-GUI limb object answer
@@ -17475,7 +17475,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     name = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs->size(), limbs, 0, wxDefaultValidator, wxString("Limb choices"));
     
     change_selection = new OnChangeSelectionInLimbField(this);
-
+    
     
     
     name->SetBackgroundColour(parent_frame->GetBackgroundColour());
@@ -17489,14 +17489,14 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     name->Bind(wxEVT_CHECKLISTBOX, (*check));
     //whenever an item is selected/deselected in name, I call change_selection->operator
     name->Bind(wxEVT_CHECKLISTBOX, *change_selection);
-  
-
+    
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(name, 0, wxALIGN_CENTER);
-
+    
 }
 
 
@@ -18299,7 +18299,7 @@ bool LimbField::is_ok(void){
 template <typename EventTag, typename Method, typename Object> void LimbField::Bind(EventTag tag,  Method method, Object object){
     
     name->Bind(tag, method, object);
-
+    
 }
 
 

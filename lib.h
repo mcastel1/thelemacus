@@ -1814,8 +1814,8 @@ public:
     //the parent frame to which this object is attached
     SightFrame* parent_frame;
     
-    //this is the wxComboBox with the name of the bodies
-    wxCheckListBox* name_new;
+    //this is the wxComboBox with the name of the limbs
+    wxCheckListBox* name;
     wxArrayString limbs;
     wxArrayInt checked_items;
     wxString* limbs_new;

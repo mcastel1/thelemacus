@@ -10478,12 +10478,12 @@ template<class T>void CheckBody::operator()(T& event){
                 if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
                     //in this case, the selected body is a body which has a limb -> I enable the limb field
                     
-                    ((f->limb)->name_new)->Enable(true);
+                    ((f->limb)->name)->Enable(true);
 
                 }else{
                     //in this case, the selected body is a body which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
                     
-                    ((f->limb)->name_new)->Enable(false);
+                    ((f->limb)->name)->Enable(false);
                     ((f->limb)->ok) = true;
                     
                 }
@@ -10557,24 +10557,24 @@ template<class T> void CheckLimb::operator()(T &event){
         
         
 //        p->checked_items->Item(0)]
-        //        s = (p->name_new)[(((p->name_new)->GetCheckedItems())[0])];
+        //        s = (p->name)[(((p->name)->GetCheckedItems())[0])];
         //I check whether the name in the GUI field body matches one of the valid limb names
         
         check = ((p->checked_items.GetCount()) == 1);
         
         
-        if(check || ((((p->name_new)->GetForegroundColour()) != (wxGetApp().error_color)) && ((p->checked_items.GetCount()) == 0))){
-            //p->name_new either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+        if(check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && ((p->checked_items.GetCount()) == 0))){
+            //p->name either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
-            //the background color is set to white, because in this case there is no erroneous value in name_new
-            (p->name_new)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->name_new)->SetFont(wxGetApp().default_font);
+            //the background color is set to white, because in this case there is no erroneous value in name
+            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->name)->SetFont(wxGetApp().default_font);
             
         }else{
             
-            (f->print_error_message)->SetAndCall(p->name_new, String("Limb not valid!"), String("Limb must be upper, center or lower."), (wxGetApp().path_file_error_icon));
+            (f->print_error_message)->SetAndCall(p->name, String("Limb not valid!"), String("Limb must be upper, center or lower."), (wxGetApp().path_file_error_icon));
             (p->ok) = false;
             
         }
@@ -10593,7 +10593,7 @@ template<class T> void LimbField::get(T &event){
     
     if(ok){
         
-        if(name_new->IsEnabled()){
+        if(name->IsEnabled()){
             //if the limb is ok and the limb wxComboBox is enabled, I set the char in (limb->value) to the first letter in the string contained in the GUI field
             
             //            (limb->value) = ((String((name->GetValue().ToStdString()))).value)[0];
@@ -13483,7 +13483,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize);
     limb = new LimbField(this, &(sight->limb));
-    (limb->name_new)->Enable(false);
+    (limb->name)->Enable(false);
 
     //sextant altitude
     StaticText* text_H_s = new StaticText(panel, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize);
@@ -16062,7 +16062,7 @@ void SightFrame::set(void){
         
         long i;
                 
-        for(i=0; i<3; i++){limb->name_new->Check(((unsigned int)i), false);}
+        for(i=0; i<3; i++){limb->name->Check(((unsigned int)i), false);}
         limb->checked_items.Clear();
         
         limb->Enable(false);
@@ -16795,7 +16795,7 @@ template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
     long i, j;
         
     temp.Clear();
-    caller->name_new->GetCheckedItems(temp);
+    caller->name->GetCheckedItems(temp);
 
      
     if((temp.GetCount()) <= 1){
@@ -16824,19 +16824,19 @@ template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
         
     }
     
-    //update the checked items in caller->name_new
+    //update the checked items in caller->name
     if((caller->checked_items.GetCount()) == 0){
-        //checked_items is empty->uncheck everythig in name_new
+        //checked_items is empty->uncheck everythig in name
         
         for(i=0; i<(caller->limbs.GetCount()); i++){
-            caller->name_new->Check(((unsigned int)i), false);
+            caller->name->Check(((unsigned int)i), false);
         }
         
     }else{
-        //checked_items is not empty->check, in name_new, only the first element in checked_items
+        //checked_items is not empty->check, in name, only the first element in checked_items
         
         for(i=0; i<(caller->limbs.GetCount()); i++){
-            caller->name_new->Check(((unsigned int)i), (i == (caller->checked_items.Item(0))));
+            caller->name->Check(((unsigned int)i), (i == (caller->checked_items.Item(0))));
         }
         
     }
@@ -16847,8 +16847,8 @@ template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
     
     if(caller->ok){
         
-        caller->name_new->SetForegroundColour(wxGetApp().foreground_color);
-        caller->name_new->SetFont(wxGetApp().default_font);
+        caller->name->SetForegroundColour(wxGetApp().foreground_color);
+        caller->name->SetFont(wxGetApp().default_font);
   
     }
     
@@ -17226,18 +17226,18 @@ void LimbField::set(void){
     
     if((limb->value) == 'u'){
         
-        name_new->Check(0, true);
-        name_new->Check(1, false);
-        name_new->Check(2, false);
+        name->Check(0, true);
+        name->Check(1, false);
+        name->Check(2, false);
         checked_items.Add(0, 1);
 
     }
     
     if((limb->value) == 'l'){
         
-        name_new->Check(0, false);
-        name_new->Check(1, false);
-        name_new->Check(2, true);
+        name->Check(0, false);
+        name->Check(1, false);
+        name->Check(2, true);
         
         checked_items.Add(2, 1);
 
@@ -17245,9 +17245,9 @@ void LimbField::set(void){
     
     if((limb->value) == 'c'){
         
-        name_new->Check(0, false);
-        name_new->Check(1, true);
-        name_new->Check(2, false);
+        name->Check(0, false);
+        name->Check(1, true);
+        name->Check(2, false);
         
         checked_items.Add(1, 1);
 
@@ -17260,7 +17260,7 @@ void LimbField::set(void){
 //this function enables/disable the LimbField
 void LimbField::Enable(bool is_enabled){
     
-    name_new->Enable(is_enabled);
+    name->Enable(is_enabled);
 
 }
 
@@ -17477,30 +17477,30 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     limbs_new[1] = wxString("center");
     limbs_new[2] = wxString("lower");
     
-    name_new = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs.GetCount(), limbs_new, 0, wxDefaultValidator, wxString("Limb choices"));
+    name = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs.GetCount(), limbs_new, 0, wxDefaultValidator, wxString("Limb choices"));
     
     change_selection = new OnChangeSelectionInLimbField(this);
 
     
     
-    name_new->SetBackgroundColour(parent_frame->GetBackgroundColour());
+    name->SetBackgroundColour(parent_frame->GetBackgroundColour());
     //SetColor(name);
     
     //uncheck all items and empty cecked_items accordingly
-    for(i=0; i<3; i++){name_new->Check(((unsigned int)i), false);}
+    for(i=0; i<3; i++){name->Check(((unsigned int)i), false);}
     checked_items.Clear();
     ok = false;
     
-    name_new->Bind(wxEVT_CHECKLISTBOX, (*check));
-    //whenever an item is selected/deselected in name_new, I call change_selection->operator
-    name_new->Bind(wxEVT_CHECKLISTBOX, *change_selection);
+    name->Bind(wxEVT_CHECKLISTBOX, (*check));
+    //whenever an item is selected/deselected in name, I call change_selection->operator
+    name->Bind(wxEVT_CHECKLISTBOX, *change_selection);
   
 
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(name_new, 0, wxALIGN_CENTER);
+    sizer_h->Add(name, 0, wxALIGN_CENTER);
 
 }
 
@@ -18262,7 +18262,7 @@ template<class E> void BodyField::OnEdit(E& event){
         //the text entered in name is valid
         
         //I enable the limb field if and only if the selected body allows for a field and I run check on the existing text in the limb field
-        ((parent_frame->limb)->name_new)->Enable((bodies[i] == wxString("sun")) || (bodies[i] == wxString("moon")));
+        ((parent_frame->limb)->name)->Enable((bodies[i] == wxString("sun")) || (bodies[i] == wxString("moon")));
         (*((parent_frame->limb)->check))(event);
         
         //because the text in name is valid, I set the background color of name to white
@@ -18272,7 +18272,7 @@ template<class E> void BodyField::OnEdit(E& event){
     }else{
         //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body related to limb is invalid
         
-        ((parent_frame->limb)->name_new)->Enable(false);
+        ((parent_frame->limb)->name)->Enable(false);
         ((parent_frame->limb)->ok) = false;
         
     }
@@ -18303,7 +18303,7 @@ bool LimbField::is_ok(void){
 
 template <typename EventTag, typename Method, typename Object> void LimbField::Bind(EventTag tag,  Method method, Object object){
     
-    name_new->Bind(tag, method, object);
+    name->Bind(tag, method, object);
 
 }
 
@@ -18318,15 +18318,15 @@ template <typename EventTag, typename Method, typename Object> void LimbField::B
 //
 //    //ok is true/false is the text enteres is valid/invalid
 ////    (*on_change_selection_in_limb_field)(event);
-////    ok = name_new->;
+////    ok = name->;
 ////
 //    if(check){
 //
 //        name->SetForegroundColour(wxGetApp().foreground_color);
 //        name->SetFont(wxGetApp().default_font);
 //
-//        name_new->SetForegroundColour(wxGetApp().foreground_color);
-//        name_new->SetFont(wxGetApp().default_font);
+//        name->SetForegroundColour(wxGetApp().foreground_color);
+//        name->SetFont(wxGetApp().default_font);
 //
 //    }
 //

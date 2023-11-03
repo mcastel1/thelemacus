@@ -43,7 +43,6 @@
  - move all constants to the init file , such as  the 0.15 in  'position_plot_area = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);'
  - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer
  - replace use of epsilon_double with more proper methods 
- - replace limb dropdown menu and other dropdown menus with horizontal selection menus
  - Make sure that Draw is not called uselessly some times
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  - move all stuff which is general enough in the code to MyApp class

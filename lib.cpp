@@ -16798,6 +16798,7 @@ template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
     
     wxArrayInt temp;
     long i, j;
+    bool check;
         
     temp.Clear();
     caller->name_new->GetCheckedItems(temp);
@@ -16847,7 +16848,19 @@ template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
     }
     
   
+
+    check = ((caller->checked_items.GetCount()) == 1);
+    
+    if(check){
         
+        caller->name_new->SetForegroundColour(wxGetApp().foreground_color);
+        caller->name_new->SetFont(wxGetApp().default_font);
+  
+    }
+    
+    //tries to enable button_reduce
+    caller->parent_frame->AllOk();
+ 
         
 //    cout << "checked_items : ";
 //    for(int i=0; i<caller->checked_items.GetCount(); ++i){
@@ -17215,28 +17228,37 @@ template<class T> void BodyField::get(T& event){
 //sets the value in the GUI object name equal to the value in the non-GUI limb object limb
 void LimbField::set(void){
     
+    checked_items.Clear();
+    
     if((limb->value) == 'u'){
         name->SetValue("upper");
         
         name_new->Check(0, true);
         name_new->Check(1, false);
         name_new->Check(2, false);
+        checked_items.Add(0, 1);
 
     }
+    
     if((limb->value) == 'l'){
         name->SetValue("lower");
         
         name_new->Check(0, false);
         name_new->Check(1, false);
         name_new->Check(2, true);
+        
+        checked_items.Add(2, 1);
 
     }
+    
     if((limb->value) == 'c'){
         name->SetValue("center");
         
         name_new->Check(0, false);
         name_new->Check(1, true);
         name_new->Check(2, false);
+        
+        checked_items.Add(1, 1);
 
     }
     
@@ -17486,8 +17508,8 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     name->Bind(wxEVT_KILL_FOCUS, (*check));
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    name->Bind(wxEVT_COMBOBOX, &LimbField::OnEdit<wxCommandEvent>, this);
-    name->Bind(wxEVT_KEY_UP, &LimbField::OnEdit<wxKeyEvent>, this);
+//    name->Bind(wxEVT_COMBOBOX, &LimbField::OnEdit<wxCommandEvent>, this);
+//    name->Bind(wxEVT_KEY_UP, &LimbField::OnEdit<wxKeyEvent>, this);
     
     //whenever an item is selected/deselected in name_new, I call change_selection->operator
     name_new->Bind(wxEVT_CHECKLISTBOX, *change_selection);
@@ -18310,33 +18332,34 @@ template <typename EventTag, typename Method, typename Object> void LimbField::B
 }
 
 
-//this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid and runs AllOk
-template<class E> void LimbField::OnEdit(E& event){
-    
-    bool check;
-    
-    //I check whether the name in the GUI field name matches one of the valid limb names
-    find_and_replace_case_insensitive(name, limbs, &check, NULL);
-    
-    //ok is true/false is the text enteres is valid/invalid
-    ok = check;
-    
-    if(check){
-        
-        name->SetForegroundColour(wxGetApp().foreground_color);
-        name->SetFont(wxGetApp().default_font);
-        
-        name_new->SetForegroundColour(wxGetApp().foreground_color);
-        name_new->SetFont(wxGetApp().default_font);
-  
-    }
-    
-    //tries to enable button_reduce
-    parent_frame->AllOk();
-    
-    event.Skip(true);
-    
-}
+////this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid and runs AllOk
+//template<class E> void LimbField::OnEdit(E& event){
+//
+//    bool check;
+//
+//    //I check whether the name in the GUI field name matches one of the valid limb names
+//    find_and_replace_case_insensitive(name, limbs, &check, NULL);
+//
+//    //ok is true/false is the text enteres is valid/invalid
+////    (*on_change_selection_in_limb_field)(event);
+////    ok = name_new->;
+////
+//    if(check){
+//
+//        name->SetForegroundColour(wxGetApp().foreground_color);
+//        name->SetFont(wxGetApp().default_font);
+//
+//        name_new->SetForegroundColour(wxGetApp().foreground_color);
+//        name_new->SetFont(wxGetApp().default_font);
+//
+//    }
+//
+//    //tries to enable button_reduce
+//    parent_frame->AllOk();
+//
+//    event.Skip(true);
+//
+//}
 
 bool DateField::is_ok(void){
     

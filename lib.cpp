@@ -16802,15 +16802,12 @@ OnChangeSelectionInLimbField::OnChangeSelectionInLimbField(LimbField* caller_in)
     
 }
 
+//when an item is selected/deselcted in *caller, make sure that only one item stays selected in *calller 
 template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
-    
-    
     
     caller->checked_items.Clear();
     caller->name_new->GetCheckedItems(caller->checked_items);
-    
-    
-    
+
     cout << "checked_items : ";
     for(int i=0; i<caller->checked_items.GetCount(); ++i){
         cout << " " << caller->checked_items.Item(i);

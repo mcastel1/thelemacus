@@ -10554,8 +10554,11 @@ template<class T> void CheckLimb::operator()(T &event){
         String s;
         bool check;
         wxArrayInt checked_items;
-            
+        
         s = String(((p->name)->GetValue().ToStdString()));
+        
+        ((p->name_new)->GetCheckedItems(checked_items));
+        
 //        s = (p->name_new)[(((p->name_new)->GetCheckedItems())[0])];
         //I check whether the name in the GUI field body matches one of the valid limb names
         
@@ -17391,6 +17394,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     name_new = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs.GetCount(), limbs_new, 0, wxDefaultValidator, wxString("Limb choices"));
+    name_new->SetBackgroundColour(parent_frame->GetBackgroundColour());
     //SetColor(name);
     
     //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));

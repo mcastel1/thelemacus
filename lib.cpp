@@ -16828,14 +16828,14 @@ template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
     if((caller->checked_items.GetCount()) == 0){
         //checked_items is empty->uncheck everythig in name
         
-        for(i=0; i<(caller->limbs->size()); i++){
+        for(i=0; i<(caller->limbs.size()); i++){
             caller->name->Check(((unsigned int)i), false);
         }
         
     }else{
         //checked_items is not empty->check, in name, only the first element in checked_items
         
-        for(i=0; i<(caller->limbs->size()); i++){
+        for(i=0; i<(caller->limbs.size()); i++){
             caller->name->Check(((unsigned int)i), (i == (caller->checked_items.Item(0))));
         }
         
@@ -17466,13 +17466,13 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     check = new CheckLimb;
     (check->p) = this;
     
-    limbs = new wxString [3];
+    limbs.resize(3);
     
     limbs[0] = wxString("upper");
     limbs[1] = wxString("center");
     limbs[2] = wxString("lower");
     
-    name = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs->size(), limbs, 0, wxDefaultValidator, wxString("Limb choices"));
+    name = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, ((int)(limbs.size())), limbs.data(), 0, wxDefaultValidator, wxString("Limb choices"));
     
     change_selection = new OnChangeSelectionInLimbField(this);
     

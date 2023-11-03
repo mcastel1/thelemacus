@@ -10556,7 +10556,14 @@ template<class T> void CheckLimb::operator()(T &event){
         
         s = String(((p->name)->GetValue().ToStdString()));
         
+        p->checked_items.Clear();
         ((p->name_new)->GetCheckedItems(p->checked_items));
+        
+        cout << "checked_items : ";
+        for(int i=0; i<p->checked_items.GetCount(); ++i){
+            cout << " " << p->checked_items.Item(i);
+        }
+        cout << "\n";
         
 //        s = (p->name_new)[(((p->name_new)->GetCheckedItems())[0])];
         //I check whether the name in the GUI field body matches one of the valid limb names

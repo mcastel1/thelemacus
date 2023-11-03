@@ -16796,15 +16796,26 @@ template<class T>void OnChangeSelectionInListControl::operator()(T& event){
 }
 
 
-OnChangeSelectionInCheckListBox::OnChangeSelectionInCheckListBox(wxCheckListBox* caller_in){
+OnChangeSelectionInLimbField::OnChangeSelectionInLimbField(LimbField* caller_in){
     
     caller = caller_in;
     
 }
 
-template<class T>void OnChangeSelectionInCheckListBox::operator()(T& event){
+template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
     
     
+    
+    caller->checked_items.Clear();
+    caller->name_new->GetCheckedItems(caller->checked_items);
+    
+    
+    
+    cout << "checked_items : ";
+    for(int i=0; i<caller->checked_items.GetCount(); ++i){
+        cout << " " << caller->checked_items.Item(i);
+    }
+    cout << "\n";
     
     
     event.Skip(true);
@@ -17418,7 +17429,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     name_new = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs.GetCount(), limbs_new, 0, wxDefaultValidator, wxString("Limb choices"));
     
-    change_selection = new OnChangeSelectionInCheckListBox(name_new);
+    change_selection = new OnChangeSelectionInLimbField(this);
 
     
     
@@ -17429,7 +17440,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     //name->SetValue("");
     AdjustWidth(name);
     name->SetValue(wxString(""));
-    for(i=0; i<3; i++){name_new->Check(i, false);}
+    for(i=0; i<3; i++){name_new->Check(((unsigned int)i), false);}
     ok = false;
     
     name->Bind(wxEVT_KILL_FOCUS, (*check));
@@ -17438,8 +17449,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     name->Bind(wxEVT_KEY_UP, &LimbField::OnEdit<wxKeyEvent>, this);
     
     //whenever an item is selected/deselected in name_new, I call change_selection->operator
-    name_new->Bind(wxEVT_LIST_ITEM_SELECTED, *change_selection);
-    name_new->Bind(wxEVT_LIST_ITEM_DESELECTED, *change_selection);
+    name_new->Bind(wxEVT_CHECKLISTBOX, *change_selection);
   
     
     

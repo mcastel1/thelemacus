@@ -16798,7 +16798,6 @@ template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
     
     wxArrayInt temp;
     long i, j;
-    bool check;
         
     temp.Clear();
     caller->name_new->GetCheckedItems(temp);
@@ -16849,9 +16848,9 @@ template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
     
   
 
-    check = ((caller->checked_items.GetCount()) == 1);
+    (caller->ok) = ((caller->checked_items.GetCount()) == 1);
     
-    if(check){
+    if(caller->ok){
         
         caller->name_new->SetForegroundColour(wxGetApp().foreground_color);
         caller->name_new->SetFont(wxGetApp().default_font);
@@ -17507,6 +17506,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     ok = false;
     
     name->Bind(wxEVT_KILL_FOCUS, (*check));
+    name_new->Bind(wxEVT_CHECKLISTBOX, (*check));
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
 //    name->Bind(wxEVT_COMBOBOX, &LimbField::OnEdit<wxCommandEvent>, this);
 //    name->Bind(wxEVT_KEY_UP, &LimbField::OnEdit<wxKeyEvent>, this);

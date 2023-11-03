@@ -16796,7 +16796,20 @@ template<class T>void OnChangeSelectionInListControl::operator()(T& event){
 }
 
 
+OnChangeSelectionInCheckListBox::OnChangeSelectionInCheckListBox(wxCheckListBox* caller_in){
+    
+    caller = caller_in;
+    
+}
 
+template<class T>void OnChangeSelectionInCheckListBox::operator()(T& event){
+    
+    
+    
+    event.Skip(true);
+
+    
+}
 
 
 //this function writes into the non-GUI fields in chrono the value written into the respective GUI fields hour, minute and second

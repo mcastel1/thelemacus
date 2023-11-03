@@ -10551,47 +10551,32 @@ template<class T> void CheckLimb::operator()(T &event){
     if(!(f->idling)){
         
         
-        String s;
         bool check;
         
 
-        /*
-        p->checked_items.Clear();
-        ((p->name_new)->GetCheckedItems(p->checked_items));
-        */
-        /*
-        cout << "checked_items : ";
-        for(int i=0; i<p->checked_items.GetCount(); ++i){
-            cout << " " << p->checked_items.Item(i);
-        }
-        cout << "\n";
-        */
+    
+//        s = String(((p->name)->GetValue().ToStdString()));
         
-        s = String(((p->name)->GetValue().ToStdString()));
+        
+//        p->checked_items->Item(0)]
         //        s = (p->name_new)[(((p->name_new)->GetCheckedItems())[0])];
         //I check whether the name in the GUI field body matches one of the valid limb names
         
-        check = ((s == String("upper")) || (s == String("lower")) || (s == String("center")));
+        check = ((p->checked_items.GetCount()) == 1);
         
         
-        if(check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (s == String("")))){
-            //p->name either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+        if(check || ((((p->name_new)->GetForegroundColour()) != (wxGetApp().error_color)) && ((p->checked_items.GetCount()) == 0))){
+            //p->name_new either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
             
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
-            //the background color is set to white, because in this case there is no erroneous value in name
-            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->name)->SetFont(wxGetApp().default_font);
-
+            //the background color is set to white, because in this case there is no erroneous value in name_new
             (p->name_new)->SetForegroundColour(wxGetApp().foreground_color);
             (p->name_new)->SetFont(wxGetApp().default_font);
-
             
         }else{
             
-            (f->print_error_message)->SetAndCall(p->name, String("Limb not valid!"), String("Limb must be upper, lower or center."), (wxGetApp().path_file_error_icon));
-            (f->print_error_message)->SetAndCall(p->name_new, String("Limb not valid!"), String("Limb must be upper, lower or center."), (wxGetApp().path_file_error_icon));
- 
+            (f->print_error_message)->SetAndCall(p->name_new, String("Limb not valid!"), String("Limb must be upper, center or lower."), (wxGetApp().path_file_error_icon));
             (p->ok) = false;
             
         }
@@ -10613,9 +10598,9 @@ template<class T> void LimbField::get(T &event){
         if(name_new->IsEnabled()){
             //if the limb is ok and the limb wxComboBox is enabled, I set the char in (limb->value) to the first letter in the string contained in the GUI field
             
-            (limb->value) = ((String((name->GetValue().ToStdString()))).value)[0];
-            
-            
+            //            (limb->value) = ((String((name->GetValue().ToStdString()))).value)[0];
+            (limb->value) = ((String(((limbs.Item(selected_items->Item(0))).ToStdString()))).value)[0];
+
         }else{
             //if the limb is ok and the limb wxComboBox is disabled, then the limb is irrelevant, and I set the char in limb->value to the null char.
             

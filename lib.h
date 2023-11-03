@@ -1816,7 +1816,6 @@ public:
     
     //this is the wxComboBox with the name of the bodies
     wxCheckListBox* name_new;
-    wxComboBox* name;
     wxArrayString limbs;
     wxArrayInt checked_items;
     wxString* limbs_new;

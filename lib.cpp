@@ -10478,13 +10478,11 @@ template<class T>void CheckBody::operator()(T& event){
                 if((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))){
                     //in this case, the selected body is a body which has a limb -> I enable the limb field
                     
-                    ((f->limb)->name)->Enable(true);
                     ((f->limb)->name_new)->Enable(true);
 
                 }else{
                     //in this case, the selected body is a body which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
                     
-                    ((f->limb)->name)->Enable(false);
                     ((f->limb)->name_new)->Enable(false);
                     ((f->limb)->ok) = true;
                     
@@ -13485,7 +13483,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize);
     limb = new LimbField(this, &(sight->limb));
-    (limb->name)->Enable(false);
     (limb->name_new)->Enable(false);
 
     //sextant altitude
@@ -16064,9 +16061,7 @@ void SightFrame::set(void){
         //if  body is not sun or moon, then I set the limb GUI field to empty and disable it
         
         long i;
-        
-        (limb->name)->SetValue("");
-        
+                
         for(i=0; i<3; i++){limb->name_new->Check(((unsigned int)i), false);}
         limb->checked_items.Clear();
         
@@ -17230,7 +17225,6 @@ void LimbField::set(void){
     checked_items.Clear();
     
     if((limb->value) == 'u'){
-        name->SetValue("upper");
         
         name_new->Check(0, true);
         name_new->Check(1, false);
@@ -17240,7 +17234,6 @@ void LimbField::set(void){
     }
     
     if((limb->value) == 'l'){
-        name->SetValue("lower");
         
         name_new->Check(0, false);
         name_new->Check(1, false);
@@ -17251,7 +17244,6 @@ void LimbField::set(void){
     }
     
     if((limb->value) == 'c'){
-        name->SetValue("center");
         
         name_new->Check(0, false);
         name_new->Check(1, true);
@@ -17268,7 +17260,6 @@ void LimbField::set(void){
 //this function enables/disable the LimbField
 void LimbField::Enable(bool is_enabled){
     
-    name->Enable(is_enabled);
     name_new->Enable(is_enabled);
 
 }
@@ -17486,7 +17477,6 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     limbs_new[1] = wxString("center");
     limbs_new[2] = wxString("lower");
     
-    name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, limbs, wxCB_DROPDOWN);
     name_new = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs.GetCount(), limbs_new, 0, wxDefaultValidator, wxString("Limb choices"));
     
     change_selection = new OnChangeSelectionInLimbField(this);
@@ -17496,31 +17486,20 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     name_new->SetBackgroundColour(parent_frame->GetBackgroundColour());
     //SetColor(name);
     
-    //name->SetInitialSize(name->GetSizeFromTextSize(name->GetTextExtent(wxS("000"))));
-    //name->SetValue("");
-    AdjustWidth(name);
-    name->SetValue(wxString(""));
-    //deselect all items and empty cecked_items accordingly
+    //uncheck all items and empty cecked_items accordingly
     for(i=0; i<3; i++){name_new->Check(((unsigned int)i), false);}
     checked_items.Clear();
     ok = false;
     
-    name->Bind(wxEVT_KILL_FOCUS, (*check));
     name_new->Bind(wxEVT_CHECKLISTBOX, (*check));
-    //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-//    name->Bind(wxEVT_COMBOBOX, &LimbField::OnEdit<wxCommandEvent>, this);
-//    name->Bind(wxEVT_KEY_UP, &LimbField::OnEdit<wxKeyEvent>, this);
-    
     //whenever an item is selected/deselected in name_new, I call change_selection->operator
     name_new->Bind(wxEVT_CHECKLISTBOX, *change_selection);
   
-    
-    
+
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(name, 0, wxALIGN_CENTER);
     sizer_h->Add(name_new, 0, wxALIGN_CENTER);
 
 }
@@ -18283,7 +18262,6 @@ template<class E> void BodyField::OnEdit(E& event){
         //the text entered in name is valid
         
         //I enable the limb field if and only if the selected body allows for a field and I run check on the existing text in the limb field
-        ((parent_frame->limb)->name)->Enable((bodies[i] == wxString("sun")) || (bodies[i] == wxString("moon")));
         ((parent_frame->limb)->name_new)->Enable((bodies[i] == wxString("sun")) || (bodies[i] == wxString("moon")));
         (*((parent_frame->limb)->check))(event);
         
@@ -18294,7 +18272,6 @@ template<class E> void BodyField::OnEdit(E& event){
     }else{
         //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body related to limb is invalid
         
-        ((parent_frame->limb)->name)->Enable(false);
         ((parent_frame->limb)->name_new)->Enable(false);
         ((parent_frame->limb)->ok) = false;
         
@@ -18326,7 +18303,6 @@ bool LimbField::is_ok(void){
 
 template <typename EventTag, typename Method, typename Object> void LimbField::Bind(EventTag tag,  Method method, Object object){
     
-    name->Bind(tag, method, object);
     name_new->Bind(tag, method, object);
 
 }

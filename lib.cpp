@@ -10599,7 +10599,7 @@ template<class T> void LimbField::get(T &event){
             //if the limb is ok and the limb wxComboBox is enabled, I set the char in (limb->value) to the first letter in the string contained in the GUI field
             
             //            (limb->value) = ((String((name->GetValue().ToStdString()))).value)[0];
-            (limb->value) = ((String(((limbs.Item(selected_items->Item(0))).ToStdString()))).value)[0];
+            (limb->value) = ((String(((limbs.Item(checked_items.Item(0))).ToStdString()))).value)[0];
 
         }else{
             //if the limb is ok and the limb wxComboBox is disabled, then the limb is irrelevant, and I set the char in limb->value to the null char.
@@ -16063,7 +16063,13 @@ void SightFrame::set(void){
     }else{
         //if  body is not sun or moon, then I set the limb GUI field to empty and disable it
         
+        long i;
+        
         (limb->name)->SetValue("");
+        
+        for(i=0; i<3; i++){limb->name_new->Check(((unsigned int)i), false);}
+        limb->checked_items.Clear();
+        
         limb->Enable(false);
     }
     

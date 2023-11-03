@@ -1318,7 +1318,7 @@ public:
         
 };
 
-//if an item is selected/deselected in caller, call operator() to make sure that only one item is selected at a time 
+//if an item is selected/deselected in caller, call operator() to make sure that only one item is selected at a time
 class OnChangeSelectionInCheckListBox{
     
 public:
@@ -1825,8 +1825,8 @@ public:
     wxBoxSizer *sizer_h, *sizer_v;
     bool ok;
     CheckLimb* check;
-    
-     
+    OnChangeSelectionInCheckListBox* change_selection;
+
     LimbField(SightFrame*, Limb*);
     void set(void);
     void Enable(bool);

@@ -2703,7 +2703,7 @@ int Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[mayb
             
             //delete duplicates from t
             set<Angle> t_temp( t->begin(), t->end() );
-            t->assign( t_temp.begin(), t_temp.end() );
+            t->assign(t_temp.begin(), t_temp.end());
             
         }
         

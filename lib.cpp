@@ -1551,13 +1551,13 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
 }
 
 
-Rectangle::Rectangle(void){
+MyRectangle::MyRectangle(void){
     
     
 }
 
 //constructor which constructs p_NW and p_SE from p_NW_in and p_SE_in. For this to work, p_NW_in must lie at the NW of p_SE_in
-Rectangle::Rectangle(Position p_NW_in, Position p_SE_in, [[maybe_unused]] String prefix){
+MyRectangle::MyRectangle(Position p_NW_in, Position p_SE_in, [[maybe_unused]] String prefix){
     
     //    Angle phi_N, phi_S, lambda_W, lambda_E;
     //
@@ -1592,7 +1592,7 @@ Rectangle::Rectangle(Position p_NW_in, Position p_SE_in, [[maybe_unused]] String
 }
 
 //returns true/false if p is containted in *this
-bool Rectangle::Contains(Position p){
+bool MyRectangle::Contains(Position p){
     
     bool check_lambda;
     
@@ -2568,8 +2568,8 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle> *t, [[maybe_unuse
     
 }
 
-//If *this is a loxodrome, return -1 because I don't know how to determine whetehr the loxodrome is included in a Rectangle. Otherwise, if *this is included into the Rectangle rectangle it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it reallocates t and writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this entirely lies within circle and write_t = true, it returns t[0] = t[1] = 0.0
-int Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[maybe_unused]] String prefix){
+//If *this is a loxodrome, return -1 because I don't know how to determine whetehr the loxodrome is included in a MyRectangle. Otherwise, if *this is included into the MyRectangle rectangle it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it reallocates t and writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this entirely lies within circle and write_t = true, it returns t[0] = t[1] = 0.0
+int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle> *t, [[maybe_unused]] String prefix){
     
     
     if(type == String("l")){
@@ -2704,7 +2704,7 @@ int Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[mayb
             //delete duplicates from t
 //            set<Angle> t_temp(t->begin(), t->end());
 //            t->assign(t_temp.begin(), t_temp.end());
-//            
+//
         }
         
         return output;
@@ -8786,7 +8786,7 @@ void DrawPanel::Draw_Mercator(void){
     (this->*Set_x_y_min_max)();
     
     //set rectangle_obseerver
-    rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min), String(""));
+    rectangle_observer = MyRectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min), String(""));
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > x_span()){

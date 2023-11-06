@@ -2690,7 +2690,7 @@ int Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[mayb
         
         if(write_t){
             
-            //I push back into to the last value of u, wich corresponds to the endpoint of *this  and which has not been pushed back by the loop above
+            //I push back into t the last value of u, wich corresponds to the endpoint of *this  and which has not been pushed back by the loop above
             t->push_back(u.back());
             
             if((type == String("c")) && is_fully_included && (t->size() == 2)){
@@ -2702,9 +2702,9 @@ int Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[mayb
             }
             
             //delete duplicates from t
-            set<Angle> t_temp(t->begin(), t->end());
-            t->assign(t_temp.begin(), t_temp.end());
-            
+//            set<Angle> t_temp(t->begin(), t->end());
+//            t->assign(t_temp.begin(), t_temp.end());
+//            
         }
         
         return output;

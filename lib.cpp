@@ -10457,7 +10457,7 @@ void ChartFrame::UpdateSlider(void){
 }
 
 
-template<class T>void CheckBody::operator()(T& event){
+template<class P> template<class T>void CheckBody<P>::operator()(T& event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -12661,7 +12661,7 @@ template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operat
     
 }
 
-CheckBody::CheckBody(BodyField* p_in){
+template<class P> CheckBody<P>::CheckBody(BodyField<P>* p_in){
     
     p = p_in;
     
@@ -13487,7 +13487,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     
     StaticText* text_combo_body = new StaticText(panel, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize);
-    body = new BodyField(panel, &(sight->body), catalog);
+    body = new BodyField<SightFrame>(panel, &(sight->body), catalog);
     
     StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize);
     limb = new LimbField(panel, &(sight->limb));
@@ -13599,7 +13599,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, label->set_to_current_time);
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_reduce->Bind(wxEVT_BUTTON, &BodyField::get<wxCommandEvent>, body);
+    button_reduce->Bind(wxEVT_BUTTON, &BodyField<SightFrame>::get<wxCommandEvent>, body);
     button_reduce->Bind(wxEVT_BUTTON, &LimbField::get<wxCommandEvent>, limb);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, H_s);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, index_error);
@@ -17139,7 +17139,7 @@ template<class P> void ProjectionField<P>::write_recent_items(void){
 //constructor of a BodyField object, based on the parent frame frame
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c){
     
-    parent_frame = ((P*)(panel_of_parent->GetParent();));
+    parent_frame = ((P*)(panel_of_parent->GetParent()));
     //I link the internal pointers p and c to the respective body and body catalog
     body = p;
     catalog = c;
@@ -17147,7 +17147,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
     //sets the name of file_recent for future use
     file_recent.set_name((wxGetApp().path_file_recent));
     
-    check = new CheckBody(this);
+    check = new CheckBody<P>(this);
     
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
     //    name->SetValue("");
@@ -17174,7 +17174,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 
 
 //sets the value in the GUI object name equal to the value in the non-GUI Body object body
-void BodyField::set(void){
+template<class P> void BodyField<P>::set(void){
     
     name->SetValue((body->name).value);
     ok = true;
@@ -17182,7 +17182,7 @@ void BodyField::set(void){
 }
 
 //sets the value in the non-GUI object body equal to the value in the GUI  object name
-template<class T> void BodyField::get(T& event){
+template<class P> template<class T> void BodyField<P>::get(T& event){
     
     unsigned int i;
     bool check;
@@ -18225,14 +18225,14 @@ void ChronoField::Enable(bool is_enabled){
     
 }
 
-bool BodyField::is_ok(void){
+template<class P> bool BodyField<P>::is_ok(void){
     
     return(ok);
     
 }
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
-template<class E> void BodyField::OnEdit(E& event){
+template<class P> template<class E> void BodyField<P>::OnEdit(E& event){
     
     unsigned int i;
     bool check;
@@ -18270,7 +18270,7 @@ template<class E> void BodyField::OnEdit(E& event){
     
 }
 
-template <typename EventTag, typename Method, typename Object> void BodyField::Bind(EventTag tag,  Method method, Object object){
+template<class P> template <typename EventTag, typename Method, typename Object> void BodyField<P>::Bind(EventTag tag,  Method method, Object object){
     
     name->Bind(tag, method, object);
     
@@ -18493,14 +18493,14 @@ template <typename EventTag, typename Method, typename Object> void RouteTypeFie
 
 
 
-template<class T> void BodyField::InsertIn(T* host){
+template<class P> template<class T> void BodyField<P>::InsertIn(T* host){
     
     host->Add(sizer_v);
     
 }
 
 //reads from file_recent the recently selected items in the dropdown menu of BodyField and updates the dropdown menu in such a way that the recent items appear on top of it
-void BodyField::read_recent_items(void){
+template<class P> void BodyField<P>::read_recent_items(void){
     
     unsigned int i, j;
     wxArrayString bodies_temp;
@@ -18591,7 +18591,7 @@ void BodyField::read_recent_items(void){
 }
 
 //write the recent items in recent_itams to file
-void BodyField::write_recent_items(void){
+template<class P> void BodyField<P>::write_recent_items(void){
     
     String prefix, s;
     stringstream temp;

@@ -22,7 +22,7 @@
 //#include "chartdir.h"
 
 
-class BodyField;
+template<class P> class BodyField;
 template<class P> class ProjectionField;
 class LimbField;
 template<class T> class CheckField;
@@ -1014,13 +1014,13 @@ public:
 
 
 //this checks if an element of the BodyField class is valid
-class CheckBody{
+template<class P> class CheckBody{
     
 public:
     
-    BodyField* p;
+    BodyField<P>* p;
     
-    CheckBody(BodyField*);
+    CheckBody(BodyField<P>*);
     template<class T> void operator()(T&);
     
     
@@ -1789,7 +1789,7 @@ public:
     
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
-    CheckBody* check;
+    CheckBody<P>* check;
     File file_recent;
     vector<int> recent_items;
     
@@ -2249,7 +2249,7 @@ public:
     UnsetIdling<SightFrame>* unset_idling;
     PrintMessage<SightFrame, UnsetIdling<SightFrame> >* print_error_message;
     
-    BodyField* body;
+    BodyField<SightFrame>* body;
     LimbField* limb;
     CheckField< LengthField<SightFrame> >* artificial_horizon_check;
     CheckField<ChronoField>* stopwatch_check;

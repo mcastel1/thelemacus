@@ -4701,7 +4701,8 @@ void Limb::read_from_file(String name, File& file, bool search_entire_file, [[ma
 }
 
 
-void Body::read_from_file(String name, File& file, [[maybe_unused]] String prefix){
+//read a Body from file, and it returns true if it has not reached the end of file, false otherwise
+bool Body::read_from_file(String name, File& file, [[maybe_unused]] String prefix){
     
     string line;
     String new_prefix;
@@ -4716,27 +4717,40 @@ void Body::read_from_file(String name, File& file, [[maybe_unused]] String prefi
     //read first line with no information
     getline(file.value, line);
     
-    //read type
-    line.clear();
-    getline(file.value, line);
-    pos = line.find(" = ");
-    type = line.substr(pos+3, line.size() - (pos+3));
-    cout << new_prefix.value << "Type = " << type.value << "\n";
-    
-    
-    //read name
-    line.clear();
-    getline(file.value, line);
-    pos = line.find(" = ");
-    ((*this).name) = line.substr(pos+3, line.size() - (pos+3));
-    cout << new_prefix.value << "Name = " << ((*this).name).value << "\n";
-    
-    
-    if(type == String("star")){
-        RA.read_from_file(String("right ascension"), file, false, new_prefix);
-        d.read_from_file(String("declination"), file, false, new_prefix);
+    if(!(file.value).eof()){
+        //file.value has not reached the end of file
+        
+        
+        //read type
+        line.clear();
+        getline(file.value, line);
+        pos = line.find(" = ");
+        type = line.substr(pos+3, line.size() - (pos+3));
+        cout << new_prefix.value << "Type = " << type.value << "\n";
+        
+        
+        //read name
+        line.clear();
+        getline(file.value, line);
+        pos = line.find(" = ");
+        ((*this).name) = line.substr(pos+3, line.size() - (pos+3));
+        cout << new_prefix.value << "Name = " << ((*this).name).value << "\n";
+        
+        
+        if(type == String("star")){
+            RA.read_from_file(String("right ascension"), file, false, new_prefix);
+            d.read_from_file(String("declination"), file, false, new_prefix);
+        }else{
+            radius.read_from_file(String("radius"), file, false, new_prefix);
+        }
+        
+        return true;
+        
     }else{
-        radius.read_from_file(String("radius"), file, false, new_prefix);
+        //file.value has reached the end of file
+        
+        return false;
+        
     }
     
 }
@@ -4748,30 +4762,30 @@ Catalog::Catalog(String filename, [[maybe_unused]] String prefix){
     File file;
     string line;
     Body body;
-    streampos old_position;
+//    streampos old_position;
     
     
     file.set_name(filename);
     if(file.open(String("in"), String(""))){
         
         // stores the position of file.value
-        old_position = file.value.tellg();
+//        old_position = file.value.tellg();
         //read the next line in the file
-        getline(file.value, line);
+//        getline(file.value, line);
         
         //check whether the next line in the file has reached the end of file
-        while(!(file.value).eof()){
+        while((body.read_from_file(String("read body"), file, prefix)) == true){
             
             //if the next line in the file has not reached the end of file, I set file.value to its old position and keep reading the file
-            (file.value).seekg(old_position);
+//            (file.value).seekg(old_position);
             
-            body.read_from_file(String("read body"), file, prefix);
+//            body.read_from_file(String("read body"), file, prefix);
             list.push_back(body);
             
             // stores the position of file.value
-            old_position = file.value.tellg();
+//            old_position = file.value.tellg();
             //read the next line in the file
-            getline(file.value, line);
+//            getline(file.value, line);
             
         }
         

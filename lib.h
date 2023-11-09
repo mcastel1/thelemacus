@@ -849,7 +849,7 @@ public:
     void enter(String, Catalog, String);
     bool check(unsigned int*, Catalog, String);
     void print(String, String, ostream&);
-    void read_from_file(String, File&, String);
+    bool read_from_file(String, File&, String);
     
     bool operator==(const Body&);
     

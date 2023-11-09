@@ -9602,8 +9602,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     unset_idling = new UnsetIdling<ChartFrame>(this);
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
     
-    //    ((print_error_message->message_frame)->button_ok)->Bind(wxEVT_BUTTON, *unset_idling);
-    
     
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
     draw_panel = new DrawPanel(panel, wxDefaultPosition, wxDefaultSize);
@@ -9650,10 +9648,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
                                           );
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
     
-    
     projection = new ProjectionField<ChartFrame>(panel);
     (projection->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
-    
     
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveNorth<wxCommandEvent>, this);
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveSouth<wxCommandEvent>, this);
@@ -9680,9 +9676,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     empty_text_3 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     empty_text_4 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
     empty_text_5 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
-    
-    
-    
     
     //when the ChartFrame is initialized with projection_in = "", I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of projection->name to either of these,
     if(projection_in == String("")){
@@ -9711,10 +9704,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     (draw_panel->height_chart_0) = ((draw_panel->size_chart).GetHeight());
     
     
-    
-    //    draw_panel->SetMinSize(wxSize((draw_panel->chart)->getWidth(),(draw_panel->chart)->getHeight()));
-    //
-    
     sizer_buttons->Add(empty_text_1, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_buttons->Add(button_up, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_buttons->Add(empty_text_2, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
@@ -9741,9 +9730,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     //    sizer_v->Fit(panel);
     
-    //    Maximize(panel);
-    SetSizerAndFit(sizer_v);
-    
+    Maximize(panel);
+    panel->SetSizerAndFit(sizer_v);
+    panel->Fit();
+    Fit();
+  
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
     
@@ -13911,8 +13902,6 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     if(!check){
         cout << prefix.value << RED << "Cannot read position!\n" << RESET;
     }
- 
-    
     
     Maximize(panel);
     panel->SetSizerAndFit(sizer);
@@ -13924,7 +13913,6 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     if(position_in != NULL){set();}
     
     Centre();
-    
     
 }
 

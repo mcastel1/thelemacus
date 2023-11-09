@@ -13487,7 +13487,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //sextant altitude
     StaticText* text_H_s = new StaticText(panel, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize);
-    H_s = new AngleField<SightFrame>(this, &(sight->H_s), String(""));
+    H_s = new AngleField<SightFrame>(panel, &(sight->H_s), String(""));
     
     //index error
     StaticText* text_index_error = new StaticText(panel, wxT("Index error"), wxDefaultPosition, wxDefaultSize);
@@ -13496,7 +13496,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
         (sight->index_error).read_from_file(String("index error"), file_init, true, new_prefix);
         (sight->index_error).to_deg_min(&deg, &min);
     }
-    index_error = new AngleField<SightFrame>(this, &(sight->index_error), String("+-"));
+    index_error = new AngleField<SightFrame>(panel, &(sight->index_error), String("+-"));
     index_error->set();
     
     //artificial horizon
@@ -13982,7 +13982,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     
     //Z
     StaticText* text_Z = new StaticText(panel, wxT("Z"), wxDefaultPosition, wxDefaultSize);
-    Z = new AngleField<RouteFrame>(this, &(route->Z), String(""));
+    Z = new AngleField<RouteFrame>(panel, &(route->Z), String(""));
     
     //l
     StaticText* text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize);
@@ -13992,22 +13992,22 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     //start
     //start_phi
     StaticText* text_start_phi = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize);
-    start_phi = new AngleField<RouteFrame>(this, &((route->reference_position).phi), String("NS"));
+    start_phi = new AngleField<RouteFrame>(panel, &((route->reference_position).phi), String("NS"));
     //start_lambda
     StaticText* text_start_lambda = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize);
-    start_lambda = new AngleField<RouteFrame>(this, &((route->reference_position).lambda), String("EW"));
+    start_lambda = new AngleField<RouteFrame>(panel, &((route->reference_position).lambda), String("EW"));
     
     //GP (ground position)
     //GP_phi
     StaticText* text_GP_phi = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize);
-    GP_phi = new AngleField<RouteFrame>(this, &((route->reference_position).phi), String("NS"));
+    GP_phi = new AngleField<RouteFrame>(panel, &((route->reference_position).phi), String("NS"));
     //GP_lambda
     StaticText* text_GP_lambda = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize);
-    GP_lambda = new AngleField<RouteFrame>(this, &((route->reference_position).lambda), String("EW"));
+    GP_lambda = new AngleField<RouteFrame>(panel, &((route->reference_position).lambda), String("EW"));
     
     //omega
     StaticText* text_omega = new StaticText(panel, wxT("Omega"), wxDefaultPosition, wxDefaultSize);
-    omega = new AngleField<RouteFrame>(this, &(route->omega), String(""));
+    omega = new AngleField<RouteFrame>(panel, &(route->omega), String(""));
     
     //label
     StaticText* text_label = new StaticText(panel, wxT("Label"), wxDefaultPosition, wxDefaultSize);
@@ -17530,10 +17530,10 @@ template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* rel
 
 
 //constructor of an AngleField object, based on the parent frame frame
-template <class P> AngleField<P>::AngleField(P* parent_in, Angle* p, String format_in){
+template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p, String format_in){
     
     unsigned int i;
-    parent_frame = parent_in;
+    parent_frame = ((P*)(panel_of_parent->GetParent()));
     angle = p;
     
     format = format_in;

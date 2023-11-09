@@ -1860,7 +1860,7 @@ public:
     CheckAngle<P>* check;
     
     
-    AngleField(P*, Angle*, String);
+    AngleField(wxPanel*, Angle*, String);
     void Enable(bool);
     void set(void);
     template<class T> void get(T&);

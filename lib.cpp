@@ -13589,8 +13589,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     
     //label
-    StaticText* text_label = new StaticText(panel,wxT("Label"), wxDefaultPosition, wxDefaultSize);
-    label = new StringField<SightFrame>(this, &(sight->label));
+    StaticText* text_label = new StaticText(panel, wxT("Label"), wxDefaultPosition, wxDefaultSize);
+    label = new StringField<SightFrame>(panel, &(sight->label));
     
     
     button_cancel->Bind(wxEVT_BUTTON, &SightFrame::OnPressCancel, this);
@@ -14011,7 +14011,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     
     //label
     StaticText* text_label = new StaticText(panel, wxT("Label"), wxDefaultPosition, wxDefaultSize);
-    label = new StringField<RouteFrame>(this, &(route->label));
+    label = new StringField<RouteFrame>(panel, &(route->label));
     
     
     //If the user is about to enter a brand new route, then these fields are disable until a route type si specified
@@ -17724,9 +17724,9 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
 
 
 //constructor of a StringField object, based on the parent frame frame
-template<class P> StringField<P>::StringField(P* parent_in, String* p){
+template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* p){
     
-    parent_frame = parent_in;
+    parent_frame = ((P*)(panel_of_parent->GetParent()));
     string = p;
     
     //initialize check

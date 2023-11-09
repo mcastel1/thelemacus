@@ -1920,7 +1920,7 @@ public:
     CheckString<P> check;
     SetStringFieldToCurrentTime<P> set_to_current_time;
     
-    StringField(P*, String*);
+    StringField(wxPanel*, String*);
     void set(void);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);

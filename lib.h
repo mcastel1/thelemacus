@@ -1776,7 +1776,7 @@ public:
     
 };
 
-class BodyField{
+template<class P> class BodyField{
     
 public:
     //the parent frame to which this object is attached
@@ -1795,7 +1795,7 @@ public:
     
     bool ok;
     
-    BodyField(SightFrame*, Body*, Catalog*);
+    BodyField(wxPanel*, Body*, Catalog*);
     void read_recent_items(void);
     void write_recent_items(void);
     void set(void);

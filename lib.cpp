@@ -13509,7 +13509,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //artificial horizon
     StaticText* text_artificial_horizon_check = new StaticText(panel, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize);
-    artificial_horizon_check = new CheckField< LengthField<SightFrame> >(panel, &(sight->artificial_horizon), NULL, false);
+    artificial_horizon_check = new CheckField<SightFrame, LengthField<SightFrame> >(panel, &(sight->artificial_horizon), NULL, false);
     
     //height of eye
     StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize);
@@ -13556,7 +13556,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //check/uncheck stopwatch
     StaticText* text_stopwatch_check = new StaticText(panel, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize);
-    stopwatch_check = new CheckField<ChronoField>(panel, &(sight->use_stopwatch), NULL, true);
+    stopwatch_check = new CheckField<SightFrame, ChronoField>(panel, &(sight->use_stopwatch), NULL, true);
     //I bind stopwatch_check to OnEditTime in such a way that, if the user enters a stopwatch_check such that sight->time lies outside the ephemerides' time interval, an error message is prompted
     //    (stopwatch_check->checkbox)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     //if stopwatch_check is checked/unchecked, then I runm OnEditTime to verify that the time of sight lies within the ephemerides' time span
@@ -13603,11 +13603,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &LimbField::get<wxCommandEvent>, limb);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, H_s);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, index_error);
-    button_reduce->Bind(wxEVT_BUTTON, &CheckField< LengthField<SightFrame> >::get<wxCommandEvent>, artificial_horizon_check);
+    button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, LengthField<SightFrame> >::get<wxCommandEvent>, artificial_horizon_check);
     button_reduce->Bind(wxEVT_BUTTON, &LengthField<SightFrame>::get<wxCommandEvent>, height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, &DateField::get<wxCommandEvent>, master_clock_date);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, master_clock_chrono);
-    button_reduce->Bind(wxEVT_BUTTON, &CheckField<ChronoField>::get<wxCommandEvent>, stopwatch_check);
+    button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, ChronoField>::get<wxCommandEvent>, stopwatch_check);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, stopwatch_reading);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, TAI_minus_UTC);
     button_reduce->Bind(wxEVT_BUTTON, &StringField<SightFrame>::get<wxCommandEvent>, label);
@@ -16427,7 +16427,7 @@ template<class T> void TabulateDays::operator()(T& event){
 
 
 //this function reads the value in the GUI box checkbox, and enables/disables the related_field accordingly
-template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
+template<class P, class T> template<class R> void CheckCheck<P,T>::operator()(R& event){
     
     //I enable/disable related_field according to whether checkbox is checked or not, and according to the value of direct_reverse
     if((((p->checkbox)->GetValue()) ^ (!(p->direct_reverse)))){
@@ -16448,7 +16448,7 @@ template<class T> template<class R> void CheckCheck<T>::operator()(R& event){
 
 
 //this function writes into the non-GUI field answer the value entered in the GUI box
-template<class T> template<class S> void CheckField<T>::get(S& event){
+template<class P,class T> template<class S> void CheckField<P,T>::get(S& event){
     
     //I set p->answer to the value entered in the GUI checkbox
     if(checkbox->GetValue()){
@@ -17253,7 +17253,7 @@ void LimbField::Enable(bool is_enabled){
 }
 
 //sets the value in the GUI object check equal to the value in the non-GUI limb object answer
-template<class T> void CheckField<T>::set(void){
+template<class P,class T> void CheckField<P,T>::set(void){
     
     if((answer->value) == 'y'){
         checkbox->SetValue(true);
@@ -17265,7 +17265,7 @@ template<class T> void CheckField<T>::set(void){
     
 }
 
-template<class T> template <typename EventTag, typename Method, typename Object> void CheckField<T>::Bind(EventTag tag,  Method method, Object object){
+template<class P,class T> template <typename EventTag, typename Method, typename Object> void CheckField<P,T>::Bind(EventTag tag,  Method method, Object object){
     
     checkbox->Bind(tag, method, object);
     
@@ -17490,15 +17490,15 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
 
 
 //constructor of a CheckField object, based on the parent frame frame
-template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* related_field_in, bool direct_reverse_in){
+template<class P, class T> CheckField<P,T>::CheckField(wxPanel* panel_of_parent, Answer* p, T* related_field_in, bool direct_reverse_in){
     
-    parent = frame;
+    parent = ((P*)(panel_of_parent->GetParent()));
     //I link the internal pointers p and c to the respective Answer object
     answer = p;
     related_field = related_field_in;
     direct_reverse = direct_reverse_in;
     
-    check = new CheckCheck<T>;
+    check = new CheckCheck<P,T>;
     (check->p) = this;
     
     checkbox = new wxCheckBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
@@ -18621,7 +18621,7 @@ template<class T> void LimbField::InsertIn(T* host){
     
 }
 
-template<class T> template<class R> void CheckField<T>::InsertIn(R* host){
+template<class P,class T> template<class R> void CheckField<P,T>::InsertIn(R* host){
     
     host->Add(sizer_v);
     

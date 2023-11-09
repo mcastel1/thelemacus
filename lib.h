@@ -25,7 +25,7 @@
 template<class P> class BodyField;
 template<class P> class ProjectionField;
 class LimbField;
-template<class T> class CheckField;
+template<class P, class T> class CheckField;
 template<class P> class AngleField;
 template<class P> class LengthField;
 class DateField;
@@ -1051,9 +1051,9 @@ struct CheckLimb{
 };
 
 
-template<class T> struct CheckCheck{
+template<class P, class T> struct CheckCheck{
     
-    CheckField<T>* p;
+    CheckField<P,T>* p;
     
     //this functor checks whether a GUI Check field is filled correctly and writes its value into the relative non-GUI field
     template<class R> void operator()(R&);
@@ -1556,12 +1556,12 @@ public:
 
 
 //this is a GUI field contaning a binary checkbox, which is either checked or unchecked
-template<class T> class CheckField{
+template<class P, class T> class CheckField{
     
 public:
     
     //the parent frame to which this object is attached
-    SightFrame* parent;
+    P* parent;
     Answer* answer;
     //related_field is a GUI field (such as ChronoField, etc) related to this CheckField, such that: if direct_reverse = true->  when the checkbox in this CheckFIeld is checked (unchecked), related_field is active (inactive). If direct_reverse = false ->  when the checkbox in this CheckFIeld is unchecked (checked), related_field is active (inactive).
     T* related_field;
@@ -1570,9 +1570,9 @@ public:
     
     //this is the wxCheckBox with the name of the bodies
     wxCheckBox* checkbox;
-    CheckCheck<T>* check;
+    CheckCheck<P,T>* check;
     
-    CheckField(SightFrame*, Answer*, T*, bool);
+    CheckField(wxPanel*, Answer*, T*, bool);
     
     template<class R> void InsertIn(R*);
     template<class S> void get(S&);
@@ -2251,8 +2251,8 @@ public:
     
     BodyField<SightFrame>* body;
     LimbField* limb;
-    CheckField< LengthField<SightFrame> >* artificial_horizon_check;
-    CheckField<ChronoField>* stopwatch_check;
+    CheckField<SightFrame, LengthField<SightFrame> >* artificial_horizon_check;
+    CheckField<SightFrame, ChronoField>* stopwatch_check;
     AngleField<SightFrame>* H_s, *index_error;
     LengthField<SightFrame>* height_of_eye;
     DateField *master_clock_date;

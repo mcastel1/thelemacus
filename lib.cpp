@@ -1551,13 +1551,13 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol){
 }
 
 
-Rectangle::Rectangle(void){
+MyRectangle::MyRectangle(void){
     
     
 }
 
 //constructor which constructs p_NW and p_SE from p_NW_in and p_SE_in. For this to work, p_NW_in must lie at the NW of p_SE_in
-Rectangle::Rectangle(Position p_NW_in, Position p_SE_in, [[maybe_unused]] String prefix){
+MyRectangle::MyRectangle(Position p_NW_in, Position p_SE_in, [[maybe_unused]] String prefix){
     
     //    Angle phi_N, phi_S, lambda_W, lambda_E;
     //
@@ -1592,7 +1592,7 @@ Rectangle::Rectangle(Position p_NW_in, Position p_SE_in, [[maybe_unused]] String
 }
 
 //returns true/false if p is containted in *this
-bool Rectangle::Contains(Position p){
+bool MyRectangle::Contains(Position p){
     
     bool check_lambda;
     
@@ -2568,8 +2568,8 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle> *t, [[maybe_unuse
     
 }
 
-//If *this is a loxodrome, return -1 because I don't know how to determine whetehr the loxodrome is included in a Rectangle. Otherwise, if *this is included into the Rectangle rectangle it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it reallocates t and writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this entirely lies within circle and write_t = true, it returns t[0] = t[1] = 0.0
-int Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[maybe_unused]] String prefix){
+//If *this is a loxodrome, return -1 because I don't know how to determine whetehr the loxodrome is included in a MyRectangle. Otherwise, if *this is included into the MyRectangle rectangle it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it reallocates t and writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this entirely lies within circle and write_t = true, it returns t[0] = t[1] = 0.0
+int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle> *t, [[maybe_unused]] String prefix){
     
     
     if(type == String("l")){
@@ -2690,7 +2690,7 @@ int Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[mayb
         
         if(write_t){
             
-            //I push back into to the last value of u, wich corresponds to the endpoint of *this  and which has not been pushed back by the loop above
+            //I push back into t the last value of u, wich corresponds to the endpoint of *this  and which has not been pushed back by the loop above
             t->push_back(u.back());
             
             if((type == String("c")) && is_fully_included && (t->size() == 2)){
@@ -2702,9 +2702,9 @@ int Route::inclusion(Rectangle rectangle, bool write_t, vector<Angle> *t, [[mayb
             }
             
             //delete duplicates from t
-            set<Angle> t_temp( t->begin(), t->end() );
-            t->assign( t_temp.begin(), t_temp.end() );
-            
+//            set<Angle> t_temp(t->begin(), t->end());
+//            t->assign(t_temp.begin(), t_temp.end());
+//
         }
         
         return output;
@@ -4701,7 +4701,8 @@ void Limb::read_from_file(String name, File& file, bool search_entire_file, [[ma
 }
 
 
-void Body::read_from_file(String name, File& file, [[maybe_unused]] String prefix){
+//read a Body from file, and it returns true if it has not reached the end of file, false otherwise
+bool Body::read_from_file(String name, File& file, [[maybe_unused]] String prefix){
     
     string line;
     String new_prefix;
@@ -4716,27 +4717,40 @@ void Body::read_from_file(String name, File& file, [[maybe_unused]] String prefi
     //read first line with no information
     getline(file.value, line);
     
-    //read type
-    line.clear();
-    getline(file.value, line);
-    pos = line.find(" = ");
-    type = line.substr(pos+3, line.size() - (pos+3));
-    cout << new_prefix.value << "Type = " << type.value << "\n";
-    
-    
-    //read name
-    line.clear();
-    getline(file.value, line);
-    pos = line.find(" = ");
-    ((*this).name) = line.substr(pos+3, line.size() - (pos+3));
-    cout << new_prefix.value << "Name = " << ((*this).name).value << "\n";
-    
-    
-    if(type == String("star")){
-        RA.read_from_file(String("right ascension"), file, false, new_prefix);
-        d.read_from_file(String("declination"), file, false, new_prefix);
+    if(!(file.value).eof()){
+        //file.value has not reached the end of file
+        
+        
+        //read type
+        line.clear();
+        getline(file.value, line);
+        pos = line.find(" = ");
+        type = line.substr(pos+3, line.size() - (pos+3));
+        cout << new_prefix.value << "Type = " << type.value << "\n";
+        
+        
+        //read name
+        line.clear();
+        getline(file.value, line);
+        pos = line.find(" = ");
+        ((*this).name) = line.substr(pos+3, line.size() - (pos+3));
+        cout << new_prefix.value << "Name = " << ((*this).name).value << "\n";
+        
+        
+        if(type == String("star")){
+            RA.read_from_file(String("right ascension"), file, false, new_prefix);
+            d.read_from_file(String("declination"), file, false, new_prefix);
+        }else{
+            radius.read_from_file(String("radius"), file, false, new_prefix);
+        }
+        
+        return true;
+        
     }else{
-        radius.read_from_file(String("radius"), file, false, new_prefix);
+        //file.value has reached the end of file
+        
+        return false;
+        
     }
     
 }
@@ -4748,30 +4762,30 @@ Catalog::Catalog(String filename, [[maybe_unused]] String prefix){
     File file;
     string line;
     Body body;
-    streampos old_position;
+//    streampos old_position;
     
     
     file.set_name(filename);
     if(file.open(String("in"), String(""))){
         
         // stores the position of file.value
-        old_position = file.value.tellg();
+//        old_position = file.value.tellg();
         //read the next line in the file
-        getline(file.value, line);
+//        getline(file.value, line);
         
         //check whether the next line in the file has reached the end of file
-        while(!(file.value).eof()){
+        while((body.read_from_file(String("read body"), file, prefix)) == true){
             
             //if the next line in the file has not reached the end of file, I set file.value to its old position and keep reading the file
-            (file.value).seekg(old_position);
+//            (file.value).seekg(old_position);
             
-            body.read_from_file(String("read body"), file, prefix);
+//            body.read_from_file(String("read body"), file, prefix);
             list.push_back(body);
             
             // stores the position of file.value
-            old_position = file.value.tellg();
+//            old_position = file.value.tellg();
             //read the next line in the file
-            getline(file.value, line);
+//            getline(file.value, line);
             
         }
         
@@ -8087,20 +8101,34 @@ void ListFrame::GetAllCoastLineData(void){
     
     //read file n_line and store it into vector n_line
     file_n_line.open(String("in"), String(""));
-    i=0;
-    while(!(file_n_line.value.eof())){
+    for(i=0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i<n_line.size()) && !(file_n_line.value.eof()); i++){
         
         line.clear();
         ins.clear();
         
         getline(file_n_line.value, line);
         ins << line;
-        ins >> (n_line[i++]);
-        
-        //        cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
+        ins >> (n_line[i]);
+        //        cout << "\nn_line[" << i << "] = " << n_line[i];
         
     }
     file_n_line.close(String(""));
+    
+    /*
+     i=0;
+     while(!(file_n_line.value.eof())){
+     
+     line.clear();
+     ins.clear();
+     
+     getline(file_n_line.value, line);
+     ins << line;
+     ins >> (n_line[i++]);
+     
+     //        cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
+     
+     }
+     */
     
     
     //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
@@ -8786,7 +8814,7 @@ void DrawPanel::Draw_Mercator(void){
     (this->*Set_x_y_min_max)();
     
     //set rectangle_obseerver
-    rectangle_observer = Rectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min), String(""));
+    rectangle_observer = MyRectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min), String(""));
     
     /*I set the aspect ratio between height and width equal to the ration between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     if((y_max-y_min) > x_span()){

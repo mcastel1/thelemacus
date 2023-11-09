@@ -242,8 +242,11 @@ bool MyApp::OnInit(){
     
     //to build the app
     //        where_am_I(String(""));
-    //to develop the app with Xcode
+    //to develop the app with Xcode on OSX
     run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
+    //to run the app with Visual Studio on Windows
+    //    run_directory = String("C:/Users/miche/Documents/sight_reduction_program/");
+
     
     
     settings = new wxSystemSettings();

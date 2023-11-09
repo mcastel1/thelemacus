@@ -8087,7 +8087,7 @@ void ListFrame::GetAllCoastLineData(void){
     
     //read file n_line and store it into vector n_line
     file_n_line.open(String("in"), String(""));
-    for(i=0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i<n_nline.size()) && !(file_n_line.value.eof()); i++){
+    for(i=0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i<n_line.size()) && !(file_n_line.value.eof()); i++){
         
         line.clear();
         ins.clear();
@@ -8095,7 +8095,7 @@ void ListFrame::GetAllCoastLineData(void){
         getline(file_n_line.value, line);
         ins << line;
         ins >> (n_line[i]);
-        //        cout << "\nn_line[" << i-1 << "] = " << n_line[i-1];
+        //        cout << "\nn_line[" << i << "] = " << n_line[i];
         
     }
     file_n_line.close(String(""));

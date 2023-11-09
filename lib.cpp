@@ -10643,7 +10643,7 @@ template<class T> void LimbField::get(T &event){
 //checks the value of the sign in the GUI field
 template<class P> template <class T> void CheckSign<P>::operator()(T &event){
     
-    P* f = (p->parent_frame);
+    P* f = (p->parent);
     
     //I proceed only if the progam is not is in idling mode
     if(!(f->idling)){
@@ -12974,7 +12974,7 @@ template <class T> void DateField::get(T& event){
 
 template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event){
     
-    P* f = (p->parent_frame);
+    P* f = (p->parent);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
@@ -13009,7 +13009,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
 
 template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event){
     
-    P* f = (p->parent_frame);
+    P* f = (p->parent);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
@@ -17560,7 +17560,7 @@ template<class T> CheckField<T>::CheckField(SightFrame* frame, Answer* p, T* rel
 template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p, String format_in){
     
     unsigned int i;
-    parent_frame = ((P*)(panel_of_parent->GetParent()));
+    parent = ((P*)(panel_of_parent->GetParent()));
     angle = p;
     
     format = format_in;
@@ -17606,10 +17606,10 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
     
     //here the allocation of sign is inserted in the code in such a way that if format = "+-" the sign is allocated before deg, text_deg, min, text_min: In this way, when the user tabs through the fields in PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
     if(format == String("+-")){
-        sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
+        sign = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
     }
     
-    deg = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
+    deg = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
     deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
     //SetColor(deg);
     AdjustWidth(deg);
@@ -17621,9 +17621,9 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
     deg->Bind(wxEVT_KEY_UP, &AngleField::OnEditArcDegree<wxKeyEvent>, this);
     
     
-    text_deg = new StaticText((parent_frame->panel), wxT("° "), wxDefaultPosition, wxDefaultSize);
+    text_deg = new StaticText((parent->panel), wxT("° "), wxDefaultPosition, wxDefaultSize);
     
-    min = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+    min = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
     //SetColor(min);
     min->SetValue(wxString(""));
@@ -17633,11 +17633,11 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
     min->Bind(wxEVT_KEY_UP, &AngleField::OnEditArcMinute<wxKeyEvent>, this);
     
     
-    text_min = new StaticText((parent_frame->panel), wxT("' "), wxDefaultPosition, wxDefaultSize);
+    text_min = new StaticText((parent->panel), wxT("' "), wxDefaultPosition, wxDefaultSize);
     
     //here the allocation of sign is inserted in the code in such a way that if format = "NS" || "EW" the sign is allocated after deg, text_deg, min, text_min: In this way, when the user tabs through the fields in the PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
     if((format == String("NS")) || (format == String("EW"))){
-        sign = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
+        sign = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
     }
     
     if(format != String("")){
@@ -17818,7 +17818,7 @@ template<class P> template<class E> void AngleField<P>::OnEditSign(E& event){
     sign_ok = check;
     
     //tries to enable button_reduce
-    parent_frame->AllOk();
+    parent->AllOk();
     
     event.Skip(true);
     
@@ -17844,7 +17844,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcDegree(E& event
     deg_ok = check;
     
     //tries to enable button_reduce
-    parent_frame->AllOk();
+    parent->AllOk();
     
     event.Skip(true);
     
@@ -17870,7 +17870,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcMinute(E& event
     min_ok = check;
     
     //tries to enable button_reduce
-    parent_frame->AllOk();
+    parent->AllOk();
     
     event.Skip(true);
     

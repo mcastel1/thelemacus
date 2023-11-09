@@ -13821,15 +13821,15 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     //latitude
     StaticText* text_lat = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize);
-    lat = new AngleField<PositionFrame>(this, &(position->phi), String("NS"));
+    lat = new AngleField<PositionFrame>(panel, &(position->phi), String("NS"));
     
     //longitude
     StaticText* text_lon = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize);
-    lon = new AngleField<PositionFrame>(this, &(position->lambda), String("EW"));
+    lon = new AngleField<PositionFrame>(panel, &(position->lambda), String("EW"));
     
     //label
     StaticText* text_label = new StaticText(panel, wxT("Label"), wxDefaultPosition, wxDefaultSize);
-    label = new StringField<PositionFrame>(this, &(position->label));
+    label = new StringField<PositionFrame>(panel, &(position->label));
     
     
     //I bind  button_ok to label->set_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
@@ -13892,7 +13892,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     CreateStatusBar();
     SetStatusText( "Welcome to UnsetIdling's text editor!" );
     
-    SetSizerAndFit(sizer);
+    panel->SetSizerAndFit(sizer);
     //Maximize();
     
     

@@ -9632,10 +9632,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     s << "1:" << (zoom_factor.value);
     text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize);
     
-    //image for button_list
-    ;
-    
-    
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
     button_down = new wxButton(panel, wxID_ANY, wxT("S"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);

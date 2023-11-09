@@ -23,7 +23,7 @@
 
 
 class BodyField;
-class ProjectionField;
+template<class P> class ProjectionField;
 class LimbField;
 template<class T> class CheckField;
 template<class P> class AngleField;
@@ -1751,10 +1751,10 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-class ProjectionField{
+template<class P> class ProjectionField{
     
 public:
-    ChartFrame* parent;
+    P* parent;
     
     wxBoxSizer *sizer_h, *sizer_v;
     wxArrayString  /*this is equal to a standard list of the available graphical types*/types;
@@ -1768,7 +1768,7 @@ public:
     
     bool ok;
 
-    ProjectionField(ChartFrame*);
+    ProjectionField(wxPanel*);
     void read_recent_items(void);
     void write_recent_items(void);
     template<class T> void InsertIn(T*);

@@ -15257,7 +15257,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_all->Add(sizer_h, 0,  wxALL | wxEXPAND, ((wxGetApp().border).value));
     
     Maximize(panel);
-    SetSizerAndFit(sizer_all);
+    panel->SetSizerAndFit(sizer_all);
     
     //    panel->SetSizer(sizer_v);
     

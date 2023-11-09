@@ -2230,7 +2230,6 @@ public:
 class SightFrame: public wxFrame{
     
 public:
-    SightFrame(ListFrame*, Sight*, long, const wxString&, const wxPoint&, const wxSize&, String);
     
     ListFrame* parent;
     Catalog* catalog;
@@ -2267,6 +2266,7 @@ public:
     wxButton* button_reduce, *button_cancel;
     wxMenuBar *menuBar;
     
+    SightFrame(ListFrame*, Sight*, long, const wxString&, const wxPoint&, const wxSize&, String);
     void set(void);
     bool is_ok();
     template<class T> void get(T&);

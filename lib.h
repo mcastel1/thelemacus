@@ -1911,7 +1911,7 @@ template<class P> class StringField{
     
 public:
     //the parent where this StringField object will be inserted
-    P* parent_frame;
+    P* parent;
     //label box
     wxTextCtrl *value;
     wxBoxSizer *sizer_h, *sizer_v;

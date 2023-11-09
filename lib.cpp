@@ -12893,7 +12893,7 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event){
 //this functor does nothing, delete it in the future
 template<class P> template<class T> void CheckString<P>::operator()(T &event){
     
-    P* f = (p->parent_frame);
+    P* f = (p->parent);
     
     //    (p->string)->set(String(""), String(((p->value)->GetValue()).ToStdString()), String(""));
     
@@ -17753,7 +17753,7 @@ template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_v
 //constructor of a StringField object, based on the parent frame frame
 template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* p){
     
-    parent_frame = ((P*)(panel_of_parent->GetParent()));
+    parent = ((P*)(panel_of_parent->GetParent()));
     string = p;
     
     //initialize check
@@ -17761,7 +17761,7 @@ template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* 
     
     (set_to_current_time.p) = this;
     
-    value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+    value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     //SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_string_field))));
     value->SetValue("");

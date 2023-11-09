@@ -13487,10 +13487,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     
     StaticText* text_combo_body = new StaticText(panel, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize);
-    body = new BodyField(this, &(sight->body), catalog);
+    body = new BodyField(panel, &(sight->body), catalog);
     
     StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize);
-    limb = new LimbField(this, &(sight->limb));
+    limb = new LimbField(panel, &(sight->limb));
     (limb->name)->Enable(false);
     
     //sextant altitude
@@ -13509,11 +13509,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //artificial horizon
     StaticText* text_artificial_horizon_check = new StaticText(panel, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize);
-    artificial_horizon_check = new CheckField< LengthField<SightFrame> >(this, &(sight->artificial_horizon), NULL, false);
+    artificial_horizon_check = new CheckField< LengthField<SightFrame> >(panel, &(sight->artificial_horizon), NULL, false);
     
     //height of eye
     StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize);
-    height_of_eye = new LengthField<SightFrame>(this, &(sight->height_of_eye), String("m"));
+    height_of_eye = new LengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
     if(sight_in == NULL){
         //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye LengthField with this value, so the user won't have to enter the same value all the time
         (sight->height_of_eye).read_from_file(String("default height of eye"), (wxGetApp().path_file_init), String(""));
@@ -13532,7 +13532,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
         (sight->time).chrono.set_current((wxGetApp()).time_zone);
     }
     StaticText* text_date = new StaticText(panel, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize);
-    master_clock_date = new DateField(this, &(sight->master_clock_date_and_hour.date));
+    master_clock_date = new DateField(panel, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set((sight->master_clock_date_and_hour).date);
     //    (master_clock_date->year)->SetFont((wxGetApp().error_font));
     //I bind master_clock_date->year/month/day to OnEditTime in such a way that, if the user enters a master_clock_date such that sight->time lies outside the ephemerides' time interval, an error message is prompted
@@ -13542,7 +13542,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //master-clock chrono
     StaticText* text_space_1 = new StaticText(panel, wxT("\t"), wxDefaultPosition, wxDefaultSize);
-    master_clock_chrono = new ChronoField(this, &(sight->master_clock_date_and_hour.chrono));
+    master_clock_chrono = new ChronoField(panel, &(sight->master_clock_date_and_hour.chrono));
     //I bind master_clock_chrono->hour/minute/second to OnEditTime in such a way that, if the user enters a master_clock_chrono such that sight->time lies outside the ephemerides' time interval, an error message is prompted
     //    (master_clock_chrono->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     //    (master_clock_chrono->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
@@ -13556,7 +13556,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //check/uncheck stopwatch
     StaticText* text_stopwatch_check = new StaticText(panel, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize);
-    stopwatch_check = new CheckField<ChronoField>(this, &(sight->use_stopwatch), NULL, true);
+    stopwatch_check = new CheckField<ChronoField>(panel, &(sight->use_stopwatch), NULL, true);
     //I bind stopwatch_check to OnEditTime in such a way that, if the user enters a stopwatch_check such that sight->time lies outside the ephemerides' time interval, an error message is prompted
     //    (stopwatch_check->checkbox)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     //if stopwatch_check is checked/unchecked, then I runm OnEditTime to verify that the time of sight lies within the ephemerides' time span
@@ -13566,7 +13566,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //stopwatch reading
     StaticText* text_stopwatch_reading = new StaticText(panel, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize);
     //    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
-    stopwatch_reading = new ChronoField(this, &(sight->stopwatch));
+    stopwatch_reading = new ChronoField(panel, &(sight->stopwatch));
     //now that stopwatch_reading has been allocatd, I link stopwatch_check to stopwatch_reading
     (stopwatch_check->related_field) = stopwatch_reading;
     //I bind stopwatch_reading->hour/minute/second to OnEditTime in such a way that, if the user enters a stopwatch_reading such that sight->time lies outside the ephemerides' time interval, an error message is prompted
@@ -13579,22 +13579,13 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     (stopwatch_check->checkbox)->SetValue(false);
     stopwatch_reading->Enable(false);
     
-    StaticText* text_TAI_minus_UTC = new StaticText(panel,wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize);
-    TAI_minus_UTC = new ChronoField(this, &(sight->TAI_minus_UTC));
-    //I bind TAI_minus_UTC->hour/minute/second to OnEditTime in such a way that, if the user enters a TAI_minus_UTC such that sight->time lies outside the ephemerides' time interval, an error message is prompted
-    //    (TAI_minus_UTC->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    //    (TAI_minus_UTC->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    //    (TAI_minus_UTC->second)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
-    
+    StaticText* text_TAI_minus_UTC = new StaticText(panel, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize);
+    TAI_minus_UTC = new ChronoField(panel, &(sight->TAI_minus_UTC));
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
-    
     
     //message and image shown if the time entered by the user is not covered by ephemerides' data. Both are set to empty at the construction of SightFrame
     text_time_interval_not_ok = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize);
-    
-    
     image_time_interval_status = new wxStaticBitmap(panel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize);
-    
     
     //label
     StaticText* text_label = new StaticText(panel, wxT("Label"), wxDefaultPosition, wxDefaultSize);
@@ -13635,16 +13626,13 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     stopwatch_reading->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     TAI_minus_UTC->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    
-    
-    
+
     
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
     button_reduce->Enable((sight_in != NULL));
     
     sizer_grid_measurement->Add(text_combo_body);
     body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
-    //    sizer_grid_measurement->Add(combo_body);
     
     sizer_grid_measurement->Add(text_limb);
     limb->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
@@ -13708,14 +13696,13 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
-    
     //panel->SetSizer(sizer);
     Maximize(panel);
+    panel->SetSizerAndFit(sizer);
+    panel->Fit();
+    Fit();
+  
     
-    CreateStatusBar();
-    SetStatusText( "Welcome to UnsetIdling's text editor!" );
-    
-    SetSizerAndFit(sizer);
     //Maximize();
     
     file_init.close(prefix);
@@ -13723,9 +13710,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     if(!check){
         cout << prefix.value << RED << "Cannot read sight!\n" << RESET;
     }
-    
-    
-    
     if(sight_in != NULL){set();}
     
     //runs AllOk to enable/disable button_reduce

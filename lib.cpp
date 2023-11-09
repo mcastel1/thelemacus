@@ -17137,9 +17137,9 @@ template<class P> void ProjectionField<P>::write_recent_items(void){
 
 
 //constructor of a BodyField object, based on the parent frame frame
-BodyField::BodyField(SightFrame* frame, Body* p, Catalog* c){
+template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c){
     
-    parent_frame = frame;
+    parent_frame = ((P*)(panel_of_parent->GetParent();));
     //I link the internal pointers p and c to the respective body and body catalog
     body = p;
     catalog = c;

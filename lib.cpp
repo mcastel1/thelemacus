@@ -13887,19 +13887,21 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     
     //panel->SetSizer(sizer);
-    Maximize(panel);
-    
+
     CreateStatusBar();
-    SetStatusText( "Welcome to UnsetIdling's text editor!" );
-    
-    panel->SetSizerAndFit(sizer);
-    //Maximize();
-    
-    
+//    SetStatusText( "Welcome to UnsetIdling's text editor!" );
+ 
     if(!check){
         cout << prefix.value << RED << "Cannot read position!\n" << RESET;
     }
+ 
     
+    
+    Maximize(panel);
+    panel->SetSizerAndFit(sizer);
+    //Maximize();
+    panel->Fit();
+    Fit();
     
     
     if(position_in != NULL){set();}

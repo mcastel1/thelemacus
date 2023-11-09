@@ -9593,18 +9593,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     
     this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnPressCtrlW<wxCloseEvent>, this);
     
-    
     mouse_scrolling = false;
-    
-    
-    
     //set the zoom factor to 1 for the initial configuration of the projection
     zoom_factor.set(String(""), 1.0, String(""));
-    
     //read zoom_factor_max from file_init
     (wxGetApp().zoom_factor_max).read_from_file(String("maximal zoom factor"), (wxGetApp().path_file_init), String(""));
-    
-    
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);

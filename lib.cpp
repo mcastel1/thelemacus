@@ -9651,7 +9651,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
     
     
-    projection = new ProjectionField(this);
+    projection = new ProjectionField<ChartFrame>(panel);
     (projection->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
     
     
@@ -12677,15 +12677,15 @@ CheckBody::CheckBody(BodyField* p_in){
 }
 
 
-CheckProjection::CheckProjection(ProjectionField* p_in){
+template<class P> CheckProjection<P>::CheckProjection(ProjectionField<P>* p_in){
     
     p = p_in;
     
 }
 
-template<class T>void CheckProjection::operator()(T& event){
+template<class P> template<class T>void CheckProjection<P>::operator()(T& event){
     
-    ChartFrame* f = (p->parent);
+    P* f = (p->parent);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
@@ -17013,9 +17013,9 @@ void SightFrame::OnPressReduce(wxCommandEvent& event){
 }
 
 //constructor of a ProjectionField object, based on the parent frame frame
-ProjectionField::ProjectionField(ChartFrame* parent_in){
+template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent){
     
-    parent = parent_in;
+    parent = ((P*)(panel_of_parent->GetParent()));
     
     types.Clear();
     types.Add(wxT("Mercator"));
@@ -17025,7 +17025,7 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
     //sets the name of file_recent for future use
     file_recent.set_name((wxGetApp().path_file_recent));
     
-    check = new CheckProjection(this);
+    check = new CheckProjection<P>(this);
     
     
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
@@ -17048,7 +17048,7 @@ ProjectionField::ProjectionField(ChartFrame* parent_in){
 
 
 //reads from file_recent the recently selected items in the dropdown menu of ProjectionField and updates the dropdown menu in such a way that the recent items appear on top of it
-void ProjectionField::read_recent_items(void){
+template<class P> void ProjectionField<P>::read_recent_items(void){
     
     unsigned int i, j;
     wxArrayString types_temp;
@@ -17139,7 +17139,7 @@ void ProjectionField::read_recent_items(void){
 }
 
 //write the recent items in recent_itams to file
-void ProjectionField::write_recent_items(void){
+template<class P> void ProjectionField<P>::write_recent_items(void){
     
     String prefix, s;
     stringstream temp;
@@ -18704,14 +18704,14 @@ template<class T> void RouteTypeField::InsertIn(T* host){
     
 }
 
-template<class T> void ProjectionField::InsertIn(T* host){
+template<class P> template<class T> void ProjectionField<P>::InsertIn(T* host){
     
     host->Add(sizer_v);
     
 }
 
 //this function is called every time the user modifies the text in this->name: it checks whether the text entered so far in name is valid, if name is valid, it calls OnChooseProjection to select the projection written in name
-template<class E> void ProjectionField::OnEdit(E& event){
+template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event){
     
     String s;
     bool check;

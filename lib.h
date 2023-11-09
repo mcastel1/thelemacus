@@ -58,7 +58,7 @@ class Atmosphere;
 class Answer;
 class Body;
 class String;
-class CheckProjection;
+template<class P> class CheckProjection;
 
 
 //a class for color objects
@@ -1027,13 +1027,13 @@ public:
 };
 
 //this checks if an element of the ProjectionField class is valid
-class CheckProjection{
+template<class P> class CheckProjection{
     
 public:
     
-    ProjectionField* p;
+    ProjectionField<P>* p;
     
-    CheckProjection(ProjectionField*);
+    CheckProjection(ProjectionField<P>*);
     template<class T> void operator()(T&);
     
 };
@@ -1761,7 +1761,7 @@ public:
 
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
-    CheckProjection* check;
+    CheckProjection<P>* check;
     
     File file_recent;
     vector<int> recent_items;
@@ -2376,7 +2376,7 @@ public:
     wxSlider* slider;
     wxBitmapButton* button_show_list;
     wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
-    ProjectionField* projection;
+    ProjectionField<ChartFrame>* projection;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/lambda_min, lambda_max;
     //in p_coastline_draw, I store the 2d coordindates  in DrawPanel coordinates of coastline data p_coastline

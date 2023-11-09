@@ -10549,9 +10549,9 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event){
 }
 
 
-template<class T> void CheckLimb::operator()(T &event){
+template<class P> template<class T> void CheckLimb<P>::operator()(T &event){
     
-    SightFrame* f = (p->parent_frame);
+    P* f = (p->parent_frame);
     
     //I proceed only if the progam is not is indling mode
     if(!(f->idling)){
@@ -10597,7 +10597,7 @@ template<class T> void CheckLimb::operator()(T &event){
 
 
 //writes the value contained in the GUI field into the non-GUI field
-template<class T> void LimbField::get(T &event){
+template<class P> template<class T> void LimbField<P>::get(T &event){
     
     if(ok){
         
@@ -13490,7 +13490,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     body = new BodyField<SightFrame>(panel, &(sight->body), catalog);
     
     StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize);
-    limb = new LimbField(panel, &(sight->limb));
+    limb = new LimbField<SightFrame>(panel, &(sight->limb));
     (limb->name)->Enable(false);
     
     //sextant altitude
@@ -13600,7 +13600,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
     button_reduce->Bind(wxEVT_BUTTON, &BodyField<SightFrame>::get<wxCommandEvent>, body);
-    button_reduce->Bind(wxEVT_BUTTON, &LimbField::get<wxCommandEvent>, limb);
+    button_reduce->Bind(wxEVT_BUTTON, &LimbField<SightFrame>::get<wxCommandEvent>, limb);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, H_s);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, index_error);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, LengthField<SightFrame> >::get<wxCommandEvent>, artificial_horizon_check);
@@ -16770,14 +16770,14 @@ template<class T>void OnChangeSelectionInListControl::operator()(T& event){
 }
 
 
-OnChangeSelectionInLimbField::OnChangeSelectionInLimbField(LimbField* caller_in){
+template<class P> OnChangeSelectionInLimbField<P>::OnChangeSelectionInLimbField(LimbField<P>* caller_in){
     
     caller = caller_in;
     
 }
 
 //when an item is selected/deselcted in *caller, make sure that only one item stays selected in *calller
-template<class T>void OnChangeSelectionInLimbField::operator()(T& event){
+template<class P> template<class T>void OnChangeSelectionInLimbField<P>::operator()(T& event){
     
     wxArrayInt temp;
     long i, j;
@@ -17136,7 +17136,7 @@ template<class P> void ProjectionField<P>::write_recent_items(void){
 }
 
 
-//constructor of a BodyField object, based on the parent frame frame
+//constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c){
     
     parent_frame = ((P*)(panel_of_parent->GetParent()));
@@ -17208,7 +17208,7 @@ template<class P> template<class T> void BodyField<P>::get(T& event){
 }
 
 //sets the value in the GUI object name equal to the value in the non-GUI limb object limb
-void LimbField::set(void){
+template<class P> void LimbField<P>::set(void){
     
     checked_items.Clear();
     
@@ -17246,7 +17246,7 @@ void LimbField::set(void){
 }
 
 //this function enables/disable the LimbField
-void LimbField::Enable(bool is_enabled){
+template<class P> void LimbField<P>::Enable(bool is_enabled){
     
     name->Enable(is_enabled);
     
@@ -17442,16 +17442,16 @@ template<class P> void StringField<P>::set(void){
 
 
 //constructor of a LimbField object, based on the parent frame frame
-LimbField::LimbField(SightFrame* frame, Limb* p){
+template<class P> LimbField<P>::LimbField(wxPanel* panel_of_parent, Limb* p){
     
     long i;
     
-    parent_frame = frame;
+    parent_frame = ((P*)(panel_of_parent->GetParent()));
     //I link the internal pointers p the respective Limb object
     limb = p;
     
     //initialize check
-    check = new CheckLimb;
+    check = new CheckLimb<P>;
     (check->p) = this;
     
     limbs.resize(3);
@@ -17462,7 +17462,7 @@ LimbField::LimbField(SightFrame* frame, Limb* p){
     
     name = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, ((int)(limbs.size())), limbs.data(), 0, wxDefaultValidator, wxString("Limb choices"));
     
-    change_selection = new OnChangeSelectionInLimbField(this);
+    change_selection = new OnChangeSelectionInLimbField<P>(this);
     
     
     
@@ -18278,13 +18278,13 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 
 
-bool LimbField::is_ok(void){
+template<class P> bool LimbField<P>::is_ok(void){
     
     return(ok);
     
 }
 
-template <typename EventTag, typename Method, typename Object> void LimbField::Bind(EventTag tag,  Method method, Object object){
+template<class P> template <typename EventTag, typename Method, typename Object> void LimbField<P>::Bind(EventTag tag,  Method method, Object object){
     
     name->Bind(tag, method, object);
     
@@ -18615,7 +18615,7 @@ template<class P> void BodyField<P>::write_recent_items(void){
     
 }
 
-template<class T> void LimbField::InsertIn(T* host){
+template<class P> template<class T> void LimbField<P>::InsertIn(T* host){
     
     host->Add(sizer_v);
     

@@ -24,7 +24,7 @@
 
 template<class P> class BodyField;
 template<class P> class ProjectionField;
-class LimbField;
+template<class P> class LimbField;
 template<class P, class T> class CheckField;
 template<class P> class AngleField;
 template<class P> class LengthField;
@@ -1040,9 +1040,9 @@ public:
 
 
 
-struct CheckLimb{
+template<class P> struct CheckLimb{
     
-    LimbField* p;
+    LimbField<P>* p;
     
     template<class T> void operator()(T&);
     
@@ -1319,13 +1319,13 @@ public:
 };
 
 //if an item is selected/deselected in caller, call operator() to make sure that only one item is selected at a time
-class OnChangeSelectionInLimbField{
+template<class P> class OnChangeSelectionInLimbField{
     
 public:
     
-    LimbField* caller;
+    LimbField<P>* caller;
     
-    OnChangeSelectionInLimbField(LimbField*);
+    OnChangeSelectionInLimbField(LimbField<P>*);
     template<class T> void operator()(T&);
         
 };
@@ -1776,6 +1776,7 @@ public:
     
 };
 
+//P is the type of the frame which hosts *this
 template<class P> class BodyField{
     
 public:
@@ -1808,11 +1809,11 @@ public:
 };
 
 
-class LimbField{
+template<class P> class LimbField{
     
 public:
     //the parent frame to which this object is attached
-    SightFrame* parent_frame;
+    P* parent_frame;
     
     //this is the wxComboBox with the name of the limbs
     wxCheckListBox* name;
@@ -1822,10 +1823,10 @@ public:
     Limb* limb;
     wxBoxSizer *sizer_h, *sizer_v;
     bool ok;
-    CheckLimb* check;
-    OnChangeSelectionInLimbField* change_selection;
+    CheckLimb<P>* check;
+    OnChangeSelectionInLimbField<P>* change_selection;
 
-    LimbField(SightFrame*, Limb*);
+    LimbField(wxPanel*, Limb*);
     void set(void);
     void Enable(bool);
     template<class T> void get(T&);
@@ -2250,7 +2251,7 @@ public:
     PrintMessage<SightFrame, UnsetIdling<SightFrame> >* print_error_message;
     
     BodyField<SightFrame>* body;
-    LimbField* limb;
+    LimbField<SightFrame>* limb;
     CheckField<SightFrame, LengthField<SightFrame> >* artificial_horizon_check;
     CheckField<SightFrame, ChronoField>* stopwatch_check;
     AngleField<SightFrame>* H_s, *index_error;

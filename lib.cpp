@@ -13888,7 +13888,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     //panel->SetSizer(sizer);
 
-    CreateStatusBar();
+//    CreateStatusBar();
 //    SetStatusText( "Welcome to UnsetIdling's text editor!" );
  
     if(!check){
@@ -14111,9 +14111,6 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     
     //panel->SetSizer(sizer);
     Maximize(panel);
-    
-    CreateStatusBar();
-    SetStatusText( "Welcome to UnsetIdling's text editor!" );
     
     SetSizerAndFit(sizer);
     //Maximize();

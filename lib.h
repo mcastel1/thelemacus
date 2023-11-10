@@ -987,6 +987,19 @@ public:
     
 };
 
+//class which defines a functor which destroys a frame with arbitrary type F
+template<class F> class DestroyFrame{
+    
+public:
+    
+    //the frame to be destroyd
+    F* frame;
+    DestroyFrame(F*);
+    
+    void operator()(void);
+
+};
+
 class ResetListFrame{
     
 public:

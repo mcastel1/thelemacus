@@ -12766,13 +12766,6 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
     
 }
 
-
-template<class F> CloseFrame<F>::CloseFrame(F* frame_in){
-    
-    frame = frame_in;
-    
-}
-
 ResetListFrame::ResetListFrame(ListFrame* p_in){
     
     p = p_in;
@@ -12813,8 +12806,18 @@ template<class F> SaveAndReset<F>::SaveAndReset(F* frame_in){
 }
 
 
+template<class F> CloseFrame<F>::CloseFrame(F* frame_in){
+    
+    frame = frame_in;
+    
+}
+
 //closes a frame of type F
 template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
+    
+    DestroyFrame<F>* destroy_frame;
+    
+    destroy_frame = new DestroyFrame<F>(frame);
     
     //destroys frame
     frame->Destroy();
@@ -12823,6 +12826,24 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
     
     
 }
+
+template<class F> DestroyFrame<F>::DestroyFrame(F* frame_in){
+    
+    frame = frame_in;
+    
+}
+
+//destroys a frame of type F
+template<class F> void DestroyFrame<F>::operator()(void){
+    
+    //destroys frame
+    frame->Destroy();
+    
+//    event.Skip(true);
+    
+    
+}
+
 
 
 //saves the data in frame->data to file frame->file ,and closes frame

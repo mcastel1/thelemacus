@@ -9731,6 +9731,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //    sizer_v->Fit(panel);
     
     Maximize(panel);
+    //this line yields a segmentation fault when quitting the app -> fix it
     panel->SetSizerAndFit(sizer_v);
     panel->Fit();
     Fit();

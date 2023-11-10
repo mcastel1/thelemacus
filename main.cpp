@@ -48,6 +48,7 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
+ - fix     //this line yields a segmentation fault when quitting the app -> fix it panel->SetSizerAndFit(sizer_v);
  - buttons on bottom of ListFrame are cut on Enrico's computer (fixed it on mine, check whether it has been fixed on another computer too)
  - check that WXK_PLUS does not depend on the computer
  */

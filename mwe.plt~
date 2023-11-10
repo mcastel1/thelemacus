@@ -1,5 +1,0 @@
-set parametric
-
-p [0.:pi/2.] cos(t), sin(t) smo csp linecolor rgb "red" ti "sun 2023-02-03 02:03:02 TAI",
-        [pi:2.*pi] cos(t), sin(t) smo csp linecolor rgb "green" ti "sun 2023-02-03 02:03:02 TAI" 
-

@@ -1,4 +1,0 @@
-set table "output.dat"
-
-p '~/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_block.csv' every  ::5:3:7:8 w table
-unset table

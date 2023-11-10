@@ -12915,18 +12915,18 @@ template<class P> template <class T> void CheckAngle<P>::operator()(T& event){
     
 }
 
-CheckDate::CheckDate(DateField* p_in){
+template<class P> CheckDate<P>::CheckDate(DateField<P>* p_in){
     
     p = p_in;
     
-    check_year = new CheckYear(p);
-    check_month = new CheckMonth(p);
-    check_day = new CheckDay(p);
+    check_year = new CheckYear<P>(p);
+    check_month = new CheckMonth<P>(p);
+    check_day = new CheckDay<P>(p);
     
 }
 
 //this functor checks the whole date field by calling the check on its year, month and day parts
-template <class T> void CheckDate::operator()(T& event){
+template<class P> template <class T> void CheckDate<P>::operator()(T& event){
     
     (*check_year)(event);
     (*check_month)(event);
@@ -12937,7 +12937,7 @@ template <class T> void CheckDate::operator()(T& event){
 }
 
 //this functor writes the values written inthe whole GUI date field (year, month and day) in the respective non-GUI object date->D, date->M, date->D
-template <class T> void DateField::get(T& event){
+template<class P> template <class T> void DateField<P>::get(T& event){
     
     if(year_ok && (year->IsEnabled()) && month_ok && (month->IsEnabled()) && day_ok && (month->IsEnabled())){
         
@@ -13532,7 +13532,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
         (sight->time).chrono.set_current((wxGetApp()).time_zone);
     }
     StaticText* text_date = new StaticText(panel, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize);
-    master_clock_date = new DateField(panel, &(sight->master_clock_date_and_hour.date));
+    master_clock_date = new DateField<SightFrame>(panel, &(sight->master_clock_date_and_hour.date));
     master_clock_date->set((sight->master_clock_date_and_hour).date);
     //    (master_clock_date->year)->SetFont((wxGetApp().error_font));
     //I bind master_clock_date->year/month/day to OnEditTime in such a way that, if the user enters a master_clock_date such that sight->time lies outside the ephemerides' time interval, an error message is prompted
@@ -13542,7 +13542,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //master-clock chrono
     StaticText* text_space_1 = new StaticText(panel, wxT("\t"), wxDefaultPosition, wxDefaultSize);
-    master_clock_chrono = new ChronoField(panel, &(sight->master_clock_date_and_hour.chrono));
+    master_clock_chrono = new ChronoField<SightFrame>(panel, &(sight->master_clock_date_and_hour.chrono));
     //I bind master_clock_chrono->hour/minute/second to OnEditTime in such a way that, if the user enters a master_clock_chrono such that sight->time lies outside the ephemerides' time interval, an error message is prompted
     //    (master_clock_chrono->hour)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     //    (master_clock_chrono->minute)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
@@ -13556,7 +13556,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     //check/uncheck stopwatch
     StaticText* text_stopwatch_check = new StaticText(panel, wxT("Stopwatch"), wxDefaultPosition, wxDefaultSize);
-    stopwatch_check = new CheckField<SightFrame, ChronoField>(panel, &(sight->use_stopwatch), NULL, true);
+    stopwatch_check = new CheckField<SightFrame, ChronoField<SightFrame> >(panel, &(sight->use_stopwatch), NULL, true);
     //I bind stopwatch_check to OnEditTime in such a way that, if the user enters a stopwatch_check such that sight->time lies outside the ephemerides' time interval, an error message is prompted
     //    (stopwatch_check->checkbox)->Bind(wxEVT_KILL_FOCUS, &SightFrame::OnEditTime<wxFocusEvent>, this);
     //if stopwatch_check is checked/unchecked, then I runm OnEditTime to verify that the time of sight lies within the ephemerides' time span
@@ -13566,7 +13566,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //stopwatch reading
     StaticText* text_stopwatch_reading = new StaticText(panel, wxT("Stopwatch reading"), wxDefaultPosition, wxDefaultSize);
     //    stopwatch_reading = new ChronoField(this, &(sight.stopwatch));
-    stopwatch_reading = new ChronoField(panel, &(sight->stopwatch));
+    stopwatch_reading = new ChronoField<SightFrame>(panel, &(sight->stopwatch));
     //now that stopwatch_reading has been allocatd, I link stopwatch_check to stopwatch_reading
     (stopwatch_check->related_field) = stopwatch_reading;
     //I bind stopwatch_reading->hour/minute/second to OnEditTime in such a way that, if the user enters a stopwatch_reading such that sight->time lies outside the ephemerides' time interval, an error message is prompted
@@ -13580,7 +13580,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     stopwatch_reading->Enable(false);
     
     StaticText* text_TAI_minus_UTC = new StaticText(panel, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize);
-    TAI_minus_UTC = new ChronoField(panel, &(sight->TAI_minus_UTC));
+    TAI_minus_UTC = new ChronoField<SightFrame>(panel, &(sight->TAI_minus_UTC));
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
     
     //message and image shown if the time entered by the user is not covered by ephemerides' data. Both are set to empty at the construction of SightFrame
@@ -13605,11 +13605,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, index_error);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, LengthField<SightFrame> >::get<wxCommandEvent>, artificial_horizon_check);
     button_reduce->Bind(wxEVT_BUTTON, &LengthField<SightFrame>::get<wxCommandEvent>, height_of_eye);
-    button_reduce->Bind(wxEVT_BUTTON, &DateField::get<wxCommandEvent>, master_clock_date);
-    button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, master_clock_chrono);
-    button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, ChronoField>::get<wxCommandEvent>, stopwatch_check);
-    button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, stopwatch_reading);
-    button_reduce->Bind(wxEVT_BUTTON, &ChronoField::get<wxCommandEvent>, TAI_minus_UTC);
+    button_reduce->Bind(wxEVT_BUTTON, &DateField<SightFrame>::get<wxCommandEvent>, master_clock_date);
+    button_reduce->Bind(wxEVT_BUTTON, &ChronoField<SightFrame>::get<wxCommandEvent>, master_clock_chrono);
+    button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, ChronoField<SightFrame> >::get<wxCommandEvent>, stopwatch_check);
+    button_reduce->Bind(wxEVT_BUTTON, &ChronoField<SightFrame>::get<wxCommandEvent>, stopwatch_reading);
+    button_reduce->Bind(wxEVT_BUTTON, &ChronoField<SightFrame>::get<wxCommandEvent>, TAI_minus_UTC);
     button_reduce->Bind(wxEVT_BUTTON, &StringField<SightFrame>::get<wxCommandEvent>, label);
     
     //bind the function SightFrame::KeyDown to the event where a keyboard dey is pressed down in panel, body, ... and all fields
@@ -16461,7 +16461,7 @@ template<class P,class T> template<class S> void CheckField<P,T>::get(S& event){
     
 }
 
-CheckHour::CheckHour(ChronoField* p_in){
+template<class P> CheckHour<P>::CheckHour(ChronoField<P>* p_in){
     
     p = p_in;
     

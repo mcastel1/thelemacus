@@ -28,8 +28,8 @@ template<class P> class LimbField;
 template<class P, class T> class CheckField;
 template<class P> class AngleField;
 template<class P> class LengthField;
-class DateField;
-class ChronoField;
+template<class P> class DateField;
+template<class P> class ChronoField;
 class RouteTypeField;
 template<class P> class StringField;
 class MyApp;
@@ -1106,9 +1106,9 @@ public:
     
 };
 
-struct TabulateDays{
+template<class P> struct TabulateDays{
     
-    DateField* p;
+    DateField<P>* p;
     
     template<class T> void operator()(T&);
     
@@ -1116,58 +1116,58 @@ struct TabulateDays{
 };
 
 
-class CheckYear{
+template<class P> class CheckYear{
     
 public:
     
-    DateField* p;
-    TabulateDays tabulate_days;
+    DateField<P>* p;
+    TabulateDays<P> tabulate_days;
     
-    CheckYear(DateField*);
+    CheckYear(DateField<P>*);
     template<class T> void operator()(T&);
     
     
 };
 
-class CheckMonth{
+template<class P> class CheckMonth{
     
 public:
 
     
-    DateField* p;
-    TabulateDays tabulate_days;
+    DateField<P>* p;
+    TabulateDays<P> tabulate_days;
     
-    CheckMonth(DateField*);
+    CheckMonth(DateField<P>*);
     template<class T> void operator()(T&);
     
     
 };
 
-class CheckDay{
+template<class P> class CheckDay{
     
 public:
 
-    DateField* p;
+    DateField<P>* p;
     
-    CheckDay(DateField*);
+    CheckDay(DateField<P>*);
     template<class T> void operator()(T&);
     
     
 };
 
 
-class CheckDate{
+template<class P> class CheckDate{
     
 public:
     
     //the parent DateField
-    DateField* p;
-    CheckYear *check_year;
-    CheckMonth *check_month;
-    CheckDay *check_day;
+    DateField<P>* p;
+    CheckYear<P>* check_year;
+    CheckMonth<P>* check_month;
+    CheckDay<P>* check_day;
     
     //constructor, which sets the parent
-    CheckDate(DateField*);
+    CheckDate(DateField<P>*);
     
     template <class T> void operator()(T&);
     
@@ -1217,53 +1217,53 @@ template<class P> struct CheckString{
     
 };
 
-class CheckHour{
+template<class P> class CheckHour{
     
 public:
     
-    ChronoField* p;
+    ChronoField<P>* p;
     
-    CheckHour(ChronoField*);
+    CheckHour(ChronoField<P>*);
     template<class T> void operator()(T&);
     
     
 };
 
-class CheckMinute{
+template<class P> class CheckMinute{
 
 public:
     
-    ChronoField* p;
+    ChronoField<P>* p;
     
-    CheckMinute(ChronoField*);
+    CheckMinute(ChronoField<P>*);
     template<class T> void operator()(T&);
     
     
 };
 
-class CheckSecond{
+template<class P> class CheckSecond{
     
 public:
     
-    ChronoField* p;
+    ChronoField<P>* p;
     
-    CheckSecond(ChronoField*);
+    CheckSecond(ChronoField<P>*);
     template<class T> void operator()(T&);
     
 };
 
 
-class CheckChrono{
+template<class P> class CheckChrono{
     
 public:
     
     //the parent field of the CheckChrono object
-    ChronoField* p;
-    CheckHour *check_hour;
-    CheckMinute *check_minute;
-    CheckSecond *check_second;
+    ChronoField<P>* p;
+    CheckHour<P>* check_hour;
+    CheckMinute<P>* check_minute;
+    CheckSecond<P>* check_second;
     
-    CheckChrono(ChronoField*);
+    CheckChrono(ChronoField<P>*);
     template<class T> void operator()(T&);
     
 };
@@ -1931,11 +1931,11 @@ public:
 
 
 
-class DateField{
+template<class P> class DateField{
     
 public:
     //the parent frame to which this object is attached
-    SightFrame* parent_frame;
+    P* parent_frame;
     wxArrayString days, months;
     //year, month and day boxes
     wxTextCtrl *year;
@@ -1947,9 +1947,9 @@ public:
     Date* date;
     //year_ok = true if the year is formatted properly and set to the same value as date->Y, and similarly for the other variables
     bool year_ok, month_ok, day_ok;
-    CheckDate *check;
+    CheckDate<P>* check;
     
-    DateField(SightFrame*, Date*);
+    DateField(wxPanel*, Date*);
     void set(Date);
     void SetBackgroundColor(Color);
     template<class T> void get(T&);
@@ -1964,11 +1964,11 @@ public:
 };
 
 
-class ChronoField{
+template<class P> class ChronoField{
     
 public:
     //the parent frame to which this object is attached
-    SightFrame* parent_frame;
+    P* parent_frame;
     wxArrayString hours, minutes;
     //hour and minute  boxes
     wxComboBox *hour, *minute;
@@ -1981,9 +1981,9 @@ public:
     Chrono* chrono;
     //hour_ok = true if the hour is formatted properly and set to the same value as chrono->h, and similarly for the other variables
     bool hour_ok, minute_ok, second_ok;
-    CheckChrono* check;
+    CheckChrono<P>* check;
     
-    ChronoField(SightFrame*, Chrono*);
+    ChronoField(wxPanel*, Chrono*);
     void set(Chrono);
     void Enable(bool);
     void SetBackgroundColor(Color);
@@ -2253,11 +2253,11 @@ public:
     BodyField<SightFrame>* body;
     LimbField<SightFrame>* limb;
     CheckField<SightFrame, LengthField<SightFrame> >* artificial_horizon_check;
-    CheckField<SightFrame, ChronoField>* stopwatch_check;
+    CheckField<SightFrame, ChronoField<SightFrame> >* stopwatch_check;
     AngleField<SightFrame>* H_s, *index_error;
     LengthField<SightFrame>* height_of_eye;
-    DateField *master_clock_date;
-    ChronoField *master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
+    DateField<SightFrame>* master_clock_date;
+    ChronoField<SightFrame>* master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     StringField<SightFrame> *label;
     
     wxFlexGridSizer *sizer_grid_measurement, *sizer_grid_time, *sizer_grid_label;

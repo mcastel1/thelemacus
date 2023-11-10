@@ -9731,7 +9731,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //    sizer_v->Fit(panel);
     
     Maximize(panel);
-    //this line yields a segmentation fault when quitting the app -> fix it
     panel->SetSizerAndFit(sizer_v);
     panel->Fit();
     Fit();
@@ -14536,14 +14535,12 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     sizer_v->Add(text, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_v->Add(image, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_v->Add(button_ok, 0,  wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    
-    panel->SetSizer(sizer_v);
-    
-    frame_sizer->Add(panel, wxSizerFlags().Expand());
-    
-    //    Maximize(panel);
-    //    frame_sizer->Fit(panel);
-    SetSizerAndFit(frame_sizer);
+   
+    //panel->SetSizer(sizer);
+    Maximize(panel);
+    panel->SetSizerAndFit(sizer_v);
+    panel->Fit();
+    Fit();
     
     CentreOnScreen();
     
@@ -14584,7 +14581,6 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     rectangle.SetHeight((int)((double)rectangle.GetHeight())*1./1000.0);
     
     //allocate sizers
-    frame_sizer = new wxBoxSizer(wxVERTICAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_grid = new wxGridSizer(1, 2, 0, 0);
     
@@ -14615,14 +14611,13 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     sizer_grid->Add(button_a, 0, wxALIGN_CENTER);
     sizer_grid->Add(button_b, 0, wxALIGN_CENTER);
     sizer_v->Add(sizer_grid, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    
-    panel->SetSizer(sizer_v);
-    
-    frame_sizer->Add(panel, wxSizerFlags().Expand());
-    
-    SetSizerAndFit(frame_sizer);
-    
-    
+        
+    //panel->SetSizer(sizer);
+    Maximize(panel);
+    panel->SetSizerAndFit(sizer_v);
+    panel->Fit();
+    Fit();
+
     CentreOnScreen();
     
 }
@@ -15269,14 +15264,11 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_h->Add(sizer_big_buttons, 0, wxALIGN_TOP, ((wxGetApp().border).value));
     sizer_all->Add(sizer_h, 0,  wxALL | wxEXPAND, ((wxGetApp().border).value));
     
+    //panel->SetSizer(sizer);
     Maximize(panel);
     panel->SetSizerAndFit(sizer_all);
-    
-    //    panel->SetSizer(sizer_v);
-    
-    //    panel->SetSize(wxSize(total_column_width+4*((wxGetApp().border).value),-1));
-    //    this->SetSize(wxSize(total_column_width+6*((wxGetApp().border).value),-1));
-    
+    panel->Fit();
+    Fit();
     
     //given that I have incoroporated the listcontrols into the sizers, listrcontrols may have been resized -> I Fit() them so their content is properly shown
     Resize();

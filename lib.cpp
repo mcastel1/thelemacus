@@ -12820,8 +12820,8 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
     destroy_frame = new DestroyFrame<F>(frame);
     
     //destroys frame
-    frame->Destroy();
-    
+    frame->CallAfter(*destroy_frame);
+
     event.Skip(true);
     
     
@@ -12838,9 +12838,6 @@ template<class F> void DestroyFrame<F>::operator()(void){
     
     //destroys frame
     frame->Destroy();
-    
-//    event.Skip(true);
-    
     
 }
 
@@ -14770,7 +14767,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     unset_idling = new UnsetIdling<ListFrame>(this);
     (*unset_idling)();
     
-    close = new CloseFrame<ListFrame>(this);
     ask_remove_related_sight = new AskRemoveRelatedSight(this);
     ask_remove_related_route = new AskRemoveRelatedRoute(this);
     select_route = new SelectRoute(this);
@@ -14787,7 +14783,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     GetAllCoastLineData();
     
     //when the ListFrame window is closed, quit the app
-    Bind(wxEVT_CLOSE_WINDOW, &MyApp::OnPressCtrlQ<wxCloseEvent>, &(wxGetApp()));
+//    Bind(wxEVT_CLOSE_WINDOW, &MyApp::OnPressCtrlQ<wxCloseEvent>, &(wxGetApp()));
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     (wxGetApp().rectangle_display) = ((wxGetApp().display).GetClientArea());

@@ -10549,6 +10549,12 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event){
 }
 
 
+template<class P> CheckLimb<P>::CheckLimb(LimbField<P>* p_in){
+    
+    p = p_in;
+    
+}
+
 template<class P> template<class T> void CheckLimb<P>::operator()(T &event){
     
     P* f = (p->parent_frame);
@@ -17451,7 +17457,7 @@ template<class P> LimbField<P>::LimbField(wxPanel* panel_of_parent, Limb* p){
     limb = p;
     
     //initialize check
-    check = new CheckLimb<P>;
+    check = new CheckLimb<P>(this);
     (check->p) = this;
     
     limbs.Clear();

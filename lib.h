@@ -1039,14 +1039,15 @@ public:
 };
 
 
-
-template<class P> struct CheckLimb{
+//this checks the value of LimbField
+template<class P> class CheckLimb{
     
+public:
+
     LimbField<P>* p;
     
+    CheckLimb(LimbField<P>*);
     template<class T> void operator()(T&);
-    
-    
     
 };
 

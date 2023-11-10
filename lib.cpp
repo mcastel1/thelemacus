@@ -14125,9 +14125,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     
     //panel->SetSizer(sizer);
     Maximize(panel);
-    
-    SetSizerAndFit(sizer);
-    //Maximize();
+    panel->SetSizerAndFit(sizer);
+    panel->Fit();
+    Fit();
+  
     
     
     if(!check){

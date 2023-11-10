@@ -13977,7 +13977,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     
     //l
     StaticText* text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize);
-    l = new LengthField<RouteFrame>(this, &(route->l), String("nm"));
+    l = new LengthField<RouteFrame>(panel, &(route->l), String("nm"));
     
     
     //start
@@ -16196,14 +16196,14 @@ void SightFrame::OnPressCancel([[maybe_unused]] wxCommandEvent& event){
 }
 
 
-CheckYear::CheckYear(DateField* p_in){
+template<class P> CheckYear<P>::CheckYear(DateField<P>* p_in){
     
     p = p_in;
     (tabulate_days.p) = p;
     
 }
 
-CheckMonth::CheckMonth(DateField* p_in){
+template<class P> CheckMonth<P>::CheckMonth(DateField<P>* p_in){
     
     p = p_in;
     (tabulate_days.p) = p;
@@ -16211,14 +16211,14 @@ CheckMonth::CheckMonth(DateField* p_in){
     
 }
 
-CheckDay::CheckDay(DateField* p_in){
+template<class P> CheckDay<P>::CheckDay(DateField<P>* p_in){
     
     p = p_in;
     
 }
 
 
-template<class T> void CheckYear::operator()(T&event){
+template<class P> template<class T> void CheckYear<P>::operator()(T&event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -16264,7 +16264,7 @@ template<class T> void CheckYear::operator()(T&event){
     
 }
 
-template<class T> void CheckMonth::operator()(T&event){
+template<class P> template<class T> void CheckMonth<P>::operator()(T&event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -16311,7 +16311,7 @@ template<class T> void CheckMonth::operator()(T&event){
 }
 
 
-template<class T> void CheckDay::operator()(T& event){
+template<class P> template<class T> void CheckDay<P>::operator()(T& event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -16364,7 +16364,7 @@ template<class T> void CheckDay::operator()(T& event){
 
 
 
-template<class T> void TabulateDays::operator()(T& event){
+template<class P> template<class T> void TabulateDays<P>::operator()(T& event){
     
     unsigned int i;
     SightFrame* f = (p->parent_frame);
@@ -16467,7 +16467,7 @@ template<class P> CheckHour<P>::CheckHour(ChronoField<P>* p_in){
     
 }
 
-template<class T> void CheckHour::operator()(T &event){
+template<class P> template<class T> void CheckHour<P>::operator()(T &event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -16503,13 +16503,13 @@ template<class T> void CheckHour::operator()(T &event){
     
 }
 
-CheckMinute::CheckMinute(ChronoField* p_in){
+template<class P> CheckMinute<P>::CheckMinute(ChronoField<P>* p_in){
     
     p = p_in;
     
 }
 
-template<class T> void CheckMinute::operator()(T &event){
+template<class P>  template<class T> void CheckMinute<P>::operator()(T &event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -16544,13 +16544,13 @@ template<class T> void CheckMinute::operator()(T &event){
     
 }
 
-CheckSecond::CheckSecond(ChronoField* p_in){
+template<class P> CheckSecond<P>::CheckSecond(ChronoField<P>* p_in){
     
     p = p_in;
     
 }
 
-template<class T> void CheckSecond::operator()(T &event){
+template<class P> template<class T> void CheckSecond<P>::operator()(T &event){
     
     SightFrame* f = (p->parent_frame);
     
@@ -16586,18 +16586,18 @@ template<class T> void CheckSecond::operator()(T &event){
 }
 
 
-CheckChrono::CheckChrono(ChronoField* p_in){
+template<class P> CheckChrono<P>::CheckChrono(ChronoField<P>* p_in){
     
     p = p_in;
     
-    check_hour = new CheckHour(p);
-    check_minute = new CheckMinute(p);
-    check_second = new CheckSecond(p);
+    check_hour = new CheckHour<P>(p);
+    check_minute = new CheckMinute<P>(p);
+    check_second = new CheckSecond<P>(p);
     
 }
 
 //this function writes into sight.stopwatch the value written into the respective GUI box
-template <class T> void CheckChrono::operator()(T& event){
+template<class P> template <class T> void CheckChrono<P>::operator()(T& event){
     
     (*check_hour)(event);
     (*check_minute)(event);
@@ -16859,7 +16859,7 @@ template<class P> template<class T>void OnChangeSelectionInLimbField<P>::operato
 
 
 //this function writes into the non-GUI fields in chrono the value written into the respective GUI fields hour, minute and second
-template <class T> void ChronoField::get(T& event){
+template<class P> template <class T> void ChronoField<P>::get(T& event){
     
     if(hour_ok && (hour->IsEnabled()) && minute_ok && (minute->IsEnabled()) && second_ok && (second->IsEnabled())){
         //I write only if hour, minute and second are ok and enabled
@@ -17365,7 +17365,7 @@ template<class P> void LengthField<P>::set(void){
 }
 
 //sets the value in the GUI objects year, month and day equal to the value in the non-GUI limb object date_in
-void DateField::set(Date date_in){
+template<class P> void DateField<P>::set(Date date_in){
     
     //    Time time_UTC;
     //
@@ -17384,7 +17384,7 @@ void DateField::set(Date date_in){
 }
 
 //set color as the background color in all fields of *this
-void DateField::SetBackgroundColor(Color color){
+template<class P> void DateField<P>::SetBackgroundColor(Color color){
     
     year->SetBackgroundColour(color);
     month->SetBackgroundColour(color);
@@ -17393,7 +17393,7 @@ void DateField::SetBackgroundColor(Color color){
 }
 
 //sets the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono_in
-void ChronoField::set(Chrono chrono_in){
+template<class P> void ChronoField<P>::set(Chrono chrono_in){
     
     hour->SetValue(wxString::Format(wxT("%i"), chrono_in.h));
     minute->SetValue(wxString::Format(wxT("%i"), chrono_in.m));
@@ -17406,7 +17406,7 @@ void ChronoField::set(Chrono chrono_in){
 }
 
 //set color as the background color in all fields of *this
-void ChronoField::SetBackgroundColor(Color color){
+template<class P> void ChronoField<P>::SetBackgroundColor(Color color){
     
     hour->SetBackgroundColour(color);
     minute->SetBackgroundColour(color);
@@ -17659,9 +17659,9 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 }
 
 //constructor of a LengthField object, based on the parent frame frame
-template<class P> LengthField<P>::LengthField(P* frame, Length* p, String unit_value_in){
+template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in){
     
-    parent_frame = frame;
+    parent_frame = ((P*)(panel_of_parent->GetParent()));
     length = p;
     unit_value = unit_value_in;
     
@@ -17863,14 +17863,14 @@ template<class P> bool LengthField<P>::is_ok(void){
     
 }
 
-bool ChronoField::is_ok(void){
+template<class P> bool ChronoField<P>::is_ok(void){
     
     return(hour_ok && minute_ok && second_ok);
     
 }
 
 //this function is called every time a keyboard button is lifted in this->hour: it checks whether the text entered so far in value is valid and runs AllOk
-template<class E> void ChronoField::OnEditHour(E& event){
+template<class P> template<class E> void ChronoField<P>::OnEditHour(E& event){
     
     bool check;
     
@@ -17895,7 +17895,7 @@ template<class E> void ChronoField::OnEditHour(E& event){
 }
 
 //this function is called every time a keyboard button is lifted in this->minute: it checks whether the text entered so far in value is valid and runs AllOk
-template<class E> void ChronoField::OnEditMinute(E& event){
+template<class P> template<class E> void ChronoField<P>::OnEditMinute(E& event){
     
     bool check;
     
@@ -17920,7 +17920,7 @@ template<class E> void ChronoField::OnEditMinute(E& event){
 }
 
 //this function is called every time a keyboard button is lifted in this->second: it checks whether the text entered so far in value is valid and runs AllOk
-template<class E> void ChronoField::OnEditSecond(E& event){
+template<class P> template<class E> void ChronoField<P>::OnEditSecond(E& event){
     
     bool check;
     
@@ -17946,7 +17946,7 @@ template<class E> void ChronoField::OnEditSecond(E& event){
 
 
 
-template <typename EventTag, typename Method, typename Object> void ChronoField::Bind(EventTag tag,  Method method, Object object){
+template<class P> template <typename EventTag, typename Method, typename Object> void ChronoField<P>::Bind(EventTag tag,  Method method, Object object){
     
     //I bind hour, minute and second to method
     hour->Bind(tag, method, object);
@@ -18021,10 +18021,10 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 //constructor of a DateField object, based on the parent frame frame
-DateField::DateField(SightFrame* frame, Date* p){
+template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p){
     
     unsigned int i;
-    parent_frame = frame;
+    parent = ((P*)(panel_of_parent->GetParent()));
     date = p;
     
     
@@ -18097,13 +18097,13 @@ DateField::DateField(SightFrame* frame, Date* p){
 }
 
 //constructor of a ChronoField object, based on the parent frame frame
-ChronoField::ChronoField(SightFrame* frame, Chrono* p){
+template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* p){
     
     unsigned int i;
-    parent_frame = frame;
+    parent_frame = ((P*)(panel_of_parent->GetParent()));
     chrono = p;
     
-    check = new CheckChrono(this);
+    check = new CheckChrono<P>(this);
     //    (check.p) = this;
     
     for(hours.Clear(), hours.Add(wxT("")), i=0; i<24; i++){
@@ -18320,14 +18320,14 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 //
 //}
 
-bool DateField::is_ok(void){
+template<class P> bool DateField<P>::is_ok(void){
     
     return(year_ok && month_ok && day_ok);
     
 }
 
 //this function is called every time a keyboard button is lifted in this->year: it checks whether the text entered so far in year is valid and runs AllOk
-template<class E> void DateField::OnEditYear(E& event){
+template<class P> template<class E> void DateField<P>::OnEditYear(E& event){
     
     bool check;
     

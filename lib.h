@@ -1895,7 +1895,7 @@ public:
     bool value_ok, unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     CheckLength<P>* check;
     
-    LengthField(P*, Length*, String);
+    LengthField(wxPanel*, Length*, String);
     void set(void);
     template<class T> void get(T&);
     void Enable(bool);

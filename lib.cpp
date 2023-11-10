@@ -9730,7 +9730,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     //    sizer_v->Fit(panel);
     
-    Maximize(panel);
+//    Maximize(panel);
     panel->SetSizerAndFit(sizer_v);
     panel->Fit();
     Fit();

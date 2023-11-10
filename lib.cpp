@@ -18024,12 +18024,12 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p){
     
     unsigned int i;
-    parent = ((P*)(panel_of_parent->GetParent()));
+    parent_frame = ((P*)(panel_of_parent->GetParent()));
     date = p;
     
     
     //initialize check and its objects
-    check = new CheckDate(this);
+    check = new CheckDate<P>(this);
     //    (check.p) = this;
     //    ((check->check_year)->p) = this;
     //    (((check->check_year)->tabulate_days).p) = this;
@@ -18217,7 +18217,7 @@ template<class P> void LengthField<P>::Enable(bool is_enabled){
 }
 
 //this function enables/disable the whole ChronoField
-void ChronoField::Enable(bool is_enabled){
+template<class P> void ChronoField<P>::Enable(bool is_enabled){
     
     hour->Enable(is_enabled);
     minute->Enable(is_enabled);
@@ -18353,7 +18353,7 @@ template<class P> template<class E> void DateField<P>::OnEditYear(E& event){
 }
 
 //this function is called every time a keyboard button is lifted in this->month: it checks whether the text entered so far in month is valid and runs AllOk
-template<class E> void DateField::OnEditMonth(E& event){
+template<class P> template<class E> void DateField<P>::OnEditMonth(E& event){
     
     bool check;
     
@@ -18379,7 +18379,7 @@ template<class E> void DateField::OnEditMonth(E& event){
 }
 
 //this function is called every time a keyboard button is lifted in this->day: it checks whether the text entered so far in day is valid and runs AllOk
-template<class E> void DateField::OnEditDay(E& event){
+template<class P> template<class E> void DateField<P>::OnEditDay(E& event){
     
     bool check;
     
@@ -18414,7 +18414,7 @@ template<class E> void DateField::OnEditDay(E& event){
 
 
 
-template <typename EventTag, typename Method, typename Object> void DateField::Bind(EventTag tag,  Method method, Object object){
+template<class P> template <typename EventTag, typename Method, typename Object> void DateField<P>::Bind(EventTag tag,  Method method, Object object){
     
     //I bind year, month and day to method
     year->Bind(tag, method, object);
@@ -18641,7 +18641,7 @@ template<class P> template<class T> void LengthField<P>::InsertIn(T* host){
 }
 
 
-template<class T> void DateField::InsertIn(T* host){
+template<class P> template<class T> void DateField<P>::InsertIn(T* host){
     
     host->Add(sizer_v);
     
@@ -18664,7 +18664,7 @@ template <class P> template <typename EventTag, typename Method, typename Object
 
 
 
-template<class T> void ChronoField::InsertIn(T* host){
+template<class P> template<class T> void ChronoField<P>::InsertIn(T* host){
     
     host->Add(sizer_v);
     

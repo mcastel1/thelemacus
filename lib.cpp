@@ -17454,18 +17454,17 @@ template<class P> LimbField<P>::LimbField(wxPanel* panel_of_parent, Limb* p){
     check = new CheckLimb<P>;
     (check->p) = this;
     
-    limbs.resize(3);
+    limbs.Clear();
+    limbs.Add("upper");
+    limbs.Add("center");
+    limbs.Add("lower");
     
-    limbs[0] = wxString("upper");
-    limbs[1] = wxString("center");
-    limbs[2] = wxString("lower");
-    
-    name = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, ((int)(limbs.size())), limbs.data(), 0, wxDefaultValidator, wxString("Limb choices"));
+    name = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs, 0, wxDefaultValidator, wxString(""));
+    name->Set(limbs);
     
     change_selection = new OnChangeSelectionInLimbField<P>(this);
     
-    
-    
+    name->SetForegroundColour(parent_frame->GetForegroundColour());
     name->SetBackgroundColour(parent_frame->GetBackgroundColour());
     //SetColor(name);
     

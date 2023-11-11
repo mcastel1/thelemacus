@@ -2702,9 +2702,9 @@ int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle> *t, [[ma
             }
             
             //delete duplicates from t
-//            set<Angle> t_temp(t->begin(), t->end());
-//            t->assign(t_temp.begin(), t_temp.end());
-//
+            //            set<Angle> t_temp(t->begin(), t->end());
+            //            t->assign(t_temp.begin(), t_temp.end());
+            //
         }
         
         return output;
@@ -4762,30 +4762,30 @@ Catalog::Catalog(String filename, [[maybe_unused]] String prefix){
     File file;
     string line;
     Body body;
-//    streampos old_position;
+    //    streampos old_position;
     
     
     file.set_name(filename);
     if(file.open(String("in"), String(""))){
         
         // stores the position of file.value
-//        old_position = file.value.tellg();
+        //        old_position = file.value.tellg();
         //read the next line in the file
-//        getline(file.value, line);
+        //        getline(file.value, line);
         
         //check whether the next line in the file has reached the end of file
         while((body.read_from_file(String("read body"), file, prefix)) == true){
             
             //if the next line in the file has not reached the end of file, I set file.value to its old position and keep reading the file
-//            (file.value).seekg(old_position);
+            //            (file.value).seekg(old_position);
             
-//            body.read_from_file(String("read body"), file, prefix);
+            //            body.read_from_file(String("read body"), file, prefix);
             list.push_back(body);
             
             // stores the position of file.value
-//            old_position = file.value.tellg();
+            //            old_position = file.value.tellg();
             //read the next line in the file
-//            getline(file.value, line);
+            //            getline(file.value, line);
             
         }
         
@@ -9730,11 +9730,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     //    sizer_v->Fit(panel);
     
-//    Maximize(panel);
+    //    Maximize(panel);
     panel->SetSizerAndFit(sizer_v);
     panel->Fit();
     Fit();
-  
+    
     (draw_panel->*(draw_panel->Draw))();
     draw_panel->PaintNow();
     
@@ -12821,7 +12821,7 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event){
     
     //destroys frame
     frame->CallAfter(*destroy_frame);
-
+    
     event.Skip(true);
     
     
@@ -13650,7 +13650,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     stopwatch_reading->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     TAI_minus_UTC->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
     label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-
+    
     
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL
     button_reduce->Enable((sight_in != NULL));
@@ -13721,11 +13721,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
     //panel->SetSizer(sizer);
-    Maximize(panel);
+    //    Maximize(panel);
     panel->SetSizerAndFit(sizer);
     panel->Fit();
     Fit();
-  
+    
     
     //Maximize();
     
@@ -13903,15 +13903,15 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     
     //panel->SetSizer(sizer);
-
-//    CreateStatusBar();
-//    SetStatusText( "Welcome to UnsetIdling's text editor!" );
- 
+    
+    //    CreateStatusBar();
+    //    SetStatusText( "Welcome to UnsetIdling's text editor!" );
+    
     if(!check){
         cout << prefix.value << RED << "Cannot read position!\n" << RESET;
     }
     
-    Maximize(panel);
+    //    Maximize(panel);
     panel->SetSizerAndFit(sizer);
     //Maximize();
     panel->Fit();
@@ -14123,11 +14123,11 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     
     
     //panel->SetSizer(sizer);
-    Maximize(panel);
+    //    Maximize(panel);
     panel->SetSizerAndFit(sizer);
     panel->Fit();
     Fit();
-  
+    
     
     
     if(!check){
@@ -14535,9 +14535,9 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     sizer_v->Add(text, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_v->Add(image, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_v->Add(button_ok, 0,  wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
-   
+    
     //panel->SetSizer(sizer);
-    Maximize(panel);
+    //    Maximize(panel);
     panel->SetSizerAndFit(sizer_v);
     panel->Fit();
     Fit();
@@ -14611,13 +14611,13 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     sizer_grid->Add(button_a, 0, wxALIGN_CENTER);
     sizer_grid->Add(button_b, 0, wxALIGN_CENTER);
     sizer_v->Add(sizer_grid, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
-        
+    
     //panel->SetSizer(sizer);
-    Maximize(panel);
+    //    Maximize(panel);
     panel->SetSizerAndFit(sizer_v);
     panel->Fit();
     Fit();
-
+    
     CentreOnScreen();
     
 }
@@ -14780,7 +14780,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     GetAllCoastLineData();
     
     //when the ListFrame window is closed, quit the app
-//    Bind(wxEVT_CLOSE_WINDOW, &MyApp::OnPressCtrlQ<wxCloseEvent>, &(wxGetApp()));
+    //    Bind(wxEVT_CLOSE_WINDOW, &MyApp::OnPressCtrlQ<wxCloseEvent>, &(wxGetApp()));
     
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     (wxGetApp().rectangle_display) = ((wxGetApp().display).GetClientArea());
@@ -15265,14 +15265,14 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_all->Add(sizer_h, 0,  wxALL | wxEXPAND, ((wxGetApp().border).value));
     
     //panel->SetSizer(sizer);
-    Maximize(panel);
+        Maximize(panel);
     panel->SetSizerAndFit(sizer_all);
     panel->Fit();
     Fit();
     
     //given that I have incoroporated the listcontrols into the sizers, listrcontrols may have been resized -> I Fit() them so their content is properly shown
     Resize();
-    
+    Centre();
 }
 
 //create a new ChartFrame and appends it to the end of chart_frames

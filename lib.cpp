@@ -7320,7 +7320,7 @@ Angle Angle::normalize_pm_pi_ret(void){
 void Angle::print(String name, String prefix, ostream& ostr){
     
     normalize();
-    ostr << prefix.value << name.value << " = " << floor(K*value - 360.0*floor(K*value/360.0)) << "° " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60.0 << "'\n";
+    ostr << prefix.value << name.value << " = " << floor(K*value - 360.0*floor(K*value/360.0)) << (wxGetApp().degree_symbol.value) << " " << (K*value - 360.0*floor(K*value/360.0) - floor(K*value - 360.0*floor(K*value/360.0))) * 60.0 << "'\n";
     
 }
 
@@ -7428,7 +7428,7 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
     
     if(mode == String("")){
         //in this case, I print out the angle in the format >=0° and <360°
-        output << round(K*value) << "°";
+        output << round(K*value) << wxGetApp().degree_symbol.value;
         
     }else{
         //in this case, I print out the angle in the format >=-180° and <180°
@@ -7444,11 +7444,11 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
                     
                     if(value < M_PI_2){
                         
-                        output << round(fabs(K*value)) << "° N";
+                        output << round(fabs(K*value)) << wxGetApp().degree_symbol.value << " N";
                         
                     }else{
                         
-                        output << round(fabs(K*(M_PI-value))) << "° N";
+                        output << round(fabs(K*(M_PI-value))) << wxGetApp().degree_symbol.value << " N";
                         
                     }
                     
@@ -7456,11 +7456,11 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
                     
                     if(value < 3.0*M_PI_2){
                         
-                        output << round(fabs(K*(-M_PI+value))) << "° S";
+                        output << round(fabs(K*(-M_PI+value))) << wxGetApp().degree_symbol.value << " S";
                         
                     }else{
                         
-                        output << round(fabs(K*(2.0*M_PI-value))) << "° S";
+                        output << round(fabs(K*(2.0*M_PI-value))) << wxGetApp().degree_symbol.value << " S";
                         
                     }
                     
@@ -7470,7 +7470,7 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
                 //in this case, I output the sign of the angle in the East/West format (West = +, East = -)
                 
                 if(value>M_PI){value-=2.0*M_PI;}
-                output << round(fabs(K*value)) << "°";
+                output << round(fabs(K*value)) << wxGetApp().degree_symbol.value;
                 
                 if(value>0.0){output << " W";}
                 else{output << " E";}
@@ -7479,7 +7479,7 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
             
         }else{
             
-            output << "0°";
+            output << "0" << wxGetApp().degree_symbol.value;
             
         }
         
@@ -12997,7 +12997,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
             
         }else{
             
-            (f->print_error_message)->SetAndCall((p->deg), String("Entered value is not valid!"), String("Arcdegrees must be unsigned integer numbers >= 0° and < 360°"), (wxGetApp().path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->deg), String("Entered value is not valid!"), String("Arcdegrees must be unsigned integer numbers between 0 and 359").append(wxGetApp().degree_symbol), (wxGetApp().path_file_error_icon));
             
             (p->deg_ok) = false;
             
@@ -17598,7 +17598,7 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
     deg->Bind(wxEVT_KEY_UP, &AngleField::OnEditArcDegree<wxKeyEvent>, this);
     
     
-    text_deg = new StaticText((parent->panel), wxT("° "), wxDefaultPosition, wxDefaultSize);
+    text_deg = new StaticText((parent->panel), wxString(wxGetApp().degree_symbol.append(String(" ")).value), wxDefaultPosition, wxDefaultSize);
     
     min = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
     min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));

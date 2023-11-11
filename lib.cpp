@@ -7392,7 +7392,7 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces){
     
     
     
-    output << deg.str().c_str() << "° " << min.str().c_str() << "'";
+    output << deg.str().c_str() << (wxGetApp().degree_symbol).value << " " << min.str().c_str() << "'";
     
     if(mode != String("")){
         //in this case, I print out the angle in the format >=-180° and <180°

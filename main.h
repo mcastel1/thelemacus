@@ -73,6 +73,7 @@ public:
     String default_open_directory, code_directory, data_directory, image_directory, path_file_utc_date_and_time, path_file_init, path_file_recent, path_file_catalog, path_file_temp, path_file_app_icon, path_file_error_icon, path_file_warning_icon, path_file_question_icon, path_file_plus_icon, path_file_list_icon, path_file_position_icon, path_file_map_icon, path_file_pencil_icon, path_file_trash_icon, path_file_arrow_icon, path_file_disconnect_icon, path_file_coastline_data_blocked, path_file_n_line, /*the directory where the executable is being run*/run_directory;
     //the minimal angle at which two Routes must cross for them to be used to compute the position
     Angle min_crossing_angle;
+    String degree_symbol;
 
     wxTimer* timer;
     //type of the Boost library which contains the local time, intended as the time of the machine where the app is running

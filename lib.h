@@ -2040,58 +2040,6 @@ public:
 };
 
 
-
-
-
-
-
-
-
-//class OnSelectInListControlSights{
-//    
-//public:
-//    
-//    //the parent frame
-//    ListFrame* f;
-//    
-//    //the constructor, setting the parent frame
-//    OnSelectInListControlSights(ListFrame*);
-//    
-//    template<class T> void operator()(T&);
-//    
-//    
-//};
-
-//class OnSelectInListControlPositions{
-//
-//public:
-//
-//    //parent frame
-//    ListFrame* f;
-//
-//    //constructor, which sets the parent frame
-//    OnSelectInListControlPositions(ListFrame*);
-//
-//    template<class T> void operator()(T&);
-//
-//
-//};
-//
-//class OnSelectInListControlRoutes{
-//
-//public:
-//
-//    //parent frame
-//    ListFrame* f;
-//
-//    //constructor, which sets the parent frame
-//    OnSelectInListControlRoutes(ListFrame*);
-//
-//    template<class T> void operator()(T&);
-//
-//
-//};
-
 //this class is to define the functor template<class T> void operator()(T&), which is called when the user selects a route with which he wants to transport a sight
 class OnSelectRouteInListControlRoutesForTransport{
     

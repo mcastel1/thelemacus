@@ -1067,6 +1067,8 @@ public:
 
 template<class P, class T> class CheckCheck{
     
+public:
+    
     CheckField<P,T>* p;
     
     //this functor checks whether a GUI Check field is filled correctly and writes its value into the relative non-GUI field
@@ -1078,6 +1080,8 @@ template<class P, class T> class CheckCheck{
 
 template<class P> class CheckSign{
     
+public:
+    
     AngleField<P>* p;
     
     template <class T> void operator()(T&);
@@ -1087,6 +1091,8 @@ template<class P> class CheckSign{
 
 template<class P> class CheckArcDegree{
     
+public:
+    
     AngleField<P>* p;
     
     template<class T> void operator()(T&);
@@ -1095,6 +1101,8 @@ template<class P> class CheckArcDegree{
 };
 
 template<class P> class CheckArcMinute{
+    
+public:
     
     AngleField<P>* p;
     
@@ -1121,6 +1129,8 @@ public:
 };
 
 template<class P> class TabulateDays{
+    
+public:
     
     DateField<P>* p;
     
@@ -1189,6 +1199,8 @@ public:
 
 template<class P> class CheckLengthValue{
     
+public:
+    
     LengthField<P>* p;
     
     template<class T> void operator()(T&);
@@ -1197,6 +1209,8 @@ template<class P> class CheckLengthValue{
 };
 
 template<class P> class CheckLengthUnit{
+    
+public:
     
     LengthField<P>* p;
     
@@ -1221,9 +1235,9 @@ public:
 };
 
 
-
-
 template<class P> class CheckString{
+    
+public:
     
     StringField<P>* p;
     
@@ -1345,8 +1359,9 @@ public:
 };
 
 
-
 class SetStringToCurrentTime{
+    
+public:
     
     String* p;
     
@@ -1356,6 +1371,8 @@ class SetStringToCurrentTime{
 };
 
 template<class P> class SetStringFieldToCurrentTime{
+    
+public:
     
     StringField<P>* p;
     
@@ -1440,7 +1457,6 @@ public:
 };
 
 
-
 //this functor sets idling -> true in parent
 template<class P> class SetIdling{
     
@@ -1473,7 +1489,6 @@ public:
 };
 
 
-
 //this functor pops up a QuestionFrame and asks the user whether he wants to remove the a Sight related to a Route
 class AskRemoveRelatedSight{
     
@@ -1487,6 +1502,7 @@ public:
     void operator()(wxCommandEvent&);
     
 };
+
 
 //this functor pops up a QuestionFrame and asks the user whether he wants to remove the a Route related to a Sight
 class AskRemoveRelatedRoute{
@@ -1518,7 +1534,6 @@ public:
 };
 
 
-
 //this class defines the functor () used to ...
 template<class P> class FunctionOnPressOk{
     
@@ -1532,6 +1547,7 @@ public:
     void operator()(wxCommandEvent&);
     
 };
+
 
 //this class defines the functor () used to remove a Route from the non-GUI object data
 class DeleteRoute{

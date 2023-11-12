@@ -1386,8 +1386,6 @@ class DeleteSight{
     
 public:
     
-    DeleteSight(ListFrame*, Answer);
-    
     //the frame which called this struct
     ListFrame* f;
     //the id of the sight to be removed
@@ -1395,6 +1393,7 @@ public:
     //this is equal to 'y' if the route related to the removed sight has to be removed too, and 'n' otherwise
     Answer remove_related_route;
     
+    DeleteSight(ListFrame*, Answer);
     void operator()(wxCommandEvent&);
     
 };
@@ -1403,12 +1402,11 @@ public:
 class ExistingRoute{
     
 public:
-    
-    ExistingRoute(ListFrame*);
-    
+
     //the frame which called this struct
     ListFrame* f;
     
+    ExistingRoute(ListFrame*);
     void operator()(wxCommandEvent&);
     
 };
@@ -1418,12 +1416,11 @@ public:
 class NewRoute{
     
 public:
-    
-    NewRoute(ListFrame*);
-    
+        
     //the frame which called this struct
     ListFrame* f;
     
+    NewRoute(ListFrame*);
     void operator()(wxCommandEvent&);
     
 };
@@ -1432,12 +1429,11 @@ public:
 class AllRoutes{
     
 public:
-    
-    AllRoutes(ListFrame*);
-    
+        
     //the frame which called this struct
     ListFrame* f;
     
+    AllRoutes(ListFrame*);
     void operator()(wxCommandEvent&);
     
 };
@@ -1447,11 +1443,10 @@ class SomeRoutes{
     
 public:
     
-    SomeRoutes(ListFrame*);
-    
     //the frame which called this struct
     ListFrame* f;
-    
+
+    SomeRoutes(ListFrame*);
     void operator()(wxCommandEvent&);
     
 };
@@ -1461,12 +1456,11 @@ public:
 template<class P> class SetIdling{
     
 public:
-    
-    SetIdling(P*);
-    
+ 
     //the frame which called this struct
     P* parent;
 
+    SetIdling(P*);
     void operator()(wxCommandEvent&);
     void operator()(void);
 

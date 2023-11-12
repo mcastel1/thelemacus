@@ -280,7 +280,7 @@ void MousePositionOnListControl(wxListCtrl* list_control, int* i){
 
 
 
-//this is a wxFrame designed to show a message to the GUI user. FF_OK is the type of the functor struct which will be called when the button ok is pressed. This type is variable, so it has been 'templated'
+//this is a wxFrame designed to show a message to the GUI user. FF_OK is the type of the functor class which will be called when the button ok is pressed. This type is variable, so it has been 'templated'
 template<typename FF_OK> class MessageFrame: public wxFrame{
     
 public:
@@ -296,14 +296,14 @@ public:
     void KeyDown(wxKeyEvent&);
   
     
-    //pointer to the struct containing the functor which will be called when the button ok is pressed
+    //pointer to the class containing the functor which will be called when the button ok is pressed
     FF_OK* f_ok;
     
     //    void OnPressOk(wxCommandEvent&);
 
 };
 
-//this is a wxFrame designed to ask a  yes/no question to the GUI user. F_A is the type of the functor struct which will be called when the button yes is pressed. This type is variables, so it has been 'templated'. Same for F_B. If the user presses enter (esc), f_a  (f_b) are called 
+//this is a wxFrame designed to ask a  yes/no question to the GUI user. F_A is the type of the functor class which will be called when the button yes is pressed. This type is variables, so it has been 'templated'. Same for F_B. If the user presses enter (esc), f_a  (f_b) are called
 template<typename F_A, typename F_B> class QuestionFrame: public wxFrame{
     
 public:
@@ -317,9 +317,9 @@ public:
     wxStaticBitmap* image;
     //initialize the functor to close thie QuestionFrame when button_a or button_b will be pressed
     CloseFrame<QuestionFrame>* close_frame;
-    //pointer to the struct containing the functor which will be called when the button yes is pressed
+    //pointer to the class containing the functor which will be called when the button yes is pressed
     F_A* f_a;
-    //pointer to the struct containing the functor which will be called when the button no is pressed
+    //pointer to the class containing the functor which will be called when the button no is pressed
     F_B* f_b;
     String string_a, string_b;
     
@@ -1065,7 +1065,7 @@ public:
 };
 
 
-template<class P, class T> struct CheckCheck{
+template<class P, class T> class CheckCheck{
     
     CheckField<P,T>* p;
     
@@ -1076,7 +1076,7 @@ template<class P, class T> struct CheckCheck{
 
 
 
-template<class P> struct CheckSign{
+template<class P> class CheckSign{
     
     AngleField<P>* p;
     
@@ -1085,7 +1085,7 @@ template<class P> struct CheckSign{
     
 };
 
-template<class P> struct CheckArcDegree{
+template<class P> class CheckArcDegree{
     
     AngleField<P>* p;
     
@@ -1094,7 +1094,7 @@ template<class P> struct CheckArcDegree{
     
 };
 
-template<class P> struct CheckArcMinute{
+template<class P> class CheckArcMinute{
     
     AngleField<P>* p;
     
@@ -1120,7 +1120,7 @@ public:
     
 };
 
-template<class P> struct TabulateDays{
+template<class P> class TabulateDays{
     
     DateField<P>* p;
     
@@ -1187,7 +1187,7 @@ public:
     
 };
 
-template<class P> struct CheckLengthValue{
+template<class P> class CheckLengthValue{
     
     LengthField<P>* p;
     
@@ -1196,7 +1196,7 @@ template<class P> struct CheckLengthValue{
     
 };
 
-template<class P> struct CheckLengthUnit{
+template<class P> class CheckLengthUnit{
     
     LengthField<P>* p;
     
@@ -1223,7 +1223,7 @@ public:
 
 
 
-template<class P> struct CheckString{
+template<class P> class CheckString{
     
     StringField<P>* p;
     
@@ -1355,7 +1355,7 @@ class SetStringToCurrentTime{
     
 };
 
-template<class P> struct SetStringFieldToCurrentTime{
+template<class P> class SetStringFieldToCurrentTime{
     
     StringField<P>* p;
     
@@ -1597,7 +1597,7 @@ public:
     
 };
 
-//this functor pops out a message window with title tile and  message message, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this struct adaptable
+//this functor pops out a message window with title tile and  message message, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this class adaptable
 template<class T, typename FF_OK> class PrintMessage{
     
 public:
@@ -1616,7 +1616,7 @@ public:
     
 };
 
-//this functor pops out a question window with title tile, quesiton question, and answers answer_y, answer_n, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this struct adaptable. If the user answers yes/no to the question, f_yes/f_no are called
+//this functor pops out a question window with title tile, quesiton question, and answers answer_y, answer_n, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this class adaptable. If the user answers yes/no to the question, f_yes/f_no are called
 template<class T, typename FF_YES, typename FF_NO> class PrintQuestion{
     
 public:

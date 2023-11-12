@@ -16451,7 +16451,11 @@ template<class P> template<class T> void TabulateDays<P>::operator()(T& event){
     
 }
 
-
+template<class P, class T>  CheckCheck<P,T>::CheckCheck(CheckField<P,T>* p_in){
+    
+    p = p_in;
+    
+}
 
 //this function reads the value in the GUI box checkbox, and enables/disables the related_field accordingly
 template<class P, class T> template<class R> void CheckCheck<P,T>::operator()(R& event){
@@ -17524,8 +17528,7 @@ template<class P, class T> CheckField<P,T>::CheckField(wxPanel* panel_of_parent,
     related_field = related_field_in;
     direct_reverse = direct_reverse_in;
     
-    check = new CheckCheck<P,T>;
-    (check->p) = this;
+    check = new CheckCheck<P,T>(this);
     
     checkbox = new wxCheckBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
     //SetColor(checkbox);

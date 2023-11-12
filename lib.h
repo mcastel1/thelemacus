@@ -1074,7 +1074,7 @@ public:
     
     AngleField<P>* p;
     
-    CheckArcMinute(AngleField<P>*)
+    CheckArcMinute(AngleField<P>*);
     template <class T> void operator()(T&);
     
 };

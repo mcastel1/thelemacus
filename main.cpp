@@ -15,8 +15,6 @@
  notes:
  =======
  - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging 
- - if the running idrectory of the app contains a ' it does not work, but let us leave it like this
- >>>>>>> revise_make_app
  - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
  - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR
@@ -49,6 +47,8 @@
  
  ********** THINGS TO FIX ************
 - check whetehr '(draw_panel->memory_dc).SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));' is the reason why parallels and meridians are not shown on MSW
+ - Do not write on file every time you update the recent items, write/read from to file only when you open /close the app
+ - On MSW the old curves are shown when dragging the chart -> fix it
  - buttons on bottom of ListFrame are cut on Enrico's computer (fixed it on mine, check whether it has been fixed on another computer too)
  - check that WXK_PLUS does not depend on the computer
  */

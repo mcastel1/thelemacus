@@ -1036,6 +1036,7 @@ public:
     
     CheckField<P,T>* p;
     
+    CheckCheck(CheckField<P,T>*);
     //this functor checks whether a GUI Check field is filled correctly and writes its value into the relative non-GUI field
     template<class R> void operator()(R&);
     
@@ -1049,6 +1050,7 @@ public:
     
     AngleField<P>* p;
     
+    CheckSign(AngleField<P>*);
     template <class T> void operator()(T&);
     
     
@@ -1060,10 +1062,11 @@ public:
     
     AngleField<P>* p;
     
+    CheckArcDegree(AngleField<P>*);
     template<class T> void operator()(T&);
     
-    
 };
+
 
 template<class P> class CheckArcMinute{
     
@@ -1071,8 +1074,8 @@ public:
     
     AngleField<P>* p;
     
+    CheckArcMinute(AngleField<P>*)
     template <class T> void operator()(T&);
-    
     
 };
 
@@ -1088,7 +1091,6 @@ public:
     CheckArcMinute<P> check_arc_minute;
     
     CheckAngle(AngleField<P>*);
-    
     template <class T> void operator()(T&);
     
 };
@@ -1098,9 +1100,9 @@ template<class P> class TabulateDays{
 public:
     
     DateField<P>* p;
-    
+   
+    TabulateDays(DateField<P>*);
     template<class T> void operator()(T&);
-    
     
 };
 
@@ -1115,7 +1117,6 @@ public:
     CheckYear(DateField<P>*);
     template<class T> void operator()(T&);
     
-    
 };
 
 template<class P> class CheckMonth{
@@ -1129,7 +1130,6 @@ public:
     CheckMonth(DateField<P>*);
     template<class T> void operator()(T&);
     
-    
 };
 
 template<class P> class CheckDay{
@@ -1140,7 +1140,6 @@ public:
     
     CheckDay(DateField<P>*);
     template<class T> void operator()(T&);
-    
     
 };
 
@@ -1157,7 +1156,6 @@ public:
     
     //constructor, which sets the parent
     CheckDate(DateField<P>*);
-    
     template <class T> void operator()(T&);
     
 };
@@ -1168,8 +1166,8 @@ public:
     
     LengthField<P>* p;
     
+    CheckLengthValue(LengthField<P>*);
     template<class T> void operator()(T&);
-    
     
 };
 
@@ -1179,8 +1177,8 @@ public:
     
     LengthField<P>* p;
     
+    CheckLengthUnit(LengthField<P>*);
     template<class T> void operator()(T&);
-    
     
 };
 
@@ -1194,7 +1192,6 @@ public:
     CheckLengthUnit<P> check_length_unit;
     
     CheckLength(LengthField<P>*);
-    
     template <class T> void operator()(T&);
     
 };
@@ -1206,6 +1203,7 @@ public:
     
     StringField<P>* p;
     
+    CheckString(StringField<P>*);
     template<class T> void operator()(T&);
     
 };

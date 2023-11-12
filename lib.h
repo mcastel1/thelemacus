@@ -600,15 +600,17 @@ public:
 class Speed{
     
 public:
+    
     double value;
+    
+    Speed();
+    Speed(double);
     void enter(String, String);
     bool check_valid(String, String);
     void print(String, String, ostream&);
     
     
 };
-
-
 
 
 class Answer{

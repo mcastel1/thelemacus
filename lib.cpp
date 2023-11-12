@@ -657,6 +657,16 @@ void Speed::print(String name, String prefix, ostream& ostr){
     
 }
 
+//constructor of Speed that takes no arguments
+Speed::Speed(void){}
+
+//constructor of Speed that sets value to value_in
+Speed::Speed(double value_in){
+    
+    value = value_in;
+    
+    
+}
 
 
 //enter a speed in knots

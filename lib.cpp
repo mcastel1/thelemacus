@@ -10635,6 +10635,11 @@ template<class P> template<class T> void LimbField<P>::get(T &event){
     
 }
 
+template<class P> CheckSign<P>::CheckSign(AngleField<P>* p_in){
+    
+    p = p_in;
+    
+}
 
 //checks the value of the sign in the GUI field
 template<class P> template <class T> void CheckSign<P>::operator()(T &event){
@@ -12985,6 +12990,12 @@ template<class P> template <class T> void DateField<P>::get(T& event){
     
 }
 
+template<class P> CheckArcDegree<P>::CheckArcDegree(AngleField<P>* p_in){
+    
+    p = p_in;
+    
+}
+
 
 template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event){
     
@@ -13018,6 +13029,12 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T &event)
     }
     
     event.Skip(true);
+    
+}
+
+template<class P> CheckArcMinute<P>::CheckArcMinute(AngleField<P>* p_in){
+    
+    p = p_in;
     
 }
 
@@ -13058,6 +13075,12 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T &event
     
 }
 
+template<class P> CheckLengthValue<P>::CheckLengthValue(LengthField<P>* p_in){
+    
+    p = p_in;
+    
+}
+
 //checks the value in the GUI field in LengthField
 template<class P> template <class T> void CheckLengthValue<P>::operator()(T &event){
     
@@ -13092,6 +13115,12 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T &eve
     }
     
     event.Skip(true);
+    
+}
+
+template<class P> CheckLengthUnit<P>::CheckLengthUnit(LengthField<P>* p_in){
+    
+    p = p_in;
     
 }
 

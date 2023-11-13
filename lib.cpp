@@ -8750,7 +8750,7 @@ void DrawPanel::Draw_Mercator(void){
     Projection temp, delta_temp;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     //the total length of each Route
-    Angle phi, lambda_saved, Z_saved, phi_saved;
+    Angle phi, lambda_saved, phi_saved;
     Route route;
     Length r, s;
     Position q, /*the geographic positions corresponding to the NW (SE) boundary of of the plot area, moved to the interior of the plot area by one pixel. These will be used to plot parallels and meridians in such a way that they don't hit the boundary of the plot area*/p_NW, p_SE;
@@ -9041,7 +9041,6 @@ void DrawPanel::Draw_Mercator(void){
                 
                 (route.l).set(String(""), Re*((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
                 (((route.reference_position).lambda).value) = (lambda_saved.value);
-                //                ((route.reference_position).phi) = phi_saved;
                 
             }
             

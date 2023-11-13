@@ -1723,7 +1723,7 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
 
 
 //draws into draw_panel the Route this, by tabulating the Route with n points and connecting them with an spline. The route is drawn with color 'color' and width 'width'. If width = -1, then the Route is drawn with default width
-void Route::DrawOld(unsigned int n_points, Color color, int width, DrawPanel* draw_panel){
+void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, DrawPanel* draw_panel){
     
     vector< vector<wxPoint> > p;
     wxPoint temp;
@@ -1732,8 +1732,8 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, DrawPanel* dr
     Length s;
     
     //sets color and width of memory_dc to the ones supported as arguments of Draw
-    (draw_panel->memory_dc).SetPen(wxPen(color, width));
-    (draw_panel->memory_dc).SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
+    dc->SetPen(wxPen(color, width));
+    dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
     
     
     //tabulate the Route points
@@ -1780,14 +1780,14 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, DrawPanel* dr
         
         if(((p[i]).size()) > 1){
             
-            (draw_panel->memory_dc).DrawSpline((int)((p[i]).size()), (p[i]).data());
+            dc->DrawSpline((int)((p[i]).size()), (p[i]).data());
             
         }
         
     }
     
     //put back original parameters of memory_dc
-    (draw_panel->memory_dc).SetPen(wxPen(wxGetApp().foreground_color, 1));
+    dc->SetPen(wxPen(wxGetApp().foreground_color, 1));
     
 }
 
@@ -8462,7 +8462,7 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
             
             //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, -1, this, String(""));
             //here I use DrawOld because Draw cannot handle loxodromes
-            route.DrawOld(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, -1, this);
+            route.DrawOld(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, -1, dc, this);
             
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -8481,7 +8481,7 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
                         
                         //                        route.Draw(((wxGetApp().n_points_minor_ticks)).value, 0x0000ff, -1, this, String(""));
                         //here I use DrawOld because Draw cannot handle loxodromes
-                        route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, -1, this);
+                        route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, -1, dc, this);
                         
                     }
                 

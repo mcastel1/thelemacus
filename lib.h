@@ -745,7 +745,7 @@ public:
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
     
-    void DrawOld(unsigned int, Color, int, DrawPanel*);
+    void DrawOld(unsigned int, Color, int, wxDC*, DrawPanel*);
     void DrawOld(unsigned int, wxDC*, DrawPanel*, String);
     void DrawOld(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
 

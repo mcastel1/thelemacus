@@ -241,12 +241,27 @@ bool MyApp::OnInit(){
     
     degree_symbol = String("\u00b0");
     
-    //to build the app
+    //detect the operating system
+#ifdef _WIN32
+    
+    cout << "You have Windows Operating System" << "\n";
+    //to run the app with Visual Studio on Windows
+    run_directory = String("C:/Users/miche/Documents/sight_reduction_program/");
+    
+#endif
+    
+#ifdef __APPLE__
+    
+    cout << "You have Apple Operating System" << "\n";
+    
+    //to build the app on mac
     //        where_am_I(String(""));
     //to develop the app with Xcode on OSX
     run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
-    //to run the app with Visual Studio on Windows
-    //    run_directory = String("C:/Users/miche/Documents/sight_reduction_program/");
+    
+#endif
+    
+    
 
     
     

@@ -8906,6 +8906,8 @@ void DrawPanel::Draw_Mercator(void){
         else{delta_phi += k*5.0/((double)gamma_phi);}
     }
     
+    //here I set up things to plot meridians and parallels in Render_Mercator
+    
     //set phi_start/end
     (phi_start.value) = floor((((parent->phi_min).normalize_pm_pi_ret()).value)/delta_phi)*delta_phi;
     (phi_end.value) = (((parent->phi_max).normalize_pm_pi_ret()).value);

@@ -8245,6 +8245,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     rp_now_drag = gsl_vector_alloc(3);
     rp_end_drag = gsl_vector_alloc(3);
     
+    client_dc = new wxClientDC(this);
+    
     mouse_dragging = false;
     
     parent = (parent_in->parent);
@@ -8339,9 +8341,11 @@ void DrawPanel::PaintEvent([[maybe_unused]]  wxPaintEvent & event){
  */
 void DrawPanel::PaintNow(){
     
-    wxClientDC dc(this);
     //    Render(dc);
-    (this->*Render)(dc);
+    client_dc->Clear();
+    client_dc = new wxClientDC(this);
+//    client_dc->SetParent(this);
+    (this->*Render)(*client_dc);
     
     
     
@@ -8758,6 +8762,8 @@ void DrawPanel::Draw_Mercator(void){
     prefix = String("");
     new_prefix = prefix.append(String("\t"));
     
+    client_dc->Clear();
+    
     
     //here I compute multiple quantities relative to the y axis: this computation is done here, at the very beginning of Draw_Mercator, because these quantitites will be needed immediatly to compute size_label_horizontal
     //set phi_start, phi_end and delta_phi
@@ -9168,6 +9174,8 @@ void DrawPanel::Draw_3D(void){
     wxPoint p;
     wxString dummy_label;
     unsigned int i, n_intervals_ticks;
+    
+    client_dc->Clear();
     
     //clears all labels previously drawn
     for(i=0; i<label_lambda.size(); i++){(label_lambda[i])->Destroy();}

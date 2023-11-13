@@ -16387,6 +16387,11 @@ template<class P> template<class T> void CheckDay<P>::operator()(T& event){
 
 
 
+template<class P> TabulateDays<P>::TabulateDays(DateField<P>* p_in){
+ 
+    p = p_in;
+    
+}
 
 
 
@@ -17604,7 +17609,7 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
     AdjustWidth(deg);
     deg->SetValue(wxString(""));
     deg_ok = false;
-    deg->Bind(wxEVT_KILL_FOCUS, (check->check_arc_degree));
+    deg->Bind(wxEVT_KILL_FOCUS, (*(check->check_arc_degree)));
     //as text is changed in deg from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     deg->Bind(wxEVT_COMBOBOX, &AngleField::OnEditArcDegree<wxCommandEvent>, this);
     deg->Bind(wxEVT_KEY_UP, &AngleField::OnEditArcDegree<wxKeyEvent>, this);
@@ -17617,7 +17622,7 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
     //SetColor(min);
     min->SetValue(wxString(""));
     min_ok = false;
-    min->Bind(wxEVT_KILL_FOCUS, (check->check_arc_minute));
+    min->Bind(wxEVT_KILL_FOCUS, (*(check->check_arc_minute)));
     //as text is changed min by the user with the keyboard, call OnEditArcMinute
     min->Bind(wxEVT_KEY_UP, &AngleField::OnEditArcMinute<wxKeyEvent>, this);
     
@@ -17636,7 +17641,7 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
         AdjustWidth(sign);
         sign->SetValue(wxString(""));
         sign_ok = false;
-        sign->Bind(wxEVT_KILL_FOCUS, (check->check_sign));
+        sign->Bind(wxEVT_KILL_FOCUS, (*(check->check_sign)));
         //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEditSign
         sign->Bind(wxEVT_COMBOBOX, &AngleField::OnEditSign<wxCommandEvent>, this);
         sign->Bind(wxEVT_KEY_UP, &AngleField::OnEditSign<wxKeyEvent>, this);
@@ -17754,7 +17759,7 @@ template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* 
     //SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_string_field))));
     value->SetValue("");
-    value->Bind(wxEVT_KILL_FOCUS, check);
+    value->Bind(wxEVT_KILL_FOCUS, (*check));
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);

@@ -59,6 +59,9 @@ class Answer;
 class Body;
 class String;
 template<class P> class CheckProjection;
+template<class P> class CheckArcDegree;
+template<class P> class CheckArcMinute;
+template<class P> class TabulateDays;
 
 
 //a class for color objects

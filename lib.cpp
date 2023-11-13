@@ -12932,9 +12932,9 @@ template<class P> CheckAngle<P>::CheckAngle(AngleField<P>* p_in){
     
     p = p_in;
     
-    (check_sign.p) = p;
-    (check_arc_degree.p) = p;
-    (check_arc_minute.p) = p;
+    check_sign = new CheckSign<P>(p);
+    check_arc_degree = new CheckArcDegree<P>(p);
+    check_arc_minute = new CheckArcMinute<P>(p);
     
 }
 
@@ -13143,16 +13143,16 @@ template<class P> CheckLength<P>::CheckLength(LengthField<P>* p_in){
     
     p = p_in;
     
-    (check_length_value.p) = p;
-    (check_length_unit.p) = p;
+    check_length_value = new CheckLengthValue<P>(p);
+    check_length_unit = new CheckLengthUnit<P>(p);
     
 }
 
 //this functor checks the whole Length field by calling the check on its value and unit
 template<class P> template <class T> void CheckLength<P>::operator()(T& event){
     
-    check_length_value(event);
-    check_length_unit(event);
+    (*check_length_value)(event);
+    (*check_length_unit)(event);
     
     event.Skip(true);
     
@@ -16226,15 +16226,14 @@ void SightFrame::OnPressCancel([[maybe_unused]] wxCommandEvent& event){
 template<class P> CheckYear<P>::CheckYear(DateField<P>* p_in){
     
     p = p_in;
-    (tabulate_days.p) = p;
+    tabulate_days = new TabulateDays<P>(p);
     
 }
 
 template<class P> CheckMonth<P>::CheckMonth(DateField<P>* p_in){
     
     p = p_in;
-    (tabulate_days.p) = p;
-    
+    tabulate_days = new TabulateDays<P>(p);
     
 }
 
@@ -16267,7 +16266,7 @@ template<class P> template<class T> void CheckYear<P>::operator()(T&event){
             
             if(check && (p->month_ok)){
                 
-                tabulate_days(event);
+                (*tabulate_days)(event);
                 
             }
             
@@ -16313,7 +16312,7 @@ template<class P> template<class T> void CheckMonth<P>::operator()(T&event){
             
             if(check && (p->year_ok)){
                 
-                tabulate_days(event);
+                (*tabulate_days)(event);
                 
             }
             
@@ -17713,7 +17712,7 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
     value->SetValue(wxString(""));
     value_ok = false;
-    value->Bind(wxEVT_KILL_FOCUS, check->check_length_value);
+    value->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
     value->Bind(wxEVT_KEY_UP, &LengthField::OnEditValue<wxKeyEvent>, this);
     
@@ -17724,7 +17723,7 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
     unit->SetValue(unit_value.value);
     unit_ok = true;
-    unit->Bind(wxEVT_KILL_FOCUS, check->check_length_unit);
+    unit->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_unit)));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     unit->Bind(wxEVT_COMBOBOX, &LengthField::OnEditUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &LengthField::OnEditUnit<wxKeyEvent>, this);
@@ -17747,7 +17746,7 @@ template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* 
     string = p;
     
     //initialize check
-    (check.p) = this;
+    (check->p) = this;
     
     (set_to_current_time.p) = this;
     
@@ -18372,7 +18371,7 @@ template<class P> template<class E> void DateField<P>::OnEditYear(E& event){
     //year_ok is true/false is the text enteres is valid/invalid
     year_ok = check;
     
-    ((this->check)->check_month)->tabulate_days(event);
+    (*(((this->check)->check_month)->tabulate_days))(event);
     
     //tries to enable button_reduce
     parent_frame->AllOk();
@@ -18398,7 +18397,7 @@ template<class P> template<class E> void DateField<P>::OnEditMonth(E& event){
     //month_ok is true/false is the text enteres is valid/invalid
     month_ok = check;
     
-    ((this->check)->check_month)->tabulate_days(event);
+    (*(((this->check)->check_month)->tabulate_days))(event);
     
     //tries to enable button_reduce
     parent_frame->AllOk();

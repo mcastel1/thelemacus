@@ -1086,9 +1086,9 @@ public:
     
     //p is the AngleField which is parent of the CheckAngle object: the CheckAngle object checks the validity of the entries in AngleField
     AngleField<P>* p;
-    CheckSign<P> check_sign;
-    CheckArcDegree<P> check_arc_degree;
-    CheckArcMinute<P> check_arc_minute;
+    CheckSign<P>* check_sign;
+    CheckArcDegree<P>* check_arc_degree;
+    CheckArcMinute<P>* check_arc_minute;
     
     CheckAngle(AngleField<P>*);
     template <class T> void operator()(T&);
@@ -1112,7 +1112,7 @@ template<class P> class CheckYear{
 public:
     
     DateField<P>* p;
-    TabulateDays<P> tabulate_days;
+    TabulateDays<P>* tabulate_days;
     
     CheckYear(DateField<P>*);
     template<class T> void operator()(T&);
@@ -1125,7 +1125,7 @@ public:
 
     
     DateField<P>* p;
-    TabulateDays<P> tabulate_days;
+    TabulateDays<P>* tabulate_days;
     
     CheckMonth(DateField<P>*);
     template<class T> void operator()(T&);
@@ -1188,8 +1188,8 @@ public:
     
     //p is the LengthField which is parent of the CheckLength object: the CheckLength object checks the validity of the entries in LengthField
     LengthField<P>* p;
-    CheckLengthValue<P> check_length_value;
-    CheckLengthUnit<P> check_length_unit;
+    CheckLengthValue<P>* check_length_value;
+    CheckLengthUnit<P>* check_length_unit;
     
     CheckLength(LengthField<P>*);
     template <class T> void operator()(T&);
@@ -1905,7 +1905,7 @@ public:
     wxBoxSizer *sizer_h, *sizer_v;
     //non-GUI object related to this
     String* string;
-    CheckString<P> check;
+    CheckString<P>* check;
     SetStringFieldToCurrentTime<P> set_to_current_time;
     
     StringField(wxPanel*, String*);

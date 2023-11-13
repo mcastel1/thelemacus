@@ -12908,6 +12908,11 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event){
     
 }
 
+template<class P> CheckString<P>::CheckString(StringField<P>* p_in){
+    
+    p = p_in;
+    
+}
 
 //this functor does nothing, delete it in the future
 template<class P> template<class T> void CheckString<P>::operator()(T &event){
@@ -17780,7 +17785,7 @@ template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* 
     string = p;
     
     //initialize check
-    (check->p) = this;
+    check = new CheckString<P>(this);
     
     (set_to_current_time.p) = this;
     

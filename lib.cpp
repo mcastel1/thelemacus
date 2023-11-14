@@ -281,6 +281,11 @@ void File::remove(String prefix){
 
 void File::count_lines_new(String prefix){
     
+    // Number of lines in *this
+    number_of_lines = ((unsigned int)count(istreambuf_iterator<char>(value), istreambuf_iterator<char>(), '\n'));
+    
+    cout << prefix.value << "Number of lines in file " << (name.value) << " = " << number_of_lines << "\n";
+    
 }
 
 

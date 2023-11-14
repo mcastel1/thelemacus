@@ -12,6 +12,7 @@
 #include "lib.cpp"
 
 /*
+ 
  notes:
  =======
  - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging 
@@ -50,6 +51,12 @@
  - On MSW the old curves are shown when dragging the chart -> fix it
  - buttons on bottom of ListFrame are cut on Enrico's computer (fixed it on mine, check whether it has been fixed on another computer too)
  - check that WXK_PLUS does not depend on the computer
+ 
+ ---
+ 
+ for MSW:
+ - get rid of system() calls
+ - labels in ChartFrame have the wrong background color
  */
 
 //this function is executed reguarly over time, to check some things

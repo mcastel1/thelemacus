@@ -91,7 +91,7 @@ night background color = (40,40,43)
 point size = 1
 number of points coastline Mercator = 45000
 number of points coastline 3D = 90000
-show coastlines = y
+show coastlines = n
 #directories and names of files
 default open directory = /Users/macbookpro/Desktop/Thelemacus.app/
 code directory = /Users/macbookpro/Desktop/Thelemacus.app/

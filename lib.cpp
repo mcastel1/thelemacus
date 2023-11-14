@@ -1035,12 +1035,20 @@ void String::print(String name, bool print_if_empty, String prefix, ostream& ost
     
 }
 
+//set the value of String *this, titled name, to input_string, by printing out everything
 void String::set(String name, String input_string, [[maybe_unused]] String prefix){
     
     value = (input_string.value);
     
     print(name, true, prefix, cout);
     
+}
+
+//set the value of String *this to input_string, without printing out anything
+void String::set(String input_string){
+    
+    value = (input_string.value);
+        
 }
 
 

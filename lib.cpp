@@ -215,6 +215,14 @@ void Int::enter(String name, [[maybe_unused]] String prefix){
     
 }
 
+
+File::File(){
+    
+    value.precision((data_precision.value));
+    
+}
+
+
 void File::enter_name(String prefix){
     
     name.enter(String("name of file"), prefix);
@@ -271,12 +279,10 @@ void File::remove(String prefix){
     
 }
 
-
-File::File(){
-    
-    value.precision((data_precision.value));
+void File::count_lines_new(String prefix){
     
 }
+
 
 void File::set_name(String filename){
     

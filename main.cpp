@@ -46,6 +46,7 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
+ - remove useless stuff from init.txt
  - do not allocate a new wxDC every time you call Render*
 - check whetehr '(draw_panel->memory_dc).SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));' is the reason why parallels and meridians are not shown on MSW
  - Do not write on file every time you update the recent items, write/read from to file only when you open /close the app
@@ -58,8 +59,6 @@
 
  for MSW:
  - listcontrol_sights is shown with empty columns 
- - get rid of system() calls
- - labels in ChartFrame have the wrong background color
  */
 
 //this function is executed reguarly over time, to check some things
@@ -238,7 +237,7 @@ void MyApp::where_am_I([[maybe_unused]] String prefix){
 }
 
 bool MyApp::OnInit(){
-    
+        
     unsigned int i;
     Int n_chart_frames;
     stringstream s;

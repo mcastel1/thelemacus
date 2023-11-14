@@ -2059,8 +2059,6 @@ public:
 class ListFrame: public wxFrame{
     
 public:
-    //this frame has no parent, because it is supposed to be the main frame of the appplication
-    ListFrame(MyApp*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     //the MyApp that constructed *this
     MyApp* parent;
@@ -2115,6 +2113,8 @@ public:
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;
     AskRemoveRelatedSight* ask_remove_related_sight;
     AskRemoveRelatedRoute* ask_remove_related_route;
+    
+    ListFrame(MyApp*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
 
     void set(void);
     void DrawAll(void);

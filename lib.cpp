@@ -256,6 +256,15 @@ void File::remove(String prefix){
     
 }
 
+//delete file *this
+void File::remove_new(String prefix){
+ 
+    boost::filesystem::remove(name.value);
+    
+    cout << prefix.value << "File " << name.value << " removed\n";
+    
+}
+
 void File::set_name(String filename){
     
     (name.value) = filename.value;

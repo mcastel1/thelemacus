@@ -8111,7 +8111,7 @@ void ListFrame::GetAllCoastLineData(void){
     
     //read file n_line and store it into vector n_line
     file_n_line.open(String("in"), String(""));
-    for(i=0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i<n_line.size()) && !(file_n_line.value.eof()); i++){
+    for(i=0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i<n_line.size()) && (!(file_n_line.value.eof())); i++){
         
         line.clear();
         ins.clear();
@@ -8146,11 +8146,8 @@ void ListFrame::GetAllCoastLineData(void){
     
     if(show_coastlines == Answer('y', String(""))){
         
-        
         i=0;
-        while(!(file_coastline_data_blocked.value.eof())){
-            
-            
+        while(/*here, to be safe, I stop the while() if I am not sure that n_line will be called with a valid value*/(360*i+360 < (n_line.size())) && (!(file_coastline_data_blocked.value.eof()))){
             
             p_coastline.resize(i+1);
             (p_coastline[i]).resize(360);
@@ -8166,7 +8163,6 @@ void ListFrame::GetAllCoastLineData(void){
                 
                 (file_coastline_data_blocked.value).read(buffer, l);
                 string data(buffer, l);
-                
                 
                 //count how many datapoints are in data
                 //                n = ((unsigned int)count(data.begin(), data.end(), ','));

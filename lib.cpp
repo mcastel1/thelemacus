@@ -8794,7 +8794,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
     
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    (route.type).set(String(""), String("o"), String(""));
+    (route.type).set(String("o"));
     (route.l).set(String(""), Re*M_PI, String(""));
     (route.Z).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = -M_PI_2;
@@ -8859,7 +8859,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
                 
-                (route.type).set(String(""), String("o"), String(""));
+                (route.type).set(String("o"));
                 (route.Z).set(String(""), M_PI_2, String(""));
                 (route.l).set(String(""), Re*2.0*((((wxGetApp().tick_length_over_aperture_circle_observer)).value)*((circle_observer.omega).value)), String(""));
                 

@@ -8711,6 +8711,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
     wxString wx_string;
     //this is a list of tabulated points for dummy_route, such as a meridian, which will be created and destroyed just after
     vector<wxPoint> points_dummy_route;
+    Projection dummy_projection;
     Route route;
     wxPoint p;
     Position q, temp;
@@ -8853,6 +8854,24 @@ void DrawPanel::Render_3D(wxDC*  dc){
             
         }
     
+    //draw horizon circle
+    //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
+    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+    dummy_projection = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
+    //set the wxPen color for the horizon
+    dc->SetPen(wxPen(wxGetApp().color_horizon, 1));
+    dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
+    dc->SetBackground(wxGetApp().background_color);
+    //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
+    dc->DrawCircle(
+                         (position_plot_area.x) + (int)(((double)(size_plot_area.GetWidth()))/2.0),
+                         (position_plot_area.y) + (int)(((double)(size_plot_area.GetHeight()))/2.0),
+                         (dummy_projection.y)/y_max * ((double)(size_plot_area.GetWidth()))/2.0
+                         );
+    //set back the pen  color and brush
+    dc->SetPen(wxPen(wxGetApp().foreground_color, 1));
+    dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
+    
     
     
     //draw positions
@@ -8957,7 +8976,7 @@ void DrawPanel::TabulateRoutes(void){
 void DrawPanel::Draw_Mercator(void){
     
     int i;
-    Projection temp, delta_temp;
+    Projection delta_temp;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     Length r, s;
     Position q;
@@ -9463,26 +9482,7 @@ void DrawPanel::Draw_3D(void){
     gsl_vector_set(rp, 1, -cos(q.phi));
     gsl_vector_set(rp, 2, sin((q.phi)));
     
-    //draw horizon circle
-    //
-    //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
-    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
-    temp = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
-    //set the wxPen color for the horizon
-    memory_dc.SetPen(wxPen(wxGetApp().color_horizon, 1));
-    memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
-    memory_dc.SetBackground(wxGetApp().background_color);
-    //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
-    memory_dc.DrawCircle(
-                         (position_plot_area.x) + (int)(((double)(size_plot_area.GetWidth()))/2.0),
-                         (position_plot_area.y) + (int)(((double)(size_plot_area.GetHeight()))/2.0),
-                         (temp.y)/y_max * ((double)(size_plot_area.GetWidth()))/2.0
-                         );
-    //set back the pen  color and brush
-    memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
-    memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
-    //
-    
+ 
     
     
     //draw coastlines

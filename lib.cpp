@@ -8724,11 +8724,16 @@ void DrawPanel::Render_3D(wxDC*  dc){
     wxPoint p;
     Position q, temp;
     
-    dc->SetBrush(wxBrush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25)));
+    //draws a rectangle filled with color wxGetApp().background_color and with border wich color wxGetApp().foregrond_color on bitmap_image, so bitmap_image will have the right background color
+    dc->SetBrush(wxBrush(wxGetApp().background_color));
+    dc->SetPen(wxPen(wxGetApp().foreground_color));
+    dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
+
     
-    //draw coastlines
-    dc->DrawBitmap(*bitmap_image, 0, 0);
-    
+//    dc->SetBrush(wxBrush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25)));
+//    //draw coastlines
+//    dc->DrawBitmap(*bitmap_image, 0, 0);
+//
     
     //set the pen to grey
     dc->SetPen(wxPen(Color(128,128,128), 1));
@@ -9322,10 +9327,6 @@ void DrawPanel::Draw_3D(void){
     //allocate bitmap_image
     bitmap_image = new wxBitmap((size_chart.GetWidth()), (size_chart.GetHeight()));
     memory_dc.SelectObject(*bitmap_image);
-    //draws a rectangle filled with color wxGetApp().background_color and with border wich color wxGetApp().foregrond_color on bitmap_image, so bitmap_image will have the right background color
-    memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
-    memory_dc.SetBrush(wxBrush(wxGetApp().background_color));
-    memory_dc.DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     
     
     position_plot_area = wxPoint((int)(((double)(size_chart.GetWidth()))*(1.0-(length_plot_area_over_length_chart.value))/2.0),

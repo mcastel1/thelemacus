@@ -55,7 +55,9 @@
  
  ---
  
+
  for MSW:
+ - listcontrol_sights is shown with empty columns 
  - get rid of system() calls
  - labels in ChartFrame have the wrong background color
  */

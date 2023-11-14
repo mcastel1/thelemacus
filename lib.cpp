@@ -8760,8 +8760,10 @@ void DrawPanel::Render_3D(wxDC*  dc){
         }
         
     }
-    
-    
+
+    //set thickness to ordinary thickness to draw meridians and parallels
+    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+
     
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
@@ -8775,8 +8777,8 @@ void DrawPanel::Render_3D(wxDC*  dc){
         (((route.reference_position).lambda).value) < (lambda_end.value);
         (((route.reference_position).lambda).value) += delta_lambda){
             
-            //            route.draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, -1, this);
-            route.Draw(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, -1, &memory_dc, this, String(""));
+            //            route.draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this);
+            route.Draw(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, thickness, dc, this, String(""));
             
             if(gamma_lambda != 1){
                 //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -8794,7 +8796,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
                     (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                     (((route.reference_position).lambda).value) += delta_lambda_minor){
                     
-                    route.Draw(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, -1, &memory_dc, this, String(""));
+                    route.Draw(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, thickness, dc, this, String(""));
                     
                 }
                 
@@ -8825,7 +8827,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
             (route.l).set(String(""), 2.0*M_PI*Re*sin(route.omega), String(""));
             ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value)*M_PI_2, String(""));
             
-            route.Draw(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, -1, &memory_dc, this, String(""));
+            route.Draw(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, thickness, dc, this, String(""));
             
             if(gamma_phi != 1){
                 //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -8841,7 +8843,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
                     (((route.reference_position).phi).value) += delta_phi_minor
                     ){
                         
-                        route.Draw(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, -1, &memory_dc, this, String(""));
+                        route.Draw(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, thickness, dc, this, String(""));
                         
                     }
                 

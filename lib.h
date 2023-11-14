@@ -537,7 +537,6 @@ public:
     bool open(String, String);
     void close(String);
     void remove(String);
-    void remove_new(String);
     void count_lines(String);
     bool check_if_exists(String);
     

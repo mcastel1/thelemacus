@@ -244,20 +244,9 @@ void File::count_lines(String prefix){
 }
 
 
-void File::remove(String prefix){
-    
-    stringstream command;
-    
-    command.str("");
-    command << "rm -rf \"" << (name.value) << "\"> /dev/null 2>&1";
-    system(command.str().c_str());
-    
-    cout << prefix.value << "File " << name.value << " removed\n";
-    
-}
 
 //delete file *this
-void File::remove_new(String prefix){
+void File::remove(String prefix){
  
     boost::filesystem::remove(name.value);
     
@@ -5244,7 +5233,7 @@ Projection Projection::operator-(const Projection& q){
 }
 
 
-// this function plots the Routes of type String("c") in route_list in kml format
+// this function plots the Routes of type String("c") in route_list in kml forma. WARNING: THIS FUNCTION USES THE SYSTEM() COMMAND AND THUS IT IS NOT PORTABLE ACROSS PLATFORMS
 void Data::print_to_kml(String prefix){
     
     stringstream line_ins, /*plot_title contains the  title of the Route to be plotted*/ plot_title;

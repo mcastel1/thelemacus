@@ -8379,13 +8379,18 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
     int i, j, /*an integer which specifies the color_id of the objects which are being plotted. It is incremented every time that something is plotted, to plot everything with a different color*/color_id;
     
     
+    //draws two rectangles (representing the borders) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color. Here I set the pen color equal to the foreground color, because I want the border of the rectangle to have the foreground color
+    dc->SetBrush(wxBrush(wxGetApp().background_color));
+    dc->SetPen(wxPen(wxGetApp().foreground_color));
+    dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
+    dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
+  
+
     
-    //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
-    dc->SetBrush(wxBrush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25)));
-    
-    
-    //draw coastlines
-    dc->DrawBitmap(*bitmap_image, 0, 0);
+//    //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
+//    dc->SetBrush(wxBrush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25)));
+//    //draw coastlines
+//    dc->DrawBitmap(*bitmap_image, 0, 0);
     
     
     color_id = 0;
@@ -8560,6 +8565,8 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
         
         
     }
+    
+
     
     //   reset the pen to its default parameters
     dc->SetPen(wxPen(Color(255,175,175), 1 ) ); // 1-pixels-thick pink outline
@@ -9142,11 +9149,6 @@ void DrawPanel::Draw_Mercator(void){
     //allocate bitmap_image
     bitmap_image = new wxBitmap((size_chart.GetWidth()), (size_chart.GetHeight()));
     memory_dc.SelectObject(*bitmap_image);
-    //draws a rectangle whose border and fill are with color wxGetApp().background_color on bitmap_image, so bitmap_image will have the right background color
-    //set the pen color equal to the background color, because I want the border of the rectangle to have the background color
-    memory_dc.SetBrush(wxBrush(wxGetApp().background_color));
-    memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
-    memory_dc.DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     
     //set p_NW and p_SE
     //updates the position of the draw pane this
@@ -9230,9 +9232,6 @@ void DrawPanel::Draw_Mercator(void){
     
   
     
-    memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
-    memory_dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
-    memory_dc.DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
     
     
     //draw labels on parallels

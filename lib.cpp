@@ -229,40 +229,17 @@ void File::enter_name(String prefix){
     
 }
 
+
+
 void File::count_lines(String prefix){
     
-    stringstream command, line_ins;
-    string line, dummy;
-    File file_number_of_lines;
-    String new_prefix;
+    ifstream temp;
     
-    //append \t to prefix
-    new_prefix = prefix.append(String("\t"));
-    
-    
-    file_number_of_lines.set_name((wxGetApp().data_directory).append(String("output.dat")));
-    file_number_of_lines.remove(new_prefix);
-    
-    //    cout << "****** I am about to run wc on " << (name.value) << "...";
-    
-    command.str("");
-    //here I add ' because name.value and ((file_number_of_lines.name).value) may contain special characters
-    command << "wc -l \"" << (name.value)  << "\" >> \"" << ((file_number_of_lines.name).value) << "\"";
-    system(command.str().c_str());
-    
-    //    cout << "... done\n";
-    
-    file_number_of_lines.open(String("in"), new_prefix);
-    
-    getline((file_number_of_lines.value), line);
-    line_ins << line;
-    line_ins >> number_of_lines >> dummy;
-    
-    file_number_of_lines.close(new_prefix);
-    file_number_of_lines.remove(new_prefix);
+    temp.open(name.value);
+    number_of_lines = ((unsigned int)count(istreambuf_iterator<char>(temp), istreambuf_iterator<char>(), '\n'));
+    temp.close();
     
     cout << prefix.value << "Number of lines in file " << (name.value) << " = " << number_of_lines << "\n";
-    
     
 }
 
@@ -278,16 +255,6 @@ void File::remove(String prefix){
     cout << prefix.value << "File " << name.value << " removed\n";
     
 }
-
-void File::count_lines_new(String prefix){
-    
-    // Number of lines in *this
-    number_of_lines = ((unsigned int)count(istreambuf_iterator<char>(value), istreambuf_iterator<char>(), '\n'));
-    
-    cout << prefix.value << "Number of lines in file " << (name.value) << " = " << number_of_lines << "\n";
-    
-}
-
 
 void File::set_name(String filename){
     
@@ -5161,10 +5128,8 @@ bool Sight::check_time_interval(String prefix){
         //... then I add to it TAI_minus_UTC, to convert it from the UTC to the TAI scale
         time+=TAI_minus_UTC;
         
-        
-        
         data_file.count_lines(new_prefix);
-        
+
         //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
         l_min = (int)(L*((time.MJD)-MJD_min))-(int)(N/2.0);
         //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends

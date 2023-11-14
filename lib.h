@@ -538,7 +538,6 @@ public:
     void close(String);
     void remove(String);
     void count_lines(String);
-    void count_lines_new(String);
     bool check_if_exists(String);
     
 };

@@ -1669,7 +1669,6 @@ public:
     //this is true if the label which is being drawn is the first among the parallel/meridian labels, false otherwise
     bool first_label;
     wxMemoryInputStream * memory_input_stream;
-    wxBitmap* bitmap_image; 
     UnsetIdling<DrawPanel>* unset_idling;
     vector< StaticText* > label_lambda, label_phi;
     //this is used for drawing 

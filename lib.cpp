@@ -9149,12 +9149,6 @@ void DrawPanel::Draw_Mercator(void){
     
     tick_length = (((wxGetApp().tick_length_over_width_plot_area)).value)*(size_plot_area.GetWidth());
     
-    
-    
-    //allocate bitmap_image
-    bitmap_image = new wxBitmap((size_chart.GetWidth()), (size_chart.GetHeight()));
-    memory_dc.SelectObject(*bitmap_image);
-    
     //set p_NW and p_SE
     //updates the position of the draw pane this
     DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/+ wxPoint(1, 1), &p_NW);
@@ -9323,11 +9317,6 @@ void DrawPanel::Draw_3D(void){
     
     size_plot_area.SetWidth((size_chart.GetWidth())*(length_plot_area_over_length_chart.value));
     size_plot_area.SetHeight((size_chart.GetHeight())*(length_plot_area_over_length_chart.value));
-    
-    //allocate bitmap_image
-    bitmap_image = new wxBitmap((size_chart.GetWidth()), (size_chart.GetHeight()));
-    memory_dc.SelectObject(*bitmap_image);
-    
     
     position_plot_area = wxPoint((int)(((double)(size_chart.GetWidth()))*(1.0-(length_plot_area_over_length_chart.value))/2.0),
                                  (int)(((double)(size_chart.GetHeight()))*(1.0-(length_plot_area_over_length_chart.value))/2.0));

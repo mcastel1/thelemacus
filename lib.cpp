@@ -8839,7 +8839,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
     
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
-    (route.type).set(String(""), String("c"), String(""));
+    (route.type).set(String("c"));
     ((route.reference_position).lambda) = lambda_middle;
     
     //this loop runs over the latitude of the parallel, which we call phi
@@ -8874,7 +8874,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
                         
                     }
                 
-                (route.type).set(String(""), String("c"), String(""));
+                (route.type).set(String("c"));
                 
             }
             

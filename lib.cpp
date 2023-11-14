@@ -8289,8 +8289,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     text_geo_position = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     //sets the pen and the brush, for memory_dc, which will be used in the following
-    memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
-    memory_dc.SetBrush(wxBrush(wxGetApp().background_color));
+//    memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
+//    memory_dc.SetBrush(wxBrush(wxGetApp().background_color));
     
     //    sizer_h->Add(text_phi);
     //    sizer_h->Add(text_lambda);
@@ -8387,10 +8387,15 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
   
 
     
-//    //    brush.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
-//    dc->SetBrush(wxBrush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25)));
-//    //draw coastlines
-//    dc->DrawBitmap(*bitmap_image, 0, 0);
+    //draw coastlines
+    //draw the coastline points into bitmap_image through memory_dc
+    dc->SetPen(wxPen(wxGetApp().foreground_color));
+    dc->SetBrush(wxBrush(wxGetApp().foreground_color, wxBRUSHSTYLE_SOLID));
+    for(i=0; i<(parent->p_coastline_draw).size(); i++){
+        dc->DrawEllipse((parent->p_coastline_draw)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
+    }
+    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+
     
     
     color_id = 0;
@@ -8730,10 +8735,17 @@ void DrawPanel::Render_3D(wxDC*  dc){
     dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
 
     
-//    dc->SetBrush(wxBrush(Color(/*the first three entries are the rgb code for the color*/255, 0, 0, /*the last is the degree of transparency of the color*/25)));
-//    //draw coastlines
-//    dc->DrawBitmap(*bitmap_image, 0, 0);
-//
+    //draw coastlines
+    //draw the coastline points into bitmap_image through memory_dc
+    dc->SetPen(wxPen(wxGetApp().foreground_color));
+    dc->SetBrush(wxBrush(wxGetApp().foreground_color, wxBRUSHSTYLE_SOLID));
+    for(i=0; i<(parent->p_coastline_draw).size(); i++){
+        //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
+        dc->DrawEllipse((parent->p_coastline_draw)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
+    }
+    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+ 
+    
     
     //set the pen to grey
     dc->SetPen(wxPen(Color(128,128,128), 1));
@@ -9261,15 +9273,7 @@ void DrawPanel::Draw_Mercator(void){
         
     }
     
-    //draw coastlines
-    //draw the coastline points into bitmap_image through memory_dc
-    memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
-    memory_dc.SetBrush(wxBrush(wxGetApp().foreground_color, wxBRUSHSTYLE_SOLID));
-    for(i=0; i<(parent->p_coastline_draw).size(); i++){
-        memory_dc.DrawEllipse((parent->p_coastline_draw)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
-    }
-    memory_dc.SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
-    
+     
     
     TabulateRoutes();
     
@@ -9468,23 +9472,6 @@ void DrawPanel::Draw_3D(void){
     
     //take the angle 0° 0.0' expresed with display_precision: the height of this angle label is the largest possible -> set it equal to size_label_vertical
     size_label_vertical = (GetTextExtent(wxString((Angle(0,  0.0).to_string(String("NS"), (display_precision.value), false)))).GetHeight());
-    
-    
-    
-     
- 
-    
-    
-    //draw coastlines
-    //draw the coastline points into bitmap_image through memory_dc
-    memory_dc.SetPen(wxPen(wxGetApp().foreground_color));
-    memory_dc.SetBrush(wxBrush(wxGetApp().foreground_color, wxBRUSHSTYLE_SOLID));
-    for(i=0; i<(parent->p_coastline_draw).size(); i++){
-        //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
-        memory_dc.DrawEllipse((parent->p_coastline_draw)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
-    }
-    memory_dc.SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
-    
     
     TabulateRoutes();
     

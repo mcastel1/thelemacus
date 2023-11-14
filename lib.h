@@ -1672,7 +1672,6 @@ public:
     UnsetIdling<DrawPanel>* unset_idling;
     vector< StaticText* > label_lambda, label_phi;
     //this is used for drawing 
-    wxMemoryDC memory_dc;
     wxClientDC* client_dc;
 
 

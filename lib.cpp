@@ -8706,6 +8706,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
     
     int i, j, color_id;
     double thickness;
+    Double d;
     Angle lambda, /*phi is an auxiliary variable used in the loop which draws parallels*/phi;
     stringstream s;
     wxString wx_string;
@@ -8855,6 +8856,17 @@ void DrawPanel::Render_3D(wxDC*  dc){
         }
     
     //draw horizon circle
+    //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
+    //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection temp: the resulting temp.y is the radius of the circular horizon of the earth in 3d projection cooordinates
+    //set q
+    (q.lambda).set(String(""), 0.0, String(""));
+    (q.phi) = (circle_observer.omega);
+    
+    //obtain the coordinates of q in the reference frame x'y'z'
+    gsl_vector_set(rp, 0, 0.0);
+    gsl_vector_set(rp, 1, -cos(q.phi));
+    gsl_vector_set(rp, 2, sin((q.phi)));
+ 
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
     d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     dummy_projection = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
@@ -9277,7 +9289,6 @@ void DrawPanel::Draw_3D(void){
     
     double lambda_span, phi_span;
     Angle lambda_in, lambda_out;
-    Double d;
     Position q;
     Projection temp;
     wxPoint p;
@@ -9471,17 +9482,7 @@ void DrawPanel::Draw_3D(void){
     
     
     
-    //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
-    //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection temp: the resulting temp.y is the radius of the circular horizon of the earth in 3d projection cooordinates
-    //set q
-    (q.lambda).set(String(""), 0.0, String(""));
-    (q.phi) = (circle_observer.omega);
-    
-    //obtain the coordinates of q in the reference frame x'y'z'
-    gsl_vector_set(rp, 0, 0.0);
-    gsl_vector_set(rp, 1, -cos(q.phi));
-    gsl_vector_set(rp, 2, sin((q.phi)));
-    
+     
  
     
     

@@ -58,7 +58,8 @@
  
 
  for MSW:
- - listcontrol_sights is shown with empty columns 
+ - allow columns to be large enough to show the rows of listcontrol_sights
+ - in SIghtframe, when I enter a body and press tab tehre is an error 
  */
 
 //this function is executed reguarly over time, to check some things

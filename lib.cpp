@@ -18857,6 +18857,9 @@ void ListControl::Resize(void){
     unsigned int i, j, total_column_width, header_width, item_width, column_width;
     wxListItem temp;
     wxString header_text, item_text;
+
+    temp.SetMask(wxLIST_MASK_TEXT);
+
     
     //    set the column width to the width of its longest item
     for(total_column_width=0, j=0; j<GetColumnCount(); j++){
@@ -18875,7 +18878,7 @@ void ListControl::Resize(void){
             
         }
         
-        column_width = max(header_width, item_width)+ 2*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value);
+        column_width = max(header_width, item_width)+ 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value);
         
         SetColumnWidth(j, column_width);
         total_column_width += column_width;

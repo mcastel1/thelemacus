@@ -9238,13 +9238,7 @@ void DrawPanel::Draw_Mercator(void){
         }
         
     }
-    
-    
-    
-    
-  
-    
-    
+
     
     //draw labels on parallels
     for(first_label = true,

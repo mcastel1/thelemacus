@@ -8397,11 +8397,8 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
 
     
-    
-    color_id = 0;
-    
     //draw routes
-    for(i=0; i<(((parent->parent)->data)->route_list).size(); i++){
+    for(i=0, color_id = 0; i<(((parent->parent)->data)->route_list).size(); i++){
         
         if(i == ((parent->parent)->highlighted_route)){
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
@@ -9277,7 +9274,7 @@ void DrawPanel::Draw_Mercator(void){
     
     TabulateRoutes();
     
-    (parent->p_coastline_draw).clear();
+//    (parent->p_coastline_draw).clear();
     
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
@@ -9505,7 +9502,7 @@ void DrawPanel::Draw_3D(void){
     }
     
     
-    (parent->p_coastline_draw).clear();
+//    (parent->p_coastline_draw).clear();
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     //    parent->CenterOnScreen();

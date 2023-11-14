@@ -8397,9 +8397,9 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
     for(i=0, color_id = 0; i<(((parent->parent)->data)->route_list).size(); i++){
         
         if(i == ((parent->parent)->highlighted_route)){
-            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
         }
         
         dc->SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
@@ -8429,7 +8429,7 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
     }
     
     //set thickness to normal thicnkness
-    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
 
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
@@ -8547,9 +8547,9 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
     for(i=0; i<(((parent->parent)->data)->position_list).size(); i++){
         
         if(i == ((parent->parent)->highlighted_position)){
-            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
         }
         
         dc->SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
@@ -8751,9 +8751,9 @@ void DrawPanel::Render_3D(wxDC*  dc){
         
         //set the route thickness and pen
         if(i == ((parent->parent)->highlighted_route)){
-            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
         }
         dc->SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
@@ -8781,7 +8781,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
     }
 
     //set thickness to ordinary thickness to draw meridians and parallels
-    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
 
     
     //draw meridians
@@ -8908,9 +8908,9 @@ void DrawPanel::Render_3D(wxDC*  dc){
         
         //set thickness and pen
         if(i == ((parent->parent)->highlighted_position)){
-            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
         }else{
-            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth()), 1);
+            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
         }
         dc->SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
@@ -11238,7 +11238,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
                              (((points_route_list[i][j][l]).y) + ((double)(((points_route_list[i][j][l+1]).y) - ((points_route_list[i][j][l]).y))) / ((double)(((points_route_list[i][j][l+1]).x) - ((points_route_list[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x))))
                              )
                         
-                        <= (thickness_route_selection_over_length_screen.value)*((double)((((parent->parent)->parent)->rectangle_display).GetWidth()))/2.0
+                        <= (thickness_route_selection_over_length_screen.value)*((double)((wxGetApp().rectangle_display).GetWidth()))/2.0
                         )
                        ){
                         //the mouse is overing over a Route
@@ -11284,7 +11284,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent &event){
             GeoToScreen((((parent->parent)->data)->position_list)[i], &q);
             
             if(sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
-               4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (((parent->parent)->parent)->rectangle_display).GetWidth())){
+               4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth())){
                 //the mouse is over a position
                 
                 //sets the highlighted position to i, so as to use highlighted_position in other functions

@@ -800,10 +800,14 @@ void String::read_from_file(String name, String filename, [[maybe_unused]] Strin
 //writes to file the content of string after 'name = '
 void String::write_to_file(String name, File& file, [[maybe_unused]] String prefix){
     
+    long i;
     File temp;
     string line;
     stringstream s;
     
+    //count the number of lines infile so I kno when to stop when reading it
+    file.count_lines(prefix);
+
     temp.set_name((wxGetApp().path_file_temp));
     temp.remove(String(""));
     temp.open(String("out"), prefix);
@@ -812,7 +816,7 @@ void String::write_to_file(String name, File& file, [[maybe_unused]] String pref
     file.value.clear();                 // clear fail and eof bits
     file.value.seekg(0, std::ios::beg); // back to the start!
     
-    do{
+    for (i=0; (i<(file.number_of_lines)) && (!(file.value).eof()); i++){
         
         line.clear();
         getline(file.value, line);
@@ -837,14 +841,15 @@ void String::write_to_file(String name, File& file, [[maybe_unused]] String pref
             
         }
         
-    }while(!(file.value).eof());
+    }
     
     temp.close(prefix);
     
     //move file_temp to file, so as to obtain the desired result
+    file.close(prefix);
+    boost::filesystem::remove(file.name.value);
     boost::filesystem::rename(temp.name.value, file.name.value);
 
-    
 }
 
 Answer::Answer(void){

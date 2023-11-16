@@ -9558,6 +9558,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
     StaticText* empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     wxCommandEvent dummy_event;
+    //a wxSizerFlags object to insert stuff into sizers
+    wxSizerFlags flags;
     
     parent = parent_input;
     
@@ -9698,7 +9700,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, 0);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
-    projection->InsertIn<wxBoxSizer>(sizer_slider);
+    flags.Center();
+    projection->InsertIn<wxBoxSizer>(sizer_slider, flags);
     sizer_slider->AddStretchSpacer(1);
     sizer_slider->Add(button_show_list, 0, wxALIGN_CENTER | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     
@@ -18713,9 +18716,9 @@ template<class T> void RouteTypeField::InsertIn(T* host){
     
 }
 
-template<class P> template<class T> void ProjectionField<P>::InsertIn(T* host){
+template<class P> template<class T> void ProjectionField<P>::InsertIn(T* host, wxSizerFlags& flag){
     
-    host->Add(sizer_v);
+    host->Add(sizer_v, flag);
     
 }
 

@@ -1762,7 +1762,7 @@ public:
     ProjectionField(wxPanel*);
     void read_recent_items(void);
     void write_recent_items(void);
-    template<class T> void InsertIn(T*);
+    template<class T> void InsertIn(T*, wxSizerFlags&);
     template<class E> void OnEdit(E&);
     
 };

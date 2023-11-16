@@ -15110,7 +15110,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     listcontrol_positions->PushBackColumn(wxString("Longitude"));
     listcontrol_positions->PushBackColumn(wxString("Label"));
     
-    sizer_box_position->Add(listcontrol_positions, 0,  wxALL, ((wxGetApp().border).value));
+    sizer_box_position->Add(listcontrol_positions, 1,  wxALL, ((wxGetApp().border).value));
     
     
     //listcontrol routes with routes
@@ -15265,7 +15265,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     //    }
     
     sizer_v->Add(sizer_box_sight, 1,  wxALL, ((wxGetApp().border).value));
-    sizer_v->Add(sizer_box_position, 0,  wxALL, ((wxGetApp().border).value));
+    sizer_v->Add(sizer_box_position, 1,  wxALL, ((wxGetApp().border).value));
     sizer_listcontrol_routes_plus_buttons->Add(sizer_box_route);
     sizer_listcontrol_routes_plus_buttons->AddStretchSpacer(1);
     //here I set the flag '0' to avoid button_show_map from being stretched

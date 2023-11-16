@@ -18859,11 +18859,11 @@ void ListControl::EnableButtons(bool check){
 //correctly resizes the sizes of columns of *this
 void ListControl::Resize(void){
     
-    int j, width_header, width_item;
+    int j, width_header, width_item, width_total;
    
     
     //    set the column width to the width of the header or its longest item
-    for(j=0; j<GetColumnCount(); j++){
+    for(width_total=0, j=0; j<GetColumnCount(); j++){
         
         SetColumnWidth(j, wxLIST_AUTOSIZE);
         width_item = GetColumnWidth(j);
@@ -18872,9 +18872,13 @@ void ListControl::Resize(void){
         width_header = GetColumnWidth(j);
         
         SetColumnWidth(j, max(width_item, width_header));
+        
+        width_total += GetColumnWidth(j);
 
     }
     
+    SetSize(wxSize(width_total + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),-1));
+
 }
 
 

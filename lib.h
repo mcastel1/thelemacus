@@ -11,6 +11,7 @@
 #include "wx/settings.h"
 #include "wx/kbdstate.h"
 #include "wx/wfstream.h"
+#include "wx/graphics.h"
 
 
 

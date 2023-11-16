@@ -14540,16 +14540,21 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     button_ok->Bind(wxEVT_BUTTON, *close_frame);
     button_ok->Bind(wxEVT_BUTTON, *f_ok);
     
+    image = new wxStaticBitmap(panel, wxID_ANY,
+                               Bitmap(image_path.value, wxSize(
+                                                               ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+                                                               ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value)))
+                               , wxDefaultPosition, wxDefaultSize);
+//    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
-    image->SetMinSize(wxSize(
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
-                      );
-    image->SetMaxSize(wxSize(
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
-                      );
+//    image->SetMinSize(wxSize(
+//                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+//                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
+//                      );
+//    image->SetMaxSize(wxSize(
+//                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+//                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
+//                      );
     
     m_bitmap = new wxBitmap(image_path.value, wxBITMAP_TYPE_PNG);
     Bind(wxEVT_PAINT, &MessageFrame::OnPaint, this);

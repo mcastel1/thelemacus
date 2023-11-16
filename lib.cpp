@@ -18859,44 +18859,26 @@ void ListControl::EnableButtons(bool check){
 //correctly resizes the sizes of columns of *this
 void ListControl::Resize(void){
     
-    unsigned int i, j, total_column_width, header_width, item_width, column_width;
-    wxListItem temp;
-    wxString header_text, item_text;
-
-    temp.SetMask(wxLIST_MASK_TEXT);
-
+    int j, width_header, width_item, width_total;
+   
     
-    //    set the column width to the width of its longest item
-    for(total_column_width=0, j=0; j<GetColumnCount(); j++){
+    //    set the column width to the width of the header or its longest item
+    for(width_total=0, j=0; j<GetColumnCount(); j++){
         
-        GetColumn(j, temp);
-        header_text = temp.GetText();
-        header_width  = GetTextExtent(header_text).GetWidth();
+        SetColumnWidth(j, wxLIST_AUTOSIZE);
+        width_item = GetColumnWidth(j);
         
-        for(item_width=0, i=0; i<GetItemCount(); i++){
-            
-            item_text = GetItemText(i, j);
-            
-            if(GetTextExtent(item_text).GetWidth() > item_width){
-                item_width = GetTextExtent(item_text).GetWidth();
-            }
-            
-        }
+        SetColumnWidth(j, wxLIST_AUTOSIZE_USEHEADER);
+        width_header = GetColumnWidth(j);
         
-        column_width = max(header_width, item_width)+ 4*((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value);
+        SetColumnWidth(j, max(width_item, width_header));
         
-        SetColumnWidth(j, column_width);
-        total_column_width += column_width;
-        
+        width_total += GetColumnWidth(j);
+
     }
     
-    
-    //    for(total_column_width=0, i=0; i<GetColumnCount(); i++){
-    //        total_column_width += GetColumnWidth(i);
-    //    }
-    //
-    SetSize(wxSize(total_column_width + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),-1));
-    
+    SetSize(wxSize(width_total + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),-1));
+
 }
 
 

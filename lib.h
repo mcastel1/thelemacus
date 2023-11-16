@@ -62,6 +62,7 @@ template<class P> class CheckProjection;
 template<class P> class CheckArcDegree;
 template<class P> class CheckArcMinute;
 template<class P> class TabulateDays;
+template<typename FF_OK> class MessageFrame;
 
 
 //a class for color objects
@@ -285,7 +286,7 @@ void MousePositionOnListControl(wxListCtrl* list_control, int* i){
 
 
 //this is a wxFrame designed to show a message to the GUI user. FF_OK is the type of the functor class which will be called when the button ok is pressed. This type is variable, so it has been 'templated'
-template<typename FF_OK> class MessageFrame: public wxFrame{
+template<class FF_OK> class MessageFrame: public wxFrame{
     
 public:
 
@@ -304,8 +305,11 @@ public:
     void KeyDown(wxKeyEvent&);
     void OnPaint(wxPaintEvent&);
     //    void OnPressOk(wxCommandEvent&);
+    
+    DECLARE_EVENT_TABLE();
 
 };
+
 
 //this is a wxFrame designed to ask a  yes/no question to the GUI user. F_A is the type of the functor class which will be called when the button yes is pressed. This type is variables, so it has been 'templated'. Same for F_B. If the user presses enter (esc), f_a  (f_b) are called
 template<typename F_A, typename F_B> class QuestionFrame: public wxFrame{

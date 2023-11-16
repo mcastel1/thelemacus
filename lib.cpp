@@ -14497,6 +14497,9 @@ void PositionFrame::KeyDown(wxKeyEvent& event){
     
 }
 
+BEGIN_EVENT_TABLE_TEMPLATE1(MessageFrame, wxFrame, FF_OK)
+//    EVT_PAINT(MessageFrame<FF_OK>::OnPaint)
+END_EVENT_TABLE()
 
 
 template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, String image_path, const wxPoint& pos, const wxSize& size, [[maybe_unused]]  String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN){

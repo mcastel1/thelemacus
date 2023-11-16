@@ -14497,7 +14497,8 @@ void PositionFrame::KeyDown(wxKeyEvent& event){
     
 }
 
-BEGIN_EVENT_TABLE_TEMPLATE1(MessageFrame, wxFrame, FF_OK)
+//this is an event table with template
+BEGIN_EVENT_TABLE_TEMPLATE1(MessageFrame, /*here I put the derived class*/wxFrame, /*here I put the template argument*/FF_OK)
     EVT_PAINT(MessageFrame<FF_OK>::OnPaint)
 END_EVENT_TABLE()
 

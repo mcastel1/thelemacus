@@ -14547,7 +14547,8 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
                              ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
                       );
     
-    
+    m_bitmap = new wxBitmap(image_path.value, wxBITMAP_TYPE_PNG);
+    Bind(wxEVT_PAINT, &MessageFrame::OnPaint, this);
     
     sizer_v->Add(text, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_v->Add(image, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
@@ -14574,6 +14575,26 @@ template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event){
         
     }
     
+}
+
+template<typename FF_OK> void MessageFrame<FF_OK>::OnPaint(wxPaintEvent& WXUNUSED(event)){
+
+    wxPaintDC dc(this);
+    wxScopedPtr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
+//    wxGraphicsBitmap gb(gc->CreateBitmapFromImage(m_image));
+
+    gc->SetFont(*wxNORMAL_FONT, *wxBLACK);
+//    gc->DrawText("Bitmap", 0, HEIGHT/2);
+    gc->DrawBitmap(*m_bitmap, 0, 0,
+                   ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+                   ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value)
+                   );
+
+//    wxGraphicsFont gf = gc->CreateFont(wxNORMAL_FONT->GetPixelSize().y, "");
+//    gc->SetFont(gf);
+//    gc->DrawText("Graphics bitmap", 0, (3*HEIGHT)/2);
+//    gc->DrawBitmap(gb, 0, HEIGHT, WIDTH, HEIGHT);
+
 }
 
 

@@ -15150,7 +15150,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     listcontrol_routes->PushBackColumn(wxString("Related Sight"));
     
     
-    sizer_box_route->Add(listcontrol_routes, 0,  wxALL, ((wxGetApp().border).value));
+    sizer_box_route->Add(listcontrol_routes, 1,  wxALL, ((wxGetApp().border).value));
     
     //bing everything to KeyDown method, so when a key is pressed on *this, panel, listcontrol... then KeyDown is called
     Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
@@ -15266,14 +15266,14 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     
     sizer_v->Add(sizer_box_sight, 1,  wxALL, ((wxGetApp().border).value));
     sizer_v->Add(sizer_box_position, 1,  wxALL, ((wxGetApp().border).value));
-    sizer_listcontrol_routes_plus_buttons->Add(sizer_box_route);
-    sizer_listcontrol_routes_plus_buttons->AddStretchSpacer(1);
+    sizer_listcontrol_routes_plus_buttons->Add(sizer_box_route, 0, wxALL, ((wxGetApp().border).value));
+//    sizer_listcontrol_routes_plus_buttons->AddStretchSpacer(1);
     //here I set the flag '0' to avoid button_show_map from being stretched
     sizer_big_buttons->Add(button_compute_position, 0, wxALL, ((wxGetApp().border).value));
     sizer_big_buttons->Add(button_show_map, 0, wxALL, ((wxGetApp().border).value));
     //    sizer_listcontrol_routes_plus_buttons->Add(sizer_big_buttons, 0);
     //by adding the flag wxEXPAND here, I let the StretchSpacer in sizer_listcontrol_routes_plus_buttons expand, and thus I flush to the right button_show_map
-    sizer_v->Add(sizer_listcontrol_routes_plus_buttons, 0,  wxALL | wxEXPAND, ((wxGetApp().border).value));
+    sizer_v->Add(sizer_listcontrol_routes_plus_buttons, 1,  wxALL | wxEXPAND, ((wxGetApp().border).value));
     sizer_h->Add(sizer_v, 1, wxALIGN_BOTTOM, ((wxGetApp().border).value));
     sizer_h->Add(sizer_big_buttons, 0, wxALIGN_TOP, ((wxGetApp().border).value));
     sizer_all->Add(sizer_h, 1,  wxALL | wxEXPAND, ((wxGetApp().border).value));

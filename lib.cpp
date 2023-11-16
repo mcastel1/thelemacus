@@ -247,7 +247,7 @@ void File::count_lines(String prefix){
 
 //delete file *this
 void File::remove(String prefix){
- 
+    
     boost::filesystem::remove(name.value);
     
     cout << prefix.value << "File " << name.value << " removed\n";
@@ -807,7 +807,7 @@ void String::write_to_file(String name, File& file, [[maybe_unused]] String pref
     
     //count the number of lines infile so I kno when to stop when reading it
     file.count_lines(prefix);
-
+    
     temp.set_name((wxGetApp().path_file_temp));
     temp.remove(String(""));
     temp.open(String("out"), prefix);
@@ -849,7 +849,7 @@ void String::write_to_file(String name, File& file, [[maybe_unused]] String pref
     file.close(prefix);
     boost::filesystem::remove(file.name.value);
     boost::filesystem::rename(temp.name.value, file.name.value);
-
+    
 }
 
 Answer::Answer(void){
@@ -1028,7 +1028,7 @@ void String::set(String name, String input_string, [[maybe_unused]] String prefi
 void String::set(String input_string){
     
     value = (input_string.value);
-        
+    
 }
 
 
@@ -5131,7 +5131,7 @@ bool Sight::check_time_interval(String prefix){
         time+=TAI_minus_UTC;
         
         data_file.count_lines(new_prefix);
-
+        
         //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
         l_min = (int)(L*((time.MJD)-MJD_min))-(int)(N/2.0);
         //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
@@ -8271,8 +8271,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     text_geo_position = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
     
     //sets the pen and the brush, for memory_dc, which will be used in the following
-//    memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
-//    memory_dc.SetBrush(wxBrush(wxGetApp().background_color));
+    //    memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
+    //    memory_dc.SetBrush(wxBrush(wxGetApp().background_color));
     
     //    sizer_h->Add(text_phi);
     //    sizer_h->Add(text_lambda);
@@ -8326,7 +8326,7 @@ void DrawPanel::PaintNow(){
     //    Render(dc);
     client_dc->Clear();
     client_dc = new wxClientDC(this);
-//    client_dc->SetParent(this);
+    //    client_dc->SetParent(this);
     (this->*Render)(client_dc);
     
     
@@ -8366,8 +8366,8 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
     dc->SetPen(wxPen(wxGetApp().foreground_color));
     dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
-  
-
+    
+    
     
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
@@ -8377,7 +8377,7 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
         dc->DrawEllipse((parent->p_coastline_draw)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
-
+    
     
     //draw routes
     for(i=0, color_id = 0; i<(((parent->parent)->data)->route_list).size(); i++){
@@ -8418,7 +8418,7 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
     
     //set thickness to normal thicnkness
     thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-
+    
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String("o"));
@@ -8473,7 +8473,7 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
             }
             
         }
-        
+    
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     (route.type).set(String("l"));
@@ -8554,7 +8554,7 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
         
     }
     
-
+    
     
     //   reset the pen to its default parameters
     dc->SetPen(wxPen(Color(255,175,175), 1 ) ); // 1-pixels-thick pink outline
@@ -8562,11 +8562,11 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
     
     if(((parent->parent)->selection_rectangle)){
         dc->DrawRectangle(
-                         position_start_selection.x - (position_draw_panel.x),
-                         position_start_selection.y - (position_draw_panel.y),
-                         (position_screen_now.x)-(position_start_selection.x),
-                         (position_screen_now.y)-(position_start_selection.y)
-                         );
+                          position_start_selection.x - (position_draw_panel.x),
+                          position_start_selection.y - (position_draw_panel.y),
+                          (position_screen_now.x)-(position_start_selection.x),
+                          (position_screen_now.y)-(position_start_selection.y)
+                          );
         
     }
     
@@ -8673,7 +8673,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
         (*labels).resize(((*labels).size())+1);
         //I first crate a StaticText with default position ...
         ((*labels).back()) = new StaticText(this, wx_string, wxDefaultPosition, wxDefaultSize);
-
+        
         //... then I shift p it in such a way that the label drawn at p is diplayed nicely, and draw the label at  p. To do this, I need to know the size of ((*labels).back()) : for example, in the NS case, I shift p horizontally on the left by a length equal to the width of ((*labels).back())
         if(mode == String("NS")){
             
@@ -8690,7 +8690,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
         //here the static text is displayed on top of a wxImage, so I set the appropriate fore/background color
         ((*labels).back())->SetForegroundColour(wxGetApp().foreground_color);
         ((*labels).back())->SetBackgroundColour(wxGetApp().background_color);
-
+        
         first_label = false;
         
     }
@@ -8717,7 +8717,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
     dc->SetBrush(wxBrush(wxGetApp().background_color));
     dc->SetPen(wxPen(wxGetApp().foreground_color));
     dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
-
+    
     
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
@@ -8728,7 +8728,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
         dc->DrawEllipse((parent->p_coastline_draw)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
- 
+    
     
     
     //set the pen to grey
@@ -8772,10 +8772,10 @@ void DrawPanel::Render_3D(wxDC*  dc){
         }
         
     }
-
+    
     //set thickness to ordinary thickness to draw meridians and parallels
     thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-
+    
     
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
@@ -8876,7 +8876,7 @@ void DrawPanel::Render_3D(wxDC*  dc){
     gsl_vector_set(rp, 0, 0.0);
     gsl_vector_set(rp, 1, -cos(q.phi));
     gsl_vector_set(rp, 2, sin((q.phi)));
- 
+    
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
     d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     dummy_projection = Projection(0.0, ((d.value)*gsl_vector_get(rp, 2))/((d.value) + 1.0 + gsl_vector_get(rp, 1)));
@@ -8886,10 +8886,10 @@ void DrawPanel::Render_3D(wxDC*  dc){
     dc->SetBackground(wxGetApp().background_color);
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
     dc->DrawCircle(
-                         (position_plot_area.x) + (int)(((double)(size_plot_area.GetWidth()))/2.0),
-                         (position_plot_area.y) + (int)(((double)(size_plot_area.GetHeight()))/2.0),
-                         (dummy_projection.y)/y_max * ((double)(size_plot_area.GetWidth()))/2.0
-                         );
+                   (position_plot_area.x) + (int)(((double)(size_plot_area.GetWidth()))/2.0),
+                   (position_plot_area.y) + (int)(((double)(size_plot_area.GetHeight()))/2.0),
+                   (dummy_projection.y)/y_max * ((double)(size_plot_area.GetWidth()))/2.0
+                   );
     //set back the pen  color and brush
     dc->SetPen(wxPen(wxGetApp().foreground_color, 1));
     dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
@@ -9225,7 +9225,7 @@ void DrawPanel::Draw_Mercator(void){
         }
         
     }
-
+    
     
     //draw labels on parallels
     for(first_label = true,
@@ -9255,11 +9255,11 @@ void DrawPanel::Draw_Mercator(void){
         
     }
     
-     
+    
     
     TabulateRoutes();
     
-//    (parent->p_coastline_draw).clear();
+    //    (parent->p_coastline_draw).clear();
     
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
@@ -9487,7 +9487,7 @@ void DrawPanel::Draw_3D(void){
     }
     
     
-//    (parent->p_coastline_draw).clear();
+    //    (parent->p_coastline_draw).clear();
     
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     //    parent->CenterOnScreen();
@@ -14498,9 +14498,9 @@ void PositionFrame::KeyDown(wxKeyEvent& event){
 }
 
 //this is an event table with template
-BEGIN_EVENT_TABLE_TEMPLATE1(MessageFrame, /*here I put the derived class*/wxFrame, /*here I put the template argument*/FF_OK)
-    EVT_PAINT(MessageFrame<FF_OK>::OnPaint)
-END_EVENT_TABLE()
+//BEGIN_EVENT_TABLE_TEMPLATE1(MessageFrame, /*here I put the derived class*/wxFrame, /*here I put the template argument*/FF_OK)
+//    EVT_PAINT(MessageFrame<FF_OK>::OnPaint)
+//END_EVENT_TABLE()
 
 
 template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, String image_path, const wxPoint& pos, const wxSize& size, [[maybe_unused]]  String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN){
@@ -14545,19 +14545,19 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
                                                                ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
                                                                ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value)))
                                , wxDefaultPosition, wxDefaultSize);
-//    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+    //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
-//    image->SetMinSize(wxSize(
-//                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
-//                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
-//                      );
-//    image->SetMaxSize(wxSize(
-//                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
-//                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
-//                      );
+    //    image->SetMinSize(wxSize(
+    //                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+    //                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
+    //                      );
+    //    image->SetMaxSize(wxSize(
+    //                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+    //                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
+    //                      );
     
-    m_bitmap = new wxBitmap(image_path.value, wxBITMAP_TYPE_PNG);
-    Bind(wxEVT_PAINT, &MessageFrame::OnPaint, this);
+    //    m_bitmap = new wxBitmap(image_path.value, wxBITMAP_TYPE_PNG);
+    //    Bind(wxEVT_PAINT, &MessageFrame::OnPaint, this);
     
     sizer_v->Add(text, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_v->Add(image, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
@@ -14586,25 +14586,18 @@ template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event){
     
 }
 
-template<typename FF_OK> void MessageFrame<FF_OK>::OnPaint(wxPaintEvent& WXUNUSED(event)){
-
-    wxPaintDC dc(this);
-    wxScopedPtr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
-//    wxGraphicsBitmap gb(gc->CreateBitmapFromImage(m_image));
-
-    gc->SetFont(*wxNORMAL_FONT, *wxBLACK);
-//    gc->DrawText("Bitmap", 0, HEIGHT/2);
-    gc->DrawBitmap(*m_bitmap, 0, 0,
-                   ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
-                   ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value)
-                   );
-
-//    wxGraphicsFont gf = gc->CreateFont(wxNORMAL_FONT->GetPixelSize().y, "");
-//    gc->SetFont(gf);
-//    gc->DrawText("Graphics bitmap", 0, (3*HEIGHT)/2);
-//    gc->DrawBitmap(gb, 0, HEIGHT, WIDTH, HEIGHT);
-
-}
+//template<typename FF_OK> void MessageFrame<FF_OK>::OnPaint(wxPaintEvent& WXUNUSED(event)){
+//
+//    wxPaintDC dc(this);
+//    wxScopedPtr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
+//
+//    gc->SetFont(*wxNORMAL_FONT, *wxBLACK);
+//    gc->DrawBitmap(*m_bitmap, 0, 0,
+//                   ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+//                   ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value)
+//                   );
+//
+//}
 
 
 template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, [[maybe_unused]]  String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN){
@@ -15300,7 +15293,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_v->Add(sizer_box_sight, 1,  wxALL, ((wxGetApp().border).value));
     sizer_v->Add(sizer_box_position, 1,  wxALL, ((wxGetApp().border).value));
     sizer_listcontrol_routes_plus_buttons->Add(sizer_box_route, 0, wxALL, ((wxGetApp().border).value));
-//    sizer_listcontrol_routes_plus_buttons->AddStretchSpacer(1);
+    //    sizer_listcontrol_routes_plus_buttons->AddStretchSpacer(1);
     //here I set the flag '0' to avoid button_show_map from being stretched
     sizer_big_buttons->Add(button_compute_position, 0, wxALL, ((wxGetApp().border).value));
     sizer_big_buttons->Add(button_show_map, 0, wxALL, ((wxGetApp().border).value));
@@ -15312,7 +15305,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     sizer_all->Add(sizer_h, 1,  wxALL | wxEXPAND, ((wxGetApp().border).value));
     
     //panel->SetSizer(sizer);
-        Maximize(panel);
+    Maximize(panel);
     panel->SetSizerAndFit(sizer_all);
     panel->Fit();
     Fit();
@@ -16425,7 +16418,7 @@ template<class P> template<class T> void CheckDay<P>::operator()(T& event){
 
 
 template<class P> TabulateDays<P>::TabulateDays(DateField<P>* p_in){
- 
+    
     p = p_in;
     
 }
@@ -18901,7 +18894,7 @@ void ListControl::EnableButtons(bool check){
 void ListControl::Resize(void){
     
     int j, width_header, width_item, width_total;
-   
+    
     
     //    set the column width to the width of the header or its longest item
     for(width_total=0, j=0; j<GetColumnCount(); j++){
@@ -18915,11 +18908,11 @@ void ListControl::Resize(void){
         SetColumnWidth(j, max(width_item, width_header));
         
         width_total += GetColumnWidth(j);
-
+        
     }
     
     SetSize(wxSize(width_total + ((wxGetApp().rectangle_display).GetWidth())*(length_border_over_length_screen.value),-1));
-
+    
 }
 
 

@@ -58,7 +58,6 @@
  
 
  for MSW:
- - curves are not highlighted when mouse hovers on them
  - images are not loaded correctly
  */
 

@@ -288,14 +288,15 @@ void MousePositionOnListControl(wxListCtrl* list_control, int* i){
 template<typename FF_OK> class MessageFrame: public wxFrame{
     
 public:
-    MessageFrame(wxWindow*, FF_OK*, const wxString&, const wxString&, String, const wxPoint&, const wxSize&, String);
-    
+
     wxPanel *panel;
     wxBoxSizer *frame_sizer, *sizer_v;
     wxGridSizer* sizer_grid;
     wxButton* button_ok;
     wxStaticBitmap* image;
-    //initialize the functor to close this MessageFrame when button_ok will be pressed
+    
+    MessageFrame(wxWindow*, FF_OK*, const wxString&, const wxString&, String, const wxPoint&, const wxSize&, String);
+     //initialize the functor to close this MessageFrame when button_ok will be pressed
     CloseFrame<MessageFrame>* close_frame;
     void KeyDown(wxKeyEvent&);
   

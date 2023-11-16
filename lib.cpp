@@ -8354,7 +8354,7 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
     wxPoint p;
     Projection temp;
     Position q;
-    double thickness;
+    double thickness, radius;
     stringstream s;
     wxString wx_string;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
@@ -8384,8 +8384,10 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
         
         if(i == ((parent->parent)->highlighted_route)){
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            radius = thickness;
         }else{
             thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            radius = 4*thickness;
         }
         
         dc->SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
@@ -8393,7 +8395,7 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
         
         //draw the reference position
         if(GeoToDrawPanel((((((parent->parent)->data)->route_list)[i]).reference_position), &p, false)){
-            dc->DrawCircle(p, 4.0*thickness);
+            dc->DrawCircle(p, radius);
         }
         
         
@@ -8534,8 +8536,10 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
         
         if(i == ((parent->parent)->highlighted_position)){
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            radius = thickness;
         }else{
             thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            radius = 4*thickness;
         }
         
         dc->SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
@@ -8544,7 +8548,7 @@ void DrawPanel::Render_Mercator(wxDC*  dc){
         if(GeoToDrawPanel((((parent->parent)->data)->position_list)[i], &p, false)){
             //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
             
-            dc->DrawCircle(p, 4.0*thickness);
+            dc->DrawCircle(p, radius);
         }
         
         
@@ -8697,7 +8701,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 void DrawPanel::Render_3D(wxDC*  dc){
     
     int i, j, color_id;
-    double thickness;
+    double thickness, radius;
     Double d;
     Angle lambda, /*phi is an auxiliary variable used in the loop which draws parallels*/phi;
     stringstream s;
@@ -8739,14 +8743,16 @@ void DrawPanel::Render_3D(wxDC*  dc){
         //set the route thickness and pen
         if(i == ((parent->parent)->highlighted_route)){
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            radius = thickness;
         }else{
             thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            radius = 4*thickness;
         }
         dc->SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
         //draw the reference_position
         if(GeoToDrawPanel((((((parent->parent)->data)->route_list)[i]).reference_position), &p, false)){
-            dc->DrawCircle(p, 4.0*thickness);
+            dc->DrawCircle(p, radius);
         }
         
         
@@ -8896,15 +8902,17 @@ void DrawPanel::Render_3D(wxDC*  dc){
         //set thickness and pen
         if(i == ((parent->parent)->highlighted_position)){
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            radius = thickness;
         }else{
             thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value)/2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            radius = 4*thickness;
         }
         dc->SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness) );
         
         if(GeoToDrawPanel((((parent->parent)->data)->position_list)[i], &p, false)){
             //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
             
-            dc->DrawCircle(p, 4.0*thickness);
+            dc->DrawCircle(p, radius);
             
         }
         

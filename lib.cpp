@@ -14498,7 +14498,7 @@ void PositionFrame::KeyDown(wxKeyEvent& event){
 }
 
 BEGIN_EVENT_TABLE_TEMPLATE1(MessageFrame, wxFrame, FF_OK)
-//    EVT_PAINT(MessageFrame<FF_OK>::OnPaint)
+    EVT_PAINT(MessageFrame<FF_OK>::OnPaint)
 END_EVENT_TABLE()
 
 

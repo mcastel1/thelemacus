@@ -58,9 +58,8 @@
  
 
  for MSW:
- - allow columns to be large enough to show the rows of listcontrol_sights
  - curves are not highlighted when mouse hovers on them
- - images are not loaded correctly 
+ - images are not loaded correctly
  */
 
 //this function is executed reguarly over time, to check some things

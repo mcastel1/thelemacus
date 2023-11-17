@@ -255,7 +255,7 @@ bool MyApp::OnInit(){
     
     cout << "You have Windows Operating System" << "\n";
     //to run the app with Visual Studio on Windows
-    run_directory = String("C:/Users/miche/Documents/sight_reduction_program/");
+    run_directory = String("Z:/");
     
 #endif
     

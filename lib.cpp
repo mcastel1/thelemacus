@@ -13433,9 +13433,10 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
         if(((control->GetForegroundColour()) != (wxGetApp().error_color))){
             
             message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
-            message_frame ->Show(true);
+            message_frame->Show(true);
+            message_frame->Raise();
             
-            control->SetFocus();
+           // control->SetFocus();
             control->SetForegroundColour((wxGetApp().error_color));
             control->SetFont(wxGetApp().error_font);
             //                Reset(control);
@@ -13445,7 +13446,8 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void){
     }else{
         
         message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
-        message_frame ->Show(true);
+        message_frame->Show(true);
+        message_frame->Raise();
         
     }
     

@@ -14547,17 +14547,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
                                                                ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
                                                                ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value)))
                                , wxDefaultPosition, wxDefaultSize);
-    //    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(image_path.value, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
-    
-    //    image->SetMinSize(wxSize(
-    //                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
-    //                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
-    //                      );
-    //    image->SetMaxSize(wxSize(
-    //                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
-    //                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
-    //                      );
-    
+
     //    m_bitmap = new wxBitmap(image_path.value, wxBITMAP_TYPE_PNG);
     //    Bind(wxEVT_PAINT, &MessageFrame::OnPaint, this);
     
@@ -14638,16 +14628,16 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     
     panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(QuestionFrame::KeyDown<wxKeyEvent>), this);
     
-    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(((wxGetApp().path_file_question_icon).value), wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
-    image->SetMinSize(wxSize(
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
-                      );
-    image->SetMaxSize(wxSize(
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
-                             ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value))
-                      );
-    
+//    image = new wxStaticBitmap(panel, wxID_ANY, wxBitmap(((wxGetApp().path_file_question_icon).value), wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+
+
+    image = new wxStaticBitmap(panel, wxID_ANY,
+                               Bitmap(((wxGetApp().path_file_question_icon).value), wxSize(
+                                                               ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+                                                               ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value)))
+                               , wxDefaultPosition, wxDefaultSize);
+
+
     sizer_v->Add(text, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_v->Add(image, 0, wxALL | wxALIGN_CENTER, 2*(((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value));
     sizer_grid->Add(button_a, 0, wxALIGN_CENTER);

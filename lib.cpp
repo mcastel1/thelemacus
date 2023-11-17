@@ -14759,8 +14759,9 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
                 
                 question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, answer_y, f_no, answer_n, title.value, question.value, wxDefaultPosition, wxDefaultSize, String(""));
                 question_frame->Show(true);
-                
-                control->SetFocus();
+                question_frame->Raise();
+
+//                control->SetFocus();
                 control->SetForegroundColour((wxGetApp().highlight_color));
                 control->SetFont(wxGetApp().highlight_font);
                 
@@ -14771,7 +14772,8 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
             
             question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, answer_y, f_no, answer_n, title.value, question.value, wxDefaultPosition, wxDefaultSize, String(""));
             question_frame->Show(true);
-            
+            question_frame->Raise();
+
         }
         
     }

@@ -253,13 +253,12 @@ bool MyApp::OnInit(){
     
     cout << "You have Windows Operating System" << "\n";
 
-    auto h1 = FindResource(GetModuleHandle(nullptr), L"FILE", L"DATA");
+    auto h1 = FindResource(GetModuleHandle(nullptr), L"init_file", L"DATA");
     auto h2 = LoadResource(GetModuleHandle(nullptr), h1);
     void* ptr = LockResource(h2);
     //auto sz = SizeOfResource(GetModuleHandle(nullptr), h2);
     // ....
     // use ptr. No free needed.
-
 
 
 

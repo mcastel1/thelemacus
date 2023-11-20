@@ -47,11 +47,9 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
- - remove useless stuff from init.txt
  - do not allocate a new wxDC every time you call Render*
-- check whetehr '(draw_panel->memory_dc).SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));' is the reason why parallels and meridians are not shown on MSW
+
  - Do not write on file every time you update the recent items, write/read from to file only when you open /close the app
- - On MSW the old curves are shown when dragging the chart -> fix it
  - buttons on bottom of ListFrame are cut on Enrico's computer (fixed it on mine, check whether it has been fixed on another computer too)
  - check that WXK_PLUS does not depend on the computer
  

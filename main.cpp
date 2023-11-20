@@ -59,7 +59,6 @@
  
 
  for MSW:
- - images are not loaded correctly
  */
 
 //this function is executed reguarly over time, to check some things

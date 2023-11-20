@@ -252,6 +252,17 @@ bool MyApp::OnInit(){
 #ifdef _WIN32
     
     cout << "You have Windows Operating System" << "\n";
+
+    auto h1 = FindResource(GetModuleHandle(nullptr), L"FILE", L"DATA");
+    auto h2 = LoadResource(GetModuleHandle(nullptr), h1);
+    void* ptr = LockResource(h2);
+    //auto sz = SizeOfResource(GetModuleHandle(nullptr), h2);
+    // ....
+    // use ptr. No free needed.
+
+
+
+
     //to run the app with Visual Studio on Windows
     run_directory = String("Z:/");
     
@@ -441,6 +452,10 @@ bool MyApp::OnInit(){
     
     
     list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
+#ifdef _WIN32
+    //if I am on Windows, I set the icon from the icon set in the .rc file
+    list_frame->SetIcon(wxICON(myapp_icon));
+#endif
     list_frame->Show(true);
     
     

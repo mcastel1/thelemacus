@@ -25,7 +25,8 @@
  - se xcode ti crea nuove copie dei file .cpp e .h quando li aggiungi a un progetto, fai attenzione a deselezioare 'copy items if needed' nel momento in cui li aggiungi al progetto. Non mettere i file in /src/, altrimenti xcode ti crea una copie di quei file nella directory in cui si trova il file .xcodeproj
  
  
- ********** THINGS TO ADD ************
+ ********** THINGS TO ADD/IMPROVE ************
+ - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
  - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
  - fill up selection 'rectangle' in 3D projection by using a bundle of curves at fixed lat or lon
  - change     highlight_color = color_selected_item and     highlight_font = default_font;

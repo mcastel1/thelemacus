@@ -761,6 +761,9 @@ template<class S> void String::read_from_stream(String name, S* input_stream, bo
 //reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
 void String::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
+#ifdef __APPLE__
+//I am on APPLE operating system
+    
     File file;
     
     file.set_name(filename);
@@ -770,6 +773,35 @@ void String::read_from_file(String name, String filename, [[maybe_unused]] Strin
     
     file.close(prefix);
     
+#endif
+
+    
+#ifdef _WIN32
+    //I am on WIN32 operating system
+    
+    char* bytes;
+    HMODULE hModule;
+    HRSRC hResource;
+    HGLOBAL hMemory;
+    DWORD dwSize;
+    LPVOID lpAddress;
+    istringstream *my_stream;
+    
+    hModule = GetModuleHandle(NULL);
+    hResource = FindResource(hModule, L"init_file", L"DATA");
+    hMemory = LoadResource(hModule, hResource);
+    dwSize = SizeofResource(hModule, hResource);
+    lpAddress = LockResource(hMemory);
+    
+    bytes = new char[dwSize];
+    memcpy(bytes, lpAddress, dwSize);
+    my_stream = new istringstream(bytes);
+    
+    read_from_stream<istringstream>(name, my_stream, true, prefix);
+    
+
+#endif
+
 }
 
 

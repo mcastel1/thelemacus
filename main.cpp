@@ -252,6 +252,17 @@ bool MyApp::OnInit(){
     degree_symbol = String("\u00b0");
     
     //detect the operating system
+#ifdef __APPLE__
+    
+    cout << "You have Apple Operating System" << "\n";
+    
+    //to build the app on mac
+    //        where_am_I(String(""));
+    //to develop the app with Xcode on OSX
+    run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
+    
+#endif
+    
 #ifdef _WIN32
     
     cout << "You have Windows Operating System" << "\n";
@@ -292,16 +303,7 @@ bool MyApp::OnInit(){
     
 #endif
     
-#ifdef __APPLE__
-    
-    cout << "You have Apple Operating System" << "\n";
-    
-    //to build the app on mac
-    //        where_am_I(String(""));
-    //to develop the app with Xcode on OSX
-    run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
-    
-#endif
+
     
     
 

@@ -47,7 +47,6 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
-  -  f->AllOk(); in template<class P> template<class T>void CheckProjection<P>::operator()(T& event){ should be called only if p->ok is true
  - do not allocate a new wxDC every time you call Render*
 
  - Do not write on file every time you update the recent items, write/read from to file only when you open /close the app
@@ -237,6 +236,9 @@ void MyApp::where_am_I([[maybe_unused]] String prefix){
 
 bool MyApp::OnInit(){
         
+
+  
+
     unsigned int i;
     Int n_chart_frames;
     stringstream s;
@@ -254,14 +256,27 @@ bool MyApp::OnInit(){
     
     cout << "You have Windows Operating System" << "\n";
 
-    auto h1 = FindResource(GetModuleHandle(nullptr), L"init_file", L"DATA");
-    auto h2 = LoadResource(GetModuleHandle(nullptr), h1);
-    void* ptr = LockResource(h2);
+    //HBITMAP hBmp;
+    //hBmp = LoadBitmap(hInst, "error_image");
+
+
+    //auto h1 = FindResource(GetModuleHandle(nullptr), L"errror_image", L"BITMAP");
+    //auto h2 = LoadResource(GetModuleHandle(nullptr), h1);
+    //void* ptr = LockResource(h2);
     //auto sz = SizeOfResource(GetModuleHandle(nullptr), h2);
     // ....
     // use ptr. No free needed.
 
+   // wxfILE(init_file);
 
+    HMODULE hModule = GetModuleHandle(NULL); // get the handle to the current module (the executable file)
+    HRSRC hResource = FindResource(hModule, L"init_file", L"DATA"); // substitute RESOURCE_ID and RESOURCE_TYPE.
+    HGLOBAL hMemory = LoadResource(hModule, hResource);
+    DWORD dwSize = SizeofResource(hModule, hResource);
+    LPVOID lpAddress = LockResource(hMemory);
+
+    char* bytes = new char[dwSize];
+    memcpy(bytes, lpAddress, dwSize);
 
     //to run the app with Visual Studio on Windows
     run_directory = String("Z:/");
@@ -454,9 +469,11 @@ bool MyApp::OnInit(){
     list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
 #ifdef _WIN32
     //if I am on Windows, I set the icon from the icon set in the .rc file
-    list_frame->SetIcon(wxICON(myapp_icon));
+    list_frame->SetIcon(wxICON(app_icon));
 #endif
     list_frame->Show(true);
+
+  
     
     
     //allocate and show the chart frames

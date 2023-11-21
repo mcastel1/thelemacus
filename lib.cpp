@@ -717,7 +717,7 @@ void Color::read_from_file(String name, String filename, [[maybe_unused]] String
 }
 
 //reads from file the content after 'name = ' and writes it into this. This function requires file to be correctly set and open
-void String::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
+void String::read_from_stream(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -2983,7 +2983,7 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    type.read_from_file(String("type"), file, false, new_prefix);
+    type.read_from_stream(String("type"), file, false, new_prefix);
     
     line.clear();
     getline(file.value, line);
@@ -3004,7 +3004,7 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
         
     }
     
-    label.read_from_file(String("label"), file, false, new_prefix);
+    label.read_from_stream(String("label"), file, false, new_prefix);
     if(label.value == ""){
         //if the value of label read from file is empty, set in label the time at which *this has been read
         
@@ -3566,7 +3566,7 @@ void Position::read_from_file(File& file, [[maybe_unused]] String prefix){
     phi.read_from_file(String("latitude"), file, false, new_prefix);
     lambda.read_from_file(String("longitude"), file, false, new_prefix);
     
-    label.read_from_file(String("label"), file, false, new_prefix);
+    label.read_from_stream(String("label"), file, false, new_prefix);
     if(label.value == ""){
         //if the value of label read from file is empty, set in label the time at which *this has been read
         
@@ -5074,7 +5074,7 @@ bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
     //check whether the date and hour of sight falls within the time window covered by JPL data files
     check &= check_time_interval(prefix);
     
-    label.read_from_file(String("label"), file, false, new_prefix);
+    label.read_from_stream(String("label"), file, false, new_prefix);
     if(label.value == ""){
         //if the value of label read from file is empty, set in label the time at which *this has been read
         

@@ -98,7 +98,7 @@ public:
     String(string);
     void enter(String, String);
     void print(String, bool, String, ostream&);
-    void read_from_file(String, File&, bool, String);
+    void read_from_stream(String, File&, bool, String);
     void read_from_file(String, String, String);
     void write_to_file(String, File&, String);
     void set(String, String, String);

@@ -717,23 +717,23 @@ void Color::read_from_file(String name, String filename, [[maybe_unused]] String
 }
 
 //reads from stream input_stream the content after 'name = ' and writes it into this
-template<class S> void String::read_from_stream(String name, S input_stream, bool search_entire_file, [[maybe_unused]] String prefix){
+template<class S> void String::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
     
     cout << prefix.value << YELLOW << "Reading " << name.value << " from stream...\n" << RESET;
     
-    if(search_entire_file){
+    if(search_entire_stream){
         
         //rewind the file pointer
-        input_stream.clear();                 // clear fail and eof bits
-        input_stream.seekg(0, std::ios::beg); // back to the start!
+        input_stream->clear();                 // clear fail and eof bits
+        input_stream->seekg(0, std::ios::beg); // back to the start!
         
         do{
             
             line.clear();
-            getline(input_stream, line);
+            getline(*input_stream, line);
             
         }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
         
@@ -741,7 +741,7 @@ template<class S> void String::read_from_stream(String name, S input_stream, boo
     }else{
         
         line.clear();
-        getline(input_stream, line);
+        getline(*input_stream, line);
         
     }
     
@@ -2983,7 +2983,7 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    type.read_from_stream<fstream>(String("type"), file.value, false, new_prefix);
+    type.read_from_stream<fstream>(String("type"), &(file.value), false, new_prefix);
     
     line.clear();
     getline(file.value, line);
@@ -3004,7 +3004,7 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
         
     }
     
-    label.read_from_stream<fstream>(String("label"), file.value, false, new_prefix);
+    label.read_from_stream<fstream>(String("label"), &(file.value), false, new_prefix);
     if(label.value == ""){
         //if the value of label read from file is empty, set in label the time at which *this has been read
         
@@ -3566,7 +3566,7 @@ void Position::read_from_file(File& file, [[maybe_unused]] String prefix){
     phi.read_from_file(String("latitude"), file, false, new_prefix);
     lambda.read_from_file(String("longitude"), file, false, new_prefix);
     
-    label.read_from_stream<fstream>(String("label"), file.value, false, new_prefix);
+    label.read_from_stream<fstream>(String("label"), &(file.value), false, new_prefix);
     if(label.value == ""){
         //if the value of label read from file is empty, set in label the time at which *this has been read
         
@@ -5074,7 +5074,7 @@ bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
     //check whether the date and hour of sight falls within the time window covered by JPL data files
     check &= check_time_interval(prefix);
     
-    label.read_from_stream<fstrea>(String("label"), file.value, false, new_prefix);
+    label.read_from_stream<fstream>(String("label"), &(file.value), false, new_prefix);
     if(label.value == ""){
         //if the value of label read from file is empty, set in label the time at which *this has been read
         

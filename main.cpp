@@ -277,6 +277,12 @@ bool MyApp::OnInit(){
 
     char* bytes = new char[dwSize];
     memcpy(bytes, lpAddress, dwSize);
+    istringstream my_stream(bytes);
+
+    string line;
+    line.clear();
+    getline(my_stream, line);
+
 
     //to run the app with Visual Studio on Windows
     run_directory = String("Z:/");

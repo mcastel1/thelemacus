@@ -278,10 +278,13 @@ bool MyApp::OnInit(){
     char* bytes = new char[dwSize];
     memcpy(bytes, lpAddress, dwSize);
     istringstream my_stream(bytes);
+    
+    temp.read_from_stream<istringstream>(String("name file coastline data blocked"), &my_stream, true, String("****"));
 
-    string line;
+
+    /*string line;
     line.clear();
-    getline(my_stream, line);
+    getline(my_stream, line);*/
 
 
     //to run the app with Visual Studio on Windows

@@ -175,6 +175,17 @@ bool String::operator!=(const String& s){
     
 }
 
+//reads from file the content after 'name = ' and returns it. This function opens a new file, sets its name to filename and opens it
+String read_from_file(String name, String filename, [[maybe_unused]] String prefix){
+    
+    String temp;
+    
+    temp.read_from_file_to(name, filename, prefix);
+    
+    return temp;
+    
+}
+
 void Int::set(String name, int i, [[maybe_unused]] String prefix){
     
     String new_prefix;

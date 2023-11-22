@@ -3158,10 +3158,35 @@ String String::prepend(String s){
     
 }
 
-//splits the file path *this into the folrder, filename and extension part, by writing them into *folder, *filename, and *extension, respectively. The three arguments need to be allcoated. 
-void String::split_file_path(String* folder, String* filename, String* extension){
+//splits the file path *this into the folrder path (with '/' at the end), filename (without extension) and extension part (with no '.'), by writing them into *folder_path, *filename, and *extension, respectively. The three arguments need to be allcoated. It returns true/false if the operation could be completed succesfully/not succesfully
+bool String::split_file_path(String* folder_path, String* filename, String* extension, [[maybe_unused]] String prefix){
     
+    //the positions of '/' and of '.' in *this
+    size_t slash_position, dot_position;
     
+    cout << prefix.value << "Splitting String" << value << "...\n";
+    
+    slash_position = value.find_last_of("/");
+    dot_position = value.find_last_of(".");
+    
+    if((slash_position != (string::npos)) && (dot_position != (string::npos))){
+        
+        folder_path->set(String("folder path"), String(value.substr(0,slash_position+1)), prefix);
+        filename->set(String("filename"), String(value.substr(slash_position+1, dot_position-slash_position-1)), prefix);
+        extension->set(String("extension"), String(value.substr(dot_position+1)), prefix);
+        
+        cout << "...done.\n";
+
+        return true;
+        
+    }else{
+        
+        cout << prefix.value << RED << "... String is not valid!\n" << RESET;
+
+        return false;
+        
+    }
+
 }
 
 

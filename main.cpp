@@ -338,6 +338,8 @@ bool MyApp::OnInit(){
     temp.read_from_file(String("name file utc date and time"), String(path_file_init), String(""));
     path_file_utc_date_and_time = code_directory.append(temp);
     
+  
+    
     temp.read_from_file(String("name file recent"), String(path_file_init), String(""));
     path_file_recent = data_directory.append(temp);
     
@@ -360,6 +362,12 @@ bool MyApp::OnInit(){
     
     temp.read_from_file(String("name file error icon"), String(path_file_init), String(""));
     path_file_error_icon = image_directory.append(temp);
+    
+    //
+    String filename, folder, extension;
+    path_file_error_icon.split_file_path(&folder, &filename, &extension, String("****"));
+    
+    //
     
     temp.read_from_file(String("name file warning icon"), String(path_file_init), String(""));
     path_file_warning_icon = image_directory.append(temp);

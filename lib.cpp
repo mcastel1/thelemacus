@@ -254,9 +254,11 @@ void File::remove(String prefix){
     
 }
 
+//sets name, foler, name_without_folder_nor_extension, and extension
 void File::set_name(String filename){
     
     (name.value) = filename.value;
+    name.split_file_path(&folder, &name_without_folder_nor_extension, &extension, String(""));
     
 }
 

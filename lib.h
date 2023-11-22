@@ -534,7 +534,7 @@ class File{
     
 public:
     fstream value;
-    String name;
+    String /*the full path of the file, including the folder, filename and extension*/name, /*the path of the folder where the file is located*/folder, /*the name of the file without the folder path (before it) and without the file extension (after it)*/name_without_folder_nor_extension, /*the file extension, without the '.'*/extension;
     unsigned int number_of_lines;
     
     File();

@@ -687,7 +687,7 @@ void Color::read_from_file(String name, String filename, [[maybe_unused]] String
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    s.read_from_file(name, filename, new_prefix);
+    s.read_from_file_to(name, filename, new_prefix);
     
     //get rid of everything that comes before and at '(' at the beginnign of s
     pos_end = (s.value).find("(");
@@ -760,8 +760,8 @@ template<class S> void String::read_from_stream(String name, S* input_stream, bo
 }
 
 
-//reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void String::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
+//reads from file the content after 'name = ' and writes it into *this. This function opens a new file, sets its name to filename and opens it
+void String::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix){
     
     File file;
 
@@ -9713,7 +9713,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     if(projection_in == String("")){
         //if the constructor has been called with an empty projection_in, I use the default projection by reading it from the init file.
         
-        default_projection.read_from_file(String("default projection"), (wxGetApp().path_file_init), String(""));
+        default_projection.read_from_file_to(String("default projection"), (wxGetApp().path_file_init), String(""));
         (projection->name)->SetValue(wxString(default_projection.value));
         
     }else{
@@ -14872,7 +14872,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     (wxGetApp().file_init).set_name((wxGetApp().path_file_init));
     
     //read color list from file_init
-    s.read_from_file(String("color list"), (wxGetApp().path_file_init), String(""));
+    s.read_from_file_to(String("color list"), (wxGetApp().path_file_init), String(""));
     
     //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
     (wxGetApp().color_list).resize(count((s.value).begin(), (s.value).end(), '('));
@@ -17148,7 +17148,7 @@ template<class P> void ProjectionField<P>::read_recent_items(void){
     }
     
     //read the recently selected items from file_recent
-    s.read_from_file(String("projection"), (wxGetApp().path_file_recent), String(""));
+    s.read_from_file_to(String("projection"), (wxGetApp().path_file_recent), String(""));
     
     recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
     for(i=0; i<(recent_items.size()); i++){
@@ -18626,7 +18626,7 @@ template<class P> void BodyField<P>::read_recent_items(void){
     }
     
     //read the recently selected items from file_recent
-    s.read_from_file(String("body"), (wxGetApp().path_file_recent), String(""));
+    s.read_from_file_to(String("body"), (wxGetApp().path_file_recent), String(""));
     
     recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
     for(i=0; i<recent_items.size(); i++){

@@ -763,12 +763,14 @@ template<class S> void String::read_from_stream(String name, S* input_stream, bo
 //reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
 void String::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
+    File file;
+
+    file.set_name(filename);
+
+
 #ifdef __APPLE__
 //I am on APPLE operating system->the file is located in a folder in the .app package and I read it from there
     
-    File file;
-    
-    file.set_name(filename);
     file.open(String("in"), prefix);
     
     read_from_stream<fstream>(name, &(file.value), true, prefix);

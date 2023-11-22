@@ -280,17 +280,17 @@ bool MyApp::OnInit(){
 
    // wxfILE(init_file);
 
-    HMODULE hModule = GetModuleHandle(NULL); // get the handle to the current module (the executable file)
-    HRSRC hResource = FindResource(hModule, L"init_file", L"DATA"); // substitute RESOURCE_ID and RESOURCE_TYPE.
-    HGLOBAL hMemory = LoadResource(hModule, hResource);
-    DWORD dwSize = SizeofResource(hModule, hResource);
-    LPVOID lpAddress = LockResource(hMemory);
+    //HMODULE hModule = GetModuleHandle(NULL); // get the handle to the current module (the executable file)
+    //HRSRC hResource = FindResource(hModule, L"init_file", L"DATA"); // substitute RESOURCE_ID and RESOURCE_TYPE.
+    //HGLOBAL hMemory = LoadResource(hModule, hResource);
+    //DWORD dwSize = SizeofResource(hModule, hResource);
+    //LPVOID lpAddress = LockResource(hMemory);
 
-    char* bytes = new char[dwSize];
-    memcpy(bytes, lpAddress, dwSize);
-    istringstream my_stream(bytes);
-    
-    temp.read_from_stream<istringstream>(String("name file coastline data blocked"), &my_stream, true, String("****"));
+    //char* bytes = new char[dwSize];
+    //memcpy(bytes, lpAddress, dwSize);
+    //istringstream my_stream(bytes);
+    //
+    //temp.read_from_stream<istringstream>(String("name file coastline data blocked"), &my_stream, true, String("****"));
 
 
     /*string line;

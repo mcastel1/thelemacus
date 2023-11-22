@@ -23,6 +23,9 @@
 #include <algorithm>
 #include <list>
 #include <stdio.h>
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 
 
 #include "gsl_rng.h"

@@ -791,9 +791,12 @@ void String::read_from_file(String name, String filename, [[maybe_unused]] Strin
     LPVOID lpAddress;
     istringstream *my_stream;
     LPCWSTR resource_id;
+    wstring temp;
+
+    temp = wstring((file.name_without_folder_nor_extension.value).begin(), (file.name_without_folder_nor_extension.value).end());
     
     //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
-    resource_id = (wstring(file.name_without_folder_nor_extension.value.begin(), file.name_without_folder_nor_extension.value.end()).c_str());
+    resource_id = (temp.c_str());
   
     hModule = GetModuleHandle(NULL);
     hResource = FindResource(hModule, resource_id, L"DATA");

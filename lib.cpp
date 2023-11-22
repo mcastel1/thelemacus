@@ -764,7 +764,7 @@ template<class S> void String::read_from_stream(String name, S* input_stream, bo
 void String::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
 #ifdef __APPLE__
-//I am on APPLE operating system
+//I am on APPLE operating system->the file is located in a folder in the .app package and I read it from there
     
     File file;
     
@@ -779,7 +779,7 @@ void String::read_from_file(String name, String filename, [[maybe_unused]] Strin
 
     
 #ifdef _WIN32
-    //I am on WIN32 operating system
+    //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
     
     char* bytes;
     HMODULE hModule;

@@ -107,6 +107,7 @@ public:
     String append(String);
     void appendto(String);
     String prepend(String);
+    void split_file_path(String*, String*, String*);
     
     bool operator==(const String&), operator!=(const String&);
     

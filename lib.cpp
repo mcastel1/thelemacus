@@ -3158,6 +3158,12 @@ String String::prepend(String s){
     
 }
 
+//splits the file path *this into the folrder, filename and extension part, by writing them into *folder, *filename, and *extension, respectively. The three arguments need to be allcoated. 
+void String::split_file_path(String* folder, String* filename, String* extension){
+    
+    
+}
+
 
 
 

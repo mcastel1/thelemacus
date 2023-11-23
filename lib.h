@@ -595,7 +595,7 @@ public:
     void set(String, double, String);
     void enter(String, String, String);
     void print(String, String, String, ostream&);
-    void read_from_file(String, File&, bool, String);
+    template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file(String, String, String);
     bool check_valid(String, String);
     string to_string(String, unsigned int);

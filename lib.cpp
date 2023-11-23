@@ -3030,7 +3030,7 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
         reference_position.read_from_file(file, new_prefix);
         
         Z.read_from_file(String("starting heading"), file, false, new_prefix);
-        l.read_from_file(String("length"), file, false, new_prefix);
+        l.read_from_stream<fstream>(String("length"), &(file.value), false, new_prefix);
         
     }
     
@@ -4519,7 +4519,7 @@ bool Length::check_valid(String name, [[maybe_unused]] String prefix){
 }
 
 //reads from file the content after 'name = ' and writes it into this. This function requires file to be correctly set and open
-void Length::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
+template<class S> void Length::read_from_stream(String name, S* input_stream, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     stringstream new_prefix;
@@ -4532,20 +4532,20 @@ void Length::read_from_file(String name, File& file, bool search_entire_file, [[
     if(search_entire_file){
         
         //rewind the file pointer
-        file.value.clear();                 // clear fail and eof bits
-        file.value.seekg(0, std::ios::beg); // back to the start!
+        input_stream->clear();                 // clear fail and eof bits
+        input_stream->seekg(0, std::ios::beg); // back to the start!
         
         do{
             
             line.clear();
-            getline(file.value, line);
+            getline(*input_stream, line);
             
         }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
         
     }else{
         
         line.clear();
-        getline(file.value, line);
+        getline(*input_stream, line);
         
     }
     
@@ -4800,7 +4800,7 @@ bool Body::read_from_file(String name, File& file, [[maybe_unused]] String prefi
             RA.read_from_file(String("right ascension"), file, false, new_prefix);
             d.read_from_file(String("declination"), file, false, new_prefix);
         }else{
-            radius.read_from_file(String("radius"), file, false, new_prefix);
+            radius.read_from_stream<fstream>(String("radius"), &(file.value), false, new_prefix);
         }
         
         return true;
@@ -5109,7 +5109,7 @@ bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
     artificial_horizon.read_from_file(String("artificial horizon"), file, false, new_prefix);
     if(artificial_horizon == Answer('n', new_prefix)){
         items.insert(items.begin()+3+(additional_items++), String("height of eye"));
-        height_of_eye.read_from_file(String("height of eye"), file, false, new_prefix);
+        height_of_eye.read_from_stream<fstream>(String("height of eye"), &(file.value), false, new_prefix);
     }
     
     check &= master_clock_date_and_hour.read_from_file(String("master-clock date and hour of sight"), file, new_prefix);

@@ -782,7 +782,7 @@ void Color::read_from_file(String name, String filename, [[maybe_unused]] String
     
 }
 
-//reads from stream input_stream the content after 'name = ' and writes it into this
+//read from stream input_stream the content after 'name = ' and writes it into this
 template<class S> void String::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix){
     
     string line;
@@ -2976,13 +2976,13 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
     
     if((type.value)[0] == 'c'){
         
-        reference_position.read_from_stream<fstream>(&(file.value), new_prefix);
+        reference_position.read_from_stream<fstream>(String("reference position"), &(file.value), false, new_prefix);
         omega.read_from_stream<fstream>(String("omega"), &(file.value), false, new_prefix);
         l.set(String("length"), 2.0*M_PI*Re*sin(omega), new_prefix);
         
     }else{
         
-        reference_position.read_from_stream<fstream>(&(file.value), new_prefix);
+        reference_position.read_from_stream<fstream>(String("reference position"), &(file.value), false, new_prefix);
         
         Z.read_from_stream<fstream>(String("starting heading"), &(file.value), false, new_prefix);
         l.read_from_stream<fstream>(String("length"), &(file.value), false, new_prefix);
@@ -3572,7 +3572,8 @@ void Position::rotate(String name, Rotation r, Position* p, [[maybe_unused]] Str
     
 }
 
-template<class S> void Position::read_from_stream(S* input_stream, [[maybe_unused]] String prefix){
+//read from stream input_stream the Position by starting at the current position of input_stream. Here name and search_entire_file are unused and have been included as arguments of the function in order to match with the format of read_from_stream of other classes and so in order to use template<class C> void read_from_file(C* object, String name, String filename, [[maybe_unused]] String prefix) throughout the code
+template<class S> void Position::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool search_entire_file, [[maybe_unused]] String prefix){
     
     String new_prefix;
     
@@ -3590,7 +3591,13 @@ template<class S> void Position::read_from_stream(S* input_stream, [[maybe_unuse
         
     }
     
+}
+
+//reads from file the content after 'name = ' and writes it into *this. This function opens a new file, sets its name to filename and opens it, and it works only if the Position to be read is at the beginning of the file. 
+void Position::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix){
     
+    read_from_file<Position>(this, name, filename, prefix);
+
 }
 
 
@@ -5437,7 +5444,7 @@ bool Data::read_from_file(File& file, [[maybe_unused]] String prefix){
             //read the position block
             Position position;
             
-            position.read_from_stream<fstream>(&(file.value), new_prefix);
+            position.read_from_stream<fstream>(String("position"), &(file.value), false, new_prefix);
             
             position.print(String("New position"), new_prefix, cout);
             

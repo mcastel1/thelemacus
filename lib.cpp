@@ -1273,9 +1273,9 @@ void Rotation::read_from_file(String name, String filename, [[maybe_unused]] Str
         
     }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
     
-    alpha.read_from_file(String("alpha"), file, false, new_prefix);
-    beta.read_from_file(String("beta"), file, false, new_prefix);
-    gamma.read_from_file(String("gamma"), file, false, new_prefix);
+    alpha.read_from_stream(String("alpha"), &(file.value), false, new_prefix);
+    beta.read_from_stream(String("beta"), &(file.value), false, new_prefix);
+    gamma.read_from_stream(String("gamma"), &(file.value), false, new_prefix);
     
     set(alpha, beta, gamma);
     
@@ -3027,14 +3027,14 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
     if((type.value)[0] == 'c'){
         
         reference_position.read_from_file(file, new_prefix);
-        omega.read_from_file(String("omega"), file, false, new_prefix);
+        omega.read_from_stream<fstream>(String("omega"), &(file.value), false, new_prefix);
         l.set(String("length"), 2.0*M_PI*Re*sin(omega), new_prefix);
         
     }else{
         
         reference_position.read_from_file(file, new_prefix);
         
-        Z.read_from_file(String("starting heading"), file, false, new_prefix);
+        Z.read_from_stream<fstream>(String("starting heading"), &(file.value), false, new_prefix);
         l.read_from_stream<fstream>(String("length"), &(file.value), false, new_prefix);
         
     }
@@ -3629,8 +3629,8 @@ void Position::read_from_file(File& file, [[maybe_unused]] String prefix){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    phi.read_from_file(String("latitude"), file, false, new_prefix);
-    lambda.read_from_file(String("longitude"), file, false, new_prefix);
+    phi.read_from_stream<fstream>(String("latitude"), &(file.value), false, new_prefix);
+    lambda.read_from_stream<fstream>(String("longitude"), &(file.value), false, new_prefix);
     
     label.read_from_stream<fstream>(String("label"), &(file.value), false, new_prefix);
     if(label.value == ""){
@@ -4757,8 +4757,8 @@ bool Body::read_from_file(String name, File& file, [[maybe_unused]] String prefi
         
         
         if(type == String("star")){
-            RA.read_from_file(String("right ascension"), file, false, new_prefix);
-            d.read_from_file(String("declination"), file, false, new_prefix);
+            RA.read_from_stream<fstream>(String("right ascension"), &(file.value), false, new_prefix);
+            d.read_from_stream<fstream>(String("declination"), &(file.value), false, new_prefix);
         }else{
             radius.read_from_stream<fstream>(String("radius"), &(file.value), false, new_prefix);
         }
@@ -5064,8 +5064,8 @@ bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
         items.insert(items.begin()+1+(additional_items++), all_items[1]);
         limb.read_from_file(String("limb"), file, false, new_prefix);
     }
-    H_s.read_from_file(String("sextant altitude"), file, false, new_prefix);
-    index_error.read_from_file(String("index error"), file, false, new_prefix);
+    H_s.read_from_stream<fstream>(String("sextant altitude"), &(file.value), false, new_prefix);
+    index_error.read_from_stream<fstream>(String("index error"), &(file.value), false, new_prefix);
     artificial_horizon.read_from_file(String("artificial horizon"), file, false, new_prefix);
     if(artificial_horizon == Answer('n', new_prefix)){
         items.insert(items.begin()+3+(additional_items++), String("height of eye"));
@@ -6128,7 +6128,7 @@ bool Sight::enter(Catalog catalog, String name, [[maybe_unused]] String prefix){
     }
     H_s.enter(String("sextant altitude"), new_prefix);
     //read index error from init file
-    index_error.read_from_file(String("index error"), file_init, true, new_prefix);
+    index_error.read_from_stream<fstream>(String("index error"), &(file_init.value), true, new_prefix);
     artificial_horizon.read_from_file(String("artificial horizon"), file_init, true, new_prefix);
     if(artificial_horizon == Answer('n', new_prefix)){
         items.insert(items.begin()+3+(additional_items++), String("height of eye"));
@@ -13565,7 +13565,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_index_error = new StaticText(panel, wxT("Index error"), wxDefaultPosition, wxDefaultSize);
     //If sight_in = NULL, read index error from init file
     if(sight_in == NULL){
-        (sight->index_error).read_from_file(String("index error"), file_init, true, new_prefix);
+        (sight->index_error).read_from_stream<fstream>(String("index error"), &(file_init.value), true, new_prefix);
         (sight->index_error).to_deg_min(&deg, &min);
     }
     index_error = new AngleField<SightFrame>(panel, &(sight->index_error), String("+-"));

@@ -1,7 +1,12 @@
 /*
  
  g++ main.cpp -o main.o `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -lboost_filesystem -lboost_system -L/Applications/ChartDirector/lib  -Wall -Wno-c++11-extensions --std=c++17  -O3
+
+To run on WIN32, the resource file is resource_file_windows.rc
+
  */
+
+
 
 //uncomment this to test the code at higher speed
 //#define wxDEBUG_LEVEL 0

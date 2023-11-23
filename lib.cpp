@@ -1401,43 +1401,11 @@ template<class S> void Angle::read_from_stream(String name, S* input_stream, boo
 }
 
 //reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void Angle::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
+void Angle::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix){
     
-    string line;
-    size_t pos1, pos2, pos3;
-    File file;
-    
-    file.set_name(filename);
-    file.open(String("in"), prefix);
-    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
-    
-    
-    //rewind the file pointer
-    file.value.clear();                 // clear fail and eof bits
-    file.value.seekg(0, std::ios::beg); // back to the start!
-    
-    do{
-        
-        line.clear();
-        getline(file.value, line);
-        
-    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
-    
-    
-    pos1 = line.find(" = ");
-    pos2 = line.find("° ");
-    pos3 = line.find("'");
-    
-    value = k*(stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str()) + stod(line.substr(pos2+2, pos3 - (pos2+2)))/60.0);
-    
-    cout << prefix.value << YELLOW << "... done.\n" << RESET;
-    
-    print(name, prefix, cout);
-    
-    file.close(prefix);
-    
-}
+    read_from_file<Angle>(this, name, filename, prefix);
 
+}
 
 //evaluates whether Position (*this) is equal to Position p
 bool Position::operator==(const Position& p){
@@ -8257,7 +8225,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     SetCursor(*wxCROSS_CURSOR);
     
     
-    (circle_observer.omega).read_from_file(String("omega draw 3d"), (wxGetApp().path_file_init), prefix);
+    (circle_observer.omega).read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), prefix);
     thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), (wxGetApp().path_file_init), prefix);
     
     rotation = Rotation(
@@ -9588,10 +9556,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     new_prefix = prefix.append(String("\t"));
     
     //read lambda_min, ...., phi_max from file_init
-    lambda_min.read_from_file(String("minimal longitude"), (wxGetApp().path_file_init), new_prefix);
-    lambda_max.read_from_file(String("maximal longitude"), (wxGetApp().path_file_init), new_prefix);
-    phi_min.read_from_file(String("minimal latitude"), (wxGetApp().path_file_init), new_prefix);
-    phi_max.read_from_file(String("maximal latitude"), (wxGetApp().path_file_init), new_prefix);
+    lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), new_prefix);
+    lambda_max.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), new_prefix);
+    phi_min.read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), new_prefix);
+    phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), new_prefix);
     
     
     this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnPressCtrlW<wxCloseEvent>, this);
@@ -10105,10 +10073,10 @@ template<class T> void ChartFrame::Reset(T& event){
     if(((projection->name)->GetValue()) == wxString("Mercator")){
         
         //read lambda_min, ...., phi_max from file_init
-        lambda_min.read_from_file(String("minimal longitude"), (wxGetApp().path_file_init), String(""));
-        lambda_max.read_from_file(String("maximal longitude"), (wxGetApp().path_file_init), String(""));
-        phi_min.read_from_file(String("minimal latitude"), (wxGetApp().path_file_init), String(""));
-        phi_max.read_from_file(String("maximal latitude"), (wxGetApp().path_file_init), String(""));
+        lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String(""));
+        lambda_max.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String(""));
+        phi_min.read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String(""));
+        phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String(""));
         draw_panel->Set_x_y_min_max_Mercator();
         ComputeZoomFactor_Mercator(draw_panel->x_span());
         
@@ -10120,7 +10088,7 @@ template<class T> void ChartFrame::Reset(T& event){
     if(((projection->name)->GetValue()) == wxString("3D")){
         //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
         
-        ((draw_panel->circle_observer_0).omega).read_from_file(String("omega draw 3d"), (wxGetApp().path_file_init), String(""));
+        ((draw_panel->circle_observer_0).omega).read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String(""));
         zoom_factor.set(String(""), 1.0, String(""));
         ComputeZoomFactor_3D();
         

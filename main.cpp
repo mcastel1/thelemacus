@@ -364,8 +364,8 @@ bool MyApp::OnInit(){
     time_check.read_from_file(String("time check"), String(path_file_init), String(""));
     time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));
     
-    max_lat.read_from_file(String("maximal latitude coastline data"), String(path_file_init), String(""));
-    min_lat.read_from_file(String("minimal latitude coastline data"), String(path_file_init), String(""));
+    max_lat.read_from_file_to(String("maximal latitude coastline data"), String(path_file_init), String(""));
+    min_lat.read_from_file_to(String("minimal latitude coastline data"), String(path_file_init), String(""));
     
     size_small_button_over_width_screen.read_from_file(String("size small button over width screen"), String(path_file_init), String(""));
     size_large_button_over_width_screen.read_from_file(String("size large button over width screen"), String(path_file_init), String(""));
@@ -408,7 +408,7 @@ bool MyApp::OnInit(){
     //read tick length over width plot area from file_init
     tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
     //read min_crossing_angle from file_init
-    min_crossing_angle.read_from_file(String("minimal crossing angle between circles of equal altitude"), (wxGetApp().path_file_init), String(""));
+    min_crossing_angle.read_from_file_to(String("minimal crossing angle between circles of equal altitude"), (wxGetApp().path_file_init), String(""));
     
     
     

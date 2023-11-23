@@ -982,21 +982,23 @@ void Answer::read_from_file(String name, String filename, [[maybe_unused]] Strin
 
 
 
-void Answer::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
+template<class S> void Answer::read_from_stream(String name, S* input_stream, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
     
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from stream " << input_stream << "... \n" << RESET;
+    
     if(search_entire_file){
         
         //rewind the file pointer
-        file.value.clear();                 // clear fail and eof bits
-        file.value.seekg(0, std::ios::beg); // back to the start!
+        input_stream->clear();                 // clear fail and eof bits
+        input_stream->seekg(0, std::ios::beg); // back to the start!
         
         do{
             
             line.clear();
-            getline(file.value, line);
+            getline(*input_stream, line);
             
         }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
         
@@ -1004,7 +1006,7 @@ void Answer::read_from_file(String name, File& file, bool search_entire_file, [[
     }else{
         
         line.clear();
-        getline(file.value, line);
+        getline(*input_stream, line);
         
     }
     
@@ -1013,6 +1015,9 @@ void Answer::read_from_file(String name, File& file, bool search_entire_file, [[
     pos = line.find(" = ");
     
     value = line[pos+3];
+    
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
     
     print(name, prefix, cout);
     
@@ -5034,7 +5039,7 @@ bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
     }
     H_s.read_from_stream<fstream>(String("sextant altitude"), &(file.value), false, new_prefix);
     index_error.read_from_stream<fstream>(String("index error"), &(file.value), false, new_prefix);
-    artificial_horizon.read_from_file(String("artificial horizon"), file, false, new_prefix);
+    artificial_horizon.read_from_stream<fstream>(String("artificial horizon"), &(file.value), false, new_prefix);
     if(artificial_horizon == Answer('n', new_prefix)){
         items.insert(items.begin()+3+(additional_items++), String("height of eye"));
         height_of_eye.read_from_stream<fstream>(String("height of eye"), &(file.value), false, new_prefix);
@@ -5046,7 +5051,7 @@ bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
     }
     time = master_clock_date_and_hour;
     
-    use_stopwatch.read_from_file(String("use of stopwatch"), file, false, new_prefix);
+    use_stopwatch.read_from_stream<fstream>(String("use of stopwatch"), &(file.value), false, new_prefix);
     
     if(use_stopwatch == Answer('y', new_prefix)){
         
@@ -6097,7 +6102,7 @@ bool Sight::enter(Catalog catalog, String name, [[maybe_unused]] String prefix){
     H_s.enter(String("sextant altitude"), new_prefix);
     //read index error from init file
     index_error.read_from_stream<fstream>(String("index error"), &(file_init.value), true, new_prefix);
-    artificial_horizon.read_from_file(String("artificial horizon"), file_init, true, new_prefix);
+    artificial_horizon.read_from_stream<fstream>(String("artificial horizon"), &(file_init.value), true, new_prefix);
     if(artificial_horizon == Answer('n', new_prefix)){
         items.insert(items.begin()+3+(additional_items++), String("height of eye"));
         height_of_eye.enter(String("height of eye"), String("m"), new_prefix);
@@ -6108,7 +6113,7 @@ bool Sight::enter(Catalog catalog, String name, [[maybe_unused]] String prefix){
         master_clock_date_and_hour.enter(String("master-clock date and hour of sight"), new_prefix);
         time = master_clock_date_and_hour;
         
-        use_stopwatch.read_from_file(String("use of stopwatch"), file_init, true, new_prefix);
+        use_stopwatch.read_from_stream<fstream>(String("use of stopwatch"), &(file_init.value), true, new_prefix);
         
         if(use_stopwatch == Answer('y', new_prefix)){
             

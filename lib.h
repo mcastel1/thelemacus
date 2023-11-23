@@ -633,7 +633,8 @@ public:
     bool set(String, char, String);
     //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
     void print(String, String, ostream&);
-    void read_from_file(String, File&, bool, String), read_from_file(String, String, String);
+    template<class S> void read_from_stream(String, S*, bool, String);
+    void read_from_file(String, String, String);
     bool operator==(const Answer&), operator !=(const Answer&);
     
 };

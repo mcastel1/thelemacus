@@ -4557,60 +4557,6 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
         cout << prefix.value << "Unit is in nm\n";
         pos2 = line.find(" nm");
         unit = String("nm");
-    }else{
-        //in this case the units of the length read is m
-        cout << prefix.value << "Unit is in m\n";
-        pos2 = line.find(" m");
-        unit = String("m");
-    }
-    
-    value = stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str());
-    if(unit == String("m")){
-        value/=(1e3*nm);
-    }
-    
-    print(name, String("nm"), prefix, cout);
-    
-}
-
-//reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void Length::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix){
-    
-    string line;
-    stringstream new_prefix;
-    size_t pos1, pos2;
-    String unit;
-    File file;
-    
-    
-    //prepend \t to prefix
-    new_prefix << "\t" << prefix.value;
-    
-    file.set_name(filename);
-    file.open(String("in"), prefix);
-    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
-    
-    //rewind the file pointer
-    file.value.clear();                 // clear fail and eof bits
-    file.value.seekg(0, std::ios::beg); // back to the start!
-    
-    
-    do{
-        
-        line.clear();
-        getline(file.value, line);
-        
-    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
-    
-    
-    pos1 = line.find(" = ");
-    pos2 = line.find(" nm");
-    
-    if(line.find(" nm") != (string::npos)){
-        //in this case the units of the length read is nm
-        cout << prefix.value << "Unit is in nm\n";
-        pos2 = line.find(" nm");
-        unit = String("nm");
     }
     if(line.find(" m") != (string::npos)){
         //in this case the units of the length read is m
@@ -4625,8 +4571,6 @@ void Length::read_from_file_to(String name, String filename, [[maybe_unused]] St
         unit = String("ft");
     }
     
-    
-    
     value = stod(line.substr(pos1+3, pos2 - (pos1+3)).c_str());
     if(unit == String("m")){
         value/=(1e3*nm);
@@ -4636,6 +4580,22 @@ void Length::read_from_file_to(String name, String filename, [[maybe_unused]] St
     }
     
     print(name, String("nm"), prefix, cout);
+    
+}
+
+//reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
+void Length::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix){
+
+    File file;
+
+    file.set_name(filename);
+    file.open(String("in"), prefix);
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
+   
+    read_from_stream<fstream>(name, &(file.value), true, prefix);
+    
+    file.close(prefix);
+
     
 }
 

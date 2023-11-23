@@ -46,6 +46,59 @@ inline double acos(Double x){
     
 }
 
+//read from file the content after 'name = ' and writes it into the *object (the element of class C). This works for any class C. This function opens a new file, sets its name to filename and opens it
+template<class C> void read_from_file(C* object, String name, String filename, [[maybe_unused]] String prefix){
+
+    File file;
+
+    file.set_name(filename);
+    
+#ifdef __APPLE__
+//I am on APPLE operating system->the file is located in a folder in the .app package and I read it from there
+
+    
+    file.open(String("in"), prefix);
+    
+    object->template read_from_stream<fstream>(name, &(file.value), true, prefix);
+    
+    file.close(prefix);
+    
+#endif
+
+#ifdef _WIN32
+    //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
+    
+    char* bytes;
+    HMODULE hModule;
+    HRSRC hResource;
+    HGLOBAL hMemory;
+    DWORD dwSize;
+    LPVOID lpAddress;
+    istringstream *my_stream;
+    LPCWSTR resource_id;
+    wstring temp;
+
+    temp = wstring((file.name_without_folder_nor_extension.value).begin(), (file.name_without_folder_nor_extension.value).end());
+    
+    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
+    resource_id = (temp.c_str());
+  
+    hModule = GetModuleHandle(NULL);
+    hResource = FindResource(hModule, resource_id, L"DATA");
+    hMemory = LoadResource(hModule, hResource);
+    dwSize = SizeofResource(hModule, hResource);
+    lpAddress = LockResource(hMemory);
+    
+    bytes = new char[dwSize];
+    memcpy(bytes, lpAddress, dwSize);
+    my_stream = new istringstream(bytes);
+    
+    object->template read_from_stream<istringstream>(name, my_stream, true, prefix);
+
+#endif
+    
+}
+
 
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.
 inline bool cross(const gsl_vector *a, const gsl_vector *b, gsl_vector **r){
@@ -774,55 +827,7 @@ template<class S> void String::read_from_stream(String name, S* input_stream, bo
 //reads from file the content after 'name = ' and writes it into *this. This function opens a new file, sets its name to filename and opens it
 void String::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix){
     
-    File file;
-
-    file.set_name(filename);
-
-
-#ifdef __APPLE__
-//I am on APPLE operating system->the file is located in a folder in the .app package and I read it from there
-    
-    file.open(String("in"), prefix);
-    
-    read_from_stream<fstream>(name, &(file.value), true, prefix);
-    
-    file.close(prefix);
-    
-#endif
-
-    
-#ifdef _WIN32
-    //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
-    
-    char* bytes;
-    HMODULE hModule;
-    HRSRC hResource;
-    HGLOBAL hMemory;
-    DWORD dwSize;
-    LPVOID lpAddress;
-    istringstream *my_stream;
-    LPCWSTR resource_id;
-    wstring temp;
-
-    temp = wstring((file.name_without_folder_nor_extension.value).begin(), (file.name_without_folder_nor_extension.value).end());
-    
-    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
-    resource_id = (temp.c_str());
-  
-    hModule = GetModuleHandle(NULL);
-    hResource = FindResource(hModule, resource_id, L"DATA");
-    hMemory = LoadResource(hModule, hResource);
-    dwSize = SizeofResource(hModule, hResource);
-    lpAddress = LockResource(hMemory);
-    
-    bytes = new char[dwSize];
-    memcpy(bytes, lpAddress, dwSize);
-    my_stream = new istringstream(bytes);
-    
-    read_from_stream<istringstream>(name, my_stream, true, prefix);
-    
-
-#endif
+    read_from_file<String>(this, name, filename, prefix);
 
 }
 
@@ -4590,56 +4595,8 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
 //reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
 void Length::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix){
 
-    File file;
+    read_from_file<Length>(this, name, filename, prefix);
 
-    file.set_name(filename);
-    
-    
-#ifdef __APPLE__
-//I am on APPLE operating system->the file is located in a folder in the .app package and I read it from there
-
-    
-    file.open(String("in"), prefix);
-    
-    read_from_stream<fstream>(name, &(file.value), true, prefix);
-    
-    file.close(prefix);
-    
-#endif
-
-#ifdef _WIN32
-    //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
-    
-    char* bytes;
-    HMODULE hModule;
-    HRSRC hResource;
-    HGLOBAL hMemory;
-    DWORD dwSize;
-    LPVOID lpAddress;
-    istringstream *my_stream;
-    LPCWSTR resource_id;
-    wstring temp;
-
-    temp = wstring((file.name_without_folder_nor_extension.value).begin(), (file.name_without_folder_nor_extension.value).end());
-    
-    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
-    resource_id = (temp.c_str());
-  
-    hModule = GetModuleHandle(NULL);
-    hResource = FindResource(hModule, resource_id, L"DATA");
-    hMemory = LoadResource(hModule, hResource);
-    dwSize = SizeofResource(hModule, hResource);
-    lpAddress = LockResource(hMemory);
-    
-    bytes = new char[dwSize];
-    memcpy(bytes, lpAddress, dwSize);
-    my_stream = new istringstream(bytes);
-    
-    read_from_stream<istringstream>(name, my_stream, true, prefix);
-
-#endif
-
-    
 }
 
 

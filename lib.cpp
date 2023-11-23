@@ -4529,6 +4529,8 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
     //prepend \t to prefix
     new_prefix << "\t" << prefix.value;
     
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from stream " << input_stream << " ...\n" << RESET;
+    
     if(search_entire_file){
         
         //rewind the file pointer
@@ -4579,6 +4581,8 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
         value/=nm_ft;
     }
     
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+    
     print(name, String("nm"), prefix, cout);
     
 }
@@ -4589,12 +4593,20 @@ void Length::read_from_file_to(String name, String filename, [[maybe_unused]] St
     File file;
 
     file.set_name(filename);
+    
+    
+#ifdef __APPLE__
+//I am on APPLE operating system->the file is located in a folder in the .app package and I read it from there
+
+    
     file.open(String("in"), prefix);
-    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
-   
+    
     read_from_stream<fstream>(name, &(file.value), true, prefix);
     
     file.close(prefix);
+    
+#endif
+
 
     
 }

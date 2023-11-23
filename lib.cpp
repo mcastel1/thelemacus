@@ -4574,7 +4574,7 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
 }
 
 //reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void Length::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
+void Length::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix){
     
     string line;
     stringstream new_prefix;
@@ -13620,7 +13620,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     height_of_eye = new LengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
     if(sight_in == NULL){
         //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye LengthField with this value, so the user won't have to enter the same value all the time
-        (sight->height_of_eye).read_from_file(String("default height of eye"), (wxGetApp().path_file_init), String(""));
+        (sight->height_of_eye).read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String(""));
         height_of_eye->set();
         
     }

@@ -2976,13 +2976,13 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
     
     if((type.value)[0] == 'c'){
         
-        reference_position.read_from_file(file, new_prefix);
+        reference_position.read_from_stream<fstream>(&(file.value), new_prefix);
         omega.read_from_stream<fstream>(String("omega"), &(file.value), false, new_prefix);
         l.set(String("length"), 2.0*M_PI*Re*sin(omega), new_prefix);
         
     }else{
         
-        reference_position.read_from_file(file, new_prefix);
+        reference_position.read_from_stream<fstream>(&(file.value), new_prefix);
         
         Z.read_from_stream<fstream>(String("starting heading"), &(file.value), false, new_prefix);
         l.read_from_stream<fstream>(String("length"), &(file.value), false, new_prefix);
@@ -3572,17 +3572,17 @@ void Position::rotate(String name, Rotation r, Position* p, [[maybe_unused]] Str
     
 }
 
-void Position::read_from_file(File& file, [[maybe_unused]] String prefix){
+template<class S> void Position::read_from_stream(S* input_stream, [[maybe_unused]] String prefix){
     
     String new_prefix;
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    phi.read_from_stream<fstream>(String("latitude"), &(file.value), false, new_prefix);
-    lambda.read_from_stream<fstream>(String("longitude"), &(file.value), false, new_prefix);
+    phi.read_from_stream<fstream>(String("latitude"), input_stream, false, new_prefix);
+    lambda.read_from_stream<fstream>(String("longitude"), input_stream, false, new_prefix);
     
-    label.read_from_stream<fstream>(String("label"), &(file.value), false, new_prefix);
+    label.read_from_stream<fstream>(String("label"), input_stream, false, new_prefix);
     if(label.value == ""){
         //if the value of label read from file is empty, set in label the time at which *this has been read
         
@@ -5437,7 +5437,7 @@ bool Data::read_from_file(File& file, [[maybe_unused]] String prefix){
             //read the position block
             Position position;
             
-            position.read_from_file(file, new_prefix);
+            position.read_from_stream<fstream>(&(file.value), new_prefix);
             
             position.print(String("New position"), new_prefix, cout);
             

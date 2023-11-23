@@ -1360,23 +1360,23 @@ bool operator<(const Angle& x, const double& y){
 
 
 //I added the booleian variable search_entire_file. If true, then this function rewinds the file pointer to the beginning of file and goes through the file until it finds the quantity 'name'. If false, it reads the angle at the position where 'file' was when it was passed to this function
-void Angle::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
+template<class S> void Angle::read_from_stream(String name, S* input_stream, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos1, pos2, pos3;
     
-    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << (file.name).value << " ...\n" << RESET;
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from stream " << input_stream << " ...\n" << RESET;
     
     if(search_entire_file){
         
         //rewind the file pointer
-        file.value.clear();                 // clear fail and eof bits
-        file.value.seekg(0, std::ios::beg); // back to the start!
+        input_stream->clear();                 // clear fail and eof bits
+        input_stream->seekg(0, std::ios::beg); // back to the start!
         
         do{
             
             line.clear();
-            getline(file.value, line);
+            getline(*input_stream, line);
             
         }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
         
@@ -1384,7 +1384,7 @@ void Angle::read_from_file(String name, File& file, bool search_entire_file, [[m
     }else{
         
         line.clear();
-        getline(file.value, line);
+        getline(*input_stream, line);
         
     }
     

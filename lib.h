@@ -184,7 +184,7 @@ public:
     void print(String, String, ostream&);
     void to_deg_min(unsigned int*, double*);
     void from_sign_deg_min(char, unsigned int, double);
-    void read_from_file(String, File&, bool, String);
+    template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file(String, String, String);
     void to_deg_min_string(stringstream, stringstream);
     string to_string(String, unsigned int, bool);

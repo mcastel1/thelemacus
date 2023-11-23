@@ -951,32 +951,10 @@ bool Answer::set(String name, char c, [[maybe_unused]] String prefix){
     
 }
 //reads *this from file whose path is filename, by looking through the entire file
-void Answer::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
+void Answer::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix){
     
-    string line;
-    size_t pos;
-    File file;
-    
-    file.set_name(filename);
-    file.open(String("in"), prefix);
-    cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
-    
-    //rewind the file pointer
-    file.value.clear();                 // clear fail and eof bits
-    file.value.seekg(0, std::ios::beg); // back to the start!
-    
-    do{
-        
-        line.clear();
-        getline(file.value, line);
-        
-    }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
-    
-    pos = line.find(" = ");
-    
-    value = line[pos+3];
-    
-    file.close(String(""));
+    read_from_file<Answer>(this, name, filename, prefix);
+
     
 }
 
@@ -14803,7 +14781,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]]  
     data = new Data(catalog, String(""));
     
     //read show_coastlines from file_init
-    show_coastlines.read_from_file(String("show coastlines"), (wxGetApp().path_file_init), String(""));
+    show_coastlines.read_from_file_to(String("show coastlines"), (wxGetApp().path_file_init), String(""));
     
     GetAllCoastLineData();
     

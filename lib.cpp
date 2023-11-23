@@ -954,7 +954,6 @@ bool Answer::set(String name, char c, [[maybe_unused]] String prefix){
 void Answer::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix){
     
     read_from_file<Answer>(this, name, filename, prefix);
-
     
 }
 
@@ -14513,6 +14512,8 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     //    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
     button_ok->Bind(wxEVT_BUTTON, *close_frame);
     button_ok->Bind(wxEVT_BUTTON, *f_ok);
+
+  
     
     image = new wxStaticBitmap(panel, wxID_ANY,
                                Bitmap(image_path.value, wxSize(

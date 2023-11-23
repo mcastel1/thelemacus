@@ -272,35 +272,18 @@ bool MyApp::OnInit(){
     
     cout << "You have Windows Operating System" << "\n";
 
-    //HBITMAP hBmp;
-    //hBmp = LoadBitmap(hInst, "error_image");
+    HRSRC imageResHandle = NULL;
+
+    // Locate the resource in the application's executable.
+    imageResHandle = FindResource(
+        NULL,             // This component.
+        L"error_image",   // Resource name.
+        L"PNG");        // Resource type.
+
+    wxBitmap* resource_bitmap;
+    resource_bitmap = new wxBitmap(wxString("error_image"), wxBITMAP_TYPE_PNG_RESOURCE);
 
 
-    //auto h1 = FindResource(GetModuleHandle(nullptr), L"errror_image", L"BITMAP");
-    //auto h2 = LoadResource(GetModuleHandle(nullptr), h1);
-    //void* ptr = LockResource(h2);
-    //auto sz = SizeOfResource(GetModuleHandle(nullptr), h2);
-    // ....
-    // use ptr. No free needed.
-
-   // wxfILE(init_file);
-
-    //HMODULE hModule = GetModuleHandle(NULL); // get the handle to the current module (the executable file)
-    //HRSRC hResource = FindResource(hModule, L"init_file", L"DATA"); // substitute RESOURCE_ID and RESOURCE_TYPE.
-    //HGLOBAL hMemory = LoadResource(hModule, hResource);
-    //DWORD dwSize = SizeofResource(hModule, hResource);
-    //LPVOID lpAddress = LockResource(hMemory);
-
-    //char* bytes = new char[dwSize];
-    //memcpy(bytes, lpAddress, dwSize);
-    //istringstream my_stream(bytes);
-    //
-    //temp.read_from_stream<istringstream>(String("name file coastline data blocked"), &my_stream, true, String("****"));
-
-
-    /*string line;
-    line.clear();
-    getline(my_stream, line);*/
 
 
     //to run the app with Visual Studio on Windows

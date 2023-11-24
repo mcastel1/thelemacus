@@ -9524,9 +9524,8 @@ Bitmap::Bitmap(String path, wxSize size) : wxBitmap(RescaleProportionally(wxBitm
 
 
 
-//constructs a StaticBitmap object by assignign to it the parent parent, loading it from path path and rescaling it to size
-StaticBitmap::StaticBitmap(wxWindow* parent,String path, wxSize size) : wxStaticBitmap(parent, wxID_ANY, wxNullBitmap){
-    
+//construct a StaticBitmap object by assignign to it the parent parent, loading it from path path and rescaling it to size
+StaticBitmap::StaticBitmap(wxWindow* parent, String path, wxSize size) : wxStaticBitmap(parent, wxID_ANY, wxNullBitmap){
     
     File file;
 
@@ -9535,6 +9534,14 @@ StaticBitmap::StaticBitmap(wxWindow* parent,String path, wxSize size) : wxStatic
 #ifdef __APPLE__
     //I am on apple operating system
     
+    SetBitmap(
+        Bitmap(file.name.value,
+               wxSize(
+            ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value),
+            ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value)
+                      )
+               )
+    );
     
 #endif
     

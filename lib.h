@@ -80,15 +80,6 @@ public:
     
 };
 
-//a class for image objects
-class StaticBitmap: public wxStaticBitmap{
-    
-public:
-    StaticBitmap();
-  
-};
-
-
 //a class for Bitmap images
 class Bitmap: public wxBitmap{
     
@@ -96,6 +87,14 @@ public:
     Bitmap();
     Bitmap(String, wxSize);
 
+};
+
+//a class for image objects
+class StaticBitmap: public wxStaticBitmap{
+    
+public:
+    StaticBitmap(wxWindow*, String, wxSize);
+  
 };
 
 class String{

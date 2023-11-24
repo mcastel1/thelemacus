@@ -9523,6 +9523,37 @@ Bitmap::Bitmap(String path, wxSize size) : wxBitmap(RescaleProportionally(wxBitm
 
 
 
+
+//constructs a StaticBitmap object by assignign to it the parent parent, loading it from path path and rescaling it to size
+StaticBitmap::StaticBitmap(wxWindow* parent,String path, wxSize size) : wxStaticBitmap(parent, wxID_ANY, wxNullBitmap){
+    
+    
+    File file;
+
+    file.set_name(path);
+    
+#ifdef __APPLE__
+    //I am on apple operating system
+    
+    
+#endif
+    
+#ifdef _WIN32
+    //I am on windows operating system
+    
+    wxBitmap temp;
+  
+    temp = wxBitmap(wxString(file.name_without_folder_nor_extension.value), wxBITMAP_TYPE_PNG_RESOURCE);
+    temp = wxBitmap(temp.ConvertToImage().Scale(size.GetWidth(), size.GetHeight()));
+    
+    SetBitmap(temp);
+   
+#endif
+    
+    
+}
+
+
 ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size){
     
     stringstream s;

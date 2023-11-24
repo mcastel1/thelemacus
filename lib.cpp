@@ -9531,13 +9531,9 @@ wxBitmap(RescaleProportionally(wxBitmap(path.value, wxBITMAP_TYPE_PNG).ConvertTo
 #ifdef _WIN32
     //I am on windows operating system-> I load the bitmap from the windows resources
     
-wxBitmap(wxNullBitmap){
+wxBitmap(wxBitmap(wxString(path.name_without_folder_nor_extension.value), wxBITMAP_TYPE_PNG_RESOURCE).ConvertToImage().Scale(size.GetWidth(), size.GetHeight())) {
     
-    wxBitmap temp;
-  
-    temp = wxBitmap(wxString(file.name_without_folder_nor_extension.value), wxBITMAP_TYPE_PNG_RESOURCE);
-    temp = wxBitmap(temp.ConvertToImage().Scale(size.GetWidth(), size.GetHeight()));
-    SetBitmap(temp);
+ 
     
 }
         

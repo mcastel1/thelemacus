@@ -9516,14 +9516,34 @@ Bitmap::Bitmap() : wxBitmap(){
 }
 
 //constructs a Bitmap object by loading it from path path and rescaling it to size, by keeping its proportions
-Bitmap::Bitmap(String path, wxSize size) : wxBitmap(RescaleProportionally(wxBitmap(path.value, wxBITMAP_TYPE_PNG).ConvertToImage(), size)){
+Bitmap::Bitmap(String path, wxSize size) :
+
+#ifdef __APPLE__
+//I am on apple operating system->I set the bitmap from the file path
+
+wxBitmap(RescaleProportionally(wxBitmap(path.value, wxBITMAP_TYPE_PNG).ConvertToImage(), size)){
     
     
 }
-
-
-
-
+    
+#endif
+    
+#ifdef _WIN32
+    //I am on windows operating system-> I load the bitmap from the windows resources
+    
+wxBitmap(wxNullBitmap){
+    
+    wxBitmap temp;
+  
+    temp = wxBitmap(wxString(file.name_without_folder_nor_extension.value), wxBITMAP_TYPE_PNG_RESOURCE);
+    temp = wxBitmap(temp.ConvertToImage().Scale(size.GetWidth(), size.GetHeight()));
+    SetBitmap(temp);
+    
+}
+        
+#endif
+        
+  
 //construct a StaticBitmap object by assignign to it the parent parent, loading it from path path and rescaling it to size
 StaticBitmap::StaticBitmap(wxWindow* parent, String path, wxSize size) : wxStaticBitmap(parent, wxID_ANY, wxNullBitmap){
     

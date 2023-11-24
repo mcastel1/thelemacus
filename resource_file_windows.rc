@@ -16,6 +16,10 @@
 // and alphabetically (!), so put this icon first and give it a name
 // starting with "a"
 app_icon ICON "Z:/Contents/Resources/Images/Light/app_icon.ico"
+error_icon RCDATA "Z:\Contents\Resources\Images\Light\error_icon.png"
+warning_icon RCDATA "Z:\Contents\Resources\Images\Light\warning_icon.png"
+question_icon RCDATA "Z:\Contents\Resources\Images\Light\question_icon.png"
+
 
 // this icon is used with wxFrame::SetIcon()
 sample ICON  "Z:/Contents/Resources/Images/Light/app_icon.ico"
@@ -38,5 +42,3 @@ sample ICON  "Z:/Contents/Resources/Images/Light/app_icon.ico"
 init DATA "Z:/Contents/Resources/Data/init.txt"
 recent DATA "Z:/Contents/Resources/Data/recent.txt"
 
-error_icon RCDATA "Z:\Contents\Resources\Images\Light\error_icon.png"
-warning_icon RCDATA "Z:\Contents\Resources\Images\Light\warning_icon.png"

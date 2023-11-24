@@ -14509,16 +14509,37 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     
     
     //buttons
-    button_ok = new wxButton(panel, wxID_ANY, "Ok!", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+    button_ok = new wxButton(panel, wxID_ANY, "Ok", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     //    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
     button_ok->Bind(wxEVT_BUTTON, *close_frame);
     button_ok->Bind(wxEVT_BUTTON, *f_ok);
 
     wxBitmap* resource_bitmap;
+    wxImage my_image;
     resource_bitmap = new wxBitmap(wxString("error_image"), wxBITMAP_TYPE_PNG_RESOURCE);
-
-    image = new wxStaticBitmap(panel, wxID_ANY, *resource_bitmap, wxDefaultPosition, wxDefaultSize);
+    my_image = (resource_bitmap->ConvertToImage());
     
+    //resource_bitmap->SetWidth(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value));
+    //resource_bitmap->SetHeight(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value));
+
+
+    image = new wxStaticBitmap(
+        panel, 
+        wxID_ANY, 
+        wxBitmap(my_image.Scale(
+            ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value), 
+            ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value)
+        )),
+        wxDefaultPosition, 
+        wxDefaultSize
+    );
+    //image->SetBitmap(*resource_bitmap);
+  /*  wxSize my_size;
+    my_size = wxSize(
+       10, 10);
+    image->SetMinSize(my_size);
+    image->SetMaxSize(my_size);*/
+
   /*  image = new wxStaticBitmap(panel, wxID_ANY,
                                Bitmap(image_path.value, wxSize(
                                                                ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),

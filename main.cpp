@@ -240,10 +240,7 @@ void MyApp::where_am_I([[maybe_unused]] String prefix){
 }
 
 bool MyApp::OnInit(){
-        
-
-  
-
+    
     unsigned int i;
     Int n_chart_frames;
     stringstream s;
@@ -253,6 +250,9 @@ bool MyApp::OnInit(){
     wxCommandEvent dummy;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
     //    Chrono current_time, dawn, dusk;
+    
+    wxInitAllImageHandlers();
+
     
     degree_symbol = String("\u00b0");
     
@@ -272,17 +272,15 @@ bool MyApp::OnInit(){
     
     cout << "You have Windows Operating System" << "\n";
 
-    HRSRC imageResHandle = NULL;
+//    HRSRC imageResHandle = NULL;
+//
+//    // Locate the resource in the application's executable.
+//    imageResHandle = FindResource(
+//        NULL,             // This component.
+//        L"error_image",   // Resource name.
+//        L"PNG");        // Resource type.
 
-    // Locate the resource in the application's executable.
-    imageResHandle = FindResource(
-        NULL,             // This component.
-        L"error_image",   // Resource name.
-        L"PNG");        // Resource type.
-
-    wxBitmap* resource_bitmap;
-    resource_bitmap = new wxBitmap(wxString("error_image"), wxBITMAP_TYPE_PNG_RESOURCE);
-
+    
 
 
 

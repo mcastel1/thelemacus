@@ -38,5 +38,5 @@ sample ICON  "Z:/Contents/Resources/Images/Light/app_icon.ico"
 init DATA "Z:/Contents/Resources/Data/init.txt"
 recent DATA "Z:/Contents/Resources/Data/recent.txt"
 
-error_image RCDATA "Z:\Contents\Resources\Images\Light\error_icon.png"
-
+error_icon RCDATA "Z:\Contents\Resources\Images\Light\error_icon.png"
+warning_icon RCDATA "Z:\Contents\Resources\Images\Light\warning_icon.png"

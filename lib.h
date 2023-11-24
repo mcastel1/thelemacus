@@ -304,7 +304,7 @@ public:
     wxBoxSizer *frame_sizer, *sizer_v;
     wxGridSizer* sizer_grid;
     wxButton* button_ok;
-    wxStaticBitmap* image;
+    StaticBitmap* image;
 //    wxBitmap* m_bitmap;
     //pointer to the class containing the functor which will be called when the button ok is pressed
     FF_OK* f_ok;

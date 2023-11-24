@@ -3135,7 +3135,8 @@ String String::prepend(String s){
     
 }
 
-//splits the file path *this into the folrder path (with '/' at the end), filename (without extension) and extension part (with no '.'), by writing them into *folder_path, *filename, and *extension, respectively. The three arguments need to be allcoated. It returns true/false if the operation could be completed succesfully/not succesfully
+//splits the file path *this into the folrder path (with '/' at the end), filename (without extension) and extension part (with no '.'), by writing them into *folder_path (if folder_path != NULL), *filename (if != NULL), and *extension (if != NULL), respectively. 
+// It returns true/false if the operation could be completed succesfully/not succesfully
 bool String::split_file_path(String* folder_path, String* filename, String* extension, [[maybe_unused]] String prefix){
     
     //the positions of '/' and of '.' in *this
@@ -3146,11 +3147,11 @@ bool String::split_file_path(String* folder_path, String* filename, String* exte
     slash_position = value.find_last_of("/");
     dot_position = value.find_last_of(".");
     
-    if((slash_position != (string::npos)) && (dot_position != (string::npos))){
-        
-        folder_path->set(String("folder path"), String(value.substr(0,slash_position+1)), prefix);
-        filename->set(String("filename"), String(value.substr(slash_position+1, dot_position-slash_position-1)), prefix);
-        extension->set(String("extension"), String(value.substr(dot_position+1)), prefix);
+    if ((slash_position != (string::npos)) && (dot_position != (string::npos))) {
+
+        if(folder_path != NULL){ folder_path->set(String("folder path"), String(value.substr(0, slash_position + 1)), prefix);}
+        if(filename != NULL){filename->set(String("filename"), String(value.substr(slash_position + 1, dot_position - slash_position - 1)), prefix);}
+        if(extension != NULL) { extension->set(String("extension"), String(value.substr(dot_position + 1)), prefix);}
         
         cout << "...done.\n";
 
@@ -3166,7 +3167,16 @@ bool String::split_file_path(String* folder_path, String* filename, String* exte
 
 }
 
+//assuming that output is a filename (including [folder]+ [name of file without folder nor extension] + [extension], return [name of file without folder nor extension]
+String String::filename_without_folder_nor_extension([[maybe_unused]] String prefix){
 
+    String output;
+
+    split_file_path(NULL, &output, NULL, prefix);
+
+    return output;
+
+}
 
 
 bool Chrono::operator==(const Chrono& chrono){
@@ -9521,21 +9531,14 @@ Bitmap::Bitmap(String path, wxSize size) :
 #ifdef __APPLE__
 //I am on apple operating system->I set the bitmap from the file path
 
-wxBitmap(RescaleProportionally(wxBitmap(path.value, wxBITMAP_TYPE_PNG).ConvertToImage(), size)){
-    
-    
-}
+wxBitmap(RescaleProportionally(wxBitmap(path.value, wxBITMAP_TYPE_PNG).ConvertToImage(), size)){}
     
 #endif
     
 #ifdef _WIN32
     //I am on windows operating system-> I load the bitmap from the windows resources
     
-wxBitmap(wxBitmap(wxString(path.name_without_folder_nor_extension.value), wxBITMAP_TYPE_PNG_RESOURCE).ConvertToImage().Scale(size.GetWidth(), size.GetHeight())) {
-    
- 
-    
-}
+wxBitmap(wxBitmap(wxString(path.filename_without_folder_nor_extension(String("")).value), wxBITMAP_TYPE_PNG_RESOURCE).ConvertToImage().Scale(size.GetWidth(), size.GetHeight())){}
         
 #endif
         

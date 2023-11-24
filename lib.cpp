@@ -3593,12 +3593,6 @@ template<class S> void Position::read_from_stream([[maybe_unused]] String name, 
     
 }
 
-//reads from file the content after 'name = ' and writes it into *this. This function opens a new file, sets its name to filename and opens it, and it works only if the Position to be read is at the beginning of the file. 
-void Position::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix){
-    
-    read_from_file<Position>(this, name, filename, prefix);
-
-}
 
 
 //writes into this->end the position on the Route at length this->l along the Route from start

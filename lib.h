@@ -332,7 +332,7 @@ public:
     wxBoxSizer *sizer_v, *sizer_buttons;
     wxGridSizer* sizer_grid;
     wxButton* button_a, *button_b;
-    wxStaticBitmap* image;
+    StaticBitmap* image;
     //initialize the functor to close thie QuestionFrame when button_a or button_b will be pressed
     CloseFrame<QuestionFrame>* close_frame;
     //pointer to the class containing the functor which will be called when the button yes is pressed

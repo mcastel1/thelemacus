@@ -46,6 +46,48 @@ inline double acos(Double x){
     
 }
 
+//this function does something only if the operating system is WIN32. If the operating system is WIN32, it reads the WIN32 resouces file name_without_folder_nor_extension, allocates result and writes the result of the read operation into *result. If the operating system is different from WIN32, it does nothing
+void create_istringstream(String name_without_folder_nor_extension, istringstream* result, [[maybe_unused]] String prefix){
+    
+#ifdef __APPLE__
+    
+    cout << prefix.value << RED << "create_istringstream does not work on APPLE operating system!\n" << RESET;
+
+#endif
+
+    
+#ifdef _WIN32
+    //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
+    
+    char* bytes;
+    HMODULE hModule;
+    HRSRC hResource;
+    HGLOBAL hMemory;
+    DWORD dwSize;
+    LPVOID lpAddress;
+    LPCWSTR resource_id;
+    wstring temp;
+
+    temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
+    
+    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
+    resource_id = (temp.c_str());
+  
+    hModule = GetModuleHandle(NULL);
+    hResource = FindResource(hModule, resource_id, L"DATA");
+    hMemory = LoadResource(hModule, hResource);
+    dwSize = SizeofResource(hModule, hResource);
+    lpAddress = LockResource(hMemory);
+    
+    bytes = new char[dwSize];
+    memcpy(bytes, lpAddress, dwSize);
+    output = new istringstream(bytes);
+
+#endif
+
+    
+}
+
 //read from file the content after 'name = ' and writes it into the *object (the element of class C). This works for any class C. This function opens a new file, sets its name to filename and opens it
 template<class C> void read_from_file(C* object, String name, String filename, [[maybe_unused]] String prefix){
 

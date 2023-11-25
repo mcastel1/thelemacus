@@ -46,8 +46,9 @@ inline double acos(Double x){
     
 }
 
-//this function does something only if the operating system is WIN32. If the operating system is WIN32, it reads the WIN32 resouces file name_without_folder_nor_extension, allocates result and writes the result of the read operation into *result. If the operating system is different from WIN32, it does nothing
-void create_istringstream(String name_without_folder_nor_extension, istringstream* result, [[maybe_unused]] String prefix){
+//If the operating system is WIN32, read the WIN32 resouces file name_without_folder_nor_extension, allocates an istringstream containg the file, and returns a pointer to this istringstream
+// If the operating system is different from WIN32, do nothing
+istringstream* create_istringstream(String name_without_folder_nor_extension, [[maybe_unused]] String prefix){
     
 #ifdef __APPLE__
     
@@ -55,7 +56,7 @@ void create_istringstream(String name_without_folder_nor_extension, istringstrea
 
 #endif
 
-    
+  
 #ifdef _WIN32
     //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
     
@@ -67,6 +68,8 @@ void create_istringstream(String name_without_folder_nor_extension, istringstrea
     LPVOID lpAddress;
     LPCWSTR resource_id;
     wstring temp;
+    istringstream* result;
+
 
     temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
     
@@ -81,11 +84,12 @@ void create_istringstream(String name_without_folder_nor_extension, istringstrea
     
     bytes = new char[dwSize];
     memcpy(bytes, lpAddress, dwSize);
-    output = new istringstream(bytes);
+    result = new istringstream(bytes);
+
+    return result;
 
 #endif
 
-    
 }
 
 //read from file the content after 'name = ' and writes it into the *object (the element of class C). This works for any class C. This function opens a new file, sets its name to filename and opens it
@@ -110,32 +114,11 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 #ifdef _WIN32
     //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
     
-    char* bytes;
-    HMODULE hModule;
-    HRSRC hResource;
-    HGLOBAL hMemory;
-    DWORD dwSize;
-    LPVOID lpAddress;
-    istringstream *my_stream;
-    LPCWSTR resource_id;
-    wstring temp;
-
-    temp = wstring((file.name_without_folder_nor_extension.value).begin(), (file.name_without_folder_nor_extension.value).end());
+    istringstream *temp;
+   
+    temp = create_istringstream(file.name_without_folder_nor_extension, prefix);
     
-    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
-    resource_id = (temp.c_str());
-  
-    hModule = GetModuleHandle(NULL);
-    hResource = FindResource(hModule, resource_id, L"DATA");
-    hMemory = LoadResource(hModule, hResource);
-    dwSize = SizeofResource(hModule, hResource);
-    lpAddress = LockResource(hMemory);
-    
-    bytes = new char[dwSize];
-    memcpy(bytes, lpAddress, dwSize);
-    my_stream = new istringstream(bytes);
-    
-    object->template read_from_stream<istringstream>(name, my_stream, true, prefix);
+    object->template read_from_stream<istringstream>(name, temp, true, prefix);
 
 #endif
     

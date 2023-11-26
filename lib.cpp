@@ -251,6 +251,9 @@ void Int::enter(String name, [[maybe_unused]] String prefix){
 
 File::File(){
     
+    //allocate value
+    value = new fstream;
+    
     value->precision((data_precision.value));
     
 }

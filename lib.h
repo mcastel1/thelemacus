@@ -545,11 +545,11 @@ public:
 
 #ifdef __APPLE__
     //I am on APPLE operating system: the file will be read from a path in the .app package and read with the fstream value
-    fstream value;
+    fstream* value;
 #endif
 #ifdef _WIN32
     //I am on WIN32 operating system: the file will be loaded from a resource incoporeated in the .exe file and read with the istringstream value
-    istringstream value;
+    istringstream* value;
 #endif
 
 

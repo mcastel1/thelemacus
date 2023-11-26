@@ -251,7 +251,7 @@ void Int::enter(String name, [[maybe_unused]] String prefix){
 
 File::File(){
     
-    value.precision((data_precision.value));
+    value->precision((data_precision.value));
     
 }
 
@@ -299,11 +299,11 @@ bool File::check_if_exists(String prefix){
     
     bool output;
     
-    value.open(name.value, ios::in);
+    value->open(name.value, ios::in);
     
     if(value){
         cout << prefix.value << "File " << (name.value) << " exists\n";
-        value.close();
+        value->close();
         output = true;
     }
     else{
@@ -323,9 +323,9 @@ bool File::open(String mode, [[maybe_unused]] String prefix){
 #ifdef __APPLE__
     
     if(mode == String("in")){
-        value.open(name.value, ios::in);
+        value->open(name.value, ios::in);
     }else{
-        value.open(name.value, ios::out);
+        value->open(name.value, ios::out);
     }
     
     cout << prefix.value << "Opening " << (name.value) << " in mode '" << mode.value << "' ... \n";
@@ -389,7 +389,7 @@ bool File::open(String mode, [[maybe_unused]] String prefix){
 
 void File::close(String prefix){
     
-    value.close();
+    value->close();
     cout << prefix.value << "File " << (name.value) << " closed.\n";
     
     

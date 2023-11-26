@@ -59,7 +59,7 @@ template<class C> void read_from_file(C* object, String name, String filename, [
     
     file.open(String("in"), prefix);
     
-    object->template read_from_stream<fstream>(name, &(file.value), true, prefix);
+    object->template read_from_stream<fstream>(name, (file.value), true, prefix);
     
     file.close(prefix);
     
@@ -2987,7 +2987,7 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
     type.read_from_stream<fstream>(String("type"), (file.value), false, new_prefix);
     
     line.clear();
-    getline(file.value, line);
+    getline(*(file.value), line);
     
     
     if((type.value)[0] == 'c'){
@@ -4209,14 +4209,14 @@ bool Chrono::read_from_file(String name, File& file, bool search_entire_file, [[
         do{
             
             line.clear();
-            getline(file.value, line);
+            getline(*(file.value), line);
             
         }while((line.find(name.value)) == (string::npos));
         
     }else{
         
         line.clear();
-        getline(file.value, line);
+        getline(*(file.value), line);
         
     }
     
@@ -4277,15 +4277,15 @@ bool Chrono::read_from_file(String name, String filename, [[maybe_unused]] Strin
     cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
     
     //rewind the file pointer
-    file.value.clear();                 // clear fail and eof bits
-    file.value.seekg(0, std::ios::beg); // back to the start!
+    file.value->clear();                 // clear fail and eof bits
+    file.value->seekg(0, std::ios::beg); // back to the start!
     
     
     
     do{
         
         line.clear();
-        getline(file.value, line);
+        getline(*(file.value), line);
         
     }while((line.find(name.value)) == (string::npos));
     
@@ -4343,20 +4343,20 @@ bool Date::read_from_file(String name, File& file, bool search_entire_file, [[ma
     if(search_entire_file){
         
         //rewind the file pointer
-        file.value.clear();                 // clear fail and eof bits
-        file.value.seekg(0, std::ios::beg); // back to the start!
+        file.value->clear();                 // clear fail and eof bits
+        file.value->seekg(0, std::ios::beg); // back to the start!
         
         do{
             
             line.clear();
-            getline(file.value, line);
+            getline(*(file.value), line);
             
         }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
         
     }else{
         
         line.clear();
-        getline(file.value, line);
+        getline(*(file.value), line);
         
     }
     
@@ -4443,7 +4443,7 @@ bool Time::read_from_file(String name, File& file, [[maybe_unused]] String prefi
     
     
     //read dummy line
-    getline(file.value, line);
+    getline(*(file.value), line);
     
     cout << prefix.value << name.value << ":\n";
     
@@ -4671,20 +4671,20 @@ void Limb::read_from_file(String name, File& file, bool search_entire_file, [[ma
     if(search_entire_file){
         
         //rewind the file pointer
-        file.value.clear();                 // clear fail and eof bits
-        file.value.seekg(0, std::ios::beg); // back to the start!
+        file.value->clear();                 // clear fail and eof bits
+        file.value->seekg(0, std::ios::beg); // back to the start!
         
         do{
             
             line.clear();
-            getline(file.value, line);
+            getline(*(file.value), line);
             
         }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
         
     }else{
         
         line.clear();
-        getline(file.value, line);
+        getline(*(file.value), line);
         
     }
     pos = line.find(" = ");
@@ -4711,15 +4711,15 @@ bool Body::read_from_file(String name, File& file, [[maybe_unused]] String prefi
     cout << prefix.value << name.value << ":\n";
     
     //read first line with no information
-    getline(file.value, line);
+    getline(*(file.value), line);
     
-    if(!(file.value).eof()){
-        //file.value has not reached the end of file
+    if(!(*(file.value)).eof()){
+        //*(file.value) has not reached the end of file
         
         
         //read type
         line.clear();
-        getline(file.value, line);
+        getline(*(file.value), line);
         pos = line.find(" = ");
         type = line.substr(pos+3, line.size() - (pos+3));
         cout << new_prefix.value << "Type = " << type.value << "\n";
@@ -4727,23 +4727,23 @@ bool Body::read_from_file(String name, File& file, [[maybe_unused]] String prefi
         
         //read name
         line.clear();
-        getline(file.value, line);
+        getline(*(file.value), line);
         pos = line.find(" = ");
         ((*this).name) = line.substr(pos+3, line.size() - (pos+3));
         cout << new_prefix.value << "Name = " << ((*this).name).value << "\n";
         
         
         if(type == String("star")){
-            RA.read_from_stream<fstream>(String("right ascension"), &(file.value), false, new_prefix);
-            d.read_from_stream<fstream>(String("declination"), &(file.value), false, new_prefix);
+            RA.read_from_stream<fstream>(String("right ascension"), (file.value), false, new_prefix);
+            d.read_from_stream<fstream>(String("declination"), (file.value), false, new_prefix);
         }else{
-            radius.read_from_stream<fstream>(String("radius"), &(file.value), false, new_prefix);
+            radius.read_from_stream<fstream>(String("radius"), (file.value), false, new_prefix);
         }
         
         return true;
         
     }else{
-        //file.value has reached the end of file
+        //*(file.value) has reached the end of file
         
         return false;
         
@@ -4764,25 +4764,12 @@ Catalog::Catalog(String filename, [[maybe_unused]] String prefix){
     file.set_name(filename);
     if(file.open(String("in"), String(""))){
         
-        // stores the position of file.value
-        //        old_position = file.value.tellg();
-        //read the next line in the file
-        //        getline(file.value, line);
-        
         //check whether the next line in the file has reached the end of file
         while((body.read_from_file(String("read body"), file, prefix)) == true){
             
-            //if the next line in the file has not reached the end of file, I set file.value to its old position and keep reading the file
-            //            (file.value).seekg(old_position);
-            
-            //            body.read_from_file(String("read body"), file, prefix);
+            //if the next line in the file has not reached the end of file, I set *(file.value) to its old position and keep reading the file
             list.push_back(body);
-            
-            // stores the position of file.value
-            //            old_position = file.value.tellg();
-            //read the next line in the file
-            //            getline(file.value, line);
-            
+              
         }
         
         file.close(String(""));
@@ -5041,12 +5028,12 @@ bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
         items.insert(items.begin()+1+(additional_items++), all_items[1]);
         limb.read_from_file(String("limb"), file, false, new_prefix);
     }
-    H_s.read_from_stream<fstream>(String("sextant altitude"), &(file.value), false, new_prefix);
-    index_error.read_from_stream<fstream>(String("index error"), &(file.value), false, new_prefix);
-    artificial_horizon.read_from_stream<fstream>(String("artificial horizon"), &(file.value), false, new_prefix);
+    H_s.read_from_stream<fstream>(String("sextant altitude"), (file.value), false, new_prefix);
+    index_error.read_from_stream<fstream>(String("index error"), (file.value), false, new_prefix);
+    artificial_horizon.read_from_stream<fstream>(String("artificial horizon"), (file.value), false, new_prefix);
     if(artificial_horizon == Answer('n', new_prefix)){
         items.insert(items.begin()+3+(additional_items++), String("height of eye"));
-        height_of_eye.read_from_stream<fstream>(String("height of eye"), &(file.value), false, new_prefix);
+        height_of_eye.read_from_stream<fstream>(String("height of eye"), (file.value), false, new_prefix);
     }
     
     check &= master_clock_date_and_hour.read_from_file(String("master-clock date and hour of sight"), file, new_prefix);
@@ -5055,7 +5042,7 @@ bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
     }
     time = master_clock_date_and_hour;
     
-    use_stopwatch.read_from_stream<fstream>(String("use of stopwatch"), &(file.value), false, new_prefix);
+    use_stopwatch.read_from_stream<fstream>(String("use of stopwatch"), (file.value), false, new_prefix);
     
     if(use_stopwatch == Answer('y', new_prefix)){
         
@@ -5072,7 +5059,7 @@ bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
     //check whether the date and hour of sight falls within the time window covered by JPL data files
     check &= check_time_interval(prefix);
     
-    label.read_from_stream<fstream>(String("label"), &(file.value), false, new_prefix);
+    label.read_from_stream<fstream>(String("label"), (file.value), false, new_prefix);
     if(label.value == ""){
         //if the value of label read from file is empty, set in label the time at which *this has been read
         
@@ -5373,11 +5360,11 @@ bool Data::read_from_file(File& file, [[maybe_unused]] String prefix){
         //1. Here I read sights
         
         //read dummy text line '    Sights in the data:"
-        getline(file.value, line);
+        getline(*(file.value), line);
         
         line.clear();
         //read dummyt text line
-        getline(file.value, line);
+        getline(*(file.value), line);
         pos = line.find("Sight #");
         
         //if I have found 'Sight #' in the line above, then I proceed and read the relative sight
@@ -5414,7 +5401,7 @@ bool Data::read_from_file(File& file, [[maybe_unused]] String prefix){
             
             line.clear();
             //read dummyt text line
-            getline(file.value, line);
+            getline(*(file.value), line);
             pos = line.find("Sight #");
             
         }
@@ -5423,7 +5410,7 @@ bool Data::read_from_file(File& file, [[maybe_unused]] String prefix){
         
         line.clear();
         //read dummy text line
-        getline(file.value, line);
+        getline(*(file.value), line);
         pos = line.find("Route #");
         
         //if I have found 'Route #' in the line above, then I proceed and read the relative position
@@ -5443,7 +5430,7 @@ bool Data::read_from_file(File& file, [[maybe_unused]] String prefix){
             
             line.clear();
             //read dummyt text line
-            getline(file.value, line);
+            getline(*(file.value), line);
             pos = line.find("Route #");
             
         }
@@ -5453,7 +5440,7 @@ bool Data::read_from_file(File& file, [[maybe_unused]] String prefix){
         
         line.clear();
         //read dummy text line
-        getline(file.value, line);
+        getline(*(file.value), line);
         pos = line.find("Position #");
         
         //if I have found 'Position #' in the line above, then I proceed and read the relative position
@@ -5464,7 +5451,7 @@ bool Data::read_from_file(File& file, [[maybe_unused]] String prefix){
             //read the position block
             Position position;
             
-            position.read_from_stream<fstream>(String("position"), &(file.value), false, new_prefix);
+            position.read_from_stream<fstream>(String("position"), (file.value), false, new_prefix);
             
             position.print(String("New position"), new_prefix, cout);
             
@@ -5473,7 +5460,7 @@ bool Data::read_from_file(File& file, [[maybe_unused]] String prefix){
             
             line.clear();
             //read dummyt text line
-            getline(file.value, line);
+            getline(*(file.value), line);
             pos = line.find("Position #");
             
         }
@@ -6105,8 +6092,8 @@ bool Sight::enter(Catalog catalog, String name, [[maybe_unused]] String prefix){
     }
     H_s.enter(String("sextant altitude"), new_prefix);
     //read index error from init file
-    index_error.read_from_stream<fstream>(String("index error"), &(file_init.value), true, new_prefix);
-    artificial_horizon.read_from_stream<fstream>(String("artificial horizon"), &(file_init.value), true, new_prefix);
+    index_error.read_from_stream<fstream>(String("index error"), (file_init.value), true, new_prefix);
+    artificial_horizon.read_from_stream<fstream>(String("artificial horizon"), (file_init.value), true, new_prefix);
     if(artificial_horizon == Answer('n', new_prefix)){
         items.insert(items.begin()+3+(additional_items++), String("height of eye"));
         height_of_eye.enter(String("height of eye"), String("m"), new_prefix);
@@ -6117,7 +6104,7 @@ bool Sight::enter(Catalog catalog, String name, [[maybe_unused]] String prefix){
         master_clock_date_and_hour.enter(String("master-clock date and hour of sight"), new_prefix);
         time = master_clock_date_and_hour;
         
-        use_stopwatch.read_from_stream<fstream>(String("use of stopwatch"), &(file_init.value), true, new_prefix);
+        use_stopwatch.read_from_stream<fstream>(String("use of stopwatch"), (file_init.value), true, new_prefix);
         
         if(use_stopwatch == Answer('y', new_prefix)){
             
@@ -6894,7 +6881,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
         //dummy read of file data
         for(l=0; l<l_min; l++){
             line.clear();
-            getline((file.value), line);
+            getline(*(file.value), line);
         }
         
         
@@ -6911,7 +6898,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 line.clear();
                 line_ins.clear();
                 
-                getline((file.value), line);
+                getline(*(file.value), line);
                 line_ins << line;
                 cout << new_prefix.value << line << "\n";
                 line_ins >> dummy >> dummy >> dummy >> GHA_tab[l-l_min] >> d_tab[l-l_min] >> r_tab[l-l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
@@ -6994,7 +6981,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 line.clear();
                 line_ins.clear();
                 
-                getline((file.value), line);
+                getline(*(file.value), line);
                 line_ins << line;
                 cout << new_prefix.value << line << "\n";
                 line_ins >> dummy >> dummy >> dummy >> phi3 >> phi2 >> phi1;
@@ -8095,12 +8082,12 @@ void ListFrame::GetAllCoastLineData(void){
     
     //read file n_line and store it into vector n_line
     file_n_line.open(String("in"), String(""));
-    for(i=0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i<n_line.size()) && (!(file_n_line.value.eof())); i++){
+    for(i=0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i<n_line.size()) && (!((file_n_line.value)->eof())); i++){
         
         line.clear();
         ins.clear();
         
-        getline(file_n_line.value, line);
+        getline(*(file_n_line.value), line);
         ins << line;
         ins >> (n_line[i]);
         //        cout << "\nn_line[" << i << "] = " << n_line[i];
@@ -8131,7 +8118,7 @@ void ListFrame::GetAllCoastLineData(void){
     if(show_coastlines == Answer('y', String(""))){
         
         i=0;
-        while(/*here, to be safe, I stop the while() if I am not sure that n_line will be called with a valid value*/(360*i+360 < (n_line.size())) && (!(file_coastline_data_blocked.value.eof()))){
+        while(/*here, to be safe, I stop the while() if I am not sure that n_line will be called with a valid value*/(360*i+360 < (n_line.size())) && (!((file_coastline_data_blocked.value)->eof()))){
             
             p_coastline.resize(i+1);
             (p_coastline[i]).resize(360);
@@ -8139,13 +8126,13 @@ void ListFrame::GetAllCoastLineData(void){
             for(j=0; j<360; j++){
                 
                 // read data as a block:
-                file_coastline_data_blocked.value.seekg(n_line[360*i+j], file_coastline_data_blocked.value.beg);
+                (file_coastline_data_blocked.value)->seekg(n_line[360*i+j], (file_coastline_data_blocked.value)->beg);
                 
                 l = n_line[360*i+j + 1] - n_line[360*i+j] - 1;
                 if(buffer != NULL){delete [] buffer;}
                 buffer = new char [l];
                 
-                (file_coastline_data_blocked.value).read(buffer, l);
+                (file_coastline_data_blocked.value)->read(buffer, l);
                 string data(buffer, l);
                 
                 //count how many datapoints are in data
@@ -12911,7 +12898,7 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event){
         //open a new file
         (frame->file).open(String("out"), String(""));
         //write frame->data into file
-        (frame->data)->print(false, String(""), ((frame->file).value));
+        (frame->data)->print(false, String(""), *((frame->file).value));
         //close the file
         (frame->file).close(String(""));
         
@@ -13587,7 +13574,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_index_error = new StaticText(panel, wxT("Index error"), wxDefaultPosition, wxDefaultSize);
     //If sight_in = NULL, read index error from init file
     if(sight_in == NULL){
-        (sight->index_error).read_from_stream<fstream>(String("index error"), &(file_init.value), true, new_prefix);
+        (sight->index_error).read_from_stream<fstream>(String("index error"), (file_init.value), true, new_prefix);
         (sight->index_error).to_deg_min(&deg, &min);
     }
     index_error = new AngleField<SightFrame>(panel, &(sight->index_error), String("+-"));
@@ -15999,7 +15986,7 @@ template<class E> void ListFrame::OnPressCtrlW([[maybe_unused]] E& event){
 template<class E> void ListFrame::OnPressCtrlS(E& event){
     
     file.open(String("out"), String(""));
-    data->print(false, String(""), file.value);
+    data->print(false, String(""), *(file.value));
     file.close(String(""));
     
     OnSaveFile();
@@ -16021,7 +16008,7 @@ template<class E> void ListFrame::OnPressCtrlShiftS(E& event){
         //open a new file to save content on it
         file.open(String("out"), String(""));
         //writedata into file
-        data->print(false, String(""), (file).value);
+        data->print(false, String(""), *(file.value));
         //close the file
         file.close(String(""));
         

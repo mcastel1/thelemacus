@@ -585,7 +585,7 @@ bool get_date_hour(String &line, String prefix){
     ((file.name).value) = "output.out";
     check &= file.open(String("in"), prefix);
     line.value.clear();
-    getline(file.value, line.value);
+    getline(*(file.value), line.value);
     file.close(prefix);
     
     command.str("");

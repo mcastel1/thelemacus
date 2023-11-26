@@ -46,52 +46,6 @@ inline double acos(Double x){
     
 }
 
-//If the operating system is WIN32, read the WIN32 resouces file name_without_folder_nor_extension, allocates an istringstream containg the file, and returns a pointer to this istringstream
-// If the operating system is different from WIN32, do nothing
-istringstream* create_istringstream(String name_without_folder_nor_extension, [[maybe_unused]] String prefix){
-    
-#ifdef __APPLE__
-    
-    cout << prefix.value << RED << "create_istringstream does not work on APPLE operating system!\n" << RESET;
-
-#endif
-
-  
-#ifdef _WIN32
-    //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
-    
-    char* bytes;
-    HMODULE hModule;
-    HRSRC hResource;
-    HGLOBAL hMemory;
-    DWORD dwSize;
-    LPVOID lpAddress;
-    LPCWSTR resource_id;
-    wstring temp;
-    istringstream* result;
-
-
-    temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
-    
-    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
-    resource_id = (temp.c_str());
-  
-    hModule = GetModuleHandle(NULL);
-    hResource = FindResource(hModule, resource_id, L"DATA");
-    hMemory = LoadResource(hModule, hResource);
-    dwSize = SizeofResource(hModule, hResource);
-    lpAddress = LockResource(hMemory);
-    
-    bytes = new char[dwSize];
-    memcpy(bytes, lpAddress, dwSize);
-    result = new istringstream(bytes);
-
-    return result;
-
-#endif
-
-}
-
 //read from file the content after 'name = ' and writes it into the *object (the element of class C). This works for any class C. This function opens a new file, sets its name to filename and opens it
 template<class C> void read_from_file(C* object, String name, String filename, [[maybe_unused]] String prefix){
 
@@ -112,13 +66,9 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 #endif
 
 #ifdef _WIN32
-    //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
-    
-    istringstream *temp;
-   
-    temp = create_istringstream(file.name_without_folder_nor_extension, prefix);
-    
-    object->template read_from_stream<istringstream>(name, temp, true, prefix);
+    //I am on WIN32 operating system->I create an istringstream that containts the data of file (which is incorporated in the .exe file as a WIN32 resource),  and I read it from there
+        
+    object->template read_from_stream<istringstream>(name, (file.create_istringstream(prefix)), true, prefix);
 
 #endif
     
@@ -156,12 +106,6 @@ inline bool cross(const gsl_vector *a, const gsl_vector *b, gsl_vector **r){
     
 }
 
-////returns true if a and b are case-unsensitive equal, and false otherwise
-//inline bool char_case_insensitive_compare(char a, char b){
-//
-//    return(toupper(a) == toupper(b));
-//
-//}
 
 //checks whether s is present into wxArrayString, and writes true/false into check if its present/absent. If i!=NULL: if it is present, it writes the position of s in v in *i, if it is not present, i is not touched
 inline void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString v, bool* check, unsigned int* i){
@@ -370,6 +314,54 @@ bool File::check_if_exists(String prefix){
     return output;
     
 }
+
+
+//If the operating system is WIN32, read the WIN32 resouces file this->name_without_folder_nor_extension, allocates an istringstream containg the file, and returns a pointer to this istringstream
+// If the operating system is different from WIN32, do nothing
+istringstream* File::create_istringstream([[maybe_unused]] String prefix) {
+
+#ifdef __APPLE__
+
+    cout << prefix.value << RED << "create_istringstream does not work on APPLE operating system!\n" << RESET;
+
+#endif
+
+
+#ifdef _WIN32
+    //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
+
+    char* bytes;
+    HMODULE hModule;
+    HRSRC hResource;
+    HGLOBAL hMemory;
+    DWORD dwSize;
+    LPVOID lpAddress;
+    LPCWSTR resource_id;
+    wstring temp;
+    istringstream* result;
+
+
+    temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
+
+    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
+    resource_id = (temp.c_str());
+
+    hModule = GetModuleHandle(NULL);
+    hResource = FindResource(hModule, resource_id, L"DATA");
+    hMemory = LoadResource(hModule, hResource);
+    dwSize = SizeofResource(hModule, hResource);
+    lpAddress = LockResource(hMemory);
+
+    bytes = new char[dwSize];
+    memcpy(bytes, lpAddress, dwSize);
+    result = new istringstream(bytes);
+
+    return result;
+
+#endif
+
+}
+
 
 bool File::open(String mode, [[maybe_unused]] String prefix){
     

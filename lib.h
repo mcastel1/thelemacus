@@ -554,6 +554,7 @@ public:
     void remove(String);
     void count_lines(String);
     bool check_if_exists(String);
+    istringstream* create_istringstream(String);
     
 };
 

@@ -64,6 +64,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  
 
  for MSW:
+ - in LIstframe there is an odd empty space on the top
  */
 
 //this function is executed reguarly over time, to check some things

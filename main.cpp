@@ -64,6 +64,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  
 
  for MSW:
+ - all methods of File class must have an if to be treated differently in APPLE and in WIN32
  - in LIstframe there is an odd empty space on the top
  */
 

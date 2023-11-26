@@ -438,13 +438,13 @@ void Double::read_from_file(String name, File& file, bool search_entire_file, [[
     if(search_entire_file){
         
         //rewind the file pointer
-        file.value.clear();                 // clear fail and eof bits
-        file.value.seekg(0, std::ios::beg); // back to the start!
+        file.value->clear();                 // clear fail and eof bits
+        file.value->seekg(0, std::ios::beg); // back to the start!
         
         do{
             
             line.clear();
-            getline(file.value, line);
+            getline(*(file.value), line);
             
         }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
         
@@ -452,7 +452,7 @@ void Double::read_from_file(String name, File& file, bool search_entire_file, [[
     }else{
         
         line.clear();
-        getline(file.value, line);
+        getline(*(file.value), line);
         
     }
     
@@ -479,13 +479,13 @@ void Double::read_from_file(String name, String filename, [[maybe_unused]] Strin
     cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
     
     //rewind the file pointer
-    file.value.clear();                 // clear fail and eof bits
-    file.value.seekg(0, std::ios::beg); // back to the start!
+    file.value->clear();                 // clear fail and eof bits
+    file.value->seekg(0, std::ios::beg); // back to the start!
     
     do{
         
         line.clear();
-        getline(file.value, line);
+        getline(*(file.value), line);
         
     }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
     
@@ -531,13 +531,13 @@ void Int::read_from_file(String name, File& file, bool search_entire_file, [[may
     if(search_entire_file){
         
         //rewind the file pointer
-        file.value.clear();                 // clear fail and eof bits
-        file.value.seekg(0, std::ios::beg); // back to the start!
+        file.value->clear();                 // clear fail and eof bits
+        file.value->seekg(0, std::ios::beg); // back to the start!
         
         do{
             
             line.clear();
-            getline(file.value, line);
+            getline(*(file.value), line);
             
         }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
         
@@ -545,7 +545,7 @@ void Int::read_from_file(String name, File& file, bool search_entire_file, [[may
     }else{
         
         line.clear();
-        getline(file.value, line);
+        getline(*(file.value), line);
         
     }
     
@@ -576,7 +576,7 @@ void Int::read_from_file(String name, String filename, [[maybe_unused]] String p
     do{
         
         line.clear();
-        getline(file.value, line);
+        getline(*(file.value), line);
         
     }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
     
@@ -864,20 +864,20 @@ void String::write_to_file(String name, File& file, [[maybe_unused]] String pref
     temp.open(String("out"), prefix);
     
     //rewind the file pointer
-    file.value.clear();                 // clear fail and eof bits
-    file.value.seekg(0, std::ios::beg); // back to the start!
+    file.value->clear();                 // clear fail and eof bits
+    file.value->seekg(0, std::ios::beg); // back to the start!
     
-    for (i=0; (i<(file.number_of_lines)) && (!(file.value).eof()); i++){
+    for (i=0; (i<(file.number_of_lines)) && (!(*(file.value)).eof()); i++){
         
         line.clear();
-        getline(file.value, line);
+        getline(*(file.value), line);
         
         if(((line.find(name.value)) == (string::npos)) /*I ignore comment lines which start with '#'*/ || (line[0] == '#')){
             
             //in this case 'name' has not been found in the line under consideration, or the line under consideration is a comment
             
             //I copy and paste the line that I read from file to temp
-            (temp.value) << line << "\n";
+            (*(temp.value)) << line << "\n";
             
             
         }else{
@@ -888,7 +888,7 @@ void String::write_to_file(String name, File& file, [[maybe_unused]] String pref
             s << (name.value) << " = " << value;
             
             //I write s to file temp
-            (temp.value) << (s.str()) << "\n";
+            (*(temp.value)) << (s.str()) << "\n";
             
         }
         
@@ -1267,13 +1267,13 @@ void Rotation::read_from_file(String name, String filename, [[maybe_unused]] Str
     do{
         
         line.clear();
-        getline(file.value, line);
+        getline(*(file.value), line);
         
     }while(((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
     
-    alpha.read_from_stream(String("alpha"), &(file.value), false, new_prefix);
-    beta.read_from_stream(String("beta"), &(file.value), false, new_prefix);
-    gamma.read_from_stream(String("gamma"), &(file.value), false, new_prefix);
+    alpha.read_from_stream(String("alpha"), (file.value), false, new_prefix);
+    beta.read_from_stream(String("beta"), (file.value), false, new_prefix);
+    gamma.read_from_stream(String("gamma"), (file.value), false, new_prefix);
     
     set(alpha, beta, gamma);
     
@@ -2984,7 +2984,7 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    type.read_from_stream<fstream>(String("type"), &(file.value), false, new_prefix);
+    type.read_from_stream<fstream>(String("type"), (file.value), false, new_prefix);
     
     line.clear();
     getline(file.value, line);
@@ -2992,20 +2992,20 @@ void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
     
     if((type.value)[0] == 'c'){
         
-        reference_position.read_from_stream<fstream>(String("reference position"), &(file.value), false, new_prefix);
-        omega.read_from_stream<fstream>(String("omega"), &(file.value), false, new_prefix);
+        reference_position.read_from_stream<fstream>(String("reference position"), (file.value), false, new_prefix);
+        omega.read_from_stream<fstream>(String("omega"), (file.value), false, new_prefix);
         l.set(String("length"), 2.0*M_PI*Re*sin(omega), new_prefix);
         
     }else{
         
-        reference_position.read_from_stream<fstream>(String("reference position"), &(file.value), false, new_prefix);
+        reference_position.read_from_stream<fstream>(String("reference position"), (file.value), false, new_prefix);
         
-        Z.read_from_stream<fstream>(String("starting heading"), &(file.value), false, new_prefix);
-        l.read_from_stream<fstream>(String("length"), &(file.value), false, new_prefix);
+        Z.read_from_stream<fstream>(String("starting heading"), (file.value), false, new_prefix);
+        l.read_from_stream<fstream>(String("length"), (file.value), false, new_prefix);
         
     }
     
-    label.read_from_stream<fstream>(String("label"), &(file.value), false, new_prefix);
+    label.read_from_stream<fstream>(String("label"), (file.value), false, new_prefix);
     if(label.value == ""){
         //if the value of label read from file is empty, set in label the time at which *this has been read
         
@@ -4203,8 +4203,8 @@ bool Chrono::read_from_file(String name, File& file, bool search_entire_file, [[
     if(search_entire_file){
         
         //rewind the file pointer
-        file.value.clear();                 // clear fail and eof bits
-        file.value.seekg(0, std::ios::beg); // back to the start!
+        file.value->clear();                 // clear fail and eof bits
+        file.value->seekg(0, std::ios::beg); // back to the start!
         
         do{
             

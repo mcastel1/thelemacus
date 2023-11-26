@@ -330,41 +330,15 @@ istringstream* File::create_istringstream([[maybe_unused]] String prefix) {
 #ifdef _WIN32
     //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
 
-    char* bytes;
-    HMODULE hModule;
-    HRSRC hResource;
-    HGLOBAL hMemory;
-    DWORD dwSize;
-    LPVOID lpAddress;
-    LPCWSTR resource_id;
-    wstring temp;
-    istringstream* result;
-
-
-    temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
-
-    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
-    resource_id = (temp.c_str());
-
-    hModule = GetModuleHandle(NULL);
-    hResource = FindResource(hModule, resource_id, L"DATA");
-    hMemory = LoadResource(hModule, hResource);
-    dwSize = SizeofResource(hModule, hResource);
-    lpAddress = LockResource(hMemory);
-
-    bytes = new char[dwSize];
-    memcpy(bytes, lpAddress, dwSize);
-    result = new istringstream(bytes);
-
-    return result;
-
+  
 #endif
 
 }
 
-
+//open the file *this in mode 'mode' and returns value pointing to it
 bool File::open(String mode, [[maybe_unused]] String prefix){
     
+#ifdef __APPLE__
     
     if(mode == String("in")){
         value.open(name.value, ios::in);
@@ -385,6 +359,49 @@ bool File::open(String mode, [[maybe_unused]] String prefix){
         return 1;
         
     }
+    
+#endif
+#ifdef _WIN32
+    //in WIN32 I can open (from the resources incorporated in the .exe file) files in read mode only -> if mode == String("out") I return false
+    
+    if(mode == String("in")){
+        
+        char* bytes;
+        HMODULE hModule;
+        HRSRC hResource;
+        HGLOBAL hMemory;
+        DWORD dwSize;
+        LPVOID lpAddress;
+        LPCWSTR resource_id;
+        wstring temp;
+
+        temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
+
+        //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
+        resource_id = (temp.c_str());
+
+        hModule = GetModuleHandle(NULL);
+        hResource = FindResource(hModule, resource_id, L"DATA");
+        hMemory = LoadResource(hModule, hResource);
+        dwSize = SizeofResource(hModule, hResource);
+        lpAddress = LockResource(hMemory);
+
+        bytes = new char[dwSize];
+        memcpy(bytes, lpAddress, dwSize);
+        value = new istringstream(bytes);
+
+        return true;
+        
+    }else{
+        
+        cout << prefix.value << RED << "Cannot open resouce files in mode out in WIN32 operating system!\n" << RESET;
+        
+        return false;
+
+    }
+    
+#endif
+
     
 }
 

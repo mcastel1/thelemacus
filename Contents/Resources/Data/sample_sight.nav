@@ -8,7 +8,7 @@ Sights in the data:
 		sextant altitude = 4° 2.999999999999989'
 		index error = 0° 1.9'
 		artificial horizon = n
-		height of eye = 0.6503238812929238 m
+		height of eye = 0.6300000000000001 m
 		master-clock date and hour of sight:
 			master-clock date and hour of sight = 2023-09-19
 			hour of master-clock date and hour of sight = 10:19:35
@@ -21,7 +21,7 @@ Routes in the data:
 		ground position:
 			latitude = 335° 7.380813274966158'
 			longitude = 293° 42.32778523490083'
-			label = 
+			label = 2023-11-27 11:18:03 UTC+2
 		aperture angle = 85° 0.940582757800712'
 		label = moon 2023-09-19 10:20:12 TAI, 2023-10-16 13:28:18 UTC+2
 	Route #2:

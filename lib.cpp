@@ -259,46 +259,11 @@ File::File(){
 }
 
 
-void File::enter_name(String prefix){
-    
-    name.enter(String("name of file"), prefix);
-    
-}
 
 
 
-void File::count_lines(String prefix){
-    
-    ifstream temp;
-    
-    temp.open(name.value);
-    number_of_lines = ((unsigned int)count(istreambuf_iterator<char>(temp), istreambuf_iterator<char>(), '\n'));
-    temp.close();
-    
-    cout << prefix.value << "Number of lines in file " << (name.value) << " = " << number_of_lines << "\n";
-    
-}
 
 
-bool File::check_if_exists(String prefix){
-    
-    bool output;
-    
-    value->open(name.value, ios::in);
-    
-    if(value){
-        cout << prefix.value << "File " << (name.value) << " exists\n";
-        value->close();
-        output = true;
-    }
-    else{
-        cout << prefix.value << "File " << (name.value) << " does not exist\n";
-        output = false;
-    }
-    
-    return output;
-    
-}
 
 
 
@@ -430,6 +395,41 @@ void FileRW::remove(String prefix){
     boost::filesystem::remove(name.value);
     
     cout << prefix.value << "File " << name.value << " removed\n";
+    
+}
+
+void FileRW::count_lines(String prefix){
+    
+    ifstream temp;
+    
+    temp.open(name.value);
+    number_of_lines = ((unsigned int)count(istreambuf_iterator<char>(temp), istreambuf_iterator<char>(), '\n'));
+    temp.close();
+    
+    cout << prefix.value << "Number of lines in file " << (name.value) << " = " << number_of_lines << "\n";
+    
+}
+
+bool FileRW::check_if_exists(String prefix){
+    
+    bool output;
+    
+    value->open(name.value, ios::in);
+    
+    if(value){
+        
+        cout << prefix.value << "File " << (name.value) << " exists.\n";
+        value->close();
+        output = true;
+        
+    }else{
+        
+        cout << prefix.value << RED << "File " << (name.value) << " does not exist!\n" << RESET;
+        output = false;
+        
+    }
+    
+    return output;
     
 }
 

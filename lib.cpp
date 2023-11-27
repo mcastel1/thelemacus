@@ -280,18 +280,6 @@ void File::count_lines(String prefix){
 }
 
 
-
-//delete file *this
-void File::remove(String prefix){
-    
-    boost::filesystem::remove(name.value);
-    
-    cout << prefix.value << "File " << name.value << " removed\n";
-    
-}
-
-
-
 bool File::check_if_exists(String prefix){
     
     bool output;
@@ -429,12 +417,22 @@ bool FileRW::open(String mode, [[maybe_unused]] String prefix){
     
 }
 
-void File::close(String prefix){
+void FileRW::close(String prefix){
     
     value->close();
     cout << prefix.value << "File " << (name.value) << " closed.\n";
     
 }
+
+//delete file *this from disk
+void FileRW::remove(String prefix){
+    
+    boost::filesystem::remove(name.value);
+    
+    cout << prefix.value << "File " << name.value << " removed\n";
+    
+}
+
 
 FileR::FileR(){
     

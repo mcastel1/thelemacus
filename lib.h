@@ -547,7 +547,6 @@ public:
     unsigned int number_of_lines;
     
     File();
-//    void remove(String);
 //    void count_lines(String);
 //    bool check_if_exists(String);
 //    istringstream* create_istringstream(String);
@@ -569,6 +568,8 @@ public:
     void set_name(String);
     bool open(String, String);
     void close(String);
+    void remove(String);
+
 
 
 

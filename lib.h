@@ -150,7 +150,7 @@ public:
     bool set(String, double, String);
     void set_current(Int);
     void enter(String, String);
-    bool read_from_file(String, File&, bool, String);
+    bool read_from_file(String, FileRW&, bool, String);
     bool read_from_file(String, String, String);
     string to_string(unsigned int, bool);
     
@@ -831,7 +831,7 @@ public:
     
     void print(String, String, ostream&);
     void enter(String, String);
-    bool read_from_file(String, File&, bool, String);
+    bool read_from_file(String, FileRW&, bool, String);
     string to_string(void);
     void check_leap_year(void);
     void set_current(void);
@@ -849,7 +849,7 @@ public:
     void enter(String, String);
     void print(String, String, ostream&);
     void set_current(void);
-    bool read_from_file(String, File&, String);
+    bool read_from_file(String, FileRW&, String);
     
     void to_MJD(void);
     void to_TAI(void);
@@ -882,7 +882,7 @@ public:
     void enter(String, Catalog, String);
     bool check(unsigned int*, Catalog, String);
     void print(String, String, ostream&);
-    bool read_from_file(String, File&, String);
+    bool read_from_file(String, FileRW&, String);
     
     bool operator==(const Body&);
     
@@ -895,7 +895,7 @@ public:
     char value;
     void enter(String, String);
     void print(String, String, ostream&);
-    void read_from_file(String, File&, bool, String);
+    void read_from_file(String, FileRW&, bool, String);
     
     bool operator==(const Limb&);
     

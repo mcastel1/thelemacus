@@ -4612,7 +4612,7 @@ void Date::check_leap_year(void){
     
 }
 
-bool Time::read_from_file(String name, File& file, [[maybe_unused]] String prefix){
+bool Time::read_from_file(String name, FileRW& file, [[maybe_unused]] String prefix){
     
     string line;
     bool check = true;
@@ -4843,7 +4843,7 @@ Angle Angle::operator/ (const double& x){
 
 
 
-void Limb::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
+void Limb::read_from_file(String name, FileRW& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -4878,7 +4878,7 @@ void Limb::read_from_file(String name, File& file, bool search_entire_file, [[ma
 
 
 //read a Body from file, and it returns true if it has not reached the end of file, false otherwise
-bool Body::read_from_file(String name, File& file, [[maybe_unused]] String prefix){
+bool Body::read_from_file(String name, FileRW& file, [[maybe_unused]] String prefix){
     
     string line;
     String new_prefix;
@@ -4935,7 +4935,7 @@ bool Body::read_from_file(String name, File& file, [[maybe_unused]] String prefi
 
 Catalog::Catalog(String filename, [[maybe_unused]] String prefix){
     
-    File file;
+    FileRW file;
     string line;
     Body body;
     //    streampos old_position;

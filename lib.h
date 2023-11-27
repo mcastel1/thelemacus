@@ -595,6 +595,8 @@ public:
     
     FileR();
     void set_name(String);
+    bool open(String);
+
 
 
     //    wxDECLARE_EVENT_TABLE();

@@ -542,19 +542,9 @@ void enter_double(double* x, bool check_interval, double min, double sup, String
 class File{
     
 public:
+    
+    String  /*the name of the file without the folder path (before it) and without the file extension (after it)*/name_without_folder_nor_extension;
 
-//#ifdef __APPLE__
-//    //I am on APPLE operating system: the file will be read from a path in the .app package and read with the fstream value
-//    fstream*
-//#endif
-//#ifdef _WIN32
-//    //I am on WIN32 operating system: the file will be loaded from a resource incoporeated in the .exe file and read with the istringstream value
-//    istringstream*
-//#endif
-//    value;
-
-
-    String /*the full path of the file, including the folder, filename and extension*/name, /*the path of the folder where the file is located*/folder, /*the name of the file without the folder path (before it) and without the file extension (after it)*/name_without_folder_nor_extension, /*the file extension, without the '.'*/extension;
     unsigned int number_of_lines;
     
     File();
@@ -575,7 +565,9 @@ public:
     
     //the strean for reading and writing
     fstream* value;
+    String /*the full path of the file, including the folder, filename and extension*/name, /*the path of the folder where the file is located*/folder, /*the file extension, without the '.'*/extension;
 
+    
     
     FileRW();
 

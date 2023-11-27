@@ -436,8 +436,14 @@ bool FileRW::check_if_exists(String prefix){
 
 FileR::FileR(){
     
-    //allocate value
+#ifdef __APPLE__
+    value = new ifstream;
+#endif
+#ifdef _WIN32
     value = new istringstream;
+#endif
+    
+    //allocate value
 
     //set the precision of *value
     value->precision((data_precision.value));

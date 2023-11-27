@@ -290,10 +290,10 @@ void File::remove(String prefix){
     
 }
 
-//sets name, foler, name_without_folder_nor_extension, and extension
-void File::set_name(String filename){
+//set the full path of the file and write it into name
+void FileRW::set_name(String path){
     
-    (name.value) = filename.value;
+    (name.value) = (path.value);
     name.split_file_path(&folder, &name_without_folder_nor_extension, &extension, String(""));
     
 }
@@ -402,6 +402,16 @@ FileRW::FileRW(){
     
     //allocate value
     value = new fstream;
+
+    //set the precision of *value
+    value->precision((data_precision.value));
+    
+}
+
+FileR::FileR(){
+    
+    //allocate value
+    value = new istringstream;
 
     //set the precision of *value
     value->precision((data_precision.value));

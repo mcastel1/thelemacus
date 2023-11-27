@@ -548,7 +548,6 @@ public:
     unsigned int number_of_lines;
     
     File();
-//    void set_name(String);
 //    bool open(String, String);
 //    void close(String);
 //    void remove(String);
@@ -570,6 +569,8 @@ public:
     
     
     FileRW();
+    void set_name(String);
+
 
 
     //    wxDECLARE_EVENT_TABLE();

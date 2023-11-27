@@ -384,13 +384,7 @@ bool File::open(String mode, [[maybe_unused]] String prefix){
     
 }
 
-void File::close(String prefix){
-    
-    value->close();
-    cout << prefix.value << "File " << (name.value) << " closed.\n";
-    
-    
-}
+
 
 FileRW::FileRW(){
     
@@ -432,6 +426,13 @@ bool FileRW::open(String mode, [[maybe_unused]] String prefix){
         return true;
         
     }
+    
+}
+
+void File::close(String prefix){
+    
+    value->close();
+    cout << prefix.value << "File " << (name.value) << " closed.\n";
     
 }
 

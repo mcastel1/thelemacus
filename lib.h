@@ -1817,7 +1817,7 @@ public:
     wxComboBox* name;
     CheckProjection<P>* check;
     
-    File file_recent;
+    FileRW file_recent;
     vector<int> recent_items;
     
     bool ok;
@@ -1845,7 +1845,7 @@ public:
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
     CheckBody<P>* check;
-    File file_recent;
+    FileRW file_recent;
     vector<int> recent_items;
     
     bool ok;
@@ -2154,7 +2154,7 @@ public:
     vector<Route> crossing_route_list_temp;
     bool selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling, /*this is equal to true if file has been modified, false otherwise*/file_has_been_modified, /*this is equal to true if the file has no name, false otherwise*/file_is_untitled, /*this is true if I am computing the astronomical position, false otherwise*/selecting_route_for_position;
     Answer /*if this is y/n, the coastlines are shown/not shown*/show_coastlines;
-    File file;
+    FileRW file;
     
     unsigned int margin;
     int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position, /*# of the object to transport or disconnect */i_object_to_transport, i_object_to_disconnect;

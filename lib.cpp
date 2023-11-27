@@ -13675,7 +13675,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     parent = parent_input;
     
     //pointer to init.txt to read fixed sight data from in there
-    File file_init;
+    FileRW file_init;
     String new_prefix;
     unsigned int deg, common_width;
     double min;

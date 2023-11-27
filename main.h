@@ -92,7 +92,7 @@ public:
     //the rectangle used to measure the size of the display
     wxDisplay display;
     //this referrs to the init file
-    File file_init;
+    FileRW file_init;
 
 
     virtual bool OnInit();

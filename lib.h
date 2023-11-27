@@ -580,16 +580,17 @@ class FileR: public File{
     
 public:
     
-    #ifdef __APPLE__
-        //I am on APPLE operating system: the file will be read from a path in the .app package and read with the ifstream value (read only)
-        ifstream*
-    #endif
-    #ifdef _WIN32
-        //I am on WIN32 operating system: the file will be loaded from a resource incoporeated in the .exe file and read with the istringstream value
-        istringstream*
-    #endif
+#ifdef __APPLE__
+    //I am on APPLE operating system: the file will be read from a path in the .app package and read with the ifstream value (read only) -> I include also ame, folder and extension as members of this class
+    ifstream* value;
+    String /*the full path of the file, including the folder, filename and extension*/name, /*the path of the folder where the file is located*/folder, /*the file extension, without the '.'*/extension;
+
+#endif
+#ifdef _WIN32
+    //I am on WIN32 operating system: the file will be loaded from a resource incoporeated in the .exe file and read with the istringstream value
+    istringstream* value;
+#endif
     
-    value;
     
     FileR();
     void set_name(String);

@@ -266,76 +266,76 @@ File::File(){
 
 
 
-
-//open the file *this in mode 'mode' and returns value pointing to it
-bool File::open(String mode, [[maybe_unused]] String prefix){
-    
-#ifdef __APPLE__
-    
-    if(mode == String("in")){
-        value->open(name.value, ios::in);
-    }else{
-        value->open(name.value, ios::out);
-    }
-    
-    cout << prefix.value << "Opening " << (name.value) << " in mode '" << mode.value << "' ... \n";
-    
-    if(!value){
-        
-        cout << prefix.value << RED << "... error opening file " << (name.value) << "!\n" << RESET;
-        return 0;
-        
-    }else{
-        
-        cout << prefix.value <<  "... done.\n";
-        return 1;
-        
-    }
-    
-#endif
-#ifdef _WIN32
-    //in WIN32 I can open (from the resources incorporated in the .exe file) files in read mode only -> if mode == String("out") I return false
-    
-    if(mode == String("in")){
-        
-        char* bytes;
-        HMODULE hModule;
-        HRSRC hResource;
-        HGLOBAL hMemory;
-        DWORD dwSize;
-        LPVOID lpAddress;
-        LPCWSTR resource_id;
-        wstring temp;
-
-        temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
-
-        //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
-        resource_id = (temp.c_str());
-
-        hModule = GetModuleHandle(NULL);
-        hResource = FindResource(hModule, resource_id, L"DATA");
-        hMemory = LoadResource(hModule, hResource);
-        dwSize = SizeofResource(hModule, hResource);
-        lpAddress = LockResource(hMemory);
-
-        bytes = new char[dwSize];
-        memcpy(bytes, lpAddress, dwSize);
-        value = new istringstream(bytes);
-
-        return true;
-        
-    }else{
-        
-        cout << prefix.value << RED << "Cannot open resouce files in mode out in WIN32 operating system!\n" << RESET;
-        
-        return false;
-
-    }
-    
-#endif
-
-    
-}
+//
+////open the file *this in mode 'mode' and returns value pointing to it
+//bool File::open(String mode, [[maybe_unused]] String prefix){
+//    
+//#ifdef __APPLE__
+//    
+//    if(mode == String("in")){
+//        value->open(name.value, ios::in);
+//    }else{
+//        value->open(name.value, ios::out);
+//    }
+//    
+//    cout << prefix.value << "Opening " << (name.value) << " in mode '" << mode.value << "' ... \n";
+//    
+//    if(!value){
+//        
+//        cout << prefix.value << RED << "... error opening file " << (name.value) << "!\n" << RESET;
+//        return 0;
+//        
+//    }else{
+//        
+//        cout << prefix.value <<  "... done.\n";
+//        return 1;
+//        
+//    }
+//    
+//#endif
+//#ifdef _WIN32
+//    //in WIN32 I can open (from the resources incorporated in the .exe file) files in read mode only -> if mode == String("out") I return false
+//    
+//    if(mode == String("in")){
+//        
+//        char* bytes;
+//        HMODULE hModule;
+//        HRSRC hResource;
+//        HGLOBAL hMemory;
+//        DWORD dwSize;
+//        LPVOID lpAddress;
+//        LPCWSTR resource_id;
+//        wstring temp;
+//
+//        temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
+//
+//        //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
+//        resource_id = (temp.c_str());
+//
+//        hModule = GetModuleHandle(NULL);
+//        hResource = FindResource(hModule, resource_id, L"DATA");
+//        hMemory = LoadResource(hModule, hResource);
+//        dwSize = SizeofResource(hModule, hResource);
+//        lpAddress = LockResource(hMemory);
+//
+//        bytes = new char[dwSize];
+//        memcpy(bytes, lpAddress, dwSize);
+//        value = new istringstream(bytes);
+//
+//        return true;
+//        
+//    }else{
+//        
+//        cout << prefix.value << RED << "Cannot open resouce files in mode out in WIN32 operating system!\n" << RESET;
+//        
+//        return false;
+//
+//    }
+//    
+//#endif
+//
+//    
+//}
 
 
 

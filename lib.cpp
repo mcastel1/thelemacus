@@ -251,10 +251,10 @@ void Int::enter(String name, [[maybe_unused]] String prefix){
 
 File::File(){
     
-    //allocate value
-    value = new fstream;
-    
-    value->precision((data_precision.value));
+//    //allocate value
+//    value = new fstream;
+//    
+//    value->precision((data_precision.value));
     
 }
 
@@ -397,6 +397,17 @@ void File::close(String prefix){
     
     
 }
+
+FileRW::FileRW(){
+    
+    //allocate value
+    value = new fstream;
+
+    //set the precision of *value
+    value->precision((data_precision.value));
+    
+}
+
 
 void Double::set(String name, double x, [[maybe_unused]] String prefix){
     

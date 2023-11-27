@@ -557,7 +557,7 @@ public:
     String /*the full path of the file, including the folder, filename and extension*/name, /*the path of the folder where the file is located*/folder, /*the name of the file without the folder path (before it) and without the file extension (after it)*/name_without_folder_nor_extension, /*the file extension, without the '.'*/extension;
     unsigned int number_of_lines;
     
-//    File();
+    File();
 //    void set_name(String);
 //    bool open(String, String);
 //    void close(String);
@@ -567,6 +567,46 @@ public:
 //    istringstream* create_istringstream(String);
     
 };
+
+//a inherited class from File class, for files on disk that can be read and written to
+class FileRW: public File{
+    
+public:
+    
+    //the strean for reading and writing
+    fstream* value;
+
+    
+    FileRW();
+
+
+    //    wxDECLARE_EVENT_TABLE();
+    
+};
+
+//an inherited class from File class, for files that can be read only
+class FileR: public File{
+    
+public:
+    
+    #ifdef __APPLE__
+        //I am on APPLE operating system: the file will be read from a path in the .app package and read with the ifstream value (read only)
+        ifstream*
+    #endif
+    #ifdef _WIN32
+        //I am on WIN32 operating system: the file will be loaded from a resource incoporeated in the .exe file and read with the istringstream value
+        istringstream*
+    #endif
+    
+    value;
+    
+    FileR();
+
+
+    //    wxDECLARE_EVENT_TABLE();
+    
+};
+
 
 
 

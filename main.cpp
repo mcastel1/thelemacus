@@ -64,7 +64,8 @@ To run on WIN32, the resource file is resource_file_windows.rc
  
 
  for MSW:
- - add  count_lines method for FileR 
+ - add  count_lines method for FileR
+ - add FileR:create_istringstream method 
  - all methods of File class must have an if to be treated differently in APPLE and in WIN32
  - in LIstframe there is an odd empty space on the top
  */

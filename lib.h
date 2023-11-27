@@ -547,7 +547,6 @@ public:
     unsigned int number_of_lines;
     
     File();
-//    istringstream* create_istringstream(String);
     
 };
 
@@ -595,8 +594,7 @@ public:
     FileR();
     void set_name(String);
     bool open(String);
-
-
+    istringstream* create_istringstream(String);
 
     //    wxDECLARE_EVENT_TABLE();
     

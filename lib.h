@@ -935,7 +935,7 @@ public:
     bool enter(Catalog, String, String);
     bool modify(Catalog, String);
     void print(String, String, ostream&);
-    bool read_from_file(File&, String);
+    bool read_from_file(FileRW&, String);
     bool reduce(Route*, String);
     bool check_time_interval(String);
     
@@ -959,7 +959,7 @@ class Data{
     
 public:
     Catalog* catalog;
-    File file_init, file_id, file_gnuplot, file_kml, file_boundary;
+    FileRW file_init, file_id, file_gnuplot, file_kml, file_boundary;
     int job_id;
     stringstream command, plot_command;
     vector<Sight> sight_list;
@@ -980,7 +980,7 @@ public:
     void transport_position(unsigned int, String);
     void remove_position(unsigned int, String);
     void remove_route(unsigned int, Answer, String);
-    bool read_from_file(File&, String);
+    bool read_from_file(FileRW&, String);
     void print(bool, String, ostream&);
     void print_to_kml(String);
     void print_sights(String, ostream&);

@@ -4445,7 +4445,7 @@ bool Chrono::read_from_file(String name, String filename, [[maybe_unused]] Strin
     stringstream new_prefix;
     bool check = true;
     size_t pos;
-    File file;
+    FileRW file;
     
     
     //prepend \t to prefix
@@ -5190,7 +5190,7 @@ void Sight::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcont
 
 
 //this function returns true if the reading operation has been performed without errors, false otherwise
-bool Sight::read_from_file(File& file, [[maybe_unused]] String prefix){
+bool Sight::read_from_file(FileRW& file, [[maybe_unused]] String prefix){
     
     string line;
     bool check = true;
@@ -5263,7 +5263,7 @@ bool Sight::check_time_interval(String prefix){
     
     String new_prefix;
     stringstream temp;
-    File data_file;
+    FileRW data_file;
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
@@ -5519,7 +5519,7 @@ void Data::print_to_kml(String prefix){
 }
 
 
-bool Data::read_from_file(File& file, [[maybe_unused]] String prefix){
+bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix){
     
     stringstream line_ins;
     string line;
@@ -6246,7 +6246,7 @@ void Data::transport_position(unsigned int i, [[maybe_unused]] String prefix){
 bool Sight::enter(Catalog catalog, String name, [[maybe_unused]] String prefix){
     
     //pointer to init.txt to read fixed sight data from in there
-    File file_init;
+    FileRW file_init;
     String new_prefix;
     bool check = true;
     //this unsigned int counts how many additional entries have been inserted into the vector item
@@ -7023,7 +7023,7 @@ void Length::print(String name, String unit, String prefix, ostream& ostr){
 
 bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] String prefix){
     
-    File file;
+    FileRW file;
     stringstream filename, line_ins;
     string line, dummy, temp;
     int l, l_min, l_max;
@@ -8243,7 +8243,7 @@ void ChartFrame::GetCoastLineData_Mercator(void){
 //this function fetches the data in ((wxGetApp().path_file_coastline_data_blocked).value) and stores them in data_x, data_y, p_coastline so that they can be read fastly
 void ListFrame::GetAllCoastLineData(void){
     
-    File file_n_line, file_coastline_data_blocked;
+    FileRW file_n_line, file_coastline_data_blocked;
     Position p_temp;
     string data, line;
     stringstream ins;
@@ -9729,7 +9729,7 @@ wxBitmap(wxBitmap(wxString(path.filename_without_folder_nor_extension(String("")
 //construct a StaticBitmap object by assignign to it the parent parent, loading it from path path and rescaling it to size
 StaticBitmap::StaticBitmap(wxWindow* parent, String path, wxSize size) : wxStaticBitmap(parent, wxID_ANY, wxNullBitmap){
     
-    File file;
+    FileRW file;
 
     file.set_name(path);
     

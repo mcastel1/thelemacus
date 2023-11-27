@@ -49,7 +49,7 @@ inline double acos(Double x){
 //read from file the content after 'name = ' and writes it into the *object (the element of class C). This works for any class C. This function opens a new file, sets its name to filename and opens it
 template<class C> void read_from_file(C* object, String name, String filename, [[maybe_unused]] String prefix){
 
-    File file;
+    FileR file;
 
     file.set_name(filename);
     
@@ -57,7 +57,7 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 //I am on APPLE operating system->the file is located in a folder in the .app package and I read it from there
 
     
-    file.open(String("in"), prefix);
+    file.open(prefix);
     
     object->template read_from_stream<fstream>(name, (file.value), true, prefix);
     
@@ -383,10 +383,10 @@ bool FileRW::open(String mode, [[maybe_unused]] String prefix){
 }
 
 void FileRW::close(String prefix){
-    
+        
     value->close();
     cout << prefix.value << "File " << (name.value) << " closed.\n";
-    
+
 }
 
 //delete file *this from disk
@@ -526,6 +526,22 @@ bool FileR::open([[maybe_unused]] String prefix){
 #endif
     
     
+}
+
+void FileR::close(String prefix){
+    
+#ifdef __APPLE__
+        
+    value->close();
+    cout << prefix.value << "File " << (name.value) << " closed.\n";
+    
+#endif
+#ifdef _WIN32
+    
+    cout << prefix.value << "Close method has been called on a resource file, there is nothing to do.\n";
+
+#endif
+
 }
 
 //If the operating system is WIN32, read the WIN32 resouces file this->name_without_folder_nor_extension, allocates an istringstream containg the file, and returns a pointer to this istringstream

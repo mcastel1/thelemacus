@@ -290,13 +290,7 @@ void File::remove(String prefix){
     
 }
 
-//set the full path of the file and write it into name
-void FileRW::set_name(String path){
-    
-    (name.value) = (path.value);
-    name.split_file_path(&folder, &name_without_folder_nor_extension, &extension, String(""));
-    
-}
+
 
 bool File::check_if_exists(String prefix){
     
@@ -408,6 +402,14 @@ FileRW::FileRW(){
     
 }
 
+//set the full path of the file and write it into name
+void FileRW::set_name(String path){
+    
+    (name.value) = (path.value);
+    name.split_file_path(&folder, &name_without_folder_nor_extension, &extension, String(""));
+    
+}
+
 FileR::FileR(){
     
     //allocate value
@@ -415,6 +417,13 @@ FileR::FileR(){
 
     //set the precision of *value
     value->precision((data_precision.value));
+    
+}
+
+//set the name without folder nor extension  of the file and write it into name_without_folder_nor_extension
+void FileR::set_name(String name_without_folder_nor_extension_in){
+    
+    (name_without_folder_nor_extension.value) = (name_without_folder_nor_extension_in.value);
     
 }
 

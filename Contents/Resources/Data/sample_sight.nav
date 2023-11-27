@@ -1,9 +1,9 @@
 Sights in the data:
 	Sight #1:
 		body:
-			Type = moon
-			Name = moon
-			Radius = 938.1209503239741 nm
+			Type = sun
+			Name = sun
+			Radius = 375647.9481641469 nm
 		limb = l
 		sextant altitude = 4° 2.999999999999989'
 		index error = 0° 1.9'

@@ -49,4 +49,3 @@ sample ICON  "Z:/Contents/Resources/Images/Light/app_icon.ico"
 
 init DATA "Z:/Contents/Resources/Data/init.txt"
 recent DATA "Z:/Contents/Resources/Data/recent.txt"
-

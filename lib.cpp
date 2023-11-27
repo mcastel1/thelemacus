@@ -450,21 +450,20 @@ FileR::FileR(){
     
 }
 
-//set the name without folder nor extension  of the file and write it into name_without_folder_nor_extension
-void FileR::set_name(String path){
+void FileR::set_name(String input){
     
 #ifdef __APPLE__
-    //I am on APPLE -> I set name, folder, name_without_folder_nor_extension and extension
+    //I am on APPLE -> input = [full file path] -> I set name, folder, name_without_folder_nor_extension and extension
 
-    (name.value) = (path.value);
+    (name.value) = (input.value);
     name.split_file_path(&folder, &name_without_folder_nor_extension, &extension, String(""));
     
 #endif
 
 #ifdef _WIN32
-    //I am on WIN32-> I only need to set name_without_folder_nor_extension to identify the resource
+    //I am on WIN32->input = [file name without folder nor extenion] -> I set name_without_folder_nor_extension equal to input
     
-    path.split_file_path(NULL, &name_without_folder_nor_extension, NULL, String(""));
+    (name_without_folder_nor_extension.value) = (input.value);
 
 #endif
     

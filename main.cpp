@@ -260,6 +260,8 @@ bool MyApp::OnInit(){
     
     wxInitAllImageHandlers();
 
+
+
     
     degree_symbol = String("\u00b0");
     
@@ -279,14 +281,12 @@ bool MyApp::OnInit(){
     
     cout << "You have Windows Operating System" << "\n";
 
-//    HRSRC imageResHandle = NULL;
 //
-//    // Locate the resource in the application's executable.
-//    imageResHandle = FindResource(
-//        NULL,             // This component.
-//        L"error_image",   // Resource name.
-//        L"PNG");        // Resource type.
-
+    //FileR file_r;
+    //file_r.set_name(String("mamma"));
+    //bool output;
+    //output = file_r.check_if_exists(String(""));
+    //
     
 
 

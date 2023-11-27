@@ -547,7 +547,6 @@ public:
     unsigned int number_of_lines;
     
     File();
-//    bool open(String, String);
 //    void close(String);
 //    void remove(String);
 //    void count_lines(String);
@@ -569,6 +568,8 @@ public:
     
     FileRW();
     void set_name(String);
+    bool open(String, String);
+
 
 
 

@@ -410,6 +410,31 @@ void FileRW::set_name(String path){
     
 }
 
+//open the file *this in mode 'mode' and returns value pointing to it
+bool FileRW::open(String mode, [[maybe_unused]] String prefix){
+    
+    if(mode == String("in")){
+        value->open(name.value, ios::in);
+    }else{
+        value->open(name.value, ios::out);
+    }
+    
+    cout << prefix.value << "Opening " << (name.value) << " in mode '" << mode.value << "' ... \n";
+    
+    if(!value){
+        
+        cout << prefix.value << RED << "... error opening file " << (name.value) << "!\n" << RESET;
+        return false;
+        
+    }else{
+        
+        cout << prefix.value <<  "... done.\n";
+        return true;
+        
+    }
+    
+}
+
 FileR::FileR(){
     
     //allocate value

@@ -593,11 +593,12 @@ public:
     istringstream* value;
 #endif
     
-    
+ 
     FileR();
     void set_name(String);
     bool open(String);
     void close(String);
+    bool check_if_exists(String);
     istringstream* create_istringstream(String);
 
     //    wxDECLARE_EVENT_TABLE();

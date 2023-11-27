@@ -557,6 +557,65 @@ void FileR::close(String prefix){
 
 }
 
+bool FileR::check_if_exists(String prefix) {
+
+    bool output;
+
+#ifdef __APPLE__
+    //on APPLE operating system, *this is a file on disk -> open it to check if exists
+
+    value->open(name.value, ios::in);
+
+    if(value){
+
+        cout << prefix.value << "File " << (name.value) << " exists.\n";
+        value->close();
+        output = true;
+
+    }else{
+
+        cout << prefix.value << RED << "FileR " << (name.value) << " does not exist!\n" << RESET;
+        output = false;
+
+    }
+
+#endif
+#ifdef _WIN32
+    //on WIN32 operating system, *this is a resrouce -> check the output of FindResource to check whether *this exists
+
+    HMODULE hModule;
+    HRSRC hResource;
+    LPCWSTR resource_id;
+    wstring temp;
+
+
+    temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
+    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
+    resource_id = (temp.c_str());
+
+    hModule = GetModuleHandle(NULL);
+    hResource = FindResource(hModule, resource_id, L"DATA");
+
+    if(hResource != NULL){
+
+        cout << prefix.value << "FileR " << (name_without_folder_nor_extension.value) << " exists.\n";
+        output = true;
+
+    }
+    else{
+
+        cout << prefix.value << RED << "FileR " << (name_without_folder_nor_extension.value) << " does not exist!\n" << RESET;
+        output = false;
+
+    }
+
+
+#endif
+
+    return output;
+
+}
+
 //If the operating system is WIN32, read the WIN32 resouces file this->name_without_folder_nor_extension, allocates an istringstream containg the file, and returns a pointer to this istringstream
 // If the operating system is different from WIN32, do nothing
 istringstream* FileR::create_istringstream([[maybe_unused]] String prefix) {

@@ -50,6 +50,8 @@ class Limb;
 class Length;
 class Data;
 class File;
+class FileRW;
+class FileR;
 class Time;
 class Date;
 class Chrono;
@@ -108,7 +110,7 @@ public:
     void print(String, bool, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String);
-    void write_to_file(String, File&, String);
+    void write_to_file(String, FileRW&, String);
     void set(String, String, String);
     void set(String);
     void set_to_current_time(void);
@@ -128,7 +130,7 @@ class Int{
 public:
     int value;
     
-    void read_from_file(String, File&, bool, String);
+    void read_from_file(String, FileRW&, bool, String);
     void read_from_file(String, String, String);
     void enter(String, String);
     void set(String, int, String);
@@ -164,7 +166,7 @@ public:
     double value;
     
     bool equal_approx(Double);
-    void read_from_file(String, File&, bool, String);
+    void read_from_file(String, FileRW&, bool, String);
     void read_from_file(String, String, String);
     void set(String, double, String);
     void print(String, String, ostream&);
@@ -606,7 +608,7 @@ public:
 
 bool get_date_hour(String &line, String prefix){
     
-    File file;
+    FileRW file;
     stringstream command;
     bool check;
     
@@ -794,7 +796,7 @@ public:
     Route(String, Position, Angle);
     void enter(String, String);
     void print(String, String, ostream&);
-    void read_from_file(File&, String);
+    void read_from_file(FileRW&, String);
     void compute_end(String);
     bool compute_end(Length, String);
     int crossing(Route, vector<Position>*, double*, String);

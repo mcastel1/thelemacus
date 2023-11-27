@@ -610,7 +610,7 @@ bool Double::equal_approx(Double x){
     
 }
 
-void Double::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
+void Double::read_from_file(String name, FileRW& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -652,7 +652,7 @@ void Double::read_from_file(String name, String filename, [[maybe_unused]] Strin
     
     string line;
     size_t pos;
-    File file;
+    FileRW file;
     
     file.set_name(filename);
     file.open(String("in"), prefix);
@@ -701,7 +701,7 @@ Double Double::operator+ (const Double& x){
 
 
 //reads an Int from File file, which must be already open, and it search the file from the beginning if search_entire_file = true, does not search the file from the beginning otherwise. Writes the result in *this
-void Int::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
+void Int::read_from_file(String name, FileRW& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     size_t pos;
@@ -747,7 +747,7 @@ void Int::read_from_file(String name, String filename, [[maybe_unused]] String p
     
     string line;
     size_t pos;
-    File file;
+    FileRW file;
     
     file.set_name(filename);
     file.open(String("in"), prefix);
@@ -1029,10 +1029,10 @@ void String::read_from_file_to(String name, String filename, [[maybe_unused]] St
 
 
 //writes to file the content of string after 'name = '
-void String::write_to_file(String name, File& file, [[maybe_unused]] String prefix){
+void String::write_to_file(String name, FileRW& file, [[maybe_unused]] String prefix){
     
     long i;
-    File temp;
+    FileRW temp;
     string line;
     stringstream s;
     
@@ -1432,7 +1432,7 @@ void Rotation::print(String name, String prefix, ostream& ostr){
 void Rotation::read_from_file(String name, String filename, [[maybe_unused]] String prefix){
     
     string line;
-    File file;
+    FileRW file;
     Angle alpha, beta, gamma;
     String new_prefix;
     
@@ -3156,7 +3156,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle> *t, [[maybe_unu
     
 }
 
-void Route::read_from_file(File& file, [[maybe_unused]] String prefix){
+void Route::read_from_file(FileRW& file, [[maybe_unused]] String prefix){
     
     String new_prefix;
     string line;
@@ -4368,7 +4368,7 @@ void Route::enter(String name, [[maybe_unused]] String prefix){
 
 
 
-bool Chrono::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
+bool Chrono::read_from_file(String name, FileRW& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     stringstream new_prefix;
@@ -4508,7 +4508,7 @@ bool Chrono::read_from_file(String name, String filename, [[maybe_unused]] Strin
 
 
 //this function returns true if the date read is consistent, false if it is not
-bool Date::read_from_file(String name, File& file, bool search_entire_file, [[maybe_unused]] String prefix){
+bool Date::read_from_file(String name, FileRW& file, bool search_entire_file, [[maybe_unused]] String prefix){
     
     string line;
     stringstream new_prefix;

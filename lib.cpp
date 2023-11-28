@@ -58,7 +58,7 @@ template<class C> void read_from_file(C* object, String name, String filename, S
 	file.set_name(filename);
 	file.open(String("in"), prefix);
 
-	object->template read_from_stream<ifstream>(name, (file.value), true, prefix);
+	object->template read_from_stream<fstream>(name, (file.value), true, prefix);
 
 	file.close(prefix);
 

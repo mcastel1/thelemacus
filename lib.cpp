@@ -46,8 +46,9 @@ inline double acos(Double x) {
 
 }
 
-//read from file the content after 'name = ' and writes it into the *object (the element of class C). This works for any class C. On WIN32, it accepts both a filepath  such as "C:/a/b.txt" and a resource name such as my_resource_file in filename. 
-template<class C> void read_from_file(C* object, String name, String filename, [[maybe_unused]] String prefix) {
+//read from file the content after 'name = ' and writes it into the *object (the element of class C). 
+// This works for any class C. On WIN32, if mode = 'RW' then filename is filepath  such as "C:/a/b.txt", while if mode = 'R' then filename is a resource name such as my_resource_file. 
+template<class C> void read_from_file(C* object, String name, String filename, String mode, [[maybe_unused]] String prefix) {
 
 #ifdef __APPLE__
 	//I am on APPLE operating system->the file is located in a folder in the .app package and I read it from there
@@ -55,7 +56,7 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 	FileRW file;
 
 	file.set_name(filename);
-	file.open(prefix);
+	file.open(String("in"), prefix);
 
 	object->template read_from_stream<ifstream>(name, (file.value), true, prefix);
 
@@ -67,8 +68,8 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 	//I am on WIN32 operating system->I create an istringstream that containts the data of file (which is incorporated in the .exe file as a WIN32 resource),  and I read it from there
 
 
-	if(filename.is_a_file_path(String(""))){
-		//filenam is a file path -> read from FileRW
+	if(mode == String("RW")){
+		//I am reading form a FileRW and filename is a file path
 
 		FileRW file;
 
@@ -81,16 +82,24 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 
 	}
 	else{
-		//filename is not a file path -> read from FileR
 
-		FileR file;
+		if(mode == String("R")){
+			//I am reading from a FileR  and filename is a resource id
 
-		file.set_name(filename);
-		file.open(prefix);
+			FileR file;
 
-		object->template read_from_stream<istringstream>(name, (file.value), true, prefix);
+			file.set_name(filename);
+			file.open(prefix);
 
-		file.close(prefix);
+			object->template read_from_stream<istringstream>(name, (file.value), true, prefix);
+
+			file.close(prefix);
+
+		}else{
+
+			cout << prefix.value << RED << "Cannor read from file beacuse mode is invalid!\n" << RESET;
+
+		}
 
 	}
 
@@ -223,12 +232,12 @@ bool String::operator!=(const String& s) {
 
 }
 
-//reads from file the content after 'name = ' and returns it. This function opens a new file, sets its name to filename and opens it
-String read_from_file(String name, String filename, [[maybe_unused]] String prefix) {
+//reads from file the content after 'name = ' and returns it. If mode = 'RW' ('R') it reads from a FileRW (FileR)
+String read_from_file(String name, String filename, String mode, [[maybe_unused]] String prefix) {
 
 	String temp;
 
-	temp.read_from_file_to(name, filename, prefix);
+	temp.read_from_file_to(name, filename, mode, prefix);
 
 	return temp;
 
@@ -1081,8 +1090,8 @@ String::String(string s) {
 }
 
 
-//reads from file the color written after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void Color::read_from_file(String name, String filename, [[maybe_unused]] String prefix) {
+//reads from file the color written after 'name = ' and writes it into this. If mode  = 'RW' ('R') it reads from a FileRW (FileR)
+void Color::read_from_file(String name, String filename, String mode, [[maybe_unused]] String prefix) {
 
 	String new_prefix, s;
 	size_t pos_end;
@@ -1091,7 +1100,7 @@ void Color::read_from_file(String name, String filename, [[maybe_unused]] String
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
 
-	s.read_from_file_to(name, filename, new_prefix);
+	s.read_from_file_to(name, filename, mode, new_prefix);
 
 	//get rid of everything that comes before and at '(' at the beginnign of s
 	pos_end = (s.value).find("(");
@@ -1165,10 +1174,11 @@ template<class S> void String::read_from_stream(String name, S* input_stream, bo
 }
 
 
-//reads from file the content after 'name = ' and writes it into *this. This function opens a new file, sets its name to filename and opens it
-void String::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix) {
+//reads from file the content after 'name = ' and writes it into *this. 
+//if mode = 'RW' ('R') it reads form a FileRW (FileR)
+void String::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
 
-	read_from_file<String>(this, name, filename, prefix);
+	read_from_file<String>(this, name, filename, mode, prefix);
 
 }
 
@@ -1295,9 +1305,9 @@ bool Answer::set(String name, char c, [[maybe_unused]] String prefix) {
 
 }
 //reads *this from file whose path is filename, by looking through the entire file
-void Answer::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix) {
+void Answer::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
 
-	read_from_file<Answer>(this, name, filename, prefix);
+	read_from_file<Answer>(this, name, filename, mode, prefix);
 
 }
 
@@ -1729,10 +1739,10 @@ template<class S> void Angle::read_from_stream(String name, S* input_stream, boo
 
 }
 
-//reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void Angle::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix) {
+//reads from file the content after 'name = ' and writes it into this.
+void Angle::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
 
-	read_from_file<Angle>(this, name, filename, prefix);
+	read_from_file<Angle>(this, name, filename, mode, prefix);
 
 }
 
@@ -4971,10 +4981,10 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
 
 }
 
-//reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void Length::read_from_file_to(String name, String filename, [[maybe_unused]] String prefix) {
+//reads from file the content after 'name = ' and writes it into this.
+void Length::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
 
-	read_from_file<Length>(this, name, filename, prefix);
+	read_from_file<Length>(this, name, filename, mode, prefix);
 
 }
 
@@ -8693,7 +8703,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 	SetCursor(*wxCROSS_CURSOR);
 
 
-	(circle_observer.omega).read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), prefix);
+	(circle_observer.omega).read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), prefix);
 	thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), (wxGetApp().path_file_init), prefix);
 
 	rotation = Rotation(
@@ -10099,10 +10109,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	new_prefix = prefix.append(String("\t"));
 
 	//read lambda_min, ...., phi_max from file_init
-	lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), new_prefix);
-	lambda_max.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), new_prefix);
-	phi_min.read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), new_prefix);
-	phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), new_prefix);
+	lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
+	lambda_max.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
+	phi_min.read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
+	phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
 
 
 	this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnPressCtrlW<wxCloseEvent>, this);
@@ -10195,7 +10205,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	if (projection_in == String("")) {
 		//if the constructor has been called with an empty projection_in, I use the default projection by reading it from the init file.
 
-		default_projection.read_from_file_to(String("default projection"), (wxGetApp().path_file_init), String(""));
+		default_projection.read_from_file_to(String("default projection"), (wxGetApp().path_file_init), String("R"), String(""));
 		(projection->name)->SetValue(wxString(default_projection.value));
 
 	}
@@ -10617,10 +10627,10 @@ template<class T> void ChartFrame::Reset(T& event) {
 	if (((projection->name)->GetValue()) == wxString("Mercator")) {
 
 		//read lambda_min, ...., phi_max from file_init
-		lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String(""));
-		lambda_max.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String(""));
-		phi_min.read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String(""));
-		phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String(""));
+		lambda_min.read_from_file_to(String("minimal longitude"),  (wxGetApp().path_file_init), String("R"),  String(""));
+		lambda_max.read_from_file_to(String("maximal longitude"),  (wxGetApp().path_file_init), String("R"),  String(""));
+		phi_min.read_from_file_to(String("minimal latitude"),  (wxGetApp().path_file_init), String("R"),  String(""));
+		phi_max.read_from_file_to(String("maximal latitude"),  (wxGetApp().path_file_init), String("R"),  String(""));
 		draw_panel->Set_x_y_min_max_Mercator();
 		ComputeZoomFactor_Mercator(draw_panel->x_span());
 
@@ -10632,7 +10642,7 @@ template<class T> void ChartFrame::Reset(T& event) {
 	if (((projection->name)->GetValue()) == wxString("3D")) {
 		//reset d abd the earth orientation to the initial one and set the zoom factor accordingly
 
-		((draw_panel->circle_observer_0).omega).read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String(""));
+		((draw_panel->circle_observer_0).omega).read_from_file_to(String("omega draw 3d"),  (wxGetApp().path_file_init), String("R"),  String(""));
 		zoom_factor.set(String(""), 1.0, String(""));
 		ComputeZoomFactor_3D();
 
@@ -14142,7 +14152,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 	height_of_eye = new LengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
 	if (sight_in == NULL) {
 		//given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye LengthField with this value, so the user won't have to enter the same value all the time
-		(sight->height_of_eye).read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String(""));
+		(sight->height_of_eye).read_from_file_to(String("default height of eye"),  (wxGetApp().path_file_init), String("R"),  String(""));
 		height_of_eye->set();
 
 	}
@@ -15411,7 +15421,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 	data = new Data(catalog, String(""));
 
 	//read show_coastlines from file_init
-	show_coastlines.read_from_file_to(String("show coastlines"), (wxGetApp().path_file_init), String(""));
+	show_coastlines.read_from_file_to(String("show coastlines"),  (wxGetApp().path_file_init), String("R"),  String(""));
 
 	GetAllCoastLineData();
 
@@ -15424,7 +15434,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 	(wxGetApp().file_init).set_name((wxGetApp().path_file_init));
 
 	//read color list from file_init
-	s.read_from_file_to(String("color list"), (wxGetApp().path_file_init), String(""));
+	s.read_from_file_to(String("color list"),  (wxGetApp().path_file_init), String("R"),  String(""));
 
 	//in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
 	(wxGetApp().color_list).resize(count((s.value).begin(), (s.value).end(), '('));
@@ -17730,7 +17740,7 @@ template<class P> void ProjectionField<P>::read_recent_items(void) {
 	}
 
 	//read the recently selected items from file_recent
-	s.read_from_file_to(String("projection"), (wxGetApp().path_file_recent), String(""));
+	s.read_from_file_to(String("projection"), (wxGetApp().path_file_recent), String("RW"), String(""));
 
 	recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
 	for (i = 0; i < (recent_items.size()); i++) {
@@ -19218,7 +19228,7 @@ template<class P> void BodyField<P>::read_recent_items(void) {
 	}
 
 	//read the recently selected items from file_recent
-	s.read_from_file_to(String("body"), (wxGetApp().path_file_recent), String(""));
+	s.read_from_file_to(String("body"), (wxGetApp().path_file_recent), String("RW"), String(""));
 
 	recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
 	for (i = 0; i < recent_items.size(); i++) {

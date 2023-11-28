@@ -328,28 +328,28 @@ bool MyApp::OnInit() {
 
 	//read the file names and prenend to the file name the respective directory where the file is located -> obtain the file path
 	//files in code directory
-	path_file_utc_date_and_time = code_directory.append(read_from_file(String("name file utc date and time"), String(path_file_init), String("")));
-	path_file_temp = code_directory.append(read_from_file(String("name file temp"), String(path_file_init), String("")));
+	path_file_utc_date_and_time = code_directory.append(read_from_file(String("name file utc date and time"), String(path_file_init), String("R"), String("")));
+	path_file_temp = code_directory.append(read_from_file(String("name file temp"), String(path_file_init), String("R"), String("")));
 
 	//files in data directory
-	path_file_recent = data_directory.append(read_from_file(String("name file recent"), String(path_file_init), String("")));
-	path_file_catalog = data_directory.append(read_from_file(String("name file catalog"), String(path_file_init), String("")));
-	path_file_coastline_data_blocked = data_directory.append(read_from_file(String("name file coastline data blocked"), String(path_file_init), String("")));
-	path_file_n_line = data_directory.append(read_from_file(String("name file n line"), String(path_file_init), String("")));
+	path_file_recent = data_directory.append(read_from_file(String("name file recent"), String(path_file_init), String("R"), String("")));
+	path_file_catalog = data_directory.append(read_from_file(String("name file catalog"), String(path_file_init), String("R"), String("")));
+	path_file_coastline_data_blocked = data_directory.append(read_from_file(String("name file coastline data blocked"), String(path_file_init), String("R"), String("")));
+	path_file_n_line = data_directory.append(read_from_file(String("name file n line"), String(path_file_init), String("R"), String("")));
 
 	//files in image directory
-	path_file_app_icon = image_directory.append(read_from_file(String("name file app icon"), String(path_file_init), String("")));
-	path_file_error_icon = image_directory.append(read_from_file(String("name file error icon"), String(path_file_init), String("")));
-	path_file_warning_icon = image_directory.append(read_from_file(String("name file warning icon"), String(path_file_init), String("")));
-	path_file_question_icon = image_directory.append(read_from_file(String("name file question icon"), String(path_file_init), String("")));
-	path_file_plus_icon = image_directory.append(read_from_file(String("name file plus icon"), String(path_file_init), String("")));
-	path_file_list_icon = image_directory.append(read_from_file(String("name file list icon"), String(path_file_init), String("")));
-	path_file_position_icon = image_directory.append(read_from_file(String("name file position icon"), String(path_file_init), String("")));
-	path_file_map_icon = image_directory.append(read_from_file(String("name file map icon"), String(path_file_init), String("")));
-	path_file_pencil_icon = image_directory.append(read_from_file(String("name file pencil icon"), String(path_file_init), String("")));
-	path_file_trash_icon = image_directory.append(read_from_file(String("name file trash icon"), String(path_file_init), String("")));
-	path_file_arrow_icon = image_directory.append(read_from_file(String("name file arrow icon"), String(path_file_init), String("")));
-	path_file_disconnect_icon = image_directory.append(read_from_file(String("name file disconnect icon"), String(path_file_init), String("")));
+	path_file_app_icon = image_directory.append(read_from_file(String("name file app icon"), String(path_file_init), String("R"), String("")));
+	path_file_error_icon = image_directory.append(read_from_file(String("name file error icon"), String(path_file_init), String("R"), String("")));
+	path_file_warning_icon = image_directory.append(read_from_file(String("name file warning icon"), String(path_file_init), String("R"), String("")));
+	path_file_question_icon = image_directory.append(read_from_file(String("name file question icon"), String(path_file_init), String("R"), String("")));
+	path_file_plus_icon = image_directory.append(read_from_file(String("name file plus icon"), String(path_file_init), String("R"), String("")));
+	path_file_list_icon = image_directory.append(read_from_file(String("name file list icon"), String(path_file_init), String("R"), String("")));
+	path_file_position_icon = image_directory.append(read_from_file(String("name file position icon"), String(path_file_init), String("R"), String("")));
+	path_file_map_icon = image_directory.append(read_from_file(String("name file map icon"), String(path_file_init), String("R"), String("")));
+	path_file_pencil_icon = image_directory.append(read_from_file(String("name file pencil icon"), String(path_file_init), String("R"), String("")));
+	path_file_trash_icon = image_directory.append(read_from_file(String("name file trash icon"), String(path_file_init), String("R"), String("")));
+	path_file_arrow_icon = image_directory.append(read_from_file(String("name file arrow icon"), String(path_file_init), String("R"), String("")));
+	path_file_disconnect_icon = image_directory.append(read_from_file(String("name file disconnect icon"), String(path_file_init), String("R"), String("")));
 
 
 	data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
@@ -357,8 +357,8 @@ bool MyApp::OnInit() {
 	time_check.read_from_file(String("time check"), String(path_file_init), String(""));
 	time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));
 
-	max_lat.read_from_file_to(String("maximal latitude coastline data"), String(path_file_init), String(""));
-	min_lat.read_from_file_to(String("minimal latitude coastline data"), String(path_file_init), String(""));
+	max_lat.read_from_file_to(String("maximal latitude coastline data"), String(path_file_init), String("R"), String(""));
+	min_lat.read_from_file_to(String("minimal latitude coastline data"), String(path_file_init), String("R"), String(""));
 
 	size_small_button_over_width_screen.read_from_file(String("size small button over width screen"), String(path_file_init), String(""));
 	size_large_button_over_width_screen.read_from_file(String("size large button over width screen"), String(path_file_init), String(""));

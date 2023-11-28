@@ -77,7 +77,7 @@ public:
     Color(unsigned char, unsigned char, unsigned char);
     Color(unsigned char, unsigned char, unsigned char, unsigned char);
     
-    void read_from_file(String, String, String);
+    void read_from_file(String, String, String, String);
     int ToRGB(void);
     
 };
@@ -109,7 +109,7 @@ public:
     void enter(String, String);
     void print(String, bool, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String);
+    void read_from_file_to(String, String, String, String);
     void write_to_file(String, FileRW&, String);
     void set(String, String, String);
     void set(String);
@@ -197,7 +197,7 @@ public:
     void to_deg_min(unsigned int*, double*);
     void from_sign_deg_min(char, unsigned int, double);
     template<class S> void read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String);
+    void read_from_file_to(String, String, String, String);
     void to_deg_min_string(stringstream, stringstream);
     string to_string(String, unsigned int, bool);
     string deg_to_string(String, unsigned int);
@@ -656,7 +656,7 @@ public:
     void enter(String, String, String);
     void print(String, String, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String);
+    void read_from_file_to(String, String, String, String);
     bool check_valid(String, String);
     string to_string(String, unsigned int);
     bool operator> (const Length&), operator<= (const Length&), operator> (const double&), operator< (const double&), operator==(const Length&), operator!=(const Length&);
@@ -694,7 +694,7 @@ public:
     //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
     void print(String, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String);
+    void read_from_file_to(String, String, String, String);
     bool operator==(const Answer&), operator !=(const Answer&);
     
 };

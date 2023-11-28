@@ -286,9 +286,9 @@ bool MyApp::OnInit() {
 	//
 	String my_string;
 
-	my_string.read_from_file_to(String("name file trash icon"), String("init"), String(""));
+	my_string.read_from_file_to(String("name file trash icon"), String("init"), String("R"), String(""));
 
-	my_string.read_from_file_to(String("body"), String("Z:/michele.txt"), String(""));
+	my_string.read_from_file_to(String("body"), String("Z:/michele.txt"), String("RW"), String(""));
 
 	//to run the app with Visual Studio on Windows
 	run_directory = String("Z:/");

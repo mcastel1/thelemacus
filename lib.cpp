@@ -619,13 +619,14 @@ bool FileR::check_if_exists(String prefix) {
 //count the number of lines in *this and writes it in number_of_lines
 void FileR::count_lines(String prefix) {
 
- /*   ifstream temp;
+   FileR temp;
 
-    temp.open(name.value);
-    number_of_lines = ((unsigned int)count(istreambuf_iterator<char>(temp), istreambuf_iterator<char>(), '\n'));
-    temp.close();*/
+   temp.set_name(name_without_folder_nor_extension);
+    temp.open(prefix);
+    number_of_lines = ((unsigned int)count(istreambuf_iterator<char>((*(temp.value))), istreambuf_iterator<char>(), '\n'));
+    temp.close(prefix);
 
-    cout << prefix.value << "Number of lines in file " << (name.value) << " = " << number_of_lines << "\n";
+    cout << prefix.value << "Number of lines in file " << (name_without_folder_nor_extension.value) << " = " << number_of_lines << "\n";
 
 }
 

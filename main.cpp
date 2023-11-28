@@ -282,13 +282,13 @@ bool MyApp::OnInit(){
     cout << "You have Windows Operating System" << "\n";
 
 //
-    //FileR file_r;
-    //file_r.set_name(String("mamma"));
-    //bool output;
-    //output = file_r.check_if_exists(String(""));
-    //
+    FileR file_r;
+    file_r.set_name(String("recent"));
+    bool output;
+    output = file_r.check_if_exists(String(""));
     
-
+    
+    file_r.count_lines(String(""));
 
 
     //to run the app with Visual Studio on Windows

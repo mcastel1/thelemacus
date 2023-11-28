@@ -328,43 +328,43 @@ bool MyApp::OnInit() {
 
 	//read the file names and prenend to the file name the respective directory where the file is located -> obtain the file path
 	//files in code directory
-	path_file_utc_date_and_time = code_directory.append(read_from_file(String("name file utc date and time"), String(path_file_init), String("R"), String("")));
-	path_file_temp = code_directory.append(read_from_file(String("name file temp"), String(path_file_init), String("R"), String("")));
+	path_file_utc_date_and_time = code_directory.append(read_from_file(String("name file utc date and time"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_temp = code_directory.append(read_from_file(String("name file temp"), (wxGetApp().path_file_init), String("R"), String("")));
 
 	//files in data directory
-	path_file_recent = data_directory.append(read_from_file(String("name file recent"), String(path_file_init), String("R"), String("")));
-	path_file_catalog = data_directory.append(read_from_file(String("name file catalog"), String(path_file_init), String("R"), String("")));
-	path_file_coastline_data_blocked = data_directory.append(read_from_file(String("name file coastline data blocked"), String(path_file_init), String("R"), String("")));
-	path_file_n_line = data_directory.append(read_from_file(String("name file n line"), String(path_file_init), String("R"), String("")));
+	path_file_recent = data_directory.append(read_from_file(String("name file recent"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_catalog = data_directory.append(read_from_file(String("name file catalog"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_coastline_data_blocked = data_directory.append(read_from_file(String("name file coastline data blocked"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_n_line = data_directory.append(read_from_file(String("name file n line"), (wxGetApp().path_file_init), String("R"), String("")));
 
 	//files in image directory
-	path_file_app_icon = image_directory.append(read_from_file(String("name file app icon"), String(path_file_init), String("R"), String("")));
-	path_file_error_icon = image_directory.append(read_from_file(String("name file error icon"), String(path_file_init), String("R"), String("")));
-	path_file_warning_icon = image_directory.append(read_from_file(String("name file warning icon"), String(path_file_init), String("R"), String("")));
-	path_file_question_icon = image_directory.append(read_from_file(String("name file question icon"), String(path_file_init), String("R"), String("")));
-	path_file_plus_icon = image_directory.append(read_from_file(String("name file plus icon"), String(path_file_init), String("R"), String("")));
-	path_file_list_icon = image_directory.append(read_from_file(String("name file list icon"), String(path_file_init), String("R"), String("")));
-	path_file_position_icon = image_directory.append(read_from_file(String("name file position icon"), String(path_file_init), String("R"), String("")));
-	path_file_map_icon = image_directory.append(read_from_file(String("name file map icon"), String(path_file_init), String("R"), String("")));
-	path_file_pencil_icon = image_directory.append(read_from_file(String("name file pencil icon"), String(path_file_init), String("R"), String("")));
-	path_file_trash_icon = image_directory.append(read_from_file(String("name file trash icon"), String(path_file_init), String("R"), String("")));
-	path_file_arrow_icon = image_directory.append(read_from_file(String("name file arrow icon"), String(path_file_init), String("R"), String("")));
-	path_file_disconnect_icon = image_directory.append(read_from_file(String("name file disconnect icon"), String(path_file_init), String("R"), String("")));
+	path_file_app_icon = image_directory.append(read_from_file(String("name file app icon"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_error_icon = image_directory.append(read_from_file(String("name file error icon"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_warning_icon = image_directory.append(read_from_file(String("name file warning icon"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_question_icon = image_directory.append(read_from_file(String("name file question icon"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_plus_icon = image_directory.append(read_from_file(String("name file plus icon"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_list_icon = image_directory.append(read_from_file(String("name file list icon"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_position_icon = image_directory.append(read_from_file(String("name file position icon"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_map_icon = image_directory.append(read_from_file(String("name file map icon"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_pencil_icon = image_directory.append(read_from_file(String("name file pencil icon"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_trash_icon = image_directory.append(read_from_file(String("name file trash icon"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_arrow_icon = image_directory.append(read_from_file(String("name file arrow icon"), (wxGetApp().path_file_init), String("R"), String("")));
+	path_file_disconnect_icon = image_directory.append(read_from_file(String("name file disconnect icon"), (wxGetApp().path_file_init), String("R"), String("")));
 
 
-	data_precision.read_from_file(String("data precision"), String(path_file_init), String(""));
-	display_precision.read_from_file(String("display precision"), String(path_file_init), String(""));
-	time_check.read_from_file(String("time check"), String(path_file_init), String(""));
-	time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));
+	data_precision.read_from_file(String("data precision"), (wxGetApp().path_file_init), String(""));
+	display_precision.read_from_file(String("display precision"), (wxGetApp().path_file_init), String(""));
+	time_check.read_from_file(String("time check"), (wxGetApp().path_file_init), String(""));
+	time_zone.read_from_file(String("time zone"), (wxGetApp().path_file_init), String(""));
 
-	max_lat.read_from_file_to(String("maximal latitude coastline data"), String(path_file_init), String("R"), String(""));
-	min_lat.read_from_file_to(String("minimal latitude coastline data"), String(path_file_init), String("R"), String(""));
+	max_lat.read_from_file_to(String("maximal latitude coastline data"), (wxGetApp().path_file_init), String("R"), String(""));
+	min_lat.read_from_file_to(String("minimal latitude coastline data"), (wxGetApp().path_file_init), String("R"), String(""));
 
-	size_small_button_over_width_screen.read_from_file(String("size small button over width screen"), String(path_file_init), String(""));
-	size_large_button_over_width_screen.read_from_file(String("size large button over width screen"), String(path_file_init), String(""));
-	size_icon_over_width_screen.read_from_file(String("size icon over width screen"), String(path_file_init), String(""));
-	size_message_image_over_width_screen.read_from_file(String("size message image over width screen"), String(path_file_init), String(""));
-	point_size.read_from_file(String("point size"), String(path_file_init), String(""));
+	size_small_button_over_width_screen.read_from_file(String("size small button over width screen"), (wxGetApp().path_file_init), String(""));
+	size_large_button_over_width_screen.read_from_file(String("size large button over width screen"), (wxGetApp().path_file_init), String(""));
+	size_icon_over_width_screen.read_from_file(String("size icon over width screen"), (wxGetApp().path_file_init), String(""));
+	size_message_image_over_width_screen.read_from_file(String("size message image over width screen"), (wxGetApp().path_file_init), String(""));
+	point_size.read_from_file(String("point size"), (wxGetApp().path_file_init), String(""));
 
 
 	//set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen
@@ -378,49 +378,49 @@ bool MyApp::OnInit() {
 	);
 
 
-	length_plot_area_over_length_chart.read_from_file(String("length of plot area over length of chart"), String(path_file_init), String(""));
-	length_chart_over_length_chart_frame.read_from_file(String("length of chart over length of chart frame"), String(path_file_init), String(""));
-	length_border_over_length_screen.read_from_file(String("length of border over length of screen"), String(path_file_init), String(""));
+	length_plot_area_over_length_chart.read_from_file(String("length of plot area over length of chart"), (wxGetApp().path_file_init), String(""));
+	length_chart_over_length_chart_frame.read_from_file(String("length of chart over length of chart frame"), (wxGetApp().path_file_init), String(""));
+	length_border_over_length_screen.read_from_file(String("length of border over length of screen"), (wxGetApp().path_file_init), String(""));
 
 	border.set(String("border"), (rectangle_display.GetWidth()) * (length_border_over_length_screen.value), String(""));
 
 	//read n_points_minor_ticks from file_init
-	n_points_minor_ticks.read_from_file(String("number of points for minor ticks"), String(path_file_init), String(""));
+	n_points_minor_ticks.read_from_file(String("number of points for minor ticks"), (wxGetApp().path_file_init), String(""));
 	//read relative_displacement from file_init
-	relative_displacement.read_from_file(String("relative displacement"), String(path_file_init), String(""));
+	relative_displacement.read_from_file(String("relative displacement"), (wxGetApp().path_file_init), String(""));
 	//read standard_thickness_over_length_screen from file_init
-	standard_thickness_over_length_screen.read_from_file(String("standard thickness over length screen"), String(path_file_init), String(""));
+	standard_thickness_over_length_screen.read_from_file(String("standard thickness over length screen"), (wxGetApp().path_file_init), String(""));
 	//read large_thickness_over_length_screen from file_init
-	large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), String(path_file_init), String(""));
+	large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), (wxGetApp().path_file_init), String(""));
 	//read color horizon from file
-	color_horizon.read_from_file(String("color horizon"), String(path_file_init), String(""));
+	color_horizon.read_from_file(String("color horizon"), (wxGetApp().path_file_init), String("R"), String(""));
 	//read color selected item from file
-	color_selected_item.read_from_file(String("color selected item"), String(path_file_init), String(""));
+	color_selected_item.read_from_file(String("color selected item"), (wxGetApp().path_file_init), String("R"), String(""));
 	//read tick length over width plot area from file_init
-	tick_length_over_width_plot_area.read_from_file(String("tick length over width plot area"), String(path_file_init), String(""));
+	tick_length_over_width_plot_area.read_from_file(String("tick length over width plot area"), (wxGetApp().path_file_init), String(""));
 	//read tick length over width plot area from file_init
-	tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), String(path_file_init), String(""));
+	tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), (wxGetApp().path_file_init), String(""));
 	//read min_crossing_angle from file_init
-	min_crossing_angle.read_from_file_to(String("minimal crossing angle between circles of equal altitude"), (wxGetApp().path_file_init), String(""));
+	min_crossing_angle.read_from_file_to(String("minimal crossing angle between circles of equal altitude"), (wxGetApp().path_file_init), String("R"), String(""));
 
 
 
 	//read the time, and set the background color to either the day or night background color, which are read from file
-	//    time_zone.read_from_file(String("time zone"), String(path_file_init), String(""));
-	//    dawn.read_from_file(String("dawn"), String(path_file_init), String(""));
-	//    dusk.read_from_file(String("dusk"), String(path_file_init), String(""));
+	//    time_zone.read_from_file(String("time zone"), (wxGetApp().path_file_init), String(""));
+	//    dawn.read_from_file(String("dawn"), (wxGetApp().path_file_init), String(""));
+	//    dusk.read_from_file(String("dusk"), (wxGetApp().path_file_init), String(""));
 	//    current_time.set_current(time_zone, String(""));
 
 
 	//    if((current_time < dawn) || (current_time > dusk)){
 	//        //we are at night -> set background color to night mode
 	//
-	//        foreground_color.read_from_file(String("night foreground color"), String(path_file_init), String(""));
+	//        foreground_color.read_from_file(String("night foreground color"), (wxGetApp().path_file_init), String(""));
 	//
 	//    }else{
 	//        //we are at day -> set background color ot day mode
 	//
-	//        foreground_color.read_from_file(String("day foreground color"), String(path_file_init), String(""));
+	//        foreground_color.read_from_file(String("day foreground color"), (wxGetApp().path_file_init), String(""));
 	//
 	//    }
 
@@ -430,11 +430,11 @@ bool MyApp::OnInit() {
 
 	foreground_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
 	background_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
-	error_color.read_from_file(String("error color"), String(path_file_init), String(""));
+	error_color.read_from_file(String("error color"), (wxGetApp().path_file_init), String("R"), String(""));
 	highlight_color = color_selected_item;
 	dark_mode = (settings->GetAppearance()).IsDark();
 
-	//    default_projection.read_from_file(String("default projection"), String(path_file_init), String(""));
+	//    default_projection.read_from_file(String("default projection"), (wxGetApp().path_file_init), String(""));
 
 
 	list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
@@ -448,7 +448,7 @@ bool MyApp::OnInit() {
 
 
 	//allocate and show the chart frames
-	n_chart_frames.read_from_file(String("number chart frames"), String(path_file_init), String(""));
+	n_chart_frames.read_from_file(String("number chart frames"), (wxGetApp().path_file_init), String(""));
 	(list_frame->chart_frames).resize(n_chart_frames.value);
 	for (i = 0; i < (list_frame->chart_frames).size(); i++) {
 

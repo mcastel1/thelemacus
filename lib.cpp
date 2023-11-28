@@ -488,6 +488,8 @@ FileR::FileR() {
 
 }
 
+//set the name of *this from input. On Win32: if input is a file path, it gets from it the [file name without folder nor extension] and write it 
+// into name_without_folder_nor_extension, while if input is not a  file path, it writes it directly into name_without_folder_nor_extension
 void FileR::set_name(String input) {
 
 #ifdef __APPLE__
@@ -499,9 +501,18 @@ void FileR::set_name(String input) {
 #endif
 
 #ifdef _WIN32
-	//I am on WIN32->input = [file name without folder nor extenion] -> I set name_without_folder_nor_extension equal to input
+	//I am on WIN32->input = [file name without folder nor extenion] -> I set name_without_folder_nor_extension from input
 
-	(name_without_folder_nor_extension.value) = (input.value);
+	if (input.is_a_file_path(String(""))) {
+
+		input.split_file_path(NULL, &name_without_folder_nor_extension, NULL, String(""));
+
+	}
+	else {
+
+		(name_without_folder_nor_extension.value) = (input.value);
+
+	}
 
 #endif
 

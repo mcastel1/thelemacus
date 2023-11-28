@@ -283,12 +283,13 @@ bool MyApp::OnInit(){
 
 //
     FileR file_r;
-    file_r.set_name(String("recent"));
-    bool output;
+      bool output;
+      String my_string;
+
+  file_r.set_name(String("recent"));
     output = file_r.check_if_exists(String(""));
-    
-    
     file_r.count_lines(String(""));
+    my_string.read_from_file_to(String("projection"), String("init"), String(""));
 
 
     //to run the app with Visual Studio on Windows

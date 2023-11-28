@@ -46,7 +46,7 @@ inline double acos(Double x) {
 
 }
 
-//read from file the content after 'name = ' and writes it into the *object (the element of class C). This works for any class C. This function opens a new file, sets its name to filename and opens it
+//read from file the content after 'name = ' and writes it into the *object (the element of class C). This works for any class C. On WIN32, it accepts both a filepath  such as "C:/a/b.txt" and a resource name such as my_resource_file in filename. 
 template<class C> void read_from_file(C* object, String name, String filename, [[maybe_unused]] String prefix) {
 
 #ifdef __APPLE__
@@ -70,9 +70,18 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 	if(filename.is_a_file_path(String(""))){
 		//filenam is a file path -> read from FileRW
 
+		FileRW file;
+
+		file.set_name(filename);
+		file.open(String("in"), prefix);
+
+		object->template read_from_stream<fstream>(name, (file.value), true, prefix);
+
+		file.close(prefix);
+
 	}
 	else{
-		//filename is not a file path -> read from File
+		//filename is not a file path -> read from FileR
 
 		FileR file;
 
@@ -80,6 +89,8 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 		file.open(prefix);
 
 		object->template read_from_stream<istringstream>(name, (file.value), true, prefix);
+
+		file.close(prefix);
 
 	}
 

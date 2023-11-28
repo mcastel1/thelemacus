@@ -599,6 +599,7 @@ public:
     bool open(String);
     void close(String);
     bool check_if_exists(String);
+    void count_lines(String);
     istringstream* create_istringstream(String);
 
     //    wxDECLARE_EVENT_TABLE();

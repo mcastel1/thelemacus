@@ -706,7 +706,6 @@ public:
    
     Position();
     Position(Angle, Angle);
-    void enter(String, String);
     void set_cartesian(String, const gsl_vector*, String);
     void get_cartesian(String, gsl_vector*, String);
     void print(String, String, ostream&);
@@ -897,8 +896,6 @@ public:
     void compute_H_a(String);
     bool compute_H_o(String);
     
-    bool enter(Catalog, String, String);
-    bool modify(Catalog, String);
     void print(String, String, ostream&);
     bool read_from_file(FileRW&, String);
     bool reduce(Route*, String);
@@ -938,7 +935,6 @@ public:
     //~Data();
     bool add_sight_and_reduce(Sight*, String);
     bool modify_sight(unsigned int, String);
-    void add_position(String);
     void add_route(Route*, String);
     void remove_sight(unsigned int, Answer, String);
     void remove_position(unsigned int, String);

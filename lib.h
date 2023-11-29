@@ -711,7 +711,6 @@ public:
     void print(String, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
     bool transport(Route, String);
-    Route transport(String);
     string to_string(unsigned int);
     bool distance(Position, Length*, String, String);
     bool is_in(Route, String);
@@ -763,7 +762,6 @@ public:
     void compute_end(String);
     bool compute_end(Length, String);
     int crossing(Route, vector<Position>*, double*, String);
-    void transport(String);
     static double lambda_minus_pi(double, void*);
     int inclusion(Route, bool, vector<Angle>*, String);
     int inclusion(MyRectangle, bool, vector<Angle>*, String);

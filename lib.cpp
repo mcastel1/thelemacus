@@ -3904,64 +3904,6 @@ bool Position::transport(Route route, [[maybe_unused]] String prefix) {
 
 }
 
-//transport a Position with a Route entered from keyboard and return the existing Route
-Route Position::transport(String prefix) {
-
-	Route route;
-	stringstream temp_label;
-	bool check;
-	String new_prefix;
-	Time t_start, t_end;
-
-	//append \t to prefix
-	new_prefix = prefix.append(String("\t"));
-
-	cout << prefix.value << "Enter route:\n";
-
-	// route is not related to any sight, so I set
-	((route.related_sight).value) = -1;
-
-	do {
-		route.type.enter(String("type [l(=loxodrome)/o(=orthodrome)]"), new_prefix);
-		check = ((route.type == String("l")) || (route.type == String("o")));
-		if (!check) {
-			cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
-		}
-	} while (!check);
-	route.reference_position = (*this);
-	route.Z.enter(String("Course Over Ground"), new_prefix);
-
-	do {
-
-		t_start.enter(String("start time of course"), new_prefix);
-		t_end.enter(String("end time of course"), new_prefix);
-		if (t_start > t_end) {
-			cout << new_prefix.value << RED << "Start time of course is larger than end time of course!\n" << RESET;
-		}
-
-	} while (t_start > t_end);
-
-	(route.sog).enter(String("Speed Over Ground [kt]"), new_prefix);
-
-	t_start.to_MJD();
-	t_end.to_MJD();
-
-	(route.l).set(String("Length"), (route.sog).value * ((t_end.MJD) - (t_start.MJD)) * 24.0, new_prefix);
-
-	route.print(String("transport"), prefix, cout);
-
-	route.compute_end(new_prefix);
-
-	temp_label << label.value << "tr. w. " << route.type.value << ", COG = " << route.Z.to_string(String(""), (display_precision.value), false) << ", l = " << (route.l).value << " nm";
-	(route.end.label).set(String(""), temp_label.str(), prefix);
-
-	(*this) = route.end;
-
-	print(String("transported position"), prefix, cout);
-
-	return route;
-
-}
 
 //rotates the Position (*this) according to the Rotation s, and writes the result in *p
 void Position::rotate(String name, Rotation r, Position* p, [[maybe_unused]] String prefix) {
@@ -4855,40 +4797,6 @@ void Answer::enter(String name, [[maybe_unused]] String prefix) {
 void Answer::print(String name, String prefix, ostream& ostr) {
 
 	ostr << prefix.value << name.value << " = " << value << "\n";
-
-}
-
-
-//this function transports the Route (*this) with the Route transporting route
-void Route::transport(String prefix) {
-
-	String new_prefix;
-
-	if ((type.value)[0] == 'c') {
-
-		Route transporting_route;
-		stringstream temp_label;
-
-		//append \t to prefix
-		new_prefix = prefix.append(String("\t"));
-
-		transporting_route = (reference_position.transport(new_prefix));
-
-
-		//append 'translated to ...' to the label of sight, and make this the new label of sight
-		temp_label << label.value << ", tr. w. " << transporting_route.type.value << ", COG = " << transporting_route.Z.to_string(String(""), (display_precision.value), false) << ", l = " << transporting_route.l.value << " nm";
-		label.set(String(""), temp_label.str(), prefix);
-		//given that I transported the Route object, this object is no longer directly connected to its Sight object, thus I set
-		(related_sight.value) = -1;
-
-		print(String("transported route"), prefix, cout);
-
-	}
-	else {
-
-		cout << prefix.value << RED << "I cannot transport routes different from circles of equal altitude\n" << RESET;
-
-	}
 
 }
 

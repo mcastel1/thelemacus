@@ -4187,54 +4187,6 @@ void Route::print(String name, String prefix, ostream& ostr) {
 }
 
 
-void Route::enter(String name, [[maybe_unused]] String prefix) {
-
-	string s;
-	bool check;
-	String new_prefix;
-
-	//append \t to prefix
-	new_prefix = prefix.append(String("\t"));
-
-	cout << prefix.value << "Enter " << name.value << ":\n";
-
-	do {
-		type.enter(String("type [l(=loxodrome)/o(=orthodrome)/c(=circle of equal altitude)]"), new_prefix);
-		check = ((type == String("l")) || (type == String("o")) || (type == String("c")));
-		if (!check) {
-			cout << new_prefix.value << RED << "\tEntered value of type is not valid!\n" << RESET;
-		}
-	} while (!check);
-
-	if ((type == String("l")) || (type == String("o"))) {
-		//if the route is a loxodrome or an orthodrome, I enter its starting point and  starting heading (the ground position GP and aperture angle remain unused)
-
-		reference_position.enter(String("starting position"), new_prefix);
-		Z.enter(String("starting heading"), new_prefix);
-		l.enter(String("length"), String("nm"), new_prefix);
-
-
-	}
-	else {
-		//if the route is a circle of equal altitude, I enter its ground position and its aperture angle (Z remains unused) ...
-		reference_position.enter(String("ground position"), new_prefix);
-		omega.enter(String("aperture angle"), new_prefix);
-		l.set(String("length"), 2.0 * M_PI * Re * sin(omega), new_prefix);
-
-		/* //... and then compute the resulting starting position and starting heading */
-		/* reference_position.phi.set(String("latitude of ground position"), (reference_position.phi.value) - (omega.value), true, new_prefix); */
-		/* reference_position.lambda.set(String("longitude of ground position"), reference_position.lambda.value, true, new_prefix); */
-	}
-
-	label.enter(String("label"), new_prefix);
-
-	//given that the route has just been entered, it is not yet related to any sight, thus I set
-	(related_sight.value) = -1;
-
-}
-
-
-
 bool Chrono::read_from_file(String name, FileRW& file, bool search_entire_file, [[maybe_unused]] String prefix) {
 
 	string line;
@@ -5876,38 +5828,6 @@ void Data::print_routes(bool print_all_routes, String prefix, ostream& ostr) {
 
 
 }
-
-
-bool Data::modify_sight(unsigned int i, [[maybe_unused]] String prefix) {
-
-	bool check;
-
-	check = true;
-
-	check &= ((sight_list[i]).modify((*catalog), prefix));
-
-	if (check) {
-
-		check &= ((sight_list[i]).reduce(&(route_list[(sight_list[i]).related_route.value]), prefix));
-
-	}
-
-
-	if (check) {
-
-		(sight_list[i]).print(String("Sight modified"), prefix, cout);
-
-	}
-	else {
-
-		cout << prefix.value << RED << "I could not modify sight!\n" << RESET;
-
-	}
-
-	return check;
-
-}
-
 
 
 bool Data::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix) {

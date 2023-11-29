@@ -758,7 +758,6 @@ public:
     Route(void);
     Route(String, Position, Angle, Length);
     Route(String, Position, Angle);
-    void enter(String, String);
     void print(String, String, ostream&);
     void read_from_file(FileRW&, String);
     void compute_end(String);
@@ -934,7 +933,6 @@ public:
     Data(Catalog*, String);
     //~Data();
     bool add_sight_and_reduce(Sight*, String);
-    bool modify_sight(unsigned int, String);
     void add_route(Route*, String);
     void remove_sight(unsigned int, Answer, String);
     void remove_position(unsigned int, String);

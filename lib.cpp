@@ -5514,7 +5514,7 @@ bool Sight::check_time_interval(String prefix) {
 
 	String new_prefix;
 	stringstream temp;
-	FileRW data_file;
+	FileR data_file;
 
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
@@ -5530,7 +5530,7 @@ bool Sight::check_time_interval(String prefix) {
 	data_file.set_name(temp.str());
 
 
-	if (data_file.check_if_exists(new_prefix)) {
+	if(data_file.check_if_exists(new_prefix)){
 		//the ephemerides file data_file exists -> check the time interval
 
 		int l_min, l_max;
@@ -11839,8 +11839,17 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 		if ((parent->parent->highlighted_route) == -1) {
 			//no Route is highlighted -> in listcontrol_sights and listcontrol_routes go back to showing the first respective items
 
-			parent->parent->listcontrol_routes->EnsureVisible(0);
-			parent->parent->listcontrol_sights->EnsureVisible(0);
+            if((parent->parent->listcontrol_routes->GetItemCount()) > 0){
+                
+                parent->parent->listcontrol_routes->EnsureVisible(0);
+                
+            }
+            
+            if((parent->parent->listcontrol_sights->GetItemCount()) > 0){
+                
+                parent->parent->listcontrol_sights->EnsureVisible(0);
+                
+            }
 
 		}
 

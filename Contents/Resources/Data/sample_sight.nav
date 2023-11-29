@@ -15,22 +15,6 @@ Sights in the data:
 		use of stopwatch = n
 		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 		label = 2023-10-16 13:28:18 UTC+2
-	Sight #2:
-		body:
-			Type = star
-			Name = vega
-			Right ascension = 279° 13.92611999999986'
-			Declination = 38° 46.93896000000009'
-		sextant altitude = 33° 2.999999999999829'
-		index error = 0° 1.9'
-		artificial horizon = n
-		height of eye = 2.13 m
-		master-clock date and hour of sight:
-			master-clock date and hour of sight = 2023-11-28
-			hour of master-clock date and hour of sight = 15:39:21
-		use of stopwatch = n
-		hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-		label = 2023-11-28 15:39:30 UTC+2
 Routes in the data:
 	Route #1:
 		type = c

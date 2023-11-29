@@ -673,7 +673,16 @@ void FileR::count_lines(String prefix) {
 
 	FileR temp;
 
+#ifdef __APPLE__
+	//I am on APPLE operating system -> FileR is a file with an actual path -> I set the path of temp equal to that of *this
+	temp.set_name(name);
+#endif
+
+#ifdef  _WIN32
+	//I am on WIN32 operating system -> FileR is a resource -> I set the resource id of temp equal to that of *this
 	temp.set_name(name_without_folder_nor_extension);
+#endif
+
 	temp.open(prefix);
 	number_of_lines = ((unsigned int)count(istreambuf_iterator<char>((*(temp.value))), istreambuf_iterator<char>(), '\n'));
 	temp.close(prefix);

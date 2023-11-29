@@ -1376,26 +1376,6 @@ template<class S> void Answer::read_from_stream(String name, S* input_stream, bo
 
 }
 
-
-void String::enter(String name, [[maybe_unused]] String prefix) {
-
-	String new_prefix;
-
-	//append \t to prefix
-	new_prefix = prefix.append(String("\t"));
-
-	cout << prefix.value << "Enter " << name.value << ":";
-	getline(cin, value);
-
-	if (value.empty()) {
-		get_date_hour((*this), new_prefix);
-		cout << prefix.value << YELLOW << "Entered an empty " << name.value << ", setting it to " << value << "\n" << RESET;
-	}
-
-	print(name, true, prefix, cout);
-
-}
-
 //Tries to print the string name to ostr. If print_if_empty the string is printed even if it is empty, while if print_if_empty = false the string is not printed if empty
 void String::print(String name, bool print_if_empty, String prefix, ostream& ostr) {
 
@@ -6459,61 +6439,6 @@ void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
 	}
 
 }
-
-
-void Data::transport_route(unsigned int i, [[maybe_unused]] String prefix) {
-
-	stringstream name;
-	String new_prefix;
-	Route original_route;
-	Answer keep_original;
-
-	//append \t to prefix
-	new_prefix = prefix.append(String("\t"));
-
-	name.str("");
-	name << "Route to be transported: Route #" << i + 1;
-
-	original_route = route_list[i];
-
-	(route_list[i]).print(String(name.str().c_str()), new_prefix, cout);
-	(route_list[i]).transport(prefix);
-	cout << prefix.value << "Route transported.\n";
-
-	keep_original.enter(String("whether you want to keep the original route"), new_prefix);
-	if (keep_original == Answer('y', new_prefix)) {
-		route_list.insert(route_list.begin() + i, original_route);
-	}
-
-}
-
-
-void Data::transport_position(unsigned int i, [[maybe_unused]] String prefix) {
-
-	stringstream name;
-	String new_prefix;
-	Position original_position;
-	Answer keep_original;
-
-	//append \t to prefix
-	new_prefix = prefix.append(String("\t"));
-
-	name.str("");
-	name << "Position to be transported: Position #" << i + 1;
-
-	original_position = position_list[i];
-
-	(position_list[i]).print(String(name.str().c_str()), new_prefix, cout);
-	(position_list[i]).transport(prefix);
-	cout << prefix.value << "Position transported.\n";
-
-	keep_original.enter(String("whether you want to keep the original position"), new_prefix);
-	if (keep_original == Answer('y', new_prefix)) {
-		position_list.insert(position_list.begin() + i, original_position);
-	}
-
-}
-
 
 
 bool Sight::enter(Catalog catalog, String name, [[maybe_unused]] String prefix) {

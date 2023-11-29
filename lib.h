@@ -106,7 +106,6 @@ public:
     
     String();
     String(string);
-    void enter(String, String);
     void print(String, bool, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
@@ -607,43 +606,6 @@ public:
     
 };
 
-
-
-
-bool get_date_hour(String &line, String prefix){
-    
-    FileRW file;
-    stringstream command;
-    bool check;
-    
-    check = true;
-    
-    command.str("");
-    command << "rm -rf output.out; date \"+%Y-%m-%d %H:%M:%S\" >> output.out";
-    system(command.str().c_str());
-    
-    ((file.name).value) = "output.out";
-    check &= file.open(String("in"), prefix);
-    line.value.clear();
-    getline(*(file.value), line.value);
-    file.close(prefix);
-    
-    command.str("");
-    command << "rm -rf output.out";
-    system(command.str().c_str());
-    
-    if(!check){
-        cout << prefix.value << RED << "\tI could not get hour and date!\n" << RESET;
-    }
-    
-    return check;
-    
-}
-
-
-
-
-
 class Length{
     
 public:
@@ -665,7 +627,6 @@ public:
     
 };
  
-
 
 class Speed{
     
@@ -977,11 +938,9 @@ public:
     //~Data();
     bool add_sight_and_reduce(Sight*, String);
     bool modify_sight(unsigned int, String);
-    void transport_route(unsigned int, String);
     void add_position(String);
     void add_route(Route*, String);
     void remove_sight(unsigned int, Answer, String);
-    void transport_position(unsigned int, String);
     void remove_position(unsigned int, String);
     void remove_route(unsigned int, Answer, String);
     bool read_from_file(FileRW&, String);

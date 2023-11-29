@@ -50,4 +50,13 @@ sample ICON  "Z:/Contents/Resources/Images/Light/app_icon.ico"
 init DATA "Z:/Contents/Resources/Data/init.txt"
 recent DATA "Z:/Contents/Resources/Data/recent.txt"
 sample_sight DATA "Z:/Contents/Resources/Data/sample_sight.nav"
+catalog DATA "Z:/Contents/Resources/Data/catalog.txt"
+j2000_to_itrf93	DATA "Z:/Contents/Resources/Data/j2000_to_itrf93.txt"
+jupiter	DATA "Z:/Contents/Resources/Data/jupiter.txt"
+map_conv_blocked DATA "Z:/Contents/Resources/Data/map_conv_blocked.csv"
+moon DATA "Z:/Contents/Resources/Data/moon.txt"
+n_line_map_conv_blocked	DATA "Z:/Contents/Resources/Data/n_line_map_conv_blocked.txt"
+saturn DATA "Z:/Contents/Resources/Data/saturn.txt"
+sun	DATA "Z:/Contents/Resources/Data/sun.txt"
+
 

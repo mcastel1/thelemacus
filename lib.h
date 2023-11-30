@@ -165,7 +165,7 @@ public:
     double value;
     
     bool equal_approx(Double);
-    void read_from_file(String, FileRW&, bool, String);
+    template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file(String, String, String);
     void set(String, double, String);
     void print(String, String, ostream&);

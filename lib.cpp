@@ -275,14 +275,6 @@ bool Int::operator>(const int& i) {
 
 }
 
-//enter an Int
-void Int::enter(String name, [[maybe_unused]] String prefix) {
-
-	enter_int(&value, false, 0, 0, name, prefix);
-	print(name, prefix, cout);
-
-}
-
 
 File::File() {
 
@@ -292,86 +284,6 @@ File::File() {
 	//    value->precision((data_precision.value));
 
 }
-
-
-
-
-
-
-
-
-
-//
-////open the file *this in mode 'mode' and returns value pointing to it
-//bool File::open(String mode, [[maybe_unused]] String prefix){
-//    
-//#ifdef __APPLE__
-//    
-//    if(mode == String("in")){
-//        value->open(name.value, ios::in);
-//    }else{
-//        value->open(name.value, ios::out);
-//    }
-//    
-//    cout << prefix.value << "Opening " << (name.value) << " in mode '" << mode.value << "' ... \n";
-//    
-//    if(!value){
-//        
-//        cout << prefix.value << RED << "... error opening file " << (name.value) << "!\n" << RESET;
-//        return 0;
-//        
-//    }else{
-//        
-//        cout << prefix.value <<  "... done.\n";
-//        return 1;
-//        
-//    }
-//    
-//#endif
-//#ifdef _WIN32
-//    //in WIN32 I can open (from the resources incorporated in the .exe file) files in read mode only -> if mode == String("out") I return false
-//    
-//    if(mode == String("in")){
-//        
-//        char* bytes;
-//        HMODULE hModule;
-//        HRSRC hResource;
-//        HGLOBAL hMemory;
-//        DWORD dwSize;
-//        LPVOID lpAddress;
-//        LPCWSTR resource_id;
-//        wstring temp;
-//
-//        temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
-//
-//        //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
-//        resource_id = (temp.c_str());
-//
-//        hModule = GetModuleHandle(NULL);
-//        hResource = FindResource(hModule, resource_id, L"DATA");
-//        hMemory = LoadResource(hModule, hResource);
-//        dwSize = SizeofResource(hModule, hResource);
-//        lpAddress = LockResource(hMemory);
-//
-//        bytes = new char[dwSize];
-//        memcpy(bytes, lpAddress, dwSize);
-//        value = new istringstream(bytes);
-//
-//        return true;
-//        
-//    }else{
-//        
-//        cout << prefix.value << RED << "Cannot open resouce files in mode out in WIN32 operating system!\n" << RESET;
-//        
-//        return false;
-//
-//    }
-//    
-//#endif
-//
-//    
-//}
-
 
 
 FileRW::FileRW() {
@@ -887,34 +799,11 @@ template<class S> void Int::read_from_stream([[maybe_unused]] String name, S* in
 
 }
 
-//reads the Int *this from file with path filename. Writes the result in *this
-void Int::read_from_file(String name, String filename, [[maybe_unused]] String prefix) {
+//reads from file the content after 'name = ' and writes it into *this.
+//if mode = 'RW' ('R') it reads form a FileRW (FileR)
+void Int::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
 
-	string line;
-	size_t pos;
-	FileRW file;
-
-	file.set_name(filename);
-	file.open(String("in"), prefix);
-	cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
-
-	do {
-
-		line.clear();
-		getline(*(file.value), line);
-
-	} while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
-
-	pos = line.find(" = ");
-
-	//read the string after ' = ' until the end of line string and store it into value
-	value = stoi(line.substr(pos + 3, line.size() - (pos + 3)).c_str(), 0);
-
-	cout << prefix.value << YELLOW << "... done.\n" << RESET;
-
-	print(name, prefix, cout);
-
-	file.close(prefix);
+    read_from_file<Int>(this, name, filename, mode, prefix);
 
 }
 
@@ -9332,7 +9221,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	//set the zoom factor to 1 for the initial configuration of the projection
 	zoom_factor.set(String(""), 1.0, String(""));
 	//read zoom_factor_max from file_init
-	(wxGetApp().zoom_factor_max).read_from_file(String("maximal zoom factor"), (wxGetApp().path_file_init), String(""));
+	(wxGetApp().zoom_factor_max).read_from_file_to(String("maximal zoom factor"), (wxGetApp().path_file_init), String("R"), String(""));
 	idling = false;
 	unset_idling = new UnsetIdling<ChartFrame>(this);
 	print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);

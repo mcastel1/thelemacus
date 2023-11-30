@@ -352,10 +352,10 @@ bool MyApp::OnInit() {
 	path_file_disconnect_icon = image_directory.append(read_from_file(String("name file disconnect icon"), (wxGetApp().path_file_init), String("R"), String("")));
 
 
-	data_precision.read_from_file(String("data precision"), (wxGetApp().path_file_init), String(""));
-	display_precision.read_from_file(String("display precision"), (wxGetApp().path_file_init), String(""));
+	data_precision.read_from_file_to(String("data precision"), (wxGetApp().path_file_init), String("R"), String(""));
+	display_precision.read_from_file_to(String("display precision"), (wxGetApp().path_file_init), String("R"), String(""));
 	time_check.read_from_file(String("time check"), (wxGetApp().path_file_init), String(""));
-	time_zone.read_from_file(String("time zone"), (wxGetApp().path_file_init), String(""));
+	time_zone.read_from_file_to(String("time zone"), (wxGetApp().path_file_init), String("R"), String(""));
 
 	max_lat.read_from_file_to(String("maximal latitude coastline data"), (wxGetApp().path_file_init), String("R"), String(""));
 	min_lat.read_from_file_to(String("minimal latitude coastline data"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -364,7 +364,7 @@ bool MyApp::OnInit() {
 	size_large_button_over_width_screen.read_from_file_to(String("size large button over width screen"), (wxGetApp().path_file_init), String("in"),  String(""));
 	size_icon_over_width_screen.read_from_file_to(String("size icon over width screen"), (wxGetApp().path_file_init), String("in"),  String(""));
 	size_message_image_over_width_screen.read_from_file_to(String("size message image over width screen"), (wxGetApp().path_file_init), String("in"),  String(""));
-	point_size.read_from_file(String("point size"), (wxGetApp().path_file_init), String(""));
+	point_size.read_from_file_to(String("point size"), (wxGetApp().path_file_init), String("R"), String(""));
 
 
 	//set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen
@@ -385,7 +385,7 @@ bool MyApp::OnInit() {
 	border.set(String("border"), (rectangle_display.GetWidth()) * (length_border_over_length_screen.value), String(""));
 
 	//read n_points_minor_ticks from file_init
-	n_points_minor_ticks.read_from_file(String("number of points for minor ticks"), (wxGetApp().path_file_init), String(""));
+	n_points_minor_ticks.read_from_file_to(String("number of points for minor ticks"), (wxGetApp().path_file_init), String("R"), String(""));
 	//read relative_displacement from file_init
 	relative_displacement.read_from_file_to(String("relative displacement"), (wxGetApp().path_file_init), String("in"), String(""));
 	//read standard_thickness_over_length_screen from file_init
@@ -448,7 +448,7 @@ bool MyApp::OnInit() {
 
 
 	//allocate and show the chart frames
-	n_chart_frames.read_from_file(String("number chart frames"), (wxGetApp().path_file_init), String(""));
+	n_chart_frames.read_from_file_to(String("number chart frames"), (wxGetApp().path_file_init), String("R"), String(""));
 	(list_frame->chart_frames).resize(n_chart_frames.value);
 	for (i = 0; i < (list_frame->chart_frames).size(); i++) {
 

@@ -9101,7 +9101,7 @@ wxBitmap(wxBitmap(wxString(path.filename_without_folder_nor_extension(String("")
 //construct a StaticBitmap object by assignign to it the parent parent, loading it from path path and rescaling it to size
 StaticBitmap::StaticBitmap(wxWindow* parent, String path, wxSize size) : wxStaticBitmap(parent, wxID_ANY, wxNullBitmap) {
 
-	FileRW file;
+	FileR file;
 
 	file.set_name(path);
 

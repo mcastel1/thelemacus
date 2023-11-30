@@ -4924,7 +4924,7 @@ void Sight::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcont
 
 
 //this function returns true if the reading operation has been performed without errors, false otherwise
-bool Sight::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
+template<class S> bool Sight::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool read_entire_stream, [[maybe_unused]] String prefix) {
 
 	string line;
 	bool check = true;
@@ -4937,43 +4937,43 @@ bool Sight::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 
 	additional_items = 0;
 
-	body.read_from_file(String("body"), file, new_prefix);
+    body.read_from_stream<S>(String("body"), input_stream, false, new_prefix);
 	if (body.type.value != "star") {
 		items.insert(items.begin() + 1 + (additional_items++), all_items[1]);
-		limb.read_from_stream<fstream>(String("limb"), file.value, false, new_prefix);
+		limb.read_from_stream<fstream>(String("limb"), input_stream, false, new_prefix);
 	}
-	H_s.read_from_stream<fstream>(String("sextant altitude"), (file.value), false, new_prefix);
-	index_error.read_from_stream<fstream>(String("index error"), (file.value), false, new_prefix);
-	artificial_horizon.read_from_stream<fstream>(String("artificial horizon"), (file.value), false, new_prefix);
+	H_s.read_from_stream<fstream>(String("sextant altitude"), (input_stream), false, new_prefix);
+	index_error.read_from_stream<fstream>(String("index error"), (input_stream), false, new_prefix);
+	artificial_horizon.read_from_stream<fstream>(String("artificial horizon"), (input_stream), false, new_prefix);
 	if (artificial_horizon == Answer('n', new_prefix)) {
 		items.insert(items.begin() + 3 + (additional_items++), String("height of eye"));
-		height_of_eye.read_from_stream<fstream>(String("height of eye"), (file.value), false, new_prefix);
+		height_of_eye.read_from_stream<fstream>(String("height of eye"), (input_stream), false, new_prefix);
 	}
 
-	check &= master_clock_date_and_hour.read_from_file(String("master-clock date and hour of sight"), file, new_prefix);
+	check &= master_clock_date_and_hour.read_from_stream<S>(String("master-clock date and hour of sight"), input_stream, false, new_prefix);
 	if (!check) {
 		cout << prefix.value << RED << "\tMaster-clock date and hour is not valid!\n" << RESET;
 	}
 	time = master_clock_date_and_hour;
 
-	use_stopwatch.read_from_stream<fstream>(String("use of stopwatch"), (file.value), false, new_prefix);
+	use_stopwatch.read_from_stream<fstream>(String("use of stopwatch"), (input_stream), false, new_prefix);
 
 	if (use_stopwatch == Answer('y', new_prefix)) {
 
 		items.insert(items.begin() + 5 + (additional_items++), String("stopwatch reading"));
-		stopwatch.read_from_file(String("stopwatch"), file, false, new_prefix);
+		stopwatch.read_from_stream<S>(String("stopwatch"), input_stream, false, new_prefix);
 		time += stopwatch;
 
 	}
 
-	TAI_minus_UTC.read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file, false, new_prefix);
+	TAI_minus_UTC.read_from_stream<S>(String("TAI - UTC at time of master-clock synchronization with UTC"), input_stream, false, new_prefix);
 	time += TAI_minus_UTC;
 	time.print(String("TAI date and hour of sight"), new_prefix, cout);
 
 	//check whether the date and hour of sight falls within the time window covered by JPL data files
 	check &= check_time_interval(prefix);
 
-	label.read_from_stream<fstream>(String("label"), (file.value), false, new_prefix);
+	label.read_from_stream<fstream>(String("label"), (input_stream), false, new_prefix);
 	if (label.value == "") {
 		//if the value of label read from file is empty, set in label the time at which *this has been read
 

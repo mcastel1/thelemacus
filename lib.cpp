@@ -812,37 +812,10 @@ template<class S> void Double::read_from_stream(String name, S* input_stream, bo
 
 
 //reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
-void Double::read_from_file(String name, String filename, [[maybe_unused]] String prefix) {
+void Double::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
 
-	string line;
-	size_t pos;
-	FileRW file;
+    read_from_file<Double>(this, name, filename, mode, prefix);
 
-	file.set_name(filename);
-	file.open(String("in"), prefix);
-	cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
-
-	//rewind the file pointer
-	file.value->clear();                 // clear fail and eof bits
-	file.value->seekg(0, std::ios::beg); // back to the start!
-
-	do {
-
-		line.clear();
-		getline(*(file.value), line);
-
-	} while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
-
-	pos = line.find(" = ");
-
-	//read the string after ' = ' until the end of line string and store it into value
-	value = stod(line.substr(pos + 3, line.size() - (pos + 3)).c_str(), NULL);
-
-	cout << prefix.value << YELLOW << "... done.\n" << RESET;
-
-	print(name, prefix, cout);
-
-	file.close(prefix);
 
 }
 
@@ -7928,7 +7901,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
 
 	(circle_observer.omega).read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), prefix);
-	thickness_route_selection_over_length_screen.read_from_file(String("thickness route selection over length screen"), (wxGetApp().path_file_init), prefix);
+	thickness_route_selection_over_length_screen.read_from_file_to(String("thickness route selection over length screen"), (wxGetApp().path_file_init), String("in"), prefix);
 
 	rotation = Rotation(
 		Angle(String("Euler angle alpha"), -M_PI_2, String("")),
@@ -9368,7 +9341,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)((wxGetApp().zoom_factor_max).value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);
 
 	//sets the coefficients for the function which relates the zoom factor to the slider value: read from file (wxGetApp().e_zoom) and set (wxGetApp().a_zoom), (wxGetApp().b_zoom)
-	(wxGetApp().e_zoom).read_from_file(String("exponent zoom"), (wxGetApp().path_file_init), String(""));
+	(wxGetApp().e_zoom).read_from_file_to(String("exponent zoom"), (wxGetApp().path_file_init), String("in"), String(""));
 	(wxGetApp().a_zoom).set(String(""), (-1.0 + ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
 	(wxGetApp().b_zoom).set(String(""), (pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value) - ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
 

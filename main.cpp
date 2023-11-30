@@ -360,10 +360,10 @@ bool MyApp::OnInit() {
 	max_lat.read_from_file_to(String("maximal latitude coastline data"), (wxGetApp().path_file_init), String("R"), String(""));
 	min_lat.read_from_file_to(String("minimal latitude coastline data"), (wxGetApp().path_file_init), String("R"), String(""));
 
-	size_small_button_over_width_screen.read_from_file(String("size small button over width screen"), (wxGetApp().path_file_init), String(""));
-	size_large_button_over_width_screen.read_from_file(String("size large button over width screen"), (wxGetApp().path_file_init), String(""));
-	size_icon_over_width_screen.read_from_file(String("size icon over width screen"), (wxGetApp().path_file_init), String(""));
-	size_message_image_over_width_screen.read_from_file(String("size message image over width screen"), (wxGetApp().path_file_init), String(""));
+	size_small_button_over_width_screen.read_from_file_to(String("size small button over width screen"), (wxGetApp().path_file_init), String("in"),  String(""));
+	size_large_button_over_width_screen.read_from_file_to(String("size large button over width screen"), (wxGetApp().path_file_init), String("in"),  String(""));
+	size_icon_over_width_screen.read_from_file_to(String("size icon over width screen"), (wxGetApp().path_file_init), String("in"),  String(""));
+	size_message_image_over_width_screen.read_from_file_to(String("size message image over width screen"), (wxGetApp().path_file_init), String("in"),  String(""));
 	point_size.read_from_file(String("point size"), (wxGetApp().path_file_init), String(""));
 
 
@@ -378,28 +378,28 @@ bool MyApp::OnInit() {
 	);
 
 
-	length_plot_area_over_length_chart.read_from_file(String("length of plot area over length of chart"), (wxGetApp().path_file_init), String(""));
-	length_chart_over_length_chart_frame.read_from_file(String("length of chart over length of chart frame"), (wxGetApp().path_file_init), String(""));
-	length_border_over_length_screen.read_from_file(String("length of border over length of screen"), (wxGetApp().path_file_init), String(""));
+	length_plot_area_over_length_chart.read_from_file_to(String("length of plot area over length of chart"), (wxGetApp().path_file_init), String("in"),  String(""));
+	length_chart_over_length_chart_frame.read_from_file_to(String("length of chart over length of chart frame"), (wxGetApp().path_file_init), String("in"),  String(""));
+	length_border_over_length_screen.read_from_file_to(String("length of border over length of screen"), (wxGetApp().path_file_init), String("in"),  String(""));
 
 	border.set(String("border"), (rectangle_display.GetWidth()) * (length_border_over_length_screen.value), String(""));
 
 	//read n_points_minor_ticks from file_init
 	n_points_minor_ticks.read_from_file(String("number of points for minor ticks"), (wxGetApp().path_file_init), String(""));
 	//read relative_displacement from file_init
-	relative_displacement.read_from_file(String("relative displacement"), (wxGetApp().path_file_init), String(""));
+	relative_displacement.read_from_file_to(String("relative displacement"), (wxGetApp().path_file_init), String("in"), String(""));
 	//read standard_thickness_over_length_screen from file_init
-	standard_thickness_over_length_screen.read_from_file(String("standard thickness over length screen"), (wxGetApp().path_file_init), String(""));
+	standard_thickness_over_length_screen.read_from_file_to(String("standard thickness over length screen"), (wxGetApp().path_file_init), String("in"),  String(""));
 	//read large_thickness_over_length_screen from file_init
-	large_thickness_over_length_screen.read_from_file(String("large thickness over length screen"), (wxGetApp().path_file_init), String(""));
+	large_thickness_over_length_screen.read_from_file_to(String("large thickness over length screen"), (wxGetApp().path_file_init), String("in"),  String(""));
 	//read color horizon from file
 	color_horizon.read_from_file(String("color horizon"), (wxGetApp().path_file_init), String("R"), String(""));
 	//read color selected item from file
 	color_selected_item.read_from_file(String("color selected item"), (wxGetApp().path_file_init), String("R"), String(""));
 	//read tick length over width plot area from file_init
-	tick_length_over_width_plot_area.read_from_file(String("tick length over width plot area"), (wxGetApp().path_file_init), String(""));
+	tick_length_over_width_plot_area.read_from_file_to(String("tick length over width plot area"), (wxGetApp().path_file_init), String("in"), String(""));
 	//read tick length over width plot area from file_init
-	tick_length_over_aperture_circle_observer.read_from_file(String("tick length over aperture circle observer"), (wxGetApp().path_file_init), String(""));
+	tick_length_over_aperture_circle_observer.read_from_file_to(String("tick length over aperture circle observer"), (wxGetApp().path_file_init), String("in"), String(""));
 	//read min_crossing_angle from file_init
 	min_crossing_angle.read_from_file_to(String("minimal crossing angle between circles of equal altitude"), (wxGetApp().path_file_init), String("R"), String(""));
 

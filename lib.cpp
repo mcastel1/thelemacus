@@ -4121,7 +4121,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
 }
 
 
-template<class S> bool Chrono::read_from_stream([[maybe_unused]] String name, FileRW& file, bool search_entire_stream, [[maybe_unused]] String prefix) {
+template<class S> bool Chrono::read_from_stream([[maybe_unused]] String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
 
 	string line;
 	stringstream new_prefix;
@@ -4136,13 +4136,13 @@ template<class S> bool Chrono::read_from_stream([[maybe_unused]] String name, Fi
 	if (search_entire_stream) {
 
 		//rewind the file pointer
-		file.value->clear();                 // clear fail and eof bits
-		file.value->seekg(0, std::ios::beg); // back to the start!
+		input_stream->clear();                 // clear fail and eof bits
+		input_stream->seekg(0, std::ios::beg); // back to the start!
 
 		do {
 
 			line.clear();
-			getline(*(file.value), line);
+			getline((*input_stream), line);
 
 		} while ((line.find(name.value)) == (string::npos));
 
@@ -4150,7 +4150,7 @@ template<class S> bool Chrono::read_from_stream([[maybe_unused]] String name, Fi
 	else {
 
 		line.clear();
-		getline(*(file.value), line);
+		getline((*input_stream), line);
 
 	}
 
@@ -4262,7 +4262,7 @@ bool Chrono::read_from_file(String name, String filename, [[maybe_unused]] Strin
 
 
 //this function returns true if the date read is consistent, false if it is not
-bool Date::read_from_file(String name, FileRW& file, bool search_entire_stream, [[maybe_unused]] String prefix) {
+template<class S> bool Date::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
 
 	string line;
 	stringstream new_prefix;
@@ -4277,13 +4277,13 @@ bool Date::read_from_file(String name, FileRW& file, bool search_entire_stream, 
 	if (search_entire_stream) {
 
 		//rewind the file pointer
-		file.value->clear();                 // clear fail and eof bits
-		file.value->seekg(0, std::ios::beg); // back to the start!
+		input_stream->clear();                 // clear fail and eof bits
+		input_stream->seekg(0, std::ios::beg); // back to the start!
 
 		do {
 
 			line.clear();
-			getline(*(file.value), line);
+			getline((*input_stream), line);
 
 		} while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
@@ -4291,7 +4291,7 @@ bool Date::read_from_file(String name, FileRW& file, bool search_entire_stream, 
 	else {
 
 		line.clear();
-		getline(*(file.value), line);
+		getline((*input_stream), line);
 
 	}
 
@@ -4371,7 +4371,7 @@ void Date::check_leap_year(void) {
 
 }
 
-bool Time::read_from_file(String name, FileRW& file, [[maybe_unused]] String prefix) {
+template<class S> bool Time::read_from_stream(String name, S* input_stream, [[maybe_unused]] String prefix) {
 
 	string line;
 	bool check = true;
@@ -4382,17 +4382,17 @@ bool Time::read_from_file(String name, FileRW& file, [[maybe_unused]] String pre
 
 
 	//read dummy line
-	getline(*(file.value), line);
+	getline((*input_stream), line);
 
 	cout << prefix.value << name.value << ":\n";
 
 	//read date
-	if (!(date.read_from_file(name, file, false, new_prefix))) {
+	if (!(date.read_from_stream<S>(name, input_stream, false, new_prefix))) {
 		check &= false;
 	}
 
 	//read chrono
-	if (!(chrono.read_from_file(name, file, false, new_prefix))) {
+	if (!(chrono.read_from_stream<S>(name, input_stream, false, new_prefix))) {
 		check &= false;
 	}
 

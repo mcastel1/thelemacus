@@ -5157,7 +5157,7 @@ void Data::print_to_kml(String prefix) {
 	//replace line with number of points for routes in plot_dummy.plt
 	plot_command.str("");
 	command.str("");
-	n_points_routes.read_from_file(String("number of points for routes"), file_init, true, new_prefix);
+	n_points_routes.read_from_stream<fstream>(String("number of points for routes"), file_init.value, true, new_prefix);
 
 
 
@@ -5256,7 +5256,7 @@ void Data::print_to_kml(String prefix) {
 }
 
 
-bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
+template<class S> bool Data::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool read_entire_stream, [[maybe_unused]] String prefix) {
 
 	stringstream line_ins;
 	string line;
@@ -5278,11 +5278,11 @@ bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 		//1. Here I read sights
 
 		//read dummy text line '    Sights in the data:"
-		getline(*(file.value), line);
+		getline(*(input_stream), line);
 
 		line.clear();
 		//read dummyt text line
-		getline(*(file.value), line);
+		getline(*(input_stream), line);
 		pos = line.find("Sight #");
 
 		//if I have found 'Sight #' in the line above, then I proceed and read the relative sight
@@ -5319,7 +5319,7 @@ bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 
 			line.clear();
 			//read dummyt text line
-			getline(*(file.value), line);
+			getline(*(input_stream), line);
 			pos = line.find("Sight #");
 
 		}
@@ -5328,7 +5328,7 @@ bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 
 		line.clear();
 		//read dummy text line
-		getline(*(file.value), line);
+		getline(*(input_stream), line);
 		pos = line.find("Route #");
 
 		//if I have found 'Route #' in the line above, then I proceed and read the relative position
@@ -5339,7 +5339,7 @@ bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 			//read the position block
 			Route route;
 
-			route.read_from_stream<fstream>(String("route"), file.value, false, new_prefix);
+			route.read_from_stream<fstream>(String("route"), input_stream, false, new_prefix);
 
 			route.print(String("New route"), new_prefix, cout);
 
@@ -5348,7 +5348,7 @@ bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 
 			line.clear();
 			//read dummyt text line
-			getline(*(file.value), line);
+			getline(*(input_stream), line);
 			pos = line.find("Route #");
 
 		}
@@ -5358,7 +5358,7 @@ bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 
 		line.clear();
 		//read dummy text line
-		getline(*(file.value), line);
+		getline(*(input_stream), line);
 		pos = line.find("Position #");
 
 		//if I have found 'Position #' in the line above, then I proceed and read the relative position
@@ -5369,7 +5369,7 @@ bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 			//read the position block
 			Position position;
 
-			position.read_from_stream<fstream>(String("position"), (file.value), false, new_prefix);
+			position.read_from_stream<fstream>(String("position"), (input_stream), false, new_prefix);
 
 			position.print(String("New position"), new_prefix, cout);
 
@@ -5378,7 +5378,7 @@ bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 
 			line.clear();
 			//read dummyt text line
-			getline(*(file.value), line);
+			getline(*(input_stream), line);
 			pos = line.find("Position #");
 
 		}

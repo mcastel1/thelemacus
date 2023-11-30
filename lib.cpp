@@ -5445,14 +5445,14 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
 	file_init.open(String("in"), prefix);
 
 	//read number of intervals for ticks from file_init
-	n_intervals_ticks_preferred.read_from_file(String("preferred number of intervals for ticks"), file_init, true, new_prefix);
+	n_intervals_ticks_preferred.read_from_stream<fstream>(String("preferred number of intervals for ticks"), file_init.value, true, new_prefix);
 
 	//read number of points for routes from file_init
-	n_points_routes.read_from_file(String("number of points for routes"), file_init, true, new_prefix);
+	n_points_routes.read_from_stream<fstream>(String("number of points for routes"), file_init.value, true, new_prefix);
 
 	//read n_points_plot_coastline_* from file_init
-	n_points_plot_coastline_Mercator.read_from_file(String("number of points coastline Mercator"), file_init, true, new_prefix);
-	n_points_plot_coastline_3D.read_from_file(String("number of points coastline 3D"), file_init, true, new_prefix);
+	n_points_plot_coastline_Mercator.read_from_stream<fstream>(String("number of points coastline Mercator"), file_init.value, true, new_prefix);
+	n_points_plot_coastline_3D.read_from_stream<fstream>(String("number of points coastline 3D"), file_init.value, true, new_prefix);
 
 	file_init.close(prefix);
 
@@ -7466,77 +7466,6 @@ void Chrono::print(String name, String prefix, ostream& ostr) {
 	ostr << prefix.value << "hour of " << name.value << " = " << to_string(precision, false) << "\n";
 
 };
-void Chrono::enter(String name, String prefix) {
-
-	String new_prefix;
-	bool check;
-	string input;
-	size_t pos;
-
-
-	//append \t to prefix
-	new_prefix = prefix.append(String("\t"));
-
-	do {
-
-		check = true;
-
-		cout << prefix.value << "Enter " << name.value << " [hh mm ss.s]:";
-		getline(cin >> ws, input);
-
-		//check whether the string contains two ' '
-		check &= (count(input.begin(), input.end(), ' ') == 2);
-
-		if (check) {
-			//in this case there are two ' ' in input, thus I can proceed checkin the other fields
-
-			//find the position of the first ' '
-			pos = (input).find(" ");
-
-			//check whether hour part is formatted correctly
-			check &= check_unsigned_int(input.substr(0, pos).c_str(), &h, true, 0, 24);
-
-			if (check) {
-				//in this case, the hour's format is valid
-
-				//now I am no longer interested in the hour, the string runs from the minutes to seconds
-				input = (input.substr(pos + 1).c_str());
-
-				//find the position of the second ' '
-				pos = input.find(" ");
-
-				//check whether minute part is formatted correctly
-				check &= check_unsigned_int(input.substr(0, pos).c_str(), &m, true, 0, 60);
-
-				if (check) {
-					//in this case the minute part is formatted correctly
-
-					//now I am no longer interested in the minutes, the string runs from the seconds to the end of the string
-					input = (input.substr(pos + 1).c_str());
-
-					//check whether the part with seconds is formatted correctly
-					check &= check_double(input.c_str(), &s, true, 0.0, 60.0);
-
-				}
-
-			}
-
-		}
-
-		if (!check) {
-
-			cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
-
-		}
-
-
-	} while (!check);
-
-	//  enter_unsigned_int(&h, true, 0, 24, String("hh"), new_prefix);
-	//enter_unsigned_int(&m, true, 0, 60, String("mm"), new_prefix);
-	//enter_double(&s, true, 0.0, 60.0, String("ss.s"), new_prefix);
-
-}
 
 
 
@@ -13405,7 +13334,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 	//First off, I need to set TAI_minus_UTC, which will be used in the following. If sight_in = NULL,  I read it from from file_init
 	if (sight_in == NULL) {
 
-		(sight->TAI_minus_UTC).read_from_file(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init, true, new_prefix);
+		(sight->TAI_minus_UTC).read_from_stream<fstream>(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init.value, true, new_prefix);
 
 	}
 

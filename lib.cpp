@@ -3361,7 +3361,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
 }
 
-void Route::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
+template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] String prefix){
 
 	String new_prefix;
 	string line;
@@ -3369,29 +3369,29 @@ void Route::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
 
-	type.read_from_stream<fstream>(String("type"), (file.value), false, new_prefix);
+	type.read_from_stream<fstream>(String("type"), input_stream, false, new_prefix);
 
 	line.clear();
-	getline(*(file.value), line);
+	getline(*input_stream, line);
 
 
 	if ((type.value)[0] == 'c') {
 
-		reference_position.read_from_stream<fstream>(String("reference position"), (file.value), false, new_prefix);
-		omega.read_from_stream<fstream>(String("omega"), (file.value), false, new_prefix);
+		reference_position.read_from_stream<fstream>(String("reference position"), input_stream, false, new_prefix);
+		omega.read_from_stream<fstream>(String("omega"), input_stream, false, new_prefix);
 		l.set(String("length"), 2.0 * M_PI * Re * sin(omega), new_prefix);
 
 	}
 	else {
 
-		reference_position.read_from_stream<fstream>(String("reference position"), (file.value), false, new_prefix);
+		reference_position.read_from_stream<fstream>(String("reference position"), input_stream, false, new_prefix);
 
-		Z.read_from_stream<fstream>(String("starting heading"), (file.value), false, new_prefix);
-		l.read_from_stream<fstream>(String("length"), (file.value), false, new_prefix);
+		Z.read_from_stream<fstream>(String("starting heading"), input_stream, false, new_prefix);
+		l.read_from_stream<fstream>(String("length"), input_stream, false, new_prefix);
 
 	}
 
-	label.read_from_stream<fstream>(String("label"), (file.value), false, new_prefix);
+	label.read_from_stream<fstream>(String("label"), input_stream, false, new_prefix);
 	if (label.value == "") {
 		//if the value of label read from file is empty, set in label the time at which *this has been read
 
@@ -5347,7 +5347,7 @@ bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 			//read the position block
 			Route route;
 
-			route.read_from_file(file, new_prefix);
+			route.read_from_stream<fstream>(String("route"), file.value, new_prefix);
 
 			route.print(String("New route"), new_prefix, cout);
 

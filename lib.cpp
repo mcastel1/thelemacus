@@ -4371,7 +4371,7 @@ void Date::check_leap_year(void) {
 
 }
 
-template<class S> bool Time::read_from_stream(String name, S* input_stream, [[maybe_unused]] String prefix) {
+template<class S> bool Time::read_from_stream(String name, S* input_stream, [[maybe_unused]] bool read_entire_stream, [[maybe_unused]] String prefix) {
 
 	string line;
 	bool check = true;
@@ -4639,7 +4639,7 @@ template<class S> void Limb::read_from_stream([[maybe_unused]] String name, S* i
 
 
 //read a Body from file, and it returns true if it has not reached the end of file, false otherwise
-bool Body::read_from_file(String name, FileRW& file, [[maybe_unused]] String prefix) {
+template<class S> bool Body::read_from_stream(String name, S* input_stream, [[maybe_unused]] bool read_entire_stream, [[maybe_unused]] String prefix) {
 
 	string line;
 	String new_prefix;
@@ -4652,15 +4652,15 @@ bool Body::read_from_file(String name, FileRW& file, [[maybe_unused]] String pre
 	cout << prefix.value << name.value << ":\n";
 
 	//read first line with no information
-	getline(*(file.value), line);
+	getline((*input_stream), line);
 
-	if (!(*(file.value)).eof()) {
-		//*(file.value) has not reached the end of file
+	if (!(*input_stream).eof()) {
+		//*(input_stream) has not reached the end of file
 
 
 		//read type
 		line.clear();
-		getline(*(file.value), line);
+		getline(*(input_stream), line);
 		pos = line.find(" = ");
 		type = line.substr(pos + 3, line.size() - (pos + 3));
 		cout << new_prefix.value << "Type = " << type.value << "\n";
@@ -4668,25 +4668,25 @@ bool Body::read_from_file(String name, FileRW& file, [[maybe_unused]] String pre
 
 		//read name
 		line.clear();
-		getline(*(file.value), line);
+		getline(*(input_stream), line);
 		pos = line.find(" = ");
 		((*this).name) = line.substr(pos + 3, line.size() - (pos + 3));
 		cout << new_prefix.value << "Name = " << ((*this).name).value << "\n";
 
 
 		if (type == String("star")) {
-			RA.read_from_stream<fstream>(String("right ascension"), (file.value), false, new_prefix);
-			d.read_from_stream<fstream>(String("declination"), (file.value), false, new_prefix);
+			RA.read_from_stream<S>(String("right ascension"), input_stream, false, new_prefix);
+			d.read_from_stream<S>(String("declination"), input_stream, false, new_prefix);
 		}
 		else {
-			radius.read_from_stream<fstream>(String("radius"), (file.value), false, new_prefix);
+			radius.read_from_stream<S>(String("radius"), input_stream, false, new_prefix);
 		}
 
 		return true;
 
 	}
 	else {
-		//*(file.value) has reached the end of file
+		//*input_stream has reached the end of stream
 
 		return false;
 
@@ -4708,7 +4708,7 @@ Catalog::Catalog(String filename, [[maybe_unused]] String prefix) {
 	if (file.open(String("in"), String(""))) {
 
 		//check whether the next line in the file has reached the end of file
-		while ((body.read_from_file(String("read body"), file, prefix)) == true) {
+		while ((body.read_from_stream<fstream>(String("read body"), file.value, false, prefix)) == true) {
 
 			//if the next line in the file has not reached the end of file, I set *(file.value) to its old position and keep reading the file
 			list.push_back(body);

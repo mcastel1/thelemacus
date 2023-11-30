@@ -1562,10 +1562,9 @@ void Rotation::print(String name, String prefix, ostream& ostr) {
 
 
 //reads the Rotation from file whose path is filename, by looking through the entire file
-void Rotation::read_from_file(String name, String filename, [[maybe_unused]] String prefix) {
+template<class S> void Rotation::read_from_stream(String name, S* input_stream, [[maybe_unused]] bool search_entire_stream,  [[maybe_unused]] String prefix) {
 
 	string line;
-	FileRW file;
 	Angle alpha, beta, gamma;
 	String new_prefix;
 
@@ -1573,26 +1572,41 @@ void Rotation::read_from_file(String name, String filename, [[maybe_unused]] Str
 	new_prefix = prefix.append(String("\t"));
 
 
-	file.set_name(filename);
-	file.open(String("in"), prefix);
-	cout << prefix.value << YELLOW << "Reading " << name.value << " from file " << file.name.value << " ...\n" << RESET;
+	cout << prefix.value << YELLOW << "Reading " << name.value << " from stream " << input_stream << " ...\n" << RESET;
+    
+    if (search_entire_stream) {
+        
+        
+        do {
+            
+            line.clear();
+            getline((*input_stream), line);
+            
+        } while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+        
+    }else {
+        
+        line.clear();
+        getline((*input_stream), line);
 
-	do {
+    }
 
-		line.clear();
-		getline(*(file.value), line);
-
-	} while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
-
-	alpha.read_from_stream(String("alpha"), (file.value), false, new_prefix);
-	beta.read_from_stream(String("beta"), (file.value), false, new_prefix);
-	gamma.read_from_stream(String("gamma"), (file.value), false, new_prefix);
+	alpha.read_from_stream<S>(String("alpha"), input_stream, false, new_prefix);
+	beta.read_from_stream<S>(String("beta"), input_stream, false, new_prefix);
+	gamma.read_from_stream<S>(String("gamma"), input_stream, false, new_prefix);
 
 	set(alpha, beta, gamma);
 
-	file.close(String(""));
+}
+
+//reads from file the content after 'name = ' and writes it into *this.
+//if mode = 'RW' ('R') it reads form a FileRW (FileR)
+void Rotation::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
+
+    read_from_file<Rotation>(this, name, filename, mode, prefix);
 
 }
+
 
 
 //constructor of Angle, which does not set the value of the angle
@@ -9848,7 +9862,7 @@ template<class T> void ChartFrame::Reset(T& event) {
 		//                                            Angle(String("Euler angle beta"), 0.0, String("")),
 		//                                            Angle(String("Euler angle gamma"), 0.0, String(""))
 		//                                            );
-		(draw_panel->rotation_0).read_from_file(String("rotation 0"), (wxGetApp().path_file_init), String(""));
+		(draw_panel->rotation_0).read_from_file_to(String("rotation 0"), (wxGetApp().path_file_init), String("R"), String(""));
 
 		(draw_panel->rotation) = (draw_panel->rotation_0);
 

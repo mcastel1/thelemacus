@@ -677,7 +677,9 @@ public:
     void set(Angle, Angle, Angle);
     void set(gsl_matrix*);
     void print(String, String, ostream&);
-    void read_from_file(String, String, String);
+    template<class S> void read_from_stream(String, S*, bool, String);
+    void read_from_file_to(String, String, String, String);
+
     
 };
 

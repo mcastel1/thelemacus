@@ -130,7 +130,7 @@ class Int{
 public:
     int value;
     
-    void read_from_file(String, FileRW&, bool, String);
+    template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file(String, String, String);
     void enter(String, String);
     void set(String, int, String);
@@ -149,8 +149,7 @@ public:
     void print(String, String, ostream&);
     bool set(String, double, String);
     void set_current(Int);
-    void enter(String, String);
-    bool read_from_file(String, FileRW&, bool, String);
+    template<class S> bool read_from_stream(String, S*, bool, String);
     bool read_from_file(String, String, String);
     string to_string(unsigned int, bool);
     
@@ -794,7 +793,7 @@ public:
     
     void print(String, String, ostream&);
     void enter(String, String);
-    bool read_from_file(String, FileRW&, bool, String);
+    template<class S> bool read_from_stream(String, S*, bool, String);
     string to_string(void);
     void check_leap_year(void);
     void set_current(void);
@@ -812,7 +811,7 @@ public:
     void enter(String, String);
     void print(String, String, ostream&);
     void set_current(void);
-    bool read_from_file(String, FileRW&, String);
+    template<class S> bool read_from_stream(String, S*, bool, String);
     
     void to_MJD(void);
     void to_TAI(void);
@@ -845,7 +844,7 @@ public:
     void enter(String, Catalog, String);
     bool check(unsigned int*, Catalog, String);
     void print(String, String, ostream&);
-    bool read_from_file(String, FileRW&, String);
+    template<class S> bool read_from_stream(String, S*, bool, String);
     
     bool operator==(const Body&);
     
@@ -895,7 +894,7 @@ public:
     bool compute_H_o(String);
     
     void print(String, String, ostream&);
-    bool read_from_file(FileRW&, String);
+    template<class S> bool read_from_stream(String, S*, bool, String);
     bool reduce(Route*, String);
     bool check_time_interval(String);
     
@@ -936,7 +935,7 @@ public:
     void remove_sight(unsigned int, Answer, String);
     void remove_position(unsigned int, String);
     void remove_route(unsigned int, Answer, String);
-    bool read_from_file(FileRW&, String);
+    template<class S> bool read_from_stream(String, S*, bool, String);
     void print(bool, String, ostream&);
     void print_to_kml(String);
     void print_sights(String, ostream&);

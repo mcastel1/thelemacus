@@ -5785,7 +5785,7 @@ bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
             Sight sight;
             Route route;
 
-            //if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors 
+            //if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors
             check &= (sight.read_from_stream<fstream>(String("sight"), file.value, false, new_prefix));
             if (check) {
 
@@ -6606,7 +6606,7 @@ void Length::print(String name, String unit, String prefix, ostream& ostr) {
 
 bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] String prefix) {
 
-	FileRW file;
+	FileR file;
 	stringstream filename, line_ins;
 	string line, dummy, temp;
 	int l, l_min, l_max;
@@ -6631,7 +6631,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
 
 
 	file.set_name(String(temp.c_str()));
-	if ((file.open(String("in"), new_prefix)) && check_time_interval(new_prefix)) {
+	if ((file.open(new_prefix)) && check_time_interval(new_prefix)) {
 		//the file corresponding to this->body exists and the time of *this lies within the time interval of NASA JPL ephemerides data
 
 

@@ -7769,7 +7769,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //this function fetches the data in ((wxGetApp().path_file_coastline_data_blocked).value) and stores them in data_x, data_y, p_coastline so that they can be read fastly
 void ListFrame::GetAllCoastLineData(void) {
 
-	FileRW file_n_line, file_coastline_data_blocked;
+	FileR file_n_line, file_coastline_data_blocked;
 	Position p_temp;
 	string data, line;
 	stringstream ins;
@@ -7787,7 +7787,7 @@ void ListFrame::GetAllCoastLineData(void) {
 	file_coastline_data_blocked.set_name((wxGetApp().path_file_coastline_data_blocked));
 
 	//read file n_line and store it into vector n_line
-	file_n_line.open(String("in"), String(""));
+	file_n_line.open(String(""));
 	for (i = 0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i < n_line.size()) && (!((file_n_line.value)->eof())); i++) {
 
 		line.clear();
@@ -7819,7 +7819,7 @@ void ListFrame::GetAllCoastLineData(void) {
 
 
 	 //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
-	file_coastline_data_blocked.open(String("in"), String(""));
+	file_coastline_data_blocked.open(String(""));
 
 	if (show_coastlines == Answer('y', String(""))) {
 

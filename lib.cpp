@@ -3379,7 +3379,7 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
 
-	type.read_from_stream<fstream>(String("type"), input_stream, false, new_prefix);
+	type.read_from_stream<S>(String("type"), input_stream, false, new_prefix);
 
 	line.clear();
 	getline(*input_stream, line);
@@ -3387,21 +3387,21 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 
 	if ((type.value)[0] == 'c') {
 
-		reference_position.read_from_stream<fstream>(String("reference position"), input_stream, false, new_prefix);
-		omega.read_from_stream<fstream>(String("omega"), input_stream, false, new_prefix);
+		reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
+		omega.read_from_stream<S>(String("omega"), input_stream, false, new_prefix);
 		l.set(String("length"), 2.0 * M_PI * Re * sin(omega), new_prefix);
 
 	}
 	else {
 
-		reference_position.read_from_stream<fstream>(String("reference position"), input_stream, false, new_prefix);
+		reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
 
-		Z.read_from_stream<fstream>(String("starting heading"), input_stream, false, new_prefix);
-		l.read_from_stream<fstream>(String("length"), input_stream, false, new_prefix);
+		Z.read_from_stream<S>(String("starting heading"), input_stream, false, new_prefix);
+		l.read_from_stream<S>(String("length"), input_stream, false, new_prefix);
 
 	}
 
-	label.read_from_stream<fstream>(String("label"), input_stream, false, new_prefix);
+	label.read_from_stream<S>(String("label"), input_stream, false, new_prefix);
 	if (label.value == "") {
 		//if the value of label read from file is empty, set in label the time at which *this has been read
 
@@ -3949,10 +3949,10 @@ template<class S> void Position::read_from_stream([[maybe_unused]] String name, 
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
 
-	phi.read_from_stream<fstream>(String("latitude"), input_stream, false, new_prefix);
-	lambda.read_from_stream<fstream>(String("longitude"), input_stream, false, new_prefix);
+	phi.read_from_stream<S>(String("latitude"), input_stream, false, new_prefix);
+	lambda.read_from_stream<S>(String("longitude"), input_stream, false, new_prefix);
 
-	label.read_from_stream<fstream>(String("label"), input_stream, false, new_prefix);
+	label.read_from_stream<S>(String("label"), input_stream, false, new_prefix);
 	if (label.value == "") {
 		//if the value of label read from file is empty, set in label the time at which *this has been read
 

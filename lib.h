@@ -856,9 +856,8 @@ class Limb{
     
 public:
     char value;
-    void enter(String, String);
     void print(String, String, ostream&);
-    void read_from_file(String, FileRW&, bool, String);
+    template<class S> void read_from_stream(String, S*, bool, String);
     
     bool operator==(const Limb&);
     

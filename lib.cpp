@@ -4621,21 +4621,21 @@ Angle Angle::operator/ (const double& x) {
 
 
 
-void Limb::read_from_file(String name, FileRW& file, bool search_entire_file, [[maybe_unused]] String prefix) {
+template<class S> void Limb::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool search_entire_stream, [[maybe_unused]] String prefix) {
 
 	string line;
 	size_t pos;
 
-	if (search_entire_file) {
+	if(search_entire_stream){
 
 		//rewind the file pointer
-		file.value->clear();                 // clear fail and eof bits
-		file.value->seekg(0, std::ios::beg); // back to the start!
+		input_stream->clear();                 // clear fail and eof bits
+		input_stream->seekg(0, std::ios::beg); // back to the start!
 
 		do {
 
 			line.clear();
-			getline(*(file.value), line);
+			getline((*input_stream), line);
 
 		} while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
@@ -4643,7 +4643,7 @@ void Limb::read_from_file(String name, FileRW& file, bool search_entire_file, [[
 	else {
 
 		line.clear();
-		getline(*(file.value), line);
+		getline((*input_stream), line);
 
 	}
 	pos = line.find(" = ");
@@ -4958,7 +4958,7 @@ bool Sight::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 	body.read_from_file(String("body"), file, new_prefix);
 	if (body.type.value != "star") {
 		items.insert(items.begin() + 1 + (additional_items++), all_items[1]);
-		limb.read_from_file(String("limb"), file, false, new_prefix);
+		limb.read_from_stream<fstream>(String("limb"), file.value, false, new_prefix);
 	}
 	H_s.read_from_stream<fstream>(String("sextant altitude"), (file.value), false, new_prefix);
 	index_error.read_from_stream<fstream>(String("index error"), (file.value), false, new_prefix);
@@ -7276,27 +7276,6 @@ string Angle::min_to_string(String mode, unsigned int precision) {
 	output << (fabs(K * value) - floor(fabs(K * value))) * 60.0 << "'";
 
 	return (output.str().c_str());
-
-}
-
-
-
-void Limb::enter(String name, [[maybe_unused]] String prefix) {
-
-	bool check;
-
-	do {
-		cout << prefix.value << "Enter " << name.value << " [u/l/c]:";
-		cin >> value;
-
-		if ((value == 'u') || (value == 'l') || (value == 'c')) { check = true; }
-		else {
-			cout << prefix.value << RED << "Entered value is not valid!\n" << RESET;
-			check = false;
-		}
-	} while (!check);
-
-	print(name, prefix, cout);
 
 }
 

@@ -5256,151 +5256,6 @@ void Data::print_to_kml(String prefix) {
 }
 
 
-template<class S> bool Data::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool read_entire_stream, [[maybe_unused]] String prefix) {
-
-	stringstream line_ins;
-	string line;
-	size_t pos;
-	bool check = true;
-	String new_prefix;
-
-	//append \t to prefix
-	new_prefix = prefix.append(String("\t"));
-
-
-	if (!(file.open(String("in"), new_prefix))) {
-
-		check &= false;
-
-	}
-	else {
-
-		//1. Here I read sights
-
-		//read dummy text line '    Sights in the data:"
-		getline(*(input_stream), line);
-
-		line.clear();
-		//read dummyt text line
-		getline(*(input_stream), line);
-		pos = line.find("Sight #");
-
-		//if I have found 'Sight #' in the line above, then I proceed and read the relative sight
-		while (pos != (string::npos)) {
-
-			cout << new_prefix.value << "Found new sight!\n";
-
-			//read the sight block
-			Sight sight;
-			Route route;
-
-			//if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors
-			check &= (sight.read_from_file(file, new_prefix));
-			if (check) {
-
-				check &= (sight.reduce(&route, new_prefix));
-
-				if (check) {
-					sight.print(String("New sight"), new_prefix, cout);
-
-					sight_list.push_back(sight);
-					cout << new_prefix.value << "Sight added as sight #" << sight_list.size() << ".\n";
-
-					route_list.push_back(route);
-					cout << new_prefix.value << "Route added as route #" << route_list.size() << ".\n";
-
-					//I link the sight to the route, and the route to the sight
-					((route_list[route_list.size() - 1].related_sight).value) = ((int)(sight_list.size())) - 1;
-					((sight_list[sight_list.size() - 1].related_route).value) = ((int)(route_list.size())) - 1;
-
-				}
-
-			}
-
-			line.clear();
-			//read dummyt text line
-			getline(*(input_stream), line);
-			pos = line.find("Sight #");
-
-		}
-
-		//2. Here I read routes
-
-		line.clear();
-		//read dummy text line
-		getline(*(input_stream), line);
-		pos = line.find("Route #");
-
-		//if I have found 'Route #' in the line above, then I proceed and read the relative position
-		while (pos != (string::npos)) {
-
-			cout << new_prefix.value << "Found new route!\n";
-
-			//read the position block
-			Route route;
-
-			route.read_from_stream<fstream>(String("route"), input_stream, false, new_prefix);
-
-			route.print(String("New route"), new_prefix, cout);
-
-			route_list.push_back(route);
-			cout << new_prefix.value << "Route added as position #" << route_list.size() << ".\n";
-
-			line.clear();
-			//read dummyt text line
-			getline(*(input_stream), line);
-			pos = line.find("Route #");
-
-		}
-
-
-		//3. Here I read positions
-
-		line.clear();
-		//read dummy text line
-		getline(*(input_stream), line);
-		pos = line.find("Position #");
-
-		//if I have found 'Position #' in the line above, then I proceed and read the relative position
-		while (pos != (string::npos)) {
-
-			cout << new_prefix.value << "Found new position!\n";
-
-			//read the position block
-			Position position;
-
-			position.read_from_stream<fstream>(String("position"), (input_stream), false, new_prefix);
-
-			position.print(String("New position"), new_prefix, cout);
-
-			position_list.push_back(position);
-			cout << new_prefix.value << "Position added as position #" << position_list.size() << ".\n";
-
-			line.clear();
-			//read dummyt text line
-			getline(*(input_stream), line);
-			pos = line.find("Position #");
-
-		}
-
-
-		file.close(new_prefix);
-
-	}
-
-	if (!check) {
-		cout << prefix.value << RED << "There was an error while reading file!\n" << RESET;
-	}
-
-	return check;
-
-}
-
-
-
-
-
-
 Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
 
 	String new_prefix;
@@ -5779,6 +5634,7 @@ void Data::add_route(Route* route_in, [[maybe_unused]] String prefix) {
 }
 
 
+
 //removes sight #i from sight_list by updating all the connections to between sights and routes. If remove_related_route = 'y', it removes also the route related to sight i
 void Data::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unused]] String prefix) {
 
@@ -5890,6 +5746,147 @@ void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
 	}
 
 }
+
+bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
+
+    stringstream line_ins;
+    string line;
+    size_t pos;
+    bool check = true;
+    String new_prefix;
+
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+
+
+    if (!(file.open(String("in"), new_prefix))) {
+
+        check &= false;
+
+    }
+    else {
+
+        //1. Here I read sights
+
+        //read dummy text line '    Sights in the data:"
+        getline(*(file.value), line);
+
+        line.clear();
+        //read dummyt text line
+        getline(*(file.value), line);
+        pos = line.find("Sight #");
+
+        //if I have found 'Sight #' in the line above, then I proceed and read the relative sight
+        while (pos != (string::npos)) {
+
+            cout << new_prefix.value << "Found new sight!\n";
+
+            //read the sight block
+            Sight sight;
+            Route route;
+
+            //if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors
+            check &= (sight.read_from_stream<fstream>(String("sight"), file.value, false, new_prefix));
+            if (check) {
+
+                check &= (sight.reduce(&route, new_prefix));
+
+                if (check) {
+                    sight.print(String("New sight"), new_prefix, cout);
+
+                    sight_list.push_back(sight);
+                    cout << new_prefix.value << "Sight added as sight #" << sight_list.size() << ".\n";
+
+                    route_list.push_back(route);
+                    cout << new_prefix.value << "Route added as route #" << route_list.size() << ".\n";
+
+                    //I link the sight to the route, and the route to the sight
+                    ((route_list[route_list.size() - 1].related_sight).value) = ((int)(sight_list.size())) - 1;
+                    ((sight_list[sight_list.size() - 1].related_route).value) = ((int)(route_list.size())) - 1;
+
+                }
+
+            }
+
+            line.clear();
+            //read dummyt text line
+            getline(*(file.value), line);
+            pos = line.find("Sight #");
+
+        }
+
+        //2. Here I read routes
+
+        line.clear();
+        //read dummy text line
+        getline(*(file.value), line);
+        pos = line.find("Route #");
+
+        //if I have found 'Route #' in the line above, then I proceed and read the relative position
+        while (pos != (string::npos)) {
+
+            cout << new_prefix.value << "Found new route!\n";
+
+            //read the position block
+            Route route;
+
+            route.read_from_stream<fstream>(String("route"), file.value, false, new_prefix);
+
+            route.print(String("New route"), new_prefix, cout);
+
+            route_list.push_back(route);
+            cout << new_prefix.value << "Route added as position #" << route_list.size() << ".\n";
+
+            line.clear();
+            //read dummyt text line
+            getline(*(file.value), line);
+            pos = line.find("Route #");
+
+        }
+
+
+        //3. Here I read positions
+
+        line.clear();
+        //read dummy text line
+        getline(*(file.value), line);
+        pos = line.find("Position #");
+
+        //if I have found 'Position #' in the line above, then I proceed and read the relative position
+        while (pos != (string::npos)) {
+
+            cout << new_prefix.value << "Found new position!\n";
+
+            //read the position block
+            Position position;
+
+            position.read_from_stream<fstream>(String("position"), (file.value), false, new_prefix);
+
+            position.print(String("New position"), new_prefix, cout);
+
+            position_list.push_back(position);
+            cout << new_prefix.value << "Position added as position #" << position_list.size() << ".\n";
+
+            line.clear();
+            //read dummyt text line
+            getline(*(file.value), line);
+            pos = line.find("Position #");
+
+        }
+
+
+        file.close(new_prefix);
+
+    }
+
+    if (!check) {
+        cout << prefix.value << RED << "There was an error while reading file!\n" << RESET;
+    }
+
+    return check;
+
+}
+
 
 bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String prefix) {
 

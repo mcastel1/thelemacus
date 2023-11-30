@@ -5582,7 +5582,7 @@ void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
 
 }
 
-bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
+bool Data::read_from_file_to(FileRW& file, [[maybe_unused]] String prefix) {
 
     stringstream line_ins;
     string line;
@@ -14846,7 +14846,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 	//here I read a sample sight from file default_open_directory/sample_sight.nav, store into sight and set all the fields in this to the data in sight with set()
 	//
 	file.set_name((wxGetApp().data_directory).append(String("sample_sight.nav")));
-	data->read_from_file(file, String(""));
+	data->read_from_file_to(file, String(""));
 	file_is_untitled = false;
 
 	menu_file->Enable(wxID_HIGHEST + 7, true);
@@ -15556,7 +15556,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event) {
 			//file could be opened
 
 			file.set_name(String((openFileDialog.GetPath()).ToStdString()));
-			data->read_from_file(file, String(""));
+			data->read_from_file_to(file, String(""));
 			//            data->print(true, String(""), cout);
 
 			file_is_untitled = false;

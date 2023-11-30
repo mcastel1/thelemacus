@@ -354,7 +354,7 @@ bool MyApp::OnInit() {
 
 	data_precision.read_from_file_to(String("data precision"), (wxGetApp().path_file_init), String("R"), String(""));
 	display_precision.read_from_file_to(String("display precision"), (wxGetApp().path_file_init), String("R"), String(""));
-	time_check.read_from_file(String("time check"), (wxGetApp().path_file_init), String(""));
+	time_check.read_from_file_to(String("time check"), (wxGetApp().path_file_init), String("R"), String(""));
 	time_zone.read_from_file_to(String("time zone"), (wxGetApp().path_file_init), String("R"), String(""));
 
 	max_lat.read_from_file_to(String("maximal latitude coastline data"), (wxGetApp().path_file_init), String("R"), String(""));

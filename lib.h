@@ -149,7 +149,7 @@ public:
     bool set(String, double, String);
     void set_current(Int);
     template<class S> bool read_from_stream(String, S*, bool, String);
-    bool read_from_file(String, String, String);
+    void read_from_file_to(String, String, String, String);
     string to_string(unsigned int, bool);
     
     bool operator==(const Chrono&), operator!=(const Chrono&), operator<(const Chrono&), operator>(const Chrono&);

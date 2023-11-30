@@ -1,14 +1,14 @@
 Sights in the data:
 	Sight #1:
 		body:
-			Type = moon
-			Name = moon
-			Radius = 938.1209503239741 nm
-		limb = l
+			Type = star
+			Name = arcturus
+			Right ascension = 213° 54.79890000000069'
+			Declination = 19° 10.69494000000006'
 		sextant altitude = 4° 2.999999999999989'
 		index error = 0° 1.9'
 		artificial horizon = n
-		height of eye = 2.133604267208534 m
+		height of eye = 2.13 m
 		master-clock date and hour of sight:
 			master-clock date and hour of sight = 2023-09-19
 			hour of master-clock date and hour of sight = 10:19:35

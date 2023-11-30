@@ -5785,7 +5785,7 @@ bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
             Sight sight;
             Route route;
 
-            //if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors
+            //if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors 
             check &= (sight.read_from_stream<fstream>(String("sight"), file.value, false, new_prefix));
             if (check) {
 

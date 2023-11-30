@@ -910,6 +910,8 @@ public:
     Catalog(String, String);
     void add(String, String, double);
     void print(String, ostream&);
+    void read_from_file_to(String, String, String, String);
+    template<class S> void read_from_stream(String, S*, bool, String);
     
 };
 

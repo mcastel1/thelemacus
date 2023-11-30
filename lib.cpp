@@ -4697,29 +4697,48 @@ template<class S> bool Body::read_from_stream(String name, S* input_stream, [[ma
 
 
 Catalog::Catalog(String filename, [[maybe_unused]] String prefix) {
+    
+    read_from_file_to(String("catalog"), filename, String("R"), prefix);
 
-	FileRW file;
-	string line;
-	Body body;
+//	FileRW file;
+//	string line;
 	//    streampos old_position;
 
 
-	file.set_name(filename);
-	if (file.open(String("in"), String(""))) {
+//	file.set_name(filename);
+//	if (file.open(String("in"), String(""))) {
 
-		//check whether the next line in the file has reached the end of file
-		while ((body.read_from_stream<fstream>(String("read body"), file.value, false, prefix)) == true) {
+	
 
-			//if the next line in the file has not reached the end of file, I set *(file.value) to its old position and keep reading the file
-			list.push_back(body);
+//		file.close(String(""));
 
-		}
-
-		file.close(String(""));
-
-	}
+//	}
 
 }
+
+//reads from file the Catalog and writes it into *this.
+//if mode = 'RW' ('R') it reads form a FileRW (FileR)
+void Catalog::read_from_file_to([[maybe_unused]] String name, String filename, String mode, [[maybe_unused]] String prefix) {
+
+    read_from_file<Catalog>(this, name, filename, mode, prefix);
+
+}
+
+//read from stream input_stream the content and writes it into this
+template<class S> void Catalog::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
+    
+    Body body;
+    
+    //check whether the next line in the file has reached the end of file
+    while((body.read_from_stream<S>(String("read body"), input_stream, false, prefix)) == true) {
+        
+        //if the next line in the file has not reached the end of file, I set *(file.value) to its old position and keep reading the file
+        list.push_back(body);
+        
+    }
+    
+}
+
 
 void Catalog::print(String prefix, ostream& ostr) {
 

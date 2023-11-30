@@ -7004,6 +7004,15 @@ void Position::print(String name, String prefix, ostream& ostr) {
 
 }
 
+//reads from file the content after 'Position # ...' and writes it into *this.
+//if mode = 'RW' ('R') it reads form a FileRW (FileR)
+void Position::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
+
+    read_from_file<Position>(this, name, filename, mode, prefix);
+
+}
+
+
 
 void Angle::normalize(void) {
 

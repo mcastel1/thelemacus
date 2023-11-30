@@ -709,6 +709,7 @@ public:
     void set_cartesian(String, const gsl_vector*, String);
     void get_cartesian(String, gsl_vector*, String);
     void print(String, String, ostream&);
+    void read_from_file_to(String, String, String, String);
     template<class S> void read_from_stream(String, S*, bool, String);
     bool transport(Route, String);
     string to_string(unsigned int);

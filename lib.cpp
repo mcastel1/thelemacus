@@ -13106,7 +13106,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 	parent = parent_input;
 
 	//pointer to init.txt to read fixed sight data from in there
-	FileRW file_init;
 	String new_prefix;
 	unsigned int deg, common_width;
 	double min;
@@ -13124,8 +13123,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
 	print_error_message = new PrintMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
 
-	file_init.set_name((wxGetApp().path_file_init));
-	check &= (file_init.open(String("in"), prefix));
 
 	catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
 
@@ -13166,7 +13163,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 	//First off, I need to set TAI_minus_UTC, which will be used in the following. If sight_in = NULL,  I read it from from file_init
 	if (sight_in == NULL) {
 
-		(sight->TAI_minus_UTC).read_from_stream<fstream>(String("TAI - UTC at time of master-clock synchronization with UTC"), file_init.value, true, new_prefix);
+		(sight->TAI_minus_UTC).read_from_file_to(String("TAI - UTC at time of master-clock synchronization with UTC"), (wxGetApp().path_file_init), String("R"), new_prefix);
 
 	}
 
@@ -13186,7 +13183,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 	StaticText* text_index_error = new StaticText(panel, wxT("Index error"), wxDefaultPosition, wxDefaultSize);
 	//If sight_in = NULL, read index error from init file
 	if (sight_in == NULL) {
-		(sight->index_error).read_from_stream<fstream>(String("index error"), (file_init.value), true, new_prefix);
+		(sight->index_error).read_from_file_to(String("index error"), (wxGetApp().path_file_init), String("R"), new_prefix);
 		(sight->index_error).to_deg_min(&deg, &min);
 	}
 	index_error = new AngleField<SightFrame>(panel, &(sight->index_error), String("+-"));
@@ -13390,7 +13387,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
 	//Maximize();
 
-	file_init.close(prefix);
 
 	if (!check) {
 		cout << prefix.value << RED << "Cannot read sight!\n" << RESET;

@@ -3361,7 +3361,17 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
 }
 
-template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] String prefix){
+//reads from file the content after 'Route = ...' and writes it into *this.
+//if mode = 'RW' ('R') it reads form a FileRW (FileR)
+void Route::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
+
+    read_from_file<Route>(this, name, filename, mode, prefix);
+
+}
+
+
+//read *this from the stream *input_stream. Here search_entire_stream is provided as argument only to match the argument pattern of read_from_stream in other classes, and it is not used (this function reads the Route at the current position of *input_stream)
+template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool search_entire_stream, [[maybe_unused]] String prefix){
 
 	String new_prefix;
 	string line;
@@ -5347,7 +5357,7 @@ bool Data::read_from_file(FileRW& file, [[maybe_unused]] String prefix) {
 			//read the position block
 			Route route;
 
-			route.read_from_stream<fstream>(String("route"), file.value, new_prefix);
+			route.read_from_stream<fstream>(String("route"), file.value, false, new_prefix);
 
 			route.print(String("New route"), new_prefix, cout);
 

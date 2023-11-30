@@ -759,7 +759,8 @@ public:
     Route(String, Position, Angle, Length);
     Route(String, Position, Angle);
     void print(String, String, ostream&);
-    template<class S> void read_from_stream(String, S*, String);
+    void read_from_file_to(String, String, String, String);
+    template<class S> void read_from_stream(String, S*, bool, String);
     void compute_end(String);
     bool compute_end(Length, String);
     int crossing(Route, vector<Position>*, double*, String);

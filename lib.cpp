@@ -4986,13 +4986,13 @@ void Data::print_to_kml(String prefix) {
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
 
-	file_init.open(String("in"), prefix);
+//	file_init.open(prefix);
 	file_kml.remove(prefix);
 
 	//replace line with number of points for routes in plot_dummy.plt
 	plot_command.str("");
 	command.str("");
-	n_points_routes.read_from_stream<fstream>(String("number of points for routes"), file_init.value, true, new_prefix);
+	n_points_routes.read_from_file_to(String("number of points for routes"), (wxGetApp().path_file_init), String("R"), new_prefix);
 
 
 
@@ -5086,7 +5086,7 @@ void Data::print_to_kml(String prefix) {
 
 
 
-	file_init.close(prefix);
+//	file_init.close(prefix);
 
 }
 
@@ -5104,7 +5104,7 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
 	plot_command.precision((data_precision.value));
 	command.precision((data_precision.value));
 
-	file_init.set_name((wxGetApp().path_file_init));
+//	file_init.set_name((wxGetApp().path_file_init));
 	file_id.set_name(String("job_id.txt"));
 	file_gnuplot.set_name(String("plot.plt"));
 	file_boundary.set_name(String("boundary.txt"));
@@ -5132,19 +5132,19 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
 
 	//read paramters from init file
 
-	file_init.open(String("in"), prefix);
+//	file_init.open(String("in"), prefix);
 
 	//read number of intervals for ticks from file_init
-	n_intervals_ticks_preferred.read_from_stream<fstream>(String("preferred number of intervals for ticks"), file_init.value, true, new_prefix);
+	n_intervals_ticks_preferred.read_from_file_to(String("preferred number of intervals for ticks"), wxGetApp().path_file_init, String("R"), new_prefix);
 
 	//read number of points for routes from file_init
-	n_points_routes.read_from_stream<fstream>(String("number of points for routes"), file_init.value, true, new_prefix);
+	n_points_routes.read_from_file_to(String("number of points for routes"), wxGetApp().path_file_init, String("R"), new_prefix);
 
 	//read n_points_plot_coastline_* from file_init
-	n_points_plot_coastline_Mercator.read_from_stream<fstream>(String("number of points coastline Mercator"), file_init.value, true, new_prefix);
-	n_points_plot_coastline_3D.read_from_stream<fstream>(String("number of points coastline 3D"), file_init.value, true, new_prefix);
+	n_points_plot_coastline_Mercator.read_from_file_to(String("number of points coastline Mercator"), wxGetApp().path_file_init, String("R"), new_prefix);
+	n_points_plot_coastline_3D.read_from_file_to(String("number of points coastline 3D"), wxGetApp().path_file_init, String("R"), new_prefix);
 
-	file_init.close(prefix);
+//	file_init.close(prefix);
 
 }
 

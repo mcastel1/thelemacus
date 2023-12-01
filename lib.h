@@ -921,7 +921,8 @@ class Data{
     
 public:
     Catalog* catalog;
-    FileRW file_init, file_id, file_gnuplot, file_kml, file_boundary;
+    FileRW file_id, file_gnuplot, file_kml, file_boundary;
+//    FileR file_init;
     int job_id;
     stringstream command, plot_command;
     vector<Sight> sight_list;

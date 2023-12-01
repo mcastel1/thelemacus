@@ -5105,7 +5105,6 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
 	command.precision((data_precision.value));
 
 //	file_init.set_name((wxGetApp().path_file_init));
-	file_gnuplot.set_name(String("plot.plt"));
 	file_boundary.set_name(String("boundary.txt"));
 	file_boundary.remove(prefix);
 

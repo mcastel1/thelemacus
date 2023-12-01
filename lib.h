@@ -88,7 +88,7 @@ class Bitmap: public wxBitmap{
 public:
     Bitmap();
     Bitmap(String, wxSize);
-
+    
 };
 
 //a class for image objects
@@ -96,7 +96,7 @@ class StaticBitmap: public wxStaticBitmap{
     
 public:
     StaticBitmap(wxWindow*, String, wxSize);
-  
+    
 };
 
 class String{
@@ -199,8 +199,8 @@ public:
     string to_string(String, unsigned int, bool);
     string deg_to_string(String, unsigned int);
     string min_to_string(String, unsigned int);
-
-     bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator > (const Angle&), operator > (const double&);
+    
+    bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator > (const Angle&), operator > (const double&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&), operator * (const double&);
     Angle& operator +=(const Angle&), &operator +=(const double&), &operator -=(const Angle&), &operator -=(const double&);
     
@@ -300,25 +300,25 @@ void MousePositionOnListControl(wxListCtrl* list_control, int* i){
 template<class FF_OK> class MessageFrame: public wxFrame{
     
 public:
-
+    
     wxPanel *panel;
     wxBoxSizer *frame_sizer, *sizer_v;
     wxGridSizer* sizer_grid;
     wxButton* button_ok;
     StaticBitmap* image;
-//    wxBitmap* m_bitmap;
+    //    wxBitmap* m_bitmap;
     //pointer to the class containing the functor which will be called when the button ok is pressed
     FF_OK* f_ok;
- 
+    
     MessageFrame(wxWindow*, FF_OK*, const wxString&, const wxString&, String, const wxPoint&, const wxSize&, String);
-     //initialize the functor to close this MessageFrame when button_ok will be pressed
+    //initialize the functor to close this MessageFrame when button_ok will be pressed
     CloseFrame<MessageFrame>* close_frame;
     void KeyDown(wxKeyEvent&);
-//    void OnPaint(wxPaintEvent&);
+    //    void OnPaint(wxPaintEvent&);
     //    void OnPressOk(wxCommandEvent&);
     
-//    DECLARE_EVENT_TABLE();
-
+    //    DECLARE_EVENT_TABLE();
+    
 };
 
 
@@ -343,7 +343,7 @@ public:
     String string_a, string_b;
     
     template<class E> void KeyDown(E&);
-
+    
 };
 
 
@@ -558,7 +558,7 @@ public:
     //the strean for reading and writing
     fstream* value;
     String /*the full path of the file, including the folder, filename and extension*/name, /*the path of the folder where the file is located*/folder, /*the file extension, without the '.'*/extension;
-
+    
     
     
     FileRW();
@@ -568,9 +568,9 @@ public:
     void remove(String);
     void count_lines(String);
     bool check_if_exists(String);
-
-
-
+    
+    
+    
     //    wxDECLARE_EVENT_TABLE();
     
 };
@@ -584,14 +584,14 @@ public:
     //I am on APPLE operating system: the file will be read from a path in the .app package and read with the ifstream value (read only) -> I include also ame, folder and extension as members of this class
     ifstream* value;
     String /*the full path of the file, including the folder, filename and extension*/name, /*the path of the folder where the file is located*/folder, /*the file extension, without the '.'*/extension;
-
+    
 #endif
 #ifdef _WIN32
     //I am on WIN32 operating system: the file will be loaded from a resource incoporeated in the .exe file and read with the istringstream value
     istringstream* value;
 #endif
     
- 
+    
     FileR();
     void set_name(String);
     bool open(String);
@@ -599,7 +599,7 @@ public:
     bool check_if_exists(String);
     void count_lines(String);
     //istringstream* create_istringstream(String);
-
+    
     //    wxDECLARE_EVENT_TABLE();
     
 };
@@ -624,7 +624,7 @@ public:
     Length &operator += (const Length&), &operator -= (const Length&);
     
 };
- 
+
 
 class Speed{
     
@@ -661,7 +661,7 @@ public:
 
 //this class denotes a rigid rotation R_z(c).R_x(-b).R_z(a) with Euler angles a, b, c
 class Rotation{
-  
+    
 public:
     
     //R[3*i+j] is the element of the j-th column, i-th row of the rotation matrix of this
@@ -678,7 +678,7 @@ public:
     void print(String, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
-
+    
     
 };
 
@@ -703,7 +703,7 @@ public:
     Angle phi, lambda;
     //label to add a note about the position
     String label;
-   
+    
     Position();
     Position(Angle, Angle);
     void set_cartesian(String, const gsl_vector*, String);
@@ -775,14 +775,14 @@ public:
     void DrawOld(unsigned int, Color, int, wxDC*, DrawPanel*);
     void DrawOld(unsigned int, wxDC*, DrawPanel*, String);
     void DrawOld(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
-
+    
     void Draw(unsigned int, Color, int, wxDC*, DrawPanel*, String);
     void Draw(unsigned int, wxDC*, DrawPanel*, String);
     void Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
     
     bool lambda_min_max(Angle*, Angle*, String);
     void compute_l_ends(vector<Length>*, bool*, DrawPanel*, String);
-
+    
 };
 
 class Date{
@@ -901,7 +901,7 @@ public:
     
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
-
+    
 };
 
 class Catalog{
@@ -921,8 +921,7 @@ class Data{
     
 public:
     Catalog* catalog;
-    FileRW file_boundary;
-//    FileR file_init;
+    //    FileR file_init;
     int job_id;
     stringstream command, plot_command;
     vector<Sight> sight_list;
@@ -961,7 +960,7 @@ public:
     Projection();
     Projection(const double, const double);
     Projection operator+(const Projection&), operator-(const Projection&);
-
+    
     
 };
 
@@ -988,7 +987,7 @@ public:
     DestroyFrame(F*);
     
     void operator()(void);
-
+    
 };
 
 class ResetListFrame{
@@ -1047,7 +1046,7 @@ public:
 template<class P> class CheckLimb{
     
 public:
-
+    
     LimbField<P>* p;
     
     CheckLimb(LimbField<P>*);
@@ -1126,7 +1125,7 @@ template<class P> class TabulateDays{
 public:
     
     DateField<P>* p;
-   
+    
     TabulateDays(DateField<P>*);
     template<class T> void operator()(T&);
     
@@ -1148,7 +1147,7 @@ public:
 template<class P> class CheckMonth{
     
 public:
-
+    
     
     DateField<P>* p;
     TabulateDays<P>* tabulate_days;
@@ -1161,7 +1160,7 @@ public:
 template<class P> class CheckDay{
     
 public:
-
+    
     DateField<P>* p;
     
     CheckDay(DateField<P>*);
@@ -1247,7 +1246,7 @@ public:
 };
 
 template<class P> class CheckMinute{
-
+    
 public:
     
     ChronoField<P>* p;
@@ -1302,7 +1301,7 @@ public:
 
 //my own derived class of wxListCtrl
 class ListControl : public wxListCtrl{
-  
+    
 public:
     
     //a vector containing pointers to the buttons of *this (modify button, etc ...) which may be disabled if some event occurs
@@ -1332,7 +1331,7 @@ public:
     
     OnChangeSelectionInListControl(ListControl*, String);
     template<class T> void operator()(T&);
-        
+    
 };
 
 //if an item is selected/deselected in caller, call operator() to make sure that only one item is selected at a time
@@ -1344,7 +1343,7 @@ public:
     
     OnChangeSelectionInLimbField(LimbField<P>*);
     template<class T> void operator()(T&);
-        
+    
 };
 
 
@@ -1391,7 +1390,7 @@ public:
 class ExistingRoute{
     
 public:
-
+    
     //the frame which called this struct
     ListFrame* f;
     
@@ -1405,7 +1404,7 @@ public:
 class NewRoute{
     
 public:
-        
+    
     //the frame which called this struct
     ListFrame* f;
     
@@ -1418,7 +1417,7 @@ public:
 class AllRoutes{
     
 public:
-        
+    
     //the frame which called this struct
     ListFrame* f;
     
@@ -1434,7 +1433,7 @@ public:
     
     //the frame which called this struct
     ListFrame* f;
-
+    
     SomeRoutes(ListFrame*);
     void operator()(wxCommandEvent&);
     
@@ -1445,14 +1444,14 @@ public:
 template<class P> class SetIdling{
     
 public:
- 
+    
     //the frame which called this struct
     P* parent;
-
+    
     SetIdling(P*);
     void operator()(wxCommandEvent&);
     void operator()(void);
-
+    
 };
 
 
@@ -1465,10 +1464,10 @@ public:
     
     //the frame which called this struct
     P* parent;
-
+    
     void operator()(wxCommandEvent&);
     void operator()(void);
-
+    
 };
 
 
@@ -1481,7 +1480,7 @@ public:
     
     //the frame which called this struct
     ListFrame* parent;
-
+    
     void operator()(wxCommandEvent&);
     
 };
@@ -1496,7 +1495,7 @@ public:
     
     //the frame which called this struct
     ListFrame* parent;
-
+    
     void operator()(wxCommandEvent&);
     
 };
@@ -1511,7 +1510,7 @@ public:
     
     //the ListFrame which called this struct
     ListFrame* parent;
-
+    
     void operator()(wxCommandEvent&);
     
 };
@@ -1526,7 +1525,7 @@ public:
     
     //the frame which called this struct
     P* parent;
-     
+    
     void operator()(wxCommandEvent&);
     
 };
@@ -1561,7 +1560,7 @@ public:
     ListFrame* f;
     //the id of the Position to be removed
     long i_position_to_remove;
- 
+    
     
     void operator()(wxCommandEvent&);
     
@@ -1591,7 +1590,7 @@ public:
     template<class S> void get(S&);
     void set(void);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-
+    
     
     
 };
@@ -1606,7 +1605,7 @@ public:
     String title, message, image_path;
     FF_OK* f_ok;
     MessageFrame<FF_OK>* message_frame;
-        
+    
     PrintMessage(T*, FF_OK*);
     
     void SetAndCall(wxControl*, String, String, String);
@@ -1626,7 +1625,7 @@ public:
     FF_YES* f_yes;
     FF_NO* f_no;
     QuestionFrame<FF_YES, FF_NO>* question_frame;
-        
+    
     PrintQuestion(T*, FF_YES*, FF_NO*);
     
     void SetAndCall(wxControl*, String, String, String, String);
@@ -1638,12 +1637,12 @@ public:
 
 //my own derived class of wxStaticText
 class StaticText : public wxStaticText{
-  
+    
 public:
     
-     
+    
     StaticText(wxWindow*, const wxString&, const wxPoint&, const wxSize&);
-        
+    
 };
 
 
@@ -1680,7 +1679,7 @@ public:
     //this rectangle represents the rectangle x_min ... y_max in the Mercator projection
     MyRectangle rectangle_observer;
     
- 
+    
     
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list: in this list there are as many elements as the number of connected curves in which the route is cut (because of the meridian lambda = pi). In each of these elements there are the  points, with respect to the origin of DrawPanel, which represent the route_list[i] discretized
@@ -1696,10 +1695,10 @@ public:
     vector< StaticText* > label_lambda, label_phi;
     //this is used for drawing 
     wxClientDC* client_dc;
-
-
-
- 
+    
+    
+    
+    
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*Draw)(void);
     bool (DrawPanel::*ScreenToProjection)(wxPoint, Projection*);
@@ -1710,7 +1709,7 @@ public:
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
     void (DrawPanel::*Set_size_chart)(void);
-
+    
     
     void SetIdling(bool);
     void Draw_Mercator(void);
@@ -1750,7 +1749,7 @@ public:
     void Render_3D(wxDC*);
     void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);
     void DrawLabel(const Position&, Angle, Angle, Int, String);
-
+    
     bool GetMouseGeoPosition(Position*);
     void OnMouseMovement(wxMouseEvent&);
     void OnMouseLeftDown(wxMouseEvent&);
@@ -1771,7 +1770,7 @@ public:
     
     wxBoxSizer *sizer_h, *sizer_v;
     wxArrayString  /*this is equal to a standard list of the available graphical types*/types;
-
+    
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
     CheckProjection<P>* check;
@@ -1780,7 +1779,7 @@ public:
     vector<int> recent_items;
     
     bool ok;
-
+    
     ProjectionField(wxPanel*);
     void read_recent_items(void);
     void write_recent_items(void);
@@ -1818,7 +1817,7 @@ public:
     bool is_ok(void);
     template<class E> void OnEdit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-
+    
 };
 
 
@@ -1838,7 +1837,7 @@ public:
     bool ok;
     CheckLimb<P>* check;
     OnChangeSelectionInLimbField<P>* change_selection;
-
+    
     LimbField(wxPanel*, Limb*);
     void set(void);
     void Enable(bool);
@@ -1884,8 +1883,8 @@ public:
     template<class E> void OnEditArcDegree(E&);
     template<class E> void OnEditArcMinute(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-
-
+    
+    
 };
 
 //class for graphical object: a field to enter a length, composed of a box. P is the type of the parent which hosts the LengthField object
@@ -1917,7 +1916,7 @@ public:
     template<class E> void OnEditValue(E&);
     template<class E> void OnEditUnit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-
+    
 };
 
 //class for graphical object: a field to enter a String, composed of a box. P is the type of the object in which this StringField will be inserted
@@ -1972,8 +1971,8 @@ public:
     template<class E> void OnEditMonth(E&);
     template<class E> void OnEditDay(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-
-
+    
+    
 };
 
 
@@ -2007,8 +2006,8 @@ public:
     template<class E> void OnEditMinute(E&);
     template<class E> void OnEditSecond(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-
-
+    
+    
 };
 
 class RouteTypeField{
@@ -2034,7 +2033,7 @@ public:
     bool is_ok(void);
     template<class E> void OnEdit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-
+    
     
 };
 
@@ -2066,7 +2065,7 @@ public:
     ListFrame* f;
     //the object which is being transported : a "sight" or a "position"
     String transported_object;
- 
+    
     //constructor, which sets the parent frame
     OnNewRouteInListControlRoutesForTransport(ListFrame*);
     
@@ -2137,11 +2136,11 @@ public:
     AskRemoveRelatedRoute* ask_remove_related_route;
     
     ListFrame(MyApp*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
-
+    
     void set(void);
     void DrawAll(void);
     void Resize(void);
-
+    
     void GetAllCoastLineData(void);
     
     void OnAddSight(wxCommandEvent&);
@@ -2154,7 +2153,7 @@ public:
     template<class E> void OnModifyPosition(E&);
     void OnTransportPosition(wxCommandEvent&);
     template<class E> void OnPressDeletePosition(E&);
-
+    
     void OnAddRoute(wxCommandEvent&);
     void OnAddRouteForTransport(wxCommandEvent&);
     template<class E> void OnModifyRoute(E&);
@@ -2163,15 +2162,15 @@ public:
     template<class E> void OnPressDeleteRoute(E&);
     
     template<class E> void Disconnect(E&);
-
+    
     void OnAddChartFrame(wxCommandEvent&);
     void OnCloseActiveChartFrame(wxCommandEvent&);
     void OnCloseAllChartFrames(wxCommandEvent&);
     void OnComputePosition(void);
-
-//    void OnMouseOnListControlSights(wxMouseEvent&);
+    
+    //    void OnMouseOnListControlSights(wxMouseEvent&);
     void OnMouseMovement(wxMouseEvent&);
-//    void OnMouseOnListControlPositions(wxMouseEvent&);
+    //    void OnMouseOnListControlPositions(wxMouseEvent&);
     
     void OnModifyFile(void);
     void OnSaveFile(void);
@@ -2233,10 +2232,10 @@ public:
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
     void AllOk(void);
-//    template<class T> void OnEditTime(T&);
+    //    template<class T> void OnEditTime(T&);
     void TimeIntervalOk(String);
     void KeyDown(wxKeyEvent&);
-
+    
     //    wxDECLARE_EVENT_TABLE();
     
 };
@@ -2347,7 +2346,7 @@ public:
     Double /*the zoom factor relative to the default configuration of either projection, the zoom factor  is not necessarily equal to the numerical value (slider->GetValue()) shown on the slider*/zoom_factor;
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither ChartFrame::UpdateSliderLabel_Mercator or ChartFrame::UpdateSliderLabel_3D, according to my needs, and similarly for the other pointers
     void (ChartFrame::*UpdateSliderLabel)(void);
-
+    
     void GetCoastLineData_Mercator(void);
     void GetCoastLineData_3D(void);
     void UpdateSlider(void);
@@ -2372,8 +2371,8 @@ public:
     //this is created for testing
     UnsetIdling<ChartFrame> *unset_idling;
     
-
-
+    
+    
     
 };
 

@@ -4974,7 +4974,7 @@ Projection Projection::operator-(const Projection& q) {
 }
 
 
-// this function plots the Routes of type String("c") in route_list in kml forma. WARNING: THIS FUNCTION USES THE SYSTEM() COMMAND AND THUS IT IS NOT PORTABLE ACROSS PLATFORMS. Also, this functions used file_kml, which has been removed from the code, and it should be revised. 
+// this function plots the Routes of type String("c") in route_list in kml forma. WARNING: THIS FUNCTION USES THE SYSTEM() COMMAND AND THUS IT IS NOT PORTABLE ACROSS PLATFORMS. Also, this functions used file_kml, which has been removed from the code, and it should be revised.
 void Data::print_to_kml(String prefix) {
 
 	stringstream line_ins, /*plot_title contains the  title of the Route to be plotted*/ plot_title;
@@ -5105,8 +5105,6 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
 	command.precision((data_precision.value));
 
 //	file_init.set_name((wxGetApp().path_file_init));
-	file_boundary.set_name(String("boundary.txt"));
-	file_boundary.remove(prefix);
 
 	choices.push_back(String("Add a sight"));
 	choices.push_back(String("Modify a sight"));

@@ -14834,18 +14834,19 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 
 
 
-
-	//here I read a sample sight from file default_open_directory/sample_sight.nav, store into sight and set all the fields in this to the data in sight with set()
-	//
-	file.set_name((wxGetApp().data_directory).append(String("sample_sight.nav")));
-	data->read_from_file_to(file, String(""));
-	file_is_untitled = false;
-
-	menu_file->Enable(wxID_HIGHEST + 7, true);
-	set();
-	SetLabel(file.name.value);
-	DrawAll();
-	//
+    //if you want the app to start with an untitled file, just comment this
+    //here I read a sample sight from file default_open_directory/sample_sight.nav, store into sight and set all the fields in this to the data in sight with set()
+    //if you want the app to start with an untitled file, just comment out this
+    //
+    file.set_name((wxGetApp().data_directory).append(String("sample_sight.nav")));
+    data->read_from_file_to(file, String(""));
+    file_is_untitled = false;
+    
+    menu_file->Enable(wxID_HIGHEST + 7, true);
+    set();
+    SetLabel(file.name.value);
+    DrawAll();
+    //
 
 
 	set();

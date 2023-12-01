@@ -4974,7 +4974,7 @@ Projection Projection::operator-(const Projection& q) {
 }
 
 
-// this function plots the Routes of type String("c") in route_list in kml forma. WARNING: THIS FUNCTION USES THE SYSTEM() COMMAND AND THUS IT IS NOT PORTABLE ACROSS PLATFORMS
+// this function plots the Routes of type String("c") in route_list in kml forma. WARNING: THIS FUNCTION USES THE SYSTEM() COMMAND AND THUS IT IS NOT PORTABLE ACROSS PLATFORMS. Also, this functions used file_kml, which has been removed from the code, and it should be revised. 
 void Data::print_to_kml(String prefix) {
 
 	stringstream line_ins, /*plot_title contains the  title of the Route to be plotted*/ plot_title;
@@ -4987,7 +4987,7 @@ void Data::print_to_kml(String prefix) {
 	new_prefix = prefix.append(String("\t"));
 
 //	file_init.open(prefix);
-	file_kml.remove(prefix);
+//	file_kml.remove(prefix);
 
 	//replace line with number of points for routes in plot_dummy.plt
 	plot_command.str("");
@@ -5079,7 +5079,7 @@ void Data::print_to_kml(String prefix) {
 	}
 
 	//add the line to plot_kml.kml which contains the parametric plot of the positions
-	command << "LANG=C sed 's/\\/\\/position\\_plots/" << plot_command.str().c_str() << "/g' kml_temp.kml >> '" << file_kml.name.value << "'\nrm -rf kml_temp.kml\n";
+	command << "LANG=C sed 's/\\/\\/position\\_plots/" << plot_command.str().c_str() << "/g' kml_temp.kml >> '" /*<< file_kml.name.value*/ << "'\nrm -rf kml_temp.kml\n";
 
 	//execute the command string
 	system(command.str().c_str());

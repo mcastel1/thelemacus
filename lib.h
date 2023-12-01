@@ -921,7 +921,7 @@ class Data{
     
 public:
     Catalog* catalog;
-    FileRW file_kml, file_boundary;
+    FileRW file_boundary;
 //    FileR file_init;
     int job_id;
     stringstream command, plot_command;

@@ -20,6 +20,8 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  notes:
  =======
+ - on MSW: * with coastlines = n it runs from folder on sight_reduction_program and on Desktop
+           * with coastlines = y it 
  - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging
  - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.

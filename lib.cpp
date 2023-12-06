@@ -16801,7 +16801,7 @@ template<class P> void ProjectionField<P>::read_recent_items(void) {
 	}
 
 	//read the recently selected items from file_recent
-	s.read_from_file_to(String("projection"), (wxGetApp().path_file_recent), String("RW"), String(""));
+	s.read_from_file_to(String("Recent projections"), (wxGetApp().path_file_recent), String("RW"), String(""));
 
 	recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
 	for (i = 0; i < (recent_items.size()); i++) {
@@ -18289,7 +18289,7 @@ template<class P> void BodyField<P>::read_recent_items(void) {
 	}
 
 	//read the recently selected items from file_recent
-	s.read_from_file_to(String("body"), (wxGetApp().path_file_recent), String("RW"), String(""));
+	s.read_from_file_to(String("Recent bodies"), (wxGetApp().path_file_recent), String("RW"), String(""));
 
 	recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
 	for (i = 0; i < recent_items.size(); i++) {

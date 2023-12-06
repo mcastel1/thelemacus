@@ -1,2 +1,0 @@
-body = 4 3 2 
-projection = 0 1

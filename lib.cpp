@@ -9292,6 +9292,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	//    sizer_v->Fit(panel);
 
+#ifdef _WIN32
+    //if I am on WIN32, I set the icon from the icon set in the .rc file
+    SetIcon(wxICON(app_icon));
+#endif
+    
 	//    Maximize(panel);
 	panel->SetSizerAndFit(sizer_v);
 	panel->Fit();
@@ -13373,6 +13378,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 	sizer->Add(sizer_box_time, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer->Add(box_sizer_2, 1, wxALIGN_RIGHT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
+    
+#ifdef _WIN32
+    //if I am on WIN32, I set the icon from the icon set in the .rc file
+    SetIcon(wxICON(app_icon));
+#endif
 
 	//panel->SetSizer(sizer);
 	//    Maximize(panel);
@@ -13439,14 +13449,11 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
 	String new_prefix, /*the label which appears on button_ok*/label_button_ok;
 	unsigned int common_width;
 
-
+    
 	bool check = true;
-
 
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
-
-
 	//SetColor(this);
 
 	set_idling = new SetIdling<PositionFrame>(this);
@@ -13567,6 +13574,11 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
 		cout << prefix.value << RED << "Cannot read position!\n" << RESET;
 	}
 
+#ifdef _WIN32
+    //if I am on WIN32, I set the icon from the icon set in the .rc file
+    SetIcon(wxICON(app_icon));
+#endif
+    
 	//    Maximize(panel);
 	panel->SetSizerAndFit(sizer);
 	//Maximize();
@@ -13766,8 +13778,6 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	box_sizer->Add(button_cancel, 0, wxALIGN_BOTTOM | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), NULL);
 	box_sizer->Add(button_ok, 0, wxALIGN_BOTTOM | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), NULL);
 
-
-
 	//set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
 	//sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Longitude"
 	common_width = GetTextExtent(wxS("Longitude   ")).GetWidth();
@@ -13780,6 +13790,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	sizer->Add(sizer_grid_label, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer->Add(box_sizer, 1, wxALIGN_RIGHT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 
+#ifdef _WIN32
+    //if I am on WIN32, I set the icon from the icon set in the .rc file
+    SetIcon(wxICON(app_icon));
+#endif
 
 	//panel->SetSizer(sizer);
 	//    Maximize(panel);
@@ -14952,6 +14966,11 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 	sizer_h->Add(sizer_big_buttons, 0, wxALIGN_TOP, ((wxGetApp().border).value));
 	sizer_all->Add(sizer_h, 1, wxALL | wxEXPAND, ((wxGetApp().border).value));
 
+#ifdef _WIN32
+    //if I am on WIN32, I set the icon from the icon set in the .rc file
+    SetIcon(wxICON(app_icon));
+#endif
+    
 	//panel->SetSizer(sizer);
 	Maximize(panel);
 	panel->SetSizerAndFit(sizer_all);

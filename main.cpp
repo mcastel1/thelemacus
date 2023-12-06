@@ -33,7 +33,6 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  ********** THINGS TO ADD/IMPROVE ************
  - when transporting a sight allow the user to enter speed and time instead of distance
- - add icons to frames
  - adjust size of buttons
  - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
  - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
@@ -44,7 +43,6 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - add instrumental error
  - add lambert projection and 3D sphere with no projection
  - add separator between recent items and non-recent items in BodyField->name
- -  in the 3d projection, plot the number of points in each lat/long square according to its inclination with respect to the observer
  - set up a proper output to a log file
  - set parents to constructors of all frames that you defined
  - in Route::draw_3D, code the part for loxodrome curves
@@ -56,20 +54,16 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- - transform the  FileRW that need to be transformed into FileR
  - do not allocate a new wxDC every time you call Render*
-
  - Do not write on file every time you update the recent items, write/read from to file only when you open /close the app
  - buttons on bottom of ListFrame are cut on Enrico's computer (fixed it on mine, check whether it has been fixed on another computer too)
  - check that WXK_PLUS does not depend on the computer
 
  ---
 
-
  for MSW:
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  - on MSW when I save a .nav file the ° symbol is replaced with an odd inifnity symbol and then the .sav file cannot be read on APPLE
- - add FileR:create_istringstream method
  - in LIstframe there is an odd empty space on the top
  */
 
@@ -440,10 +434,6 @@ bool MyApp::OnInit() {
 
 
 	list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
-#ifdef _WIN32
-	//if I am on Windows, I set the icon from the icon set in the .rc file
-	list_frame->SetIcon(wxICON(app_icon));
-#endif
 	list_frame->Show(true);
 
 

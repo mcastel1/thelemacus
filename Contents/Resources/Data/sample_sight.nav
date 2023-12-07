@@ -145,5 +145,5 @@ Positions in the data:
 		longitude = 322° 26.58243497594981'
 		label = 2023-10-16 13:28:19 UTC+2
   #note that here a space must follow every item in a line
-  Recent bodies = 7 3 2 
-  Recent projections = 1 0 
+Recent bodies = 7 3 2 
+Recent projections = 1 0 

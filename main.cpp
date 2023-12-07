@@ -63,6 +63,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  ---
 
  for MSW:
+ - center name of file in top bar of ListFrame 
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  - on MSW when I save a .nav file the ° symbol is replaced with an odd inifnity symbol and then the .sav file cannot be read on APPLE

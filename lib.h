@@ -1775,7 +1775,6 @@ public:
     wxComboBox* name;
     CheckProjection<P>* check;
     
-    FileRW file_recent;
     vector<int> recent_items;
     
     bool ok;
@@ -1803,7 +1802,6 @@ public:
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
     CheckBody<P>* check;
-    FileRW file_recent;
     vector<int> recent_items;
     
     bool ok;

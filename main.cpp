@@ -43,7 +43,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - add instrumental error
  - add lambert projection and 3D sphere with no projection
  - add separator between recent items and non-recent items in BodyField->name
- - set up a proper output to a log file
+ - set up output to a log file
  - set parents to constructors of all frames that you defined
  - in Route::draw_3D, code the part for loxodrome curves
  - move all constants to the init file , such as  the 0.15 in  'position_plot_area = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);'
@@ -54,10 +54,9 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- - fix root_directory on APPLE and WIN32
+ - fix root_directory on WIN32
  - do not allocate a new wxDC every time you call Render*
  - Do not write on file every time you update the recent items, write/read from to file only when you open /close the app
- - buttons on bottom of ListFrame are cut on Enrico's computer (fixed it on mine, check whether it has been fixed on another computer too)
  - check that WXK_PLUS does not depend on the computer
 
  ---
@@ -258,10 +257,10 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 #ifdef _WIN32
 
 	//value = "\"C:\\wxWidgets-3.2.3\\samples\\minimal\\vc_x64_mswud\""
-	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '\"'), root_directory.value.end());
-	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '"'), root_directory.value.end());
+//	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '\"'), root_directory.value.end());
+//	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '"'), root_directory.value.end());
 
-
+    root_directory = String("Z:/");
 
 
 #endif

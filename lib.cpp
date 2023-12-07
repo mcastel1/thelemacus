@@ -7632,9 +7632,11 @@ void ListFrame::GetAllCoastLineData(void) {
 
 
 	 //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
-	file_coastline_data_blocked.open(String(""));
 
 	if (show_coastlines == Answer('y', String(""))) {
+
+		file_coastline_data_blocked.open(String(""));
+
 
 		i = 0;
 		while (/*here, to be safe, I stop the while() if I am not sure that n_line will be called with a valid value*/(360 * i + 360 < (n_line.size())) && (!((file_coastline_data_blocked.value)->eof()))) {
@@ -7696,9 +7698,11 @@ void ListFrame::GetAllCoastLineData(void) {
 
 		}
 
+		file_coastline_data_blocked.close(String(""));
+
+
 	}
 
-	file_coastline_data_blocked.close(String(""));
 	n_line.clear();
 
 }
@@ -14956,13 +14960,13 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 	sizer_listcontrol_routes_plus_buttons->Add(sizer_box_route, 0, wxALL, ((wxGetApp().border).value));
 	//    sizer_listcontrol_routes_plus_buttons->AddStretchSpacer(1);
 	//here I set the flag '0' to avoid button_show_map from being stretched
-	sizer_big_buttons->Add(button_compute_position, 0, wxALL, ((wxGetApp().border).value));
-	sizer_big_buttons->Add(button_show_map, 0, wxALL, ((wxGetApp().border).value));
+	sizer_big_buttons->Add(button_compute_position, 0, wxALL | wxALIGN_CENTER, ((wxGetApp().border).value));
+	sizer_big_buttons->Add(button_show_map, 0, wxALL | wxALIGN_CENTER, ((wxGetApp().border).value));
 	//    sizer_listcontrol_routes_plus_buttons->Add(sizer_big_buttons, 0);
 	//by adding the flag wxEXPAND here, I let the StretchSpacer in sizer_listcontrol_routes_plus_buttons expand, and thus I flush to the right button_show_map
-	sizer_v->Add(sizer_listcontrol_routes_plus_buttons, 1, wxALL | wxEXPAND, ((wxGetApp().border).value));
+	sizer_v->Add(sizer_listcontrol_routes_plus_buttons, 1, wxALL, ((wxGetApp().border).value));
 	sizer_h->Add(sizer_v, 1, wxALIGN_BOTTOM, ((wxGetApp().border).value));
-	sizer_h->Add(sizer_big_buttons, 0, wxALIGN_TOP, ((wxGetApp().border).value));
+	sizer_h->Add(sizer_big_buttons, 0, wxALIGN_CENTER, ((wxGetApp().border).value));
 	sizer_all->Add(sizer_h, 1, wxALL | wxEXPAND, ((wxGetApp().border).value));
 
 #ifdef _WIN32

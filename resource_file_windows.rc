@@ -48,7 +48,6 @@ sample ICON  "Z:/Contents/Resources/Images/Light/app_icon.ico"
 #include "wx\msw\wx.rc"
 
 init DATA "Z:/Contents/Resources/Data/init.txt"
-recent DATA "Z:/Contents/Resources/Data/recent.txt"
 sample_sight DATA "Z:/Contents/Resources/Data/sample_sight.nav"
 catalog DATA "Z:/Contents/Resources/Data/catalog.txt"
 j2000_to_itrf93	DATA "Z:/Contents/Resources/Data/j2000_to_itrf93.txt"

@@ -18295,20 +18295,30 @@ template<class P> void BodyField<P>::read_recent_items(void) {
 	for (bodies_temp.Clear(), i = 0; i < (catalog->list).size(); i++) {
 		bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
 	}
+    
+    
+    if(!(parent_frame->parent->file_is_untitled)){
+        //ListFrame::data_file exists -> read the recently selected items from ListFrame.data_file
 
-	//read the recently selected items from file_recent
-	s.read_from_file_to(String("Recent bodies"), (wxGetApp().path_file_recent), String("RW"), String(""));
+        s.read_from_file_to(String("Recent bodies"), (parent_frame->parent->data_file.name), String("RW"), String(""));
+        
+        for(recent_items.resize(count((s.value).begin(), (s.value).end(), ' ')), i=0; i<(recent_items.size()); i++) {
 
-	recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
-	for (i = 0; i < recent_items.size(); i++) {
+            pos_end = (s.value).find(" ", 0);
+            recent_items[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
+            (s.value) = ((s.value).substr(pos_end + 1, string::npos));
 
-		pos_end = (s.value).find(" ", 0);
-		recent_items[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
-		(s.value) = ((s.value).substr(pos_end + 1, string::npos));
+        }
 
-	}
+    }else{
+        //ListFrame::data_file exists -> set the size of recent_items to that of tymes and set recent_items[i] simply to i
+        
+        for(recent_items.resize((bodies.GetCount())), i=0; i<(recent_items.size()); i++){
+            recent_items[i] = i;
+        }
+        
 
-	bodies.Clear();
+    }
 
 	//    cout << "Before: Bodies_temp = ";
 	//    for(i=0; i<bodies_temp.GetCount(); i++){
@@ -18323,7 +18333,7 @@ template<class P> void BodyField<P>::read_recent_items(void) {
 	//    cout << "\n";
 
 	//I first add to bodies the recently selected celestial bodies written in recent_items
-	for (i = 0; i < recent_items.size(); i++) {
+	for (bodies.Clear(), i = 0; i < recent_items.size(); i++) {
 
 		bodies.Add(bodies_temp[recent_items[i]]);
 

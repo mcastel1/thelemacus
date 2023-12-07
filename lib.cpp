@@ -1075,7 +1075,7 @@ void String::write_to_file(String name, FileRW& file, [[maybe_unused]] String pr
 
 	//count the number of lines infile so I kno when to stop when reading it
 	file.count_lines(prefix);
-    //open the file in mode "in" to read the lines corresponding to "name", which will be then copied and pasted to a new 'file' with the same name 
+    //open the file in mode "in" to read the lines corresponding to "name", which will be then copied and pasted to a new 'file' with the same name
     file.open(String("in"), prefix);
 
 	temp.set_name((wxGetApp().path_file_temp));
@@ -16900,9 +16900,7 @@ template<class P> void ProjectionField<P>::write_recent_items(void) {
             temp << recent_items[i] << " ";
         }
         s = String(temp.str().c_str());
-        
-//        parent->parent->data_file.open(String("out"), prefix);
-        
+                
         cout << prefix.value << "Writing recent items of projection field to file " <<  parent->parent->data_file.value << " ...\n" << RESET;
         s.write_to_file(String("Recent projections"), parent->parent->data_file, String(""));
         

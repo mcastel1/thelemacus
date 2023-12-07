@@ -54,7 +54,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- - fix run_directory on APPLE and WIN32
+ - fix root_directory on APPLE and WIN32
  - do not allocate a new wxDC every time you call Render*
  - Do not write on file every time you update the recent items, write/read from to file only when you open /close the app
  - buttons on bottom of ListFrame are cut on Enrico's computer (fixed it on mine, check whether it has been fixed on another computer too)
@@ -63,6 +63,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  ---
 
  for MSW:
+ - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  - on MSW when I save a .nav file the ° symbol is replaced with an odd inifnity symbol and then the .sav file cannot be read on APPLE
  - in LIstframe there is an odd empty space on the top
@@ -70,20 +71,23 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  //this function is executed reguarly over time, to check some things
 void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
+    
+#ifdef __APPLE__
 
-	if (dark_mode != (settings->GetAppearance().IsDark())) {
+
+	if(dark_mode != (settings->GetAppearance().IsDark())) {
 		//if the dark mode of the operating system has changed
 
 		if ((settings->GetAppearance().IsDark())) {
 			//the system is in dark mode -> set image path equal to the /Dark folder
 
-			image_directory = run_directory.append(String("Contents/Resources/Images/Dark/"));
+			image_directory = root_directory.append(String("Contents/Resources/Images/Dark/"));
 
 		}
 		else {
 			//the system is in light mode ->  set image path equal to the /Light folder
 
-			image_directory = run_directory.append(String("Contents/Resources/Images/Light/"));
+			image_directory = root_directory.append(String("Contents/Resources/Images/Light/"));
 
 		}
 
@@ -92,6 +96,12 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 	}
 
 	dark_mode = (settings->GetAppearance()).IsDark();
+
+#endif
+#ifdef _WIN32
+
+#endif
+
 
 }
 
@@ -223,7 +233,7 @@ void MyApp::ShowList([[maybe_unused]] wxCommandEvent& event) {
 
 }
 
-//writes into this->run_directory the path where the executable is currently running
+//writes into this->root_directory the path where the executable is currently running
 void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 	stringstream ins;
@@ -231,17 +241,21 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 	ins.str("");
 	//note that here boost::dll::program_location() may return a path with './' at the end, but this has no effect because ./ simply says to stay in the same path
 	ins << (boost::dll::program_location().parent_path());
-	run_directory.value = ins.str().c_str();
+	root_directory.value = ins.str().c_str();
 
-	run_directory.print(String("Non-formatted run directory"), true, String("*******"), cout);
+	root_directory.print(String("Non-formatted run directory"), true, String("*******"), cout);
 
 
-	//remove " from run_directory
-	run_directory.value.erase(std::remove(run_directory.value.begin(), run_directory.value.end(), '"'), run_directory.value.end());
+	//remove " from root_directory
+	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '"'), root_directory.value.end());
+    
+#ifdef __APPLE__
+    //if I am on APPLE operating system, I go down by two directory levels to obtain the root_directory
 
-	run_directory.appendto(String("/../../"));
-	run_directory.print(String("Formatted run directory"), true, String("*******"), cout);
+	root_directory.appendto(String("/../../"));
+	root_directory.print(String("Formatted run directory"), true, String("*******"), cout);
 
+#endif
 
 }
 
@@ -272,7 +286,7 @@ bool MyApp::OnInit() {
 	//to build the app on mac
 	//        where_am_I(String(""));
 	//to develop the app with Xcode on OSX
-	run_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
+	root_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
 
 #endif
 
@@ -280,15 +294,9 @@ bool MyApp::OnInit() {
 
 	cout << "You have Windows Operating System" << "\n";
 
-	//
-	String my_string;
-
-	my_string.read_from_file_to(String("name file trash icon"), String("init"), String("R"), String(""));
-
-	my_string.read_from_file_to(String("body"), String("Z:/michele.txt"), String("RW"), String(""));
-
 	//to run the app with Visual Studio on Windows
-	run_directory = String("Z:/");
+//	root_directory = String("Z:/");
+    where_am_I(String(""));
 
 #endif
 
@@ -309,17 +317,17 @@ bool MyApp::OnInit() {
 	rectangle_display.SetHeight((int)((double)rectangle_display.GetHeight()));
 
 
-	//directories are set dynamically from run_directory
-	path_file_init = run_directory.append(String("Contents/Resources/Data/init.txt"));
-	code_directory = run_directory;
-	data_directory = run_directory.append(String("Contents/Resources/Data/"));
+	//directories are set dynamically from root_directory
+	path_file_init = root_directory.append(String("Contents/Resources/Data/init.txt"));
+	code_directory = root_directory;
+	data_directory = root_directory.append(String("Contents/Resources/Data/"));
 	if ((settings->GetAppearance().IsDark())) {
 		//the system is in dark mode
-		image_directory = run_directory.append(String("Contents/Resources/Images/Dark/"));
+		image_directory = root_directory.append(String("Contents/Resources/Images/Dark/"));
 	}
 	else {
 		//the system is in light mode
-		image_directory = run_directory.append(String("Contents/Resources/Images/Light/"));
+		image_directory = root_directory.append(String("Contents/Resources/Images/Light/"));
 	}
 	default_open_directory = data_directory;
 

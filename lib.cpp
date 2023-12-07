@@ -16754,7 +16754,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 	//    types.Add(wxT("Lambert"));
 
 	//sets the name of file_recent for future use
-	file_recent.set_name((wxGetApp().path_file_recent));
+//	file_recent.set_name((wxGetApp().path_file_recent));
 
 	check = new CheckProjection<P>(this);
 
@@ -16797,20 +16797,31 @@ template<class P> void ProjectionField<P>::read_recent_items(void) {
 		types_temp.Add(types[i]);
 	}
 
-	//read the recently selected items from file_recent
-	s.read_from_file_to(String("Recent projections"), (wxGetApp().path_file_recent), String("RW"), String(""));
+    if(!(parent->parent->file_is_untitled)){
+        //ListFrame::data_file exists -> read the recently selected items from ListFrame.data_file
 
-	recent_items.resize(count((s.value).begin(), (s.value).end(), ' '));
-	for (i = 0; i < (recent_items.size()); i++) {
+        s.read_from_file_to(String("Recent projections"), (parent->parent->data_file.name), String("RW"), String(""));
 
-		pos_end = (s.value).find(" ", 0);
-		recent_items[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
-		(s.value) = ((s.value).substr(pos_end + 1, string::npos));
+        
+        for(recent_items.resize(count((s.value).begin(), (s.value).end(), ' ')), i=0; i<(recent_items.size()); i++) {
 
-	}
+            pos_end = (s.value).find(" ", 0);
+            recent_items[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
+            (s.value) = ((s.value).substr(pos_end + 1, string::npos));
 
-	types.Clear();
+        }
 
+    }else{
+        //ListFrame::data_file exists -> set the size of recent_items to that of tymes and set recent_items[i] simply to i
+        
+        
+        for(recent_items.resize((types.GetCount())), i=0; i<(recent_items.size()); i++){
+            recent_items[i] = i;
+        }
+        
+
+    }
+    
 	//    cout << "Before: types_temp = ";
 	//    for(i=0; i<types_temp.GetCount(); i++){
 	//        cout << (types_temp[i]).ToStdString() << " ";
@@ -16824,7 +16835,7 @@ template<class P> void ProjectionField<P>::read_recent_items(void) {
 	//    cout << "\n";
 
 	//I first add to bodies the recently selected celestial bodies written in recent_items
-	for (i = 0; i < recent_items.size(); i++) {
+    for(types.Clear(), i = 0; i < recent_items.size(); i++) {
 
 		types.Add(types_temp[recent_items[i]]);
 
@@ -16904,7 +16915,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 	catalog = c;
 
 	//sets the name of file_recent for future use
-	file_recent.set_name((wxGetApp().path_file_recent));
+//	file_recent.set_name((wxGetApp().path_file_recent));
 
 	check = new CheckBody<P>(this);
 

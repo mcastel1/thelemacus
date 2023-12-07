@@ -328,7 +328,7 @@ bool MyApp::OnInit() {
 	path_file_temp = code_directory.append(read_from_file(String("name file temp"), (wxGetApp().path_file_init), String("R"), String("")));
 
 	//files in data directory
-	path_file_recent = data_directory.append(read_from_file(String("name file recent"), (wxGetApp().path_file_init), String("R"), String("")));
+//	path_file_recent = data_directory.append(read_from_file(String("name file recent"), (wxGetApp().path_file_init), String("R"), String("")));
 	path_file_catalog = data_directory.append(read_from_file(String("name file catalog"), (wxGetApp().path_file_init), String("R"), String("")));
 	path_file_coastline_data_blocked = data_directory.append(read_from_file(String("name file coastline data blocked"), (wxGetApp().path_file_init), String("R"), String("")));
 	path_file_n_line = data_directory.append(read_from_file(String("name file n line"), (wxGetApp().path_file_init), String("R"), String("")));

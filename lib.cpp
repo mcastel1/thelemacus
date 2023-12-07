@@ -16890,20 +16890,30 @@ template<class P> void ProjectionField<P>::write_recent_items(void) {
 
 
 	prefix = String("");
-
-	for (temp.str(""), i = 0; i < (recent_items.size()); i++) {
-		temp << recent_items[i] << " ";
-	}
-	s = String(temp.str().c_str());
-
-	file_recent.open(String("in"), prefix);
-
-	cout << prefix.value << YELLOW << "Writing recent items of projection field to file " << file_recent.name.value << " ...\n" << RESET;
-	s.write_to_file(String("projection"), file_recent, String(""));
-
-	cout << prefix.value << YELLOW << "... done.\n" << RESET;
-	file_recent.close(prefix);
-
+    
+    
+    if(!(parent->parent->file_is_untitled)){
+        //there is a .nav file open-> write recent items to it
+        
+        for (temp.str(""), i = 0; i < (recent_items.size()); i++) {
+            temp << recent_items[i] << " ";
+        }
+        s = String(temp.str().c_str());
+        
+        parent->parent->data_file.open(String("out"), prefix);
+        
+        cout << prefix.value << "Writing recent items of projection field to file " <<  parent->parent->data_file.value << " ...\n" << RESET;
+        s.write_to_file(String("Recent projections"), parent->parent->data_file, String(""));
+        
+        cout << prefix.value << "... done.\n" << RESET;
+        parent->parent->data_file.close(prefix);
+        
+    }else{
+        //no .nav file is open -> I don't write recent items
+        
+        cout << prefix.value << YELLOW << "No .nav file is open: cannot write recent items of projection field to file\n" << RESET;
+    }
+    
 }
 
 

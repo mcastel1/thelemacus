@@ -246,17 +246,28 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 	root_directory.print(String("Non-formatted run directory"), true, String("*******"), cout);
 
-
 	//remove " from root_directory
-	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '"'), root_directory.value.end());
     
 #ifdef __APPLE__
     //if I am on APPLE operating system, I go down by two directory levels to obtain the root_directory
 
+	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '"'), root_directory.value.end());
 	root_directory.appendto(String("/../../"));
-	root_directory.print(String("Formatted run directory"), true, String("*******"), cout);
 
 #endif
+#ifdef _WIN32
+
+	//value = "\"C:\\wxWidgets-3.2.3\\samples\\minimal\\vc_x64_mswud\""
+	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '\"'), root_directory.value.end());
+	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '"'), root_directory.value.end());
+
+
+
+
+#endif
+
+	root_directory.print(String("Formatted root directory"), true, String("*******"), cout);
+
 
 }
 

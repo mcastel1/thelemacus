@@ -14442,422 +14442,423 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
 
 
 ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] const wxString& message, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size) {
-
-	unsigned int i, red, green, blue;
-	wxListItem column, item;
-	String s;
-	wxBoxSizer* sizer_listcontrol_routes_plus_buttons, * sizer_big_buttons;
-	vector<wxButton*> disableable_buttons;
-	//pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
-	size_t pos_end;
-
-	//the file has not been modified yet -> I set
-	file_has_been_modified = false;
-	//for the time being, the file has no title
-	file_is_untitled = true;
-	enable_highlight = true;
-	selecting_route_for_position = false;
-
-	set_idling = new SetIdling<ListFrame>(this);
-	unset_idling = new UnsetIdling<ListFrame>(this);
-	(*unset_idling)();
-
-	ask_remove_related_sight = new AskRemoveRelatedSight(this);
-	ask_remove_related_route = new AskRemoveRelatedRoute(this);
-	select_route = new SelectRoute(this);
-	print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
-	print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
-	print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
-	//create extract_color with zero size, because I will need extract_color only to get colors
-
-	data = new Data(catalog, String(""));
-
-	//read show_coastlines from file_init
-	show_coastlines.read_from_file_to(String("show coastlines"),  (wxGetApp().path_file_init), String("R"),  String(""));
-
-	GetAllCoastLineData();
-
-	//when the ListFrame window is closed, quit the app
-	//    Bind(wxEVT_CLOSE_WINDOW, &MyApp::OnPressCtrlQ<wxCloseEvent>, &(wxGetApp()));
-
-	//obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-	(wxGetApp().rectangle_display) = ((wxGetApp().display).GetClientArea());
-
-	(wxGetApp().file_init).set_name((wxGetApp().path_file_init));
-
-	//read color list from file_init
-	s.read_from_file_to(String("color list"),  (wxGetApp().path_file_init), String("R"),  String(""));
-
-	//in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
-	(wxGetApp().color_list).resize(count((s.value).begin(), (s.value).end(), '('));
-
-	//when the ListFrame is created there is no open selection rectangle in any ChartFrame
-	selection_rectangle = false;
-
-	//SetColor(this);
-
-	for (i = 0; i < (wxGetApp().color_list).size(); i++) {
-
-		//get rid of everything that comes before and at '(' at the beginnign of s
-		pos_end = (s.value).find("(");
-		s.set(String(""), String((s.value).substr(pos_end + 1).c_str()), String(""));
-		//look for the first ','
-
-		pos_end = (s.value).find(",");
-
-		//read red
-		red = stoi(((s.value).substr(0, pos_end)).c_str());
-
-		//get rid of the first ','
-		s.set(String(""), String((s.value).substr(pos_end + 1).c_str()), String(""));
-
-		pos_end = (s.value).find(",");
-
-		green = stoi((s.value).substr(0, pos_end).c_str());
-
-		//get rid of the second ','
-		s.set(String(""), String((s.value).substr(pos_end + 1).c_str()), String(""));
-
-		pos_end = (s.value).find(")");
-		//get rid of '('
-		blue = stoi((s.value).substr(0, pos_end + 1).c_str());
-
-		//write the color that I just read in color_list
-		(wxGetApp().color_list)[i] = Color(red, green, blue);
-
-	}
-
-	//no positions nor routes are highlighted when ListFrame is constructed
-	highlighted_route = -1;
-	highlighted_position = -1;
-
-	menu_bar = new wxMenuBar;
-	menu_app = new wxMenu;
-	menu_file = new wxMenu;
-	menu_chart = new wxMenu;
-	menu_new_chart = new wxMenu;
-	menu_item_mercator = new wxMenu;
-	menu_item_3d = new wxMenu;
-
-	menu_new_chart->Append(wxID_HIGHEST + 1, "Mercator\tCtrl-m");
-	menu_new_chart->Append(wxID_HIGHEST + 2, "3D\tCtrl-3");
-	menu_chart->AppendSubMenu(menu_new_chart, wxT("New"), wxT(""));
-	menu_chart->Append(wxID_HIGHEST + 3, "Close\tCtrl-c");
-	menu_chart->Append(wxID_HIGHEST + 4, "Close all\tCtrl-a");
-	menu_app->Append(wxID_HIGHEST + 5, "Quit\tCtrl-q");
-	menu_file->Append(wxID_HIGHEST + 6, "Open\tCtrl-o");
-	menu_file->Append(wxID_HIGHEST + 7, "Close\tCtrl-w");
-	menu_file->Append(wxID_HIGHEST + 8, "Save\tCtrl-s");
-	menu_file->Append(wxID_HIGHEST + 9, "Save as...\tCtrl-Shift-s");
-
-	menu_bar->Append(menu_app, wxT("&App"));
-	menu_bar->Append(menu_file, wxT("&File"));
-	menu_bar->Append(menu_chart, wxT("&Chart"));
-	SetMenuBar(menu_bar);
-
-	menu_file->Enable(wxID_HIGHEST + 7, false);
-
-	menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 1);
-	menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 2);
-	menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseActiveChartFrame, this, wxID_HIGHEST + 3);
-	menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseAllChartFrames, this, wxID_HIGHEST + 4);
-	menu_bar->Bind(wxEVT_MENU, &MyApp::OnPressCtrlQ<wxCommandEvent>, &(wxGetApp()), wxID_HIGHEST + 5);
-	menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlO<wxCommandEvent>, this, wxID_HIGHEST + 6);
-	menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlW<wxCommandEvent>, this, wxID_HIGHEST + 7);
-	menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlS<wxCommandEvent>, this, wxID_HIGHEST + 8);
-	menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlShiftS<wxCommandEvent>, this, wxID_HIGHEST + 9);
-
-
-	on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
-	on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
-
-	//initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
-	delete_sight = new DeleteSight(this, Answer('n', String("")));
-	//initialize delete_sight_and_related_route, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
-	delete_sight_and_related_route = new DeleteSight(this, Answer('y', String("")));
-
-	//initialize delete_route, which defines the functor to delete the route but not its related sight (it is called when the user answers 'n' to QuestionFrame)
-	delete_route = new DeleteRoute(this, Answer('n', String("")));
-	//initialize delete_route_and_related_sight, which defines the functor to delete the route and its related sight (it is called when the user answers 'y' to QuestionFrame)
-	delete_route_and_related_sight = new DeleteRoute(this, Answer('y', String("")));
-
-	//initialize delete_position, which defines the functor to delete a Position
-	delete_position = new DeletePosition(this);
-
-
-	//initialized existing_route and create_route, which define the functors to modify / create a Route
-	existing_route = new ExistingRoute(this);
-	create_route = new NewRoute(this);
-
-	catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
-
-	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-
-
-	sizer_all = new wxBoxSizer(wxVERTICAL);
-	sizer_h = new wxBoxSizer(wxHORIZONTAL);
-	sizer_v = new wxBoxSizer(wxVERTICAL);
-	sizer_listcontrol_routes_plus_buttons = new wxBoxSizer(wxHORIZONTAL);
-	sizer_big_buttons = new wxBoxSizer(wxVERTICAL);
-
-	sizer_buttons_sight = new wxBoxSizer(wxHORIZONTAL);
-	sizer_buttons_position = new wxBoxSizer(wxHORIZONTAL);
-	sizer_buttons_route = new wxBoxSizer(wxHORIZONTAL);
-
-	sizer_box_sight = new wxStaticBoxSizer(wxVERTICAL, panel, "Sights");
-	sizer_box_position = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
-	sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
-
-	//button to modify a sight
-	button_modify_sight = new wxBitmapButton(
-		panel,
-		wxID_ANY,
-		Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button),
-		wxDefaultPosition,
-		wxGetApp().size_small_button,
-		wxBU_EXACTFIT | wxSIMPLE_BORDER
-	);
-	button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight<wxCommandEvent>, this);
-	button_modify_sight->Enable(false);
-
-	//button to transport a sight
-	button_transport_sight = new wxBitmapButton(
-		panel,
-		wxID_ANY,
-		Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
-		wxDefaultPosition, wxGetApp().size_small_button,
-		wxBU_EXACTFIT | wxSIMPLE_BORDER
-	);
-	button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
-	button_transport_sight->Enable(false);
-
-	//button to disconnect a sight
-	button_disconnect_sight = new wxBitmapButton(
-		panel,
-		wxID_ANY,
-		Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button),
-		wxDefaultPosition, wxGetApp().size_small_button,
-		wxBU_EXACTFIT | wxSIMPLE_BORDER
-	);
-	button_disconnect_sight->Bind(wxEVT_BUTTON, &ListFrame::OnDisconnectSight, this);
-	button_disconnect_sight->Enable(false);
-
-
-	//button to modify a position
-	button_modify_position = new wxBitmapButton(
-		panel,
-		wxID_ANY,
-		Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button),
-		wxDefaultPosition,
-		wxGetApp().size_small_button,
-		wxBU_EXACTFIT | wxSIMPLE_BORDER
-	);
-	button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition<wxCommandEvent>, this);
-	button_modify_position->Enable(false);
-
-	//button to transport a position
-	button_transport_position = new wxBitmapButton(
-		panel,
-		wxID_ANY,
-		Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
-		wxDefaultPosition,
-		wxGetApp().size_small_button,
-		wxBU_EXACTFIT | wxSIMPLE_BORDER
-	);
-	button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
-	button_transport_position->Enable(false);
-
-	//button to transport a Route
-	button_transport_route = new wxBitmapButton(
-		panel,
-		wxID_ANY,
-		Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
-		wxDefaultPosition,
-		wxGetApp().size_small_button,
-		wxBU_EXACTFIT | wxSIMPLE_BORDER
-	);
-	button_transport_route->Bind(wxEVT_BUTTON, &ListFrame::OnTransportRoute, this);
-	button_transport_route->Enable(false);
-
-	//button to disconect a Route
-	button_disconnect_route = new wxBitmapButton(
-		panel,
-		wxID_ANY,
-		Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button),
-		wxDefaultPosition,
-		wxGetApp().size_small_button,
-		wxBU_EXACTFIT | wxSIMPLE_BORDER
-	);
-	button_disconnect_route->Bind(wxEVT_BUTTON, &ListFrame::OnDisconnectRoute, this);
-	button_disconnect_route->Enable(false);
-
-	//button to modify a route
-	button_modify_route = new wxBitmapButton(
-		panel,
-		wxID_ANY,
-		Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button),
-		wxDefaultPosition,
-		wxGetApp().size_small_button,
-		wxBU_EXACTFIT | wxSIMPLE_BORDER
-	);
-	button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute<wxCommandEvent>, this);
-	button_modify_route->Enable(false);
-
-	//button to delete a sight
-	button_delete_sight = new wxBitmapButton(
-		panel,
-		wxID_ANY,
-		Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button),
-		wxDefaultPosition,
-		wxGetApp().size_small_button,
-		wxBU_EXACTFIT | wxSIMPLE_BORDER
-	);
-	button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight<wxCommandEvent>, this);
-	button_delete_sight->Enable(false);
-
-	//button to delete a position
-	button_delete_position = new wxBitmapButton(
-		panel,
-		wxID_ANY,
-		Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button),
-		wxDefaultPosition,
-		wxGetApp().size_small_button,
-		wxBU_EXACTFIT | wxSIMPLE_BORDER
-	);
-	button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeletePosition<wxCommandEvent>, this);
-	button_delete_position->Enable(false);
-
-	//button to delete a route
-	button_delete_route = new wxBitmapButton(
-		panel,
-		wxID_ANY,
-		Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button),
-		wxDefaultPosition,
-		wxGetApp().size_small_button,
-		wxBU_EXACTFIT | wxSIMPLE_BORDER
-	);
-	button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute<wxCommandEvent>, this);
-	button_delete_route->Enable(false);
-
-
-	//listcontrol_sights with sights
-	disableable_buttons.clear();
-	disableable_buttons.push_back(button_modify_sight);
-	disableable_buttons.push_back(button_transport_sight);
-	//    disableable_buttons.push_back(button_disconnect_sight);
-	disableable_buttons.push_back(button_delete_sight);
-
-	listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
-	on_change_selection_in_listcontrol_sights = new OnChangeSelectionInListControl(listcontrol_sights, String("sight"));
-	//SetColor(listcontrol_sights);
-	//    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
-	listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_sights);
-	listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_sights);
-
-	i = 0;
-
-	listcontrol_sights->PushBackColumn(wxString("Number"));
-	listcontrol_sights->PushBackColumn(wxString("Body"));
-	listcontrol_sights->PushBackColumn(wxString("Limb"));
-	listcontrol_sights->PushBackColumn(wxString("Artificial horizon"));
-	listcontrol_sights->PushBackColumn(wxString("Sextant altitude"));
-	listcontrol_sights->PushBackColumn(wxString("Index error"));
-	listcontrol_sights->PushBackColumn(wxString("Height of eye"));
-	listcontrol_sights->PushBackColumn(wxString("Master-clock date and hour (UTC)"));
-	listcontrol_sights->PushBackColumn(wxString("Stopwatch"));
-	listcontrol_sights->PushBackColumn(wxString("Stopwatch reading"));
-	listcontrol_sights->PushBackColumn(wxString("TAI - UTC"));
-	listcontrol_sights->PushBackColumn(wxString("Label"));
-	listcontrol_sights->PushBackColumn(wxString("Related route"));
-
-
-
-
-	sizer_box_sight->Add(listcontrol_sights, 1, wxALL, ((wxGetApp().border).value));
-
-
-	//listcontrol_positions with positions
-	disableable_buttons.clear();
-	disableable_buttons.push_back(button_modify_position);
-	disableable_buttons.push_back(button_transport_position);
-	disableable_buttons.push_back(button_delete_position);
-
-
-	listcontrol_positions = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
-	on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl(listcontrol_positions, String("position"));
-	listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_positions);
-	listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_positions);
-	//    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
-
-	listcontrol_positions->PushBackColumn(wxString("Number"));
-	listcontrol_positions->PushBackColumn(wxString("Latitude"));
-	listcontrol_positions->PushBackColumn(wxString("Longitude"));
-	listcontrol_positions->PushBackColumn(wxString("Label"));
-
-	sizer_box_position->Add(listcontrol_positions, 1, wxALL, ((wxGetApp().border).value));
-
-
-	//listcontrol routes with routes
-	disableable_buttons.clear();
-	disableable_buttons.push_back(button_modify_route);
-	disableable_buttons.push_back(button_transport_route);
-	//    disableable_buttons.push_back(button_disconnect_route);
-	disableable_buttons.push_back(button_delete_route);
-
-	listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
-	on_change_selection_in_listcontrol_routes = new OnChangeSelectionInListControl(listcontrol_routes, String("route"));
-	//SetColor(listcontrol_routes);
-	//    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
-	listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_routes);
-	listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_routes);
-	//I bind ListFrame::OnMouseMovement to listcontrol_sights, listcontrol_routes and to panel, because I want ListFrame::OnMouseMovement to be called when the mouse is either on listcontrol_sights, listcontrol_routes and on panel
-	listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
-	listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
-	listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
-	panel->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
-
-
-	//bind all listcontrols to mouse double-click event, so when the user double clicks on an item in the listcontrol, the SightFrame, PositionFrame or RouteFrame is opened to modify the sight, position or route
-	listcontrol_sights->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifySight<wxMouseEvent>), this);
-	listcontrol_positions->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyPosition<wxMouseEvent>), this);
-	listcontrol_routes->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyRoute<wxMouseEvent>), this);
-
-
-	listcontrol_routes->PushBackColumn(wxString("Number"));
-	listcontrol_routes->PushBackColumn(wxString("Type"));
-	listcontrol_routes->PushBackColumn(wxString("Start"));
-	listcontrol_routes->PushBackColumn(wxString("Z"));
-	listcontrol_routes->PushBackColumn(wxString("Length"));
-	listcontrol_routes->PushBackColumn(wxString("Ground Position"));
-	listcontrol_routes->PushBackColumn(wxString("Omega"));
-	listcontrol_routes->PushBackColumn(wxString("Label"));
-	listcontrol_routes->PushBackColumn(wxString("Related Sight"));
-
-
-	sizer_box_route->Add(listcontrol_routes, 1, wxALL, ((wxGetApp().border).value));
-
-	//bing everything to KeyDown method, so when a key is pressed on *this, panel, listcontrol... then KeyDown is called
-	Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
-	panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
-	listcontrol_sights->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
-	listcontrol_routes->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
-	listcontrol_positions->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
-
-
-
-    //if you want the app to start with an untitled file, just comment this
-    //here I read a sample sight from file default_open_directory/sample_sight.nav, store into sight and set all the fields in this to the data in sight with set()
-    //if you want the app to start with an untitled file,  comment out this
-    //
-    data_file.set_name((wxGetApp().data_directory).append(String("sample_sight.nav")));
-    data->read_from_file_to(data_file, String(""));
-    file_is_untitled = false;
     
-    menu_file->Enable(wxID_HIGHEST + 7, true);
-    set();
-    SetLabel(data_file.name.value);
-    DrawAll();
-    //
+    unsigned int i, red, green, blue;
+    wxListItem column, item;
+    String s;
+    wxBoxSizer* sizer_listcontrol_routes_plus_buttons, * sizer_big_buttons;
+    vector<wxButton*> disableable_buttons;
+    //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
+    size_t pos_end;
+    
+    //the file has not been modified yet -> I set
+    file_has_been_modified = false;
+    //for the time being, the file has no title
+    file_is_untitled = true;
+    enable_highlight = true;
+    selecting_route_for_position = false;
+    
+    set_idling = new SetIdling<ListFrame>(this);
+    unset_idling = new UnsetIdling<ListFrame>(this);
+    (*unset_idling)();
+    
+    ask_remove_related_sight = new AskRemoveRelatedSight(this);
+    ask_remove_related_route = new AskRemoveRelatedRoute(this);
+    select_route = new SelectRoute(this);
+    print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
+    print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
+    print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
+    //create extract_color with zero size, because I will need extract_color only to get colors
+    
+    data = new Data(catalog, String(""));
+    
+    //read show_coastlines from file_init
+    show_coastlines.read_from_file_to(String("show coastlines"),  (wxGetApp().path_file_init), String("R"),  String(""));
+    //read load_sample_sight from file_init
+    load_sample_sight.read_from_file_to(String("load sample sight"),  (wxGetApp().path_file_init), String("R"),  String(""));
+
+    GetAllCoastLineData();
+    
+    //when the ListFrame window is closed, quit the app
+    //    Bind(wxEVT_CLOSE_WINDOW, &MyApp::OnPressCtrlQ<wxCloseEvent>, &(wxGetApp()));
+    
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
+    (wxGetApp().rectangle_display) = ((wxGetApp().display).GetClientArea());
+    
+    (wxGetApp().file_init).set_name((wxGetApp().path_file_init));
+    
+    //read color list from file_init
+    s.read_from_file_to(String("color list"),  (wxGetApp().path_file_init), String("R"),  String(""));
+    
+    //in file_init, each color is written as '(i,j,k) ', where i, j, k are the integers for the levels of red, green and blue. To cound the number of colors, I thus count the number of '(' in the string
+    (wxGetApp().color_list).resize(count((s.value).begin(), (s.value).end(), '('));
+    
+    //when the ListFrame is created there is no open selection rectangle in any ChartFrame
+    selection_rectangle = false;
+    
+    //SetColor(this);
+    
+    for (i = 0; i < (wxGetApp().color_list).size(); i++) {
+        
+        //get rid of everything that comes before and at '(' at the beginnign of s
+        pos_end = (s.value).find("(");
+        s.set(String(""), String((s.value).substr(pos_end + 1).c_str()), String(""));
+        //look for the first ','
+        
+        pos_end = (s.value).find(",");
+        
+        //read red
+        red = stoi(((s.value).substr(0, pos_end)).c_str());
+        
+        //get rid of the first ','
+        s.set(String(""), String((s.value).substr(pos_end + 1).c_str()), String(""));
+        
+        pos_end = (s.value).find(",");
+        
+        green = stoi((s.value).substr(0, pos_end).c_str());
+        
+        //get rid of the second ','
+        s.set(String(""), String((s.value).substr(pos_end + 1).c_str()), String(""));
+        
+        pos_end = (s.value).find(")");
+        //get rid of '('
+        blue = stoi((s.value).substr(0, pos_end + 1).c_str());
+        
+        //write the color that I just read in color_list
+        (wxGetApp().color_list)[i] = Color(red, green, blue);
+        
+    }
+    
+    //no positions nor routes are highlighted when ListFrame is constructed
+    highlighted_route = -1;
+    highlighted_position = -1;
+    
+    menu_bar = new wxMenuBar;
+    menu_app = new wxMenu;
+    menu_file = new wxMenu;
+    menu_chart = new wxMenu;
+    menu_new_chart = new wxMenu;
+    menu_item_mercator = new wxMenu;
+    menu_item_3d = new wxMenu;
+    
+    menu_new_chart->Append(wxID_HIGHEST + 1, "Mercator\tCtrl-m");
+    menu_new_chart->Append(wxID_HIGHEST + 2, "3D\tCtrl-3");
+    menu_chart->AppendSubMenu(menu_new_chart, wxT("New"), wxT(""));
+    menu_chart->Append(wxID_HIGHEST + 3, "Close\tCtrl-c");
+    menu_chart->Append(wxID_HIGHEST + 4, "Close all\tCtrl-a");
+    menu_app->Append(wxID_HIGHEST + 5, "Quit\tCtrl-q");
+    menu_file->Append(wxID_HIGHEST + 6, "Open\tCtrl-o");
+    menu_file->Append(wxID_HIGHEST + 7, "Close\tCtrl-w");
+    menu_file->Append(wxID_HIGHEST + 8, "Save\tCtrl-s");
+    menu_file->Append(wxID_HIGHEST + 9, "Save as...\tCtrl-Shift-s");
+    
+    menu_bar->Append(menu_app, wxT("&App"));
+    menu_bar->Append(menu_file, wxT("&File"));
+    menu_bar->Append(menu_chart, wxT("&Chart"));
+    SetMenuBar(menu_bar);
+    
+    menu_file->Enable(wxID_HIGHEST + 7, false);
+    
+    menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 1);
+    menu_new_chart->Bind(wxEVT_MENU, &ListFrame::OnAddChartFrame, this, wxID_HIGHEST + 2);
+    menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseActiveChartFrame, this, wxID_HIGHEST + 3);
+    menu_chart->Bind(wxEVT_MENU, &ListFrame::OnCloseAllChartFrames, this, wxID_HIGHEST + 4);
+    menu_bar->Bind(wxEVT_MENU, &MyApp::OnPressCtrlQ<wxCommandEvent>, &(wxGetApp()), wxID_HIGHEST + 5);
+    menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlO<wxCommandEvent>, this, wxID_HIGHEST + 6);
+    menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlW<wxCommandEvent>, this, wxID_HIGHEST + 7);
+    menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlS<wxCommandEvent>, this, wxID_HIGHEST + 8);
+    menu_file->Bind(wxEVT_MENU, &ListFrame::OnPressCtrlShiftS<wxCommandEvent>, this, wxID_HIGHEST + 9);
+    
+    
+    on_select_route_in_listcontrol_routes_for_transport = new OnSelectRouteInListControlRoutesForTransport(this);
+    on_new_route_in_listcontrol_routes_for_transport = new OnNewRouteInListControlRoutesForTransport(this);
+    
+    //initialize delete_sight, which defines the functor to delete the sight but not its related route (it is called when the user answers 'n' to QuestionFrame)
+    delete_sight = new DeleteSight(this, Answer('n', String("")));
+    //initialize delete_sight_and_related_route, which defines the functor to delete the sight and its related route (it is called when the user answers 'y' to QuestionFrame)
+    delete_sight_and_related_route = new DeleteSight(this, Answer('y', String("")));
+    
+    //initialize delete_route, which defines the functor to delete the route but not its related sight (it is called when the user answers 'n' to QuestionFrame)
+    delete_route = new DeleteRoute(this, Answer('n', String("")));
+    //initialize delete_route_and_related_sight, which defines the functor to delete the route and its related sight (it is called when the user answers 'y' to QuestionFrame)
+    delete_route_and_related_sight = new DeleteRoute(this, Answer('y', String("")));
+    
+    //initialize delete_position, which defines the functor to delete a Position
+    delete_position = new DeletePosition(this);
+    
+    
+    //initialized existing_route and create_route, which define the functors to modify / create a Route
+    existing_route = new ExistingRoute(this);
+    create_route = new NewRoute(this);
+    
+    catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
+    
+    panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
+    
+    
+    sizer_all = new wxBoxSizer(wxVERTICAL);
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    sizer_listcontrol_routes_plus_buttons = new wxBoxSizer(wxHORIZONTAL);
+    sizer_big_buttons = new wxBoxSizer(wxVERTICAL);
+    
+    sizer_buttons_sight = new wxBoxSizer(wxHORIZONTAL);
+    sizer_buttons_position = new wxBoxSizer(wxHORIZONTAL);
+    sizer_buttons_route = new wxBoxSizer(wxHORIZONTAL);
+    
+    sizer_box_sight = new wxStaticBoxSizer(wxVERTICAL, panel, "Sights");
+    sizer_box_position = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
+    sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
+    
+    //button to modify a sight
+    button_modify_sight = new wxBitmapButton(
+                                             panel,
+                                             wxID_ANY,
+                                             Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button),
+                                             wxDefaultPosition,
+                                             wxGetApp().size_small_button,
+                                             wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                             );
+    button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight<wxCommandEvent>, this);
+    button_modify_sight->Enable(false);
+    
+    //button to transport a sight
+    button_transport_sight = new wxBitmapButton(
+                                                panel,
+                                                wxID_ANY,
+                                                Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
+                                                wxDefaultPosition, wxGetApp().size_small_button,
+                                                wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                );
+    button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
+    button_transport_sight->Enable(false);
+    
+    //button to disconnect a sight
+    button_disconnect_sight = new wxBitmapButton(
+                                                 panel,
+                                                 wxID_ANY,
+                                                 Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button),
+                                                 wxDefaultPosition, wxGetApp().size_small_button,
+                                                 wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                 );
+    button_disconnect_sight->Bind(wxEVT_BUTTON, &ListFrame::OnDisconnectSight, this);
+    button_disconnect_sight->Enable(false);
+    
+    
+    //button to modify a position
+    button_modify_position = new wxBitmapButton(
+                                                panel,
+                                                wxID_ANY,
+                                                Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button),
+                                                wxDefaultPosition,
+                                                wxGetApp().size_small_button,
+                                                wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                );
+    button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition<wxCommandEvent>, this);
+    button_modify_position->Enable(false);
+    
+    //button to transport a position
+    button_transport_position = new wxBitmapButton(
+                                                   panel,
+                                                   wxID_ANY,
+                                                   Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
+                                                   wxDefaultPosition,
+                                                   wxGetApp().size_small_button,
+                                                   wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                   );
+    button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
+    button_transport_position->Enable(false);
+    
+    //button to transport a Route
+    button_transport_route = new wxBitmapButton(
+                                                panel,
+                                                wxID_ANY,
+                                                Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
+                                                wxDefaultPosition,
+                                                wxGetApp().size_small_button,
+                                                wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                );
+    button_transport_route->Bind(wxEVT_BUTTON, &ListFrame::OnTransportRoute, this);
+    button_transport_route->Enable(false);
+    
+    //button to disconect a Route
+    button_disconnect_route = new wxBitmapButton(
+                                                 panel,
+                                                 wxID_ANY,
+                                                 Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button),
+                                                 wxDefaultPosition,
+                                                 wxGetApp().size_small_button,
+                                                 wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                 );
+    button_disconnect_route->Bind(wxEVT_BUTTON, &ListFrame::OnDisconnectRoute, this);
+    button_disconnect_route->Enable(false);
+    
+    //button to modify a route
+    button_modify_route = new wxBitmapButton(
+                                             panel,
+                                             wxID_ANY,
+                                             Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button),
+                                             wxDefaultPosition,
+                                             wxGetApp().size_small_button,
+                                             wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                             );
+    button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute<wxCommandEvent>, this);
+    button_modify_route->Enable(false);
+    
+    //button to delete a sight
+    button_delete_sight = new wxBitmapButton(
+                                             panel,
+                                             wxID_ANY,
+                                             Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button),
+                                             wxDefaultPosition,
+                                             wxGetApp().size_small_button,
+                                             wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                             );
+    button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight<wxCommandEvent>, this);
+    button_delete_sight->Enable(false);
+    
+    //button to delete a position
+    button_delete_position = new wxBitmapButton(
+                                                panel,
+                                                wxID_ANY,
+                                                Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button),
+                                                wxDefaultPosition,
+                                                wxGetApp().size_small_button,
+                                                wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                );
+    button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeletePosition<wxCommandEvent>, this);
+    button_delete_position->Enable(false);
+    
+    //button to delete a route
+    button_delete_route = new wxBitmapButton(
+                                             panel,
+                                             wxID_ANY,
+                                             Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button),
+                                             wxDefaultPosition,
+                                             wxGetApp().size_small_button,
+                                             wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                             );
+    button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute<wxCommandEvent>, this);
+    button_delete_route->Enable(false);
+    
+    
+    //listcontrol_sights with sights
+    disableable_buttons.clear();
+    disableable_buttons.push_back(button_modify_sight);
+    disableable_buttons.push_back(button_transport_sight);
+    //    disableable_buttons.push_back(button_disconnect_sight);
+    disableable_buttons.push_back(button_delete_sight);
+    
+    listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
+    on_change_selection_in_listcontrol_sights = new OnChangeSelectionInListControl(listcontrol_sights, String("sight"));
+    //SetColor(listcontrol_sights);
+    //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
+    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_sights);
+    listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_sights);
+    
+    i = 0;
+    
+    listcontrol_sights->PushBackColumn(wxString("Number"));
+    listcontrol_sights->PushBackColumn(wxString("Body"));
+    listcontrol_sights->PushBackColumn(wxString("Limb"));
+    listcontrol_sights->PushBackColumn(wxString("Artificial horizon"));
+    listcontrol_sights->PushBackColumn(wxString("Sextant altitude"));
+    listcontrol_sights->PushBackColumn(wxString("Index error"));
+    listcontrol_sights->PushBackColumn(wxString("Height of eye"));
+    listcontrol_sights->PushBackColumn(wxString("Master-clock date and hour (UTC)"));
+    listcontrol_sights->PushBackColumn(wxString("Stopwatch"));
+    listcontrol_sights->PushBackColumn(wxString("Stopwatch reading"));
+    listcontrol_sights->PushBackColumn(wxString("TAI - UTC"));
+    listcontrol_sights->PushBackColumn(wxString("Label"));
+    listcontrol_sights->PushBackColumn(wxString("Related route"));
+    
+    
+    
+    
+    sizer_box_sight->Add(listcontrol_sights, 1, wxALL, ((wxGetApp().border).value));
+    
+    
+    //listcontrol_positions with positions
+    disableable_buttons.clear();
+    disableable_buttons.push_back(button_modify_position);
+    disableable_buttons.push_back(button_transport_position);
+    disableable_buttons.push_back(button_delete_position);
+    
+    
+    listcontrol_positions = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
+    on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl(listcontrol_positions, String("position"));
+    listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_positions);
+    listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_positions);
+    //    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
+    
+    listcontrol_positions->PushBackColumn(wxString("Number"));
+    listcontrol_positions->PushBackColumn(wxString("Latitude"));
+    listcontrol_positions->PushBackColumn(wxString("Longitude"));
+    listcontrol_positions->PushBackColumn(wxString("Label"));
+    
+    sizer_box_position->Add(listcontrol_positions, 1, wxALL, ((wxGetApp().border).value));
+    
+    
+    //listcontrol routes with routes
+    disableable_buttons.clear();
+    disableable_buttons.push_back(button_modify_route);
+    disableable_buttons.push_back(button_transport_route);
+    //    disableable_buttons.push_back(button_disconnect_route);
+    disableable_buttons.push_back(button_delete_route);
+    
+    listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize);
+    on_change_selection_in_listcontrol_routes = new OnChangeSelectionInListControl(listcontrol_routes, String("route"));
+    //SetColor(listcontrol_routes);
+    //    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
+    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_routes);
+    listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_routes);
+    //I bind ListFrame::OnMouseMovement to listcontrol_sights, listcontrol_routes and to panel, because I want ListFrame::OnMouseMovement to be called when the mouse is either on listcontrol_sights, listcontrol_routes and on panel
+    listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
+    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
+    listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
+    panel->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
+    
+    
+    //bind all listcontrols to mouse double-click event, so when the user double clicks on an item in the listcontrol, the SightFrame, PositionFrame or RouteFrame is opened to modify the sight, position or route
+    listcontrol_sights->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifySight<wxMouseEvent>), this);
+    listcontrol_positions->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyPosition<wxMouseEvent>), this);
+    listcontrol_routes->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyRoute<wxMouseEvent>), this);
+    
+    
+    listcontrol_routes->PushBackColumn(wxString("Number"));
+    listcontrol_routes->PushBackColumn(wxString("Type"));
+    listcontrol_routes->PushBackColumn(wxString("Start"));
+    listcontrol_routes->PushBackColumn(wxString("Z"));
+    listcontrol_routes->PushBackColumn(wxString("Length"));
+    listcontrol_routes->PushBackColumn(wxString("Ground Position"));
+    listcontrol_routes->PushBackColumn(wxString("Omega"));
+    listcontrol_routes->PushBackColumn(wxString("Label"));
+    listcontrol_routes->PushBackColumn(wxString("Related Sight"));
+    
+    
+    sizer_box_route->Add(listcontrol_routes, 1, wxALL, ((wxGetApp().border).value));
+    
+    //bing everything to KeyDown method, so when a key is pressed on *this, panel, listcontrol... then KeyDown is called
+    Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
+    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
+    listcontrol_sights->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
+    listcontrol_routes->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
+    listcontrol_positions->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
+    
+    
+    if(load_sample_sight == Answer('y', String(""))){
+        //I read a sample sight from file default_open_directory/sample_sight.nav, store into sight and set all the fields in this to the data in sight with set()
+        
+        data_file.set_name((wxGetApp().data_directory).append(String("sample_sight.nav")));
+        data->read_from_file_to(data_file, String(""));
+        file_is_untitled = false;
+        
+        menu_file->Enable(wxID_HIGHEST + 7, true);
+        set();
+        SetLabel(data_file.name.value);
+        DrawAll();
+        
+    }
 
 
 	set();

@@ -14975,7 +14975,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 #endif
     
 	//panel->SetSizer(sizer);
-	Maximize(panel);
+//	Maximize(panel);
 	panel->SetSizerAndFit(sizer_all);
 	panel->Fit();
 	Fit();

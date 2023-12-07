@@ -10090,9 +10090,9 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 
 				}
 
-				//write newly updated recent_items to file
+				//write newly updated recent_items to .nav file
 				p->write_recent_items();
-				//I update p->bodies according to the content of file_recent
+				//I update p->bodies according to the content of .nav file
 				p->read_recent_items();
 
 			}
@@ -16890,8 +16890,7 @@ template<class P> void ProjectionField<P>::write_recent_items(void) {
 
 
 	prefix = String("");
-    
-    
+        
     if(!(parent->parent->file_is_untitled)){
         //there is a .nav file open-> write recent items to it
         
@@ -18398,19 +18397,28 @@ template<class P> void BodyField<P>::write_recent_items(void) {
 
 	prefix = String("");
 
+    if(!(parent_frame->parent->file_is_untitled)){
+        //there is a .nav file open-> write recent items to it
 
-	for (temp.str(""), i = 0; i < recent_items.size(); i++) {
-		temp << recent_items[i] << " ";
-	}
-	s = String(temp.str().c_str());
+        for (temp.str(""), i = 0; i < recent_items.size(); i++) {
+            temp << recent_items[i] << " ";
+        }
+        s = String(temp.str().c_str());
 
-	file_recent.open(String("in"), prefix);
+        parent_frame->parent->data_file.open(String("out"), prefix);
 
-	cout << prefix.value << YELLOW << "Writing recent items of body field to file " << file_recent.name.value << " ...\n" << RESET;
-	s.write_to_file(String("body"), file_recent, String(""));
+        cout << prefix.value << "Writing recent items of projection field to file " <<  parent_frame->parent->data_file.value << " ...\n" << RESET;
+        s.write_to_file(String("Recent bodies"), parent_frame->parent->data_file, String(""));
 
-	cout << prefix.value << YELLOW << "... done.\n" << RESET;
-	file_recent.close(prefix);
+        cout << prefix.value << YELLOW << "... done.\n" << RESET;
+        parent_frame->parent->data_file.close(prefix);
+        
+    }else{
+        //no .nav file is open -> I don't write recent items
+
+        cout << prefix.value << YELLOW << "No .nav file is open: cannot write recent items of projection field to file\n" << RESET;
+
+    }
 
 }
 

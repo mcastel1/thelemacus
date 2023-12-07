@@ -54,6 +54,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
+ - fix run_directory on APPLE and WIN32
  - do not allocate a new wxDC every time you call Render*
  - Do not write on file every time you update the recent items, write/read from to file only when you open /close the app
  - buttons on bottom of ListFrame are cut on Enrico's computer (fixed it on mine, check whether it has been fixed on another computer too)

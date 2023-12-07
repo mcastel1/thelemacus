@@ -12499,13 +12499,13 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event) 
 		//the file has a name -> save
 
 		//remove the file to avoid overwriting
-		(frame->file).remove(String(""));
-		//open a new file
-		(frame->file).open(String("out"), String(""));
-		//write frame->data into file
-		(frame->data)->print(false, String(""), *((frame->file).value));
-		//close the file
-		(frame->file).close(String(""));
+		(frame->data_file).remove(String(""));
+		//open a new data_file
+		(frame->data_file).open(String("out"), String(""));
+		//write frame->data into data_file
+		(frame->data)->print(false, String(""), *((frame->data_file).value));
+		//close the data_file
+		(frame->data_file).close(String(""));
 
 
 	}
@@ -14451,9 +14451,6 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 	//pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
 	size_t pos_end;
 
-	parent = parent_in;
-
-
 	//the file has not been modified yet -> I set
 	file_has_been_modified = false;
 	//for the time being, the file has no title
@@ -15540,7 +15537,7 @@ void ListFrame::OnModifyFile(void) {
 void ListFrame::OnSaveFile(void) {
 
 	//set back the label of *this to the filename
-	SetLabel(wxString((file.name).value));
+	SetLabel(wxString((data_file.name).value));
 
 	file_is_untitled = false;
 	file_has_been_modified = false;
@@ -15567,18 +15564,18 @@ template<class E> void ListFrame::OnPressCtrlO(E& event) {
 		else {
 			//file could be opened
 
-			file.set_name(String((openFileDialog.GetPath()).ToStdString()));
-			data->read_from_file_to(file, String(""));
+			data_file.set_name(String((openFileDialog.GetPath()).ToStdString()));
+			data->read_from_file_to(data_file, String(""));
 			//            data->print(true, String(""), cout);
 
 			file_is_untitled = false;
 
-			//emable the menu item to close file
+			//emable the menu item to close data_file
 			menu_file->Enable(wxID_HIGHEST + 7, true);
 			//load the data in data into the GUI fields of *this
 			set();
 			//change the title of *this to the filename
-			SetLabel(wxString((file.name).value));
+			SetLabel(wxString((data_file.name).value));
 			//resize and draw all charts according to the newly loaded data
 			Resize();
 			DrawAll();
@@ -15629,9 +15626,9 @@ template<class E> void ListFrame::OnPressCtrlW([[maybe_unused]] E& event) {
 //write content of data into file
 template<class E> void ListFrame::OnPressCtrlS(E& event) {
 
-	file.open(String("out"), String(""));
-	data->print(false, String(""), *(file.value));
-	file.close(String(""));
+	data_file.open(String("out"), String(""));
+	data->print(false, String(""), *(data_file.value));
+	data_file.close(String(""));
 
 	OnSaveFile();
 
@@ -15648,13 +15645,13 @@ template<class E> void ListFrame::OnPressCtrlShiftS(E& event) {
 	if ((openFileDialog.ShowModal()) != wxID_CANCEL) {
 		// the user did not presse cancel -> proceed saving on the file chosen by the user;
 
-		file.set_name(String((openFileDialog.GetPath()).ToStdString()));
+		data_file.set_name(String((openFileDialog.GetPath()).ToStdString()));
 		//open a new file to save content on it
-		file.open(String("out"), String(""));
-		//writedata into file
-		data->print(false, String(""), *(file.value));
+		data_file.open(String("out"), String(""));
+		//writ edata into data_file
+		data->print(false, String(""), *(data_file.value));
 		//close the file
-		file.close(String(""));
+		data_file.close(String(""));
 
 		OnSaveFile();
 

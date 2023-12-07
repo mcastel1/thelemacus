@@ -63,7 +63,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  ---
 
  for MSW:
- - center name of file in top bar of ListFrame 
+ - center name of file in top bar of ListFrame
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  - on MSW when I save a .nav file the ° symbol is replaced with an odd inifnity symbol and then the .sav file cannot be read on APPLE
@@ -335,7 +335,6 @@ bool MyApp::OnInit() {
 	//read the file names and prenend to the file name the respective directory where the file is located -> obtain the file path
 	//files in code directory
 	path_file_utc_date_and_time = code_directory.append(read_from_file(String("name file utc date and time"), (wxGetApp().path_file_init), String("R"), String("")));
-	path_file_temp = code_directory.append(read_from_file(String("name file temp"), (wxGetApp().path_file_init), String("R"), String("")));
 
 	//files in data directory
 //	path_file_recent = data_directory.append(read_from_file(String("name file recent"), (wxGetApp().path_file_init), String("R"), String("")));

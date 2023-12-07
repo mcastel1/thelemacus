@@ -1069,24 +1069,20 @@ void String::read_from_file_to(String name, String filename, String mode, [[mayb
 void String::write_to_file(String name, FileRW& file, [[maybe_unused]] String prefix) {
 
 	long i;
-	FileRW temp;
 	string line;
-	stringstream s;
+	stringstream s, temp;
 
 	//count the number of lines infile so I kno when to stop when reading it
 	file.count_lines(prefix);
     //open the file in mode "in" to read the lines corresponding to "name", which will be then copied and pasted to a new 'file' with the same name
     file.open(String("in"), prefix);
 
-	temp.set_name((wxGetApp().path_file_temp));
-	temp.remove(String(""));
-	temp.open(String("out"), prefix);
 
 	//rewind the file pointer
 	file.value->clear();                 // clear fail and eof bits
 	file.value->seekg(0, std::ios::beg); // back to the start!
 
-	for (i = 0; (i < (file.number_of_lines)) && (!(*(file.value)).eof()); i++) {
+	for (temp.str(""), i = 0; (i < (file.number_of_lines)) && (!(*(file.value)).eof()); i++) {
 
 		line.clear();
 		getline(*(file.value), line);
@@ -1096,7 +1092,7 @@ void String::write_to_file(String name, FileRW& file, [[maybe_unused]] String pr
 			//in this case 'name' has not been found in the line under consideration, or the line under consideration is a comment
 
 			//I copy and paste the line that I read from file to temp
-			(*(temp.value)) << line << "\n";
+			temp << line << "\n";
 
 
 		}
@@ -1108,18 +1104,21 @@ void String::write_to_file(String name, FileRW& file, [[maybe_unused]] String pr
 			s << (name.value) << " = " << value;
 
 			//I write s to file temp
-			(*(temp.value)) << (s.str()) << "\n";
+            temp << (s.str()) << "\n";
 
 		}
 
 	}
 
-	temp.close(prefix);
 
-	//move file_temp to file, so as to obtain the desired result
+	//move remove old 'file' and write the content of temp into a new 'file' with the same name
 	file.close(prefix);
 	boost::filesystem::remove(file.name.value);
-	boost::filesystem::rename(temp.name.value, file.name.value);
+    file.open(String("out"), prefix);
+    (*(file.value)) << temp.str().c_str();
+    file.close(prefix);
+    
+//	boost::filesystem::rename(temp.name.value, file.name.value);
 
 }
 

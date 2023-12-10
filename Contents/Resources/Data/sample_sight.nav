@@ -144,6 +144,6 @@ Positions in the data:
 		latitude = 42° 29.04848594960882'
 		longitude = 322° 26.58243497594981'
 		label = 2023-10-16 13:28:19 UTC+2
-  #note that here a space must follow every item in a line
-Recent bodies = 1 10 4 
-Recent projections = 1 0 
+#note that here a space must follow every item in a line
+Recent bodies = 1 10 4
+Recent projections = 1 0

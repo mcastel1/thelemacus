@@ -62,6 +62,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  ---
 
  for MSW:
+ - when I select moon to add a sight and then select a limb , I get an error 
  - icon of button add sight/route/position is not shown 
  - center name of file in top bar of ListFrame
  - write the WIN32 part of void MyApp::OnTimer

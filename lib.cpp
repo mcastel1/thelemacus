@@ -14854,10 +14854,19 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
     if(load_sample_sight == Answer('y', String(""))){
         //I read a sample sight from file default_open_directory/sample_sight.nav, store into sight and set all the fields in this to the data in sight with set()
         
+#ifdef __APPLE__
+
         data_file.set_name((wxGetApp().data_directory).append(String("sample_sight.nav")));
         data->read_from_file_to(data_file, String(""));
         file_is_untitled = false;
+
+#endif
+#ifdef _WIN32
+
         
+        file_is_untitled = true;
+     
+#endif
         menu_file->Enable(wxID_HIGHEST + 7, true);
         set();
         SetLabel(data_file.name.value);

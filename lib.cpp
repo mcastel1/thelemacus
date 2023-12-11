@@ -739,6 +739,16 @@ bool String::is_a_file_path([[maybe_unused]] String prefix){
 }
 
 
+//return the size of *this if shown in the wxWindow (e.g. a wxtextctr, a wxliscontrol, etc...)
+wxSize String::get_size(wxWindow* p){
+    
+    wxClientDC dc(p);
+    
+    return (dc.GetTextExtent(wxString(value)));
+    
+}
+
+
 void Double::print(String name, String prefix, ostream& ostr) {
 
 	ostr << prefix.value << name.value << " = " << value << "\n";

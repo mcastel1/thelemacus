@@ -54,6 +54,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
+ - listcontrol_sights etc are not resized to their minimum sizes 
  - fix root_directory on WIN32
  - do not allocate a new wxDC every time you call Render*
  - Do not write on file every time you update the recent items, write/read from to file only when you open /close the app

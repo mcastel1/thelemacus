@@ -261,7 +261,7 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 //	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '\"'), root_directory.value.end());
 //	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '"'), root_directory.value.end());
 
-    root_directory = String("Z:/");
+//    root_directory = String("Z:/");
 
 
 #endif
@@ -331,7 +331,6 @@ bool MyApp::OnInit() {
 
 	//directories are set dynamically from root_directory
 	path_file_init = root_directory.append(String("Contents/Resources/Data/init.txt"));
-	code_directory = root_directory;
 	data_directory = root_directory.append(String("Contents/Resources/Data/"));
 	if ((settings->GetAppearance().IsDark())) {
 		//the system is in dark mode
@@ -345,7 +344,6 @@ bool MyApp::OnInit() {
 
 	//read the file names and prenend to the file name the respective directory where the file is located -> obtain the file path
 	//files in code directory
-	path_file_utc_date_and_time = code_directory.append(read_from_file(String("name file utc date and time"), (wxGetApp().path_file_init), String("R"), String("")));
 
 	//files in data directory
 //	path_file_recent = data_directory.append(read_from_file(String("name file recent"), (wxGetApp().path_file_init), String("R"), String("")));

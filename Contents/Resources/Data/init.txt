@@ -88,7 +88,6 @@ code directory = /Users/macbookpro/Desktop/Thelemacus.app/
 data directory = /Users/macbookpro/Desktop/Thelemacus.app/data/
 image directory = /Users/macbookpro/Desktop/Thelemacus.app/images/
 #files in code directory
-name file utc date and time = utc.txt
 name file temp = temp.txt
 #files in data directory
 name file catalog = catalog.txt

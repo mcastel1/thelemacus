@@ -15423,7 +15423,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 
 	int i, j;
 
-	//            cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
+	            cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
 
 
 	//check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
@@ -16690,7 +16690,7 @@ template <class T> void RouteTypeField::get(T& event) {
 
 
 void SightFrame::OnPressReduce(wxCommandEvent& event) {
-
+    
 	stringstream s;
 
 	if (label->value->GetValue().ToStdString() == "") {
@@ -18659,19 +18659,40 @@ void ListControl::EnableButtons(bool check) {
 //correctly resizes the sizes of columns of *this
 void ListControl::Resize(void) {
 
-	int j, width_header, width_item, width_total;
+	int i, j, width_item, width_total;
+    wxListItem item;
+    wxSize item_size, header_size;
+
+    item.SetMask(wxLIST_MASK_TEXT); // enable GetText()
 
 
 	//    set the column width to the width of the header or its longest item
-	for (width_total = 0, j = 0; j < GetColumnCount(); j++) {
+	for(width_total = 0, j = 0; j < GetColumnCount(); j++) {
+        
+        item.SetColumn(j); // set the column
 
-		SetColumnWidth(j, wxLIST_AUTOSIZE);
-		width_item = GetColumnWidth(j);
+        //
+     
+        for(width_item=0, i=0; i<GetItemCount(); i++){
 
-		SetColumnWidth(j, wxLIST_AUTOSIZE_USEHEADER);
-		width_header = GetColumnWidth(j);
 
-		SetColumnWidth(j, max(width_item, width_header));
+            //run through all elements of column j, compute their size and store the maximum size
+            item.SetId(i); // set the index
+            GetItem(item); // get the item
+            item_size = String(item.GetText().ToStdString()).get_size(this);
+            
+            if((item_size.GetWidth()) > width_item){width_item = (item_size.GetWidth());}
+            
+        }
+        
+        GetColumn(j, item);
+        
+        header_size = String(item.GetText().ToStdString()).get_size(this);
+
+
+//		SetColumnWidth(j, header_size.GetWidth());
+
+		SetColumnWidth(j, max(header_size.GetWidth(), item_size.GetWidth()) + 2*((wxGetApp().border).value));
 
 		width_total += GetColumnWidth(j);
 

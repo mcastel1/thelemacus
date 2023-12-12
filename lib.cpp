@@ -18343,9 +18343,10 @@ template<class P> void BodyField<P>::read_recent_items(void) {
         }
 
     }else{
-        //ListFrame::data_file exists -> set the size of recent_items to that of tymes and set recent_items[i] simply to i
+        //ListFrame::data_file exists -> set the size of recent_items to that of catalog->list and set recent_items[i] simply to i
+
         
-        for(recent_items.resize((bodies.GetCount())), i=0; i<(recent_items.size()); i++){
+        for(recent_items.resize((catalog->list).size()), i=0; i<(recent_items.size()); i++){
             recent_items[i] = i;
         }
         

@@ -299,7 +299,7 @@ bool MyApp::OnInit() {
 	//        where_am_I(String(""));
 	//to develop the app with Xcode on OSX
 	root_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
-
+    
 #endif
 
 #ifdef _WIN32
@@ -350,6 +350,7 @@ bool MyApp::OnInit() {
 	path_file_catalog = data_directory.append(read_from_file(String("name file catalog"), (wxGetApp().path_file_init), String("R"), String("")));
 	path_file_coastline_data_blocked = data_directory.append(read_from_file(String("name file coastline data blocked"), (wxGetApp().path_file_init), String("R"), String("")));
 	path_file_n_line = data_directory.append(read_from_file(String("name file n line"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_sample_sight = data_directory.append(read_from_file(String("name file sample sight"), (wxGetApp().path_file_init), String("R"), String("")));
 
 	//files in image directory
 	path_file_app_icon = image_directory.append(read_from_file(String("name file app icon"), (wxGetApp().path_file_init), String("R"), String("")));
@@ -380,6 +381,22 @@ bool MyApp::OnInit() {
 	size_message_image_over_width_screen.read_from_file_to(String("size message image over width screen"), (wxGetApp().path_file_init), String("R"),  String(""));
 	point_size.read_from_file_to(String("point size"), (wxGetApp().path_file_init), String("R"), String(""));
 
+    
+    //
+    FileR my_file;
+    Data* my_data;
+    my_file.set_name(String(""));
+    my_file.open(String("*"));
+    Catalog* my_catalog;
+    
+    my_catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
+    my_data = new Data(my_catalog, String(""));
+
+    my_data->read_from_stream<ifstream>(String("Sample of data to start the app"), my_file.value, true, String("**"));
+    
+    my_file.close(String("*"));
+    
+    //
 
 	//set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen
 	size_small_button = wxSize(

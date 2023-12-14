@@ -15042,10 +15042,8 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 #ifdef _WIN32
         //I am on WIN32 operating system -> reat the file from resources 
 
-        
+
         data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String(""));
- 
-     
 #endif
         file_is_untitled = true;
         menu_file->Enable(wxID_HIGHEST + 7, true);

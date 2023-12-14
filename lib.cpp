@@ -5374,7 +5374,7 @@ void Data::print_sights(String prefix, ostream& ostr) {
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
 
-	ostr << prefix.value << "Sights in the data:\n";
+	ostr << prefix.value << "Sights:\n";
 	for (i = 0; i < sight_list.size(); i++) {
 		name.str("");
 		name << "Sight #" << i + 1;
@@ -5393,7 +5393,7 @@ void Data::print_positions(String prefix, ostream& ostr) {
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
 
-	ostr << prefix.value << "Positions in the data:\n";
+	ostr << prefix.value << "Positions:\n";
 	for (i = 0; i < position_list.size(); i++) {
 		name.str("");
 		name << "Position #" << i + 1;
@@ -5412,7 +5412,7 @@ void Data::print_routes(bool print_all_routes, String prefix, ostream& ostr) {
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
 
-	ostr << prefix.value << "Routes in the data:\n";
+	ostr << prefix.value << "Routes:\n";
 
 	for (i = 0, j = 0; i < (route_list.size()); i++) {
 
@@ -5629,7 +5629,7 @@ bool Data::read_from_file_to(FileRW& file, [[maybe_unused]] String prefix) {
 
         //1. Here I read sights
 
-        //read dummy text line '    Sights in the data:"
+        //read dummy text line '    Sights:"
         getline(*(file.value), line);
 
         line.clear();
@@ -5792,7 +5792,7 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
     
     //1. Read Sights
 
-    //read dummy text line '    Sights in the data:"
+    //read dummy text line '    Sights:"
     getline((*input_stream), line);
 
     line.clear();

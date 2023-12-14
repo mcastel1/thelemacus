@@ -62,6 +62,8 @@ To run on WIN32, the resource file is resource_file_windows.rc
  ---
 
  for MSW:
+ - the Light version of trash icon has a gray background -> it should have a white background 
+ - the Mercator projeciton ChartFrame is shown out of thescreeen
  - center name of file in top bar of ListFrame
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder

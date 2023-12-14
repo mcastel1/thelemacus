@@ -15029,14 +15029,19 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
     if(load_sample_sight == Answer('y', String(""))){
         //I read a sample sight from file default_open_directory/sample_sight.nav, store into sight and set all the fields in this to the data in sight with set()
         
-#ifdef __APPLE__
+        //I am loading data from path_file_sample_sight -> set name of data_file accordingly 
+        data_file.set_name((wxGetApp().path_file_sample_sight));
 
-        data_file.set_name((wxGetApp().data_directory).append(String("sample_sight.nav")));
-//        data->read_from_file_to(data_file, String(""));
+        
+#ifdef __APPLE__
+//I am on APPLE operating system -> read the file from hard drive locatd in the Data directory
+        
+        data->read_from_file_to(String("Sample of data to start the app"), (wxGetApp().path_file_sample_sight), String("RW"), String(""));
         file_is_untitled = false;
 
 #endif
 #ifdef _WIN32
+        //I am on WIN32 operating system -> reat the file from resources 
 
         
         file_is_untitled = true;

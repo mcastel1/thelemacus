@@ -15052,7 +15052,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 
         data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String(""));
 #endif
-        file_is_untitled = true;
+        file_is_untitled = false;
         menu_file->Enable(wxID_HIGHEST + 7, true);
         set();
         SetLabel(data_file.name.value);

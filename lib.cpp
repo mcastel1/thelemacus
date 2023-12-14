@@ -5351,10 +5351,17 @@ int Data::compute_position(String prefix) {
 
 //print all the data in data to ostr
 void Data::print(bool print_all_routes, String prefix, ostream& ostr) {
+    
+    String new_prefix;
 
-	print_sights(prefix, ostr);
-	print_routes(print_all_routes, prefix, ostr);
-	print_positions(prefix, ostr);
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+    
+    ostr << prefix.value << "Data:\n";
+
+	print_sights(new_prefix, ostr);
+	print_routes(print_all_routes, new_prefix, ostr);
+	print_positions(new_prefix, ostr);
 
 }
 

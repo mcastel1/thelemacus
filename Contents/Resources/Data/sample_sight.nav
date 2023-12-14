@@ -1,5 +1,3 @@
-my number = 312674623987
-#this is a comment
 Data:
     Sights in the data:
         Sight #1:
@@ -136,17 +134,10 @@ Data:
             longitude = 322° 26.58243497594981'
             label = 2023-10-16 13:28:19 UTC+2
         Position #5:
-            latitude = 33° 29.04848594960882'
-            longitude = 322° 26.58243497594981'
-            label = 2023-10-16 13:28:19 UTC+2
-        Position #6:
             latitude = 56° 29.04848594960924'
             longitude = 22° 26.58243497594981'
             label = 2023-10-16 13:28:19 UTC+2
-        Position #7:
+        Position #6:
             latitude = 42° 29.04848594960882'
             longitude = 322° 26.58243497594981'
             label = 2023-10-16 13:28:19 UTC+2
-    #note that here a space must follow every item in a line
-    Recent bodies = 1 10 4
-    Recent projections = 1 0

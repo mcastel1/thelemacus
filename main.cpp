@@ -383,15 +383,16 @@ bool MyApp::OnInit() {
 
     
     //----- test for Data::read_from_file_to - start
+    /*
     Data* my_data;
     Catalog* my_catalog;
     
     my_catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
     my_data = new Data(my_catalog, String(""));
 
-    my_data->read_from_file_to(String("Sample of data to start the app"), (wxGetApp().path_file_sample_sight), String("R"), String("**"));
+    my_data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String("**"));
     
-    
+    */
     //----- test for Data::read_from_file_to - end
 
 	//set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen

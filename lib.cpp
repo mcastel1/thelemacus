@@ -15036,14 +15036,14 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 #ifdef __APPLE__
 //I am on APPLE operating system -> read the file from hard drive locatd in the Data directory
         
-        data->read_from_file_to(String("Sample of data to start the app"), (wxGetApp().path_file_sample_sight), String("RW"), String(""));
+        data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("RW"), String(""));
 
 #endif
 #ifdef _WIN32
         //I am on WIN32 operating system -> reat the file from resources 
 
         
-        data->read_from_file_to(String("Sample of data to start the app"), (wxGetApp().path_file_sample_sight), String("R"), String(""));
+        data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String(""));
  
      
 #endif
@@ -15761,8 +15761,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event) {
 			//file could be opened
 
 			data_file.set_name(String((openFileDialog.GetPath()).ToStdString()));
-//			data->read_from_file_to(data_file, String(""));
-			//            data->print(true, String(""), cout);
+            data->read_from_file_to(String("Data"), String((openFileDialog.GetPath()).ToStdString()), String("RW"), String(""));
 
 			file_is_untitled = false;
 

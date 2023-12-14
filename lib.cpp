@@ -15058,6 +15058,11 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
         SetLabel(data_file.name.value);
         DrawAll();
         
+    }else{
+        
+        file_is_untitled = true;
+
+        
     }
 
 

@@ -5731,8 +5731,35 @@ bool Data::read_from_file_to(FileRW& file, [[maybe_unused]] String prefix) {
 
 template<class S> void Data::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
     
+    string line;
+
+    
     cout << prefix.value << "Reading " << name.value << " from stream " << input_stream << "... \n";
 
+    
+    if (search_entire_stream) {
+        //rewind *input_stream, look for the beginning of the data block corresponding to name, and read its first line
+
+        //rewind the file pointer
+        input_stream->clear();                 // clear fail and eof bits
+        input_stream->seekg(0, std::ios::beg); // back to the start!
+
+        do {
+
+            line.clear();
+            getline(*input_stream, line);
+
+        } while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+
+
+    }
+    else {
+        //read the first line of the data block corresponding to name
+
+        line.clear();
+        getline(*input_stream, line);
+
+    }
     
     cout << prefix.value << "... done.\n";
 

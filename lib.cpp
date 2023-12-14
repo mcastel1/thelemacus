@@ -58,7 +58,7 @@ template<class C> void read_from_file(C* object, String name, String filename, S
 	file.set_name(filename);
 	file.open(String("in"), prefix);
 
-	object->template read_from_stream<fstream>(name, (file.value), true, prefix);
+	object->template read_from_stream<fstream>(name, file.value, true, prefix);
 
 	file.close(prefix);
 
@@ -76,7 +76,7 @@ template<class C> void read_from_file(C* object, String name, String filename, S
 		file.set_name(filename);
 		file.open(String("in"), prefix);
 
-		object->template read_from_stream<fstream>(name, (file.value), true, prefix);
+		object->template read_from_stream<fstream>(name, file.value, true, prefix);
 
 		file.close(prefix);
 
@@ -91,7 +91,7 @@ template<class C> void read_from_file(C* object, String name, String filename, S
 			file.set_name(filename);
 			file.open(prefix);
 
-			object->template read_from_stream<istringstream>(name, (file.value), true, prefix);
+			object->template read_from_stream<istringstream>(name, file.value, true, prefix);
 
 			file.close(prefix);
 

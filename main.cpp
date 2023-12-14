@@ -382,21 +382,17 @@ bool MyApp::OnInit() {
 	point_size.read_from_file_to(String("point size"), (wxGetApp().path_file_init), String("R"), String(""));
 
     
-    //
-    FileR my_file;
+    //----- test for Data::read_from_file_to - start
     Data* my_data;
-    my_file.set_name((wxGetApp().path_file_sample_sight));
-    my_file.open(String("*"));
     Catalog* my_catalog;
     
     my_catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
     my_data = new Data(my_catalog, String(""));
 
-    my_data->read_from_stream<ifstream>(String("Sample of data to start the app"), my_file.value, true, String("**"));
+    my_data->read_from_file_to(String("Sample of data to start the app"), (wxGetApp().path_file_sample_sight), String("R"), String("**"));
     
-    my_file.close(String("*"));
     
-    //
+    //----- test for Data::read_from_file_to - end
 
 	//set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen
 	size_small_button = wxSize(

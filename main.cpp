@@ -385,7 +385,7 @@ bool MyApp::OnInit() {
     //
     FileR my_file;
     Data* my_data;
-    my_file.set_name(String(""));
+    my_file.set_name((wxGetApp().path_file_sample_sight));
     my_file.open(String("*"));
     Catalog* my_catalog;
     

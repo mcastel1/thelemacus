@@ -4482,12 +4482,12 @@ template<class S> bool Body::read_from_stream(String name, S* input_stream, [[ma
 	getline((*input_stream), line);
 
 	if (!(*input_stream).eof()) {
-		//*(input_stream) has not reached the end of file
+		//*input_stream has not reached the end of file
 
 
 		//read type
 		line.clear();
-		getline(*(input_stream), line);
+		getline(*input_stream, line);
 		pos = line.find(" = ");
 		type = line.substr(pos + 3, line.size() - (pos + 3));
 		cout << new_prefix.value << "Type = " << type.value << "\n";
@@ -4495,7 +4495,7 @@ template<class S> bool Body::read_from_stream(String name, S* input_stream, [[ma
 
 		//read name
 		line.clear();
-		getline(*(input_stream), line);
+		getline(*input_stream, line);
 		pos = line.find(" = ");
 		((*this).name) = line.substr(pos + 3, line.size() - (pos + 3));
 		cout << new_prefix.value << "Name = " << ((*this).name).value << "\n";
@@ -4786,14 +4786,14 @@ template<class S> bool Sight::read_from_stream([[maybe_unused]] String name, S* 
     body.read_from_stream<S>(String("body"), input_stream, false, new_prefix);
 	if (body.type.value != "star") {
 		items.insert(items.begin() + 1 + (additional_items++), all_items[1]);
-		limb.read_from_stream<fstream>(String("limb"), input_stream, false, new_prefix);
+		limb.read_from_stream<S>(String("limb"), input_stream, false, new_prefix);
 	}
-	H_s.read_from_stream<fstream>(String("sextant altitude"), (input_stream), false, new_prefix);
-	index_error.read_from_stream<fstream>(String("index error"), (input_stream), false, new_prefix);
-	artificial_horizon.read_from_stream<fstream>(String("artificial horizon"), (input_stream), false, new_prefix);
+	H_s.read_from_stream<S>(String("sextant altitude"), input_stream, false, new_prefix);
+	index_error.read_from_stream<S>(String("index error"), input_stream, false, new_prefix);
+	artificial_horizon.read_from_stream<S>(String("artificial horizon"), input_stream, false, new_prefix);
 	if (artificial_horizon == Answer('n', new_prefix)) {
 		items.insert(items.begin() + 3 + (additional_items++), String("height of eye"));
-		height_of_eye.read_from_stream<fstream>(String("height of eye"), (input_stream), false, new_prefix);
+		height_of_eye.read_from_stream<S>(String("height of eye"), input_stream, false, new_prefix);
 	}
 
 	check &= master_clock_date_and_hour.read_from_stream<S>(String("master-clock date and hour of sight"), input_stream, false, new_prefix);
@@ -4802,7 +4802,7 @@ template<class S> bool Sight::read_from_stream([[maybe_unused]] String name, S* 
 	}
 	time = master_clock_date_and_hour;
 
-	use_stopwatch.read_from_stream<fstream>(String("use of stopwatch"), (input_stream), false, new_prefix);
+	use_stopwatch.read_from_stream<S>(String("use of stopwatch"), input_stream, false, new_prefix);
 
 	if (use_stopwatch == Answer('y', new_prefix)) {
 
@@ -4819,7 +4819,7 @@ template<class S> bool Sight::read_from_stream([[maybe_unused]] String name, S* 
 	//check whether the date and hour of sight falls within the time window covered by JPL data files
 	check &= check_time_interval(prefix);
 
-	label.read_from_stream<fstream>(String("label"), (input_stream), false, new_prefix);
+	label.read_from_stream<S>(String("label"), input_stream, false, new_prefix);
 	if (label.value == "") {
 		//if the value of label read from file is empty, set in label the time at which *this has been read
 
@@ -5792,7 +5792,7 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
         Route route;
 
         //if I find a sight which returns an error message when read from file, to be conservative I do not add any of the following sights in the file to sight_list because they may contain other errors
-        check &= (sight.read_from_stream<fstream>(String("sight"), input_stream, false, new_prefix));
+        check &= (sight.read_from_stream<S>(String("sight"), input_stream, false, new_prefix));
         if (check) {
 
             check &= (sight.reduce(&route, new_prefix));
@@ -5836,12 +5836,12 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
         //read the position block
         Route route;
 
-        route.read_from_stream<fstream>(String("route"), input_stream, false, new_prefix);
+        route.read_from_stream<S>(String("route"), input_stream, false, new_prefix);
 
         route.print(String("New route"), new_prefix, cout);
 
         route_list.push_back(route);
-        cout << new_prefix.value << "Route added as position #" << route_list.size() << ".\n";
+        cout << new_prefix.value << "Route added as route #" << route_list.size() << ".\n";
 
         line.clear();
         //read dummyt text line
@@ -5866,7 +5866,7 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
         //read the position block
         Position position;
 
-        position.read_from_stream<fstream>(String("position"), (input_stream), false, new_prefix);
+        position.read_from_stream<S>(String("position"), input_stream, false, new_prefix);
 
         position.print(String("New position"), new_prefix, cout);
 

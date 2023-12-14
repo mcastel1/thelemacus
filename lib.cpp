@@ -1029,7 +1029,7 @@ template<class S> void String::read_from_stream(String name, S* input_stream, bo
 	string line;
 	size_t pos;
 
-	cout << prefix.value << YELLOW << "Reading " << name.value << " from stream " << input_stream << "... \n" << RESET;
+	cout << prefix.value << "Reading " << name.value << " from stream " << input_stream << "... \n";
 
 	if (search_entire_stream) {
 
@@ -1059,7 +1059,7 @@ template<class S> void String::read_from_stream(String name, S* input_stream, bo
 	//read the string after ' = ' until the end of line string and store it into value
 	value = line.substr(pos + 3, line.size() - (pos + 3)).c_str();
 
-	cout << prefix.value << YELLOW << "... done.\n" << RESET;
+	cout << prefix.value << "... done.\n";
 
 	print(name, true, prefix, cout);
 
@@ -5726,6 +5726,15 @@ bool Data::read_from_file_to(FileRW& file, [[maybe_unused]] String prefix) {
     }
 
     return check;
+
+}
+
+template<class S> void Data::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
+    
+    cout << prefix.value << "Reading " << name.value << " from stream " << input_stream << "... \n";
+
+    
+    cout << prefix.value << "... done.\n";
 
 }
 

@@ -940,6 +940,7 @@ public:
     void remove_position(unsigned int, String);
     void remove_route(unsigned int, Answer, String);
     bool read_from_file_to(FileRW&, String);
+    template<class S> void read_from_stream(String, S*, bool, String);
     void print(bool, String, ostream&);
     void print_to_kml(String);
     void print_sights(String, ostream&);

@@ -1066,7 +1066,7 @@ template<class S> void String::read_from_stream(String name, S* input_stream, bo
 }
 
 
-//reads from file the content after 'name = ' and writes it into *this. 
+//read from file the content after 'name = ' and writes it into *this.
 //if mode = 'RW' ('R') it reads form a FileRW (FileR)
 void String::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
 
@@ -5589,6 +5589,16 @@ void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
 
 }
 
+
+//read from file the content after 'name = ' and writes it into *this.
+//if mode = 'RW' ('R') it reads form a FileRW (FileR)
+void Data::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
+
+    read_from_file<Data>(this, name, filename, mode, prefix);
+
+}
+
+/*
 bool Data::read_from_file_to(FileRW& file, [[maybe_unused]] String prefix) {
 
     stringstream line_ins;
@@ -5730,6 +5740,7 @@ bool Data::read_from_file_to(FileRW& file, [[maybe_unused]] String prefix) {
     return check;
 
 }
+ */
 
 template<class S> void Data::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
     
@@ -15021,7 +15032,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 #ifdef __APPLE__
 
         data_file.set_name((wxGetApp().data_directory).append(String("sample_sight.nav")));
-        data->read_from_file_to(data_file, String(""));
+//        data->read_from_file_to(data_file, String(""));
         file_is_untitled = false;
 
 #endif
@@ -15744,7 +15755,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event) {
 			//file could be opened
 
 			data_file.set_name(String((openFileDialog.GetPath()).ToStdString()));
-			data->read_from_file_to(data_file, String(""));
+//			data->read_from_file_to(data_file, String(""));
 			//            data->print(true, String(""), cout);
 
 			file_is_untitled = false;

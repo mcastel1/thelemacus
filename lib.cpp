@@ -11218,11 +11218,12 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 				//in this case, drag_end_position lies out the plot area
 
 				if (((parent->parent)->highlighted_route) != -1) {
-					//in this case, I am dragging a route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
+					//in this case, I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
 
 					(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position) = route_position_start_drag;
 
 					TabulateRoutes();
+                    //WASTE OF RESOURCES: here you don't neet do paint everything, just paint the Routes that  has changed
 					PaintNow();
 
 					print_error_message->SetAndCall(NULL, String("Route ground or start position outside plot area!"), String("Route start or start position must lie within the plot area."), (wxGetApp().path_file_error_icon));
@@ -11240,6 +11241,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 					((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
 
 					//given that the position under consideration has changed, I re-pain the chart
+                    //WASTE OF RESOURCES: here you don't neet do paint everything, just paint the Positions that have changed
 					PaintNow();
 
 					print_error_message->SetAndCall(NULL, String("Position outside plot area!"), String("The position must lie within the plot area."), (wxGetApp().path_file_error_icon));
@@ -11365,6 +11367,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
 			((parent->parent)->selection_rectangle) = false;
 			//I call paintnow to delete the currently drawn selection rectangle
+            //WASTE OF RESOURCES: here you don't neet do paint everything
 			PaintNow();
 
 		}
@@ -11668,6 +11671,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						for (i = 0; i < ((parent->parent)->chart_frames).size(); i++) {
 
 							((((parent->parent)->chart_frames)[i])->draw_panel)->TabulateRoutes();
+                            //WASTE OF RESOURCES: here you don't neet do paint everything, just paint the Routes that have changed
 							((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
 
 						}
@@ -11681,12 +11685,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 						if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
-
 							//convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
 							(this->*ScreenToGeo)(position_now_drag, &((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]));
 
 						}
-
 
 						if ((((parent->projection)->name)->GetValue()) == wxString("3D")) {
 
@@ -11708,6 +11710,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						//given that the Position under consideration has changed, I re-paint the charts
 						for (i = 0; i < ((parent->parent)->chart_frames).size(); i++) {
 
+                            //WASTE OF RESOURCES: here you don't neet do paint everything, just paint the Positions that have changed
 							((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
 
 						}
@@ -11717,45 +11720,37 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 				}
 
 			}
-			else {
-				//in this case, position_drag_now is not a valid position
-
-				switch (((((parent->projection)->name)->GetValue()).ToStdString())[0]) {
-
-				case 'M': {
-					//I am using the mercator projection: then the position is invalid and I may print an error message
-
-					//uncomment this if you want an info message to be pribted
-					//print_error_message->SetAndCall(NULL,  String("The drag goes through an invalid point!"), String("The drag must go through valid points."));
-
-
-					break;
-
-				}
-
-				case '3': {
-					//I am using the 3d projection: even if the position lies outside the circular boundary of the Earth,  thus this posibtion is a valid position for a drag which rotates the earth about the y' axis -> I do this rotation
-
-					//compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-					rotation =
-						rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
-
-
-					//re-draw the chart
-					(this->*Draw)();
-					PaintNow();
-
-
-
-					break;
-
-				}
-
-
-				}
-
-
-
+            else {
+                //in this case, position_drag_now is not a valid position
+                
+                switch (((((parent->projection)->name)->GetValue()).ToStdString())[0]) {
+                        
+                    case 'M': {
+                        //I am using the mercator projection: then the position is invalid and I may print an error message
+                        
+                        //uncomment this if you want an info message to be printed
+                        //print_error_message->SetAndCall(NULL,  String("The drag goes through an invalid point!"), String("The drag must go through valid points."));
+                        
+                        break;
+                        
+                    }
+                        
+                    case '3': {
+                        //I am using the 3d projection: even if the position lies outside the circular boundary of the Earth,  thus this posibtion is a valid position for a drag which rotates the earth about the y' axis -> I do this rotation
+                        
+                        //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
+                        rotation = rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+                        
+                        //re-draw the chart
+                        (this->*Draw)();
+                        PaintNow();
+                        
+                        break;
+                        
+                    }
+                        
+                        
+                }
 
 			}
 
@@ -15615,7 +15610,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 	MousePositionOnListControl(listcontrol_routes, &highlighted_route);
 
 	if ((highlighted_sight == wxNOT_FOUND) && (highlighted_position == wxNOT_FOUND) && (highlighted_route == wxNOT_FOUND)) {
-		//in this case, the mouse is not hovering over an element in listcontrol_sights nor listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights
+		//the mouse is not hovering over an element in listcontrol_sights nor listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights
 
 		//set the beckgorund color of the Routes in listcontrol_sights and listcontrol_routes  and the background color of the Positions in listcontrol_positions to white
 		for (i = 0; i < (listcontrol_sights->GetItemCount()); i++) {
@@ -15630,9 +15625,10 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 
 	}
 	else {
+        //the mouse is hovering over either an element of listcontrol_sights, or an element of listcontrol_routes, or an element of listcontrol_positions
 
 		if ((highlighted_sight != wxNOT_FOUND) && enable_highlight) {
-			//in this case, the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
+			// the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
 
 			highlighted_route = ((((data->sight_list)[highlighted_sight]).related_route).value);
 
@@ -15663,7 +15659,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 
 
 		if (highlighted_position != wxNOT_FOUND) {
-			//in this case, the mouse is hovering over an element of listcontrool_positions -> highlight it and the related position in listcontrol_positions, and set  a white background in all other leements in listcontrol_positions
+			//the mouse is hovering over an element of listcontrool_positions -> highlight it and the related position in listcontrol_positions, and set  a white background in all other leements in listcontrol_positions
 
 			for (i = 0; i < (listcontrol_positions->GetItemCount()); i++) {
 
@@ -15685,7 +15681,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 		}
 
 		if ((highlighted_route != wxNOT_FOUND) && enable_highlight) {
-			//in this case, the mouse is hovering over an element of listcontrool_routes -> highlight it and the related sight in listcontrol_sights, and set  a white background in all other leements in listcontrol_routes and listcontorl_sights
+			//the mouse is hovering over an element of listcontrool_routes -> highlight it and the related sight in listcontrol_sights, and set  a white background in all other leements in listcontrol_routes and listcontorl_sights
 
 			j = ((((data->route_list)[highlighted_route]).related_sight).value);
 
@@ -15716,10 +15712,9 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 
 	}
 
+    //WASTE OF RESOURCES: here you don't neet do paint everything
 	for (i = 0; i < chart_frames.size(); i++) {
-
 		((chart_frames[i])->draw_panel)->PaintNow();
-
 	}
 
 	event.Skip(true);

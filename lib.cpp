@@ -10978,6 +10978,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 		ShowCoordinates((parent->parent)->p_now, text_position_end);
 
+        //WASTE OF RESOURCES: here you don't neet do paint everything, just re-paint the selection rectangle
 		PaintNow();
 	}
 
@@ -11103,6 +11104,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 		//given that the Route under consideration has changed, I re-tabulate the Routes and rePaint the charts
 		for (i = 0; i < ((parent->parent)->chart_frames).size(); i++) {
 
+            //WASTE OF RESOURCES: here you don't neet do paint everything, just paint the Routes/Positions that have changed
 			((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
 
 		}

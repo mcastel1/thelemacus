@@ -32,6 +32,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
 
  ********** THINGS TO ADD/IMPROVE ************
+ - fix all WASTE OF RESOURCES ... 
  - when transporting a sight allow the user to enter speed and time instead of distance
  - adjust size of buttons
  - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value

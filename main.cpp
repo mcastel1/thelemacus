@@ -66,7 +66,6 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  for MSW:
  - when you open sample_sight.nav from resouces, you open it in R mode -> when you try to write in it you will get an error
- - in the formagt of .nav files replace 'Sights in the data:' -> 'Sight:' etc
  - the Mercator projeciton ChartFrame is shown out of thescreeen
  - center name of file in top bar of ListFrame
  - write the WIN32 part of void MyApp::OnTimer

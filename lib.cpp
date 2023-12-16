@@ -8001,10 +8001,10 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     
     wxPaintDC dc(this);
     
-    if( !m_bgbuffer.IsOk()
-       || m_bgbuffer.GetWidth() != dc.GetSize().x
-       || m_bgbuffer.GetHeight() != dc.GetSize().y
-       /*|| m_dataset_dirty*/ )
+    if( (!m_bgbuffer.IsOk())
+       || (m_bgbuffer.GetWidth() != dc.GetSize().x)
+       || (m_bgbuffer.GetHeight() != dc.GetSize().y)
+       || re_draw )
     {
         if( !m_bgbuffer.IsOk() ) m_bgbuffer.Create(dc.GetSize().x, dc.GetSize().y, 24);
         wxMemoryDC mdc(m_bgbuffer);

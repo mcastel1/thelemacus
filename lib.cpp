@@ -7931,6 +7931,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 	client_dc = new wxClientDC(this);
 
 	mouse_dragging = false;
+    re_draw = true;
 
 	parent = (parent_in->parent);
 
@@ -8009,6 +8010,8 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         if( !m_bgbuffer.IsOk() ) m_bgbuffer.Create(dc.GetSize().x, dc.GetSize().y, 24);
         wxMemoryDC mdc(m_bgbuffer);
         (this->*Render)(&mdc);
+        
+        re_draw = false;
     }
     
     dc.DrawBitmap(m_bgbuffer, 0, 0, false);
@@ -8038,11 +8041,11 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
  */
 void DrawPanel::PaintNow() {
 
-	//    Render(dc);
-	client_dc->Clear();
-	client_dc = new wxClientDC(this);
-	//    client_dc->SetParent(this);
-	(this->*Render)(client_dc);
+//	//    Render(dc);
+//	client_dc->Clear();
+//	client_dc = new wxClientDC(this);
+//	//    client_dc->SetParent(this);
+//	(this->*Render)(client_dc);
 
 
 
@@ -8995,6 +8998,9 @@ void DrawPanel::Draw_Mercator(void) {
 
 
 	TabulateRoutes();
+    
+    //tell PaintEvent that everything but highligghteable objects (coastlines, meridians ... ) must be re-drawn
+    re_draw = true;
 
 	//    (parent->p_coastline_draw).clear();
 
@@ -9240,7 +9246,9 @@ void DrawPanel::Draw_3D(void) {
 	//updates the position of the DrawPanel *this
 	position_draw_panel = (this->GetScreenPosition());
 
-
+    //tell PaintEvent that everything but highligghteable objects (coastlines, meridians ... ) must be re-drawn
+    re_draw = true;
+    
 }
 
 

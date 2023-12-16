@@ -7986,28 +7986,42 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
 
 BEGIN_EVENT_TABLE(DrawPanel, wxPanel)
-// some useful events
-/*
- EVT_MOTION(DrawPanel::mouseMoved)
- EVT_LEFT_DOWN(DrawPanel::mouseDown)
- EVT_LEFT_UP(DrawPanel::mouseReleased)
- EVT_RIGHT_DOWN(DrawPanel::rightClick)
- EVT_LEAVE_WINDOW(DrawPanel::mouseLeftWindow)
- EVT_KEY_DOWN(DrawPanel::keyPressed)
- EVT_KEY_UP(DrawPanel::keyReleased)
- EVT_MOUSEWHEEL(DrawPanel::mouseWheelMoved)
- */
 
- // catch paint events
-	EVT_PAINT(DrawPanel::PaintEvent)
+// catch paint events
+EVT_PAINT(DrawPanel::PaintEvent)
 
-	END_EVENT_TABLE()
+END_EVENT_TABLE()
 
 
-	void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
+void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
+    
+//    wxPaintDC dc(this);
+//    (this->*Render)(&dc);
 
-	wxPaintDC dc(this);
-	(this->*Render)(&dc);
+    
+    wxPaintDC dc(this);
+    
+    if( !m_bgbuffer.IsOk()
+       || m_bgbuffer.GetWidth() != dc.GetSize().x
+       || m_bgbuffer.GetHeight() != dc.GetSize().y
+       /*|| m_dataset_dirty*/ )
+    {
+        if( !m_bgbuffer.IsOk() ) m_bgbuffer.Create(dc.GetSize().x, dc.GetSize().y, 24);
+        wxMemoryDC mdc(m_bgbuffer);
+        (this->*Render)(&mdc);
+    }
+    
+    dc.DrawBitmap(m_bgbuffer, 0, 0, false);
+    
+    /*
+    if( has_highlighted_curve )
+    {
+        // draw highlighted curve into dc
+    }
+     */
+    
+    
+    
 }
 
 /*

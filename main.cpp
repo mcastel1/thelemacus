@@ -70,7 +70,6 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - center name of file in top bar of ListFrame
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
- - on MSW when I save a .nav file the ° symbol is replaced with an odd inifnity symbol and then the .sav file cannot be read on APPLE
  - in LIstframe there is an odd empty space on the top
  */
 
@@ -290,9 +289,9 @@ bool MyApp::OnInit() {
 	wxInitAllImageHandlers();
 
 
-
-
 	degree_symbol = String("\u00b0");
+
+
 
 	//detect the operating system
 #ifdef __APPLE__
@@ -309,6 +308,8 @@ bool MyApp::OnInit() {
 #ifdef _WIN32
 
 	cout << "You have Windows Operating System" << "\n";
+	//degree_symbol = String((char)176);
+
 
 	//to run the app with Visual Studio on Windows
 //	root_directory = String("Z:/");

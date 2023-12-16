@@ -106,6 +106,7 @@ public:
     
     String();
     String(string);
+    String(char);
     void print(String, bool, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);

@@ -981,6 +981,17 @@ String::String(string s) {
 
 }
 
+//constructs a string made of the char c
+String::String(char c) {
+
+	stringstream temp;
+
+	temp.str("");
+	temp << c;
+
+	value = (temp.str().c_str());
+
+}
 
 //reads from file the color written after 'name = ' and writes it into this. If mode  = 'RW' ('R') it reads from a FileRW (FileR)
 void Color::read_from_file(String name, String filename, String mode, [[maybe_unused]] String prefix) {

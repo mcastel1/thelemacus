@@ -11036,7 +11036,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 					//if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
 
-					if (/*to recognize that the mouse is hivering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ (((points_route_list[i][j][l]).x) != ((points_route_list[i][j][l + 1]).x))
+					if (/*to recognize that the mouse is hovering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ (((points_route_list[i][j][l]).x) != ((points_route_list[i][j][l + 1]).x))
 
 						&&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
 
@@ -11056,9 +11056,14 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 							)
 						) {
 						//the mouse is overing over a Route
-
+                        
+                        wxPaintEvent dummy;
+                        
 						//sets the highlighted route to i, so as to use highlighted_route in other functions
 						((parent->parent)->highlighted_route) = i;
+                        
+                        //call PaintEvent to re-draw Routes with the right thickness
+                        PaintEvent(dummy);
 
 						parent->parent->listcontrol_routes->EnsureVisible(i);
 						if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {

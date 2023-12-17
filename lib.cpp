@@ -11011,10 +11011,11 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 		PaintNow();
 	}
 
-	if ((!mouse_dragging) && (!((parent->parent)->selection_rectangle))) {
+	if ((!mouse_dragging) && (!(parent->parent->selection_rectangle))) {
 		//If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
 
-        int highlighted_route_old;
+        int highlighted_route_old, highlighted_position_old;
+        
         
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
 		position_draw_panel_now = position_screen_now - position_draw_panel;
@@ -11084,21 +11085,14 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 					}
 
-				}
-                
-                if(highlighted_route_old != (parent->parent->highlighted_route)){
-                    //the highlighted Route has changed->call PaintEvent to re-draw Routes with the right thickness
-                    
-                    wxPaintEvent dummy;
-                    PaintEvent(dummy);
-                    
                 }
-
-
-			}
+                
+            }
 
 		}
+            
 
+    
 		if ((parent->parent->highlighted_route) == -1) {
 			//no Route is highlighted -> in listcontrol_sights and listcontrol_routes go back to showing the first respective items
 
@@ -11118,7 +11112,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 
 		//I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
-		for (((parent->parent)->highlighted_position) = -1, i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
+		for (highlighted_position_old = (parent->parent->highlighted_position), ((parent->parent)->highlighted_position) = -1, i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
 
 			GeoToScreen((((parent->parent)->data)->position_list)[i], &q);
 
@@ -11132,8 +11126,6 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 				((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
 				parent->parent->listcontrol_positions->EnsureVisible(i);
 
-
-
 			}
 			else {
 				//no Position is highlighted -> reset the background color in listcontrol positions, and in listcontrol_positions go back to showing the first  item
@@ -11144,15 +11136,24 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 			}
 
 		}
+        
+        if((highlighted_route_old != (parent->parent->highlighted_route)) || (highlighted_position_old != (parent->parent->highlighted_position))){
+            //the highlighted Route has changed->call PaintEvent to re-draw Routes with the right thickness
+            
+            wxPaintEvent dummy;
+            
+            PaintEvent(dummy);
+            
+        }
 
-		//Given that the mouse may hovering over one route (position) or may have quit hovering over one route (position), this route (position) will be highlighted / de-highlighted and the chart will change -> I re-paint the chart
-		//given that the Route under consideration has changed, I re-tabulate the Routes and rePaint the charts
-		for (i = 0; i < ((parent->parent)->chart_frames).size(); i++) {
-
-            //WASTE OF RESOURCES: here you don't neet do paint everything, just paint the Routes/Positions that have changed
-			((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
-
-		}
+//		//Given that the mouse may hovering over one route (position) or may have quit hovering over one route (position), this route (position) will be highlighted / de-highlighted and the chart will change -> I re-paint the chart
+//		//given that the Route under consideration has changed, I re-tabulate the Routes and rePaint the charts
+//		for (i = 0; i < ((parent->parent)->chart_frames).size(); i++) {
+//
+//            //WASTE OF RESOURCES: here you don't neet do paint everything, just paint the Routes/Positions that have changed
+//			((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
+//
+//		}
 
 	}
     

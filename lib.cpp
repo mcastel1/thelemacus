@@ -11013,11 +11013,16 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 	if ((!mouse_dragging) && (!((parent->parent)->selection_rectangle))) {
 		//If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
-		//I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
+
+        int highlighted_route_old;
+        
+        //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
 		position_draw_panel_now = position_screen_now - position_draw_panel;
 
 
-		for (((parent->parent)->highlighted_route) = -1, i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
+		for (highlighted_route_old = ((parent->parent)->highlighted_route), ((parent->parent)->highlighted_route) = -1, i = 0;
+             i < (((parent->parent)->data)->route_list).size();
+             i++) {
 
 			//set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
 			//when only a fraction of the Routes is Drawn, this will create a problem ---
@@ -11057,14 +11062,10 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 						) {
 						//the mouse is overing over a Route
                         
-                        wxPaintEvent dummy;
                         
 						//sets the highlighted route to i, so as to use highlighted_route in other functions
 						((parent->parent)->highlighted_route) = i;
-                        
-                        //call PaintEvent to re-draw Routes with the right thickness
-                        PaintEvent(dummy);
-
+                       
 						parent->parent->listcontrol_routes->EnsureVisible(i);
 						if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
 							parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->data->route_list)[i]).related_sight.value);
@@ -11075,7 +11076,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 						if ((((((parent->parent)->data)->route_list)[i]).related_sight).value != -1) {
 							((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[i]).related_sight).value, (wxGetApp().color_selected_item));
 						}
-
+                        
+             
 						// quit the loops over l ad j
 						break;
 						break;
@@ -11083,6 +11085,15 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 					}
 
 				}
+                
+                if(highlighted_route_old != (parent->parent->highlighted_route)){
+                    //the highlighted Route has changed->call PaintEvent to re-draw Routes with the right thickness
+                    
+                    wxPaintEvent dummy;
+                    PaintEvent(dummy);
+                    
+                }
+
 
 			}
 
@@ -11144,6 +11155,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 		}
 
 	}
+    
+
 
 	event.Skip(true);
 

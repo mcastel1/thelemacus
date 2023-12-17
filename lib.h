@@ -1849,9 +1849,7 @@ public:
     template<class E> void OnEdit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
-    
 };
-
 
 
 //class for graphical object: a field to enter an angle, composed of a box for the sign, a box for the degrees, a degree text symbol, another box for minutes and a minute text symbol
@@ -1944,7 +1942,6 @@ public:
 };
 
 
-
 template<class P> class DateField{
     
 public:
@@ -2035,7 +2032,6 @@ public:
     bool is_ok(void);
     template<class E> void OnEdit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-    
     
 };
 

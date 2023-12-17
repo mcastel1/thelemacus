@@ -15647,9 +15647,9 @@ template<class E> void ListFrame::Disconnect(E& event) {
 void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 
 	int i, j;
+    wxPaintEvent dummy;
 
 //	            cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
-
 
 	//check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
 	MousePositionOnListControl(listcontrol_sights, &highlighted_sight);
@@ -15678,7 +15678,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 			// the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
 
 			highlighted_route = ((((data->sight_list)[highlighted_sight]).related_route).value);
-
+            
 			for (i = 0; i < (listcontrol_sights->GetItemCount()); i++) {
 
 				if (i == highlighted_sight) {
@@ -15756,14 +15756,13 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 			}
 
 		}
-
+                
 	}
 
-    //WASTE OF RESOURCES: here you don't neet do paint everything
-	for (i = 0; i < chart_frames.size(); i++) {
-		((chart_frames[i])->draw_panel)->PaintNow();
-	}
-
+    for (i = 0; i < chart_frames.size(); i++) {
+        ((chart_frames[i])->draw_panel)->PaintEvent(dummy);
+    }
+ 
 	event.Skip(true);
 
 }

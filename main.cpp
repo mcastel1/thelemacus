@@ -286,6 +286,7 @@ bool MyApp::OnInit() {
 	//obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
 	wxDisplay display;
 	wxCommandEvent dummy;
+    wxFrame* dummy_frame;
 	//this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
 	//    Chrono current_time, dawn, dusk;
 
@@ -331,6 +332,11 @@ bool MyApp::OnInit() {
 
 	wxImage::AddHandler(new wxPNGHandler);
 	//    wxImage::AddHandler(new wxBMPHandler);
+
+    
+    dummy_frame = new wxFrame();
+    display.GetFromWindow(dummy_frame);
+    dummy_frame->~wxFrame();
 
 	rectangle_display = (display.GetClientArea());
 	rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));

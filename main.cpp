@@ -204,6 +204,23 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
 
 	}
 
+	wxPoint top_left_position;
+
+
+	//top_left_position = wxPoint(
+
+
+	//	(((double)((((list_frame->chart_frames)[0])->GetSize()).GetWidth())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetWidth()))) / 2.0 + ((wxGetApp().border).value) + delta_x * ((double)i)
+
+
+	//	,
+
+	//	/*here I shift everything down on the screen by the height of the menu_bar, because otherwise the ChartFrame on the top would be partially corvered by the menu bar and the one on the bottom would leave an empty space t the bottom of the screen */
+	//	(((list_frame->menu_bar)->GetSize()).GetHeight()) +
+	//	(((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetHeight()))) / 2.0 + ((wxGetApp().border).value) + delta_y * ((double)i)
+
+	//);
+
 
 	for (i = 0; i < ((list_frame->chart_frames).size()); i++) {
 

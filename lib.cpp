@@ -7983,16 +7983,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 	text_position_end = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
 	text_geo_position = new StaticText(this, wxT(""), wxDefaultPosition, wxDefaultSize);
 
-	//sets the pen and the brush, for memory_dc, which will be used in the following
-	//    memory_dc.SetPen(wxPen(wxGetApp().foreground_color, 1));
-	//    memory_dc.SetBrush(wxBrush(wxGetApp().background_color));
-
-	//    sizer_h->Add(text_phi);
-	//    sizer_h->Add(text_lambda);
-	//
-	//    SetSizer(sizer_h);
-
-
+    text_position_start->SetBackgroundColour(wxGetApp().background_color);
+    text_position_end->SetBackgroundColour(wxGetApp().background_color);
 
 }
 
@@ -8106,7 +8098,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         
         //   reset the pen to its default parameters
         dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
-        dc.SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+        dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH)); //Set a transparent brush in order not to fill the interior of the selection rectangle
 
         if((parent->projection->name->GetValue()) == wxString("Mercator")) {
             

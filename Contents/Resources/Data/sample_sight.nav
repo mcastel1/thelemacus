@@ -50,4 +50,4 @@ Data:
 			label = My Place (MP)
 #note that here a space must follow every item in a line
 Recent bodies = 1 10 4
-Recent projections = 1 0
+Recent projections = 0 

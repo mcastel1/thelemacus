@@ -11142,7 +11142,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             
             wxPaintEvent dummy;
             
-            PaintEvent(dummy);
+            for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
+                (((parent->parent->chart_frames)[i])->draw_panel)->PaintEvent(dummy);
+            }
             
         }
 

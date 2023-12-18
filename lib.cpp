@@ -2035,9 +2035,11 @@ void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[ma
 
 	DrawOld(n_points, draw_panel, &v, prefix);
 
-	for (i = 0; i < v.size(); i++) {
-		dc->DrawSpline((int)((v[i]).size()), (v[i]).data());
-	}
+//    if(v.size() > 1){
+        for (i = 0; i < v.size(); i++) {
+            dc->DrawSpline((int)((v[i]).size()), (v[i]).data());
+        }
+//    }
 
 }
 
@@ -8093,12 +8095,13 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     //draw selection_rectangle
     if (((parent->parent)->selection_rectangle)) {
         
-        
+        //   reset the pen to its default parameters
+        dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
+        dc.SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+
         if((parent->projection->name->GetValue()) == wxString("Mercator")) {
             
-            //   reset the pen to its default parameters
-            dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
-            
+
             dc.DrawRectangle(
                               position_start_selection.x - (position_draw_panel.x),
                               position_start_selection.y - (position_draw_panel.y),
@@ -11005,11 +11008,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 		ShowCoordinates((parent->parent)->p_now, text_position_end);
 
-        //I Refresh() all DrawPanel(s) to draw the selection_rectangle in there 
-        for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-            (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
-        }
-        
+        //I Refresh the current DrawPanel to draw the selection_rectangle in there
+        Refresh();
+                
 	}
 
 	if ((!mouse_dragging) && (!(parent->parent->selection_rectangle))) {

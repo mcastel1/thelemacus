@@ -7775,7 +7775,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
 
 //this function fetches the data in ((wxGetApp().path_file_coastline_data_blocked).value) and stores them in data_x, data_y, p_coastline so that they can be read fastly
-void ListFrame::GetAllCoastLineData(void) {
+void ListFrame::GetAllCoastLineData(String prefix) {
 
 	FileR file_n_line, file_coastline_data_blocked;
 	Position p_temp;
@@ -7793,9 +7793,13 @@ void ListFrame::GetAllCoastLineData(void) {
 
 	file_n_line.set_name((wxGetApp().path_file_n_line));
 	file_coastline_data_blocked.set_name((wxGetApp().path_file_coastline_data_blocked));
+    
 
 	//read file n_line and store it into vector n_line
 	file_n_line.open(String(""));
+    
+    cout << prefix.value << "Reading file ...\n";
+
 	for (i = 0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i < n_line.size()) && (!((file_n_line.value)->eof())); i++) {
 
 		line.clear();
@@ -7807,8 +7811,12 @@ void ListFrame::GetAllCoastLineData(void) {
 		//        cout << "\nn_line[" << i << "] = " << n_line[i];
 
 	}
+    cout << prefix.value << "... done.\n";
+    
 	file_n_line.close(String(""));
 
+
+    
 	/*
 	 i=0;
 	 while(!(file_n_line.value.eof())){
@@ -7831,7 +7839,7 @@ void ListFrame::GetAllCoastLineData(void) {
 	if (show_coastlines == Answer('y', String(""))) {
 
 		file_coastline_data_blocked.open(String(""));
-
+        cout << prefix.value << "Reading file ...\n";
 
 		i = 0;
 		while (/*here, to be safe, I stop the while() if I am not sure that n_line will be called with a valid value*/(360 * i + 360 < (n_line.size())) && (!((file_coastline_data_blocked.value)->eof()))) {
@@ -7893,8 +7901,8 @@ void ListFrame::GetAllCoastLineData(void) {
 
 		}
 
+        cout << prefix.value << "... done.\n";
 		file_coastline_data_blocked.close(String(""));
-
 
 	}
 
@@ -14724,7 +14732,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
     //read load_sample_sight from file_init
     load_sample_sight.read_from_file_to(String("load sample sight"),  (wxGetApp().path_file_init), String("R"),  String(""));
 
-    GetAllCoastLineData();
+    GetAllCoastLineData(String(""));
     
     //when the ListFrame window is closed, quit the app
     //    Bind(wxEVT_CLOSE_WINDOW, &MyApp::OnPressCtrlQ<wxCloseEvent>, &(wxGetApp()));

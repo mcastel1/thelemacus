@@ -2138,7 +2138,7 @@ public:
     void DrawAll(void);
     void Resize(void);
     
-    void GetAllCoastLineData(void);
+    void GetAllCoastLineData(String);
     
     void OnAddSight(wxCommandEvent&);
     template<class E> void OnModifySight(E&);

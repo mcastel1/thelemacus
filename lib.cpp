@@ -11710,6 +11710,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						//draw the label of the coordinates of the position which is being
 
 						wxPoint q;
+                        wxPaintEvent dummy;
 
 						//show the coordinates of the reference position of the Route that is being dragged
 						ShowCoordinates(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position, text_geo_position);
@@ -11721,8 +11722,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						for (i = 0; i < ((parent->parent)->chart_frames).size(); i++) {
 
 							((((parent->parent)->chart_frames)[i])->draw_panel)->TabulateRoutes();
-                            //WASTE OF RESOURCES: here you don't neet do paint everything, just paint the Routes that have changed
-							((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
+							((((parent->parent)->chart_frames)[i])->draw_panel)->PaintEvent(dummy);
 
 						}
 

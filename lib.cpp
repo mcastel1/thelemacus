@@ -8087,7 +8087,66 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
             dc.DrawCircle(p, radius);
 
         }
-
+        
+    }
+    
+    //draw selection_rectangle
+    if (((parent->parent)->selection_rectangle)) {
+        
+        
+        if((parent->projection->name->GetValue()) == wxString("Mercator")) {
+            
+            //   reset the pen to its default parameters
+            dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
+            
+            dc.DrawRectangle(
+                              position_start_selection.x - (position_draw_panel.x),
+                              position_start_selection.y - (position_draw_panel.y),
+                              (position_screen_now.x) - (position_start_selection.x),
+                              (position_screen_now.y) - (position_start_selection.y)
+                              );
+            
+        }
+        
+        if((parent->projection->name->GetValue()) == wxString("3D")) {
+            
+            //right vertical edge of rectangle
+            (Route(
+                   String("o"),
+                   ((parent->parent)->p_start),
+                   Angle(M_PI * (1.0 - GSL_SIGN((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+                   Length(Re * fabs((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value)))
+                   )).Draw(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
+            
+            //left vertical edge of rectangle
+            (Route(
+                   String("o"),
+                   ((parent->parent)->p_now),
+                   Angle(M_PI * (1.0 + GSL_SIGN((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+                   Length(Re * fabs((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value)))
+                   )).Draw(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
+            
+            //bottom horizontal edge of rectangle
+            (Route(
+                   String("l"),
+                   ((parent->parent)->p_start),
+                   //change this by introducing if
+                   Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+                   Length(Re * cos(((parent->parent)->p_start).phi) * fabs((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value)))
+                   )).DrawOld(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
+            
+            //top horizontal edge of rectangle
+            (Route(
+                   String("l"),
+                   ((parent->parent)->p_now),
+                   //change this by introducing if
+                   Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+                   Length(Re * cos(((parent->parent)->p_now).phi) * fabs((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value)))
+                   )).DrawOld(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
+            
+            
+        }
+        
     }
     
     
@@ -8127,11 +8186,9 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 	wxPoint p;
 	Projection temp;
 	Position q;
-	double thickness, radius;
-	stringstream s;
-	wxString wx_string;
+	double thickness;
 	//this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
-	int i, j, /*an integer which specifies the color_id of the objects which are being plotted. It is incremented every time that something is plotted, to plot everything with a different color*/color_id;
+    int i, /*an integer which specifies the color_id of the objects which are being plotted. It is incremented every time that something is plotted, to plot everything with a different color*/color_id;
 
 
 	//draws two rectangles (representing the borders) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color. Here I set the pen color equal to the foreground color, because I want the border of the rectangle to have the foreground color
@@ -8331,20 +8388,6 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 */
 
 
-	//   reset the pen to its default parameters
-	dc->SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
-
-
-	if (((parent->parent)->selection_rectangle)) {
-		dc->DrawRectangle(
-			position_start_selection.x - (position_draw_panel.x),
-			position_start_selection.y - (position_draw_panel.y),
-			(position_screen_now.x) - (position_start_selection.x),
-			(position_screen_now.y) - (position_start_selection.y)
-		);
-
-	}
-
 }
 
 
@@ -8482,8 +8525,8 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_3D(wxDC* dc) {
 
-	int i, j, color_id;
-	double thickness, radius;
+	int i, j;
+	double thickness;
 	Double d;
 	Angle lambda, /*phi is an auxiliary variable used in the loop which draws parallels*/phi;
 	stringstream s;
@@ -8639,51 +8682,6 @@ void DrawPanel::Render_3D(wxDC* dc) {
 	dc->SetPen(wxPen(wxGetApp().foreground_color, 1));
 	dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
 
-
-
-
-
-	//   reset the pen to its default parameters
-	dc->SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
-
-	if (((parent->parent)->selection_rectangle)) {
-
-		//right vertical edge of rectangle
-		(Route(
-			String("o"),
-			((parent->parent)->p_start),
-			Angle(M_PI * (1.0 - GSL_SIGN((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-			Length(Re * fabs((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value)))
-		)).Draw(((((parent->parent)->data)->n_points_routes).value), dc, this, String(""));
-
-		//left vertical edge of rectangle
-		(Route(
-			String("o"),
-			((parent->parent)->p_now),
-			Angle(M_PI * (1.0 + GSL_SIGN((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-			Length(Re * fabs((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value)))
-		)).Draw(((((parent->parent)->data)->n_points_routes).value), dc, this, String(""));
-
-		//bottom horizontal edge of rectangle
-		(Route(
-			String("l"),
-			((parent->parent)->p_start),
-			//change this by introducing if
-			Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-			Length(Re * cos(((parent->parent)->p_start).phi) * fabs((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value)))
-		)).DrawOld(((((parent->parent)->data)->n_points_routes).value), dc, this, String(""));
-
-		//top horizontal edge of rectangle
-		(Route(
-			String("l"),
-			((parent->parent)->p_now),
-			//change this by introducing if
-			Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-			Length(Re * cos(((parent->parent)->p_now).phi) * fabs((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value)))
-		)).DrawOld(((((parent->parent)->data)->n_points_routes).value), dc, this, String(""));
-
-
-	}
 
 }
 
@@ -11007,8 +11005,11 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 		ShowCoordinates((parent->parent)->p_now, text_position_end);
 
-        //WASTE OF RESOURCES: here you don't neet do paint everything, just re-paint the selection rectangle
-		PaintNow();
+        //I Refresh() all DrawPanel(s) to draw the selection_rectangle in there 
+        for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
+            (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
+        }
+        
 	}
 
 	if ((!mouse_dragging) && (!(parent->parent->selection_rectangle))) {

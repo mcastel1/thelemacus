@@ -11138,12 +11138,10 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 		}
         
         if((highlighted_route_old != (parent->parent->highlighted_route)) || (highlighted_position_old != (parent->parent->highlighted_position))){
-            //the highlighted Route has changed->call PaintEvent to re-draw Routes with the right thickness
-            
-            wxPaintEvent dummy;
+            //the highlighted Route has changed->call Refresh, which triggers PaintEvent, to re-draw Routes with the right thickness
             
             for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-                (((parent->parent->chart_frames)[i])->draw_panel)->PaintEvent(dummy);
+                (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
             }
             
         }
@@ -11710,7 +11708,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						//draw the label of the coordinates of the position which is being
 
 						wxPoint q;
-                        wxPaintEvent dummy;
 
 						//show the coordinates of the reference position of the Route that is being dragged
 						ShowCoordinates(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position, text_geo_position);
@@ -11722,7 +11719,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						for (i = 0; i < ((parent->parent)->chart_frames).size(); i++) {
 
 							((((parent->parent)->chart_frames)[i])->draw_panel)->TabulateRoutes();
-							((((parent->parent)->chart_frames)[i])->draw_panel)->PaintEvent(dummy);
+							((((parent->parent)->chart_frames)[i])->draw_panel)->Refresh();
 
 						}
 
@@ -11732,7 +11729,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						//in this case, the mouse is over a position
 
 						wxPoint p;
-                        wxPaintEvent dummy;
 
 						if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
@@ -11761,7 +11757,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						//given that the Position under consideration has changed, I re-paint the charts
 						for (i = 0; i < ((parent->parent)->chart_frames).size(); i++) {
 
-                            ((((parent->parent)->chart_frames)[i])->draw_panel)->PaintEvent(dummy);
+                            ((((parent->parent)->chart_frames)[i])->draw_panel)->Refresh();
 
 						}
 
@@ -15650,7 +15646,6 @@ template<class E> void ListFrame::Disconnect(E& event) {
 void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 
 	int i, j;
-    wxPaintEvent dummy;
 
 //	            cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
 
@@ -15763,7 +15758,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 	}
 
     for (i = 0; i < chart_frames.size(); i++) {
-        ((chart_frames[i])->draw_panel)->PaintEvent(dummy);
+        ((chart_frames[i])->draw_panel)->Refresh();
     }
  
 	event.Skip(true);

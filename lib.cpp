@@ -11634,7 +11634,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 							//re-draw the chart
 							(this->*Draw)();
-							PaintNow();
+							Refresh();
+							//PaintNow();
 
 						}
 
@@ -11650,7 +11651,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 						//re-draw the chart
 						(this->*Draw)();
-						PaintNow();
+						Refresh();
+						//PaintNow();
 
 					}
 

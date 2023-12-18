@@ -4,32 +4,50 @@ Data:
 			body:
 				Type = moon
 				Name = moon
-				Radius = 938.12099999999998090061126276851 nm
+				Radius = 938.121 nm
 			limb = u
-			sextant altitude = 47° 57.799999999999869260136620141566'
-			index error = 0° 1.8999999999999996891375531049562'
+			sextant altitude = 47° 57.79999999999987'
+			index error = 0° 1.9'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date of master-clock date and hour of sight = 2021-06-21
+				master-clock date and hour of sight = 2021-06-21
 				hour of master-clock date and hour of sight = 21:01:20
 			use of stopwatch = y
 			hour of stopwatch = 00:37:35
 			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = Sight was taken at BGC
-    Routes:
+	Routes:
+		Route #1:
+			type = l
+			start position:
+				latitude = 337° 56.99999999999932'
+				longitude = 2° 1.999999999999993'
+				label = 
+			starting heading = 20° 3.200000000000074'
+			length = 2222 nm
+			label = A
+		Route #2:
+			type = o
+			start position:
+				latitude = 326° 57.00000000000273'
+				longitude = 347° 58.00000000000182'
+				label = 
+			starting heading = 233° 3.000000000000682'
+			length = 3444.4345427849 nm
+			label = fdsjkghdl
 	Positions:
 		Position #1:
-			latitude = 8° 51.179385474737415506751858629286'
-			longitude = 57° 35.178159790311838150955736637115'
+			latitude = 8° 51.17938547473742'
+			longitude = 57° 35.17815979031141'
 			label = Centre Sportif Maryse Hilsz (MH)
 		Position #2:
-			latitude = 328° 51.327167000000031293893698602915'
-			longitude = 87° 35.565500000000156433088704943657'
+			latitude = 328° 51.32716700000174'
+			longitude = 87° 35.56550000000016'
 			label = Baby Gym Campo (BGC)
 		Position #3:
-			latitude = 8° 51.309166999999860081516089849174'
-			longitude = 7° 35.41566699999748379923403263092'
+			latitude = 8° 51.30916699999986'
+			longitude = 7° 35.41566699999748'
 			label = My Place (MP)
 #note that here a space must follow every item in a line
-Recent bodies = 1 10 4 
-Recent projections = 1 0 
+Recent bodies = 1 10 4
+Recent projections = 1 0

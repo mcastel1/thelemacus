@@ -11,7 +11,7 @@ clear; clear;
 #the name of the app that you want to create
 APP_NAME='Thelemacus'
 #the path to the icon of the app
-ICON_PATH='/Users/macbookpro/Documents/sight_reduction_program/jolly_roger.icns'
+ICON_PATH='/Users/macbookpro/Documents/sight_reduction_program/Contents/Resources/Images/Light/jolly_roger.icns'
 #the path to the .cpp file
 INPUT_PATH='/Users/macbookpro/Documents/sight_reduction_program'
 OUTPUT_PATH='/Users/macbookpro/Desktop'

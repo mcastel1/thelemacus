@@ -11732,6 +11732,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						//in this case, the mouse is over a position
 
 						wxPoint p;
+                        wxPaintEvent dummy;
 
 						if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
@@ -11760,8 +11761,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						//given that the Position under consideration has changed, I re-paint the charts
 						for (i = 0; i < ((parent->parent)->chart_frames).size(); i++) {
 
-                            //WASTE OF RESOURCES: here you don't neet do paint everything, just paint the Positions that have changed
-							((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
+                            ((((parent->parent)->chart_frames)[i])->draw_panel)->PaintEvent(dummy);
 
 						}
 

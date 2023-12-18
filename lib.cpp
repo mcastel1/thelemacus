@@ -7912,6 +7912,7 @@ void ChartFrame::SetIdling(bool b) {
 void ChartFrame::AllOk(void) {
 
 	(draw_panel->*(draw_panel->Draw))();
+    draw_panel->Refresh();
 	draw_panel->PaintNow();
 
 }
@@ -9520,6 +9521,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	Fit();
 
 	(draw_panel->*(draw_panel->Draw))();
+    draw_panel->Refresh();
 	draw_panel->PaintNow();
 
 	//    CenterOnScreen();
@@ -9614,6 +9616,7 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
 
 	//re-draw the chart
 	(draw_panel->*(draw_panel->Draw))();
+    draw_panel->Refresh();
 	draw_panel->PaintNow();
 
 
@@ -9681,6 +9684,7 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
 
 	//re-draw the chart
 	(draw_panel->*(draw_panel->Draw))();
+    draw_panel->Refresh();
 	draw_panel->PaintNow();
 
 
@@ -9740,8 +9744,8 @@ template<class T> void ChartFrame::MoveWest(T& event) {
 
 	//re-draw the chart
 	(draw_panel->*(draw_panel->Draw))();
+    draw_panel->Refresh();
 	draw_panel->PaintNow();
-
 
 	event.Skip(true);
 
@@ -9751,75 +9755,76 @@ template<class T> void ChartFrame::MoveWest(T& event) {
 
 //if a key is pressed in the keyboard, I call this function
 void DrawPanel::KeyDown(wxKeyEvent& event) {
-
-	switch (event.GetKeyCode()) {
-
-	case WXK_UP:
-
-		parent->MoveNorth<wxKeyEvent>(event);
-
-		break;
-
-	case WXK_DOWN:
-
-		parent->MoveSouth<wxKeyEvent>(event);
-
-		break;
-
-	case WXK_LEFT:
-
-		parent->MoveWest<wxKeyEvent>(event);
-
-		break;
-
-	case WXK_RIGHT:
-
-		parent->MoveEast<wxKeyEvent>(event);
-
-		break;
-
-	case WXK_ESCAPE:
-
-		//If the user presses esc, I cancel the selection process with the rectangle and call PaintNow to re-draw the chart without the selection rectangle
-		((parent->parent)->selection_rectangle) = false;
-		text_position_start->SetLabel(wxString(""));
-		text_position_end->SetLabel(wxString(""));
-		PaintNow();
-
-		break;
-
-	case WXK_PLUS:
-		//the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
-
-		if (event.ControlDown()) {
-			parent->SetSlider(((parent->slider)->GetValue()) * 2);
-		}
-
-		break;
-
-
-	case WXK_MINUS:
-		//the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
-
-		if (event.ControlDown()) {
-			parent->SetSlider(round(((parent->slider)->GetValue()) / 2.0));
-		}
-
-		break;
-
-	}
-
-	//    }
-
-	event.Skip(true);
-
+    
+    switch (event.GetKeyCode()) {
+            
+        case WXK_UP:
+            
+            parent->MoveNorth<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_DOWN:
+            
+            parent->MoveSouth<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_LEFT:
+            
+            parent->MoveWest<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_RIGHT:
+            
+            parent->MoveEast<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_ESCAPE:
+            
+            //If the user presses esc, I cancel the selection process with the rectangle and call PaintNow to re-draw the chart without the selection rectangle
+            ((parent->parent)->selection_rectangle) = false;
+            text_position_start->SetLabel(wxString(""));
+            text_position_end->SetLabel(wxString(""));
+            Refresh();
+            PaintNow();
+            
+            break;
+            
+        case WXK_PLUS:
+            //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
+            
+            if (event.ControlDown()) {
+                parent->SetSlider(((parent->slider)->GetValue()) * 2);
+            }
+            
+            break;
+            
+            
+        case WXK_MINUS:
+            //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
+            
+            if (event.ControlDown()) {
+                parent->SetSlider(round(((parent->slider)->GetValue()) / 2.0));
+            }
+            
+            break;
+            
+    }
+    
+    //    }
+    
+    event.Skip(true);
+    
 }
 
 //moves (makes slide) to the east the chart
 template<class T> void ChartFrame::MoveEast(T& event) {
-
-
-	switch ((((projection->name)->GetValue()).ToStdString())[0]) {
+    
+    
+    switch ((((projection->name)->GetValue()).ToStdString())[0]) {
 
 	case 'M': {
 		//I am using the mercator projection
@@ -9867,6 +9872,7 @@ template<class T> void ChartFrame::MoveEast(T& event) {
 
 	//re-draw the chart
 	(draw_panel->*(draw_panel->Draw))();
+    draw_panel->Refresh();
 	draw_panel->PaintNow();
 
 
@@ -9930,6 +9936,7 @@ template<class T> void ChartFrame::Reset(T& event) {
 	(draw_panel->width_chart_0) = ((draw_panel->size_chart).GetWidth());
 	(draw_panel->height_chart_0) = ((draw_panel->size_chart).GetHeight());
 
+    draw_panel->Refresh();
 	draw_panel->PaintNow();
 
 	UpdateSlider();
@@ -11238,6 +11245,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 					//re-draw the chart
 					(this->*Draw)();
+                    Refresh();
 					PaintNow();
 
 					//uncomment this if you want to print an error message
@@ -11273,7 +11281,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 					(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position) = route_position_start_drag;
 
 					TabulateRoutes();
-                    //WASTE OF RESOURCES: here you don't neet do paint everything, just paint the Routes that  has changed
+                    Refresh();
 					PaintNow();
 
 					print_error_message->SetAndCall(NULL, String("Route ground or start position outside plot area!"), String("Route start or start position must lie within the plot area."), (wxGetApp().path_file_error_icon));
@@ -11291,7 +11299,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 					((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
 
 					//given that the position under consideration has changed, I re-pain the chart
-                    //WASTE OF RESOURCES: here you don't neet do paint everything, just paint the Positions that have changed
+                    Refresh();
 					PaintNow();
 
 					print_error_message->SetAndCall(NULL, String("Position outside plot area!"), String("The position must lie within the plot area."), (wxGetApp().path_file_error_icon));
@@ -11416,8 +11424,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 			//position_start_selection is not vlid -> delete the selection rectangle by setting selection_rectangle to false
 
 			((parent->parent)->selection_rectangle) = false;
-			//I call paintnow to delete the currently drawn selection rectangle
-            //WASTE OF RESOURCES: here you don't neet do paint everything
+			//I call Refresh to delete the currently drawn selection rectangle
+            Refresh();
 			PaintNow();
 
 		}
@@ -11476,6 +11484,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 					(((parent->parent)->p_end).lambda).normalize();
 
 					(this->*Draw)();
+                    Refresh();
 					PaintNow();
 
 					parent->UpdateSlider();
@@ -11524,9 +11533,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 				//The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
 				rotation = (rotation * Rotation(circle_observer.reference_position, reference_position_old));
 
-
 				(this->*Draw)();
+                Refresh();
 				PaintNow();
+                
 				parent->UpdateSlider();
 				//the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen
 				wxGetApp().ShowChart(event);
@@ -11793,6 +11803,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         //re-draw the chart
                         (this->*Draw)();
+                        Refresh();
                         PaintNow();
                         
                         break;
@@ -11932,6 +11943,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 			//            ComputeZoomFactor_Mercator((draw_panel->x_span));
 
 			(draw_panel->*(draw_panel->Draw))();
+            draw_panel->Refresh();
 			draw_panel->PaintNow();
 			UpdateSlider();
 
@@ -11954,6 +11966,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 		((draw_panel->circle_observer).omega) = (((draw_panel->circle_observer_0).omega) / (zoom_factor.value));
 
 		(draw_panel->*(draw_panel->Draw))();
+        draw_panel->Refresh();
 		draw_panel->PaintNow();
 
 		UpdateSlider();
@@ -15336,7 +15349,7 @@ void ListFrame::DrawAll(void) {
 
 		//I call PaintNow() because the positions have changed, so I need to re-draw the chart
 		(((chart_frames[i])->draw_panel)->*(((chart_frames[i])->draw_panel)->Draw))();
-
+        ((chart_frames[i])->draw_panel)->Refresh();
 		((chart_frames[i])->draw_panel)->PaintNow();
 
 	}

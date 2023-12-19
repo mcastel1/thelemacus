@@ -8815,21 +8815,25 @@ void DrawPanel::Draw_Mercator(void) {
 	rectangle_observer = MyRectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min), String(""));
 
 	/*I set the aspect ratio between height and width equal to the ratio between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
-	if ((y_max - y_min) > x_span()) {
-		//set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
-		parent->SetSize(
-			(((wxGetApp().rectangle_display).GetSize()).GetHeight()) / ((y_max - y_min) / x_span()),
-			(((wxGetApp().rectangle_display).GetSize()).GetHeight())
-		);
 
+	if (drag_chart) {
+		if ((y_max - y_min) > x_span()) {
+			//set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
+			parent->SetSize(
+				(((wxGetApp().rectangle_display).GetSize()).GetHeight()) / ((y_max - y_min) / x_span()),
+				(((wxGetApp().rectangle_display).GetSize()).GetHeight())
+			);
+
+		}
+		else {
+			//set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
+			parent->SetSize(
+				(((wxGetApp().rectangle_display).GetSize()).GetHeight()),
+				(((wxGetApp().rectangle_display).GetSize()).GetHeight()) * ((y_max - y_min) / x_span())
+			);
+		}
 	}
-	else {
-		//set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
-		parent->SetSize(
-			(((wxGetApp().rectangle_display).GetSize()).GetHeight()),
-			(((wxGetApp().rectangle_display).GetSize()).GetHeight()) * ((y_max - y_min) / x_span())
-		);
-	}
+
 	(this->*Set_size_chart)();
     //set the size of *this equal to the size of the chart, in such a way that draw_panel can properly contain the chart
     SetSize(size_chart);
@@ -9364,6 +9368,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
 
+	//when a ChartFrame is created, the chart is not being dragged
+	drag_chart = false;
+
 	//read lambda_min, ...., phi_max from file_init
 	lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
 	lambda_max.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
@@ -9824,7 +9831,9 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
 
 //moves (makes slide) to the east the chart
 template<class T> void ChartFrame::MoveEast(T& event) {
-    
+
+	//I am dragging the chart and the size of *this will not change -> set 
+	drag_chart = true;
     
     switch ((((projection->name)->GetValue()).ToStdString())[0]) {
 
@@ -9876,6 +9885,9 @@ template<class T> void ChartFrame::MoveEast(T& event) {
 	(draw_panel->*(draw_panel->Draw))();
     draw_panel->Refresh();
 	draw_panel->PaintNow();
+
+	//I stopped dragging the chart -> set
+	drag_chart = false;
 
 
 	event.Skip(true);

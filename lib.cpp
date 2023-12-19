@@ -9025,6 +9025,7 @@ void DrawPanel::Draw_3D(void) {
 	Position q;
 	Projection temp;
 	wxPoint p;
+	wxSize old_size;
 	wxString dummy_label;
 	unsigned int i, n_intervals_ticks;
 
@@ -9036,6 +9037,9 @@ void DrawPanel::Draw_3D(void) {
 	for (i = 0; i < label_phi.size(); i++) { (label_phi[i])->Destroy(); }
 	label_phi.resize(0);
 
+	//store the old size of the chart in old_size
+	old_size = (parent->GetSize());
+
 
 	//set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
 	(parent->zoom_factor).set(String(""), ((circle_observer_0.omega).value) / ((circle_observer.omega).value), String(""));
@@ -9044,11 +9048,19 @@ void DrawPanel::Draw_3D(void) {
 
 	parent->GetCoastLineData_3D();
 
-	parent->SetSize(
-		(((wxGetApp().rectangle_display).GetSize()).GetHeight()),
-		(((wxGetApp().rectangle_display).GetSize()).GetHeight())
-	);
+	if (!(parent->dragging_chart)) {
+		//I am not dragging the chart -> the size of the chart changes -> re-compute it
+		parent->SetSize(
+			(((wxGetApp().rectangle_display).GetSize()).GetHeight()),
+			(((wxGetApp().rectangle_display).GetSize()).GetHeight())
+		);
+	}
+	else {
+		//i qm dragging the chart -> the size of the chart does not change -> Set it equal to the old size
+		parent->SetSize(old_size);
+	}
 	(this->*Set_size_chart)();
+	SetSize(size_chart);
 
 	size_plot_area.SetWidth((size_chart.GetWidth()) * (length_plot_area_over_length_chart.value));
 	size_plot_area.SetHeight((size_chart.GetHeight()) * (length_plot_area_over_length_chart.value));
@@ -10100,8 +10112,13 @@ void DrawPanel::Set_size_chart_Mercator(void) {
 //set size_chart for the 3D projection
 void DrawPanel::Set_size_chart_3D(void) {
 
-	size_chart.SetHeight(((parent->GetSize()).GetHeight()) * 0.75);
+	/*size_chart.SetHeight(((parent->GetSize()).GetHeight()) * 0.75);
+	size_chart.SetWidth((size_chart.GetHeight()));*/
+
+
+	size_chart.SetHeight((length_chart_over_length_chart_frame.value) * (((wxGetApp().rectangle_display).GetSize()).GetHeight()));
 	size_chart.SetWidth((size_chart.GetHeight()));
+
 
 }
 

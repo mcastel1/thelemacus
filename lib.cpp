@@ -9025,7 +9025,6 @@ void DrawPanel::Draw_3D(void) {
 	Position q;
 	Projection temp;
 	wxPoint p;
-	wxSize old_size;
 	wxString dummy_label;
 	unsigned int i, n_intervals_ticks;
 
@@ -9036,9 +9035,6 @@ void DrawPanel::Draw_3D(void) {
 	label_lambda.resize(0);
 	for (i = 0; i < label_phi.size(); i++) { (label_phi[i])->Destroy(); }
 	label_phi.resize(0);
-
-	//store the old size of the chart in old_size
-	old_size = (parent->GetSize());
 
 
 	//set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
@@ -9054,10 +9050,6 @@ void DrawPanel::Draw_3D(void) {
 			(((wxGetApp().rectangle_display).GetSize()).GetHeight()),
 			(((wxGetApp().rectangle_display).GetSize()).GetHeight())
 		);
-	}
-	else {
-		//i qm dragging the chart -> the size of the chart does not change -> Set it equal to the old size
-		parent->SetSize(old_size);
 	}
 	(this->*Set_size_chart)();
 	SetSize(size_chart);

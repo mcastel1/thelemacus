@@ -7921,7 +7921,7 @@ void ChartFrame::AllOk(void) {
 
 	(draw_panel->*(draw_panel->Draw))();
     draw_panel->Refresh();
-	draw_panel->PaintNow();
+	draw_panel->FitAll();
 
 }
 
@@ -8156,8 +8156,8 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     
 }
 
-
-void DrawPanel::PaintNow() {
+//fit the size of the chart, of parent, of parent->panel to the content 
+void DrawPanel::FitAll() {
 
 //	//    Render(dc);
 //	client_dc->Clear();
@@ -9537,7 +9537,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 
 	(draw_panel->*(draw_panel->Draw))();
     draw_panel->Refresh();
-	draw_panel->PaintNow();
+	draw_panel->FitAll();
 
 	//    CenterOnScreen();
 
@@ -9635,7 +9635,7 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
 	//re-draw the charton
 	(draw_panel->*(draw_panel->Draw))();
     draw_panel->Refresh();
-	draw_panel->PaintNow();
+	draw_panel->FitAll();
 
 	//I stopped dragging the chart -> set
 	dragging_chart = false;
@@ -9707,7 +9707,7 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
 	//re-draw the chart
 	(draw_panel->*(draw_panel->Draw))();
     draw_panel->Refresh();
-	draw_panel->PaintNow();
+	draw_panel->FitAll();
 
 	//I stopped dragging the chart -> set
 	dragging_chart = false;
@@ -9772,7 +9772,7 @@ template<class T> void ChartFrame::MoveWest(T& event) {
 	//re-draw the chart
 	(draw_panel->*(draw_panel->Draw))();
     draw_panel->Refresh();
-	draw_panel->PaintNow();
+	draw_panel->FitAll();
 
 	//I stopped dragging the chart -> set
 	dragging_chart = false;
@@ -9814,12 +9814,12 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
             
         case WXK_ESCAPE:
             
-            //If the user presses esc, I cancel the selection process with the rectangle and call PaintNow to re-draw the chart without the selection rectangle
+            //If the user presses esc, I cancel the selection process with the rectangle and call FitAll to re-draw the chart without the selection rectangle
             ((parent->parent)->selection_rectangle) = false;
             text_position_start->SetLabel(wxString(""));
             text_position_end->SetLabel(wxString(""));
             Refresh();
-            PaintNow();
+            FitAll();
             
             break;
             
@@ -9905,7 +9905,7 @@ template<class T> void ChartFrame::MoveEast(T& event) {
 	//re-draw the chart
 	(draw_panel->*(draw_panel->Draw))();
     draw_panel->Refresh();
-	draw_panel->PaintNow();
+	draw_panel->FitAll();
 
 	//I stopped dragging the chart -> set
 	dragging_chart = false;
@@ -9972,7 +9972,7 @@ template<class T> void ChartFrame::Reset(T& event) {
 	(draw_panel->height_chart_0) = ((draw_panel->size_chart).GetHeight());
 
     draw_panel->Refresh();
-	draw_panel->PaintNow();
+	draw_panel->FitAll();
 
 	UpdateSlider();
 
@@ -11200,7 +11200,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 //		for (i = 0; i < ((parent->parent)->chart_frames).size(); i++) {
 //
 //            //WASTE OF RESOURCES: here you don't neet do paint everything, just paint the Routes/Positions that have changed
-//			((((parent->parent)->chart_frames)[i])->draw_panel)->PaintNow();
+//			((((parent->parent)->chart_frames)[i])->draw_panel)->FitAll();
 //
 //		}
 
@@ -11286,7 +11286,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 					//re-draw the chart
 					(this->*Draw)();
                     Refresh();
-					PaintNow();
+					FitAll();
 
 					//uncomment this if you want to print an error message
 					//                     print_error_message->SetAndCall(NULL, String("Chart outside boundaries!"), String("The chart must lie within the boundaries."));
@@ -11325,7 +11325,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 					TabulateRoutes();
                     Refresh();
-					PaintNow();
+					FitAll();
 
 					print_error_message->SetAndCall(NULL, String("Route ground or start position outside plot area!"), String("Route start or start position must lie within the plot area."), (wxGetApp().path_file_error_icon));
 
@@ -11343,7 +11343,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 					//given that the position under consideration has changed, I re-pain the chart
                     Refresh();
-					PaintNow();
+					FitAll();
 
 					print_error_message->SetAndCall(NULL, String("Position outside plot area!"), String("The position must lie within the plot area."), (wxGetApp().path_file_error_icon));
 
@@ -11469,7 +11469,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 			((parent->parent)->selection_rectangle) = false;
 			//I call Refresh to delete the currently drawn selection rectangle
             Refresh();
-			PaintNow();
+			FitAll();
 
 		}
 
@@ -11528,7 +11528,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
 					(this->*Draw)();
                     Refresh();
-					PaintNow();
+					FitAll();
 
 					parent->UpdateSlider();
 					//the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen
@@ -11578,7 +11578,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
 				(this->*Draw)();
                 Refresh();
-				PaintNow();
+				FitAll();
                 
 				parent->UpdateSlider();
 				//the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen
@@ -11690,7 +11690,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 							//re-draw the chart
 							(this->*Draw)();
 							Refresh();
-							PaintNow();
+							FitAll();
 
 						}
 
@@ -11707,7 +11707,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						//re-draw the chart
 						(this->*Draw)();
 						Refresh();
-						PaintNow();
+						FitAll();
 
 					}
 
@@ -11849,7 +11849,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //re-draw the chart
                         (this->*Draw)();
                         Refresh();
-                        PaintNow();
+                        FitAll();
                         
                         break;
                         
@@ -11989,7 +11989,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
 			(draw_panel->*(draw_panel->Draw))();
             draw_panel->Refresh();
-			draw_panel->PaintNow();
+			draw_panel->FitAll();
 			UpdateSlider();
 
 		}
@@ -12012,7 +12012,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
 		(draw_panel->*(draw_panel->Draw))();
         draw_panel->Refresh();
-		draw_panel->PaintNow();
+		draw_panel->FitAll();
 
 		UpdateSlider();
 
@@ -15387,15 +15387,15 @@ void ListFrame::OnComputePosition(void) {
 }
 
 
-//calls Draw and PaintNow in all che ChartFrames which are children of *this
+//calls Draw and FitAll in all che ChartFrames which are children of *this
 void ListFrame::DrawAll(void) {
 
 	for (long i = 0; i < (chart_frames.size()); i++) {
 
-		//I call PaintNow() because the positions have changed, so I need to re-draw the chart
+		//I call FitAll() because the positions have changed, so I need to re-draw the chart
 		(((chart_frames[i])->draw_panel)->*(((chart_frames[i])->draw_panel)->Draw))();
         ((chart_frames[i])->draw_panel)->Refresh();
-		((chart_frames[i])->draw_panel)->PaintNow();
+		((chart_frames[i])->draw_panel)->FitAll();
 
 	}
 

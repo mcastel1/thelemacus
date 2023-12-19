@@ -8015,7 +8015,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
        || (m_bgbuffer.GetHeight() != dc.GetSize().y)
        || re_draw )
     {
-        if( !m_bgbuffer.IsOk() ) m_bgbuffer.Create(dc.GetSize().x, dc.GetSize().y, 24);
+        m_bgbuffer.Create(dc.GetSize(), 24);
         wxMemoryDC mdc(m_bgbuffer);
         (this->*Render)(&mdc);
         
@@ -8831,6 +8831,8 @@ void DrawPanel::Draw_Mercator(void) {
 		);
 	}
 	(this->*Set_size_chart)();
+    //set the size of *this equal to the size of the chart, in such a way that draw_panel can properly contain the chart
+    SetSize(size_chart);
 
 	//sets size_plot_area and stores into position_plot_area the screen position of the top-left edge of the plot area.
 	if (

@@ -8816,7 +8816,7 @@ void DrawPanel::Draw_Mercator(void) {
 
 	/*I set the aspect ratio between height and width equal to the ratio between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
 
-	if (!(parent->drag_chart)) {
+	if (!(parent->dragging_chart)) {
 		//the ChartFrame is not being dragged -> its size will change -> re-compute its size
 
 		if ((y_max - y_min) > x_span()) {
@@ -9371,7 +9371,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	new_prefix = prefix.append(String("\t"));
 
 	//when a ChartFrame is created, the chart is not being dragged
-	drag_chart = false;
+	dragging_chart = false;
 
 	//read lambda_min, ...., phi_max from file_init
 	lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
@@ -9569,6 +9569,9 @@ template<class T> void ChartFrame::OnPressCtrlW(T& event) {
 //moves (makes slide) to the north the chart
 template<class T> void ChartFrame::MoveNorth(T& event) {
 
+	//I am dragging the chart and the size of *this will not change -> set 
+	dragging_chart = true;
+
 
 	switch ((((projection->name)->GetValue()).ToStdString())[0]) {
 
@@ -9625,11 +9628,13 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
 
 	}
 
-	//re-draw the chart
+	//re-draw the charton
 	(draw_panel->*(draw_panel->Draw))();
     draw_panel->Refresh();
 	draw_panel->PaintNow();
 
+	//I stopped dragging the chart -> set
+	dragging_chart = false;
 
 	event.Skip(true);
 
@@ -9639,6 +9644,8 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
 //moves (makes slide) up the chart
 template<class T> void ChartFrame::MoveSouth(T& event) {
 
+	//I am dragging the chart and the size of *this will not change -> set 
+	dragging_chart = true;
 
 	switch ((((projection->name)->GetValue()).ToStdString())[0]) {
 
@@ -9698,6 +9705,8 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
     draw_panel->Refresh();
 	draw_panel->PaintNow();
 
+	//I stopped dragging the chart -> set
+	dragging_chart = false;
 
 	event.Skip(true);
 
@@ -9705,6 +9714,9 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
 
 //moves (makes slide) to the west the chart
 template<class T> void ChartFrame::MoveWest(T& event) {
+
+	//I am dragging the chart and the size of *this will not change -> set 
+	dragging_chart = true;
 
 
 	switch ((((projection->name)->GetValue()).ToStdString())[0]) {
@@ -9757,6 +9769,9 @@ template<class T> void ChartFrame::MoveWest(T& event) {
 	(draw_panel->*(draw_panel->Draw))();
     draw_panel->Refresh();
 	draw_panel->PaintNow();
+
+	//I stopped dragging the chart -> set
+	dragging_chart = false;
 
 	event.Skip(true);
 
@@ -9835,7 +9850,7 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
 template<class T> void ChartFrame::MoveEast(T& event) {
 
 	//I am dragging the chart and the size of *this will not change -> set 
-	drag_chart = true;
+	dragging_chart = true;
     
     switch ((((projection->name)->GetValue()).ToStdString())[0]) {
 
@@ -9889,7 +9904,7 @@ template<class T> void ChartFrame::MoveEast(T& event) {
 	draw_panel->PaintNow();
 
 	//I stopped dragging the chart -> set
-	drag_chart = false;
+	dragging_chart = false;
 
 
 	event.Skip(true);
@@ -11016,8 +11031,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 	//update the instantaneous position of the mouse on the chart
 	if (GetMouseGeoPosition(&((parent->parent)->p_now))) {
-		;
-		//if the mouse has a screen position corresponding to a geographic position, I write it into s, otherwise s is left empty
+		//the mouse has a screen position corresponding to a geographic position -> I write it into s, otherwise s is left empty
+
 		(parent->text_position_now)->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
 	}
 	else {
@@ -11236,7 +11251,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 
 		if ((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)) {
-			//in this case, I am dragging the chart (not a route or position)
+			//in this case, I am dragging the chart (not a Route nor  a Position)
 
 			if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
@@ -11279,6 +11294,9 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 				rotation_end_drag.print(String("rotation end drag"), String(""), cout);
 
 			}
+
+			//the drag operation has ended -> I set
+			(parent->dragging_chart) = false;
 
 		}
 		else {
@@ -11634,7 +11652,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 				//in this case, position_drag_now is a valid position
 
 				if (((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1))) {
-					//in this case I am moving the whole chart (the mouse is not over a route nor a position when dragging)
+					//in this case I am dragging the whole chart (the mouse is not over a route nor a position when dragging)
+
+					(parent->dragging_chart) = true;
 
 					if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 						//in this case, I am using the mercator projection

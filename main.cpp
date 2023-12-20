@@ -185,7 +185,6 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
 	unsigned int i;
 	//the spacing between one frame and another in the x and y direction, respectively
 	double delta_x, delta_y;
-    wxPoint top_left_position;
 
 	i = (((list_frame->menu_bar)->GetSize()).GetHeight());
 
@@ -205,15 +204,6 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
 	}
 
 
-
-    top_left_position = wxPoint(
-                                (((double)((((list_frame->chart_frames)[0])->GetSize()).GetWidth())) - ((double)((((list_frame->chart_frames)[0])->GetSize()).GetWidth()))) / 2.0 + ((wxGetApp().border).value)
-                                ,
-                                
-                                (((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight()))) / 2.0 + ((wxGetApp().border).value)
-                                );
-
-
 	for (i = 0; i < ((list_frame->chart_frames).size()); i++) {
 
 		((list_frame->chart_frames)[i])->Show(true);
@@ -226,7 +216,7 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
 			(((list_frame->menu_bar)->GetSize()).GetHeight()) +
 			(((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetHeight()))) / 2.0 + ((wxGetApp().border).value) + delta_y * ((double)i)
 
-		) - top_left_position);
+		));
 
 	}
 

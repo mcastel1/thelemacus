@@ -14512,6 +14512,11 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
 	sizer_v->Add(image, 0, wxALL | wxALIGN_CENTER, 2 * (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_v->Add(button_ok, 0, wxALL | wxALIGN_CENTER, 2 * (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 
+#ifdef _WIN32
+    //if I am on WIN32, I set the icon from the icon set in the .rc file
+    SetIcon(wxICON(app_icon));
+#endif
+    
 	//panel->SetSizer(sizer);
 	//    Maximize(panel);
 	panel->SetSizerAndFit(sizer_v);
@@ -14606,6 +14611,11 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 	sizer_grid->Add(button_a, 0, wxALIGN_CENTER);
 	sizer_grid->Add(button_b, 0, wxALIGN_CENTER);
 	sizer_v->Add(sizer_grid, 0, wxALL | wxALIGN_CENTER, 2 * (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
+
+#ifdef _WIN32
+    //if I am on WIN32, I set the icon from the icon set in the .rc file
+    SetIcon(wxICON(app_icon));
+#endif
 
 	//panel->SetSizer(sizer);
 	//    Maximize(panel);

@@ -7988,6 +7988,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
     SetBackgroundColour(wxGetApp().background_color);
+    //set the border of the chart area 
+    SetWindowStyle(wxSIMPLE_BORDER);
 
 }
 
@@ -8202,7 +8204,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
     dc->SetBrush(wxBrush(wxGetApp().background_color));
 	dc->SetPen(wxPen(wxGetApp().foreground_color));
-	dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
+	//dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
 	dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
 
 
@@ -8547,9 +8549,9 @@ void DrawPanel::Render_3D(wxDC* dc) {
 	Position q, temp;
 
 	//draws a rectangle filled with color wxGetApp().background_color and with border wich color wxGetApp().foregrond_color on bitmap_image, so bitmap_image will have the right background color
-	dc->SetBrush(wxBrush(wxGetApp().background_color));
-	dc->SetPen(wxPen(wxGetApp().foreground_color));
-	dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
+	//dc->SetBrush(wxBrush(wxGetApp().background_color));
+	//dc->SetPen(wxPen(wxGetApp().foreground_color));
+	//dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
 
 
 	//draw coastlines

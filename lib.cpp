@@ -8025,7 +8025,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         re_draw = false;
     }
     
-    dc.DrawBitmap(m_bgbuffer, 0, 0, false);
+//    dc.DrawBitmap(m_bgbuffer, 0, 0, false);
     
     /*
     if( has_highlighted_curve )
@@ -8199,12 +8199,13 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
 
 	//draws two rectangles (representing the borders) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color. Here I set the pen color equal to the foreground color, because I want the border of the rectangle to have the foreground color
-	dc->SetBrush(wxBrush(wxGetApp().background_color));
+/*
+    dc->SetBrush(wxBrush(wxGetApp().background_color));
 	dc->SetPen(wxPen(wxGetApp().foreground_color));
 	dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
 	dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
 
-
+*/
 
 	//draw coastlines
 	//draw the coastline points into bitmap_image through memory_dc

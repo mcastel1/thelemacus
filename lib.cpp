@@ -8018,9 +8018,9 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
        || (m_bgbuffer.GetHeight() != dc.GetSize().y)
        || re_draw )
     {
-        m_bgbuffer.Create(dc.GetSize(), 24);
-        wxMemoryDC mdc(m_bgbuffer);
-        (this->*Render)(&mdc);
+//        m_bgbuffer.Create(dc.GetSize(), 24);
+//        wxMemoryDC mdc(m_bgbuffer);
+        (this->*Render)(&dc);
         
         re_draw = false;
     }

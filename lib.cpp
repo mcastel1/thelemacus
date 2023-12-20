@@ -9434,7 +9434,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	button_down = new wxButton(panel, wxID_ANY, wxT("S"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
 	button_left = new wxButton(panel, wxID_ANY, wxT("W"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
 	button_right = new wxButton(panel, wxID_ANY, wxT("E"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
-	button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+	button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize);
 
 	//button to show list
 	button_show_list = new wxBitmapButton(
@@ -13455,8 +13455,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 	sizer = new wxBoxSizer(wxVERTICAL);
 
 	//allocate buttons
-	button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-	button_reduce = new wxButton(panel, wxID_ANY, "Reduce", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+	button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, wxDefaultSize);
+	button_reduce = new wxButton(panel, wxID_ANY, "Reduce", wxDefaultPosition, wxDefaultSize);
 
 
 	//First off, I need to set TAI_minus_UTC, which will be used in the following. If sight_in = NULL,  I read it from from file_init
@@ -13781,8 +13781,8 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
 
 	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
 
-	button_ok = new wxButton(panel, wxID_ANY, label_button_ok.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-	button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+	button_ok = new wxButton(panel, wxID_ANY, label_button_ok.value, wxDefaultPosition, wxDefaultSize);
+	button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, wxDefaultSize);
 
 	sizer_grid_measurement = new wxFlexGridSizer(2, 2,
 		(((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value),
@@ -13936,8 +13936,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
 
 	//allocate buttons
-	button_ok = new wxButton(panel, wxID_ANY, label_button_ok.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
-	button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+	button_ok = new wxButton(panel, wxID_ANY, label_button_ok.value, wxDefaultPosition, wxDefaultSize);
+	button_cancel = new wxButton(panel, wxID_ANY, "Cancel", wxDefaultPosition, wxDefaultSize);
 
 
 	sizer_grid_type = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
@@ -14494,7 +14494,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
 
 
 	//buttons
-	button_ok = new wxButton(panel, wxID_ANY, "Ok", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+	button_ok = new wxButton(panel, wxID_ANY, "Ok", wxDefaultPosition, wxDefaultSize);
 	//    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
 	button_ok->Bind(wxEVT_BUTTON, *close_frame);
 	button_ok->Bind(wxEVT_BUTTON, *f_ok);
@@ -14576,10 +14576,10 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 	StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize);
 
 	//buttons
-	button_a = new wxButton(panel, wxID_ANY, string_a.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+	button_a = new wxButton(panel, wxID_ANY, string_a.value, wxDefaultPosition, wxDefaultSize);
 	button_a->Bind(wxEVT_BUTTON, *f_a);
 	button_a->Bind(wxEVT_BUTTON, *close_frame);
-	button_b = new wxButton(panel, wxID_ANY, string_b.value, wxDefaultPosition, GetTextExtent(wxS("00000000000")), wxBU_EXACTFIT);
+	button_b = new wxButton(panel, wxID_ANY, string_b.value, wxDefaultPosition, wxDefaultSize);
 	button_b->Bind(wxEVT_BUTTON, *f_b);
 	button_b->Bind(wxEVT_BUTTON, *close_frame);
 

@@ -7986,7 +7986,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     text_position_start->SetBackgroundColour(wxGetApp().background_color);
     text_position_end->SetBackgroundColour(wxGetApp().background_color);
     
-    //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster 
+    //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
     SetBackgroundColour(wxGetApp().background_color);
 
 }
@@ -8195,7 +8195,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 	Position q;
 	double thickness;
 	//this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
-    int i, /*an integer which specifies the color_id of the objects which are being plotted. It is incremented every time that something is plotted, to plot everything with a different color*/color_id;
+    int i;
 
 
 	//draws two rectangles (representing the borders) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color. Here I set the pen color equal to the foreground color, because I want the border of the rectangle to have the foreground color

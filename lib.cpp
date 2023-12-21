@@ -8533,9 +8533,8 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 		}
 
 
-		labels->resize(((*labels).size()) + 1);
-		//I first crate a StaticText with default position ...
         labels->push_back(wx_string);
+        //I first crate a StaticText with default position ...
         //		(labels->back()) = new StaticText(this, wx_string, wxDefaultPosition, wxDefaultSize);
 
         /*

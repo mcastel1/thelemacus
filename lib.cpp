@@ -8538,6 +8538,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
         labels->push_back(wx_string);
         //		(labels->back()) = new StaticText(this, wx_string, wxDefaultPosition, wxDefaultSize);
 
+        /*
 		//... then I shift p it in such a way that the label drawn at p is diplayed nicely, and draw the label at  p. To do this, I need to know the size of (labels->back()) : for example, in the NS case, I shift p horizontally on the left by a length equal to the width of (labels->back())
 		if (mode == String("NS")) {
 
@@ -8555,7 +8556,9 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 		//here the static text is displayed on top of a wxImage, so I set the appropriate fore/background color
 		(labels->back())->SetForegroundColour(wxGetApp().foreground_color);
 		(labels->back())->SetBackgroundColour(wxGetApp().background_color);
-
+*/
+        
+        
 		first_label = false;
 
 	}

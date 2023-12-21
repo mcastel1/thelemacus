@@ -7987,7 +7987,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     text_position_end->SetBackgroundColour(wxGetApp().background_color);
     
     //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
-    SetBackgroundColour(*wxBLUE);
+    SetBackgroundColour(wxGetApp().background_color);
     //set the border of the chart area 
     SetWindowStyle(wxSIMPLE_BORDER);
 

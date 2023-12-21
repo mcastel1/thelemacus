@@ -7962,8 +7962,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 	circle_observer.type = String("c");
 
 	//clears the vector label_phi because tehre are not y labels yet.
-	label_lambda.resize(0);
-	label_phi.resize(0);
+	labels_lambda.resize(0);
+	labels_phi.resize(0);
 
 	//    rotation.print(String("initial rotation"), String(""), cout);
 
@@ -8512,7 +8512,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
 void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision, String mode) {
 
 	wxPoint p;
-	vector<StaticText*>* labels;
+	vector<wxString>* labels;
 
 	if (/* convert temp to draw_panel coordinates p*/GeoToDrawPanel(q, &p, false)) {
 		//if Position q lies on the visible side of the Earth, I proceed and draw its label
@@ -8525,20 +8525,20 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 
 		if (mode == String("NS")) {
 			//if I am drawing latitude labels I let labels point to label_phi
-			labels = &label_phi;
+			labels = &labels_phi;
 		}
 		else {
 			//if I am drawing longitude labels I let labels point to label_lambda
-			labels = &label_lambda;
+			labels = &labels_lambda;
 		}
 
 
-		(*labels).resize(((*labels).size()) + 1);
+		labels->resize(((*labels).size()) + 1);
 		//I first crate a StaticText with default position ...
-        //THIS SLOWS DOWN THE CODE
-		((*labels).back()) = new StaticText(this, wx_string, wxDefaultPosition, wxDefaultSize);
+        labels->push_back(wx_string);
+        //		(labels->back()) = new StaticText(this, wx_string, wxDefaultPosition, wxDefaultSize);
 
-		//... then I shift p it in such a way that the label drawn at p is diplayed nicely, and draw the label at  p. To do this, I need to know the size of ((*labels).back()) : for example, in the NS case, I shift p horizontally on the left by a length equal to the width of ((*labels).back())
+		//... then I shift p it in such a way that the label drawn at p is diplayed nicely, and draw the label at  p. To do this, I need to know the size of (labels->back()) : for example, in the NS case, I shift p horizontally on the left by a length equal to the width of (labels->back())
 		if (mode == String("NS")) {
 
 			p += wxPoint(-((int)size_label_horizontal) - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -((int)size_label_vertical) / 2);
@@ -8546,15 +8546,15 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 		}
 		else {
 
-			p += wxPoint(-(((*labels).back())->GetSize().GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
+			p += wxPoint(-((labels->back())->GetSize().GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
 
 		}
-		//... and finally, I set the position of ((*labels).back()) equal to p
-		((*labels).back())->SetPosition(p);
+		//... and finally, I set the position of (labels->back()) equal to p
+		(labels->back())->SetPosition(p);
 
 		//here the static text is displayed on top of a wxImage, so I set the appropriate fore/background color
-		((*labels).back())->SetForegroundColour(wxGetApp().foreground_color);
-		((*labels).back())->SetBackgroundColour(wxGetApp().background_color);
+		(labels->back())->SetForegroundColour(wxGetApp().foreground_color);
+		(labels->back())->SetBackgroundColour(wxGetApp().background_color);
 
 		first_label = false;
 

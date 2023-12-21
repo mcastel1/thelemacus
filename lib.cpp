@@ -8842,10 +8842,10 @@ void DrawPanel::Draw_Mercator(void) {
 
 
 	//clears all labels previously drawn
-	for (i = 0; i < label_lambda.size(); i++) { (label_lambda[i])->Destroy(); }
-	label_lambda.resize(0);
-	for (i = 0; i < label_phi.size(); i++) { (label_phi[i])->Destroy(); }
-	label_phi.resize(0);
+//	for (i = 0; i < labels_lambda.size(); i++) { (label_lambda[i])->Destroy(); }
+	labels_lambda.resize(0);
+//	for (i = 0; i < label_phi.size(); i++) { (label_phi[i])->Destroy(); }
+	labels_phi.resize(0);
 
 	//set x_min, ..., y_max for the following
 	(this->*Set_x_y_min_max)();
@@ -9070,10 +9070,10 @@ void DrawPanel::Draw_3D(void) {
 	//client_dc->Clear();
 
 	//clears all labels previously drawn
-	for (i = 0; i < label_lambda.size(); i++) { (label_lambda[i])->Destroy(); }
-	label_lambda.resize(0);
-	for (i = 0; i < label_phi.size(); i++) { (label_phi[i])->Destroy(); }
-	label_phi.resize(0);
+//	for (i = 0; i < label_lambda.size(); i++) { (label_lambda[i])->Destroy(); }
+	labels_lambda.resize(0);
+//	for (i = 0; i < label_phi.size(); i++) { (label_phi[i])->Destroy(); }
+	labels_phi.resize(0);
 
 
 	//set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer

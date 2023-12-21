@@ -8042,8 +8042,8 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         dc2.SetBackground(*wxTRANSPARENT_BRUSH);
         dc2.Clear();
 
-        dc2.SetBrush(*wxTRANSPARENT_BRUSH);
-        dc2.SetPen(*wxRED);
+//        dc2.SetBrush(*wxTRANSPARENT_BRUSH);
+//        dc2.SetPen(*wxRED);
 
 
         

@@ -58,7 +58,6 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
  - listcontrol_sights etc are not resized to their minimum sizes 
  - fix root_directory on WIN32
- - do not allocate a new wxDC every time you call Render*
  - check that WXK_PLUS does not depend on the computer
 
  ---
@@ -209,8 +208,10 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
 
 			(((double)((((list_frame->chart_frames)[0])->GetSize()).GetWidth())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetWidth()))) / 2.0 + ((wxGetApp().border).value) + delta_x * ((double)i)
 			,
-			/*here I shift everything down on the screen by the height of the menu_bar, because otherwise the ChartFrame on the top would be partially corvered by the menu bar and the one on the bottom would leave an empty space t the bottom of the screen */
 #ifdef __APPLE__
+//I am on APPLE operating system -> there is a menu bar
+/*here I shift everything down on the screen by the height of the menu_bar, because otherwise the ChartFrame on the top would be partially corvered by the menu bar and the one on the bottom would leave an empty space t the bottom of the screen */
+
 
 			(((list_frame->menu_bar)->GetSize()).GetHeight()) +
                                                              

@@ -8003,17 +8003,30 @@ END_EVENT_TABLE()
 
 
 void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
-    
-//    wxPaintDC dc(this);
-//    (this->*Render)(&dc);
+
 
     int i, j, color_id;
     double thickness, radius;
     wxPoint p;
-
-    
-    
     wxPaintDC dc(this);
+    
+    
+    ::wxInitAllImageHandlers();
+    wxBitmap bmp( dc.GetSize().x, dc.GetSize().y, 32);
+    bmp.UseAlpha();
+
+    wxMemoryDC memDC( bmp );
+    wxGCDC dc2( memDC );
+
+    dc2.SetBackground( *wxTRANSPARENT_BRUSH );
+    dc2.Clear();
+
+    dc2.SetBrush( *wxTRANSPARENT_BRUSH );
+    dc2.SetPen( *wxRED );
+    dc2.DrawRectangle( 10, 10, 44, 44 );
+
+    memDC.SelectObject( wxNullBitmap );
+    
     
     if( (!m_bgbuffer.IsOk())
        || (m_bgbuffer.GetWidth() != dc.GetSize().x)
@@ -8027,7 +8040,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         re_draw = false;
     }
     
-//    dc.DrawBitmap(m_bgbuffer, 0, 0, false);
+    dc.DrawBitmap(bmp, 0, 0, false);
     
     /*
     if( has_highlighted_curve )

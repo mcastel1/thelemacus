@@ -12,6 +12,7 @@
 #include "wx/kbdstate.h"
 #include "wx/wfstream.h"
 #include "wx/graphics.h"
+#include "wx/dcgraph.h"
 
 
 

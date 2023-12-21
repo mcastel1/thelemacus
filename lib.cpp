@@ -7987,7 +7987,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     text_position_end->SetBackgroundColour(wxGetApp().background_color);
     
     //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
-    SetBackgroundColour(wxGetApp().background_color);
+    SetBackgroundColour(*wxBLUE);
     //set the border of the chart area 
     SetWindowStyle(wxSIMPLE_BORDER);
 
@@ -8012,20 +8012,20 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     
     
     ::wxInitAllImageHandlers();
-    wxBitmap bmp( dc.GetSize().x, dc.GetSize().y, 32);
-    bmp.UseAlpha();
+//    wxBitmap bmp( dc.GetSize().x, dc.GetSize().y, 32);
+//    bmp.UseAlpha();
 
-    wxMemoryDC memDC( bmp );
-    wxGCDC dc2( memDC );
+//    wxMemoryDC memDC( bmp );
+//    wxGCDC dc2( memDC );
 
-    dc2.SetBackground( *wxTRANSPARENT_BRUSH );
-    dc2.Clear();
+//    dc2.SetBackground( *wxTRANSPARENT_BRUSH );
+//    dc2.Clear();
+//
+//    dc2.SetBrush( *wxTRANSPARENT_BRUSH );
+//    dc2.SetPen( *wxRED );
+//    dc2.DrawRectangle( 10, 10, 44, 44 );
 
-    dc2.SetBrush( *wxTRANSPARENT_BRUSH );
-    dc2.SetPen( *wxRED );
-    dc2.DrawRectangle( 10, 10, 44, 44 );
-
-    memDC.SelectObject( wxNullBitmap );
+//    memDC.SelectObject( wxNullBitmap );
     
     
     if( (!m_bgbuffer.IsOk())
@@ -8033,14 +8033,29 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
        || (m_bgbuffer.GetHeight() != dc.GetSize().y)
        || re_draw )
     {
-//        m_bgbuffer.Create(dc.GetSize(), 24);
-//        wxMemoryDC mdc(m_bgbuffer);
-        (this->*Render)(&dc);
+        m_bgbuffer.Create(dc.GetSize(), 32);
+        m_bgbuffer.UseAlpha();
+
+        wxMemoryDC mdc(m_bgbuffer);
+        wxGCDC dc2(mdc);
+        
+        dc2.SetBackground(*wxTRANSPARENT_BRUSH);
+        dc2.Clear();
+
+        dc2.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc2.SetPen(*wxRED);
+
+
+        
+        (this->*Render)(&dc2);
+        
+        mdc.SelectObject( wxNullBitmap );
+
         
         re_draw = false;
     }
     
-    dc.DrawBitmap(bmp, 0, 0, false);
+    dc.DrawBitmap(m_bgbuffer, 0, 0, false);
     
     /*
     if( has_highlighted_curve )
@@ -8215,7 +8230,8 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
 	//draws two rectangles (representing the borders) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color. Here I set the pen color equal to the foreground color, because I want the border of the rectangle to have the foreground color
 
-    dc->SetBrush(wxBrush(wxGetApp().background_color));
+//    dc->SetBrush(wxBrush(wxGetApp().background_color));
+    dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
 	dc->SetPen(wxPen(wxGetApp().foreground_color));
 	//dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
 	dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));

@@ -210,7 +210,12 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
 			(((double)((((list_frame->chart_frames)[0])->GetSize()).GetWidth())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetWidth()))) / 2.0 + ((wxGetApp().border).value) + delta_x * ((double)i)
 			,
 			/*here I shift everything down on the screen by the height of the menu_bar, because otherwise the ChartFrame on the top would be partially corvered by the menu bar and the one on the bottom would leave an empty space t the bottom of the screen */
+#ifdef __APPLE__
+
 			(((list_frame->menu_bar)->GetSize()).GetHeight()) +
+                                                             
+#endif
+
 			(((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetHeight()))) / 2.0 + ((wxGetApp().border).value) + delta_y * ((double)i)
 
 		));

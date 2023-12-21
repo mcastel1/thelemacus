@@ -8011,7 +8011,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     wxPaintDC dc(this);
     
     
-    ::wxInitAllImageHandlers();
+//    ::wxInitAllImageHandlers();
 //    wxBitmap bmp( dc.GetSize().x, dc.GetSize().y, 32);
 //    bmp.UseAlpha();
 
@@ -8037,17 +8037,17 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         m_bgbuffer.UseAlpha();
 
         wxMemoryDC mdc(m_bgbuffer);
-        wxGCDC dc2(mdc);
+        wxGCDC dc_m_bgbuffer(mdc);
         
-        dc2.SetBackground(*wxTRANSPARENT_BRUSH);
-        dc2.Clear();
+        dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
+        dc_m_bgbuffer.Clear();
 
-//        dc2.SetBrush(*wxTRANSPARENT_BRUSH);
-//        dc2.SetPen(*wxRED);
+//        dc_m_bgbuffer.SetBrush(*wxTRANSPARENT_BRUSH);
+//        dc_m_bgbuffer.SetPen(*wxRED);
 
 
         
-        (this->*Render)(&dc2);
+        (this->*Render)(&dc_m_bgbuffer);
         
         mdc.SelectObject( wxNullBitmap );
 

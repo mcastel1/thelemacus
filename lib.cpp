@@ -8407,6 +8407,12 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 		}
 
 	}
+    
+    //draw labels of parallels
+    for(i=0; i<labels_lambda.size(); i++){
+        dc->DrawText(labels_lambda[i], positions_labels_lambda[i]);
+    }
+ 
 
     /*
 	//draw positions
@@ -8581,7 +8587,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_3D(wxDC* dc) {
 
-	int i, j;
+	int i;
 	double thickness;
 	Double d;
 	Angle lambda, /*phi is an auxiliary variable used in the loop which draws parallels*/phi;
@@ -8664,6 +8670,12 @@ void DrawPanel::Render_3D(wxDC* dc) {
 		}
 
 	}
+    
+    //draw labels of meridians
+    for(i=0; i<labels_phi.size(); i++){
+        dc->DrawText(labels_phi[i], positions_labels_phi[i]);
+    }
+
 
 
 	//draw parallels
@@ -8708,6 +8720,12 @@ void DrawPanel::Render_3D(wxDC* dc) {
 		}
 
 	}
+    
+    //draw labels of parallels
+    for(i=0; i<labels_lambda.size(); i++){
+        dc->DrawText(labels_lambda[i], positions_labels_lambda[i]);
+    }
+
 
 	//draw horizon circle
 	//draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer

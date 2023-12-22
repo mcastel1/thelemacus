@@ -8344,6 +8344,12 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 		}
 
 	}
+    
+    //draw labels of meridians
+    for(i=0; i<labels_phi.size(); i++){
+        dc->DrawText(labels_phi[i], positions_labels_phi[i]);
+    }
+    
 
 	//draw parallels
 	//set route equal to a parallel of latitude phi, i.e., a circle of equal altitude

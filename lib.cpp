@@ -8223,6 +8223,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 	Angle lambda, phi, lambda_saved;
 	Route route;
 	wxPoint p;
+    wxCoord width_label, height_label;
 	Projection temp;
 	Position q;
 	double thickness;
@@ -8347,7 +8348,10 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
     
     //draw labels of meridians
     for(i=0; i<labels_phi.size(); i++){
-        dc->DrawText(labels_phi[i], positions_labels_phi[i]);
+        
+        dc->GetTextExtent(labels_phi[i], &width_label, &height_label);
+        dc->DrawText(labels_phi[i], positions_labels_phi[i] + wxPoint(width_label/2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)));
+        
     }
     
 
@@ -8410,7 +8414,10 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
     
     //draw labels of parallels
     for(i=0; i<labels_lambda.size(); i++){
-        dc->DrawText(labels_lambda[i], positions_labels_lambda[i]);
+        
+        dc->GetTextExtent(labels_lambda[i], &width_label, &height_label);
+        dc->DrawText(labels_lambda[i], positions_labels_lambda[i] /*-
+                     wxPoint(width_label, height_label/2)*/);
     }
  
 

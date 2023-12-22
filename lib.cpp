@@ -7964,6 +7964,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 	//clears the vector label_phi because tehre are not y labels yet.
 	labels_lambda.resize(0);
 	labels_phi.resize(0);
+    positions_labels_lambda.resize(0);
+    position_labels_phi.resize(0);
 
 	//    rotation.print(String("initial rotation"), String(""), cout);
 
@@ -8513,6 +8515,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 
 	wxPoint p;
 	vector<wxString>* labels;
+    vector<wxPoint>* positions_labels;
 
 	if (/* convert temp to draw_panel coordinates p*/GeoToDrawPanel(q, &p, false)) {
 		//if Position q lies on the visible side of the Earth, I proceed and draw its label
@@ -8526,10 +8529,12 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 		if (mode == String("NS")) {
 			//if I am drawing latitude labels I let labels point to label_phi
 			labels = &labels_phi;
+            positions_labels = &positions_labels_phi;
 		}
 		else {
 			//if I am drawing longitude labels I let labels point to label_lambda
 			labels = &labels_lambda;
+            positions_labels = &positions_labels_lambda;
 		}
 
 
@@ -8843,8 +8848,10 @@ void DrawPanel::Draw_Mercator(void) {
 	//clears all labels previously drawn
 //	for (i = 0; i < labels_lambda.size(); i++) { (label_lambda[i])->Destroy(); }
 	labels_lambda.resize(0);
+    positions_labels_lambda.resize(0);
 //	for (i = 0; i < label_phi.size(); i++) { (label_phi[i])->Destroy(); }
 	labels_phi.resize(0);
+    positions_labels_phi.resize(0);
 
 	//set x_min, ..., y_max for the following
 	(this->*Set_x_y_min_max)();
@@ -9071,8 +9078,11 @@ void DrawPanel::Draw_3D(void) {
 	//clears all labels previously drawn
 //	for (i = 0; i < label_lambda.size(); i++) { (label_lambda[i])->Destroy(); }
 	labels_lambda.resize(0);
+    positions_labels_lambda.resize(0);
 //	for (i = 0; i < label_phi.size(); i++) { (label_phi[i])->Destroy(); }
 	labels_phi.resize(0);
+    positions_labels_phi.resize(0);
+
 
 
 	//set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer

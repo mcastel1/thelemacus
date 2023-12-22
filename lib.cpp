@@ -8347,10 +8347,10 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 	}
     
     //draw labels of meridians
-    for(i=0; i<labels_phi.size(); i++){
+    for(i=0; i<labels_lambda.size(); i++){
         
-        dc->GetTextExtent(labels_phi[i], &width_label, &height_label);
-        dc->DrawText(labels_phi[i], positions_labels_phi[i] + wxPoint(width_label/2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)));
+        dc->GetTextExtent(labels_lambda[i], &width_label, &height_label);
+        dc->DrawText(labels_lambda[i], positions_labels_lambda[i] + wxPoint(-width_label/2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)));
         
     }
     
@@ -8412,12 +8412,12 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
 	}
     
-    //draw labels of parallels
-    for(i=0; i<labels_lambda.size(); i++){
+    //draw labels on parallels
+    for(i=0; i<labels_phi.size(); i++){
         
-        dc->GetTextExtent(labels_lambda[i], &width_label, &height_label);
-        dc->DrawText(labels_lambda[i], positions_labels_lambda[i] /*-
-                     wxPoint(width_label, height_label/2)*/);
+        dc->GetTextExtent(labels_phi[i], &width_label, &height_label);
+        dc->DrawText(labels_phi[i], positions_labels_phi[i] + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label/2));
+        
     }
  
 
@@ -8606,6 +8606,8 @@ void DrawPanel::Render_3D(wxDC* dc) {
 	Route route;
 	wxPoint p;
 	Position q, temp;
+    wxCoord width_label, height_label;
+
 
 	//draws a rectangle filled with color wxGetApp().background_color and with border wich color wxGetApp().foregrond_color on bitmap_image, so bitmap_image will have the right background color
 	//dc->SetBrush(wxBrush(wxGetApp().background_color));
@@ -8679,10 +8681,12 @@ void DrawPanel::Render_3D(wxDC* dc) {
 	}
     
     //draw labels of meridians
-    for(i=0; i<labels_phi.size(); i++){
-        dc->DrawText(labels_phi[i], positions_labels_phi[i]);
+    for(i=0; i<labels_lambda.size(); i++){
+        
+        dc->GetTextExtent(labels_lambda[i], &width_label, &height_label);
+        dc->DrawText(labels_lambda[i], positions_labels_lambda[i] + wxPoint(-width_label/2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)));
+        
     }
-
 
 
 	//draw parallels
@@ -8728,10 +8732,14 @@ void DrawPanel::Render_3D(wxDC* dc) {
 
 	}
     
-    //draw labels of parallels
-    for(i=0; i<labels_lambda.size(); i++){
-        dc->DrawText(labels_lambda[i], positions_labels_lambda[i]);
+    //draw labels on parallels
+    for(i=0; i<labels_phi.size(); i++){
+        
+        dc->GetTextExtent(labels_phi[i], &width_label, &height_label);
+        dc->DrawText(labels_phi[i], positions_labels_phi[i] + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label/2));
+        
     }
+ 
 
 
 	//draw horizon circle

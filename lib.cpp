@@ -7965,7 +7965,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 	labels_lambda.resize(0);
 	labels_phi.resize(0);
     positions_labels_lambda.resize(0);
-    position_labels_phi.resize(0);
+    positions_labels_phi.resize(0);
 
 	//    rotation.print(String("initial rotation"), String(""), cout);
 
@@ -8539,11 +8539,13 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 
 
         labels->push_back(wx_string);
+        positions_labels->push_back(p);
         //I first crate a StaticText with default position ...
         //		(labels->back()) = new StaticText(this, wx_string, wxDefaultPosition, wxDefaultSize);
 
-        /*
+        
 		//... then I shift p it in such a way that the label drawn at p is diplayed nicely, and draw the label at  p. To do this, I need to know the size of (labels->back()) : for example, in the NS case, I shift p horizontally on the left by a length equal to the width of (labels->back())
+        /*
 		if (mode == String("NS")) {
 
 			p += wxPoint(-((int)size_label_horizontal) - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -((int)size_label_vertical) / 2);
@@ -8551,16 +8553,17 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 		}
 		else {
 
-			p += wxPoint(-((labels->back())->GetSize().GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
+			p += wxPoint(-((labels->back()).GetTextExtent().GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
 
 		}
+         */
 		//... and finally, I set the position of (labels->back()) equal to p
-		(labels->back())->SetPosition(p);
+//		(labels->back())->SetPosition(p);
 
 		//here the static text is displayed on top of a wxImage, so I set the appropriate fore/background color
-		(labels->back())->SetForegroundColour(wxGetApp().foreground_color);
-		(labels->back())->SetBackgroundColour(wxGetApp().background_color);
-*/
+//		(labels->back())->SetForegroundColour(wxGetApp().foreground_color);
+//		(labels->back())->SetBackgroundColour(wxGetApp().background_color);
+
         
         
 		first_label = false;

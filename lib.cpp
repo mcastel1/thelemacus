@@ -7724,7 +7724,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 	}
 
 	i_min = floor(K * (phi_min.value));
-	i_max = ceil(K * (phi_max.value));
+	i_max = ((parent->p_coastline).size())  + floor_min_lat;
 
 	n_points_grid = (i_max - i_min + 1) * (j_max - j_min + 1);
 

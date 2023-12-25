@@ -1,4 +1,5 @@
 #comment lines, such as this one, will be ignored
+show coastlines = n
 artificial horizon = y	
 plot coastline every = 10
 index error = 0° 1.9'
@@ -79,7 +80,6 @@ night background color = (40,40,43)
 point size = 1
 number of points coastline Mercator = 45000
 number of points coastline 3D = 90000
-show coastlines = n
 load sample sight = y
 number of recent items = 3
 #directories and names of files

@@ -16055,6 +16055,12 @@ template<class E> void ListFrame::OnPressCtrlShiftS(E& event) {
 		data_file.open(String("out"), String(""));
 		//writ edata into data_file
 		data->print(false, String(""), *(data_file.value));
+  
+//        //Here I write only the recent projections of the zero-th ChartFrame
+//        if(chart_frames.size() != 0){
+//            String((chart_frames[0])->projection->name->GetValue().ToStdString()).print(String("Recent projections"), false, String("\t"), *(data_file.value));
+//        }
+//
 		//close the file
 		data_file.close(String(""));
 
@@ -17317,6 +17323,19 @@ template<class P> void ProjectionField<P>::write_recent_items(void) {
     
 }
 
+//write recent_items to stream *out
+template<class P>   template<class S> void ProjectionField<P>::write_recent_items_to_stream(S* out){
+    
+    stringstream temp;
+    String s;
+    unsigned int i;
+
+    for (temp.str(""), i = 0; i < (recent_items.size()); i++) {
+        temp << recent_items[i] << " ";
+    }
+    s = String(temp.str().c_str());
+    
+}
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c) {

@@ -7789,12 +7789,14 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 	char* buffer = NULL;
 	size_t pos_beg, pos_end;
 	double lambda_temp, phi_temp;
+    wxProgressDialog* dialog;
 
 
 	file_n_line.set_name((wxGetApp().path_file_n_line));
 	file_coastline_data_blocked.set_name((wxGetApp().path_file_coastline_data_blocked));
     
-
+    dialog = new wxProgressDialog(wxT("Wait..."), wxT("Keep waiting..."), max_dialog, this, wxPD_AUTO_HIDE | wxPD_APP_MODAL);
+    
 	//read file n_line and store it into vector n_line
 	file_n_line.open(String(""));
     
@@ -7835,6 +7837,8 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
 
 	 //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
+    
+  
 
 	if (show_coastlines == Answer('y', String(""))) {
 
@@ -7897,16 +7901,22 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
 			}
 
+            dialog->Update( 100.0 * ((double)i)/(((double)(n_line.size()))/360.0) );
+
 			i++;
 
 		}
 
+        dialog->Update(max_dialog);
+    
         cout << prefix.value << "... done.\n";
 		file_coastline_data_blocked.close(String(""));
 
 	}
 
 	n_line.clear();
+    delete dialog;
+
 
 }
 
@@ -14890,6 +14900,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
     //read load_sample_sight from file_init
     load_sample_sight.read_from_file_to(String("load sample sight"),  (wxGetApp().path_file_init), String("R"),  String(""));
 
+
     GetAllCoastLineData(String(""));
     
     //when the ListFrame window is closed, quit the app
@@ -15409,6 +15420,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
 	//given that I have incoroporated the listcontrols into the sizers, listrcontrols may have been resized -> I Fit() them so their content is properly shown
 	Resize();
 	Centre();
+    
 }
 
 //create a new ChartFrame and appends it to the end of chart_frames

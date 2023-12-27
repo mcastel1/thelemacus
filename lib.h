@@ -13,6 +13,8 @@
 #include "wx/wfstream.h"
 #include "wx/graphics.h"
 #include "wx/dcgraph.h"
+#include "wx/progdlg.h"
+
 
 
 

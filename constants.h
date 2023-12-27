@@ -49,6 +49,7 @@ Angle max_lat, min_lat;
 //#define wxDEBUG_LEVEL 0
 #define WXK_PLUS 61
 #define WXK_MINUS 45
+#define max_dialog 100
 
 
 //this string defines the width of GUI fields hosting floating-point numbers

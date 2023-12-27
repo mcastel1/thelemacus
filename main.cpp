@@ -284,7 +284,8 @@ bool MyApp::OnInit() {
 	wxDisplay display;
 	wxCommandEvent dummy;
     wxFrame* dummy_frame;
-    QuestionFrame< CloseFrame<ListFrame>, UnsetIdling<ListFrame> >* disclaimer;
+    ShowFrame<ListFrame> * show_list_frame;
+    QuestionFrame< ShowFrame<ListFrame>, CloseFrame<ListFrame> >* disclaimer;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
 	//    Chrono current_time, dawn, dusk;
 
@@ -479,15 +480,18 @@ bool MyApp::OnInit() {
 
 
 	list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
+    show_list_frame = new ShowFrame<ListFrame>(list_frame);
 
-    disclaimer = new QuestionFrame< CloseFrame<ListFrame>, UnsetIdling<ListFrame> >(NULL, list_frame->close, String("Yes"), list_frame->unset_idling, String("No"),
+    
+    
+    disclaimer = new QuestionFrame< ShowFrame<ListFrame> , CloseFrame<ListFrame> >(NULL, show_list_frame, String("Yes"), list_frame->close, String("No"),
         "",
         "Do you really want to use this app?",
         wxDefaultPosition,
         wxDefaultSize,
         String(""));
     disclaimer->Show(true);
-    list_frame->Show(true);
+//    list_frame->Show(true);
 
 
 

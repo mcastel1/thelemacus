@@ -12833,7 +12833,6 @@ template <class T> void ResetListFrame::operator()(T& event) {
 
 	event.Skip(true);
 
-
 }
 
 
@@ -12865,6 +12864,23 @@ template<class F> template <class T> void CloseFrame<F>::operator()(T& event) {
 
 
 }
+
+template<class F> ShowFrame<F>::ShowFrame(F* frame_in) {
+
+    frame = frame_in;
+
+}
+
+//show a frame of type F
+template<class F> template <class T> void ShowFrame<F>::operator()(T& event) {
+
+    frame->Show(true);
+
+    event.Skip(true);
+
+
+}
+
 
 template<class F> DestroyFrame<F>::DestroyFrame(F* frame_in) {
 

@@ -479,15 +479,15 @@ bool MyApp::OnInit() {
 
 
 	list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
-	list_frame->Show(true);
 
     disclaimer = new QuestionFrame< CloseFrame<ListFrame>, UnsetIdling<ListFrame> >(NULL, list_frame->close, String("Yes"), list_frame->unset_idling, String("No"),
         "",
-        "Do you really want to remove this route?",
+        "Do you really want to use this app?",
         wxDefaultPosition,
         wxDefaultSize,
         String(""));
-    disclaimer ->Show(true);
+    disclaimer->Show(true);
+    list_frame->Show(true);
 
 
 

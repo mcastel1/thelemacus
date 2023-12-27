@@ -38,6 +38,7 @@ class RouteTypeField;
 template<class P> class StringField;
 class MyApp;
 template<class F> class CloseFrame;
+template<class F> class ShowFrame;
 template<class F_A, class F_B> class QuestionFrame;
 class ListFrame;
 class SightFrame;
@@ -978,6 +979,19 @@ public:
     //the frame to be closed
     F* frame;
     CloseFrame(F*);
+    
+    template<class T> void operator()(T&);
+    
+};
+
+//class which defines a functor which shows a frame with arbitrary type F
+template<class F> class ShowFrame{
+    
+public:
+    
+    //the frame to be closed
+    F* frame;
+    ShowFrame(F*);
     
     template<class T> void operator()(T&);
     

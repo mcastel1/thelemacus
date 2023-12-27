@@ -7795,7 +7795,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 	file_n_line.set_name((wxGetApp().path_file_n_line));
 	file_coastline_data_blocked.set_name((wxGetApp().path_file_coastline_data_blocked));
     
-    dialog = new wxProgressDialog(wxT("Wait..."), wxT("Keep waiting..."), max_dialog, this, wxPD_AUTO_HIDE | wxPD_APP_MODAL);
+    dialog = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxT("Loading charts..."), max_dialog, NULL, wxPD_AUTO_HIDE | wxPD_APP_MODAL);
     
 	//read file n_line and store it into vector n_line
 	file_n_line.open(String(""));

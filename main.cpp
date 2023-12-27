@@ -33,10 +33,8 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  ********** THINGS TO ADD/IMPROVE ************
  - when transporting a sight allow the user to enter speed and time instead of distance
- - adjust size of buttons
  - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
  - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
- - fill up selection 'rectangle' in 3D projection by using a bundle of curves at fixed lat or lon
  - change     highlight_color = color_selected_item and     highlight_font = default_font;
  with a better  choice
  - add + / - button in chartframe to zoom in / out

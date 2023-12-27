@@ -7796,6 +7796,10 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 	file_coastline_data_blocked.set_name((wxGetApp().path_file_coastline_data_blocked));
     
     dialog = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxT("Loading charts..."), max_dialog, NULL, wxPD_AUTO_HIDE | wxPD_APP_MODAL);
+#ifdef _WIN32
+    //if I am on WIN32, I set the icon from the icon set in the .rc file
+    dialog->SetIcon(wxICON(app_icon));
+#endif
     
 	//read file n_line and store it into vector n_line
 	file_n_line.open(String(""));

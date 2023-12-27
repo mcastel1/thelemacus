@@ -11587,12 +11587,36 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 					(((parent->parent)->p_end).lambda).normalize_pm_pi();
 					//I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of ((parent->parent)->p_start).lambda, ... ((parent->parent)->p_end).phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc.
 					if ((((parent->parent)->p_start).lambda) > (((parent->parent)->p_end).lambda)) {
-						(parent->lambda_min) = (((parent->parent)->p_start).lambda);
-						(parent->lambda_max) = (((parent->parent)->p_end).lambda);
+                        
+                        if((((parent->parent)->p_start).lambda.value) * (((parent->parent)->p_end).lambda.value) > 0.0){
+                            
+                            (parent->lambda_min) = (((parent->parent)->p_start).lambda);
+                            (parent->lambda_max) = (((parent->parent)->p_end).lambda);
+                            
+                        }else{
+                            
+                            (parent->lambda_min) = (((parent->parent)->p_end).lambda);
+                            (parent->lambda_max) = (((parent->parent)->p_start).lambda);
+       
+                        }
+                        
+                        
 					}
 					else {
-						(parent->lambda_min) = (((parent->parent)->p_end).lambda);
-						(parent->lambda_max) = (((parent->parent)->p_start).lambda);
+                        
+                        if((((parent->parent)->p_start).lambda.value) * (((parent->parent)->p_end).lambda.value) > 0.0){
+                            
+                            (parent->lambda_min) = (((parent->parent)->p_end).lambda);
+                            (parent->lambda_max) = (((parent->parent)->p_start).lambda);
+                            
+                        }else{
+                            
+                            (parent->lambda_min) = (((parent->parent)->p_start).lambda);
+                            (parent->lambda_max) = (((parent->parent)->p_end).lambda);
+   
+                            
+                        }
+                        
 					}
 					if ((((parent->parent)->p_start).phi) > (((parent->parent)->p_end).phi)) {
 						(parent->phi_max) = (((parent->parent)->p_start).phi);

@@ -11585,7 +11585,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 					(((parent->parent)->p_start).lambda).normalize_pm_pi();
 					(((parent->parent)->p_end).phi).normalize_pm_pi();
 					(((parent->parent)->p_end).lambda).normalize_pm_pi();
-					//I assign the values of lambda_min and lamba_max, phi_min and phi_max from the vluaes of ((parent->parent)->p_start).lambda, ... ((parent->parent)->p_end).phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc.
+					//I assign the values of lambda_min and lamba_max, phi_min and phi_max from the values of ((parent->parent)->p_start).lambda, ... ((parent->parent)->p_end).phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc. While I do this, I take care of the case where the selection rectangle may encompass the Greenwich antimeridian 
 					if ((((parent->parent)->p_start).lambda) > (((parent->parent)->p_end).lambda)) {
                         
                         if((((parent->parent)->p_start).lambda.value) * (((parent->parent)->p_end).lambda.value) > 0.0){

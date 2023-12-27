@@ -32,7 +32,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
 
  ********** THINGS TO ADD/IMPROVE ************
- - readme file 
+ - readme file
  - add popup when mouse on button
  - propose to donate to the user
  - add loader
@@ -284,7 +284,8 @@ bool MyApp::OnInit() {
 	wxDisplay display;
 	wxCommandEvent dummy;
     wxFrame* dummy_frame;
-	//this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
+    QuestionFrame< CloseFrame<ListFrame>, UnsetIdling<ListFrame> >* disclaimer;
+    //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
 	//    Chrono current_time, dawn, dusk;
 
 	wxInitAllImageHandlers();
@@ -476,8 +477,17 @@ bool MyApp::OnInit() {
 	//    default_projection.read_from_file(String("default projection"), (wxGetApp().path_file_init), String(""));
 
 
+
 	list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
 	list_frame->Show(true);
+
+    disclaimer = new QuestionFrame< CloseFrame<ListFrame>, UnsetIdling<ListFrame> >(NULL, list_frame->close, String("Yes"), list_frame->unset_idling, String("No"),
+        "",
+        "Do you really want to remove this route?",
+        wxDefaultPosition,
+        wxDefaultSize,
+        String(""));
+    disclaimer ->Show(true);
 
 
 

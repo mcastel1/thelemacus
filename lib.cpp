@@ -14887,6 +14887,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
     
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);
+    close = new CloseFrame<ListFrame>(this);
     (*unset_idling)();
     
     ask_remove_related_sight = new AskRemoveRelatedSight(this);

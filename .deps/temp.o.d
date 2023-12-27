@@ -227,6 +227,7 @@ temp.o: /Users/macbookpro/Documents/sight_reduction_program/main.cpp \
   /usr/local/include/wx-3.1/wx/osx/filedlg.h \
   /usr/local/include/wx-3.1/wx/mdi.h \
   /usr/local/include/wx-3.1/wx/osx/mdi.h \
+  /usr/local/include/wx-3.1/wx/artprov.h \
   /usr/local/include/gsl/gsl_rng.h /usr/local/include/gsl/gsl_types.h \
   /usr/local/include/gsl/gsl_errno.h /usr/local/include/gsl/gsl_inline.h \
   /usr/local/include/gsl/gsl_blas.h /usr/local/include/gsl/gsl_vector.h \
@@ -948,6 +949,10 @@ temp.o: /Users/macbookpro/Documents/sight_reduction_program/main.cpp \
   /usr/local/include/boost/dll/detail/elf_info.hpp \
   /usr/local/include/boost/dll/detail/macho_info.hpp \
   /usr/local/include/boost/dll/runtime_symbol_info.hpp \
+  /usr/local/include/boost/filesystem.hpp \
+  /usr/local/include/boost/filesystem/convenience.hpp \
+  /usr/local/include/boost/filesystem/string_file.hpp \
+  /usr/local/include/boost/filesystem/fstream.hpp \
   /usr/local/include/boost/date_time.hpp \
   /usr/local/include/boost/date_time/local_time/local_time.hpp \
   /usr/local/include/boost/date_time/posix_time/posix_time.hpp \
@@ -1125,5 +1130,6 @@ temp.o: /Users/macbookpro/Documents/sight_reduction_program/main.cpp \
   /usr/local/include/wx-3.1/wx/file.h \
   /usr/local/include/wx-3.1/wx/convauto.h \
   /usr/local/include/wx-3.1/wx/ffile.h \
+  /usr/local/include/wx-3.1/wx/dcgraph.h \
   /Users/macbookpro/Documents/sight_reduction_program/constants.h \
   /Users/macbookpro/Documents/sight_reduction_program/lib.cpp

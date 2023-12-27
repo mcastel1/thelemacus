@@ -32,6 +32,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
 
  ********** THINGS TO ADD/IMPROVE ************
+ - add loader
  - when transporting a sight allow the user to enter speed and time instead of distance
  - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
  - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
@@ -52,6 +53,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
+- fix trash icon
  - when you write Data to file, write also recent items 
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
  - listcontrol_sights etc are not resized to their minimum sizes 

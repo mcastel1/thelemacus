@@ -333,7 +333,7 @@ public:
 template<typename F_A, typename F_B> class QuestionFrame: public wxFrame{
     
 public:
-    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
+    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
     
     //the non-GUI object connected to the GUI object MessageFrame
     wxPanel *panel;

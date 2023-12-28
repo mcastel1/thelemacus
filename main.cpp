@@ -478,6 +478,7 @@ bool MyApp::OnInit() {
     disclaimer = new QuestionFrame< ShowAll , CloseFrame<ListFrame> >(NULL, show_all, String("Yes"), (list_frame->close), String("No"),
         "",
         "Do you really want to use this app?",
+        wxGetApp().path_file_app_icon,
         wxDefaultPosition,
         wxDefaultSize,
         String(""));

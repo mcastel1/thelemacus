@@ -14710,7 +14710,7 @@ template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event) {
 //}
 
 
-template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, const wxString& title, const wxString& message, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
+template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
 
 	wxDisplay display;
 	wxRect rectangle;
@@ -14754,7 +14754,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 
 	image = new StaticBitmap(
 		panel,
-		wxGetApp().path_file_question_icon,
+		path_icon_file,
 		wxSize(
 			((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value),
 			((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value)
@@ -14877,7 +14877,7 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
 
 			if (((control->GetForegroundColour()) != (wxGetApp().error_color))) {
 
-				question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, answer_y, f_no, answer_n, title.value, question.value, wxDefaultPosition, wxDefaultSize, String(""));
+				question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, answer_y, f_no, answer_n, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
 				question_frame->Show(true);
 				question_frame->Raise();
 
@@ -14891,7 +14891,7 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
 		else {
 			//this question has not been prompted from a control
 
-			question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, answer_y, f_no, answer_n, title.value, question.value, wxDefaultPosition, wxDefaultSize, String(""));
+			question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, answer_y, f_no, answer_n, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
 			question_frame->Show(true);
 			question_frame->Raise();
 
@@ -15828,6 +15828,7 @@ template<class E> void ListFrame::OnPressDeleteRoute(E& event) {
 		ask_remove_related_sight, String("Yes"), unset_idling, String("No"),
 		"",
 		"Do you really want to remove this route?",
+        wxGetApp().path_file_question_icon,
 		wxDefaultPosition,
 		wxDefaultSize,
 		String(""));

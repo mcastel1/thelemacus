@@ -7780,7 +7780,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 	FileR file_n_line, file_coastline_data_blocked;
 	Position p_temp;
 	string data, line;
-	stringstream ins;
+	stringstream ins, message_dialog;
 	int i, j;
 	string::size_type sz;
 	//n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
@@ -7788,7 +7788,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 	unsigned int l/*, n = 0*/;
 	char* buffer = NULL;
 	size_t pos_beg, pos_end;
-	double lambda_temp, phi_temp;
+	double lambda_temp, phi_temp, percentage_dialog;
     wxProgressDialog* dialog;
 
 
@@ -7905,7 +7905,10 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
 			}
 
-            dialog->Update( 100.0 * ((double)i)/(((double)(n_line.size()))/360.0) );
+            percentage_dialog = 100.0 * ((double)i)/(((double)(n_line.size()))/360.0);
+            message_dialog.str("");
+            message_dialog << "Loading charts... " << ((int)percentage_dialog) << "%";
+            dialog->Update( percentage_dialog, wxString(message_dialog.str().c_str()) );
 
 			i++;
 

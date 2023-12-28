@@ -12884,6 +12884,24 @@ template<class F> template <class T> void ShowFrame<F>::operator()(T& event) {
 
 }
 
+ShowAll::ShowAll(ListFrame* frame_in) {
+
+    frame = frame_in;
+
+}
+
+//show ListFrame and all ChartFrames
+template <class T> void ShowAll::operator()(T& event) {
+    
+    ShowFrame<ListFrame>* show_frame;
+    show_frame = new ShowFrame<ListFrame>(frame);
+
+    (*show_frame)(event);
+    wxGetApp().ShowChart(event);
+    
+    event.Skip(true);
+
+}
 
 template<class F> DestroyFrame<F>::DestroyFrame(F* frame_in) {
 

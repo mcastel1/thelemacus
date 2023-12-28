@@ -282,10 +282,10 @@ bool MyApp::OnInit() {
 	String projection, temp;
 	//obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
 	wxDisplay display;
-	wxCommandEvent dummy;
     wxFrame* dummy_frame;
     ShowFrame<ListFrame> * show_list_frame;
-    QuestionFrame< ShowFrame<ListFrame>, CloseFrame<ListFrame> >* disclaimer;
+    ShowAll* show_all;
+    QuestionFrame< ShowAll, CloseFrame<ListFrame> >* disclaimer;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
 	//    Chrono current_time, dawn, dusk;
 
@@ -320,19 +320,12 @@ bool MyApp::OnInit() {
 
 #endif
 
-
-
-
-
-
-
 	settings = new wxSystemSettings();
 	timer = new wxTimer();
 
 	wxImage::AddHandler(new wxPNGHandler);
 	//    wxImage::AddHandler(new wxBMPHandler);
 
-    
     dummy_frame = new wxFrame();
     display.GetFromWindow(dummy_frame);
     dummy_frame->~wxFrame();
@@ -480,11 +473,9 @@ bool MyApp::OnInit() {
 
 
 	list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
-    show_list_frame = new ShowFrame<ListFrame>(list_frame);
+    show_all = new ShowAll(list_frame);
 
-    
-    
-    disclaimer = new QuestionFrame< ShowFrame<ListFrame> , CloseFrame<ListFrame> >(NULL, show_list_frame, String("Yes"), list_frame->close, String("No"),
+    disclaimer = new QuestionFrame< ShowAll , CloseFrame<ListFrame> >(NULL, show_all, String("Yes"), (list_frame->close), String("No"),
         "",
         "Do you really want to use this app?",
         wxDefaultPosition,
@@ -522,7 +513,6 @@ bool MyApp::OnInit() {
 
 	}
 
-	ShowChart(dummy);
 
 	//bring either of these wxFrames to front
 	//    list_frame->Raise();

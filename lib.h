@@ -39,6 +39,7 @@ template<class P> class StringField;
 class MyApp;
 template<class F> class CloseFrame;
 template<class F> class ShowFrame;
+class ShowAll;
 template<class F_A, class F_B> class QuestionFrame;
 class ListFrame;
 class SightFrame;
@@ -992,6 +993,18 @@ public:
     //the frame to be closed
     F* frame;
     ShowFrame(F*);
+    
+    template<class T> void operator()(T&);
+    
+};
+
+//class which defines a functor which shows ListFrame and all ChartFrames
+class ShowAll{
+    
+public:
+    
+    ListFrame* frame;
+    ShowAll(ListFrame*);
     
     template<class T> void operator()(T&);
     

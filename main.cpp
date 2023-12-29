@@ -59,7 +59,6 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - when you write Data to file, write also recent items
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
  - listcontrol_sights etc are not resized to their minimum sizes 
- - fix root_directory on WIN32
  - check that WXK_PLUS does not depend on the computer
 
  ---
@@ -257,13 +256,9 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 #endif
 #ifdef _WIN32
-
-	//value = "\"C:\\wxWidgets-3.2.3\\samples\\minimal\\vc_x64_mswud\""
-//	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '\"'), root_directory.value.end());
-//	root_directory.value.erase(std::remove(root_directory.value.begin(), root_directory.value.end(), '"'), root_directory.value.end());
-
-//    root_directory = String("Z:/");
-
+	//I am on WIN32 operating system: I remove the '\"'that is present in root_directory at the beginning and at the end to obatin a root_directory that can be used as a path
+    
+	(root_directory.value) = (root_directory.value.substr(1, root_directory.value.size() - 2));
 
 #endif
 

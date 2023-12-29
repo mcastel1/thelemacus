@@ -56,7 +56,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- - when you write Data to file, write also recent items 
+ - when you write Data to file, write also recent items
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
  - listcontrol_sights etc are not resized to their minimum sizes 
  - fix root_directory on WIN32
@@ -65,7 +65,6 @@ To run on WIN32, the resource file is resource_file_windows.rc
  ---
 
  for MSW:
- - check whether use of Direct2D for WIN32 speeds up the plot 
  - when you open sample_sight.nav from resouces, you open it in R mode -> when you try to write in it you will get an error
  - center name of file in top bar of ListFrame
  - write the WIN32 part of void MyApp::OnTimer

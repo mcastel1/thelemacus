@@ -27,6 +27,7 @@ position_icon RCDATA "Z:/Contents/Resources/Images/Light/position_icon.png"
 question_icon RCDATA "Z:/Contents/Resources/Images/Light/question_icon.png"
 trash_icon RCDATA "Z:/Contents/Resources/Images/Light/trash_icon.png"
 warning_icon RCDATA "Z:/Contents/Resources/Images/Light/warning_icon.png"
+jolly_rogers RCDATA "Z:/Contents/Resources/Images/Light/jolly_rogers.png"
 
 
 // this icon is used with wxFrame::SetIcon()

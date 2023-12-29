@@ -59,6 +59,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - when you write Data to file, write also recent items
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
  - listcontrol_sights etc are not resized to their minimum sizes 
+ - fix root_directory on WIN32
  - check that WXK_PLUS does not depend on the computer
 
  ---
@@ -339,7 +340,7 @@ bool MyApp::OnInit() {
 		//the system is in light mode
 		image_directory = root_directory.append(String("Contents/Resources/Images/Light/"));
 	}
-	default_open_directory = data_directory;
+	default_open_directory = root_directory;
 
 	//read the file names and prenend to the file name the respective directory where the file is located -> obtain the file path
 	//files in code directory

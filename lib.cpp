@@ -11824,7 +11824,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 							//re-draw the chart
 							(this->*Draw)();
 							Refresh();
-							FitAll();
+//							FitAll();
 
 						}
 
@@ -11841,7 +11841,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						//re-draw the chart
 						(this->*Draw)();
 						Refresh();
-						FitAll();
+//						FitAll();
 
 					}
 

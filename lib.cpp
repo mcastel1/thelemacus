@@ -11357,6 +11357,9 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 		//the left button of the mouse has been lifted at the end of a drag
 
 		mouse_dragging = false;
+        //given that the mosue drag has ended, I re-bind OnMoueMOvement to the mouse motion event
+        Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), this);
+
 
 		position_end_drag = wxGetMousePosition();
 		(this->*ScreenToGeo)(position_start_drag, &geo_end_drag);
@@ -11745,6 +11748,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 			if (!mouse_dragging) {
 				//in this case, the mouse has started dragging: If I am dragging a Route, I save the starting point of this Route into route_position_start_drag
+
+                //during the mouse drag, I disable DrawPanel::OnMouseMovement
+                Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
 
 				if (((parent->parent)->highlighted_route) != -1) {
 					//set route_position_start_drag to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)

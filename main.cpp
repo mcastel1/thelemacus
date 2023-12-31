@@ -477,6 +477,7 @@ bool MyApp::OnInit() {
         wxDefaultSize,
         String(""));
     disclaimer->Show(true);
+    disclaimer->Raise();
 //    list_frame->Show(true);
 
 

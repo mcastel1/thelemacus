@@ -20,6 +20,14 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  notes:
  =======
+ - to set up everything on Windows 10: 
+     1. Istall MinGW
+     2. Install Visual Studio
+     3. Istall wxWidgets
+     4. Open wx_vc17.sln with VIsual studio, set everywhere multi-threaded debug (not dll) and build
+     5. Open wxWidgets/sample/minimal/ -> set everything to Multi Threaded Debug
+     6. Download and run gsl-1.8.exe
+     7. Download boost library boost_1_84_0.zip fow Windows, then do 'bootstrap' and 'b2 variant=debug link=static'
  - on MSW, if you allocate 13387 MB of Base Memory, it runs by clicking on the .exe and with coastlines = y
  - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging
  - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus

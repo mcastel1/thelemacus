@@ -28,7 +28,8 @@ To run on WIN32, the resource file is resource_file_windows.rc
      5. Open wxWidgets/sample/minimal/ -> set everything to Multi Threaded Debug
      6. Download and run gsl
      7. Download boost library boost_1_83_0.zip from https://sourceforge.net/projects/boost/files/boost/1.83.0/boost_1_83_0.zip/download?use_mirror=altushost-swe&use_mirror=altushost-swe&r=https%3A%2F%2Fsourceforge.net%2Fp%2Fboost%2Factivity%2F%3Fpage%3D0%26limit%3D100 fow Windows, then do 'bootstrap' and 'b2 variant=debug link=static runtime-link=static runtime-debugging=on'
-8. In Visual studio -> project -> minimal properties -> general -> additional include directories, add C:\boost_1_83_0 
+     8. In Visual studio -> project -> minimal properties -> general -> additional include directories, add C:\boost_1_83_0 
+     9.  In Visual studio -> project ->  properties -> linker -> general -> additional library directories, add  C:\boost_1_83_0\stage\lib 
  - on MSW, if you allocate 13387 MB of Base Memory, it runs by clicking on the .exe and with coastlines = y
  - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging
  - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus

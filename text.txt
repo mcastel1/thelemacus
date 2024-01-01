@@ -1,1 +1,1 @@
- C:\boost_1_83_0\stage\lib
+ C:\gnu-gsl-for-windows-master\lib\x64\Debug\gsl.lib

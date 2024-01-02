@@ -7815,9 +7815,9 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 		ins >> (n_line[i]);
 		//        cout << "\nn_line[" << i << "] = " << n_line[i];
         
-        pressed_cancel = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
+        abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
         
-        if(pressed_cancel){
+        if(abort){
             //(wxGetApp().progress_dialog)->Update() has returned false -> the user has pressed the cancel button in (wxGetApp().progress_dialog) -> close the app
             break;
         }
@@ -7829,13 +7829,13 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
 
 	 //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
-	if ((!pressed_cancel) && (show_coastlines == Answer('y', String("")))) {
+	if ((!abort) && (show_coastlines == Answer('y', String("")))) {
 
 		file_coastline_data_blocked.open(String(""));
         cout << prefix.value << "Reading file ...\n";
 
 		i = 0;
-        pressed_cancel = false;
+        abort = false;
 		while (/*here, to be safe, I stop the while() if I am not sure that n_line will be called with a valid value*/(360 * i + 360 < (n_line.size())) && (!((file_coastline_data_blocked.value)->eof()))) {
 
 			p_coastline.resize(i + 1);
@@ -7895,9 +7895,9 @@ void ListFrame::GetAllCoastLineData(String prefix) {
             message_dialog.str("");
             message_dialog << "Loading charts... " << ((int)percentage_dialog) << "%";
             
-            pressed_cancel = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
+            abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
             
-            if(pressed_cancel){
+            if(abort){
                 //(wxGetApp().progress_dialog)->Update() has returned false -> the user has pressed the cancel button in (wxGetApp().progress_dialog) -> close the app
                 break;
             }
@@ -7906,7 +7906,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
 		}
         
-        if((!pressed_cancel)){
+        if((!abort)){
                         
             (wxGetApp().progress_dialog)->Update(max_dialog);
             cout << prefix.value << "... done.\n";
@@ -14938,7 +14938,7 @@ ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] c
     
     GetAllCoastLineData(String(""));
     
-    if(!pressed_cancel){
+    if(!abort){
         //the user has not pressed cancel while charts were loading -> I proceed
         
         //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display

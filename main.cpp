@@ -293,7 +293,6 @@ bool MyApp::OnInit() {
 	//obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
 	wxDisplay display;
     wxFrame* dummy_frame;
-    ShowFrame<ListFrame> * show_list_frame;
     ShowAll* show_all;
     QuestionFrame< ShowAll, CloseFrame<ListFrame> >* disclaimer;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
@@ -479,7 +478,7 @@ bool MyApp::OnInit() {
 	dark_mode = (settings->GetAppearance()).IsDark();
 
 	list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
-    if(!(list_frame->pressed_cancel)){
+    if(!(list_frame->abort)){
         //the user has not pressed cancel while charts were loading -> I proceed and start the app
         
         show_all = new ShowAll(list_frame);

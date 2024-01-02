@@ -478,71 +478,80 @@ bool MyApp::OnInit() {
 	highlight_color = color_selected_item;
 	dark_mode = (settings->GetAppearance()).IsDark();
 
-	//    default_projection.read_from_file(String("default projection"), (wxGetApp().path_file_init), String(""));
-
-
-
 	list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
-    show_all = new ShowAll(list_frame);
-
-    disclaimer = new QuestionFrame< ShowAll , CloseFrame<ListFrame> >(NULL, show_all, String("Yes,\n I want to be part of history"), (list_frame->close), String("No,\n I want to stick to my pointless life"),
-        "",
-        "On December 16, 1719, Captain J. Cook perceived the first Australian aborigens from HMS Endeavour, off the coast of Perth.\n He was on a mission commissioned by King John III, designed to discover new commercial routes, and new worlds.\n His voyage had been made possible by the novel, state-of-the art astronomical positioning methods\n based on the marine chronometer built by J. Harrison, which was on board the Endeavour. \nThe reliability of the positioning method allowed the british realm to trace and map the coasts of new, unknonw lands, \nand paved the way to a new way to sail which lasted until the invention of GPS.\n With this application, you will bring back to life astronomical positioning methods, in a way that no other existing application allows for, and entering in a novel historical path. ",
-        wxGetApp().path_file_app_icon,
-        wxDefaultPosition,
-        wxDefaultSize,
-        String(""));
-    disclaimer->Show(true);
-    disclaimer->Raise();
-//    list_frame->Show(true);
-
-
-
-
-	//allocate and show the chart frames
-	n_chart_frames.read_from_file_to(String("number chart frames"), (wxGetApp().path_file_init), String("R"), String(""));
-	(list_frame->chart_frames).resize(n_chart_frames.value);
-	for (i = 0; i < (list_frame->chart_frames).size(); i++) {
-
-		projection = String((((i % 2) == 0) ? "Mercator" : "3D"));
-
-		//open a Mercator projection for even is and a 3D projection for odd is
-		s.str("");
-		s << "Chart #" << i + 1 << " - " << projection.value << " projection";
-
-		string dummy = s.str();
-
-		(list_frame->chart_frames)[i] = new ChartFrame(
-			list_frame,
-			projection,
-			s.str(),
-			wxDefaultPosition,
-			wxDefaultSize,
-			String("")
-		);
-		//        ((list_frame->chart_frames)[i])->Show(true);
-		//        ((list_frame->chart_frames)[i])->Raise();
-
-	}
-
-
-	//bring either of these wxFrames to front
-	//    list_frame->Raise();
-
-	//fore/background color is determined from the default background color of extract_colors
-	foreground_color = Color(list_frame->extract_colors->GetForegroundColour());
-	background_color = Color(list_frame->extract_colors->GetBackgroundColour());
-
-
-	//extracts the default font and creates a error_font, obtained from default font by setting its weight to wxFONTWEIGHT_BOLD
-	default_font = (list_frame->extract_colors->GetFont());
-	error_font = (list_frame->extract_colors->GetFont());
-	highlight_font = default_font;
-	error_font.SetWeight(wxFONTWEIGHT_BOLD);
-
-	timer->Start(/*time_check is converted in milliseconds, because Start() takes its first argument i milliseconds*/((time_check.h) * 60.0 * 60.0 + (time_check.m) * 60.0 + (time_check.s)) * 1000.0, wxTIMER_CONTINUOUS);
-
-
-	return true;
+    if(!(list_frame->pressed_cancel)){
+        //the user has not pressed cancel while charts were loading -> I proceed
+        
+        show_all = new ShowAll(list_frame);
+        disclaimer = new QuestionFrame< ShowAll , CloseFrame<ListFrame> >(NULL, show_all, String("Yes,\n I want to be part of history"), (list_frame->close), String("No,\n I want to stick to my pointless life"),
+                                                                          "",
+                                                                          "On December 16, 1719, Captain J. Cook perceived the first Australian aborigens from HMS Endeavour, off the coast of Perth.\n He was on a mission commissioned by King John III, designed to discover new commercial routes, and new worlds.\n His voyage had been made possible by the novel, state-of-the art astronomical positioning methods\n based on the marine chronometer built by J. Harrison, which was on board the Endeavour. \nThe reliability of the positioning method allowed the british realm to trace and map the coasts of new, unknonw lands, \nand paved the way to a new way to sail which lasted until the invention of GPS.\n With this application, you will bring back to life astronomical positioning methods, in a way that no other existing application allows for, and entering in a novel historical path. ",
+                                                                          wxGetApp().path_file_app_icon,
+                                                                          wxDefaultPosition,
+                                                                          wxDefaultSize,
+                                                                          String(""));
+        disclaimer->Show(true);
+        disclaimer->Raise();
+        //    list_frame->Show(true);
+        
+        
+        
+        
+        //allocate and show the chart frames
+        n_chart_frames.read_from_file_to(String("number chart frames"), (wxGetApp().path_file_init), String("R"), String(""));
+        (list_frame->chart_frames).resize(n_chart_frames.value);
+        for (i = 0; i < (list_frame->chart_frames).size(); i++) {
+            
+            projection = String((((i % 2) == 0) ? "Mercator" : "3D"));
+            
+            //open a Mercator projection for even is and a 3D projection for odd is
+            s.str("");
+            s << "Chart #" << i + 1 << " - " << projection.value << " projection";
+            
+            string dummy = s.str();
+            
+            (list_frame->chart_frames)[i] = new ChartFrame(
+                                                           list_frame,
+                                                           projection,
+                                                           s.str(),
+                                                           wxDefaultPosition,
+                                                           wxDefaultSize,
+                                                           String("")
+                                                           );
+            //        ((list_frame->chart_frames)[i])->Show(true);
+            //        ((list_frame->chart_frames)[i])->Raise();
+            
+        }
+        
+        
+        //bring either of these wxFrames to front
+        //    list_frame->Raise();
+        
+        //fore/background color is determined from the default background color of extract_colors
+        foreground_color = Color(list_frame->extract_colors->GetForegroundColour());
+        background_color = Color(list_frame->extract_colors->GetBackgroundColour());
+        
+        
+        //extracts the default font and creates a error_font, obtained from default font by setting its weight to wxFONTWEIGHT_BOLD
+        default_font = (list_frame->extract_colors->GetFont());
+        error_font = (list_frame->extract_colors->GetFont());
+        highlight_font = default_font;
+        error_font.SetWeight(wxFONTWEIGHT_BOLD);
+        
+        timer->Start(/*time_check is converted in milliseconds, because Start() takes its first argument i milliseconds*/((time_check.h) * 60.0 * 60.0 + (time_check.m) * 60.0 + (time_check.s)) * 1000.0, wxTIMER_CONTINUOUS);
+        
+        
+        return true;
+        
+    }else{
+        
+        wxCommandEvent dummy;
+        
+        (*(list_frame->close))(dummy);
+        
+        return false;
+        
+    }
+    
 
 }

@@ -1,1 +1,1 @@
- C:\gnu-gsl-for-windows-master\lib\x64\Debug\gsl.lib
+ C:\wxWidgets-3.2.4_debug\build\msw\wx_vc17.sln

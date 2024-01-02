@@ -21,10 +21,10 @@ To run on WIN32, the resource file is resource_file_windows.rc
  notes:
  =======
  - to set up everything on Windows 10: 
-     1. Istall MinGW
-     2. Install Visual Studio
-     3. Istall wxWidgets
-     4. Open wx_vc17.sln with VIsual studio, set everywhere multi-threaded debug (not dll) and build
+     1. Istall MinGW : download mingw-get-setup from https://sourceforge.net/projects/mingw/
+     2. Install Visual Studio: download VisualStudioSetup from https://visualstudio.microsoft.com/downloads/
+     3. Istall wxWidgets: download wxMSW-3.2.4-Setup.exe from https://wxwidgets.org/downloads/ and install it in, say,  C:\wxWidgets-3.2.4_debug\
+     4. Open  C:\wxWidgets-3.2.4_debug\build\msw\wx_vc17.sln with Visual studio, set everywhere that the mode is multi-threaded debug (not dll) and build (you may get an error the first time you build, just build multiple times and the error will disappear)
      5. Open wxWidgets/sample/minimal/ -> set everything to Multi Threaded Debug
      6. Download the whole archive code from https://github.com/ahmadyan/gnu-gsl-for-windows/tree/master/build.vc11  , open  C:\gnu-gsl-for-windows-master\build.vc11\gsl.lib.sln with Visual Studio, set everything to Multi-Threaded Debug -> Build -> Add  C:\gnu-gsl-for-windows-master\lib\x64\Debug\gsl.lib and  C:\gnu-gsl-for-windows-master\lib\x64\Debug\cblas.lib to VIsual Studio -> project  -> properties -> configuration properties -> linker -> input -> additional dependencies
      7. Download boost library boost_1_83_0.zip from https://sourceforge.net/projects/boost/files/boost/1.83.0/boost_1_83_0.zip/download?use_mirror=altushost-swe&use_mirror=altushost-swe&r=https%3A%2F%2Fsourceforge.net%2Fp%2Fboost%2Factivity%2F%3Fpage%3D0%26limit%3D100 fow Windows, then do 'bootstrap' and 'b2 variant=debug link=static runtime-link=static runtime-debugging=on'

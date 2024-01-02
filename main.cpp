@@ -480,7 +480,7 @@ bool MyApp::OnInit() {
 
 	list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
     if(!(list_frame->pressed_cancel)){
-        //the user has not pressed cancel while charts were loading -> I proceed
+        //the user has not pressed cancel while charts were loading -> I proceed and start the app
         
         show_all = new ShowAll(list_frame);
         disclaimer = new QuestionFrame< ShowAll , CloseFrame<ListFrame> >(NULL, show_all, String("Yes,\n I want to be part of history"), (list_frame->close), String("No,\n I want to stick to my pointless life"),
@@ -544,6 +544,7 @@ bool MyApp::OnInit() {
         return true;
         
     }else{
+        //the user pressed cancel -> I quit the app
         
         wxCommandEvent dummy;
         

@@ -11127,112 +11127,107 @@ bool DrawPanel::GetMouseGeoPosition(Position* p) {
 }
 
 void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
-
-	wxPoint q;
-	stringstream s;
-	int i, j, l;
-
-	//    cout << "\nMouse moved";
-	//    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
-	//            cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
-	//    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
     
-    if((!mouse_dragging)){
-        //the mouse is not being dragged
+    wxPoint q;
+    stringstream s;
+    int i, j, l;
+    
+    //    cout << "\nMouse moved";
+    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
+    //    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
+    //    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
+    
+    //update the instantaneous position of the mouse on the chart
+    if (GetMouseGeoPosition(&((parent->parent)->p_now))) {
+        //the mouse has a screen position corresponding to a geographic position -> I write it into s, otherwise s is left empty
         
-        //update the instantaneous position of the mouse on the chart
-        if (GetMouseGeoPosition(&((parent->parent)->p_now))) {
-            //the mouse has a screen position corresponding to a geographic position -> I write it into s, otherwise s is left empty
-            
-            (parent->text_position_now)->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
-        }
-        else {
-            (parent->text_position_now)->SetLabel(wxString(""));
-        }
+        (parent->text_position_now)->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
+    }
+    else {
+        (parent->text_position_now)->SetLabel(wxString(""));
+    }
+    
+    if (((parent->parent)->selection_rectangle)) {
+        //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
         
-        if (((parent->parent)->selection_rectangle)) {
-            //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
-
-            //        text_position_end->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
-            //        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
+        //        text_position_end->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
+        //        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
+        
+        ShowCoordinates((parent->parent)->p_now, text_position_end);
+        
+        //I Refresh the current DrawPanel to draw the selection_rectangle in there
+        Refresh();
+        
+    }else{
+        //If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
+        
+        int highlighted_route_old, highlighted_position_old;
+        
+        
+        //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
+        position_draw_panel_now = position_screen_now - position_draw_panel;
+        
+        for (highlighted_route_old = ((parent->parent)->highlighted_route), ((parent->parent)->highlighted_route) = -1, i = 0;
+             i < (((parent->parent)->data)->route_list).size();
+             i++) {
             
-            ShowCoordinates((parent->parent)->p_now, text_position_end);
+            //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
+            //when only a fraction of the Routes is Drawn, this will create a problem ---
+            ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
+            //when only a fraction of the Routes is Drawn, this will create a problem ---
             
-            //I Refresh the current DrawPanel to draw the selection_rectangle in there
-            Refresh();
-            
-        }else{
-            //If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
-            
-            int highlighted_route_old, highlighted_position_old;
+            if ((((((parent->parent)->data)->route_list)[i]).related_sight).value != -1) {
+                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[i]).related_sight).value, wxGetApp().background_color);
+            }
             
             
-            //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
-            position_draw_panel_now = position_screen_now - position_draw_panel;
             
-            for (highlighted_route_old = ((parent->parent)->highlighted_route), ((parent->parent)->highlighted_route) = -1, i = 0;
-                 i < (((parent->parent)->data)->route_list).size();
-                 i++) {
+            for (j = 0; j < (points_route_list[i]).size(); j++) {
                 
-                //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
-                //when only a fraction of the Routes is Drawn, this will create a problem ---
-                ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
-                //when only a fraction of the Routes is Drawn, this will create a problem ---
-                
-                if ((((((parent->parent)->data)->route_list)[i]).related_sight).value != -1) {
-                    ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[i]).related_sight).value, wxGetApp().background_color);
-                }
-                
-                
-                
-                for (j = 0; j < (points_route_list[i]).size(); j++) {
+                for (l = 0; l < ((int)((points_route_list[i][j]).size())) - 1; l++) {
                     
-                    for (l = 0; l < ((int)((points_route_list[i][j]).size())) - 1; l++) {
+                    //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
+                    
+                    if (/*to recognize that the mouse is hovering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ (((points_route_list[i][j][l]).x) != ((points_route_list[i][j][l + 1]).x))
                         
-                        //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
+                        &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
                         
-                        if (/*to recognize that the mouse is hovering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ (((points_route_list[i][j][l]).x) != ((points_route_list[i][j][l + 1]).x))
-                            
-                            &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
-                            
-                            (((((points_route_list[i][j][l]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l + 1]).x))) ||
-                             
-                             ((((points_route_list[i][j][l + 1]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l]).x))))
-                            
-                            &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
-                            
-                            (
-                             fabs(
-                                  (position_draw_panel_now.y) -
-                                  (((points_route_list[i][j][l]).y) + ((double)(((points_route_list[i][j][l + 1]).y) - ((points_route_list[i][j][l]).y))) / ((double)(((points_route_list[i][j][l + 1]).x) - ((points_route_list[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x))))
-                                  )
-                             
-                             <= (thickness_route_selection_over_length_screen.value) * ((double)((wxGetApp().rectangle_display).GetWidth())) / 2.0
-                             )
-                            ) {
-                            //the mouse is overing over a Route
-                            
-                            
-                            //sets the highlighted route to i, so as to use highlighted_route in other functions
-                            ((parent->parent)->highlighted_route) = i;
-                            
-                            parent->parent->listcontrol_routes->EnsureVisible(i);
-                            if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
-                                parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->data->route_list)[i]).related_sight.value);
-                            }
-                            
-                            //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                            ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-                            if ((((((parent->parent)->data)->route_list)[i]).related_sight).value != -1) {
-                                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[i]).related_sight).value, (wxGetApp().color_selected_item));
-                            }
-                            
-                            
-                            // quit the loops over l ad j
-                            break;
-                            break;
-                            
+                        (((((points_route_list[i][j][l]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l + 1]).x))) ||
+                         
+                         ((((points_route_list[i][j][l + 1]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l]).x))))
+                        
+                        &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
+                        
+                        (
+                         fabs(
+                              (position_draw_panel_now.y) -
+                              (((points_route_list[i][j][l]).y) + ((double)(((points_route_list[i][j][l + 1]).y) - ((points_route_list[i][j][l]).y))) / ((double)(((points_route_list[i][j][l + 1]).x) - ((points_route_list[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x))))
+                              )
+                         
+                         <= (thickness_route_selection_over_length_screen.value) * ((double)((wxGetApp().rectangle_display).GetWidth())) / 2.0
+                         )
+                        ) {
+                        //the mouse is overing over a Route
+                        
+                        
+                        //sets the highlighted route to i, so as to use highlighted_route in other functions
+                        ((parent->parent)->highlighted_route) = i;
+                        
+                        parent->parent->listcontrol_routes->EnsureVisible(i);
+                        if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
+                            parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->data->route_list)[i]).related_sight.value);
                         }
+                        
+                        //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
+                        ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
+                        if ((((((parent->parent)->data)->route_list)[i]).related_sight).value != -1) {
+                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[i]).related_sight).value, (wxGetApp().color_selected_item));
+                        }
+                        
+                        
+                        // quit the loops over l ad j
+                        break;
+                        break;
                         
                     }
                     
@@ -11240,67 +11235,67 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 
             }
             
+        }
+        
+        
+        
+        if ((parent->parent->highlighted_route) == -1) {
+            //no Route is highlighted -> in listcontrol_sights and listcontrol_routes go back to showing the first respective items
             
-            
-            if ((parent->parent->highlighted_route) == -1) {
-                //no Route is highlighted -> in listcontrol_sights and listcontrol_routes go back to showing the first respective items
+            if((parent->parent->listcontrol_routes->GetItemCount()) > 0){
                 
-                if((parent->parent->listcontrol_routes->GetItemCount()) > 0){
-                    
-                    parent->parent->listcontrol_routes->EnsureVisible(0);
-                    
-                }
-                
-                if((parent->parent->listcontrol_sights->GetItemCount()) > 0){
-                    
-                    parent->parent->listcontrol_sights->EnsureVisible(0);
-                    
-                }
+                parent->parent->listcontrol_routes->EnsureVisible(0);
                 
             }
             
-            
-            //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
-            for (highlighted_position_old = (parent->parent->highlighted_position), ((parent->parent)->highlighted_position) = -1, i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
+            if((parent->parent->listcontrol_sights->GetItemCount()) > 0){
                 
-                GeoToScreen((((parent->parent)->data)->position_list)[i], &q);
-                
-                if (sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
-                    4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth())) {
-                    //the mouse is over a position
-                    
-                    //sets the highlighted position to i, so as to use highlighted_position in other functions
-                    ((parent->parent)->highlighted_position) = i;
-                    
-                    ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-                    parent->parent->listcontrol_positions->EnsureVisible(i);
-                    
-                }
-                else {
-                    //no Position is highlighted -> reset the background color in listcontrol positions, and in listcontrol_positions go back to showing the first  item
-                    
-                    ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxGetApp().background_color);
-                    parent->parent->listcontrol_positions->EnsureVisible(0);
-                    
-                }
+                parent->parent->listcontrol_sights->EnsureVisible(0);
                 
             }
             
-            if((highlighted_route_old != (parent->parent->highlighted_route)) || (highlighted_position_old != (parent->parent->highlighted_position))){
-                //the highlighted Route has changed->call Refresh, which triggers PaintEvent, to re-draw Routes with the right thickness
+        }
+        
+        
+        //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
+        for (highlighted_position_old = (parent->parent->highlighted_position), ((parent->parent)->highlighted_position) = -1, i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
+            
+            GeoToScreen((((parent->parent)->data)->position_list)[i], &q);
+            
+            if (sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
+                4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth())) {
+                //the mouse is over a position
                 
-                for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-                    (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
-                }
+                //sets the highlighted position to i, so as to use highlighted_position in other functions
+                ((parent->parent)->highlighted_position) = i;
                 
+                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
+                parent->parent->listcontrol_positions->EnsureVisible(i);
+                
+            }
+            else {
+                //no Position is highlighted -> reset the background color in listcontrol positions, and in listcontrol_positions go back to showing the first  item
+                
+                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxGetApp().background_color);
+                parent->parent->listcontrol_positions->EnsureVisible(0);
+                
+            }
+            
+        }
+        
+        if((highlighted_route_old != (parent->parent->highlighted_route)) || (highlighted_position_old != (parent->parent->highlighted_position))){
+            //the highlighted Route has changed->call Refresh, which triggers PaintEvent, to re-draw Routes with the right thickness
+            
+            for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
+                (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
             }
             
         }
         
     }
     
-	event.Skip(true);
-
+    event.Skip(true);
+    
 }
 
 //if the left button of the mouse is pressed, I record its position as the starting position of a (potential) mouse-dragging event
@@ -11345,7 +11340,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 		mouse_dragging = false;
         //given that the mosue drag has ended, I re-bind OnMoueMOvement to the mouse motion event
-        //        Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), this);
+        this->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), this);
 
 
 		position_end_drag = wxGetMousePosition();
@@ -11737,7 +11732,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 				//in this case, the mouse has started dragging: If I am dragging a Route, I save the starting point of this Route into route_position_start_drag
 
                 //during the mouse drag, I disable DrawPanel::OnMouseMovement
-//                Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
+                this->Unbind(wxEVT_MOTION,wxMouseEventHandler(DrawPanel::OnMouseMovement), this);
 
 				if (((parent->parent)->highlighted_route) != -1) {
 					//set route_position_start_drag to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)

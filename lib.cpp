@@ -12181,6 +12181,9 @@ template<class P> template <class T> void AngleField<P>::get(T& event) {
 		double min_temp;
 		char c;
 
+        //set a value to c to avoid uninitialized-variable warning
+        c = ' ';
+        
 		if (format == String("")) {
 			//in this case there is no sign in AngleField->this:
 

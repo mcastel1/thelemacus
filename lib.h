@@ -358,7 +358,7 @@ public:
 bool check_unsigned_int(string s, unsigned int* i, bool check_interval, unsigned int min, unsigned int sup){
     
     bool check;
-    unsigned int j;
+    unsigned int j = 0;
     
     check = false;
     

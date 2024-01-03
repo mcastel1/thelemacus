@@ -2279,218 +2279,218 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
 
 //computes the values of the Length l for Route *this at which *this crosses draw_panel->circle/rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/rectangle_observer, and it is thus visible. If success != NULL, it writes true in *success if the values of the length above could be computed succesfully, and false otherwise.
 void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
-
-	vector<Angle> t;
-
-	switch ((type.value)[0]) {
-
-	case 'l': {
-
-		cout << prefix.value << RED << "Cannot execute compute_l_ends: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
-
-		if (success != NULL) {
-			(*success) = false;
-		}
-
-		break;
-
-	}
-
-	case 'o': {
-		//the Route this is an orthodrome
-
-		int check;
-
-		switch (((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]) {
-
-		case 'M': {
-			//I am using the mercator projection
-
-			check = inclusion(draw_panel->rectangle_observer, true, &t, String(""));
-
-			break;
-
-		}
-
-		case '3': {
-			//I am using the 3d projection
-
-			check = inclusion(draw_panel->circle_observer, true, &t, String(""));
-
-			break;
-
-		}
-
-		}
-
-
-		if (check == 1) {
-			//there is a part of *this which is included in circle/rectangle_observer -> some part of *this will lie on the visible part of the earth
-
-			unsigned int i;
-
-			//                s->resize(2);
-			//                ((*s)[0]).set(String(""), Re*((t[0]).value), String(""));
-			//                ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
-
-			for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
-
-				((*s)[i]).set(String(""), ((t[i]).value) * Re, String(""));
-
-			}
-
-
-			t.clear();
-
-			if (success != NULL) {
-				(*success) = true;
-			}
-
-		}
-		else {
-			//no part of this is included in circle/rectagle observer -> no part of this lies on the visible part of the earth
-
-			if (success != NULL) {
-				(*success) = false;
-			}
-
-		}
-
-
-		break;
-
-	}
-
-	case 'c': {
-		//the Route this is a circle of equal altitde.  its total length is the length of the circle itself, which reads:
-
-		switch (((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]) {
-
-		case 'M': {
-			//I am using the mercator projection
-
-			if (inclusion(draw_panel->rectangle_observer, true, &t, String("")) == 1) {
-				//*this is included in rectangle_observer
-
-				if ((t[0] == 0.0) && (t[1] == 0.0)) {
-					//*this is fully included into rectangle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
-
-					s->resize(2);
-					((*s)[0]).set(String(""), 0.0, String(""));
-					((*s)[1]).set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
-
-				}
-				else {
-
-					unsigned int i;
-
-					//*this is partially included into rectangle_observer and it interscets rectangle_observer-> I write in s the values of the parametric length of *this at which these intersections occur
-
-					for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
-
-						((*s)[i]).set(String(""), ((t[i]).value) * Re * sin(omega), String(""));
-
-					}
-
-				}
-
-				if (success != NULL) {
-					(*success) = true;
-				}
-
-			}
-			else {
-				//*this is not included in rectangle_observer
-
-				if (success != NULL) {
-					(*success) = false;
-				}
-
-			}
-
-
-			break;
-
-		}
-
-		case '3': {
-			//I am using the 3d projection
-
-			if (inclusion(draw_panel->circle_observer, true, &t, String("")) == 1) {
-				//there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
-
-				s->resize(2);
-
-				if ((t[0] == 0.0) && (t[1] == 0.0)) {
-					//*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
-
-					((*s)[0]).set(String(""), 0.0, String(""));
-					((*s)[1]).set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
-
-				}
-				else {
-					//*this intersects with circle_observer: I draw only a chunk of the circle of equal altitutde *this
-
-					Length l1, l2;
-
-					//here I decide whether the chunk with average t t[0]+t[1]/2 or the chunk with average t t[0]+t[1]/2+pi is the one included in circle_observer
-					//note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
-					compute_end(
-						Length(
-							((Angle(((((t[0]).value) + ((t[1]).value))) / 2.0)).value) * (Re * sin(omega))
-						),
-						String(""));
-					((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
-
-					compute_end(
-						Length(
-							((Angle(((((t[0]).value) + ((t[1]).value))) / 2.0 + M_PI)).value) * (Re * sin(omega))
-						),
-						String(""));
-					((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
-
-					if (l2 > l1) {
-
-						((*s)[0]).set(String(""), ((t[0]).value) * (Re * sin(omega)), String(""));
-						((*s)[1]).set(String(""), ((t[1]).value) * (Re * sin(omega)), String(""));
-
-					}
-					else {
-
-						((*s)[0]).set(String(""), ((t[1]).value) * (Re * sin(omega)), String(""));
-						((*s)[1]).set(String(""), (2.0 * M_PI + ((t[0]).value)) * (Re * sin(omega)), String(""));
-
-					}
-
-				}
-
-				t.clear();
-
-				if (success != NULL) {
-					(*success) = true;
-				}
-
-			}
-			else {
-
-				if (success != NULL) {
-					(*success) = false;
-				}
-
-			}
-
-			break;
-
-		}
-
-		}
-
-		break;
-
-	}
-
-	}
-
+    
+    vector<Angle> t;
+    
+    switch ((type.value)[0]) {
+            
+        case 'l': {
+            
+            cout << prefix.value << RED << "Cannot execute compute_l_ends: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
+            
+            if (success != NULL) {
+                (*success) = false;
+            }
+            
+            break;
+            
+        }
+            
+        case 'o': {
+            //the Route this is an orthodrome
+            
+            int check;
+            
+            switch (((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]) {
+                    
+                case 'M': {
+                    //I am using the mercator projection
+                    
+                    check = inclusion(draw_panel->rectangle_observer, true, &t, String(""));
+                    
+                    break;
+                    
+                }
+                    
+                case '3': {
+                    //I am using the 3d projection
+                    
+                    check = inclusion(draw_panel->circle_observer, true, &t, String(""));
+                    
+                    break;
+                    
+                }
+                    
+            }
+            
+            
+            if (check == 1) {
+                //there is a part of *this which is included in circle/rectangle_observer -> some part of *this will lie on the visible part of the earth
+                
+                unsigned int i;
+                
+                //                s->resize(2);
+                //                ((*s)[0]).set(String(""), Re*((t[0]).value), String(""));
+                //                ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
+                
+                for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
+                    
+                    ((*s)[i]).set(String(""), ((t[i]).value) * Re, String(""));
+                    
+                }
+                
+                
+                t.clear();
+                
+                if (success != NULL) {
+                    (*success) = true;
+                }
+                
+            }
+            else {
+                //no part of this is included in circle/rectagle observer -> no part of this lies on the visible part of the earth
+                
+                if (success != NULL) {
+                    (*success) = false;
+                }
+                
+            }
+            
+            
+            break;
+            
+        }
+            
+        case 'c': {
+            //the Route this is a circle of equal altitde.  its total length is the length of the circle itself, which reads:
+            
+            switch (((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]) {
+                    
+                case 'M': {
+                    //I am using the mercator projection
+                    
+                    if (inclusion(draw_panel->rectangle_observer, true, &t, String("")) == 1) {
+                        //*this is included in rectangle_observer
+                        
+                        if ((t[0] == 0.0) && (t[1] == 0.0)) {
+                            //*this is fully included into rectangle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
+                            
+                            s->resize(2);
+                            ((*s)[0]).set(String(""), 0.0, String(""));
+                            ((*s)[1]).set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
+                            
+                        }
+                        else {
+                            
+                            unsigned int i;
+                            
+                            //*this is partially included into rectangle_observer and it interscets rectangle_observer-> I write in s the values of the parametric length of *this at which these intersections occur
+                            
+                            for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
+                                
+                                ((*s)[i]).set(String(""), ((t[i]).value) * Re * sin(omega), String(""));
+                                
+                            }
+                            
+                        }
+                        
+                        if (success != NULL) {
+                            (*success) = true;
+                        }
+                        
+                    }
+                    else {
+                        //*this is not included in rectangle_observer
+                        
+                        if (success != NULL) {
+                            (*success) = false;
+                        }
+                        
+                    }
+                    
+                    
+                    break;
+                    
+                }
+                    
+                case '3': {
+                    //I am using the 3d projection
+                    
+                    if (inclusion(draw_panel->circle_observer, true, &t, String("")) == 1) {
+                        //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
+                        
+                        s->resize(2);
+                        
+                        if ((t[0] == 0.0) && (t[1] == 0.0)) {
+                            //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
+                            
+                            ((*s)[0]).set(String(""), 0.0, String(""));
+                            ((*s)[1]).set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
+                            
+                        }
+                        else {
+                            //*this intersects with circle_observer: I draw only a chunk of the circle of equal altitutde *this
+                            
+                            Length l1, l2;
+                            
+                            //here I decide whether the chunk with average t t[0]+t[1]/2 or the chunk with average t t[0]+t[1]/2+pi is the one included in circle_observer
+                            //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
+                            compute_end(
+                                        Length(
+                                               ((Angle(((((t[0]).value) + ((t[1]).value))) / 2.0)).value) * (Re * sin(omega))
+                                               ),
+                                        String(""));
+                            ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
+                            
+                            compute_end(
+                                        Length(
+                                               ((Angle(((((t[0]).value) + ((t[1]).value))) / 2.0 + M_PI)).value) * (Re * sin(omega))
+                                               ),
+                                        String(""));
+                            ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
+                            
+                            if (l2 > l1) {
+                                
+                                ((*s)[0]).set(String(""), ((t[0]).value) * (Re * sin(omega)), String(""));
+                                ((*s)[1]).set(String(""), ((t[1]).value) * (Re * sin(omega)), String(""));
+                                
+                            }
+                            else {
+                                
+                                ((*s)[0]).set(String(""), ((t[1]).value) * (Re * sin(omega)), String(""));
+                                ((*s)[1]).set(String(""), (2.0 * M_PI + ((t[0]).value)) * (Re * sin(omega)), String(""));
+                                
+                            }
+                            
+                        }
+                        
+                        t.clear();
+                        
+                        if (success != NULL) {
+                            (*success) = true;
+                        }
+                        
+                    }
+                    else {
+                        
+                        if (success != NULL) {
+                            (*success) = false;
+                        }
+                        
+                    }
+                    
+                    break;
+                    
+                }
+                    
+            }
+            
+            break;
+            
+        }
+            
+    }
+    
 }
 
 void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
@@ -7802,7 +7802,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
     
     cout << prefix.value << "Reading file ...\n";
 
-	for (i = 0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i < n_line.size()) && (!((file_n_line.value)->eof())); i++) {
+	for (i = 0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i < (n_line.size())) && (!((file_n_line.value)->eof())); i++) {
 
 		line.clear();
 		ins.clear();
@@ -7812,6 +7812,9 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 		ins >> (n_line[i]);
 		//        cout << "\nn_line[" << i << "] = " << n_line[i];
         
+        percentage_dialog = 100.0 * ((double)i)/((double)(n_line.size()));
+        message_dialog.str("");
+        message_dialog << "Loading chart structure ... " << ((int)percentage_dialog) << "%";
         abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
         
         if(abort){
@@ -8818,7 +8821,6 @@ void DrawPanel::TabulateRoutes(void) {
 //draws coastlines, Routes and Positions on the Mercator-projection case
 void DrawPanel::Draw_Mercator(void) {
 
-	int i;
 	Projection delta_temp;
 	unsigned int n_intervals_ticks, n_intervals_ticks_max;
 	Length r, s;
@@ -9119,7 +9121,7 @@ void DrawPanel::Draw_3D(void) {
 	Projection temp;
 	wxPoint p;
 	wxString dummy_label;
-	unsigned int i, n_intervals_ticks;
+	unsigned int n_intervals_ticks;
 
 	//client_dc->Clear();
 

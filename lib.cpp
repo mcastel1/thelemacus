@@ -7639,10 +7639,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 			}
 
 
-
 			if (check) {
-
-
 
 				//n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
 				n = ((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();

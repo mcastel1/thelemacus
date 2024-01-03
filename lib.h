@@ -487,7 +487,7 @@ void enter_int(int* i, bool check_interval, int min, int sup, String name, Strin
 bool check_double(string s, double* x, bool check_interval, double min, double sup){
     
     bool check;
-    double y;
+    double y = 0.0;
     
     check = false;
     

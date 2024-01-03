@@ -7822,8 +7822,14 @@ void ListFrame::GetAllCoastLineData(String prefix) {
         }
 
 	}
-    cout << prefix.value << "... done.\n";
     
+    if((!abort)){
+                    
+        (wxGetApp().progress_dialog)->Update(max_dialog);
+        cout << prefix.value << "... done.\n";
+
+    }
+        
 	file_n_line.close(String(""));
 
 

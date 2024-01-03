@@ -285,6 +285,14 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
+//    //
+//    string my_string = "2.32";
+//    double test;
+//    bool check;
+//    
+//    check = check_double(my_string, &test, false, 0, 0);
+//    
+//    //
 
 	unsigned int i;
 	Int n_chart_frames;

@@ -7531,7 +7531,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 	int i, j, i_adjusted, j_adjusted, i_min, i_max, j_min, j_max;
 	double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
 	Projection temp;
-	bool check;
+	bool check = false;
 	wxPoint q;
 	gsl_vector* r, * s;
 	Position u;

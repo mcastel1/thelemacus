@@ -360,6 +360,8 @@ bool check_unsigned_int(string s, unsigned int* i, bool check_interval, unsigned
     bool check;
     unsigned int j;
     
+    check = false;
+    
     if(/*here I check that the string s is not empty*/(!s.empty()) && /*here I check whether the quantity entered in s is an unsigned integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
         
         j = stoi(s, NULL, 10);

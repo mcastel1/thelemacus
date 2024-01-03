@@ -7839,6 +7839,10 @@ void ListFrame::GetAllCoastLineData(String prefix) {
             message_dialog.str("");
             message_dialog << "Loading chart structure ... 100%\nLoading charts ... ";
             (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxString(message_dialog.str().c_str()), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_APP_MODAL);
+#ifdef _WIN32
+            //if I am on WIN32, I set the icon from the icon set in the .rc file
+            (wxGetApp().progress_dialog)->SetIcon(wxICON(app_icon));
+#endif
 
             i = 0;
             abort = false;

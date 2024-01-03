@@ -20,6 +20,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  notes:
  =======
+ - on WIN32, keep the output directory as $(wxIntRootDir) : if you set it to Z:\ the program will not run 
  - to set up everything on Windows 10:
     0. With Virtual Box, set up a partition with Windows 10. In the partition, set 2 cores, 13387 MB of base memory, set 'Shared Clipboard' to 'Bidirectional', install 'Guest Additions' and share the folder, say, sight_reduction_program, containing main.cpp, main.h, lib.cpp, lib.h, constants.h etc
     1. Install WinZip

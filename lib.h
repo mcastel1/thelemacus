@@ -397,7 +397,7 @@ bool check_unsigned_int(string s, unsigned int* i, bool check_interval, unsigned
 bool check_int(string s, int* i, bool check_interval, int min, int sup){
     
     bool check;
-    int j;
+    int j = 0;
     
     if(/*here I check whether the quantity entered in s is an integer, i.e., it contains only the characters +-0123456789*/ ((s.find_first_not_of(chars_int)) == (std::string::npos))){
         

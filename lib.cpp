@@ -7780,150 +7780,154 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 	int i, j;
 	string::size_type sz;
 	//n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
-	vector<unsigned int> n_line(360 * (floor_max_lat - floor_min_lat + 1));
+	vector<unsigned int> n_line;
 	unsigned int l/*, n = 0*/;
 	char* buffer = NULL;
 	size_t pos_beg, pos_end;
 	double lambda_temp, phi_temp, percentage_dialog;
 
-
-	file_n_line.set_name((wxGetApp().path_file_n_line));
-	file_coastline_data_blocked.set_name((wxGetApp().path_file_coastline_data_blocked));
-    
-    (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxT("Loading charts..."), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_APP_MODAL);
+    if(show_coastlines == Answer('y', String(""))){
+        //in file_init, show coastlines = y
+        
+        file_n_line.set_name((wxGetApp().path_file_n_line));
+        file_coastline_data_blocked.set_name((wxGetApp().path_file_coastline_data_blocked));
+        n_line.resize((360 * (floor_max_lat - floor_min_lat + 1)));
+        
+        (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxT("Loading charts..."), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_APP_MODAL);
 #ifdef _WIN32
-    //if I am on WIN32, I set the icon from the icon set in the .rc file
-    (wxGetApp().progress_dialog)->SetIcon(wxICON(app_icon));
+        //if I am on WIN32, I set the icon from the icon set in the .rc file
+        (wxGetApp().progress_dialog)->SetIcon(wxICON(app_icon));
 #endif
-    
-	//read file n_line and store it into vector n_line
-	file_n_line.open(String(""));
-    
-    cout << prefix.value << "Reading file ...\n";
-
-	for (i = 0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i < (n_line.size())) && (!((file_n_line.value)->eof())); i++) {
-
-		line.clear();
-		ins.clear();
-
-		getline(*(file_n_line.value), line);
-		ins << line;
-		ins >> (n_line[i]);
-		//        cout << "\nn_line[" << i << "] = " << n_line[i];
         
-        percentage_dialog = 100.0 * ((double)i)/((double)(n_line.size()));
-        message_dialog.str("");
-        message_dialog << "Loading chart structure ... " << ((int)percentage_dialog) << "%";
-        abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
+        //read file n_line and store it into vector n_line
+        file_n_line.open(String(""));
         
-        if(abort){
-            //(wxGetApp().progress_dialog)->Update() has returned false -> the user has pressed the cancel button in (wxGetApp().progress_dialog) -> close the app
-            break;
-        }
-
-	}
-    
-    if((!abort)){
-                    
-        (wxGetApp().progress_dialog)->Update(max_dialog);
-        cout << prefix.value << "... done.\n";
-
-    }
-        
-	file_n_line.close(String(""));
-
-
-	 //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
-	if ((!abort) && (show_coastlines == Answer('y', String("")))) {
-
-		file_coastline_data_blocked.open(String(""));
         cout << prefix.value << "Reading file ...\n";
-
-		i = 0;
-        abort = false;
-		while (/*here, to be safe, I stop the while() if I am not sure that n_line will be called with a valid value*/(360 * i + 360 < (n_line.size())) && (!((file_coastline_data_blocked.value)->eof()))) {
-
-			p_coastline.resize(i + 1);
-			(p_coastline[i]).resize(360);
-
-			for (j = 0; j < 360; j++) {
-
-				// read data as a block:
-				(file_coastline_data_blocked.value)->seekg(n_line[360 * i + j], (file_coastline_data_blocked.value)->beg);
-
-				l = n_line[360 * i + j + 1] - n_line[360 * i + j] - 1;
-				if (buffer != NULL) { delete[] buffer; }
-				buffer = new char[l];
-
-				(file_coastline_data_blocked.value)->read(buffer, l);
-				string data(buffer, l);
-
-				//count how many datapoints are in data
-				//                n = ((unsigned int)count(data.begin(), data.end(), ','));
-
-				l = 0;
-				pos_beg = 0;
-				pos_end = data.find(" ", pos_beg);
-				while (pos_end != (string::npos)) {
-
-					line.clear();
-					line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
-
-					replace(line.begin(), line.end(), ' ', '\n');
-					replace(line.begin(), line.end(), ',', ' ');
-
-					//                    ins.clear();
-					//                    ins << line;
-					//                    ins >> phi_temp >> lambda_temp;
-
-					phi_temp = std::stod(line, &sz);
-					lambda_temp = std::stod(line.substr(sz));
-
-
-					(p_temp.lambda).set(String(""), k * lambda_temp, String(""));
-					(p_temp.phi).set(String(""), k * phi_temp, String(""));
-
-					(p_coastline[i][j]).push_back(p_temp);
-
-					pos_beg = pos_end + 1;
-					pos_end = data.find(" ", pos_beg);
-
-					l++;
-
-				};
-
-				data.clear();
-
-			}
-
-            percentage_dialog = 100.0 * ((double)i)/(((double)(n_line.size()))/360.0);
-            message_dialog.str("");
-            message_dialog << "Loading charts... " << ((int)percentage_dialog) << "%";
+        
+        for (i = 0; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i < (n_line.size())) && (!((file_n_line.value)->eof())); i++) {
             
+            line.clear();
+            ins.clear();
+            
+            getline(*(file_n_line.value), line);
+            ins << line;
+            ins >> (n_line[i]);
+            //        cout << "\nn_line[" << i << "] = " << n_line[i];
+            
+            percentage_dialog = 100.0 * ((double)i)/((double)(n_line.size()));
+            message_dialog.str("");
+            message_dialog << "Loading chart structure ... " << ((int)percentage_dialog) << "%";
             abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
             
             if(abort){
                 //(wxGetApp().progress_dialog)->Update() has returned false -> the user has pressed the cancel button in (wxGetApp().progress_dialog) -> close the app
                 break;
             }
-
-			i++;
-
-		}
-        
-        if((!abort)){
-                        
-            (wxGetApp().progress_dialog)->Update(max_dialog);
-            cout << prefix.value << "... done.\n";
-
+            
         }
         
-        file_coastline_data_blocked.close(String(""));
-
-	}
-
-	n_line.clear();
-
+        if((!abort)){
+            
+            (wxGetApp().progress_dialog)->Update(max_dialog);
+            cout << prefix.value << "... done.\n";
+            
+        }
+        
+        file_n_line.close(String(""));
+        
+        
+        //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
+        if ((!abort)) {
+            
+            file_coastline_data_blocked.open(String(""));
+            cout << prefix.value << "Reading file ...\n";
+            
+            i = 0;
+            abort = false;
+            while (/*here, to be safe, I stop the while() if I am not sure that n_line will be called with a valid value*/(360 * i + 360 < (n_line.size())) && (!((file_coastline_data_blocked.value)->eof()))) {
+                
+                p_coastline.resize(i + 1);
+                (p_coastline[i]).resize(360);
+                
+                for (j = 0; j < 360; j++) {
+                    
+                    // read data as a block:
+                    (file_coastline_data_blocked.value)->seekg(n_line[360 * i + j], (file_coastline_data_blocked.value)->beg);
+                    
+                    l = n_line[360 * i + j + 1] - n_line[360 * i + j] - 1;
+                    if (buffer != NULL) { delete[] buffer; }
+                    buffer = new char[l];
+                    
+                    (file_coastline_data_blocked.value)->read(buffer, l);
+                    string data(buffer, l);
+                    
+                    //count how many datapoints are in data
+                    //                n = ((unsigned int)count(data.begin(), data.end(), ','));
+                    
+                    l = 0;
+                    pos_beg = 0;
+                    pos_end = data.find(" ", pos_beg);
+                    while (pos_end != (string::npos)) {
+                        
+                        line.clear();
+                        line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+                        
+                        replace(line.begin(), line.end(), ' ', '\n');
+                        replace(line.begin(), line.end(), ',', ' ');
+                        
+                        //                    ins.clear();
+                        //                    ins << line;
+                        //                    ins >> phi_temp >> lambda_temp;
+                        
+                        phi_temp = std::stod(line, &sz);
+                        lambda_temp = std::stod(line.substr(sz));
+                        
+                        
+                        (p_temp.lambda).set(String(""), k * lambda_temp, String(""));
+                        (p_temp.phi).set(String(""), k * phi_temp, String(""));
+                        
+                        (p_coastline[i][j]).push_back(p_temp);
+                        
+                        pos_beg = pos_end + 1;
+                        pos_end = data.find(" ", pos_beg);
+                        
+                        l++;
+                        
+                    };
+                    
+                    data.clear();
+                    
+                }
+                
+                percentage_dialog = 100.0 * ((double)i)/(((double)(n_line.size()))/360.0);
+                message_dialog.str("");
+                message_dialog << "Loading charts... " << ((int)percentage_dialog) << "%";
+                
+                abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
+                
+                if(abort){
+                    //(wxGetApp().progress_dialog)->Update() has returned false -> the user has pressed the cancel button in (wxGetApp().progress_dialog) -> close the app
+                    break;
+                }
+                
+                i++;
+                
+            }
+            
+            if((!abort)){
+                
+                (wxGetApp().progress_dialog)->Update(max_dialog);
+                cout << prefix.value << "... done.\n";
+                
+            }
+            
+            file_coastline_data_blocked.close(String(""));
+            
+        }
+        
+        n_line.clear();
+        
+    }
 
 }
 

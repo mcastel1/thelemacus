@@ -2277,7 +2277,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
 
 }
 
-//computes the values of the Length l for Route *this at which *this crosses draw_panel->circle/rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/rectangle_observer, and it is thus visible. If success != NULL, it writes true in *success if the values of the length above could be computed succesfully, and false otherwise.
+//compute the values of the Length l for Route *this at which *this crosses draw_panel->circle/rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/ draw_panel->rectangle_observer, and it is thus visible. If success != NULL, it writes true in *success if the values of the length above could be computed succesfully, and false otherwise.
 void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
     
     vector<Angle> t;
@@ -2299,8 +2299,8 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
         case 'o': {
             //the Route this is an orthodrome
             
-            int check;
-            
+            int check = -1;
+                        
             switch (((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]) {
                     
                 case 'M': {
@@ -2355,7 +2355,6 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                 }
                 
             }
-            
             
             break;
             

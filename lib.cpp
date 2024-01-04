@@ -8823,7 +8823,6 @@ void DrawPanel::Draw_Mercator(void) {
 
 	Projection delta_temp;
 	unsigned int n_intervals_ticks, n_intervals_ticks_max;
-	Length r, s;
 	Position q;
 	String prefix, new_prefix;
 	wxPoint p;

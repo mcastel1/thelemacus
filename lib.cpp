@@ -3578,13 +3578,13 @@ bool Time::operator!=(const Time& t) {
 //evaluates whether Time (*this) is larger than t
 bool Time::operator>(const Time& t) {
 
-	Time s;
+	Time temp;
 
 	(*this).to_MJD();
-	s = t;
-	s.to_MJD();
+	temp = t;
+	temp.to_MJD();
 
-	return((((*this).MJD) > (s.MJD)));
+	return((((*this).MJD) > (temp.MJD)));
 
 }
 

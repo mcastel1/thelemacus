@@ -487,7 +487,7 @@ bool MyApp::OnInit() {
 	highlight_color = color_selected_item;
 	dark_mode = (settings->GetAppearance()).IsDark();
 
-	list_frame = new ListFrame(this, "Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
+	list_frame = new ListFrame("Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
     if(!(list_frame->abort)){
         //the user has not pressed cancel while charts were loading -> I proceed and start the app
         

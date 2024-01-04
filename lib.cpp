@@ -4564,7 +4564,7 @@ void Catalog::read_from_file_to([[maybe_unused]] String name, String filename, S
 }
 
 //read from stream input_stream the content and writes it into this
-template<class S> void Catalog::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
+template<class S> void Catalog::read_from_stream(String name, S* input_stream, [[maybe_unused]] bool search_entire_stream, [[maybe_unused]] String prefix) {
     
     Body body;
     
@@ -7816,7 +7816,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
             
             percentage_dialog = 100.0 * ((double)i)/((double)(n_line.size()));
             message_dialog.str("");
-            message_dialog << "\nLoading chart structure ... " << ((int)percentage_dialog) << "%\n";
+            message_dialog << "\nLoading chart structure ... " << ((int)percentage_dialog) << "%";
             abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
             
         }
@@ -7903,7 +7903,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                 
                 percentage_dialog = 100.0 * ((double)i)/(((double)(n_line.size()))/360.0);
                 message_dialog.str("");
-                message_dialog << "\nLoading chart structure ... 100%\nLoading charts ... " << ((int)percentage_dialog) << "%\n";
+                message_dialog << "\nLoading chart structure ... 100%\nLoading charts ... " << ((int)percentage_dialog) << "%";
                 abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
                 
                 i++;
@@ -14899,7 +14899,7 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
 }
 
 
-ListFrame::ListFrame(MyApp* parent_in, const wxString& title, [[maybe_unused]] const wxString& message, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size) {
+ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& message, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size) {
     
     unsigned int i, red, green, blue;
     wxListItem column, item;

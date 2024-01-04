@@ -2164,7 +2164,7 @@ public:
     AskRemoveRelatedSight* ask_remove_related_sight;
     AskRemoveRelatedRoute* ask_remove_related_route;
     
-    ListFrame(MyApp*, const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
+    ListFrame(const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     void set(void);
     void DrawAll(void);

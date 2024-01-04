@@ -18197,11 +18197,11 @@ template<class P> template<class E> void ChronoField<P>::OnEditMinute(E& event) 
 //this function is called every time a keyboard button is lifted in this->second: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> template<class E> void ChronoField<P>::OnEditSecond(E& event) {
 
-	bool check;
+	bool success;
 
-	check = check_double((second->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
+	success = check_double((second->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
 
-	if (check) {
+	if (success) {
 
 		//because the text in value is valid, I set the background color of value to white
 		second->SetForegroundColour(wxGetApp().foreground_color);
@@ -18211,7 +18211,7 @@ template<class P> template<class E> void ChronoField<P>::OnEditSecond(E& event) 
 
 
 	//second_ok is true/false is the text entered is valid/invalid
-	second_ok = check;
+	second_ok = success;
 	//tries to enable button_reduce
 	parent_frame->AllOk();
 
@@ -18631,11 +18631,11 @@ template<class P> template<class E> void DateField<P>::OnEditYear(E& event) {
 //this function is called every time a keyboard button is lifted in this->month: it checks whether the text entered so far in month is valid and runs AllOk
 template<class P> template<class E> void DateField<P>::OnEditMonth(E& event) {
 
-	bool check;
+	bool success;
 
-	check = check_unsigned_int((month->GetValue()).ToStdString(), NULL, true, 1, 12 + 1);
+	success = check_unsigned_int((month->GetValue()).ToStdString(), NULL, true, 1, 12 + 1);
 
-	if (check) {
+	if (success) {
 
 		month->SetForegroundColour(wxGetApp().foreground_color);
 		month->SetFont(wxGetApp().default_font);
@@ -18643,7 +18643,7 @@ template<class P> template<class E> void DateField<P>::OnEditMonth(E& event) {
 	}
 
 	//month_ok is true/false is the text enteres is valid/invalid
-	month_ok = check;
+	month_ok = success;
 
 	(*(((this->check)->check_month)->tabulate_days))(event);
 

@@ -2070,7 +2070,6 @@ void Route::Draw(unsigned int n_points, Color color, int width, wxDC* dc, DrawPa
 
 		//the following code holds for all projections
 
-		vector<Length> s;
 		bool compute_l_ends_ok;
 
 		compute_l_ends(&s, &compute_l_ends_ok, draw_panel, prefix);

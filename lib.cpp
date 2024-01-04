@@ -7788,7 +7788,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
         file_coastline_data_blocked.set_name((wxGetApp().path_file_coastline_data_blocked));
         n_line.resize((360 * (floor_max_lat - floor_min_lat + 1)));
         
-        (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxT("\nLoading chart structure ..."), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_APP_MODAL);
+        (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxT("\nLoading chart structure ..."), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_SMOOTH | wxPD_ELAPSED_TIME | wxPD_REMAINING_TIME | wxPD_APP_MODAL);
 #ifdef _WIN32
         //if I am on WIN32, I set the icon from the icon set in the .rc file
         (wxGetApp().progress_dialog)->SetIcon(wxICON(app_icon));
@@ -7833,7 +7833,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
             cout << prefix.value << "Reading file ...\n";
             message_dialog.str("");
             message_dialog << "\nLoading chart structure ... 100%\nLoading charts ... ";
-            (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxString(message_dialog.str().c_str()), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_APP_MODAL);
+            (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxString(message_dialog.str().c_str()), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_SMOOTH | wxPD_ELAPSED_TIME | wxPD_REMAINING_TIME | wxPD_APP_MODAL);
 #ifdef _WIN32
             //if I am on WIN32, I set the icon from the icon set in the .rc file
             (wxGetApp().progress_dialog)->SetIcon(wxICON(app_icon));

@@ -17454,15 +17454,15 @@ template<class P> void BodyField<P>::set(void) {
 template<class P> template<class T> void BodyField<P>::get(T& event) {
 
 	unsigned int i;
-	bool check;
+	bool success;
 
 	if (ok) {
 		//If the GUI field's content is ok...
 
 		//I find the position of the content of the GUI field in the list of  the body names in catalog
-		for (check = false, i = 0; (i < (catalog->list).size()) && (!check); i++) {
+		for (success = false, i = 0; (i < (catalog->list).size()) && (!success); i++) {
 			if (String((name->GetValue().ToStdString())) == (((catalog->list)[i]).name)) {
-				check = true;
+				success = true;
 			}
 		}
 		i--;
@@ -18235,11 +18235,11 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event) {
 
-	bool check;
+	bool success;
 
-	check = check_double((value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+	success = check_double((value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
 
-	if (check) {
+	if (success) {
 
 		//because the text in value is valid, I set the background color of value to white
 		value->SetForegroundColour(wxGetApp().foreground_color);
@@ -18249,7 +18249,7 @@ template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event) 
 
 
 	//value_ok is true/false is the text entered is valid/invalid
-	value_ok = check;
+	value_ok = success;
 	//tries to enable button_reduce
 	parent_frame->AllOk();
 
@@ -18261,13 +18261,13 @@ template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event) 
 //this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
 template<class P> template<class E>  void LengthField<P>::OnEditUnit(E& event) {
 
-	bool check;
+	bool success;
 
 	//I check whether the name in the GUI field unit matches one of the unit names in units
-	find_and_replace_case_insensitive(unit, units, &check, NULL);
+	find_and_replace_case_insensitive(unit, units, &success, NULL);
 
 
-	if (check) {
+	if (success) {
 
 		//because the text in value is valid, I set the background color of unit to white
 		unit->SetForegroundColour(wxGetApp().foreground_color);
@@ -18277,7 +18277,7 @@ template<class P> template<class E>  void LengthField<P>::OnEditUnit(E& event) {
 
 
 	//value_ok is true/false is the text entered is valid/invalid
-	unit_ok = check;
+	unit_ok = success;
 	//tries to enable button_reduce
 	parent_frame->AllOk();
 
@@ -18509,13 +18509,13 @@ template<class P> bool BodyField<P>::is_ok(void) {
 template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
 
 	unsigned int i;
-	bool check;
-
+	bool success;
+    
 
 	//I check whether the name in the GUI field body matches one of the valid body names
-	find_and_replace_case_insensitive(name, bodies, &check, &i);
+	find_and_replace_case_insensitive(name, bodies, &success, &i);
 
-	if (check) {
+	if (success) {
 		//the text entered in name is valid
 
 		//I enable the limb field if and only if the selected body allows for a field and I run check on the existing text in the limb field
@@ -18537,7 +18537,7 @@ template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
 
 
 	//ok is true/false is the text enteres is valid/invalid
-	ok = check;
+	ok = success;
 	//tries to enable button_reduce
 	parent_frame->AllOk();
 
@@ -18712,13 +18712,13 @@ bool RouteTypeField::is_ok(void) {
 template<class E> void RouteTypeField::OnEdit(E& event) {
 
 	unsigned int i;
-	bool check, enable;
+	bool success, enable;
 
 
 	//I check whether the name in the GUI field body matches one of the body names in catalog
-	find_and_replace_case_insensitive(name, types, &check, &i);
+	find_and_replace_case_insensitive(name, types, &success, &i);
 
-	if (check) {
+	if (success) {
 		//the text entered in name is valid
 
 		//enable/disable the related fields in RouteFrame f
@@ -18752,7 +18752,7 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 
 
 	//ok is true/false is the text entered is valid/invalid
-	ok = check;
+	ok = success;
 	//tries to enable button_reduce
 	parent_frame->AllOk();
 

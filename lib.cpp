@@ -7527,7 +7527,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 	unsigned long every, l, n, n_points_grid;
 	//integer values of min/max lat/lon to be extractd from p_coastline
-	int i, j, i_adjusted = 0, j_adjusted, i_min, i_max, j_min, j_max;
+	int i, j, i_adjusted = 0, j_adjusted = 0, i_min, i_max, j_min, j_max;
 	double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
 	Projection temp;
 	bool check = false;

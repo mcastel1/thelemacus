@@ -18718,13 +18718,13 @@ bool RouteTypeField::is_ok(void) {
 template<class E> void RouteTypeField::OnEdit(E& event) {
 
 	unsigned int i;
-	bool check, enable;
+	bool success, enable;
 
 
 	//I check whether the name in the GUI field body matches one of the body names in catalog
-	find_and_replace_case_insensitive(name, types, &check, &i);
+	find_and_replace_case_insensitive(name, types, &success, &i);
 
-	if (check) {
+	if (success) {
 		//the text entered in name is valid
 
 		//enable/disable the related fields in RouteFrame f
@@ -18758,7 +18758,7 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 
 
 	//ok is true/false is the text entered is valid/invalid
-	ok = check;
+	ok = success;
 	//tries to enable button_reduce
 	parent_frame->AllOk();
 

@@ -154,7 +154,7 @@ public:
     
     void print(String, String, ostream&);
     bool set(String, double, String);
-    void set_current(Int);
+    void set_current(void);
     template<class S> bool read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
     string to_string(unsigned int, bool);

@@ -7321,7 +7321,7 @@ void Date::print(String name, String prefix, ostream& ostr) {
 void Time::set_current(void) {
 
 	date.set_current();
-	chrono.set_current((wxGetApp()).time_zone);
+	chrono.set_current();
 
 }
 
@@ -7336,19 +7336,17 @@ void Date::set_current(void) {
 
 }
 
-//this function sets (*this) to the current UTC time +- time_zone
-void Chrono::set_current(Int time_zone) {
 
+//this function sets (*this) to the current UTC time +- time_zone
+void Chrono::set_current(void) {
 
 	(wxGetApp().local_time) = (boost::posix_time::second_clock::local_time());
-
 
 	h = ((unsigned int)((wxGetApp().local_time).time_of_day().hours()));
 	m = ((unsigned int)((wxGetApp().local_time).time_of_day().minutes()));
 	s = (wxGetApp().local_time).time_of_day().seconds();
 
 }
-
 
 
 void Date::enter(String name, String prefix) {
@@ -13655,9 +13653,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 	//sets  sight.master_clock_date_and_hour.date and sight.time.date to the current UTC date if this constructor has been called with sight_in = NULL
 	if (sight_in == NULL) {
 		(sight->master_clock_date_and_hour).date.set_current();
-		(sight->master_clock_date_and_hour).chrono.set_current((wxGetApp()).time_zone);
+		(sight->master_clock_date_and_hour).chrono.set_current();
 		(sight->time).date.set_current();
-		(sight->time).chrono.set_current((wxGetApp()).time_zone);
+		(sight->time).chrono.set_current();
 	}
 	StaticText* text_date = new StaticText(panel, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize);
 	master_clock_date = new DateField<SightFrame>(panel, &(sight->master_clock_date_and_hour.date));

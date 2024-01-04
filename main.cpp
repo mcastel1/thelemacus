@@ -72,11 +72,10 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- - if I press cancel while loading charts, there is an error 
+ - fix all warnings on WIN32
  - when you write Data to file, write also recent items
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
  - listcontrol_sights etc are not resized to their minimum sizes 
- - fix root_directory on WIN32
  - check that WXK_PLUS does not depend on the computer
 
  ---

@@ -7915,7 +7915,9 @@ void ListFrame::GetAllCoastLineData(String prefix) {
             file_coastline_data_blocked.close(String(""));
             
         }
-        
+
+        //destroy the progress_dialog so if the user aborts the loading process there are no pending frames while closing the application
+        wxGetApp().progress_dialog->Destroy();
         n_line.clear();
         
     }

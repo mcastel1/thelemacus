@@ -4244,24 +4244,22 @@ template<class S> bool Time::read_from_stream(String name, S* input_stream, [[ma
 
 }
 
-void Time::operator += (const Chrono& chrono) {
+void Time::operator += (const Chrono& chrono_in) {
 
 	to_MJD();
-	MJD += (((double)(chrono.h)) + ((double)(chrono.m)) / 60.0 + ((double)(chrono.s)) / (60.0 * 60.0)) / 24.0;
+	MJD += (((double)(chrono_in.h)) + ((double)(chrono_in.m)) / 60.0 + ((double)(chrono_in.s)) / (60.0 * 60.0)) / 24.0;
 	to_TAI();
 
 }
 
 
-
-void Time::operator -= (const Chrono& chrono) {
+void Time::operator -= (const Chrono& chrono_in) {
 
 	to_MJD();
-	MJD -= (((double)(chrono.h)) + ((double)(chrono.m)) / 60.0 + ((double)(chrono.s)) / (60.0 * 60.0)) / 24.0;
+	MJD -= (((double)(chrono_in.h)) + ((double)(chrono_in.m)) / 60.0 + ((double)(chrono_in.s)) / (60.0 * 60.0)) / 24.0;
 	to_TAI();
 
 }
-
 
 
 bool Length::check_valid(String name, [[maybe_unused]] String prefix) {

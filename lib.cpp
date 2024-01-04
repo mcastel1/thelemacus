@@ -6409,7 +6409,7 @@ void Body::print(String name_in, String prefix, ostream& ostr) {
 }
 
 
-void Body::enter(String name, Catalog catalog, [[maybe_unused]] String prefix) {
+void Body::enter(String name_in, Catalog catalog, [[maybe_unused]] String prefix) {
 
 	unsigned int i;
 	string s;
@@ -6422,17 +6422,17 @@ void Body::enter(String name, Catalog catalog, [[maybe_unused]] String prefix) {
 	do {
 
 
-		cout << prefix.value << "Enter " << name.value << ":";
+		cout << prefix.value << "Enter " << name_in.value << ":";
 		s.clear();
 		getline(cin >> ws, s);
 
-		((*this).name) = String(s);
+		(this->name) = String(s);
 
 	} while (!check(&i, catalog, prefix));
 
 	(*this) = (catalog.list)[i];
 
-	print(name, prefix, cout);
+	print(name_in, prefix, cout);
 
 }
 

@@ -14723,7 +14723,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 	sizer_v = new wxBoxSizer(wxVERTICAL);
 	sizer_grid = new wxGridSizer(1, 2, 0, 0);
 
-	StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize, 0);
+	StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
 
 	//buttons
 	button_a = new wxButton(panel, wxID_ANY, string_a.value, wxDefaultPosition, wxDefaultSize);

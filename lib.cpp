@@ -18038,11 +18038,11 @@ template<class P> bool AngleField<P>::is_ok(void) {
 //this function is called every time a keyboard button is lifted in this->sign: it checks whether the text entered so far in this->sign is valid and runs AllOk
 template<class P> template<class E> void AngleField<P>::OnEditSign(E& event) {
 
-	bool check;
+	bool success;
 
-	find_and_replace_case_insensitive(sign, signs, &check, NULL);
+	find_and_replace_case_insensitive(sign, signs, &success, NULL);
 
-	if (check) {
+	if (success) {
 
 		//because the text in sign is valid, I set the background color of sign to white
 		sign->SetForegroundColour(wxGetApp().foreground_color);
@@ -18051,7 +18051,7 @@ template<class P> template<class E> void AngleField<P>::OnEditSign(E& event) {
 	}
 
 	//sign_ok is true/false is the text entered in sign is valid/invalid
-	sign_ok = check;
+	sign_ok = success;
 
 	//tries to enable button_reduce
 	parent->AllOk();
@@ -18090,11 +18090,11 @@ template<class P> template<class E> void AngleField<P>::OnEditArcDegree(E& event
 //this function is called every time a keyboard button is lifted in this->min: it checks whether the text entered so far in min is valid and runs AllOk
 template<class P> template<class E> void AngleField<P>::OnEditArcMinute(E& event) {
 
-	bool check;
+	bool success;
 
-	check = check_double((min->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
+	success = check_double((min->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
 
-	if (check) {
+	if (success) {
 
 		//because the text in sign is valid, I set the background color of min to white
 		min->SetForegroundColour(wxGetApp().foreground_color);
@@ -18103,7 +18103,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcMinute(E& event
 	}
 
 	//min_ok is true/false is the text entered in min is valid/invalid
-	min_ok = check;
+	min_ok = success;
 
 	//tries to enable button_reduce
 	parent->AllOk();
@@ -18605,11 +18605,11 @@ template<class P> bool DateField<P>::is_ok(void) {
 //this function is called every time a keyboard button is lifted in this->year: it checks whether the text entered so far in year is valid and runs AllOk
 template<class P> template<class E> void DateField<P>::OnEditYear(E& event) {
 
-	bool check;
+	bool success;
 
-	check = check_unsigned_int((year->GetValue()).ToStdString(), NULL, false, 0, 0);
+	success = check_unsigned_int((year->GetValue()).ToStdString(), NULL, false, 0, 0);
 
-	if (check) {
+	if (success) {
 
 		year->SetForegroundColour(wxGetApp().foreground_color);
 		year->SetFont(wxGetApp().default_font);
@@ -18617,7 +18617,7 @@ template<class P> template<class E> void DateField<P>::OnEditYear(E& event) {
 	}
 
 	//year_ok is true/false is the text enteres is valid/invalid
-	year_ok = check;
+	year_ok = success;
 
 	(*(((this->check)->check_month)->tabulate_days))(event);
 
@@ -18657,22 +18657,22 @@ template<class P> template<class E> void DateField<P>::OnEditMonth(E& event) {
 //this function is called every time a keyboard button is lifted in this->day: it checks whether the text entered so far in day is valid and runs AllOk
 template<class P> template<class E> void DateField<P>::OnEditDay(E& event) {
 
-	bool check;
+	bool success;
 
 	date->check_leap_year();
 
 	if (date->Y_is_leap_year) {
 
-		check = check_unsigned_int((day->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi(month->GetValue())) - 1] + 1);
+		success = check_unsigned_int((day->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi(month->GetValue())) - 1] + 1);
 
 	}
 	else {
 
-		check = check_unsigned_int((day->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi(month->GetValue())) - 1] + 1);
+		success = check_unsigned_int((day->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi(month->GetValue())) - 1] + 1);
 
 	}
 
-	if (check) {
+	if (success) {
 
 		day->SetForegroundColour(wxGetApp().foreground_color);
 		day->SetFont(wxGetApp().default_font);
@@ -18680,7 +18680,7 @@ template<class P> template<class E> void DateField<P>::OnEditDay(E& event) {
 	}
 
 	//day_ok is true/false is the text enteres is valid/invalid
-	day_ok = check;
+	day_ok = success;
 
 	//tries to enable button_reduce
 	parent_frame->AllOk();
@@ -18984,15 +18984,15 @@ template<class P> template<class T> void ProjectionField<P>::InsertIn(T* host, w
 template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
 
 	String s;
-	bool check;
+	bool success;
 
 	//I check whether the name in the GUI field body matches one of the body names in catalog
-	find_and_replace_case_insensitive(name, types, &check, NULL);
+	find_and_replace_case_insensitive(name, types, &success, NULL);
 
 	//ok is true/false is the text enteres is valid/invalid
-	ok = check;
+	ok = success;
 
-	if (check) {
+	if (success) {
 
 		name->SetForegroundColour(wxGetApp().foreground_color);
 		name->SetFont(wxGetApp().default_font);

@@ -12780,7 +12780,6 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
 		else {
 
 			stringstream temp;
-			unsigned int i;
 
 			temp.str("");
 			temp << "Projection must be one of the following: ";

@@ -12856,7 +12856,7 @@ template<class F> template <class T> void CloseFrame<F>::operator()([[maybe_unus
 	//destroys frame
 	frame->CallAfter(*destroy_frame);
 
-//	event.Skip(true);
+	event.Skip(true);
 
 
 }

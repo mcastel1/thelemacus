@@ -17460,15 +17460,15 @@ template<class P> void BodyField<P>::set(void) {
 template<class P> template<class T> void BodyField<P>::get(T& event) {
 
 	unsigned int i;
-	bool check;
+	bool success;
 
 	if (ok) {
 		//If the GUI field's content is ok...
 
 		//I find the position of the content of the GUI field in the list of  the body names in catalog
-		for (check = false, i = 0; (i < (catalog->list).size()) && (!check); i++) {
+		for (success = false, i = 0; (i < (catalog->list).size()) && (!success); i++) {
 			if (String((name->GetValue().ToStdString())) == (((catalog->list)[i]).name)) {
-				check = true;
+				success = true;
 			}
 		}
 		i--;

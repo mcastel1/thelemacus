@@ -14910,6 +14910,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     file_is_untitled = true;
     enable_highlight = true;
     selecting_route_for_position = false;
+    abort = false;
     
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);

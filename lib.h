@@ -1678,7 +1678,7 @@ class StaticText : public wxStaticText{
 public:
     
     
-    StaticText(wxWindow*, const wxString&, const wxPoint&, const wxSize&);
+    StaticText(wxWindow*, const wxString&, const wxPoint&, const wxSize&, long);
     
 };
 

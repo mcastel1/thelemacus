@@ -15744,8 +15744,7 @@ template<class E> void ListFrame::OnModifyRoute(E& event) {
 		s.str("");
 		s << "Route #" << item + 1;
 
-		RouteFrame* route_frame = new RouteFrame(this, &((data->route_list)[item]), false, item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
-
+		route_frame = new RouteFrame(this, &((data->route_list)[item]), false, item, s.str().c_str(), wxDefaultPosition, wxDefaultSize, String(""));
 		route_frame->Show(true);
 
 	}

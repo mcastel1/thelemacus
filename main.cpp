@@ -300,8 +300,6 @@ bool MyApp::OnInit() {
 	Int n_chart_frames;
 	stringstream s;
 	String projection, temp;
-	//obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-	wxDisplay display;
     wxFrame* dummy_frame;
     ShowAll* show_all;
     QuestionFrame< ShowAll, CloseFrame<ListFrame> >* disclaimer;
@@ -346,6 +344,7 @@ bool MyApp::OnInit() {
 	//    wxImage::AddHandler(new wxBMPHandler);
 
     dummy_frame = new wxFrame();
+    //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     display.GetFromWindow(dummy_frame);
     dummy_frame->~wxFrame();
 

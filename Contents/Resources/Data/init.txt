@@ -1,5 +1,5 @@
 #comment lines, such as this one, will be ignored
-show coastlines = n
+show coastlines = y
 artificial horizon = y	
 plot coastline every = 10
 index error = 0° 1.9'
@@ -107,3 +107,4 @@ name file trash icon = trash_icon.png
 name file arrow icon = arrow_icon.png
 name file position icon = position_icon.png
 name file disconnect icon = disconnect_icon.png
+name file michele icon = michele_icon.png

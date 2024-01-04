@@ -12847,7 +12847,7 @@ template<class F> CloseFrame<F>::CloseFrame(F* frame_in) {
 }
 
 //closes a frame of type F
-template<class F> template <class T> void CloseFrame<F>::operator()(T& event) {
+template<class F> template <class T> void CloseFrame<F>::operator()([[maybe_unused]] T& event) {
 
 	DestroyFrame<F>* destroy_frame;
 
@@ -17460,15 +17460,15 @@ template<class P> void BodyField<P>::set(void) {
 template<class P> template<class T> void BodyField<P>::get(T& event) {
 
 	unsigned int i;
-	bool success;
+	bool check;
 
 	if (ok) {
 		//If the GUI field's content is ok...
 
 		//I find the position of the content of the GUI field in the list of  the body names in catalog
-		for (success = false, i = 0; (i < (catalog->list).size()) && (!success); i++) {
+		for (check = false, i = 0; (i < (catalog->list).size()) && (!check); i++) {
 			if (String((name->GetValue().ToStdString())) == (((catalog->list)[i]).name)) {
-				success = true;
+				check = true;
 			}
 		}
 		i--;
@@ -18718,13 +18718,13 @@ bool RouteTypeField::is_ok(void) {
 template<class E> void RouteTypeField::OnEdit(E& event) {
 
 	unsigned int i;
-	bool success, enable;
+	bool check, enable;
 
 
 	//I check whether the name in the GUI field body matches one of the body names in catalog
-	find_and_replace_case_insensitive(name, types, &success, &i);
+	find_and_replace_case_insensitive(name, types, &check, &i);
 
-	if (success) {
+	if (check) {
 		//the text entered in name is valid
 
 		//enable/disable the related fields in RouteFrame f
@@ -18758,7 +18758,7 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 
 
 	//ok is true/false is the text entered is valid/invalid
-	ok = success;
+	ok = check;
 	//tries to enable button_reduce
 	parent_frame->AllOk();
 

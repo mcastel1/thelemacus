@@ -73,6 +73,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  ********** THINGS TO FIX ************
  - fix all warnings on WIN32
+ - add the ::check method to Route and PositionFrame, and bind it as it is bound in SightFrame
  - check why a lot of stuff is printed out when you press reduce in Sight Frame 
  - on SightFrame, if you edit BodyField without pressing tab, the method that updates recent bodies is not called 
  - when you write Data to file, write also recent items

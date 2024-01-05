@@ -19158,9 +19158,14 @@ void ListControl::EnableButtons(bool check) {
 void ListControl::Resize(void) {
 
 	int i, j, width_item, width_total, column_width;
-    wxListItem item;
+    wxListItem item, column;
     wxSize item_size;
 
+    //dirty fix: header_width[0] is set to an oddly large value-> here I get the width of the text in the first column, add a margin and set header_width[0] equal to it 
+	column.SetMask(wxLIST_MASK_TEXT); // enable GetText()
+	GetColumn(0, column);
+    header_width[0] = (String((column.GetText()).ToStdString()).get_size(this).GetWidth()) + (String("AAA").get_size(this).GetWidth());
+    
     item.SetMask(wxLIST_MASK_TEXT); // enable GetText()
 
 	//    set the column width to the width of the header or its longest item

@@ -13037,9 +13037,9 @@ template<class P> CheckAngle<P>::CheckAngle(AngleField<P>* p_in) {
 //this functor checks the whole angle field by calling the check on its sign, arcdegree and arcminute parts‰
 template<class P> template <class T> void CheckAngle<P>::operator()(T& event) {
 
-	check_sign(event);
-	check_arc_degree(event);
-	check_arc_minute(event);
+	(*check_sign)(event);
+	(*check_arc_degree)(event);
+	(*check_arc_minute)(event);
 
 	event.Skip(true);
 
@@ -13758,6 +13758,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 	//I bind reduce button to label->set_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
 	button_reduce->Bind(wxEVT_BUTTON, &SightFrame::OnPressReduce, this);
 	button_reduce->Bind(wxEVT_BUTTON, label->set_to_current_time);
+    button_reduce->Bind(wxEVT_BUTTON, &SightFrame::check<wxCommandEvent>, this);
 
 	//If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
 	button_reduce->Bind(wxEVT_BUTTON, &BodyField<SightFrame>::get<wxCommandEvent>, body);
@@ -13918,7 +13919,25 @@ void SightFrame::KeyDown(wxKeyEvent& event) {
 
 }
 
+//run check on all the GUI fields that are members of SightFrame
+template<class E> void SightFrame::check(E& event){
 
+    (*(body->check))(event);
+    (*(limb->check))(event);
+    (*(artificial_horizon_check->check))(event);
+    (*(stopwatch_check->check))(event);
+    (*(H_s->check))(event);
+    (*(index_error->check))(event);
+    (*(height_of_eye->check))(event);
+    (*(master_clock_date->check))(event);
+    (*(master_clock_chrono->check))(event);
+    (*(stopwatch_reading->check))(event);
+    (*(TAI_minus_UTC->check))(event);
+    (*(label->check))(event);
+
+    event.Skip(true);
+
+}
 
 PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, long position_in_listcontrol_positions_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {
 

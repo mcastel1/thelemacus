@@ -15603,13 +15603,17 @@ void ListFrame::DrawAll(void) {
 
 }
 
-//fits the size of all listcontrols inside *this to their respective content and resizes *this to fit the new size of the listcontrols
+//fit the size of all listcontrols inside *this to their respective content and resize the respective sizer_boxes and *this to fit the new size of the listcontrols
 void ListFrame::Resize(void) {
 
 	listcontrol_sights->Resize();
-
+    sizer_box_sight->Layout();
+    
 	listcontrol_positions->Resize();
+    sizer_box_position->Layout();
+    
 	listcontrol_routes->Resize();
+    sizer_box_route->Layout();
 
 	//    Maximize(panel);
 	panel->Fit();

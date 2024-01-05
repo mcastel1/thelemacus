@@ -959,6 +959,9 @@ public:
     void print_positions(String, ostream&);
     void print_routes(bool, String, ostream&);
     //    void show(bool, String);
+    
+    void write_recent_bodies(void);
+    
     void menu(String);
     int compute_position(String);
     
@@ -1844,7 +1847,6 @@ public:
     
     BodyField(wxPanel*, Body*, Catalog*);
     void read_recent_bodies(void);
-    void write_recent_items(void);
     void set(void);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);

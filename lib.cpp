@@ -5907,8 +5907,43 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
 
     }
 
+}
+
+
+//write the recent bodies to file
+void Data::write_recent_bodies(void) {
+
+    String prefix, s;
+    stringstream temp;
+    unsigned int i;
+
+    prefix = String("");
+
+    if(!(wxGetApp().list_frame->file_is_untitled)){
+        //there is a .nav file open-> write recent items to it
+
+        for (temp.str(""), i = 0; i < (wxGetApp().list_frame->data->recent_bodies).size(); i++) {
+            temp << (wxGetApp().list_frame->data->recent_bodies)[i] << " ";
+        }
+        s = String(temp.str().c_str());
+
+//        wxGetApp().list_frame->data_file.open(String("out"), prefix);
+
+        cout << prefix.value << "Writing recent items of projection field to file " <<  wxGetApp().list_frame->data_file.value << " ...\n" << RESET;
+        s.write_to_file(String("Recent bodies"), wxGetApp().list_frame->data_file, String(""));
+
+        cout << prefix.value << YELLOW << "... done.\n" << RESET;
+        wxGetApp().list_frame->data_file.close(prefix);
+        
+    }else{
+        //no .nav file is open -> I don't write recent items
+
+        cout << prefix.value << YELLOW << "No .nav file is open: cannot write recent items of projection field to file\n" << RESET;
+
+    }
 
 }
+
 
 
 bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String prefix) {
@@ -10453,7 +10488,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 				}
 
 				//write newly updated recent_items to .nav file
-				p->write_recent_items();
+				wxGetApp().list_frame->data->write_recent_bodies();
 				//I update p->bodies according to the content of .nav file
 				p->read_recent_bodies();
 
@@ -18880,39 +18915,6 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
 
 }
 
-//write the recent items in recent_itams to file
-template<class P> void BodyField<P>::write_recent_items(void) {
-
-	String prefix, s;
-	stringstream temp;
-	unsigned int i;
-
-	prefix = String("");
-
-    if(!(parent_frame->parent->file_is_untitled)){
-        //there is a .nav file open-> write recent items to it
-
-        for (temp.str(""), i = 0; i < (wxGetApp().list_frame->data->recent_bodies).size(); i++) {
-            temp << (wxGetApp().list_frame->data->recent_bodies)[i] << " ";
-        }
-        s = String(temp.str().c_str());
-
-//        parent_frame->parent->data_file.open(String("out"), prefix);
-
-        cout << prefix.value << "Writing recent items of projection field to file " <<  parent_frame->parent->data_file.value << " ...\n" << RESET;
-        s.write_to_file(String("Recent bodies"), parent_frame->parent->data_file, String(""));
-
-        cout << prefix.value << YELLOW << "... done.\n" << RESET;
-        parent_frame->parent->data_file.close(prefix);
-        
-    }else{
-        //no .nav file is open -> I don't write recent items
-
-        cout << prefix.value << YELLOW << "No .nav file is open: cannot write recent items of projection field to file\n" << RESET;
-
-    }
-
-}
 
 template<class P> template<class T> void LimbField<P>::InsertIn(T* host) {
 

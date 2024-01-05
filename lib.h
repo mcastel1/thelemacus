@@ -1843,7 +1843,7 @@ public:
     bool ok;
     
     BodyField(wxPanel*, Body*, Catalog*);
-    void read_recent_items(void);
+    void read_recent_bodies(void);
     void write_recent_items(void);
     void set(void);
     template<class T> void get(T&);

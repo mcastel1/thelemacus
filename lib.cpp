@@ -10455,7 +10455,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 				//write newly updated recent_items to .nav file
 				p->write_recent_items();
 				//I update p->bodies according to the content of .nav file
-				p->read_recent_items();
+				p->read_recent_bodies();
 
 			}
 
@@ -17423,7 +17423,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 	name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
 	//    name->SetValue("");
 	//SetColor(name);
-	read_recent_items();
+	read_recent_bodies();
 	AdjustWidth(name);
 	name->Bind(wxEVT_KILL_FOCUS, *check);
 	//as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -18779,7 +18779,7 @@ template<class P> template<class T> void BodyField<P>::InsertIn(T* host) {
 }
 
 //reads from file_recent the recently selected items in the dropdown menu of BodyField and updates the dropdown menu in such a way that the recent items appear on top of it
-template<class P> void BodyField<P>::read_recent_items(void) {
+template<class P> void BodyField<P>::read_recent_bodies(void) {
 
 	unsigned int i, j;
 	wxArrayString bodies_temp;

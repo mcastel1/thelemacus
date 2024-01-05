@@ -73,6 +73,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  ********** THINGS TO FIX ************
  - fix all warnings on WIN32
+ - boxes around listcontrols are not resized when listcontrols are resized in ListFrame
  - on SightFrame, if you edit BodyField without pressing tab, the method that updates recent bodies is not called 
  - when you write Data to file, write also recent items
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc

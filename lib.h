@@ -1348,6 +1348,8 @@ public:
     
     //a vector containing pointers to the buttons of *this (modify button, etc ...) which may be disabled if some event occurs
     vector<wxButton*> disableable_buttons;
+    //header_width[i] = width of the header of the i-th column
+    vector<int> header_width;
     
     ListControl(wxWindow*, vector<wxButton*>, const wxPoint&, const wxSize&);
     

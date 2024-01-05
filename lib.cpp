@@ -15266,7 +15266,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         
         
         
-        sizer_box_sight->Add(listcontrol_sights, 1, wxALL, ((wxGetApp().border).value));
+        sizer_box_sight->Add(listcontrol_sights, 0, wxALL, ((wxGetApp().border).value));
         
         
         //listcontrol_positions with positions
@@ -19061,6 +19061,7 @@ OnNewRouteInListControlRoutesForTransport::OnNewRouteInListControlRoutesForTrans
 ListControl::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_buttons_in, const wxPoint& pos, const wxSize& size) : wxListCtrl(parent_in, wxID_ANY, pos, size, wxLC_REPORT) {
 
 	disableable_buttons = disableable_buttons_in;
+    header_width.resize(0);
 
 }
 
@@ -19074,7 +19075,7 @@ StaticText::StaticText(wxWindow* parent, const wxString& label, const wxPoint& p
 
 
 
-//this pushes back a column to ListControl
+//pushe back a column to ListControl and store the header size into header_size
 void ListControl::PushBackColumn(wxString name) {
 
 //	wxListItem column;
@@ -19083,7 +19084,9 @@ void ListControl::PushBackColumn(wxString name) {
 //	column.SetText(name);
 //	column.SetAlign(wxLIST_FORMAT_LEFT);
 //	column.SetWidth(((this->GetSize()).GetWidth()) / ((this->GetColumnCount()) + 1));
+    
 	InsertColumn(GetColumnCount(), name, wxLIST_FORMAT_LEFT, wxLIST_AUTOSIZE_USEHEADER);
+    header_width.push_back(GetColumnWidth(GetColumnCount()-1));
 
 }
 
@@ -19146,44 +19149,39 @@ void ListControl::EnableButtons(bool check) {
 //correctly resizes the sizes of columns of *this
 void ListControl::Resize(void) {
 
-//	int i, j, width_item, width_total;
-//    wxListItem item;
-//    wxSize item_size, header_size;
-//
-//    item.SetMask(wxLIST_MASK_TEXT); // enable GetText()
-//
-//
-//	//    set the column width to the width of the header or its longest item
-//	for(width_total = 0, j = 0; j < GetColumnCount(); j++) {
-//
-//        item.SetColumn(j); // set the column
-//
-//        for(width_item=0, i=0; i<GetItemCount(); i++){
-//
-//
-//            //run through all elements of column j, compute their size and store the maximum size
-//            item.SetId(i); // set the index
-//            GetItem(item); // get the item
-//            item_size = String(item.GetText().ToStdString()).get_size(this);
-//
-//            if((item_size.GetWidth()) > width_item){width_item = (item_size.GetWidth());}
-//
-//        }
-//
-//        GetColumn(j, item);
-//
-//        header_size = String(item.GetText().ToStdString()).get_size(this);
-//
-//
-////		SetColumnWidth(j, header_size.GetWidth());
-//
-//		SetColumnWidth(j, max(header_size.GetWidth(), item_size.GetWidth()) + 2*((wxGetApp().border).value));
-//
-//		width_total += GetColumnWidth(j);
-//
-//	}
-//
-//	SetSize(wxSize(width_total + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -1));
+	int i, j, width_item, width_total, column_width;
+    wxListItem item;
+    wxSize item_size;
+
+    item.SetMask(wxLIST_MASK_TEXT); // enable GetText()
+
+	//    set the column width to the width of the header or its longest item
+	for(width_total = 0, j = 0; j < GetColumnCount(); j++) {
+
+        item.SetColumn(j); // set the column
+
+        for(width_item=0, i=0; i<GetItemCount(); i++){
+
+            //run through all elements of column j, compute their size and store the maximum size
+            item.SetId(i); // set the index
+            GetItem(item); // get the item
+            item_size = String(item.GetText().ToStdString()).get_size(this);
+
+            if((item_size.GetWidth()) > width_item){width_item = (item_size.GetWidth());}
+
+        }
+
+        column_width = max(header_width[j], width_item);
+        if(header_width[j] <= width_item){
+            column_width += (String("A").get_size(this).GetWidth());
+        }
+        
+        SetColumnWidth(j, column_width);
+		width_total += GetColumnWidth(j);
+
+	}
+
+	SetSize(wxSize(width_total, -1));
 
 }
 

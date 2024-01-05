@@ -13923,15 +13923,24 @@ void SightFrame::KeyDown(wxKeyEvent& event) {
 template<class E> void SightFrame::check(E& event){
 
     (*(body->check))(event);
-    (*(limb->check))(event);
+    if(((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon"))){
+        //I check limb only if the body has a limb -> only if the body is either sun or moon
+        (*(limb->check))(event);
+    }
     (*(artificial_horizon_check->check))(event);
     (*(stopwatch_check->check))(event);
     (*(H_s->check))(event);
     (*(index_error->check))(event);
-    (*(height_of_eye->check))(event);
+    if(!((artificial_horizon_check->checkbox)->GetValue())){
+        //I check height_of_eye only if the artificial horizon checkbox has been checked
+        (*(height_of_eye->check))(event);
+    }
     (*(master_clock_date->check))(event);
     (*(master_clock_chrono->check))(event);
-    (*(stopwatch_reading->check))(event);
+    if((stopwatch_check->checkbox)->GetValue()){
+        //I check stopwatch_reading only if the stopwatch checkbox has been checked
+        (*(stopwatch_reading->check))(event);
+    }
     (*(TAI_minus_UTC->check))(event);
     (*(label->check))(event);
 

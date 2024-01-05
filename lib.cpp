@@ -18836,7 +18836,22 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
     if(!(parent_frame->parent->file_is_untitled)){
         //ListFrame::data_file exists -> read the recently selected items from ListFrame.data_file
 
-        s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("R"), String(""));
+#ifdef __APPLE__
+
+		s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("R"), String(""));
+
+#endif
+
+#ifdef _WIN32
+
+		//If I open a sample sight file at startup stored in Windows resources, use this
+		s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("R"), String(""));
+		//If I open a file on disk, use this
+		//s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("RW"), String(""));
+
+#endif
+
+
         
         for((wxGetApp().list_frame->data->recent_bodies).resize(count((s.value).begin(), (s.value).end(), ' ')), i=0; i<((wxGetApp().list_frame->data->recent_bodies).size()); i++) {
 

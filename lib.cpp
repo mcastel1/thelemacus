@@ -18845,9 +18845,9 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
 #ifdef _WIN32
 
 		//Fork: If I open a sample sight file at startup stored in Windows resources, use this
-		//s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("R"), String(""));
+		s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("R"), String(""));
 		//Fork: If I open a file on disk, use this
-		s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("RW"), String(""));
+//		s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("RW"), String(""));
 
 #endif
 
@@ -19077,13 +19077,13 @@ StaticText::StaticText(wxWindow* parent, const wxString& label, const wxPoint& p
 //this pushes back a column to ListControl
 void ListControl::PushBackColumn(wxString name) {
 
-	wxListItem column;
-
-	column.SetId(GetColumnCount());
-	column.SetText(name);
-	column.SetAlign(wxLIST_FORMAT_LEFT);
-	column.SetWidth(((this->GetSize()).GetWidth()) / ((this->GetColumnCount()) + 1));
-	InsertColumn(GetColumnCount(), column);
+//	wxListItem column;
+//
+//	column.SetId(GetColumnCount());
+//	column.SetText(name);
+//	column.SetAlign(wxLIST_FORMAT_LEFT);
+//	column.SetWidth(((this->GetSize()).GetWidth()) / ((this->GetColumnCount()) + 1));
+	InsertColumn(GetColumnCount(), name, wxLIST_FORMAT_LEFT, wxLIST_AUTOSIZE_USEHEADER);
 
 }
 
@@ -19146,46 +19146,44 @@ void ListControl::EnableButtons(bool check) {
 //correctly resizes the sizes of columns of *this
 void ListControl::Resize(void) {
 
-	int i, j, width_item, width_total;
-    wxListItem item;
-    wxSize item_size, header_size;
-
-    item.SetMask(wxLIST_MASK_TEXT); // enable GetText()
-
-
-	//    set the column width to the width of the header or its longest item
-	for(width_total = 0, j = 0; j < GetColumnCount(); j++) {
-        
-        item.SetColumn(j); // set the column
-
-        //
-     
-        for(width_item=0, i=0; i<GetItemCount(); i++){
-
-
-            //run through all elements of column j, compute their size and store the maximum size
-            item.SetId(i); // set the index
-            GetItem(item); // get the item
-            item_size = String(item.GetText().ToStdString()).get_size(this);
-            
-            if((item_size.GetWidth()) > width_item){width_item = (item_size.GetWidth());}
-            
-        }
-        
-        GetColumn(j, item);
-        
-        header_size = String(item.GetText().ToStdString()).get_size(this);
-
-
-//		SetColumnWidth(j, header_size.GetWidth());
-
-		SetColumnWidth(j, max(header_size.GetWidth(), item_size.GetWidth()) + 2*((wxGetApp().border).value));
-
-		width_total += GetColumnWidth(j);
-
-	}
-
-	SetSize(wxSize(width_total + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -1));
+//	int i, j, width_item, width_total;
+//    wxListItem item;
+//    wxSize item_size, header_size;
+//
+//    item.SetMask(wxLIST_MASK_TEXT); // enable GetText()
+//
+//
+//	//    set the column width to the width of the header or its longest item
+//	for(width_total = 0, j = 0; j < GetColumnCount(); j++) {
+//
+//        item.SetColumn(j); // set the column
+//
+//        for(width_item=0, i=0; i<GetItemCount(); i++){
+//
+//
+//            //run through all elements of column j, compute their size and store the maximum size
+//            item.SetId(i); // set the index
+//            GetItem(item); // get the item
+//            item_size = String(item.GetText().ToStdString()).get_size(this);
+//
+//            if((item_size.GetWidth()) > width_item){width_item = (item_size.GetWidth());}
+//
+//        }
+//
+//        GetColumn(j, item);
+//
+//        header_size = String(item.GetText().ToStdString()).get_size(this);
+//
+//
+////		SetColumnWidth(j, header_size.GetWidth());
+//
+//		SetColumnWidth(j, max(header_size.GetWidth(), item_size.GetWidth()) + 2*((wxGetApp().border).value));
+//
+//		width_total += GetColumnWidth(j);
+//
+//	}
+//
+//	SetSize(wxSize(width_total + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -1));
 
 }
 

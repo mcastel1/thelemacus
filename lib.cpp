@@ -10638,9 +10638,14 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
 
 			//if check is true (false) -> set sign_ok to true (false)
 			(p->sign_ok) = check;
-			//the background color is set to white, because in this case there is no erroneous value in sign
-			(p->sign)->SetForegroundColour(wxGetApp().foreground_color);
-			(p->sign)->SetFont(wxGetApp().default_font);
+            
+            if((p->format) != String("")){
+                //there exists a p->sign field
+                
+                //the background color is set to white, because in this case there is no erroneous value in sign
+                (p->sign)->SetForegroundColour(wxGetApp().foreground_color);
+                (p->sign)->SetFont(wxGetApp().default_font);
+            }
 
 		}
 		else {
@@ -13037,7 +13042,9 @@ template<class P> CheckAngle<P>::CheckAngle(AngleField<P>* p_in) {
 //this functor checks the whole angle field by calling the check on its sign, arcdegree and arcminute parts‰
 template<class P> template <class T> void CheckAngle<P>::operator()(T& event) {
 
-	(*check_sign)(event);
+//    if((p->format) != String("")){
+        (*check_sign)(event);
+//    }
 	(*check_arc_degree)(event);
 	(*check_arc_minute)(event);
 
@@ -17859,7 +17866,7 @@ template<class P, class T> CheckField<P, T>::CheckField(wxPanel* panel_of_parent
 
 
 
-//constructor of an AngleField object, based on the parent frame frame
+//constructor of an AngleField object, based on the parent frame 'frame'. Here format_in is the format of the angle
 template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p, String format_in) {
 
 	unsigned int i;

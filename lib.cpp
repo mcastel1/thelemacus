@@ -10429,18 +10429,18 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 
 				}
 
-				position = find((p->recent_items).begin(), (p->recent_items).end(), i);
+				position = find((wxGetApp().list_frame->data->recent_bodies).begin(), (wxGetApp().list_frame->data->recent_bodies).end(), i);
 
 
-				if (position == (p->recent_items).end()) {
+				if (position == (wxGetApp().list_frame->data->recent_bodies).end()) {
 					//in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
 
 					String prefix;
 
 					prefix = String("");
 
-					(p->recent_items)[(p->recent_items).size() - 1] = i;
-					rotate((p->recent_items).begin(), (p->recent_items).end() - 1, (p->recent_items).end());
+					(wxGetApp().list_frame->data->recent_bodies)[(wxGetApp().list_frame->data->recent_bodies).size() - 1] = i;
+					rotate((wxGetApp().list_frame->data->recent_bodies).begin(), (wxGetApp().list_frame->data->recent_bodies).end() - 1, (wxGetApp().list_frame->data->recent_bodies).end());
 
 
 				}
@@ -10448,7 +10448,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 
 					//the selected item is  in the recent list: I move the element in position to the first place in recent_items
 
-					iter_swap((p->recent_items).begin(), position);
+					iter_swap((wxGetApp().list_frame->data->recent_bodies).begin(), position);
 
 				}
 
@@ -18803,20 +18803,20 @@ template<class P> void BodyField<P>::read_recent_items(void) {
 
         s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("R"), String(""));
         
-        for(recent_items.resize(count((s.value).begin(), (s.value).end(), ' ')), i=0; i<(recent_items.size()); i++) {
+        for((wxGetApp().list_frame->data->recent_bodies).resize(count((s.value).begin(), (s.value).end(), ' ')), i=0; i<((wxGetApp().list_frame->data->recent_bodies).size()); i++) {
 
             pos_end = (s.value).find(" ", 0);
-            recent_items[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
+            (wxGetApp().list_frame->data->recent_bodies)[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
             (s.value) = ((s.value).substr(pos_end + 1, string::npos));
 
         }
 
     }else{
-        //ListFrame::data_file exists -> set the size of recent_items to that of catalog->list and set recent_items[i] simply to i
+        //ListFrame::data_file exists -> set the size of (wxGetApp().list_frame->data->recent_bodies) to that of catalog->list and set (wxGetApp().list_frame->data->recent_bodies)[i] simply to i
 
         
-        for(recent_items.resize((catalog->list).size()), i=0; i<(recent_items.size()); i++){
-            recent_items[i] = i;
+        for((wxGetApp().list_frame->data->recent_bodies).resize((catalog->list).size()), i=0; i<((wxGetApp().list_frame->data->recent_bodies).size()); i++){
+            (wxGetApp().list_frame->data->recent_bodies)[i] = i;
         }
         
 
@@ -18834,10 +18834,10 @@ template<class P> void BodyField<P>::read_recent_items(void) {
 	//    }
 	//    cout << "\n";
 
-	//I first add to bodies the recently selected celestial bodies written in recent_items
-	for (bodies.Clear(), i = 0; i < recent_items.size(); i++) {
+	//I first add to bodies the recently selected celestial bodies written in (wxGetApp().list_frame->data->recent_bodies)
+	for (bodies.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_bodies).size(); i++) {
 
-		bodies.Add(bodies_temp[recent_items[i]]);
+		bodies.Add(bodies_temp[(wxGetApp().list_frame->data->recent_bodies)[i]]);
 
 	}
 
@@ -18892,8 +18892,8 @@ template<class P> void BodyField<P>::write_recent_items(void) {
     if(!(parent_frame->parent->file_is_untitled)){
         //there is a .nav file open-> write recent items to it
 
-        for (temp.str(""), i = 0; i < recent_items.size(); i++) {
-            temp << recent_items[i] << " ";
+        for (temp.str(""), i = 0; i < (wxGetApp().list_frame->data->recent_bodies).size(); i++) {
+            temp << (wxGetApp().list_frame->data->recent_bodies)[i] << " ";
         }
         s = String(temp.str().c_str());
 

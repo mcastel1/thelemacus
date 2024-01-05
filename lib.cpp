@@ -18844,10 +18844,10 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
 
 #ifdef _WIN32
 
-		//If I open a sample sight file at startup stored in Windows resources, use this
-		s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("R"), String(""));
-		//If I open a file on disk, use this
-		//s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("RW"), String(""));
+		//Fork: If I open a sample sight file at startup stored in Windows resources, use this
+		//s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("R"), String(""));
+		//Fork: If I open a file on disk, use this
+		s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("RW"), String(""));
 
 #endif
 

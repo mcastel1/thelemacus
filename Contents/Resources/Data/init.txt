@@ -94,6 +94,7 @@ name file catalog = catalog.txt
 name file coastline data blocked = map_conv_blocked.csv
 name file n line = n_line_map_conv_blocked.txt
 name file sample sight = sample_sight.nav
+#name file sample sight = paris_sights.nav
 #files in image directory
 name file app icon = jolly_rogers.png
 name file question icon = question_icon.png

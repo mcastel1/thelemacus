@@ -51,6 +51,7 @@ sample ICON  "Z:/Contents/Resources/Images/Light/app_icon.ico"
 
 init DATA "Z:/Contents/Resources/Data/init.txt"
 sample_sight DATA "Z:/Contents/Resources/Data/sample_sight.nav"
+paris_sights DATA "Z:/Contents/Resources/Data/paris_sights.nav"
 catalog DATA "Z:/Contents/Resources/Data/catalog.txt"
 j2000_to_itrf93	DATA "Z:/Contents/Resources/Data/j2000_to_itrf93.txt"
 jupiter	DATA "Z:/Contents/Resources/Data/jupiter.txt"

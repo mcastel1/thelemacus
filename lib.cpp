@@ -3555,13 +3555,13 @@ bool Chrono::set(String name, double x, [[maybe_unused]] String prefix) {
 //evaluates whether Time (*this) is equal to t
 bool Time::operator==(const Time& t) {
 
-	Time s;
+	Time temp;
 
 	(*this).to_MJD();
-	s = t;
-	s.to_MJD();
+	temp = t;
+	temp.to_MJD();
 
-	return((((*this).MJD) == (s.MJD)));
+	return((((*this).MJD) == (temp.MJD)));
 
 }
 
@@ -3639,7 +3639,7 @@ void Time::to_TAI(void) {
 	 hour : corresponding hours of the above date
 	 */
 
-	int Yt, Mt, Dt;
+	int Yt = 0, Mt = 0, Dt = 0;
 	double ht;
 
 	long int b, c, d, e, f, jd0;
@@ -11044,12 +11044,12 @@ void DrawPanel::ShowCoordinates(Position q, wxStaticText* label) {
 void DrawPanel::ShowCoordinates(wxPoint q, wxStaticText* label) {
 
 	wxPoint p;
-	Position r;
+	Position temp;
 
-	(this->*ScreenToGeo)(q, &r);
+	(this->*ScreenToGeo)(q, &temp);
 
 	if ((this->ScreenToDrawPanel)(q, &p)) {
-		SetCoordinateLabel(r, p, label);
+		SetCoordinateLabel(temp, p, label);
 	}
 	else {
 		label->SetLabel(wxString(""));

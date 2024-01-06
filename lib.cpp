@@ -19122,25 +19122,21 @@ StaticText::StaticText(wxWindow* parent, const wxString& label, const wxPoint& p
 
 }
 
-//set all columns of *this: add a first dummy column, which is not correctly sized on WIN32 (I don't know why) -> add the real columns -> remove the dummy column
+//set all columns of *this: add a first dummy column, which is not correctly sized on WIN32 (I don't know why) -> add the real columns -> remove the dummy column. The  size of column i that fits the header is stored in header_width[i]
 void ListControl::SetColumns(vector<wxString> headers) {
     
     int i;
     
-    
     for(i=0, header_width.clear(), PushBackColumn(wxString("")); i<(headers.size()); i++){
         PushBackColumn(headers[i]);
-//        header_width.push_back(this->GetColumnWidth(i));
     }
     
     DeleteColumn(0);
     header_width.erase(header_width.begin());
-
-    cout << "";
         
 }
 
-//pushe back a column to ListControl and store the header size into header_size
+//push back a column to ListControl and store the header size into header_size
 void ListControl::PushBackColumn(wxString name) {
 
 //	wxListItem column;
@@ -19211,17 +19207,17 @@ void ListControl::EnableButtons(bool check) {
 
 }
 
-//correctly resizes the sizes of columns of *this
+// resize the sizes of columns of *this to the maximum between the header size and the largest item size
 void ListControl::Resize(void) {
 
 	int j, item_width;
  
-	//    set the column width to the width of the header or its longest item
 	for(j = 0; j < GetColumnCount(); j++) {
 
+        //set the column width to the width of the largest item with wxLIST_AUTOSIZE, and store the width in wxLIST_AUTOSIZE
         SetColumnWidth(j, wxLIST_AUTOSIZE);
         item_width = GetColumnWidth(j);
-        
+        //set the column width to the maximum between the header width (computed elsewhere) and item_width
         SetColumnWidth(j, max(header_width[j], item_width));
 
 	}

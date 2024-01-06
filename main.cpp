@@ -73,19 +73,16 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  ********** THINGS TO FIX ************
  - add flag to ListControl to enable only one selection
- - to fit ListControl to both column and content size, add one dummy column -> add the other columns and fit to their size and store the size -> remove the first dummy column -> do a similar thing for the rows
  - fix all warnings on WIN32
  - add the ::check method to Route and PositionFrame, and bind it as it is bound in SightFrame
- - check why a lot of stuff is printed out when you press reduce in Sight Frame 
- - on SightFrame, if you edit BodyField without pressing tab, the method that updates recent bodies is not called 
- - when you write Data to file, write also recent items
+ - on SightFrame, if you edit BodyField without pressing tab, the method that updates recent bodies is not called
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
  - listcontrol_sights etc are not resized to their minimum sizes 
  - check that WXK_PLUS does not depend on the computer
-
  ---
 
  for MSW:
+ - enter key is not bound to reduce or similar buttons
  - when you open sample_sight.nav from resouces, you open it in R mode -> when you try to write in it you will get an error
  - center name of file in top bar of ListFrame
  - write the WIN32 part of void MyApp::OnTimer

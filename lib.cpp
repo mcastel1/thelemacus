@@ -8266,7 +8266,7 @@ void DrawPanel::FitAll() {
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_Mercator(wxDC* dc) {
 
-	Angle lambda, phi, lambda_saved;
+	Angle lambda, phi;
 	Route route;
 	wxPoint p;
     wxCoord width_label, height_label;

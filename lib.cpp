@@ -1103,7 +1103,7 @@ void String::write_to_file(String name, FileRW& file, [[maybe_unused]] String pr
 	file.value->clear();                 // clear fail and eof bits
 	file.value->seekg(0, std::ios::beg); // back to the start!
 
-	for (temp.str(""), i = 0; (i < (file.number_of_lines)) && (!(*(file.value)).eof()); i++) {
+	for (temp.str(""), i = 0; (i < ((long)(file.number_of_lines))) && (!(*(file.value)).eof()); i++) {
 
 		line.clear();
 		getline(*(file.value), line);

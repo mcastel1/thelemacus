@@ -19122,18 +19122,21 @@ StaticText::StaticText(wxWindow* parent, const wxString& label, const wxPoint& p
 
 }
 
-//set all columns of *this: add a first dummy column, which is not correctly sized on WIN32 (I don't know why) -> add the columns -> remove the first column
+//set all columns of *this: add a first dummy column, which is not correctly sized on WIN32 (I don't know why) -> add the real columns -> remove the dummy column
 void ListControl::SetColumns(vector<wxString> headers) {
     
     int i;
     
-    for(i=0, PushBackColumn(wxString("")), header_width.resize(1); i<(headers.size()); i++){
+    
+    for(i=0, header_width.clear(), PushBackColumn(wxString("")); i<(headers.size()); i++){
         PushBackColumn(headers[i]);
-        header_width.push_back(this->GetColumnWidth(i));
+//        header_width.push_back(this->GetColumnWidth(i));
     }
     
     DeleteColumn(0);
     header_width.erase(header_width.begin());
+
+    cout << "";
         
 }
 
@@ -19148,7 +19151,7 @@ void ListControl::PushBackColumn(wxString name) {
 //	column.SetWidth(((this->GetSize()).GetWidth()) / ((this->GetColumnCount()) + 1));
     
 	InsertColumn(GetColumnCount(), name, wxLIST_FORMAT_LEFT, wxLIST_AUTOSIZE_USEHEADER);
-//    header_width.push_back(GetColumnWidth(GetColumnCount()-1));
+    header_width.push_back(GetColumnWidth(GetColumnCount()-1));
 
 }
 

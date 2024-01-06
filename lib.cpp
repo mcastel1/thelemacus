@@ -17318,13 +17318,9 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 	types.Add(wxT("3D"));
 	//    types.Add(wxT("Lambert"));
 
-	//sets the name of file_recent for future use
-//	file_recent.set_name((wxGetApp().path_file_recent));
-
 	check = new CheckProjection<P>(this);
 
-
-	name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
+	name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	//SetColor(name);
 	name->SetValue(types[0]);
 	read_recent_items();
@@ -17504,7 +17500,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 
 	check = new CheckBody<P>(this);
 
-	name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN);
+	name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	//    name->SetValue("");
 	//SetColor(name);
 	read_recent_bodies();
@@ -17924,10 +17920,10 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 
 	//here the allocation of sign is inserted in the code in such a way that if format = "+-" the sign is allocated before deg, text_deg, min, text_min: In this way, when the user tabs through the fields in PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
 	if (format == String("+-")) {
-		sign = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
+		sign = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	}
 
-	deg = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN);
+	deg = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, degrees, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	deg->SetInitialSize(deg->GetSizeFromTextSize(deg->GetTextExtent(wxS("000"))));
 	//SetColor(deg);
 	AdjustWidth(deg);
@@ -17941,7 +17937,7 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 
 	text_deg = new StaticText((parent->panel), wxString(wxGetApp().degree_symbol.append(String(" ")).value), wxDefaultPosition, wxDefaultSize, 0);
 
-	min = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+	min = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 	min->SetInitialSize(min->GetSizeFromTextSize(min->GetTextExtent(wxS(sample_width_floating_point_field))));
 	//SetColor(min);
 	min->SetValue(wxString(""));
@@ -17955,7 +17951,7 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 
 	//here the allocation of sign is inserted in the code in such a way that if format = "NS" || "EW" the sign is allocated after deg, text_deg, min, text_min: In this way, when the user tabs through the fields in the PositionFrame, the tab will go through the different fields in the correct order (in the order in which the fields appear from left to right in PositionFrame)
 	if ((format == String("NS")) || (format == String("EW"))) {
-		sign = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN);
+		sign = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, signs, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	}
 
 	if (format != String("")) {
@@ -18037,7 +18033,7 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 
 
 
-	value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+	value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 	//SetColor(value);
 	value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
 	//I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
@@ -18048,7 +18044,7 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 	value->Bind(wxEVT_KEY_UP, &LengthField::OnEditValue<wxKeyEvent>, this);
 
 
-	unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN);
+	unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	//SetColor(unit);
 	AdjustWidth(unit);
 	//I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
@@ -18081,7 +18077,7 @@ template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* 
 
 	(set_to_current_time.p) = this;
 
-	value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize);
+	value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 	//SetColor(value);
 	value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_string_field))));
 	value->SetValue("");
@@ -18401,7 +18397,7 @@ template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {
 		months.Add(wxString::Format(wxT("%i"), i + 1));
 	}
 
-	year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
+	year = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 	//SetColor(year);
 	year->SetInitialSize(year->GetSizeFromTextSize(year->GetTextExtent(wxS("0000"))));
 	year->SetValue(wxString(""));
@@ -18412,7 +18408,7 @@ template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {
 
 
 	text_hyphen_1 = new StaticText((parent_frame->panel), wxT("-"), wxDefaultPosition, wxDefaultSize, 0);
-	month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN);
+	month = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, months, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	//SetColor(month);
 	AdjustWidth(month);
 	month->SetValue(wxString(""));
@@ -18424,7 +18420,7 @@ template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {
 
 	text_hyphen_2 = new StaticText((parent_frame->panel), wxT("-"), wxDefaultPosition, wxDefaultSize, 0);
 
-	day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN);
+	day = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, days, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	//SetColor(day);
 	//I create a temporary days list to set the size of the wxComboBox day with AdjustWidth, and then destroy this temporary days list
 	for (days.Clear(), i = 0; i < 31; i++) {
@@ -18473,7 +18469,7 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 		minutes.Add(wxString::Format(wxT("%i"), i));
 	}
 
-	hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN);
+	hour = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, hours, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	//SetColor(hour);
 	//    hour->SetInitialSize(hour->GetSizeFromTextSize(hour ->GetTextExtent(wxS("00"))));
 	AdjustWidth(hour);
@@ -18486,7 +18482,7 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 
 	text_colon_1 = new StaticText((parent_frame->panel), wxT(":"), wxDefaultPosition, wxDefaultSize, 0);
 
-	minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN);
+	minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	//SetColor(minute);
 	AdjustWidth(minute);
 	//    minute->SetInitialSize(minute->GetSizeFromTextSize(minute->GetTextExtent(wxS("00"))));
@@ -18499,7 +18495,7 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 
 	text_colon_2 = new StaticText((parent_frame->panel), wxT(":"), wxDefaultPosition, wxDefaultSize, 0);
 
-	second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize);
+	second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 	second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
 	//SetColor(second);
 	second->SetValue(wxString(""));
@@ -18538,7 +18534,7 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s) {
 
 
 
-	name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN);
+	name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	//SetColor(name);
 	AdjustWidth(name);
 	ok = false;

@@ -18145,11 +18145,11 @@ template<class P> template<class E> void AngleField<P>::OnEditSign(E& event) {
 //this function is called every time a keyboard button is lifted in this->deg: it checks whether the text entered so far in deg is valid and runs AllOk
 template<class P> template<class E> void AngleField<P>::OnEditArcDegree(E& event) {
 
-	bool check;
+	bool success;
 
-	check = check_unsigned_int((deg->GetValue()).ToStdString(), NULL, true, 0, 360);
+	success = check_unsigned_int((deg->GetValue()).ToStdString(), NULL, true, 0, 360);
 
-	if (check) {
+	if (success) {
 
 		//because the text in sign is valid, I set the background color of deg to white
 		deg->SetForegroundColour(wxGetApp().foreground_color);
@@ -18158,7 +18158,7 @@ template<class P> template<class E> void AngleField<P>::OnEditArcDegree(E& event
 	}
 
 	//sign_ok is true/false is the text entered in sign is valid/invalid
-	deg_ok = check;
+	deg_ok = success;
 
 	//tries to enable button_reduce
 	parent->AllOk();
@@ -18228,11 +18228,11 @@ template<class P> bool ChronoField<P>::is_ok(void) {
 //this function is called every time a keyboard button is lifted in this->hour: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> template<class E> void ChronoField<P>::OnEditHour(E& event) {
 
-	bool check;
+	bool success;
 
-	check = check_unsigned_int((hour->GetValue()).ToStdString(), NULL, true, 0, 24);
+	success = check_unsigned_int((hour->GetValue()).ToStdString(), NULL, true, 0, 24);
 
-	if (check) {
+	if (success) {
 
 		//because the text in value is valid, I set the background color of value to white
 		hour->SetForegroundColour(wxGetApp().foreground_color);
@@ -18242,7 +18242,7 @@ template<class P> template<class E> void ChronoField<P>::OnEditHour(E& event) {
 
 
 	//hour_ok is true/false is the text entered is valid/invalid
-	hour_ok = check;
+	hour_ok = success;
 	//tries to enable button_reduce
 	parent_frame->AllOk();
 
@@ -18253,11 +18253,11 @@ template<class P> template<class E> void ChronoField<P>::OnEditHour(E& event) {
 //this function is called every time a keyboard button is lifted in this->minute: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> template<class E> void ChronoField<P>::OnEditMinute(E& event) {
 
-	bool check;
+	bool success;
 
-	check = check_unsigned_int((minute->GetValue()).ToStdString(), NULL, true, 0, 60);
+	success = check_unsigned_int((minute->GetValue()).ToStdString(), NULL, true, 0, 60);
 
-	if (check) {
+	if (success) {
 
 		//because the text in value is valid, I set the background color of value to white
 		minute->SetForegroundColour(wxGetApp().foreground_color);
@@ -18267,7 +18267,7 @@ template<class P> template<class E> void ChronoField<P>::OnEditMinute(E& event) 
 
 
 	//minute_ok is true/false is the text entered is valid/invalid
-	minute_ok = check;
+	minute_ok = success;
 	//tries to enable button_reduce
 	parent_frame->AllOk();
 

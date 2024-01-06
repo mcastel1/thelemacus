@@ -1353,6 +1353,7 @@ public:
     
     ListControl(wxWindow*, vector<wxButton*>, const wxPoint&, const wxSize&);
     
+    void SetColumns(vector<wxString>);
     void PushBackColumn(wxString);
     void DeselectAll(void);
     template<class T> void set(vector<T>, bool);

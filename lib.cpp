@@ -19116,7 +19116,18 @@ StaticText::StaticText(wxWindow* parent, const wxString& label, const wxPoint& p
 
 }
 
-
+//set all columns of *this: add a first dummy column, which is not correctly sized on WIN32 (I don't know why) -> add the columns -> remove the first column
+void ListControl::SetColumns(vector<wxString> headers) {
+    
+    int i;
+    
+    for(i=0, PushBackColumn(wxString("")); i<(headers.size()); i++){
+        PushBackColumn(headers[i]);
+    }
+    
+    DeleteColumn(0);
+    
+}
 
 //pushe back a column to ListControl and store the header size into header_size
 void ListControl::PushBackColumn(wxString name) {

@@ -72,6 +72,8 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
+ - add flag to ListControl to enable only one selection
+ - to fit ListControl to both column and content size, add one dummy column -> add the other columns and fit to their size and store the size -> remove the first dummy column -> do a similar thing for the rows
  - fix all warnings on WIN32
  - add the ::check method to Route and PositionFrame, and bind it as it is bound in SightFrame
  - check why a lot of stuff is printed out when you press reduce in Sight Frame 

@@ -15283,9 +15283,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_sights);
         listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_sights);
         
-        i = 0;
         
-        headers.resize(0);
+        headers.clear();
         headers.push_back(wxString("Number"));
         headers.push_back(wxString("Body"));
         headers.push_back(wxString("Limb"));
@@ -15320,10 +15319,12 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_positions);
         //    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
         
-        listcontrol_positions->PushBackColumn(wxString("Number"));
-        listcontrol_positions->PushBackColumn(wxString("Latitude"));
-        listcontrol_positions->PushBackColumn(wxString("Longitude"));
-        listcontrol_positions->PushBackColumn(wxString("Label"));
+        headers.clear();
+        headers.push_back(wxString("Number"));
+        headers.push_back(wxString("Latitude"));
+        headers.push_back(wxString("Longitude"));
+        headers.push_back(wxString("Label"));
+        listcontrol_positions->SetColumns(headers);
         
         sizer_box_position->Add(listcontrol_positions, 1, wxALL, ((wxGetApp().border).value));
         
@@ -15354,16 +15355,18 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         listcontrol_routes->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyRoute<wxMouseEvent>), this);
         
         
-        listcontrol_routes->PushBackColumn(wxString("Number"));
-        listcontrol_routes->PushBackColumn(wxString("Type"));
-        listcontrol_routes->PushBackColumn(wxString("Start"));
-        listcontrol_routes->PushBackColumn(wxString("Z"));
-        listcontrol_routes->PushBackColumn(wxString("Length"));
-        listcontrol_routes->PushBackColumn(wxString("Ground Position"));
-        listcontrol_routes->PushBackColumn(wxString("Omega"));
-        listcontrol_routes->PushBackColumn(wxString("Label"));
-        listcontrol_routes->PushBackColumn(wxString("Related Sight"));
-        
+        headers.clear();
+        headers.push_back(wxString("Number"));
+        headers.push_back(wxString("Type"));
+        headers.push_back(wxString("Start"));
+        headers.push_back(wxString("Z"));
+        headers.push_back(wxString("Length"));
+        headers.push_back(wxString("Ground Position"));
+        headers.push_back(wxString("Omega"));
+        headers.push_back(wxString("Label"));
+        headers.push_back(wxString("Related Sight"));
+        listcontrol_routes->SetColumns(headers);
+
         
         sizer_box_route->Add(listcontrol_routes, 1, wxALL, ((wxGetApp().border).value));
         
@@ -19124,12 +19127,14 @@ void ListControl::SetColumns(vector<wxString> headers) {
     
     int i;
     
-    for(i=0, PushBackColumn(wxString("")); i<(headers.size()); i++){
+    for(i=0, PushBackColumn(wxString("")), header_width.resize(1); i<(headers.size()); i++){
         PushBackColumn(headers[i]);
+        header_width.push_back(this->GetColumnWidth(i));
     }
     
     DeleteColumn(0);
-    
+    header_width.erase(header_width.begin());
+        
 }
 
 //pushe back a column to ListControl and store the header size into header_size
@@ -19143,7 +19148,7 @@ void ListControl::PushBackColumn(wxString name) {
 //	column.SetWidth(((this->GetSize()).GetWidth()) / ((this->GetColumnCount()) + 1));
     
 	InsertColumn(GetColumnCount(), name, wxLIST_FORMAT_LEFT, wxLIST_AUTOSIZE_USEHEADER);
-    header_width.push_back(GetColumnWidth(GetColumnCount()-1));
+//    header_width.push_back(GetColumnWidth(GetColumnCount()-1));
 
 }
 
@@ -19207,13 +19212,13 @@ void ListControl::EnableButtons(bool check) {
 void ListControl::Resize(void) {
 
 	int i, j, width_item, width_total, column_width;
-    wxListItem item, column;
+    wxListItem item/*, column*/;
     wxSize item_size;
 
     //dirty fix: header_width[0] is set to an oddly large value-> here I get the width of the text in the first column, add a margin and set header_width[0] equal to it 
-	column.SetMask(wxLIST_MASK_TEXT); // enable GetText()
-	GetColumn(0, column);
-    header_width[0] = (String((column.GetText()).ToStdString()).get_size(this).GetWidth()) + (String("AAA").get_size(this).GetWidth());
+//	column.SetMask(wxLIST_MASK_TEXT); // enable GetText()
+//	GetColumn(0, column);
+//    header_width[0] = (String((column.GetText()).ToStdString()).get_size(this).GetWidth()) + (String("AAA").get_size(this).GetWidth());
     
     item.SetMask(wxLIST_MASK_TEXT); // enable GetText()
 
@@ -19238,12 +19243,12 @@ void ListControl::Resize(void) {
             column_width += (String("A").get_size(this).GetWidth());
         }
         
-        SetColumnWidth(j, column_width);
+        SetColumnWidth(j, header_width[j]);
 		width_total += GetColumnWidth(j);
 
 	}
 
-	SetSize(wxSize(width_total, -1));
+//	SetSize(wxSize(width_total, -1));
 
 }
 

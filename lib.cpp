@@ -5185,6 +5185,7 @@ int Data::compute_position(String prefix) {
 
 		vector< vector<Position> > p;
 		vector<Position> q, q_temp(2);
+		int output;
 
 		cout << prefix.value << "Computing crossings between routes :\n";
 		for (i = 0; i < crossing_route_list.size(); i++) {
@@ -5228,8 +5229,10 @@ int Data::compute_position(String prefix) {
 			}
 		}
 
+
 		if (l > 0) {
 			//there is at least one valid crossing
+
 
 			//r is the minimal distance between crossing points. To find the minimum, here I set r to it largest possible value, obtained when the two points are at the antipodes. I find the pair of crossing points which is closest to each other, and set Position center to one of the Positions in this pair. center will thus represent the approximate astronomical position. I will then run over all the pairs of crossing points in p, p[i], and pick either p[i][0] or p[i][1]: I will pick the one which is closest to center
 
@@ -5325,13 +5328,13 @@ int Data::compute_position(String prefix) {
 			if (l == (crossing_route_list.size()) * ((crossing_route_list.size()) - 1) / 2) {
 				//all Routes in crossing_route_list have been used to get the position
 
-				return 1;
+				output = 1;
 
 			}
 			else {
 				//only some Routes in crossing_route_list have been used to get the position
 
-				return 0;
+				output = 0;
 
 			}
 
@@ -5339,13 +5342,15 @@ int Data::compute_position(String prefix) {
 		else {
 
 			cout << prefix.value << RED << "I could not compute the position because there are no valid crossings!\n" << RESET;
-			return(-1);
+			output = -1;
 
 		}
 
 		p.clear();
 		q.clear();
 		q_temp.clear();
+
+		return output;
 
 	}
 	else {

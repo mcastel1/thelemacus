@@ -14969,6 +14969,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     unsigned int i, red, green, blue;
     wxListItem column, item;
     String s;
+    vector<wxString> headers;
     wxBoxSizer* sizer_listcontrol_routes_plus_buttons, * sizer_big_buttons;
     vector<wxButton*> disableable_buttons;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
@@ -15284,19 +15285,21 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         
         i = 0;
         
-        listcontrol_sights->PushBackColumn(wxString("Number"));
-        listcontrol_sights->PushBackColumn(wxString("Body"));
-        listcontrol_sights->PushBackColumn(wxString("Limb"));
-        listcontrol_sights->PushBackColumn(wxString("Artificial horizon"));
-        listcontrol_sights->PushBackColumn(wxString("Sextant altitude"));
-        listcontrol_sights->PushBackColumn(wxString("Index error"));
-        listcontrol_sights->PushBackColumn(wxString("Height of eye"));
-        listcontrol_sights->PushBackColumn(wxString("Master-clock date and hour (UTC)"));
-        listcontrol_sights->PushBackColumn(wxString("Stopwatch"));
-        listcontrol_sights->PushBackColumn(wxString("Stopwatch reading"));
-        listcontrol_sights->PushBackColumn(wxString("TAI - UTC"));
-        listcontrol_sights->PushBackColumn(wxString("Label"));
-        listcontrol_sights->PushBackColumn(wxString("Related route"));
+        headers.resize(0);
+        headers.push_back(wxString("Number"));
+        headers.push_back(wxString("Body"));
+        headers.push_back(wxString("Limb"));
+        headers.push_back(wxString("Artificial horizon"));
+        headers.push_back(wxString("Sextant altitude"));
+        headers.push_back(wxString("Index error"));
+        headers.push_back(wxString("Height of eye"));
+        headers.push_back(wxString("Master-clock date and hour (UTC)"));
+        headers.push_back(wxString("Stopwatch"));
+        headers.push_back(wxString("Stopwatch reading"));
+        headers.push_back(wxString("TAI - UTC"));
+        headers.push_back(wxString("Label"));
+        headers.push_back(wxString("Related route"));
+        listcontrol_sights->SetColumns(headers);
         
         
         

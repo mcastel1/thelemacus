@@ -7805,7 +7805,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
 	FileR file_n_line, file_coastline_data_blocked;
 	Position p_temp;
-	string data, line;
+	string line;
 	stringstream ins, message_dialog;
 	int i, j;
 	string::size_type sz;
@@ -7891,18 +7891,18 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                     buffer = new char[l];
                     
                     (file_coastline_data_blocked.value)->read(buffer, l);
-                    string data(buffer, l);
+                    string temp(buffer, l);
                     
-                    //count how many datapoints are in data
-                    //                n = ((unsigned int)count(data.begin(), data.end(), ','));
+                    //count how many datapoints are in temp
+                    //                n = ((unsigned int)count(temp.begin(), temp.end(), ','));
                     
                     l = 0;
                     pos_beg = 0;
-                    pos_end = data.find(" ", pos_beg);
+                    pos_end = temp.find(" ", pos_beg);
                     while (pos_end != (string::npos)) {
                         
                         line.clear();
-                        line = data.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+                        line = temp.substr(pos_beg, pos_end - pos_beg + 1).c_str();
                         
                         replace(line.begin(), line.end(), ' ', '\n');
                         replace(line.begin(), line.end(), ',', ' ');
@@ -7921,13 +7921,13 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                         (p_coastline[i][j]).push_back(p_temp);
                         
                         pos_beg = pos_end + 1;
-                        pos_end = data.find(" ", pos_beg);
+                        pos_end = temp.find(" ", pos_beg);
                         
                         l++;
                         
                     };
                     
-                    data.clear();
+                    temp.clear();
                     
                 }
                 

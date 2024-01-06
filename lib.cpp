@@ -8921,7 +8921,7 @@ void DrawPanel::Draw_Mercator(void) {
 
 		WriteLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"), &dummy_label);
 
-		if ((GetTextExtent(dummy_label).GetWidth()) > size_label_horizontal) {
+		if ((GetTextExtent(dummy_label).GetWidth()) > ((int)size_label_horizontal)) {
 			size_label_horizontal = (GetTextExtent(dummy_label).GetWidth());
 		}
 
@@ -9340,7 +9340,7 @@ void DrawPanel::Draw_3D(void) {
 
 		WriteLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"), &dummy_label);
 
-		if ((GetTextExtent(dummy_label).GetWidth()) > size_label_horizontal) {
+		if ((GetTextExtent(dummy_label).GetWidth()) > ((int)size_label_horizontal)) {
 			size_label_horizontal = (GetTextExtent(dummy_label).GetWidth());
 		}
 
@@ -12181,7 +12181,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 //If slider->GetMin() <= slider_value <= slider->GetMax() it returns true, and sets slider to slider_value and updates the chart zoom accordingly. It returns false otherwise
 bool ChartFrame::SetSlider(unsigned int slider_value) {
 
-	if ((slider_value >= (slider->GetMin())) && (slider_value <= (slider->GetMax()))) {
+	if ((slider_value >= ((unsigned int)(slider->GetMin()))) && (slider_value <= ((unsigned int)(slider->GetMax())))) {
 
 		wxCommandEvent dummy;
 

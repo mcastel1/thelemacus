@@ -19214,44 +19214,17 @@ void ListControl::EnableButtons(bool check) {
 //correctly resizes the sizes of columns of *this
 void ListControl::Resize(void) {
 
-	int i, j, width_item, width_total, column_width;
-    wxListItem item/*, column*/;
-    wxSize item_size;
-
-    //dirty fix: header_width[0] is set to an oddly large value-> here I get the width of the text in the first column, add a margin and set header_width[0] equal to it 
-//	column.SetMask(wxLIST_MASK_TEXT); // enable GetText()
-//	GetColumn(0, column);
-//    header_width[0] = (String((column.GetText()).ToStdString()).get_size(this).GetWidth()) + (String("AAA").get_size(this).GetWidth());
-    
-    item.SetMask(wxLIST_MASK_TEXT); // enable GetText()
-
+	int j, item_width;
+ 
 	//    set the column width to the width of the header or its longest item
-	for(width_total = 0, j = 0; j < GetColumnCount(); j++) {
+	for(j = 0; j < GetColumnCount(); j++) {
 
-        item.SetColumn(j); // set the column
-
-        for(width_item=0, i=0; i<GetItemCount(); i++){
-
-            //run through all elements of column j, compute their size and store the maximum size
-            item.SetId(i); // set the index
-            GetItem(item); // get the item
-            item_size = String(item.GetText().ToStdString()).get_size(this);
-
-            if((item_size.GetWidth()) > width_item){width_item = (item_size.GetWidth());}
-
-        }
-
-        column_width = max(header_width[j], width_item);
-        if(header_width[j] <= width_item){
-            column_width += (String("A").get_size(this).GetWidth());
-        }
+        SetColumnWidth(j, wxLIST_AUTOSIZE);
+        item_width = GetColumnWidth(j);
         
-        SetColumnWidth(j, header_width[j]);
-		width_total += GetColumnWidth(j);
+        SetColumnWidth(j, max(header_width[j], item_width));
 
 	}
-
-//	SetSize(wxSize(width_total, -1));
 
 }
 

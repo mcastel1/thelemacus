@@ -19151,7 +19151,7 @@ void ListControl::PushBackColumn(wxString name) {
 //deselect all items in *this
 void ListControl::DeselectAll(void) {
 
-	unsigned int i;
+	int i;
 
 	for (i = 0; i < (this->GetItemCount()); i++) {
 

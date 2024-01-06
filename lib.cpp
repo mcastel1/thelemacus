@@ -179,7 +179,7 @@ template <class T> void Reset(T* control) {
 	wxArrayString list;
 
 	value = (control->GetValue());
-	for (i = 0; i < (control->GetCount()); i++) {
+	for (i = 0; i < ((int)(control->GetCount())); i++) {
 		list.Add(control->GetString(i), 1);
 	}
 
@@ -10360,7 +10360,7 @@ bool ChartFrame::ComputeZoomFactor_Mercator(double delta_x) {
 
 	temp = ((double)((draw_panel->size_chart).GetWidth())) / ((double)(draw_panel->width_chart_0)) * ((draw_panel->x_max_0) - (draw_panel->x_min_0)) / delta_x;
 
-	output = ((1 <= ((unsigned int)temp)) && (((unsigned int)temp) <= ((wxGetApp().zoom_factor_max).value)));
+	output = ((1.0 <= temp) && (temp <= ((double)((wxGetApp().zoom_factor_max).value))));
 
 	if (output) {
 		zoom_factor.set(String(""), temp, String(""));

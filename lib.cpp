@@ -9588,6 +9588,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveEast<wxCommandEvent>, this);
 	button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
 
+	Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
+	panel->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
+    draw_panel->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
+
 	draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
 	panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
 
@@ -10055,6 +10059,19 @@ template<class T> void ChartFrame::MoveEast(T& event) {
 
 
 template<class T> void ChartFrame::KeyDown(T& event) {
+
+	if ((event.GetKeyCode()) == WXK_ESCAPE) {
+		// the use pressed escape -> I do as if the user pressed button_cancel
+
+		wxCommandEvent dummy;
+
+		//OnPressCancel(dummy);
+
+	}
+
+
+
+	event.Skip(true);
 
 }
 

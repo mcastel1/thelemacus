@@ -2402,6 +2402,7 @@ public:
     template<class T> void MoveSouth(T&);
     template<class T> void MoveWest(T&);
     template<class T> void MoveEast(T&);
+    template<class T> void KeyDown(T&);
     template<class T> void Reset(T&);
     
     //this is created for testing

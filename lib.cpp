@@ -10054,6 +10054,9 @@ template<class T> void ChartFrame::MoveEast(T& event) {
 }
 
 
+template<class T> void ChartFrame::KeyDown(T& event) {
+
+}
 
 //resets the chart to its starting configuration for x_min ... y_max
 template<class T> void ChartFrame::Reset(T& event) {

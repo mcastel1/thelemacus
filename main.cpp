@@ -48,6 +48,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
 
  ********** THINGS TO ADD/IMPROVE ************
+ - center name of file in top bar of ListFrame
  - readme file
  - add popup when mouse on button
  - propose to donate to the user
@@ -79,10 +80,8 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - check that WXK_PLUS does not depend on the computer
 
  for MSW:
- - mouse hovering over listcontrol does not work well
  - esc key does not work in SightFrame and other *Frames when one does not FOCUS on a control
  - when you open sample_sight.nav from resouces, you open it in R mode -> when you try to write in it you will get an error
- - center name of file in top bar of ListFrame
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  */

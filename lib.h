@@ -281,11 +281,16 @@ void MousePositionOnListControl(wxListCtrl* list_control, int* i){
         
         p = (list_control->ScreenToClient(wxGetMousePosition()));
         
+     
+#ifdef __APPLE__
+        //on APPLE operating system I need to correct the Mouse position in the following way
+
         //obtain the position of the rectangle of the first visible item in *this and store it in r
         list_control->GetItemRect(list_control->GetTopItem(), r, wxLIST_RECT_BOUNDS);
-        
-        //decrease the mouse position with respect to the origin of *this located on the bottom edge of the gray band on the top by r.y on the y axis -> now p is the mouse position with respect to the top-left origin of the white area of *this
-        (p.y) -= r.y;
+
+		//decrease the mouse position with respect to the origin of *this located on the bottom edge of the gray band on the top by r.y on the y axis -> now p is the mouse position with respect to the top-left origin of the white area of *this
+		(p.y) -= r.y;
+#endif
         
         //store in i the # of the item on which the mouse is hovering
         (*i) = ((int)(list_control->HitTest(p, hit_test_flag)));

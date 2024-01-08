@@ -73,9 +73,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  ********** THINGS TO FIX ************
  - add flag to ListControl to enable only one selection
- - fix all warnings on WIN32
  - add the ::check method to Route and PositionFrame, and bind it as it is bound in SightFrame
- - on SightFrame, if you edit BodyField without pressing tab, the method that updates recent bodies is not called
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
  - listcontrol_sights etc are not resized to their minimum sizes 
  - check that WXK_PLUS does not depend on the computer

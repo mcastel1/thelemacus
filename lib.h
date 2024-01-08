@@ -338,9 +338,7 @@ public:
 template<typename F_A, typename F_B> class QuestionFrame: public wxFrame{
     
 public:
-    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
-    
-    //the non-GUI object connected to the GUI object MessageFrame
+        //the non-GUI object connected to the GUI object MessageFrame
     wxPanel *panel;
     wxBoxSizer *sizer_v, *sizer_buttons;
     wxGridSizer* sizer_grid;
@@ -354,6 +352,7 @@ public:
     F_B* f_b;
     String string_a, string_b;
     
+    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
     template<class E> void KeyDown(E&);
     
 };

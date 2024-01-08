@@ -10059,20 +10059,53 @@ template<class T> void ChartFrame::MoveEast(T& event) {
 
 
 template<class T> void ChartFrame::KeyDown(T& event) {
-
-	if ((event.GetKeyCode()) == WXK_ESCAPE) {
-		// the use pressed escape -> I do as if the user pressed button_cancel
-
-		wxCommandEvent dummy;
-
-		//OnPressCancel(dummy);
-
-	}
-
-
-
-	event.Skip(true);
-
+    
+    switch ((event.GetKeyCode())) {
+            
+            
+        case WXK_ESCAPE: {
+            
+            wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed WXK_ESCAPE"), wxT("Info"), wxOK);
+            dial->ShowModal();
+            
+            break;
+            
+        }
+            
+        case WXK_RETURN: {
+            
+            wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed WXK_RETURN"), wxT("Info"), wxOK);
+            dial->ShowModal();
+            
+            break;
+            
+        }
+            
+        case WXK_CONTROL: {
+            
+            wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed WXK_CONTROL"), wxT("Info"), wxOK);
+            dial->ShowModal();
+            
+            
+            break;
+            
+        }
+            
+        case WXK_MENU: {
+            
+            wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed WXK_MENU"), wxT("Info"), wxOK);
+            dial->ShowModal();
+            
+            
+            break;
+            
+        }
+            
+    }
+    
+    
+    event.Skip(true);
+    
 }
 
 //resets the chart to its starting configuration for x_min ... y_max

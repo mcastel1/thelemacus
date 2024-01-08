@@ -10070,7 +10070,7 @@ template<class T> void ChartFrame::KeyDown(T& event) {
                 
                 wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed ctrl+Q"), wxT("Info"), wxOK);
                 dial->ShowModal();
-                
+           
                 break;
                 
             }

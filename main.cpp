@@ -79,6 +79,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  ---
 
  for MSW:
+ - mouse hovering over listcontrol does not work well 
  - esc key does not work in SightFrame and other *Frames when one does not FOCUS on a control
  - when you open sample_sight.nav from resouces, you open it in R mode -> when you try to write in it you will get an error
  - center name of file in top bar of ListFrame

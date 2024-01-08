@@ -1351,7 +1351,7 @@ public:
     //header_width[i] = width of the header of the i-th column
     vector<int> header_width;
     
-    ListControl(wxWindow*, vector<wxButton*>, const wxPoint&, const wxSize&);
+    ListControl(wxWindow*, vector<wxButton*>, const wxPoint&, const wxSize&, long);
     
     void SetColumns(vector<wxString>);
     void PushBackColumn(wxString);

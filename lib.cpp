@@ -10060,50 +10060,35 @@ template<class T> void ChartFrame::MoveEast(T& event) {
 
 template<class T> void ChartFrame::KeyDown(T& event) {
     
-    switch ((event.GetKeyCode())) {
-            
-            
-        case WXK_ESCAPE: {
-            
-            wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed WXK_ESCAPE"), wxT("Info"), wxOK);
-            dial->ShowModal();
-            
-            break;
-            
+    if(wxGetKeyState(WXK_CONTROL)){
+
+//        cout << "Key = " << (event.GetUnicodeKey()) << "\n";
+
+        switch ((event.GetUnicodeKey())) {
+                
+            case 'Q': {
+                
+                wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed ctrl+Q"), wxT("Info"), wxOK);
+                dial->ShowModal();
+                
+                break;
+                
+            }
+                
+            case 'W': {
+                
+                wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed ctrl+W"), wxT("Info"), wxOK);
+                dial->ShowModal();
+
+                break;
+                
+            }
+                
         }
-            
-        case WXK_RETURN: {
-            
-            wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed WXK_RETURN"), wxT("Info"), wxOK);
-            dial->ShowModal();
-            
-            break;
-            
-        }
-            
-        case WXK_CONTROL: {
-            
-            wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed WXK_CONTROL"), wxT("Info"), wxOK);
-            dial->ShowModal();
-            
-            
-            break;
-            
-        }
-            
-        case WXK_MENU: {
-            
-            wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed WXK_MENU"), wxT("Info"), wxOK);
-            dial->ShowModal();
-            
-            
-            break;
-            
-        }
-            
+        
     }
     
-    
+
     event.Skip(true);
     
 }

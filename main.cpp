@@ -21,6 +21,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  notes:
  =======
  - on APPLE, the cmd (apple) key corresponds to WXK_CONTROL
+ - on WIN32, to recognize what character key has been pressed, do (event.GetUnicodeKey()) and check if it is equal to, sai, 'A', not 'a'
  - on WIN32, if you press control key on runtime from within Visual Studio, it will not be detected as WXK_CONTROL, while if you run the exe file from system resources it does.
  - on WIN32, keep the output directory as $(wxIntRootDir) : if you set it to Z:\ the program will not run 
  - to set up everything on Windows 10:

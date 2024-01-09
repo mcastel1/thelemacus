@@ -1,25 +1,26 @@
 Data:
-	Sights:
-		Sight #1:
-			body:
-				Type = star
-				Name = altair
-				Right ascension = 297° 41.7499799999996'
-				Declination = 8° 51.98333999999999'
-			sextant altitude = 47° 57.79999999999987'
-			index error = 0° 1.9'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				master-clock date and hour of sight = 2021-06-21
-				hour of master-clock date and hour of sight = 21:01:20
-			use of stopwatch = y
-			hour of stopwatch = 00:37:35
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = Sight was taken at BGC
-	Routes:
-	Positions:
-		Position #1:
-			latitude = 48° 51.17938547473742'
-			longitude = 357° 35.17815979031184'
-			label = Centre Sportif Maryse Hilsz (MH)
-Recent bodies = 7 11 8 
+    Sights:
+        Sight #1:
+            body:
+                Type = moon
+                Name = moon
+                Radius = 938.12099999999998090061126276851 nm
+            limb = u
+            sextant altitude = 47° 57.799999999999869260136620141566'
+            index error = 0° 1.8999999999999996891375531049562'
+            artificial horizon = y
+            master-clock date and hour of sight:
+                date of master-clock date and hour of sight = 2021-06-21
+                hour of master-clock date and hour of sight = 21:01:20
+            use of stopwatch = y
+            hour of stopwatch = 00:37:35
+            hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+            label = Sight was taken at BGC
+    Routes:
+    Positions:
+        Position #1:
+            latitude = 48° 51.179385474737415506751858629286'
+            longitude = 357° 35.178159790311838150955736637115'
+            label = Centre Sportif Maryse Hilsz (MH)
+Recent bodies = 8 1 6 
+Recent projections = 0 1 

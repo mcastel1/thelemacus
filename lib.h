@@ -966,7 +966,9 @@ public:
     
     void insert_recent_body(unsigned int);
     void print_recent_bodies(String, ostream&);
-    
+    void insert_recent_projection(unsigned int);
+    void print_recent_projections(String, ostream&);
+
     void menu(String);
     int compute_position(String);
     

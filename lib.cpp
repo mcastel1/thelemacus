@@ -5376,7 +5376,9 @@ void Data::print(bool print_all_routes, String prefix, ostream& ostr) {
 	print_sights(new_prefix, ostr);
 	print_routes(print_all_routes, new_prefix, ostr);
 	print_positions(new_prefix, ostr);
+    
     print_recent_bodies(prefix, ostr);
+    print_recent_projections(prefix, ostr);
 
 }
 
@@ -5953,6 +5955,43 @@ void Data::print_recent_bodies(String prefix, ostream& ostr) {
     
 }
 
+
+//insert projection projection_id into recent_projections
+void Data::insert_recent_projection(unsigned int projection_id){
+    
+    vector<int>::iterator position;
+    
+    position = find(recent_projections.begin(), recent_projections.end(), projection_id);
+
+    if (position == recent_projections.end()) {
+        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
+
+        recent_projections[recent_projections.size() - 1] = projection_id;
+        rotate(recent_projections.begin(), recent_projections.end() - 1, recent_projections.end());
+
+    }else {
+        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
+
+        iter_swap(recent_projections.begin(), position);
+
+    }
+    
+}
+
+
+//print recent_projections to ostr
+void Data::print_recent_projections(String prefix, ostream& ostr) {
+    
+    unsigned int i;
+    stringstream temp;
+
+   
+    for (temp.str(""), i = 0; i < recent_projections.size(); i++) {
+        temp << recent_projections[i] << " ";
+    }
+    String(temp.str().c_str()).print(String("Recent projections"), false, prefix, ostr);
+    
+}
 
 
 bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String prefix) {
@@ -12796,31 +12835,9 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
 
 			if (check) {
 
-				vector<int>::iterator position;
-
-				position = find((p->recent_items).begin(), (p->recent_items).end(), i);
-
-				if (position == (p->recent_items).end()) {
-					//the selected item is not in the recent list: I write it in the recent list and in file_recent
-
-					String prefix;
-
-					prefix = String("");
-
-					(p->recent_items)[(p->recent_items).size() - 1] = i;
-					rotate((p->recent_items).begin(), (p->recent_items).end() - 1, (p->recent_items).end());
-
-				}
-				else {
-					//the selected item is  in the recent list: I move the element in position to the first place in recent_items
-
-					iter_swap((p->recent_items).begin(), position);
-
-				}
-
-                //insert body #i into data->recent_bodies
+                //insert projection #i into data->recent_bodies
                 wxGetApp().list_frame->data->insert_recent_projection(i);
-                //I update p->name according to the content of data->recent_bodies file
+                //I update p->name according to the content of data->recent_projections file
                 p->update_projections();
 
 			}
@@ -17362,8 +17379,6 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 }
 
 
-//---------
-
 //update the dropdown menu of ProjectionField according to wxGetApp().list_frame->data->recent_projections in such a way that the recent items appear on top of it
 template<class P> void ProjectionField<P>::update_projections(void){
     
@@ -17457,7 +17472,6 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
     update_projections();
     
 }
-//---------
 
 
 //write recent_items to stream *out

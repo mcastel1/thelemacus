@@ -1854,6 +1854,7 @@ public:
     bool ok;
     
     BodyField(wxPanel*, Body*, Catalog*);
+    void update_recent_bodies(void);
     void read_recent_bodies(void);
     void set(void);
     template<class T> void get(T&);

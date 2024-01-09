@@ -18910,8 +18910,48 @@ template<class P> template<class T> void BodyField<P>::InsertIn(T* host) {
 //update the dropdown menu of BodyField according to wxGetApp().list_frame->data->recent_bodies in such a way that the recent items appear on top of it
 template<class P> void BodyField<P>::update_recent_bodies(void){
     
+    unsigned int i, j;
+    wxArrayString bodies_temp;
+    wxString name_temp;
+    bool is_present;
+
+    //save the current value of name in name_temp
+    name_temp = (name->GetValue());
+    //create the temporary list of bodies bodies_temp
+    for (bodies_temp.Clear(), i = 0; i < (catalog->list).size(); i++) {
+        bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
+    }
     
-    
+    //I first add to bodies the recently selected celestial bodies written in (wxGetApp().list_frame->data->recent_bodies)
+    for (bodies.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_bodies.size()); i++) {
+
+        bodies.Add(bodies_temp[(wxGetApp().list_frame->data->recent_bodies)[i]]);
+
+    }
+
+    //then, I fill bodies with the remaining bodies
+    for (i = 0; i < bodies_temp.GetCount(); i++) {
+
+        for (is_present = false, j = 0; (j < bodies.GetCount()) && (!is_present); j++) {
+
+            if (bodies[j] == bodies_temp[i]) {
+                is_present = true;
+            }
+
+        }
+
+        if (!is_present) {
+            bodies.Add(bodies_temp[i]);
+        }
+
+    }
+
+    name->Set(bodies);
+    //because name->Set(bodies clears the value of name, I set the value of name back to name_temp
+    name->SetValue(name_temp);
+
+    bodies_temp.Clear();
+
 }
 
 
@@ -18919,20 +18959,13 @@ template<class P> void BodyField<P>::update_recent_bodies(void){
 template<class P> void BodyField<P>::read_recent_bodies(void) {
 
 	unsigned int i, j;
-	wxArrayString bodies_temp;
 	String prefix, s;
 	size_t pos_end;
-	bool is_present;
-	wxString name_temp;
 
 	prefix = String("");
 
-	//save the current value of name in name_temp
-	name_temp = (name->GetValue());
 
-	for (bodies_temp.Clear(), i = 0; i < (catalog->list).size(); i++) {
-		bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
-	}
+	
     
     
     if(!(parent_frame->parent->file_is_untitled)){
@@ -18983,34 +19016,6 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
 	//    }
 	//    cout << "\n";
 
-	//I first add to bodies the recently selected celestial bodies written in (wxGetApp().list_frame->data->recent_bodies)
-	for (bodies.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_bodies).size(); i++) {
-
-		bodies.Add(bodies_temp[(wxGetApp().list_frame->data->recent_bodies)[i]]);
-
-	}
-
-	//then, I fill bodies with the remaining bodies
-	for (i = 0; i < bodies_temp.GetCount(); i++) {
-
-		for (is_present = false, j = 0; (j < bodies.GetCount()) && (!is_present); j++) {
-
-			if (bodies[j] == bodies_temp[i]) {
-				is_present = true;
-			}
-
-		}
-
-		if (!is_present) {
-			bodies.Add(bodies_temp[i]);
-		}
-
-	}
-
-	name->Set(bodies);
-
-	//because name->Set(bodies clears the value of name, I set the value of name back to name_temp
-	name->SetValue(name_temp);
 
 	//
 	//    cout << "After: Bodies_temp = ";
@@ -19025,7 +19030,6 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
 	//    }
 	//    cout << "\n";
 
-	bodies_temp.Clear();
 
 }
 

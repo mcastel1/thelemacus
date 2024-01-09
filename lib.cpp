@@ -10551,7 +10551,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 				//insert body #i into data->recent_bodies
 				wxGetApp().list_frame->data->insert_recent_body(i);
 				//I update p->name according to the content of data->recent_bodies file
-				p->update_bodies();
+				p->fill_bodies();
 
 			}
 
@@ -12838,7 +12838,7 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
                 //insert projection #i into data->recent_bodies
                 wxGetApp().list_frame->data->insert_recent_projection(i);
                 //I update p->name according to the content of data->recent_projections file
-                p->update_projections();
+                p->fill_projections();
 
 			}
 
@@ -17380,7 +17380,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 
 
 //update the dropdown menu of ProjectionField according to wxGetApp().list_frame->data->recent_projections in such a way that the recent items appear on top of it
-template<class P> void ProjectionField<P>::update_projections(void){
+template<class P> void ProjectionField<P>::fill_projections(void){
     
     unsigned int i, j;
     wxArrayString projections_temp;
@@ -17469,7 +17469,7 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
         
     }
     
-    update_projections();
+    fill_projections();
     
 }
 
@@ -17512,7 +17512,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 	name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	//    name->SetValue("");
 	//SetColor(name);
-	read_recent_bodies();
+	fill_bodies();
 	AdjustWidth(name);
 	name->Bind(wxEVT_KILL_FOCUS, *check);
 	//as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -18869,7 +18869,7 @@ template<class P> template<class T> void BodyField<P>::InsertIn(T* host) {
 
 
 //update the dropdown menu of BodyField according to wxGetApp().list_frame->data->recent_bodies in such a way that the recent items appear on top of it
-template<class P> void BodyField<P>::update_bodies(void){
+template<class P> void BodyField<P>::fill_bodies(void){
     
     unsigned int i, j;
     wxArrayString bodies_temp;
@@ -18958,7 +18958,7 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
         
     }
     
-    update_bodies();
+    fill_bodies();
     
 }
 

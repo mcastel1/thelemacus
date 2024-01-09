@@ -1826,7 +1826,7 @@ public:
     bool ok;
     
     ProjectionField(wxPanel*);
-    void update_projections(void);
+    void fill_projections(void);
     void read_recent_projections(void);
     template<class S> void write_recent_items_to_stream(S*);
     template<class T> void InsertIn(T*, wxSizerFlags&);
@@ -1853,7 +1853,7 @@ public:
     bool ok;
     
     BodyField(wxPanel*, Body*, Catalog*);
-    void update_bodies(void);
+    void fill_bodies(void);
     void read_recent_bodies(void);
     void update_recent_bodies(void);
     void set(void);

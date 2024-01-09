@@ -15427,6 +15427,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             //I am loading data from path_file_sample_sight -> set name of data_file accordingly
             data_file.set_name((wxGetApp().path_file_sample_sight));
             
+            //HERE YOU MUST READ RECENT BODIES ETC FROM FILE
+            
             
 #ifdef __APPLE__
             //I am on APPLE operating system -> read the file from hard drive locatd in the Data directory
@@ -15450,7 +15452,14 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             
             file_is_untitled = true;
             
-            
+            //there is no file-> I initialize recent_bodies ect in lexicographic order
+            for(i=0; i<(data->recent_bodies.size()); i++){
+                (data->recent_bodies)[i] = i;
+            }
+            for(i=0; i<(data->recent_projections.size()); i++){
+                (data->recent_projections)[i] = i;
+            }
+   
         }
         
         

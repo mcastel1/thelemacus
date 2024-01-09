@@ -5915,28 +5915,43 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
 }
 
 
-//write the recent bodies to file
-void Data::write_recent_bodies(void) {
+//update the list of recent bodies by inserting in it body #body_id, and write the recent bodies to file
+void Data::write_recent_bodies(unsigned int body_id) {
 
     String prefix, s;
     stringstream temp;
     unsigned int i;
+    vector<int>::iterator position;
 
     prefix = String("");
+    
+    //insert body body_id into recent_bodies
+    position = find((recent_bodies).begin(), (recent_bodies).end(), body_id);
 
+    if (position == (recent_bodies).end()) {
+        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
+
+        (recent_bodies)[(recent_bodies).size() - 1] = body_id;
+        rotate((recent_bodies).begin(), (recent_bodies).end() - 1, (recent_bodies).end());
+
+    }else {
+        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
+
+        iter_swap((recent_bodies).begin(), position);
+
+    }
+
+    //write recent_bodies to file
     if(!(wxGetApp().list_frame->file_is_untitled)){
         //there is a .nav file open-> write recent items to it
 
-        for (temp.str(""), i = 0; i < (wxGetApp().list_frame->data->recent_bodies).size(); i++) {
-            temp << (wxGetApp().list_frame->data->recent_bodies)[i] << " ";
+        for (temp.str(""), i = 0; i < (recent_bodies).size(); i++) {
+            temp << recent_bodies[i] << " ";
         }
         s = String(temp.str().c_str());
 
-//        wxGetApp().list_frame->data_file.open(String("out"), prefix);
-
         cout << prefix.value << "Writing recent items of projection field to file " <<  wxGetApp().list_frame->data_file.value << " ...\n" << RESET;
         s.write_to_file(String("Recent bodies"), wxGetApp().list_frame->data_file, String(""));
-
         cout << prefix.value << YELLOW << "... done.\n" << RESET;
         wxGetApp().list_frame->data_file.close(prefix);
         
@@ -10489,10 +10504,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 		if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
 			//p->check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
-
 			if (check) {
-
-				vector<int>::iterator position;
 
 				if ((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))) {
 					//in this case, the selected body is a body which has a limb -> I enable the limb field
@@ -10507,32 +10519,9 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 					((f->limb)->ok) = true;
 
 				}
-
-				position = find((wxGetApp().list_frame->data->recent_bodies).begin(), (wxGetApp().list_frame->data->recent_bodies).end(), i);
-
-
-				if (position == (wxGetApp().list_frame->data->recent_bodies).end()) {
-					//in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
-
-					String prefix;
-
-					prefix = String("");
-
-					(wxGetApp().list_frame->data->recent_bodies)[(wxGetApp().list_frame->data->recent_bodies).size() - 1] = i;
-					rotate((wxGetApp().list_frame->data->recent_bodies).begin(), (wxGetApp().list_frame->data->recent_bodies).end() - 1, (wxGetApp().list_frame->data->recent_bodies).end());
-
-
-				}
-				else {
-
-					//the selected item is  in the recent list: I move the element in position to the first place in recent_items
-
-					iter_swap((wxGetApp().list_frame->data->recent_bodies).begin(), position);
-
-				}
-
+                
 				//write newly updated recent_items to .nav file
-				wxGetApp().list_frame->data->write_recent_bodies();
+				wxGetApp().list_frame->data->write_recent_bodies(i);
 				//I update p->bodies according to the content of .nav file
 				p->read_recent_bodies();
 

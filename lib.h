@@ -964,7 +964,7 @@ public:
     void print_routes(bool, String, ostream&);
     //    void show(bool, String);
     
-    void write_recent_bodies(void);
+    void write_recent_bodies(unsigned int);
     
     void menu(String);
     int compute_position(String);

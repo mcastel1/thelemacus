@@ -51,6 +51,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
 
  ********** THINGS TO ADD/IMPROVE ************
+ - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
  - check whether you can speed up Draw3D by tabulating stuff it i < 90  etc
  - on WIN32, when there are many sights and a ListControl is resized, it shows a messy graphics -> do resize with a dummy listcontrol that is never shown -> extract the sizes from this listcontrol -> set these sizes only once to the listcontrol that is shown 
  - center name of file in top bar of ListFrame
@@ -79,8 +80,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  ********** THINGS TO FIX ************
  - add the ::check method to Route and PositionFrame, and bind it as it is bound in SightFrame
- - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
- - listcontrol_sights etc are not resized to their minimum sizes 
+ - listcontrol_sights etc are not resized to their minimum sizes
  - check that WXK_PLUS does not depend on the computer
 
  for MSW:

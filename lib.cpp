@@ -5376,6 +5376,7 @@ void Data::print(bool print_all_routes, String prefix, ostream& ostr) {
 	print_sights(new_prefix, ostr);
 	print_routes(print_all_routes, new_prefix, ostr);
 	print_positions(new_prefix, ostr);
+    print_recent_bodies(new_prefix, ostr);
 
 }
 
@@ -5938,36 +5939,21 @@ void Data::insert_recent_body(unsigned int body_id){
 }
 
 
-//update the list of recent bodies by inserting in it body #body_id, and write the recent bodies to file
-void Data::write_recent_bodies(void) {
-
-    String prefix, s;
-    stringstream temp;
+//print recent_bodies to ostr
+void Data::print_recent_bodies(String prefix, ostream& ostr) {
+    
     unsigned int i;
+    stringstream temp;
+    String new_prefix;
 
-    prefix = String("");
-
-    //write recent_bodies to file
-    if(!(wxGetApp().list_frame->file_is_untitled)){
-        //there is a .nav file open-> write recent items to it
-
-        for (temp.str(""), i = 0; i < recent_bodies.size(); i++) {
-            temp << recent_bodies[i] << " ";
-        }
-        s = String(temp.str().c_str());
-
-        cout << prefix.value << "Writing recent items of projection field to file " <<  wxGetApp().list_frame->data_file.value << " ...\n" << RESET;
-        s.write_to_file(String("Recent bodies"), wxGetApp().list_frame->data_file, String(""));
-        cout << prefix.value << YELLOW << "... done.\n" << RESET;
-        wxGetApp().list_frame->data_file.close(prefix);
-        
-    }else{
-        //no .nav file is open -> I don't write recent items
-
-        cout << prefix.value << YELLOW << "No .nav file is open: cannot write recent items of projection field to file\n" << RESET;
-
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+    
+    for (temp.str(""), i = 0; i < recent_bodies.size(); i++) {
+        temp << recent_bodies[i] << " ";
     }
-
+    String(temp.str().c_str()).print(String("Recent bodies"), false, new_prefix, ostr);
+    
 }
 
 
@@ -10529,7 +10515,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 				//insert body #i into data->recent_bodies
 				wxGetApp().list_frame->data->insert_recent_body(i);
 				//I update p->name according to the content of data->recent_bodies file
-				p->update_name();
+				p->update_bodies();
 
 			}
 
@@ -18908,7 +18894,7 @@ template<class P> template<class T> void BodyField<P>::InsertIn(T* host) {
 
 
 //update the dropdown menu of BodyField according to wxGetApp().list_frame->data->recent_bodies in such a way that the recent items appear on top of it
-template<class P> void BodyField<P>::update_name(void){
+template<class P> void BodyField<P>::update_bodies(void){
     
     unsigned int i, j;
     wxArrayString bodies_temp;
@@ -18997,7 +18983,7 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
         
     }
     
-    update_name();
+    update_bodies();
     
 }
 

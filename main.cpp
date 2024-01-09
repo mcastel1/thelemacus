@@ -51,6 +51,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
 
  ********** THINGS TO ADD/IMPROVE ************
+ - check whether you can speed up Draw3D by tabulating stuff it i < 90  etc
  - on WIN32, when there are many sights and a ListControl is resized, it shows a messy graphics -> do resize with a dummy listcontrol that is never shown -> extract the sizes from this listcontrol -> set these sizes only once to the listcontrol that is shown 
  - center name of file in top bar of ListFrame
  - readme file
@@ -83,9 +84,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - check that WXK_PLUS does not depend on the computer
 
  for MSW:
- - check whether you can speed up Draw3D by tabulating stuff it i < 90  etc
  - esc key does not work in SightFrame and other *Frames when one does not FOCUS on a control
- - when you open sample_sight.nav from resouces, you open it in R mode -> when you try to write in it you will get an error
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  */

@@ -5159,6 +5159,9 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
 	//read n_points_plot_coastline_* from file_init
 	n_points_plot_coastline_Mercator.read_from_file_to(String("number of points coastline Mercator"), wxGetApp().path_file_init, String("R"), new_prefix);
 	n_points_plot_coastline_3D.read_from_file_to(String("number of points coastline 3D"), wxGetApp().path_file_init, String("R"), new_prefix);
+    
+    recent_bodies.resize(wxGetApp().n_recent_bodies.value);
+    recent_projections.resize(wxGetApp().n_recent_projections.value);
 
 //	file_init.close(prefix);
 

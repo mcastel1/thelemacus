@@ -51,6 +51,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
 
  ********** THINGS TO ADD/IMPROVE ************
+ - on WIN32, when there are many sights and a ListControl is resized, it shows a messy graphics -> do resize with a dummy listcontrol that is never shown -> extract the sizes from this listcontrol -> set these sizes only once to the listcontrol that is shown 
  - center name of file in top bar of ListFrame
  - readme file
  - add popup when mouse on button

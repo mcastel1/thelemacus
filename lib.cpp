@@ -9588,10 +9588,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveEast<wxCommandEvent>, this);
 	button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
 
+    //bind all the elemetns of *this to KeyDown method
 	Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
 	panel->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
     draw_panel->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
-
+    projection->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
+    
 	draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
 	panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
 
@@ -10057,53 +10059,37 @@ template<class T> void ChartFrame::MoveEast(T& event) {
 
 }
 
-
+//this method is called when a key is pressed
 template<class T> void ChartFrame::KeyDown(T& event) {
     
-    switch ((event.GetKeyCode())) {
-            
-            
-        case WXK_ESCAPE: {
-            
-            wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed WXK_ESCAPE"), wxT("Info"), wxOK);
-            dial->ShowModal();
-            
-            break;
-            
+    if(wxGetKeyState(WXK_CONTROL)){
+        //the command key (APPLE operating system) or the control key (WIN32 operating system) is down
+
+        switch ((event.GetUnicodeKey())) {
+                
+            case 'Q': {
+                //command (APPLE) or control (WIN32) + q key has been pressed
+                
+				wxGetApp().OnPressCtrlQ(event);
+
+                break;
+                
+            }
+                
+            case 'W': {
+                //command (APPLE) or control (WIN32) + w key has been pressed
+                
+				parent->OnPressCtrlW(event);
+
+                break;
+                
+            }
+                
         }
-            
-        case WXK_RETURN: {
-            
-            wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed WXK_RETURN"), wxT("Info"), wxOK);
-            dial->ShowModal();
-            
-            break;
-            
-        }
-            
-        case WXK_CONTROL: {
-            
-            wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed WXK_CONTROL"), wxT("Info"), wxOK);
-            dial->ShowModal();
-            
-            
-            break;
-            
-        }
-            
-        case WXK_MENU: {
-            
-            wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed WXK_MENU"), wxT("Info"), wxOK);
-            dial->ShowModal();
-            
-            
-            break;
-            
-        }
-            
+        
     }
     
-    
+
     event.Skip(true);
     
 }
@@ -12906,8 +12892,9 @@ template <class T> void ResetListFrame::operator()(T& event) {
 
 	//clear p->data and allocate a new one
 	(p->data)->~Data();
-	//the file now has no title
+	//the file now has no title and has not been modified
 	(p->file_is_untitled) = true;
+    (p->file_has_been_modified) = false;
 
 	p->data = new Data(p->catalog, String(""));
 
@@ -17544,6 +17531,14 @@ template<class P>   template<class S> void ProjectionField<P>::write_recent_item
     s = String(temp.str().c_str());
     
 }
+
+template<class P> template <typename EventTag, typename Method, typename Object> void ProjectionField<P>::Bind(EventTag tag, Method method, Object object) {
+
+    name->Bind(tag, method, object);
+
+}
+
+
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c) {

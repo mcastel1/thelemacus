@@ -20,6 +20,8 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
  notes:
  =======
+ - on APPLE, the cmd (apple) key corresponds to WXK_CONTROL
+ - on WIN32, to recognize what character key has been pressed, do (event.GetUnicodeKey()) and check if it is equal to, sai, 'A', not 'a'
  - on WIN32, if you press control key on runtime from within Visual Studio, it will not be detected as WXK_CONTROL, while if you run the exe file from system resources it does.
  - on WIN32, keep the output directory as $(wxIntRootDir) : if you set it to Z:\ the program will not run 
  - to set up everything on Windows 10:
@@ -74,13 +76,13 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- - fix template<class T> void ChartFrame::KeyDown(T& event) {
  - add the ::check method to Route and PositionFrame, and bind it as it is bound in SightFrame
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
  - listcontrol_sights etc are not resized to their minimum sizes 
  - check that WXK_PLUS does not depend on the computer
 
  for MSW:
+ - check whether you can speed up Draw3D by tabulating stuff it i < 90  etc
  - esc key does not work in SightFrame and other *Frames when one does not FOCUS on a control
  - when you open sample_sight.nav from resouces, you open it in R mode -> when you try to write in it you will get an error
  - write the WIN32 part of void MyApp::OnTimer

@@ -5376,7 +5376,7 @@ void Data::print(bool print_all_routes, String prefix, ostream& ostr) {
 	print_sights(new_prefix, ostr);
 	print_routes(print_all_routes, new_prefix, ostr);
 	print_positions(new_prefix, ostr);
-    print_recent_bodies(new_prefix, ostr);
+    print_recent_bodies(prefix, ostr);
 
 }
 
@@ -5944,15 +5944,12 @@ void Data::print_recent_bodies(String prefix, ostream& ostr) {
     
     unsigned int i;
     stringstream temp;
-    String new_prefix;
 
-    //append \t to prefix
-    new_prefix = prefix.append(String("\t"));
-    
+   
     for (temp.str(""), i = 0; i < recent_bodies.size(); i++) {
         temp << recent_bodies[i] << " ";
     }
-    String(temp.str().c_str()).print(String("Recent bodies"), false, new_prefix, ostr);
+    String(temp.str().c_str()).print(String("Recent bodies"), false, prefix, ostr);
     
 }
 

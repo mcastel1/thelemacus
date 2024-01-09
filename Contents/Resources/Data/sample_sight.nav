@@ -3,9 +3,9 @@ Data:
 		Sight #1:
 			body:
 				Type = star
-				Name = sirius
-				Right ascension = 101° 17.3124599999997'
-				Declination = 343° 17.21141999999986'
+				Name = altair
+				Right ascension = 297° 41.7499799999996'
+				Declination = 8° 51.98333999999999'
 			sextant altitude = 47° 57.79999999999987'
 			index error = 0° 1.9'
 			artificial horizon = y
@@ -22,5 +22,4 @@ Data:
 			latitude = 48° 51.17938547473742'
 			longitude = 357° 35.17815979031184'
 			label = Centre Sportif Maryse Hilsz (MH)
-		Recent bodies = 11 8 1 
-Recent projections = 1 0
+Recent bodies = 7 11 8 

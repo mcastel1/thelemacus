@@ -5769,6 +5769,7 @@ bool Data::read_from_file_to(FileRW& file, [[maybe_unused]] String prefix) {
 }
  */
 
+//HERE YOU MUST READ RECENT BODIES ETC FROM FILE
 template<class S> void Data::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
     
     string line;
@@ -15427,7 +15428,6 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             //I am loading data from path_file_sample_sight -> set name of data_file accordingly
             data_file.set_name((wxGetApp().path_file_sample_sight));
             
-            //HERE YOU MUST READ RECENT BODIES ETC FROM FILE
             
             
 #ifdef __APPLE__

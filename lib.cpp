@@ -10057,28 +10057,27 @@ template<class T> void ChartFrame::MoveEast(T& event) {
 
 }
 
-
+//this method is called when a key is pressed
 template<class T> void ChartFrame::KeyDown(T& event) {
     
     if(wxGetKeyState(WXK_CONTROL)){
-
-//        cout << "Key = " << (event.GetUnicodeKey()) << "\n";
+        //the command key (APPLE operating system) or the control key (WIN32 operating system) is down
 
         switch ((event.GetUnicodeKey())) {
                 
             case 'Q': {
+                //command (APPLE) or control (WIN32) + q key has been pressed
                 
-                wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed ctrl+Q"), wxT("Info"), wxOK);
-                dial->ShowModal();
-           
+				wxGetApp().OnPressCtrlQ(event);
+
                 break;
                 
             }
                 
             case 'W': {
+                //command (APPLE) or control (WIN32) + w key has been pressed
                 
-                wxMessageDialog* dial = new wxMessageDialog(NULL, wxT("You pressed ctrl+W"), wxT("Info"), wxOK);
-                dial->ShowModal();
+				parent->OnPressCtrlW(event);
 
                 break;
                 

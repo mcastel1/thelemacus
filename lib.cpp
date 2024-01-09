@@ -5915,37 +5915,43 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
 }
 
 
-//update the list of recent bodies by inserting in it body #body_id, and write the recent bodies to file
-void Data::write_recent_bodies(unsigned int body_id) {
-
-    String prefix, s;
-    stringstream temp;
-    unsigned int i;
-    vector<int>::iterator position;
-
-    prefix = String("");
+//insert body body_id into recent_bodies
+void Data::insert_recent_body(unsigned int body_id){
     
-    //insert body body_id into recent_bodies
-    position = find((recent_bodies).begin(), (recent_bodies).end(), body_id);
+    vector<int>::iterator position;
+    
+    position = find(recent_bodies.begin(), recent_bodies.end(), body_id);
 
-    if (position == (recent_bodies).end()) {
+    if (position == recent_bodies.end()) {
         //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
 
-        (recent_bodies)[(recent_bodies).size() - 1] = body_id;
-        rotate((recent_bodies).begin(), (recent_bodies).end() - 1, (recent_bodies).end());
+        recent_bodies[recent_bodies.size() - 1] = body_id;
+        rotate(recent_bodies.begin(), recent_bodies.end() - 1, recent_bodies.end());
 
     }else {
         //the selected item is  in the recent list: I move the element in position to the first place in recent_items
 
-        iter_swap((recent_bodies).begin(), position);
+        iter_swap(recent_bodies.begin(), position);
 
     }
+    
+}
+
+
+//update the list of recent bodies by inserting in it body #body_id, and write the recent bodies to file
+void Data::write_recent_bodies(void) {
+
+    String prefix, s;
+    stringstream temp;
+    unsigned int i;
+
+    prefix = String("");
 
     //write recent_bodies to file
     if(!(wxGetApp().list_frame->file_is_untitled)){
         //there is a .nav file open-> write recent items to it
 
-        for (temp.str(""), i = 0; i < (recent_bodies).size(); i++) {
+        for (temp.str(""), i = 0; i < recent_bodies.size(); i++) {
             temp << recent_bodies[i] << " ";
         }
         s = String(temp.str().c_str());
@@ -10520,8 +10526,8 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 
 				}
                 
-				//write newly updated recent_items to .nav file
-				wxGetApp().list_frame->data->write_recent_bodies(i);
+				//insert body #i into data->recent_bodies
+				wxGetApp().list_frame->data->insert_recent_body(i);
 				//I update p->bodies according to the content of .nav file
 				p->read_recent_bodies();
 
@@ -18937,8 +18943,6 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
 //		s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("RW"), String(""));
 
 #endif
-
-
         
         for((wxGetApp().list_frame->data->recent_bodies).resize(count((s.value).begin(), (s.value).end(), ' ')), i=0; i<((wxGetApp().list_frame->data->recent_bodies).size()); i++) {
 
@@ -18951,7 +18955,6 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
     }else{
         //ListFrame::data_file exists -> set the size of (wxGetApp().list_frame->data->recent_bodies) to that of catalog->list and set (wxGetApp().list_frame->data->recent_bodies)[i] simply to i
 
-        
         for((wxGetApp().list_frame->data->recent_bodies).resize((catalog->list).size()), i=0; i<((wxGetApp().list_frame->data->recent_bodies).size()); i++){
             (wxGetApp().list_frame->data->recent_bodies)[i] = i;
         }

@@ -962,9 +962,9 @@ public:
     void print_sights(String, ostream&);
     void print_positions(String, ostream&);
     void print_routes(bool, String, ostream&);
-    //    void show(bool, String);
     
-    void write_recent_bodies(unsigned int);
+    void insert_recent_body(unsigned int);
+    void write_recent_bodies();
     
     void menu(String);
     int compute_position(String);

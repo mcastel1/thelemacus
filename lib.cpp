@@ -17498,19 +17498,7 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
 }
 
 
-//write recent_items to stream *out
-template<class P>   template<class S> void ProjectionField<P>::write_recent_items_to_stream(S* out){
-    
-    stringstream temp;
-    String s;
-    unsigned int i;
 
-    for (temp.str(""), i = 0; i < (recent_items.size()); i++) {
-        temp << recent_items[i] << " ";
-    }
-    s = String(temp.str().c_str());
-    
-}
 
 template<class P> template <typename EventTag, typename Method, typename Object> void ProjectionField<P>::Bind(EventTag tag, Method method, Object object) {
 

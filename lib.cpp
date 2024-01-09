@@ -18962,6 +18962,33 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
     
 }
 
+//update list_frame->data->insert_recent_bodies according to the body currently written in name 
+template<class P> void BodyField<P>::update_recent_bodies(void) {
+    
+    //I proceed only if the progam is not is indling mode
+    if (!(parent_frame->idling)) {
+        
+        unsigned int i;
+        bool check;
+        
+        //I check whether the name in the GUI field body matches one of the body names in catalog if it is (is not) -> check = true (false). I write the id in i
+        for (check = false, i = 0; (i < (catalog->list).size()) && (!check); i++) {
+            if (String((name->GetValue().ToStdString())) == (((catalog->list)[i]).name)) {
+                check = true;
+            }
+        }
+        i--;
+        
+        
+        if(check){
+            //insert body #i into data->recent_bodies
+            wxGetApp().list_frame->data->insert_recent_body(i);
+        }
+        
+    }
+    
+}
+
 
 template<class P> template<class T> void LimbField<P>::InsertIn(T* host) {
 

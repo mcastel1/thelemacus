@@ -1855,6 +1855,7 @@ public:
     BodyField(wxPanel*, Body*, Catalog*);
     void update_bodies(void);
     void read_recent_bodies(void);
+    void update_recent_bodies(void);
     void set(void);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);
@@ -2276,7 +2277,8 @@ public:
     void TimeIntervalOk(String);
     void KeyDown(wxKeyEvent&);
     template<class E> void check(E&);
-    
+    template<class E> void update_recent_items(E&);
+
     //    wxDECLARE_EVENT_TABLE();
     
 };

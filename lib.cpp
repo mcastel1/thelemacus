@@ -12818,10 +12818,10 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
 
 				}
 
-				//write newly updated recent_items to file
-				p->write_recent_items();
-				//I update p->types according to the content of file_recent
-				p->read_recent_items();
+                //insert body #i into data->recent_bodies
+                wxGetApp().list_frame->data->insert_recent_projection(i);
+                //I update p->name according to the content of data->recent_bodies file
+                p->update_projections();
 
 			}
 
@@ -17346,7 +17346,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 	name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, projections, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	//SetColor(name);
 	name->SetValue(projections[0]);
-	read_recent_items();
+	read_recent_projections();
 	AdjustWidth(name);
 	//as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
 	name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
@@ -17375,8 +17375,8 @@ template<class P> void ProjectionField<P>::update_projections(void){
     //save the current value of name in name_temp
     name_temp = (name->GetValue());
     //create the temporary list of projections projections_temp
-    for (projections_temp.Clear(), i = 0; i < (catalog->list).size(); i++) {
-        projections_temp.Add(((catalog->list)[i]).name.value.c_str());
+    for (projections_temp.Clear(), i = 0; i < projections.GetCount(); i++) {
+        projections_temp.Add(projections[i]);
     }
     
     //I first add to projections the recently selected celestial projections written in (wxGetApp().list_frame->data->recent_projections)
@@ -17419,12 +17419,12 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
     String s;
     size_t pos_end;
 
-    if(!(parent_frame->parent->file_is_untitled)){
+    if(!(parent->parent->file_is_untitled)){
         //ListFrame::data_file exists -> read the recently selected items from ListFrame.data_file
 
 #ifdef __APPLE__
 
-        s.read_from_file_to(String("Recent projections"), parent_frame->parent->data_file.name, String("R"), String(""));
+        s.read_from_file_to(String("Recent projections"), parent->parent->data_file.name, String("R"), String(""));
 
 #endif
 
@@ -17448,7 +17448,7 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
     }else{
         //ListFrame::data_file exists -> set the size of (wxGetApp().list_frame->data->recent_projections) to that of catalog->list and set (wxGetApp().list_frame->data->recent_projections)[i] simply to i
 
-        for((wxGetApp().list_frame->data->recent_projections).resize((catalog->list).size()), i=0; i<((wxGetApp().list_frame->data->recent_projections).size()); i++){
+        for((wxGetApp().list_frame->data->recent_projections).resize(projections.GetCount()), i=0; i<((wxGetApp().list_frame->data->recent_projections).size()); i++){
             (wxGetApp().list_frame->data->recent_projections)[i] = i;
         }
         

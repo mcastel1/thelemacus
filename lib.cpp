@@ -18907,6 +18907,14 @@ template<class P> template<class T> void BodyField<P>::InsertIn(T* host) {
 }
 
 
+//update the dropdown menu of BodyField according to wxGetApp().list_frame->data->recent_bodies in such a way that the recent items appear on top of it
+template<class P> void BodyField<P>::update_recent_bodies(void){
+    
+    
+    
+}
+
+
 //read from file_recent the recently selected items in the dropdown menu of BodyField, store them in wxGetApp().list_frame->data->recent_bodies, and update the dropdown menu in such a way that the recent items appear on top of it
 template<class P> void BodyField<P>::read_recent_bodies(void) {
 

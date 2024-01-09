@@ -81,7 +81,8 @@ point size = 1
 number of points coastline Mercator = 45000
 number of points coastline 3D = 90000
 load sample sight = y
-number of recent items = 3
+number of recent bodies = 3
+number of recent projections = 2
 #directories and names of files
 default open directory = /Users/macbookpro/Desktop/Thelemacus.app/
 code directory = /Users/macbookpro/Desktop/Thelemacus.app/

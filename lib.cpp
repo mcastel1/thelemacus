@@ -10528,8 +10528,8 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
                 
 				//insert body #i into data->recent_bodies
 				wxGetApp().list_frame->data->insert_recent_body(i);
-				//I update p->bodies according to the content of .nav file
-				p->read_recent_bodies();
+				//I update p->name according to the content of data->recent_bodies file
+				p->update_name();
 
 			}
 
@@ -18908,7 +18908,7 @@ template<class P> template<class T> void BodyField<P>::InsertIn(T* host) {
 
 
 //update the dropdown menu of BodyField according to wxGetApp().list_frame->data->recent_bodies in such a way that the recent items appear on top of it
-template<class P> void BodyField<P>::update_recent_bodies(void){
+template<class P> void BodyField<P>::update_name(void){
     
     unsigned int i, j;
     wxArrayString bodies_temp;
@@ -18958,16 +18958,10 @@ template<class P> void BodyField<P>::update_recent_bodies(void){
 //read from file_recent the recently selected items in the dropdown menu of BodyField, store them in wxGetApp().list_frame->data->recent_bodies, and update the dropdown menu in such a way that the recent items appear on top of it
 template<class P> void BodyField<P>::read_recent_bodies(void) {
 
-	unsigned int i, j;
-	String prefix, s;
+	unsigned int i;
+	String s;
 	size_t pos_end;
 
-	prefix = String("");
-
-
-	
-    
-    
     if(!(parent_frame->parent->file_is_untitled)){
         //ListFrame::data_file exists -> read the recently selected items from ListFrame.data_file
 
@@ -19001,36 +18995,10 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
             (wxGetApp().list_frame->data->recent_bodies)[i] = i;
         }
         
-
     }
-
-	//    cout << "Before: Bodies_temp = ";
-	//    for(i=0; i<bodies_temp.GetCount(); i++){
-	//        cout << (bodies_temp[i]).ToStdString() << " ";
-	//    }
-	//    cout << "\n";
-	//
-	//    cout << "Before: Bodies = ";
-	//    for(i=0; i<bodies.GetCount(); i++){
-	//        cout << (bodies[i]).ToStdString() << " ";
-	//    }
-	//    cout << "\n";
-
-
-	//
-	//    cout << "After: Bodies_temp = ";
-	//    for(i=0; i<bodies_temp.GetCount(); i++){
-	//        cout << (bodies_temp[i]).ToStdString() << " ";
-	//    }
-	//    cout << "\n";
-	//
-	//    cout << "After: Bodies = ";
-	//    for(i=0; i<bodies.GetCount(); i++){
-	//        cout << (bodies[i]).ToStdString() << " ";
-	//    }
-	//    cout << "\n";
-
-
+    
+    update_name();
+    
 }
 
 

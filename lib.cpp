@@ -9588,10 +9588,12 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveEast<wxCommandEvent>, this);
 	button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
 
+    //bind all the elemetns of *this to KeyDown method
 	Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
 	panel->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
     draw_panel->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
-
+    projection->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
+    
 	draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
 	panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
 
@@ -17528,6 +17530,14 @@ template<class P>   template<class S> void ProjectionField<P>::write_recent_item
     s = String(temp.str().c_str());
     
 }
+
+template<class P> template <typename EventTag, typename Method, typename Object> void ProjectionField<P>::Bind(EventTag tag, Method method, Object object) {
+
+    name->Bind(tag, method, object);
+
+}
+
+
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c) {

@@ -17362,139 +17362,103 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 }
 
 
-//reads from file_recent the recently selected items in the dropdown menu of ProjectionField and updates the dropdown menu in such a way that the recent items appear on top of it
-template<class P> void ProjectionField<P>::read_recent_items(void) {
+//---------
 
-	unsigned int i, j;
-	wxArrayString projections_temp;
-	String prefix, s;
-	size_t pos_end;
-	bool is_present;
-	wxString temp;
+//update the dropdown menu of ProjectionField according to wxGetApp().list_frame->data->recent_projections in such a way that the recent items appear on top of it
+template<class P> void ProjectionField<P>::update_projections(void){
+    
+    unsigned int i, j;
+    wxArrayString projections_temp;
+    wxString name_temp;
+    bool is_present;
 
-	prefix = String("");
+    //save the current value of name in name_temp
+    name_temp = (name->GetValue());
+    //create the temporary list of projections projections_temp
+    for (projections_temp.Clear(), i = 0; i < (catalog->list).size(); i++) {
+        projections_temp.Add(((catalog->list)[i]).name.value.c_str());
+    }
+    
+    //I first add to projections the recently selected celestial projections written in (wxGetApp().list_frame->data->recent_projections)
+    for (projections.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_projections.size()); i++) {
 
-	//save the current value of name in temp
-	temp = (name->GetValue());
+        projections.Add(projections_temp[(wxGetApp().list_frame->data->recent_projections)[i]]);
 
-	for (projections_temp.Clear(), i = 0; i < (projections.GetCount()); i++) {
-		projections_temp.Add(projections[i]);
-	}
+    }
 
-    if(!(parent->parent->file_is_untitled)){
+    //then, I fill projections with the remaining projections
+    for (i = 0; i < projections_temp.GetCount(); i++) {
+
+        for (is_present = false, j = 0; (j < projections.GetCount()) && (!is_present); j++) {
+
+            if (projections[j] == projections_temp[i]) {
+                is_present = true;
+            }
+
+        }
+
+        if (!is_present) {
+            projections.Add(projections_temp[i]);
+        }
+
+    }
+
+    name->Set(projections);
+    //because name->Set(projections clears the value of name, I set the value of name back to name_temp
+    name->SetValue(name_temp);
+
+    projections_temp.Clear();
+
+}
+
+
+//read from file_recent the recently selected items in the dropdown menu of ProjectionField, store them in wxGetApp().list_frame->data->recent_projections, and update the dropdown menu in such a way that the recent items appear on top of it
+template<class P> void ProjectionField<P>::read_recent_projections(void) {
+
+    unsigned int i;
+    String s;
+    size_t pos_end;
+
+    if(!(parent_frame->parent->file_is_untitled)){
         //ListFrame::data_file exists -> read the recently selected items from ListFrame.data_file
 
-        s.read_from_file_to(String("Recent projections"), (parent->parent->data_file.name), String("R"), String(""));
+#ifdef __APPLE__
 
+        s.read_from_file_to(String("Recent projections"), parent_frame->parent->data_file.name, String("R"), String(""));
+
+#endif
+
+#ifdef _WIN32
+
+        //Fork: If I open a sample sight file at startup stored in Windows resources, use this
+        s.read_from_file_to(String("Recent projections"), parent_frame->parent->data_file.name, String("R"), String(""));
+        //Fork: If I open a file on disk, use this
+//        s.read_from_file_to(String("Recent projections"), parent_frame->parent->data_file.name, String("RW"), String(""));
+
+#endif
         
-        for(recent_items.resize(count((s.value).begin(), (s.value).end(), ' ')), i=0; i<(recent_items.size()); i++) {
+        for((wxGetApp().list_frame->data->recent_projections).resize(count((s.value).begin(), (s.value).end(), ' ')), i=0; i<((wxGetApp().list_frame->data->recent_projections).size()); i++) {
 
             pos_end = (s.value).find(" ", 0);
-            recent_items[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
+            (wxGetApp().list_frame->data->recent_projections)[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
             (s.value) = ((s.value).substr(pos_end + 1, string::npos));
 
         }
 
     }else{
-        //ListFrame::data_file exists -> set the size of recent_items to that of tymes and set recent_items[i] simply to i
-        
-        
-        for(recent_items.resize((projections.GetCount())), i=0; i<(recent_items.size()); i++){
-            recent_items[i] = i;
+        //ListFrame::data_file exists -> set the size of (wxGetApp().list_frame->data->recent_projections) to that of catalog->list and set (wxGetApp().list_frame->data->recent_projections)[i] simply to i
+
+        for((wxGetApp().list_frame->data->recent_projections).resize((catalog->list).size()), i=0; i<((wxGetApp().list_frame->data->recent_projections).size()); i++){
+            (wxGetApp().list_frame->data->recent_projections)[i] = i;
         }
         
-
     }
     
-	//    cout << "Before: projections_temp = ";
-	//    for(i=0; i<projections_temp.GetCount(); i++){
-	//        cout << (projections_temp[i]).ToStdString() << " ";
-	//    }
-	//    cout << "\n";
-	//
-	//    cout << "Before: Bodies = ";
-	//    for(i=0; i<bodies.GetCount(); i++){
-	//        cout << (bodies[i]).ToStdString() << " ";
-	//    }
-	//    cout << "\n";
-
-	//I first add to bodies the recently selected celestial bodies written in recent_items
-    for(projections.Clear(), i = 0; i < recent_items.size(); i++) {
-
-		projections.Add(projections_temp[recent_items[i]]);
-
-	}
-
-	//then, I fill projections with the remaining projections
-	for (i = 0; i < (projections_temp.GetCount()); i++) {
-
-		for (is_present = false, j = 0; (j < projections.GetCount()) && (!is_present); j++) {
-
-			if (projections[j] == projections_temp[i]) {
-				is_present = true;
-			}
-
-		}
-
-		if (!is_present) {
-			projections.Add(projections_temp[i]);
-		}
-
-	}
-
-	name->Set(projections);
-
-	//because name->Set(bodies clears the value of name, I set the value of name back to temp
-	name->SetValue(temp);
-
-	//
-	//    cout << "After: projections_temp = ";
-	//    for(i=0; i<projections_temp.GetCount(); i++){
-	//        cout << (projections_temp[i]).ToStdString() << " ";
-	//    }
-	//    cout << "\n";
-	//
-	//    cout << "After: Projections = ";
-	//    for(i=0; i<projections.GetCount(); i++){
-	//        cout << (projections[i]).ToStdString() << " ";
-	//    }
-	//    cout << "\n";
-
-	projections_temp.Clear();
-
-}
-
-//write the recent items in recent_itams to file
-template<class P> void ProjectionField<P>::write_recent_items(void) {
-
-	String prefix, s;
-	stringstream temp;
-	unsigned int i;
-
-
-	prefix = String("");
-        
-    if(!(parent->parent->file_is_untitled)){
-        //there is a .nav file open-> write recent items to it
-        
-        for (temp.str(""), i = 0; i < (recent_items.size()); i++) {
-            temp << recent_items[i] << " ";
-        }
-        s = String(temp.str().c_str());
-                
-        cout << prefix.value << "Writing recent items of projection field to file " <<  parent->parent->data_file.value << " ...\n" << RESET;
-        s.write_to_file(String("Recent projections"), parent->parent->data_file, String(""));
-        
-        cout << prefix.value << "... done.\n" << RESET;
-        parent->parent->data_file.close(prefix);
-        
-    }else{
-        //no .nav file is open -> I don't write recent items
-        
-        cout << prefix.value << YELLOW << "No .nav file is open: cannot write recent items of projection field to file\n" << RESET;
-    }
+    update_projections();
     
 }
+//---------
+
 
 //write recent_items to stream *out
 template<class P>   template<class S> void ProjectionField<P>::write_recent_items_to_stream(S* out){

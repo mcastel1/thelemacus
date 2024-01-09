@@ -1812,17 +1812,14 @@ public:
 template<class P> class ProjectionField{
     
 public:
+    
     P* parent;
-    
     wxBoxSizer *sizer_h, *sizer_v;
-    wxArrayString  /*this is equal to a standard list of the available graphical types*/types;
-    
+    wxArrayString  /*this is equal to a standard list of the available graphical types*/projections;
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
     CheckProjection<P>* check;
-    
     vector<int> recent_items;
-    
     bool ok;
     
     ProjectionField(wxPanel*);
@@ -1850,7 +1847,6 @@ public:
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
     CheckBody<P>* check;
-    
     bool ok;
     
     BodyField(wxPanel*, Body*, Catalog*);

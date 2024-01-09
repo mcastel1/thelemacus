@@ -12783,8 +12783,8 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
 		bool check;
 
 		//I check whether the name in the GUI field Projection matches one of the Projection names in p->names
-		for (check = false, i = 0; (i < (p->types).size()) && (!check); i++) {
-			if (((p->name)->GetValue()) == ((p->types)[i])) {
+		for (check = false, i = 0; (i < (p->projections).size()) && (!check); i++) {
+			if (((p->name)->GetValue()) == ((p->projections)[i])) {
 				check = true;
 			}
 		}
@@ -12840,8 +12840,8 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
 
 			temp.str("");
 			temp << "Projection must be one of the following: ";
-			for (i = 0; i < ((p->types).GetCount()); i++) {
-				temp << ((p->types)[i]).ToStdString() << (i < ((p->types).GetCount()) - 1 ? ", " : ".");
+			for (i = 0; i < ((p->projections).GetCount()); i++) {
+				temp << ((p->projections)[i]).ToStdString() << (i < ((p->projections).GetCount()) - 1 ? ", " : ".");
 			}
 
 
@@ -17336,16 +17336,16 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 
 	parent = ((P*)(panel_of_parent->GetParent()));
 
-	types.Clear();
-	types.Add(wxT("Mercator"));
-	types.Add(wxT("3D"));
-	//    types.Add(wxT("Lambert"));
+	projections.Clear();
+	projections.Add(wxT("Mercator"));
+	projections.Add(wxT("3D"));
+	//    projections.Add(wxT("Lambert"));
 
 	check = new CheckProjection<P>(this);
 
-	name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+	name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, projections, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	//SetColor(name);
-	name->SetValue(types[0]);
+	name->SetValue(projections[0]);
 	read_recent_items();
 	AdjustWidth(name);
 	//as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -17366,7 +17366,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 template<class P> void ProjectionField<P>::read_recent_items(void) {
 
 	unsigned int i, j;
-	wxArrayString types_temp;
+	wxArrayString projections_temp;
 	String prefix, s;
 	size_t pos_end;
 	bool is_present;
@@ -17377,8 +17377,8 @@ template<class P> void ProjectionField<P>::read_recent_items(void) {
 	//save the current value of name in temp
 	temp = (name->GetValue());
 
-	for (types_temp.Clear(), i = 0; i < (types.GetCount()); i++) {
-		types_temp.Add(types[i]);
+	for (projections_temp.Clear(), i = 0; i < (projections.GetCount()); i++) {
+		projections_temp.Add(projections[i]);
 	}
 
     if(!(parent->parent->file_is_untitled)){
@@ -17399,16 +17399,16 @@ template<class P> void ProjectionField<P>::read_recent_items(void) {
         //ListFrame::data_file exists -> set the size of recent_items to that of tymes and set recent_items[i] simply to i
         
         
-        for(recent_items.resize((types.GetCount())), i=0; i<(recent_items.size()); i++){
+        for(recent_items.resize((projections.GetCount())), i=0; i<(recent_items.size()); i++){
             recent_items[i] = i;
         }
         
 
     }
     
-	//    cout << "Before: types_temp = ";
-	//    for(i=0; i<types_temp.GetCount(); i++){
-	//        cout << (types_temp[i]).ToStdString() << " ";
+	//    cout << "Before: projections_temp = ";
+	//    for(i=0; i<projections_temp.GetCount(); i++){
+	//        cout << (projections_temp[i]).ToStdString() << " ";
 	//    }
 	//    cout << "\n";
 	//
@@ -17419,48 +17419,48 @@ template<class P> void ProjectionField<P>::read_recent_items(void) {
 	//    cout << "\n";
 
 	//I first add to bodies the recently selected celestial bodies written in recent_items
-    for(types.Clear(), i = 0; i < recent_items.size(); i++) {
+    for(projections.Clear(), i = 0; i < recent_items.size(); i++) {
 
-		types.Add(types_temp[recent_items[i]]);
+		projections.Add(projections_temp[recent_items[i]]);
 
 	}
 
-	//then, I fill types with the remaining projections
-	for (i = 0; i < (types_temp.GetCount()); i++) {
+	//then, I fill projections with the remaining projections
+	for (i = 0; i < (projections_temp.GetCount()); i++) {
 
-		for (is_present = false, j = 0; (j < types.GetCount()) && (!is_present); j++) {
+		for (is_present = false, j = 0; (j < projections.GetCount()) && (!is_present); j++) {
 
-			if (types[j] == types_temp[i]) {
+			if (projections[j] == projections_temp[i]) {
 				is_present = true;
 			}
 
 		}
 
 		if (!is_present) {
-			types.Add(types_temp[i]);
+			projections.Add(projections_temp[i]);
 		}
 
 	}
 
-	name->Set(types);
+	name->Set(projections);
 
 	//because name->Set(bodies clears the value of name, I set the value of name back to temp
 	name->SetValue(temp);
 
 	//
-	//    cout << "After: types_temp = ";
-	//    for(i=0; i<types_temp.GetCount(); i++){
-	//        cout << (types_temp[i]).ToStdString() << " ";
+	//    cout << "After: projections_temp = ";
+	//    for(i=0; i<projections_temp.GetCount(); i++){
+	//        cout << (projections_temp[i]).ToStdString() << " ";
 	//    }
 	//    cout << "\n";
 	//
 	//    cout << "After: Projections = ";
-	//    for(i=0; i<types.GetCount(); i++){
-	//        cout << (types[i]).ToStdString() << " ";
+	//    for(i=0; i<projections.GetCount(); i++){
+	//        cout << (projections[i]).ToStdString() << " ";
 	//    }
 	//    cout << "\n";
 
-	types_temp.Clear();
+	projections_temp.Clear();
 
 }
 
@@ -19059,7 +19059,7 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
 	bool success;
 
 	//I check whether the name in the GUI field body matches one of the body names in catalog
-	find_and_replace_case_insensitive(name, types, &success, NULL);
+	find_and_replace_case_insensitive(name, projections, &success, NULL);
 
 	//ok is true/false is the text enteres is valid/invalid
 	ok = success;

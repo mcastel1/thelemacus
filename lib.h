@@ -1818,7 +1818,7 @@ public:
     
     P* parent;
     wxBoxSizer *sizer_h, *sizer_v;
-    wxArrayString  /*this is equal to a standard list of the available graphical types*/projections;
+    wxArrayString  /*this is equal to a standard list of the available graphical types*/projections, /*same as projections, but it is fixed and never wrote to: it is a fixed catalog*/projection_catalog;
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
     CheckProjection<P>* check;

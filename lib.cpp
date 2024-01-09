@@ -12838,8 +12838,8 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
 		bool check;
 
 		//I check whether the name in the GUI field Projection matches one of the Projection names in p->names
-		for (check = false, i = 0; (i < (p->projections).size()) && (!check); i++) {
-			if (((p->name)->GetValue()) == ((p->projections)[i])) {
+		for (check = false, i = 0; (i < (p->projection_catalog).size()) && (!check); i++) {
+			if (((p->name)->GetValue()) == ((p->projection_catalog)[i])) {
 				check = true;
 			}
 		}
@@ -12873,8 +12873,8 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
 
 			temp.str("");
 			temp << "Projection must be one of the following: ";
-			for (i = 0; i < ((p->projections).GetCount()); i++) {
-				temp << ((p->projections)[i]).ToStdString() << (i < ((p->projections).GetCount()) - 1 ? ", " : ".");
+			for (i = 0; i < ((p->projection_catalog).GetCount()); i++) {
+				temp << ((p->projection_catalog)[i]).ToStdString() << (i < ((p->projection_catalog).GetCount()) - 1 ? ", " : ".");
 			}
 
 
@@ -17377,10 +17377,11 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 
 	parent = ((P*)(panel_of_parent->GetParent()));
 
-	projections.Clear();
-	projections.Add(wxT("Mercator"));
-	projections.Add(wxT("3D"));
-	//    projections.Add(wxT("Lambert"));
+	projection_catalog.Clear();
+	projection_catalog.Add(wxT("Mercator"));
+	projection_catalog.Add(wxT("3D"));
+	//    projection_catalog.Add(wxT("Lambert"));
+    projections = projection_catalog;
 
 	check = new CheckProjection<P>(this);
 

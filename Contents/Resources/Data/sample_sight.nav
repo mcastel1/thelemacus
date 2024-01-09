@@ -3,9 +3,9 @@ Data:
 		Sight #1:
 			body:
 				Type = star
-				Name = arcturus
-				Right ascension = 213° 54.79890000000069'
-				Declination = 19° 10.69494000000006'
+				Name = spica
+				Right ascension = 201° 17.89998000000082'
+				Declination = 348° 50.32500000000027'
 			sextant altitude = 47° 57.79999999999987'
 			index error = 0° 1.9'
 			artificial horizon = y
@@ -22,5 +22,5 @@ Data:
 			latitude = 48° 51.17938547473742'
 			longitude = 357° 35.17815979031184'
 			label = Centre Sportif Maryse Hilsz (MH)
-Recent bodies = 4 0 1 
-Recent projections = 0 1 
+Recent bodies = 12 1 0 
+Recent projections = 1 0 

@@ -18906,7 +18906,8 @@ template<class P> template<class T> void BodyField<P>::InsertIn(T* host) {
 
 }
 
-//reads from file_recent the recently selected items in the dropdown menu of BodyField and updates the dropdown menu in such a way that the recent items appear on top of it
+
+//read from file_recent the recently selected items in the dropdown menu of BodyField, store them in wxGetApp().list_frame->data->recent_bodies, and update the dropdown menu in such a way that the recent items appear on top of it
 template<class P> void BodyField<P>::read_recent_bodies(void) {
 
 	unsigned int i, j;
@@ -18914,12 +18915,12 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
 	String prefix, s;
 	size_t pos_end;
 	bool is_present;
-	wxString temp;
+	wxString name_temp;
 
 	prefix = String("");
 
-	//save the current value of name in temp
-	temp = (name->GetValue());
+	//save the current value of name in name_temp
+	name_temp = (name->GetValue());
 
 	for (bodies_temp.Clear(), i = 0; i < (catalog->list).size(); i++) {
 		bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
@@ -19000,8 +19001,8 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
 
 	name->Set(bodies);
 
-	//because name->Set(bodies clears the value of name, I set the value of name back to temp
-	name->SetValue(temp);
+	//because name->Set(bodies clears the value of name, I set the value of name back to name_temp
+	name->SetValue(name_temp);
 
 	//
 	//    cout << "After: Bodies_temp = ";

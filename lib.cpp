@@ -5772,8 +5772,8 @@ bool Data::read_from_file_to(FileRW& file, [[maybe_unused]] String prefix) {
 template<class S> void Data::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
     
     string line;
-    size_t pos;
-    String new_prefix;
+    size_t pos, pos_p;
+    String new_prefix, temp;
     bool check;
     unsigned int i;
 
@@ -5921,13 +5921,26 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
     
     //4. Read recent items
     //4.1 read recent bodies
+    
+    temp.read_from_stream(String("Recent bodies"), input_stream, true, String(""));
+    string number;
+    pos = 0;
+    do{
+        
+        pos_p = temp.value.find(" ", pos);
+        number = temp.value.substr(pos, pos_p-pos);
+        pos = pos_p+1;
+        
+    }while(pos_p != string::npos);
+    
+    
     //REPLACE THIS DUMB CODE WITH A CODE WHERE YOU ACTUALLY READ RECENT BODIES ETC FROM FILE
-    for(i=0; i<recent_bodies.size(); i++){
-        recent_bodies[i] = i;
-    }
-    for(i=0; i<recent_projections.size(); i++){
-        recent_projections[i] = i;
-    }
+//    for(i=0; i<recent_bodies.size(); i++){
+//        recent_bodies[i] = i;
+//    }
+//    for(i=0; i<recent_projections.size(); i++){
+//        recent_projections[i] = i;
+//    }
     //REPLACE THIS DUMB CODE WITH A CODE WHERE YOU ACTUALLY READ RECENT BODIES ETC FROM FILE
 
 

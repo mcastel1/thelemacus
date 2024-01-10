@@ -4590,7 +4590,7 @@ void Catalog::read_from_file_to([[maybe_unused]] String name, String filename, S
 }
 
 //read from stream input_stream the content and writes it into this
-template<class S> void Catalog::read_from_stream(String name, S* input_stream, [[maybe_unused]] bool search_entire_stream, [[maybe_unused]] String prefix) {
+template<class S> void Catalog::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool search_entire_stream, [[maybe_unused]] String prefix) {
     
     Body body;
     

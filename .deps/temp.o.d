@@ -1131,5 +1131,7 @@ temp.o: /Users/macbookpro/Documents/sight_reduction_program/main.cpp \
   /usr/local/include/wx-3.1/wx/convauto.h \
   /usr/local/include/wx-3.1/wx/ffile.h \
   /usr/local/include/wx-3.1/wx/dcgraph.h \
+  /usr/local/include/wx-3.1/wx/progdlg.h \
+  /usr/local/include/wx-3.1/wx/generic/progdlgg.h \
   /Users/macbookpro/Documents/sight_reduction_program/constants.h \
   /Users/macbookpro/Documents/sight_reduction_program/lib.cpp

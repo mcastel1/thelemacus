@@ -114,6 +114,7 @@ public:
     String(char);
     void print(String, bool, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
+//    template<class S> void read_ints_from_stream(String, S*, bool, vector<int>*);
     void read_from_file_to(String, String, String, String);
     void write_to_file(String, FileRW&, String);
     void set(String, String, String);

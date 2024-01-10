@@ -1077,6 +1077,28 @@ template<class S> void String::read_from_stream(String name, S* input_stream, bo
 }
 
 
+//read a string of the form 'name = 3 4 12 34241 12 ' in input_stream and stores 3 in result[0], 4 in result[1], etc ... Search (do no search) the entire stream if search_entire_stream = true (false). Clear *result and re-allocate it
+template<class S> void read_list_from_stream(String name, S* input_stream, bool search_entire_stream, vector<int>* result){
+    
+    size_t pos_a, pos_b;
+    String temp;
+    
+    result->clear();
+    
+    temp.read_from_stream(name, input_stream, search_entire_stream, String(""));
+    pos_a = 0;
+    do{
+        
+        pos_b = temp.value.find(" ", pos_a);
+        result->push_back(stoi(temp.subString(pos_a, pos_b-pos_a).value, NULL, 10));
+        
+        pos_a = pos_b+1;
+        
+    }while(pos_b != string::npos);
+ 
+}
+
+
 //read from file the content after 'name = ' and writes it into *this.
 //if mode = 'RW' ('R') it reads form a FileRW (FileR)
 void String::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
@@ -5928,18 +5950,9 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
     
     //4. Read recent items
     //4.1 read recent bodies
+    read_list_from_stream<S>(String("Recent bodies"), input_stream, true, &recent_bodies);
     
-    temp.read_from_stream(String("Recent bodies"), input_stream, true, String(""));
-    String number;
-    pos = 0;
-    do{
-        
-        pos_p = temp.value.find(" ", pos);
-        number = temp.subString(pos, pos_p-pos);
-        pos = pos_p+1;
-        
-    }while(pos_p != string::npos);
-    
+
     
     //REPLACE THIS DUMB CODE WITH A CODE WHERE YOU ACTUALLY READ RECENT BODIES ETC FROM FILE
 //    for(i=0; i<recent_bodies.size(); i++){

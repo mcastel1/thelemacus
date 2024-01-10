@@ -17477,6 +17477,7 @@ template<class P> void ProjectionField<P>::fill_projections(void){
 
 
 //read from file_recent the recently selected items in the dropdown menu of ProjectionField, store them in wxGetApp().list_frame->data->recent_projections, and update the dropdown menu in such a way that the recent items appear on top of it
+/*
 template<class P> void ProjectionField<P>::read_recent_projections(void) {
 
     unsigned int i;
@@ -17521,7 +17522,7 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
     fill_projections();
     
 }
-
+*/
 
 
 
@@ -18954,6 +18955,7 @@ template<class P> void BodyField<P>::fill_bodies(void){
 
 
 //read from file_recent the recently selected items in the dropdown menu of BodyField, store them in wxGetApp().list_frame->data->recent_bodies, and update the dropdown menu in such a way that the recent items appear on top of it
+/*
 template<class P> void BodyField<P>::read_recent_bodies(void) {
 
 	unsigned int i;
@@ -18998,6 +19000,7 @@ template<class P> void BodyField<P>::read_recent_bodies(void) {
     fill_bodies();
     
 }
+ */
 
 //update list_frame->data->insert_recent_bodies according to the body currently written in name 
 template<class P> void BodyField<P>::update_recent_bodies(void) {

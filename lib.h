@@ -1829,7 +1829,7 @@ public:
     
     ProjectionField(wxPanel*);
     void fill_projections(void);
-    void read_recent_projections(void);
+//    void read_recent_projections(void);
     template<class T> void InsertIn(T*, wxSizerFlags&);
     template<class E> void OnEdit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
@@ -1855,7 +1855,7 @@ public:
     
     BodyField(wxPanel*, Body*, Catalog*);
     void fill_bodies(void);
-    void read_recent_bodies(void);
+//    void read_recent_bodies(void);
     void update_recent_bodies(void);
     void set(void);
     template<class T> void get(T&);

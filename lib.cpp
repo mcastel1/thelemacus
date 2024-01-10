@@ -3447,6 +3447,13 @@ String String::prepend(String s) {
 
 }
 
+//return substring of *this from start with length length
+String String::subString(size_t start, size_t length){
+    
+    return String(value.substr(start, length));
+    
+}
+
 //splits the file path *this into the folrder path (with '/' at the end), filename (without extension) and extension part (with no '.'), by writing them into *folder_path (if folder_path != NULL), *filename (if != NULL), and *extension (if != NULL), respectively. 
 // It returns true/false if the operation could be completed succesfully/not succesfully
 bool String::split_file_path(String* folder_path, String* filename, String* extension, [[maybe_unused]] String prefix) {
@@ -5923,12 +5930,12 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
     //4.1 read recent bodies
     
     temp.read_from_stream(String("Recent bodies"), input_stream, true, String(""));
-    string number;
+    String number;
     pos = 0;
     do{
         
         pos_p = temp.value.find(" ", pos);
-        number = temp.value.substr(pos, pos_p-pos);
+        number = temp.subString(pos, pos_p-pos);
         pos = pos_p+1;
         
     }while(pos_p != string::npos);

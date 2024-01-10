@@ -5997,9 +5997,10 @@ void Data::print_recent_bodies(String prefix, ostream& ostr) {
     stringstream temp;
 
    
-    for (temp.str(""), i = 0; i < recent_bodies.size(); i++) {
+    for (temp.str(""), i = 0; i < (recent_bodies.size())-1; i++) {
         temp << recent_bodies[i] << " ";
     }
+    temp << recent_bodies.back();
     String(temp.str().c_str()).print(String("Recent bodies"), false, prefix, ostr);
     
 }
@@ -6035,9 +6036,10 @@ void Data::print_recent_projections(String prefix, ostream& ostr) {
     stringstream temp;
 
    
-    for (temp.str(""), i = 0; i < recent_projections.size(); i++) {
+    for (temp.str(""), i = 0; i < (recent_projections.size())-1; i++) {
         temp << recent_projections[i] << " ";
     }
+    temp << recent_projections.back();
     String(temp.str().c_str()).print(String("Recent projections"), false, prefix, ostr);
     
 }

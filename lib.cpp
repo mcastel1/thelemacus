@@ -5191,7 +5191,7 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
     
     recent_bodies.resize(wxGetApp().n_recent_bodies.value);
     recent_projections.resize(wxGetApp().n_recent_projections.value);
-
+    
 //	file_init.close(prefix);
 
 }
@@ -17411,8 +17411,8 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 
 	name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, projections, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 	//SetColor(name);
+    fill_projections();
 	name->SetValue(projections[0]);
-	read_recent_projections();
 	AdjustWidth(name);
 	//as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
 	name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);

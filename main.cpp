@@ -25,7 +25,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - on WIN32, if you press control key on runtime from within Visual Studio, it will not be detected as WXK_CONTROL, while if you run the exe file from system resources it does.
  - on WIN32, keep the output directory as $(wxIntRootDir) : if you set it to Z:\ the program will not run 
  - to set up everything on Windows 10:
-    0. With Virtual Box, set up a partition with Windows 10. In the partition, set 2 cores, 13387 MB of base memory, set 'Shared Clipboard' to 'Bidirectional', install 'Guest Additions' and share the folder, say, sight_reduction_program, containing main.cpp, main.h, lib.cpp, lib.h, constants.h etc
+    0. With Virtual Box, set up a partition with Windows 10. In the partition, set 2 cores, 13387 MB of base memory, set 'Shared Clipboard' to 'Bidirectional', install 'Guest Additions' and share the folder, say, sight_reduction_program, containing main.cpp, main.h, lib.cpp, lib.h, constants.h etc. Set up 100 GB of disk on the partition, and set it to pre-allocated. 
     1. Install WinZip
     2. Istall MinGW : download mingw-get-setup from https://sourceforge.net/projects/mingw/
      3. Install Visual Studio: download VisualStudioSetup from https://visualstudio.microsoft.com/downloads/

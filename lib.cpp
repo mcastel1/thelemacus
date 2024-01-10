@@ -19276,16 +19276,28 @@ void ListControl::EnableButtons(bool check) {
 void ListControl::Resize(void) {
 
 	int j, item_width;
- 
-	for(j = 0; j < GetColumnCount(); j++) {
+    //a dummy listcontrol, never shown, used to set the column widths
+    ListControl* dummy;
+    vector<wxButton*> disableable_buttons_dummy(0);
+    
+    dummy = new ListControl(NULL, disableable_buttons_dummy, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_NO_HEADER);
+    dummy->set(wxGetApp().list_frame->data->sight_list, false);
 
-        //set the column width to the width of the largest item with wxLIST_AUTOSIZE, and store the width in wxLIST_AUTOSIZE
-        SetColumnWidth(j, wxLIST_AUTOSIZE);
-        item_width = GetColumnWidth(j);
-        //set the column width to the maximum between the header width (computed elsewhere) and item_width
+    for(j = 0; j < (dummy->GetColumnCount()); j++) {
+        dummy->SetColumnWidth(j, wxLIST_AUTOSIZE);
+        item_width = (dummy->GetColumnWidth(j));
         SetColumnWidth(j, max(header_width[j], item_width));
-
-	}
+    }
+     
+//	for(j = 0; j < GetColumnCount(); j++) {
+//
+//        //set the column width to the width of the largest item with wxLIST_AUTOSIZE, and store the width in wxLIST_AUTOSIZE
+//        SetColumnWidth(j, wxLIST_AUTOSIZE);
+//        item_width = GetColumnWidth(j);
+//        //set the column width to the maximum between the header width (computed elsewhere) and item_width
+//        SetColumnWidth(j, max(header_width[j], item_width));
+//
+//	}
 
 }
 

@@ -5801,12 +5801,11 @@ bool Data::read_from_file_to(FileRW& file, [[maybe_unused]] String prefix) {
 template<class S> void Data::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
     
     string line;
-    size_t pos, pos_p;
+    size_t pos;
     String new_prefix, temp;
     bool check;
-    unsigned int i;
 
-
+    
     check = true;
     
     cout << prefix.value << "Reading " << name.value << " from stream " << input_stream << "... \n";
@@ -13845,7 +13844,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 	//I bind reduce button to label->set_to_current_time: in this way, whenever the reduce button is pressed, the GUI field label is filled with the current time (if empty)
 	button_reduce->Bind(wxEVT_BUTTON, &SightFrame::OnPressReduce, this);
 	button_reduce->Bind(wxEVT_BUTTON, label->set_to_current_time);
-    button_reduce->Bind(wxEVT_BUTTON, &SightFrame::check<wxCommandEvent>, this);
+    button_reduce->Bind(wxEVT_BUTTON, &SightFrame::update_recent_items<wxCommandEvent>, this);
 
 	//If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
 	button_reduce->Bind(wxEVT_BUTTON, &BodyField<SightFrame>::get<wxCommandEvent>, body);
@@ -14033,6 +14032,26 @@ template<class E> void SightFrame::check(E& event){
 
     event.Skip(true);
 
+}
+
+template<class E> void SightFrame::update_recent_items(E& event){
+    
+    unsigned int i;
+    bool check;
+
+    //I check whether the name in the GUI field body matches one of the body names in catalog, and store its id in i
+    for (check = false, i = 0; (i < (body->catalog->list).size()) && (!check); i++) {
+        if (String((body->name->GetValue().ToStdString())) == (((body->catalog->list)[i]).name)) {
+            check = true;
+        }
+    }
+    i--;
+    
+    //insert body #i into data->recent_bodies
+    wxGetApp().list_frame->data->insert_recent_body(i);
+    
+    event.Skip(true);
+    
 }
 
 PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, long position_in_listcontrol_positions_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {
@@ -17253,17 +17272,7 @@ template<class P> template<class T>void OnChangeSelectionInLimbField<P>::operato
 	//tries to enable button_reduce
 	caller->parent_frame->AllOk();
 
-
-	//    cout << "checked_items : ";
-	//    for(int i=0; i<caller->checked_items.GetCount(); ++i){
-	//        cout << " " << caller->checked_items.Item(i);
-	//    }
-	//    cout << "\n";
-
-
-
 	event.Skip(true);
-
 
 }
 

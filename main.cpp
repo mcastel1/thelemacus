@@ -79,8 +79,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- - add the ::check method to Route and PositionFrame, and bind it as it is bound in SightFrame
- - listcontrol_sights etc are not resized to their minimum sizes
+ - fix the 'Fork ... ' part for WIN32
  - check that WXK_PLUS does not depend on the computer
 
  for MSW:
@@ -288,15 +287,6 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
-//    //
-//    string my_string = "2.32";
-//    double test;
-//    bool check;
-//    
-//    check = check_double(my_string, &test, false, 0, 0);
-//    
-//    //
-
 	unsigned int i;
 	Int n_chart_frames;
 	stringstream s;

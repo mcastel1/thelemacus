@@ -82,6 +82,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - check that WXK_PLUS does not depend on the computer
 
  for MSW:
+ - add ctrl+s and ctrl+shift+s to ChartFrame::KeyDown (if you read sample_sight.nav from resources, this may lead to a crash -> check it by opening it from disk)
  - esc key does not work in SightFrame and other *Frames when one does not FOCUS on a control
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder

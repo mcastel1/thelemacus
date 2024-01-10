@@ -79,7 +79,6 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- - fix the 'Fork ... ' part for WIN32
  - check that WXK_PLUS does not depend on the computer
 
  for MSW:

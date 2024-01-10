@@ -5949,20 +5949,9 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
     }
     
     //4. Read recent items
-    //4.1 read recent bodies
+    //read recent bodies and projections and ...
     read_list_from_stream<S>(String("Recent bodies"), input_stream, true, &recent_bodies);
-    
-
-    
-    //REPLACE THIS DUMB CODE WITH A CODE WHERE YOU ACTUALLY READ RECENT BODIES ETC FROM FILE
-//    for(i=0; i<recent_bodies.size(); i++){
-//        recent_bodies[i] = i;
-//    }
-//    for(i=0; i<recent_projections.size(); i++){
-//        recent_projections[i] = i;
-//    }
-    //REPLACE THIS DUMB CODE WITH A CODE WHERE YOU ACTUALLY READ RECENT BODIES ETC FROM FILE
-
+    read_list_from_stream<S>(String("Recent projections"), input_stream, true, &recent_projections);
 
 }
 
@@ -17449,9 +17438,9 @@ template<class P> void ProjectionField<P>::fill_projections(void){
 
     //save the current value of name in name_temp
     name_temp = (name->GetValue());
-    //create the temporary list of projections projections_temp
+    //create the temporary list of projections projections_temp from projection_catalog
     for (projections_temp.Clear(), i = 0; i < projections.GetCount(); i++) {
-        projections_temp.Add(projections[i]);
+        projections_temp.Add(projection_catalog[i]);
     }
     
     //I first add to projections the recently selected celestial projections written in (wxGetApp().list_frame->data->recent_projections)

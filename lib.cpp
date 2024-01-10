@@ -48,7 +48,7 @@ inline double acos(Double x) {
 
 //read from file the content after 'name = ' and writes it into the *object (the element of class C). 
 // This works for any class C. On WIN32, if mode = 'RW' then filename is filepath  such as "C:/a/b.txt", while if mode = 'R' then filename is a resource name such as my_resource_file. 
-template<class C> void read_from_file(C* object, String name, String filename, String mode, [[maybe_unused]] String prefix) {
+template<class C> void read_from_file(C* object, String name, String filename, [[maybe_unused]] String mode, [[maybe_unused]] String prefix) {
 
 #ifdef __APPLE__
 	//I am on APPLE operating system->the file is located in a folder in the .app package and I read it from there

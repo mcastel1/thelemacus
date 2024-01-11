@@ -13443,12 +13443,10 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
 	long i_transporting_route;
 	UnsetIdling<ListFrame>* unset_idling;
-    wxTimer* timer;
+    TransportHandler* transport_handler;
 
 	unset_idling = new UnsetIdling<ListFrame>(f);
-    timer = new wxTimer();
 
-//    timer->Bind(wxEVT_TIMER, &MyApp::OnTimer, this);
 
 	//copy the data of f->route_list_saved into f->data->route_list
 	((f->data)->route_list).resize((f->route_list_saved).size());
@@ -13512,11 +13510,13 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
 		//the id of the Position that will be transported,
 		(f->i_object_to_transport) = ((int)(((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
+        
+        transport_handler = new TransportHandler(&(((f->data)->position_list)[(f->i_object_to_transport)]), &(((f->data)->route_list)[i_transporting_route]));
 
         //the animation should be inserted here
-        timer->Start(/*time_step_animation is converted in milliseconds, because Start() takes its first argument in milliseconds*/(((wxGetApp().time_step_animation).h) * 60.0 * 60.0 + ((wxGetApp().time_step_animation).m) * 60.0 + ((wxGetApp().time_step_animation).s)) * 1000.0, wxTIMER_CONTINUOUS);
+        transport_handler->timer->Start(/*time_step_animation is converted in milliseconds, because Start() takes its first argument in milliseconds*/(((wxGetApp().time_step_animation).h) * 60.0 * 60.0 + ((wxGetApp().time_step_animation).m) * 60.0 + ((wxGetApp().time_step_animation).s)) * 1000.0, wxTIMER_CONTINUOUS);
         
-        timer->Stop();
+        transport_handler->timer->Stop();
     
         
 		//tranport the Position
@@ -19340,4 +19340,24 @@ template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_i
 	} while (item != -1);
 
 
+}
+
+TransportHandler::TransportHandler(Position* position_in, Route* route_in){
+    
+    timer = new wxTimer();
+
+    position = position_in;
+    route = route_in;
+    
+    timer->Bind(wxEVT_TIMER, &TransportHandler::OnTimer, this);
+
+    
+}
+
+//this method iterates the animation
+void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
+    
+    
+    cout << "a";
+    
 }

@@ -49,6 +49,7 @@ class ChartPanel;
 class RouteFrame;
 class DrawPanel;
 class Position;
+class TransportHandler;
 
 class Catalog;
 class Limb;
@@ -2430,5 +2431,18 @@ public:
     ChartFrame* parent;
     
     ChartPanel(ChartFrame*, const wxPoint&, const wxSize&);
+    
+};
+
+
+class TransportHandler{
+    
+public:
+    wxTimer* timer;
+    Position* position;
+    Route* route;
+    
+    TransportHandler(Position*, Route*);
+    void OnTimer(wxTimerEvent&);
     
 };

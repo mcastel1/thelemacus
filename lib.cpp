@@ -19328,6 +19328,7 @@ TransportHandler::TransportHandler(OnSelectRouteInListControlRoutesForTransport*
 //this method iterates the animation
 void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
+    
     if(t<(wxGetApp().n_animation_steps.value)){
         
         if(t==0){
@@ -19336,24 +19337,26 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
             if ((parent->transported_object) == String("position")) {
                 
-                //store the starting position in position_t
-                position_t = (parent->f->data->position_list)[(parent->f->i_object_to_transport)];
+                //store the starting position in position_start
+                position_start = (parent->f->data->position_list)[(parent->f->i_object_to_transport)];
                 
             }else{
                 
                 if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")){
                     
-                    //store the starting reference position in position_t
-                    position_t = (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position);
+                    //store the starting reference position in position_start
+                    position_start = (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position);
                     
                 }
                 
             }
             
+            (route_chunk->reference_position) = position_start;
+            
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
             for(long i=0; i<parent->f->chart_frames.size(); i++){
                 
-                ((parent->f->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION,wxMouseEventHandler(DrawPanel::OnMouseMovement), ((parent->f->chart_frames)[i])->draw_panel);
+                ((parent->f->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), ((parent->f->chart_frames)[i])->draw_panel);
                 
             }
             
@@ -19363,9 +19366,27 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             route_chunk->l.set(String("length of the route chunk"), (((parent->f->data->route_list)[parent->i_transporting_route]).l.value)/((double)(wxGetApp().n_animation_steps.value)), String(""));
             
                 
-            position_t.transport_to(*route_chunk, String(""));
-            (route_chunk->reference_position) = position_t;
+            if ((parent->transported_object) == String("position")) {
+                
+                (parent->f->data->position_list)[(parent->f->i_object_to_transport)].transport_to(*route_chunk, String(""));
+                (route_chunk->reference_position) = (parent->f->data->position_list)[(parent->f->i_object_to_transport)];
+
+                     
+            }else{
+                
+                if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")){
+                    
+                    ((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position.transport_to(*route_chunk, String(""));
+                    (route_chunk->reference_position) = (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position);
+                    
+                }
+                
+            }
+
             wxGetApp().list_frame->RefreshAll();
+            
+            cout << "\t\t t= " << t << "\n";
+
 
         }
         
@@ -19377,11 +19398,12 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         if ((parent->transported_object) == String("position")) {
             
             //do the whole transport rather than combining many little transports, to avoid rounding errors
-            ((parent->f->data->position_list)[(parent->f->i_object_to_transport)]).transport_to( (parent->f->data->route_list)[parent->i_transporting_route], String(""));
+            ((parent->f->data->position_list)[(parent->f->i_object_to_transport)]) = position_start;
+            ((parent->f->data->position_list)[(parent->f->i_object_to_transport)]).transport_to((parent->f->data->route_list)[parent->i_transporting_route], String(""));
             
+        
             
             //update labels
-            
             //change the label of Position #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
             (((parent->f->data->position_list)[(parent->f->i_object_to_transport)]).label) = (((parent->f->data->position_list)[(parent->f->i_object_to_transport)]).label).append(String(" transported with ")).append((((parent->f->data->route_list)[parent->i_transporting_route]).label));
             
@@ -19396,6 +19418,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 String new_label;
                 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
+                (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position) = position_start;
                 ((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position.transport_to( (parent->f->data->route_list)[parent->i_transporting_route], String(""));
 
 
@@ -19438,14 +19461,15 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         
         //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
         (*(parent->unset_idling))();
-        parent->f->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_SELECTED, *(parent->f->on_select_route_in_listcontrol_routes_for_transport));
-        
-        //the transport is over -> I bind back DrawPanel::OnMouseMovement to mouse movements
         for(long i=0; i<(parent->f->chart_frames.size()); i++){
             
             ((parent->f->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), ((parent->f->chart_frames)[i])->draw_panel);
             
         }
+        parent->f->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_SELECTED, *(parent->f->on_select_route_in_listcontrol_routes_for_transport));
+        
+        //the transport is over -> I bind back DrawPanel::OnMouseMovement to mouse movements
+
         
         timer->Stop();
 

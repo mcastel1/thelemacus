@@ -2185,6 +2185,7 @@ public:
     
     void set(void);
     void DrawAll(void);
+    void RefreshAll(void);
     void Resize(void);
     
     void GetAllCoastLineData(String);

@@ -13508,8 +13508,8 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
 	}
 
-	(f->listcontrol_sights)->set<Sight>((f->data)->sight_list, false);
-	(f->listcontrol_routes)->set<Route>((f->data)->route_list, false);
+	(f->listcontrol_sights)->set((f->data)->sight_list, false);
+	(f->listcontrol_routes)->set((f->data)->route_list, false);
 	f->Resize();
 	f->DrawAll();
 
@@ -13606,8 +13606,8 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 		(((f->data)->position_list)[(f->i_object_to_transport)]).update_wxListCtrl((f->i_object_to_transport), f->listcontrol_positions);
 	}
 
-	(f->listcontrol_sights)->set<Sight>((f->data)->sight_list, false);
-	(f->listcontrol_routes)->set<Route>((f->data)->route_list, false);
+	(f->listcontrol_sights)->set((f->data)->sight_list, false);
+	(f->listcontrol_routes)->set((f->data)->route_list, false);
 	f->Resize();
 	f->DrawAll();
 
@@ -15760,13 +15760,13 @@ void ListFrame::DrawAll(void) {
 //fit the size of all listcontrols inside *this to their respective content and resize the respective sizers and *this to fit the new size of the listcontrols
 void ListFrame::Resize(void) {
 
-	listcontrol_sights->Resize();
+	listcontrol_sights->Resize(data->sight_list);
     sizer_box_sight->Layout();
     
-	listcontrol_positions->Resize();
+	listcontrol_positions->Resize(data->position_list);
     sizer_box_position->Layout();
     
-	listcontrol_routes->Resize();
+	listcontrol_routes->Resize(data->route_list);
     sizer_box_route->Layout();
     
     sizer_v->Layout();
@@ -19227,7 +19227,7 @@ template<class S> void ListControl<S>::DeselectAll(void) {
 }
 
 //clears *this and sets all its items equal to the items in the non-GUI vector v. If keep_selected_items = true, I re-select the items in *this that were selected before ListControl::set was called (if they are compatible with the new size of *this)
-template<class S> template<class T> void ListControl<S>::set(vector<T> v, bool keep_selected_items) {
+template<class S> void ListControl<S>::set(vector<S> v, bool keep_selected_items) {
 
 	unsigned int i;
 	vector<long> selected_items;
@@ -19269,19 +19269,20 @@ template<class S> void ListControl<S>::EnableButtons(bool check) {
 }
 
 // resize the sizes of columns of *this to the maximum between the header size and the largest item size
-template<class S> void ListControl<S>::Resize(vector<S>* list) {
+template<class S> void ListControl<S>::Resize(vector<S> list) {
 
 	int j, item_width;
     //a dummy listcontrol, never shown, used to set the column widths
-    ListControl* dummy;
+    ListControl<S>* dummy;
         
-    dummy = new ListControl(this, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+    dummy = new ListControl<S>(this, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
     
     for(j=0; j<(this->GetColumnCount()); j++){
         dummy->PushBackColumn(wxString(""));
     }
     
-    dummy->set(((ListFrame*)(GetParent()->GetParent()))->data->sight_list, false);
+    //((ListFrame*)(GetParent()->GetParent()))->data->sight_list
+    dummy->set(list, false);
 
     for(j = 0; j < (dummy->GetColumnCount()); j++) {
         dummy->SetColumnWidth(j, wxLIST_AUTOSIZE);

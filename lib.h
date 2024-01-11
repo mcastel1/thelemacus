@@ -1365,9 +1365,9 @@ public:
     void SetColumns(vector<wxString>);
     void PushBackColumn(wxString);
     void DeselectAll(void);
-    template<class T> void set(vector<T>, bool);
+    void set(vector<S>, bool);
     void EnableButtons(bool);
-    void Resize(vector<S>*);
+    void Resize(vector<S>);
     void GetSelectedItems(vector<long>*);
     
 };

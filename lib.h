@@ -2089,6 +2089,7 @@ public:
     
     //parent frame
     ListFrame* f;
+    UnsetIdling<ListFrame>* unset_idling;
     long i_transporting_route;
     //the object which is being transported : a "sight" or a "position"
     String transported_object;

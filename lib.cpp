@@ -13525,7 +13525,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         transport_handler = new TransportHandler(&(((f->data)->position_list)[(f->i_object_to_transport)]), &(((f->data)->route_list)[i_transporting_route]));
 
         //the animation should be inserted here
-        transport_handler->timer->Start(/*time_step_animation is converted in milliseconds, because Start() takes its first argument in milliseconds*/(((wxGetApp().time_step_animation).h) * 60.0 * 60.0 + ((wxGetApp().time_step_animation).m) * 60.0 + ((wxGetApp().time_step_animation).s)) * 1000.0, wxTIMER_CONTINUOUS);
+        transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(((wxGetApp().animation_time).h) * 60.0 * 60.0 + ((wxGetApp().animation_time).m) * 60.0 + ((wxGetApp().animation_time).s)) * 1000.0, wxTIMER_CONTINUOUS);
         
         transport_handler->timer->Stop();
     

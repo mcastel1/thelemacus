@@ -45,7 +45,8 @@ plot area x margin over x size chart = 0.15
 plot area y margin over y size chart = 0.1
 standard thickness over length screen = 1.2e-3
 time check light dark = 00:00:01
-time step animation = 00:00:10
+#the temporal length of animations
+animation time = 00:00:10
 large thickness over length screen = 5e-3
 size icon over width screen = 4e-2
 size small button over width screen = 2e-2

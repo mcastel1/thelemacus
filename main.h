@@ -87,7 +87,7 @@ public:
     //type of the Boost library which contains the local time, intended as the time of the machine where the app is running
     boost::posix_time::ptime local_time;
     wxSystemSettings* settings;
-    Chrono /*the code checks every time_check whether the operating system has changed its light/dark mode*/time_check_light_dark, /*the time step between two subsequent animation frames */time_step_animation;
+    Chrono /*the code checks every time_check whether the operating system has changed its light/dark mode*/time_check_light_dark, /*the time step between two subsequent animation frames */animation_time;
     //this is true/false if the system is in dark/light mode, respectively
     bool dark_mode, idling;
     //the rectangle used to measure the size of the display

@@ -19371,6 +19371,9 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 
             }
             
+            //I brind all ChartFrames to front to show the animation 
+            wxGetApp().ShowChart(event);
+            
         }else{
             //the transport animation is not over -> do the next chunk
             

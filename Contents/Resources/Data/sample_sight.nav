@@ -36,16 +36,16 @@ Data:
 		Route #1:
 			type = o
 			start position:
-				latitude = 32° 2.999999999999829'
-				longitude = 123° 3.000000000000682'
-				label = 
-			starting heading = 33° 3.232400000000126'
+				latitude = 304° 26.76196762990912'
+				longitude = 64° 46.12037344398345'
+				label = 2024-01-11 17:17:38 UTC+2
+			starting heading = 126° 3.230000000000643'
 			length = 3000 nm
 			label = 2024-01-11 12:55:38 UTC+2
 	Positions:
 		Position #1:
 			latitude = 8° 51.17938547473742'
-			longitude = 57° 35.17815979031184'
+			longitude = 57° 35.17815979031141'
 			label = Centre Sportif Maryse Hilsz (MH)
 Recent bodies = 12 10 8
 Recent projections = 1 0

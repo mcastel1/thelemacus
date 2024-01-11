@@ -47,7 +47,7 @@ standard thickness over length screen = 1.2e-3
 time check light dark = 00:00:01
 #the temporal length of animations
 animation time = 00:00:10
-number of animation steps = 128
+number of animation steps = 100
 large thickness over length screen = 5e-3
 size icon over width screen = 4e-2
 size small button over width screen = 2e-2
@@ -69,7 +69,7 @@ relative displacement = 0.1
 omega draw 3d = 89° 32.157897987'
 default projection = Mercator
 #the number of chart frames opened when the program starts
-number chart frames = 2
+number chart frames = 1
 #initial rotation with which the 3D projection is displayed
 rotation 0 =
 alpha = 128° 3.43879'

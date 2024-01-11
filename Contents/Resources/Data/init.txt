@@ -84,7 +84,6 @@ load sample sight = y
 number of recent bodies = 3
 number of recent projections = 2
 #directories and names of files
-default open directory = /Users/macbookpro/Desktop/Thelemacus.app/
 code directory = /Users/macbookpro/Desktop/Thelemacus.app/
 data directory = /Users/macbookpro/Desktop/Thelemacus.app/data/
 image directory = /Users/macbookpro/Desktop/Thelemacus.app/images/

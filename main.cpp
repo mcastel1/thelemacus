@@ -51,20 +51,19 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
 
  ********** THINGS TO ADD/IMPROVE ************
+ - when transporting a sight allow the user to enter speed and time instead of distance
+ - add instrumental error
+ - readme file
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
  - check whether you can speed up Draw3D by tabulating stuff it i < 90  etc
  - center name of file in top bar of ListFrame
- - readme file
  - add popup when mouse on button
  - propose to donate to the user
- - add loader
- - when transporting a sight allow the user to enter speed and time instead of distance
  - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
  - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
  - change     highlight_color = color_selected_item and     highlight_font = default_font;
  with a better  choice
  - add + / - button in chartframe to zoom in / out
- - add instrumental error
  - add lambert projection and 3D sphere with no projection
  - add separator between recent items and non-recent items in BodyField->name
  - set up output to a log file
@@ -80,7 +79,6 @@ To run on WIN32, the resource file is resource_file_windows.rc
  ********** THINGS TO FIX ************
 
  for MSW:
- - add ctrl+s and ctrl+shift+s to ChartFrame::KeyDown (if you read sample_sight.nav from resources, this may lead to a crash -> check it by opening it from disk)
  - esc key does not work in SightFrame and other *Frames when one does not FOCUS on a control
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
@@ -278,7 +276,7 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 #endif
 
-	root_directory.print(String("Formatted root directory"), true, String("*******"), cout);
+	//root_directory.print(String("Formatted root directory"), true, String("*******"), cout);
 
 
 }

@@ -10183,7 +10183,7 @@ template<class T> void ChartFrame::KeyDown(T& event) {
 
                 break;
                 
-            }   
+            }
                 
         }
         
@@ -15515,9 +15515,9 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             
             //Fork
             //Case 1: If I open a sample sight file at startup stored in Windows resources, use this
-            data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String(""));
+//            data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String(""));
             //Case 2: If I open a file on disk, use this
-            //            data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("RW"), String(""));
+                        data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("RW"), String(""));
             
             
 #endif
@@ -16330,7 +16330,7 @@ template<class E> void ListFrame::OnPressCtrlS(E& event) {
 //write content of data into a named file
 template<class E> void ListFrame::OnPressCtrlShiftS(E& event) {
 
-	wxFileDialog openFileDialog(this, _(""), (wxGetApp().default_open_directory).value, "", "nav files (*.nav)|*.nav", wxFD_SAVE | wxFD_FILE_MUST_EXIST);
+	wxFileDialog openFileDialog(this, _(""), (wxGetApp().default_open_directory).value, "", "nav files (*.nav)|*.nav", wxFD_SAVE);
 
 	if ((openFileDialog.ShowModal()) != wxID_CANCEL) {
 		// the user did not presse cancel -> proceed saving on the file chosen by the user;

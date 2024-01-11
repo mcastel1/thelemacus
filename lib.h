@@ -2439,9 +2439,12 @@ public:
 class TransportHandler{
     
 public:
+    
     wxTimer* timer;
     Position* position;
     Route* route;
+    //a counter of the step in the animation, running from 0 to n_animation_steps -1
+    long t;
     
     TransportHandler(Position*, Route*);
     void OnTimer(wxTimerEvent&);

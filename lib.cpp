@@ -19373,27 +19373,27 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         }else{
             //the transport animation is not over -> do the next chunk
             
-            route_chunk->l.set(String("length of the route chunk"), (((parent->f->data->route_list)[parent->i_transporting_route]).l.value)/((double)(wxGetApp().n_animation_steps.value)), String(""));
+            route_chunk->l.set(String("length of the route chunk"), (((parent->f->data->route_list)[parent->i_transporting_route]).l.value) * ((double)t)/((double)(wxGetApp().n_animation_steps.value)), String(""));
             
                 
             if ((parent->transported_object) == String("position")) {
                 
+                (parent->f->data->position_list)[(parent->f->i_object_to_transport)] = position_start;
                 (parent->f->data->position_list)[(parent->f->i_object_to_transport)].transport_to(*route_chunk, String(""));
-                (route_chunk->reference_position) = (parent->f->data->position_list)[(parent->f->i_object_to_transport)];
+//                (route_chunk->reference_position) = (parent->f->data->position_list)[(parent->f->i_object_to_transport)];
 
                      
             }else{
                 
                 if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")){
                     
+                    (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position) = position_start;
                     ((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position.transport_to(*route_chunk, String(""));
-                    (route_chunk->reference_position) = (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position);
+//                    (route_chunk->reference_position) = (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position);
                     
                 }
                 
             }
-
-            
 
             wxGetApp().list_frame->TabulateRoutesAll();
             wxGetApp().list_frame->RefreshAll();
@@ -19413,7 +19413,6 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             //do the whole transport rather than combining many little transports, to avoid rounding errors
             ((parent->f->data->position_list)[(parent->f->i_object_to_transport)]) = position_start;
             ((parent->f->data->position_list)[(parent->f->i_object_to_transport)]).transport_to((parent->f->data->route_list)[parent->i_transporting_route], String(""));
-            
         
             
             //update labels
@@ -19433,7 +19432,6 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
                 (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position) = position_start;
                 ((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position.transport_to( (parent->f->data->route_list)[parent->i_transporting_route], String(""));
-
 
                 
                 //update labels

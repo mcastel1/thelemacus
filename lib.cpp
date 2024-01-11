@@ -15375,7 +15375,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         //    disableable_buttons.push_back(button_disconnect_sight);
         disableable_buttons.push_back(button_delete_sight);
         
-        listcontrol_sights = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL);
+        listcontrol_sights = new ListControl<Sight>(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL);
         on_change_selection_in_listcontrol_sights = new OnChangeSelectionInListControl(listcontrol_sights, String("sight"));
         //SetColor(listcontrol_sights);
         //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
@@ -15412,7 +15412,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         disableable_buttons.push_back(button_delete_position);
         
         
-        listcontrol_positions = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL);
+        listcontrol_positions = new ListControl<Position>(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL);
         on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl(listcontrol_positions, String("position"));
         listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_positions);
         listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_positions);
@@ -15435,7 +15435,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         //    disableable_buttons.push_back(button_disconnect_route);
         disableable_buttons.push_back(button_delete_route);
         
-        listcontrol_routes = new ListControl(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+        listcontrol_routes = new ListControl<Route>(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
         on_change_selection_in_listcontrol_routes = new OnChangeSelectionInListControl(listcontrol_routes, String("route"));
         //SetColor(listcontrol_routes);
         //    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
@@ -19168,18 +19168,6 @@ OnNewRouteInListControlRoutesForTransport::OnNewRouteInListControlRoutesForTrans
 
 }
 
-
-
-
-
-ListControl::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_buttons_in, const wxPoint& pos, const wxSize& size, long style) : wxListCtrl(parent_in, wxID_ANY, pos, size, style) {
-
-	disableable_buttons = disableable_buttons_in;
-    header_width.resize(0);
-
-}
-
-
 //construct a StaticText object from a wxStaticText object, and sets its color
 StaticText::StaticText(wxWindow* parent, const wxString& label, const wxPoint& pos, const wxSize& size, long style) : wxStaticText(parent, wxID_ANY, label, pos, size, style, wxT("")) {
 
@@ -19187,8 +19175,16 @@ StaticText::StaticText(wxWindow* parent, const wxString& label, const wxPoint& p
 
 }
 
+
+template<class S> ListControl<S>::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_buttons_in, const wxPoint& pos, const wxSize& size, long style) : wxListCtrl(parent_in, wxID_ANY, pos, size, style) {
+
+    disableable_buttons = disableable_buttons_in;
+    header_width.resize(0);
+
+}
+
 //set all columns of *this: add a first dummy column, which is not correctly sized on WIN32 (I don't know why) -> add the real columns -> remove the dummy column. The  size of column i that fits the header is stored in header_width[i]
-void ListControl::SetColumns(vector<wxString> headers) {
+template<class S> void ListControl<S>::SetColumns(vector<wxString> headers) {
     
     int i;
     
@@ -19202,7 +19198,7 @@ void ListControl::SetColumns(vector<wxString> headers) {
 }
 
 //push back a column to ListControl and store the header size into header_size
-void ListControl::PushBackColumn(wxString name) {
+template<class S> void ListControl<S>::PushBackColumn(wxString name) {
 
 //	wxListItem column;
 //
@@ -19218,7 +19214,7 @@ void ListControl::PushBackColumn(wxString name) {
 
 
 //deselect all items in *this
-void ListControl::DeselectAll(void) {
+template<class S> void ListControl<S>::DeselectAll(void) {
 
 	int i;
 
@@ -19231,7 +19227,7 @@ void ListControl::DeselectAll(void) {
 }
 
 //clears *this and sets all its items equal to the items in the non-GUI vector v. If keep_selected_items = true, I re-select the items in *this that were selected before ListControl::set was called (if they are compatible with the new size of *this)
-template<class T> void ListControl::set(vector<T> v, bool keep_selected_items) {
+template<class S> template<class T> void ListControl<S>::set(vector<T> v, bool keep_selected_items) {
 
 	unsigned int i;
 	vector<long> selected_items;
@@ -19260,7 +19256,7 @@ template<class T> void ListControl::set(vector<T> v, bool keep_selected_items) {
 
 
 //if check = true/false it enables/disables all disableable buttons in *this
-void ListControl::EnableButtons(bool check) {
+template<class S> void ListControl<S>::EnableButtons(bool check) {
 
 	unsigned int i;
 
@@ -19273,7 +19269,7 @@ void ListControl::EnableButtons(bool check) {
 }
 
 // resize the sizes of columns of *this to the maximum between the header size and the largest item size
-void ListControl::Resize(void) {
+template<class S> void ListControl<S>::Resize(vector<S>* list) {
 
 	int j, item_width;
     //a dummy listcontrol, never shown, used to set the column widths
@@ -19308,7 +19304,7 @@ void ListControl::Resize(void) {
 
 
 //get the selected items from *this, clears and reallocate selected_items, and writes them in selected_items
-void ListControl::GetSelectedItems(vector<long>* selected_items) {
+template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_items) {
 
 	long item;
 

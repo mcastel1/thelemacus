@@ -13452,7 +13452,6 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
 //if an item in listcontrol_sights/positions/routes is selected, I transport the Sight/Position/Route under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event) {
 
-	long i_transporting_route;
 	UnsetIdling<ListFrame>* unset_idling;
     TransportHandler* transport_handler;
 
@@ -13522,7 +13521,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 		//the id of the Position that will be transported,
 		(f->i_object_to_transport) = ((int)(((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
-        transport_handler = new TransportHandler(&(((f->data)->position_list)[(f->i_object_to_transport)]), &(((f->data)->route_list)[i_transporting_route]));
+        transport_handler = new TransportHandler(this);
 
         //the animation should be inserted here
         transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(((wxGetApp().animation_time).h) * 60.0 * 60.0 + ((wxGetApp().animation_time).m) * 60.0 + ((wxGetApp().animation_time).s))/((double)((wxGetApp().n_animation_steps.value)-1)) * 1000.0, wxTIMER_CONTINUOUS);
@@ -19364,14 +19363,15 @@ template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_i
 
 }
 
-TransportHandler::TransportHandler(Position* position_in, Route* route_in){
-    
+TransportHandler::TransportHandler( OnSelectRouteInListControlRoutesForTransport* parent_in){
+
+
     timer = new wxTimer();
     route_chunk = new Route();
+    
+    parent = parent_in;
 
-    position = position_in;
-    route = route_in;
-    (*route_chunk) = (*route);
+    (*route_chunk) = (parent->f->data->route_list)[parent->i_transporting_route];
     t = 0;
 
     timer->Bind(wxEVT_TIMER, &TransportHandler::OnTimer, this);
@@ -19381,20 +19381,23 @@ TransportHandler::TransportHandler(Position* position_in, Route* route_in){
 //this method iterates the animation
 void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
-    
-    route_chunk->l.set(String("length of route chunk"), (route->l.value)/((double)(wxGetApp().n_animation_steps.value)), String(""));
-    position->transport_to(*route_chunk, String(""));
-    
-    route_chunk->reference_position = (*position);
-    
     if(t<(wxGetApp().n_animation_steps.value)+1){
-
+        //the transport animation is not over -> do the next chunk
+        
+        route_chunk->l.set(String("length of route chunk"), (((parent->f->data->route_list)[parent->i_transporting_route]).l.value)/((double)(wxGetApp().n_animation_steps.value)), String(""));
+        ((parent->f->data->position_list)[(parent->f->i_object_to_transport)]).transport_to(*route_chunk, String(""));
+        
+        route_chunk->reference_position = (((parent->f->data->position_list)[(parent->f->i_object_to_transport)]));
+        
         t++;
         
     }else{
+        //the transport animation is over -> do the whole transport from the beginning to avoid roundoff errors and stop timer
         
+        ((parent->f->data->route_list)[parent->i_transporting_route]).compute_end(String(""));
+        ((parent->f->data->position_list)[(parent->f->i_object_to_transport)]) = ((parent->f->data->route_list)[parent->i_transporting_route]).end;
         timer->Stop();
-
+        
     }
     
     wxGetApp().list_frame->RefreshAll();

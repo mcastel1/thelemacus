@@ -2089,6 +2089,7 @@ public:
     
     //parent frame
     ListFrame* f;
+    long i_transporting_route;
     //the object which is being transported : a "sight" or a "position"
     String transported_object;
     
@@ -2441,13 +2442,14 @@ class TransportHandler{
     
 public:
     
+    //the functor that calls *this
+    OnSelectRouteInListControlRoutesForTransport* parent;
     wxTimer* timer;
-    Position* position;
-    Route *route, *route_chunk;
+    Route *route_chunk;
     //a counter of the step in the animation, running from 0 to n_animation_steps
     long t;
     
-    TransportHandler(Position*, Route*);
+    TransportHandler(OnSelectRouteInListControlRoutesForTransport*);
     void OnTimer(wxTimerEvent&);
     
 };

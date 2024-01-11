@@ -19272,34 +19272,28 @@ template<class S> void ListControl<S>::EnableButtons(bool check) {
 template<class S> void ListControl<S>::Resize(vector<S> list) {
 
 	int j, item_width;
-    //a dummy listcontrol, never shown, used to set the column widths
-    ListControl<S>* dummy;
+    //a dummy listcontrol, never shown, used to set the column widths. To avoid resizing *this multiple times as the items are checked (ugly looking), I create a dummy_listcontrol whose column size is adapted to the largest item -> add all the items in list to it -> compute the item_width -> set the column width of *this as the maximum between header_width (already computed) and item_width. In this way, all columns of *this will be large enough to accomodate both its headers and items
+    ListControl<S>* dummy_listcontrol;
+    wxFrame* dummy_frame;
         
-    dummy = new ListControl<S>(this, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+    dummy_frame = new wxFrame(NULL, wxID_ANY, wxString(""), wxDefaultPosition, wxDefaultSize);
+    dummy_listcontrol = new ListControl<S>(dummy_frame, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
     
     for(j=0; j<(this->GetColumnCount()); j++){
-        dummy->PushBackColumn(wxString(""));
+        dummy_listcontrol->PushBackColumn(wxString(""));
     }
     
     //((ListFrame*)(GetParent()->GetParent()))->data->sight_list
-    dummy->set(list, false);
+    dummy_listcontrol->set(list, false);
 
-    for(j = 0; j < (dummy->GetColumnCount()); j++) {
-        dummy->SetColumnWidth(j, wxLIST_AUTOSIZE);
-        item_width = (dummy->GetColumnWidth(j));
+    for(j = 0; j < (dummy_listcontrol->GetColumnCount()); j++) {
+        dummy_listcontrol->SetColumnWidth(j, wxLIST_AUTOSIZE);
+        item_width = (dummy_listcontrol->GetColumnWidth(j));
         SetColumnWidth(j, max(header_width[j], item_width));
     }
     
-     
-//	for(j = 0; j < GetColumnCount(); j++) {
-//
-//        //set the column width to the width of the largest item with wxLIST_AUTOSIZE, and store the width in wxLIST_AUTOSIZE
-//        SetColumnWidth(j, wxLIST_AUTOSIZE);
-//        item_width = GetColumnWidth(j);
-//        //set the column width to the maximum between the header width (computed elsewhere) and item_width
-//        SetColumnWidth(j, max(header_width[j], item_width));
-//
-//	}
+    dummy_listcontrol->Destroy();
+    dummy_frame->Destroy();
 
 }
 

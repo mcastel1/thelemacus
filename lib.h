@@ -2447,6 +2447,8 @@ public:
     OnSelectRouteInListControlRoutesForTransport* parent;
     wxTimer* timer;
     Route *route_chunk;
+    //the position during the transport process at 'time' t 
+    Position position_t;
     //a counter of the step in the animation, running from 0 to n_animation_steps
     long t;
     

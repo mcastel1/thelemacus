@@ -729,7 +729,8 @@ public:
     void print(String, String, ostream&);
     void read_from_file_to(String, String, String, String);
     template<class S> void read_from_stream(String, S*, bool, String);
-    bool transport(Route, String);
+    bool transport(Position*, Route, String);
+    bool transport_to(Route, String);
     string to_string(unsigned int);
     bool distance(Position, Length*, String, String);
     bool is_in(Route, String);

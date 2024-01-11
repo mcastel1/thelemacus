@@ -3789,8 +3789,8 @@ void Time::to_MJD(void)
 }
 
 
-//transport the Position *this with the Route route
-bool Position::transport(Route route, [[maybe_unused]] String prefix) {
+//transport the Position *this with the Route route and write the result in *this. If route is not a circle of equal altitude, the transport is done and true is returned, otherwise no transport is done and false is returned.
+bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
 
 	String new_prefix;
 
@@ -3821,6 +3821,17 @@ bool Position::transport(Route route, [[maybe_unused]] String prefix) {
 	}
 
 
+}
+
+
+//transport the Position *this with the Route route and write the result in *result. If route is not a circle of equal altitude, the transport is done and true is returned, otherwise no transport is done and false is returned. result is allocated
+bool Position::transport(Position* result, Route route, [[maybe_unused]] String prefix){
+    
+    
+    result = new Position();
+
+    return(result->transport_to(route, prefix));
+    
 }
 
 
@@ -13477,7 +13488,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
 
 		//tranport the Route
-		((((f->data)->route_list)[(f->i_object_to_transport)]).reference_position).transport(
+		((((f->data)->route_list)[(f->i_object_to_transport)]).reference_position).transport_to(
 
 			((f->data)->route_list)[i_transporting_route],
 			String("")
@@ -13520,7 +13531,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
         
 		//tranport the Position
-		(((f->data)->position_list)[(f->i_object_to_transport)]).transport(
+		(((f->data)->position_list)[(f->i_object_to_transport)]).transport_to(
 
 			((f->data)->route_list)[i_transporting_route],
 			String("")
@@ -13583,7 +13594,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 		((((f->data)->route_list)[i_transporting_route]).reference_position) = ((((f->data)->route_list)[(f->i_object_to_transport)]).reference_position);
 
 		//tranport the Route
-		((((f->data)->route_list)[(f->i_object_to_transport)]).reference_position).transport(
+		((((f->data)->route_list)[(f->i_object_to_transport)]).reference_position).transport_to(
 
 			((f->data)->route_list)[i_transporting_route],
 			String("")
@@ -13623,7 +13634,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 
 
 		//tranport the Position
-		(((f->data)->position_list)[(f->i_object_to_transport)]).transport(((f->data)->route_list)[i_transporting_route], String(""));
+		(((f->data)->position_list)[(f->i_object_to_transport)]).transport_to(((f->data)->route_list)[i_transporting_route], String(""));
 
 		//change the label of Position #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
 		((((f->data)->position_list)[(f->i_object_to_transport)]).label) = ((((f->data)->position_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->data)->route_list)[i_transporting_route]).label));

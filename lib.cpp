@@ -19278,16 +19278,21 @@ void ListControl::Resize(void) {
 	int j, item_width;
     //a dummy listcontrol, never shown, used to set the column widths
     ListControl* dummy;
-    vector<wxButton*> disableable_buttons_dummy(0);
+        
+    dummy = new ListControl(this, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
     
-    dummy = new ListControl(NULL, disableable_buttons_dummy, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_NO_HEADER);
-    dummy->set(wxGetApp().list_frame->data->sight_list, false);
+    for(j=0; j<(this->GetColumnCount()); j++){
+        dummy->PushBackColumn(wxString(""));
+    }
+    
+    dummy->set(((ListFrame*)(GetParent()->GetParent()))->data->sight_list, false);
 
     for(j = 0; j < (dummy->GetColumnCount()); j++) {
         dummy->SetColumnWidth(j, wxLIST_AUTOSIZE);
         item_width = (dummy->GetColumnWidth(j));
         SetColumnWidth(j, max(header_width[j], item_width));
     }
+    
      
 //	for(j = 0; j < GetColumnCount(); j++) {
 //
@@ -19309,6 +19314,7 @@ void ListControl::GetSelectedItems(vector<long>* selected_items) {
 
 	item = -1;
 	selected_items->clear();
+    
 	do {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item != -1) { selected_items->push_back(item); }

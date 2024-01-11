@@ -42,6 +42,7 @@
 #include "gsl_spline.h"
 #include "gsl_integration.h"
 #include "gsl_roots.h"
+#include "gsl_sf_psi.h"
 // #include "gsl_complex.h"
 // #include "gsl_complex_math.h"
 

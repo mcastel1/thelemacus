@@ -15484,9 +15484,9 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             
             //Fork
             //Case 1: If I open a sample sight file at startup stored in Windows resources, use this
-//            data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String(""));
+            data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String(""));
             //Case 2: If I open a file on disk, use this
-                        data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("RW"), String(""));
+                        //data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("RW"), String(""));
             
             
 #endif
@@ -19371,13 +19371,23 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 
             }
             
-            //I brind all ChartFrames to front to show the animation 
+            //I brind all ChartFrames to front to show the animation
             wxGetApp().ShowChart(event);
             
         }else{
             //the transport animation is not over -> do the next chunk
             
-            route_chunk->l.set(String("length of the route chunk"), (((parent->f->data->route_list)[parent->i_transporting_route]).l.value) * ((double)t)/((double)(wxGetApp().n_animation_steps.value)), String(""));
+            /*
+             t_{i+1}-t_i = i+1
+             
+             */
+            
+            route_chunk->l.set(
+                               String("length of the route chunk"),
+                               (((parent->f->data->route_list)[parent->i_transporting_route]).l.value) *
+                               (M_EULER + gsl_sf_psi_n(0, ((double)(t+1))))/(M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)+1))))
+                               ,
+                               String(""));
             
                 
             if ((parent->transported_object) == String("position")) {

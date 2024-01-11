@@ -13529,13 +13529,13 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
     
         
-		//tranport the Position
-		(((f->data)->position_list)[(f->i_object_to_transport)]).transport_to(
-
-			((f->data)->route_list)[i_transporting_route],
-			String("")
-
-		);
+//		//tranport the Position
+//		(((f->data)->position_list)[(f->i_object_to_transport)]).transport_to(
+//
+//			((f->data)->route_list)[i_transporting_route],
+//			String("")
+//
+//		);
 
 		//change the label of Position #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
 		((((f->data)->position_list)[(f->i_object_to_transport)]).label) = ((((f->data)->position_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->data)->route_list)[i_transporting_route]).label));

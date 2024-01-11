@@ -10166,6 +10166,24 @@ template<class T> void ChartFrame::KeyDown(T& event) {
                 break;
                 
             }
+  
+            case 'S': {
+                
+                if(wxGetKeyState(WXK_SHIFT)){
+
+                    //command (APPLE) or control (WIN32) + shift + s key has been pressed
+                                        
+                    parent->OnPressCtrlShiftS(event);
+                }else{
+                    //command (APPLE) or control (WIN32) + s key has been pressed
+                    
+                    parent->OnPressCtrlS(event);
+                    
+                }
+
+                break;
+                
+            }   
                 
         }
         

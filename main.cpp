@@ -381,7 +381,7 @@ bool MyApp::OnInit() {
 
 	data_precision.read_from_file_to(String("data precision"), (wxGetApp().path_file_init), String("R"), String(""));
 	display_precision.read_from_file_to(String("display precision"), (wxGetApp().path_file_init), String("R"), String(""));
-	time_check.read_from_file_to(String("time check"), (wxGetApp().path_file_init), String("R"), String(""));
+	time_check_light_dark.read_from_file_to(String("time check light dark"), (wxGetApp().path_file_init), String("R"), String(""));
 	time_zone.read_from_file_to(String("time zone"), (wxGetApp().path_file_init), String("R"), String(""));
 
 	max_lat.read_from_file_to(String("maximal latitude coastline data"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -541,7 +541,7 @@ bool MyApp::OnInit() {
         highlight_font = default_font;
         error_font.SetWeight(wxFONTWEIGHT_BOLD);
         
-        timer->Start(/*time_check is converted in milliseconds, because Start() takes its first argument i milliseconds*/((time_check.h) * 60.0 * 60.0 + (time_check.m) * 60.0 + (time_check.s)) * 1000.0, wxTIMER_CONTINUOUS);
+        timer->Start(/*time_check_light_dark is converted in milliseconds, because Start() takes its first argument in milliseconds*/((time_check_light_dark.h) * 60.0 * 60.0 + (time_check_light_dark.m) * 60.0 + (time_check_light_dark.s)) * 1000.0, wxTIMER_CONTINUOUS);
         
         
         return true;

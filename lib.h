@@ -1375,15 +1375,15 @@ public:
 
 
 //if an item is selected/deselected in caller, enable/disable the disableable buttons in caller
-class OnChangeSelectionInListControl{
+template<class S> class OnChangeSelectionInListControl{
     
 public:
     
-    ListControl* caller;
+    ListControl<S>* caller;
     //the type of listcontrol: "sight" if caller = listcontrol_sights, "position" if caller = listcontrol_positions, "route" if caller = listcontrol_routes
     String type;
     
-    OnChangeSelectionInListControl(ListControl*, String);
+    OnChangeSelectionInListControl(ListControl<S>*, String);
     template<class T> void operator()(T&);
     
 };
@@ -2147,7 +2147,7 @@ public:
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
     DeletePosition *delete_position;
-    OnChangeSelectionInListControl *on_change_selection_in_listcontrol_sights, *on_change_selection_in_listcontrol_routes, *on_change_selection_in_listcontrol_positions;
+    OnChangeSelectionInListControl<Sight>* on_change_selection_in_listcontrol_sights; OnChangeSelectionInListControl<Route>* on_change_selection_in_listcontrol_routes; OnChangeSelectionInListControl<Position>* on_change_selection_in_listcontrol_positions;
     ExistingRoute *existing_route;
     NewRoute *create_route;
     //a temporary value of data->crossing_route_list

@@ -15376,7 +15376,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         disableable_buttons.push_back(button_delete_sight);
         
         listcontrol_sights = new ListControl<Sight>(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL);
-        on_change_selection_in_listcontrol_sights = new OnChangeSelectionInListControl(listcontrol_sights, String("sight"));
+        on_change_selection_in_listcontrol_sights = new OnChangeSelectionInListControl<Sight>(listcontrol_sights, String("sight"));
         //SetColor(listcontrol_sights);
         //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
         listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_sights);
@@ -15413,7 +15413,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         
         
         listcontrol_positions = new ListControl<Position>(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL);
-        on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl(listcontrol_positions, String("position"));
+        on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl<Position>(listcontrol_positions, String("position"));
         listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_positions);
         listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_positions);
         //    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
@@ -15436,7 +15436,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         disableable_buttons.push_back(button_delete_route);
         
         listcontrol_routes = new ListControl<Route>(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
-        on_change_selection_in_listcontrol_routes = new OnChangeSelectionInListControl(listcontrol_routes, String("route"));
+        on_change_selection_in_listcontrol_routes = new OnChangeSelectionInListControl<Route>(listcontrol_routes, String("route"));
         //SetColor(listcontrol_routes);
         //    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
         listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_routes);
@@ -17120,7 +17120,7 @@ template<class T>void CheckRouteType::operator()(T& event) {
 }
 
 
-OnChangeSelectionInListControl::OnChangeSelectionInListControl(ListControl* caller_in, String type_in) {
+template<class S> OnChangeSelectionInListControl<S>::OnChangeSelectionInListControl(ListControl<S>* caller_in, String type_in) {
 
 	caller = caller_in;
 	type = type_in;
@@ -17128,7 +17128,7 @@ OnChangeSelectionInListControl::OnChangeSelectionInListControl(ListControl* call
 }
 
 //check whether there are some selected items in ListControl *caller, and enables/disables disableable_buttons accordingly
-template<class T>void OnChangeSelectionInListControl::operator()(T& event) {
+template<class S> template<class T>void OnChangeSelectionInListControl<S>::operator()(T& event) {
 
 	long i;
 	//a pointer to the ListFrame

@@ -15754,6 +15754,16 @@ void ListFrame::RefreshAll(void){
 
 }
 
+//tabulate Routes in all chart_frames
+void ListFrame::TabulateRoutesAll(void){
+    
+    for(long i=0; i<(chart_frames.size()); i++){
+        (chart_frames[i])->draw_panel->TabulateRoutes();
+    }
+
+}
+
+
 //fit the size of all listcontrols inside *this to their respective content and resize the respective sizers and *this to fit the new size of the listcontrols
 void ListFrame::Resize(void) {
 
@@ -19383,6 +19393,9 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 
             }
 
+            
+
+            wxGetApp().list_frame->TabulateRoutesAll();
             wxGetApp().list_frame->RefreshAll();
             
             cout << "\t\t t= " << t << "\n";

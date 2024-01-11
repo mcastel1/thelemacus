@@ -13525,9 +13525,8 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         transport_handler = new TransportHandler(&(((f->data)->position_list)[(f->i_object_to_transport)]), &(((f->data)->route_list)[i_transporting_route]));
 
         //the animation should be inserted here
-        transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(((wxGetApp().animation_time).h) * 60.0 * 60.0 + ((wxGetApp().animation_time).m) * 60.0 + ((wxGetApp().animation_time).s)) * 1000.0, wxTIMER_CONTINUOUS);
+        transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(((wxGetApp().animation_time).h) * 60.0 * 60.0 + ((wxGetApp().animation_time).m) * 60.0 + ((wxGetApp().animation_time).s))/((double)((wxGetApp().n_animation_steps.value)-1)) * 1000.0, wxTIMER_CONTINUOUS);
         
-        transport_handler->timer->Stop();
     
         
 		//tranport the Position
@@ -13541,14 +13540,16 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 		//change the label of Position #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
 		((((f->data)->position_list)[(f->i_object_to_transport)]).label) = ((((f->data)->position_list)[(f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((f->data)->route_list)[i_transporting_route]).label));
 
-		//update the Position information in f, and re-draw everything
+		//update the Position information in f
 		(((f->data)->position_list)[(f->i_object_to_transport)]).update_wxListCtrl((f->i_object_to_transport), f->listcontrol_positions);
 
 	}
+    
 
 	(f->listcontrol_sights)->set((f->data)->sight_list, false);
 	(f->listcontrol_routes)->set((f->data)->route_list, false);
 	f->Resize();
+    //re-draw everything
 	f->DrawAll();
 
 	//re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
@@ -19356,19 +19357,34 @@ template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_i
 TransportHandler::TransportHandler(Position* position_in, Route* route_in){
     
     timer = new wxTimer();
+    route_chunk = new Route();
 
     position = position_in;
     route = route_in;
-    
+    (*route_chunk) = (*route);
+    t = 0;
+
     timer->Bind(wxEVT_TIMER, &TransportHandler::OnTimer, this);
 
-    
 }
 
 //this method iterates the animation
 void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
     
-    cout << "a";
+    route_chunk->l.set(String("length of route chunk"), (route->l.value)/((double)(wxGetApp().n_animation_steps.value)), String(""));
+    position->transport_to(*route_chunk, String(""));
+    
+    route_chunk->reference_position = (*position);
+    
+    if(t<(wxGetApp().n_animation_steps.value)+1){
+        
+        t++;
+        
+    }else{
+        
+        timer->Stop();
+
+    }
     
 }

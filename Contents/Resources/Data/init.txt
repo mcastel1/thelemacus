@@ -46,7 +46,7 @@ plot area y margin over y size chart = 0.1
 standard thickness over length screen = 1.2e-3
 time check light dark = 00:00:01
 #the temporal length of animations
-animation time = 00:00:10
+animation time = 00:01:00
 number of animation steps = 8
 large thickness over length screen = 5e-3
 size icon over width screen = 4e-2

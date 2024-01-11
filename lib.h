@@ -2442,8 +2442,8 @@ public:
     
     wxTimer* timer;
     Position* position;
-    Route* route;
-    //a counter of the step in the animation, running from 0 to n_animation_steps -1
+    Route *route, *route_chunk;
+    //a counter of the step in the animation, running from 0 to n_animation_steps
     long t;
     
     TransportHandler(Position*, Route*);

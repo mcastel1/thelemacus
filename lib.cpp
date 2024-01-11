@@ -15783,6 +15783,7 @@ void ListFrame::Resize(void) {
 	//    Maximize(panel);
 	panel->Fit();
 	Fit();
+    Layout();
 
 }
 

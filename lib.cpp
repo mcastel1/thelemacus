@@ -18585,6 +18585,47 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 }
 
 
+//set the value in the GUI object value equal to the value in the non-GUI object Speed
+template<class P> void SpeedField<P>::set(void) {
+    
+    
+    if(unit.value == "kt"){
+        //unit = String("nm")
+
+        value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (length->value)));
+        unit->SetValue(wxString("nm"));
+
+    }else{
+        
+        if(unit.value == "km/h"){
+            
+            //unit = String("km/h")
+
+             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(length->value) * 1e3 * nm));
+             unit->SetValue(wxString("m"));
+
+        }else{
+            
+            if(unit.value == "m/s"){
+                //unit = String("ft")
+
+                   value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(length->value) * nm_ft));
+                   unit->SetValue(wxString("ft"));
+                
+            }
+            
+        }
+        
+    }
+ 
+
+    value_ok = true;
+    unit_ok = true;
+
+}
+
+
+
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> template<class E>  void SpeedField<P>::OnEditValue(E& event) {
 

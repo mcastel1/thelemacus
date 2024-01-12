@@ -2026,8 +2026,8 @@ public:
     CheckSpeed<P>* check;
     
     SpeedField(wxPanel*, Speed*, String);
-//    void set(void);
-//    template<class T> void get(T&);
+    void set(void);
+    template<class T> void get(T&);
     void Enable(bool);
     template<class T> void InsertIn(T*);
     bool is_ok(void);

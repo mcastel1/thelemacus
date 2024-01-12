@@ -13515,12 +13515,17 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 //if a new item listcontrol_routes is created, I transport the sight/position under consideration with such Route
 template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& event) {
 
+    TransportHandler* transport_handler;
+
+    transport_handler = new TransportHandler(f);
+    
 	//the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
 	(f->i_transporting_route) = ((f->listcontrol_routes)->GetItemCount()) - 1;
 	//given that the transporting Route has no meaningful starting position, I write "" in its position field
 	(f->listcontrol_routes)->SetItem((f->i_transporting_route), 2, wxString(""), -1);
 
 	if (((f->transported_object) == String("sight")) || ((f->transported_object) == String("route"))) {
+        //I am transporting a Sight or the Route related to it 
 
 		if ((f->transported_object) == String("sight")) {
 

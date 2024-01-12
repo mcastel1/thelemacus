@@ -32,6 +32,7 @@ template<class P> class LimbField;
 template<class P, class T> class CheckField;
 template<class P> class AngleField;
 template<class P> class LengthField;
+template<class P> class SpeedField;
 template<class P> class DateField;
 template<class P> class ChronoField;
 class RouteTypeField;
@@ -2344,6 +2345,7 @@ public:
     RouteTypeField *type;
     AngleField<RouteFrame> *Z, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
     LengthField<RouteFrame> *l;
+    ChronoField<RouteFrame> *t;
     StringField<RouteFrame> *label;
     
     wxFlexGridSizer *sizer_grid_type, *sizer_grid_Z, *sizer_grid_l,  *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;

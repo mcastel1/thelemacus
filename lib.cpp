@@ -19483,13 +19483,19 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
         }
         
-        parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
-        (parent->route_frame)->Unbind(wxEVT_CLOSE_WINDOW, *(parent->on_new_route_in_listcontrol_routes_for_transport));
+        if(select_or_new == String("select")){
+            //the transport is over -> I bind back DrawPanel::OnMouseMovement to mouse movements
+            
+           parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
+            
+        }
+        if(select_or_new == String("new")){
+            //the transport is over -> I unbind (parent->on_new_route_in_listcontrol_routes_for_transport) from route_frame
 
-        
-        //the transport is over -> I bind back DrawPanel::OnMouseMovement to mouse movements
-
-        
+            (parent->route_frame)->Unbind(wxEVT_CLOSE_WINDOW, *(parent->on_new_route_in_listcontrol_routes_for_transport));
+            
+        }
+ 
         timer->Stop();
 
     }

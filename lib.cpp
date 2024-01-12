@@ -13483,9 +13483,6 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
 		}
         
-        //the animation should be inserted here
-        transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(((wxGetApp().animation_time).h) * 60.0 * 60.0 + ((wxGetApp().animation_time).m) * 60.0 + ((wxGetApp().animation_time).s))/((double)((wxGetApp().n_animation_steps.value)-1)) * 1000.0, wxTIMER_CONTINUOUS);
-
 //		//tranport the Route
 //		((((f->data)->route_list)[(f->i_object_to_transport)]).reference_position).transport_to(
 //
@@ -13502,11 +13499,12 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 		//the id of the Position that will be transported,
 		(f->i_object_to_transport) = ((int)(((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
-        //the animation should be inserted here
-        transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(((wxGetApp().animation_time).h) * 60.0 * 60.0 + ((wxGetApp().animation_time).m) * 60.0 + ((wxGetApp().animation_time).s))/((double)((wxGetApp().n_animation_steps.value)-1)) * 1000.0, wxTIMER_CONTINUOUS);
-
+    
 	}
 
+    //the animation starts here
+        transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(((wxGetApp().animation_time).h) * 60.0 * 60.0 + ((wxGetApp().animation_time).m) * 60.0 + ((wxGetApp().animation_time).s))/((double)((wxGetApp().n_animation_steps.value)-1)) * 1000.0, wxTIMER_CONTINUOUS);
+    
 	event.Skip(true);
 
 }
@@ -13525,7 +13523,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 	(f->listcontrol_routes)->SetItem((f->i_transporting_route), 2, wxString(""), -1);
 
 	if (((f->transported_object) == String("sight")) || ((f->transported_object) == String("route"))) {
-        //I am transporting a Sight or the Route related to it 
+        //I am transporting a Sight or the Route related to it
 
 		if ((f->transported_object) == String("sight")) {
 
@@ -13598,7 +13596,8 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 	f->DrawAll();
 
 	//set parameters back to their original value and unbing the closing of route_frame from on_new_route_in_listcontrol_routes_for_transport
-	(*unset_idling)();
+    //PUT BACK THIS
+//	(*unset_idling)();
 	(f->route_frame)->Unbind(wxEVT_CLOSE_WINDOW, *(f->on_new_route_in_listcontrol_routes_for_transport));
 
 

@@ -2028,8 +2028,8 @@ public:
     SpeedField(wxPanel*, Speed*, String);
 //    void set(void);
 //    template<class T> void get(T&);
-//    void Enable(bool);
-//    template<class T> void InsertIn(T*);
+    void Enable(bool);
+    template<class T> void InsertIn(T*);
 //    bool is_ok(void);
     template<class E> void OnEditValue(E&);
     template<class E> void OnEditUnit(E&);
@@ -2424,7 +2424,7 @@ public:
     SpeedField<RouteFrame> *v;
     StringField<RouteFrame> *label;
     
-    wxFlexGridSizer *sizer_grid_type, *sizer_grid_Z, *sizer_grid_l,  *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;
+    wxFlexGridSizer *sizer_grid_type, *sizer_grid_Z, *sizer_grid_l, *sizer_grid_tv, *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;
     wxBoxSizer *sizer, *box_sizer;
     wxStaticBoxSizer *sizer_box_data, *sizer_box_start, *sizer_box_GP;
     

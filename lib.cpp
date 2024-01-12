@@ -14256,15 +14256,14 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
 //create a new RouteFrame. If for_transport = true/false, it enables the fields related to the start position of the Route and disables the circle of equal altitude type 
 RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transport_in, long position_in_listcontrol_routes_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {
 
-	parent = parent_input;
-
 	String new_prefix, label_button_ok;
 	unsigned int common_width;
-
-	bool check = true;
-
+	bool check;
+    
+    
+    parent = parent_input;
+    check = true;
 	for_transport = for_transport_in;
-
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
 
@@ -14305,6 +14304,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	sizer_grid_type = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_Z = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_l = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
+    sizer_grid_tv = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_start = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_GP = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_omega = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
@@ -14367,11 +14367,13 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	label = new StringField<RouteFrame>(panel, &(route->label));
 
 
-	//If the user is about to enter a brand new route, then these fields are disable until a route type si specified
+	//If the user is about to enter a brand new route, then these fields are disabled until a route type si specified
 	if (route_in == NULL) {
 
 		Z->Enable(false);
 		l->Enable(false);
+        v->Enable(false);
+        t->Enable(false);
 		start_phi->Enable(false);
 		start_lambda->Enable(false);
 		GP_phi->Enable(false);
@@ -14402,10 +14404,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	GP_phi->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	GP_lambda->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	l->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    t->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    v->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-
-
-
+    
 
 	sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
 	type->InsertIn<wxFlexGridSizer>(sizer_grid_type);
@@ -14416,6 +14418,12 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	sizer_grid_l->Add(text_l, 0, wxALIGN_CENTER_VERTICAL);
 	l->InsertIn<wxFlexGridSizer>(sizer_grid_l);
 
+    sizer_grid_tv->Add(text_t, 0, wxALIGN_CENTER_VERTICAL);
+    t->InsertIn<wxFlexGridSizer>(sizer_grid_tv);
+    sizer_grid_tv->Add(text_v, 0, wxALIGN_CENTER_VERTICAL);
+    v->InsertIn<wxFlexGridSizer>(sizer_grid_tv);
+
+    
 	sizer_grid_omega->Add(text_omega, 0, wxALIGN_CENTER_VERTICAL);
 	omega->InsertIn<wxFlexGridSizer>(sizer_grid_omega);
 
@@ -14439,6 +14447,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	sizer_box_data->Add(sizer_grid_type);
 	sizer_box_data->Add(sizer_grid_Z);
 	sizer_box_data->Add(sizer_grid_l);
+    sizer_box_data->Add(sizer_grid_tv);
 	sizer_box_data->Add(sizer_box_start);
 	sizer_box_data->Add(sizer_box_GP);
 	sizer_box_data->Add(sizer_grid_omega);
@@ -14470,17 +14479,20 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	Fit();
 
 
-
 	if (!check) {
+        
 		cout << prefix.value << RED << "Cannot read route!\n" << RESET;
+        
 	}
 
-
-
-	if (route_in != NULL) { set(); }
+    
+	if (route_in != NULL){
+        
+        set();
+        
+    }
 
 	Centre();
-
 
 }
 
@@ -18168,7 +18180,6 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 	units.Add(wxT("ft"));
 
 
-
 	value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 	//SetColor(value);
 	value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
@@ -18613,6 +18624,22 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
     parent_frame->AllOk();
 
     event.Skip(true);
+
+}
+
+
+//enable/disable the SpeedField
+template<class P> void SpeedField<P>::Enable(bool is_enabled) {
+
+    value->Enable(is_enabled);
+    unit->Enable(is_enabled);
+
+}
+
+
+template<class P> template<class T> void SpeedField<P>::InsertIn(T* host) {
+
+    host->Add(sizer_v);
 
 }
 
@@ -19252,6 +19279,7 @@ template<class P> template<class T> void AngleField<P>::InsertIn(T* host) {
 
 }
 
+
 template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
 
 	host->Add(sizer_v);
@@ -19278,8 +19306,6 @@ template <class P> template <typename EventTag, typename Method, typename Object
 	value->Bind(tag, method, object);
 
 }
-
-
 
 
 template<class P> template<class T> void ChronoField<P>::InsertIn(T* host) {

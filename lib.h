@@ -1276,6 +1276,43 @@ public:
 };
 
 
+template<class P> class CheckSpeedValue{
+    
+public:
+    
+    SpeedField<P>* p;
+    
+    CheckSpeedValue(SpeedField<P>*);
+    template<class T> void operator()(T&);
+    
+};
+
+template<class P> class CheckSpeedUnit{
+    
+public:
+    
+    SpeedField<P>* p;
+    
+    CheckSpeedUnit(SpeedField<P>*);
+    template<class T> void operator()(T&);
+    
+};
+
+template<class P> class CheckSpeed{
+    
+public:
+    
+    //p is the SpeedField which is parent of the CheckSpeed object: the CheckSpeed object checks the validity of the entries in SpeedField
+    SpeedField<P>* p;
+    CheckSpeedValue<P>* check_speed_value;
+    CheckSpeedUnit<P>* check_speed_unit;
+    
+    CheckSpeed(SpeedField<P>*);
+    template <class T> void operator()(T&);
+    
+};
+
+
 template<class P> class CheckString{
     
 public:
@@ -1984,7 +2021,7 @@ public:
     String unit_value;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool value_ok, unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
-//    CheckSpeed<P>* check;
+    CheckSpeed<P>* check;
     
     SpeedField(wxPanel*, Speed*, String);
 //    void set(void);

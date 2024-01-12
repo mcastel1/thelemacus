@@ -13532,28 +13532,28 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 		else {
 
 
-		}
-
-
-//		((((f->data)->route_list)[(f->i_transporting_route)]).reference_position) = ((((f->data)->route_list)[(f->i_object_to_transport)]).reference_position);
-//
-//		//tranport the Route
-//		((((f->data)->route_list)[(f->i_object_to_transport)]).reference_position).transport_to(
-//
-//			((f->data)->route_list)[(f->i_transporting_route)],
-//			String("")
-//
-//		);
-        
-		if (((f->transported_object) == String("sight"))) {
-			//I am either transporting a Sight, or a Route related to a Sight -> I disconnect Route and respective Sight
-
-            
-            //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
-            (f->i_object_to_disconnect) = ((((f->data->route_list)[(f->i_object_to_transport)]).related_sight).value);
-            f->Disconnect(event);
-            
         }
+        
+        
+        //		((((f->data)->route_list)[(f->i_transporting_route)]).reference_position) = ((((f->data)->route_list)[(f->i_object_to_transport)]).reference_position);
+        //
+        //		//tranport the Route
+        //		((((f->data)->route_list)[(f->i_object_to_transport)]).reference_position).transport_to(
+        //
+        //			((f->data)->route_list)[(f->i_transporting_route)],
+        //			String("")
+        //
+        //		);
+        //        
+        //		if (((f->transported_object) == String("sight"))) {
+        //			//I am either transporting a Sight, or a Route related to a Sight -> I disconnect Route and respective Sight
+        //
+        //            
+        //            //given that I am transporting a Route related to a Sight, disconnect the Route from the sight
+        //            (f->i_object_to_disconnect) = ((((f->data->route_list)[(f->i_object_to_transport)]).related_sight).value);
+        //            f->Disconnect(event);
+        //            
+        //        }
         
         //ONTIMER
         

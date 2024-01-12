@@ -18441,6 +18441,59 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 }
 
 
+//this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
+template<class P> template<class E>  void SpeedField<P>::OnEditValue(E& event) {
+
+    bool success;
+
+    success = check_double((value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+
+    if (success) {
+
+        //because the text in value is valid, I set the background color of value to white
+        value->SetForegroundColour(wxGetApp().foreground_color);
+        value->SetFont(wxGetApp().default_font);
+
+    }
+
+    //value_ok is true/false is the text entered is valid/invalid
+    value_ok = success;
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+
+    event.Skip(true);
+
+}
+
+
+//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
+template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
+
+    bool success;
+
+    //I check whether the name in the GUI field unit matches one of the unit names in units
+    find_and_replace_case_insensitive(unit, units, &success, NULL);
+
+
+    if (success) {
+
+        //because the text in value is valid, I set the background color of unit to white
+        unit->SetForegroundColour(wxGetApp().foreground_color);
+        unit->SetFont(wxGetApp().default_font);
+
+    }
+
+    //value_ok is true/false is the text entered is valid/invalid
+    unit_ok = success;
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+
+    event.Skip(true);
+
+}
+
+
+
 //constructor of a DateField object, based on the parent frame frame
 template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {
 

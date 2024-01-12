@@ -2089,7 +2089,7 @@ public:
     
     //parent frame
     ListFrame* f;
-    UnsetIdling<ListFrame>* unset_idling;
+//    UnsetIdling<ListFrame>* unset_idling;
     long i_transporting_route;
     //the object which is being transported : a "sight" or a "position"
     String transported_object;
@@ -2446,6 +2446,7 @@ public:
     
     //the functor that calls *this
     OnSelectRouteInListControlRoutesForTransport* parent;
+    
     wxTimer* timer;
     Route *route_chunk;
     //the position during the transport process at 'time' t 

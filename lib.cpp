@@ -13454,7 +13454,6 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
     TransportHandler* transport_handler;
 
-	unset_idling = new UnsetIdling<ListFrame>(f);
     transport_handler = new TransportHandler(this);
 
 	//copy the data of f->route_list_saved into f->data->route_list
@@ -19325,12 +19324,11 @@ template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_i
 
 TransportHandler::TransportHandler(OnSelectRouteInListControlRoutesForTransport* parent_in){
 
-
     timer = new wxTimer();
     route_chunk = new Route();
+    unset_idling = new UnsetIdling<ListFrame>();
     
     parent = parent_in;
-
     t = 0;
     timer->Bind(wxEVT_TIMER, &TransportHandler::OnTimer, this);
 
@@ -19485,7 +19483,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         parent->f->listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, *(parent->f->on_change_selection_in_listcontrol_routes));
         
         //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
-        (*(parent->unset_idling))();
+        (*unset_idling)();
         for(long i=0; i<(parent->f->chart_frames.size()); i++){
             
             ((parent->f->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), ((parent->f->chart_frames)[i])->draw_panel);

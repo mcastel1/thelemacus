@@ -18368,13 +18368,12 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
-
-
 template<class P> bool LengthField<P>::is_ok(void) {
 
 	return(value_ok && unit_ok);
 
 }
+
 
 template<class P> bool ChronoField<P>::is_ok(void) {
 
@@ -18662,6 +18661,11 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
+template<class P> bool SpeedField<P>::is_ok(void) {
+
+    return(value_ok && unit_ok);
+
+}
 
 //constructor of a DateField object, based on the parent frame frame
 template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {

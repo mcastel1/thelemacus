@@ -2091,8 +2091,6 @@ public:
     ListFrame* f;
 //    UnsetIdling<ListFrame>* unset_idling;
     long i_transporting_route;
-    //the object which is being transported : a "sight" or a "position"
-    String transported_object;
     
     //constructor, which sets the parent frame
     OnSelectRouteInListControlRoutesForTransport(ListFrame*);
@@ -2109,14 +2107,10 @@ public:
     
     //parent frame
     ListFrame* f;
-    //the object which is being transported : a "sight" or a "position"
-    String transported_object;
     
     //constructor, which sets the parent frame
     OnNewRouteInListControlRoutesForTransport(ListFrame*);
-    
     template<class T> void operator()(T&);
-    
     
 };
 
@@ -2160,7 +2154,6 @@ public:
     Answer /*if this is y/n, the coastlines are shown/not shown*/show_coastlines, /*if this is y/n, sample_sight.nav is loaded/not loaded at startup*/ load_sample_sight;
     //the file where the data is read and written
     FileRW data_file;
-    
     unsigned int margin;
     int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position, /*# of the object to transport or disconnect */i_object_to_transport, i_object_to_disconnect;
     /*map[i] is the position in data->route_list of the i-th Route in route_list_for_transport*/
@@ -2168,6 +2161,8 @@ public:
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
     vector< vector< vector<Position> > > p_coastline;
     Position /*these are the positions where the right mouse button is clicked at the beginning, current time and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_now, p_end;
+    //the object which is being transported : a "sight" or a "position"
+    String transported_object;
     
     //a functor to set/unset idling mode in *this
     SetIdling<ListFrame>* set_idling;
@@ -2445,8 +2440,7 @@ class TransportHandler{
 public:
     
     //the functor that calls *this
-    OnSelectRouteInListControlRoutesForTransport* parent;
-    
+    ListFrame* parent;
     wxTimer* timer;
     Route *route_chunk;
     //the position during the transport process at 'time' t 
@@ -2454,7 +2448,7 @@ public:
     //a counter of the step in the animation, running from 0 to n_animation_steps
     long t;
     
-    TransportHandler(OnSelectRouteInListControlRoutesForTransport*);
+    TransportHandler(ListFrame*);
     void OnTimer(wxTimerEvent&);
     
 };

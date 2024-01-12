@@ -13454,7 +13454,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
     TransportHandler* transport_handler;
 
-    transport_handler = new TransportHandler(this);
+    transport_handler = new TransportHandler(f);
 
 	//copy the data of f->route_list_saved into f->data->route_list
 	((f->data)->route_list).resize((f->route_list_saved).size());
@@ -13463,12 +13463,12 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 	//this is the # of the transporting Route in the full Route list given by data->route_list
 	i_transporting_route = (f->map)[((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
 
-	if ((transported_object == String("sight")) || transported_object == String("route")) {
+	if (((f->transported_object) == String("sight")) || (f->transported_object) == String("route")) {
 		//the transported object is either a Sight or a Route
 
 		String new_label;
 
-		if (transported_object == String("sight")) {
+		if ((f->transported_object) == String("sight")) {
 			//the transported object is a Sight
 
 			//the id of the Route that will be transported is the one of the Route related to the Sight that is being transported
@@ -13496,7 +13496,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
 	}
 
-	if (transported_object == String("position")) {
+	if ((f->transported_object) == String("position")) {
 
 
 		//the id of the Position that will be transported,
@@ -13525,9 +13525,9 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 	//given that the transporting Route has no meaningful starting position, I write "" in its position field
 	(f->listcontrol_routes)->SetItem(i_transporting_route, 2, wxString(""), -1);
 
-	if ((transported_object == String("sight")) || (transported_object == String("route"))) {
+	if (((f->transported_object) == String("sight")) || ((f->transported_object) == String("route"))) {
 
-		if (transported_object == String("sight")) {
+		if ((f->transported_object) == String("sight")) {
 
 			//the id of the Route or Position that will be transported
 			(f->i_object_to_transport) = (((((f->data)->sight_list)[(f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
@@ -13549,7 +13549,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 
 		);
 
-		if ((transported_object == String("sight")) || (((((f->data)->route_list)[(f->i_object_to_transport)]).related_sight.value) != -1)) {
+		if (((f->transported_object) == String("sight")) || (((((f->data)->route_list)[(f->i_object_to_transport)]).related_sight.value) != -1)) {
 			//I am either transporting a Sight, or a Route related to a Sight -> I disconnect Route and respective Sight
 
 
@@ -13573,7 +13573,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 
 	}
 
-	if (transported_object == String("position")) {
+	if ((f->transported_object) == String("position")) {
 
 		//the id of the Route or Position that will be transported
 		(f->i_object_to_transport) = ((int)(f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
@@ -15867,9 +15867,8 @@ template<class E> void ListFrame::OnModifySight(E& event) {
 
 void ListFrame::OnTransportSight(wxCommandEvent& event) {
 
-	//tell the functions on_select_route_in_listcontrol_routes_for_transport and on_new_route_in_listcontrol_routes_for_transport that I am transporting a Route (related to a Sight)
-	(on_select_route_in_listcontrol_routes_for_transport->transported_object) = String("sight");
-	(on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("sight");
+	//I am transporting a Route (related to a Sight)
+	transported_object = String("sight");
 
 	PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
 	print_question->SetAndCall(NULL, String("You want to transport a sight"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
@@ -15900,9 +15899,8 @@ void ListFrame::OnDisconnectRoute(wxCommandEvent& event) {
 
 void ListFrame::OnTransportPosition(wxCommandEvent& event) {
 
-	//tell the functions on_select_route_in_listcontrol_routes_for_transport and on_new_route_in_listcontrol_routes_for_transport that I am transporting a Position
-	(on_select_route_in_listcontrol_routes_for_transport->transported_object) = String("position");
-	(on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("position");
+	// I am transporting a Position
+	transported_object = String("position");
 
 	//ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
 	PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
@@ -15962,9 +15960,8 @@ template<class E> void ListFrame::OnModifyRoute(E& event) {
 
 void ListFrame::OnTransportRoute(wxCommandEvent& event) {
 
-	//tell the functions on_select_route_in_listcontrol_routes_for_transport and on_new_route_in_listcontrol_routes_for_transport that I am transporting a Position
-	(on_select_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
-	(on_new_route_in_listcontrol_routes_for_transport->transported_object) = String("route");
+	//I am transporting a Route
+	transported_object = String("route");
 
 	//I store the # of the selected Route into i_object_to_transport
 	i_object_to_transport = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
@@ -19322,11 +19319,10 @@ template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_i
 
 }
 
-TransportHandler::TransportHandler(OnSelectRouteInListControlRoutesForTransport* parent_in){
+TransportHandler::TransportHandler(ListFrame* parent_in){
 
     timer = new wxTimer();
     route_chunk = new Route();
-    unset_idling = new UnsetIdling<ListFrame>();
     
     parent = parent_in;
     t = 0;
@@ -19337,24 +19333,23 @@ TransportHandler::TransportHandler(OnSelectRouteInListControlRoutesForTransport*
 //this method iterates the animation
 void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
-    
     if(t<(wxGetApp().n_animation_steps.value)){
         
         if(t==0){
             
-            (*route_chunk) = (parent->f->data->route_list)[parent->i_transporting_route];
+            (*route_chunk) = (parent->data->route_list)[parent->i_transporting_route];
             
             if ((parent->transported_object) == String("position")) {
                 
                 //store the starting position in position_start
-                position_start = (parent->f->data->position_list)[(parent->f->i_object_to_transport)];
+                position_start = (parent->data->position_list)[(parent->i_object_to_transport)];
                 
             }else{
                 
                 if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")){
                     
                     //store the starting reference position in position_start
-                    position_start = (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position);
+                    position_start = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
                     
                 }
                 
@@ -19363,9 +19358,9 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             (route_chunk->reference_position) = position_start;
             
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
-            for(long i=0; i<parent->f->chart_frames.size(); i++){
+            for(long i=0; i<parent->chart_frames.size(); i++){
                 
-                ((parent->f->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), ((parent->f->chart_frames)[i])->draw_panel);
+                ((parent->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), ((parent->chart_frames)[i])->draw_panel);
                 
             }
             
@@ -19382,7 +19377,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
             route_chunk->l.set(
                                String("length of the route chunk"),
-                               (((parent->f->data->route_list)[parent->i_transporting_route]).l.value) *
+                               (((parent->data->route_list)[parent->i_transporting_route]).l.value) *
                                (M_EULER + gsl_sf_psi_n(0, ((double)(t+1))))/(M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)+1))))
                                ,
                                String(""));
@@ -19390,18 +19385,18 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 
             if ((parent->transported_object) == String("position")) {
                 
-                (parent->f->data->position_list)[(parent->f->i_object_to_transport)] = position_start;
-                (parent->f->data->position_list)[(parent->f->i_object_to_transport)].transport_to(*route_chunk, String(""));
-//                (route_chunk->reference_position) = (parent->f->data->position_list)[(parent->f->i_object_to_transport)];
+                (parent->data->position_list)[(parent->i_object_to_transport)] = position_start;
+                (parent->data->position_list)[(parent->i_object_to_transport)].transport_to(*route_chunk, String(""));
+//                (route_chunk->reference_position) = (parent->data->position_list)[(parent->i_object_to_transport)];
 
                      
             }else{
                 
                 if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")){
                     
-                    (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position) = position_start;
-                    ((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position.transport_to(*route_chunk, String(""));
-//                    (route_chunk->reference_position) = (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position);
+                    (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position) = position_start;
+                    ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to(*route_chunk, String(""));
+//                    (route_chunk->reference_position) = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
                     
                 }
                 
@@ -19423,16 +19418,16 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         if ((parent->transported_object) == String("position")) {
             
             //do the whole transport rather than combining many little transports, to avoid rounding errors
-            ((parent->f->data->position_list)[(parent->f->i_object_to_transport)]) = position_start;
-            ((parent->f->data->position_list)[(parent->f->i_object_to_transport)]).transport_to((parent->f->data->route_list)[parent->i_transporting_route], String(""));
+            ((parent->data->position_list)[(parent->i_object_to_transport)]) = position_start;
+            ((parent->data->position_list)[(parent->i_object_to_transport)]).transport_to((parent->data->route_list)[parent->i_transporting_route], String(""));
         
             
             //update labels
             //change the label of Position #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
-            (((parent->f->data->position_list)[(parent->f->i_object_to_transport)]).label) = (((parent->f->data->position_list)[(parent->f->i_object_to_transport)]).label).append(String(" transported with ")).append((((parent->f->data->route_list)[parent->i_transporting_route]).label));
+            (((parent->data->position_list)[(parent->i_object_to_transport)]).label) = (((parent->data->position_list)[(parent->i_object_to_transport)]).label).append(String(" transported with ")).append((((parent->data->route_list)[parent->i_transporting_route]).label));
             
             //update the Position information in f
-            ((parent->f->data->position_list)[(parent->f->i_object_to_transport)]).update_wxListCtrl((parent->f->i_object_to_transport), parent->f->listcontrol_positions);
+            ((parent->data->position_list)[(parent->i_object_to_transport)]).update_wxListCtrl((parent->i_object_to_transport), parent->listcontrol_positions);
             
             
         }else{
@@ -19442,54 +19437,54 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 String new_label;
                 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-                (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position) = position_start;
-                ((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).reference_position.transport_to( (parent->f->data->route_list)[parent->i_transporting_route], String(""));
+                (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position) = position_start;
+                ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to( (parent->data->route_list)[parent->i_transporting_route], String(""));
 
                 
                 //update labels
                 
                 //the new label which will be given to the transported Route
-                new_label = (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).label).append(String(" transported with ")).append(((((parent->f->data)->route_list)[parent->i_transporting_route]).label));
+                new_label = (((parent->data->route_list)[(parent->i_object_to_transport)]).label).append(String(" transported with ")).append(((((parent->data)->route_list)[parent->i_transporting_route]).label));
                 
                 //set back listcontrol_routes to route_list, in order to include all Routes (not only those which are not related to a Sight)
-                parent->f->listcontrol_routes->set((parent->f->data)->route_list, false);
+                parent->listcontrol_routes->set((parent->data)->route_list, false);
                 //given that the transport is over, set highlight_routes back to true
-                (parent->f->enable_highlight) = true;
+                (parent->enable_highlight) = true;
                 
                 if (parent->transported_object == String("sight")) {
                     //I am transporting a Route related to a Sight -> disconnect the Route from the sight
                     
-                    (parent->f->i_object_to_disconnect) = ((((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).related_sight).value);
-                    parent->f->Disconnect(event);
+                    (parent->i_object_to_disconnect) = ((((parent->data->route_list)[(parent->i_object_to_transport)]).related_sight).value);
+                    parent->Disconnect(event);
                     
                 }
                 
-                //change the label of Route #(parent->f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
-                (((parent->f->data->route_list)[(parent->f->i_object_to_transport)]).label) = new_label;
+                //change the label of Route #(parent->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
+                (((parent->data->route_list)[(parent->i_object_to_transport)]).label) = new_label;
                 
             }
    
         }
         
         
-        parent->f->listcontrol_sights->set((parent->f->data->sight_list), false);
-        parent->f->listcontrol_routes->set((parent->f->data->route_list), false);
-        parent->f->Resize();
+        parent->listcontrol_sights->set((parent->data->sight_list), false);
+        parent->listcontrol_routes->set((parent->data->route_list), false);
+        parent->Resize();
         //re-draw everything
-        parent->f->DrawAll();
+        parent->DrawAll();
         
         //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
-        parent->f->listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->f->on_change_selection_in_listcontrol_routes));
-        parent->f->listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, *(parent->f->on_change_selection_in_listcontrol_routes));
+        parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_change_selection_in_listcontrol_routes));
+        parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, *(parent->on_change_selection_in_listcontrol_routes));
         
         //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
-        (*unset_idling)();
-        for(long i=0; i<(parent->f->chart_frames.size()); i++){
+        (*(parent->unset_idling))();
+        for(long i=0; i<(parent->chart_frames.size()); i++){
             
-            ((parent->f->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), ((parent->f->chart_frames)[i])->draw_panel);
+            ((parent->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), ((parent->chart_frames)[i])->draw_panel);
             
         }
-        parent->f->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_SELECTED, *(parent->f->on_select_route_in_listcontrol_routes_for_transport));
+        parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
         
         //the transport is over -> I bind back DrawPanel::OnMouseMovement to mouse movements
 

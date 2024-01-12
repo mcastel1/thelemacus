@@ -18589,27 +18589,26 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 template<class P> void SpeedField<P>::set(void) {
     
     
-    if(unit.value == "kt"){
+    if((unit->GetValue().ToStdString()) == "kt"){
         //unit = String("nm")
 
-        value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (length->value)));
+        value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (speed->value)));
         unit->SetValue(wxString("nm"));
 
     }else{
         
-        if(unit.value == "km/h"){
-            
+        if((unit->GetValue().ToStdString()) == "km/h"){
             //unit = String("km/h")
 
-             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(length->value) * 1e3 * nm));
+             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(speed->value) * 1e3 * nm));
              unit->SetValue(wxString("m"));
 
         }else{
             
-            if(unit.value == "m/s"){
+            if((unit->GetValue().ToStdString()) == "m/s"){
                 //unit = String("ft")
 
-                   value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(length->value) * nm_ft));
+                   value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(speed->value) * nm_ft));
                    unit->SetValue(wxString("ft"));
                 
             }

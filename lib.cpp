@@ -19371,7 +19371,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             //the transport animation is not over -> do the next chunk
             
             route_chunk->l.set(
-                               String("length of the route chunk"),
+                               String(""),
                                (((parent->data->route_list)[parent->i_transporting_route]).l.value) *
                                (M_EULER + gsl_sf_psi_n(0, ((double)(t+1))))/(M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)+1))))
                                ,

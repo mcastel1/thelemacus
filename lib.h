@@ -768,8 +768,10 @@ public:
     //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude
     Angle /*this is equal to alpha_notes: it is the azimuth of the vector tangent to the Route at reference_position*/Z, omega;
     //the length of the route
+    //the length of the Route can be either expressed as the length l, or as the product of the Speed v and the time t
     Length l;
-    Speed sog;
+    Speed v;
+    Chrono t;
     //this is the position in sight_list of the sight linked to route. If there is no sight linked to route, then related_sight = -1.
     Int related_sight;
     //a list of points containing the geo coordinates of points on the Route this
@@ -2414,8 +2416,11 @@ public:
     
     RouteTypeField *type;
     AngleField<RouteFrame> *Z, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
+    //if the length of the Route is written directly as a length, this field is used
     LengthField<RouteFrame> *l;
+    //if the lenght of the Route is written in terms of a speed multiplied by a time, the following two fields are used
     ChronoField<RouteFrame> *t;
+    SpeedField<RouteFrame> *v;
     StringField<RouteFrame> *label;
     
     wxFlexGridSizer *sizer_grid_type, *sizer_grid_Z, *sizer_grid_l,  *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;

@@ -13398,6 +13398,123 @@ template<class P> template <class T> void CheckLength<P>::operator()(T& event) {
 }
 
 
+
+template<class P> CheckSpeedValue<P>::CheckSpeedValue(SpeedField<P>* p_in) {
+
+    p = p_in;
+
+}
+
+//check the value in the GUI field in SpeedField
+template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& event) {
+
+    P* f = (p->parent_frame);
+
+    //I proceed only if the progam is not is indling mode
+    if (!(f->idling)) {
+
+        bool check;
+
+        check = check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+
+        if (check || ((((p->value)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->value)->GetValue()).ToStdString())) == String("")))) {
+            //p->value either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+
+            //if check is true (false) -> set value_ok to true (false)
+            (p->value_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in value
+            (p->value)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->value)->SetFont(wxGetApp().default_font);
+
+        }
+        else {
+
+            (f->print_error_message)->SetAndCall((p->value), String("Entered value is not valid!"), String("Speeds must be floating-point numbers >= 0 m"), (wxGetApp().path_file_error_icon));
+
+            (p->value_ok) = false;
+
+        }
+
+        f->AllOk();
+
+    }
+
+    event.Skip(true);
+
+}
+
+template<class P> CheckSpeedUnit<P>::CheckSpeedUnit(SpeedField<P>* p_in) {
+
+    p = p_in;
+
+}
+
+//checks the unit in the GUI field in SpeedField
+template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event) {
+
+    P* f = (p->parent_frame);
+
+    //I proceed only if the progam is not is indling mode
+    if (!(f->idling)) {
+
+        unsigned int i;
+        bool check;
+
+        //I check whether the name in the GUI field unit matches one of the unit names in units
+        for (check = false, i = 0; (i < (p->units).size()) && (!check); i++) {
+            if (((p->unit)->GetValue()) == (p->units)[i]) {
+                check = true;
+            }
+        }
+        i--;
+
+        if (check || ((((p->unit)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->unit)->GetValue()).ToStdString())) == String("")))) {
+
+            //if check is true (false) -> set unit_ok to true (false)
+            (p->unit_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in deg
+            (p->unit)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->unit)->SetFont(wxGetApp().default_font);
+
+
+        }
+        else {
+
+            (f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String("Unit must be nm, m or ft."), (wxGetApp().path_file_error_icon));
+
+            (p->unit_ok) = false;
+
+        }
+
+        f->AllOk();
+
+    }
+
+    event.Skip(true);
+
+}
+
+template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
+
+    p = p_in;
+
+    check_speed_value = new CheckSpeedValue<P>(p);
+    check_speed_unit = new CheckSpeedUnit<P>(p);
+
+}
+
+//this functor checks the whole Speed field by calling the check on its value and unit
+template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
+
+    (*check_speed_value)(event);
+    (*check_speed_unit)(event);
+
+    event.Skip(true);
+
+}
+
+
+
 //writes the value of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void LengthField<P>::get(T& event) {
 
@@ -14215,9 +14332,18 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	//l
 	StaticText* text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
 	l = new LengthField<RouteFrame>(panel, &(route->l), String("nm"));
+    
+    //t
+    StaticText* text_t = new StaticText(panel, wxT("Time"), wxDefaultPosition, wxDefaultSize, 0);
+    t = new ChronoField<RouteFrame>(panel, &(route->t));
 
 
-	//start
+    //v
+    StaticText* text_v = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
+    v = new SpeedField<RouteFrame>(panel, &(route->v), String("kt"));
+
+    
+	//start position
 	//start_phi
 	StaticText* text_start_phi = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0);
 	start_phi = new AngleField<RouteFrame>(panel, &((route->reference_position).phi), String("NS"));

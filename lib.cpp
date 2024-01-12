@@ -13514,8 +13514,7 @@ template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
 }
 
 
-
-//writes the value of the GUI field in LengthField into the non-GUI field length
+//write the value of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void LengthField<P>::get(T& event) {
 
 	if (is_ok()) {
@@ -18593,7 +18592,6 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 //set the value in the GUI object value equal to the value in the non-GUI object Speed
 template<class P> void SpeedField<P>::set(void) {
     
-    
     if((unit->GetValue().ToStdString()) == "kt"){
         //unit = String("nm")
 
@@ -18622,12 +18620,48 @@ template<class P> void SpeedField<P>::set(void) {
         
     }
  
-
     value_ok = true;
     unit_ok = true;
 
 }
 
+
+//write the value of the GUI field in SpeedField into the non-GUI field length
+template<class P> template <class T> void SpeedField<P>::get(T& event) {
+
+    if (is_ok()) {
+        
+        double speed_temp;
+        
+        value->GetValue().ToDouble(&speed_temp);
+        
+        if((unit->GetValue().ToStdString()) == "kt"){
+            //unit = String("nm")
+            speed->set(String(""), /*the speed is entered in the GUI field is already in nm, thus no need to convert it*/speed_temp, String(""));
+            
+        }else{
+            
+            if((unit->GetValue().ToStdString()) == "km/h"){
+                //unit = String("km/h")
+                speed->set(String(""), /*the speed is entered in the GUI field in meters, thus I convert it to nm here*/speed_temp / (1e3 * nm), String(""));
+                
+            }else{
+                
+                if((unit->GetValue().ToStdString()) == "m/s"){
+                    //unit = String("ft")
+                    
+                    speed->set(String(""), /*the speed is entered in the GUI field in feet, thus I convert it to nm here*/speed_temp / nm_ft, String(""));
+                    
+                }
+                
+            }
+            
+        }
+    }
+
+    event.Skip(true);
+
+}
 
 
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk

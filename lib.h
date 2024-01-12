@@ -2094,6 +2094,7 @@ public:
 };
 
 
+//a GUI field containing a time, which is contained by an object of type P
 template<class P> class ChronoField{
     
 public:

@@ -14337,7 +14337,6 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     StaticText* text_t = new StaticText(panel, wxT("Time"), wxDefaultPosition, wxDefaultSize, 0);
     t = new ChronoField<RouteFrame>(panel, &(route->t));
 
-
     //v
     StaticText* text_v = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
     v = new SpeedField<RouteFrame>(panel, &(route->v), String("kt"));
@@ -16971,7 +16970,7 @@ template<class P> CheckHour<P>::CheckHour(ChronoField<P>* p_in) {
 
 template<class P> template<class T> void CheckHour<P>::operator()(T& event) {
 
-	SightFrame* f = (p->parent_frame);
+	P* f = (p->parent_frame);
 
 	//I proceed only if the progam is not is indling mode
 	if (!(f->idling)) {
@@ -17014,7 +17013,7 @@ template<class P> CheckMinute<P>::CheckMinute(ChronoField<P>* p_in) {
 
 template<class P>  template<class T> void CheckMinute<P>::operator()(T& event) {
 
-	SightFrame* f = (p->parent_frame);
+	P* f = (p->parent_frame);
 
 	//I proceed only if the progam is not is indling mode
 	if (!(f->idling)) {
@@ -17056,7 +17055,7 @@ template<class P> CheckSecond<P>::CheckSecond(ChronoField<P>* p_in) {
 
 template<class P> template<class T> void CheckSecond<P>::operator()(T& event) {
 
-	SightFrame* f = (p->parent_frame);
+	P* f = (p->parent_frame);
 
 	//I proceed only if the progam is not is indling mode
 	if (!(f->idling)) {

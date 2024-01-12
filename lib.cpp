@@ -18394,20 +18394,19 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     parent_frame = ((P*)(panel_of_parent->GetParent()));
     speed = p;
     unit_value = unit_value_in;
-
+    
     //    ((parent_frame->check_height_of_eye).p) = this;
-
+    
     //initialize check
     check = new CheckSpeed<P>(this);
-
+    
     //tabulate the possible units of measure
     units.Clear();
     units.Add(wxT("kt"));
     units.Add(wxT("km/h"));
-//    units.Add(wxT("/h"));
-
-
-
+    units.Add(wxT("m/s"));
+    
+    
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     //SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
@@ -18489,6 +18488,14 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
     parent_frame->AllOk();
 
     event.Skip(true);
+
+}
+
+
+template<class P> template <typename EventTag, typename Method, typename Object> void SpeedField<P>::Bind(EventTag tag, Method method, Object object) {
+
+    value->Bind(tag, method, object);
+    unit->Bind(tag, method, object);
 
 }
 

@@ -2115,6 +2115,7 @@ public:
     CheckChrono<P>* check;
     
     ChronoField(wxPanel*, Chrono*);
+    void set(void);
     void set(Chrono);
     void Enable(bool);
     void SetBackgroundColor(Color);

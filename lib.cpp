@@ -17846,7 +17846,6 @@ template<class P> void LengthField<P>::set(void) {
 
 	}
 
-
 	case 'm': {
 		//unit = String("m")
 
@@ -17856,7 +17855,6 @@ template<class P> void LengthField<P>::set(void) {
 		break;
 
 	}
-
 
 	case 'f': {
 		//unit = String("ft")
@@ -17903,7 +17901,14 @@ template<class P> void DateField<P>::SetBackgroundColor(Color color) {
 
 }
 
-//sets the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono_in
+//set the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object *chrono
+template<class P> void ChronoField<P>::set(void){
+    
+    set(*chrono);
+    
+}
+
+//set the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono_in
 template<class P> void ChronoField<P>::set(Chrono chrono_in) {
 
 	hour->SetValue(wxString::Format(wxT("%i"), chrono_in.h));

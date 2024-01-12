@@ -13461,7 +13461,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 	copy((f->route_list_saved).begin(), (f->route_list_saved).end(), ((f->data)->route_list).begin());
 
 	//this is the # of the transporting Route in the full Route list given by data->route_list
-	i_transporting_route = (f->map)[((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
+	(f->i_transporting_route) = (f->map)[((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
 
 	if (((f->transported_object) == String("sight")) || (f->transported_object) == String("route")) {
 		//the transported object is either a Sight or a Route

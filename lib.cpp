@@ -18387,6 +18387,60 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 }
 
+
+//constructor of a SpeedField object, based on the parent frame frame
+template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, String unit_value_in) {
+
+    parent_frame = ((P*)(panel_of_parent->GetParent()));
+    speed = p;
+    unit_value = unit_value_in;
+
+    //    ((parent_frame->check_height_of_eye).p) = this;
+
+    //initialize check
+    check = new CheckSpeed<P>(this);
+
+    //tabulate the possible units of measure
+    units.Clear();
+    units.Add(wxT("kt"));
+    units.Add(wxT("km/h"));
+//    units.Add(wxT("/h"));
+
+
+
+    value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    //SetColor(value);
+    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
+    //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Speed object
+    value->SetValue(wxString(""));
+    value_ok = false;
+    value->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_value)));
+    //as text is changed in value by the user with the keyboard, call OnEditValue
+    value->Bind(wxEVT_KEY_UP, &SpeedField::OnEditValue<wxKeyEvent>, this);
+
+
+    unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    //SetColor(unit);
+    AdjustWidth(unit);
+    //I set the value of unit to the unit of measure with with this SpeedField was called in its constructor, and set its value to ok because that is a valid unit of measure
+    unit->SetValue(unit_value.value);
+    unit_ok = true;
+    unit->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_unit)));
+    //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    unit->Bind(wxEVT_COMBOBOX, &SpeedField::OnEditUnit<wxCommandEvent>, this);
+    unit->Bind(wxEVT_KEY_UP, &SpeedField::OnEditUnit<wxKeyEvent>, this);
+
+
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(value, 0, wxALIGN_CENTER);
+    sizer_h->Add(unit, 0, wxALIGN_CENTER);
+
+}
+
+
 //constructor of a DateField object, based on the parent frame frame
 template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {
 

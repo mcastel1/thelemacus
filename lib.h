@@ -2444,10 +2444,12 @@ public:
     Route *route_chunk;
     //the position during the transport process at 'time' t 
     Position position_start;
+    //this is equal to String("select") if the transporting Route has been selected among the existing ones, and to String("new") if it is an newly created Route
+    String select_or_new;
     //a counter of the step in the animation, running from 0 to n_animation_steps
     long t;
     
-    TransportHandler(ListFrame*);
+    TransportHandler(ListFrame*, String);
     void OnTimer(wxTimerEvent&);
     
 };

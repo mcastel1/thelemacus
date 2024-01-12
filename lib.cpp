@@ -13454,7 +13454,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
     TransportHandler* transport_handler;
 
-    transport_handler = new TransportHandler(f);
+    transport_handler = new TransportHandler(f, String("select"));
 
 	//copy the data of f->route_list_saved into f->data->route_list
 	((f->data)->route_list).resize((f->route_list_saved).size());
@@ -13513,7 +13513,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 
     TransportHandler* transport_handler;
 
-    transport_handler = new TransportHandler(f);
+    transport_handler = new TransportHandler(f, String("new"));
     
 	//the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
 	(f->i_transporting_route) = ((f->listcontrol_routes)->GetItemCount()) - 1;
@@ -19324,12 +19324,13 @@ template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_i
 
 }
 
-TransportHandler::TransportHandler(ListFrame* parent_in){
+TransportHandler::TransportHandler(ListFrame* parent_in, String select_or_new_in){
 
     timer = new wxTimer();
     route_chunk = new Route();
     
     parent = parent_in;
+    select_or_new = select_or_new_in;
     t = 0;
     timer->Bind(wxEVT_TIMER, &TransportHandler::OnTimer, this);
 

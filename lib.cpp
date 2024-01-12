@@ -19370,11 +19370,6 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         }else{
             //the transport animation is not over -> do the next chunk
             
-            /*
-             t_{i+1}-t_i = i+1
-             
-             */
-            
             route_chunk->l.set(
                                String("length of the route chunk"),
                                (((parent->data->route_list)[parent->i_transporting_route]).l.value) *
@@ -19387,26 +19382,23 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 
                 (parent->data->position_list)[(parent->i_object_to_transport)] = position_start;
                 (parent->data->position_list)[(parent->i_object_to_transport)].transport_to(*route_chunk, String(""));
-//                (route_chunk->reference_position) = (parent->data->position_list)[(parent->i_object_to_transport)];
-
-                     
+                //                (route_chunk->reference_position) = (parent->data->position_list)[(parent->i_object_to_transport)];
+                
             }else{
                 
                 if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")){
                     
                     (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position) = position_start;
                     ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to(*route_chunk, String(""));
-//                    (route_chunk->reference_position) = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
+                    //                    (route_chunk->reference_position) = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
                     
                 }
                 
             }
-
-            wxGetApp().list_frame->TabulateRoutesAll();
-            wxGetApp().list_frame->RefreshAll();
             
-            cout << "\t\t t= " << t << "\n";
-
+            parent->TabulateRoutesAll();
+            parent->RefreshAll();
+            //            cout << "\t\t t= " << t << "\n";
 
         }
         

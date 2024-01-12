@@ -653,7 +653,9 @@ public:
     
     Speed();
     Speed(double);
+    void set(String, double, String);
     void enter(String, String);
+    void print(String, String, String, ostream&);
     bool check_valid(String, String);
     void print(String, String, ostream&);
     
@@ -2403,7 +2405,6 @@ public:
 class RouteFrame: public wxFrame{
     
 public:
-    RouteFrame(ListFrame*, Route*, bool, long, const wxString&, const wxPoint&, const wxSize&, String);
     
     ListFrame* parent;
     Route* route;
@@ -2431,6 +2432,7 @@ public:
     
     wxButton* /*this button triggers either the addition of a new Route, or the modification of an existing one*/button_ok, *button_cancel;
     
+    RouteFrame(ListFrame*, Route*, bool, long, const wxString&, const wxPoint&, const wxSize&, String);
     void set(void);
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);

@@ -78,7 +78,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
- - revise constants for units of measure in SpeedField<P>::set and SpeedField<P>::get
+ - revise constants for units of measure in SpeedField<P>::set and SpeedField<P>::get and Speed::print
  - when you transport something -> existing Route -> press cancel bbecause you changed your mind -> something is transported anyway
  for MSW:
  - esc key does not work in SightFrame and other *Frames when one does not FOCUS on a control

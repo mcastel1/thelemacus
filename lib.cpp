@@ -918,6 +918,39 @@ Length Length::operator- (const Length& l) {
 
 }
 
+void Speed::print(String name, String unit, String prefix, ostream& ostr) {
+
+    if ((name.value) != "") {
+
+        ostr << prefix.value << name.value << " = ";
+        if (unit == String("kt")) {
+            //units are kt
+            
+            ostr << value << " nm\n";
+            
+        }else {
+            
+            if (unit == String("km/h")) {
+                //units are km/h
+            
+                ostr << value * nm * 1e3 << " km/h\n";
+
+            }else{
+                
+                if (unit == String("m/s")){
+                    //units are m/s
+                    
+                    ostr << value * nm * 1e3 << " m/s\n";
+                    
+                }
+                
+            }
+            
+        }
+
+    }
+
+}
 
 
 bool Speed::check_valid(String name, [[maybe_unused]] String prefix) {
@@ -952,17 +985,18 @@ Speed::Speed(double value_in) {
 }
 
 
-//enter a speed in knots
-void Speed::enter(String name, [[maybe_unused]] String prefix) {
 
-	do {
+void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
 
-		enter_double(&value, false, 0.0, 0.0, name, prefix);
+    String new_prefix;
 
-	} while (!check_valid(name, prefix));
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
 
+    value = x;
 
-	print(name, prefix, cout);
+    if (name != String("")) { print(name, String("kt"), prefix, cout); }
+    check_valid(name, new_prefix);
 
 }
 

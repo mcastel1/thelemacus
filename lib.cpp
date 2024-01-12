@@ -14662,7 +14662,7 @@ bool RouteFrame::is_ok(void) {
 	return((type->is_ok()) &&
 		(
 			(((((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome"))) &&
-				((Z->is_ok()) && ((start_phi->is_ok()) || for_transport) && ((start_lambda->is_ok()) || for_transport) && (l->is_ok())))
+				((Z->is_ok()) && ((start_phi->is_ok()) || for_transport) && ((start_lambda->is_ok()) || for_transport) && (l->is_ok()) && (t->is_ok()) && (v->is_ok())))
 			||
 			((((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
 				((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok())))
@@ -14727,6 +14727,8 @@ void RouteFrame::set(void) {
 		start_lambda->Enable(false);
 
 		l->Enable(false);
+        t->Enable(false);
+        v->Enable(false);
 
 		GP_phi->set();
 		GP_lambda->set();
@@ -14744,6 +14746,8 @@ void RouteFrame::set(void) {
 		start_lambda->Enable(!for_transport);
 
 		l->set();
+        t->set();
+        v->set();
 
 		GP_phi->Enable(false);
 		GP_lambda->Enable(false);
@@ -14774,6 +14778,8 @@ template<class T> void RouteFrame::get(T& event) {
 		start_phi->get(event);
 		start_lambda->get(event);
 		l->get(event);
+        t->get(event);
+        v->get(event);
 
 	}
 
@@ -17161,6 +17167,8 @@ template<class T>void CheckRouteType::operator()(T& event) {
 			(f->start_lambda)->Enable(!(f->for_transport));
 
 			(f->l)->Enable(enable);
+            (f->t)->Enable(enable);
+            (f->v)->Enable(enable);
 
 			(f->GP_phi)->Enable(!enable);
 			(f->GP_lambda)->Enable(!enable);
@@ -17173,6 +17181,8 @@ template<class T>void CheckRouteType::operator()(T& event) {
 			(f->start_phi)->Enable(false);
 			(f->start_lambda)->Enable(false);
 			(f->l)->Enable(false);
+            (f->t)->Enable(false);
+            (f->v)->Enable(false);
 			(f->GP_phi)->Enable(false);
 			(f->GP_lambda)->Enable(false);
 			(f->omega)->Enable(false);
@@ -19087,6 +19097,8 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 		(parent_frame->start_phi)->Enable(enable && (!(parent_frame->for_transport)));
 		(parent_frame->start_lambda)->Enable(enable && (!(parent_frame->for_transport)));
 		(parent_frame->l)->Enable(enable);
+        (parent_frame->t)->Enable(enable);
+        (parent_frame->v)->Enable(enable);
 
 		(parent_frame->GP_phi)->Enable(!enable);
 		(parent_frame->GP_lambda)->Enable(!enable);
@@ -19103,6 +19115,8 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 		(parent_frame->start_phi)->Enable(false);
 		(parent_frame->start_lambda)->Enable(false);
 		(parent_frame->l)->Enable(false);
+        (parent_frame->t)->Enable(false);
+        (parent_frame->v)->Enable(false);
 		(parent_frame->GP_phi)->Enable(false);
 		(parent_frame->GP_lambda)->Enable(false);
 		(parent_frame->omega)->Enable(false);

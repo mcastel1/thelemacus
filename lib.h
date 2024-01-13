@@ -1888,8 +1888,8 @@ public:
     
     P* parent;
     wxBoxSizer *sizer_h, *sizer_v;
-    wxArrayString  /*this is equal to a standard list of the available graphical types*/formats, /*same as formats, but it is fixed and never wrote to: it is a fixed catalog*/format_catalog;
-    //this is the wxComboBox with the name of the formats
+    wxArrayString  /*this is equal to a standard list of the available formats for a length*/length_formats, /*same as length_formats, but it is fixed and never wrote to: it is a fixed catalog*/length_formats_catalog;
+    //this is the wxComboBox with the name of the length formats
     wxComboBox* name;
     CheckProjection<P>* check;
     vector<int> recent_items;

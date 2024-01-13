@@ -17677,6 +17677,38 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
+//constructor of a LengthFormatField object, based on the parent frame frame
+template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent) {
+
+    parent = ((P*)(panel_of_parent->GetParent()));
+
+    length_formats_catalog.Clear();
+    length_formats_catalog.Add(wxT("Length"));
+    length_formats_catalog.Add(wxT("Time x Speed"));
+    //    length_formats_catalog.Add(wxT("Lambert"));
+    length_formats = length_formats_catalog;
+
+    check = new CheckLengthFormat<P>(this);
+
+    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, length_formats, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    //SetColor(name);
+    fill_length_formats();
+    name->SetValue(length_formats[0]);
+    AdjustWidth(name);
+    //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    name->Bind(wxEVT_COMBOBOX, &LengthFormatField::OnEdit<wxCommandEvent>, this);
+    name->Bind(wxEVT_KEY_UP, &LengthFormatField::OnEdit<wxKeyEvent>, this);
+    name->Bind(wxEVT_KILL_FOCUS, *check);
+
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(name, 0, wxALIGN_CENTER);
+
+}
+
+
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c) {

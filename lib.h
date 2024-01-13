@@ -1865,7 +1865,7 @@ public:
     P* parent;
     wxBoxSizer *sizer_h, *sizer_v;
     wxArrayString  /*this is equal to a standard list of the available graphical types*/projections, /*same as projections, but it is fixed and never wrote to: it is a fixed catalog*/projection_catalog;
-    //this is the wxComboBox with the name of the bodies
+    //this is the wxComboBox with the name of the projections
     wxComboBox* name;
     CheckProjection<P>* check;
     vector<int> recent_items;
@@ -1879,6 +1879,30 @@ public:
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
+
+
+//this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a LengthField or as a ChronoField + a SpeedField (l = t * v)
+template<class P> class LengthFormatField{
+    
+public:
+    
+    P* parent;
+    wxBoxSizer *sizer_h, *sizer_v;
+    wxArrayString  /*this is equal to a standard list of the available graphical types*/formats, /*same as formats, but it is fixed and never wrote to: it is a fixed catalog*/format_catalog;
+    //this is the wxComboBox with the name of the formats
+    wxComboBox* name;
+    CheckProjection<P>* check;
+    vector<int> recent_items;
+    bool ok;
+    
+    LengthFormatField(wxPanel*);
+    void fill_projections(void);
+    template<class T> void InsertIn(T*, wxSizerFlags&);
+    template<class E> void OnEdit(E&);
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+    
+};
+
 
 //P is the type of the frame which hosts *this
 template<class P> class BodyField{

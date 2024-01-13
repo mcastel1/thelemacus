@@ -1881,7 +1881,7 @@ public:
 };
 
 
-//this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a LengthField or as a ChronoField + a SpeedField (l = t * v)
+//this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a LengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted 
 template<class P> class LengthFormatField{
     
 public:
@@ -1891,12 +1891,12 @@ public:
     wxArrayString  /*this is equal to a standard list of the available formats for a length*/length_formats, /*same as length_formats, but it is fixed and never wrote to: it is a fixed catalog*/length_formats_catalog;
     //this is the wxComboBox with the name of the length formats
     wxComboBox* name;
-    CheckProjection<P>* check;
+    CheckLengthFormat<P>* check;
     vector<int> recent_items;
     bool ok;
     
     LengthFormatField(wxPanel*);
-    void fill_projections(void);
+    void fill_length_formats(void);
     template<class T> void InsertIn(T*, wxSizerFlags&);
     template<class E> void OnEdit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);

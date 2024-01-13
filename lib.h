@@ -28,6 +28,7 @@
 
 template<class P> class BodyField;
 template<class P> class ProjectionField;
+template<class P> class LengthFormatField;
 template<class P> class LimbField;
 template<class P, class T> class CheckField;
 template<class P> class AngleField;
@@ -1099,6 +1100,18 @@ public:
     
 };
 
+//this checks if an element of the LengthFormatField class is valid
+template<class P> class CheckLengthFormat{
+    
+public:
+    
+    LengthFormatField<P>* p;
+    
+    CheckLengthFormat(LengthFormatField<P>*);
+    template<class T> void operator()(T&);
+    
+};
+
 
 //this checks the value of LimbField
 template<class P> class CheckLimb{
@@ -1881,7 +1894,7 @@ public:
 };
 
 
-//this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a LengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted 
+//this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a LengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted
 template<class P> class LengthFormatField{
     
 public:

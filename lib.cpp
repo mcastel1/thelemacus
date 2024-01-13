@@ -12978,6 +12978,80 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
 
 }
 
+
+template<class P> CheckLengthFormat<P>::CheckLengthFormat(LengthFormatField<P>* p_in) {
+
+    p = p_in;
+
+}
+
+template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& event) {
+
+    P* f = (p->parent);
+
+    //I proceed only if the progam is not is indling mode
+    if (!(f->idling)) {
+
+        unsigned int i;
+        bool check;
+
+        //I check whether the name in the GUI field LengthFormat matches one of the LengthFormat names in p->names
+        for (check = false, i = 0; (i < (p->projection_catalog).size()) && (!check); i++) {
+            if (((p->name)->GetValue()) == ((p->projection_catalog)[i])) {
+                check = true;
+            }
+        }
+        i--;
+
+        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
+            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+
+
+            if (check) {
+
+                //insert projection #i into data->recent_bodies
+                wxGetApp().list_frame->data->insert_recent_projection(i);
+                //I update p->name according to the content of data->recent_projections file
+                p->fill_projections();
+
+            }
+
+
+            //if check is true (false) -> set ok to true (false)
+            (p->ok) = check;
+            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
+            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->name)->SetFont(wxGetApp().default_font);
+            Reset(p->name);
+
+        }
+        else {
+
+            stringstream temp;
+
+            temp.str("");
+            temp << "Length format must be one of the following: ";
+            for (i = 0; i < ((p->projection_catalog).GetCount()); i++) {
+                temp << ((p->projection_catalog)[i]).ToStdString() << (i < ((p->projection_catalog).GetCount()) - 1 ? ", " : ".");
+            }
+
+
+            (f->print_error_message)->SetAndCall(p->name, String("Length format not found in list of projections!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+
+            (p->ok) = false;
+
+        }
+
+        f->AllOk();
+
+    }
+
+    event.Skip(true);
+
+}
+
+
+
 ResetListFrame::ResetListFrame(ListFrame* p_in) {
 
 	p = p_in;
@@ -18967,10 +19041,8 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s) {
 	types.Add(wxString("circle of equal altitude"));
 
 	check = new CheckRouteType(this);
-
-
-
 	name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    
 	//SetColor(name);
 	AdjustWidth(name);
 	ok = false;

@@ -2456,7 +2456,7 @@ public:
     RouteTypeField *type;
     AngleField<RouteFrame> *Z, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
     //l_format tells whether the length of Route is written simply as a Length, or as a Speed x a Chrono (a time)
-    LengthFormatField* l_format;
+    LengthFormatField<RouteFrame>* l_format;
     //if the length of the Route is written directly as a length, this field is used
     LengthField<RouteFrame> *l;
     //if the lenght of the Route is written in terms of a speed multiplied by a time, the following two fields are used

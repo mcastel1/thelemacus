@@ -12996,8 +12996,8 @@ template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& even
         bool check;
 
         //I check whether the name in the GUI field LengthFormat matches one of the LengthFormat names in p->names
-        for (check = false, i = 0; (i < (p->projection_catalog).size()) && (!check); i++) {
-            if (((p->name)->GetValue()) == ((p->projection_catalog)[i])) {
+        for (check = false, i = 0; (i < (p->length_formats_catalog).size()) && (!check); i++) {
+            if (((p->name)->GetValue()) == ((p->length_formats_catalog)[i])) {
                 check = true;
             }
         }
@@ -13012,7 +13012,7 @@ template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& even
                 //insert projection #i into data->recent_bodies
                 wxGetApp().list_frame->data->insert_recent_projection(i);
                 //I update p->name according to the content of data->recent_projections file
-                p->fill_projections();
+                p->fill_length_formats();
 
             }
 
@@ -13031,8 +13031,8 @@ template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& even
 
             temp.str("");
             temp << "Length format must be one of the following: ";
-            for (i = 0; i < ((p->projection_catalog).GetCount()); i++) {
-                temp << ((p->projection_catalog)[i]).ToStdString() << (i < ((p->projection_catalog).GetCount()) - 1 ? ", " : ".");
+            for (i = 0; i < ((p->length_formats_catalog).GetCount()); i++) {
+                temp << ((p->length_formats_catalog)[i]).ToStdString() << (i < ((p->length_formats_catalog).GetCount()) - 1 ? ", " : ".");
             }
 
 
@@ -14434,6 +14434,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	//Z
 	StaticText* text_Z = new StaticText(panel, wxT("Z"), wxDefaultPosition, wxDefaultSize, 0);
 	Z = new AngleField<RouteFrame>(panel, &(route->Z), String(""));
+    
+    l_format = new LengthFormatField<RouteFrame>(panel);
 
 	//l
 	StaticText* text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);

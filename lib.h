@@ -958,6 +958,7 @@ public:
     //the recent bodies, projections, ... selected by the user are stored here
     vector<int> recent_bodies;
     vector<int> recent_projections;
+    vector<int> recent_length_formats;
 
     Data(Catalog*, String);
     //~Data();

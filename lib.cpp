@@ -17784,6 +17784,55 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 }
 
 
+//update the dropdown menu of ProjectionField according to wxGetApp().list_frame->data->recent_length_formats in such a way that the recent items appear on top of it
+template<class P> void LengthFormatField<P>::fill_length_formats(void){
+    
+    unsigned int i, j;
+    wxArrayString length_formats_temp;
+    wxString name_temp;
+    bool is_present;
+
+    //save the current value of name in name_temp
+    name_temp = (name->GetValue());
+    //create the temporary list of length_formats length_formats_temp from projection_catalog
+    for (length_formats_temp.Clear(), i = 0; i < length_formats.GetCount(); i++) {
+        length_formats_temp.Add(length_formats_catalog[i]);
+    }
+    
+    //I first add to length_formats the recently selected celestial length_formats written in (wxGetApp().list_frame->data->recent_length_formats)
+    for (length_formats.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_length_formats.size()); i++) {
+
+        length_formats.Add(length_formats_temp[(wxGetApp().list_frame->data->recent_length_formats)[i]]);
+
+    }
+
+    //then, I fill length_formats with the remaining length_formats
+    for (i = 0; i < length_formats_temp.GetCount(); i++) {
+
+        for (is_present = false, j = 0; (j < length_formats.GetCount()) && (!is_present); j++) {
+
+            if (length_formats[j] == length_formats_temp[i]) {
+                is_present = true;
+            }
+
+        }
+
+        if (!is_present) {
+            length_formats.Add(length_formats_temp[i]);
+        }
+
+    }
+
+    name->Set(length_formats);
+    //because name->Set(length_formats clears the value of name, I set the value of name back to name_temp
+    name->SetValue(name_temp);
+
+    length_formats_temp.Clear();
+
+}
+
+
+
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c) {

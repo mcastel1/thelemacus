@@ -657,6 +657,7 @@ public:
     void set(String, double, String);
     void enter(String, String);
     void print(String, String, String, ostream&);
+    template<class S> void read_from_stream(String, S*, bool, String);
     bool check_valid(String, String);
     void print(String, String, ostream&);
     

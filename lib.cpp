@@ -953,6 +953,80 @@ void Speed::print(String name, String unit, String prefix, ostream& ostr) {
 }
 
 
+//reads from file the content after 'name = ' and writes it into this. This function requires file to be correctly set and open
+template<class S> void Speed::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
+
+    string line;
+    stringstream new_prefix;
+    size_t pos1, pos2;
+    String unit;
+
+    //prepend \t to prefix
+    new_prefix << "\t" << prefix.value;
+
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from stream " << input_stream << " ...\n" << RESET;
+
+    if (search_entire_stream) {
+
+        //rewind the file pointer
+        input_stream->clear();                 // clear fail and eof bits
+        input_stream->seekg(0, std::ios::beg); // back to the start!
+
+        do {
+
+            line.clear();
+            getline(*input_stream, line);
+
+        } while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+
+    }
+    else {
+
+        line.clear();
+        getline(*input_stream, line);
+
+    }
+
+    pos1 = line.find(" = ");
+    pos2 = line.find(" kt");
+
+    if (line.find(" kt") != (string::npos)) {
+        //the units of the speed read is kt
+        cout << prefix.value << "Unit is in kt\n";
+        pos2 = line.find(" kt");
+        unit = String("kt");
+    }
+    if (line.find(" km/h") != (string::npos)) {
+        //the units of the length read is km/h
+        cout << prefix.value << "Unit is in km/h\n";
+        pos2 = line.find(" km/h");
+        unit = String("km/h");
+    }
+    if (line.find(" m/s") != (string::npos)) {
+        //the units of the length read is m/s
+        cout << prefix.value << "Unit is in m/s\n";
+        pos2 = line.find(" m/s");
+        unit = String("m/s");
+    }
+
+    //X [km/h] = X [nm]/nm/[h] = X/nm [kt] = X 1000/3600 [m/s]
+    
+    value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
+    if (unit == String("km/h")) {
+        value /= nm;
+    }
+    if (unit == String("m/s")) {
+        value /= (1e3)*nm/3600.0;
+    }
+
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
+    print(name, String("kt"), prefix, cout);
+
+}
+
+
+
 bool Speed::check_valid(String name, [[maybe_unused]] String prefix) {
 
 	bool check = true;
@@ -3351,7 +3425,21 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 		reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
 
 		Z.read_from_stream<S>(String("starting heading"), input_stream, false, new_prefix);
-		l.read_from_stream<S>(String("length"), input_stream, false, new_prefix);
+        
+        length_format.read_from_stream(String("length format"), input_stream, false, new_prefix);
+        
+        if(length_format == String("time and speed")){
+            
+            t.read_from_stream(String("time"), input_stream, false, new_prefix);
+            v.read_from_stream(String("speed"), input_stream, false, new_prefix);
+            
+            
+        }else{
+            
+            l.read_from_stream<S>(String("length"), input_stream, false, new_prefix);
+
+        }
+        
 
 	}
 

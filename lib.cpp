@@ -13471,8 +13471,16 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
 
 		}
 		else {
+            
+            stringstream temp;
+            
+            temp.str("");
+            temp << "Available units are: ";
+            for(i=0; i<(p->units).size(); i++){
+                temp << (p->units)[i].ToStdString() << ((i<(p->units).size() -1) ? ", " : ".");
+            }
 
-			(f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String("Unit must be nm, m or ft."), (wxGetApp().path_file_error_icon));
+			(f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
 
 			(p->unit_ok) = false;
 
@@ -13587,8 +13595,16 @@ template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event
 
         }
         else {
+            
+            stringstream temp;
+            
+            temp.str("");
+            temp << "Available units are: ";
+            for(i=0; i<(p->units).size(); i++){
+                temp << (p->units)[i].ToStdString() << ((i<(p->units).size() -1) ? ", " : ".");
+            }
 
-            (f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String("Unit must be nm, m or ft."), (wxGetApp().path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
 
             (p->unit_ok) = false;
 
@@ -14779,24 +14795,39 @@ void RouteFrame::OnPressCancel([[maybe_unused]] wxCommandEvent& event) {
 
 //write the content in the GUI fields into the non-GUI fields, and returns true if all is ok, false otherwise
 bool RouteFrame::is_ok(void) {
-
-	wxCommandEvent dummy;
-
-	get(dummy);
-
-	return((type->is_ok()) &&
-		(
-			(((((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome"))) &&
-				((Z->is_ok()) && ((start_phi->is_ok()) || for_transport) && ((start_lambda->is_ok()) || for_transport) && (l->is_ok()) && (t->is_ok()) && (v->is_ok())))
-			||
-			((((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
-				((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok())))
-			)
-		);
-
+    
+    wxCommandEvent dummy;
+    
+    get(dummy);
+    
+    return((type->is_ok()) &&
+           
+           (
+            (
+             ((((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome"))) &&
+             (
+              (Z->is_ok()) &&
+              ((start_phi->is_ok()) || for_transport) &&
+              ((start_lambda->is_ok()) || for_transport) &&
+              ( ((((l_format->name)->GetValue()) == wxString("Time and speed")) && ((t->is_ok()) && (v->is_ok()))) || ((((l_format->name)->GetValue()) == wxString("Length")) && (l->is_ok())) )
+              )
+             )
+            
+            ||
+            
+            (
+             (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
+             ((omega->is_ok()) &&
+              (GP_phi->is_ok()) &&
+              (GP_lambda->is_ok()))
+             )
+            )
+           
+           );
+    
 }
 
-//tries to enable button_ok
+           //tries to enable button_ok
 void RouteFrame::AllOk(void) {
 
 	button_ok->Enable(is_ok());

@@ -14438,17 +14438,17 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     //format in which lengths are expressed
     StaticText* text_l_format = new StaticText(panel, wxT("Length format"), wxDefaultPosition, wxDefaultSize, 0);
     l_format = new LengthFormatField<RouteFrame>(panel);
-
+    
     //the field for time to set the Route length
-    StaticText* text_t = new StaticText(panel, wxT("Time"), wxDefaultPosition, wxDefaultSize, 0);
+    text_t = new StaticText(panel, wxT("Time"), wxDefaultPosition, wxDefaultSize, 0);
     t = new ChronoField<RouteFrame>(panel, &(route->t));
     //the field for speed to set the Route length
-    StaticText* text_v = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
+    text_v = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
     v = new SpeedField<RouteFrame>(panel, &(route->v), String("kt"));
     
-	//the field for Length to set the Route length
-	StaticText* text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
-	l = new LengthField<RouteFrame>(panel, &(route->l), String("nm"));
+    //the field for Length to set the Route length
+    text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
+    l = new LengthField<RouteFrame>(panel, &(route->l), String("nm"));
     
 
     

@@ -968,8 +968,7 @@ bool Speed::check_valid(String name, [[maybe_unused]] String prefix) {
 
 void Speed::print(String name, String prefix, ostream& ostr) {
 
-	ostr << prefix.value << name.value << " = ";
-	ostr << value << " kt\n";
+	ostr << prefix.value << name.value << " = " << value << " kt\n";
 
 }
 
@@ -981,9 +980,7 @@ Speed::Speed(double value_in) {
 
 	value = value_in;
 
-
 }
-
 
 
 void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
@@ -4074,7 +4071,20 @@ void Route::print(String name, String prefix, ostream& ostr) {
 
 		reference_position.print(String("start position"), new_prefix, ostr);
 		Z.print(String("starting heading"), new_prefix, ostr);
-		l.print(String("length"), String("nm"), new_prefix, ostr);
+    
+        ostr << "length format = ";
+        if(!length_format_t_v){
+            
+            ostr << "length\n";
+            l.print(String("length"), String("nm"), new_prefix, ostr);
+            
+        }else{
+            
+            ostr << "time and speed\n";
+            t.print(String("time"), new_prefix, ostr);
+            v.print(String("speed"), new_prefix, ostr);
+            
+        }
 
 	}
 	else {

@@ -51,6 +51,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
 
  ********** THINGS TO ADD/IMPROVE ************
+ - when you enable / disable a field, enable/disable its wxStaticTexts and wxBoxSizers as well 
  - check whether you can remove Fitall in void ListFrame::DrawAll(void) { and whether it speeds up things 
  - when transporting a sight allow the user to enter speed and time instead of distance
  - add instrumental error

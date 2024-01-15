@@ -14520,6 +14520,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	start_lambda->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	GP_phi->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	GP_lambda->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    l_format->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	l->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
     t->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
     v->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
@@ -17830,7 +17831,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
     parent = ((P*)(panel_of_parent->GetParent()));
 
     length_formats_catalog.Clear();
-    length_formats_catalog.Add(wxT("Time x Speed"));
+    length_formats_catalog.Add(wxT("Time and speed"));
     length_formats_catalog.Add(wxT("Length"));
     length_formats = length_formats_catalog;
 
@@ -17935,6 +17936,13 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
     event.Skip(true);
 
 }
+
+template<class P> template <typename EventTag, typename Method, typename Object> void LengthFormatField<P>::Bind(EventTag tag, Method method, Object object) {
+
+    name->Bind(tag, method, object);
+
+}
+
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c) {

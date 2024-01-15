@@ -4058,10 +4058,11 @@ bool Limb::operator==(const Limb& limb) {
 
 void Route::print(String name, String prefix, ostream& ostr) {
 
-	String s, new_prefix;
+	String s, new_prefix, new_new_prefix;
 
-	//append \t to prefix
+	//append \t to prefix and \t\t to new_new_prefix
 	new_prefix = prefix.append(String("\t"));
+    new_new_prefix = new_prefix.append(String("\t"));
 
 	ostr << prefix.value << name.value << ":\n";
 
@@ -4072,17 +4073,17 @@ void Route::print(String name, String prefix, ostream& ostr) {
 		reference_position.print(String("start position"), new_prefix, ostr);
 		Z.print(String("starting heading"), new_prefix, ostr);
     
-        ostr << "length format = ";
+        ostr << new_prefix.value << "length format = ";
         if(!length_format_t_v){
             
             ostr << "length\n";
-            l.print(String("length"), String("nm"), new_prefix, ostr);
+            l.print(String("length"), String("nm"), new_new_prefix, ostr);
             
         }else{
             
             ostr << "time and speed\n";
-            t.print(String("time"), new_prefix, ostr);
-            v.print(String("speed"), new_prefix, ostr);
+            t.print(String("time"), new_new_prefix, ostr);
+            v.print(String("speed"), new_new_prefix, ostr);
             
         }
 

@@ -289,6 +289,12 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
+    //
+    Route* r;
+    r = new Route(String("l"), Position(Angle(1.2), Angle(3.232)), Angle(2.2323), Length(232.32));
+    r->print(String("my new route"), String("\t"), cout);
+    //
+    
 	unsigned int i;
 	Int n_chart_frames;
 	stringstream s;

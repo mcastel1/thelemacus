@@ -14438,7 +14438,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	sizer_box_data = new wxStaticBoxSizer(wxVERTICAL, panel, "Data");
     sizer_box_l_format_l_t_v = new wxStaticBoxSizer(wxVERTICAL, panel, "Length");
     sizer_box_l = new wxStaticBoxSizer(wxVERTICAL, panel, "Time");
-    sizer_box_t_v = new wxStaticBoxSizer(wxVERTICAL, panel, "Time, speed");
+    sizer_box_t_v = new wxStaticBoxSizer(wxVERTICAL, panel, "Time and speed");
 	sizer_box_start = new wxStaticBoxSizer(wxVERTICAL, panel, "Start position");
 	sizer_box_GP = new wxStaticBoxSizer(wxVERTICAL, panel, "Ground position");
 	sizer = new wxBoxSizer(wxVERTICAL);
@@ -18955,8 +18955,7 @@ template<class P> void SpeedField<P>::set(void) {
         case '1':{
             //unit = String("km/h")
             
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(speed->value) * 1e3 * nm));
-
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to km/h*/(speed->value) * nm));
             
             break;
         }
@@ -18964,8 +18963,7 @@ template<class P> void SpeedField<P>::set(void) {
         case '2':{
             //unit = String("ft")
 
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(speed->value) * nm_ft));
-
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm * 1e3 / 3600.0));
             
             break;
         }

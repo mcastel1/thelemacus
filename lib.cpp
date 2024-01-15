@@ -14905,21 +14905,37 @@ template<class T> void RouteFrame::get(T& event) {
 
 template<class E> void RouteFrame::OnChooseLengthFormat(E& event) {
     
-    if((l_format->name->GetValue()) == (l_format->length_formats_catalog)[0]){
-        
-        l->Enable(false);
-        v->Enable(true);
-        t->Enable(true);
-        
-    }else{
-        
-        l->Enable(true);
-        v->Enable(false);
-        t->Enable(false);
+    int i;
     
+    //run over all entries of length_formats_catalog and store in i the id of the entry that is equal to l_format->name->GetValue()
+    for(i=0; (i<(l_format->length_formats_catalog).size()) && ((l_format->name->GetValue()) != (l_format->length_formats_catalog)[i]); i++){}
+    
+    switch (i) {
+            
+        case 0:{
+           //l_format->name->GetValue() = "Time x speed" -> disable l, enable v and t
+  
+            l->Enable(false);
+            v->Enable(true);
+            t->Enable(true);
+
+            break;
+            
+        }
+
+        case 1:{
+            //l_format->name->GetValue() = "Length" -> enable l, disable v and t
+
+            l->Enable(true);
+            v->Enable(false);
+            t->Enable(false);
+            
+            break;
+            
+        }
+            
     }
     
- 
     event.Skip(true);
     
 }
@@ -17785,9 +17801,8 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
     parent = ((P*)(panel_of_parent->GetParent()));
 
     length_formats_catalog.Clear();
-    length_formats_catalog.Add(wxT("Length"));
     length_formats_catalog.Add(wxT("Time x Speed"));
-    //    length_formats_catalog.Add(wxT("Lambert"));
+    length_formats_catalog.Add(wxT("Length"));
     length_formats = length_formats_catalog;
 
     check = new CheckLengthFormat<P>(this);

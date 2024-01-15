@@ -14484,6 +14484,9 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 		l->Enable(false);
         v->Enable(false);
         t->Enable(false);
+        text_t->Enable(false);
+        text_v->Enable(false);
+        text_l->Enable(false);
 		start_phi->Enable(false);
 		start_lambda->Enable(false);
 		GP_phi->Enable(false);
@@ -14838,9 +14841,12 @@ void RouteFrame::set(void) {
 		start_phi->Enable(false);
 		start_lambda->Enable(false);
 
-		l->Enable(false);
         t->Enable(false);
         v->Enable(false);
+        l->Enable(false);
+        text_t->Enable(false);
+        text_v->Enable(false);
+        text_l->Enable(false);
 
 		GP_phi->set();
 		GP_lambda->set();
@@ -14914,9 +14920,12 @@ template<class E> void RouteFrame::OnChooseLengthFormat(E& event) {
         case 0:{
            //l_format->name->GetValue() = "Time x speed" -> disable l, enable v and t
   
-            l->Enable(false);
-            v->Enable(true);
             t->Enable(true);
+            v->Enable(true);
+            l->Enable(false);
+            text_t->Enable(true);
+            text_v->Enable(true);
+            text_l->Enable(false);
 
             break;
             
@@ -14925,10 +14934,13 @@ template<class E> void RouteFrame::OnChooseLengthFormat(E& event) {
         case 1:{
             //l_format->name->GetValue() = "Length" -> enable l, disable v and t
 
-            l->Enable(true);
-            v->Enable(false);
             t->Enable(false);
-            
+            v->Enable(false);
+            l->Enable(true);
+            text_t->Enable(false);
+            text_v->Enable(false);
+            text_l->Enable(true);
+
             break;
             
         }
@@ -17316,9 +17328,13 @@ template<class T>void CheckRouteType::operator()(T& event) {
 			(f->start_phi)->Enable(!(f->for_transport));
 			(f->start_lambda)->Enable(!(f->for_transport));
 
-			(f->l)->Enable(enable);
-            (f->t)->Enable(enable);
-            (f->v)->Enable(enable);
+            f->t->Enable(enable);
+            f->v->Enable(enable);
+            f->l->Enable(enable);
+            f->text_t->Enable(enable);
+            f->text_v->Enable(enable);
+            f->text_l->Enable(enable);
+
 
 			(f->GP_phi)->Enable(!enable);
 			(f->GP_lambda)->Enable(!enable);
@@ -17330,9 +17346,14 @@ template<class T>void CheckRouteType::operator()(T& event) {
 			(f->Z)->Enable(false);
 			(f->start_phi)->Enable(false);
 			(f->start_lambda)->Enable(false);
-			(f->l)->Enable(false);
-            (f->t)->Enable(false);
-            (f->v)->Enable(false);
+            
+            f->t->Enable(false);
+            f->v->Enable(false);
+            f->l->Enable(false);
+            f->text_t->Enable(false);
+            f->text_v->Enable(false);
+            f->text_l->Enable(false);
+            
 			(f->GP_phi)->Enable(false);
 			(f->GP_lambda)->Enable(false);
 			(f->omega)->Enable(false);
@@ -19436,16 +19457,20 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 		//enable/disable the related fields in RouteFrame f
 		enable = (((types[i]) == wxString("loxodrome")) || ((types[i]) == wxString("orthodrome")));
 
-		(parent_frame->Z)->Enable(enable);
-		(parent_frame->start_phi)->Enable(enable && (!(parent_frame->for_transport)));
-		(parent_frame->start_lambda)->Enable(enable && (!(parent_frame->for_transport)));
-		(parent_frame->l)->Enable(enable);
-        (parent_frame->t)->Enable(enable);
-        (parent_frame->v)->Enable(enable);
+		parent_frame->Z->Enable(enable);
+		parent_frame->start_phi->Enable(enable && (!(parent_frame->for_transport)));
+		parent_frame->start_lambda->Enable(enable && (!(parent_frame->for_transport)));
+        
+        parent_frame->t->Enable(enable);
+        parent_frame->v->Enable(enable);
+        parent_frame->l->Enable(enable);
+        parent_frame->text_t->Enable(enable);
+        parent_frame->text_v->Enable(enable);
+        parent_frame->text_l->Enable(enable);
 
-		(parent_frame->GP_phi)->Enable(!enable);
-		(parent_frame->GP_lambda)->Enable(!enable);
-		(parent_frame->omega)->Enable(!enable);
+		parent_frame->GP_phi->Enable(!enable);
+		parent_frame->GP_lambda->Enable(!enable);
+		parent_frame->omega->Enable(!enable);
 
 		//because the text in name is valid, I set the background color of name to white
 		name->SetForegroundColour(wxGetApp().foreground_color);
@@ -19454,18 +19479,22 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 	}
 	else {
 
-		(parent_frame->Z)->Enable(false);
-		(parent_frame->start_phi)->Enable(false);
-		(parent_frame->start_lambda)->Enable(false);
-		(parent_frame->l)->Enable(false);
-        (parent_frame->t)->Enable(false);
-        (parent_frame->v)->Enable(false);
-		(parent_frame->GP_phi)->Enable(false);
-		(parent_frame->GP_lambda)->Enable(false);
-		(parent_frame->omega)->Enable(false);
+		parent_frame->Z->Enable(false);
+		parent_frame->start_phi->Enable(false);
+		parent_frame->start_lambda->Enable(false);
+        
+        parent_frame->t->Enable(false);
+        parent_frame->v->Enable(false);
+        parent_frame->l->Enable(false);
+        parent_frame->text_t->Enable(false);
+        parent_frame->text_v->Enable(false);
+        parent_frame->text_l->Enable(false);
+        
+        parent_frame->GP_phi->Enable(false);
+        parent_frame->GP_lambda->Enable(false);
+        parent_frame->omega->Enable(false);
 
 	}
-
 
 	//ok is true/false is the text entered is valid/invalid
 	ok = success;

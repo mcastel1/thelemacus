@@ -2468,7 +2468,7 @@ public:
     wxFlexGridSizer *sizer_grid_type, *sizer_grid_Z, *sizer_grid_l, *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;
     wxBoxSizer *sizer, *box_sizer;
     wxStaticBoxSizer *sizer_box_data, *sizer_box_l, *sizer_box_start, *sizer_box_GP;
-    //static texts for the GUI fields containing the Route length, speed and time 
+    //static texts for the GUI fields containing the Route length, speed and time
     wxStaticText *text_t, *text_v, *text_l;
     wxButton* /*this button triggers either the addition of a new Route, or the modification of an existing one*/button_ok, *button_cancel;
     

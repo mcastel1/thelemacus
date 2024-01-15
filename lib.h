@@ -1911,9 +1911,9 @@ public:
     
     LengthFormatField(wxPanel*);
     void fill_length_formats(void);
-//    template<class T> void InsertIn(T*, wxSizerFlags&);
+    template<class T> void InsertIn(T*);
     template<class E> void OnEdit(E&);
-//    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
 
@@ -2465,9 +2465,9 @@ public:
     SpeedField<RouteFrame> *v;
     StringField<RouteFrame> *label;
     
-    wxFlexGridSizer *sizer_grid_type, *sizer_grid_Z, *sizer_grid_l, *sizer_grid_tv, *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;
+    wxFlexGridSizer *sizer_grid_type, *sizer_grid_Z, *sizer_grid_l, *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;
     wxBoxSizer *sizer, *box_sizer;
-    wxStaticBoxSizer *sizer_box_data, *sizer_box_start, *sizer_box_GP;
+    wxStaticBoxSizer *sizer_box_data, *sizer_box_l, *sizer_box_start, *sizer_box_GP;
     
     wxButton* /*this button triggers either the addition of a new Route, or the modification of an existing one*/button_ok, *button_cancel;
     

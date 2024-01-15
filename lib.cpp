@@ -14409,13 +14409,13 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
 	sizer_grid_type = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_Z = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
-	sizer_grid_l = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
-    sizer_grid_tv = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
+	sizer_grid_l = new wxFlexGridSizer(4, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_start = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_GP = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_omega = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_label = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_box_data = new wxStaticBoxSizer(wxVERTICAL, panel, "Data");
+    sizer_box_l = new wxStaticBoxSizer(wxVERTICAL, panel, "Length");
 	sizer_box_start = new wxStaticBoxSizer(wxVERTICAL, panel, "Start position");
 	sizer_box_GP = new wxStaticBoxSizer(wxVERTICAL, panel, "Ground position");
 	sizer = new wxBoxSizer(wxVERTICAL);
@@ -14435,6 +14435,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	StaticText* text_Z = new StaticText(panel, wxT("Z"), wxDefaultPosition, wxDefaultSize, 0);
 	Z = new AngleField<RouteFrame>(panel, &(route->Z), String(""));
     
+    //format in which lengths are expressed
+    StaticText* text_l_format = new StaticText(panel, wxT("Length format"), wxDefaultPosition, wxDefaultSize, 0);
     l_format = new LengthFormatField<RouteFrame>(panel);
 
 	//l
@@ -14522,16 +14524,20 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
 	sizer_grid_Z->Add(text_Z, 0, wxALIGN_CENTER_VERTICAL);
 	Z->InsertIn<wxFlexGridSizer>(sizer_grid_Z);
+    
+    sizer_grid_l->Add(text_l_format, 0, wxALIGN_CENTER_VERTICAL);
+    l_format->InsertIn<wxFlexGridSizer>(sizer_grid_l);
 
 	sizer_grid_l->Add(text_l, 0, wxALIGN_CENTER_VERTICAL);
 	l->InsertIn<wxFlexGridSizer>(sizer_grid_l);
 
-    sizer_grid_tv->Add(text_t, 0, wxALIGN_CENTER_VERTICAL);
-    t->InsertIn<wxFlexGridSizer>(sizer_grid_tv);
-    sizer_grid_tv->Add(text_v, 0, wxALIGN_CENTER_VERTICAL);
-    v->InsertIn<wxFlexGridSizer>(sizer_grid_tv);
+    sizer_grid_l->Add(text_t, 0, wxALIGN_CENTER_VERTICAL);
+    t->InsertIn<wxFlexGridSizer>(sizer_grid_l);
+    sizer_grid_l->Add(text_v, 0, wxALIGN_CENTER_VERTICAL);
+    v->InsertIn<wxFlexGridSizer>(sizer_grid_l);
 
-    
+    sizer_box_l->Add(sizer_grid_l);
+
 	sizer_grid_omega->Add(text_omega, 0, wxALIGN_CENTER_VERTICAL);
 	omega->InsertIn<wxFlexGridSizer>(sizer_grid_omega);
 
@@ -14554,8 +14560,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
 	sizer_box_data->Add(sizer_grid_type);
 	sizer_box_data->Add(sizer_grid_Z);
-	sizer_box_data->Add(sizer_grid_l);
-    sizer_box_data->Add(sizer_grid_tv);
+	sizer_box_data->Add(sizer_box_l);
 	sizer_box_data->Add(sizer_box_start);
 	sizer_box_data->Add(sizer_box_GP);
 	sizer_box_data->Add(sizer_grid_omega);
@@ -17835,6 +17840,14 @@ template<class P> void LengthFormatField<P>::fill_length_formats(void){
     length_formats_temp.Clear();
 
 }
+
+
+template<class P> template<class T> void LengthFormatField<P>::InsertIn(T* host) {
+
+    host->Add(sizer_v);
+
+}
+
 
 
 //this function is called every time the user modifies the text in this->name: it checks whether the text entered so far in name is valid, if name is valid, it calls OnChooseLengthFormat to select the projection written in name

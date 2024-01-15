@@ -51,7 +51,8 @@ To run on WIN32, the resource file is resource_file_windows.rc
 
 
  ********** THINGS TO ADD/IMPROVE ************
- - when you enable / disable a field, enable/disable its wxStaticTexts and wxBoxSizers as well 
+ - all unit fields should have the system              temp << "Available units are: "; message generated in the same way, as in template <class T> void CheckSpeedUnit<P>::operator()
+ - when you enable / disable a field, enable/disable its wxStaticTexts and wxBoxSizers as well
  - check whether you can remove Fitall in void ListFrame::DrawAll(void) { and whether it speeds up things 
  - when transporting a sight allow the user to enter speed and time instead of distance
  - add instrumental error
@@ -79,6 +80,7 @@ To run on WIN32, the resource file is resource_file_windows.rc
  - move all stuff which is general enough in the code to MyApp class
 
  ********** THINGS TO FIX ************
+ - frames are not resized according to the size of their title 
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class
  - revise constants for units of measure in SpeedField<P>::set and SpeedField<P>::get and Speed::print
  - when you transport something -> existing Route -> press cancel bbecause you changed your mind -> something is transported anyway

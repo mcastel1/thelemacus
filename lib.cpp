@@ -14439,17 +14439,17 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     StaticText* text_l_format = new StaticText(panel, wxT("Length format"), wxDefaultPosition, wxDefaultSize, 0);
     l_format = new LengthFormatField<RouteFrame>(panel);
 
-	//l
+    //the field for time to set the Route length
+    StaticText* text_t = new StaticText(panel, wxT("Time"), wxDefaultPosition, wxDefaultSize, 0);
+    t = new ChronoField<RouteFrame>(panel, &(route->t));
+    //the field for speed to set the Route length
+    StaticText* text_v = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
+    v = new SpeedField<RouteFrame>(panel, &(route->v), String("kt"));
+    
+	//the field for Length to set the Route length
 	StaticText* text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
 	l = new LengthField<RouteFrame>(panel, &(route->l), String("nm"));
     
-    //t
-    StaticText* text_t = new StaticText(panel, wxT("Time"), wxDefaultPosition, wxDefaultSize, 0);
-    t = new ChronoField<RouteFrame>(panel, &(route->t));
-
-    //v
-    StaticText* text_v = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
-    v = new SpeedField<RouteFrame>(panel, &(route->v), String("kt"));
 
     
 	//start position

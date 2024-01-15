@@ -14850,6 +14850,8 @@ void RouteFrame::set(void) {
 	}
 	else {
 		//I disable the GUI fields which do not define a loxodrome or orthodrome and set the others
+        
+        wxCommandEvent dummy;
 
 		Z->set();
 
@@ -14857,10 +14859,10 @@ void RouteFrame::set(void) {
 		start_lambda->set();
 		start_phi->Enable(!for_transport);
 		start_lambda->Enable(!for_transport);
-
-		l->set();
-        t->set();
-        v->set();
+        
+        l_format->name->SetValue(l_format->length_formats_catalog[1]);
+        l_format->OnEdit(dummy);
+        l->set();
 
 		GP_phi->Enable(false);
 		GP_lambda->Enable(false);
@@ -14902,6 +14904,21 @@ template<class T> void RouteFrame::get(T& event) {
 }
 
 template<class E> void RouteFrame::OnChooseLengthFormat(E& event) {
+    
+    if((l_format->name->GetValue()) == (l_format->length_formats_catalog)[0]){
+        
+        l->Enable(false);
+        v->Enable(true);
+        t->Enable(true);
+        
+    }else{
+        
+        l->Enable(true);
+        v->Enable(false);
+        t->Enable(false);
+    
+    }
+    
  
     event.Skip(true);
     

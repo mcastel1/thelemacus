@@ -14409,7 +14409,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
 	sizer_grid_type = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_Z = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
-	sizer_grid_length = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
+	sizer_grid_ltv = new wxBoxSizer(wxVERTICAL);
     sizer_grid_l = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
     sizer_grid_vt = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_start = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
@@ -14538,12 +14538,12 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	sizer_grid_l->Add(text_l, 0, wxALIGN_CENTER_VERTICAL);
 	l->InsertIn<wxFlexGridSizer>(sizer_grid_l);
     
-    sizer_grid_length->Add(text_l_format, 0, wxALIGN_CENTER_VERTICAL);
-    l_format->InsertIn<wxFlexGridSizer>(sizer_grid_length);
-    sizer_grid_length->Add(sizer_grid_vt);
-    sizer_grid_length->Add(sizer_grid_l);
+    sizer_grid_ltv->Add(text_l_format, 0, wxALIGN_LEFT);
+    l_format->InsertIn<wxBoxSizer>(sizer_grid_ltv);
+    sizer_grid_ltv->Add(sizer_grid_vt);
+    sizer_grid_ltv->Add(sizer_grid_l);
 
-    sizer_box_l->Add(sizer_grid_length);
+    sizer_box_l->Add(sizer_grid_ltv);
 
 	sizer_grid_omega->Add(text_omega, 0, wxALIGN_CENTER_VERTICAL);
 	omega->InsertIn<wxFlexGridSizer>(sizer_grid_omega);

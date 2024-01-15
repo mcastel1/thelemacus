@@ -14527,14 +14527,13 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     
     sizer_grid_l->Add(text_l_format, 0, wxALIGN_CENTER_VERTICAL);
     l_format->InsertIn<wxFlexGridSizer>(sizer_grid_l);
-
-	sizer_grid_l->Add(text_l, 0, wxALIGN_CENTER_VERTICAL);
-	l->InsertIn<wxFlexGridSizer>(sizer_grid_l);
-
+    
     sizer_grid_l->Add(text_t, 0, wxALIGN_CENTER_VERTICAL);
     t->InsertIn<wxFlexGridSizer>(sizer_grid_l);
     sizer_grid_l->Add(text_v, 0, wxALIGN_CENTER_VERTICAL);
     v->InsertIn<wxFlexGridSizer>(sizer_grid_l);
+	sizer_grid_l->Add(text_l, 0, wxALIGN_CENTER_VERTICAL);
+	l->InsertIn<wxFlexGridSizer>(sizer_grid_l);
 
     sizer_box_l->Add(sizer_grid_l);
 

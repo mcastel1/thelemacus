@@ -14544,8 +14544,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     sizer_l_format_l_t_v->Add(text_l_format, 0, wxALIGN_LEFT);
     l_format->InsertIn<wxBoxSizer>(sizer_l_format_l_t_v);
-    sizer_l_format_l_t_v->Add(sizer_grid_t_v);
-    sizer_l_format_l_t_v->Add(sizer_grid_l);
+    sizer_l_format_l_t_v->Add(sizer_box_t_v);
+    sizer_l_format_l_t_v->Add(sizer_box_l);
 
     sizer_box_l_format_l_t_v->Add(sizer_l_format_l_t_v);
 

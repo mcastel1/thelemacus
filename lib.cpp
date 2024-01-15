@@ -14954,9 +14954,21 @@ template<class T> void RouteFrame::get(T& event) {
 		Z->get(event);
 		start_phi->get(event);
 		start_lambda->get(event);
-		l->get(event);
-        t->get(event);
-        v->get(event);
+        
+        if((l_format->name->GetValue()) == l_format->length_formats_catalog[0]){
+            //in the GUI field, lengths are expressed at Chrono x Speed -> get t and v and set in the non-GUI field to true
+            
+            (route->length_format_t_v) = true;
+            t->get(event);
+            v->get(event);
+            
+        }else{
+            //in the GUI field, lenght are expressed simply as a Length -> get l and set in the non-GUI field to false
+            
+            (route->length_format_t_v) = false;
+            l->get(event);
+
+        }
 
 	}
 

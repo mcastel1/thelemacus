@@ -291,11 +291,16 @@ bool MyApp::OnInit() {
     
     //
     Route* r;
+    ofstream outfile;
+
     r = new Route(String("l"), Position(Angle(1.2), Angle(3.232)), Angle(2.2323), Length(232.32));
     r->length_format=String("time and speed");
-    r->t.set(String(""), 2.42222325, String(""));
-    r->v.set(String(""), 2.2132, String(""));
-    r->print(String("my new route"), String("\t"), cout);
+    r->t.set(String(""), 2.42, String(""));
+    r->v.set(String(""), 2.21, String(""));
+    outfile.open("/Users/macbookpro/Desktop/route.dat");
+    r->print(String("My new beautiful Route"), String("\t"), outfile);
+    
+    outfile.close();
     //
     
 	unsigned int i;

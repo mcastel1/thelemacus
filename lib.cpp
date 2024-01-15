@@ -18938,34 +18938,42 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 //set the value in the GUI object value equal to the value in the non-GUI object Speed
 template<class P> void SpeedField<P>::set(void) {
     
-    if((unit->GetValue().ToStdString()) == "kt"){
-        //unit = String("nm")
-
-        value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (speed->value)));
-        unit->SetValue(wxString("nm"));
-
-    }else{
-        
-        if((unit->GetValue().ToStdString()) == "km/h"){
-            //unit = String("km/h")
-
-             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(speed->value) * 1e3 * nm));
-             unit->SetValue(wxString("m"));
-
-        }else{
+    int i;
+    
+    for(i=0; (i<(units.size())) && ((unit->GetValue()) != (units[i])); i++){}
+    
+    switch (i){
             
-            if((unit->GetValue().ToStdString()) == "m/s"){
-                //unit = String("ft")
-
-                   value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(speed->value) * nm_ft));
-                   unit->SetValue(wxString("ft"));
-                
-            }
+        case '0':{
+            //unit = String("nm")
             
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (speed->value)));
+            
+            break;
         }
-        
+            
+        case '1':{
+            //unit = String("km/h")
+            
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(speed->value) * 1e3 * nm));
+
+            
+            break;
+        }
+  
+        case '2':{
+            //unit = String("ft")
+
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(speed->value) * nm_ft));
+
+            
+            break;
+        }
+  
     }
- 
+    
+    unit->SetValue(units[i]);
+    
     value_ok = true;
     unit_ok = true;
 

@@ -14896,6 +14896,11 @@ template<class T> void RouteFrame::get(T& event) {
 
 }
 
+template<class E> void RouteFrame::OnChooseLengthFormat(E& event) {
+ 
+    event.Skip(true);
+    
+}
 
 
 //write all the content in the GUI fields into the non-GUI objects, checks whether all the fields in PositionFrame are ok and if they are it returns true and false otherwise

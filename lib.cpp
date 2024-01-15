@@ -17832,7 +17832,30 @@ template<class P> void LengthFormatField<P>::fill_length_formats(void){
 }
 
 
+//this function is called every time the user modifies the text in this->name: it checks whether the text entered so far in name is valid, if name is valid, it calls OnChooseLengthFormat to select the projection written in name
+template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) {
 
+    String s;
+    bool success;
+
+    //I check whether the name in the GUI field body matches one of the body names in catalog
+    find_and_replace_case_insensitive(name, length_formats, &success, NULL);
+
+    //ok is true/false is the text enteres is valid/invalid
+    ok = success;
+
+    if (success) {
+
+        name->SetForegroundColour(wxGetApp().foreground_color);
+        name->SetFont(wxGetApp().default_font);
+        //choses the length format entered in name button_reduce
+        parent->OnChooseLengthFormat(event);
+
+    }
+
+    event.Skip(true);
+
+}
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c) {

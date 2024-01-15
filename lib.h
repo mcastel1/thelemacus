@@ -1911,9 +1911,9 @@ public:
     
     LengthFormatField(wxPanel*);
     void fill_length_formats(void);
-    template<class T> void InsertIn(T*, wxSizerFlags&);
+//    template<class T> void InsertIn(T*, wxSizerFlags&);
     template<class E> void OnEdit(E&);
-    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+//    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
 

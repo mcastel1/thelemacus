@@ -292,6 +292,9 @@ bool MyApp::OnInit() {
     //
     Route* r;
     r = new Route(String("l"), Position(Angle(1.2), Angle(3.232)), Angle(2.2323), Length(232.32));
+    r->length_format=String("time and speed");
+    r->t.set(String(""), 2.42222325, String(""));
+    r->v.set(String(""), 2.2132, String(""));
     r->print(String("my new route"), String("\t"), cout);
     //
     

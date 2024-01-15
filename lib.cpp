@@ -1914,7 +1914,7 @@ bool MyRectangle::Contains(Position p) {
 Route::Route(void) {
 
 	related_sight.set(String(""), -1, String(""));
-    length_format_t_v = false;
+    length_format.set(String("length"));
 
 }
 
@@ -1926,7 +1926,7 @@ Route::Route(String type_in, Position reference_position_in, Angle Z_in, Length 
 	reference_position = reference_position_in;
 	Z = Z_in;
 	l = l_in;
-    length_format_t_v = false;
+    length_format.set(String("length"));
 
     related_sight.set(String(""), -1, String(""));
 
@@ -1939,7 +1939,7 @@ Route::Route(String type_in, Position reference_position_in, Angle omega_in) {
 	reference_position = reference_position_in;
 	omega = omega_in;
 
-    length_format_t_v = false;
+    length_format.set(String("length"));
 	//the lenght of the circle of equal altitude is set by default
 	l.set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
 
@@ -4072,16 +4072,14 @@ void Route::print(String name, String prefix, ostream& ostr) {
 
 		reference_position.print(String("start position"), new_prefix, ostr);
 		Z.print(String("starting heading"), new_prefix, ostr);
-    
-        ostr << new_prefix.value << "length format = ";
-        if(!length_format_t_v){
+        
+        length_format.print(String("length format"), false, new_prefix, ostr);
+        if((length_format.value) == "length"){
             
-            ostr << "length\n";
             l.print(String("length"), String("nm"), new_new_prefix, ostr);
             
         }else{
             
-            ostr << "time and speed\n";
             t.print(String("time"), new_new_prefix, ostr);
             v.print(String("speed"), new_new_prefix, ostr);
             
@@ -14920,7 +14918,7 @@ void RouteFrame::set(void) {
         start_phi->Enable(!for_transport);
         start_lambda->Enable(!for_transport);
         
-        if((route->length_format_t_v)){
+        if((route->length_format.value) == "time and speed"){
             //the length in *route is written as a Chrono x a Speed
             
             l_format->name->SetValue(l_format->length_formats_catalog[0]);
@@ -14969,14 +14967,14 @@ template<class T> void RouteFrame::get(T& event) {
         if((l_format->name->GetValue()) == l_format->length_formats_catalog[0]){
             //in the GUI field, lengths are expressed at Chrono x Speed -> get t and v and set in the non-GUI field to true
             
-            (route->length_format_t_v) = true;
+            (route->length_format) = String("time and speed");
             t->get(event);
             v->get(event);
             
         }else{
             //in the GUI field, lenght are expressed simply as a Length -> get l and set in the non-GUI field to false
             
-            (route->length_format_t_v) = false;
+            (route->length_format) = String("length");
             l->get(event);
 
         }

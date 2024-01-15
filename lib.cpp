@@ -14411,13 +14411,15 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	sizer_grid_Z = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_l_format_l_t_v = new wxBoxSizer(wxVERTICAL);
     sizer_grid_l = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
-    sizer_grid_vt = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
+    sizer_grid_t_v = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_start = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_GP = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_omega = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_label = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_box_data = new wxStaticBoxSizer(wxVERTICAL, panel, "Data");
     sizer_box_l_format_l_t_v = new wxStaticBoxSizer(wxVERTICAL, panel, "Length");
+    sizer_box_l = new wxStaticBoxSizer(wxVERTICAL, panel, "Time");
+    sizer_box_t_v = new wxStaticBoxSizer(wxVERTICAL, panel, "Time, speed");
 	sizer_box_start = new wxStaticBoxSizer(wxVERTICAL, panel, "Start position");
 	sizer_box_GP = new wxStaticBoxSizer(wxVERTICAL, panel, "Ground position");
 	sizer = new wxBoxSizer(wxVERTICAL);
@@ -14530,17 +14532,19 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	sizer_grid_Z->Add(text_Z, 0, wxALIGN_CENTER_VERTICAL);
 	Z->InsertIn<wxFlexGridSizer>(sizer_grid_Z);
     
-    sizer_grid_vt->Add(text_t, 0, wxALIGN_CENTER_VERTICAL);
-    t->InsertIn<wxFlexGridSizer>(sizer_grid_vt);
-    sizer_grid_vt->Add(text_v, 0, wxALIGN_CENTER_VERTICAL);
-    v->InsertIn<wxFlexGridSizer>(sizer_grid_vt);
+    sizer_grid_t_v->Add(text_t, 0, wxALIGN_CENTER_VERTICAL);
+    t->InsertIn<wxFlexGridSizer>(sizer_grid_t_v);
+    sizer_grid_t_v->Add(text_v, 0, wxALIGN_CENTER_VERTICAL);
+    v->InsertIn<wxFlexGridSizer>(sizer_grid_t_v);
+    sizer_box_t_v->Add(sizer_grid_t_v);
     
 	sizer_grid_l->Add(text_l, 0, wxALIGN_CENTER_VERTICAL);
 	l->InsertIn<wxFlexGridSizer>(sizer_grid_l);
-    
+    sizer_box_l->Add(sizer_grid_l);
+
     sizer_l_format_l_t_v->Add(text_l_format, 0, wxALIGN_LEFT);
     l_format->InsertIn<wxBoxSizer>(sizer_l_format_l_t_v);
-    sizer_l_format_l_t_v->Add(sizer_grid_vt);
+    sizer_l_format_l_t_v->Add(sizer_grid_t_v);
     sizer_l_format_l_t_v->Add(sizer_grid_l);
 
     sizer_box_l_format_l_t_v->Add(sizer_l_format_l_t_v);

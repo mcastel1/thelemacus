@@ -1913,33 +1913,36 @@ bool MyRectangle::Contains(Position p) {
 
 }
 
-//constructs a brand new Route object and thus sets its related sight to -1, because this Route is not related to any sight yet
+//construct a brand new Route object and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(void) {
 
 	related_sight.set(String(""), -1, String(""));
+    length_format_t_v = false;
 
 }
 
 
-//constructs a brand new Route object of type 'l' or 'o' and thus sets its related sight to -1, because this Route is not related to any sight yet.
+//constructs a brand new Route object of type 'l' or 'o' and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(String type_in, Position reference_position_in, Angle Z_in, Length l_in) {
 
 	type = type_in;
 	reference_position = reference_position_in;
 	Z = Z_in;
 	l = l_in;
+    length_format_t_v = false;
 
-	related_sight.set(String(""), -1, String(""));
+    related_sight.set(String(""), -1, String(""));
 
 }
 
-//constructs a brand new Route object of type 'c' and thus sets its related sight to -1, because this Route is not related to any sight yet.
+//constructs a brand new Route object of type 'c' and thus sets its related sight to -1, because this Route is not related to any sight yet.  length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(String type_in, Position reference_position_in, Angle omega_in) {
 
 	type = type_in;
 	reference_position = reference_position_in;
 	omega = omega_in;
 
+    length_format_t_v = false;
 	//the lenght of the circle of equal altitude is set by default
 	l.set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
 
@@ -14902,13 +14905,26 @@ void RouteFrame::set(void) {
 		Z->set();
 
 		start_phi->set();
-		start_lambda->set();
-		start_phi->Enable(!for_transport);
-		start_lambda->Enable(!for_transport);
+        start_lambda->set();
+        start_phi->Enable(!for_transport);
+        start_lambda->Enable(!for_transport);
         
-        l_format->name->SetValue(l_format->length_formats_catalog[1]);
+        if((route->length_format_t_v)){
+            //the length in *route is written as a Chrono x a Speed
+            
+            l_format->name->SetValue(l_format->length_formats_catalog[0]);
+            t->set();
+            v->set();
+
+        }else{
+            //the length in *route is written simply as a Length
+            
+            l_format->name->SetValue(l_format->length_formats_catalog[1]);
+            l->set();
+            
+        }
+        
         l_format->OnEdit(dummy);
-        l->set();
 
 		GP_phi->Enable(false);
 		GP_lambda->Enable(false);
@@ -18161,14 +18177,13 @@ template <class P> void AngleField<P>::set(void) {
 }
 
 
-//sets the value in the GUI object value equal to the value in the non-GUI  object length
+//set the value in the GUI object value equal to the value in the non-GUI  object length
 template<class P> void LengthField<P>::set(void) {
 
 	switch ((unit_value.value)[0]) {
 
 	case 'n': {
 		//unit = String("nm")
-
 
 		value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (length->value)));
 		unit->SetValue(wxString("nm"));

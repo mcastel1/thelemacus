@@ -771,7 +771,8 @@ public:
     //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude
     Angle /*this is equal to alpha_notes: it is the azimuth of the vector tangent to the Route at reference_position*/Z, omega;
     //the length of the route
-    //the length of the Route can be either expressed as the length l, or as the product of the Speed v and the time t
+    //the length of the Route is expressed as the length l (if length_format_t_v == false), or as the product of the Speed v and the time t (if length_format_t_v == true)
+    bool length_format_t_v;
     Length l;
     Speed v;
     Chrono t;

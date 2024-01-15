@@ -505,7 +505,7 @@ bool MyApp::OnInit() {
     ////    r->read_from_stream<ifstream>(String(""), file.value, false, String(""));
     //    r->read_from_file_to(String("xx"), String("/Users/macbookpro/Desktop/route.dat"), String("R"), String(""));
     //    file.close(String(""));
-    //TEST TO READ A ROUTE ---
+    //TEST TO READ A ROUTE --- 
     
 	list_frame = new ListFrame("Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
     if(!(list_frame->abort)){

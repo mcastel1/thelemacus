@@ -291,16 +291,22 @@ bool MyApp::OnInit() {
     
     //
     Route* r;
-    ofstream outfile;
+    FileRW file;
+    string line;
+
 
     r = new Route(String("l"), Position(Angle(1.2), Angle(3.232)), Angle(2.2323), Length(232.32));
     r->length_format=String("time and speed");
     r->t.set(String(""), 2.42, String(""));
     r->v.set(String(""), 2.21, String(""));
-    outfile.open("/Users/macbookpro/Desktop/route.dat");
-    r->print(String("My new beautiful Route"), String("\t"), outfile);
+    file.set_name(String("/Users/macbookpro/Desktop/route.dat"));
+    file.open(String("out"), String(""));
     
-    outfile.close();
+    
+    r->print(String("My new beautiful Route"), String("\t"), *(file.value));
+//    getline(file, line);
+//    r->read_from_stream<ifstream>(String(""), &file, false, String(""));
+    file.close(String(""));
     //
     
 	unsigned int i;

@@ -289,26 +289,6 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
-    //
-    Route* r;
-    FileRW file;
-    string line;
-
-
-    r = new Route(String("l"), Position(Angle(1.2), Angle(3.232)), Angle(2.2323), Length(232.32));
-    r->length_format=String("time and speed");
-    r->t.set(String(""), 2.42, String(""));
-    r->v.set(String(""), 2.21, String(""));
-    file.set_name(String("/Users/macbookpro/Desktop/route.dat"));
-    file.open(String("out"), String(""));
-    
-    
-    r->print(String("My new beautiful Route"), String("\t"), *(file.value));
-//    getline(file, line);
-//    r->read_from_stream<ifstream>(String(""), &file, false, String(""));
-    file.close(String(""));
-    //
-    
 	unsigned int i;
 	Int n_chart_frames;
 	stringstream s;
@@ -505,6 +485,26 @@ bool MyApp::OnInit() {
     n_recent_projections.read_from_file_to(String("number of recent projections"), (wxGetApp().path_file_init), String("R"), String(""));
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
 
+    
+    //TEST TO WRITE A ROUTE----
+    Route* r;
+    FileRW file;
+    string line;
+
+
+    r = new Route(String("l"), Position(Angle(1.2), Angle(3.232)), Angle(2.2323), Length(232.32));
+    r->length_format=String("time and speed");
+    r->t.set(String(""), 2.42, String(""));
+    r->v.set(String(""), 2.21, String(""));
+    file.set_name(String("/Users/macbookpro/Desktop/route.dat"));
+    file.open(String("out"), String(""));
+    
+    
+    r->print(String("My new beautiful Route"), String("\t"), *(file.value));
+//    getline(file, line);
+//    r->read_from_stream<ifstream>(String(""), &file, false, String(""));
+    file.close(String(""));
+    //TEST TO WRITE A ROUTE ---
     
 	list_frame = new ListFrame("Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
     if(!(list_frame->abort)){

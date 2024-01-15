@@ -486,25 +486,26 @@ bool MyApp::OnInit() {
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
 
     
-    //TEST TO WRITE A ROUTE----
+    //TEST TO READ A ROUTE----
     Route* r;
-    FileRW file;
+//    FileR file;
     string line;
 
 
-    r = new Route(String("l"), Position(Angle(1.2), Angle(3.232)), Angle(2.2323), Length(232.32));
-    r->length_format=String("time and speed");
-    r->t.set(String(""), 2.42, String(""));
-    r->v.set(String(""), 2.21, String(""));
-    file.set_name(String("/Users/macbookpro/Desktop/route.dat"));
-    file.open(String("out"), String(""));
+    r = new Route(String("l"), Position(Angle(0), Angle(0)), Angle(0), Length(0));
+//    r->length_format=String("time and speed");
+//    r->t.set(String(""), 2.42, String(""));
+//    r->v.set(String(""), 2.21, String(""));
+//    file.set_name(String("/Users/macbookpro/Desktop/route.dat"));
+//    file.open(String(""));
     
     
-    r->print(String("My new beautiful Route"), String("\t"), *(file.value));
-//    getline(file, line);
-//    r->read_from_stream<ifstream>(String(""), &file, false, String(""));
-    file.close(String(""));
-    //TEST TO WRITE A ROUTE ---
+//    r->print(String("My new beautiful Route"), String("\t"), *(file.value));
+//    getline(*(file.value), line);
+//    r->read_from_stream<ifstream>(String(""), file.value, false, String(""));
+    r->read_from_file_to(String("xx"), String("/Users/macbookpro/Desktop/route.dat"), String("R"), String(""));
+//    file.close(String(""));
+    //TEST TO READ A ROUTE ---
     
 	list_frame = new ListFrame("Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
     if(!(list_frame->abort)){

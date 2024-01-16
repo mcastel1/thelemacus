@@ -18,6 +18,7 @@ OUTPUT_PATH='/Users/michele/Desktop'
 WX_VERSION='3.2.4'
 LIBTIFF_VERSION='4.6.0'
 BOOST_INCLUDE_DIRECTORY='/Applications/boost_1_83_0/'
+BOOST_LIB_DIRECTORY='/Applications/boost_1_83_0/stage/lib/'
 LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.40/lib/'
 LIBJPEG_LIB_DIRECTORY='/opt/homebrew/Cellar/jpeg/9f/lib/'
 LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/Cellar/pcre2/10.42/lib/'
@@ -36,7 +37,7 @@ mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 #compile Thelemacus
 /Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/bk-deps g++ `wx-config --cxxflags` -std=gnu++11 -mmacosx-version-min=10.10 -c -O3 -o temp.o -I/Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib/wx/include/osx_cocoa-unicode-3.2 -I/usr/local/include/gsl/  -I../../../include -D_FILE_OFFSET_BITS=64  -D__WXOSX_COCOA__      -I/Users/michele/Documents/sight_reduction_program/ -DWXUSINGDLL -I../../../samples/minimal/../../samples -Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy -Woverloaded-virtual -Wno-deprecated-declarations -g -O0 -I$BOOST_INCLUDE_DIRECTORY -I/usr/local/Cellar/pcre2/10.39/include -fno-common  -fvisibility=hidden -fvisibility-inlines-hidden -dynamic -fPIC -DPIC   $INPUT_PATH/main.cpp
-g++ `wx-config --cxxflags --libs`  -std=gnu++11 -mmacosx-version-min=12.0 -o $APP_NAME  temp.o    -L/Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib    -L$LIBPNG_LIB_DIRECTORY -L$LIBPCRE2_LIB_DIRECTORY -L$LIBJPEG_LIB_DIRECTORY -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL -lpng -lz -ljpeg -L/opt/homebrew/Cellar/libtiff/$LIBTIFF_VERSION/lib -ltiff -framework WebKit  -lgsl -lcblas  -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lz -framework Security -lpthread -liconv -lcurl -lpcre2-32  -lz -framework Security  -L/usr/local/bin  -lboost_filesystem -lboost_system
+g++ `wx-config --cxxflags --libs`  -std=gnu++11 -mmacosx-version-min=12.0 -o $APP_NAME  temp.o    -L/Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib    -L$LIBPNG_LIB_DIRECTORY -L$BOOST_LIB_DIRECTORY -L$LIBPCRE2_LIB_DIRECTORY -L$LIBJPEG_LIB_DIRECTORY -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL -lpng -lz -ljpeg -L/opt/homebrew/Cellar/libtiff/$LIBTIFF_VERSION/lib -ltiff -framework WebKit  -lgsl -lcblas  -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL -framework Security -lpthread -liconv -lcurl -lpcre2-32  -lz -framework Security  -L/usr/local/bin  -lboost_filesystem -lboost_system
 #compile wrapper
 # g++ wrapper.cpp -o $APP_NAME -I/usr/local/include/  -Wall -Wno-c++11-extensions --std=c++17  -O3 -L/usr/local/bin  -lboost_filesystem -lboost_system
 

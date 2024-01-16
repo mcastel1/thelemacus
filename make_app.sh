@@ -19,9 +19,9 @@ WX_VERSION='3.2.4'
 LIBTIFF_VERSION='4.6.0'
 BOOST_INCLUDE_DIRECTORY='/Applications/boost_1_83_0/'
 BOOST_LIB_DIRECTORY='/Applications/boost_1_83_0/stage/lib'
-LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.40/lib/'
-LIBJPEG_LIB_DIRECTORY='/opt/homebrew/Cellar/jpeg/9f/lib/'
-LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/Cellar/pcre2/10.42/lib/'
+LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.40/lib'
+LIBJPEG_LIB_DIRECTORY='/opt/homebrew/Cellar/jpeg/9f/lib'
+LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/Cellar/pcre2/10.42/lib'
 
 export PATH="/Applications/wxWidgets-"$WX_VERSION"/build-cocoa-debug:$PATH"
 

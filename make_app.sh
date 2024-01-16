@@ -20,6 +20,7 @@ LIBTIFF_VERSION='4.6.0'
 BOOST_INCLUDE_DIRECTORY='/Applications/boost_1_83_0/'
 LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.40/lib/'
 LIBJPEG_LIB_DIRECTORY='/opt/homebrew/Cellar/jpeg/9f/lib/'
+LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/Cellar/pcre2/10.42/lib/'
 
 export PATH="/Applications/wxWidgets-"$WX_VERSION"/build-cocoa-debug:$PATH"
 
@@ -35,7 +36,7 @@ mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 #compile Thelemacus
 /Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/bk-deps g++ `wx-config --cxxflags` -std=gnu++11 -mmacosx-version-min=10.10 -c -O3 -o temp.o -I/Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib/wx/include/osx_cocoa-unicode-3.2 -I/usr/local/include/gsl/  -I../../../include -D_FILE_OFFSET_BITS=64  -D__WXOSX_COCOA__      -I/Users/michele/Documents/sight_reduction_program/ -DWXUSINGDLL -I../../../samples/minimal/../../samples -Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy -Woverloaded-virtual -Wno-deprecated-declarations -g -O0 -I$BOOST_INCLUDE_DIRECTORY -I/usr/local/Cellar/pcre2/10.39/include -fno-common  -fvisibility=hidden -fvisibility-inlines-hidden -dynamic -fPIC -DPIC   $INPUT_PATH/main.cpp
-g++ `wx-config --cxxflags --libs`  -std=gnu++11 -mmacosx-version-min=12.0 -o $APP_NAME  temp.o    -L/Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib    -L$LIBPNG_LIB_DIRECTORY -L$LIBJPEG_LIB_DIRECTORY -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lwx_osx_cocoau_core-3.2  -lwx_baseu-3.2        -lpng -lz -ljpeg -L/opt/homebrew/Cellar/libtiff/$LIBTIFF_VERSION/lib -ltiff -framework WebKit  -lgsl -lcblas  -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lz -framework Security -lpthread -liconv -lcurl -lpcre2-32  -lz -framework Security -lpthread -liconv -lcurl -L/usr/local/bin  -lboost_filesystem -lboost_system
+g++ `wx-config --cxxflags --libs`  -std=gnu++11 -mmacosx-version-min=12.0 -o $APP_NAME  temp.o    -L/Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib    -L$LIBPNG_LIB_DIRECTORY -L$LIBPCRE2_LIB_DIRECTORY -L$LIBJPEG_LIB_DIRECTORY -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lwx_osx_cocoau_core-3.2  -lwx_baseu-3.2        -lpng -lz -ljpeg -L/opt/homebrew/Cellar/libtiff/$LIBTIFF_VERSION/lib -ltiff -framework WebKit  -lgsl -lcblas  -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL  -lz -framework Security -lpthread -liconv -lcurl -lpcre2-32  -lz -framework Security -lpthread -liconv -lcurl -L/usr/local/bin  -lboost_filesystem -lboost_system
 #compile wrapper
 # g++ wrapper.cpp -o $APP_NAME -I/usr/local/include/  -Wall -Wno-c++11-extensions --std=c++17  -O3 -L/usr/local/bin  -lboost_filesystem -lboost_system
 
@@ -58,7 +59,7 @@ install_name_tool -change $LIBJPEG_LIB_DIRECTORY/libjpeg.9.dylib @rpath/libjpeg.
 install_name_tool -change /usr/local/lib/libtiff.5.dylib @rpath/libtiff.5.dylib $APP_NAME
 install_name_tool -change /usr/lib/libiconv.2.dylib @rpath/libiconv.2.dylib $APP_NAME
 install_name_tool -change /usr/lib/libcurl.4.dylib @rpath/libcurl.4.dylib $APP_NAME
-install_name_tool -change /usr/local/lib/libpcre2-32.0.dylib @rpath/libpcre2-32.0.dylib $APP_NAME
+install_name_tool -change $LIBPCRE2_LIB_DIRECTORY/libpcre2-32.0.dylib @rpath/libpcre2-32.0.dylib $APP_NAME
 install_name_tool -change /usr/lib/libSystem.B.dylib @rpath/libSystem.B.dylib $APP_NAME
 install_name_tool -change /usr/local/opt/boost/lib/libboost_filesystem.dylib @rpath/libboost_filesystem.dylib $APP_NAME
 install_name_tool -change /usr/local/opt/boost/lib/libboost_system.dylib @rpath/libboost_system.dylib $APP_NAME
@@ -76,7 +77,7 @@ cp -r $INPUT_PATH/Contents/Resources/Images/* $OUTPUT_PATH/$APP_NAME.app/Content
 cp /usr/lib/dyld  /usr/local/opt/boost/lib/libboost_filesystem.dylib  /usr/local/opt/boost/lib/libboost_system.dylib  /usr/lib/libc++.1.dylib  /usr/lib/libSystem.B.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 #libraries for main.o (removed /usr/lib/libc++.1.dylib /usr/lib/libSystem.B.dylib /usr/lib/dyld /usr/local/opt/boost/lib/libboost_filesystem.dylib   /usr/local/opt/boost/lib/libboost_system.dylib because they are alreday in the libraries for $APP_NAME)
-cp  /System/Library/Frameworks/IOKit.framework/Versions/A/IOKit  /System/Library/Frameworks/Carbon.framework/Versions/A/Carbon  /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa  /System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore  /System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox     /System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL  /usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib   /usr/local/lib/libwx_osx_cocoau_html-3.1.dylib   /usr/local/lib/libwx_osx_cocoau_qa-3.1.dylib   /usr/local/lib/libwx_osx_cocoau_core-3.1.dylib   /usr/local/lib/libwx_baseu_xml-3.1.dylib   /usr/local/lib/libwx_baseu_net-3.1.dylib   /usr/local/lib/libwx_baseu-3.1.dylib   /Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib/libwx_osx_cocoau_core-3.2.0.2.1.dylib   /Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib/libwx_baseu-3.2.0.2.1.dylib   $LIBPNG_LIB_DIRECTORY/libpng16.16.dylib   /usr/lib/libz.1.dylib   $LIBJPEG_LIB_DIRECTORY/libjpeg.9.dylib   /usr/local/lib/libtiff.5.dylib   /System/Library/Frameworks/WebKit.framework/Versions/A/WebKit   /usr/local/lib/libgsl.27.dylib   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib   /System/Library/Frameworks/Security.framework/Versions/A/Security   /usr/lib/libiconv.2.dylib   /usr/lib/libcurl.4.dylib   /usr/local/lib/libpcre2-32.0.dylib  /usr/local/lib/libwx_osx_cocoau_html-3.1.5.0.0.dylib /usr/local/lib/libwx_osx_cocoau_core-3.1.5.0.0.dylib /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib /usr/local/lib/libwx_baseu_xml-3.1.5.0.0.dylib /usr/local/opt/xz/lib/liblzma.5.dylib  /usr/local/opt/libpng/lib/libpng16.16.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
+cp  /System/Library/Frameworks/IOKit.framework/Versions/A/IOKit  /System/Library/Frameworks/Carbon.framework/Versions/A/Carbon  /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa  /System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore  /System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox     /System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL  /usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib   /usr/local/lib/libwx_osx_cocoau_html-3.1.dylib   /usr/local/lib/libwx_osx_cocoau_qa-3.1.dylib   /usr/local/lib/libwx_osx_cocoau_core-3.1.dylib   /usr/local/lib/libwx_baseu_xml-3.1.dylib   /usr/local/lib/libwx_baseu_net-3.1.dylib   /usr/local/lib/libwx_baseu-3.1.dylib   /Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib/libwx_osx_cocoau_core-3.2.0.2.1.dylib   /Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib/libwx_baseu-3.2.0.2.1.dylib   $LIBPNG_LIB_DIRECTORY/libpng16.16.dylib   /usr/lib/libz.1.dylib   $LIBJPEG_LIB_DIRECTORY/libjpeg.9.dylib   /usr/local/lib/libtiff.5.dylib   /System/Library/Frameworks/WebKit.framework/Versions/A/WebKit   /usr/local/lib/libgsl.27.dylib   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib   /System/Library/Frameworks/Security.framework/Versions/A/Security   /usr/lib/libiconv.2.dylib   /usr/lib/libcurl.4.dylib   $LIBPCRE2_LIB_DIRECTORY/libpcre2-32.0.dylib  /usr/local/lib/libwx_osx_cocoau_html-3.1.5.0.0.dylib /usr/local/lib/libwx_osx_cocoau_core-3.1.5.0.0.dylib /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib /usr/local/lib/libwx_baseu-3.1.5.0.0.dylib /usr/local/lib/libwx_baseu_xml-3.1.5.0.0.dylib /usr/local/opt/xz/lib/liblzma.5.dylib  /usr/local/opt/libpng/lib/libpng16.16.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 
 #libraries called by libwx_osx_cocoau_xrc-3.1.dylib
@@ -170,7 +171,7 @@ install_name_tool -change /usr/local/opt/xz/lib/liblzma.5.dylib @rpath/liblzma.5
 
 #libraries called by libwx_baseu-3.2.0.2.1.dylib
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu-3.2.0.2.1.dylib
-install_name_tool -change /usr/local/lib/libpcre2-32.0.dylib @rpath/libpcre2-32.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu-3.2.0.2.1.dylib
+install_name_tool -change $LIBPCRE2_LIB_DIRECTORY/libpcre2-32.0.dylib @rpath/libpcre2-32.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_baseu-3.2.0.2.1.dylib
 
 
 #libraries called by libwx_osx_cocoau_core-3.2.0.2.1.dylib
@@ -178,7 +179,7 @@ install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PA
 install_name_tool -change $LIBPNG_LIB_DIRECTORY/libpng16.16.dylib @rpath/libpng16.16.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_core-3.2.0.2.1.dylib
 install_name_tool -change $LIBJPEG_LIB_DIRECTORY/libjpeg.9.dylib @rpath/libjpeg.9.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_core-3.2.0.2.1.dylib
 install_name_tool -change /usr/local/lib/libtiff.5.dylib @rpath/libtiff.5.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_core-3.2.0.2.1.dylib
-install_name_tool -change /usr/local/lib/libpcre2-32.0.dylib @rpath/libpcre2-32.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_core-3.2.0.2.1.dylib
+install_name_tool -change $LIBPCRE2_LIB_DIRECTORY/libpcre2-32.0.dylib @rpath/libpcre2-32.0.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_core-3.2.0.2.1.dylib
 install_name_tool -change /Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib/libwx_baseu-3.2.0.2.1.dylib @rpath/libwx_baseu-3.2.0.2.1.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_core-3.2.0.2.1.dylib
 
 

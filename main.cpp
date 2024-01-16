@@ -28,7 +28,7 @@
      1. Download and install boost_1_83_0
      2. Download and install gsl (gnu scientifc library)
      3. Download and install wxWidgets
-     3. Open  /Applications/wxWidgets-XXX/samples/minimal/minimal_cocoa.xcodeproj/
+     4. Open  /Applications/wxWidgets-XXX/samples/minimal/minimal_cocoa.xcodeproj/
         * remove minimal.cpp and insert main.cpp, lib.cpp, main.h, lib.h and constants.h in the project.
         * select both app-static and app-dynamic -> add /usr/local/include/gsl/ /usr/local/include/ /Applications/boost_1_83_0/ $(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include/ $(WXROOT)/include/ to 'User header search path' (you need to split this in multiple lines when you add)
         * select both app-static and app-dynamic -> add -lgsl -lcblas -lboost_filesystem -lboost_system to 'Other linker flags' (you need to split this in multiple lines when you add)
@@ -36,6 +36,7 @@
         * select both app-static and app-dynamic -> add '/usr/local/lib' to Library Search Paths
         * select both app-static and app-dynamic  set 'Always search user paths (deprecated)' to 'Yes'
         * set Product -> scheme -> dynamic
+      5. Add all necessary paths by adding, say, 'export PATH="/Applications/wxWidgets-3.2.4/build-cocoa-debug:$PATH"' to ~/.zprofile
  - to set up everything on Windows 10:
      0. With Virtual Box, set up a partition with Windows 10. In the partition, set 2 cores, 13387 MB of base memory, set 'Shared Clipboard' to 'Bidirectional', install 'Guest Additions' and share the folder, say, sight_reduction_program, containing main.cpp, main.h, lib.cpp, lib.h, constants.h etc. Set up 100 GB of disk on the partition, and set it to pre-allocated.
      1. Install WinZip

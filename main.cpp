@@ -343,10 +343,7 @@ bool MyApp::OnInit() {
     
     settings = new wxSystemSettings();
     timer = new wxTimer();
-    
-    wxImage::AddHandler(new wxPNGHandler);
-    //    wxImage::AddHandler(new wxBMPHandler);
-    
+        
     dummy_frame = new wxFrame();
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     display.GetFromWindow(dummy_frame);

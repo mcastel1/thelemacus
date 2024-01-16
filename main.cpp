@@ -24,21 +24,32 @@
  - on WIN32, to recognize what character key has been pressed, do (event.GetUnicodeKey()) and check if it is equal to, sai, 'A', not 'a'
  - on WIN32, if you press control key on runtime from within Visual Studio, it will not be detected as WXK_CONTROL, while if you run the exe file from system resources it does.
  - on WIN32, keep the output directory as $(wxIntRootDir) : if you set it to Z:\ the program will not run
+ - to setup everything on Mac OS (incomplete):
+     1. Download and install boost_1_83_0
+     2. Download and install gsl
+     3. Download and install wxWidgets
+     3. Open  /Applications/wxWidgets-XXX/samples/minimal/minimal_cocoa.xcodeproj/
+        * remove minimal.cpp and insert main.cpp, lib.cpp, main.h, lib.h and constants.h in the project.
+        * add /usr/local/include/gsl/ /usr/local/include/ /Applications/boost_1_83_0/ to 'User header search path'
+        * add -lgsl, -lcblas, -libboost_filesystem, -libboost_system to 'Other linker flags'
+        * add '/Applications/boost_1_83_0/stage/lib/' to 'Runpath search paths'
+        * set 'Always search user paths (deprecated)' to 'Yes'
+        * set Product -> scheme -> dynamic
  - to set up everything on Windows 10:
- 0. With Virtual Box, set up a partition with Windows 10. In the partition, set 2 cores, 13387 MB of base memory, set 'Shared Clipboard' to 'Bidirectional', install 'Guest Additions' and share the folder, say, sight_reduction_program, containing main.cpp, main.h, lib.cpp, lib.h, constants.h etc. Set up 100 GB of disk on the partition, and set it to pre-allocated.
- 1. Install WinZip
- 2. Istall MinGW : download mingw-get-setup from https://sourceforge.net/projects/mingw/
- 3. Install Visual Studio: download VisualStudioSetup from https://visualstudio.microsoft.com/downloads/
- 4. Istall wxWidgets: download wxMSW-3.2.4-Setup.exe from https://wxwidgets.org/downloads/ and install it in, say,  C:\wxWidgets-3.2.4_debug\
- 5. Open  C:\wxWidgets-3.2.4_debug\build\msw\wx_vc17.sln with Visual studio, set everywhere that the mode is multi-threaded debug (not dll) and build (you may get an error the first time you build, just build multiple times and the error will disappear)
- 6. Open   C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln -> set the mode to Multi Threaded Debug everywhere, replaced all existing files from Source files with main.h main.cpp lib.h constants.h init.txt, replace all existing Resource files with resource_file_winsows.rc
- 7. Install gsl: download gnu-gsl-for-windows-master.zip from https://github.com/ahmadyan/gnu-gsl-for-windows/tree/master/build.vc11  -> extract it in C:\gnu-gsl-for-windows-master -> open  C:\gnu-gsl-for-windows-master\build.vc11\gsl.lib.sln with Visual Studio, set everything to Multi-Threaded Debug -> Build
- 8. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> Add C:\gnu-gsl-for-windows-master\lib\x64\Debug\gsl.lib and  C:\gnu-gsl-for-windows-master\lib\x64\Debug\cblas.lib to  -> project  -> minimal properties -> configuration properties -> linker -> input -> additional dependencies
- 9. Install boost library : download boost_1_83_0.zip (not 84 or later versions!) from https://sourceforge.net/projects/boost/files/boost/1.83.0/boost_1_83_0.zip/download?use_mirror=altushost-swe&use_mirror=altushost-swe&r=https%3A%2F%2Fsourceforge.net%2Fp%2Fboost%2Factivity%2F%3Fpage%3D0%26limit%3D100 -> extract boost_1_83_0.zip to, say,  C:\boost_1_83_0 -> Open command prompt -> cd into  C:\boost_1_83_0 ->  do 'bootstrap' and 'b2 variant=debug link=static runtime-link=static runtime-debugging=on'
- 10. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to  project -> configuration properties -> C/C++ -> additional include directories, add C:\boost_1_83_0 , C:\gnu-gsl-for-windows-master and C:\gnu-gsl-for-windows-master\gsl
- 11. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio-> go to   project ->  minimal properties -> linker -> general -> additional library directories, add  C:\boost_1_83_0\stage\lib
- 12. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to project -> configuration properties -> general -> C++ language standard  and set ISO C++20 Standard (/std:c++20)
- 13. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to project -> minimal properties -> configuration properties -> general -> set target name to, say, Thelemacus_debug
+     0. With Virtual Box, set up a partition with Windows 10. In the partition, set 2 cores, 13387 MB of base memory, set 'Shared Clipboard' to 'Bidirectional', install 'Guest Additions' and share the folder, say, sight_reduction_program, containing main.cpp, main.h, lib.cpp, lib.h, constants.h etc. Set up 100 GB of disk on the partition, and set it to pre-allocated.
+     1. Install WinZip
+     2. Istall MinGW : download mingw-get-setup from https://sourceforge.net/projects/mingw/
+     3. Install Visual Studio: download VisualStudioSetup from https://visualstudio.microsoft.com/downloads/
+     4. Istall wxWidgets: download wxMSW-3.2.4-Setup.exe from https://wxwidgets.org/downloads/ and install it in, say,  C:\wxWidgets-3.2.4_debug\
+     5. Open  C:\wxWidgets-3.2.4_debug\build\msw\wx_vc17.sln with Visual studio, set everywhere that the mode is multi-threaded debug (not dll) and build (you may get an error the first time you build, just build multiple times and the error will disappear)
+     6. Open   C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln -> set the mode to Multi Threaded Debug everywhere, replaced all existing files from Source files with main.h main.cpp lib.h constants.h init.txt, replace all existing Resource files with resource_file_winsows.rc
+     7. Install gsl: download gnu-gsl-for-windows-master.zip from https://github.com/ahmadyan/gnu-gsl-for-windows/tree/master/build.vc11  -> extract it in C:\gnu-gsl-for-windows-master -> open  C:\gnu-gsl-for-windows-master\build.vc11\gsl.lib.sln with Visual Studio, set everything to Multi-Threaded Debug -> Build
+     8. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> Add C:\gnu-gsl-for-windows-master\lib\x64\Debug\gsl.lib and  C:\gnu-gsl-for-windows-master\lib\x64\Debug\cblas.lib to  -> project  -> minimal properties -> configuration properties -> linker -> input -> additional dependencies
+     9. Install boost library : download boost_1_83_0.zip (not 84 or later versions!) from https://sourceforge.net/projects/boost/files/boost/1.83.0/boost_1_83_0.zip/download?use_mirror=altushost-swe&use_mirror=altushost-swe&r=https%3A%2F%2Fsourceforge.net%2Fp%2Fboost%2Factivity%2F%3Fpage%3D0%26limit%3D100 -> extract boost_1_83_0.zip to, say,  C:\boost_1_83_0 -> Open command prompt -> cd into  C:\boost_1_83_0 ->  do 'bootstrap' and 'b2 variant=debug link=static runtime-link=static runtime-debugging=on'
+     10. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to  project -> configuration properties -> C/C++ -> additional include directories, add C:\boost_1_83_0 , C:\gnu-gsl-for-windows-master and C:\gnu-gsl-for-windows-master\gsl
+     11. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio-> go to   project ->  minimal properties -> linker -> general -> additional library directories, add  C:\boost_1_83_0\stage\lib
+     12. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to project -> configuration properties -> general -> C++ language standard  and set ISO C++20 Standard (/std:c++20)
+     13. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to project -> minimal properties -> configuration properties -> general -> set target name to, say, Thelemacus_debug
  - on MSW, if you allocate 13387 MB of Base Memory, it runs by clicking on the .exe and with coastlines = y
  - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging
  - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus

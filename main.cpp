@@ -78,6 +78,7 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
+ - allow for messages with \n QuestionFrame and MessageFrame
  - when you transport something -> existing Route -> press cancel bbecause you changed your mind -> something is transported anyway
  for MSW:
  - esc key does not work in SightFrame and other *Frames when one does not FOCUS on a control
@@ -492,7 +493,7 @@ bool MyApp::OnInit() {
         disclaimer = new QuestionFrame< ShowAll , CloseFrame<ListFrame> >(NULL, show_all, String("Yes, I know what I am doing."), (list_frame->close), String("No, I will pass."),
                                                                           "Welcome to Thelemacus!",
                                                                           //                                                                          "On December 16, 1719, Captain J. Cook perceived the first Australian aborigens from HMS Endeavour, off the coast of Perth.\n He was on a mission commissioned by King John III, designed to discover new commercial routes, and new worlds.\n His voyage had been made possible by the novel, state-of-the art astronomical positioning methods\n based on the marine chronometer built by J. Harrison, which was on board the Endeavour. \nThe reliability of the positioning method allowed the british realm to trace and map the coasts of new, unknonw lands, \nand paved the way to a new way to sail which lasted until the invention of GPS.\n With this application, you will bring back to life astronomical positioning methods, in a way that no other existing application allows for, and entering in a novel historical path. "
-                                                                          "This is the state-of-the art application for celestial navigation, I hope you will enjoy it! \n Remember that this software comes with no warranty, use at your own risk!\n Do you want to proceed? \n\n Fair winds, following seas ..."
+                                                                          "This is the state-of-the art application for celestial navigation, I hope you will enjoy it! \t Remember that this software comes with no warranty, use at your own risk!\t Do you want to proceed? \t Fair winds, following seas ..."
                                                                           ,
                                                                           
                                                                           wxGetApp().path_file_warning_icon,

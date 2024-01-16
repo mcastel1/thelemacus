@@ -26,7 +26,7 @@
  - on WIN32, keep the output directory as $(wxIntRootDir) : if you set it to Z:\ the program will not run
  - to setup everything on Mac OS (incomplete):
      1. Download and install boost_1_83_0
-     2. Download and install gsl
+     2. Download and install gsl (gnu scientifc library)
      3. Download and install wxWidgets
      3. Open  /Applications/wxWidgets-XXX/samples/minimal/minimal_cocoa.xcodeproj/
         * remove minimal.cpp and insert main.cpp, lib.cpp, main.h, lib.h and constants.h in the project.

@@ -1,7 +1,9 @@
 /*
  
- g++ main.cpp -o main.o `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -lboost_filesystem -lboost_system -L/Applications/ChartDirector/lib  -Wall -Wno-c++11-extensions --std=c++17  -O3
  
+ - compile on APPLE:
+ g++ main.cpp -o main.o `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -I/Applications/boost_1_83_0 -L/Applications/boost_1_83_0/stage/lib/ -lboost_filesystem -lboost_system   -Wall -Wno-c++11-extensions --std=c++17  -O3 -rpath /Applications/boost_1_83_0/stage/lib
+
  To run on WIN32, the resource file is resource_file_windows.rc
  
  */

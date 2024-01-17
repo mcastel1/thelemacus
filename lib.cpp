@@ -11105,10 +11105,8 @@ inline void DrawPanel::GeoToScreen(Position q, wxPoint* p) {
 // If the projection of q falls within the plot area, it writes its projection into p (if p!=NULL) and returns true. If not, it returns false and, if write = true, it writes its projection in p
 inline bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
     
-    clock_t t_start, t_end;
-
-    t_start = clock();
-
+//    clock_t t_start, t_end;
+//    t_start = clock();
 
 	Projection temp;
 	bool check_x, check, out;
@@ -11173,9 +11171,8 @@ inline bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
 
 	}
     
-    t_end = clock();
-    double t_tot= ((double)(t_end-t_start))/CLOCKS_PER_SEC;
-    
+//    t_end = clock();
+//    double t_tot= ((double)(t_end-t_start))/CLOCKS_PER_SEC;
 //    cout << "t_mer " << t_tot << "s\n";
     
     return out;

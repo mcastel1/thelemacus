@@ -40,6 +40,8 @@
         * set Product -> scheme -> dynamic
       5. Add all necessary paths by adding, say, 'export PATH="/Applications/wxWidgets-3.2.4/build-cocoa-debug:$PATH"' to ~/.zprofile
       6. To make breakpoints in included files to work in Xcode, create file  ~/.lldbinit and write in it 'settings set target.inline-breakpoint-strategy always'
+      7. To build the app with make_app.sh:
+        * download the libpng library from https://sourceforge.net/projects/libpng/
  - to set up everything on Windows 10:
      0. With Virtual Box, set up a partition with Windows 10. In the partition, set 2 cores, 13387 MB of base memory, set 'Shared Clipboard' to 'Bidirectional', install 'Guest Additions' and share the folder, say, sight_reduction_program, containing main.cpp, main.h, lib.cpp, lib.h, constants.h etc. Set up 100 GB of disk on the partition, and set it to pre-allocated.
      1. Install WinZip
@@ -324,7 +326,7 @@ bool MyApp::OnInit() {
     cout << "You have Apple Operating System" << "\n";
     
     //to build the app on mac
-            where_am_I(String(""));
+    where_am_I(String(""));
     //to develop the app with Xcode on OSX
     //new Mac
 //    root_directory = String("/Users/michele/Documents/sight_reduction_program/");

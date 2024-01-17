@@ -7826,9 +7826,9 @@ void ChartFrame::GetCoastLineData_3D(void) {
     t_end = clock();
     double t_tot= ((double)(t_end-t_start))/CLOCKS_PER_SEC;
     
-    cout << "t_tot " << t_tot << "s.";
-    cout << "T_if " << T_if << "s.";
-    cout << "T_check " << T_check << "s.";
+    cout << "t_tot " << t_tot << "s\n";
+    cout << "T_if " << T_if << "s\n";
+    cout << "T_check " << T_check << "s\n";
     cout << "\n";
     
     gsl_vector_free(r);

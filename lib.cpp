@@ -7703,11 +7703,11 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 	p_coastline_draw.clear();
     
-    clock_t t_start, t_end, ta, tb;
-    double T_I, T_II;
+    clock_t t_start, t_end/*, ta, tb*/;
+//    double T_I, T_II;
     
-    T_I=0.0;
-    T_II=0.0;
+//    T_I=0.0;
+//    T_II=0.0;
     
     t_start = clock();
 
@@ -7716,7 +7716,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 		for (j = j_min; j < j_max; j++) {
             
-            ta =clock();
+//            ta =clock();
 
             
 
@@ -7779,10 +7779,10 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 			}
             
-            tb=clock();
-            T_I+=tb-ta;
-            
-            ta=clock();
+//            tb=clock();
+//            T_I+=tb-ta;
+//            
+//            ta=clock();
 
 
 			if (check) {
@@ -7832,8 +7832,8 @@ void ChartFrame::GetCoastLineData_3D(void) {
           
 			}
             
-            tb=clock();
-            T_II+=tb-ta;
+//            tb=clock();
+//            T_II+=tb-ta;
      
           
 
@@ -7842,11 +7842,11 @@ void ChartFrame::GetCoastLineData_3D(void) {
     }
     
     t_end = clock();
-    double t_tot= t_end-t_start;
+    double t_tot = t_end-t_start;
     
-    cout << "t_tot " << t_tot << "s\n";
-    cout << "T_I " << T_I << "s\n";
-    cout << "T_II " << T_II << "s\n";
+    cout << "t_tot " << t_tot/CLOCKS_PER_SEC << " s\n";
+//    cout << "T_I " << T_I/CLOCKS_PER_SEC << "s\n";
+//    cout << "T_II " << T_II/CLOCKS_PER_SEC << "s\n";
     
     gsl_vector_free(r);
     gsl_vector_free(s);
@@ -11058,13 +11058,14 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
 		if (q != NULL) {
             
+            double temp;
      
             //rotate r by rotation, and write the result in rp!
             gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, r, 0.0, rp);
 
-
-			(q->x) = ((d.value) * gsl_vector_get(rp, 0)) / ((d.value) + 1.0 + gsl_vector_get(rp, 1));
-			(q->y) = ((d.value) * gsl_vector_get(rp, 2)) / ((d.value) + 1.0 + gsl_vector_get(rp, 1));
+            temp = (d.value) / ((d.value) + 1.0 + gsl_vector_get(rp, 1));
+			(q->x) = gsl_vector_get(rp, 0) * temp;
+			(q->y) = gsl_vector_get(rp, 2) * temp;
 
 		}
         

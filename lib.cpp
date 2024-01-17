@@ -7828,7 +7828,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
     
     cout << "t_tot " << t_tot << "s.";
     cout << "T_if " << T_if << "s.";
-    cout << "T_check " << t_check << "s.";
+    cout << "T_check " << T_check << "s.";
     cout << "\n";
     
     gsl_vector_free(r);

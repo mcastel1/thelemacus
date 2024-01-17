@@ -106,15 +106,15 @@ install_name_tool -change $LIBTIFF_LIB_DIRECTORY/lib/libtiff.6.dylib @rpath/libt
 install_name_tool -change /usr/local/opt/xz/lib/liblzma.5.dylib @rpath/liblzma.5.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_html-3.2.dylib
 
 
-#libraries called by libwx_osx_cocoau_qa-3.2.dylib
-install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.dylib
-install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_core-3.2.0.2.2.dylib @rpath/libwx_osx_cocoau_core-3.2.0.2.2.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.dylib
-install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_baseu_xml-3.2.0.2.2.dylib @rpath/libwx_baseu_xml-3.2.0.2.2.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.dylib
-install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_baseu-3.2.0.2.2.dylib @rpath/libwx_baseu-3.2.0.2.2.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.dylib
-install_name_tool -change /usr/local/opt/libpng/lib/libpng16.16.dylib @rpath/libpng16.16.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.dylib
-install_name_tool -change /usr/local/opt/jpeg/lib/libjpeg.9.dylib @rpath/libjpeg.9.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.dylib
-install_name_tool -change $LIBTIFF_LIB_DIRECTORY/lib/libtiff.6.dylib @rpath/libtiff.6.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.dylib
-install_name_tool -change /usr/local/opt/xz/lib/liblzma.5.dylib @rpath/liblzma.5.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.dylib
+#libraries called by libwx_osx_cocoau_qa-3.2.0.2.2.dylib
+install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.0.2.2.dylib
+install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_core-3.2.0.2.2.dylib @rpath/libwx_osx_cocoau_core-3.2.0.2.2.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.0.2.2.dylib
+install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_baseu_xml-3.2.0.2.2.dylib @rpath/libwx_baseu_xml-3.2.0.2.2.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.0.2.2.dylib
+install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_baseu-3.2.0.2.2.dylib @rpath/libwx_baseu-3.2.0.2.2.dylib  $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.0.2.2.dylib
+install_name_tool -change /usr/local/opt/libpng/lib/libpng16.16.dylib @rpath/libpng16.16.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.0.2.2.dylib
+install_name_tool -change /usr/local/opt/jpeg/lib/libjpeg.9.dylib @rpath/libjpeg.9.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.0.2.2.dylib
+install_name_tool -change $LIBTIFF_LIB_DIRECTORY/lib/libtiff.6.dylib @rpath/libtiff.6.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.0.2.2.dylib
+install_name_tool -change /usr/local/opt/xz/lib/liblzma.5.dylib @rpath/liblzma.5.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.0.2.2.dylib
 
 #libraries called by libwx_osx_cocoau_core-3.2.0.2.2.dylib
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries/libwx_osx_cocoau_core-3.2.0.2.2.dylib
@@ -191,7 +191,7 @@ install_name_tool -change /Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/
 
 
 
-#cp $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_xrc-3.1* $WXWIDGETS_LIB_DIRECTORY/libwx_baseu* $WXWIDGETS_LIB_DIRECTORY/libpng* /usr/local/lib/libjpeg*  $LIBTIFF_DIRECTORY/*.* /usr/local/lib/libgsl* /usr/local/lib/libboost_filesystem* /usr/local/lib/libboost_system*  $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_html-3.2.dylib $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_qa-3.2.dylib  $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_core-3.2.0.2.2.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
+#cp $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_xrc-3.1* $WXWIDGETS_LIB_DIRECTORY/libwx_baseu* $WXWIDGETS_LIB_DIRECTORY/libpng* /usr/local/lib/libjpeg*  $LIBTIFF_DIRECTORY/*.* /usr/local/lib/libgsl* /usr/local/lib/libboost_filesystem* /usr/local/lib/libboost_system*  $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_html-3.2.dylib $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_qa-3.2.0.2.2.dylib  $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_core-3.2.0.2.2.dylib $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_EXECUTABLE_NAME}/$APP_NAME/" \

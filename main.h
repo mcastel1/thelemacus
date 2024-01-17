@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <list>
 #include <stdio.h>
+#include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 #ifdef _WIN32
 #include <Windows.h>
 #endif

@@ -7652,6 +7652,8 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 
 
 void ChartFrame::GetCoastLineData_3D(void) {
+    
+    clock_t t1, t2;
 
 	unsigned long every, l, n, n_points_grid;
 	//integer values of min/max lat/lon to be extractd from p_coastline
@@ -7701,6 +7703,9 @@ void ChartFrame::GetCoastLineData_3D(void) {
 	n_points_grid = (i_max - i_min + 1) * (j_max - j_min + 1);
 
 	p_coastline_draw.clear();
+    
+    t1 = clock();
+
 
 	for (i = i_min; i < i_max; i++) {
 
@@ -7806,6 +7811,12 @@ void ChartFrame::GetCoastLineData_3D(void) {
 	gsl_vector_free(r);
 	gsl_vector_free(s);
 
+    t2 = clock();
+    double t21 = ((double)(t2-t1))/CLOCKS_PER_SEC;
+    
+    cout << "It took " << ((double)(t2-t1))/CLOCKS_PER_SEC;
+    cout << "\n";
+    
 }
 
 

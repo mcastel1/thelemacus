@@ -10842,7 +10842,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
 
 
 // the screen position p lies within the DrawPanel *this, it returns true and write it into the position q with respect to the DrawPanel *this. Otherwise, it returns alse, and does nothing with q
-bool DrawPanel::ScreenToDrawPanel(wxPoint p, wxPoint* q) {
+inline bool DrawPanel::ScreenToDrawPanel(wxPoint p, wxPoint* q) {
 
 	bool check;
 
@@ -10881,7 +10881,7 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position* q) {
 }
 
 //converts the point p in the DrawPanel coordinates to the relative geographic position q, see specifics of ScreenToGeo_Mercator and ScreenToGeo_3D
-bool DrawPanel::DrawPanelToGeo(wxPoint p, Position* q) {
+inline bool DrawPanel::DrawPanelToGeo(wxPoint p, Position* q) {
 
 	//computes the poisition of the DrawPanel *this which will be needed in the following
 	position_draw_panel = (this->GetScreenPosition());
@@ -10893,7 +10893,7 @@ bool DrawPanel::DrawPanelToGeo(wxPoint p, Position* q) {
 
 
 //converts the point p on the screen with a 3D projection, to the relative geographic position q (if q!=NULL). It returns true if p lies within the circle denoting the boundaries of the earth, and false otherwise. If false is returned, q is the geographic position on the earth defined as follows: it lies on the intersection between the Earth and the x'z' plane and on the line between the center of the Earth and the vector rp corresponding to p (such vector rp lies on the x'z' plane)
-bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position* q) {
+inline bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position* q) {
 
 	Projection temp;
 
@@ -10950,7 +10950,7 @@ bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position* q) {
 }
 
 //converts the point p on the screen (which is supposed to lie in the plot area), to the  Mercator projection q of the relative geographic position, by writing into q only if q!=NULL. It returns true/false if q lies within the boundaris x_min .. y_max
-bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q) {
+inline bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q) {
 
 	Projection temp;
 	bool check_x;
@@ -10987,7 +10987,7 @@ bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q) {
 
 
 //converts the point p on the screen (which is supposed to lie in the plot area), to the  3D projection (x,y), which is written in q if q!=NULL. If p lies within /outside the circle of the earth, it returns true/false.
-bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q) {
+inline bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q) {
 
 	Projection temp;
 	Double d;
@@ -11087,7 +11087,7 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
 
 //this function converts the geographic position p into the screen position p
-void DrawPanel::GeoToScreen(Position q, wxPoint* p) {
+inline void DrawPanel::GeoToScreen(Position q, wxPoint* p) {
 
 	//updates the position of the draw pane this
 	position_draw_panel = (this->GetScreenPosition());
@@ -11102,7 +11102,7 @@ void DrawPanel::GeoToScreen(Position q, wxPoint* p) {
 
 
 // If the projection of q falls within the plot area, it writes its projection into p (if p!=NULL) and returns true. If not, it returns false and, if write = true, it writes its projection in p
-bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
+inline bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
     
     clock_t t_start, t_end;
 
@@ -11183,7 +11183,7 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
 }
 
 //this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p.
-bool DrawPanel::GeoToDrawPanel(Position q, wxPoint* p, bool write) {
+inline bool DrawPanel::GeoToDrawPanel(Position q, wxPoint* p, bool write) {
 
 	Projection temp;
 	bool check;
@@ -11209,7 +11209,7 @@ bool DrawPanel::GeoToDrawPanel(Position q, wxPoint* p, bool write) {
 }
 
 //this function converts the Mercator projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
-void  DrawPanel::ProjectionToDrawPanel_Mercator(Projection q, wxPoint* p) {
+inline void  DrawPanel::ProjectionToDrawPanel_Mercator(Projection q, wxPoint* p) {
 
 	(p->x) = (position_plot_area.x) + ((q.x) - x_min) / x_span() * (size_plot_area.GetWidth());
 	(p->y) = (position_plot_area.y) + (size_plot_area.GetHeight()) - (((q.y) - y_min) / (y_max - y_min) * (size_plot_area.GetHeight()));
@@ -11217,7 +11217,7 @@ void  DrawPanel::ProjectionToDrawPanel_Mercator(Projection q, wxPoint* p) {
 }
 
 //this function converts the 3D projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
-void  DrawPanel::ProjectionToDrawPanel_3D(Projection q, wxPoint* p) {
+inline void  DrawPanel::ProjectionToDrawPanel_3D(Projection q, wxPoint* p) {
 
 	(p->x) = ((double)(position_plot_area.x)) + (1.0 + (q.x) / x_max) * (((double)(size_plot_area.GetWidth())) / 2.0);
 	(p->y) = ((double)(position_plot_area.y)) + (1.0 - (q.y) / y_max) * (((double)(size_plot_area.GetHeight())) / 2.0);

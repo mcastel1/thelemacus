@@ -7807,9 +7807,10 @@ void ChartFrame::GetCoastLineData_3D(void) {
                     
                     ta =clock();
 
-
+                    //THIS IS THE BOTTLENECK - START
                     b = (draw_panel->GeoToDrawPanel)((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false);
-                    
+                    //THIS IS THE BOTTLENECK - END
+
                     tb=clock();
                     T_if+=((double)(tb-ta))/CLOCKS_PER_SEC;
                     

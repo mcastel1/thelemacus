@@ -11055,6 +11055,8 @@ bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 			(q->y) = ((d.value) * gsl_vector_get(rp, 2)) / ((d.value) + 1.0 + gsl_vector_get(rp, 1));
 
 		}
+        
+        out = check;
 
 
 	}
@@ -11151,6 +11153,8 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
 			(p->y) = (temp.y);
 
 		}
+        
+        out = check;
 
 
 	}

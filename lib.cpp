@@ -10351,7 +10351,9 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
 
 	//set lambda_min/max from circle_observer
 	circle_observer.lambda_min_max(&(parent->lambda_min), &(parent->lambda_max), String(""));
-
+    
+    //set
+    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
 
 	//set phi_min/max
 	((circle_observer.reference_position).phi).normalize_pm_pi();
@@ -11026,16 +11028,12 @@ bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q) {
 bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
 
-    clock_t t_start, t_end;
+    clock_t t1, t2, t3;
+    double Ta, Tb;
 
-    t_start = clock();
+    t1 = clock();
 
     bool check, out;
-	Double d;
-
-
-	//set d for the following
-	d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
 
 	//set r according equal to the 3d vector corresponding to the geographic position p
 	gsl_vector_set(r, 0, cos((p.lambda)) * cos((p.phi)));
@@ -11046,6 +11044,9 @@ bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 	gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, r, 0.0, rp);
 
 	check = (gsl_vector_get(rp, 1) < -1.0 / (1.0 + (d.value)));
+    
+    t2 = clock();
+    Ta = t2-t1;
 
 
 	if (check || write) {
@@ -11067,12 +11068,8 @@ bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
 	}
     
-    t_end = clock();
-    double t_tot= ((double)(t_end-t_start))/CLOCKS_PER_SEC;
-    
-//    cout << "t_3d " << t_tot << "s\n";
- 
-
+    t3 = clock();
+    Tb = t3-t2;
 
     return out;
 }

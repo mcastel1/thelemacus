@@ -7653,7 +7653,6 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 
 void ChartFrame::GetCoastLineData_3D(void) {
     
-    clock_t t1, t2;
 
 	unsigned long every, l, n, n_points_grid;
 	//integer values of min/max lat/lon to be extractd from p_coastline
@@ -7704,12 +7703,20 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 	p_coastline_draw.clear();
     
-    t1 = clock();
+    clock_t t_start, t_end, ta, tb;
+    double T_if, T_check;
+    
+    T_if=0.0;
+    T_check=0.0;
+    
+    t_start = clock();
 
 
 	for (i = i_min; i < i_max; i++) {
 
 		for (j = j_min; j < j_max; j++) {
+            
+            ta=clock();
 
 			if (!((i >= -90) && (i <= 90))) {
 				//in this case, i needs to be adjusted because it is not between -90 and +90
@@ -7769,7 +7776,11 @@ void ChartFrame::GetCoastLineData_3D(void) {
 				}
 
 			}
-
+            
+            tb=clock();
+            T_if+=((double)(tb-ta))/CLOCKS_PER_SEC;
+            
+            ta=clock();
 
 			if (check) {
 
@@ -7803,20 +7814,27 @@ void ChartFrame::GetCoastLineData_3D(void) {
 				}
 
 			}
+            
+            tb=clock();
+            T_check+=((double)(tb-ta))/CLOCKS_PER_SEC;
+      
 
 		}
 
-	}
-
-	gsl_vector_free(r);
-	gsl_vector_free(s);
-
-    t2 = clock();
-    double t21 = ((double)(t2-t1))/CLOCKS_PER_SEC;
+    }
     
-    cout << "It took " << ((double)(t2-t1))/CLOCKS_PER_SEC;
+    t_end = clock();
+    double t_tot= ((double)(t_end-t_start))/CLOCKS_PER_SEC;
+    
+    cout << "t_tot " << t_tot << "s.";
+    cout << "T_if " << T_if << "s.";
+    cout << "T_check " << t_check << "s.";
     cout << "\n";
     
+    gsl_vector_free(r);
+    gsl_vector_free(s);
+
+  
 }
 
 

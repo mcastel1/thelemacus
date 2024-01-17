@@ -11026,7 +11026,7 @@ bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q) {
 
 
 //converts the geographic Position p  to the  3D projection (x,y). / If the projection of p falls in the visible side of the earth, it writes its projection into *q (if q!=NULL) and returns true. If not, it returns false and, if write = true, it writes its projection in *q (if q!=NULL)
-bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
+inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
 
 //    clock_t t1, t2, t3;

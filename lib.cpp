@@ -7704,10 +7704,10 @@ void ChartFrame::GetCoastLineData_3D(void) {
 	p_coastline_draw.clear();
     
     clock_t t_start, t_end, ta, tb;
-    double T_if, T_check;
+    double T_I, T_II;
     
-    T_if=0.0;
-    T_check=0.0;
+    T_I=0.0;
+    T_II=0.0;
     
     t_start = clock();
 
@@ -7715,6 +7715,9 @@ void ChartFrame::GetCoastLineData_3D(void) {
 	for (i = i_min; i < i_max; i++) {
 
 		for (j = j_min; j < j_max; j++) {
+            
+            ta =clock();
+
             
 
 			if (!((i >= -90) && (i <= 90))) {
@@ -7776,7 +7779,11 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 			}
             
+            tb=clock();
+            T_I+=tb-ta;
             
+            ta=clock();
+
 
 			if (check) {
                 
@@ -7805,18 +7812,11 @@ void ChartFrame::GetCoastLineData_3D(void) {
 				//run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
 				for (l = 0; l < ((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l+=every) {
                     
-                    ta =clock();
 
                     //THIS IS THE BOTTLENECK - START
                     b = (draw_panel->GeoToDrawPanel)((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false);
                     //THIS IS THE BOTTLENECK - END
 
-                    tb=clock();
-                    T_if+=((double)(tb-ta))/CLOCKS_PER_SEC;
-                    
-                    ta=clock();
-
-                  
                     
 					//I write points in data_x and data_y to x and y in such a way to write (((parent->data)->n_points_coastline).value) points to the most
 					if (b) {
@@ -7825,15 +7825,16 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 					}
                     
-                    tb=clock();
-                    T_check+=((double)(tb-ta))/CLOCKS_PER_SEC;
-             
+              
 
 				}
                 
           
 			}
             
+            tb=clock();
+            T_II+=tb-ta;
+     
           
 
 		}
@@ -7841,11 +7842,11 @@ void ChartFrame::GetCoastLineData_3D(void) {
     }
     
     t_end = clock();
-    double t_tot= ((double)(t_end-t_start))/CLOCKS_PER_SEC;
+    double t_tot= t_end-t_start;
     
     cout << "t_tot " << t_tot << "s\n";
-    cout << "T_if " << T_if << "s\n";
-    cout << "T_check " << T_check << "s\n";
+    cout << "T_I " << T_I << "s\n";
+    cout << "T_II " << T_II << "s\n";
     
     gsl_vector_free(r);
     gsl_vector_free(s);
@@ -11024,34 +11025,43 @@ bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q) {
 }
 
 
-//converts the geographic Position p  to the  3D projection (x,y). / If the projection of p falls in the visible side of the earth, it writes its projection into *q and returns true. If not, it returns false and, if write = true, it writes its projection in p (if p!=NULL)
+//converts the geographic Position p  to the  3D projection (x,y). / If the projection of p falls in the visible side of the earth, it writes its projection into *q (if q!=NULL) and returns true. If not, it returns false and, if write = true, it writes its projection in *q (if q!=NULL)
 bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
 
-    clock_t t1, t2, t3;
-    double Ta, Tb;
-
-    t1 = clock();
+//    clock_t t1, t2, t3;
+//    double Ta, Tb;
+//
+//    t1 = clock();
 
     bool check, out;
-
-	//set r according equal to the 3d vector corresponding to the geographic position p
-	gsl_vector_set(r, 0, cos((p.lambda)) * cos((p.phi)));
-	gsl_vector_set(r, 1, -(cos((p.phi)) * sin((p.lambda))));
-	gsl_vector_set(r, 2, sin((p.phi)));
-
-	//rotate r by rotation, and write the result in rp!
-	gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, r, 0.0, rp);
-
-	check = (gsl_vector_get(rp, 1) < -1.0 / (1.0 + (d.value)));
     
-    t2 = clock();
-    Ta = t2-t1;
+    //compute rp before hand to rule out early the cases where check = 0
+    //set r according equal to the 3d vector corresponding to the geographic position p
+    gsl_vector_set(r, 0, cos((p.lambda)) * cos((p.phi)));
+    gsl_vector_set(r, 1, -(cos((p.phi)) * sin((p.lambda))));
+    gsl_vector_set(r, 2, sin((p.phi)));
+    gsl_vector_set(rp, 1,
+                   gsl_matrix_get(rotation.matrix, 1, 0) * gsl_vector_get(r, 0) +
+                   gsl_matrix_get(rotation.matrix, 1, 1) * gsl_vector_get(r, 1) +
+                   gsl_matrix_get(rotation.matrix, 1, 2) * gsl_vector_get(r, 2)
+                   );
+    check = (gsl_vector_get(rp, 1) < -1.0 / (1.0 + (d.value)));
+    
+
+
+//    t2 = clock();
+//    Ta = t2-t1;
 
 
 	if (check || write) {
 
 		if (q != NULL) {
+            
+     
+            //rotate r by rotation, and write the result in rp!
+            gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, r, 0.0, rp);
+
 
 			(q->x) = ((d.value) * gsl_vector_get(rp, 0)) / ((d.value) + 1.0 + gsl_vector_get(rp, 1));
 			(q->y) = ((d.value) * gsl_vector_get(rp, 2)) / ((d.value) + 1.0 + gsl_vector_get(rp, 1));
@@ -11068,8 +11078,8 @@ bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
 	}
     
-    t3 = clock();
-    Tb = t3-t2;
+//    t3 = clock();
+//    Tb = t3-t2;
 
     return out;
 }

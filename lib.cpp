@@ -7703,13 +7703,13 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 	p_coastline_draw.clear();
     
-    clock_t t_start, t_end/*, ta, tb*/;
+//    clock_t t_start, t_end/*, ta, tb*/;
 //    double T_I, T_II;
     
 //    T_I=0.0;
 //    T_II=0.0;
     
-    t_start = clock();
+//    t_start = clock();
 
 
 	for (i = i_min; i < i_max; i++) {
@@ -7841,10 +7841,10 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
     }
     
-    t_end = clock();
-    double t_tot = t_end-t_start;
+//    t_end = clock();
+//    double t_tot = t_end-t_start;
     
-    cout << "t_tot " << t_tot/CLOCKS_PER_SEC << " s\n";
+//    cout << "t_tot " << t_tot/CLOCKS_PER_SEC << " s\n";
 //    cout << "T_I " << T_I/CLOCKS_PER_SEC << "s\n";
 //    cout << "T_II " << T_II/CLOCKS_PER_SEC << "s\n";
     

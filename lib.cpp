@@ -11067,7 +11067,7 @@ bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
     t_end = clock();
     double t_tot= ((double)(t_end-t_start))/CLOCKS_PER_SEC;
     
-    cout << "t_3d " << t_tot << "s\n";
+//    cout << "t_3d " << t_tot << "s\n";
  
 
 
@@ -11163,7 +11163,7 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
     t_end = clock();
     double t_tot= ((double)(t_end-t_start))/CLOCKS_PER_SEC;
     
-    cout << "t_mer " << t_tot << "s\n";
+//    cout << "t_mer " << t_tot << "s\n";
     
     return out;
  

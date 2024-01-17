@@ -7659,7 +7659,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 	int i, j, i_adjusted = 0, j_adjusted = 0, i_min, i_max, j_min, j_max;
 	double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
 	Projection temp;
-	bool check = false;
+	bool check = false, b;
 	wxPoint q;
 	gsl_vector* r, * s;
 	Position u;
@@ -7716,7 +7716,6 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 		for (j = j_min; j < j_max; j++) {
             
-            ta=clock();
 
 			if (!((i >= -90) && (i <= 90))) {
 				//in this case, i needs to be adjusted because it is not between -90 and +90
@@ -7777,12 +7776,10 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 			}
             
-            tb=clock();
-            T_if+=((double)(tb-ta))/CLOCKS_PER_SEC;
             
-            ta=clock();
 
 			if (check) {
+                
 
 				//n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
 				n = ((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
@@ -7796,28 +7793,47 @@ void ChartFrame::GetCoastLineData_3D(void) {
 				//compute cos
 				gsl_blas_ddot(r, s, &cos);
 				if (cos == 0.0) { cos = 1.0; }
-
+                
+              
 				//I plot every 'every' data points. I include the factor 1/cos in such a way that the farther the point (i,j) from circle_observer.reference_position, the less data points I plot, because plotting more would be pointless. In this way, points (i,j) which are close to circle_observer.reference_position (which are nearly parallel to the plane of the screen and thus well visible) are plotted with a lot of points, and the other way around
 				every = (unsigned long)(((double)n) / ((double)(((parent->data)->n_points_plot_coastline_3D).value)) * ((double)n_points_grid) / cos);
 				if (every == 0) { every = 1; }
+                
+                
+
 
 				//run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-				for (l = 0; (l * every) < ((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l++) {
+				for (l = 0; l < ((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l+=every) {
+                    
+                    ta =clock();
 
+
+                    b = (draw_panel->GeoToDrawPanel)((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false);
+                    
+                    tb=clock();
+                    T_if+=((double)(tb-ta))/CLOCKS_PER_SEC;
+                    
+                    ta=clock();
+
+                  
+                    
 					//I write points in data_x and data_y to x and y in such a way to write (((parent->data)->n_points_coastline).value) points to the most
-					if ((draw_panel->GeoToDrawPanel)((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360][l * every], &q, false)) {
+					if (b) {
 
 						p_coastline_draw.push_back(q);
 
 					}
+                    
+                    tb=clock();
+                    T_check+=((double)(tb-ta))/CLOCKS_PER_SEC;
+             
 
 				}
-
+                
+          
 			}
             
-            tb=clock();
-            T_check+=((double)(tb-ta))/CLOCKS_PER_SEC;
-      
+          
 
 		}
 
@@ -7829,7 +7845,6 @@ void ChartFrame::GetCoastLineData_3D(void) {
     cout << "t_tot " << t_tot << "s\n";
     cout << "T_if " << T_if << "s\n";
     cout << "T_check " << T_check << "s\n";
-    cout << "\n";
     
     gsl_vector_free(r);
     gsl_vector_free(s);
@@ -11009,7 +11024,12 @@ bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q) {
 //converts the geographic Position p  to the  3D projection (x,y). / If the projection of p falls in the visible side of the earth, it writes its projection into *q and returns true. If not, it returns false and, if write = true, it writes its projection in p (if p!=NULL)
 bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
-	bool check;
+
+    clock_t t_start, t_end;
+
+    t_start = clock();
+
+    bool check, out;
 	Double d;
 
 
@@ -11036,17 +11056,22 @@ bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
 		}
 
-		return check;
 
 	}
 	else {
 
-		return false;
+		out= false;
 
 	}
+    
+    t_end = clock();
+    double t_tot= ((double)(t_end-t_start))/CLOCKS_PER_SEC;
+    
+    cout << "t_3d " << t_tot << "s\n";
+ 
 
 
-
+    return out;
 }
 
 
@@ -11068,9 +11093,14 @@ void DrawPanel::GeoToScreen(Position q, wxPoint* p) {
 
 // If the projection of q falls within the plot area, it writes its projection into p (if p!=NULL) and returns true. If not, it returns false and, if write = true, it writes its projection in p
 bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
+    
+    clock_t t_start, t_end;
+
+    t_start = clock();
+
 
 	Projection temp;
-	bool check_x, check;
+	bool check_x, check, out;
 
 	(temp.x) = -(((q.lambda).normalize_pm_pi_ret()).value);
 	(temp.y) = log(1.0 / cos((q.phi)) + tan((q.phi)));
@@ -11122,14 +11152,21 @@ bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
 
 		}
 
-		return check;
 
 	}
 	else {
 
-		return false;
+		out= false;
 
 	}
+    
+    t_end = clock();
+    double t_tot= ((double)(t_end-t_start))/CLOCKS_PER_SEC;
+    
+    cout << "t_mer " << t_tot << "s\n";
+    
+    return out;
+ 
 
 }
 

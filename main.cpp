@@ -544,7 +544,7 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
     
 #endif
     
-    //root_directory.print(String("Formatted root directory"), true, String("*******"), cout);
+    root_directory.print(String("Formatted root directory"), true, String("*******"), cout);
     
     
 }

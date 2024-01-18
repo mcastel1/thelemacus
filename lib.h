@@ -2173,6 +2173,7 @@ public:
     SelectRoute* select_route;
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message;
     PrintMessage<ListFrame, SelectRoute >* print_info_message;
+    PrintQuestion< ListFrame, UnsetIdling<ListFrame>, UnsetIdling<ListFrame> >* print_question_message;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;

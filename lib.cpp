@@ -15100,6 +15100,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
+    print_question_message = new PrintQuestion<ListFrame, UnsetIdling<ListFrame>, UnsetIdling<ListFrame> >(this, unset_idling, unset_idling);
     //create extract_color with zero size, because I will need extract_color only to get colors
     
     data = new Data(catalog, String(""));

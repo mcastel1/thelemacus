@@ -24,7 +24,7 @@ LIBPNG_LIB_DIRECTORY='/usr/local/lib'
 LIBJPEG_LIB_DIRECTORY='/opt/homebrew/opt/jpeg/lib'
 LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/opt/pcre2/lib'
 LIBTIFF_LIB_DIRECTORY='/opt/homebrew/opt/libtiff/lib'
-LIBICONV_LIB_DIRECTORY='/opt/homebrew/Cellar/libiconv/1.17/lib'
+LIBICONV_LIB_DIRECTORY='/usr/local/lib'
 LIBCURL_LIB_DIRECTORY='/opt/homebrew/Cellar/curl/8.5.0/lib'
 LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3/lib'
 LIBGSL_LIB_DIRECTORY='/usr/local/lib'
@@ -149,9 +149,6 @@ LIB_A='libwx_baseu-3.2.0.2.2.dylib'
 DIR_LIB_A=$APP_LIBRARY_DIRECTORY
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
 LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-#IF THIS LINE IS UNCOMMENTED, THERE IS A PROBLEM AT RUNTIME
-#LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-#IF THIS LINE IS UNCOMMENTED, THERE IS A PROBLEM AT RUNTIME
 
 
 #libraries called by libwx_osx_cocoau_qa-3.2.0.2.2.dylib

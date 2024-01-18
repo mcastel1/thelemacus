@@ -12692,6 +12692,30 @@ template<class P> void UnsetIdling<P>::operator()(void) {
 }
 
 
+template<class P> ChooseToTransport<P>::ChooseToTransport(P* parent_in) {
+
+    parent = parent_in;
+
+}
+
+
+template<class P> void ChooseToTransport<P>::operator()(wxCommandEvent& event) {
+
+
+    event.Skip(true);
+
+}
+
+//this is the same as template<class P> void ChooseToTransport<P>::operator()(void){ but without the event argument)
+template<class P> void ChooseToTransport<P>::operator()(void) {
+
+    wxCommandEvent dummy;
+
+    (*this)(dummy);
+
+}
+
+
 template<class P> void SetIdling<P>::operator()(wxCommandEvent& event) {
 
 	(parent->idling) = true;

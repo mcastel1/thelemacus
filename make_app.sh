@@ -144,6 +144,16 @@ LIB_B='libwx_baseu-3.2.0.2.2.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install
 LIB_B='libwx_osx_cocoau_html-3.2.0.2.2.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 
 
+#libraries called by libwx_baseu-3.2.0.2.2.dylib
+LIB_A='libwx_baseu-3.2.0.2.2.dylib'
+DIR_LIB_A=$APP_LIBRARY_DIRECTORY
+install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
+LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+#IF THIS LINE IS UNCOMMENTED, THERE IS A PROBLEM AT RUNTIME
+#LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+#IF THIS LINE IS UNCOMMENTED, THERE IS A PROBLEM AT RUNTIME
+
+
 #libraries called by libwx_osx_cocoau_qa-3.2.0.2.2.dylib
 LIB_A='libwx_osx_cocoau_qa-3.2.0.2.2.dylib'
 DIR_LIB_A=$APP_LIBRARY_DIRECTORY

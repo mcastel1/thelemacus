@@ -15250,7 +15250,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         
         //initialized existing_route and create_route, which define the functors to modify / create a Route
         existing_route = new ExistingRoute(this);
-        create_route = new NewRoute(this);
+        new_route = new NewRoute(this);
         
         catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
         
@@ -15919,7 +15919,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event) {
 	//I am transporting a Route (related to a Sight)
 	transported_object = String("sight");
 
-	PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
+	PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
 	print_question->SetAndCall(NULL, String("You want to transport a sight"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
 
 	OnModifyFile();
@@ -15952,7 +15952,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event) {
 	transported_object = String("position");
 
 	//ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
-	PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
+	PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
 	print_question->SetAndCall(NULL, String("You want to transport a position"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
 
 	OnModifyFile();
@@ -16018,7 +16018,7 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
 	//here set i_object_to_transport to the currently selected Route
 
 	//ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
-	PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, create_route);
+	PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
 	print_question->SetAndCall(NULL, String("You want to transport a route"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
 
 	OnModifyFile();

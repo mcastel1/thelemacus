@@ -27,7 +27,7 @@ LIBTIFF_LIB_DIRECTORY='/opt/homebrew/opt/libtiff/lib'
 LIBICONV_LIB_DIRECTORY='/opt/homebrew/Cellar/libiconv/1.17/lib'
 LIBCURL_LIB_DIRECTORY='/opt/homebrew/Cellar/curl/8.5.0/lib'
 LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3/lib'
-GSL_LIB_DIRECTORY='/usr/local/lib'
+LIBGSL_LIB_DIRECTORY='/usr/local/lib'
 LIST_LIBRARIES_TO_COPY=''
 
 #export PATH="/Applications/wxWidgets-"$WX_VERSION"/build-cocoa-debug:$PATH"
@@ -64,7 +64,7 @@ install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_core-3.2.0.2
 install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_baseu_xml-3.2.0.2.2.dylib @rpath/libwx_baseu_xml-3.2.0.2.2.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_baseu_net-3.2.0.2.2.dylib @rpath/libwx_baseu_net-3.2.0.2.2.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_baseu-3.2.0.2.2.dylib @rpath/libwx_baseu-3.2.0.2.2.dylib $APP_NAME
-#install_name_tool -change $GSL_LIB_DIRECTORY/libgsl.27.dylib @rpath/libgsl.27.dylib $APP_NAME
+install_name_tool -change $LIBGSL_LIB_DIRECTORY/libgsl.27.dylib @rpath/libgsl.27.dylib $APP_NAME
 #install_name_tool -change /Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib/libwx_osx_cocoau_core-3.2.0.2.2.dylib @rpath/libwx_osx_cocoau_core-3.2.0.2.2.dylib $APP_NAME
 #install_name_tool -change $LIBJPEG_LIB_DIRECTORY/libjpeg.9.dylib @rpath/libjpeg.9.dylib $APP_NAME
 #install_name_tool -change $LIBTIFF_LIB_DIRECTORY/libtiff.6.dylib @rpath/libtiff.6.dylib $APP_NAME
@@ -99,6 +99,7 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY/libwx_
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY/libwx_baseu_net-3.2.0.2.2.dylib
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY/libwx_baseu-3.2.0.2.2.dylib
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBICONV_LIB_DIRECTORY/libiconv.2.dylib
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBGSL_LIB_DIRECTORY/libgsl.27.dylib
 
 #copy the list
 cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
@@ -187,6 +188,8 @@ LIB_B='libwx_osx_cocoau_core-3.2.0.2.2.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTOR
 LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libwx_baseu-3.2.0.2.2.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+
+
 
 #
 #

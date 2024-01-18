@@ -32,11 +32,4 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBGSL_LIB_DIRECTORY/libgsl.27
 
 SAVE_PATH=/Users/michele/saved
 
-mv $SAVE_PATH/libboost_filesystem.dylib $BOOST_LIB_DIRECTORY
-mv $SAVE_PATH/libboost_system.dylib $BOOST_LIB_DIRECTORY
-mv $SAVE_PATH/libboost_atomic.dylib $BOOST_LIB_DIRECTORY
-mv $SAVE_PATH/libpng16.16.dylib $LIBPNG_LIB_DIRECTORY
-mv $SAVE_PATH/libz.1.dylib $LIBZ_LIB_DIRECTORY
-mv $SAVE_PATH/libwx* $WXWIDGETS_LIB_DIRECTORY
-mv $SAVE_PATH/libiconv.2.dylib $LIBICONV_LIB_DIRECTORY
-mv $SAVE_PATH/libgsl.27.dylib $LIBGSL_LIB_DIRECTORY
+sudo mv $SAVE_PATH/libboost_filesystem.dylib $BOOST_LIB_DIRECTORY;  sudo mv $SAVE_PATH/libboost_system.dylib $BOOST_LIB_DIRECTORY;  sudo mv $SAVE_PATH/libboost_atomic.dylib $BOOST_LIB_DIRECTORY;  sudo mv $SAVE_PATH/libpng16.16.dylib $LIBPNG_LIB_DIRECTORY;  sudo mv $SAVE_PATH/libz.1.dylib $LIBZ_LIB_DIRECTORY;  sudo mv $SAVE_PATH/libwx* $WXWIDGETS_LIB_DIRECTORY;  sudo mv $SAVE_PATH/libiconv.2.dylib $LIBICONV_LIB_DIRECTORY;  sudo mv $SAVE_PATH/libgsl.27.dylib $LIBGSL_LIB_DIRECTORY

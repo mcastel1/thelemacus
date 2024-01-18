@@ -1,5 +1,6 @@
 #!/bin/sh
 
+WXWIDGETS_LIB_DIRECTORY='/Applications/wxWidgets-3.2.4/build-cocoa-debug/lib'
 BOOST_LIB_DIRECTORY='/Applications/boost_1_83_0/stage/lib'
 LIBPNG_LIB_DIRECTORY='/usr/local/lib'
 LIBJPEG_LIB_DIRECTORY='/opt/homebrew/opt/jpeg/lib'
@@ -29,4 +30,4 @@ LIST_LIBRARIES_TO_MOVE=$LIST_LIBRARIES_TO_MOVE' '$LIBGSL_LIB_DIRECTORY/libgsl.27
 
 SAVE_PATH=/Users/michele/saved
 
-mv $LIST_LIBRARIES_TO_MOVE $SAVE_PATH
+sudo mv $LIST_LIBRARIES_TO_MOVE $SAVE_PATH

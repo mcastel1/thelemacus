@@ -28,6 +28,7 @@ LIBICONV_LIB_DIRECTORY='/opt/homebrew/Cellar/libiconv/1.17/lib'
 LIBCURL_LIB_DIRECTORY='/opt/homebrew/Cellar/curl/8.5.0/lib'
 LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3/lib'
 GSL_LIB_DIRECTORY='/usr/local/lib'
+LIST_LIBRARIES_TO_COPY=''
 
 #export PATH="/Applications/wxWidgets-"$WX_VERSION"/build-cocoa-debug:$PATH"
 
@@ -82,11 +83,15 @@ cp -r $INPUT_PATH/Contents/Resources/Images/* $OUTPUT_PATH/$APP_NAME.app/Content
 ##copy libraries
 ##libraries for $APP_NAME
 #cp /usr/lib/dyld     $APP_LIBRARY_DIRECTORY
-cp $BOOST_LIB_DIRECTORY/libboost_filesystem.dylib  $APP_LIBRARY_DIRECTORY
-cp $BOOST_LIB_DIRECTORY/libboost_system.dylib $APP_LIBRARY_DIRECTORY
-cp $BOOST_LIB_DIRECTORY/libboost_atomic.dylib $APP_LIBRARY_DIRECTORY
-cp $LIBPNG_LIB_DIRECTORY/libpng16.16.dylib $APP_LIBRARY_DIRECTORY
-cp $LIBZ_LIB_DIRECTORY/libz.1.dylib $APP_LIBRARY_DIRECTORY
+#built the list of the libraries to copy
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$BOOST_LIB_DIRECTORY/libboost_filesystem.dylib
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$BOOST_LIB_DIRECTORY/libboost_system.dylib
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$BOOST_LIB_DIRECTORY/libboost_atomic.dylib
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPNG_LIB_DIRECTORY/libpng16.16.dylib
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZ_LIB_DIRECTORY/libz.1.dylib
+#copy the list
+cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
+
 #
 ##libraries for main.o (removed /usr/lib/libc++.1.dylib /usr/lib/libSystem.B.dylib /usr/lib/dyld $BOOST_LIB_DIRECTORY/libboost_filesystem.dylib   $BOOST_LIB_DIRECTORY/libboost_system.dylib because they are alreday in the libraries for $APP_NAME)
 ##/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit  /System/Library/Frameworks/Carbon.framework/Versions/A/Carbon  /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa  /System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore  /System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox     /System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL /System/Library/Frameworks/WebKit.framework/Versions/A/WebKit /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib /usr/local/opt/libpng/lib/libpng16.16.dylib /System/Library/Frameworks/Security.framework/Versions/A/Security /usr/local/opt/xz/lib/liblzma.5.dylib

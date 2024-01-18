@@ -12637,6 +12637,8 @@ void SomeRoutes::operator()(wxCommandEvent& event) {
 
 
 void NewRoute::operator()(wxCommandEvent& event) {
+    
+    (f->transporting_with_new_route)=true;
 
 	//call OnAddRoute to add a new Route
 	(f->OnAddRouteForTransport)(event);

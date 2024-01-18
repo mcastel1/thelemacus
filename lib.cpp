@@ -12638,11 +12638,11 @@ void SomeRoutes::operator()(wxCommandEvent& event) {
 
 void NewRoute::operator()(wxCommandEvent& event) {
     
-    (f->transporting_with_new_route)=true;
 
 	//call OnAddRoute to add a new Route
 	(f->OnAddRouteForTransport)(event);
-
+    (f->transporting_with_new_route) = true;
+    
 	//when button_ok in f->route_fram will be pressed, I call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
     f->route_frame->button_ok->Bind(wxEVT_BUTTON, *(f->on_new_route_in_listcontrol_routes_for_transport));
       
@@ -14539,6 +14539,13 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
 	unsigned int i;
 	stringstream s;
+    
+    if((parent->transporting_with_new_route)){
+        
+        //enter  has been pressed -> I call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
+         (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
+     
+    }
 
 	if (label->value->GetValue().ToStdString() == "") {
 		//if the user entered no label, I set a label with the time at which Reduce has been pressed
@@ -14550,17 +14557,14 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 	}
 
 
-	//writes the values of the GUI fields in the non-GUI fields
+	//write the values of the GUI fields in the non-GUI fields
 	get(event);
-
-	route->print(String("route entered via GUI"), String(""), cout);
-
 
 	if (position_in_listcontrol_routes == -1) {
 		//I am creating a new Route
 
 		//if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
-		(parent->data)->add_route(route, String(""));
+		parent->data->add_route(route, String(""));
 
 	}
 	else {
@@ -14570,14 +14574,13 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 			//the Route that I am moidifying is related to a Sight
 
 			//because I am modifying and thus altering the Route, I disconnect it from its related sight
-			(parent->i_object_to_disconnect) = ((route->related_sight).value);
+			(parent->i_object_to_disconnect) = (route->related_sight.value);
 			parent->Disconnect(event);
 
 		}
 
 	}
-
-
+    
 
 	//if I am adding a new Route, I resize points_route_list to add a new element to it
 	if (position_in_listcontrol_routes == -1) {
@@ -14590,9 +14593,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 	}
 
 	//I call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
-	(parent->listcontrol_sights)->set((parent->data)->sight_list, true);
-	(parent->listcontrol_positions)->set((parent->data)->position_list, true);
-	(parent->listcontrol_routes)->set((parent->data)->route_list, false);
+	parent->listcontrol_sights->set((parent->data)->sight_list, true);
+	parent->listcontrol_positions->set((parent->data)->position_list, true);
+	parent->listcontrol_routes->set((parent->data)->route_list, false);
 
 	//given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
 	(*(parent->on_change_selection_in_listcontrol_sights))(event);
@@ -14606,6 +14609,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 	event.Skip(true);
 
 	Close(TRUE);
+    
 }
 
 void RouteFrame::OnPressCancel([[maybe_unused]] wxCommandEvent& event) {

@@ -12572,40 +12572,15 @@ void DeleteSight::operator()(wxCommandEvent& event) {
 
 void ExistingRoute::operator()(wxCommandEvent& event) {
 
-	int i;
-	//the list of Routes which may be used for transport
-
-
 	//save data->route_list into route_list_saved
-	(f->route_list_saved).resize(((f->data)->route_list).size());
-	copy(((f->data)->route_list).begin(), ((f->data)->route_list).end(), (f->route_list_saved).begin());
+	f->route_list_saved.resize(((f->data)->route_list).size());
+	copy((f->data->route_list).begin(), (f->data->route_list).end(), (f->route_list_saved).begin());
 
 	//print an info message
 //	(f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), (wxGetApp().path_file_warning_icon));
     (f->print_question_message)->SetAndCall(NULL, String("You are about to transport with an existing route"), String("Do you want to continue?"), String("Yes\n Let me select the route"), String("No\nI want to cancel"));
 
-	//given that I am about to display routes for transport only, routes related to sights will (temporarily) not be highlighted when the mouse hovers over them
-	(f->enable_highlight) = false;
 
-	//Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
-	for ((f->route_list_for_transport).clear(), (f->map).clear(), i = 0; i < ((f->data)->route_list).size(); i++) {
-
-		if (((((((f->data)->route_list)[i]).related_sight).value) == -1) && ((((f->data)->route_list)[i]).type != String("c"))) {
-
-			(f->route_list_for_transport).push_back(((f->data)->route_list)[i]);
-			(f->map).push_back(i);
-
-		}
-
-	}
-
-	(f->listcontrol_routes)->set((f->route_list_for_transport), false);
-	((f->data)->route_list).resize((f->route_list_for_transport).size());
-	copy((f->route_list_for_transport).begin(), (f->route_list_for_transport).end(), ((f->data)->route_list).begin());
-	f->DrawAll();
-
-	//I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
-	(f->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(f->on_select_route_in_listcontrol_routes_for_transport));
 
 
 	event.Skip(true);
@@ -12699,7 +12674,33 @@ template<class P> ChooseToTransport<P>::ChooseToTransport(P* parent_in) {
 }
 
 
+//I call this method when the user has decided to confirm that he/she wants to make the transport of an object
 template<class P> void ChooseToTransport<P>::operator()(wxCommandEvent& event) {
+    
+    int i;
+
+    //given that I am about to display routes for transport only, routes related to sights will (temporarily) not be highlighted when the mouse hovers over them
+    (parent->enable_highlight) = false;
+
+    //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
+    for ((parent->route_list_for_transport).clear(), (parent->map).clear(), i = 0; i < (parent->data->route_list).size(); i++) {
+
+        if ((((((parent->data->route_list)[i]).related_sight).value) == -1) && (((parent->data->route_list)[i]).type != String("c"))) {
+
+            (parent->route_list_for_transport).push_back((parent->data->route_list)[i]);
+            (parent->map).push_back(i);
+
+        }
+
+    }
+
+    parent->listcontrol_routes->set((parent->route_list_for_transport), false);
+    (parent->data->route_list).resize((parent->route_list_for_transport).size());
+    copy((parent->route_list_for_transport).begin(), (parent->route_list_for_transport).end(), ((parent->data)->route_list).begin());
+    parent->DrawAll();
+
+    //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
+    (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
 
 
     event.Skip(true);
@@ -15126,7 +15127,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
-    print_question_message = new PrintQuestion<ListFrame, UnsetIdling<ListFrame>, UnsetIdling<ListFrame> >(this, unset_idling, unset_idling);
+    print_question_message = new PrintQuestion<ListFrame, ChooseToTransport<ListFrame>, UnsetIdling<ListFrame> >(this, choose_to_transport, unset_idling);
     //create extract_color with zero size, because I will need extract_color only to get colors
     
     data = new Data(catalog, String(""));

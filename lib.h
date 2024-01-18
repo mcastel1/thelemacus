@@ -1527,7 +1527,7 @@ public:
 };
 
 
-//this functor is called when the user decides whether he/she wants to condfirm transporting an object
+//this functor is called when the user has chosen that he/she wants to condfirm transporting an object
 template<class P> class ChooseToTransport{
     
 public:
@@ -2191,7 +2191,7 @@ public:
     SelectRoute* select_route;
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message;
     PrintMessage<ListFrame, SelectRoute >* print_info_message;
-    PrintQuestion< ListFrame, UnsetIdling<ListFrame>, UnsetIdling<ListFrame> >* print_question_message;
+    PrintQuestion< ListFrame, ChooseToTransport<ListFrame>, UnsetIdling<ListFrame> >* print_question_message;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;

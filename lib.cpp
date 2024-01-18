@@ -12581,7 +12581,8 @@ void ExistingRoute::operator()(wxCommandEvent& event) {
 	copy(((f->data)->route_list).begin(), ((f->data)->route_list).end(), (f->route_list_saved).begin());
 
 	//print an info message
-	(f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), (wxGetApp().path_file_warning_icon));
+//	(f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the transporting route"), (wxGetApp().path_file_warning_icon));
+    (f->print_question_message)->SetAndCall(NULL, String("You are about to transport with an existing route"), String("Do you want to continue?"), String("Yes\n Let me select the route"), String("No\nI want to cancel"));
 
 	//given that I am about to display routes for transport only, routes related to sights will (temporarily) not be highlighted when the mouse hovers over them
 	(f->enable_highlight) = false;

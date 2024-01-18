@@ -1528,11 +1528,11 @@ public:
 
 
 //this functor is called when the user has chosen that he/she wants to condfirm transporting an object
-template<class P> class ChooseToTransport{
+template<class P> class ConfirmTransport{
     
 public:
     
-    ChooseToTransport(P*);
+    ConfirmTransport(P*);
     
     //the frame which called this struct
     P* parent;
@@ -2185,13 +2185,13 @@ public:
     //a functor to set/unset idling mode in *this
     SetIdling<ListFrame>* set_idling;
     UnsetIdling<ListFrame>* unset_idling;
-    ChooseToTransport<ListFrame>* choose_to_transport;
+    ConfirmTransport<ListFrame>* confirm_transport;
     CloseFrame<ListFrame>* close;
     //a functor to let the user select a Route in listcontrol_routes
     SelectRoute* select_route;
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message;
     PrintMessage<ListFrame, SelectRoute >* print_info_message;
-    PrintQuestion< ListFrame, ChooseToTransport<ListFrame>, UnsetIdling<ListFrame> >* print_question_message;
+    PrintQuestion< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> >* print_question_message;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;

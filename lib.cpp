@@ -12667,7 +12667,7 @@ template<class P> void UnsetIdling<P>::operator()(void) {
 }
 
 
-template<class P> ChooseToTransport<P>::ChooseToTransport(P* parent_in) {
+template<class P> ConfirmTransport<P>::ConfirmTransport(P* parent_in) {
 
     parent = parent_in;
 
@@ -12675,7 +12675,7 @@ template<class P> ChooseToTransport<P>::ChooseToTransport(P* parent_in) {
 
 
 //I call this method when the user has decided to confirm that he/she wants to make the transport of an object
-template<class P> void ChooseToTransport<P>::operator()(wxCommandEvent& event) {
+template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
     
     int i;
 
@@ -12707,8 +12707,8 @@ template<class P> void ChooseToTransport<P>::operator()(wxCommandEvent& event) {
 
 }
 
-//this is the same as template<class P> void ChooseToTransport<P>::operator()(void){ but without the event argument)
-template<class P> void ChooseToTransport<P>::operator()(void) {
+//this is the same as template<class P> void ConfirmTransport<P>::operator()(void){ but without the event argument)
+template<class P> void ConfirmTransport<P>::operator()(void) {
 
     wxCommandEvent dummy;
 
@@ -15117,7 +15117,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);
-    choose_to_transport = new ChooseToTransport<ListFrame>(this);
+    confirm_transport = new ConfirmTransport<ListFrame>(this);
     close = new CloseFrame<ListFrame>(this);
     (*unset_idling)();
     
@@ -15127,7 +15127,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
-    print_question_message = new PrintQuestion<ListFrame, ChooseToTransport<ListFrame>, UnsetIdling<ListFrame> >(this, choose_to_transport, unset_idling);
+    print_question_message = new PrintQuestion<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> >(this, confirm_transport, unset_idling);
     //create extract_color with zero size, because I will need extract_color only to get colors
     
     data = new Data(catalog, String(""));

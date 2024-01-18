@@ -15114,6 +15114,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     file_is_untitled = true;
     enable_highlight = true;
     selecting_route_for_position = false;
+    transporting_with_new_route = false;
     abort = false;
     
     set_idling = new SetIdling<ListFrame>(this);
@@ -19388,6 +19389,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     if(t<(wxGetApp().n_animation_steps.value)){
         
         if(t==0){
+            //the transport has just started
             
             (*route_chunk) = (parent->data->route_list)[parent->i_transporting_route];
             
@@ -19457,7 +19459,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         t++;
         
     }else{
-        //the transport animation is over
+        //the transport  is over
 
         if ((parent->transported_object) == String("position")) {
             
@@ -19510,7 +19512,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
    
         }
         
-        
+        (parent->transporting_with_new_route) = false;
         parent->listcontrol_sights->set((parent->data->sight_list), false);
         parent->listcontrol_routes->set((parent->data->route_list), false);
         parent->Resize();

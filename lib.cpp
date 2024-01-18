@@ -17202,8 +17202,9 @@ template<class S> template<class T>void OnChangeSelectionInListControl<S>::opera
 		case 's': {
 			//type.value = "sight"->caller is listcontrol_sights
 
-			//the selected Sight has/does not have a related Route -> enable/disable the button to disconnect the selected Sight
+			//the selected Sight has/does not have a related Route -> enable/disable the buttons to disconnect and transport the selected Sight
 			list_frame_pointer->button_disconnect_sight->Enable(((((list_frame_pointer->data->sight_list)[i]).related_route.value) != -1));
+            list_frame_pointer->button_transport_sight->Enable(((((list_frame_pointer->data->sight_list)[i]).related_route.value) != -1));
 
 			break;
 

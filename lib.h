@@ -2185,6 +2185,7 @@ public:
     //a functor to set/unset idling mode in *this
     SetIdling<ListFrame>* set_idling;
     UnsetIdling<ListFrame>* unset_idling;
+    ChooseToTransport<ListFrame>* choose_to_transport;
     CloseFrame<ListFrame>* close;
     //a functor to let the user select a Route in listcontrol_routes
     SelectRoute* select_route;

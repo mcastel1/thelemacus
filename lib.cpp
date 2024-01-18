@@ -15116,6 +15116,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);
+    choose_to_transport = new ChooseToTransport<ListFrame>(this);
     close = new CloseFrame<ListFrame>(this);
     (*unset_idling)();
     

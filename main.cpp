@@ -96,7 +96,6 @@
  
  ********** THINGS TO FIX ************
  - allow for messages with \n QuestionFrame and MessageFrame
- - when you transport something -> new Route -> if the user presses  button_cancel in RouteFrame, make sure that the operation is cancelled 
  for MSW:
  - esc key does not work in SightFrame and other *Frames when one does not FOCUS on a control
  - write the WIN32 part of void MyApp::OnTimer

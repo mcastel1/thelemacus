@@ -12641,9 +12641,9 @@ void NewRoute::operator()(wxCommandEvent& event) {
 	//call OnAddRoute to add a new Route
 	(f->OnAddRouteForTransport)(event);
 
-	//when the frame with which the new Route will be closed, I call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
-	(f->route_frame)->Bind(wxEVT_CLOSE_WINDOW, *(f->on_new_route_in_listcontrol_routes_for_transport));
-
+	//when button_ok in f->route_fram will be pressed, I call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
+    f->route_frame->button_ok->Bind(wxEVT_BUTTON, *(f->on_new_route_in_listcontrol_routes_for_transport));
+      
 	event.Skip(true);
 
 }
@@ -13642,7 +13642,6 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         
         //the id of the Route or Position that will be transported
         (f->i_object_to_transport) = ((int)(f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
-   
         
     }
     

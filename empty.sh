@@ -1,5 +1,15 @@
 #!/bin/sh
 
+BOOST_LIB_DIRECTORY='/Applications/boost_1_83_0/stage/lib'
+LIBPNG_LIB_DIRECTORY='/usr/local/lib'
+LIBJPEG_LIB_DIRECTORY='/opt/homebrew/opt/jpeg/lib'
+LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/opt/pcre2/lib'
+LIBTIFF_LIB_DIRECTORY='/opt/homebrew/opt/libtiff/lib'
+LIBICONV_LIB_DIRECTORY='/usr/local/lib'
+LIBCURL_LIB_DIRECTORY='/opt/homebrew/Cellar/curl/8.5.0/lib'
+LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3/lib'
+LIBGSL_LIB_DIRECTORY='/usr/local/lib'
+
 LIST_LIBRARIES_TO_MOVE=''
 LIST_LIBRARIES_TO_MOVE=$LIST_LIBRARIES_TO_MOVE' '$BOOST_LIB_DIRECTORY/libboost_filesystem.dylib
 LIST_LIBRARIES_TO_MOVE=$LIST_LIBRARIES_TO_MOVE' '$BOOST_LIB_DIRECTORY/libboost_system.dylib

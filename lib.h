@@ -1527,6 +1527,23 @@ public:
 };
 
 
+//this functor is called when the user decides whether he/she wants to condfirm transporting an object
+template<class P> class ChooseToTransport{
+    
+public:
+    
+    ChooseToTransport(P*);
+    
+    //the frame which called this struct
+    P* parent;
+    
+    void operator()(wxCommandEvent&);
+    void operator()(void);
+    
+};
+
+
+
 //this functor pops up a QuestionFrame and asks the user whether he wants to remove the a Sight related to a Route
 class AskRemoveRelatedSight{
     

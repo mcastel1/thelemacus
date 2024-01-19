@@ -3656,18 +3656,22 @@ bool Chrono::operator!=(const Chrono& chrono) {
 }
 
 bool Chrono::operator<(const Chrono& chrono) {
+    
+    Chrono temp;
+    
+    temp = chrono;
 
-	return(
-		(((double)h) / 24.0 + ((double)m) / 60.0 / 24.0 + s / 60.0 / 60.0 / 24.0) < (((double)(chrono.h)) / 24.0 + ((double)(chrono.m)) / 60.0 / 24.0 + (chrono.s) / 60.0 / 60.0 / 24.0)
-		);
+	return((this->get()) < (temp.get()));
 
 }
 
 bool Chrono::operator>(const Chrono& chrono) {
+    
+    Chrono temp;
 
-	return(
-		(((double)h) / 24.0 + ((double)m) / 60.0 / 24.0 + s / 60.0 / 60.0 / 24.0) > (((double)(chrono.h)) / 24.0 + ((double)(chrono.m)) / 60.0 / 24.0 + (chrono.s) / 60.0 / 60.0 / 24.0)
-		);
+    temp = chrono;
+    
+    return((this->get()) > (temp.get()));
 
 }
 
@@ -3905,7 +3909,7 @@ void Time::to_MJD(void)
 
 	MJD = 365.0 * Yt - 679004.0;
 	//comment this out if you want to include hours, minutes and seconds in MJD
-	MJD = MJD + b + int(30.6001 * (Mt + 1)) + Dt + (((double)(chrono.h)) + ((double)(chrono.m)) / 60.0 + ((double)(chrono.s)) / (60.0 * 60.0)) / 24.0;
+    MJD = MJD + b + int(30.6001 * (Mt + 1)) + Dt + (chrono.get()) / 24.0;
 
 
 }
@@ -6822,6 +6826,14 @@ Length::Length(double x) {
 }
 
 
+//constructs the Length *this frome time and speed, by setting it equal to time x speed
+Length::Length(Chrono time, Speed speed){
+    
+    set(String("Length obtained from time and speed"), (time.get()) * (speed.value), String(""));
+    
+}
+
+
 void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 
 	String new_prefix;
@@ -7601,6 +7613,14 @@ void Date::set_current(void) {
 	M = (wxGetApp().local_time).date().month().as_number();
 	D = (wxGetApp().local_time).date().day();
 
+}
+
+
+//return the value of *this expresser in hours
+inline double Chrono::get(void){
+    
+    return(((double)h) + ((double)m)/60.0 + ((double)s)/(60.0*60.0));
+    
 }
 
 
@@ -13943,7 +13963,10 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 	}
 
     //the animation starts here
-        f->transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(((wxGetApp().animation_time).h) * 60.0 * 60.0 + ((wxGetApp().animation_time).m) * 60.0 + ((wxGetApp().animation_time).s))/((double)((wxGetApp().n_animation_steps.value)-1)) * 1000.0, wxTIMER_CONTINUOUS);
+        f->transport_handler->timer->Start(
+                                           /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
+                                           (wxGetApp().animation_time.get())*60.0*60.0/((double)((wxGetApp().n_animation_steps.value)-1)) * 1000.0,
+                                           wxTIMER_CONTINUOUS);
     
 	event.Skip(true);
 
@@ -13984,7 +14007,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     }
     
     //the animation starts here
-    f->transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(((wxGetApp().animation_time).h) * 60.0 * 60.0 + ((wxGetApp().animation_time).m) * 60.0 + ((wxGetApp().animation_time).s))/((double)((wxGetApp().n_animation_steps.value)-1)) * 1000.0, wxTIMER_CONTINUOUS);
+    f->transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(wxGetApp().animation_time.get())*60.0*60.0/((double)((wxGetApp().n_animation_steps.value)-1)) * 1000.0, wxTIMER_CONTINUOUS);
     
 	event.Skip(true);
 

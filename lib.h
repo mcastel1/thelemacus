@@ -57,6 +57,7 @@ class LengthFormat;
 class Catalog;
 class Limb;
 class Length;
+class Speed;
 class Data;
 class File;
 class FileRW;
@@ -160,6 +161,7 @@ public:
     
     void print(String, String, ostream&);
     bool set(String, double, String);
+    double get(void);
     void set_current(void);
     template<class S> bool read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
@@ -632,6 +634,7 @@ public:
     
     Length();
     Length(double);
+    Length(Chrono, Speed);
     
     void set(String, double, String);
     void enter(String, String, String);
@@ -651,6 +654,7 @@ class Speed{
     
 public:
     
+    //the value of the Speed, which is expressed in kt
     double value;
     
     Speed();

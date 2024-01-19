@@ -14826,7 +14826,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
         set();
         length_format->Enable(!((route->type) == String("c")));
-        OnChooseLengthFormat();
+        EnableDisableTimeSpeedLength();
 
         start_phi->Enable(for_transport);
         start_lambda->Enable(for_transport);
@@ -15158,7 +15158,7 @@ void RouteFrame::set(void) {
 	}
     
     //enable the length or the time and speed fields
-    OnChooseLengthFormat();
+    EnableDisableTimeSpeedLength();
     
     if((route->length_format) == String("length")){
         //the Route length is simply expressed as a length rather than as a time and speed -> set length field
@@ -15274,7 +15274,7 @@ template<class E> void RouteFrame::EnableDisableTimeSpeedLength(E& event) {
 
 
 //same as RouteFrame::OnChooseLengthFormat(E& event), but it does not accept any argument
-void RouteFrame::OnChooseLengthFormat(void){
+void RouteFrame::EnableDisableTimeSpeedLength(void){
     
     wxCommandEvent dummy;
 
@@ -17662,7 +17662,7 @@ template<class T>void CheckRouteType::operator()(T& event) {
 			(f->start_phi)->Enable(!(f->for_transport));
 			(f->start_lambda)->Enable(!(f->for_transport));
 
-            f->OnChooseLengthFormat();
+            f->EnableDisableTimeSpeedLength();
             
             f->text_time->Enable(enable);
             f->text_speed->Enable(enable);
@@ -18262,7 +18262,7 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
         name->SetForegroundColour(wxGetApp().foreground_color);
         name->SetFont(wxGetApp().default_font);
         //choses the length format entered in name button_reduce
-        parent->OnChooseLengthFormat(event);
+        parent->EnableDisableTimeSpeedLength(event);
 
     }
 

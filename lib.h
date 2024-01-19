@@ -2517,7 +2517,7 @@ public:
     void set(void);
     template<class T> void get(T&);
     template<class E> void EnableDisableTimeSpeedLength(E&);
-    void OnChooseLengthFormat();
+    void EnableDisableTimeSpeedLength();
     void OnPressCancel(wxCommandEvent& event);
     void OnPressOk(wxCommandEvent& event);
     bool is_ok(void);

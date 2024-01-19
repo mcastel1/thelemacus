@@ -1933,6 +1933,7 @@ public:
     void fill_length_formats(void);
     template<class T> void InsertIn(T*);
     template<class E> void OnEdit(E&);
+    void Enable(bool);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };

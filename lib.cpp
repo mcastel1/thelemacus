@@ -14700,6 +14700,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	if (route_in == NULL) {
 
 		Z->Enable(false);
+        length_format->Enable(false);
 		length->Enable(false);
         speed->Enable(false);
         time->Enable(false);
@@ -18220,6 +18221,13 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
     }
 
     event.Skip(true);
+
+}
+
+//this function enables/disable the LengthFormatField
+template<class P> void LengthFormatField<P>::Enable(bool is_enabled) {
+
+    name->Enable(is_enabled);
 
 }
 

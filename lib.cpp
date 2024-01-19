@@ -18597,17 +18597,34 @@ template<class P> void ChronoField<P>::SetBackgroundColor(Color color) {
 //sets the value in the GUI object equal to the value in the non-GUI  object string
 void RouteTypeField::set(void) {
 
-	if ((*type) == String("l")) {
-		name->SetValue(wxString("loxodrome"));
-	}
-	if ((*type) == String("o")) {
-		name->SetValue(wxString("orthodrome"));
-	}
-	if ((*type) == String("c")) {
-		name->SetValue(wxString("circle of equal altitude"));
-	}
+    switch (((type->value)[0])) {
+            
+        case 'l':{
+            
+            name->SetValue(wxString("loxodrome"));
+            
+            break;
+            
+        }
 
-
+        case 'o':{
+            
+            name->SetValue(wxString("orthodrome"));
+            
+            break;
+            
+        }
+            
+        case 'c':{
+            
+            name->SetValue(wxString("circle of equal altitude"));
+            
+            break;
+            
+        }
+      
+    }
+    
 	ok = true;
 
 }

@@ -34,18 +34,62 @@ Data:
 			label = 2024-01-10 12:52:09 UTC+2
 	Routes:
 		Route #1:
+			type = c
+			ground position:
+				latitude = 10° 26.57357190779585'
+				longitude = 262° 14.98696559824793'
+				label = 
+			aperture angle = 66° 4.191972895230549'
+			label = spica 2021-06-21 21:39:32 TAI, Sight was taken at BGC transported with 2024-01-19 16:46:42 UTC+2 transported with 2024-01-19 16:47:10 UTC+2 transported with 2024-01-19 16:47:36 UTC+2
+		Route #2:
+			type = c
+			ground position:
+				latitude = 299° 23.00370303570503'
+				longitude = 357° 38.43111611506743'
+				label = 
+			aperture angle = 77° 5.53050815804113'
+			label = hamal 2024-01-10 12:52:37 TAI, 2024-01-10 12:52:09 UTC+2 transported with ositions: transported with ositions:
+		Route #3:
 			type = o
 			start position:
 				latitude = 304° 26.76196762990912'
 				longitude = 64° 46.12037344398345'
 				label = 2024-01-11 17:17:38 UTC+2
 			starting heading = 126° 3.230000000000643'
-			length = 3000 nm
-			label = 2024-01-11 12:55:38 UTC+2
+			length format = 3000 nm
+				hour of time = 01:00:00
+				speed = 3.011062557068811e-314 kt
+			label = ositions:
+		Route #4:
+			type = l
+			start position:
+				latitude = 348° 43.72696371942652'
+				longitude = 33° 27.00668972063255'
+				label = 
+			starting heading = 33° 2.999999999999829'
+			length format = length
+				length = 3000 nm
+			label = 2024-01-19 16:46:42 UTC+2
+		Route #5:
+			type = l
+			start position:
+				latitude = 22° 53.32998538068225'
+				longitude = 307° 39.20557603686461'
+				label = 
+			starting heading = 321° 22.99999999999955'
+			length format = length
+				length = 3000 nm
+			label = 2024-01-19 16:47:10 UTC+2
+		Route #6:
+			type = l
+			start position:
+				latitude = 44° 34.48255230862998'
+				longitude = 304° 25.54253456220863'
+				label = 
+			starting heading = 133° 3.000000000000682'
+			length format = length
+				length = 3000 nm
+			label = 2024-01-19 16:47:36 UTC+2
 	Positions:
-		Position #1:
-			latitude = 8° 51.17938547473742'
-			longitude = 57° 35.17815979031141'
-			label = Centre Sportif Maryse Hilsz (MH)
 Recent bodies = 12 10 8
 Recent projections = 1 0

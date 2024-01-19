@@ -14669,6 +14669,9 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
     length = new LengthField<RouteFrame>(panel, &(route->l), String("nm"));
     
+    
+    type->Bind(wxEVT_COMBOBOX, &LengthFormatField<RouteFrame>::OnEdit<wxCommandEvent>, length_format);
+    type->Bind(wxEVT_KEY_UP, &LengthFormatField<RouteFrame>::OnEdit<wxKeyEvent>, length_format);
 
     
 	//start position
@@ -19794,6 +19797,7 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 		parent_frame->start_phi->Enable(enable && (!(parent_frame->for_transport)));
 		parent_frame->start_lambda->Enable(enable && (!(parent_frame->for_transport)));
         
+        parent_frame->length_format->Enable(enable);
         parent_frame->time->Enable(enable);
         parent_frame->speed->Enable(enable);
         parent_frame->length->Enable(enable);
@@ -19816,6 +19820,7 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 		parent_frame->start_phi->Enable(false);
 		parent_frame->start_lambda->Enable(false);
         
+        parent_frame->length_format->Enable(false);
         parent_frame->time->Enable(false);
         parent_frame->speed->Enable(false);
         parent_frame->length->Enable(false);

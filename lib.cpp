@@ -15200,14 +15200,14 @@ template<class T> void RouteFrame::get(T& event) {
         if((length_format->name->GetValue()) == length_format->length_formats_catalog[0]){
             //in the GUI field, lengths are expressed at Chrono x Speed -> get t and v and set in the non-GUI field to true
             
-            (route->length_format) = String("time and speed");
+            (route->length_format) = LengthFormat("time and speed");
             time->get(event);
             speed->get(event);
             
         }else{
             //in the GUI field, lenght are expressed simply as a Length -> get l and set in the non-GUI field to false
             
-            (route->length_format) = String("length");
+            (route->length_format) = LengthFormat("length");
             length->get(event);
 
         }
@@ -18282,6 +18282,17 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 }
 
+
+LengthFormat::LengthFormat(void) : String(){
+    
+
+}
+
+
+LengthFormat::LengthFormat(string input) : String(input){
+    
+
+}
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c) {

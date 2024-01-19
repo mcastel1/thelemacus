@@ -52,6 +52,7 @@ class RouteFrame;
 class DrawPanel;
 class Position;
 class TransportHandler;
+class LengthFormat;
 
 class Catalog;
 class Limb;
@@ -762,11 +763,22 @@ public:
 };
 
 
+class LengthFormat: public String{
+    
+public:
+
+    LengthFormat();
+    LengthFormat(string);
+    
+};
+
 //if type = l or o, the parameters specifying the route are reference_position (which in this case is the start position of the Route), alpha, l. if type = c, the parameters specifying the route are reference_position (which in this case is the GP of the circle of equal altitude) and omega.
 class Route{
     
 public:
-    String type, label, temp_prefix,   /*the length of the Route is expressed as the length l (if length_format.value == "length"), or as the product of the Speed v and the time t (if length_format.value == "time and speed")*/ length_format;
+    String type, label, temp_prefix;
+    //the length of the Route is expressed as the length l (if length_format.value == "length"), or as the product of the Speed v and the time t (if length_format.value == "time and speed")
+    LengthFormat length_format;
     //if type = l or o -> reference_position = start position, if type = c -> reference_position = ground position
     Position reference_position, end;
     //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude

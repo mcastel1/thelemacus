@@ -2481,19 +2481,19 @@ public:
     RouteTypeField *type;
     AngleField<RouteFrame> *Z, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
     //l_format tells whether the length of Route is written simply as a Length, or as a Speed x a Chrono (a time)
-    LengthFormatField<RouteFrame>* l_format;
+    LengthFormatField<RouteFrame>* length_format;
     //if the length of the Route is written directly as a length, this field is used
-    LengthField<RouteFrame> *l;
+    LengthField<RouteFrame> *length;
     //if the lenght of the Route is written in terms of a speed multiplied by a time, the following two fields are used
-    ChronoField<RouteFrame> *t;
-    SpeedField<RouteFrame> *v;
+    ChronoField<RouteFrame> *time;
+    SpeedField<RouteFrame> *speed;
     StringField<RouteFrame> *label;
     
     wxFlexGridSizer *sizer_grid_type, *sizer_grid_Z, *sizer_grid_t_v, *sizer_grid_l, *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;
     wxBoxSizer *sizer, /*this sizer containts the Length format GUI field, the Length GUI field and the speed and time GUI fields*/*sizer_l_format_l_t_v, *box_sizer;
     wxStaticBoxSizer *sizer_box_data, *sizer_box_l_format_l_t_v, *sizer_box_l, *sizer_box_t_v, *sizer_box_start, *sizer_box_GP;
     //static texts for the GUI fields containing the Route length, speed and time
-    wxStaticText *text_t, *text_v, *text_l;
+    wxStaticText *text_time, *text_speed, *text_l;
     wxButton* /*this button triggers either the addition of a new Route, or the modification of an existing one*/button_ok, *button_cancel;
     
     RouteFrame(ListFrame*, Route*, bool, long, const wxString&, const wxPoint&, const wxSize&, String);

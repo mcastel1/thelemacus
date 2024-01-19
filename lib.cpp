@@ -14656,18 +14656,18 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     
     //format in which lengths are expressed
     StaticText* text_l_format = new StaticText(panel, wxT("Length format"), wxDefaultPosition, wxDefaultSize, 0);
-    l_format = new LengthFormatField<RouteFrame>(panel);
+    length_format = new LengthFormatField<RouteFrame>(panel);
     
     //the field for time to set the Route length
-    text_t = new StaticText(panel, wxT("Time"), wxDefaultPosition, wxDefaultSize, 0);
-    t = new ChronoField<RouteFrame>(panel, &(route->t));
+    text_time = new StaticText(panel, wxT("Time"), wxDefaultPosition, wxDefaultSize, 0);
+    time = new ChronoField<RouteFrame>(panel, &(route->t));
     //the field for speed to set the Route length
-    text_v = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
-    v = new SpeedField<RouteFrame>(panel, &(route->v), String("kt"));
+    text_speed = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
+    speed = new SpeedField<RouteFrame>(panel, &(route->v), String("kt"));
     
     //the field for Length to set the Route length
     text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
-    l = new LengthField<RouteFrame>(panel, &(route->l), String("nm"));
+    length = new LengthField<RouteFrame>(panel, &(route->l), String("nm"));
     
 
     
@@ -14700,11 +14700,11 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	if (route_in == NULL) {
 
 		Z->Enable(false);
-		l->Enable(false);
-        v->Enable(false);
-        t->Enable(false);
-        text_t->Enable(false);
-        text_v->Enable(false);
+		length->Enable(false);
+        speed->Enable(false);
+        time->Enable(false);
+        text_time->Enable(false);
+        text_speed->Enable(false);
         text_l->Enable(false);
 		start_phi->Enable(false);
 		start_lambda->Enable(false);
@@ -14735,10 +14735,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	start_lambda->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	GP_phi->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	GP_lambda->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    l_format->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-	l->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    t->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    v->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    length_format->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+	length->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    time->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    speed->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
     
 
@@ -14748,18 +14748,18 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	sizer_grid_Z->Add(text_Z, 0, wxALIGN_CENTER_VERTICAL);
 	Z->InsertIn<wxFlexGridSizer>(sizer_grid_Z);
     
-    sizer_grid_t_v->Add(text_t, 0, wxALIGN_CENTER_VERTICAL);
-    t->InsertIn<wxFlexGridSizer>(sizer_grid_t_v);
-    sizer_grid_t_v->Add(text_v, 0, wxALIGN_CENTER_VERTICAL);
-    v->InsertIn<wxFlexGridSizer>(sizer_grid_t_v);
+    sizer_grid_t_v->Add(text_time, 0, wxALIGN_CENTER_VERTICAL);
+    time->InsertIn<wxFlexGridSizer>(sizer_grid_t_v);
+    sizer_grid_t_v->Add(text_speed, 0, wxALIGN_CENTER_VERTICAL);
+    speed->InsertIn<wxFlexGridSizer>(sizer_grid_t_v);
     sizer_box_t_v->Add(sizer_grid_t_v);
     
 	sizer_grid_l->Add(text_l, 0, wxALIGN_CENTER_VERTICAL);
-	l->InsertIn<wxFlexGridSizer>(sizer_grid_l);
+	length->InsertIn<wxFlexGridSizer>(sizer_grid_l);
     sizer_box_l->Add(sizer_grid_l);
 
     sizer_l_format_l_t_v->Add(text_l_format, 0, wxALIGN_LEFT);
-    l_format->InsertIn<wxBoxSizer>(sizer_l_format_l_t_v);
+    length_format->InsertIn<wxBoxSizer>(sizer_l_format_l_t_v);
     sizer_l_format_l_t_v->Add(sizer_box_t_v);
     sizer_l_format_l_t_v->Add(sizer_box_l);
 
@@ -15035,7 +15035,7 @@ bool RouteFrame::is_ok(void) {
               (Z->is_ok()) &&
               ((start_phi->is_ok()) || for_transport) &&
               ((start_lambda->is_ok()) || for_transport) &&
-              ( ((((l_format->name)->GetValue()) == wxString("Time and speed")) && ((t->is_ok()) && (v->is_ok()))) || ((((l_format->name)->GetValue()) == wxString("Length")) && (l->is_ok())) )
+              ( ((((length_format->name)->GetValue()) == wxString("Time and speed")) && ((time->is_ok()) && (speed->is_ok()))) || ((((length_format->name)->GetValue()) == wxString("Length")) && (length->is_ok())) )
               )
              )
             
@@ -15108,11 +15108,11 @@ void RouteFrame::set(void) {
 		start_phi->Enable(false);
 		start_lambda->Enable(false);
 
-        t->Enable(false);
-        v->Enable(false);
-        l->Enable(false);
-        text_t->Enable(false);
-        text_v->Enable(false);
+        time->Enable(false);
+        speed->Enable(false);
+        length->Enable(false);
+        text_time->Enable(false);
+        text_speed->Enable(false);
         text_l->Enable(false);
 
 		GP_phi->set();
@@ -15135,19 +15135,19 @@ void RouteFrame::set(void) {
         if((route->length_format.value) == "time and speed"){
             //the length in *route is written as a Chrono x a Speed
             
-            l_format->name->SetValue(l_format->length_formats_catalog[0]);
-            t->set();
-            v->set();
+            length_format->name->SetValue(length_format->length_formats_catalog[0]);
+            time->set();
+            speed->set();
 
         }else{
             //the length in *route is written simply as a Length
             
-            l_format->name->SetValue(l_format->length_formats_catalog[1]);
-            l->set();
+            length_format->name->SetValue(length_format->length_formats_catalog[1]);
+            length->set();
             
         }
         
-        l_format->OnEdit(dummy);
+        length_format->OnEdit(dummy);
 
 		GP_phi->Enable(false);
 		GP_lambda->Enable(false);
@@ -15178,18 +15178,18 @@ template<class T> void RouteFrame::get(T& event) {
 		start_phi->get(event);
 		start_lambda->get(event);
         
-        if((l_format->name->GetValue()) == l_format->length_formats_catalog[0]){
+        if((length_format->name->GetValue()) == length_format->length_formats_catalog[0]){
             //in the GUI field, lengths are expressed at Chrono x Speed -> get t and v and set in the non-GUI field to true
             
             (route->length_format) = String("time and speed");
-            t->get(event);
-            v->get(event);
+            time->get(event);
+            speed->get(event);
             
         }else{
             //in the GUI field, lenght are expressed simply as a Length -> get l and set in the non-GUI field to false
             
             (route->length_format) = String("length");
-            l->get(event);
+            length->get(event);
 
         }
 
@@ -15205,18 +15205,18 @@ template<class E> void RouteFrame::OnChooseLengthFormat(E& event) {
     int i;
     
     //run over all entries of length_formats_catalog and store in i the id of the entry that is equal to l_format->name->GetValue()
-    for(i=0; (i<(l_format->length_formats_catalog).size()) && ((l_format->name->GetValue()) != (l_format->length_formats_catalog)[i]); i++){}
+    for(i=0; (i<(length_format->length_formats_catalog).size()) && ((length_format->name->GetValue()) != (length_format->length_formats_catalog)[i]); i++){}
     
     switch (i) {
             
         case 0:{
            //l_format->name->GetValue() = "Time x speed" -> disable l, enable v and t
   
-            t->Enable(true);
-            v->Enable(true);
-            l->Enable(false);
-            text_t->Enable(true);
-            text_v->Enable(true);
+            time->Enable(true);
+            speed->Enable(true);
+            length->Enable(false);
+            text_time->Enable(true);
+            text_speed->Enable(true);
             text_l->Enable(false);
 
             break;
@@ -15226,11 +15226,11 @@ template<class E> void RouteFrame::OnChooseLengthFormat(E& event) {
         case 1:{
             //l_format->name->GetValue() = "Length" -> enable l, disable v and t
 
-            t->Enable(false);
-            v->Enable(false);
-            l->Enable(true);
-            text_t->Enable(false);
-            text_v->Enable(false);
+            time->Enable(false);
+            speed->Enable(false);
+            length->Enable(true);
+            text_time->Enable(false);
+            text_speed->Enable(false);
             text_l->Enable(true);
 
             break;
@@ -17623,11 +17623,11 @@ template<class T>void CheckRouteType::operator()(T& event) {
 			(f->start_phi)->Enable(!(f->for_transport));
 			(f->start_lambda)->Enable(!(f->for_transport));
 
-            f->t->Enable(enable);
-            f->v->Enable(enable);
-            f->l->Enable(enable);
-            f->text_t->Enable(enable);
-            f->text_v->Enable(enable);
+            f->time->Enable(enable);
+            f->speed->Enable(enable);
+            f->length->Enable(enable);
+            f->text_time->Enable(enable);
+            f->text_speed->Enable(enable);
             f->text_l->Enable(enable);
 
 
@@ -17642,11 +17642,11 @@ template<class T>void CheckRouteType::operator()(T& event) {
 			(f->start_phi)->Enable(false);
 			(f->start_lambda)->Enable(false);
             
-            f->t->Enable(false);
-            f->v->Enable(false);
-            f->l->Enable(false);
-            f->text_t->Enable(false);
-            f->text_v->Enable(false);
+            f->time->Enable(false);
+            f->speed->Enable(false);
+            f->length->Enable(false);
+            f->text_time->Enable(false);
+            f->text_speed->Enable(false);
             f->text_l->Enable(false);
             
 			(f->GP_phi)->Enable(false);
@@ -19769,11 +19769,11 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 		parent_frame->start_phi->Enable(enable && (!(parent_frame->for_transport)));
 		parent_frame->start_lambda->Enable(enable && (!(parent_frame->for_transport)));
         
-        parent_frame->t->Enable(enable);
-        parent_frame->v->Enable(enable);
-        parent_frame->l->Enable(enable);
-        parent_frame->text_t->Enable(enable);
-        parent_frame->text_v->Enable(enable);
+        parent_frame->time->Enable(enable);
+        parent_frame->speed->Enable(enable);
+        parent_frame->length->Enable(enable);
+        parent_frame->text_time->Enable(enable);
+        parent_frame->text_speed->Enable(enable);
         parent_frame->text_l->Enable(enable);
 
 		parent_frame->GP_phi->Enable(!enable);
@@ -19791,11 +19791,11 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 		parent_frame->start_phi->Enable(false);
 		parent_frame->start_lambda->Enable(false);
         
-        parent_frame->t->Enable(false);
-        parent_frame->v->Enable(false);
-        parent_frame->l->Enable(false);
-        parent_frame->text_t->Enable(false);
-        parent_frame->text_v->Enable(false);
+        parent_frame->time->Enable(false);
+        parent_frame->speed->Enable(false);
+        parent_frame->length->Enable(false);
+        parent_frame->text_time->Enable(false);
+        parent_frame->text_speed->Enable(false);
         parent_frame->text_l->Enable(false);
         
         parent_frame->GP_phi->Enable(false);

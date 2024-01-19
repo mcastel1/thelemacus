@@ -101,16 +101,12 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
-<<<<<<< HEAD
+- when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on 
  - allow for messages with \n QuestionFrame and MessageFrame
-=======
- - frames are not resized according to the size of their title 
+ - frames are not resized according to the size of their title
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class
  - revise constants for units of measure in SpeedField<P>::set and SpeedField<P>::get and Speed::print
- - when you transport something -> existing Route -> press cancel bbecause you changed your mind -> something is transported anyway
->>>>>>> speed_time
  for MSW:
- - esc key does not work in SightFrame and other *Frames when one does not FOCUS on a control
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  */

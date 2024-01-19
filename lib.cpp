@@ -14695,33 +14695,6 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	StaticText* text_label = new StaticText(panel, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0);
 	label = new StringField<RouteFrame>(panel, &(route->label));
 
-
-	//If the user is about to enter a brand new route, then these fields are disabled until a route type si specified
-	if (route_in == NULL) {
-
-		Z->Enable(false);
-        length_format->Enable(false);
-		length->Enable(false);
-        speed->Enable(false);
-        time->Enable(false);
-        text_time->Enable(false);
-        text_speed->Enable(false);
-        text_l->Enable(false);
-		start_phi->Enable(false);
-		start_lambda->Enable(false);
-		GP_phi->Enable(false);
-		GP_lambda->Enable(false);
-		omega->Enable(false);
-
-	}
-	else {
-
-		start_phi->Enable(for_transport);
-		start_lambda->Enable(for_transport);
-        OnChooseLengthFormat();
-
-	}
-
 	//I enable the ok button only if route_in is a valid route with the entries propely filled, i.e., only if route_in != NULL
 	button_ok->Bind(wxEVT_BUTTON, &RouteFrame::OnPressOk, this);
 	button_ok->Enable((route_in != NULL));
@@ -14826,12 +14799,35 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 		cout << prefix.value << RED << "Cannot read route!\n" << RESET;
         
 	}
-
     
-	if (route_in != NULL){
-        
+    //If the user is about to enter a brand new route, then these fields are disabled until a route type si specified
+    if (route_in == NULL) {
+
+        Z->Enable(false);
+        length_format->Enable(false);
+        length->Enable(false);
+        speed->Enable(false);
+        time->Enable(false);
+        text_time->Enable(false);
+        text_speed->Enable(false);
+        text_l->Enable(false);
+        start_phi->Enable(false);
+        start_lambda->Enable(false);
+        GP_phi->Enable(false);
+        GP_lambda->Enable(false);
+        omega->Enable(false);
+
+    }
+    else {
+        //I am reading an existing Route -> I call set -> the LengthFormatField will be set -> I call OnChooseLengthFormat to enable/disable the related GUI fields accordingly
+
         set();
-        
+        length_format->Enable(!((route->type) == String("c")));
+        OnChooseLengthFormat();
+
+        start_phi->Enable(for_transport);
+        start_lambda->Enable(for_transport);
+
     }
 
 	Centre();
@@ -15204,41 +15200,51 @@ template<class T> void RouteFrame::get(T& event) {
 
 template<class E> void RouteFrame::OnChooseLengthFormat(E& event) {
     
-    int i;
-    
-    //run over all entries of length_formats_catalog and store in i the id of the entry that is equal to l_format->name->GetValue()
-    for(i=0; (i<(length_format->length_formats_catalog).size()) && ((length_format->name->GetValue()) != (length_format->length_formats_catalog)[i]); i++){}
-    
-    switch (i) {
-            
-        case 0:{
-           //l_format->name->GetValue() = "Time x speed" -> disable l, enable v and t
-  
-            time->Enable(true);
-            speed->Enable(true);
-            length->Enable(false);
-            text_time->Enable(true);
-            text_speed->Enable(true);
-            text_l->Enable(false);
-
-            break;
-            
+    if(length_format->name->IsEnabled()){
+        
+        int i;
+        bool b;
+        
+        //run over all entries of length_formats_catalog and store in i the id of the entry that is equal to l_format->name->GetValue()
+        for(i=0; (i<(length_format->length_formats_catalog).size()) && ((length_format->name->GetValue()) != (length_format->length_formats_catalog)[i]); i++){}
+        
+        switch (i) {
+                
+            case 0:{
+                //l_format->name->GetValue() = "Time x speed" -> disable l, enable v and t
+                
+                b = true;
+                break;
+                
+            }
+                
+            case 1:{
+                //l_format->name->GetValue() = "Length" -> enable l, disable v and t
+                
+                b = false;
+                break;
+                
+            }
+                
         }
-
-        case 1:{
-            //l_format->name->GetValue() = "Length" -> enable l, disable v and t
-
-            time->Enable(false);
-            speed->Enable(false);
-            length->Enable(true);
-            text_time->Enable(false);
-            text_speed->Enable(false);
-            text_l->Enable(true);
-
-            break;
-            
-        }
-            
+        
+        time->Enable(b);
+        speed->Enable(b);
+        length->Enable(!b);
+        text_time->Enable(b);
+        text_speed->Enable(b);
+        text_l->Enable(!b);
+        
+    }else{
+        //length_format is disabled -> disable both speed and time, and length
+        
+        time->Enable(false);
+        speed->Enable(false);
+        length->Enable(false);
+        text_time->Enable(false);
+        text_speed->Enable(false);
+        text_l->Enable(false);
+        
     }
     
     event.Skip(true);

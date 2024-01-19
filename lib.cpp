@@ -15100,8 +15100,9 @@ void RouteFrame::KeyDown(wxKeyEvent& event) {
 void RouteFrame::set(void) {
 
 	type->set();
+    length_format->set();
 
-	if (((type->name)->GetValue()) == wxString("circle of equal altitude")) {
+	if ((route->type.value) == wxString("c")) {
 		//I disable the GUI fields which do not define a circle of equal altitude and set the others
 
 		Z->Enable(false);
@@ -15109,12 +15110,12 @@ void RouteFrame::set(void) {
 		start_phi->Enable(false);
 		start_lambda->Enable(false);
 
-        time->Enable(false);
-        speed->Enable(false);
-        length->Enable(false);
-        text_time->Enable(false);
-        text_speed->Enable(false);
-        text_l->Enable(false);
+//        time->Enable(false);
+//        speed->Enable(false);
+//        length->Enable(false);
+//        text_time->Enable(false);
+//        text_speed->Enable(false);
+//        text_l->Enable(false);
 
 		GP_phi->set();
 		GP_lambda->set();
@@ -15133,28 +15134,45 @@ void RouteFrame::set(void) {
         start_phi->Enable(!for_transport);
         start_lambda->Enable(!for_transport);
         
-        if((route->length_format.value) == "time and speed"){
-            //the length in *route is written as a Chrono x a Speed
-            
-            length_format->name->SetValue(length_format->length_formats_catalog[0]);
-            time->set();
-            speed->set();
-
-        }else{
-            //the length in *route is written simply as a Length
-            
-            length_format->name->SetValue(length_format->length_formats_catalog[1]);
-            length->set();
-            
-        }
-        
-        length_format->OnEdit(dummy);
+//        if((route->length_format.value) == "time and speed"){
+//            //the length in *route is written as a Chrono x a Speed
+//            
+//            length_format->name->SetValue(length_format->length_formats_catalog[0]);
+//            time->set();
+//            speed->set();
+//
+//        }else{
+//            //the length in *route is written simply as a Length
+//            
+//            length_format->name->SetValue(length_format->length_formats_catalog[1]);
+//            length->set();
+//            
+//        }
+//        
+//        length_format->OnEdit(dummy);
 
 		GP_phi->Enable(false);
 		GP_lambda->Enable(false);
 		omega->Enable(false);
 
 	}
+    
+    //enable the length or the time and speed fields
+    OnChooseLengthFormat();
+    
+    if((route->length_format) == String("length")){
+        //the Route length is simply expressed as a length rather than as a time and speed -> set length field
+        
+        length->set();
+        
+        
+    }else{
+        //the Route length is expressed as a time and a speed -> set time and speed field
+        
+        time->set();
+        speed->set();
+        
+    }
 
 	label->set();
 
@@ -15201,9 +15219,9 @@ template<class T> void RouteFrame::get(T& event) {
 
 }
 
-template<class E> void RouteFrame::OnChooseLengthFormat(E& event) {
+template<class E> void RouteFrame::EnableDisableTimeSpeedLength(E& event) {
     
-    if(length_format->name->IsEnabled()){
+    if((length_format->name->IsEnabled()) && (length_format->is_ok())){
         
         int i;
         bool b;
@@ -15260,7 +15278,7 @@ void RouteFrame::OnChooseLengthFormat(void){
     
     wxCommandEvent dummy;
 
-    OnChooseLengthFormat(dummy);
+    EnableDisableTimeSpeedLength(dummy);
     
 }
 
@@ -17644,9 +17662,8 @@ template<class T>void CheckRouteType::operator()(T& event) {
 			(f->start_phi)->Enable(!(f->for_transport));
 			(f->start_lambda)->Enable(!(f->for_transport));
 
-            f->time->Enable(enable);
-            f->speed->Enable(enable);
-            f->length->Enable(enable);
+            f->OnChooseLengthFormat();
+            
             f->text_time->Enable(enable);
             f->text_speed->Enable(enable);
             f->text_l->Enable(enable);
@@ -18250,6 +18267,14 @@ template<class P> void LengthFormatField<P>::Enable(bool is_enabled) {
     name->Enable(is_enabled);
 
 }
+
+//return true(false) is *this is ok (not ok), i.e., if this->ok = true(false)
+template<class P> bool LengthFormatField<P>::is_ok(void) {
+
+    return(ok);
+
+}
+
 
 template<class P> template <typename EventTag, typename Method, typename Object> void LengthFormatField<P>::Bind(EventTag tag, Method method, Object object) {
 

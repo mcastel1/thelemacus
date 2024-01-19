@@ -1934,6 +1934,7 @@ public:
     template<class T> void InsertIn(T*);
     template<class E> void OnEdit(E&);
     void Enable(bool);
+    bool is_ok(void);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
@@ -2500,7 +2501,7 @@ public:
     RouteFrame(ListFrame*, Route*, bool, long, const wxString&, const wxPoint&, const wxSize&, String);
     void set(void);
     template<class T> void get(T&);
-    template<class E> void OnChooseLengthFormat(E&);
+    template<class E> void EnableDisableTimeSpeedLength(E&);
     void OnChooseLengthFormat();
     void OnPressCancel(wxCommandEvent& event);
     void OnPressOk(wxCommandEvent& event);

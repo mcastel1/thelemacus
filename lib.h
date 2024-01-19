@@ -2150,6 +2150,8 @@ public:
     ListControl<Sight> *listcontrol_sights;
     ListControl<Route>* listcontrol_routes;
     ListControl<Position>* listcontrol_positions;
+    //this is used to transport objects listed in *this
+    TransportHandler* transport_handler;
     //extract_colors is created only to detect the background and foreground colors set by the operating systems, it has no other use. As a result, its size will be set to zero.
     wxTextCtrl* extract_colors;
     wxPanel *panel;

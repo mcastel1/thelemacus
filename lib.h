@@ -2501,6 +2501,7 @@ public:
     void set(void);
     template<class T> void get(T&);
     template<class E> void OnChooseLengthFormat(E&);
+    void OnChooseLengthFormat();
     void OnPressCancel(wxCommandEvent& event);
     void OnPressOk(wxCommandEvent& event);
     bool is_ok(void);

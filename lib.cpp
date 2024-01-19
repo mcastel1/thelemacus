@@ -14718,6 +14718,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
 		start_phi->Enable(for_transport);
 		start_lambda->Enable(for_transport);
+        OnChooseLengthFormat();
 
 	}
 
@@ -15241,6 +15242,16 @@ template<class E> void RouteFrame::OnChooseLengthFormat(E& event) {
     }
     
     event.Skip(true);
+    
+}
+
+
+//same as RouteFrame::OnChooseLengthFormat(E& event), but it does not accept any argument
+void RouteFrame::OnChooseLengthFormat(void){
+    
+    wxCommandEvent dummy;
+
+    OnChooseLengthFormat(dummy);
     
 }
 

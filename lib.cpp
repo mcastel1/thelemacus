@@ -14825,8 +14825,6 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
         //I am reading an existing Route -> I call set -> the LengthFormatField will be set -> I call OnChooseLengthFormat to enable/disable the related GUI fields accordingly
 
         set();
-        length_format->Enable(!((route->type) == String("c")));
-        EnableDisableTimeSpeedLength();
 
         start_phi->Enable(for_transport);
         start_lambda->Enable(for_transport);
@@ -15158,7 +15156,7 @@ void RouteFrame::set(void) {
 	}
     
     //enable the length or the time and speed fields
-    EnableDisableTimeSpeedLength();
+    TryToEnableTimeSpeedLength();
     
     if((route->length_format) == String("length")){
         //the Route length is simply expressed as a length rather than as a time and speed -> set length field
@@ -15219,45 +15217,65 @@ template<class T> void RouteFrame::get(T& event) {
 
 }
 
-template<class E> void RouteFrame::EnableDisableTimeSpeedLength(E& event) {
+template<class E> void RouteFrame::TryToEnableTimeSpeedLength(E& event) {
     
-    if((length_format->name->IsEnabled()) && (length_format->is_ok())){
+    if((type->is_ok()) && (length_format->is_ok())){
         
-        int i;
-        bool b;
-        
-        //run over all entries of length_formats_catalog and store in i the id of the entry that is equal to l_format->name->GetValue()
-        for(i=0; (i<(length_format->length_formats_catalog).size()) && ((length_format->name->GetValue()) != (length_format->length_formats_catalog)[i]); i++){}
-        
-        switch (i) {
-                
-            case 0:{
-                //l_format->name->GetValue() = "Time x speed" -> disable l, enable v and t
-                
-                b = true;
-                break;
-                
+        if((type->name->GetValue()) != wxString("circle of equal altitude")){
+            //the Route is either a loxodrome or an orthodrome
+            
+            int i;
+            bool b;
+            
+            //run over all entries of length_formats_catalog and store in i the id of the entry that is equal to l_format->name->GetValue()
+            for(i=0; (i<(length_format->length_formats_catalog).size()) && ((length_format->name->GetValue()) != (length_format->length_formats_catalog)[i]); i++){}
+            
+            switch (i) {
+                    
+                case 0:{
+                    //l_format->name->GetValue() = "Time x speed" -> disable l, enable v and t
+                    
+                    b = true;
+                    break;
+                    
+                }
+                    
+                case 1:{
+                    //l_format->name->GetValue() = "Length" -> enable l, disable v and t
+                    
+                    b = false;
+                    break;
+                    
+                }
+                    
             }
-                
-            case 1:{
-                //l_format->name->GetValue() = "Length" -> enable l, disable v and t
-                
-                b = false;
-                break;
-                
-            }
-                
+            
+            length_format->Enable(true);
+            
+            time->Enable(b);
+            speed->Enable(b);
+            length->Enable(!b);
+            text_time->Enable(b);
+            text_speed->Enable(b);
+            text_l->Enable(!b);
+            
+        }else{
+            //the Route is a circle of equal altitude -> the length is not defined -> disable the length_format field as well as all fields related to the length
+            
+            length_format->Enable(false);
+            
+            time->Enable(false);
+            speed->Enable(false);
+            length->Enable(false);
+            text_time->Enable(false);
+            text_speed->Enable(false);
+            text_l->Enable(false);
+            
         }
         
-        time->Enable(b);
-        speed->Enable(b);
-        length->Enable(!b);
-        text_time->Enable(b);
-        text_speed->Enable(b);
-        text_l->Enable(!b);
-        
     }else{
-        //length_format is disabled -> disable both speed and time, and length
+         
+        length_format->Enable(false);
         
         time->Enable(false);
         speed->Enable(false);
@@ -15274,11 +15292,11 @@ template<class E> void RouteFrame::EnableDisableTimeSpeedLength(E& event) {
 
 
 //same as RouteFrame::OnChooseLengthFormat(E& event), but it does not accept any argument
-void RouteFrame::EnableDisableTimeSpeedLength(void){
+void RouteFrame::TryToEnableTimeSpeedLength(void){
     
     wxCommandEvent dummy;
 
-    EnableDisableTimeSpeedLength(dummy);
+    TryToEnableTimeSpeedLength(dummy);
     
 }
 
@@ -17661,14 +17679,7 @@ template<class T>void CheckRouteType::operator()(T& event) {
 
 			(f->start_phi)->Enable(!(f->for_transport));
 			(f->start_lambda)->Enable(!(f->for_transport));
-
-            f->EnableDisableTimeSpeedLength();
             
-            f->text_time->Enable(enable);
-            f->text_speed->Enable(enable);
-            f->text_l->Enable(enable);
-
-
 			(f->GP_phi)->Enable(!enable);
 			(f->GP_lambda)->Enable(!enable);
 			(f->omega)->Enable(!enable);
@@ -17679,19 +17690,15 @@ template<class T>void CheckRouteType::operator()(T& event) {
 			(f->Z)->Enable(false);
 			(f->start_phi)->Enable(false);
 			(f->start_lambda)->Enable(false);
-            
-            f->time->Enable(false);
-            f->speed->Enable(false);
-            f->length->Enable(false);
-            f->text_time->Enable(false);
-            f->text_speed->Enable(false);
-            f->text_l->Enable(false);
+
             
 			(f->GP_phi)->Enable(false);
 			(f->GP_lambda)->Enable(false);
 			(f->omega)->Enable(false);
 
 		}
+        
+        f->TryToEnableTimeSpeedLength();
 
 
 		if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
@@ -18262,7 +18269,7 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
         name->SetForegroundColour(wxGetApp().foreground_color);
         name->SetFont(wxGetApp().default_font);
         //choses the length format entered in name button_reduce
-        parent->EnableDisableTimeSpeedLength(event);
+        parent->TryToEnableTimeSpeedLength(event);
 
     }
 
@@ -19842,14 +19849,6 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 		parent_frame->start_phi->Enable(enable && (!(parent_frame->for_transport)));
 		parent_frame->start_lambda->Enable(enable && (!(parent_frame->for_transport)));
         
-        parent_frame->length_format->Enable(enable);
-        parent_frame->time->Enable(enable);
-        parent_frame->speed->Enable(enable);
-        parent_frame->length->Enable(enable);
-        parent_frame->text_time->Enable(enable);
-        parent_frame->text_speed->Enable(enable);
-        parent_frame->text_l->Enable(enable);
-
 		parent_frame->GP_phi->Enable(!enable);
 		parent_frame->GP_lambda->Enable(!enable);
 		parent_frame->omega->Enable(!enable);
@@ -19865,14 +19864,6 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 		parent_frame->start_phi->Enable(false);
 		parent_frame->start_lambda->Enable(false);
         
-        parent_frame->length_format->Enable(false);
-        parent_frame->time->Enable(false);
-        parent_frame->speed->Enable(false);
-        parent_frame->length->Enable(false);
-        parent_frame->text_time->Enable(false);
-        parent_frame->text_speed->Enable(false);
-        parent_frame->text_l->Enable(false);
-        
         parent_frame->GP_phi->Enable(false);
         parent_frame->GP_lambda->Enable(false);
         parent_frame->omega->Enable(false);
@@ -19881,7 +19872,11 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 
 	//ok is true/false is the text entered is valid/invalid
 	ok = success;
-	//tries to enable button_reduce
+    
+    //try to enable time, speed and length
+    parent_frame->TryToEnableTimeSpeedLength(event);
+    
+	//try to enable button_reduce
 	parent_frame->AllOk();
 
 	event.Skip(true);

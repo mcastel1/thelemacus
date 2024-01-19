@@ -1943,7 +1943,7 @@ public:
     vector<int> recent_items;
     bool ok;
     
-    LengthFormatField(wxPanel*);
+    LengthFormatField(wxPanel*, LengthFormat*);
     void fill_length_formats(void);
     void set(void);
     template<class T> void InsertIn(T*);

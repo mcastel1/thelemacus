@@ -14656,7 +14656,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     
     //format in which lengths are expressed
     StaticText* text_l_format = new StaticText(panel, wxT("Length format"), wxDefaultPosition, wxDefaultSize, 0);
-    length_format = new LengthFormatField<RouteFrame>(panel);
+    length_format = new LengthFormatField<RouteFrame>(panel, &(route->length_format));
     
     //the field for time to set the Route length
     text_time = new StaticText(panel, wxT("Time"), wxDefaultPosition, wxDefaultSize, 0);
@@ -18150,9 +18150,10 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 
 //constructor of a LengthFormatField object, based on the parent frame frame
-template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent) {
+template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p) {
 
     parent = ((P*)(panel_of_parent->GetParent()));
+    length_format = p;
 
     length_formats_catalog.Clear();
     length_formats_catalog.Add(wxT("Time and speed"));

@@ -18227,6 +18227,14 @@ template<class P> void LengthFormatField<P>::fill_length_formats(void){
 
 }
 
+//sets the value in the GUI object name equal to the value in the non-GUI LengthFormat object length_format
+template<class P> void LengthFormatField<P>::set(void) {
+
+    name->SetValue((length_format->value));
+    ok = true;
+
+}
+
 
 template<class P> template<class T> void LengthFormatField<P>::InsertIn(T* host) {
 

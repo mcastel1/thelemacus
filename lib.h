@@ -28,10 +28,12 @@
 
 template<class P> class BodyField;
 template<class P> class ProjectionField;
+template<class P> class LengthFormatField;
 template<class P> class LimbField;
 template<class P, class T> class CheckField;
 template<class P> class AngleField;
 template<class P> class LengthField;
+template<class P> class SpeedField;
 template<class P> class DateField;
 template<class P> class ChronoField;
 class RouteTypeField;
@@ -652,7 +654,10 @@ public:
     
     Speed();
     Speed(double);
+    void set(String, double, String);
     void enter(String, String);
+    void print(String, String, String, ostream&);
+    template<class S> void read_from_stream(String, S*, bool, String);
     bool check_valid(String, String);
     void print(String, String, ostream&);
     
@@ -761,14 +766,16 @@ public:
 class Route{
     
 public:
-    String type, label, temp_prefix;
+    String type, label, temp_prefix,   /*the length of the Route is expressed as the length l (if length_format.value == "length"), or as the product of the Speed v and the time t (if length_format.value == "time and speed")*/ length_format;
     //if type = l or o -> reference_position = start position, if type = c -> reference_position = ground position
     Position reference_position, end;
     //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude
     Angle /*this is equal to alpha_notes: it is the azimuth of the vector tangent to the Route at reference_position*/Z, omega;
     //the length of the route
+  
     Length l;
-    Speed sog;
+    Speed v;
+    Chrono t;
     //this is the position in sight_list of the sight linked to route. If there is no sight linked to route, then related_sight = -1.
     Int related_sight;
     //a list of points containing the geo coordinates of points on the Route this
@@ -952,6 +959,7 @@ public:
     //the recent bodies, projections, ... selected by the user are stored here
     vector<int> recent_bodies;
     vector<int> recent_projections;
+    vector<int> recent_length_formats;
 
     Data(Catalog*, String);
     //~Data();
@@ -1090,6 +1098,18 @@ public:
     ProjectionField<P>* p;
     
     CheckProjection(ProjectionField<P>*);
+    template<class T> void operator()(T&);
+    
+};
+
+//this checks if an element of the LengthFormatField class is valid
+template<class P> class CheckLengthFormat{
+    
+public:
+    
+    LengthFormatField<P>* p;
+    
+    CheckLengthFormat(LengthFormatField<P>*);
     template<class T> void operator()(T&);
     
 };
@@ -1270,6 +1290,43 @@ public:
     CheckLengthUnit<P>* check_length_unit;
     
     CheckLength(LengthField<P>*);
+    template <class T> void operator()(T&);
+    
+};
+
+
+template<class P> class CheckSpeedValue{
+    
+public:
+    
+    SpeedField<P>* p;
+    
+    CheckSpeedValue(SpeedField<P>*);
+    template<class T> void operator()(T&);
+    
+};
+
+template<class P> class CheckSpeedUnit{
+    
+public:
+    
+    SpeedField<P>* p;
+    
+    CheckSpeedUnit(SpeedField<P>*);
+    template<class T> void operator()(T&);
+    
+};
+
+template<class P> class CheckSpeed{
+    
+public:
+    
+    //p is the SpeedField which is parent of the CheckSpeed object: the CheckSpeed object checks the validity of the entries in SpeedField
+    SpeedField<P>* p;
+    CheckSpeedValue<P>* check_speed_value;
+    CheckSpeedUnit<P>* check_speed_unit;
+    
+    CheckSpeed(SpeedField<P>*);
     template <class T> void operator()(T&);
     
 };
@@ -1842,7 +1899,7 @@ public:
     P* parent;
     wxBoxSizer *sizer_h, *sizer_v;
     wxArrayString  /*this is equal to a standard list of the available graphical types*/projections, /*same as projections, but it is fixed and never wrote to: it is a fixed catalog*/projection_catalog;
-    //this is the wxComboBox with the name of the bodies
+    //this is the wxComboBox with the name of the projections
     wxComboBox* name;
     CheckProjection<P>* check;
     vector<int> recent_items;
@@ -1856,6 +1913,30 @@ public:
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
+
+
+//this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a LengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted
+template<class P> class LengthFormatField{
+    
+public:
+    
+    P* parent;
+    wxBoxSizer *sizer_h, *sizer_v;
+    wxArrayString  /*this is equal to a standard list of the available formats for a length*/length_formats, /*same as length_formats, but it is fixed and never wrote to: it is a fixed catalog*/length_formats_catalog;
+    //this is the wxComboBox with the name of the length formats
+    wxComboBox* name;
+    CheckLengthFormat<P>* check;
+    vector<int> recent_items;
+    bool ok;
+    
+    LengthFormatField(wxPanel*);
+    void fill_length_formats(void);
+    template<class T> void InsertIn(T*);
+    template<class E> void OnEdit(E&);
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+    
+};
+
 
 //P is the type of the frame which hosts *this
 template<class P> class BodyField{
@@ -1952,13 +2033,13 @@ public:
     
 };
 
-//class for graphical object: a field to enter a length, composed of a box. P is the type of the parent which hosts the LengthField object
+//class for graphical object: a field to enter a length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the LengthField object
 template<class P> class LengthField{
     
 public:
     //the parent frame to which this object is attached
     P* parent_frame;
-    //degrees and minutes boxes
+    //the length value
     wxTextCtrl *value;
     //units of measure of the length
     wxComboBox* unit;
@@ -1983,6 +2064,39 @@ public:
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
+
+//class for graphical object: a field to enter a speed, composed of a box and a dropdown menu to enter the units of measure of the speed. P is the type of the parent which hosts the LengthField object
+template<class P> class SpeedField{
+    
+public:
+    //the parent frame to which this object is attached
+    P* parent_frame;
+    //the speed value
+    wxTextCtrl *value;
+    //units of measure of the speed
+    wxComboBox* unit;
+    wxBoxSizer *sizer_h, *sizer_v;
+    Speed* speed;
+    //an array containing all possible units of measure
+    wxArrayString units;
+    //the units of measure of the length in this GUI field
+    String unit_value;
+    //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
+    bool value_ok, unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
+    CheckSpeed<P>* check;
+    
+    SpeedField(wxPanel*, Speed*, String);
+    void set(void);
+    template<class T> void get(T&);
+    void Enable(bool);
+    template<class T> void InsertIn(T*);
+    bool is_ok(void);
+    template<class E> void OnEditValue(E&);
+    template<class E> void OnEditUnit(E&);
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+    
+};
+
 
 //class for graphical object: a field to enter a String, composed of a box. P is the type of the object in which this StringField will be inserted
 template<class P> class StringField{
@@ -2040,6 +2154,7 @@ public:
 };
 
 
+//a GUI field containing a time, which is contained by an object of type P
 template<class P> class ChronoField{
     
 public:
@@ -2060,6 +2175,7 @@ public:
     CheckChrono<P>* check;
     
     ChronoField(wxPanel*, Chrono*);
+    void set(void);
     void set(Chrono);
     void Enable(bool);
     void SetBackgroundColor(Color);
@@ -2351,7 +2467,6 @@ public:
 class RouteFrame: public wxFrame{
     
 public:
-    RouteFrame(ListFrame*, Route*, bool, long, const wxString&, const wxPoint&, const wxSize&, String);
     
     ListFrame* parent;
     Route* route;
@@ -2363,20 +2478,28 @@ public:
     SetIdling<RouteFrame> * set_idling;
     UnsetIdling<RouteFrame> * unset_idling;
     PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >* print_error_message;
-    
     RouteTypeField *type;
     AngleField<RouteFrame> *Z, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
+    //l_format tells whether the length of Route is written simply as a Length, or as a Speed x a Chrono (a time)
+    LengthFormatField<RouteFrame>* l_format;
+    //if the length of the Route is written directly as a length, this field is used
     LengthField<RouteFrame> *l;
+    //if the lenght of the Route is written in terms of a speed multiplied by a time, the following two fields are used
+    ChronoField<RouteFrame> *t;
+    SpeedField<RouteFrame> *v;
     StringField<RouteFrame> *label;
     
-    wxFlexGridSizer *sizer_grid_type, *sizer_grid_Z, *sizer_grid_l,  *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;
-    wxBoxSizer *sizer, *box_sizer;
-    wxStaticBoxSizer *sizer_box_data, *sizer_box_start, *sizer_box_GP;
-    
+    wxFlexGridSizer *sizer_grid_type, *sizer_grid_Z, *sizer_grid_t_v, *sizer_grid_l, *sizer_grid_omega, *sizer_grid_start, *sizer_grid_GP, *sizer_grid_label;
+    wxBoxSizer *sizer, /*this sizer containts the Length format GUI field, the Length GUI field and the speed and time GUI fields*/*sizer_l_format_l_t_v, *box_sizer;
+    wxStaticBoxSizer *sizer_box_data, *sizer_box_l_format_l_t_v, *sizer_box_l, *sizer_box_t_v, *sizer_box_start, *sizer_box_GP;
+    //static texts for the GUI fields containing the Route length, speed and time
+    wxStaticText *text_t, *text_v, *text_l;
     wxButton* /*this button triggers either the addition of a new Route, or the modification of an existing one*/button_ok, *button_cancel;
     
+    RouteFrame(ListFrame*, Route*, bool, long, const wxString&, const wxPoint&, const wxSize&, String);
     void set(void);
     template<class T> void get(T&);
+    template<class E> void OnChooseLengthFormat(E&);
     void OnPressCancel(wxCommandEvent& event);
     void OnPressOk(wxCommandEvent& event);
     bool is_ok(void);

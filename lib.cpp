@@ -918,6 +918,113 @@ Length Length::operator- (const Length& l) {
 
 }
 
+void Speed::print(String name, String unit, String prefix, ostream& ostr) {
+
+    if ((name.value) != "") {
+
+        ostr << prefix.value << name.value << " = ";
+        if (unit == String("kt")) {
+            //units are kt
+            
+            ostr << value << " nm\n";
+            
+        }else {
+            
+            if (unit == String("km/h")) {
+                //units are km/h
+            
+                ostr << value * nm * 1e3 << " km/h\n";
+
+            }else{
+                
+                if (unit == String("m/s")){
+                    //units are m/s
+                    
+                    ostr << value * nm * 1e3 << " m/s\n";
+                    
+                }
+                
+            }
+            
+        }
+
+    }
+
+}
+
+
+//reads from file the content after 'name = ' and writes it into this. This function requires file to be correctly set and open
+template<class S> void Speed::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
+
+    string line;
+    stringstream new_prefix;
+    size_t pos1, pos2;
+    String unit;
+
+    //prepend \t to prefix
+    new_prefix << "\t" << prefix.value;
+
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from stream " << input_stream << " ...\n" << RESET;
+
+    if (search_entire_stream) {
+
+        //rewind the file pointer
+        input_stream->clear();                 // clear fail and eof bits
+        input_stream->seekg(0, std::ios::beg); // back to the start!
+
+        do {
+
+            line.clear();
+            getline(*input_stream, line);
+
+        } while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+
+    }
+    else {
+
+        line.clear();
+        getline(*input_stream, line);
+
+    }
+
+    pos1 = line.find(" = ");
+    pos2 = line.find(" kt");
+
+    if (line.find(" kt") != (string::npos)) {
+        //the units of the speed read is kt
+        cout << prefix.value << "Unit is in kt\n";
+        pos2 = line.find(" kt");
+        unit = String("kt");
+    }
+    if (line.find(" km/h") != (string::npos)) {
+        //the units of the length read is km/h
+        cout << prefix.value << "Unit is in km/h\n";
+        pos2 = line.find(" km/h");
+        unit = String("km/h");
+    }
+    if (line.find(" m/s") != (string::npos)) {
+        //the units of the length read is m/s
+        cout << prefix.value << "Unit is in m/s\n";
+        pos2 = line.find(" m/s");
+        unit = String("m/s");
+    }
+
+    //X [km/h] = X [nm]/nm/[h] = X/nm [kt] = X 1000/3600 [m/s]
+    
+    value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
+    if (unit == String("km/h")) {
+        value /= nm;
+    }
+    if (unit == String("m/s")) {
+        value /= (1e3)*nm/3600.0;
+    }
+
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
+    print(name, String("kt"), prefix, cout);
+
+}
+
 
 
 bool Speed::check_valid(String name, [[maybe_unused]] String prefix) {
@@ -935,8 +1042,7 @@ bool Speed::check_valid(String name, [[maybe_unused]] String prefix) {
 
 void Speed::print(String name, String prefix, ostream& ostr) {
 
-	ostr << prefix.value << name.value << " = ";
-	ostr << value << " kt\n";
+	ostr << prefix.value << name.value << " = " << value << " kt\n";
 
 }
 
@@ -948,21 +1054,20 @@ Speed::Speed(double value_in) {
 
 	value = value_in;
 
-
 }
 
 
-//enter a speed in knots
-void Speed::enter(String name, [[maybe_unused]] String prefix) {
+void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
 
-	do {
+    String new_prefix;
 
-		enter_double(&value, false, 0.0, 0.0, name, prefix);
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
 
-	} while (!check_valid(name, prefix));
+    value = x;
 
-
-	print(name, prefix, cout);
+    if (name != String("")) { print(name, String("kt"), prefix, cout); }
+    check_valid(name, new_prefix);
 
 }
 
@@ -1879,33 +1984,36 @@ bool MyRectangle::Contains(Position p) {
 
 }
 
-//constructs a brand new Route object and thus sets its related sight to -1, because this Route is not related to any sight yet
+//construct a brand new Route object and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(void) {
 
 	related_sight.set(String(""), -1, String(""));
+    length_format.set(String("length"));
 
 }
 
 
-//constructs a brand new Route object of type 'l' or 'o' and thus sets its related sight to -1, because this Route is not related to any sight yet.
+//constructs a brand new Route object of type 'l' or 'o' and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(String type_in, Position reference_position_in, Angle Z_in, Length l_in) {
 
 	type = type_in;
 	reference_position = reference_position_in;
 	Z = Z_in;
 	l = l_in;
+    length_format.set(String("length"));
 
-	related_sight.set(String(""), -1, String(""));
+    related_sight.set(String(""), -1, String(""));
 
 }
 
-//constructs a brand new Route object of type 'c' and thus sets its related sight to -1, because this Route is not related to any sight yet.
+//constructs a brand new Route object of type 'c' and thus sets its related sight to -1, because this Route is not related to any sight yet.  length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(String type_in, Position reference_position_in, Angle omega_in) {
 
 	type = type_in;
 	reference_position = reference_position_in;
 	omega = omega_in;
 
+    length_format.set(String("length"));
 	//the lenght of the circle of equal altitude is set by default
 	l.set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
 
@@ -3317,7 +3425,21 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 		reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
 
 		Z.read_from_stream<S>(String("starting heading"), input_stream, false, new_prefix);
-		l.read_from_stream<S>(String("length"), input_stream, false, new_prefix);
+        
+        length_format.read_from_stream(String("length format"), input_stream, false, new_prefix);
+        
+        if(length_format == String("time and speed")){
+            
+            t.read_from_stream(String("time"), input_stream, false, new_prefix);
+            v.read_from_stream(String("speed"), input_stream, false, new_prefix);
+            
+            
+        }else{
+            
+            l.read_from_stream<S>(String("length"), input_stream, false, new_prefix);
+
+        }
+        
 
 	}
 
@@ -4024,10 +4146,11 @@ bool Limb::operator==(const Limb& limb) {
 
 void Route::print(String name, String prefix, ostream& ostr) {
 
-	String s, new_prefix;
+	String s, new_prefix, new_new_prefix;
 
-	//append \t to prefix
+	//append \t to prefix and \t\t to new_new_prefix
 	new_prefix = prefix.append(String("\t"));
+    new_new_prefix = new_prefix.append(String("\t"));
 
 	ostr << prefix.value << name.value << ":\n";
 
@@ -4037,7 +4160,18 @@ void Route::print(String name, String prefix, ostream& ostr) {
 
 		reference_position.print(String("start position"), new_prefix, ostr);
 		Z.print(String("starting heading"), new_prefix, ostr);
-		l.print(String("length"), String("nm"), new_prefix, ostr);
+        
+        length_format.print(String("length format"), false, new_prefix, ostr);
+        if((length_format.value) == "length"){
+            
+            l.print(String("length"), String("nm"), new_new_prefix, ostr);
+            
+        }else{
+            
+            t.print(String("time"), new_new_prefix, ostr);
+            v.print(String("speed"), new_new_prefix, ostr);
+            
+        }
 
 	}
 	else {
@@ -13048,6 +13182,80 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
 
 }
 
+
+template<class P> CheckLengthFormat<P>::CheckLengthFormat(LengthFormatField<P>* p_in) {
+
+    p = p_in;
+
+}
+
+template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& event) {
+
+    P* f = (p->parent);
+
+    //I proceed only if the progam is not is indling mode
+    if (!(f->idling)) {
+
+        unsigned int i;
+        bool check;
+
+        //I check whether the name in the GUI field LengthFormat matches one of the LengthFormat names in p->names
+        for (check = false, i = 0; (i < (p->length_formats_catalog).size()) && (!check); i++) {
+            if (((p->name)->GetValue()) == ((p->length_formats_catalog)[i])) {
+                check = true;
+            }
+        }
+        i--;
+
+        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
+            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+
+
+            if (check) {
+
+                //insert projection #i into data->recent_bodies
+                wxGetApp().list_frame->data->insert_recent_projection(i);
+                //I update p->name according to the content of data->recent_projections file
+                p->fill_length_formats();
+
+            }
+
+
+            //if check is true (false) -> set ok to true (false)
+            (p->ok) = check;
+            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
+            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->name)->SetFont(wxGetApp().default_font);
+            Reset(p->name);
+
+        }
+        else {
+
+            stringstream temp;
+
+            temp.str("");
+            temp << "Length format must be one of the following: ";
+            for (i = 0; i < ((p->length_formats_catalog).GetCount()); i++) {
+                temp << ((p->length_formats_catalog)[i]).ToStdString() << (i < ((p->length_formats_catalog).GetCount()) - 1 ? ", " : ".");
+            }
+
+
+            (f->print_error_message)->SetAndCall(p->name, String("Length format not found in list of projections!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+
+            (p->ok) = false;
+
+        }
+
+        f->AllOk();
+
+    }
+
+    event.Skip(true);
+
+}
+
+
+
 ResetListFrame::ResetListFrame(ListFrame* p_in) {
 
 	p = p_in;
@@ -13467,8 +13675,16 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
 
 		}
 		else {
+            
+            stringstream temp;
+            
+            temp.str("");
+            temp << "Available units are: ";
+            for(i=0; i<(p->units).size(); i++){
+                temp << (p->units)[i].ToStdString() << ((i<(p->units).size() -1) ? ", " : ".");
+            }
 
-			(f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String("Unit must be nm, m or ft."), (wxGetApp().path_file_error_icon));
+			(f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
 
 			(p->unit_ok) = false;
 
@@ -13502,7 +13718,131 @@ template<class P> template <class T> void CheckLength<P>::operator()(T& event) {
 }
 
 
-//writes the value of the GUI field in LengthField into the non-GUI field length
+
+template<class P> CheckSpeedValue<P>::CheckSpeedValue(SpeedField<P>* p_in) {
+
+    p = p_in;
+
+}
+
+//check the value in the GUI field in SpeedField
+template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& event) {
+
+    P* f = (p->parent_frame);
+
+    //I proceed only if the progam is not is indling mode
+    if (!(f->idling)) {
+
+        bool check;
+
+        check = check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+
+        if (check || ((((p->value)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->value)->GetValue()).ToStdString())) == String("")))) {
+            //p->value either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+
+            //if check is true (false) -> set value_ok to true (false)
+            (p->value_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in value
+            (p->value)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->value)->SetFont(wxGetApp().default_font);
+
+        }
+        else {
+
+            (f->print_error_message)->SetAndCall((p->value), String("Entered value is not valid!"), String("Speeds must be floating-point numbers >= 0 m"), (wxGetApp().path_file_error_icon));
+
+            (p->value_ok) = false;
+
+        }
+
+        f->AllOk();
+
+    }
+
+    event.Skip(true);
+
+}
+
+template<class P> CheckSpeedUnit<P>::CheckSpeedUnit(SpeedField<P>* p_in) {
+
+    p = p_in;
+
+}
+
+//checks the unit in the GUI field in SpeedField
+template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event) {
+
+    P* f = (p->parent_frame);
+
+    //I proceed only if the progam is not is indling mode
+    if (!(f->idling)) {
+
+        unsigned int i;
+        bool check;
+
+        //I check whether the name in the GUI field unit matches one of the unit names in units
+        for (check = false, i = 0; (i < (p->units).size()) && (!check); i++) {
+            if (((p->unit)->GetValue()) == (p->units)[i]) {
+                check = true;
+            }
+        }
+        i--;
+
+        if (check || ((((p->unit)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->unit)->GetValue()).ToStdString())) == String("")))) {
+
+            //if check is true (false) -> set unit_ok to true (false)
+            (p->unit_ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in deg
+            (p->unit)->SetForegroundColour(wxGetApp().foreground_color);
+            (p->unit)->SetFont(wxGetApp().default_font);
+
+
+        }
+        else {
+            
+            stringstream temp;
+            
+            temp.str("");
+            temp << "Available units are: ";
+            for(i=0; i<(p->units).size(); i++){
+                temp << (p->units)[i].ToStdString() << ((i<(p->units).size() -1) ? ", " : ".");
+            }
+
+            (f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+
+            (p->unit_ok) = false;
+
+        }
+
+        f->AllOk();
+
+    }
+
+    event.Skip(true);
+
+}
+
+template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
+
+    p = p_in;
+
+    check_speed_value = new CheckSpeedValue<P>(p);
+    check_speed_unit = new CheckSpeedUnit<P>(p);
+
+}
+
+//this functor checks the whole Speed field by calling the check on its value and unit
+template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
+
+    (*check_speed_value)(event);
+    (*check_speed_unit)(event);
+
+    event.Skip(true);
+
+}
+
+
+//write the value of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void LengthField<P>::get(T& event) {
 
 	if (is_ok()) {
@@ -14238,15 +14578,14 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
 //create a new RouteFrame. If for_transport = true/false, it enables the fields related to the start position of the Route and disables the circle of equal altitude type 
 RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transport_in, long position_in_listcontrol_routes_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {
 
-	parent = parent_input;
-
 	String new_prefix, label_button_ok;
 	unsigned int common_width;
-
-	bool check = true;
-
+	bool check;
+    
+    
+    parent = parent_input;
+    check = true;
 	for_transport = for_transport_in;
-
 	//append \t to prefix
 	new_prefix = prefix.append(String("\t"));
 
@@ -14255,7 +14594,6 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	set_idling = new SetIdling<RouteFrame>(this);
 	unset_idling = new UnsetIdling<RouteFrame>(this);
 	(*unset_idling)();
-
 	print_error_message = new PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
 
 	//if this RouteFrame has been constructed with route_in = NULL, then I allocate a new Route object with the pointer this->route and set list_route to a 'NULL' value (list_route = -1). Otherwise, the pointer route_in points to a valid Route object -> I let this->route point to route_in, and set list_route to list_route_in.
@@ -14286,12 +14624,17 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
 	sizer_grid_type = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_Z = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
-	sizer_grid_l = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
+	sizer_l_format_l_t_v = new wxBoxSizer(wxVERTICAL);
+    sizer_grid_l = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
+    sizer_grid_t_v = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_start = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_GP = new wxFlexGridSizer(2, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_omega = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid_label = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_box_data = new wxStaticBoxSizer(wxVERTICAL, panel, "Data");
+    sizer_box_l_format_l_t_v = new wxStaticBoxSizer(wxVERTICAL, panel, "Length");
+    sizer_box_l = new wxStaticBoxSizer(wxVERTICAL, panel, "Time");
+    sizer_box_t_v = new wxStaticBoxSizer(wxVERTICAL, panel, "Time and speed");
 	sizer_box_start = new wxStaticBoxSizer(wxVERTICAL, panel, "Start position");
 	sizer_box_GP = new wxStaticBoxSizer(wxVERTICAL, panel, "Ground position");
 	sizer = new wxBoxSizer(wxVERTICAL);
@@ -14310,13 +14653,25 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	//Z
 	StaticText* text_Z = new StaticText(panel, wxT("Z"), wxDefaultPosition, wxDefaultSize, 0);
 	Z = new AngleField<RouteFrame>(panel, &(route->Z), String(""));
+    
+    //format in which lengths are expressed
+    StaticText* text_l_format = new StaticText(panel, wxT("Length format"), wxDefaultPosition, wxDefaultSize, 0);
+    l_format = new LengthFormatField<RouteFrame>(panel);
+    
+    //the field for time to set the Route length
+    text_t = new StaticText(panel, wxT("Time"), wxDefaultPosition, wxDefaultSize, 0);
+    t = new ChronoField<RouteFrame>(panel, &(route->t));
+    //the field for speed to set the Route length
+    text_v = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
+    v = new SpeedField<RouteFrame>(panel, &(route->v), String("kt"));
+    
+    //the field for Length to set the Route length
+    text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
+    l = new LengthField<RouteFrame>(panel, &(route->l), String("nm"));
+    
 
-	//l
-	StaticText* text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
-	l = new LengthField<RouteFrame>(panel, &(route->l), String("nm"));
-
-
-	//start
+    
+	//start position
 	//start_phi
 	StaticText* text_start_phi = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0);
 	start_phi = new AngleField<RouteFrame>(panel, &((route->reference_position).phi), String("NS"));
@@ -14341,11 +14696,16 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	label = new StringField<RouteFrame>(panel, &(route->label));
 
 
-	//If the user is about to enter a brand new route, then these fields are disable until a route type si specified
+	//If the user is about to enter a brand new route, then these fields are disabled until a route type si specified
 	if (route_in == NULL) {
 
 		Z->Enable(false);
 		l->Enable(false);
+        v->Enable(false);
+        t->Enable(false);
+        text_t->Enable(false);
+        text_v->Enable(false);
+        text_l->Enable(false);
 		start_phi->Enable(false);
 		start_lambda->Enable(false);
 		GP_phi->Enable(false);
@@ -14375,20 +14735,35 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	start_lambda->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	GP_phi->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	GP_lambda->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    l_format->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	l->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    t->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    v->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
 	label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-
-
-
+    
 
 	sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
 	type->InsertIn<wxFlexGridSizer>(sizer_grid_type);
 
 	sizer_grid_Z->Add(text_Z, 0, wxALIGN_CENTER_VERTICAL);
 	Z->InsertIn<wxFlexGridSizer>(sizer_grid_Z);
-
+    
+    sizer_grid_t_v->Add(text_t, 0, wxALIGN_CENTER_VERTICAL);
+    t->InsertIn<wxFlexGridSizer>(sizer_grid_t_v);
+    sizer_grid_t_v->Add(text_v, 0, wxALIGN_CENTER_VERTICAL);
+    v->InsertIn<wxFlexGridSizer>(sizer_grid_t_v);
+    sizer_box_t_v->Add(sizer_grid_t_v);
+    
 	sizer_grid_l->Add(text_l, 0, wxALIGN_CENTER_VERTICAL);
 	l->InsertIn<wxFlexGridSizer>(sizer_grid_l);
+    sizer_box_l->Add(sizer_grid_l);
+
+    sizer_l_format_l_t_v->Add(text_l_format, 0, wxALIGN_LEFT);
+    l_format->InsertIn<wxBoxSizer>(sizer_l_format_l_t_v);
+    sizer_l_format_l_t_v->Add(sizer_box_t_v);
+    sizer_l_format_l_t_v->Add(sizer_box_l);
+
+    sizer_box_l_format_l_t_v->Add(sizer_l_format_l_t_v);
 
 	sizer_grid_omega->Add(text_omega, 0, wxALIGN_CENTER_VERTICAL);
 	omega->InsertIn<wxFlexGridSizer>(sizer_grid_omega);
@@ -14412,7 +14787,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
 	sizer_box_data->Add(sizer_grid_type);
 	sizer_box_data->Add(sizer_grid_Z);
-	sizer_box_data->Add(sizer_grid_l);
+	sizer_box_data->Add(sizer_box_l_format_l_t_v);
 	sizer_box_data->Add(sizer_box_start);
 	sizer_box_data->Add(sizer_box_GP);
 	sizer_box_data->Add(sizer_grid_omega);
@@ -14444,17 +14819,20 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 	Fit();
 
 
-
 	if (!check) {
+        
 		cout << prefix.value << RED << "Cannot read route!\n" << RESET;
+        
 	}
 
-
-
-	if (route_in != NULL) { set(); }
+    
+	if (route_in != NULL){
+        
+        set();
+        
+    }
 
 	Centre();
-
 
 }
 
@@ -14643,24 +15021,39 @@ void RouteFrame::OnPressCancel([[maybe_unused]] wxCommandEvent& event) {
 
 //write the content in the GUI fields into the non-GUI fields, and returns true if all is ok, false otherwise
 bool RouteFrame::is_ok(void) {
-
-	wxCommandEvent dummy;
-
-	get(dummy);
-
-	return((type->is_ok()) &&
-		(
-			(((((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome"))) &&
-				((Z->is_ok()) && ((start_phi->is_ok()) || for_transport) && ((start_lambda->is_ok()) || for_transport) && (l->is_ok())))
-			||
-			((((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
-				((omega->is_ok()) && (GP_phi->is_ok()) && (GP_lambda->is_ok())))
-			)
-		);
-
+    
+    wxCommandEvent dummy;
+    
+    get(dummy);
+    
+    return((type->is_ok()) &&
+           
+           (
+            (
+             ((((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome"))) &&
+             (
+              (Z->is_ok()) &&
+              ((start_phi->is_ok()) || for_transport) &&
+              ((start_lambda->is_ok()) || for_transport) &&
+              ( ((((l_format->name)->GetValue()) == wxString("Time and speed")) && ((t->is_ok()) && (v->is_ok()))) || ((((l_format->name)->GetValue()) == wxString("Length")) && (l->is_ok())) )
+              )
+             )
+            
+            ||
+            
+            (
+             (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
+             ((omega->is_ok()) &&
+              (GP_phi->is_ok()) &&
+              (GP_lambda->is_ok()))
+             )
+            )
+           
+           );
+    
 }
 
-//tries to enable button_ok
+           //tries to enable button_ok
 void RouteFrame::AllOk(void) {
 
 	button_ok->Enable(is_ok());
@@ -14715,7 +15108,12 @@ void RouteFrame::set(void) {
 		start_phi->Enable(false);
 		start_lambda->Enable(false);
 
-		l->Enable(false);
+        t->Enable(false);
+        v->Enable(false);
+        l->Enable(false);
+        text_t->Enable(false);
+        text_v->Enable(false);
+        text_l->Enable(false);
 
 		GP_phi->set();
 		GP_lambda->set();
@@ -14724,15 +15122,32 @@ void RouteFrame::set(void) {
 	}
 	else {
 		//I disable the GUI fields which do not define a loxodrome or orthodrome and set the others
+        
+        wxCommandEvent dummy;
 
 		Z->set();
 
 		start_phi->set();
-		start_lambda->set();
-		start_phi->Enable(!for_transport);
-		start_lambda->Enable(!for_transport);
+        start_lambda->set();
+        start_phi->Enable(!for_transport);
+        start_lambda->Enable(!for_transport);
+        
+        if((route->length_format.value) == "time and speed"){
+            //the length in *route is written as a Chrono x a Speed
+            
+            l_format->name->SetValue(l_format->length_formats_catalog[0]);
+            t->set();
+            v->set();
 
-		l->set();
+        }else{
+            //the length in *route is written simply as a Length
+            
+            l_format->name->SetValue(l_format->length_formats_catalog[1]);
+            l->set();
+            
+        }
+        
+        l_format->OnEdit(dummy);
 
 		GP_phi->Enable(false);
 		GP_lambda->Enable(false);
@@ -14762,7 +15177,21 @@ template<class T> void RouteFrame::get(T& event) {
 		Z->get(event);
 		start_phi->get(event);
 		start_lambda->get(event);
-		l->get(event);
+        
+        if((l_format->name->GetValue()) == l_format->length_formats_catalog[0]){
+            //in the GUI field, lengths are expressed at Chrono x Speed -> get t and v and set in the non-GUI field to true
+            
+            (route->length_format) = String("time and speed");
+            t->get(event);
+            v->get(event);
+            
+        }else{
+            //in the GUI field, lenght are expressed simply as a Length -> get l and set in the non-GUI field to false
+            
+            (route->length_format) = String("length");
+            l->get(event);
+
+        }
 
 	}
 
@@ -14771,6 +15200,48 @@ template<class T> void RouteFrame::get(T& event) {
 
 }
 
+template<class E> void RouteFrame::OnChooseLengthFormat(E& event) {
+    
+    int i;
+    
+    //run over all entries of length_formats_catalog and store in i the id of the entry that is equal to l_format->name->GetValue()
+    for(i=0; (i<(l_format->length_formats_catalog).size()) && ((l_format->name->GetValue()) != (l_format->length_formats_catalog)[i]); i++){}
+    
+    switch (i) {
+            
+        case 0:{
+           //l_format->name->GetValue() = "Time x speed" -> disable l, enable v and t
+  
+            t->Enable(true);
+            v->Enable(true);
+            l->Enable(false);
+            text_t->Enable(true);
+            text_v->Enable(true);
+            text_l->Enable(false);
+
+            break;
+            
+        }
+
+        case 1:{
+            //l_format->name->GetValue() = "Length" -> enable l, disable v and t
+
+            t->Enable(false);
+            v->Enable(false);
+            l->Enable(true);
+            text_t->Enable(false);
+            text_v->Enable(false);
+            text_l->Enable(true);
+
+            break;
+            
+        }
+            
+    }
+    
+    event.Skip(true);
+    
+}
 
 
 //write all the content in the GUI fields into the non-GUI objects, checks whether all the fields in PositionFrame are ok and if they are it returns true and false otherwise
@@ -16974,7 +17445,7 @@ template<class P> CheckHour<P>::CheckHour(ChronoField<P>* p_in) {
 
 template<class P> template<class T> void CheckHour<P>::operator()(T& event) {
 
-	SightFrame* f = (p->parent_frame);
+	P* f = (p->parent_frame);
 
 	//I proceed only if the progam is not is indling mode
 	if (!(f->idling)) {
@@ -17017,7 +17488,7 @@ template<class P> CheckMinute<P>::CheckMinute(ChronoField<P>* p_in) {
 
 template<class P>  template<class T> void CheckMinute<P>::operator()(T& event) {
 
-	SightFrame* f = (p->parent_frame);
+	P* f = (p->parent_frame);
 
 	//I proceed only if the progam is not is indling mode
 	if (!(f->idling)) {
@@ -17059,7 +17530,7 @@ template<class P> CheckSecond<P>::CheckSecond(ChronoField<P>* p_in) {
 
 template<class P> template<class T> void CheckSecond<P>::operator()(T& event) {
 
-	SightFrame* f = (p->parent_frame);
+	P* f = (p->parent_frame);
 
 	//I proceed only if the progam is not is indling mode
 	if (!(f->idling)) {
@@ -17152,7 +17623,13 @@ template<class T>void CheckRouteType::operator()(T& event) {
 			(f->start_phi)->Enable(!(f->for_transport));
 			(f->start_lambda)->Enable(!(f->for_transport));
 
-			(f->l)->Enable(enable);
+            f->t->Enable(enable);
+            f->v->Enable(enable);
+            f->l->Enable(enable);
+            f->text_t->Enable(enable);
+            f->text_v->Enable(enable);
+            f->text_l->Enable(enable);
+
 
 			(f->GP_phi)->Enable(!enable);
 			(f->GP_lambda)->Enable(!enable);
@@ -17164,7 +17641,14 @@ template<class T>void CheckRouteType::operator()(T& event) {
 			(f->Z)->Enable(false);
 			(f->start_phi)->Enable(false);
 			(f->start_lambda)->Enable(false);
-			(f->l)->Enable(false);
+            
+            f->t->Enable(false);
+            f->v->Enable(false);
+            f->l->Enable(false);
+            f->text_t->Enable(false);
+            f->text_v->Enable(false);
+            f->text_l->Enable(false);
+            
 			(f->GP_phi)->Enable(false);
 			(f->GP_lambda)->Enable(false);
 			(f->omega)->Enable(false);
@@ -17627,6 +18111,124 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
+//constructor of a LengthFormatField object, based on the parent frame frame
+template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent) {
+
+    parent = ((P*)(panel_of_parent->GetParent()));
+
+    length_formats_catalog.Clear();
+    length_formats_catalog.Add(wxT("Time and speed"));
+    length_formats_catalog.Add(wxT("Length"));
+    length_formats = length_formats_catalog;
+
+    check = new CheckLengthFormat<P>(this);
+
+    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, length_formats, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    //SetColor(name);
+    fill_length_formats();
+    name->SetValue(length_formats[0]);
+    AdjustWidth(name);
+    //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    name->Bind(wxEVT_COMBOBOX, &LengthFormatField::OnEdit<wxCommandEvent>, this);
+    name->Bind(wxEVT_KEY_UP, &LengthFormatField::OnEdit<wxKeyEvent>, this);
+    name->Bind(wxEVT_KILL_FOCUS, *check);
+
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(name, 0, wxALIGN_CENTER);
+
+}
+
+
+//update the dropdown menu of ProjectionField according to wxGetApp().list_frame->data->recent_length_formats in such a way that the recent items appear on top of it
+template<class P> void LengthFormatField<P>::fill_length_formats(void){
+    
+    unsigned int i, j;
+    wxArrayString length_formats_temp;
+    wxString name_temp;
+    bool is_present;
+
+    //save the current value of name in name_temp
+    name_temp = (name->GetValue());
+    //create the temporary list of length_formats length_formats_temp from projection_catalog
+    for (length_formats_temp.Clear(), i = 0; i < length_formats.GetCount(); i++) {
+        length_formats_temp.Add(length_formats_catalog[i]);
+    }
+    
+    //I first add to length_formats the recently selected celestial length_formats written in (wxGetApp().list_frame->data->recent_length_formats)
+    for (length_formats.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_length_formats.size()); i++) {
+
+        length_formats.Add(length_formats_temp[(wxGetApp().list_frame->data->recent_length_formats)[i]]);
+
+    }
+
+    //then, I fill length_formats with the remaining length_formats
+    for (i = 0; i < length_formats_temp.GetCount(); i++) {
+
+        for (is_present = false, j = 0; (j < length_formats.GetCount()) && (!is_present); j++) {
+
+            if (length_formats[j] == length_formats_temp[i]) {
+                is_present = true;
+            }
+
+        }
+
+        if (!is_present) {
+            length_formats.Add(length_formats_temp[i]);
+        }
+
+    }
+
+    name->Set(length_formats);
+    //because name->Set(length_formats clears the value of name, I set the value of name back to name_temp
+    name->SetValue(name_temp);
+
+    length_formats_temp.Clear();
+
+}
+
+
+template<class P> template<class T> void LengthFormatField<P>::InsertIn(T* host) {
+
+    host->Add(sizer_v);
+
+}
+
+
+
+//this function is called every time the user modifies the text in this->name: it checks whether the text entered so far in name is valid, if name is valid, it calls OnChooseLengthFormat to select the projection written in name
+template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) {
+
+    String s;
+    bool success;
+
+    //I check whether the name in the GUI field body matches one of the body names in catalog
+    find_and_replace_case_insensitive(name, length_formats, &success, NULL);
+
+    //ok is true/false is the text enteres is valid/invalid
+    ok = success;
+
+    if (success) {
+
+        name->SetForegroundColour(wxGetApp().foreground_color);
+        name->SetFont(wxGetApp().default_font);
+        //choses the length format entered in name button_reduce
+        parent->OnChooseLengthFormat(event);
+
+    }
+
+    event.Skip(true);
+
+}
+
+template<class P> template <typename EventTag, typename Method, typename Object> void LengthFormatField<P>::Bind(EventTag tag, Method method, Object object) {
+
+    name->Bind(tag, method, object);
+
+}
+
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c) {
@@ -17814,7 +18416,7 @@ template <class P> void AngleField<P>::set(void) {
 }
 
 
-//sets the value in the GUI object value equal to the value in the non-GUI  object length
+//set the value in the GUI object value equal to the value in the non-GUI  object length
 template<class P> void LengthField<P>::set(void) {
 
 	switch ((unit_value.value)[0]) {
@@ -17822,13 +18424,11 @@ template<class P> void LengthField<P>::set(void) {
 	case 'n': {
 		//unit = String("nm")
 
-
 		value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (length->value)));
 		unit->SetValue(wxString("nm"));
 		break;
 
 	}
-
 
 	case 'm': {
 		//unit = String("m")
@@ -17839,7 +18439,6 @@ template<class P> void LengthField<P>::set(void) {
 		break;
 
 	}
-
 
 	case 'f': {
 		//unit = String("ft")
@@ -17886,7 +18485,14 @@ template<class P> void DateField<P>::SetBackgroundColor(Color color) {
 
 }
 
-//sets the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono_in
+//set the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object *chrono
+template<class P> void ChronoField<P>::set(void){
+    
+    set(*chrono);
+    
+}
+
+//set the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono_in
 template<class P> void ChronoField<P>::set(Chrono chrono_in) {
 
 	hour->SetValue(wxString::Format(wxT("%i"), chrono_in.h));
@@ -18173,7 +18779,6 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 	units.Add(wxT("ft"));
 
 
-
 	value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 	//SetColor(value);
 	value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
@@ -18352,13 +18957,12 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
-
-
 template<class P> bool LengthField<P>::is_ok(void) {
 
 	return(value_ok && unit_ok);
 
 }
+
 
 template<class P> bool ChronoField<P>::is_ok(void) {
 
@@ -18517,6 +19121,222 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 }
 
+
+//constructor of a SpeedField object, based on the parent frame frame
+template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, String unit_value_in) {
+
+    parent_frame = ((P*)(panel_of_parent->GetParent()));
+    speed = p;
+    unit_value = unit_value_in;
+    
+    //    ((parent_frame->check_height_of_eye).p) = this;
+    
+    //initialize check
+    check = new CheckSpeed<P>(this);
+    
+    //tabulate the possible units of measure
+    units.Clear();
+    units.Add(wxT("kt"));
+    units.Add(wxT("km/h"));
+    units.Add(wxT("m/s"));
+    
+    
+    value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    //SetColor(value);
+    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
+    //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Speed object
+    value->SetValue(wxString(""));
+    value_ok = false;
+    value->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_value)));
+    //as text is changed in value by the user with the keyboard, call OnEditValue
+    value->Bind(wxEVT_KEY_UP, &SpeedField::OnEditValue<wxKeyEvent>, this);
+
+
+    unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    //SetColor(unit);
+    AdjustWidth(unit);
+    //I set the value of unit to the unit of measure with with this SpeedField was called in its constructor, and set its value to ok because that is a valid unit of measure
+    unit->SetValue(unit_value.value);
+    unit_ok = true;
+    unit->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_unit)));
+    //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    unit->Bind(wxEVT_COMBOBOX, &SpeedField::OnEditUnit<wxCommandEvent>, this);
+    unit->Bind(wxEVT_KEY_UP, &SpeedField::OnEditUnit<wxKeyEvent>, this);
+
+
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(value, 0, wxALIGN_CENTER);
+    sizer_h->Add(unit, 0, wxALIGN_CENTER);
+
+}
+
+
+//set the value in the GUI object value equal to the value in the non-GUI object Speed
+template<class P> void SpeedField<P>::set(void) {
+    
+    int i;
+    
+    for(i=0; (i<(units.size())) && ((unit->GetValue()) != (units[i])); i++){}
+    
+    switch (i){
+            
+        case '0':{
+            //unit = String("nm")
+            
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (speed->value)));
+            
+            break;
+        }
+            
+        case '1':{
+            //unit = String("km/h")
+            
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to km/h*/(speed->value) * nm));
+            
+            break;
+        }
+  
+        case '2':{
+            //unit = String("ft")
+
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm * 1e3 / 3600.0));
+            
+            break;
+        }
+  
+    }
+    
+    unit->SetValue(units[i]);
+    
+    value_ok = true;
+    unit_ok = true;
+
+}
+
+
+//write the value of the GUI field in SpeedField into the non-GUI field length
+template<class P> template <class T> void SpeedField<P>::get(T& event) {
+
+    if (is_ok()) {
+        
+        double speed_temp;
+        
+        value->GetValue().ToDouble(&speed_temp);
+        
+        if((unit->GetValue().ToStdString()) == "kt"){
+            //unit = String("nm")
+            speed->set(String(""), /*the speed is entered in the GUI field is already in nm, thus no need to convert it*/speed_temp, String(""));
+            
+        }else{
+            
+            if((unit->GetValue().ToStdString()) == "km/h"){
+                //unit = String("km/h")
+                speed->set(String(""), /*the speed is entered in the GUI field in meters, thus I convert it to nm here*/speed_temp / (1e3 * nm), String(""));
+                
+            }else{
+                
+                if((unit->GetValue().ToStdString()) == "m/s"){
+                    //unit = String("ft")
+                    
+                    speed->set(String(""), /*the speed is entered in the GUI field in feet, thus I convert it to nm here*/speed_temp / nm_ft, String(""));
+                    
+                }
+                
+            }
+            
+        }
+    }
+
+    event.Skip(true);
+
+}
+
+
+//this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
+template<class P> template<class E>  void SpeedField<P>::OnEditValue(E& event) {
+
+    bool success;
+
+    success = check_double((value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+
+    if (success) {
+
+        //because the text in value is valid, I set the background color of value to white
+        value->SetForegroundColour(wxGetApp().foreground_color);
+        value->SetFont(wxGetApp().default_font);
+
+    }
+
+    //value_ok is true/false is the text entered is valid/invalid
+    value_ok = success;
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+
+    event.Skip(true);
+
+}
+
+
+//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
+template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
+
+    bool success;
+
+    //I check whether the name in the GUI field unit matches one of the unit names in units
+    find_and_replace_case_insensitive(unit, units, &success, NULL);
+
+
+    if (success) {
+
+        //because the text in value is valid, I set the background color of unit to white
+        unit->SetForegroundColour(wxGetApp().foreground_color);
+        unit->SetFont(wxGetApp().default_font);
+
+    }
+
+    //value_ok is true/false is the text entered is valid/invalid
+    unit_ok = success;
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+
+    event.Skip(true);
+
+}
+
+
+//enable/disable the SpeedField
+template<class P> void SpeedField<P>::Enable(bool is_enabled) {
+
+    value->Enable(is_enabled);
+    unit->Enable(is_enabled);
+
+}
+
+
+template<class P> template<class T> void SpeedField<P>::InsertIn(T* host) {
+
+    host->Add(sizer_v);
+
+}
+
+
+template<class P> template <typename EventTag, typename Method, typename Object> void SpeedField<P>::Bind(EventTag tag, Method method, Object object) {
+
+    value->Bind(tag, method, object);
+    unit->Bind(tag, method, object);
+
+}
+
+
+template<class P> bool SpeedField<P>::is_ok(void) {
+
+    return(value_ok && unit_ok);
+
+}
+
 //constructor of a DateField object, based on the parent frame frame
 template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {
 
@@ -18672,10 +19492,8 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s) {
 	types.Add(wxString("circle of equal altitude"));
 
 	check = new CheckRouteType(this);
-
-
-
 	name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    
 	//SetColor(name);
 	AdjustWidth(name);
 	ok = false;
@@ -18947,14 +19765,20 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 		//enable/disable the related fields in RouteFrame f
 		enable = (((types[i]) == wxString("loxodrome")) || ((types[i]) == wxString("orthodrome")));
 
-		(parent_frame->Z)->Enable(enable);
-		(parent_frame->start_phi)->Enable(enable && (!(parent_frame->for_transport)));
-		(parent_frame->start_lambda)->Enable(enable && (!(parent_frame->for_transport)));
-		(parent_frame->l)->Enable(enable);
+		parent_frame->Z->Enable(enable);
+		parent_frame->start_phi->Enable(enable && (!(parent_frame->for_transport)));
+		parent_frame->start_lambda->Enable(enable && (!(parent_frame->for_transport)));
+        
+        parent_frame->t->Enable(enable);
+        parent_frame->v->Enable(enable);
+        parent_frame->l->Enable(enable);
+        parent_frame->text_t->Enable(enable);
+        parent_frame->text_v->Enable(enable);
+        parent_frame->text_l->Enable(enable);
 
-		(parent_frame->GP_phi)->Enable(!enable);
-		(parent_frame->GP_lambda)->Enable(!enable);
-		(parent_frame->omega)->Enable(!enable);
+		parent_frame->GP_phi->Enable(!enable);
+		parent_frame->GP_lambda->Enable(!enable);
+		parent_frame->omega->Enable(!enable);
 
 		//because the text in name is valid, I set the background color of name to white
 		name->SetForegroundColour(wxGetApp().foreground_color);
@@ -18963,16 +19787,22 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 	}
 	else {
 
-		(parent_frame->Z)->Enable(false);
-		(parent_frame->start_phi)->Enable(false);
-		(parent_frame->start_lambda)->Enable(false);
-		(parent_frame->l)->Enable(false);
-		(parent_frame->GP_phi)->Enable(false);
-		(parent_frame->GP_lambda)->Enable(false);
-		(parent_frame->omega)->Enable(false);
+		parent_frame->Z->Enable(false);
+		parent_frame->start_phi->Enable(false);
+		parent_frame->start_lambda->Enable(false);
+        
+        parent_frame->t->Enable(false);
+        parent_frame->v->Enable(false);
+        parent_frame->l->Enable(false);
+        parent_frame->text_t->Enable(false);
+        parent_frame->text_v->Enable(false);
+        parent_frame->text_l->Enable(false);
+        
+        parent_frame->GP_phi->Enable(false);
+        parent_frame->GP_lambda->Enable(false);
+        parent_frame->omega->Enable(false);
 
 	}
-
 
 	//ok is true/false is the text entered is valid/invalid
 	ok = success;
@@ -19143,6 +19973,7 @@ template<class P> template<class T> void AngleField<P>::InsertIn(T* host) {
 
 }
 
+
 template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
 
 	host->Add(sizer_v);
@@ -19169,8 +20000,6 @@ template <class P> template <typename EventTag, typename Method, typename Object
 	value->Bind(tag, method, object);
 
 }
-
-
 
 
 template<class P> template<class T> void ChronoField<P>::InsertIn(T* host) {

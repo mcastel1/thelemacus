@@ -13618,7 +13618,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 	//the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
 	(f->i_transporting_route) = ((f->listcontrol_routes)->GetItemCount()) - 1;
 	//given that the transporting Route has no meaningful starting position, I write "" in its position field
-	(f->listcontrol_routes)->SetItem((f->i_transporting_route), 2, wxString(""), -1);
+    //	(f->listcontrol_routes)->SetItem((f->i_transporting_route), 2, wxString(""), -1);
 
 	if (((f->transported_object) == String("sight")) || ((f->transported_object) == String("route"))) {
         //I am transporting a Sight or the Route related to it
@@ -14598,6 +14598,30 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     if((parent->transporting_with_new_route)){
         //if I am adding a new Route for transport, call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
          (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
+        
+        //set the reference position of the transporting Route to the initial position of the object that has been transported: in thiw way, the transporting Route will look nice on the chart
+        if ((parent->transported_object) == String("position")) {
+            
+            //store the starting position in position_start
+           ( (parent->data->route_list)[(parent->i_transporting_route)]).reference_position = (parent->data->position_list)[(parent->i_object_to_transport)];
+            
+        }else{
+            
+            if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")){
+                
+                //store the starting reference position in position_start
+                ((parent->data->route_list)[(parent->i_transporting_route)]).reference_position = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
+                
+            }
+            
+        }
+        
+        //I refresh everything because of the modification above
+        //call listcontrol_routes->set with true because I want to keep the selection in listcontrol_routes
+        parent->listcontrol_routes->set((parent->data->route_list), false);
+        parent->Resize();
+        parent->OnModifyFile();
+        parent->DrawAll();
      
     }
 
@@ -19395,20 +19419,20 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             if ((parent->transported_object) == String("position")) {
                 
                 //store the starting position in position_start
-                position_start = (parent->data->position_list)[(parent->i_object_to_transport)];
+                start = (parent->data->position_list)[(parent->i_object_to_transport)];
                 
             }else{
                 
                 if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")){
                     
                     //store the starting reference position in position_start
-                    position_start = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
+                    start = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
                     
                 }
                 
             }
             
-            (route_chunk->reference_position) = position_start;
+            (route_chunk->reference_position) = start;
             
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
             for(long i=0; i<parent->chart_frames.size(); i++){
@@ -19433,7 +19457,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 
             if ((parent->transported_object) == String("position")) {
                 
-                (parent->data->position_list)[(parent->i_object_to_transport)] = position_start;
+                (parent->data->position_list)[(parent->i_object_to_transport)] = start;
                 (parent->data->position_list)[(parent->i_object_to_transport)].transport_to(*route_chunk, String(""));
                 //                (route_chunk->reference_position) = (parent->data->position_list)[(parent->i_object_to_transport)];
                 
@@ -19441,7 +19465,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 
                 if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")){
                     
-                    (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position) = position_start;
+                    (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position) = start;
                     ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to(*route_chunk, String(""));
                     //                    (route_chunk->reference_position) = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
                     
@@ -19463,7 +19487,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         if ((parent->transported_object) == String("position")) {
             
             //do the whole transport rather than combining many little transports, to avoid rounding errors
-            ((parent->data->position_list)[(parent->i_object_to_transport)]) = position_start;
+            ((parent->data->position_list)[(parent->i_object_to_transport)]) = start;
             ((parent->data->position_list)[(parent->i_object_to_transport)]).transport_to((parent->data->route_list)[parent->i_transporting_route], String(""));
         
             
@@ -19482,7 +19506,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 String new_label;
                 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-                (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position) = position_start;
+                (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position) = start;
                 ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to( (parent->data->route_list)[parent->i_transporting_route], String(""));
 
                 

@@ -12644,7 +12644,7 @@ void NewRoute::operator()(wxCommandEvent& event) {
     (f->transporting_with_new_route) = true;
     
 	//when button_ok in f->route_fram will be pressed, I call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
-    f->route_frame->button_ok->Bind(wxEVT_BUTTON, *(f->on_new_route_in_listcontrol_routes_for_transport));
+//    f->route_frame->button_ok->Bind(wxEVT_BUTTON, *(f->on_new_route_in_listcontrol_routes_for_transport));
       
 	event.Skip(true);
 
@@ -14539,13 +14539,6 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
 	unsigned int i;
 	stringstream s;
-    
-    if((parent->transporting_with_new_route)){
-        
-        //enter  has been pressed -> I call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
-         (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
-     
-    }
 
 	if (label->value->GetValue().ToStdString() == "") {
 		//if the user entered no label, I set a label with the time at which Reduce has been pressed
@@ -14592,7 +14585,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 		}
 	}
 
-	//I call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
+	//call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
 	parent->listcontrol_sights->set((parent->data)->sight_list, true);
 	parent->listcontrol_positions->set((parent->data)->position_list, true);
 	parent->listcontrol_routes->set((parent->data)->route_list, false);
@@ -14605,6 +14598,12 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 	parent->Resize();
 	parent->OnModifyFile();
 	parent->DrawAll();
+    
+    if((parent->transporting_with_new_route)){
+        //if I am adding a new Route for transport, call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
+         (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
+     
+    }
 
 	event.Skip(true);
 

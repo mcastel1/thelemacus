@@ -1403,7 +1403,7 @@ void String::set(String name, String input_string, [[maybe_unused]] String prefi
 
 	value = (input_string.value);
 
-	print(name, true, prefix, cout);
+    if(name != String("")){print(name, true, prefix, cout);}
 
 }
 

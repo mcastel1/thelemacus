@@ -40,7 +40,7 @@ Data:
 				longitude = 64° 46.12037344398345'
 				label = 2024-01-11 17:17:38 UTC+2
 			starting heading = 126° 3.230000000000643'
-			length format = 3000 nm
+			length format = time and speed
 				hour of time = 01:00:00
 				speed = 3.041595995797958e-314 kt
 			label = 3.012082458757784e-314 kt

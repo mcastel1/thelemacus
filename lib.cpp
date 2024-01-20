@@ -15140,13 +15140,6 @@ void RouteFrame::set(void) {
 		start_phi->Enable(false);
 		start_lambda->Enable(false);
 
-//        time->Enable(false);
-//        speed->Enable(false);
-//        length->Enable(false);
-//        text_time->Enable(false);
-//        text_speed->Enable(false);
-//        text_l->Enable(false);
-
 		GP_phi->set();
 		GP_lambda->set();
 		omega->set();
@@ -15163,23 +15156,6 @@ void RouteFrame::set(void) {
         start_lambda->set();
         start_phi->Enable(!for_transport);
         start_lambda->Enable(!for_transport);
-        
-//        if((route->length_format.value) == "time and speed"){
-//            //the length in *route is written as a Chrono x a Speed
-//            
-//            length_format->name->SetValue(length_format->length_formats_catalog[0]);
-//            time->set();
-//            speed->set();
-//
-//        }else{
-//            //the length in *route is written simply as a Length
-//            
-//            length_format->name->SetValue(length_format->length_formats_catalog[1]);
-//            length->set();
-//            
-//        }
-//        
-//        length_format->OnEdit(dummy);
 
 		GP_phi->Enable(false);
 		GP_lambda->Enable(false);

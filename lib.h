@@ -866,6 +866,7 @@ public:
     
 };
 
+
 class Atmosphere{
     
 public:
@@ -877,6 +878,7 @@ public:
     double T(Length), n(Length), dTdz(Length), dndz(Length);
     
 };
+
 
 class Body{
     
@@ -894,6 +896,7 @@ public:
     
 };
 
+
 class Limb{
     
 public:
@@ -904,6 +907,7 @@ public:
     bool operator==(const Limb&);
     
 };
+
 
 class Sight{
     
@@ -945,6 +949,7 @@ public:
     void update_wxListCtrl(long, wxListCtrl*);
     
 };
+
 
 class Catalog{
     
@@ -1002,6 +1007,7 @@ public:
     
 };
 
+
 //this class denotes a point in a 2D projection of the sphere
 class Projection{
     
@@ -1016,6 +1022,7 @@ public:
     
 };
 
+
 //class which defines a functor which closes a frame with arbitrary type F
 template<class F> class CloseFrame{
     
@@ -1028,6 +1035,7 @@ public:
     template<class T> void operator()(T&);
     
 };
+
 
 //class which defines a functor which shows a frame with arbitrary type F
 template<class F> class ShowFrame{
@@ -1042,6 +1050,7 @@ public:
     
 };
 
+
 //class which defines a functor which shows ListFrame and all ChartFrames
 class ShowAll{
     
@@ -1053,6 +1062,7 @@ public:
     template<class T> void operator()(T&);
     
 };
+
 
 //class which defines a functor which destroys a frame with arbitrary type F
 template<class F> class DestroyFrame{
@@ -1066,6 +1076,7 @@ public:
     void operator()(void);
     
 };
+
 
 class ResetListFrame{
     
@@ -1106,6 +1117,7 @@ public:
     
 };
 
+
 //this checks if an element of the ProjectionField class is valid
 template<class P> class CheckProjection{
     
@@ -1117,6 +1129,7 @@ public:
     template<class T> void operator()(T&);
     
 };
+
 
 //this checks if an element of the LengthFormatField class is valid
 template<class P> class CheckLengthFormat{
@@ -1155,7 +1168,6 @@ public:
     template<class R> void operator()(R&);
     
 };
-
 
 
 template<class P> class CheckSign{

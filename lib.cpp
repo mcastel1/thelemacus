@@ -15126,7 +15126,8 @@ void RouteFrame::KeyDown(wxKeyEvent& event) {
 
 }
 
-//sets the values in all the GUI fields equal to the values in the respective non-GUI fields
+
+//set the values in all the GUI fields equal to the values in the respective non-GUI fields
 void RouteFrame::set(void) {
 
 	type->set();
@@ -15171,12 +15172,12 @@ void RouteFrame::set(void) {
         
         length->set();
         
-        
     }else{
-        //the Route length is expressed as a time and a speed -> set time and speed field
+        //the Route length is expressed as a time and a speed -> set time and speed field, and set also the length field as the product of the time and speed
         
         time->set();
         speed->set();
+        (route->l) = Length(route->t, route->v);
         
     }
 

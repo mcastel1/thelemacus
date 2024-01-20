@@ -3577,6 +3577,8 @@ void String::appendto(String s) {
 
 }
 
+
+//prepend s to *this and returns the result
 String String::prepend(String s) {
 
 	String output;
@@ -3775,8 +3777,8 @@ void Time::print(String name, String prefix, ostream& ostr) {
 
 	ostr << prefix.value << name.value << ":\n";
 
-	date.print(name, new_prefix, ostr);
-	chrono.print(name, new_prefix, ostr);
+	date.print(String("date"), new_prefix, ostr);
+	chrono.print(String("hour"), new_prefix, ostr);
 
 };
 
@@ -7765,6 +7767,7 @@ string Date::to_string(void) {
 }
 
 
+//print *this to ostr
 void Chrono::print(String name, String prefix, ostream& ostr) {
 
 	unsigned int precision;
@@ -7777,7 +7780,7 @@ void Chrono::print(String name, String prefix, ostream& ostr) {
 		precision = (data_precision.value);
 	}
 
-	ostr << prefix.value << "hour of " << name.value << " = " << to_string(precision, false) << "\n";
+	ostr << prefix.value << (name.value) << " = " << to_string(precision, false) << "\n";
 
 };
 

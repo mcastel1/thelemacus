@@ -4423,18 +4423,27 @@ template<class S> bool Time::read_from_stream(String name, S* input_stream, [[ma
 }
 
 void Time::operator += (const Chrono& chrono_in) {
+    
+    Chrono temp;
+    
+    temp = chrono_in;
 
 	to_MJD();
-	MJD += (((double)(chrono_in.h)) + ((double)(chrono_in.m)) / 60.0 + ((double)(chrono_in.s)) / (60.0 * 60.0)) / 24.0;
+	MJD += temp.get() / 24.0;
 	to_TAI();
 
 }
 
 
 void Time::operator -= (const Chrono& chrono_in) {
+    
+    Chrono temp;
+    
+    temp = chrono_in;
+
 
 	to_MJD();
-	MJD -= (((double)(chrono_in.h)) + ((double)(chrono_in.m)) / 60.0 + ((double)(chrono_in.s)) / (60.0 * 60.0)) / 24.0;
+	MJD -= temp.get() / 24.0;
 	to_TAI();
 
 }

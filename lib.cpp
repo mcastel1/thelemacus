@@ -4405,12 +4405,12 @@ template<class S> bool Time::read_from_stream(String name, S* input_stream, [[ma
 	cout << prefix.value << name.value << ":\n";
 
 	//read date
-	if (!(date.read_from_stream<S>(name, input_stream, false, new_prefix))) {
+	if (!(date.read_from_stream<S>(String("date"), input_stream, false, new_prefix))) {
 		check &= false;
 	}
 
 	//read chrono
-	if (!(chrono.read_from_stream<S>(name, input_stream, false, new_prefix))) {
+	if (!(chrono.read_from_stream<S>(String("hour"), input_stream, false, new_prefix))) {
 		check &= false;
 	}
 

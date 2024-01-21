@@ -15294,6 +15294,13 @@ template<class E> void RouteFrame::TryToEnableTimeSpeedLength(E& event) {
 }
 
 
+//when time or speed are edited in RouteFrame, thie method updates the length GUI field by writing in it time x speed
+template<class E> void RouteFrame::UpdateLength(E& event) {
+    
+    
+}
+
+
 //same as RouteFrame::OnChooseLengthFormat(E& event), but it does not accept any argument
 void RouteFrame::TryToEnableTimeSpeedLength(void){
     

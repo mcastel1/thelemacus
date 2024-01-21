@@ -15170,6 +15170,7 @@ void RouteFrame::set(void) {
         time->set();
         speed->set();
         (route->l) = Length(route->t, route->v);
+        length->set();
         
     }
 

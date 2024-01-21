@@ -3429,9 +3429,11 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
         length_format.read_from_stream(String("length format"), input_stream, false, new_prefix);
         
         if(length_format == String("time and speed")){
+            //read time and speed, and set l accordingly
             
             t.read_from_stream(String("time"), input_stream, false, new_prefix);
             v.read_from_stream(String("speed"), input_stream, false, new_prefix);
+            l = Length(t, v);
             
             
         }else{
@@ -15208,11 +15210,12 @@ template<class T> void RouteFrame::get(T& event) {
 		start_lambda->get(event);
         
         if((length_format->name->GetValue()) == length_format->length_formats_catalog[0]){
-            //in the GUI field, lengths are expressed at Chrono x Speed -> get t and v and set in the non-GUI field to true
+            //in the GUI field, lengths are expressed at Chrono x Speed -> get t and v and set in the non-GUI field to true. I also set route->l according to time and speed
             
             (route->length_format) = LengthFormat("time and speed");
             time->get(event);
             speed->get(event);
+            (route->l) = Length(route->t, route->v);
             
         }else{
             //in the GUI field, lenght are expressed simply as a Length -> get l and set in the non-GUI field to false

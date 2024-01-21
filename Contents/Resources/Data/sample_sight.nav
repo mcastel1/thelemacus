@@ -10,11 +10,11 @@ Data:
 			index error = 0° 1.9'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				master-clock date and hour of sight = 2021-06-21
-				hour of master-clock date and hour of sight = 21:01:20
+				date = 2021-06-21
+				hour = 21:01:20
 			use of stopwatch = y
-			hour of stopwatch = 00:37:35
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			stopwatch = 00:37:35
+			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = Sight was taken at BGC
 		Sight #2:
 			body:
@@ -27,10 +27,10 @@ Data:
 			artificial horizon = n
 			height of eye = 2.13 m
 			master-clock date and hour of sight:
-				master-clock date and hour of sight = 2022-01-10
-				hour of master-clock date and hour of sight = 12:52:00
+				date = 2022-01-10
+				hour = 12:52:00
 			use of stopwatch = n
-			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = 2024-01-10 12:52:09 UTC+2
 	Routes:
 		Route #1:
@@ -41,13 +41,32 @@ Data:
 				label = 2024-01-11 17:17:38 UTC+2
 			starting heading = 126° 3.230000000000643'
 			length format = time and speed
-				time = 01:00:00
+				time = 02:00:00
 				speed = 3.12 kt
 			label = route with speed and time
+		Route #2:
+			type = l
+			start position:
+				latitude = 22° 3.000000000000043'
+				longitude = 356° 56.99999999999932'
+				label = 
+			starting heading = 19° 3.000000000000043'
+			length format = time and speed
+				time = 03:03:03
+				speed = 3 kt
+			label = jlkj
+		Route #3:
+			type = c
+			ground position:
+				latitude = 336° 56.99999999999932'
+				longitude = 356° 56.99999999999932'
+				label = 
+			aperture angle = 45° 2.999999999999829'
+			label = lkjnb
 	Positions:
 		Position #1:
 			latitude = 323° 36.54636500000151'
 			longitude = 315° 55.56999999999789'
 			label = Siamo in biblioteca
 Recent bodies = 12 10 8
-Recent projections = 1 0
+Recent projections = 0 1

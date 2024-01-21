@@ -918,6 +918,7 @@ Length Length::operator- (const Length& l) {
 
 }
 
+
 void Speed::print(String name, String unit, String prefix, ostream& ostr) {
 
     if ((name.value) != "") {
@@ -933,14 +934,14 @@ void Speed::print(String name, String unit, String prefix, ostream& ostr) {
             if (unit == String("km/h")) {
                 //units are km/h
             
-                ostr << value * nm * 1e3 << " km/h\n";
+                ostr << value * nm << " km/h\n";
 
             }else{
                 
                 if (unit == String("m/s")){
                     //units are m/s
                     
-                    ostr << value * nm * 1e3 << " m/s\n";
+                    ostr << value * nm*1e3/3600.0 << " m/s\n";
                     
                 }
                 
@@ -1026,20 +1027,6 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
 }
 
 
-
-bool Speed::check_valid(String name, [[maybe_unused]] String prefix) {
-
-	bool check = true;
-
-	if (value < 0.0) {
-		check &= false;
-		cout << prefix.value << RED << "Entered value of " << name.value << " is not valid!\n" << RESET;
-	}
-
-	return check;
-
-}
-
 void Speed::print(String name, String prefix, ostream& ostr) {
 
 	ostr << prefix.value << name.value << " = " << value << " kt\n";
@@ -1068,7 +1055,6 @@ void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
     value = x;
 
     if (name != String("")) { print(name, String("kt"), prefix, cout); }
-    check_valid(name, new_prefix);
 
 }
 

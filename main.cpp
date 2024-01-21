@@ -105,7 +105,6 @@
  - allow for messages with \n QuestionFrame and MessageFrame
  - frames are not resized according to the size of their title
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class
- - revise constants for units of measure in SpeedField<P>::set and SpeedField<P>::get and Speed::print
  for MSW:
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder

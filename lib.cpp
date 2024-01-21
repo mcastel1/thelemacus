@@ -1057,6 +1057,7 @@ Speed::Speed(double value_in) {
 }
 
 
+//set the value of *this to x, where x is in kt
 void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
 
     String new_prefix;

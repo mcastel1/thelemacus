@@ -19300,7 +19300,7 @@ template<class P> void SpeedField<P>::set(void) {
     
     switch (i){
             
-        case '0':{
+        case 0:{
             //unit = String("nm")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (speed->value)));
@@ -19308,7 +19308,7 @@ template<class P> void SpeedField<P>::set(void) {
             break;
         }
             
-        case '1':{
+        case 1:{
             //unit = String("km/h")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to km/h*/(speed->value) * nm));
@@ -19316,7 +19316,7 @@ template<class P> void SpeedField<P>::set(void) {
             break;
         }
   
-        case '2':{
+        case 2:{
             //unit = String("ft")
 
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm * 1e3 / 3600.0));

@@ -18239,8 +18239,26 @@ template<class P> void LengthFormatField<P>::fill_length_formats(void){
 
 //sets the value in the GUI object name equal to the value in the non-GUI LengthFormat object length_format
 template<class P> void LengthFormatField<P>::set(void) {
+    
+    switch ((length_format->value)[0]) {
+            
+        case 't':
+            //length format is time and speed
+            
+            name->SetValue(wxString("Time and speed"));
 
-    name->SetValue((length_format->value));
+            break;
+            
+ 
+        case 'l':
+            //length format is simply length, rather than time and speed
+            
+            name->SetValue(wxString("Length"));
+
+            break;
+   
+    }
+
     ok = true;
 
 }

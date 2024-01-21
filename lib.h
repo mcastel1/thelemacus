@@ -2524,7 +2524,7 @@ public:
     wxBoxSizer *sizer, /*this sizer containts the Length format GUI field, the Length GUI field and the speed and time GUI fields*/*sizer_l_format_l_t_v, *box_sizer;
     wxStaticBoxSizer *sizer_box_data, *sizer_box_l_format_l_t_v, *sizer_box_l, *sizer_box_t_v, *sizer_box_start, *sizer_box_GP;
     //static texts for the GUI fields containing the Route length, speed and time
-    wxStaticText *text_time, *text_speed, *text_l;
+    wxStaticText *text_time, *text_speed, *text_length;
     wxButton* /*this button triggers either the addition of a new Route, or the modification of an existing one*/button_ok, *button_cancel;
     
     RouteFrame(ListFrame*, Route*, bool, long, const wxString&, const wxPoint&, const wxSize&, String);

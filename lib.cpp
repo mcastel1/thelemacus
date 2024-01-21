@@ -14690,7 +14690,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     speed = new SpeedField<RouteFrame>(panel, &(route->v), String("kt"));
     
     //the field for Length to set the Route length
-    text_l = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
+    text_length = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
     length = new LengthField<RouteFrame>(panel, &(route->l), String("nm"));
     
     
@@ -14756,7 +14756,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     speed->InsertIn<wxFlexGridSizer>(sizer_grid_t_v);
     sizer_box_t_v->Add(sizer_grid_t_v);
     
-	sizer_grid_l->Add(text_l, 0, wxALIGN_CENTER_VERTICAL);
+	sizer_grid_l->Add(text_length, 0, wxALIGN_CENTER_VERTICAL);
 	length->InsertIn<wxFlexGridSizer>(sizer_grid_l);
     sizer_box_l->Add(sizer_grid_l);
 
@@ -14837,7 +14837,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
         time->Enable(false);
         text_time->Enable(false);
         text_speed->Enable(false);
-        text_l->Enable(false);
+        text_length->Enable(false);
         start_phi->Enable(false);
         start_lambda->Enable(false);
         GP_phi->Enable(false);
@@ -15260,7 +15260,7 @@ template<class E> void RouteFrame::TryToEnableTimeSpeedLength(E& event) {
             length->Enable(!b);
             text_time->Enable(b);
             text_speed->Enable(b);
-            text_l->Enable(!b);
+            text_length->Enable(!b);
             
         }else{
             //the Route is a circle of equal altitude -> the length is not defined -> disable the length_format field as well as all fields related to the length
@@ -15272,7 +15272,7 @@ template<class E> void RouteFrame::TryToEnableTimeSpeedLength(E& event) {
             length->Enable(false);
             text_time->Enable(false);
             text_speed->Enable(false);
-            text_l->Enable(false);
+            text_length->Enable(false);
             
         }
         
@@ -15285,7 +15285,7 @@ template<class E> void RouteFrame::TryToEnableTimeSpeedLength(E& event) {
         length->Enable(false);
         text_time->Enable(false);
         text_speed->Enable(false);
-        text_l->Enable(false);
+        text_length->Enable(false);
         
     }
     

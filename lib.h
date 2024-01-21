@@ -787,8 +787,8 @@ public:
     Angle /*this is equal to alpha_notes: it is the azimuth of the vector tangent to the Route at reference_position*/Z, omega;
     //the length of the route
   
-    Length l;
-    Speed v;
+    Length length;
+    Speed speed;
     Chrono t;
     //this is the position in sight_list of the sight linked to route. If there is no sight linked to route, then related_sight = -1.
     Int related_sight;

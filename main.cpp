@@ -68,9 +68,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
-<<<<<<< HEAD
  - check whether you can remove Fitall in void ListFrame::DrawAll(void) { and whether it speeds up things
-=======
  - all unit fields should have the system              temp << "Available units are: "; message generated in the same way, as in template <class T> void CheckSpeedUnit<P>::operator()
  - when you enable / disable a field, enable/disable its wxStaticTexts and wxBoxSizers as well
  - check whether you can remove Fitall in void ListFrame::DrawAll(void) { and whether it speeds up things 

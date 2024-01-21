@@ -1986,7 +1986,7 @@ Route::Route(String type_in, Position reference_position_in, Angle Z_in, Length 
 	type = type_in;
 	reference_position = reference_position_in;
 	Z = Z_in;
-	l = l_in;
+	length = l_in;
     length_format.set(String("length"));
 
     related_sight.set(String(""), -1, String(""));
@@ -2002,7 +2002,7 @@ Route::Route(String type_in, Position reference_position_in, Angle omega_in) {
 
     length_format.set(String("length"));
 	//the lenght of the circle of equal altitude is set by default
-	l.set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
+	length.set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
 
 	related_sight.set(String(""), -1, String(""));
 
@@ -2048,7 +2048,7 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
 	//tabulate the Route points
 	for (/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/v->clear(), end_connected = true, i = 0; i < n_points; i++) {
 
-		compute_end(Length((l.value) * ((double)i) / ((double)(n_points - 1))), String(""));
+		compute_end(Length((length.value) * ((double)i) / ((double)(n_points - 1))), String(""));
 
 		if ((draw_panel->GeoToDrawPanel)(end, &p, false)) {
 
@@ -2093,7 +2093,7 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, Dra
 		//handle special cases i=0 and i = n_points-1 to avoind roundoff error
 		if ((i > 0) && (i < n_points - 1)) {
 
-			s.set(String(""), (l.value) * ((double)i) / ((double)(n_points - 1)), String(""));
+			s.set(String(""), (length.value) * ((double)i) / ((double)(n_points - 1)), String(""));
 
 		}
 		else {
@@ -2102,7 +2102,7 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, Dra
 				s.set(String(""), 0.0, String(""));
 			}
 			else {
-				s = l;
+				s = length;
 			}
 
 		}
@@ -2644,7 +2644,7 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
 
 		listcontrol->SetItem(i, j++, wxString(reference_position.to_string((display_precision.value))));
 		listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.value), false)));
-		listcontrol->SetItem(i, j++, wxString(l.to_string(String("nm"), (display_precision.value))));
+		listcontrol->SetItem(i, j++, wxString(length.to_string(String("nm"), (display_precision.value))));
 
 		listcontrol->SetItem(i, j++, wxString(""));
 		listcontrol->SetItem(i, j++, wxString(""));
@@ -2817,7 +2817,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
 							t->resize(2);
 							((*t)[0]).set(String(""), 0.0, new_prefix);
-							((*t)[1]).set(String(""), (l.value) / Re, new_prefix);
+							((*t)[1]).set(String(""), (length.value) / Re, new_prefix);
 
 						}
 
@@ -2851,7 +2851,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 							else {
 								//this->reference position is not included into the circle of circle -> this->end must be included into the circle of circle -> the part of *this comprised into circle is the one with  (*t)[0] <= t <= (l.value)/Re
 
-								t->push_back(Angle(String(""), (l.value) / Re, new_prefix));
+								t->push_back(Angle(String(""), (length.value) / Re, new_prefix));
 
 							}
 
@@ -3033,7 +3033,7 @@ int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle>* t, [[ma
 
 		//push back into u the angle which corresponds to the endpoint of Route *this
 		if (type == String("o")) {
-			u.push_back(Angle((l.value) / Re));
+			u.push_back(Angle((length.value) / Re));
 		}
 
 		//push back into u the angle which corresponds to the endpoint of Route *this
@@ -3404,7 +3404,7 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 
 		reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
 		omega.read_from_stream<S>(String("omega"), input_stream, false, new_prefix);
-		l.set(String("length"), 2.0 * M_PI * Re * sin(omega), new_prefix);
+		length.set(String("length"), 2.0 * M_PI * Re * sin(omega), new_prefix);
 
 	}
 	else {
@@ -3419,13 +3419,13 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
             //read time and speed, and set l accordingly
             
             t.read_from_stream(String("time"), input_stream, false, new_prefix);
-            v.read_from_stream(String("speed"), input_stream, false, new_prefix);
-            l = Length(t, v);
+            speed.read_from_stream(String("speed"), input_stream, false, new_prefix);
+            length = Length(t, speed);
             
             
         }else{
             
-            l.read_from_stream<S>(String("length"), input_stream, false, new_prefix);
+            length.read_from_stream<S>(String("length"), input_stream, false, new_prefix);
 
         }
         
@@ -4013,7 +4013,7 @@ void Route::compute_end(String prefix) {
 		//orthodrome route
 		Angle t;
 
-		t.set(String(""), (l.value) / Re, prefix);
+		t.set(String(""), (length.value) / Re, prefix);
 
 		(end.phi).set(String(""), asin(cos(Z) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);
 		(end.lambda).set(String(""),
@@ -4054,13 +4054,13 @@ void Route::compute_end(String prefix) {
 			//this is the general expression of t vs l for Z != pi/2
 
 			(t.value) = -tau * sqrt((1.0 - C) / C)
-				* log(1.0 / eta * tan(-tau * sqrt(C) * (l.value) / (2.0 * Re) + atan(sqrt((1.0 - sin(reference_position.phi.value)) / (1.0 + sin(reference_position.phi.value))))));
+				* log(1.0 / eta * tan(-tau * sqrt(C) * (length.value) / (2.0 * Re) + atan(sqrt((1.0 - sin(reference_position.phi.value)) / (1.0 + sin(reference_position.phi.value))))));
 
 		}
 		else {
 			//this is the limit of the expression above in the case Z -> pi/2
 
-			(t.value) = (l.value) * (1.0 + gsl_pow_2(eta)) / (2.0 * Re * eta);
+			(t.value) = (length.value) * (1.0 + gsl_pow_2(eta)) / (2.0 * Re * eta);
 
 		}
 
@@ -4079,7 +4079,7 @@ void Route::compute_end(String prefix) {
 		Angle t;
 		//compute the parametric angle for the circle of equal altitude starting from the length l of the curve, omega  and the Earth's radius
 		//R sin omega = r, r t = l, t = l / (R sin omega)
-		t.set(String(""), (l.value) / (Re * sin(omega)), prefix);
+		t.set(String(""), (length.value) / (Re * sin(omega)), prefix);
 
 
 		(end.phi).set(String(""), M_PI_2 - acos(cos((omega.value)) * sin(reference_position.phi) - cos(reference_position.phi) * cos((t.value)) * sin((omega.value))), prefix);
@@ -4102,14 +4102,14 @@ void Route::compute_end(String prefix) {
 //This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false
 bool Route::compute_end(Length d, [[maybe_unused]] String prefix) {
 
-	if ((type == String("c")) || (d <= l)) {
+	if ((type == String("c")) || (d <= length)) {
 
 		Length l_saved;
 
-		l_saved = l;
-		l = d;
+		l_saved = length;
+		length = d;
 		compute_end(prefix);
-		l = l_saved;
+		length = l_saved;
 
 		return true;
 
@@ -4159,12 +4159,12 @@ void Route::print(String name, String prefix, ostream& ostr) {
         length_format.print(String("length format"), false, new_prefix, ostr);
         if((length_format.value) == "length"){
             
-            l.print(String("length"), String("nm"), new_new_prefix, ostr);
+            length.print(String("length"), String("nm"), new_new_prefix, ostr);
             
         }else{
             
             t.print(String("time"), new_new_prefix, ostr);
-            v.print(String("speed"), new_new_prefix, ostr);
+            speed.print(String("speed"), new_new_prefix, ostr);
             
         }
 
@@ -6206,7 +6206,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
 
 	check &= compute_H_o(new_prefix);
 	(circle_of_equal_altitude->omega).set(String(""), M_PI_2 - (H_o.value), String(""));
-	(circle_of_equal_altitude->l).set(String(""), 2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), new_prefix);
+	(circle_of_equal_altitude->length).set(String(""), 2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), new_prefix);
 
 	if (!check) {
 
@@ -6489,7 +6489,7 @@ double Route::lambda_minus_pi(double t, void* route) {
 	//append \t to prefix
 	new_prefix = ((*r).temp_prefix).append(String("\t"));
 
-	((*r).l.value) = Re * sin(((*r).omega.value)) * t;
+	((*r).length.value) = Re * sin(((*r).omega.value)) * t;
 	(*r).compute_end(new_prefix);
 
 	return(((*r).end.lambda.value) - M_PI);
@@ -6519,12 +6519,12 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
 			t_min.set(String(""), 2.0 * M_PI - acos(-tan(reference_position.phi.value) * tan((omega.value))), new_prefix);
 
 			//p_max =  Position on the circle of equal altitude  at t = t_max
-			(l.value) = Re * sin((omega.value)) * (t_max.value);
+			(length.value) = Re * sin((omega.value)) * (t_max.value);
 			compute_end(new_prefix);
 			p_max = end;
 
 			//p_min =  Position on circle of equal altitude  at t = t_min
-			(l.value) = Re * sin((omega.value)) * (t_min.value);
+			(length.value) = Re * sin((omega.value)) * (t_min.value);
 			compute_end(new_prefix);
 			p_min = end;
 
@@ -8645,7 +8645,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 	//draw the first chunk of intermediate ticks on the longitude axis
 	if (gamma_lambda != 1) {
 
-		(route.l).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
+		(route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
 
 		//set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
 		for ((((route.reference_position).lambda).value) = (lambda_start.value) - delta_lambda;
@@ -8658,7 +8658,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
 	}
 
-	(route.l).set(String(""), Re * ((((p_NW.phi).normalize_pm_pi_ret()).value) - (((p_SE.phi).normalize_pm_pi_ret()).value)), String(""));
+	(route.length).set(String(""), Re * ((((p_NW.phi).normalize_pm_pi_ret()).value) - (((p_SE.phi).normalize_pm_pi_ret()).value)), String(""));
 
 	for (
 		(((route.reference_position).lambda).value) = (lambda_start.value);
@@ -8673,7 +8673,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 			//draw intermediate ticks on the longitude axis
 
 			(lambda_saved.value) = (((route.reference_position).lambda).value);
-			(route.l).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
+			(route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
 
 			//set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
 			for ((((route.reference_position).lambda).value) = (lambda_saved.value);
@@ -8684,7 +8684,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
 			}
 
-			(route.l).set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
+			(route.length).set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
 			(((route.reference_position).lambda).value) = (lambda_saved.value);
 
 		}
@@ -8715,7 +8715,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
 		//route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
 		((route.reference_position).phi) = phi;
-		(route.l).set(String(""),
+		(route.length).set(String(""),
 
 
 
@@ -8735,7 +8735,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
 			//                (route.type).set(String(""), String("o"), String(""));
 			//                (route.Z).set(String(""), M_PI_2, String(""));
-			(route.l).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * lambda_span, String(""));
+			(route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * lambda_span, String(""));
 			//                ((route.reference_position).lambda) = (parent->lambda_min);
 
 			//set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -8984,7 +8984,7 @@ void DrawPanel::Render_3D(wxDC* dc) {
 	//draw meridians
 	//set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
 	(route.type).set(String("o"));
-	(route.l).set(String(""), Re * M_PI, String(""));
+	(route.length).set(String(""), Re * M_PI, String(""));
 	(route.Z).set(String(""), 0.0, String(""));
 	((route.reference_position).phi) = -M_PI_2;
 
@@ -9004,7 +9004,7 @@ void DrawPanel::Render_3D(wxDC* dc) {
 			Z_saved = (route.Z);
 
 			(route.Z).set(String(""), 0.0, String(""));
-			(route.l).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
+			(route.length).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
 			((route.reference_position).phi) = phi_middle;
 
 			//set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -9016,7 +9016,7 @@ void DrawPanel::Render_3D(wxDC* dc) {
 
 			}
 
-			(route.l).set(String(""), Re * M_PI, String(""));
+			(route.length).set(String(""), Re * M_PI, String(""));
 			(route.Z) = Z_saved;
 			(((route.reference_position).lambda).value) = (lambda_saved.value);
 			((route.reference_position).phi) = phi_saved;
@@ -9048,7 +9048,7 @@ void DrawPanel::Render_3D(wxDC* dc) {
 
 		//route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
 		(route.omega).set(String(""), M_PI_2 - fabs(phi.value), String(""));
-		(route.l).set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
+		(route.length).set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
 		((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
 
 		route.Draw(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, thickness, dc, this, String(""));
@@ -9058,7 +9058,7 @@ void DrawPanel::Render_3D(wxDC* dc) {
 
 			(route.type).set(String("o"));
 			(route.Z).set(String(""), M_PI_2, String(""));
-			(route.l).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
+			(route.length).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
 
 			//set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
 			for (
@@ -14687,11 +14687,11 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     time = new ChronoField<RouteFrame>(panel, &(route->t));
     //the field for speed to set the Route length
     text_speed = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
-    speed = new SpeedField<RouteFrame>(panel, &(route->v), String("kt"));
+    speed = new SpeedField<RouteFrame>(panel, &(route->speed), String("kt"));
     
     //the field for Length to set the Route length
     text_length = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
-    length = new LengthField<RouteFrame>(panel, &(route->l), String("nm"));
+    length = new LengthField<RouteFrame>(panel, &(route->length), String("nm"));
     
     
     type->Bind(wxEVT_COMBOBOX, &LengthFormatField<RouteFrame>::OnEdit<wxCommandEvent>, length_format);
@@ -15169,7 +15169,7 @@ void RouteFrame::set(void) {
         
         time->set();
         speed->set();
-        (route->l) = Length(route->t, route->v);
+        (route->length) = Length(route->t, route->speed);
         length->set();
         
     }
@@ -15203,7 +15203,7 @@ template<class T> void RouteFrame::get(T& event) {
             (route->length_format) = LengthFormat("time and speed");
             time->get(event);
             speed->get(event);
-            (route->l) = Length(route->t, route->v);
+            (route->length) = Length(route->t, route->speed);
             
         }else{
             //in the GUI field, lenght are expressed simply as a Length -> get l and set in the non-GUI field to false
@@ -20391,9 +20391,9 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         }else{
             //the transport animation is in progress -> do the next chunk
             
-            route_chunk->l.set(
+            route_chunk->length.set(
                                String(""),
-                               (((parent->data->route_list)[parent->i_transporting_route]).l.value) *
+                               (((parent->data->route_list)[parent->i_transporting_route]).length.value) *
                                (M_EULER + gsl_sf_psi_n(0, ((double)(t+1))))/(M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)+1))))
                                ,
                                String(""));

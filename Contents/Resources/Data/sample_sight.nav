@@ -52,8 +52,8 @@ Data:
 				label = 
 			starting heading = 19° 3.000000000000043'
 			length format = time and speed
-				time = 03:03:03
-				speed = 3 kt
+				time = 03:00:00
+				speed = 0.03 m/s
 			label = jlkj
 		Route #3:
 			type = c

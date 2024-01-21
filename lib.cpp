@@ -13865,48 +13865,48 @@ template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
 
 //write the value of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void LengthField<P>::get(T& event) {
-
-	if (is_ok()) {
-
-		double length_temp;
-
-		value->GetValue().ToDouble(&length_temp);
-
-
-		switch (((unit->GetValue()).ToStdString())[0]) {
-
-		case 'n': {
-			//unit = "nm"
-
-			length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
-
-			break;
-
-		}
-
-
-		case 'm': {
-			//unit = "m"
-
-			length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm), String(""));
-
-			break;
-
-		}
-
-
-		case 'f': {
-			//unit = "ft"
-
-			length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_ft, String(""));
-
-			break;
-
-		}
-
-		}
-
-	}
+    
+    if (is_ok()) {
+        
+        double length_temp;
+        
+        value->GetValue().ToDouble(&length_temp);
+        
+        
+        switch (((unit->GetValue()).ToStdString())[0]) {
+                
+            case 'n': {
+                //unit = "nm"
+                
+                length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
+                
+                break;
+                
+            }
+                
+                
+            case 'm': {
+                //unit = "m"
+                
+                length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm), String(""));
+                
+                break;
+                
+            }
+                
+                
+            case 'f': {
+                //unit = "ft"
+                
+                length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_ft, String(""));
+                
+                break;
+                
+            }
+                
+        }
+        
+    }
 
 	event.Skip(true);
 
@@ -14697,6 +14697,12 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     type->Bind(wxEVT_COMBOBOX, &LengthFormatField<RouteFrame>::OnEdit<wxCommandEvent>, length_format);
     type->Bind(wxEVT_KEY_UP, &LengthFormatField<RouteFrame>::OnEdit<wxKeyEvent>, length_format);
 
+    //bind time and speed changes to UpdateLength, so every time time and speed GUI fields are edited, length is updated accordingly
+    time->Bind(wxEVT_KEY_UP, &RouteFrame::UpdateLength<wxKeyEvent>, this);
+    time->Bind(wxEVT_COMBOBOX, &RouteFrame::UpdateLength<wxCommandEvent>, this);
+    speed->Bind(wxEVT_KEY_UP, &RouteFrame::UpdateLength<wxKeyEvent>, this);
+    speed->Bind(wxEVT_COMBOBOX, &RouteFrame::UpdateLength<wxCommandEvent>, this);
+
     
 	//start position
 	//start_phi
@@ -15297,6 +15303,8 @@ template<class E> void RouteFrame::TryToEnableTimeSpeedLength(E& event) {
 //when time or speed are edited in RouteFrame, thie method updates the length GUI field by writing in it time x speed
 template<class E> void RouteFrame::UpdateLength(E& event) {
     
+  
+    cout << " ";
     
 }
 

@@ -99,7 +99,8 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
-- when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on 
+ - rename Route::t -> time
+- when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
  - allow for messages with \n QuestionFrame and MessageFrame
  - frames are not resized according to the size of their title
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class

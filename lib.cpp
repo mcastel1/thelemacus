@@ -15313,7 +15313,9 @@ template<class E> void RouteFrame::UpdateLength(E& event) {
         length->unit->SetValue(wxString(""));
         
     }
-
+    
+    event.Skip(true);
+    
 }
 
 

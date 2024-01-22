@@ -15,24 +15,24 @@
 // first icon in the executable and the icons are sorted both by their order
 // and alphabetically (!), so put this icon first and give it a name
 // starting with "a"
-app_icon ICON "Z:/Contents/Resources/Images/Light/app_icon.ico"
-arrow_icon RCDATA "Z:/Contents/Resources/Images/Light/arrow_icon.png"
-disconnect_icon RCDATA "Z:/Contents/Resources/Images/Light/disconnect_icon.png"
-error_icon RCDATA "Z:/Contents/Resources/Images/Light/error_icon.png"
-list_icon RCDATA "Z:/Contents/Resources/Images/Light/list_icon.png"
-map_icon RCDATA "Z:/Contents/Resources/Images/Light/map_icon.png"
-pencil_icon RCDATA "Z:/Contents/Resources/Images/Light/pencil_icon.png"
-plus_icon RCDATA "Z:/Contents/Resources/Images/Light/plus_icon.png"
-position_icon RCDATA "Z:/Contents/Resources/Images/Light/position_icon.png"
-question_icon RCDATA "Z:/Contents/Resources/Images/Light/question_icon.png"
-trash_icon RCDATA "Z:/Contents/Resources/Images/Light/trash_icon.png"
-warning_icon RCDATA "Z:/Contents/Resources/Images/Light/warning_icon.png"
-jolly_rogers RCDATA "Z:/Contents/Resources/Images/Light/jolly_rogers.png"
-michele_icon RCDATA "Z:/Contents/Resources/Images/Light/michele_icon.png"
+app_icon ICON "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/app_icon.ico"
+arrow_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/arrow_icon.png"
+disconnect_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/disconnect_icon.png"
+error_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/error_icon.png"
+list_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/list_icon.png"
+map_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/map_icon.png"
+pencil_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/pencil_icon.png"
+plus_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/plus_icon.png"
+position_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/position_icon.png"
+question_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/question_icon.png"
+trash_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/trash_icon.png"
+warning_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/warning_icon.png"
+jolly_rogers RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/jolly_rogers.png"
+michele_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/michele_icon.png"
 
 
 // this icon is used with wxFrame::SetIcon()
-sample ICON  "Z:/Contents/Resources/Images/Light/app_icon.ico"
+sample ICON  "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/app_icon.ico"
 
 // set this to 1 if you don't want to use manifest resource provided by wxWidgets.
 // An aplication manifest is needed for the application UI to look properly and other
@@ -49,16 +49,16 @@ sample ICON  "Z:/Contents/Resources/Images/Light/app_icon.ico"
 // manifest mentioned above
 #include "wx\msw\wx.rc"
 
-init DATA "Z:/Contents/Resources/Data/init.txt"
-sample_sight DATA "Z:/Contents/Resources/Data/sample_sight.nav"
-paris_sights DATA "Z:/Contents/Resources/Data/paris_sights.nav"
-catalog DATA "Z:/Contents/Resources/Data/catalog.txt"
-j2000_to_itrf93	DATA "Z:/Contents/Resources/Data/j2000_to_itrf93.txt"
-jupiter	DATA "Z:/Contents/Resources/Data/jupiter.txt"
-map_conv_blocked DATA "Z:/Contents/Resources/Data/map_conv_blocked.csv"
-moon DATA "Z:/Contents/Resources/Data/moon.txt"
-n_line_map_conv_blocked	DATA "Z:/Contents/Resources/Data/n_line_map_conv_blocked.txt"
-saturn DATA "Z:/Contents/Resources/Data/saturn.txt"
-sun	DATA "Z:/Contents/Resources/Data/sun.txt"
+init DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/init.txt"
+sample_sight DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/sample_sight.nav"
+paris_sights DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/paris_sights.nav"
+catalog DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/catalog.txt"
+j2000_to_itrf93	DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/j2000_to_itrf93.txt"
+jupiter	DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/jupiter.txt"
+map_conv_blocked DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/map_conv_blocked.csv"
+moon DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/moon.txt"
+n_line_map_conv_blocked	DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/n_line_map_conv_blocked.txt"
+saturn DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/saturn.txt"
+sun	DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/sun.txt"
 
 

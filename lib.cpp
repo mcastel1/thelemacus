@@ -15518,7 +15518,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 
 	//allocate sizers
 	sizer_v = new wxBoxSizer(wxVERTICAL);
-	sizer_grid = new wxGridSizer(1, 2, 0, 0);
+	sizer_grid = new wxGridSizer(1, 2, 0, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 
 	StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
 

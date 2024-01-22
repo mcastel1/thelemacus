@@ -2085,7 +2085,7 @@ public:
     CheckLength<P>* check;
     
     LengthField(wxPanel*, Length*, String);
-    void set(Length*);
+    void set(Length);
     void set(void);
     template<class T> void get(T&);
     void Enable(bool);
@@ -2096,6 +2096,7 @@ public:
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
+
 
 //class for graphical object: a field to enter a speed, composed of a box and a dropdown menu to enter the units of measure of the speed. P is the type of the parent which hosts the LengthField object
 template<class P> class SpeedField{

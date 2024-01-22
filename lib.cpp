@@ -15303,9 +15303,17 @@ template<class E> void RouteFrame::TryToEnableTimeSpeedLength(E& event) {
 //when time or speed are edited in RouteFrame, thie method updates the length GUI field by writing in it time x speed
 template<class E> void RouteFrame::UpdateLength(E& event) {
     
-  
-    cout << " ";
-    
+    if((time->is_ok()) && (speed->is_ok())){
+        
+        length->set(Length(*(time->chrono), *(speed->speed)));
+        
+    }else{
+        
+        length->value->SetValue(wxString(""));
+        length->unit->SetValue(wxString(""));
+        
+    }
+
 }
 
 
@@ -18533,14 +18541,14 @@ template <class P> void AngleField<P>::set(void) {
 
 
 //set the value in the GUI field *this equal to the value in the non-GUI object *input
-template<class P> void LengthField<P>::set(Length* input) {
+template<class P> void LengthField<P>::set(Length input) {
     
     switch ((unit_value.value)[0]) {
             
         case 'n': {
             //unit = String("nm")
             
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input->value)));
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
             unit->SetValue(wxString("nm"));
             break;
             
@@ -18549,7 +18557,7 @@ template<class P> void LengthField<P>::set(Length* input) {
         case 'm': {
             //unit = String("m")
             
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input->value) * 1e3 * nm));
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
             unit->SetValue(wxString("m"));
             
             break;
@@ -18559,7 +18567,7 @@ template<class P> void LengthField<P>::set(Length* input) {
         case 'f': {
             //unit = String("ft")
             
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input->value) * nm_ft));
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
             unit->SetValue(wxString("ft"));
             
             break;
@@ -18575,7 +18583,7 @@ template<class P> void LengthField<P>::set(Length* input) {
 //set the value in the GUI object value equal to the value in the non-GUI object length
 template<class P> void LengthField<P>::set(void) {
     
-    set(length);
+    set(*length);
     
     value_ok = true;
     unit_ok = true;

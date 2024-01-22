@@ -18483,7 +18483,7 @@ template<class P, class T> template <typename EventTag, typename Method, typenam
 
 
 
-//sets the value in the GUI objects deg and min equal to the value in the non-GUI limb object angle
+//sets the value in the GUI objects deg and min equal to the value in the non-GUI Angle object angle
 template <class P> void AngleField<P>::set(void) {
 
 	unsigned int deg_temp;
@@ -18532,45 +18532,54 @@ template <class P> void AngleField<P>::set(void) {
 }
 
 
-//set the value in the GUI object value equal to the value in the non-GUI  object length
+//set the value in the GUI field *this equal to the value in the non-GUI object *input
+template<class P> void LengthField<P>::set(Length* input) {
+    
+    switch ((unit_value.value)[0]) {
+            
+        case 'n': {
+            //unit = String("nm")
+            
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input->value)));
+            unit->SetValue(wxString("nm"));
+            break;
+            
+        }
+            
+        case 'm': {
+            //unit = String("m")
+            
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input->value) * 1e3 * nm));
+            unit->SetValue(wxString("m"));
+            
+            break;
+            
+        }
+            
+        case 'f': {
+            //unit = String("ft")
+            
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input->value) * nm_ft));
+            unit->SetValue(wxString("ft"));
+            
+            break;
+            
+        }
+            
+    }
+    
+    
+}
+
+
+//set the value in the GUI object value equal to the value in the non-GUI object length
 template<class P> void LengthField<P>::set(void) {
-
-	switch ((unit_value.value)[0]) {
-
-	case 'n': {
-		//unit = String("nm")
-
-		value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (length->value)));
-		unit->SetValue(wxString("nm"));
-		break;
-
-	}
-
-	case 'm': {
-		//unit = String("m")
-
-		value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(length->value) * 1e3 * nm));
-		unit->SetValue(wxString("m"));
-
-		break;
-
-	}
-
-	case 'f': {
-		//unit = String("ft")
-
-		value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(length->value) * nm_ft));
-		unit->SetValue(wxString("ft"));
-
-		break;
-
-	}
-
-	}
-
-	value_ok = true;
-	unit_ok = true;
-
+    
+    set(length);
+    
+    value_ok = true;
+    unit_ok = true;
+    
 }
 
 //sets the value in the GUI objects year, month and day equal to the value in the non-GUI limb object date_in

@@ -2085,6 +2085,7 @@ public:
     CheckLength<P>* check;
     
     LengthField(wxPanel*, Length*, String);
+    void set(Length*);
     void set(void);
     template<class T> void get(T&);
     void Enable(bool);

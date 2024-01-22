@@ -15082,7 +15082,7 @@ bool RouteFrame::is_ok(void) {
     
 }
 
-           //tries to enable button_ok
+//tries to enable button_ok
 void RouteFrame::AllOk(void) {
 
 	button_ok->Enable(is_ok());
@@ -19190,7 +19190,7 @@ template<class P> template<class E> void ChronoField<P>::OnEditSecond(E& event) 
 
 	//second_ok is true/false is the text entered is valid/invalid
 	second_ok = success;
-	//tries to enable button_reduce
+	//tries to enable button_ok
 	parent_frame->AllOk();
 
 	event.Skip(true);

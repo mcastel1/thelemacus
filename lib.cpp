@@ -15249,7 +15249,7 @@ template<class E> void RouteFrame::TryToEnableTimeSpeedLength(E& event) {
             //the Route is either a loxodrome or an orthodrome
             
             int i;
-            bool b;
+            bool b = false;
             
             //run over all entries of length_formats_catalog and store in i the id of the entry that is equal to l_format->name->GetValue()
             for(i=0; (i<(length_format->length_formats_catalog).size()) && ((length_format->name->GetValue()) != (length_format->length_formats_catalog)[i]); i++){}

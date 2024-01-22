@@ -1,5 +1,0 @@
-macbookpro        1750   0.1  0.0 34122672    776 s000  S+   12:35PM   0:00.00 ./wrapper_main.o
-root             81465   0.0  0.0 33680620    696   ??  SNs  10:48AM   0:00.01 /usr/libexec/periodic-wrapper daily
-macbookpro        1754   0.0  0.0 33588072     12 s000  S+   12:35PM   0:00.00 grep wrapper
-macbookpro        1752   0.0  0.0 34133612   1232 s000  S+   12:35PM   0:00.00 sh -c ps aux | grep wrapper >> path.dat
-macbookpro         876   0.0  0.0 34143592   3068   ??  SX   12:32PM   0:00.02 /Users/macbookpro/Library/Developer/Xcode/DerivedData/wrapper-cazgfnwdwscfqngqbhcemnrdcgyn/Build/Products/Debug/wrapper

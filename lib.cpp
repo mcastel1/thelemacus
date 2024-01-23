@@ -11397,26 +11397,30 @@ void DrawPanel::ShowCoordinates(Position q, String* label) {
 
 
 
-//given a position q with respect to the origin of the screen, if q lies within *this, it write in label a text with the geographic coordinates corresponding to q, and sets the position of label close to q (with some margin, for clarity). Otherwise, it writes "" in label
-void DrawPanel::ShowCoordinates(wxPoint q, String* label) {
+//given a position q with respect to the origin of the screen, if q lies within *this, write in label a text with the geographic coordinates corresponding to q, and write in *position the position of the label close to q (with some margin, for clarity). Otherwise, write "" in label and does nothing witg poisition
+void DrawPanel::ShowCoordinates(wxPoint q, wxPoint* position, String* label) {
 
-	wxPoint p;
-	Position temp;
+//	wxPoint p;
 
-	(this->*ScreenToGeo)(q, &temp);
+	if ((this->ScreenToDrawPanel)(q, position)) {
 
-	if ((this->ScreenToDrawPanel)(q, &p)) {
-		SetCoordinateLabel(temp, p, label);
-	}
+        Position temp;
+
+        (this->*ScreenToGeo)(q, &temp);
+		SetCoordinateLabel(temp, position, label);
+
+    }
 	else {
+        
         (*label) = String("");
+        
 	}
 
 }
 
 
 //given a geographic Position p and a position q with respect to the origin of *this, write the geographic coordinates of p into label. The position of label is adjusted in such a way that label is enclosed  in *this
-void DrawPanel::SetCoordinateLabel(Position p, wxPoint q, String* label) {
+void DrawPanel::SetCoordinateLabel(Position p, wxPoint* q, String* label) {
 
 	//the shift that will be applied to the position of *label
 	wxPoint shift;

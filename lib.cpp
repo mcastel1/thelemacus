@@ -11862,7 +11862,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
             (parent->dragging_object) = false;
             
-			//given that the drag is finished, I set to empty text_geo_position
+			//given that the drag is finished, I set to empty label_dragged_object
 			label_dragged_object = String("");
 
 			if (!(((((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.GetWidth()))) &&
@@ -12304,6 +12304,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						//the mouse is over a Route
 
                         wxPoint q;
+                        Position reference_position_dragged_route;
 
 						if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
@@ -12346,10 +12347,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						//draw the label of the coordinates of the reference Position of the Route that is being dragged
                         
 						//show the coordinates of the reference position of the Route that is being dragged
-                        //store the Position of the object that is being dragged into geo_position, so PaintEvent will read it and draw the label of its coordinates on it
-                        geo_position = ((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position;
+                        //store the reference_position of the Route that is being dragged into reference_position_dragged_route, so PaintEvent will read it and draw the label of its coordinates on it
+                        reference_position_dragged_route = ((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position;
                         //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                        ShowCoordinates(geo_position, &position_label_dragged_object, &label_dragged_object);
+                        ShowCoordinates(reference_position_dragged_route, &position_label_dragged_object, &label_dragged_object);
                         
                         //update the data of the Route under consideration in listcontrol_routes
 						((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);

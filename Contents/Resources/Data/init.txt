@@ -43,7 +43,7 @@ tick length over width plot area = 2e-2
 tick length over aperture circle observer = 1e-2
 plot area x margin over x size chart = 0.15
 plot area y margin over y size chart = 0.1
-standard thickness over length screen = 2.6e-3
+standard thickness over length screen = 2e-3
 time check light dark = 00:00:01
 #the temporal length of animations
 animation time = 00:00:1

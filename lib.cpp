@@ -11559,8 +11559,10 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         //        text_position_end->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
         //        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
         
-        ShowCoordinates((parent->parent->p_now), text_position_end);
-        
+        //fix this
+        //        ShowCoordinates((parent->parent->p_now), text_position_end);
+        //fix this
+
         //I Refresh the current DrawPanel to draw the selection_rectangle in there
         Refresh();
         
@@ -12294,9 +12296,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //store the Position of the object that is being dragged into geo_position, so PaintEvent will read it and draw the label of its coordinates on it
                         geo_position = ((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position;
                         //store the string with the coordinated of the object that is being dragged into text_geo_position, so PaintEvent will read it and draw the label of its coordinates on it
-						ShowCoordinates(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position, text_geo_position);
-
-						//update the data of the Route under consideration in listcontrol_routes
+                        //fix this
+                        //                        ShowCoordinates(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position, text_geo_position);
+                        //fix this
+                        
+                        //update the data of the Route under consideration in listcontrol_routes
 						((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
 
 						//given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
@@ -12333,7 +12337,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						}
 
 						//draw the label of the coordinates of the position which is being
-						ShowCoordinates(position_now_drag, text_geo_position);
+                        //fix this
+                        //						ShowCoordinates(position_now_drag, text_geo_position);
+                        //fix this
 
 						//update the data of the Position under consideration in listcontrol_positions
 						((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);

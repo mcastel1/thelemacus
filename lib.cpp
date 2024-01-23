@@ -8377,8 +8377,8 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 //    memDC.SelectObject( wxNullBitmap );
     
     
-    if(re_draw)
-    {
+    if(re_draw){
+        
         m_bgbuffer.Create(size_chart, 32);
         m_bgbuffer.UseAlpha();
 
@@ -8432,9 +8432,6 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
             dc.DrawCircle(p, radius);
         }
 
-
-
-
         //draw the route points
         //run over all connected chunks of routes
         for (j = 0; j < (points_route_list[i]).size(); j++) {
@@ -8474,7 +8471,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     }
     
     //draw selection_rectangle
-    if (((parent->parent)->selection_rectangle)) {
+    if ((parent->parent->selection_rectangle)) {
         
         //   reset the pen to its default parameters
         dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
@@ -11384,13 +11381,16 @@ inline void  DrawPanel::ProjectionToDrawPanel_3D(Projection q, wxPoint* p) {
 //given a Position q if q lies witin *this, write in label a text with the geographic coordinates of q
 void DrawPanel::ShowCoordinates(Position q, String* label) {
 
-	wxPoint p;
+	wxPoint temp;
 
-	if (GeoToDrawPanel(q, &p, false)) {
-		SetCoordinateLabel(q, p, label);
-	}
-	else {
+	if (GeoToDrawPanel(q, &temp, false)) {
+        
+		SetCoordinateLabel(q, &temp, label);
+        
+	}else {
+        
 		(*label) = String("");
+        
 	}
 
 }

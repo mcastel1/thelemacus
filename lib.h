@@ -1885,7 +1885,7 @@ public:
     bool ScreenToGeo_3D(wxPoint, Position*);
     void ProjectionToDrawPanel_Mercator(Projection, wxPoint*);
     void ProjectionToDrawPanel_3D(Projection, wxPoint*);
-    void ShowCoordinates(Position, wxPoint*, String*);
+    void ShowCoordinates(Position, String*);
     void ShowCoordinates(wxPoint, wxPoint*, String*);
     void SetCoordinateLabel(Position, wxPoint*, String*);
     void Set_lambda_phi_min_max_Mercator(void);

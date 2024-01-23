@@ -9808,6 +9808,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 
 	//when a ChartFrame is created, the chart is not being dragged
 	dragging_chart = false;
+    //when a ChartFrame is created, no Route nor Position is  being dragged
+    dragging_object = false;
 
 	//read lambda_min, ...., phi_max from file_init
 	lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
@@ -12229,7 +12231,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 				}
 				else {
-					//in this case I am moving a position / route (the mouse is over a route or a position while dragging)
+					//in this case I am dragging a Position / Route (the mouse is over a route or a position while dragging)
 
 					unsigned int i;
 

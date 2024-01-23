@@ -11415,8 +11415,8 @@ void DrawPanel::ShowCoordinates(wxPoint q, String* label) {
 }
 
 
-//given a geographic position p and a position q with respect to the origin of *this, it writes the geographic coordinates of p into label and positions label close to q. The position of label is adjusted in such a way that label is enclosed  in *this
-void DrawPanel::SetCoordinateLabel(Position p, wxPoint q, wxStaticText* label) {
+//given a geographic Position p and a position q with respect to the origin of *this, write the geographic coordinates of p into label. The position of label is adjusted in such a way that label is enclosed  in *this
+void DrawPanel::SetCoordinateLabel(Position p, wxPoint q, String* label) {
 
 	//the shift that will be applied to the position of *label
 	wxPoint shift;

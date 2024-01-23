@@ -8297,6 +8297,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
 	SetCursor(*wxCROSS_CURSOR);
 
+    //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
+    label_position_now = String("");
 
 	(circle_observer.omega).read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), prefix);
 	thickness_route_selection_over_length_screen.read_from_file_to(String("thickness route selection over length screen"), (wxGetApp().path_file_init), String("R"), prefix);
@@ -8479,7 +8481,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     //draw the label of the current mouse position on *this
     if(mouse_in_plot_area){
         
-        dc.DrawText(wxString(parent->label_position_now.value), (parent->position_label_position_now));
+        dc.DrawText(wxString(label_position_now.value), position_label_position_now);
         
     }else{
         
@@ -8567,11 +8569,11 @@ void DrawPanel::FitAll() {
 	this->SetMinSize(size_chart);
 	parent->SetMinSize(wxSize(
 		(size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
-		(size_chart.GetHeight()) + (((parent->label_position_now).get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
+		(size_chart.GetHeight()) + ((label_position_now.get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
 	));
 
     //fix this
-    (parent->position_label_position_now) = wxPoint(
+    position_label_position_now = wxPoint(
                                                    0,
 //                                                   (size_chart.GetHeight()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
                                                    0
@@ -9253,10 +9255,8 @@ void DrawPanel::Draw_Mercator(void) {
 
 
 	//clears all labels previously drawn
-//	for (i = 0; i < labels_lambda.size(); i++) { (label_lambda[i])->Destroy(); }
 	labels_lambda.resize(0);
     positions_labels_lambda.resize(0);
-//	for (i = 0; i < label_phi.size(); i++) { (label_phi[i])->Destroy(); }
 	labels_phi.resize(0);
     positions_labels_phi.resize(0);
 
@@ -9302,12 +9302,10 @@ void DrawPanel::Draw_Mercator(void) {
 		size_plot_area.SetWidth((size_chart.GetWidth()) - (((int)size_label_horizontal) + 3 * ((wxGetApp().border).value)));
 		size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight()) / (size_chart.GetWidth()));
 
-
 		position_plot_area = wxPoint(
 			((int)size_label_horizontal) + 2 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
 			(((int)(size_chart.GetHeight())) - (((int)(size_plot_area.GetHeight())) + ((int)size_label_vertical) + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))) / 2
 		);
-
 
 	}
 	else {
@@ -9860,9 +9858,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	sizer_h = new wxBoxSizer(wxHORIZONTAL);
 	sizer_slider = new wxBoxSizer(wxVERTICAL);
 	sizer_buttons = new wxGridSizer(3, 3, 0, 0);
-
-	//text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
-    label_position_now = String("");
 
 	//initialize the variable neededed for slider
 	//allocate the slider
@@ -11571,12 +11566,12 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if (mouse_in_plot_area) {
         //the mouse has a screen position corresponding to a geographic position -> I write it into label_position_now, otherwise label_position_now is left empty,
         
-        (parent->label_position_now) = String((parent->parent->p_now.to_string(display_precision.value)));
+        label_position_now = String((parent->parent->p_now.to_string(display_precision.value)));
 
     }
     else {
         
-        (parent->label_position_now) = String("");
+        label_position_now = String("");
         
     }
 

@@ -12901,13 +12901,17 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
     
     int i;
 
-    //given that I am about to display routes for transport only, routes related to sights will (temporarily) not be highlighted when the mouse hovers over them
+    //given that I am about to display Routes for transport only, Routes related to Sights will (temporarily) not be highlighted when the mouse hovers over them
     (parent->enable_highlight) = false;
 
-    //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
+    //Given that an object must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are viable to be transporting Routes. These are the Routes that: 1. are not related to any sight, 2. that are not circles of equal altitude 3. That are different from  show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
     for ((parent->route_list_for_transport).clear(), (parent->map).clear(), i = 0; i < (parent->data->route_list).size(); i++) {
 
-        if ((((((parent->data->route_list)[i]).related_sight).value) == -1) && (((parent->data->route_list)[i]).type != String("c"))) {
+        if (
+            (((((parent->data->route_list)[i]).related_sight).value) == -1) &&
+            (((parent->data->route_list)[i]).type != String("c"))
+            && ()
+            ) {
 
             (parent->route_list_for_transport).push_back((parent->data->route_list)[i]);
             (parent->map).push_back(i);
@@ -14003,21 +14007,6 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 			(f->i_object_to_transport) = (((((f->data)->sight_list)[(f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
 
 		}
-		else {
-			//the transported object is a Route
-
-			//the id of the Route that will be transported has been written in i_object_to_transport before, so I do not overwrite i_object_to_transport
-
-
-		}
-        
-//		//tranport the Route
-//		((((f->data)->route_list)[(f->i_object_to_transport)]).reference_position).transport_to(
-//
-//			((f->data)->route_list)[i_transporting_route],
-//			String("")
-//
-//		);
 
 	}
 

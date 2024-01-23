@@ -8329,8 +8329,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
 
 	//text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
-	text_position_start = String("");
-	text_position_end = String("");
+	start_label_selection_rectangle = String("");
+	end_label_positions_rectangle = String("");
 	text_geo_position = String("");
 
 //    text_position_start->SetBackgroundColour(wxGetApp().background_color);
@@ -10253,8 +10253,8 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
             
             //If the user presses esc, I cancel the selection process with the rectangle and call FitAll to re-draw the chart without the selection rectangle
             (parent->parent->selection_rectangle) = false;
-            text_position_start = String("");
-            text_position_end = String("");
+            start_label_selection_rectangle = String("");
+            end_label_positions_rectangle = String("");
             Refresh();
             FitAll();
             
@@ -11559,7 +11559,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         //        text_position_end->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
         //        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
         
-        ShowCoordinates(position_screen_now, &position_end_label_selection_rectangle, &text_position_end);
+        ShowCoordinates(position_screen_now, &position_end_label_selection_rectangle, &end_label_positions_rectangle);
 
         //I Refresh the current DrawPanel to draw the selection_rectangle in there
         Refresh();
@@ -11955,7 +11955,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 		if ((this->*ScreenToProjection)(position_start_selection, &start_selection)) {
 			//position_start_selection is valid -> start the selection rectangle
 
-			ShowCoordinates(position_screen_now, &position_start_label_selection_rectangle, &text_position_start);
+			ShowCoordinates(position_screen_now, &position_start_label_selection_rectangle, &start_label_selection_rectangle);
 
 		}
 		else {
@@ -12107,16 +12107,16 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 			}
 
 			//I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
-			text_position_start = String("");
-			text_position_end = String("");
+			start_label_selection_rectangle = String("");
+			end_label_positions_rectangle = String("");
 
 		}
 		else {
 			//the  end position for the selected rectangle is not valid -> cancel the rectangle by setting selection_rectangle to false and by setting to empty the text fields of the geographical positions of the selection triangle
 
 			(parent->parent->selection_rectangle) = false;
-			text_position_start = String("");
-			text_position_end = String("");
+			start_label_selection_rectangle = String("");
+			end_label_positions_rectangle = String("");
 
 		}
 

@@ -8416,7 +8416,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     
     color_id = 0;
 
-    //draw routes
+    //draw Routes
     for (i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
 
         //set the route thickness and pen
@@ -8450,7 +8450,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
     }
 
-    //draw positions
+    //draw Positions
     for (i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
 
         //set thickness and pen
@@ -8486,6 +8486,14 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     }else{
         
         cout << "Mouse is not in plot area \n";
+    }
+    
+    
+    if((parent->dragging_object)){
+        //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
+        
+        dc.DrawText(wxString(label_dragged_position.value), position_label_dragged_position);
+        
     }
     
     //draw selection_rectangle and its labels
@@ -12356,11 +12364,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 							((((parent->parent)->chart_frames)[i])->draw_panel)->Refresh();
 
 						}
+                        
+                        Refresh();
 
 					}
 
 					if (((parent->parent)->highlighted_position) != -1) {
-						//in this case, the mouse is over a position
+						//in this case, the mouse is over a Position
 
 						wxPoint p;
 

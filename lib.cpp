@@ -9840,7 +9840,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	sizer_buttons = new wxGridSizer(3, 3, 0, 0);
 
 	//text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
-	text_position_now = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize, 0);
+    text_position_now = String("");
 
 	//initialize the variable neededed for slider
 	//allocate the slider

@@ -2553,7 +2553,7 @@ public:
     ListFrame* parent;
     DrawPanel *draw_panel;
     ChartPanel* panel;
-    StaticText *text_position_now, *text_slider;
+    StaticText *text_slider;
     wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
     wxGridSizer* sizer_buttons;
     wxStaticBitmap* image;
@@ -2569,6 +2569,7 @@ public:
     bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling, /*this is true if the chart is being dragged, and thus the size of *this must not change across multiple Draw(s), and false otherwise*/ dragging_chart, /*this is true if a Route or Position is being dragged, and false otherwise*/ dragging_object;
     //This is the actual value of the maximal zoom factor allowed
     Double /*the zoom factor relative to the default configuration of either projection, the zoom factor  is not necessarily equal to the numerical value (slider->GetValue()) shown on the slider*/zoom_factor;
+    String /*the text showing the coordinates of the current mouse position on draw_panel*/text_position_now;
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither ChartFrame::UpdateSliderLabel_Mercator or ChartFrame::UpdateSliderLabel_3D, according to my needs, and similarly for the other pointers
     void (ChartFrame::*UpdateSliderLabel)(void);
     

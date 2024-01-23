@@ -1808,7 +1808,7 @@ public:
     
     ChartFrame* parent;
     PrintMessage<DrawPanel, UnsetIdling<DrawPanel> >* print_error_message;
-    wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/ position_screen_now, position_start_drag, position_end_drag, /*the positions where the will be placed the labels start_label_selection_rectangle, end_label_selection_rectangle of the start and end point of selection_rectangle*/ position_start_label_selection_rectangle, position_end_label_selection_rectangle, position_now_drag, position_draw_panel_now, /*the position of label_position_now*/ position_label_position_now;
+    wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/ position_screen_now, position_start_drag, position_end_drag, /*the positions where the will be placed the labels start_label_selection_rectangle, end_label_selection_rectangle of the start and end point of selection_rectangle*/ position_start_label_selection_rectangle, position_end_label_selection_rectangle, position_now_drag, position_draw_panel_now, /*the position of label_position_now*/ position_label_position_now, /*the position of label_dragged_position*/ position_label_dragged_position;
 
     //size, in pixels, of vertical and horizontal labels
     unsigned int size_label_vertical, size_label_horizontal;
@@ -1888,6 +1888,7 @@ public:
     void ProjectionToDrawPanel_3D(Projection, wxPoint*);
     void ShowCoordinates(Position, String*);
     void ShowCoordinates(wxPoint, wxPoint*, String*);
+    void ShowCoordinates(Position, wxPoint*, String*);
     void SetCoordinateLabel(Position, wxPoint*, String*);
     void Set_lambda_phi_min_max_Mercator(void);
     void Set_lambda_phi_min_max_3D(void);

@@ -11427,6 +11427,22 @@ void DrawPanel::ShowCoordinates(Position q, String* label) {
 }
 
 
+//given a geographic Positiojn q, if q lies within *this, write in label a text with the geographic coordinates corresponding to q, and write in *position the position of the label close to q (with some margin, for clarity). Otherwise, write "" in label and does nothing witg poisition
+void DrawPanel::ShowCoordinates(Position q, wxPoint* position, String* label) {
+    
+    if ((this->GeoToDrawPanel)(q, NULL, false)) {
+
+        SetCoordinateLabel(q, position, label);
+
+    }
+    else {
+        
+        (*label) = String("");
+        
+    }
+    
+}
+
 
 //given a position q with respect to the origin of the screen, if q lies within *this, write in label a text with the geographic coordinates corresponding to q, and write in *position the position of the label close to q (with some margin, for clarity). Otherwise, write "" in label and does nothing witg poisition
 void DrawPanel::ShowCoordinates(wxPoint q, wxPoint* position, String* label) {
@@ -11786,7 +11802,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 
 		if ((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1)) {
-			//in this case, I am dragging the chart (not a Route nor  a Position)
+			//in this case, I was dragging the chart (not a Route nor  a Position)
 
 			if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
@@ -11835,8 +11851,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 		}
 		else {
-			//in this case, I am dragging a route or position
+			//in this case, I am dragging a Route or Position
 
+            (parent->dragging_object) = false;
+            
 			//given that the drag is finished, I set to empty text_geo_position
 			label_dragged_position = String("");
 
@@ -12007,10 +12025,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 		GetMouseGeoPosition(&((parent->parent)->p_end));
 		position_end_selection = position_screen_now;
 
-		//stores the position at the end of the selection process, to compute the zoom factor later
+		//store the position at the end of the selection process, to compute the zoom factor later
 		if ((this->*ScreenToProjection)(position_end_selection, &end_selection)) {
 			//position_end_selection is valid
-
 
 			if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
@@ -12267,9 +12284,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 				}
 				else {
-					//in this case I am dragging a Position / Route (the mouse is over a route or a position while dragging)
+					//in this case I am dragging an object (a Position or a Route) (the mouse is over a Route or a Position while dragging)
 
 					unsigned int i;
+                    
+                    (parent->dragging_object) = true;
 
 					//the data in the file are being modified -> I call
 					parent->parent->OnModifyFile();
@@ -12324,7 +12343,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         geo_position = ((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position;
                         //store the string with the coordinated of the object that is being dragged into text_geo_position, so PaintEvent will read it and draw the label of its coordinates on it
                         //fix this
-                        //                        ShowCoordinates(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position, &label_dragged_position);
+                        ShowCoordinates(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position, &position_label_dragged_position, &label_dragged_position);
                         //fix this
                         
                         //update the data of the Route under consideration in listcontrol_routes

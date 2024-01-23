@@ -110,7 +110,7 @@
  - frames are not resized according to the size of their title
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class
  for MSW:
- - ShowChart() does not work when an animation transport starts
+ - realized that ChartFrames are sent to back during animation only when the mouse button is lifted -> fix this 
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  */

@@ -8483,11 +8483,8 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         
         dc.DrawText(wxString(label_position_now.value), position_label_position_now);
         
-    }else{
-        
-        cout << "Mouse is not in plot area \n";
     }
-    
+
     
     if((parent->dragging_object)){
         //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
@@ -11438,8 +11435,10 @@ void DrawPanel::ShowCoordinates(Position q, String* label) {
 //given a geographic Positiojn q, if q lies within *this, write in label a text with the geographic coordinates corresponding to q, and write in *position the position of the label close to q (with some margin, for clarity). Otherwise, write "" in label and does nothing witg poisition
 void DrawPanel::ShowCoordinates(Position q, wxPoint* position, String* label) {
     
-    if ((this->GeoToDrawPanel)(q, NULL, false)) {
+    if (
+        /*GeoToDrawPanel converts q into the wxPoint position, reckoned with respect to the origin *this*/(this->GeoToDrawPanel)(q, position, false)) {
 
+            //SetCoordinateLabel uses position set from above, and ajusts it by including some margins
         SetCoordinateLabel(q, position, label);
 
     }
@@ -12351,7 +12350,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         geo_position = ((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position;
                         //store the string with the coordinated of the object that is being dragged into text_geo_position, so PaintEvent will read it and draw the label of its coordinates on it
                         //fix this
-                        ShowCoordinates(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position, &position_label_dragged_position, &label_dragged_position);
+                        ShowCoordinates(geo_position, &position_label_dragged_position, &label_dragged_position);
                         //fix this
                         
                         //update the data of the Route under consideration in listcontrol_routes

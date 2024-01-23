@@ -103,6 +103,7 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
+ - when you transport a Route or Position and the label of the transported object hits the bottom edge of plot area, it is not moved into the plot area
  - do not allow a Route to be trasnported with itself
  - rename Route::t -> time
 - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on

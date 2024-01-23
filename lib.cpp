@@ -11419,7 +11419,7 @@ void DrawPanel::ShowCoordinates(wxPoint q, wxPoint* position, String* label) {
 }
 
 
-//given a geographic Position p write a string containing the geographic coordinates of p into label, and its poisition with repsect to the origin on *this in q. The position of label is adjusted in such a way that label is enclosed in *this
+//given a geographic Position p and its corresponding wxPoint with respect to the origin of this *poisition, write a string containing the geographic coordinates of p into label, and adjust *poistiion in such a way that label is enclosed in *this
 void DrawPanel::SetCoordinateLabel(Position p, wxPoint* position, String* label) {
 
 	//the shift that will be applied to the position of *label
@@ -11457,6 +11457,7 @@ void DrawPanel::SetCoordinateLabel(Position p, wxPoint* position, String* label)
 
 	//hift the label label with respect to p
 //	label->SetPosition(position + shift);
+    //adjust *position
     (*position)+=shift;
 
 }

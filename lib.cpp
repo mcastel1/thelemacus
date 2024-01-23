@@ -11381,8 +11381,8 @@ inline void  DrawPanel::ProjectionToDrawPanel_3D(Projection q, wxPoint* p) {
 
 
 
-//given a Position q if q lies witin *this, it writes in label a text with the geographic coordinates of q, and sets the position of label close to q (with some margin, for clarity). Otherwise, it writes "" in label
-void DrawPanel::ShowCoordinates(Position q, wxStaticText* label) {
+//given a Position q if q lies witin *this, write in label a text with the geographic coordinates of q
+void DrawPanel::ShowCoordinates(Position q, String* label) {
 
 	wxPoint p;
 
@@ -11390,15 +11390,15 @@ void DrawPanel::ShowCoordinates(Position q, wxStaticText* label) {
 		SetCoordinateLabel(q, p, label);
 	}
 	else {
-		label->SetLabel(wxString(""));
+		(*label) = String("");
 	}
 
 }
 
 
 
-//given a position q with respect to the origin of the screen, if q lies within *this, it writes in label a text with the geographic coordinates corresponding to q, and sets the position of label close to q (with some margin, for clarity). Otherwise, it writes "" in label
-void DrawPanel::ShowCoordinates(wxPoint q, wxStaticText* label) {
+//given a position q with respect to the origin of the screen, if q lies within *this, it write in label a text with the geographic coordinates corresponding to q, and sets the position of label close to q (with some margin, for clarity). Otherwise, it writes "" in label
+void DrawPanel::ShowCoordinates(wxPoint q, String* label) {
 
 	wxPoint p;
 	Position temp;
@@ -11409,7 +11409,7 @@ void DrawPanel::ShowCoordinates(wxPoint q, wxStaticText* label) {
 		SetCoordinateLabel(temp, p, label);
 	}
 	else {
-		label->SetLabel(wxString(""));
+        (*label) = String("");
 	}
 
 }

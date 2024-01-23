@@ -8470,7 +8470,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         
     }
     
-    //draw selection_rectangle
+    //draw selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
         
         //   reset the pen to its default parameters
@@ -8479,7 +8479,6 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
         if((parent->projection->name->GetValue()) == wxString("Mercator")) {
             
-
             dc.DrawRectangle(
                               position_start_selection.x - (position_draw_panel.x),
                               position_start_selection.y - (position_draw_panel.y),
@@ -8527,6 +8526,9 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
             
             
         }
+        
+        //draw the label of the starting point of selection_rectangle
+        dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
         
     }
     
@@ -12286,7 +12288,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 						}
 
-						//draw the label of the coordinates of the position which is being
+						//draw the label of the coordinates of the Position which is being dragged
 
 						wxPoint q;
 

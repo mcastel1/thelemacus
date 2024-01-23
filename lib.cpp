@@ -8575,8 +8575,8 @@ void DrawPanel::FitAll() {
     //fix this
     position_label_position_now = wxPoint(
                                                    0,
-//                                                   (size_chart.GetHeight()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
-                                                   0
+                                                   (size_chart.GetHeight()) -((label_position_now.get_size(this).GetHeight()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value) )
+                                                   
                                                     );
     //fix this
 
@@ -9297,9 +9297,15 @@ void DrawPanel::Draw_Mercator(void) {
 		((size_chart.GetWidth()) - (((int)size_label_horizontal) + 3 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))) * (size_chart.GetHeight()) / (size_chart.GetWidth())
 		< (size_chart.GetHeight()) - (((int)size_label_vertical) + 3 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))
 		) {
-		//if I set size_plot_area's width first to leave room for size_label_horizontal + 3 borders, then there is enough space to set size_plot_area's height by keeping the aspect ratio
+		//if I set size_plot_area's width first to leave room for parallel labels and label_position_now, then there is enough space to set size_plot_area's height by keeping the aspect ratio
 
-		size_plot_area.SetWidth((size_chart.GetWidth()) - (((int)size_label_horizontal) + 3 * ((wxGetApp().border).value)));
+		size_plot_area.SetWidth(
+                                (size_chart.GetWidth()) 
+                                //space for  parallel labels
+                                - (((int)size_label_horizontal) + 3 * ((wxGetApp().border).value))
+                                //space for label_position_now
+                                - ((((int)size_label_vertical) + ((wxGetApp().border).value))) * (size_chart.GetWidth())/(size_chart.GetHeight())
+                                );
 		size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight()) / (size_chart.GetWidth()));
 
 		position_plot_area = wxPoint(
@@ -9309,9 +9315,15 @@ void DrawPanel::Draw_Mercator(void) {
 
 	}
 	else {
-		//if I set size_plot_area's width first to leave room for  ((int)size_label_horizontal) + 3 borders and there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first and set the width later according to the aspect ratio
+		//if I set size_plot_area's width first to leave room for  parallel labels and label_position_now and there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first, by leaving space in the resulting height for meridian labels and label_position_now , and set the width later according to the aspect ratio
 
-		size_plot_area.SetHeight((size_chart.GetHeight()) - (((int)size_label_vertical) + 3 * ((wxGetApp().border).value)));
+		size_plot_area.SetHeight(
+                                 (size_chart.GetHeight()) 
+                                 //space for meridian labels
+                                 - (((int)size_label_vertical) + 3 * ((wxGetApp().border).value))
+                                 //space for label_position_now
+                                 - (((int)size_label_vertical) + ((wxGetApp().border).value))
+                                 );
 		size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth()) / (size_chart.GetHeight()));
 
 		if (((size_plot_area.GetHeight()) * (size_chart.GetWidth()) / (size_chart.GetHeight())) < ((size_chart.GetWidth()) - (((int)size_label_horizontal) + 3 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)))) {

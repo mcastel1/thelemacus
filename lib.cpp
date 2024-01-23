@@ -12286,6 +12286,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 						wxPoint q;
 
 						//show the coordinates of the reference position of the Route that is being dragged
+                        //store the Position of the object that is being dragged into geo_position, so PaintEvent will read it and draw the label of its coordinates on it
+                        geo_position = ((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position;
+                        //store the string with the coordinated of the object that is being dragged into text_geo_position, so PaintEvent will read it and draw the label of its coordinates on it
 						ShowCoordinates(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position, text_geo_position);
 
 						//update the data of the Route under consideration in listcontrol_routes

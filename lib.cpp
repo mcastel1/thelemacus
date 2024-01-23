@@ -8332,7 +8332,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 	//text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
 	start_label_selection_rectangle = String("");
 	end_label_selection_rectangle = String("");
-	text_geo_position = String("");
+	label_dragged_position = String("");
 
 //    text_position_start->SetBackgroundColour(wxGetApp().background_color);
 //    text_position_end->SetBackgroundColour(wxGetApp().background_color);
@@ -8471,15 +8471,19 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         
     }
     
+
+    //   reset the pen to its default parameters
+    dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
+    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH)); //Set a transparent brush in order not to fill the interior of the selection rectangle
+
     //draw the label of the current mouse position on *this
     if(mouse_in_plot_area){
-    
-        //   reset the pen to its default parameters
-        dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
-        dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH)); //Set a transparent brush in order not to fill the interior of the selection rectangle
-        dc.DrawText(wxString(parent->label_position_now.value), position_plot_area);
-
         
+        dc.DrawText(wxString(parent->label_position_now.value), (parent->position_label_position_now));
+        
+    }else{
+        
+        cout << "Mouse is not in plot area \n";
     }
     
     //draw selection_rectangle and its labels
@@ -8567,7 +8571,11 @@ void DrawPanel::FitAll() {
 	));
 
     //fix this
-//    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now).GetPosition()).x, (size_chart.GetHeight()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)));
+    (parent->position_label_position_now) = wxPoint(
+                                                   0,
+//                                                   (size_chart.GetHeight()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
+                                                   0
+                                                    );
     //fix this
 
 	(parent->panel)->SetSizerAndFit(parent->sizer_v);
@@ -11417,8 +11425,6 @@ void DrawPanel::ShowCoordinates(Position q, String* label) {
 //given a position q with respect to the origin of the screen, if q lies within *this, write in label a text with the geographic coordinates corresponding to q, and write in *position the position of the label close to q (with some margin, for clarity). Otherwise, write "" in label and does nothing witg poisition
 void DrawPanel::ShowCoordinates(wxPoint q, wxPoint* position, String* label) {
 
-//	wxPoint p;
-
 	if ((this->ScreenToDrawPanel)(q, position)) {
 
         Position temp;
@@ -11560,14 +11566,12 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     //    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
     //    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
     
-    //update the instantaneous position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods
+    //update the instantaneous position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
     mouse_in_plot_area = GetMouseGeoPosition(&(parent->parent->p_now));
     if (mouse_in_plot_area) {
-        //the mouse has a screen position corresponding to a geographic position -> I write it into label_position_now, otherwise label_position_now is left empty, and I call Refresh() so PaintEvent is called and the position is updated on *this
+        //the mouse has a screen position corresponding to a geographic position -> I write it into label_position_now, otherwise label_position_now is left empty,
         
         (parent->label_position_now) = String((parent->parent->p_now.to_string(display_precision.value)));
-        //I Refresh the current DrawPanel to draw the selection_rectangle in there
-        Refresh();
 
     }
     else {
@@ -11575,18 +11579,13 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         (parent->label_position_now) = String("");
         
     }
+
     
     if ((parent->parent->selection_rectangle)) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
         
-        //        text_position_end->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
-        //        text_position_end->SetPosition(wxPoint((position_screen_now.x)-(position_draw_panel.x), (position_screen_now.y)-(position_draw_panel.y)));
-        
         ShowCoordinates(position_screen_now, &position_end_label_selection_rectangle, &end_label_selection_rectangle);
 
-        //I Refresh the current DrawPanel to draw the selection_rectangle in there
-        Refresh();
-        
     }else{
         //If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
         
@@ -11713,7 +11712,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         }
         
         if((highlighted_route_old != (parent->parent->highlighted_route)) || (highlighted_position_old != (parent->parent->highlighted_position))){
-            //the highlighted Route has changed->call Refresh, which triggers PaintEvent, to re-draw Routes with the right thickness
+            //the highlighted Route has changed-> I will call Refresh, which triggers PaintEvent, to re-draw Routes with the right thickness
             
             for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                 (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
@@ -11723,6 +11722,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         
     }
     
+    //I call Refresh() to trigger PaintEvent and update the chart drawing according to the changes made here
+    Refresh();
+
     event.Skip(true);
     
 }
@@ -11830,7 +11832,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 			//in this case, I am dragging a route or position
 
 			//given that the drag is finished, I set to empty text_geo_position
-			text_geo_position = String("");
+			label_dragged_position = String("");
 
 			if (!(((((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.GetWidth()))) &&
 				(((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) + (size_plot_area.GetHeight())))))) {
@@ -12267,8 +12269,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 					parent->parent->OnModifyFile();
 
 					if (((parent->parent)->highlighted_route) != -1) {
-						//in this case, the mouse is over a route
+						//in this case, the mouse is over a Route
 
+                        wxPoint q;
 
 						if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
@@ -12285,7 +12288,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 
 						if ((((parent->projection)->name)->GetValue()) == wxString("3D")) {
-
 
 							//compose rotation with the rotation resulting from the drag and then apply it to route_position_start_drag: route_position_start_drag -> rotation^{-1}.(rotation due to drag).rotation.route_position_start_drag. In this way, when Render() will plot the position route_position_start_drag, it will apply to route_position_start_drag the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.route_position_start_drag = (rotation due to drag).rotation.route_position_start_drag, which is the desired result (i.e. route_position_start_drag rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
 							rotation_now_drag =
@@ -12309,16 +12311,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 						}
 
-						//draw the label of the coordinates of the Position which is being dragged
-
-						wxPoint q;
-
+						//draw the label of the coordinates of the reference Position of the Route that is being dragged
+                        
 						//show the coordinates of the reference position of the Route that is being dragged
                         //store the Position of the object that is being dragged into geo_position, so PaintEvent will read it and draw the label of its coordinates on it
                         geo_position = ((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position;
                         //store the string with the coordinated of the object that is being dragged into text_geo_position, so PaintEvent will read it and draw the label of its coordinates on it
                         //fix this
-                        //                        ShowCoordinates(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position, text_geo_position);
+                        //                        ShowCoordinates(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position, &label_dragged_position);
                         //fix this
                         
                         //update the data of the Route under consideration in listcontrol_routes

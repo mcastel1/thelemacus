@@ -8551,10 +8551,12 @@ void DrawPanel::FitAll() {
 	this->SetMinSize(size_chart);
 	parent->SetMinSize(wxSize(
 		(size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
-		(size_chart.GetHeight()) + (((parent->text_position_now)->GetSize()).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
+		(size_chart.GetHeight()) + (((parent->text_position_now).get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
 	));
 
-	(parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now)->GetPosition()).x, (size_chart.GetHeight()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)));
+    //fix this
+//    (parent->text_position_now)->SetPosition(wxPoint(((parent->text_position_now).GetPosition()).x, (size_chart.GetHeight()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)));
+    //fix this
 
 	(parent->panel)->SetSizerAndFit(parent->sizer_v);
 	(parent->panel)->Fit();
@@ -9962,7 +9964,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL | wxEXPAND, 0);
 
 	sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
-	sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
+//	sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	//    sizer_v->Fit(panel);
 
 #ifdef _WIN32
@@ -11550,10 +11552,12 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if (GetMouseGeoPosition(&((parent->parent)->p_now))) {
         //the mouse has a screen position corresponding to a geographic position -> I write it into s, otherwise s is left empty
         
-        (parent->text_position_now)->SetLabel(wxString(((parent->parent)->p_now).to_string(display_precision.value)));
+        (parent->text_position_now) = String((parent->parent->p_now).to_string(display_precision.value));
     }
     else {
-        (parent->text_position_now)->SetLabel(wxString(""));
+        
+        (parent->text_position_now) = String("");
+        
     }
     
     if ((parent->parent->selection_rectangle)) {

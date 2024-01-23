@@ -8563,26 +8563,25 @@ void DrawPanel::FitAll() {
 //	//    client_dc->SetParent(this);
 //	(this->*Render)(client_dc);
 
-
-
-	//sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
-	this->SetMinSize(size_chart);
-	parent->SetMinSize(wxSize(
-		(size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
-		(size_chart.GetHeight()) + ((label_position_now.get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
-	));
-
-    //fix this
+    
+    
+    //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
+    this->SetMinSize(size_chart);
+    parent->SetMinSize(wxSize(
+                              (size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
+                              (size_chart.GetHeight()) + ((label_position_now.get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
+                              ));
+    
+    //position position_label_position_now at the bottom left corner of *this
     position_label_position_now = wxPoint(
-                                                   0,
-                                                   (size_chart.GetHeight()) -((label_position_now.get_size(this).GetHeight()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value) )
-                                                   
-                                                    );
-    //fix this
-
-	(parent->panel)->SetSizerAndFit(parent->sizer_v);
-	(parent->panel)->Fit();
-	parent->Fit();
+                                          ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
+                                          (size_chart.GetHeight())
+                                          - (size_label_vertical + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value) )
+                                          );
+    
+    (parent->panel)->SetSizerAndFit(parent->sizer_v);
+    (parent->panel)->Fit();
+    parent->Fit();
 
 }
 

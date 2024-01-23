@@ -1809,7 +1809,8 @@ public:
     ChartFrame* parent;
     PrintMessage<DrawPanel, UnsetIdling<DrawPanel> >* print_error_message;
     wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/ position_screen_now, position_start_drag, position_end_drag, /*the positions where the will be placed the labels start_label_selection_rectangle, end_label_selection_rectangle of the start and end point of selection_rectangle*/ position_start_label_selection_rectangle, position_end_label_selection_rectangle, position_now_drag, position_draw_panel_now, /*the position of label_position_now*/ position_label_position_now;
-;
+
+    //size, in pixels, of vertical and horizontal labels
     unsigned int size_label_vertical, size_label_horizontal;
     /*x_min, x_max, y_min, y_max do correspond to lambda_min, lambda_max, etc... They are ordered in such a way that x_min <= x_max and y_min <= y_max always. */
     double /*min and max values of the Mercator or 3D projections x, y*/x_min, x_max, y_min, y_max, x_min_start_drag, x_max_start_drag, y_min_start_drag, y_max_start_drag, x_span_start_drag,

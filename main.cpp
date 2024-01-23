@@ -103,14 +103,14 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
- - the instantaneous mouse position is a wxStaticText -> it may slow down things a lot! -> check 
- - do not use text_geo_position as StaticText* : it slows down things a lot -> to write it, use the same method you used for parallels/meridian lables, which is faster
+ - do not allow a Route to be trasnported with itself
  - rename Route::t -> time
 - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
  - allow for messages with \n QuestionFrame and MessageFrame
  - frames are not resized according to the size of their title
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class
  for MSW:
+ - ShowChart() does not work when an animation transport starts
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  */

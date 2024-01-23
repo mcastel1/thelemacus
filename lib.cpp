@@ -12908,9 +12908,12 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
     for ((parent->route_list_for_transport).clear(), (parent->map).clear(), i = 0; i < (parent->data->route_list).size(); i++) {
 
         if (
+            /*condition that the Route is not relatied to a Sight*/
             (((((parent->data->route_list)[i]).related_sight).value) == -1) &&
-            (((parent->data->route_list)[i]).type != String("c"))
-            && ()
+            /*condition that the Route is not a circle of equal altitude*/
+            (((parent->data->route_list)[i]).type != String("c")) &&
+            /*condition that the Route does not coincide with the object to transport*/
+            ( ((parent->transported_object) != String("route")) || ((parent->i_object_to_transport) != i) )
             ) {
 
             (parent->route_list_for_transport).push_back((parent->data->route_list)[i]);
@@ -12921,13 +12924,12 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
     }
 
     parent->listcontrol_routes->set((parent->route_list_for_transport), false);
-    (parent->data->route_list).resize((parent->route_list_for_transport).size());
+    parent->data->route_list.resize((parent->route_list_for_transport).size());
     copy((parent->route_list_for_transport).begin(), (parent->route_list_for_transport).end(), ((parent->data)->route_list).begin());
     parent->DrawAll();
 
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
-    (parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
-
+    parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
 
     event.Skip(true);
 

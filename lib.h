@@ -1806,7 +1806,6 @@ class DrawPanel : public wxPanel{
     
 public:
     
-    DrawPanel(ChartPanel*, const wxPoint& position_in, const wxSize& size_in);
     ChartFrame* parent;
     PrintMessage<DrawPanel, UnsetIdling<DrawPanel> >* print_error_message;
     wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/ position_screen_now, position_start_drag, position_end_drag, /*the positions where the will be placed the labels start_label_selection_rectangle, end_label_selection_rectangle of the start and end point of selection_rectangle*/ position_start_label_selection_rectangle, position_end_label_selection_rectangle, position_now_drag, position_draw_panel_now;
@@ -1827,7 +1826,7 @@ public:
     Rotation /*the orientation of the Earth at the beginning / current time / end of a drag*/rotation_start_drag, rotation_now_drag, rotation_end_drag, /*the rotation representing the current / initial orientation of the earth*/rotation, rotation_0;
     Double /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot, and its initial value when this is constructedd, d_0,*/ /*if the mouse hovers over a route and its y coordinate is equal to the y of the route +- (length sceen) * thickness_route_selection_over_length_screen /2, then the relative Route is highlighted in ListFrame*/thickness_route_selection_over_length_screen;
     String /*the labels that will be drawn on position_start_label_selection_rectangle and position_end_label_selection_rectangle, respectively*/start_label_selection_rectangle, end_label_selection_rectangle, /*this is used to display on the chart the coordinates of a Position that is being dragged or of the reference position of a Route that is being dragged*/text_geo_position;
-    bool /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*if re_draw = true (false), then one has to draw the non-highglighteable stuff in DrawPanel (coastlines, paralles, meridians ...  but not Routes nor Positions)*/re_draw;
+    bool /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*if re_draw = true (false), then one has to draw the non-highglighteable stuff in DrawPanel (coastlines, paralles, meridians ...  but not Routes nor Positions)*/re_draw, /*this is true if the current mouse position lies in the plot area, false otherwise*/mouse_in_plot_area;
     Position /*I store in this position the starting point (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the dragging process*/route_position_start_drag, /*current, starting and ending geographic position in a mouse drag process*/ geo_now_drag, geo_start_drag, geo_end_drag, /*the position on the sphere such that the vector between the center of the sphere and the position equals the direction of the rotation axis relative to a mouse drag*/rotation_axis, /*the geographic positions corresponding to the NW (SE) boundary of of the plot area, moved to the interior of the plot area by one pixel. These will be used to plot parallels and meridians in such a way that they don't hit the boundary of the plot area*/p_NW, p_SE, /*Position of the Route/Position that is being dragged*/geo_position;
     Angle rotation_angle, /*an angle containing the middle longitude/latitude of the current 3D projection, rounded up to the closest value which is a multiple of delta_lambda/phi, used for drawing things in the middle of the projection*/lambda_middle, phi_middle, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/ lambda_start, lambda_end, phi_start, phi_end, lambda_saved, phi_saved, Z_saved;
     Projection /*the values of (x, y) at the beginning/end of the selection process with a rectangle*/start_selection, end_selection;
@@ -1863,7 +1862,8 @@ public:
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
     void (DrawPanel::*Set_size_chart)(void);
     
-    
+    DrawPanel(ChartPanel*, const wxPoint& position_in, const wxSize& size_in);
+
     void SetIdling(bool);
     void Draw_Mercator(void);
     void Draw_3D(void);
@@ -2569,7 +2569,7 @@ public:
     bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling, /*this is true if the chart is being dragged, and thus the size of *this must not change across multiple Draw(s), and false otherwise*/ dragging_chart, /*this is true if a Route or Position is being dragged, and false otherwise*/ dragging_object;
     //This is the actual value of the maximal zoom factor allowed
     Double /*the zoom factor relative to the default configuration of either projection, the zoom factor  is not necessarily equal to the numerical value (slider->GetValue()) shown on the slider*/zoom_factor;
-    String /*the text showing the coordinates of the current mouse position on draw_panel*/text_position_now;
+    String /*text showing the coordinates of the current mouse position on draw_panel*/ label_position_now;
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither ChartFrame::UpdateSliderLabel_Mercator or ChartFrame::UpdateSliderLabel_3D, according to my needs, and similarly for the other pointers
     void (ChartFrame::*UpdateSliderLabel)(void);
     

@@ -8291,6 +8291,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
 	mouse_dragging = false;
     re_draw = true;
+    mouse_in_plot_area = false;
 
 	parent = (parent_in->parent);
 
@@ -8470,6 +8471,17 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         
     }
     
+    //draw the label of the current mouse position on *this
+    if(mouse_in_plot_area){
+    
+        //   reset the pen to its default parameters
+        dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
+        dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH)); //Set a transparent brush in order not to fill the interior of the selection rectangle
+        dc.DrawText(wxString(parent->label_position_now.value), position_plot_area);
+
+        
+    }
+    
     //draw selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
         
@@ -8527,7 +8539,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
             
         }
         
-        //draw the label of the starting point of selection_rectangle
+        //draw the label of the start and end point of selection_rectangle
         dc.DrawText(wxString(end_label_selection_rectangle.value), position_end_label_selection_rectangle);
         dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
         
@@ -8551,7 +8563,7 @@ void DrawPanel::FitAll() {
 	this->SetMinSize(size_chart);
 	parent->SetMinSize(wxSize(
 		(size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
-		(size_chart.GetHeight()) + (((parent->text_position_now).get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
+		(size_chart.GetHeight()) + (((parent->label_position_now).get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
 	));
 
     //fix this
@@ -9842,7 +9854,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	sizer_buttons = new wxGridSizer(3, 3, 0, 0);
 
 	//text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
-    text_position_now = String("");
+    label_position_now = String("");
 
 	//initialize the variable neededed for slider
 	//allocate the slider
@@ -11528,7 +11540,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
 }
 
 
-//This function obtains the geographical Position p of the mouse hovering on the map of the world
+//This function obtains the geographical Position p of the mouse hovering on the map of the world. It returns true if the mouse is in the plot area, false otherwise
 bool DrawPanel::GetMouseGeoPosition(Position* p) {
 
 	position_screen_now = wxGetMousePosition();
@@ -11543,20 +11555,24 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     stringstream s;
     int i, j, l;
     
-    //    cout << "\nMouse moved";
+    //        cout << "\nMouse moved";
     //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
     //    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
     //    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
     
-    //update the instantaneous position of the mouse on the chart
-    if (GetMouseGeoPosition(&((parent->parent)->p_now))) {
-        //the mouse has a screen position corresponding to a geographic position -> I write it into s, otherwise s is left empty
+    //update the instantaneous position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods
+    mouse_in_plot_area = GetMouseGeoPosition(&(parent->parent->p_now));
+    if (mouse_in_plot_area) {
+        //the mouse has a screen position corresponding to a geographic position -> I write it into label_position_now, otherwise label_position_now is left empty, and I call Refresh() so PaintEvent is called and the position is updated on *this
         
-        (parent->text_position_now) = String((parent->parent->p_now).to_string(display_precision.value));
+        (parent->label_position_now) = String((parent->parent->p_now.to_string(display_precision.value)));
+        //I Refresh the current DrawPanel to draw the selection_rectangle in there
+        Refresh();
+
     }
     else {
         
-        (parent->text_position_now) = String("");
+        (parent->label_position_now) = String("");
         
     }
     

@@ -11487,7 +11487,7 @@ void DrawPanel::SetLabelAndAdjustPosition(Position p, wxPoint* position, String*
 	);
 
 
-    if ((position->x) + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value) + ((label->get_size(this)).x) > (GetSize().x)) {
+    if ((position->x) + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value) + ((label->get_size(this)).x) > (size_plot_area.x) + (position_plot_area.x)) {
 		//label does not fit into *this: it goes beyond the right edge of *this -> move it to the left
 
 		shift -= wxPoint(
@@ -11497,7 +11497,7 @@ void DrawPanel::SetLabelAndAdjustPosition(Position p, wxPoint* position, String*
 
 	}
 
-    if ((position->y) + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value) + ((label->get_size(this)).y) > (GetSize().y)) {
+    if ((position->y) + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value) + ((label->get_size(this)).y) > (size_plot_area.y) + (position_plot_area.y)) {
 		//label does not fit into *this: it goes beyond the bottom edge of *this -> move up shift
 
 		shift -= wxPoint(

@@ -15560,7 +15560,7 @@ template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event) {
 //}
 
 
-template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
+template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, const wxString& title, const vector<wxString>& message_list, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
 
 	wxDisplay display;
 	wxRect rectangle;
@@ -15584,7 +15584,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 	sizer_v = new wxBoxSizer(wxVERTICAL);
 	sizer_grid = new wxGridSizer(1, 2, 0, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 
-	StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
+	StaticText* text = new StaticText(panel, message_list, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
 
 	//buttons
 	button_a = new wxButton(panel, wxID_ANY, string_a.value, wxDefaultPosition, wxDefaultSize);

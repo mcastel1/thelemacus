@@ -1887,9 +1887,9 @@ public:
     void ProjectionToDrawPanel_Mercator(Projection, wxPoint*);
     void ProjectionToDrawPanel_3D(Projection, wxPoint*);
     void ShowCoordinates(Position, String*);
-    void ShowCoordinates(wxPoint, wxPoint*, String*);
-    void ShowCoordinates(Position, wxPoint*, String*);
-    void SetCoordinateLabel(Position, wxPoint*, String*);
+    void SetLabelAndPosition(wxPoint, wxPoint*, String*);
+    void SetLabelAndPosition(Position, wxPoint*, String*);
+    void SetLabelAndAdjustPosition(Position, wxPoint*, String*);
     void Set_lambda_phi_min_max_Mercator(void);
     void Set_lambda_phi_min_max_3D(void);
     void Set_x_y_min_max_Mercator(void);

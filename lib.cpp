@@ -11421,7 +11421,7 @@ void DrawPanel::ShowCoordinates(Position q, String* label) {
 
 	if (GeoToDrawPanel(q, &temp, false)) {
         
-		SetCoordinateLabel(q, &temp, label);
+		SetLabelAndAdjustPosition(q, &temp, label);
         
 	}else {
         
@@ -11433,13 +11433,13 @@ void DrawPanel::ShowCoordinates(Position q, String* label) {
 
 
 //given a geographic Positiojn q, if q lies within *this, write in label a text with the geographic coordinates corresponding to q, and write in *position the position of the label close to q (with some margin, for clarity). Otherwise, write "" in label and does nothing witg poisition
-void DrawPanel::ShowCoordinates(Position q, wxPoint* position, String* label) {
+void DrawPanel::SetLabelAndPosition(Position q, wxPoint* position, String* label) {
     
     if (
         /*GeoToDrawPanel converts q into the wxPoint position, reckoned with respect to the origin *this*/(this->GeoToDrawPanel)(q, position, false)) {
 
             //SetCoordinateLabel uses position set from above, and ajusts it by including some margins
-        SetCoordinateLabel(q, position, label);
+        SetLabelAndAdjustPosition(q, position, label);
 
     }
     else {
@@ -11452,14 +11452,14 @@ void DrawPanel::ShowCoordinates(Position q, wxPoint* position, String* label) {
 
 
 //given a position q with respect to the origin of the screen, if q lies within *this, write in label a text with the geographic coordinates corresponding to q, and write in *position the position of the label close to q (with some margin, for clarity). Otherwise, write "" in label and does nothing witg poisition
-void DrawPanel::ShowCoordinates(wxPoint q, wxPoint* position, String* label) {
+void DrawPanel::SetLabelAndPosition(wxPoint q, wxPoint* position, String* label) {
 
 	if ((this->ScreenToDrawPanel)(q, position)) {
 
         Position temp;
 
         (this->*ScreenToGeo)(q, &temp);
-		SetCoordinateLabel(temp, position, label);
+		SetLabelAndAdjustPosition(temp, position, label);
 
     }
 	else {
@@ -11472,7 +11472,7 @@ void DrawPanel::ShowCoordinates(wxPoint q, wxPoint* position, String* label) {
 
 
 //given a geographic Position p and its corresponding wxPoint with respect to the origin of this *poisition, write a string containing the geographic coordinates of p into label, and adjust *poistiion in such a way that label is enclosed in *this
-void DrawPanel::SetCoordinateLabel(Position p, wxPoint* position, String* label) {
+void DrawPanel::SetLabelAndAdjustPosition(Position p, wxPoint* position, String* label) {
 
 	//the shift that will be applied to the position of *label
 	wxPoint shift;
@@ -11613,7 +11613,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if ((parent->parent->selection_rectangle)) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
         
-        ShowCoordinates(position_screen_now, &position_end_label_selection_rectangle, &end_label_selection_rectangle);
+        SetLabelAndPosition(position_screen_now, &position_end_label_selection_rectangle, &end_label_selection_rectangle);
 
     }else{
         //If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
@@ -12011,7 +12011,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 		if ((this->*ScreenToProjection)(position_start_selection, &start_selection)) {
 			//position_start_selection is valid -> start the selection rectangle
 
-			ShowCoordinates(position_screen_now, &position_start_label_selection_rectangle, &start_label_selection_rectangle);
+			SetLabelAndPosition(position_screen_now, &position_start_label_selection_rectangle, &start_label_selection_rectangle);
 
 		}
 		else {
@@ -12350,7 +12350,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //store the reference_position of the Route that is being dragged into reference_position_dragged_route, so PaintEvent will read it and draw the label of its coordinates on it
                         reference_position_dragged_route = ((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position;
                         //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                        ShowCoordinates(reference_position_dragged_route, &position_label_dragged_object, &label_dragged_object);
+                        SetLabelAndPosition(reference_position_dragged_route, &position_label_dragged_object, &label_dragged_object);
                         
                         //update the data of the Route under consideration in listcontrol_routes
 						((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
@@ -12392,7 +12392,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 						//draw the label of the coordinates of the Position which is being dragged
                         //store the string with the coordinated of the Position that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                        ShowCoordinates(position_now_drag, &position_label_dragged_object, &label_dragged_object);
+                        SetLabelAndPosition(position_now_drag, &position_label_dragged_object, &label_dragged_object);
                     
 						//update the data of the Position under consideration in listcontrol_positions
 						((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);

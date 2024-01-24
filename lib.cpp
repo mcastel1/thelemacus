@@ -15564,9 +15564,9 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 
 	wxDisplay display;
 	wxRect rectangle;
-    vector<StaticText> text;
+    vector<StaticText*> text;
     //the wxString message will be split into multiple Strings which were separated by a '\n' in message, each string will be written in an entry of message_split
-    vector<String> message_split;
+    vector<wxString> message_split;
     int i;
 
 	f_a = f_a_in;
@@ -15588,9 +15588,9 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 	sizer_v = new wxBoxSizer(wxVERTICAL);
 	sizer_grid = new wxGridSizer(1, 2, 0, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
     
-    //add each line
-    for(i=0, text.clear(); i<message_split.size(); i++){
-        text.push_back(StaticText(panel, message_split[i], wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL));
+    //write each line into text
+    for(i=0, text.resize(message_split.size()); i<(message_split.size()); i++){
+        text[i] = new StaticText(panel, message_split[i], wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
     }
     
 
@@ -15621,7 +15621,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 
     //add all entries of text to sizer_v
     for(i=0; i<text.size(); i++){
-        sizer_v->Add(&(text[i]), 0, wxALL | wxALIGN_CENTER, 2 * (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
+        sizer_v->Add(text[i], 0, wxALL | wxALIGN_CENTER, 2 * (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
     }
 	sizer_v->Add(image, 0, wxALL | wxALIGN_CENTER, 2 * (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid->Add(button_a, 0, wxALIGN_CENTER);

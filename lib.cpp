@@ -751,7 +751,20 @@ wxSize String::get_size(wxWindow* p){
 //split *this into multiple strings which were separated by a "\n" into *this, and return a vector containig them
 vector<String> String::split(void){
     
+    size_t pos1, pos2;
+    vector<String> result;
+
     
+    result.resize(0);
+    pos1 = 0;
+    do{
+        
+        pos2 = value.find("\n");
+        result.push_back((this->subString(pos1, pos2-pos1)));
+        
+    }while(pos2 != ((string::npos)));
+
+    return result;
     
 }
 

@@ -15586,7 +15586,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 	wxRect rectangle;
     vector<StaticText*> text;
     //the wxString message will be split into multiple Strings which were separated by a '\n' in message, each string will be written in an entry of message_split
-    vector<wxString> message_split;
+    vector<String> message_split;
     int i;
 
 	f_a = f_a_in;
@@ -15609,11 +15609,10 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 	sizer_grid = new wxGridSizer(1, 2, 0, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
     
     //write each line into text
-    for(i=0, text.resize(message_split.size()); i<(message_split.size()); i++){
-        text[i] = new StaticText(panel, message_split[i], wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
+    for(i=0, message_split = String(message.ToStdString()).split(), text.resize(message_split.size()); i<(message_split.size()); i++){
+        text[i] = new StaticText(panel, wxString((message_split[i]).value), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
     }
     
-
 	//buttons
 	button_a = new wxButton(panel, wxID_ANY, string_a.value, wxDefaultPosition, wxDefaultSize);
 	button_a->Bind(wxEVT_BUTTON, *f_a);

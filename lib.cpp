@@ -748,6 +748,12 @@ wxSize String::get_size(wxWindow* p){
     
 }
 
+//split *this into multiple strings which were separated by a "\n" into *this, and return a vector containig them
+vector<String> String::split(void){
+    
+    
+    
+}
 
 void Double::print(String name, String prefix, ostream& ostr) {
 

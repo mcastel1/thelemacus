@@ -313,6 +313,17 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
+    //
+    String hello;
+    vector<String> v;
+    hello.value = "hello \n    how are you \nxmichel  e?";
+    v = hello.split();
+    
+    
+    //
+    
+    
+    
     unsigned int i;
     Int n_chart_frames;
     stringstream s;

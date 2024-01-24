@@ -759,8 +759,9 @@ vector<String> String::split(void){
     pos1 = 0;
     do{
         
-        pos2 = value.find("\n");
+        pos2 = value.find("\n", pos1);
         result.push_back((this->subString(pos1, pos2-pos1)));
+        pos1 = pos2+1;
         
     }while(pos2 != ((string::npos)));
 

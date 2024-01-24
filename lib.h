@@ -360,7 +360,7 @@ public:
     F_B* f_b;
     String string_a, string_b;
     
-    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, const vector<wxString>&, const wxString&,  String, const wxPoint&, const wxSize&, String);
+    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
     template<class E> void KeyDown(E&);
     
 };

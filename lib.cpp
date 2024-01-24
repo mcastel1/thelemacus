@@ -15606,6 +15606,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 
 	//allocate sizers
 	sizer_v = new wxBoxSizer(wxVERTICAL);
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
 	sizer_grid = new wxGridSizer(1, 2, 0, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
     
     //write each line into text
@@ -15640,13 +15641,14 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 
     //add all entries of text to sizer_v
     for(i=0; i<text.size(); i++){
-        sizer_v->Add(text[i], 0, wxALL | wxALIGN_CENTER, 2 * (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
+        sizer_v->Add(text[i], 0, wxALL | wxALIGN_CENTER);
     }
 	sizer_v->Add(image, 0, wxALL | wxALIGN_CENTER, 2 * (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
 	sizer_grid->Add(button_a, 0, wxALIGN_CENTER);
 	sizer_grid->Add(button_b, 0, wxALIGN_CENTER);
 	sizer_v->Add(sizer_grid, 0, wxALL | wxALIGN_CENTER, 2 * (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
-
+    sizer_h->Add(sizer_v, 0, wxALL | wxALIGN_CENTER, 2 * (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
+    
 #ifdef _WIN32
     //if I am on WIN32, I set the icon from the icon set in the .rc file
     SetIcon(wxICON(app_icon));
@@ -15654,7 +15656,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 
 	//panel->SetSizer(sizer);
 	//    Maximize(panel);
-	panel->SetSizerAndFit(sizer_v);
+	panel->SetSizerAndFit(sizer_h);
 	panel->Fit();
 	Fit();
 

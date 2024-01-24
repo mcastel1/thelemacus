@@ -349,7 +349,7 @@ template<typename F_A, typename F_B> class QuestionFrame: public wxFrame{
 public:
         //the non-GUI object connected to the GUI object MessageFrame
     wxPanel *panel;
-    wxBoxSizer *sizer_v, *sizer_buttons;
+    wxBoxSizer *sizer_v, *sizer_h, *sizer_buttons;
     wxGridSizer* sizer_grid;
     wxButton* button_a, *button_b;
     StaticBitmap* image;

@@ -13089,7 +13089,7 @@ void SelectRoute::operator()(wxCommandEvent& event) {
 	(parent->listcontrol_routes)->DeselectAll();
 
 
-	(parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
+//	(parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
 
 
 
@@ -15797,6 +15797,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     enable_highlight = true;
     selecting_route_for_position = false;
     transporting_with_new_route = false;
+    transporting_with_selected_route = false;
     abort = false;
     
     set_idling = new SetIdling<ListFrame>(this);
@@ -17109,20 +17110,34 @@ template<class E> void ListFrame::KeyDown(E& event) {
 
 	}
 
-	if ((((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)) && selecting_route_for_position) {
+	if ((((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER))) {
+        
+        if(selecting_route_for_position){
+            
+            long previous_item;
+            
+            previous_item = -1;
+            (data->crossing_route_list).clear();
+            do {
+                
+                previous_item = (listcontrol_routes->GetNextItem(previous_item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+                if (previous_item != -1) { (data->crossing_route_list).push_back(crossing_route_list_temp[previous_item]); }
+                
+            } while (previous_item != -1);
+            
+            OnComputePosition();
+            
+            
+        }
+        
+        if(transporting_with_selected_route){
+            //the user is selecting an existing Route to transport an object
+            
+           (*on_select_route_in_listcontrol_routes_for_transport)(event);
 
-		long previous_item;
-
-		previous_item = -1;
-		(data->crossing_route_list).clear();
-		do {
-
-			previous_item = (listcontrol_routes->GetNextItem(previous_item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
-			if (previous_item != -1) { (data->crossing_route_list).push_back(crossing_route_list_temp[previous_item]); }
-
-		} while (previous_item != -1);
-
-		OnComputePosition();
+            
+            
+        }
 
 	}
 

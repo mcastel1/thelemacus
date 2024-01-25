@@ -15632,7 +15632,14 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 	//                                                               ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value)))
 	//                               , wxDefaultPosition, wxDefaultSize);
 
-	image = new StaticBitmap(panel, path_icon_file, wxDefaultSize);
+    image = new StaticBitmap(
+        panel,
+        path_icon_file,
+        wxSize(
+            ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value),
+            ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value)
+        )
+    );
 
     //add all entries of text to sizer_v
     for(i=0; i<text.size(); i++){

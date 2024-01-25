@@ -11598,7 +11598,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
 //This function obtains the geographical Position p of the mouse hovering on the map of the world. It returns true if the mouse is in the plot area, false otherwise
 bool DrawPanel::GetMouseGeoPosition(Position* p) {
 
-	position_screen_now = wxGetMousePosition();
+//	position_screen_now = wxGetMousePosition();
 
 	return ((this->*ScreenToGeo)(position_screen_now, p));
 
@@ -11610,10 +11610,13 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     stringstream s;
     int i, j, l;
     
-    //        cout << "\nMouse moved";
+    position_screen_now = wxGetMousePosition();
+    
+    
+    cout << "\nMouse moved";
     //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
-    //    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
-    //    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
+    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
+    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
     
     //update the instantaneous position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
     mouse_in_plot_area = GetMouseGeoPosition(&(parent->parent->p_now));
@@ -11771,8 +11774,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         
     }
     
-    //I call Refresh() to trigger PaintEvent and update the chart drawing according to the changes made here
-    Refresh();
+//    //I call Refresh() to trigger PaintEvent and update the chart drawing according to the changes made here
+//    Refresh();
 
     event.Skip(true);
     
@@ -12040,7 +12043,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 			(parent->parent->selection_rectangle) = false;
 			//I call Refresh to delete the currently drawn selection rectangle
             Refresh();
-			FitAll();
+//			FitAll();
 
 		}
 

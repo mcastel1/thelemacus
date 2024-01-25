@@ -1809,7 +1809,7 @@ public:
     
     ChartFrame* parent;
     PrintMessage<DrawPanel, UnsetIdling<DrawPanel> >* print_error_message;
-    wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/ position_screen_now, position_start_drag, position_end_drag, /*the positions where the will be placed the labels start_label_selection_rectangle, end_label_selection_rectangle of the start and end point of selection_rectangle*/ position_start_label_selection_rectangle, position_end_label_selection_rectangle, position_now_drag, position_draw_panel_now, /*the position of label_position_now*/ position_label_position_now, /*the position of label_dragged_object*/ position_label_dragged_object;
+    wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin: this position is kept to the right value by OnMouseMovement method, that is called every time the mouse moves*/ position_screen_now, position_start_drag, position_end_drag, /*the positions where the will be placed the labels start_label_selection_rectangle, end_label_selection_rectangle of the start and end point of selection_rectangle*/ position_start_label_selection_rectangle, position_end_label_selection_rectangle, position_now_drag, position_draw_panel_now, /*the position of label_position_now*/ position_label_position_now, /*the position of label_dragged_object*/ position_label_dragged_object;
 
     //size, in pixels, of vertical and horizontal labels
     unsigned int size_label_vertical, size_label_horizontal;

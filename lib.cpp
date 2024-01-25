@@ -14010,7 +14010,7 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
 //if an item in listcontrol_sights/positions/routes is selected, I transport the Sight/Position/Route under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event) {
 
-    (f->transport_handler) = new TransportHandler(f, String("select"));
+    (f->transport_handler) = new TransportHandler(f);
 
 	//copy the data of f->route_list_saved into f->data->route_list
 	((f->data)->route_list).resize((f->route_list_saved).size());
@@ -14055,7 +14055,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 //if a new item listcontrol_routes is created, I transport the sight/position under consideration with such Route
 template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& event) {
 
-    (f->transport_handler) = new TransportHandler(f, String("new"));
+    (f->transport_handler) = new TransportHandler(f);
     
 	//the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
 	(f->i_transporting_route) = ((f->listcontrol_routes)->GetItemCount()) - 1;
@@ -20491,13 +20491,12 @@ template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_i
 
 }
 
-TransportHandler::TransportHandler(ListFrame* parent_in, String select_or_new_in){
+TransportHandler::TransportHandler(ListFrame* parent_in){
 
     timer = new wxTimer();
     route_chunk = new Route();
     
     parent = parent_in;
-    select_or_new = select_or_new_in;
     t = 0;
     timer->Bind(wxEVT_TIMER, &TransportHandler::OnTimer, this);
 
@@ -20650,20 +20649,20 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
         }
         
-        if(select_or_new == String("select")){
+        if((parent->transporting_with_selected_route)){
             //I am transporting with an existing, selected Route
+            
             //the transport is over -> I bind back DrawPanel::OnMouseMovement to mouse movements
             
             (parent->transporting_with_selected_route) = false;
-
-            
             parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
             
-        }else{
+        }
+        
+        if((parent->transporting_with_new_route)){
             //I am tranporting with a new Route
             
             (parent->transporting_with_new_route) = false;
-
             
         }
         

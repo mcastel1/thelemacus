@@ -12951,7 +12951,7 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
     parent->DrawAll();
 
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
-    parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
+//    parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
 
     event.Skip(true);
 
@@ -17113,6 +17113,7 @@ template<class E> void ListFrame::KeyDown(E& event) {
 	}
 
 	if ((((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER))) {
+        //the user pressed enter
         
         if(selecting_route_for_position){
             
@@ -17132,12 +17133,10 @@ template<class E> void ListFrame::KeyDown(E& event) {
             
         }
         
-        if(transporting_with_selected_route){
-            //the user is selecting an existing Route to transport an object
+        if(transporting_with_selected_route && ((listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)){
+            //the user is transporting an object with an existing Route and he/she selected that Route in listcontrol_routes -> proceed with the transport
             
            (*on_select_route_in_listcontrol_routes_for_transport)(event);
-
-            
             
         }
 

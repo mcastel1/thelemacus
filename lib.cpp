@@ -16175,15 +16175,15 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_routes);
         listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_routes);
         //I bind ListFrame::OnMouseMovement to listcontrol_sights, listcontrol_routes and to panel, because I want ListFrame::OnMouseMovement to be called when the mouse is either on listcontrol_sights, listcontrol_routes and on panel
-        listcontrol_sights->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
-        listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
-        listcontrol_routes->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
-        panel->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseMovement), this);
+        listcontrol_sights->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, this);
+        listcontrol_positions->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, this);
+        listcontrol_routes->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, this);
+        panel->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, this);
         
         
         //bind all listcontrols to mouse double-click event, so when the user double clicks on an item in the listcontrol, the SightFrame, PositionFrame or RouteFrame is opened to modify the sight, position or route
-        listcontrol_sights->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifySight<wxMouseEvent>), this);
-        listcontrol_positions->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyPosition<wxMouseEvent>), this);
+        listcontrol_sights->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifySight<wxListEvent>, this);
+        listcontrol_positions->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyPosition<wxListEvent>, this);
         listcontrol_routes->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyRoute<wxListEvent>, this);
         
         
@@ -20535,7 +20535,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             (route_chunk->reference_position) = start;
             
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
-            for(long i=0; i<parent->chart_frames.size(); i++){
+            for(long i=0; i<(parent->chart_frames.size()); i++){
                 
                 ((parent->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), ((parent->chart_frames)[i])->draw_panel);
                 

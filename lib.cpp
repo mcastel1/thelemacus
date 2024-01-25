@@ -12945,9 +12945,11 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
     parent->listcontrol_routes->set((parent->route_list_for_transport), false);
     parent->data->route_list.resize((parent->route_list_for_transport).size());
     copy((parent->route_list_for_transport).begin(), (parent->route_list_for_transport).end(), ((parent->data)->route_list).begin());
+    parent->TabulateRoutesAll();
     parent->DrawAll();
 
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will double clock on an item in listcontrol (or single-click it and then press enter), I perform the transport
+    parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyRoute<wxListEvent>, parent);
     parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_ACTIVATED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
 
     event.Skip(true);
@@ -16182,7 +16184,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         //bind all listcontrols to mouse double-click event, so when the user double clicks on an item in the listcontrol, the SightFrame, PositionFrame or RouteFrame is opened to modify the sight, position or route
         listcontrol_sights->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifySight<wxMouseEvent>), this);
         listcontrol_positions->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyPosition<wxMouseEvent>), this);
-        listcontrol_routes->Bind(wxEVT_LEFT_DCLICK, wxMouseEventHandler(ListFrame::OnModifyRoute<wxMouseEvent>), this);
+        listcontrol_routes->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyRoute<wxListEvent>, this);
         
         
         headers.clear();
@@ -20653,10 +20655,10 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             //I am transporting with an existing, selected Route
             
             //the transport is over -> I bind back DrawPanel::OnMouseMovement to mouse movements
-            
             (parent->transporting_with_selected_route) = false;
             parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_ACTIVATED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
-            
+            parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyRoute<wxListEvent>, parent);
+
         }
         
         if((parent->transporting_with_new_route)){

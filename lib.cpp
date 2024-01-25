@@ -12815,6 +12815,8 @@ void DeleteSight::operator()(wxCommandEvent& event) {
 }
 
 void ExistingRoute::operator()(wxCommandEvent& event) {
+    
+    (f->transporting_with_selected_route) = true;
 
 	//save data->route_list into route_list_saved
 	f->route_list_saved.resize(((f->data)->route_list).size());
@@ -20624,7 +20626,6 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
    
         }
         
-        (parent->transporting_with_new_route) = false;
         parent->listcontrol_sights->set((parent->data->sight_list), false);
         parent->listcontrol_routes->set((parent->data->route_list), false);
         parent->Resize();
@@ -20644,16 +20645,21 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         }
         
         if(select_or_new == String("select")){
+            //I am transporting with an existing, selected Route
             //the transport is over -> I bind back DrawPanel::OnMouseMovement to mouse movements
+            
+            (parent->transporting_with_selected_route) = false;
+
             
             parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
             
+        }else{
+            //I am tranporting with a new Route
+            
+            (parent->transporting_with_new_route) = false;
+
+            
         }
-        //        if(select_or_new == String("new")){
-        //
-        //            //            (parent->route_frame)->Unbind(wxEVT_CLOSE_WINDOW, *(parent->on_new_route_in_listcontrol_routes_for_transport));
-        //
-        //        }
         
         timer->Stop();
         

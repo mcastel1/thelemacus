@@ -103,6 +103,7 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
+- check if with the new modifications you can simply draw a text over a text (no longer a rectangle) to delete it 
 - remove wxScrollEventHandler ... and similar stuff
   - rename Route::t -> time
 - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on

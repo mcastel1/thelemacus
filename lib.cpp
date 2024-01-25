@@ -12047,16 +12047,16 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
 	}
 	else {
-		//finish drawing a selection rectangle
+		//end drawing a selection rectangle
 
-		GetMouseGeoPosition(&((parent->parent)->p_end));
+		GetMouseGeoPosition(&(parent->parent->p_end));
 		position_end_selection = position_screen_now;
 
 		//store the position at the end of the selection process, to compute the zoom factor later
 		if ((this->*ScreenToProjection)(position_end_selection, &end_selection)) {
 			//position_end_selection is valid
 
-			if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
+			if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
 
 				if ((parent->ComputeZoomFactor_Mercator(fabs((end_selection.x) - (start_selection.x))))) {
 					//if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max

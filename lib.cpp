@@ -14006,9 +14006,11 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
     (f->transport_handler) = new TransportHandler(f);
 
-	//copy the data of f->route_list_saved into f->data->route_list
+    //now I no longer need route_list to contain only the available Routes for transport -> I put back all the Routes before the transport into route_list by copying route_list_saved into route_list.
+    // PaintEvent() will need points_route_list to be updated according to this change -> I call TabulateRoutesAll() to update points_route_list
 	((f->data)->route_list).resize((f->route_list_saved).size());
 	copy((f->route_list_saved).begin(), (f->route_list_saved).end(), ((f->data)->route_list).begin());
+    f->TabulateRoutesAll();
 
 	//this is the # of the transporting Route in the full Route list given by data->route_list
 	(f->i_transporting_route) = (f->map)[((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];

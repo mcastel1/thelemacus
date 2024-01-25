@@ -12947,8 +12947,8 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
     copy((parent->route_list_for_transport).begin(), (parent->route_list_for_transport).end(), ((parent->data)->route_list).begin());
     parent->DrawAll();
 
-    //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will select an item in listcontrol, I perform the transport
-//    parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
+    //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will double clock on an item in listcontrol (or single-click it and then press enter), I perform the transport
+    parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_ACTIVATED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
 
     event.Skip(true);
 
@@ -13087,12 +13087,7 @@ void SelectRoute::operator()(wxCommandEvent& event) {
 	//deselect all previously selected items in listcontrol_routes to allow the user to properly select an item
 	(parent->listcontrol_routes)->DeselectAll();
 
-
-//	(parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
-
-
-
-
+    //	(parent->listcontrol_routes)->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
 
 	event.Skip(true);
 
@@ -17147,12 +17142,12 @@ template<class E> void ListFrame::KeyDown(E& event) {
             
         }
         
-        if(transporting_with_selected_route && ((listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)){
-            //the user is transporting an object with an existing Route and he/she selected that Route in listcontrol_routes -> proceed with the transport
-            
-           (*on_select_route_in_listcontrol_routes_for_transport)(event);
-            
-        }
+//        if(transporting_with_selected_route && ((listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)){
+//            //the user is transporting an object with an existing Route and he/she selected that Route in listcontrol_routes -> proceed with the transport
+//            
+//           (*on_select_route_in_listcontrol_routes_for_transport)(event);
+//            
+//        }
 
 	}
 
@@ -20660,7 +20655,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             //the transport is over -> I bind back DrawPanel::OnMouseMovement to mouse movements
             
             (parent->transporting_with_selected_route) = false;
-            parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
+            parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_ACTIVATED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
             
         }
         

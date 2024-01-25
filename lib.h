@@ -1872,8 +1872,9 @@ public:
     void Draw_Mercator(void);
     void Draw_3D(void);
     void PaintEvent(wxPaintEvent & evt);
-    void DrawRoutes(void);
-    void DrawPositions(void);
+    void RenderAll(wxDC&);
+    void RenderRoutes(wxDC&);
+    void RenderPositions(wxDC&);
     void TabulateRoutes(void);
     void FitAll();
     

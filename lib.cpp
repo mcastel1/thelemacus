@@ -8378,8 +8378,8 @@ END_EVENT_TABLE()
 void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
     wxPoint p;
-    
-    
+    wxPaintDC dc(this);
+
     if(re_draw){
         
         m_bgbuffer.Create(size_chart, 32);
@@ -8399,20 +8399,20 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         re_draw = false;
     }
     
-	wxPaintDC dc(this);
 	dc.DrawBitmap(m_bgbuffer, 0, 0, false);
     
     
-    DrawRoutes();
+    RenderRoutes(dc);
 
-    DrawPositions();
+    RenderPositions(dc);
 
-    //   reset the pen to its default parameters
-    dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
-    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH)); //Set a transparent brush in order not to fill the interior of the selection rectangle
-
+  
     //draw the label of the current mouse position on *this
     if(mouse_in_plot_area){
+        
+        //   reset the pen to its default parameters
+        dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
+        dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH)); //Set a transparent brush in order not to fill the interior of the selection rectangle
         
         dc.DrawText(wxString(label_position_now.value), position_label_position_now);
         
@@ -8492,14 +8492,19 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     
 }
 
+void DrawPanel::RenderAll(wxDC& dc){
+    
+    
+    
+}
 
-void DrawPanel::DrawRoutes(void){
+
+void DrawPanel::RenderRoutes(wxDC& dc){
     
     int i, j, color_id;
     double thickness, radius;
     wxPoint p;
-    wxPaintDC dc(this);
-
+//    wxPaintDC dc(this);
 
     //draw Routes
     for (i = 0, color_id = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
@@ -8537,12 +8542,13 @@ void DrawPanel::DrawRoutes(void){
     
 }
 
-void DrawPanel::DrawPositions(void){
+
+void DrawPanel::RenderPositions(wxDC& dc){
     
     int i, color_id;
     double thickness, radius;
     wxPoint p;
-    wxPaintDC dc(this);
+//    wxPaintDC dc(this);
 
     
     //draw Positions

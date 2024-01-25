@@ -11637,6 +11637,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
         
         SetLabelAndPosition(position_screen_now, &position_end_label_selection_rectangle, &end_label_selection_rectangle);
+        //in this case I am obliged to call Refresh(), becuase PaintEvent would not be called otherwise, and the selection rectangle would not be drawn
+        Refresh();
 
     }else{
         //If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes

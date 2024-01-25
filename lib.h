@@ -1873,6 +1873,7 @@ public:
     void Draw_3D(void);
     void PaintEvent(wxPaintEvent & evt);
     void RenderAll(wxDC&);
+    void RenderBackground(wxDC&);
     void RenderRoutes(wxDC&);
     void RenderPositions(wxDC&);
     void TabulateRoutes(void);

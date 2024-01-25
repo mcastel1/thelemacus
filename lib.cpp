@@ -8380,26 +8380,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     wxPoint p;
     wxPaintDC dc(this);
 
-    if(re_draw){
-        
-        m_bgbuffer.Create(size_chart, 32);
-        m_bgbuffer.UseAlpha();
-
-        wxMemoryDC mdc(m_bgbuffer);
-        wxGCDC dc_m_bgbuffer(mdc);
-        
-        dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
-        dc_m_bgbuffer.Clear();
-        
-        (this->*Render)(&dc_m_bgbuffer);
-        
-        mdc.SelectObject( wxNullBitmap );
-
-        
-        re_draw = false;
-    }
-    
-	dc.DrawBitmap(m_bgbuffer, 0, 0, false);
+    RenderBackground(dc);
     
     
     RenderRoutes(dc);
@@ -8489,6 +8470,31 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         
     }
     
+    
+}
+
+void DrawPanel::RenderBackground(wxDC& dc){
+    
+    if(re_draw){
+        
+        m_bgbuffer.Create(size_chart, 32);
+        m_bgbuffer.UseAlpha();
+
+        wxMemoryDC mdc(m_bgbuffer);
+        wxGCDC dc_m_bgbuffer(mdc);
+        
+        dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
+        dc_m_bgbuffer.Clear();
+        
+        (this->*Render)(&dc_m_bgbuffer);
+        
+        mdc.SelectObject( wxNullBitmap );
+
+        
+        re_draw = false;
+    }
+    
+    dc.DrawBitmap(m_bgbuffer, 0, 0, false);
     
 }
 

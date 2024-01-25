@@ -9946,7 +9946,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
 	panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
 
-	draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), draw_panel);
+	draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, draw_panel);
 	draw_panel->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_panel);
 	draw_panel->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_panel);
 	draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUp), draw_panel);
@@ -11820,7 +11820,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 		mouse_dragging = false;
         //given that the mosue drag has ended, I re-bind OnMoueMOvement to the mouse motion event
-        this->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), this);
+        this->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
 
 
 		position_end_drag = wxGetMousePosition();
@@ -12213,7 +12213,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 				//in this case, the mouse has started dragging: If I am dragging a Route, I save the starting point of this Route into route_position_start_drag
 
                 //during the mouse drag, I disable DrawPanel::OnMouseMovement
-                this->Unbind(wxEVT_MOTION,wxMouseEventHandler(DrawPanel::OnMouseMovement), this);
+                this->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
 
 				if (((parent->parent)->highlighted_route) != -1) {
 					//set route_position_start_drag to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
@@ -20537,7 +20537,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
             for(long i=0; i<(parent->chart_frames.size()); i++){
                 
-                ((parent->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), ((parent->chart_frames)[i])->draw_panel);
+                ((parent->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
                 
             }
             

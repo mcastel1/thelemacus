@@ -9947,15 +9947,15 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 	panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
 
 	draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, draw_panel);
-	draw_panel->Bind(wxEVT_RIGHT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseRightDown), draw_panel);
-	draw_panel->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(DrawPanel::OnMouseLeftDown), draw_panel);
-	draw_panel->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(DrawPanel::OnMouseLeftUp), draw_panel);
-	draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseDrag), draw_panel);
-	draw_panel->Bind(wxEVT_MOUSEWHEEL, wxMouseEventHandler(DrawPanel::OnMouseWheel), draw_panel);
+	draw_panel->Bind(wxEVT_RIGHT_DOWN, &DrawPanel::OnMouseRightDown, draw_panel);
+	draw_panel->Bind(wxEVT_LEFT_DOWN, &DrawPanel::OnMouseLeftDown, draw_panel);
+	draw_panel->Bind(wxEVT_LEFT_UP, &DrawPanel::OnMouseLeftUp, draw_panel);
+	draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseDrag, draw_panel);
+	draw_panel->Bind(wxEVT_MOUSEWHEEL, &DrawPanel::OnMouseWheel, draw_panel);
 
 	slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(ChartFrame::OnScroll<wxScrollEvent>), this);
-	slider->Bind(wxEVT_LEFT_DOWN, wxMouseEventHandler(ChartFrame::OnMouseLeftDownOnSlider<wxMouseEvent>), this);
-	slider->Bind(wxEVT_LEFT_UP, wxMouseEventHandler(ChartFrame::OnMouseLeftUpOnSlider<wxMouseEvent>), this);
+	slider->Bind(wxEVT_LEFT_DOWN, &ChartFrame::OnMouseLeftDownOnSlider<wxMouseEvent>, this);
+	slider->Bind(wxEVT_LEFT_UP, &ChartFrame::OnMouseLeftUpOnSlider<wxMouseEvent>, this);
 
 	empty_text_1 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize, 0);
 	empty_text_2 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize, 0);
@@ -16149,7 +16149,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl<Position>(listcontrol_positions, String("position"));
         listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_positions);
         listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_positions);
-        //    listcontrol_positions->Bind(wxEVT_MOTION, wxMouseEventHandler(ListFrame::OnMouseOnListControlPositions), this);
+        //    listcontrol_positions->Bind(wxEVT_MOTION, &ListFrame::OnMouseOnListControlPositions, this);
         
         headers.clear();
         headers.push_back(wxString("Number"));
@@ -20647,7 +20647,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         (*(parent->unset_idling))();
         for(long i=0; i<(parent->chart_frames.size()); i++){
             
-            ((parent->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, wxMouseEventHandler(DrawPanel::OnMouseMovement), ((parent->chart_frames)[i])->draw_panel);
+            ((parent->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
             
         }
         

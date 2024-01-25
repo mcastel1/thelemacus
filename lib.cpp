@@ -8377,27 +8377,7 @@ END_EVENT_TABLE()
 
 void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
-
-    int i, j, color_id;
-    double thickness, radius;
     wxPoint p;
-    
-    
-//    ::wxInitAllImageHandlers();
-//    wxBitmap bmp( dc.GetSize().x, dc.GetSize().y, 32);
-//    bmp.UseAlpha();
-
-//    wxMemoryDC memDC( bmp );
-//    wxGCDC dc2( memDC );
-
-//    dc2.SetBackground( *wxTRANSPARENT_BRUSH );
-//    dc2.Clear();
-//
-//    dc2.SetBrush( *wxTRANSPARENT_BRUSH );
-//    dc2.SetPen( *wxRED );
-//    dc2.DrawRectangle( 10, 10, 44, 44 );
-
-//    memDC.SelectObject( wxNullBitmap );
     
     
     if(re_draw){
@@ -8410,11 +8390,6 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
         
         dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
         dc_m_bgbuffer.Clear();
-
-//        dc_m_bgbuffer.SetBrush(*wxTRANSPARENT_BRUSH);
-//        dc_m_bgbuffer.SetPen(*wxRED);
-
-
         
         (this->*Render)(&dc_m_bgbuffer);
         
@@ -8427,72 +8402,10 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 	wxPaintDC dc(this);
 	dc.DrawBitmap(m_bgbuffer, 0, 0, false);
     
-    /*
-    if( has_highlighted_curve )
-    {
-        // draw highlighted curve into dc
-    }
-     */
     
-    color_id = 0;
+    DrawRoutes();
 
-    //draw Routes
-    for (i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
-
-        //set the route thickness and pen
-        if (i == ((parent->parent)->highlighted_route)) {
-            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-            radius = thickness;
-        }
-        else {
-            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-            radius = 4 * thickness;
-        }
-        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
-
-        //draw the reference_position
-        if (GeoToDrawPanel((((((parent->parent)->data)->route_list)[i]).reference_position), &p, false)) {
-            dc.DrawCircle(p, radius);
-        }
-
-        //draw the route points
-        //run over all connected chunks of routes
-        for (j = 0; j < (points_route_list[i]).size(); j++) {
-
-            if ((points_route_list[i][j]).size() > 1) {
-                //I need to add this consdition to make sure that I am not drawing an empty connected chunk
-
-                dc.DrawSpline((int)((points_route_list[i][j]).size()), (points_route_list[i][j]).data());
-
-            }
-
-        }
-
-    }
-
-    //draw Positions
-    for (i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
-
-        //set thickness and pen
-        if (i == ((parent->parent)->highlighted_position)) {
-            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-            radius = thickness;
-        }
-        else {
-            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-            radius = 4 * thickness;
-        }
-        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
-
-        if (GeoToDrawPanel((((parent->parent)->data)->position_list)[i], &p, false)) {
-            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
-
-            dc.DrawCircle(p, radius);
-
-        }
-        
-    }
-    
+    DrawPositions();
 
     //   reset the pen to its default parameters
     dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
@@ -8579,7 +8492,86 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     
 }
 
-//fit the size of the chart, of parent, of parent->panel to the content 
+
+void DrawPanel::DrawRoutes(void){
+    
+    int i, j, color_id;
+    double thickness, radius;
+    wxPoint p;
+    wxPaintDC dc(this);
+
+
+    //draw Routes
+    for (i = 0, color_id = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
+
+        //set the route thickness and pen
+        if (i == ((parent->parent)->highlighted_route)) {
+            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            radius = thickness;
+        }
+        else {
+            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            radius = 4 * thickness;
+        }
+        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
+
+        //draw the reference_position
+        if (GeoToDrawPanel((((((parent->parent)->data)->route_list)[i]).reference_position), &p, false)) {
+            dc.DrawCircle(p, radius);
+        }
+
+        //draw the route points
+        //run over all connected chunks of routes
+        for (j = 0; j < (points_route_list[i]).size(); j++) {
+
+            if ((points_route_list[i][j]).size() > 1) {
+                //I need to add this consdition to make sure that I am not drawing an empty connected chunk
+
+                dc.DrawSpline((int)((points_route_list[i][j]).size()), (points_route_list[i][j]).data());
+
+            }
+
+        }
+
+    }
+    
+}
+
+void DrawPanel::DrawPositions(void){
+    
+    int i, color_id;
+    double thickness, radius;
+    wxPoint p;
+    wxPaintDC dc(this);
+
+    
+    //draw Positions
+    for (i = 0, color_id = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
+
+        //set thickness and pen
+        if (i == ((parent->parent)->highlighted_position)) {
+            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            radius = thickness;
+        }
+        else {
+            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            radius = 4 * thickness;
+        }
+        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
+
+        if (GeoToDrawPanel((((parent->parent)->data)->position_list)[i], &p, false)) {
+            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
+
+            dc.DrawCircle(p, radius);
+
+        }
+        
+    }
+    
+}
+
+
+//fit the size of the chart, of parent, of parent->panel to the content
 void DrawPanel::FitAll() {
 
 //	//    Render(dc);

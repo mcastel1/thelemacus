@@ -1871,8 +1871,10 @@ public:
     void SetIdling(bool);
     void Draw_Mercator(void);
     void Draw_3D(void);
-    void TabulateRoutes(void);
     void PaintEvent(wxPaintEvent & evt);
+    void DrawRoutes(void);
+    void DrawPositions(void);
+    void TabulateRoutes(void);
     void FitAll();
     
     bool ScreenToDrawPanel(wxPoint, wxPoint*);

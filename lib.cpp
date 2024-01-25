@@ -12923,9 +12923,6 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
     
     int i;
 
-    //given that I am about to display Routes for transport only, Routes related to Sights will (temporarily) not be highlighted when the mouse hovers over them
-    (parent->enable_highlight) = false;
-
     //Given that an object must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are viable to be transporting Routes. These are the Routes that: 1. are not related to any sight, 2. that are not circles of equal altitude 3. That are different from  show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
     for ((parent->route_list_for_transport).clear(), (parent->map).clear(), i = 0; i < (parent->data->route_list).size(); i++) {
 
@@ -20613,8 +20610,6 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 
                 //set back listcontrol_routes to route_list, in order to include all Routes (not only those which are not related to a Sight)
                 parent->listcontrol_routes->set((parent->data)->route_list, false);
-                //given that the transport is over, set highlight_routes back to true
-                (parent->enable_highlight) = true;
                 
                 if (parent->transported_object == String("sight")) {
                     //I am transporting a Route related to a Sight -> disconnect the Route from the sight

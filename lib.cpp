@@ -12816,6 +12816,7 @@ void DeleteSight::operator()(wxCommandEvent& event) {
 
 void ExistingRoute::operator()(wxCommandEvent& event) {
     
+    //by setting this to true, when the user presses enter, the method ListFrame::KeyDown will call on_select_route_in_listcontrol_routes_for_transport
     (f->transporting_with_selected_route) = true;
 
 	//save data->route_list into route_list_saved
@@ -12823,7 +12824,7 @@ void ExistingRoute::operator()(wxCommandEvent& event) {
 	copy((f->data->route_list).begin(), (f->data->route_list).end(), (f->route_list_saved).begin());
 
 	//print an info message
-    (f->print_question_message)->SetAndCall(NULL, String("You are about to transport with an existing route"), String("Do you want to continue?"), String("Yes\n Let me select the route"), String("No\nI want to cancel"));
+    (f->print_question_message)->SetAndCall(NULL, String("You are about to transport with an existing route"), String("Select the Route and press enter.\nDo you want to continue?"), String("Yes"), String("No, I want to cancel"));
 
 	event.Skip(true);
 
@@ -12880,15 +12881,14 @@ void SomeRoutes::operator()(wxCommandEvent& event) {
 
 void NewRoute::operator()(wxCommandEvent& event) {
     
-
-	//call OnAddRoute to add a new Route
-	(f->OnAddRouteForTransport)(event);
     (f->transporting_with_new_route) = true;
+	//call OnAddRoute to add a new Route
+    (f->OnAddRouteForTransport)(event);
     
-	//when button_ok in f->route_fram will be pressed, I call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
-//    f->route_frame->button_ok->Bind(wxEVT_BUTTON, *(f->on_new_route_in_listcontrol_routes_for_transport));
-      
-	event.Skip(true);
+    //when button_ok in f->route_fram will be pressed, I call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
+    //    f->route_frame->button_ok->Bind(wxEVT_BUTTON, *(f->on_new_route_in_listcontrol_routes_for_transport));
+    
+    event.Skip(true);
 
 }
 
@@ -14039,15 +14039,15 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 		//the id of the Position that will be transported,
 		(f->i_object_to_transport) = ((int)(((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
     
-	}
-
-    //the animation starts here
-        f->transport_handler->timer->Start(
-                                           /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
-                                           (wxGetApp().animation_time.get())*60.0*60.0/((double)((wxGetApp().n_animation_steps.value)-1)) * 1000.0,
-                                           wxTIMER_CONTINUOUS);
+    }
     
-	event.Skip(true);
+    //the animation starts here
+    f->transport_handler->timer->Start(
+                                       /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
+                                       (wxGetApp().animation_time.get())*60.0*60.0/((double)((wxGetApp().n_animation_steps.value)-1)) * 1000.0,
+                                       wxTIMER_CONTINUOUS);
+    
+    event.Skip(true);
 
 }
 

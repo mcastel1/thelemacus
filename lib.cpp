@@ -8377,11 +8377,9 @@ END_EVENT_TABLE()
 
 void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
-    wxPoint p;
     wxPaintDC dc(this);
 
     RenderAll(dc);
-    
     
 }
 
@@ -8421,24 +8419,10 @@ void DrawPanel::RenderBackground(wxDC& dc){
 void DrawPanel::RenderAll(wxDC& dc){
     
     RenderBackground(dc);
-    
     RenderRoutes(dc);
-
     RenderPositions(dc);
+    RenderMousePosition(dc);
 
-  
-    //draw the label of the current mouse position on *this
-    if(mouse_in_plot_area){
-        
-        //   reset the pen to its default parameters
-        dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
-        dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH)); //Set a transparent brush in order not to fill the interior of the selection rectangle
-        
-        dc.DrawText(wxString(label_position_now.value), position_label_position_now);
-        
-    }
-
-    
     if((parent->dragging_object)){
         //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
         
@@ -8587,6 +8571,18 @@ void DrawPanel::RenderPositions(wxDC& dc){
         
     }
     
+}
+
+void DrawPanel::RenderMousePosition(wxDC& dc){
+    
+    
+    //   reset the pen to its default parameters
+    dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
+    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH)); //Set a transparent brush in order not to fill the interior of the selection rectangle
+    
+    dc.DrawText(wxString(label_position_now.value), position_label_position_now);
+    
+
 }
 
 

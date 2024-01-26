@@ -1877,6 +1877,7 @@ public:
     void RenderBackground(wxDC&);
     void RenderRoutes(wxDC&);
     void RenderPositions(wxDC&);
+    void RenderMousePosition(wxDC&);
     void TabulateRoutes(void);
     void FitAll();
     

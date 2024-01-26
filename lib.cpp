@@ -11624,10 +11624,10 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     position_screen_now = wxGetMousePosition();
     
     
-    cout << "\nMouse moved";
-    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
-    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
-    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
+//    cout << "\nMouse moved";
+//    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
+//    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
+//    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
     
     //update the instantaneous position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
     mouse_in_plot_area = GetMouseGeoPosition(&(parent->parent->p_now));

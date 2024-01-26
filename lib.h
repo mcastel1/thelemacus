@@ -1828,7 +1828,7 @@ public:
     gsl_vector *r, /*vector position in the x'y'z' reference frame used for multiple purposes*/*rp, /*vector position in the x'y'z' reference frame at the beginning, end and current time of mouse drag*/*rp_start_drag, *rp_end_drag, *rp_now_drag;
     Rotation /*the orientation of the Earth at the beginning / current time / end of a drag*/rotation_start_drag, rotation_now_drag, rotation_end_drag, /*the rotation representing the current / initial orientation of the earth*/rotation, rotation_0;
     Double /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot, and its initial value when this is constructedd, d_0,*/ /*if the mouse hovers over a route and its y coordinate is equal to the y of the route +- (length sceen) * thickness_route_selection_over_length_screen /2, then the relative Route is highlighted in ListFrame*/thickness_route_selection_over_length_screen;
-    String /*the labels that will be drawn on position_start_label_selection_rectangle and position_end_label_selection_rectangle, respectively*/start_label_selection_rectangle, end_label_selection_rectangle, /*this is used to display on the chart the coordinates of a Position that is being dragged or of the reference_position of a Route that is being dragged*/ label_dragged_object, /*text showing the coordinates of the current mouse position on draw_panel*/ label_position_now;
+    String /*the labels that will be drawn on position_start_label_selection_rectangle and position_end_label_selection_rectangle, respectively*/start_label_selection_rectangle, end_label_selection_rectangle, /*this is used to display on the chart the coordinates of a Position that is being dragged or of the reference_position of a Route that is being dragged*/ label_dragged_object, /*text showing the coordinates of the current mouse position on draw_panel*/ label_position_now, label_position_before;
 
     bool /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*if re_draw = true (false), then one has to draw the non-highglighteable stuff in DrawPanel (coastlines, paralles, meridians ...  but not Routes nor Positions)*/re_draw, /*this is true if the current mouse position lies in the plot area, false otherwise*/mouse_in_plot_area;
     Position /*I store in this position the starting point (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the dragging process*/route_position_start_drag, /*current, starting and ending geographic position in a mouse drag process*/ geo_now_drag, geo_start_drag, geo_end_drag, /*the position on the sphere such that the vector between the center of the sphere and the position equals the direction of the rotation axis relative to a mouse drag*/rotation_axis, /*the geographic positions corresponding to the NW (SE) boundary of of the plot area, moved to the interior of the plot area by one pixel. These will be used to plot parallels and meridians in such a way that they don't hit the boundary of the plot area*/p_NW, p_SE;
@@ -1872,7 +1872,7 @@ public:
     void Draw_Mercator(void);
     void Draw_3D(void);
     void PaintEvent(wxPaintEvent & evt);
-    void PaintNow(void);
+    void CleanMousePosition(void);
     void RenderAll(wxDC&);
     void RenderBackground(wxDC&);
     void RenderRoutes(wxDC&);

@@ -8379,16 +8379,25 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
     wxPaintDC dc(this);
 
-    RenderAll(dc);
+//    RenderAll(dc);
+    
+    RenderBackground(dc);
+    RenderRoutes(dc);
+    RenderPositions(dc);
+    RenderMousePosition(dc);
+
     
 }
 
-void DrawPanel::PaintNow(void){
+void DrawPanel::CleanMousePosition(void){
     
     wxClientDC dc(this);
     
-    RenderAll(dc);
-    
+    dc.SetBrush(wxGetApp().background_color);
+    dc.DrawRectangle(position_label_position_now, label_position_before.get_size(this));
+    dc.SetPen(wxGetApp().foreground_color);
+    dc.DrawText(wxString(label_position_now.value), position_label_position_now);
+
 }
 
 void DrawPanel::RenderBackground(wxDC& dc){
@@ -11626,6 +11635,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 //    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
     
     //update the instantaneous position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
+    label_position_before = label_position_now;
     mouse_in_plot_area = GetMouseGeoPosition(&(parent->parent->p_now));
     if (mouse_in_plot_area) {
         //the mouse has a screen position corresponding to a geographic position -> I write it into label_position_now, otherwise label_position_now is left empty,
@@ -11785,6 +11795,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     
 //    //I call Refresh() to trigger PaintEvent and update the chart drawing according to the changes made here
 //    Refresh();
+    CleanMousePosition();
 
     event.Skip(true);
     

@@ -8362,6 +8362,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
     start_label_selection_rectangle = String("");
     end_label_selection_rectangle_now = String("");
+    end_label_selection_rectangle_before = String("");
     label_dragged_object = String("");
 
     //    text_position_start->SetBackgroundColour(wxGetApp().background_color);
@@ -8406,6 +8407,7 @@ void DrawPanel::CleanMousePositionLabel(void) {
     //dc.SetPen(wxPen(*wxRED));
     //dc.DrawRectangle(position_label_position_now, label_position_before.get_size(this));
     dc.SetTextForeground(wxGetApp().background_color);
+    dc.SetTextBackground(wxGetApp().background_color);
     dc.DrawText(wxString(label_position_before.value), position_label_position_now);
     //dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
     //dc.SetPen(wxPen(*wxBLUE));
@@ -8440,7 +8442,9 @@ void DrawPanel::CleanSelectionRectangle(void) {
         
     }
     
-    //draw the label of the start and end point of selection_rectangle
+    //draw the label of the start and end point of selection_rectangle on top of the old one with color background_color, in order to delete the old one
+    dc.SetTextForeground(wxGetApp().background_color);
+    dc.SetTextBackground(wxGetApp().background_color);
     dc.DrawText(wxString(end_label_selection_rectangle_before.value), position_end_label_selection_rectangle_before);
 
     
@@ -8477,67 +8481,67 @@ void DrawPanel::RenderBackground(wxDC& dc) {
 }
 
 void DrawPanel::RenderSelectionRectangle(wxDC& dc){
-
-
-        //   reset the pen to its default parameters
-        dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
-        dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH)); //Set a transparent brush in order not to fill the interior of the selection rectangle
-
-        if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
-
-            dc.DrawRectangle(
-                (position_start_selection.x) - (position_draw_panel.x),
-                (position_start_selection.y) - (position_draw_panel.y),
-                (position_screen_now.x) - (position_start_selection.x),
-                (position_screen_now.y) - (position_start_selection.y)
-            );
-
-        }
-
-        if ((parent->projection->name->GetValue()) == wxString("3D")) {
-
-            //right vertical edge of rectangle
-            (Route(
-                String("o"),
-                ((parent->parent)->p_start),
-                Angle(M_PI * (1.0 - GSL_SIGN((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-                Length(Re * fabs((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value)))
-            )).Draw(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
-
-            //left vertical edge of rectangle
-            (Route(
-                String("o"),
-                ((parent->parent)->p_now),
-                Angle(M_PI * (1.0 + GSL_SIGN((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-                Length(Re * fabs((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value)))
-            )).Draw(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
-
-            //bottom horizontal edge of rectangle
-            (Route(
-                String("l"),
-                ((parent->parent)->p_start),
-                //change this by introducing if
-                Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-                Length(Re * cos(((parent->parent)->p_start).phi) * fabs((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value)))
-            )).DrawOld(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
-
-            //top horizontal edge of rectangle
-            (Route(
-                String("l"),
-                ((parent->parent)->p_now),
-                //change this by introducing if
-                Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-                Length(Re * cos(((parent->parent)->p_now).phi) * fabs((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value)))
-            )).DrawOld(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
-
-
-        }
-
-        //draw the label of the start and end point of selection_rectangle
-        dc.DrawText(wxString(end_label_selection_rectangle_now.value), position_end_label_selection_rectangle_now);
-        dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
-
     
+    
+    //   reset the pen to its default parameters
+    dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
+    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH)); //Set a transparent brush in order not to fill the interior of the selection rectangle
+    dc.SetTextForeground(wxGetApp().foreground_color);
+    dc.SetTextBackground(wxGetApp().background_color);
+    
+    if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
+        
+        dc.DrawRectangle(
+                         (position_start_selection.x) - (position_draw_panel.x),
+                         (position_start_selection.y) - (position_draw_panel.y),
+                         (position_screen_now.x) - (position_start_selection.x),
+                         (position_screen_now.y) - (position_start_selection.y)
+                         );
+        
+    }
+    
+    if ((parent->projection->name->GetValue()) == wxString("3D")) {
+        
+        //right vertical edge of rectangle
+        (Route(
+               String("o"),
+               ((parent->parent)->p_start),
+               Angle(M_PI * (1.0 - GSL_SIGN((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * fabs((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value)))
+               )).Draw(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
+        
+        //left vertical edge of rectangle
+        (Route(
+               String("o"),
+               ((parent->parent)->p_now),
+               Angle(M_PI * (1.0 + GSL_SIGN((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * fabs((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value)))
+               )).Draw(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
+        
+        //bottom horizontal edge of rectangle
+        (Route(
+               String("l"),
+               ((parent->parent)->p_start),
+               //change this by introducing if
+               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * cos(((parent->parent)->p_start).phi) * fabs((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value)))
+               )).DrawOld(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
+        
+        //top horizontal edge of rectangle
+        (Route(
+               String("l"),
+               ((parent->parent)->p_now),
+               //change this by introducing if
+               Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * cos(((parent->parent)->p_now).phi) * fabs((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value)))
+               )).DrawOld(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
+        
+        
+    }
+    
+    //draw the label of the start and end point of selection_rectangle
+    dc.DrawText(wxString(end_label_selection_rectangle_now.value), position_end_label_selection_rectangle_now);
+    dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
     
 }
 
@@ -10381,6 +10385,7 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
         (parent->parent->selection_rectangle) = false;
         start_label_selection_rectangle = String("");
         end_label_selection_rectangle_now = String("");
+            end_label_selection_rectangle_before = String("");
         Refresh();
         FitAll();
 
@@ -11710,6 +11715,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if ((parent->parent->selection_rectangle)) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
 
+        position_end_label_selection_rectangle_before = position_end_label_selection_rectangle_now;
+        end_label_selection_rectangle_before = end_label_selection_rectangle_now;
         SetLabelAndPosition(position_screen_now, &position_end_label_selection_rectangle_now, &end_label_selection_rectangle_now);
         //in this case I am obliged to call Refresh(), becuase PaintEvent would not be called otherwise, and the selection rectangle would not be drawn
 //        Refresh();

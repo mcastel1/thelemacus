@@ -8400,17 +8400,21 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
 //erase label_position_before, the label of the previous mouse position before the last mouse movement, by drawing on top of it with color background_color, and draw the new label
 void DrawPanel::CleanMousePositionLabel(void) {
-
+    
     wxClientDC dc(this);
-
-    //dc.SetBrush(wxGetApp().background_color);
-    //dc.SetPen(wxPen(*wxRED));
-    //dc.DrawRectangle(position_label_position_now, label_position_before.get_size(this));
-    dc.SetTextForeground(wxGetApp().background_color);
-    dc.SetTextBackground(wxGetApp().background_color);
-    dc.DrawText(wxString(label_position_before.value), position_label_position_now);
-    //dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
-    //dc.SetPen(wxPen(*wxBLUE));
+    
+    //wipe out position_label_position_before by writin the text in position_label_position_before with color backgound_color
+    /*
+     dc.SetTextForeground(wxGetApp().background_color);
+     dc.SetTextBackground(wxGetApp().background_color);
+     dc.DrawText(wxString(label_position_before.value), position_label_position_now);
+     */
+    
+    //wipe out position_label_position_before by writing on top of it a rectangle filled with color backgound_color
+    dc.SetPen(wxGetApp().background_color);
+    dc.SetBrush(wxBrush(wxGetApp().background_color));
+    dc.DrawRectangle(position_label_position_now, label_position_before.get_size(this));
+    
     RenderMousePositionLabel(dc);
     
 }
@@ -8420,33 +8424,38 @@ void DrawPanel::CleanMousePositionLabel(void) {
 void DrawPanel::CleanSelectionRectangle(void) {
     
     wxClientDC dc(this);
-
+    
     dc.SetPen(wxGetApp().background_color);
     dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
     
     if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
-
+        
         dc.DrawRectangle(
-            (position_start_selection.x) - (position_draw_panel.x),
-            (position_start_selection.y) - (position_draw_panel.y),
-            (position_screen_before.x) - (position_start_selection.x),
-            (position_screen_before.y) - (position_start_selection.y)
-        );
-
+                         (position_start_selection.x) - (position_draw_panel.x),
+                         (position_start_selection.y) - (position_draw_panel.y),
+                         (position_screen_before.x) - (position_start_selection.x),
+                         (position_screen_before.y) - (position_start_selection.y)
+                         );
+        
     }
     
     if ((parent->projection->name->GetValue()) == wxString("3D")) {
         
-     //code the part for the 3d projection here
+        //code the part for the 3d projection here
         
         
     }
     
-    //draw the label of the start and end point of selection_rectangle on top of the old one with color background_color, in order to delete the old one
-    dc.SetTextForeground(wxGetApp().background_color);
-    dc.SetTextBackground(wxGetApp().background_color);
-    dc.DrawText(wxString(end_label_selection_rectangle_before.value), position_end_label_selection_rectangle_before);
-
+    //draw the label of the end point of selection_rectangle on top of the old one with color background_color, in order to delete the old one
+    /*
+     dc.SetTextForeground(wxGetApp().background_color);
+     dc.SetTextBackground(wxGetApp().background_color);
+     dc.DrawText(wxString(end_label_selection_rectangle_before.value), position_end_label_selection_rectangle_before);
+     */
+    //draw a white rectangle on top of the label of the previous end point of the selection rectangle, to wipe it out
+    dc.SetPen(wxGetApp().background_color);
+    dc.SetBrush(wxBrush(wxGetApp().background_color));
+    dc.DrawRectangle(position_end_label_selection_rectangle_before, end_label_selection_rectangle_before.get_size(this));
     
     RenderSelectionRectangle(dc);
     RenderBackground(dc);

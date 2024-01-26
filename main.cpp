@@ -103,6 +103,7 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
+ - revise void DrawPanel::CleanSelectionRectangle(void) { in such a way that the start label of selection rectangle is not drawn twice and thus it does not look like it is bold face 
 - remove wxScrollEventHandler ... and similar stuff
   - rename Route::t -> time
 - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on

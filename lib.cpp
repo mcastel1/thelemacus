@@ -8597,13 +8597,8 @@ void DrawPanel::RenderPositions(wxDC& dc) {
 
 void DrawPanel::RenderMousePosition(wxDC& dc) {
 
-
-    //   reset the pen to its default parameters
-    dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
-    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH)); //Set a transparent brush in order not to fill the interior of the selection rectangle
-
+    dc.SetTextForeground(wxGetApp().foreground_color);
     dc.DrawText(wxString(label_position_now.value), position_label_position_now);
-
 
 }
 

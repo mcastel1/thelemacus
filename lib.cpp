@@ -8417,6 +8417,33 @@ void DrawPanel::CleanMousePositionLabel(void) {
 //erase selection_rectangle_before, by drawing on top of it with color background_color, and draw the new selection_rectangle
 void DrawPanel::CleanSelectionRectangle(void) {
     
+    wxClientDC dc(this);
+
+    dc.SetPen(wxGetApp().background_color);
+    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
+    
+    if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
+
+        dc.DrawRectangle(
+            (position_start_selection.x) - (position_draw_panel.x),
+            (position_start_selection.y) - (position_draw_panel.y),
+            (position_screen_before.x) - (position_start_selection.x),
+            (position_screen_before.y) - (position_start_selection.y)
+        );
+
+    }
+    
+    if ((parent->projection->name->GetValue()) == wxString("3D")) {
+        
+     //code the part for the 3d projection here 
+        
+        
+    }
+    
+    RenderSelectionRectangle(dc);
+    RenderBackground(dc);
+    RenderRoutes(dc);
+    RenderPositions(dc);
     
 }
 
@@ -8446,9 +8473,7 @@ void DrawPanel::RenderBackground(wxDC& dc) {
 }
 
 void DrawPanel::RenderSelectionRectangle(wxDC& dc){
-    
-    //draw selection_rectangle and its labels
-    if ((parent->parent->selection_rectangle)) {
+
 
         //   reset the pen to its default parameters
         dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
@@ -8508,7 +8533,7 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc){
         dc.DrawText(wxString(end_label_selection_rectangle.value), position_end_label_selection_rectangle);
         dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
 
-    }
+    
     
 }
 
@@ -8518,7 +8543,10 @@ void DrawPanel::RenderAll(wxDC& dc) {
     RenderRoutes(dc);
     RenderPositions(dc);
     RenderMousePositionLabel(dc);
-    RenderSelectionRectangle(dc);
+    //draw selection_rectangle and its labels
+    if ((parent->parent->selection_rectangle)) {
+        RenderSelectionRectangle(dc);
+    }
 
     if ((parent->dragging_object)) {
         //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
@@ -11650,6 +11678,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     stringstream s;
     int i, j, l;
 
+    position_screen_before = position_screen_now;
     position_screen_now = wxGetMousePosition();
 
 

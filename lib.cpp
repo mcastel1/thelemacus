@@ -8394,6 +8394,7 @@ void DrawPanel::CleanMousePosition(void){
     wxClientDC dc(this);
     
     dc.SetBrush(wxGetApp().background_color);
+    dc.SetPen(wxPen(wxGetApp().background_color));
     dc.DrawRectangle(position_label_position_now, label_position_before.get_size(this));
     dc.SetPen(wxGetApp().foreground_color);
     dc.DrawText(wxString(label_position_now.value), position_label_position_now);

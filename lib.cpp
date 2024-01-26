@@ -8397,7 +8397,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
 }
 
-void DrawPanel::CleanMousePosition(void) {
+void DrawPanel::CleanMousePositionLabel(void) {
 
     wxClientDC dc(this);
 
@@ -11806,7 +11806,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
     //    //I call Refresh() to trigger PaintEvent and update the chart drawing according to the changes made here
     //    Refresh();
-    CleanMousePosition();
+    CleanMousePositionLabel();
 
     event.Skip(true);
 

@@ -1872,7 +1872,7 @@ public:
     void Draw_Mercator(void);
     void Draw_3D(void);
     void PaintEvent(wxPaintEvent & evt);
-    void CleanMousePosition(void);
+    void CleanMousePositionLabel(void);
     void RenderAll(wxDC&);
     void RenderBackground(wxDC&);
     void RenderRoutes(wxDC&);

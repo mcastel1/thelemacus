@@ -8397,6 +8397,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
 }
 
+//erase label_position_before, the label of the previous mouse position before the last mouse movement, by drawing on top of it with color background_color, and draw the new label
 void DrawPanel::CleanMousePositionLabel(void) {
 
     wxClientDC dc(this);
@@ -8408,9 +8409,15 @@ void DrawPanel::CleanMousePositionLabel(void) {
     dc.DrawText(wxString(label_position_before.value), position_label_position_now);
     //dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
     //dc.SetPen(wxPen(*wxBLUE));
-    dc.SetTextForeground(wxGetApp().foreground_color);
-    dc.DrawText(wxString(label_position_now.value), position_label_position_now);
+    RenderMousePositionLabel(dc);
+    
+}
 
+
+//erase selection_rectangle_before, by drawing on top of it with color background_color, and draw the new selection_rectangle
+void DrawPanel::CleanSelectionRectangle(void) {
+    
+    
 }
 
 void DrawPanel::RenderBackground(wxDC& dc) {
@@ -8443,7 +8450,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
     RenderBackground(dc);
     RenderRoutes(dc);
     RenderPositions(dc);
-    RenderMousePosition(dc);
+    RenderMousePositionLabel(dc);
 
     if ((parent->dragging_object)) {
         //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
@@ -8595,7 +8602,7 @@ void DrawPanel::RenderPositions(wxDC& dc) {
 
 }
 
-void DrawPanel::RenderMousePosition(wxDC& dc) {
+void DrawPanel::RenderMousePositionLabel(wxDC& dc) {
 
     dc.SetTextForeground(wxGetApp().foreground_color);
     dc.DrawText(wxString(label_position_now.value), position_label_position_now);
@@ -11665,7 +11672,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
         SetLabelAndPosition(position_screen_now, &position_end_label_selection_rectangle, &end_label_selection_rectangle);
         //in this case I am obliged to call Refresh(), becuase PaintEvent would not be called otherwise, and the selection rectangle would not be drawn
-        Refresh();
+//        Refresh();
+        CleanSelectionRectangle();
 
     }
     else {

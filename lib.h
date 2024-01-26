@@ -1873,11 +1873,12 @@ public:
     void Draw_3D(void);
     void PaintEvent(wxPaintEvent & evt);
     void CleanMousePositionLabel(void);
+    void CleanSelectionRectangle(void);
     void RenderAll(wxDC&);
     void RenderBackground(wxDC&);
     void RenderRoutes(wxDC&);
     void RenderPositions(wxDC&);
-    void RenderMousePosition(wxDC&);
+    void RenderMousePositionLabel(wxDC&);
     void TabulateRoutes(void);
     void FitAll();
     

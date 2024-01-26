@@ -8361,7 +8361,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
     start_label_selection_rectangle = String("");
-    end_label_selection_rectangle = String("");
+    end_label_selection_rectangle_now = String("");
     label_dragged_object = String("");
 
     //    text_position_start->SetBackgroundColour(wxGetApp().background_color);
@@ -8435,10 +8435,14 @@ void DrawPanel::CleanSelectionRectangle(void) {
     
     if ((parent->projection->name->GetValue()) == wxString("3D")) {
         
-     //code the part for the 3d projection here 
+     //code the part for the 3d projection here
         
         
     }
+    
+    //draw the label of the start and end point of selection_rectangle
+    dc.DrawText(wxString(end_label_selection_rectangle_before.value), position_end_label_selection_rectangle_before);
+
     
     RenderSelectionRectangle(dc);
     RenderBackground(dc);
@@ -8530,7 +8534,7 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc){
         }
 
         //draw the label of the start and end point of selection_rectangle
-        dc.DrawText(wxString(end_label_selection_rectangle.value), position_end_label_selection_rectangle);
+        dc.DrawText(wxString(end_label_selection_rectangle_now.value), position_end_label_selection_rectangle_now);
         dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
 
     
@@ -10376,7 +10380,7 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
         //If the user presses esc, I cancel the selection process with the rectangle and call FitAll to re-draw the chart without the selection rectangle
         (parent->parent->selection_rectangle) = false;
         start_label_selection_rectangle = String("");
-        end_label_selection_rectangle = String("");
+        end_label_selection_rectangle_now = String("");
         Refresh();
         FitAll();
 
@@ -11706,7 +11710,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if ((parent->parent->selection_rectangle)) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
 
-        SetLabelAndPosition(position_screen_now, &position_end_label_selection_rectangle, &end_label_selection_rectangle);
+        SetLabelAndPosition(position_screen_now, &position_end_label_selection_rectangle_now, &end_label_selection_rectangle_now);
         //in this case I am obliged to call Refresh(), becuase PaintEvent would not be called otherwise, and the selection rectangle would not be drawn
 //        Refresh();
         CleanSelectionRectangle();
@@ -12263,7 +12267,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
             //I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
             start_label_selection_rectangle = String("");
-            end_label_selection_rectangle = String("");
+            end_label_selection_rectangle_now = String("");
 
         }
         else {
@@ -12271,7 +12275,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
             (parent->parent->selection_rectangle) = false;
             start_label_selection_rectangle = String("");
-            end_label_selection_rectangle = String("");
+            end_label_selection_rectangle_now = String("");
 
         }
 

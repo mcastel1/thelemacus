@@ -8445,20 +8445,8 @@ void DrawPanel::RenderBackground(wxDC& dc) {
 
 }
 
-void DrawPanel::RenderAll(wxDC& dc) {
-
-    RenderBackground(dc);
-    RenderRoutes(dc);
-    RenderPositions(dc);
-    RenderMousePositionLabel(dc);
-
-    if ((parent->dragging_object)) {
-        //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
-
-        dc.DrawText(wxString(label_dragged_object.value), position_label_dragged_object);
-
-    }
-
+void DrawPanel::RenderSelectionRectangle(wxDC& dc){
+    
     //draw selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
 
@@ -8469,8 +8457,8 @@ void DrawPanel::RenderAll(wxDC& dc) {
         if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
 
             dc.DrawRectangle(
-                position_start_selection.x - (position_draw_panel.x),
-                position_start_selection.y - (position_draw_panel.y),
+                (position_start_selection.x) - (position_draw_panel.x),
+                (position_start_selection.y) - (position_draw_panel.y),
                 (position_screen_now.x) - (position_start_selection.x),
                 (position_screen_now.y) - (position_start_selection.y)
             );
@@ -8521,6 +8509,25 @@ void DrawPanel::RenderAll(wxDC& dc) {
         dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
 
     }
+    
+}
+
+void DrawPanel::RenderAll(wxDC& dc) {
+
+    RenderBackground(dc);
+    RenderRoutes(dc);
+    RenderPositions(dc);
+    RenderMousePositionLabel(dc);
+    RenderSelectionRectangle(dc);
+
+    if ((parent->dragging_object)) {
+        //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
+
+        dc.DrawText(wxString(label_dragged_object.value), position_label_dragged_object);
+
+    }
+
+
 
 }
 

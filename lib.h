@@ -1872,8 +1872,8 @@ public:
     void Draw_Mercator(void);
     void Draw_3D(void);
     void PaintEvent(wxPaintEvent & evt);
-    void CleanMousePositionLabel(void);
-    void CleanSelectionRectangle(void);
+    void RedrawMousePositionLabel(void);
+    void RedrawSelectionRectangle(void);
     void RenderAll(wxDC&);
     void RenderBackground(wxDC&);
     void RenderRoutes(wxDC&);

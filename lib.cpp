@@ -8385,21 +8385,21 @@ END_EVENT_TABLE()
 
 
 void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
-
+    
     wxPaintDC dc(this);
-
-    //    RenderAll(dc);
-
-    RenderBackground(dc);
-    RenderRoutes(dc);
-    RenderPositions(dc);
-    RenderMousePositionLabel(dc);
-
-
+    
+    RenderAll(dc);
+    
+    //    RenderBackground(dc);
+    //    RenderRoutes(dc);
+    //    RenderPositions(dc);
+    //    RenderMousePositionLabel(dc);
+    
+    
 }
 
 //erase label_position_before, the label of the previous mouse position before the last mouse movement, by drawing on top of it with color background_color, and draw the new label
-void DrawPanel::CleanMousePositionLabel(void) {
+void DrawPanel::RedrawMousePositionLabel(void) {
     
     wxClientDC dc(this);
     
@@ -8421,7 +8421,7 @@ void DrawPanel::CleanMousePositionLabel(void) {
 
 
 //erase selection_rectangle_before, by drawing on top of it with color background_color, and draw the new selection_rectangle
-void DrawPanel::CleanSelectionRectangle(void) {
+void DrawPanel::RedrawSelectionRectangle(void) {
     
     wxClientDC dc(this);
     
@@ -11730,9 +11730,17 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         position_end_label_selection_rectangle_before = position_end_label_selection_rectangle_now;
         end_label_selection_rectangle_before = end_label_selection_rectangle_now;
         SetLabelAndPosition(position_screen_now, &position_end_label_selection_rectangle_now, &end_label_selection_rectangle_now);
-        //in this case I am obliged to call Refresh(), becuase PaintEvent would not be called otherwise, and the selection rectangle would not be drawn
-//        Refresh();
-        CleanSelectionRectangle();
+    
+        //clean the previous selection_rectangle from *this and draw the current one
+#ifdef __APPLE__
+        //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this, and paint the new one, because Refresh() triggers a call of PaintEvent
+        Refresh();
+#endif
+#ifdef _WIN32
+        //on APPLE, the Refresh() command slows down things -> I don't call it but use RedrawSelectionRectangle, which cleans up the former selections rectangle in *this and draws a new one
+        RedrawSelectionRectangle();
+#endif
+
 
     }
     else {
@@ -11871,12 +11879,18 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
     }
 
-    //    //I call Refresh() to trigger PaintEvent and update the chart drawing according to the changes made here
-    //    Refresh();
-    CleanMousePositionLabel();
-
+    //clean the previous label of mouse position from *this and draw the current one
+#ifdef __APPLE__
+    //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this and paint the new one, because Refresh() triggers a call of PaintEvent
+    Refresh();
+#endif
+#ifdef _WIN32
+    //on APPLE, the Refresh() command slows down things -> I don't call it but use RedrawMousePositionLabel, which cleans up the former label of the mouse position in *this and draws a new one
+    RedrawMousePositionLabel();
+#endif
+    
     event.Skip(true);
-
+    
 }
 
 //if the left button of the mouse is pressed, I record its position as the starting position of a (potential) mouse-dragging event
@@ -12353,9 +12367,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
             position_now_drag = wxGetMousePosition();
 
-
-            //        if(( ((position_draw_panel.x) + (position_plot_area.x) < (position_now_drag.x)) && ((position_now_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.GetWidth())) ) &&
-            //           ( ((position_draw_panel.y) + (position_plot_area.y) < (position_now_drag.y)) && ((position_now_drag.y) < (position_draw_panel.y) + (position_plot_area.y) +  (size_plot_area.GetHeight())) )){
 
             if ((this->*ScreenToGeo)(position_now_drag, NULL)) {
                 //in this case, position_drag_now is a valid position

@@ -8461,7 +8461,7 @@ void DrawPanel::RerenderSelectionRectangle(void) {
     RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc);
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderRoutes(dc);
+    RenderRoutes(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderPositions(dc);
     
 }
@@ -8576,7 +8576,7 @@ void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc){
 void DrawPanel::RenderAll(wxDC& dc) {
 
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderRoutes(dc);
+    RenderRoutes(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderPositions(dc);
     RenderMousePositionLabel(dc);
     
@@ -8596,12 +8596,15 @@ void DrawPanel::RenderAll(wxDC& dc) {
 }
 
 
-void DrawPanel::RenderRoutes(wxDC& dc) {
+void DrawPanel::RenderRoutes(wxDC& dc, wxColor foreground_color, wxColor background_color) {
 
     int i, j, color_id;
     double thickness, radius;
     wxPoint p;
-    //    wxPaintDC dc(this);
+    
+    dc.SetPen(foreground_color);
+    dc.SetTextForeground(foreground_color);
+    dc.SetTextBackground(background_color);
 
         //draw Routes
     for (i = 0, color_id = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
@@ -8615,7 +8618,8 @@ void DrawPanel::RenderRoutes(wxDC& dc) {
             thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = 4 * thickness;
         }
-        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
+//        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
+        dc.SetPen(wxPen(foreground_color, thickness));
 
         //draw the reference_position
         if (GeoToDrawPanel((((((parent->parent)->data)->route_list)[i]).reference_position), &p, false)) {
@@ -12495,7 +12499,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         Refresh();
 #endif
 #ifdef _WIN32
-
+                        RerenderRoutes();
 #endif
                     }
 

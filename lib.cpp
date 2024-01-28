@@ -8393,7 +8393,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     RenderBackground(dc);
     RenderRoutes(dc);
     RenderPositions(dc);
-    //RenderMousePosition(dc);
+    RenderMousePositionLabel(dc);
 
 
 }
@@ -8561,6 +8561,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
     RenderRoutes(dc);
     RenderPositions(dc);
     RenderMousePositionLabel(dc);
+    
     //draw selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
         RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
@@ -8573,8 +8574,6 @@ void DrawPanel::RenderAll(wxDC& dc) {
         dc.DrawText(wxString(label_dragged_object.value), position_label_dragged_object);
 
     }
-
-
 
 }
 
@@ -12308,7 +12307,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 //this function is called whenever mouse is dragged on *this
 void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
-    if ((!idling) && (!(parent->idling)) && (!((parent->parent)->idling))) {
+    if ((!idling) && (!(parent->idling)) && (!(parent->parent->idling))) {
         //I proceed only if this and its parent and the parent of its parent are not in idling mode
 
         if (wxGetMouseState().LeftIsDown()) {
@@ -12319,19 +12318,19 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 //during the mouse drag, I disable DrawPanel::OnMouseMovement
                 this->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
 
-                if (((parent->parent)->highlighted_route) != -1) {
+                if ((parent->parent->highlighted_route) != -1) {
                     //set route_position_start_drag to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
 
-                    if ((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")) {
+                    if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).type) == String("c")) {
 
-                        route_position_start_drag = (((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position);
+                        route_position_start_drag = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position);
 
-                        if (((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value) != -1) {
+                        if ((((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).related_sight).value) != -1) {
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
 
-                            (parent->parent->i_object_to_disconnect) = ((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).related_sight).value);
+                            (parent->parent->i_object_to_disconnect) = (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).related_sight).value);
 
-                            (parent->parent)->Disconnect(event);
+                            parent->parent->Disconnect(event);
 
                         }
 
@@ -12339,7 +12338,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     }
                     else {
 
-                        route_position_start_drag = (((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position);
+                        route_position_start_drag = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position);
 
                     }
 
@@ -12361,7 +12360,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
             if ((this->*ScreenToGeo)(position_now_drag, NULL)) {
                 //in this case, position_drag_now is a valid position
 
-                if (((((parent->parent)->highlighted_route) == -1) && (((parent->parent)->highlighted_position) == -1))) {
+                if ((((parent->parent->highlighted_route) == -1) && ((parent->parent->highlighted_position) == -1))) {
                     //in this case I am dragging the whole chart (the mouse is not over a route nor a position when dragging)
 
                     (parent->dragging_chart) = true;
@@ -12424,7 +12423,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     //the data in the file are being modified -> I call
                     parent->parent->OnModifyFile();
 
-                    if (((parent->parent)->highlighted_route) != -1) {
+                    if ((parent->parent->highlighted_route) != -1) {
                         //the mouse is over a Route
 
                         wxPoint q;
@@ -12439,7 +12438,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             GeoToDrawPanel(route_position_start_drag, &p, false);
 
                             //this command is the same for all types of Routes
-                            DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position));
+                            DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position));
 
                         }
 
@@ -12454,15 +12453,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //                    (this->*GeoToDrawPanel)(route_position_start_drag, &p);
 
-                            if ((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).type) == String("c")) {
+                            if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).type) == String("c")) {
 
-                                //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position));
-                                route_position_start_drag.rotate(String(""), rotation_now_drag, &(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
+                                //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position));
+                                route_position_start_drag.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position), String(""));
 
                             }
                             else {
 
-                                route_position_start_drag.rotate(String(""), rotation_now_drag, &(((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position), String(""));
+                                route_position_start_drag.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position), String(""));
 
                             }
 
@@ -12472,18 +12471,18 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //show the coordinates of the reference position of the Route that is being dragged
                         //store the reference_position of the Route that is being dragged into reference_position_dragged_route, so PaintEvent will read it and draw the label of its coordinates on it
-                        reference_position_dragged_route = ((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position;
+                        reference_position_dragged_route = (((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position;
                         //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
                         SetLabelAndPosition(reference_position_dragged_route, &position_label_dragged_object, &label_dragged_object);
 
                         //update the data of the Route under consideration in listcontrol_routes
-                        ((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).update_wxListCtrl(((parent->parent)->highlighted_route), (parent->parent)->listcontrol_routes);
+                        (((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).update_wxListCtrl((parent->parent->highlighted_route), parent->parent->listcontrol_routes);
 
                         //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
-                        for (i = 0; i < ((parent->parent)->chart_frames).size(); i++) {
+                        for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
 
-                            ((((parent->parent)->chart_frames)[i])->draw_panel)->TabulateRoutes();
-                            ((((parent->parent)->chart_frames)[i])->draw_panel)->Refresh();
+                            (((parent->parent->chart_frames)[i])->draw_panel)->TabulateRoutes();
+                            (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
 
                         }
 
@@ -12491,7 +12490,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                     }
 
-                    if (((parent->parent)->highlighted_position) != -1) {
+                    if ((parent->parent->highlighted_position) != -1) {
                         //the mouse is over a Position
 
                         wxPoint p;
@@ -12499,18 +12498,18 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
                             //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
-                            (this->*ScreenToGeo)(position_now_drag, &((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]));
+                            (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position)]));
 
                         }
 
                         if ((((parent->projection)->name)->GetValue()) == wxString("3D")) {
 
-                            //compose rotation with the rotation resulting from the drag and then apply it to pp == &((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                            //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                             rotation_now_drag =
                                 (rotation.inverse()) *
                                 rotation_start_end(position_start_drag, position_now_drag) *
                                 rotation;
-                            geo_start_drag.rotate(String(""), rotation_now_drag, &((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]), String(""));
+                            geo_start_drag.rotate(String(""), rotation_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position)]), String(""));
 
                         }
 
@@ -12519,12 +12518,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         SetLabelAndPosition(position_now_drag, &position_label_dragged_object, &label_dragged_object);
 
                         //update the data of the Position under consideration in listcontrol_positions
-                        ((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
+                        (((parent->parent->data)->position_list)[(parent->parent->highlighted_position)]).update_wxListCtrl((parent->parent->highlighted_position), parent->parent->listcontrol_positions);
 
                         //given that the Position under consideration has changed, I re-paint the charts
-                        for (i = 0; i < ((parent->parent)->chart_frames).size(); i++) {
+                        for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
 
-                            ((((parent->parent)->chart_frames)[i])->draw_panel)->Refresh();
+                            (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
 
                         }
 

@@ -8438,11 +8438,12 @@ void DrawPanel::CleanSelectionRectangle(void) {
     dc.SetPen(wxGetApp().background_color);
     dc.SetBrush(wxBrush(wxGetApp().background_color));
     dc.DrawRectangle(position_end_label_selection_rectangle_before, end_label_selection_rectangle_before.get_size(this));
-    
+    dc.DrawRectangle(position_start_label_selection_rectangle, start_label_selection_rectangle.get_size(this));
+
     
     //re-render all the other objects in *this which may have been partially cancelled by the clean operation above
     RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderSelectionRectangleLabels(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderSelectionRectangleLabels(dc);
     RenderBackground(dc);
     RenderRoutes(dc);
     RenderPositions(dc);
@@ -8543,7 +8544,7 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position_screen, wxCo
 
 
 //draw the label of the start and end point of selection_rectangle with foreground and background colrs foreground_color and background_color, respectively
-void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc, wxColor foreground_color, wxColor background_color){
+void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc){
     
     dc.SetTextForeground(wxGetApp().foreground_color);
     dc.SetTextBackground(wxGetApp().background_color);
@@ -8563,7 +8564,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
     //draw selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
         RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
-        RenderSelectionRectangleLabels(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderSelectionRectangleLabels(dc);
     }
 
     if ((parent->dragging_object)) {

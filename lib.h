@@ -1879,7 +1879,7 @@ public:
     void RenderRoutes(wxDC&);
     void RenderPositions(wxDC&);
     void RenderMousePositionLabel(wxDC&);
-    void RenderSelectionRectangle(wxDC&, wxColor, wxColor);
+    void RenderSelectionRectangle(wxDC&, wxPoint, wxColor, wxColor);
     void RenderSelectionRectangleLabels(wxDC&, wxColor, wxColor);
     void TabulateRoutes(void);
     void FitAll();

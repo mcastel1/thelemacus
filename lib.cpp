@@ -8425,6 +8425,7 @@ void DrawPanel::CleanSelectionRectangle(void) {
     
     wxClientDC dc(this);
     
+    //render a selection rectangle with color wxGetApp().background_color to clean the preceeding one
     RenderSelectionRectangle(dc, position_screen_before, wxGetApp().background_color, wxGetApp().background_color);
     
     //draw the label of the end point of selection_rectangle on top of the old one with color background_color, in order to delete the old one
@@ -8438,6 +8439,8 @@ void DrawPanel::CleanSelectionRectangle(void) {
     dc.SetBrush(wxBrush(wxGetApp().background_color));
     dc.DrawRectangle(position_end_label_selection_rectangle_before, end_label_selection_rectangle_before.get_size(this));
     
+    
+    //re-render all the other objects in *this which may have been partially cancelled by the clean operation above
     RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderBackground(dc);

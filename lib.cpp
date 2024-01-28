@@ -8497,41 +8497,39 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxColour foreground_color, wx
         //right vertical edge of rectangle
         (Route(
                String("o"),
-               ((parent->parent)->position_start),
-               Angle(M_PI * (1.0 - GSL_SIGN((((((parent->parent)->position_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * fabs((((((parent->parent)->position_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).phi).normalize_pm_pi_ret()).value)))
-               )).Draw(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
+               (parent->parent->position_start),
+               Angle(M_PI * (1.0 - GSL_SIGN(((((parent->parent->position_now).phi).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * fabs(((((parent->parent->position_now).phi).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).phi).normalize_pm_pi_ret()).value)))
+               )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
         
         //left vertical edge of rectangle
         (Route(
                String("o"),
-               ((parent->parent)->position_now),
-               Angle(M_PI * (1.0 + GSL_SIGN((((((parent->parent)->position_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * fabs((((((parent->parent)->position_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).phi).normalize_pm_pi_ret()).value)))
-               )).Draw(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
+               (parent->parent->position_now),
+               Angle(M_PI * (1.0 + GSL_SIGN(((((parent->parent->position_now).phi).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * fabs(((((parent->parent->position_now).phi).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).phi).normalize_pm_pi_ret()).value)))
+               )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
         
         //bottom horizontal edge of rectangle
         (Route(
                String("l"),
-               ((parent->parent)->position_start),
+               (parent->parent->position_start),
                //change this by introducing if
-               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((((parent->parent)->position_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * cos(((parent->parent)->position_start).phi) * fabs((((((parent->parent)->position_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).lambda).normalize_pm_pi_ret()).value)))
-               )).DrawOld(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
+               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN(((((parent->parent->position_now).lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * cos((parent->parent->position_start).phi) * fabs(((((parent->parent->position_now).lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).lambda).normalize_pm_pi_ret()).value)))
+               )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
         
         //top horizontal edge of rectangle
         (Route(
                String("l"),
-               ((parent->parent)->position_now),
+               (parent->parent->position_now),
                //change this by introducing if
-               Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((((parent->parent)->position_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * cos(((parent->parent)->position_now).phi) * fabs((((((parent->parent)->position_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).lambda).normalize_pm_pi_ret()).value)))
-               )).DrawOld(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
+               Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN(((((parent->parent->position_now).lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * cos((parent->parent->position_now).phi) * fabs(((((parent->parent->position_now).lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).lambda).normalize_pm_pi_ret()).value)))
+               )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
         
         
     }
-    
-
     
 }
 
@@ -11691,7 +11689,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     stringstream s;
     int i, j, l;
 
+    //store the former _now positions into the _before positions
     position_screen_before = position_screen_now;
+    (parent->parent->position_before) = (parent->parent->position_now);
     position_screen_now = wxGetMousePosition();
 
 

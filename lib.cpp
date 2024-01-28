@@ -8649,7 +8649,8 @@ void DrawPanel::RerenderRoutes(void){
     wxClientDC dc(this);
 
     RenderRoutes(dc, points_route_list_before, wxGetApp().background_color, wxGetApp().background_color);
-    
+    RenderRoutes(dc, points_route_list_before, wxGetApp().foreground_color, wxGetApp().background_color);
+
 }
 
 
@@ -12501,15 +12502,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
 
                             (((parent->parent->chart_frames)[i])->draw_panel)->TabulateRoutes();
-                            (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
-
-                        }
 #ifdef __APPLE__
-                        Refresh();
+                            Refresh();
 #endif
 #ifdef _WIN32
-                        RerenderRoutes();
+                            RerenderRoutes();
 #endif
+
+                        }
+
                     }
 
                     if ((parent->parent->highlighted_position) != -1) {

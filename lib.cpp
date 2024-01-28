@@ -8398,8 +8398,14 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     
 }
 
+
+void DrawPanel::RerenderBackground(void) {
+    
+    
+}
+
 //erase label_position_before, the label of the previous mouse position before the last mouse movement, by drawing on top of it with color background_color, and draw the new label
-void DrawPanel::RedrawMousePositionLabel(void) {
+void DrawPanel::RerenderMousePositionLabel(void) {
     
     wxClientDC dc(this);
     
@@ -8421,7 +8427,7 @@ void DrawPanel::RedrawMousePositionLabel(void) {
 
 
 //erase selection_rectangle_before, by drawing on top of it with color background_color, and draw the new selection_rectangle
-void DrawPanel::RedrawSelectionRectangle(void) {
+void DrawPanel::RerenderSelectionRectangle(void) {
     
     wxClientDC dc(this);
     
@@ -11737,8 +11743,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         Refresh();
 #endif
 #ifdef _WIN32
-        //on APPLE, the Refresh() command slows down things -> I don't call it but use RedrawSelectionRectangle, which cleans up the former selections rectangle in *this and draws a new one
-        RedrawSelectionRectangle();
+        //on APPLE, the Refresh() command slows down things -> I don't call it but use RerenderSelectionRectangle, which cleans up the former selections rectangle in *this and draws a new one
+        RerenderSelectionRectangle();
 #endif
 
 
@@ -11885,8 +11891,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     Refresh();
 #endif
 #ifdef _WIN32
-    //on APPLE, the Refresh() command slows down things -> I don't call it but use RedrawMousePositionLabel, which cleans up the former label of the mouse position in *this and draws a new one
-    RedrawMousePositionLabel();
+    //on APPLE, the Refresh() command slows down things -> I don't call it but use RerenderMousePositionLabel, which cleans up the former label of the mouse position in *this and draws a new one
+    RerenderMousePositionLabel();
 #endif
     
     event.Skip(true);
@@ -12400,7 +12406,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //re-draw the chart
                             (this->*Draw)();
+#ifdef APPLE
                             Refresh();
+#endif
+#ifdef WIN32
+                            RerenderBackground();
+#endif
                             //							FitAll();
 
                         }

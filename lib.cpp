@@ -8349,9 +8349,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     //    rotation.print(String("initial rotation"), String(""), cout);
 
     //allocates points_route_list and ts_route_list
-    points_route_list.resize((((parent->parent)->data)->route_list).size());
+    points_route_list_now.resize((((parent->parent)->data)->route_list).size());
     for (i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
-        (points_route_list[i]).clear();
+        (points_route_list_now[i]).clear();
     }
 
     idling = false;
@@ -8461,7 +8461,7 @@ void DrawPanel::RerenderSelectionRectangle(void) {
     RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc);
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderRoutes(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderPositions(dc);
     
 }
@@ -8576,7 +8576,7 @@ void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc){
 void DrawPanel::RenderAll(wxDC& dc) {
 
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderRoutes(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderPositions(dc);
     RenderMousePositionLabel(dc);
     
@@ -8596,7 +8596,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
 }
 
 
-void DrawPanel::RenderRoutes(wxDC& dc, wxColor foreground_color, wxColor background_color) {
+void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > points, wxColor foreground_color, wxColor background_color) {
 
     int i, j, color_id;
     double thickness, radius;
@@ -8628,12 +8628,12 @@ void DrawPanel::RenderRoutes(wxDC& dc, wxColor foreground_color, wxColor backgro
 
         //draw the route points
         //run over all connected chunks of routes
-        for (j = 0; j < (points_route_list[i]).size(); j++) {
+        for (j = 0; j < (points_route_list_now[i]).size(); j++) {
 
-            if ((points_route_list[i][j]).size() > 1) {
+            if ((points_route_list_now[i][j]).size() > 1) {
                 //I need to add this consdition to make sure that I am not drawing an empty connected chunk
 
-                dc.DrawSpline((int)((points_route_list[i][j]).size()), (points_route_list[i][j]).data());
+                dc.DrawSpline((int)((points_route_list_now[i][j]).size()), (points_route_list_now[i][j]).data());
 
             }
 
@@ -8641,6 +8641,15 @@ void DrawPanel::RenderRoutes(wxDC& dc, wxColor foreground_color, wxColor backgro
 
     }
 
+}
+
+
+void DrawPanel::RerenderRoutes(void){
+    
+    wxClientDC dc(this);
+
+    RenderRoutes(dc, points_route_list_before, wxGetApp().background_color, wxGetApp().background_color);
+    
 }
 
 
@@ -9255,9 +9264,9 @@ void DrawPanel::TabulateRoutes(void) {
     wxPoint p;
 
     //resize points_route_list, which needs to have the same size as (data->route_list), and clear up points_route_list
-    points_route_list.resize((((parent->parent)->data)->route_list).size());
-    for (i = 0; i < (points_route_list.size()); i++) {
-        (points_route_list[i]).clear();
+    points_route_list_now.resize((((parent->parent)->data)->route_list).size());
+    for (i = 0; i < (points_route_list_now.size()); i++) {
+        (points_route_list_now[i]).clear();
     }
 
     //tabulate the points of routes
@@ -9266,12 +9275,12 @@ void DrawPanel::TabulateRoutes(void) {
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
         if (((((parent->parent)->data)->route_list)[i]).type != String("l")) {
 
-            ((((parent->parent)->data)->route_list)[i]).Draw((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list.data()) + i, String(""));
+            ((((parent->parent)->data)->route_list)[i]).Draw((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list_now.data()) + i, String(""));
 
         }
         else {
 
-            ((((parent->parent)->data)->route_list)[i]).DrawOld((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list.data()) + i, String(""));
+            ((((parent->parent)->data)->route_list)[i]).DrawOld((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list_now.data()) + i, String(""));
 
         }
 
@@ -11761,26 +11770,26 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 
 
-            for (j = 0; j < (points_route_list[i]).size(); j++) {
+            for (j = 0; j < (points_route_list_now[i]).size(); j++) {
 
-                for (l = 0; l < ((int)((points_route_list[i][j]).size())) - 1; l++) {
+                for (l = 0; l < ((int)((points_route_list_now[i][j]).size())) - 1; l++) {
 
                     //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
 
-                    if (/*to recognize that the mouse is hovering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ (((points_route_list[i][j][l]).x) != ((points_route_list[i][j][l + 1]).x))
+                    if (/*to recognize that the mouse is hovering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ (((points_route_list_now[i][j][l]).x) != ((points_route_list_now[i][j][l + 1]).x))
 
                         &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
 
-                        (((((points_route_list[i][j][l]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l + 1]).x))) ||
+                        (((((points_route_list_now[i][j][l]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((points_route_list_now[i][j][l + 1]).x))) ||
 
-                            ((((points_route_list[i][j][l + 1]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((points_route_list[i][j][l]).x))))
+                            ((((points_route_list_now[i][j][l + 1]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((points_route_list_now[i][j][l]).x))))
 
                         &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
 
                         (
                             fabs(
                                 (position_draw_panel_now.y) -
-                                (((points_route_list[i][j][l]).y) + ((double)(((points_route_list[i][j][l + 1]).y) - ((points_route_list[i][j][l]).y))) / ((double)(((points_route_list[i][j][l + 1]).x) - ((points_route_list[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list[i][j][l]).x))))
+                                (((points_route_list_now[i][j][l]).y) + ((double)(((points_route_list_now[i][j][l + 1]).y) - ((points_route_list_now[i][j][l]).y))) / ((double)(((points_route_list_now[i][j][l + 1]).x) - ((points_route_list_now[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list_now[i][j][l]).x))))
                             )
 
                             <= (thickness_route_selection_over_length_screen.value) * ((double)((wxGetApp().rectangle_display).GetWidth())) / 2.0
@@ -15206,7 +15215,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
         for (i = 0; i < (parent->chart_frames).size(); i++) {
 
-            ((((parent->chart_frames)[i])->draw_panel)->points_route_list).resize(((((parent->chart_frames)[i])->draw_panel)->points_route_list).size() + 1);
+            ((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).resize(((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).size() + 1);
 
         }
     }

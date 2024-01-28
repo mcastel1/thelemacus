@@ -1843,7 +1843,7 @@ public:
     
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list: in this list there are as many elements as the number of connected curves in which the route is cut (because of the meridian lambda = pi). In each of these elements there are the  points, with respect to the origin of DrawPanel, which represent the route_list[i] discretized
-    vector< vector< vector<wxPoint> > > points_route_list;
+    vector< vector< vector<wxPoint> > > points_route_list_now, points_route_list_before;
     //the i-th element of this vector contains a list of critical values of the parametric angle (t) of the i-th route. At these critical values, route #i crosses the meridian lambda = pi
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
     wxSize size_chart, size_plot_area;
@@ -1873,14 +1873,15 @@ public:
     void Draw_3D(void);
     void PaintEvent(wxPaintEvent & evt);
     void RerenderBackground(void);
-    void RerenderMousePositionLabel(void);
-    void RerenderSelectionRectangle(void);
     void RenderAll(wxDC&);
     void RenderBackground(wxDC&, wxColor, wxColor);
-    void RenderRoutes(wxDC&, wxColor, wxColor);
+    void RenderRoutes(wxDC&, vector< vector< vector<wxPoint> > >, wxColor, wxColor);
+    void RerenderRoutes(void);
     void RenderPositions(wxDC&);
     void RenderMousePositionLabel(wxDC&);
+    void RerenderMousePositionLabel(void);
     void RenderSelectionRectangle(wxDC&, wxPoint, wxColor, wxColor);
+    void RerenderSelectionRectangle(void);
     void RenderSelectionRectangleLabels(wxDC&);
     void TabulateRoutes(void);
     void FitAll();

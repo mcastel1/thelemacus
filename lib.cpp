@@ -8401,6 +8401,16 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
 void DrawPanel::RerenderBackground(void) {
     
+//    wxClientDC dc(this);
+//    
+//    RenderBackground(dc, wxGetApp().background_color, wxGetApp().foreground_color);
+//    
+//    //re-render all the other objects in *this which may have been partially cancelled by the clean operation above
+//    RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
+//    RenderSelectionRectangleLabels(dc);
+//    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+//    RenderRoutes(dc);
+//    RenderPositions(dc);
     
 }
 
@@ -12380,7 +12390,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //re-draw the chart
                             (this->*Draw)();
-#ifdef APPLE
+#ifdef __APPLE__
                             Refresh();
 #endif
 #ifdef WIN32

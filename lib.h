@@ -1860,7 +1860,7 @@ public:
     bool (DrawPanel::*ScreenToProjection)(wxPoint, Projection*);
     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     bool (DrawPanel::*GeoToProjection)(Position, Projection*, bool);
-    void (DrawPanel::*Render)(wxDC*);
+    void (DrawPanel::*Render)(wxDC*, wxColor, wxColor);
     void (DrawPanel::*ProjectionToDrawPanel)(Projection, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
@@ -1913,8 +1913,8 @@ public:
     double x_span(void);
     Rotation rotation_start_end(wxPoint, wxPoint);
     
-    void Render_Mercator(wxDC*);
-    void Render_3D(wxDC*);
+    void Render_Mercator(wxDC*, wxColor, wxColor);
+    void Render_3D(wxDC*, wxColor, wxColor);
     void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);
     void DrawLabel(const Position&, Angle, Angle, Int, String);
     

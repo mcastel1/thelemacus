@@ -8458,6 +8458,11 @@ void DrawPanel::RerenderSelectionRectangle(void) {
 
 void DrawPanel::RenderBackground(wxDC& dc, wxColour foreground_color, wxColour background_color) {
 
+//    dc.SetPen(foreground_color);
+//    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
+//    dc.SetTextForeground(foreground_color);
+//    dc.SetTextBackground(background_color);
+ 
     if (re_draw) {
 
         m_bgbuffer.Create(size_chart, 32);
@@ -8468,11 +8473,10 @@ void DrawPanel::RenderBackground(wxDC& dc, wxColour foreground_color, wxColour b
 
         dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
         dc_m_bgbuffer.Clear();
-
-        (this->*Render)(&dc_m_bgbuffer);
+        
+        (this->*Render)(&dc_m_bgbuffer, foreground_color, background_color);
 
         mdc.SelectObject(wxNullBitmap);
-
 
         re_draw = false;
     }
@@ -8485,8 +8489,6 @@ void DrawPanel::RenderBackground(wxDC& dc, wxColour foreground_color, wxColour b
 //render a selection rectangle with end position position_screen, foreground color foreground_color and backgrund color background_color
 void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position_screen, wxColour foreground_color, wxColour background_color){
     
-    
-    //   reset the pen to its default parameters
     dc.SetPen(foreground_color);
     dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
     dc.SetTextForeground(foreground_color);
@@ -8701,7 +8703,7 @@ void DrawPanel::FitAll() {
 }
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::Render_Mercator(wxDC* dc) {
+void DrawPanel::Render_Mercator(wxDC* dc, wxColor foreground_color, wxColor background_color) {
 
     Angle lambda, phi;
     Route route;
@@ -8716,9 +8718,8 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
     //draws two rectangles (representing the borders) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color. Here I set the pen color equal to the foreground color, because I want the border of the rectangle to have the foreground color
 
-//    dc->SetBrush(wxBrush(wxGetApp().background_color));
-    dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
-    dc->SetPen(wxPen(wxGetApp().foreground_color));
+    dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
+    dc->SetPen(wxPen(foreground_color));
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
 
@@ -8726,8 +8727,8 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
-    dc->SetPen(wxPen(wxGetApp().foreground_color));
-    dc->SetBrush(wxBrush(wxGetApp().foreground_color, wxBRUSHSTYLE_SOLID));
+    dc->SetPen(wxPen(foreground_color));
+    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
     for (i = 0; i < (parent->p_coastline_draw).size(); i++) {
         dc->DrawEllipse((parent->p_coastline_draw)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
@@ -8790,7 +8791,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
             (((route.reference_position).lambda).value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
             (((route.reference_position).lambda).value) += delta_lambda_minor) {
 
-            route.Draw(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, thickness, dc, this, String(""));
+            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this, String(""));
 
         }
 
@@ -8805,7 +8806,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
         //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
         //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
-        route.Draw(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, thickness, dc, this, String(""));
+        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, thickness, dc, this, String(""));
 
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis
@@ -8818,7 +8819,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
                 (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                 (((route.reference_position).lambda).value) += delta_lambda_minor) {
 
-                route.Draw(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, thickness, dc, this, String(""));
+                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this, String(""));
 
             }
 
@@ -8866,7 +8867,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
         //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
         //here I use DrawOld because Draw cannot handle loxodromes
-        route.DrawOld(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, thickness, dc, this);
+        route.DrawOld(((((parent->parent)->data)->n_points_routes).value), foreground_color, thickness, dc, this);
 
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -8885,7 +8886,7 @@ void DrawPanel::Render_Mercator(wxDC* dc) {
 
                 //                        route.Draw(((wxGetApp().n_points_minor_ticks)).value, 0x0000ff, thickness, this, String(""));
                 //here I use DrawOld because Draw cannot handle loxodromes
-                route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, thickness, dc, this);
+                route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this);
 
             }
 
@@ -9042,31 +9043,6 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 
         labels->push_back(wx_string);
         positions_labels->push_back(p);
-        //I first crate a StaticText with default position ...
-        //		(labels->back()) = new StaticText(this, wx_string, wxDefaultPosition, wxDefaultSize);
-
-
-        //... then I shift p it in such a way that the label drawn at p is diplayed nicely, and draw the label at  p. To do this, I need to know the size of (labels->back()) : for example, in the NS case, I shift p horizontally on the left by a length equal to the width of (labels->back())
-        /*
-        if (mode == String("NS")) {
-
-            p += wxPoint(-((int)size_label_horizontal) - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -((int)size_label_vertical) / 2);
-
-        }
-        else {
-
-            p += wxPoint(-((labels->back()).GetTextExtent().GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
-
-        }
-         */
-         //... and finally, I set the position of (labels->back()) equal to p
- //		(labels->back())->SetPosition(p);
-
-         //here the static text is displayed on top of a wxImage, so I set the appropriate fore/background color
- //		(labels->back())->SetForegroundColour(wxGetApp().foreground_color);
- //		(labels->back())->SetBackgroundColour(wxGetApp().background_color);
-
-
 
         first_label = false;
 
@@ -9075,7 +9051,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 }
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::Render_3D(wxDC* dc) {
+void DrawPanel::Render_3D(wxDC* dc, wxColor foreground_color, wxColor background_color) {
 
     int i;
     double thickness;
@@ -9094,14 +9070,14 @@ void DrawPanel::Render_3D(wxDC* dc) {
 
     //draws a rectangle filled with color wxGetApp().background_color and with border wich color wxGetApp().foregrond_color on bitmap_image, so bitmap_image will have the right background color
     //dc->SetBrush(wxBrush(wxGetApp().background_color));
-    //dc->SetPen(wxPen(wxGetApp().foreground_color));
+    //dc->SetPen(wxPen(foreground_color));
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
 
 
     //draw coastlines
     //draw the coastline points into bitmap_image through memory_dc
-    dc->SetPen(wxPen(wxGetApp().foreground_color));
-    dc->SetBrush(wxBrush(wxGetApp().foreground_color, wxBRUSHSTYLE_SOLID));
+    dc->SetPen(wxPen(foreground_color));
+    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
     for (i = 0; i < (parent->p_coastline_draw).size(); i++) {
         //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
         dc->DrawEllipse((parent->p_coastline_draw)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
@@ -9111,9 +9087,7 @@ void DrawPanel::Render_3D(wxDC* dc) {
 
 
     //set the pen to grey
-    dc->SetPen(wxPen(Color(128, 128, 128), 1));
-
-
+//    dc->SetPen(foreground_color);
 
     //set thickness to ordinary thickness to draw meridians and parallels
     thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
@@ -9132,7 +9106,7 @@ void DrawPanel::Render_3D(wxDC* dc) {
         (((route.reference_position).lambda).value) += delta_lambda) {
 
         //            route.draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this);
-        route.Draw(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, thickness, dc, this, String(""));
+        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, thickness, dc, this, String(""));
 
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -9150,7 +9124,7 @@ void DrawPanel::Render_3D(wxDC* dc) {
                 (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                 (((route.reference_position).lambda).value) += delta_lambda_minor) {
 
-                route.Draw(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, thickness, dc, this, String(""));
+                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this, String(""));
 
             }
 
@@ -9189,7 +9163,7 @@ void DrawPanel::Render_3D(wxDC* dc) {
         (route.length).set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
         ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
 
-        route.Draw(((((parent->parent)->data)->n_points_routes).value), wxGetApp().foreground_color, thickness, dc, this, String(""));
+        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, thickness, dc, this, String(""));
 
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -9205,7 +9179,7 @@ void DrawPanel::Render_3D(wxDC* dc) {
                 (((route.reference_position).phi).value) += delta_phi_minor
                 ) {
 
-                route.Draw(((wxGetApp().n_points_minor_ticks)).value, wxGetApp().foreground_color, thickness, dc, this, String(""));
+                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this, String(""));
 
             }
 
@@ -9251,7 +9225,7 @@ void DrawPanel::Render_3D(wxDC* dc) {
         (dummy_projection.y) / y_max * ((double)(size_plot_area.GetWidth())) / 2.0
     );
     //set back the pen  color and brush
-    dc->SetPen(wxPen(wxGetApp().foreground_color, 1));
+    dc->SetPen(wxPen(foreground_color, 1));
     dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
 
 

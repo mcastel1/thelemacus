@@ -8649,7 +8649,7 @@ void DrawPanel::RerenderRoutes(void){
     wxClientDC dc(this);
 
     RenderRoutes(dc, points_route_list_before, wxGetApp().background_color, wxGetApp().background_color);
-    RenderRoutes(dc, points_route_list_before, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
 
 }
 

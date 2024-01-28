@@ -1876,7 +1876,7 @@ public:
     void RerenderMousePositionLabel(void);
     void RerenderSelectionRectangle(void);
     void RenderAll(wxDC&);
-    void RenderBackground(wxDC&);
+    void RenderBackground(wxDC&, wxColor, wxColor);
     void RenderRoutes(wxDC&);
     void RenderPositions(wxDC&);
     void RenderMousePositionLabel(wxDC&);

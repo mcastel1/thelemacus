@@ -8450,13 +8450,13 @@ void DrawPanel::RerenderSelectionRectangle(void) {
     //re-render all the other objects in *this which may have been partially cancelled by the clean operation above
     RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc);
-    RenderBackground(dc);
+    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc);
     RenderPositions(dc);
     
 }
 
-void DrawPanel::RenderBackground(wxDC& dc) {
+void DrawPanel::RenderBackground(wxDC& dc, wxColour foreground_color, wxColour background_color) {
 
     if (re_draw) {
 
@@ -8563,7 +8563,7 @@ void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc){
 
 void DrawPanel::RenderAll(wxDC& dc) {
 
-    RenderBackground(dc);
+    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc);
     RenderPositions(dc);
     RenderMousePositionLabel(dc);

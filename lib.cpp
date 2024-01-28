@@ -8425,26 +8425,7 @@ void DrawPanel::CleanSelectionRectangle(void) {
     
     wxClientDC dc(this);
     
-    dc.SetPen(wxGetApp().background_color);
-    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
-    
-    if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
-        
-        dc.DrawRectangle(
-                         (position_start_selection.x) - (position_draw_panel.x),
-                         (position_start_selection.y) - (position_draw_panel.y),
-                         (position_screen_before.x) - (position_start_selection.x),
-                         (position_screen_before.y) - (position_start_selection.y)
-                         );
-        
-    }
-    
-    if ((parent->projection->name->GetValue()) == wxString("3D")) {
-        
-        //code the part for the 3d projection here
-        
-        
-    }
+    RenderSelectionRectangle(dc, wxGetApp().background_color, wxGetApp().background_color);
     
     //draw the label of the end point of selection_rectangle on top of the old one with color background_color, in order to delete the old one
     /*
@@ -8516,35 +8497,35 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxColour foreground_color, wx
         //right vertical edge of rectangle
         (Route(
                String("o"),
-               ((parent->parent)->p_start),
-               Angle(M_PI * (1.0 - GSL_SIGN((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * fabs((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value)))
+               ((parent->parent)->position_start),
+               Angle(M_PI * (1.0 - GSL_SIGN((((((parent->parent)->position_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * fabs((((((parent->parent)->position_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).phi).normalize_pm_pi_ret()).value)))
                )).Draw(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
         
         //left vertical edge of rectangle
         (Route(
                String("o"),
-               ((parent->parent)->p_now),
-               Angle(M_PI * (1.0 + GSL_SIGN((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * fabs((((((parent->parent)->p_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).phi).normalize_pm_pi_ret()).value)))
+               ((parent->parent)->position_now),
+               Angle(M_PI * (1.0 + GSL_SIGN((((((parent->parent)->position_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * fabs((((((parent->parent)->position_now).phi).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).phi).normalize_pm_pi_ret()).value)))
                )).Draw(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
         
         //bottom horizontal edge of rectangle
         (Route(
                String("l"),
-               ((parent->parent)->p_start),
+               ((parent->parent)->position_start),
                //change this by introducing if
-               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * cos(((parent->parent)->p_start).phi) * fabs((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value)))
+               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((((parent->parent)->position_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * cos(((parent->parent)->position_start).phi) * fabs((((((parent->parent)->position_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).lambda).normalize_pm_pi_ret()).value)))
                )).DrawOld(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
         
         //top horizontal edge of rectangle
         (Route(
                String("l"),
-               ((parent->parent)->p_now),
+               ((parent->parent)->position_now),
                //change this by introducing if
-               Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * cos(((parent->parent)->p_now).phi) * fabs((((((parent->parent)->p_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret()).value)))
+               Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((((parent->parent)->position_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * cos(((parent->parent)->position_now).phi) * fabs((((((parent->parent)->position_now).lambda).normalize_pm_pi_ret()).value) - (((((parent->parent)->position_start).lambda).normalize_pm_pi_ret()).value)))
                )).DrawOld(((((parent->parent)->data)->n_points_routes).value), &dc, this, String(""));
         
         
@@ -11721,11 +11702,11 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
         //update the instantaneous position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
     label_position_before = label_position_now;
-    mouse_in_plot_area = GetMouseGeoPosition(&(parent->parent->p_now));
+    mouse_in_plot_area = GetMouseGeoPosition(&(parent->parent->position_now));
     if (mouse_in_plot_area) {
         //the mouse has a screen position corresponding to a geographic position -> I write it into label_position_now, otherwise label_position_now is left empty,
 
-        label_position_now = String((parent->parent->p_now.to_string(display_precision.value)));
+        label_position_now = String((parent->parent->position_now.to_string(display_precision.value)));
 
     }
     else {
@@ -12137,7 +12118,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
     if ((parent->parent->selection_rectangle)) {
         //start drawing a selection rectangle
 
-        GetMouseGeoPosition(&((parent->parent)->p_start));
+        GetMouseGeoPosition(&((parent->parent)->position_start));
         position_start_selection = position_screen_now;
         //stores the position at the beginning of the selection process, to compute the zoom factor later
         if ((this->*ScreenToProjection)(position_start_selection, &start_selection)) {
@@ -12161,7 +12142,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
     else {
         //finish drawing a selection rectangle
 
-        GetMouseGeoPosition(&((parent->parent)->p_end));
+        GetMouseGeoPosition(&((parent->parent)->position_end));
         position_end_selection = position_screen_now;
 
         //store the position at the end of the selection process, to compute the zoom factor later
@@ -12176,23 +12157,23 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     //sets the new values of lambda_min, lambda_max, phi_min and phi_max
                     //                delete chart;
                     //I convert all the angles to the format between -pi and pi, so I can sort them numerically
-                    (((parent->parent)->p_start).phi).normalize_pm_pi();
-                    (((parent->parent)->p_start).lambda).normalize_pm_pi();
-                    (((parent->parent)->p_end).phi).normalize_pm_pi();
-                    (((parent->parent)->p_end).lambda).normalize_pm_pi();
+                    (((parent->parent)->position_start).phi).normalize_pm_pi();
+                    (((parent->parent)->position_start).lambda).normalize_pm_pi();
+                    (((parent->parent)->position_end).phi).normalize_pm_pi();
+                    (((parent->parent)->position_end).lambda).normalize_pm_pi();
                     //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the values of ((parent->parent)->p_start).lambda, ... ((parent->parent)->p_end).phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc. While I do this, I take care of the case where the selection rectangle may encompass the Greenwich antimeridian 
-                    if ((((parent->parent)->p_start).lambda) > (((parent->parent)->p_end).lambda)) {
+                    if ((((parent->parent)->position_start).lambda) > (((parent->parent)->position_end).lambda)) {
 
-                        if ((((parent->parent)->p_start).lambda.value) * (((parent->parent)->p_end).lambda.value) > 0.0) {
+                        if ((((parent->parent)->position_start).lambda.value) * (((parent->parent)->position_end).lambda.value) > 0.0) {
 
-                            (parent->lambda_min) = (((parent->parent)->p_start).lambda);
-                            (parent->lambda_max) = (((parent->parent)->p_end).lambda);
+                            (parent->lambda_min) = (((parent->parent)->position_start).lambda);
+                            (parent->lambda_max) = (((parent->parent)->position_end).lambda);
 
                         }
                         else {
 
-                            (parent->lambda_min) = (((parent->parent)->p_end).lambda);
-                            (parent->lambda_max) = (((parent->parent)->p_start).lambda);
+                            (parent->lambda_min) = (((parent->parent)->position_end).lambda);
+                            (parent->lambda_max) = (((parent->parent)->position_start).lambda);
 
                         }
 
@@ -12200,28 +12181,28 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     }
                     else {
 
-                        if ((((parent->parent)->p_start).lambda.value) * (((parent->parent)->p_end).lambda.value) > 0.0) {
+                        if ((((parent->parent)->position_start).lambda.value) * (((parent->parent)->position_end).lambda.value) > 0.0) {
 
-                            (parent->lambda_min) = (((parent->parent)->p_end).lambda);
-                            (parent->lambda_max) = (((parent->parent)->p_start).lambda);
+                            (parent->lambda_min) = (((parent->parent)->position_end).lambda);
+                            (parent->lambda_max) = (((parent->parent)->position_start).lambda);
 
                         }
                         else {
 
-                            (parent->lambda_min) = (((parent->parent)->p_start).lambda);
-                            (parent->lambda_max) = (((parent->parent)->p_end).lambda);
+                            (parent->lambda_min) = (((parent->parent)->position_start).lambda);
+                            (parent->lambda_max) = (((parent->parent)->position_end).lambda);
 
 
                         }
 
                     }
-                    if ((((parent->parent)->p_start).phi) > (((parent->parent)->p_end).phi)) {
-                        (parent->phi_max) = (((parent->parent)->p_start).phi);
-                        (parent->phi_min) = (((parent->parent)->p_end).phi);
+                    if ((((parent->parent)->position_start).phi) > (((parent->parent)->position_end).phi)) {
+                        (parent->phi_max) = (((parent->parent)->position_start).phi);
+                        (parent->phi_min) = (((parent->parent)->position_end).phi);
                     }
                     else {
-                        (parent->phi_min) = (((parent->parent)->p_start).phi);
-                        (parent->phi_max) = (((parent->parent)->p_end).phi);
+                        (parent->phi_min) = (((parent->parent)->position_start).phi);
+                        (parent->phi_max) = (((parent->parent)->position_end).phi);
                     }
                     //I normalize lambda_min, ..., phi_max for future use.
                     (parent->lambda_min).normalize();
@@ -12229,10 +12210,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     (parent->phi_min).normalize();
                     (parent->phi_max).normalize();
 
-                    (((parent->parent)->p_start).phi).normalize();
-                    (((parent->parent)->p_start).lambda).normalize();
-                    (((parent->parent)->p_end).phi).normalize();
-                    (((parent->parent)->p_end).lambda).normalize();
+                    (((parent->parent)->position_start).phi).normalize();
+                    (((parent->parent)->position_start).lambda).normalize();
+                    (((parent->parent)->position_end).phi).normalize();
+                    (((parent->parent)->position_end).lambda).normalize();
 
                     (this->*Draw)();
                     Refresh();
@@ -12267,16 +12248,16 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 //compute position in the middle of selection rectangle and set it to circle_observer.reference_position
                 (circle_observer.reference_position) = Position(
                     Angle(
-                        (((((parent->parent)->p_start).lambda).normalize_pm_pi_ret().value) + ((((parent->parent)->p_end).lambda).normalize_pm_pi_ret().value)) / 2.0
+                        (((((parent->parent)->position_start).lambda).normalize_pm_pi_ret().value) + ((((parent->parent)->position_end).lambda).normalize_pm_pi_ret().value)) / 2.0
                     ),
                     Angle(
-                        (((((parent->parent)->p_start).phi).normalize_pm_pi_ret().value) + ((((parent->parent)->p_end).phi).normalize_pm_pi_ret().value)) / 2.0
+                        (((((parent->parent)->position_start).phi).normalize_pm_pi_ret().value) + ((((parent->parent)->position_end).phi).normalize_pm_pi_ret().value)) / 2.0
                     )
                 );
 
                 //compute omega by picking the largest angular distance between the middle of selection rectangle and its corners
-                (circle_observer.reference_position).distance(((parent->parent)->p_start), &l1, String(""), String(""));
-                (circle_observer.reference_position).distance(Position(((parent->parent)->p_start).lambda, ((parent->parent)->p_end).phi), &l2, String(""), String(""));
+                (circle_observer.reference_position).distance(((parent->parent)->position_start), &l1, String(""), String(""));
+                (circle_observer.reference_position).distance(Position(((parent->parent)->position_start).lambda, ((parent->parent)->position_end).phi), &l2, String(""), String(""));
                 (circle_observer.omega).set(String(""), (max(l1, l2).value) / Re, String(""));
 
 

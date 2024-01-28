@@ -2341,7 +2341,7 @@ public:
     vector<int> map;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
     vector< vector< vector<Position> > > p_coastline;
-    Position /*these are the positions where the right mouse button is clicked at the beginning, current time and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_now, p_end;
+    Position /*these are the geographic positions where the right mouse button is clicked at the beginning, current time and at the end of the drawing process for the selection rectangle on the world's chart*/position_start, position_now, position_end;
     //the object which is being transported : a "sight" or a "position"
     String transported_object;
     

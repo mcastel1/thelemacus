@@ -12359,15 +12359,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 
             if ((this->*ScreenToGeo)(position_now_drag, NULL)) {
-                //in this case, position_drag_now is a valid position
+                //position_drag_now is a valid position
 
                 if ((((parent->parent->highlighted_route) == -1) && ((parent->parent->highlighted_position) == -1))) {
-                    //in this case I am dragging the whole chart (the mouse is not over a route nor a position when dragging)
+                    //I am dragging the whole chart (the mouse is not over a route nor a position when dragging)
 
                     (parent->dragging_chart) = true;
 
                     if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
-                        //in this case, I am using the mercator projection
+                        //I am using the mercator projection
 
                         Projection p_ceil_min, p_floor_max;
 
@@ -12403,7 +12403,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     }
 
                     if ((((parent->projection)->name)->GetValue()) == wxString("3D")) {
-                        //in this case, I am using the 3d projection
+                        //I am using the 3d projection
 
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                         rotation =
@@ -12420,7 +12420,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                 }
                 else {
-                    //in this case I am dragging an object (a Position or a Route) (the mouse is over a Route or a Position while dragging)
+                    //I am dragging an object (a Position or a Route) (the mouse is over a Route or a Position while dragging)
 
                     unsigned int i;
 
@@ -12491,9 +12491,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
 
                         }
-
+#ifdef __APPLE__
                         Refresh();
+#endif
+#ifdef _WIN32
 
+#endif
                     }
 
                     if ((parent->parent->highlighted_position) != -1) {

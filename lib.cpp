@@ -8457,7 +8457,8 @@ void DrawPanel::CleanSelectionRectangle(void) {
     dc.SetBrush(wxBrush(wxGetApp().background_color));
     dc.DrawRectangle(position_end_label_selection_rectangle_before, end_label_selection_rectangle_before.get_size(this));
     
-    RenderSelectionRectangle(dc);
+    RenderSelectionRectangle(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderSelectionRectangleLabels(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderBackground(dc);
     RenderRoutes(dc);
     RenderPositions(dc);
@@ -8489,14 +8490,15 @@ void DrawPanel::RenderBackground(wxDC& dc) {
 
 }
 
-void DrawPanel::RenderSelectionRectangle(wxDC& dc){
+
+void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxColour foreground_color, wxColour background_color){
     
     
     //   reset the pen to its default parameters
-    dc.SetPen(wxPen(Color(255, 175, 175), 1)); // 1-pixels-thick pink outline
-    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH)); //Set a transparent brush in order not to fill the interior of the selection rectangle
-    dc.SetTextForeground(wxGetApp().foreground_color);
-    dc.SetTextBackground(wxGetApp().background_color);
+    dc.SetPen(foreground_color);
+    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
+    dc.SetTextForeground(foreground_color);
+    dc.SetTextBackground(background_color);
     
     if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
         
@@ -8548,11 +8550,22 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc){
         
     }
     
-    //draw the label of the start and end point of selection_rectangle
+
+    
+}
+
+
+//draw the label of the start and end point of selection_rectangle with foreground and background colrs foreground_color and background_color, respectively
+void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc, wxColor foreground_color, wxColor background_color){
+    
+    dc.SetTextForeground(wxGetApp().foreground_color);
+    dc.SetTextBackground(wxGetApp().background_color);
+    
     dc.DrawText(wxString(end_label_selection_rectangle_now.value), position_end_label_selection_rectangle_now);
     dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
     
 }
+
 
 void DrawPanel::RenderAll(wxDC& dc) {
 
@@ -8562,7 +8575,8 @@ void DrawPanel::RenderAll(wxDC& dc) {
     RenderMousePositionLabel(dc);
     //draw selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
-        RenderSelectionRectangle(dc);
+        RenderSelectionRectangle(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderSelectionRectangleLabels(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     }
 
     if ((parent->dragging_object)) {

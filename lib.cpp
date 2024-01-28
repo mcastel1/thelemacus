@@ -8457,7 +8457,7 @@ void DrawPanel::RerenderSelectionRectangle(void) {
     dc.DrawRectangle(position_start_label_selection_rectangle, start_label_selection_rectangle.get_size(this));
 
     
-    //re-render all the other objects in *this which may have been partially cancelled by the clean operation above
+    //re-render all objects in *this which may have been partially cancelled by the clean operation above
     RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc);
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
@@ -8618,7 +8618,7 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
             thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = 4 * thickness;
         }
-//        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
+        //        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
         dc.SetPen(wxPen(foreground_color, thickness));
 
         //draw the reference_position
@@ -8628,12 +8628,12 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
 
         //draw the route points
         //run over all connected chunks of routes
-        for (j = 0; j < (points_route_list_now[i]).size(); j++) {
+        for (j = 0; j < (points[i]).size(); j++) {
 
-            if ((points_route_list_now[i][j]).size() > 1) {
+            if ((points[i][j]).size() > 1) {
                 //I need to add this consdition to make sure that I am not drawing an empty connected chunk
 
-                dc.DrawSpline((int)((points_route_list_now[i][j]).size()), (points_route_list_now[i][j]).data());
+                dc.DrawSpline((int)((points[i][j]).size()), (points[i][j]).data());
 
             }
 
@@ -8648,9 +8648,14 @@ void DrawPanel::RerenderRoutes(void){
     
     wxClientDC dc(this);
 
+    //wipe out the Routes at the preceeding mouse position
     RenderRoutes(dc, points_route_list_before, wxGetApp().background_color, wxGetApp().background_color);
+    
+    //re-render all  objects in *this which may have been partially cancelled by the clean operation above
+    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc, points_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
-
+    RenderPositions(dc);
+    
 }
 
 
@@ -12011,7 +12016,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 if (((parent->parent)->highlighted_route) != -1) {
                     //in this case, I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
 
-                    (((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position) = route_position_start_drag;
+                    (((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position) = route_position_drag_start;
 
                     TabulateRoutes();
                     Refresh();
@@ -12339,9 +12344,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 if ((parent->parent->highlighted_route) != -1) {
                     //set route_position_start_drag to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
 
+                    points_route_list_before.clear();
+                    points_route_list_before = points_route_list_now;
+
                     if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).type) == String("c")) {
 
-                        route_position_start_drag = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position);
+                        route_position_drag_start = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position);
 
                         if ((((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).related_sight).value) != -1) {
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
@@ -12356,7 +12364,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     }
                     else {
 
-                        route_position_start_drag = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position);
+                        route_position_drag_start = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position);
 
                     }
 
@@ -12455,7 +12463,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (ground) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
 
-                            GeoToDrawPanel(route_position_start_drag, &p, false);
+                            GeoToDrawPanel(route_position_drag_start, &p, false);
 
                             //this command is the same for all types of Routes
                             DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position));
@@ -12476,12 +12484,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).type) == String("c")) {
 
                                 //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position));
-                                route_position_start_drag.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position), String(""));
+                                route_position_drag_start.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position), String(""));
 
                             }
                             else {
 
-                                route_position_start_drag.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position), String(""));
+                                route_position_drag_start.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position), String(""));
 
                             }
 
@@ -12497,6 +12505,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //update the data of the Route under consideration in listcontrol_routes
                         (((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).update_wxListCtrl((parent->parent->highlighted_route), parent->parent->listcontrol_routes);
+
+                        points_route_list_before.clear();
+                        points_route_list_before = points_route_list_now;
+
 
                         //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {

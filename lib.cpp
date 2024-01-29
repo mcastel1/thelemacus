@@ -9632,6 +9632,7 @@ void DrawPanel::Draw_Mercator(void) {
 
 
     TabulateRoutes();
+    TabulatePositions();
 
     //tell PaintEvent that everything but highligghteable objects (coastlines, meridians ... ) must be re-drawn
     re_draw = true;
@@ -9847,6 +9848,7 @@ void DrawPanel::Draw_3D(void) {
     size_label_vertical = (GetTextExtent(wxString((Angle(0, 0.0).to_string(String("NS"), (display_precision.value), false)))).GetHeight());
 
     TabulateRoutes();
+    TabulatePositions();
 
 
     //draw labels on parallels

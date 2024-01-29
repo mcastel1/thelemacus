@@ -12336,13 +12336,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
         if (wxGetMouseState().LeftIsDown()) {
 
             if (!mouse_dragging) {
-                //in this case, the mouse has started dragging: If I am dragging a Route, I save the starting point of this Route into route_position_start_drag
+                //the mouse has started dragging: If I am dragging a Route, I save the starting point of this Route into route_reference_position_drag_now
 
                 //during the mouse drag, I disable DrawPanel::OnMouseMovement
                 this->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
 
                 if ((parent->parent->highlighted_route) != -1) {
-                    //set route_position_start_drag to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
+                    //set route_reference_position_drag_now to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
 
                     points_route_list_before.clear();
                     points_route_list_before = points_route_list_now;
@@ -12461,7 +12461,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             wxPoint p;
 
-                            //convert the coordinates of route_position_start_drag into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (ground) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
+                            //convert the coordinates of route_reference_position_drag_now into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (ground) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
 
                             GeoToDrawPanel(route_reference_position_drag_now, &p, false);
 
@@ -12473,13 +12473,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         if ((((parent->projection)->name)->GetValue()) == wxString("3D")) {
 
-                            //compose rotation with the rotation resulting from the drag and then apply it to route_position_start_drag: route_position_start_drag -> rotation^{-1}.(rotation due to drag).rotation.route_position_start_drag. In this way, when Render() will plot the position route_position_start_drag, it will apply to route_position_start_drag the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.route_position_start_drag = (rotation due to drag).rotation.route_position_start_drag, which is the desired result (i.e. route_position_start_drag rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                            //compose rotation with the rotation resulting from the drag and then apply it to route_reference_position_drag_now: route_reference_position_drag_now -> rotation^{-1}.(rotation due to drag).rotation.route_reference_position_drag_now. In this way, when Render() will plot the position route_reference_position_drag_now, it will apply to route_reference_position_drag_now the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.route_reference_position_drag_now = (rotation due to drag).rotation.route_reference_position_drag_now, which is the desired result (i.e. route_reference_position_drag_now rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                             rotation_now_drag =
                                 (rotation.inverse()) *
                                 rotation_start_end(position_start_drag, position_now_drag) *
                                 rotation;
 
-                            //                    (this->*GeoToDrawPanel)(route_position_start_drag, &p);
+                            //                    (this->*GeoToDrawPanel)(route_reference_position_drag_now, &p);
 
                             if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).type) == String("c")) {
 

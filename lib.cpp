@@ -8462,7 +8462,7 @@ void DrawPanel::RerenderSelectionRectangle(void) {
     RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc);
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderRoutes(dc, points_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderPositions(dc);
     
 }
@@ -8577,7 +8577,7 @@ void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc){
 void DrawPanel::RenderAll(wxDC& dc) {
 
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderRoutes(dc, points_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderPositions(dc);
     RenderMousePositionLabel(dc);
     
@@ -8650,11 +8650,11 @@ void DrawPanel::RerenderRoutes(void){
     wxClientDC dc(this);
 
     //wipe out the Routes at the preceeding mouse position
-    RenderRoutes(dc, points_route_list_before, wxGetApp().background_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, wxGetApp().background_color, wxGetApp().background_color);
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderRoutes(dc, points_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderPositions(dc);
     
 }

@@ -8698,7 +8698,7 @@ void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, wxColor foregr
         }
         
         if(foreground_color != wxNullColour){
-            dc.SetPen(wxPen(foreground_color));
+            dc.SetPen(wxPen(foreground_color, thickness));
         }else{
             dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
         }

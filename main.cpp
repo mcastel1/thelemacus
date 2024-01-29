@@ -103,7 +103,6 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
- - put back colors in RenderRoutes
  - revise void DrawPanel::CleanSelectionRectangle(void) { in such a way that the start label of selection rectangle is not drawn twice and thus it does not look like it is bold face
 - remove wxScrollEventHandler ... and similar stuff
   - rename Route::t -> time

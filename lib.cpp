@@ -8462,7 +8462,7 @@ void DrawPanel::RerenderSelectionRectangle(void) {
     RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc);
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc);
     
 }
@@ -8577,7 +8577,7 @@ void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc){
 void DrawPanel::RenderAll(wxDC& dc) {
 
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc);
     RenderMousePositionLabel(dc);
     
@@ -8596,20 +8596,16 @@ void DrawPanel::RenderAll(wxDC& dc) {
 
 }
 
-//render the Routes whose point coordinates with respect to the origin of DrawPanel are stored in points_curves, and whose reference-position coordinates with respect to the origin of DrawPanel are stored in reference_positions
-void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > points_curves, vector<wxPoint> reference_positions, wxColor foreground_color, wxColor background_color) {
+//render the Routes whose point coordinates with respect to the origin of DrawPanel are stored in points_curves, and whose reference-position coordinates with respect to the origin of DrawPanel are stored in reference_positions. If foreground_color != wxNUllColour, the Routes are rendered with the colors in color_list, otherwise they are rendered with foreground_color
+void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > points_curves, vector<wxPoint> reference_positions, wxColor foreground_color) {
 
     int i, j, color_id;
     double thickness, radius;
     wxPoint p;
-    
-    dc.SetPen(foreground_color);
-    dc.SetTextForeground(foreground_color);
-    dc.SetTextBackground(background_color);
 
-        //draw Routes
+    //draw Routes
     for (i = 0, color_id = 0; i < (points_curves.size()); i++) {
-
+        
         //set the route thickness and pen
         if (i == ((parent->parent)->highlighted_route)) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
@@ -8619,29 +8615,33 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
             thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = 4 * thickness;
         }
-        //        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
-        dc.SetPen(wxPen(foreground_color, thickness));
-
+        
+        if(foreground_color != wxNullColour){
+            dc.SetPen(wxPen(foreground_color, thickness));
+        }else{
+            dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
+        }
+        
         //draw  reference_position[i] only if it is included in the plot area
         if (DrawPanelToGeo(reference_positions[i], NULL)) {
             dc.DrawCircle(reference_positions[i], radius);
         }
-
+        
         //draw the route points
         //run over all connected chunks of routes
         for (j = 0; j < (points_curves[i]).size(); j++) {
-
+            
             if ((points_curves[i][j]).size() > 1) {
                 //I need to add this consdition to make sure that I am not drawing an empty connected chunk
-
+                
                 dc.DrawSpline((int)((points_curves[i][j]).size()), (points_curves[i][j]).data());
-
+                
             }
-
+            
         }
-
+        
     }
-
+    
 }
 
 
@@ -8650,11 +8650,11 @@ void DrawPanel::RerenderRoutes(void){
     wxClientDC dc(this);
 
     //wipe out the Routes at the preceeding mouse position
-    RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, wxGetApp().background_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, wxGetApp().background_color);
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc);
     
 }

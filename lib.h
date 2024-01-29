@@ -1880,6 +1880,7 @@ public:
     void RenderRoutes(wxDC&, vector< vector< vector<wxPoint> > >, vector<wxPoint>, wxColor);
     void RerenderRoutes(void);
     void RenderPositions(wxDC&, wxColor);
+    void RerenderPositions(void);
     void RenderMousePositionLabel(wxDC&);
     void RerenderMousePositionLabel(void);
     void RenderSelectionRectangle(wxDC&, wxPoint, wxColor, wxColor);

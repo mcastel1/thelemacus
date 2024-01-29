@@ -8659,6 +8659,21 @@ void DrawPanel::RerenderRoutes(void){
     
 }
 
+
+void DrawPanel::RerenderPositions(void){
+    
+    wxClientDC dc(this);
+
+    //wipe out the Positions at the preceeding mouse position
+    RenderPositions(dc, points_position_list_before,  wxGetApp().background_color);
+    
+    //re-render all  objects in *this which may have been partially cancelled by the clean operation above
+    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
+    RenderPositions(dc, wxNullColour);
+    
+}
+
 //render the Positions:  if foreground_color == wxNullColour, this method uses as foreground color the colors in color_list, otherwise it uses foreground_color
 void DrawPanel::RenderPositions(wxDC& dc, wxColor foreground_color) {
 

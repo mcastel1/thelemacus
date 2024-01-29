@@ -8350,6 +8350,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
     //allocates points_route_list and ts_route_list
     points_route_list_now.resize((((parent->parent)->data)->route_list).size());
+    reference_positions_route_list_now.resize((((parent->parent)->data)->route_list).size());
     for (i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
         (points_route_list_now[i]).clear();
     }
@@ -8595,8 +8596,8 @@ void DrawPanel::RenderAll(wxDC& dc) {
 
 }
 
-
-void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > points, wxColor foreground_color, wxColor background_color) {
+//render the Routes whose point coordinates with respect to the origin of DrawPanel are stored in points_curves, and whose reference-position coordinates with respect to the origin of DrawPanel are stored in reference_positions
+void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > points_curves, vector<wxPoint> reference_positions, wxColor foreground_color, wxColor background_color) {
 
     int i, j, color_id;
     double thickness, radius;
@@ -8607,7 +8608,7 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
     dc.SetTextBackground(background_color);
 
         //draw Routes
-    for (i = 0, color_id = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
+    for (i = 0, color_id = 0; i < (points_curves.size()); i++) {
 
         //set the route thickness and pen
         if (i == ((parent->parent)->highlighted_route)) {
@@ -8621,19 +8622,19 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
         //        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
         dc.SetPen(wxPen(foreground_color, thickness));
 
-        //draw the reference_position
-        if (GeoToDrawPanel((((((parent->parent)->data)->route_list)[i]).reference_position), &p, false)) {
-            dc.DrawCircle(p, radius);
+        //draw  reference_position[i] only if it is included in the plot area
+        if (DrawPanelToGeo(reference_positions[i], NULL)) {
+            dc.DrawCircle(reference_positions[i], radius);
         }
 
         //draw the route points
         //run over all connected chunks of routes
-        for (j = 0; j < (points[i]).size(); j++) {
+        for (j = 0; j < (points_curves[i]).size(); j++) {
 
-            if ((points[i][j]).size() > 1) {
+            if ((points_curves[i][j]).size() > 1) {
                 //I need to add this consdition to make sure that I am not drawing an empty connected chunk
 
-                dc.DrawSpline((int)((points[i][j]).size()), (points[i][j]).data());
+                dc.DrawSpline((int)((points_curves[i][j]).size()), (points_curves[i][j]).data());
 
             }
 

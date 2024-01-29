@@ -1877,7 +1877,7 @@ public:
     void RerenderBackground(void);
     void RenderAll(wxDC&);
     void RenderBackground(wxDC&, wxColor, wxColor);
-    void RenderRoutes(wxDC&, vector< vector< vector<wxPoint> > >, wxColor, wxColor);
+    void RenderRoutes(wxDC&, vector< vector< vector<wxPoint> > >, vector<wxPoint>, wxColor, wxColor);
     void RerenderRoutes(void);
     void RenderPositions(wxDC&);
     void RenderMousePositionLabel(wxDC&);

@@ -8398,8 +8398,16 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
 void DrawPanel::RerenderBackground(void) {
     
-
+    wxClientDC dc(this);
     
+    //wipe out the background at the preceeding step of the drag by painting on it with background_color
+    RenderBackground(dc, wxGetApp().background_color, wxGetApp().background_color);
+
+    //re-render all  objects in *this which may have been partially cancelled by the clean operation above
+    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
+    RenderPositions(dc, points_position_list_now, wxNullColour);
+  
 }
 
 //erase label_position_before, the label of the previous mouse position before the last mouse movement, by drawing on top of it with color background_color, and draw the new label

@@ -12016,7 +12016,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 if (((parent->parent)->highlighted_route) != -1) {
                     //in this case, I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
 
-                    (((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position) = route_reference_position_drag_now;
+                    (((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route)]).reference_position) = route_reference_position_drag_start;
 
                     TabulateRoutes();
                     Refresh();
@@ -12349,7 +12349,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                     if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).type) == String("c")) {
 
-                        route_reference_position_drag_now = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position);
+                        route_reference_position_drag_start = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position);
 
                         if ((((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).related_sight).value) != -1) {
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
@@ -12364,7 +12364,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     }
                     else {
 
-                        route_reference_position_drag_now = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position);
+                        route_reference_position_drag_start = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position);
 
                     }
 
@@ -12462,7 +12462,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //convert the coordinates of route_reference_position_drag_now into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (ground) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
 
-                            GeoToDrawPanel(route_reference_position_drag_now, &p, false);
+                            GeoToDrawPanel(route_reference_position_drag_start, &p, false);
 
                             //this command is the same for all types of Routes
                             DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position));
@@ -12483,12 +12483,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).type) == String("c")) {
 
                                 //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position));
-                                route_reference_position_drag_now.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position), String(""));
+                                route_reference_position_drag_start.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position), String(""));
 
                             }
                             else {
 
-                                route_reference_position_drag_now.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position), String(""));
+                                route_reference_position_drag_start.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position), String(""));
 
                             }
 

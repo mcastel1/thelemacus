@@ -103,6 +103,7 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
+ - when you zoom in in 3d projection all the positions appear at the center of the disk
  - when you drag an object, disable the label of the instanteaneous mosue postion
  - revise void DrawPanel::CleanSelectionRectangle(void) { in such a way that the start label of selection rectangle is not drawn twice and thus it does not look like it is bold face
 - remove wxScrollEventHandler ... and similar stuff

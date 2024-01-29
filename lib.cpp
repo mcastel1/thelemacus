@@ -9264,21 +9264,25 @@ void DrawPanel::Render_3D(wxDC* dc, wxColor foreground_color, wxColor background
 
 
 
-//this function tabulates into points_route_list the points of all Routes. points_route_list will then be used to plot the Routes
+//this function tabulates into points_route_list_now and reference_positions_route_list_now the points and reference Positions, respectively, of all Routes. points_route_list will then be used to plot the Routes
 void DrawPanel::TabulateRoutes(void) {
 
     unsigned int i;
     wxPoint p;
 
-    //resize points_route_list, which needs to have the same size as (data->route_list), and clear up points_route_list
+    //resize points_route_list_now and reference_position_route_list_now, which needs to have the same size as (data->route_list), and clear up points_route_list
     points_route_list_now.resize((((parent->parent)->data)->route_list).size());
     for (i = 0; i < (points_route_list_now.size()); i++) {
         (points_route_list_now[i]).clear();
     }
+    
+    reference_positions_route_list_now.clear();
+    reference_positions_route_list_now.resize((((parent->parent)->data)->route_list).size());
 
     //tabulate the points of routes
     for (i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
 
+        //write the points of the curves corresponding to the Routes into points_route_list_now
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
         if (((((parent->parent)->data)->route_list)[i]).type != String("l")) {
 
@@ -9290,6 +9294,9 @@ void DrawPanel::TabulateRoutes(void) {
             ((((parent->parent)->data)->route_list)[i]).DrawOld((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list_now.data()) + i, String(""));
 
         }
+        
+        //write the reference Positions into reference_positions_route_list_now
+        GeoToDrawPanel(   ((((parent->parent)->data)->route_list)[i]).reference_position, (reference_positions_route_list_now.data())+i, true);
 
     }
 

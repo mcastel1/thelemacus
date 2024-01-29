@@ -8463,7 +8463,7 @@ void DrawPanel::RerenderSelectionRectangle(void) {
     RenderSelectionRectangleLabels(dc);
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
-    RenderPositions(dc);
+    RenderPositions(dc, wxNullColour);
     
 }
 
@@ -8578,7 +8578,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
 
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
-    RenderPositions(dc);
+    RenderPositions(dc, wxNullColour);
     RenderMousePositionLabel(dc);
     
     //draw selection_rectangle and its labels
@@ -8655,17 +8655,16 @@ void DrawPanel::RerenderRoutes(void){
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
-    RenderPositions(dc);
+    RenderPositions(dc, wxNullColour);
     
 }
 
-
-void DrawPanel::RenderPositions(wxDC& dc) {
+//render the Positions:  if foreground_color == wxNullColour, this method uses as foreground color the colors in color_list, otherwise it uses foreground_color
+void DrawPanel::RenderPositions(wxDC& dc, wxColor foreground_color) {
 
     int i, color_id;
     double thickness, radius;
     wxPoint p;
-    //    wxPaintDC dc(this);
 
 
         //draw Positions
@@ -8680,7 +8679,12 @@ void DrawPanel::RenderPositions(wxDC& dc) {
             thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = 4 * thickness;
         }
-        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
+        
+        if(foreground_color != wxNullColour){
+            dc.SetPen(wxPen(foreground_color));
+        }else{
+            dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
+        }
 
         if (GeoToDrawPanel((((parent->parent)->data)->position_list)[i], &p, false)) {
             //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it

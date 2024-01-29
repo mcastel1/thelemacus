@@ -2585,8 +2585,8 @@ public:
     ProjectionField<ChartFrame>* projection;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/lambda_min, lambda_max;
-    //in p_coastline_draw, I store the 2d coordindates  in DrawPanel coordinates of coastline data p_coastline
-    vector<wxPoint> p_coastline_draw;
+    //in point_coastline_now, I store the 2d coordindates  in DrawPanel coordinates of coastline data p_coastline
+    vector<wxPoint> points_coastline_now;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling, /*this is true if the chart is being dragged, and thus the size of *this must not change across multiple Draw(s), and false otherwise*/ dragging_chart;
     //This is the actual value of the maximal zoom factor allowed

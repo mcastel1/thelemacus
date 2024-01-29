@@ -7884,7 +7884,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
     //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
     n_points_grid = (i_max - i_min + 1) * (j_max - j_min + 1);
 
-    p_coastline_draw.clear();
+    points_coastline_now.clear();
 
     //    clock_t t_start, t_end/*, ta, tb*/;
     //    double T_I, T_II;
@@ -8004,7 +8004,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
                     //I write points in data_x and data_y to x and y in such a way to write (((parent->data)->n_points_coastline).value) points to the most
                     if (b) {
 
-                        p_coastline_draw.push_back(q);
+                        points_coastline_now.push_back(q);
 
                     }
 
@@ -8083,7 +8083,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
     if ((parent->show_coastlines) == Answer('y', String(""))) {
 
-        p_coastline_draw.clear();
+        points_coastline_now.clear();
 
         for (i = i_min; i < i_max; i++) {
 
@@ -8112,7 +8112,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                         //                            (temp.x) += 2.0*M_PI;
                         //                        }
 
-                        p_coastline_draw.push_back(temp);
+                        points_coastline_now.push_back(temp);
 
                     }
 
@@ -8792,8 +8792,7 @@ void DrawPanel::Render_Mercator(wxDC* dc, wxColor foreground_color, wxColor back
     int i;
 
 
-    //draws two rectangles (representing the borders) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color. Here I set the pen color equal to the foreground color, because I want the border of the rectangle to have the foreground color
-
+    //draw a rectangle (representing the border) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color
     dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
     dc->SetPen(wxPen(foreground_color));
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
@@ -8805,49 +8804,12 @@ void DrawPanel::Render_Mercator(wxDC* dc, wxColor foreground_color, wxColor back
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for (i = 0; i < (parent->p_coastline_draw).size(); i++) {
-        dc->DrawEllipse((parent->p_coastline_draw)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
+    for (i = 0; i < (parent->points_coastline_now).size(); i++) {
+        dc->DrawEllipse((parent->points_coastline_now)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
 
-    /*
-        //draw routes
-        for (i = 0, color_id = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
-
-            if (i == ((parent->parent)->highlighted_route)) {
-                thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-                radius = thickness;
-            }
-            else {
-                thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-                radius = 4 * thickness;
-            }
-
-            dc->SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
-
-
-            //draw the reference position
-            if (GeoToDrawPanel((((((parent->parent)->data)->route_list)[i]).reference_position), &p, false)) {
-                dc->DrawCircle(p, radius);
-            }
-
-
-
-            //run over all connected chunks of routes
-            for (j = 0; j < (points_route_list[i]).size(); j++) {
-
-                if ((points_route_list[i][j]).size() > 1) {
-                    //I need to add this consdition to make sure that I am not drawing an empty connected chunk
-
-                    dc->DrawSpline((int)((points_route_list[i][j]).size()), (points_route_list[i][j]).data());
-
-                }
-
-            }
-
-        }
-    */
-
+  
     //set thickness to normal thicnkness
     thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
 
@@ -8979,34 +8941,6 @@ void DrawPanel::Render_Mercator(wxDC* dc, wxColor foreground_color, wxColor back
         dc->DrawText(labels_phi[i], positions_labels_phi[i] + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2));
 
     }
-
-
-    /*
-    //draw positions
-    for (i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
-
-        if (i == ((parent->parent)->highlighted_position)) {
-            thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-            radius = thickness;
-        }
-        else {
-            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-            radius = 4 * thickness;
-        }
-
-        dc->SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
-
-
-        if (GeoToDrawPanel((((parent->parent)->data)->position_list)[i], &p, false)) {
-            //if the point returned from GeoToDrawPanel falls within the plot area, then I plot it
-
-            dc->DrawCircle(p, radius);
-        }
-
-
-    }
-*/
-
 
 }
 
@@ -9154,9 +9088,9 @@ void DrawPanel::Render_3D(wxDC* dc, wxColor foreground_color, wxColor background
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for (i = 0; i < (parent->p_coastline_draw).size(); i++) {
+    for (i = 0; i < (parent->points_coastline_now).size(); i++) {
         //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
-        dc->DrawEllipse((parent->p_coastline_draw)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
+        dc->DrawEllipse((parent->points_coastline_now)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
 
@@ -9677,7 +9611,7 @@ void DrawPanel::Draw_Mercator(void) {
     //tell PaintEvent that everything but highligghteable objects (coastlines, meridians ... ) must be re-drawn
     re_draw = true;
 
-    //    (parent->p_coastline_draw).clear();
+    //    (parent->point_coastline_now).clear();
 
 
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
@@ -9920,7 +9854,7 @@ void DrawPanel::Draw_3D(void) {
     }
 
 
-    //    (parent->p_coastline_draw).clear();
+    //    (parent->point_coastline_now).clear();
 
     //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
     //    parent->CenterOnScreen();

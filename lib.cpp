@@ -8589,7 +8589,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
         RenderSelectionRectangleLabels(dc);
     }
 
-    if ((parent->dragging_object)) {
+    if ((parent->parent->dragging_object)) {
         //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
         RenderDraggedObjectLabel(dc);
     }
@@ -10051,8 +10051,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
 
     //when a ChartFrame is created, the chart is not being dragged
     dragging_chart = false;
-    //when a ChartFrame is created, no Route nor Position is  being dragged
-    dragging_object = false;
 
     //read lambda_min, ...., phi_max from file_init
     lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
@@ -11181,62 +11179,62 @@ template<class P> CheckSign<P>::CheckSign(AngleField<P>* p_in) {
 
 //checks the value of the sign in the GUI field
 template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
-
+    
     P* f = (p->parent);
-
+    
     //I proceed only if the progam is not is in idling mode
     if (!(f->idling)) {
-
+        
         unsigned int i;
         bool check;
-
+        
         //I check whether the name in the GUI field sign matches one of the sign values in the list signs
         if ((p->format) == String("")) {
             //if the AngleField p has no sign, the check is ok
-
+            
             check = true;
-
+            
         }
         else {
             //if the AngleField p has a sign, I check it
-
+            
             for (check = false, i = 0; (i < ((p->signs).GetCount())) && (!check); i++) {
                 if (((p->sign)->GetValue()) == (p->signs)[i]) {
                     check = true;
                 }
             }
-
+            
         }
-
-
+        
+        
         if (check || ((((p->sign)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->sign)->GetValue()).ToStdString())) == String("")))) {
             //p->sign either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
-
+            
             //if check is true (false) -> set sign_ok to true (false)
             (p->sign_ok) = check;
-
+            
             if ((p->format) != String("")) {
                 //there exists a p->sign field
-
+                
                 //the background color is set to white, because in this case there is no erroneous value in sign
                 (p->sign)->SetForegroundColour(wxGetApp().foreground_color);
                 (p->sign)->SetFont(wxGetApp().default_font);
             }
-
+            
         }
         else {
-
+            
             (f->print_error_message)->SetAndCall((p->sign), String("Sign is not valid!"), String("Sign must be +-, NS or EW."), (wxGetApp().path_file_error_icon));
             (p->sign_ok) = false;
-
+            
         }
-
+        
         f->AllOk();
-
+        
     }
-
+    
     event.Skip(true);
-
+    
 }
 
 
@@ -11644,6 +11642,10 @@ void DrawPanel::ShowCoordinates(Position q, String* label) {
 
 //given a geographic Positiojn q, if q lies within *this, write in label a text with the geographic coordinates corresponding to q, and write in *position the position of the label close to q (with some margin, for clarity). Otherwise, write "" in label and does nothing witg poisition
 void DrawPanel::SetLabelAndPosition(Position q, wxPoint* position, String* label) {
+    
+    string xx;
+    
+    xx = parent->projection->name->GetValue().ToStdString();
 
     if (
         /*GeoToDrawPanel converts q into the wxPoint position, reckoned with respect to the origin *this*/(this->GeoToDrawPanel)(q, position, false)) {
@@ -11656,7 +11658,10 @@ void DrawPanel::SetLabelAndPosition(Position q, wxPoint* position, String* label
 
         (*label) = String("");
 
+        
     }
+    
+    cout << "x";
 
 }
 
@@ -12098,7 +12103,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
         else {
             //in this case, I am dragging a Route or Position
 
-            (parent->dragging_object) = false;
+            (parent->parent->dragging_object) = false;
 
             //given that the drag is finished, I set to empty label_dragged_object
             label_dragged_object_now = String("");
@@ -12542,7 +12547,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                     unsigned int i;
 
-                    (parent->dragging_object) = true;
+                    (parent->parent->dragging_object) = true;
 
                     //the data in the file are being modified -> I call
                     parent->parent->OnModifyFile();
@@ -12655,17 +12660,28 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         }
 
-                        //draw the label of the coordinates of the Position which is being dragged
-                        //store the string with the coordinated of the Position that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                        label_dragged_object_before = label_dragged_object_now;
-                        position_label_dragged_object_before = position_label_dragged_object_now;
-                        SetLabelAndPosition(position_now_drag, &position_label_dragged_object_now, &label_dragged_object_now);
+//                        //draw the label of the coordinates of the Position which is being dragged
+//                        //store the string with the coordinated of the Position that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
+//                        label_dragged_object_before = label_dragged_object_now;
+//                        position_label_dragged_object_before = position_label_dragged_object_now;
+//                        SetLabelAndPosition(position_now_drag, &position_label_dragged_object_now, &label_dragged_object_now);
 
                         //update the data of the Position under consideration in listcontrol_positions
-                        (((parent->parent->data)->position_list)[(parent->parent->highlighted_position)]).update_wxListCtrl((parent->parent->highlighted_position), parent->parent->listcontrol_positions);
+                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position)]).update_wxListCtrl((parent->parent->highlighted_position), parent->parent->listcontrol_positions);
 
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
+                            
+                            //show the coordinates of the reference position of the Route that is being dragged
+                            //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
+                            (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
+                            (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
+                            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
+                                                (parent->parent->data->position_list)[(parent->parent->highlighted_position)],
+                                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                                                );
+                            
                             
                             ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
@@ -16092,6 +16108,9 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     transporting_with_new_route = false;
     transporting_with_selected_route = false;
     abort = false;
+    //when a ListFrame is created, no Route nor Position is  being dragged
+    dragging_object = false;
+
 
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);

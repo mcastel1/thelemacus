@@ -1887,6 +1887,7 @@ public:
     void RerenderSelectionRectangle(void);
     void RenderSelectionRectangleLabels(wxDC&);
     void TabulateRoutes(void);
+    void TabulatePositions(void);
     void FitAll();
     
     bool ScreenToDrawPanel(wxPoint, wxPoint*);

@@ -9283,7 +9283,7 @@ void DrawPanel::Render_3D(wxDC* dc, wxColor foreground_color, wxColor background
 
 
 
-//this function tabulates into points_route_list_now and reference_positions_route_list_now the points and reference Positions, respectively, of all Routes. points_route_list will then be used to plot the Routes
+//this function tabulates into points_route_list_now and reference_positions_route_list_now the points and reference Positions, respectively, of all Routes. points_route_list will then be used to render the Routes
 void DrawPanel::TabulateRoutes(void) {
 
     unsigned int i;
@@ -9320,6 +9320,28 @@ void DrawPanel::TabulateRoutes(void) {
     }
 
 }
+
+
+
+//tabulate into points_position_list_now all the Positions. points_position_list will then be used to render the Positions
+void DrawPanel::TabulatePositions(void) {
+
+    unsigned int i;
+
+    //resize points_position_list_now and, which needs to have the same size as (data->position_list)
+    points_position_list_now.clear();
+    points_position_list_now.resize((parent->parent->data->position_list).size());
+
+    //tabulate the points of Positions
+    for (i = 0; i < (parent->parent->data->position_list.size()); i++) {
+        
+        //write the  Positions into points_position_list_now
+        GeoToDrawPanel( (parent->parent->data->position_list)[i], (points_position_list_now.data())+i, true);
+
+    }
+
+}
+
 
 
 //draws coastlines, Routes and Positions on the Mercator-projection case

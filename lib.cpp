@@ -8392,28 +8392,13 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     wxPaintDC dc(this);
     
     RenderAll(dc);
-    
-    //    RenderBackground(dc);
-    //    RenderRoutes(dc);
-    //    RenderPositions(dc);
-    //    RenderMousePositionLabel(dc);
-    
-    
+
 }
 
 
 void DrawPanel::RerenderBackground(void) {
     
-//    wxClientDC dc(this);
-//    
-//    RenderBackground(dc, wxGetApp().background_color, wxGetApp().foreground_color);
-//    
-//    //re-render all the other objects in *this which may have been partially cancelled by the clean operation above
-//    RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
-//    RenderSelectionRectangleLabels(dc);
-//    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-//    RenderRoutes(dc);
-//    RenderPositions(dc);
+
     
 }
 
@@ -9356,9 +9341,6 @@ void DrawPanel::TabulateRoutes(void) {
             //the reference position does not fall in the plot area -> write a 'Null' value into reference_positions_route_list_now which will be ignored in other methods because it lies outside the plot area
             reference_positions_route_list_now[i] = wxPoint(0, 0);
         }
-        
-        
-//        GeoToDrawPanel(   ((((parent->parent)->data)->route_list)[i]).reference_position, (reference_positions_route_list_now.data())+i, false);
 
     }
 
@@ -9370,6 +9352,7 @@ void DrawPanel::TabulateRoutes(void) {
 void DrawPanel::TabulatePositions(void) {
 
     unsigned int i;
+    wxPoint p;
 
     //resize points_position_list_now and, which needs to have the same size as (data->position_list)
     points_position_list_now.clear();
@@ -9378,9 +9361,15 @@ void DrawPanel::TabulatePositions(void) {
     //tabulate the points of Positions
     for (i = 0; i < (parent->parent->data->position_list.size()); i++) {
         
-        //write the  Positions into points_position_list_now
-        GeoToDrawPanel( (parent->parent->data->position_list)[i], (points_position_list_now.data())+i, true);
-
+        //write the reference Positions into reference_positions_route_list_now
+        if(GeoToDrawPanel((parent->parent->data->position_list)[i], &p, false)){
+            //the  position falls in the plot area -> write it into points_position_list_now
+            points_position_list_now[i] = p;
+        }else{
+            //the  position does not fall in the plot area -> write a 'Null' value into points_position_list_now which will be ignored in other methods because it lies outside the plot area
+            points_position_list_now[i] = wxPoint(0, 0);
+        }
+ 
     }
 
 }
@@ -12443,11 +12432,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 if ((parent->parent->highlighted_route) != -1) {
                     //set route_reference_position_drag_now to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
 
-//                    points_route_list_before.clear();
-//                    points_route_list_before = points_route_list_now;
-//                    reference_positions_route_list_before.clear();
-//                    reference_positions_route_list_before = reference_positions_route_list_now;
-
                     if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).type) == String("c")) {
 
                         route_reference_position_drag_start = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position);
@@ -12460,7 +12444,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             parent->parent->Disconnect(event);
 
                         }
-
 
                     }
                     else {
@@ -12485,7 +12468,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 //position_drag_now is a valid Position
 
                 if ((((parent->parent->highlighted_route) == -1) && ((parent->parent->highlighted_position) == -1))) {
-                    //I am dragging the whole chart (the mouse is not over a route nor a position when dragging)
+                    //the whole chart is being dragged (the mouse is not over a Route nor a Position while dragging)
 
                     (parent->dragging_chart) = true;
 

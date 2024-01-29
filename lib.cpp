@@ -8366,7 +8366,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     start_label_selection_rectangle = String("");
     end_label_selection_rectangle_now = String("");
     end_label_selection_rectangle_before = String("");
-    label_dragged_object = String("");
+    label_dragged_object_now = String("");
 
     //    text_position_start->SetBackgroundColour(wxGetApp().background_color);
     //    text_position_end->SetBackgroundColour(wxGetApp().background_color);
@@ -8592,7 +8592,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
     if ((parent->dragging_object)) {
         //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
 
-        dc.DrawText(wxString(label_dragged_object.value), position_label_dragged_object);
+        dc.DrawText(wxString(label_dragged_object_now.value), position_label_dragged_object_now);
 
     }
 
@@ -8724,8 +8724,30 @@ void DrawPanel::RenderMousePositionLabel(wxDC& dc) {
 void DrawPanel::RenderDraggedObjectLabel(wxDC& dc) {
 
     dc.SetTextForeground(wxGetApp().foreground_color);
-    dc.DrawText(wxString(label_dragged_object.value), position_label_dragged_object);
+    dc.DrawText(wxString(label_dragged_object_now.value), position_label_dragged_object_now);
 
+}
+
+
+//erase the previous label of the object which is being dragged, by drawing on top of it with color background_color, and draw the new one
+void DrawPanel::RerenderDraggedObjectLabel(void) {
+    
+    wxClientDC dc(this);
+    
+    //wipe out position_label_position_before by writin the text in position_label_position_before with color backgound_color
+    /*
+     dc.SetTextForeground(wxGetApp().background_color);
+     dc.SetTextBackground(wxGetApp().background_color);
+     dc.DrawText(wxString(label_position_before.value), position_label_position_now);
+     */
+    
+    //wipe out position_label_position_before by writing on top of it a rectangle filled with color backgound_color
+    dc.SetPen(wxGetApp().background_color);
+    dc.SetBrush(wxBrush(wxGetApp().background_color));
+    dc.DrawRectangle(position_label_dragged_object_before, label_dragged_object_before.get_size(this));
+    
+    RenderDraggedObjectLabel(dc);
+    
 }
 
 
@@ -12067,7 +12089,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             (parent->dragging_object) = false;
 
             //given that the drag is finished, I set to empty label_dragged_object
-            label_dragged_object = String("");
+            label_dragged_object_now = String("");
 
             if (!(((((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.GetWidth()))) &&
                 (((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) + (size_plot_area.GetHeight())))))) {
@@ -12562,8 +12584,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
                         SetLabelAndPosition(
                                             (((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position,
-                                            &position_label_dragged_object, 
-                                            &label_dragged_object
+                                            &position_label_dragged_object_now, 
+                                            &label_dragged_object_now
                                             );
 
                         //update the data of the Route under consideration in listcontrol_routes
@@ -12618,7 +12640,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //draw the label of the coordinates of the Position which is being dragged
                         //store the string with the coordinated of the Position that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                        SetLabelAndPosition(position_now_drag, &position_label_dragged_object, &label_dragged_object);
+                        SetLabelAndPosition(position_now_drag, &position_label_dragged_object_now, &label_dragged_object_now);
 
                         //update the data of the Position under consideration in listcontrol_positions
                         (((parent->parent->data)->position_list)[(parent->parent->highlighted_position)]).update_wxListCtrl((parent->parent->highlighted_position), parent->parent->listcontrol_positions);

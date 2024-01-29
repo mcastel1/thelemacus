@@ -12352,10 +12352,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 if ((parent->parent->highlighted_route) != -1) {
                     //set route_reference_position_drag_now to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
 
-                    points_route_list_before.clear();
-                    points_route_list_before = points_route_list_now;
-                    reference_positions_route_list_before.clear();
-                    reference_positions_route_list_before = reference_positions_route_list_now;
+//                    points_route_list_before.clear();
+//                    points_route_list_before = points_route_list_now;
+//                    reference_positions_route_list_before.clear();
+//                    reference_positions_route_list_before = reference_positions_route_list_now;
 
                     if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).type) == String("c")) {
 
@@ -12516,26 +12516,28 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //update the data of the Route under consideration in listcontrol_routes
                         (((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).update_wxListCtrl((parent->parent->highlighted_route), parent->parent->listcontrol_routes);
-
-                        points_route_list_before.clear();
-                        points_route_list_before = points_route_list_now;
-                        reference_positions_route_list_before.clear();
-                        reference_positions_route_list_before = reference_positions_route_list_now;
-
-
-                        //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
-                        parent->parent->TabulateRoutesAll();
+                        
+                        
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-
+                            
+                            //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels
+                            ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
+                            (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
+                            ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
+                            (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
+                            
+                            //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
+                            ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
+                            
 #ifdef __APPLE__
                             ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
 #endif
 #ifdef _WIN32
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderRoutes();
 #endif
-
+                            
                         }
-
+                        
                     }
 
                     if ((parent->parent->highlighted_position) != -1) {

@@ -12381,7 +12381,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 
             if ((this->*ScreenToGeo)(position_now_drag, NULL)) {
-                //position_drag_now is a valid position
+                //position_drag_now is a valid Position
 
                 if ((((parent->parent->highlighted_route) == -1) && ((parent->parent->highlighted_position) == -1))) {
                     //I am dragging the whole chart (the mouse is not over a route nor a position when dragging)
@@ -12455,7 +12455,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //the mouse is over a Route
 
                         wxPoint q;
-                        Position reference_position_dragged_route;
 
                         if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
@@ -12498,10 +12497,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //draw the label of the coordinates of the reference Position of the Route that is being dragged
 
                         //show the coordinates of the reference position of the Route that is being dragged
-                        //store the reference_position of the Route that is being dragged into reference_position_dragged_route, so PaintEvent will read it and draw the label of its coordinates on it
-                        reference_position_dragged_route = (((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position;
                         //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                        SetLabelAndPosition(reference_position_dragged_route, &position_label_dragged_object, &label_dragged_object);
+                        SetLabelAndPosition(
+                                            (((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position,
+                                            &position_label_dragged_object, 
+                                            &label_dragged_object
+                                            );
 
                         //update the data of the Route under consideration in listcontrol_routes
                         (((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).update_wxListCtrl((parent->parent->highlighted_route), parent->parent->listcontrol_routes);

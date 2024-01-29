@@ -8591,9 +8591,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
 
     if ((parent->dragging_object)) {
         //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
-
-        dc.DrawText(wxString(label_dragged_object_now.value), position_label_dragged_object_now);
-
+        RenderDraggedObjectLabel(dc);
     }
 
 }
@@ -12582,6 +12580,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //show the coordinates of the reference position of the Route that is being dragged
                         //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
+                        label_dragged_object_before = label_dragged_object_now;
+                        position_label_dragged_object_before = position_label_dragged_object_now;
                         SetLabelAndPosition(
                                             (((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position,
                                             &position_label_dragged_object_now, 
@@ -12601,7 +12601,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
                             
-                            //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
+                            //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts -> I rerender the Routes and the label of the Route which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
                             
 #ifdef __APPLE__
@@ -12609,6 +12609,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 #ifdef _WIN32
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderRoutes();
+                            ((parent->parent->chart_frames)[i])->draw_panel->RerenderDraggedObjectLabel();
 #endif
                             
                         }
@@ -12640,6 +12641,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //draw the label of the coordinates of the Position which is being dragged
                         //store the string with the coordinated of the Position that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
+                        label_dragged_object_before = label_dragged_object_now;
+                        position_label_dragged_object_before = position_label_dragged_object_now;
                         SetLabelAndPosition(position_now_drag, &position_label_dragged_object_now, &label_dragged_object_now);
 
                         //update the data of the Position under consideration in listcontrol_positions
@@ -12651,7 +12654,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
                             
-                            //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
+                            //given that the Positions under consideration has changed, I re-tabulate the Routes and re-paint the charts -> I rerender the Positions and the label of the Position which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
                             
 #ifdef __APPLE__
@@ -12659,6 +12662,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 #ifdef _WIN32
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderPositions();
+                            ((parent->parent->chart_frames)[i])->draw_panel->RerenderDraggedObjectLabel();
 #endif
 
                         }

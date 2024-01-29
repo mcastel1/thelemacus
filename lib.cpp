@@ -9325,7 +9325,7 @@ void DrawPanel::TabulateRoutes(void) {
     }
     
     reference_positions_route_list_now.clear();
-    reference_positions_route_list_now.resize((parent->parent->data->route_list).size());
+    reference_positions_route_list_now.resize((parent->parent->data->route_list.size()));
 
     //tabulate the points of routes
     for (i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
@@ -9344,7 +9344,16 @@ void DrawPanel::TabulateRoutes(void) {
         }
         
         //write the reference Positions into reference_positions_route_list_now
-        GeoToDrawPanel(   ((((parent->parent)->data)->route_list)[i]).reference_position, (reference_positions_route_list_now.data())+i, true);
+        if(GeoToDrawPanel(((parent->parent->data->route_list)[i]).reference_position, &p, false)){
+            //the reference position falls in the plot area -> write it into reference_positions_route_list_now
+            reference_positions_route_list_now[i] = p;
+        }else{
+            //the reference position does not fall in the plot area -> write a 'Null' value into reference_positions_route_list_now which will be ignored in other methods because it lies outside the plot area
+            reference_positions_route_list_now[i] = wxPoint(0, 0);
+        }
+        
+        
+//        GeoToDrawPanel(   ((((parent->parent)->data)->route_list)[i]).reference_position, (reference_positions_route_list_now.data())+i, false);
 
     }
 
@@ -11565,7 +11574,7 @@ inline bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
 
 }
 
-//this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p.
+//this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p.
 inline bool DrawPanel::GeoToDrawPanel(Position q, wxPoint* p, bool write) {
 
     Projection temp;

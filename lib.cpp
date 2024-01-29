@@ -12354,6 +12354,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                     points_route_list_before.clear();
                     points_route_list_before = points_route_list_now;
+                    reference_positions_route_list_before.clear();
+                    reference_positions_route_list_before = reference_positions_route_list_now;
 
                     if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).type) == String("c")) {
 
@@ -12517,6 +12519,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         points_route_list_before.clear();
                         points_route_list_before = points_route_list_now;
+                        reference_positions_route_list_before.clear();
+                        reference_positions_route_list_before = reference_positions_route_list_now;
 
 
                         //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
@@ -15238,6 +15242,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         for (i = 0; i < (parent->chart_frames).size(); i++) {
 
             ((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).resize(((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).size() + 1);
+            ((((parent->chart_frames)[i])->draw_panel)->reference_positions_route_list_now).resize(((((parent->chart_frames)[i])->draw_panel)->reference_positions_route_list_now).size() + 1);
 
         }
     }

@@ -8744,6 +8744,11 @@ void DrawPanel::RerenderDraggedObjectLabel(void) {
     dc.SetBrush(wxBrush(wxGetApp().background_color));
     dc.DrawRectangle(position_label_dragged_object_before, label_dragged_object_before.get_size(this));
     
+    
+    //re-render all  objects in *this which may have been partially cancelled by the clean operation above
+    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
+    RenderPositions(dc, points_position_list_now, wxNullColour);
     RenderDraggedObjectLabel(dc);
     
 }

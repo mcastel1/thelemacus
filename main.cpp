@@ -104,8 +104,7 @@
  
  ********** THINGS TO FIX ************
  - when you zoom in in 3d projection all the positions appear at the center of the disk
- - when you drag an object, disable the label of the instanteaneous mosue postion
- - revise void DrawPanel::CleanSelectionRectangle(void) { in such a way that the start label of selection rectangle is not drawn twice and thus it does not look like it is bold face
+ - when you drag a position on a ChartFrame, its label is not shown in the other ChartFrames
 - remove wxScrollEventHandler ... and similar stuff
   - rename Route::t -> time
 - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on

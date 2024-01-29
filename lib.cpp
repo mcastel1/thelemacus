@@ -12590,23 +12590,25 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         }
 
-                        //draw the label of the coordinates of the reference Position of the Route that is being dragged
-
-                        //show the coordinates of the reference position of the Route that is being dragged
-                        //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                        label_dragged_object_before = label_dragged_object_now;
-                        position_label_dragged_object_before = position_label_dragged_object_now;
-                        SetLabelAndPosition(
-                                            (((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position,
-                                            &position_label_dragged_object_now, 
-                                            &label_dragged_object_now
-                                            );
+                     
+                  
 
                         //update the data of the Route under consideration in listcontrol_routes
                         (((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).update_wxListCtrl((parent->parent->highlighted_route), parent->parent->listcontrol_routes);
                         
                         
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
+                            
+                            //show the coordinates of the reference position of the Route that is being dragged
+                            //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
+                            (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
+                            (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
+                            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
+                                                ((parent->parent->data->route_list)[(parent->parent->highlighted_route)]).reference_position,
+                                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                                                );
+                            
                             
                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels
                             ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();

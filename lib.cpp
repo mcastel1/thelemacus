@@ -8349,11 +8349,13 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     //    rotation.print(String("initial rotation"), String(""), cout);
 
     //allocates points_route_list and ts_route_list
-    points_route_list_now.resize((((parent->parent)->data)->route_list).size());
-    reference_positions_route_list_now.resize((((parent->parent)->data)->route_list).size());
-    for (i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
-        (points_route_list_now[i]).clear();
-    }
+//    points_route_list_now.resize((((parent->parent)->data)->route_list).size());
+//    reference_positions_route_list_now.resize((((parent->parent)->data)->route_list).size());
+//    for (i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
+//        (points_route_list_now[i]).clear();
+//    }
+//    points_position_list_now.resize((((parent->parent)->data)->route_list).size());
+
 
     idling = false;
     unset_idling = new UnsetIdling<DrawPanel>(this);
@@ -9294,7 +9296,7 @@ void DrawPanel::TabulateRoutes(void) {
     }
     
     reference_positions_route_list_now.clear();
-    reference_positions_route_list_now.resize((((parent->parent)->data)->route_list).size());
+    reference_positions_route_list_now.resize((parent->parent->data->route_list).size());
 
     //tabulate the points of routes
     for (i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
@@ -12479,7 +12481,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     parent->parent->OnModifyFile();
 
                     if ((parent->parent->highlighted_route) != -1) {
-                        //the mouse is over a Route
+                        //a Route is being dragged
 
                         wxPoint q;
 
@@ -12540,6 +12542,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels
                             ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
+                            
                             ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
                             
@@ -12558,7 +12561,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     }
 
                     if ((parent->parent->highlighted_position) != -1) {
-                        //the mouse is over a Position
+                        //a Position is being dragged
 
                         wxPoint p;
 
@@ -12589,8 +12592,19 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-
+                            
+                            ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
+                            (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
+                            
+                            //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
+                            ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
+                            
+#ifdef __APPLE__
                             (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
+#endif
+#ifdef _WIN32
+                            ((parent->parent->chart_frames)[i])->draw_panel->RerenderPositions();
+#endif
 
                         }
 
@@ -15176,6 +15190,7 @@ void PositionFrame::OnPressCancel([[maybe_unused]] wxCommandEvent& event) {
 //this function is triggered when button_ok is pressed
 void PositionFrame::OnPressOk(wxCommandEvent& event) {
 
+    unsigned int i;
     stringstream s;
 
     if (label->value->GetValue().ToStdString() == "") {
@@ -15187,6 +15202,17 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
 
     }
 
+    //if I am adding a new Position, I resize points_position_list to add a new element to it
+    if (position_in_listcontrol_positions == -1) {
+
+        for (i = 0; i < (parent->chart_frames.size()); i++) {
+
+            ((((parent->chart_frames)[i])->draw_panel)->points_position_list_now).resize(((((parent->chart_frames)[i])->draw_panel)->points_position_list_now).size() + 1);
+            ((((parent->chart_frames)[i])->draw_panel)->points_position_list_now).resize(((((parent->chart_frames)[i])->draw_panel)->points_position_list_now).size() + 1);
+
+        }
+    }
+    
 
     //writes the values of the GUI fields in the non-GUI fields
     get(event);
@@ -15258,7 +15284,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     //if I am adding a new Route, I resize points_route_list to add a new element to it
     if (position_in_listcontrol_routes == -1) {
 
-        for (i = 0; i < (parent->chart_frames).size(); i++) {
+        for (i = 0; i < (parent->chart_frames.size()); i++) {
 
             ((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).resize(((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).size() + 1);
             ((((parent->chart_frames)[i])->draw_panel)->reference_positions_route_list_now).resize(((((parent->chart_frames)[i])->draw_panel)->reference_positions_route_list_now).size() + 1);

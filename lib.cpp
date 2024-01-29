@@ -12524,9 +12524,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 
                         //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts
+                        parent->parent->TabulateRoutesAll();
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
 
-                            (((parent->parent->chart_frames)[i])->draw_panel)->TabulateRoutes();
 #ifdef __APPLE__
                             Refresh();
 #endif

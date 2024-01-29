@@ -8720,6 +8720,15 @@ void DrawPanel::RenderMousePositionLabel(wxDC& dc) {
 }
 
 
+//render the coordinates of an object (Route or Position) which is being dragged
+void DrawPanel::RenderDraggedObjectLabel(wxDC& dc) {
+
+    dc.SetTextForeground(wxGetApp().foreground_color);
+    dc.DrawText(wxString(label_dragged_object.value), position_label_dragged_object);
+
+}
+
+
 //fit the size of the chart, of parent, of parent->panel to the content
 void DrawPanel::FitAll() {
 

@@ -1883,6 +1883,7 @@ public:
     void RerenderPositions(void);
     void RenderMousePositionLabel(wxDC&);
     void RerenderMousePositionLabel(void);
+    void RenderDraggedObjectLabel(wxDC&);
     void RenderSelectionRectangle(wxDC&, wxPoint, wxColor, wxColor);
     void RerenderSelectionRectangle(void);
     void RenderSelectionRectangleLabels(wxDC&);

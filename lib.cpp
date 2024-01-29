@@ -12528,10 +12528,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
 
 #ifdef __APPLE__
-                            Refresh();
+                            ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
 #endif
 #ifdef _WIN32
-                            RerenderRoutes();
+                            ((parent->parent->chart_frames)[i])->draw_panel->RerenderRoutes();
 #endif
 
                         }

@@ -9335,19 +9335,16 @@ void DrawPanel::Render_3D(wxDC* dc,
     d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
     dummy_projection = Projection(0.0, ((d.value) * gsl_vector_get(rp, 2)) / ((d.value) + 1.0 + gsl_vector_get(rp, 1)));
     //set the wxPen color for the horizon
-    dc->SetPen(wxPen(wxGetApp().color_horizon, 1));
-    dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
-    dc->SetBackground(wxGetApp().background_color);
+//    dc->SetPen(wxPen(wxGetApp().color_horizon, 1));
+    dc->SetPen(wxPen(foreground_color));
+    dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
+    dc->SetBackground(background_color);
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
     dc->DrawCircle(
         (position_plot_area.x) + (int)(((double)(size_plot_area.GetWidth())) / 2.0),
         (position_plot_area.y) + (int)(((double)(size_plot_area.GetHeight())) / 2.0),
         (dummy_projection.y) / y_max * ((double)(size_plot_area.GetWidth())) / 2.0
     );
-    //set back the pen  color and brush
-    dc->SetPen(wxPen(foreground_color, 1));
-    dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
-
 
 }
 
@@ -12805,11 +12802,39 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                         rotation =
                             rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
-
+#ifdef __APPLE__
 
                         //re-draw the chart
                         (this->*Draw)();
                         Refresh();
+#endif
+#ifdef WIN32
+                        //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used in RerenderBackground
+                        parent->points_coastline_before.clear();
+                        (parent->points_coastline_before) = (parent->points_coastline_now);
+                        
+                        grid_before.clear();
+                        grid_before = grid_now;
+                        ticks_before.clear();
+                        ticks_before = ticks_now;
+                 
+                        //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
+                        points_route_list_before.clear();
+                        points_route_list_before = points_route_list_now;
+                        
+                        points_position_list_before.clear();
+                        points_position_list_before = points_position_list_now;
+                        
+                        reference_positions_route_list_before.clear();
+                        reference_positions_route_list_before = reference_positions_route_list_now;
+                        
+                        //re-draw the chart
+                        (this->*Draw)();
+                        RerenderBackground();
+
+#endif
+
+                        
                         //						FitAll();
 
                     }

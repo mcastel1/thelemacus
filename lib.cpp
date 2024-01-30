@@ -9712,7 +9712,9 @@ void DrawPanel::Draw_Mercator(void) {
              (route.reference_position.lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
              (route.reference_position.lambda.value) += delta_lambda_minor) {
             
-            ticks_now.push_back(route);
+//            ticks_now.push_back(route);
+            ticks_now.resize((ticks_now.size())+1);
+            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
             
             //            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
             
@@ -9727,7 +9729,9 @@ void DrawPanel::Draw_Mercator(void) {
          (route.reference_position.lambda.value) += delta_lambda) {
         
         //add the current meridian that is being drawn (route) to meridians_now
-        grid_now.push_back(route);
+//        grid_now.push_back(route);
+        grid_now.resize((grid_now.size())+1);
+        route.Draw((parent->parent->data->n_points_routes.value), this, &(grid_now.back()), String(""));
         //             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
         
         if (gamma_lambda != 1) {
@@ -9741,7 +9745,9 @@ void DrawPanel::Draw_Mercator(void) {
                  (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
                  (route.reference_position.lambda.value) += delta_lambda_minor) {
                 
-                ticks_now.push_back(route);
+                //                ticks_now.push_back(route);
+                ticks_now.resize((ticks_now.size())+1);
+                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(grid_now.back()), String(""));
                 //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
             }
             
@@ -9774,7 +9780,9 @@ void DrawPanel::Draw_Mercator(void) {
                 ).value), String(""));
 
         //add the current parallel that is being drawn to parallels
-        grid_now.push_back(route);
+//        grid_now.push_back(route);
+        grid_now.resize((grid_now.size())+1);
+        route.DrawOld((parent->parent->data->n_points_routes.value), this, &(grid_now.back()), String(""));
         //here I use DrawOld because Draw cannot handle loxodromes
 //        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
 
@@ -9790,8 +9798,9 @@ void DrawPanel::Draw_Mercator(void) {
                 (route.reference_position.phi.value) += delta_phi_minor
                 ) {
                     
-                    ticks_now.push_back(route);
-
+//                    ticks_now.push_back(route);
+                    ticks_now.resize((ticks_now.size())+1);
+                    route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
                 //here I use DrawOld because Draw cannot handle loxodromes
 //                route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this);
 

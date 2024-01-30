@@ -1853,7 +1853,7 @@ public:
     UnsetIdling<DrawPanel>* unset_idling;
     vector<wxString> labels_lambda, labels_phi;
     vector<wxPoint> positions_labels_lambda, positions_labels_phi;
-    vector<Route> /*parallels and meridians are Routes stored in this vectors at the current step of the drag process of the chart*/grid_now, /*parallels and meridians are Routes stored in these vectors at the preceeding step in the drag process of the chart*/grid_before, ticks_now, ticks_before;
+    vector< vector< vector<wxPoint> > > /*parallels and meridians are stored in this vectors at the current step of the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_now, /*parallels and meridians are stored in these vectors at the preceeding step in the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_before, ticks_now, ticks_before;
     
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*Draw)(void);

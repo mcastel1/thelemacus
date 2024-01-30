@@ -8396,10 +8396,8 @@ void DrawPanel::RerenderBackground(void) {
     //wipe out the background at the preceeding step of the drag by painting on it with background_color
     RenderBackground(
                      dc,
-                     parallels_before,
-                     meridians_before,
-                     parallels_ticks_before,
-                     meridians_ticks_before,
+                     grid_before,
+                     ticks_before,
                      parent->points_coastline_before,
                      wxGetApp().background_color,
                      wxGetApp().background_color
@@ -8413,10 +8411,8 @@ void DrawPanel::RerenderBackground(void) {
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(
                      dc,
-                     parallels_now,
-                     meridians_now,
-                     parallel_ticks_now,
-                     meridians_ticks_now,
+                     grid_now,
+                     ticks_now,
                      parent->points_coastline_now,
                      wxGetApp().foreground_color,
                      wxGetApp().background_color
@@ -8474,10 +8470,8 @@ void DrawPanel::RerenderSelectionRectangle(void) {
     RenderSelectionRectangleLabels(dc);
     RenderBackground(
                      dc,
-                     parallels_now,
-                     meridians_now,
-                     parallel_ticks_now,
-                     meridians_ticks_now,
+                     grid_now,
+                     ticks_now,
                      parent->points_coastline_now,
                      wxGetApp().foreground_color,
                      wxGetApp().background_color
@@ -8491,10 +8485,8 @@ void DrawPanel::RerenderSelectionRectangle(void) {
 //render the coastline by using the set of points points_coastline, meridians, parallels and their labels
 void DrawPanel::RenderBackground(
                                  wxDC& dc,
-                                 vector<Route> parallels,
-                                 vector<Route> meridians,
-                                 vector<Route> parallels_ticks,
-                                 vector<Route> meridians_ticks,
+                                 vector<Route> grid,
+                                 vector<Route> ticks,
                                  vector<wxPoint> points_coastline,
                                  wxColour foreground_color, wxColour background_color
                                  ) {
@@ -8521,10 +8513,8 @@ void DrawPanel::RenderBackground(
         
         (this->*Render)(
                         &dc_m_bgbuffer,
-                        parallels,
-                        meridians,
-                        parallels_ticks,
-                        meridians_ticks,
+                        grid,
+                        ticks,
                         points_coastline,
                         foreground_color,
                         background_color);
@@ -8623,10 +8613,8 @@ void DrawPanel::RenderAll(wxDC& dc) {
 
     RenderBackground(
                      dc,
-                     parallels_now,
-                     meridians_now,
-                     parallel_ticks_now,
-                     meridians_ticks_now,
+                     grid_now,
+                     ticks_now,
                      parent->points_coastline_now,
                      wxGetApp().foreground_color,
                      wxGetApp().background_color
@@ -8707,10 +8695,8 @@ void DrawPanel::RerenderRoutes(void){
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(
                      dc,
-                     parallels_now,
-                     meridians_now,
-                     parallel_ticks_now,
-                     meridians_ticks_now,
+                     grid_now,
+                     ticks_now,
                      parent->points_coastline_now,
                      wxGetApp().foreground_color,
                      wxGetApp().background_color
@@ -8731,10 +8717,8 @@ void DrawPanel::RerenderPositions(void){
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(
                      dc,
-                     parallels_now,
-                     meridians_now,
-                     parallel_ticks_now,
-                     meridians_ticks_now,
+                     grid_now,
+                     ticks_now,
                      parent->points_coastline_now,
                      wxGetApp().foreground_color,
                      wxGetApp().background_color
@@ -8818,10 +8802,8 @@ void DrawPanel::RerenderDraggedObjectLabel(void) {
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(
                      dc,
-                     parallels_now,
-                     meridians_now,
-                     parallel_ticks_now,
-                     meridians_ticks_now,
+                     grid_now,
+                     ticks_now,
                      parent->points_coastline_now,
                      wxGetApp().foreground_color,
                      wxGetApp().background_color
@@ -8866,10 +8848,8 @@ void DrawPanel::FitAll() {
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_Mercator(wxDC* dc, 
-                                vector<Route> parallels,
-                                vector<Route> meridians,
-                                vector<Route> parallels_ticks,
-                                vector<Route> meridians_ticks,
+                                vector<Route> grid,
+                                vector<Route> ticks,
                                 vector<wxPoint> points_coastline,
                                 wxColor foreground_color, wxColor background_color) {
 
@@ -8903,21 +8883,13 @@ void DrawPanel::Render_Mercator(wxDC* dc,
     //set thickness to normal thicnkness
     thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
     
-    //render parallels
-    for(i=0; i < parallels.size(); i++){
-        (parallels[i]).DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
+    //render parallels and meridians
+    for(i=0; i < grid.size(); i++){
+        (grid[i]).DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
     }
-    //render meridians
-    for(i=0; i < meridians.size(); i++){
-        (meridians[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
-    }
-    //render parallels ticks
-    for(i=0; i < parallels_ticks.size(); i++){
-        (parallels_ticks[i]).DrawOld((wxGetApp().n_points_minor_ticks.value), foreground_color, thickness, dc, this);
-    }
-    //render meridians ticks
-    for(i=0; i < meridians_ticks.size(); i++){
-        (meridians_ticks[i]).Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+    //render parallels and meridian ticks
+    for(i=0; i < ticks.size(); i++){
+        (ticks[i]).DrawOld((wxGetApp().n_points_minor_ticks.value), foreground_color, thickness, dc, this);
     }
   
     
@@ -9163,10 +9135,8 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_3D(wxDC* dc,
-                          vector<Route> parallels,
-                          vector<Route> meridians,
-                          vector<Route> parallels_ticks,
-                          vector<Route> meridians_ticks,
+                          vector<Route> grid,
+                          vector<Route> ticks,
                           vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color) {
 
     int i;
@@ -9202,21 +9172,13 @@ void DrawPanel::Render_3D(wxDC* dc,
     //set thickness to normal thicnkness
     thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
     
-    //render parallels
-    for(i=0; i < parallels.size(); i++){
-        (parallels[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
+    //render parallels and meridians
+    for(i=0; i < grid.size(); i++){
+        (grid[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
     }
-    //render meridians
-    for(i=0; i < meridians.size(); i++){
-        (meridians[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
-    }
-    //render parallels ticks
-    for(i=0; i < parallels_ticks.size(); i++){
-        (parallels_ticks[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
-    }
-    //render meridians ticks
-    for(i=0; i < meridians_ticks.size(); i++){
-        (meridians_ticks[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
+    //render parallel and meridian ticks
+    for(i=0; i < ticks.size(); i++){
+        (ticks[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
     }
     
     
@@ -9728,9 +9690,10 @@ void DrawPanel::Draw_Mercator(void) {
 
     }
     
+    grid_now.clear();
+    ticks_now.clear();
+    
     //draw meridians
-    meridians_now.clear();
-    meridians_ticks_now.clear();
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String("o"));
     route.Z.set(String(""), 0.0, String(""));
@@ -9746,7 +9709,7 @@ void DrawPanel::Draw_Mercator(void) {
              (route.reference_position.lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
              (route.reference_position.lambda.value) += delta_lambda_minor) {
             
-            meridians_ticks_now.push_back(route);
+            ticks_now.push_back(route);
             
             //            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
             
@@ -9761,7 +9724,7 @@ void DrawPanel::Draw_Mercator(void) {
          (route.reference_position.lambda.value) += delta_lambda) {
         
         //add the current meridian that is being drawn (route) to meridians_now
-        meridians_now.push_back(route);
+        grid_now.push_back(route);
         //             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
         
         if (gamma_lambda != 1) {
@@ -9775,9 +9738,8 @@ void DrawPanel::Draw_Mercator(void) {
                  (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
                  (route.reference_position.lambda.value) += delta_lambda_minor) {
                 
-                meridians_ticks_now.push_back(route);
+                ticks_now.push_back(route);
                 //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-                //
             }
             
             route.length.set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
@@ -9794,7 +9756,7 @@ void DrawPanel::Draw_Mercator(void) {
     (route.reference_position.lambda) = (p_NW.lambda);
 
     //this loop runs over the latitude of the parallel, which we call phi
-    for (parallels_now.clear(), parallel_ticks_now.clear(), (phi.value) = (phi_start.value);
+    for ((phi.value) = (phi_start.value);
         (phi.value) < (phi_end.value);
         (phi.value) += delta_phi
         ) {
@@ -9809,7 +9771,7 @@ void DrawPanel::Draw_Mercator(void) {
                 ).value), String(""));
 
         //add the current parallel that is being drawn to parallels
-        parallels_now.push_back(route);
+        grid_now.push_back(route);
         //here I use DrawOld because Draw cannot handle loxodromes
 //        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
 
@@ -9825,7 +9787,7 @@ void DrawPanel::Draw_Mercator(void) {
                 (route.reference_position.phi.value) += delta_phi_minor
                 ) {
                     
-                    parallel_ticks_now.push_back(route);
+                    ticks_now.push_back(route);
 
                 //here I use DrawOld because Draw cannot handle loxodromes
 //                route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this);
@@ -10084,7 +10046,8 @@ void DrawPanel::Draw_3D(void) {
     }
     
     
-  
+    grid_now.clear();
+    ticks_now.clear();
     
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
@@ -10093,13 +10056,12 @@ void DrawPanel::Draw_3D(void) {
     (route.Z).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = -M_PI_2;
 
-    for (meridians_now.clear(), meridians_ticks_now.clear(),
-        (route.reference_position.lambda.value) = (lambda_start.value);
+    for ((route.reference_position.lambda.value) = (lambda_start.value);
         (route.reference_position.lambda.value) < (lambda_end.value);
         (route.reference_position.lambda.value) += delta_lambda) {
 
         //add the current meridian that is being drawn (route) to meridians
-        meridians_now.push_back(route);
+        grid_now.push_back(route);
        //        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
 
         if (gamma_lambda != 1) {
@@ -10118,7 +10080,7 @@ void DrawPanel::Draw_3D(void) {
                 (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
                 (route.reference_position.lambda.value) += delta_lambda_minor) {
 
-                meridians_ticks_now.push_back(route);
+                ticks_now.push_back(route);
 //                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
 
             }
@@ -10138,8 +10100,7 @@ void DrawPanel::Draw_3D(void) {
     ((route.reference_position).lambda) = lambda_middle;
 
     //this loop runs over the latitude of the parallel, which we call phi
-    for (parallels_now.clear(), parallel_ticks_now.clear(),
-        (phi.value) = (phi_start.value);
+    for ((phi.value) = (phi_start.value);
         (phi.value) < (phi_end.value);
         (phi.value) += delta_phi
         ) {
@@ -10150,7 +10111,7 @@ void DrawPanel::Draw_3D(void) {
         ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
 
         //add the current parallel that is being drawn to parallels
-        parallels_now.push_back(route);
+        grid_now.push_back(route);
         //        route.Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
 
         if (gamma_phi != 1) {
@@ -10167,12 +10128,12 @@ void DrawPanel::Draw_3D(void) {
                 (route.reference_position.phi.value) += delta_phi_minor
                 ) {
 
-                    parallel_ticks_now.push_back(route);
+                    ticks_now.push_back(route);
 //                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
 
             }
 
-            (route.type).set(String("c"));
+            route.type.set(String("c"));
 
         }
 
@@ -12761,14 +12722,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             parent->points_coastline_before.clear();
                             (parent->points_coastline_before) = (parent->points_coastline_now);
                             
-                            parallels_before.clear();
-                            parallels_before = parallels_now;
-                            meridians_before.clear();
-                            meridians_before = meridians_now;
-                            parallels_ticks_before.clear();
-                            parallels_ticks_before = parallel_ticks_now;
-                            meridians_ticks_before.clear();
-                            meridians_ticks_before = meridians_ticks_now;
+                            grid_before.clear();
+                            grid_before = grid_now;
+                            ticks_before.clear();
+                            ticks_before = ticks_now;
                      
                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
                             points_route_list_before.clear();

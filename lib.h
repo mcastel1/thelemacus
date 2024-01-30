@@ -1853,14 +1853,14 @@ public:
     UnsetIdling<DrawPanel>* unset_idling;
     vector<wxString> labels_lambda, labels_phi;
     vector<wxPoint> positions_labels_lambda, positions_labels_phi;
-    vector<Route> /*parallels and meridians are Routes stored in these vectors at the current step of the drag process of the chart*/parallels_now, meridians_now, /*parallels and meridians are Routes stored in these vectors at the preceeding step in the drag process of the chart*/parallels_before, /*parallels and meridians at the current and preceeding step of the chart dragging process*/ meridians_before, meridians_ticks_now, parallel_ticks_now, meridians_ticks_before, parallels_ticks_before;
+    vector<Route> /*parallels and meridians are Routes stored in this vectors at the current step of the drag process of the chart*/grid_now, /*parallels and meridians are Routes stored in these vectors at the preceeding step in the drag process of the chart*/grid_before, ticks_now, ticks_before;
     
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*Draw)(void);
     bool (DrawPanel::*ScreenToProjection)(wxPoint, Projection*);
     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     bool (DrawPanel::*GeoToProjection)(Position, Projection*, bool);
-    void (DrawPanel::*Render)(wxDC*, vector<Route>, vector<Route>, vector<Route>, vector<Route>, vector<wxPoint>, wxColor, wxColor);
+    void (DrawPanel::*Render)(wxDC*, vector<Route>, vector<Route>, vector<wxPoint>, wxColor, wxColor);
     void (DrawPanel::*ProjectionToDrawPanel)(Projection, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
@@ -1874,7 +1874,7 @@ public:
     void PaintEvent(wxPaintEvent & evt);
     void RerenderBackground(void);
     void RenderAll(wxDC&);
-    void RenderBackground(wxDC&, vector<Route>, vector<Route>, vector<Route>, vector<Route>, vector<wxPoint>, wxColor, wxColor);
+    void RenderBackground(wxDC&, vector<Route>, vector<Route>, vector<wxPoint>, wxColor, wxColor);
     void RenderRoutes(wxDC&, vector< vector< vector<wxPoint> > >, vector<wxPoint>, wxColor);
     void RerenderRoutes(void);
     void RenderPositions(wxDC&, vector<wxPoint>, wxColor);
@@ -1918,8 +1918,8 @@ public:
     double x_span(void);
     Rotation rotation_start_end(wxPoint, wxPoint);
     
-    void Render_Mercator(wxDC*, vector<Route>, vector<Route>, vector<Route>, vector<Route>, vector<wxPoint>, wxColor, wxColor);
-    void Render_3D(wxDC*, vector<Route>, vector<Route>, vector<Route>, vector<Route>, vector<wxPoint>, wxColor, wxColor);
+    void Render_Mercator(wxDC*, vector<Route>, vector<Route>, vector<wxPoint>, wxColor, wxColor);
+    void Render_3D(wxDC*, vector<Route>, vector<Route>, vector<wxPoint>, wxColor, wxColor);
     void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);
     void DrawLabel(const Position&, Angle, Angle, Int, String);
     

@@ -8399,7 +8399,12 @@ void DrawPanel::RerenderBackground(void) {
     
     //wipe out the background at the preceeding step of the drag by painting on it with background_color
     RenderBackground(dc, parent->points_coastline_before, wxGetApp().background_color, wxGetApp().background_color);
-
+    //wipe out the Routes at the preceeding mouse position
+    RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, wxGetApp().background_color);
+    //wipe out the Positions at the preceeding mouse position
+    RenderPositions(dc, points_position_list_before,  wxGetApp().background_color);
+ 
+    
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
@@ -8479,6 +8484,10 @@ void DrawPanel::RenderBackground(wxDC& dc, vector<wxPoint> points_coastline, wxC
         dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
         dc_m_bgbuffer.Clear();
         
+        dc_m_bgbuffer.SetPen(wxPen(foreground_color));
+        dc_m_bgbuffer.SetTextForeground(foreground_color);
+        dc_m_bgbuffer.SetTextBackground(background_color);
+        
         (this->*Render)(&dc_m_bgbuffer, points_coastline, foreground_color, background_color);
 
         mdc.SelectObject(wxNullBitmap);
@@ -8486,6 +8495,9 @@ void DrawPanel::RenderBackground(wxDC& dc, vector<wxPoint> points_coastline, wxC
         re_draw = false;
     }
 
+    dc.SetPen(wxPen(foreground_color));
+    dc.SetTextForeground(foreground_color);
+    dc.SetTextBackground(background_color);
     dc.DrawBitmap(m_bgbuffer, 0, 0, false);
 
 }

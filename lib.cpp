@@ -8862,9 +8862,8 @@ void DrawPanel::Render_Mercator(wxDC* dc,
     wxCoord width_label, height_label;
     Projection temp;
     Position q;
-    double thickness;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
-    int i;
+    int i, j;
 
     //draw a rectangle (representing the border) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color
     dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
@@ -8884,15 +8883,29 @@ void DrawPanel::Render_Mercator(wxDC* dc,
 
     
     //set thickness to normal thicnkness
-    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+//    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
     
     //render parallels and meridians
     for(i=0; i < grid.size(); i++){
-        (grid[i]).DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
+        for (j = 0; j < (grid[i]).size(); j++) {
+            
+//            (grid[i]).DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
+            
+            if ((grid[i][j]).size() > 1) {
+                    dc->DrawLines((int)((grid[i][j]).size()), (grid[i][j]).data());
+            }
+
+        }
     }
     //render parallels and meridian ticks
     for(i=0; i < ticks.size(); i++){
-        (ticks[i]).DrawOld((wxGetApp().n_points_minor_ticks.value), foreground_color, thickness, dc, this);
+        for (j = 0; j < (ticks[i]).size(); j++) {
+            
+//            (ticks[i]).DrawOld((wxGetApp().n_points_minor_ticks.value), foreground_color, thickness, dc, this);
+            if ((ticks[i][j]).size() > 1) {
+                dc->DrawLines((int)((ticks[i][j]).size()), (ticks[i][j]).data());
+            }
+        }
     }
   
     
@@ -9142,8 +9155,7 @@ void DrawPanel::Render_3D(wxDC* dc,
                           vector< vector< vector<wxPoint> > > ticks,
                           vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color) {
 
-    int i;
-    double thickness;
+    int i, j;
     Double d;
     Angle lambda;
     stringstream s;
@@ -9172,22 +9184,30 @@ void DrawPanel::Render_3D(wxDC* dc,
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
 
     
-    //set thickness to normal thicnkness
-    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-    
+//    //set thickness to normal thicnkness
+//    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+   
     //render parallels and meridians
     for(i=0; i < grid.size(); i++){
-        (grid[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
+        for (j = 0; j < (grid[i]).size(); j++) {
+            
+            //        (grid[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
+            if ((grid[i][j]).size() > 1) {
+                dc->DrawSpline((int)((grid[i][j]).size()), (grid[i][j]).data());
+            }
+        }
     }
     //render parallel and meridian ticks
     for(i=0; i < ticks.size(); i++){
-        (ticks[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
+        for (j = 0; j < (ticks[i]).size(); j++) {
+            
+            //        (ticks[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
+            if ((ticks[i][j]).size() > 1) {
+                dc->DrawSpline((int)((ticks[i][j]).size()), (ticks[i][j]).data());
+            }
+        }
     }
     
-    
- 
-   
-
 
 //    //draw meridians
 //    //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop

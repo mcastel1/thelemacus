@@ -103,7 +103,7 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
- - check whether some commands where you store *_now into *_before can be put into the #if for WIN32 so that APPLE does not execute them if it does not need them
+- check why the meridian ticks form triangles in mercator projeciton 
  - when you zoom in in 3d projection all the positions appear at the center of the disk
  - when you drag a position on a ChartFrame, its label is not shown in the other ChartFrames
 - remove wxScrollEventHandler ... and similar stuff

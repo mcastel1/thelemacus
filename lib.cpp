@@ -8394,7 +8394,16 @@ void DrawPanel::RerenderBackground(void) {
     wxClientDC dc(this);
     
     //wipe out the background at the preceeding step of the drag by painting on it with background_color
-    RenderBackground(dc, parent->points_coastline_before, wxGetApp().background_color, wxGetApp().background_color);
+    RenderBackground(
+                     dc,
+                     parallels_before,
+                     meridians_before,
+                     parallel_ticks_before,
+                     meridians_ticks_before,
+                     parent->points_coastline_before,
+                     wxGetApp().background_color,
+                     wxGetApp().background_color
+                     );
     //wipe out the Routes at the preceeding mouse position
     RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, wxGetApp().background_color);
     //wipe out the Positions at the preceeding mouse position
@@ -8402,7 +8411,16 @@ void DrawPanel::RerenderBackground(void) {
  
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderBackground(
+                     dc,
+                     parallels_now,
+                     meridians_now,
+                     parallel_ticks_now,
+                     meridians_ticks_now,
+                     parent->points_coastline_now,
+                     wxGetApp().foreground_color,
+                     wxGetApp().background_color
+                     );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
   
@@ -8454,7 +8472,16 @@ void DrawPanel::RerenderSelectionRectangle(void) {
     //re-render all objects in *this which may have been partially cancelled by the clean operation above
     RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc);
-    RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderBackground(
+                     dc,
+                     parallels_now,
+                     meridians_now,
+                     parallel_ticks_now,
+                     meridians_ticks_now,
+                     parent->points_coastline_now,
+                     wxGetApp().foreground_color,
+                     wxGetApp().background_color
+                     );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     
@@ -8594,7 +8621,16 @@ void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc){
 
 void DrawPanel::RenderAll(wxDC& dc) {
 
-    RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderBackground(
+                     dc,
+                     parallels_now,
+                     meridians_now,
+                     parallel_ticks_now,
+                     meridians_ticks_now,
+                     parent->points_coastline_now,
+                     wxGetApp().foreground_color,
+                     wxGetApp().background_color
+                     );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     RenderMousePositionLabel(dc);
@@ -8669,7 +8705,16 @@ void DrawPanel::RerenderRoutes(void){
     RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, wxGetApp().background_color);
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderBackground(
+                     dc,
+                     parallels_now,
+                     meridians_now,
+                     parallel_ticks_now,
+                     meridians_ticks_now,
+                     parent->points_coastline_now,
+                     wxGetApp().foreground_color,
+                     wxGetApp().background_color
+                     );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     
@@ -8684,7 +8729,16 @@ void DrawPanel::RerenderPositions(void){
     RenderPositions(dc, points_position_list_before,  wxGetApp().background_color);
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderBackground(
+                     dc,
+                     parallels_now,
+                     meridians_now,
+                     parallel_ticks_now,
+                     meridians_ticks_now,
+                     parent->points_coastline_now,
+                     wxGetApp().foreground_color,
+                     wxGetApp().background_color
+                     );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     
@@ -8762,7 +8816,16 @@ void DrawPanel::RerenderDraggedObjectLabel(void) {
     
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderBackground(
+                     dc,
+                     parallels_now,
+                     meridians_now,
+                     parallel_ticks_now,
+                     meridians_ticks_now,
+                     parent->points_coastline_now,
+                     wxGetApp().foreground_color,
+                     wxGetApp().background_color
+                     );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     RenderDraggedObjectLabel(dc);

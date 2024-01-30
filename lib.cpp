@@ -8804,9 +8804,8 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
 
-
-
-    //draw coastlines
+    
+    //render coastlines
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
@@ -8819,62 +8818,63 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
     //set thickness to normal thicnkness
     thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
 
-    //draw meridians
-    //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    route.type.set(String("o"));
-    route.Z.set(String(""), 0.0, String(""));
-    (route.reference_position.phi) = (p_SE.phi);
-
-    //draw the first chunk of intermediate ticks on the longitude axis
-    if (gamma_lambda != 1) {
-
-        (route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
-
-        //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-        for ((route.reference_position.lambda.value) = (lambda_start.value) - delta_lambda;
-            (route.reference_position.lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
-            (route.reference_position.lambda.value) += delta_lambda_minor) {
-
-            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-
-        }
-
+    //render meridians ticks
+    for(i=0; i < meridians_ticks_now.size(); i++){
+        (meridians_ticks_now[i]).Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+    }
+    //render meridians
+    for(i=0; i < meridians_now.size(); i++){
+        (meridians_now[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
     }
 
-    (route.length).set(String(""), Re * ((((p_NW.phi).normalize_pm_pi_ret()).value) - (((p_SE.phi).normalize_pm_pi_ret()).value)), String(""));
-
-    for (meridians_now.clear(),
-         (route.reference_position.lambda.value) = (lambda_start.value);
-         (route.reference_position.lambda.value) < (lambda_end.value);
-         (route.reference_position.lambda.value) += delta_lambda) {
-             
-             //add the current meridian that is being drawn (route) to meridians
-             meridians_now.push_back(route);
-             //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
-             //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
-             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
-             
-             if (gamma_lambda != 1) {
-                 //draw intermediate ticks on the longitude axis
-                 
-                 (lambda_saved.value) = (route.reference_position.lambda.value);
-                 (route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
-                 
-                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-                 for ((route.reference_position.lambda.value) = (lambda_saved.value);
-                      (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
-                      (route.reference_position.lambda.value) += delta_lambda_minor) {
-                     
-                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-                     
-                 }
-                 
-                 (route.length).set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
-                 (route.reference_position.lambda.value) = (lambda_saved.value);
-                 
-             }
-             
-         }
+//    //draw the first chunk of intermediate ticks on the longitude axis
+//    if (gamma_lambda != 1) {
+//
+//        //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+//        for ((route.reference_position.lambda.value) = (lambda_start.value) - delta_lambda;
+//            (route.reference_position.lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
+//            (route.reference_position.lambda.value) += delta_lambda_minor) {
+//
+//            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+//
+//        }
+//
+//    }
+//
+//    (route.length).set(String(""), Re * ((((p_NW.phi).normalize_pm_pi_ret()).value) - (((p_SE.phi).normalize_pm_pi_ret()).value)), String(""));
+//
+//    for (meridians_now.clear(),
+//         (route.reference_position.lambda.value) = (lambda_start.value);
+//         (route.reference_position.lambda.value) < (lambda_end.value);
+//         (route.reference_position.lambda.value) += delta_lambda) {
+//             
+//             //add the current meridian that is being drawn (route) to meridians
+//             meridians_now.push_back(route);
+//             //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
+//             //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
+//             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
+//             
+//             if (gamma_lambda != 1) {
+//                 //draw intermediate ticks on the longitude axis
+//                 
+//                 (lambda_saved.value) = (route.reference_position.lambda.value);
+//                 (route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
+//                 
+//                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+//                 for ((route.reference_position.lambda.value) = (lambda_saved.value);
+//                      (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
+//                      (route.reference_position.lambda.value) += delta_lambda_minor) {
+//                     
+//                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+//                     
+//                 }
+//                 
+//                 (route.length).set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
+//                 (route.reference_position.lambda.value) = (lambda_saved.value);
+//                 
+//             }
+//             
+//         }
 
     //draw labels of meridians
     for (i = 0; i < labels_lambda.size(); i++) {
@@ -9337,6 +9337,7 @@ void DrawPanel::Draw_Mercator(void) {
     String prefix, new_prefix;
     wxPoint p;
     wxString dummy_label;
+    Route route;
 
     //append \t to prefix
     prefix = String("");
@@ -9612,9 +9613,67 @@ void DrawPanel::Draw_Mercator(void) {
         DrawLabel(q, parent->lambda_max, parent->lambda_min, label_precision, String("EW"));
 
     }
-
-
-
+    
+    //draw meridians
+    meridians_now.clear();
+    meridians_ticks_now.clear();
+    //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
+    route.type.set(String("o"));
+    route.Z.set(String(""), 0.0, String(""));
+    (route.reference_position.phi) = (p_SE.phi);
+    
+    //draw the first chunk of intermediate ticks on the longitude axis
+    if (gamma_lambda != 1) {
+        
+        route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
+        
+        //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+        for ((route.reference_position.lambda.value) = (lambda_start.value) - delta_lambda;
+             (route.reference_position.lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
+             (route.reference_position.lambda.value) += delta_lambda_minor) {
+            
+            meridians_ticks_now.push_back(route);
+            
+            //            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+            
+        }
+        
+    }
+    
+    
+    for ((route.length).set(String(""), Re * (((p_NW.phi.normalize_pm_pi_ret()).value) - ((p_SE.phi.normalize_pm_pi_ret()).value)), String("")),
+         (route.reference_position.lambda.value) = (lambda_start.value);
+         (route.reference_position.lambda.value) < (lambda_end.value);
+         (route.reference_position.lambda.value) += delta_lambda) {
+        
+        //add the current meridian that is being drawn (route) to meridians_now
+        meridians_now.push_back(route);
+        //             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
+        
+        if (gamma_lambda != 1) {
+            //draw intermediate ticks on the longitude axis
+            
+            (lambda_saved.value) = (route.reference_position.lambda.value);
+            (route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
+            
+            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+            for ((route.reference_position.lambda.value) = (lambda_saved.value);
+                 (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
+                 (route.reference_position.lambda.value) += delta_lambda_minor) {
+                
+                meridians_ticks_now.push_back(route);
+                //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+                //
+            }
+            
+            route.length.set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
+            (route.reference_position.lambda.value) = (lambda_saved.value);
+            
+        }
+        
+    }
+    
+    
     TabulateRoutes();
     TabulatePositions();
 
@@ -12451,6 +12510,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             parent->points_coastline_before.clear();
                             (parent->points_coastline_before) = (parent->points_coastline_now);
                             
+                            parallels_before.clear();
+                            parallels_before = parallels_now;
+                            meridians_before.clear();
+                            meridians_before = meridians_now;
+                     
                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
                             points_route_list_before.clear();
                             points_route_list_before = points_route_list_now;

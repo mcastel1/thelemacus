@@ -12912,40 +12912,38 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
+#ifdef _WIN32
+
                             
+                            //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
+                              (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
+                              (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
+    
+
+#endif
+                            //obtain the coordinates of the reference position of the Route that is being dragged
+                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
+                                                 (parent->parent->data->position_list)[(parent->parent->highlighted_position)],
+                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                                 &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                                                 );
+  
 #ifdef __APPLE__
-                            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                (parent->parent->data->position_list)[(parent->parent->highlighted_position)],
-                                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
-                                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
-                                                );
-                            
+                           
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-paint the charts -> I rerender the Positions and the label of the Position which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-
                             (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
 #endif
 #ifdef _WIN32
-                            //show the coordinates of the reference position of the Route that is being dragged
-                            //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                            (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
-                            (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
-                            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                (parent->parent->data->position_list)[(parent->parent->highlighted_position)],
-                                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
-                                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
-                                                );
-                            
-                            
+ 
                             ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-paint the charts -> I rerender the Positions and the label of the Position which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-
-
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderPositions();
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderDraggedObjectLabel();
+                            
 #endif
 
                         }

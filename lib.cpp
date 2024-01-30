@@ -8798,7 +8798,6 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     int i;
 
-
     //draw a rectangle (representing the border) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color
     dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
     dc->SetPen(wxPen(foreground_color));
@@ -8844,36 +8843,38 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
 
     (route.length).set(String(""), Re * ((((p_NW.phi).normalize_pm_pi_ret()).value) - (((p_SE.phi).normalize_pm_pi_ret()).value)), String(""));
 
-    for (
-        (((route.reference_position).lambda).value) = (lambda_start.value);
-        (((route.reference_position).lambda).value) < (lambda_end.value);
-        (((route.reference_position).lambda).value) += delta_lambda) {
-
-        //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
-        //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
-        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
-
-        if (gamma_lambda != 1) {
-            //draw intermediate ticks on the longitude axis
-
-            (lambda_saved.value) = (((route.reference_position).lambda).value);
-            (route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
-
-            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-            for ((((route.reference_position).lambda).value) = (lambda_saved.value);
-                (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
-                (((route.reference_position).lambda).value) += delta_lambda_minor) {
-
-                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-
-            }
-
-            (route.length).set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
-            (((route.reference_position).lambda).value) = (lambda_saved.value);
-
-        }
-
-    }
+    for (meridians.clear(),
+         (((route.reference_position).lambda).value) = (lambda_start.value);
+         (((route.reference_position).lambda).value) < (lambda_end.value);
+         (((route.reference_position).lambda).value) += delta_lambda) {
+             
+             //at the current meridian that is being drawn (route) to meridians
+             meridians.push_back(route);
+             //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
+             //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
+             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
+             
+             if (gamma_lambda != 1) {
+                 //draw intermediate ticks on the longitude axis
+                 
+                 (lambda_saved.value) = (((route.reference_position).lambda).value);
+                 (route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
+                 
+                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+                 for ((((route.reference_position).lambda).value) = (lambda_saved.value);
+                      (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
+                      (((route.reference_position).lambda).value) += delta_lambda_minor) {
+                     
+                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+                     
+                 }
+                 
+                 (route.length).set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
+                 (((route.reference_position).lambda).value) = (lambda_saved.value);
+                 
+             }
+             
+         }
 
     //draw labels of meridians
     for (i = 0; i < labels_lambda.size(); i++) {
@@ -8891,7 +8892,7 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
     ((route.reference_position).lambda) = (p_NW.lambda);
 
     //this loop runs over the latitude of the parallel, which we call phi
-    for (
+    for (parallels.clear(),
         (phi.value) = (phi_start.value);
         (phi.value) < (phi_end.value);
         (phi.value) += delta_phi
@@ -8900,26 +8901,23 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
         //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
         ((route.reference_position).phi) = phi;
         (route.length).set(String(""),
-
-
-
             Re * cos(phi) * ((
-
 
                 (((p_NW.lambda) < M_PI) && ((p_SE.lambda) > M_PI)) ? ((p_NW.lambda) - (p_SE.lambda) + 2.0 * M_PI) : ((p_NW.lambda) - (p_SE.lambda))
 
                 ).value), String(""));
 
+        parallels.push_back(route);
         //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
         //here I use DrawOld because Draw cannot handle loxodromes
-        route.DrawOld(((((parent->parent)->data)->n_points_routes).value), foreground_color, thickness, dc, this);
+        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
 
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
 
             //                (route.type).set(String(""), String("o"), String(""));
             //                (route.Z).set(String(""), M_PI_2, String(""));
-            (route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * lambda_span, String(""));
+            route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * lambda_span, String(""));
             //                ((route.reference_position).lambda) = (parent->lambda_min);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)

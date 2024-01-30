@@ -8401,10 +8401,10 @@ void DrawPanel::RerenderBackground(void) {
     wxClientDC dc(this);
     
     //wipe out the background at the preceeding step of the drag by painting on it with background_color
-    RenderBackground(dc, wxGetApp().background_color, wxGetApp().background_color);
+    RenderBackground(dc, parent->points_coastline_before, wxGetApp().background_color, wxGetApp().background_color);
 
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
   
@@ -8456,13 +8456,15 @@ void DrawPanel::RerenderSelectionRectangle(void) {
     //re-render all objects in *this which may have been partially cancelled by the clean operation above
     RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc);
-    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     
 }
 
-void DrawPanel::RenderBackground(wxDC& dc, wxColour foreground_color, wxColour background_color) {
+
+//render the coastline by using the set of points points_coastline, meridians, parallels and their labels
+void DrawPanel::RenderBackground(wxDC& dc, vector<wxPoint> points_coastline, wxColour foreground_color, wxColour background_color) {
 
 //    dc.SetPen(foreground_color);
 //    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
@@ -8480,7 +8482,7 @@ void DrawPanel::RenderBackground(wxDC& dc, wxColour foreground_color, wxColour b
         dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
         dc_m_bgbuffer.Clear();
         
-        (this->*Render)(&dc_m_bgbuffer, foreground_color, background_color);
+        (this->*Render)(&dc_m_bgbuffer, points_coastline, foreground_color, background_color);
 
         mdc.SelectObject(wxNullBitmap);
 
@@ -8571,7 +8573,7 @@ void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc){
 
 void DrawPanel::RenderAll(wxDC& dc) {
 
-    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     RenderMousePositionLabel(dc);
@@ -8646,7 +8648,7 @@ void DrawPanel::RerenderRoutes(void){
     RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, wxGetApp().background_color);
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     
@@ -8661,7 +8663,7 @@ void DrawPanel::RerenderPositions(void){
     RenderPositions(dc, points_position_list_before,  wxGetApp().background_color);
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     
@@ -8739,7 +8741,7 @@ void DrawPanel::RerenderDraggedObjectLabel(void) {
     
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderBackground(dc, parent->points_coastline_now, wxGetApp().foreground_color, wxGetApp().background_color);
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     RenderDraggedObjectLabel(dc);
@@ -8779,7 +8781,7 @@ void DrawPanel::FitAll() {
 }
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::Render_Mercator(wxDC* dc, wxColor foreground_color, wxColor background_color) {
+void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color) {
 
     Angle lambda, phi;
     Route route;
@@ -8804,8 +8806,8 @@ void DrawPanel::Render_Mercator(wxDC* dc, wxColor foreground_color, wxColor back
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for (i = 0; i < (parent->points_coastline_now).size(); i++) {
-        dc->DrawEllipse((parent->points_coastline_now)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
+    for (i = 0; i < points_coastline.size(); i++) {
+        dc->DrawEllipse(points_coastline[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
 
@@ -9061,7 +9063,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 }
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::Render_3D(wxDC* dc, wxColor foreground_color, wxColor background_color) {
+void DrawPanel::Render_3D(wxDC* dc, vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color) {
 
     int i;
     double thickness;
@@ -9088,9 +9090,9 @@ void DrawPanel::Render_3D(wxDC* dc, wxColor foreground_color, wxColor background
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for (i = 0; i < (parent->points_coastline_now).size(); i++) {
+    for (i = 0; i < points_coastline.size(); i++) {
         //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
-        dc->DrawEllipse((parent->points_coastline_now)[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
+        dc->DrawEllipse(points_coastline[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
 

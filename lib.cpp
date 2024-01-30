@@ -12436,6 +12436,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 (this->*Set_lambda_phi_min_max)();
                             }
 
+                            
+                            //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used in RerenderBackground
+                            parent->points_coastline_before.clear();
+                            (parent->points_coastline_before) = (parent->points_coastline_now);
+                            
                             //re-draw the chart
                             (this->*Draw)();
 #ifdef __APPLE__

@@ -8398,7 +8398,7 @@ void DrawPanel::RerenderBackground(void) {
                      dc,
                      parallels_before,
                      meridians_before,
-                     parallel_ticks_before,
+                     parallels_ticks_before,
                      meridians_ticks_before,
                      parent->points_coastline_before,
                      wxGetApp().background_color,
@@ -12765,6 +12765,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             parallels_before = parallels_now;
                             meridians_before.clear();
                             meridians_before = meridians_now;
+                            parallels_ticks_before.clear();
+                            parallels_ticks_before = parallel_ticks_now;
+                            meridians_ticks_before.clear();
+                            meridians_ticks_before = meridians_ticks_now;
                      
                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
                             points_route_list_before.clear();

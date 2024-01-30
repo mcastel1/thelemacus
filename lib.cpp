@@ -8843,13 +8843,13 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
 
     (route.length).set(String(""), Re * ((((p_NW.phi).normalize_pm_pi_ret()).value) - (((p_SE.phi).normalize_pm_pi_ret()).value)), String(""));
 
-    for (meridians.clear(),
+    for (meridians_now.clear(),
          (route.reference_position.lambda.value) = (lambda_start.value);
          (route.reference_position.lambda.value) < (lambda_end.value);
          (route.reference_position.lambda.value) += delta_lambda) {
              
              //add the current meridian that is being drawn (route) to meridians
-             meridians.push_back(route);
+             meridians_now.push_back(route);
              //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
              //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
              route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
@@ -8892,7 +8892,7 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
     ((route.reference_position).lambda) = (p_NW.lambda);
 
     //this loop runs over the latitude of the parallel, which we call phi
-    for (parallels.clear(),
+    for (parallels_now.clear(),
         (phi.value) = (phi_start.value);
         (phi.value) < (phi_end.value);
         (phi.value) += delta_phi
@@ -8908,7 +8908,7 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
                 ).value), String(""));
 
         //add the current parallel that is being drawn to parallels
-        parallels.push_back(route);
+        parallels_now.push_back(route);
         //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
         //here I use DrawOld because Draw cannot handle loxodromes
         route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
@@ -9116,13 +9116,13 @@ void DrawPanel::Render_3D(wxDC* dc, vector<wxPoint> points_coastline, wxColor fo
     (route.Z).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = -M_PI_2;
 
-    for (meridians.clear(),
+    for (meridians_now.clear(),
         (route.reference_position.lambda.value) = (lambda_start.value);
         (route.reference_position.lambda.value) < (lambda_end.value);
         (route.reference_position.lambda.value) += delta_lambda) {
 
         //add the current meridian that is being drawn (route) to meridians
-        meridians.push_back(route);
+        meridians_now.push_back(route);
         //            route.draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this);
         route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
 
@@ -9170,7 +9170,7 @@ void DrawPanel::Render_3D(wxDC* dc, vector<wxPoint> points_coastline, wxColor fo
     ((route.reference_position).lambda) = lambda_middle;
 
     //this loop runs over the latitude of the parallel, which we call phi
-    for (parallels.clear(),
+    for (parallels_now.clear(),
         (phi.value) = (phi_start.value);
         (phi.value) < (phi_end.value);
         (phi.value) += delta_phi
@@ -9182,7 +9182,7 @@ void DrawPanel::Render_3D(wxDC* dc, vector<wxPoint> points_coastline, wxColor fo
         ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
 
         //add the current parallel that is being drawn to parallels
-        parallels.push_back(route);
+        parallels_now.push_back(route);
         route.Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
 
         if (gamma_phi != 1) {

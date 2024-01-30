@@ -1838,8 +1838,6 @@ public:
     MyRectangle rectangle_observer;
     wxBitmap m_bgbuffer;
     
-    
-    
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list: in this list there are as many elements as the number of connected curves in which the route is cut (because of the meridian lambda = pi). In each of these elements there are the  points, with respect to the origin of DrawPanel, which represent the route_list[i] discretized
     vector< vector< vector<wxPoint> > > points_route_list_now, points_route_list_before;
@@ -1855,6 +1853,8 @@ public:
     UnsetIdling<DrawPanel>* unset_idling;
     vector<wxString> labels_lambda, labels_phi;
     vector<wxPoint> positions_labels_lambda, positions_labels_phi;
+    //parallels and meridians are Routes stored in these vectors
+    vector<Route> parllels, meridians;
     
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*Draw)(void);

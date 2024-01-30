@@ -2186,7 +2186,7 @@ void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[ma
 
 
 //draws the Route *this into draw_panel, with any projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
-void Route::Draw(unsigned int n_points, Color color, int width, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
+void Route::Draw(unsigned int n_points, Color foreground_color, Color background_color, int width, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
 
     unsigned int i;
     vector<wxPoint> p;
@@ -2194,8 +2194,8 @@ void Route::Draw(unsigned int n_points, Color color, int width, wxDC* dc, DrawPa
     vector<Length> s;
 
     //sets color and width of memory_dc to the ones supported as arguments of Draw
-    dc->SetPen(wxPen(color, width));
-    dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
+    dc->SetPen(wxPen(foreground_color, width));
+    dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
 
     //comoute the end values of l and writes them in s
     compute_l_ends(&s, NULL, draw_panel, prefix);
@@ -2281,10 +2281,6 @@ void Route::Draw(unsigned int n_points, Color color, int width, wxDC* dc, DrawPa
         }
 
     }
-
-    //put back original parameters of memory_dc
-    dc->SetPen(wxPen(wxGetApp().foreground_color, 1));
-
 
 }
 
@@ -8840,7 +8836,7 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
             (((route.reference_position).lambda).value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
             (((route.reference_position).lambda).value) += delta_lambda_minor) {
 
-            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this, String(""));
+            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
 
         }
 
@@ -8855,7 +8851,7 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
 
         //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
         //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
-        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, thickness, dc, this, String(""));
+        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
 
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis
@@ -8868,7 +8864,7 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
                 (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                 (((route.reference_position).lambda).value) += delta_lambda_minor) {
 
-                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this, String(""));
+                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
 
             }
 
@@ -9127,7 +9123,7 @@ void DrawPanel::Render_3D(wxDC* dc, vector<wxPoint> points_coastline, wxColor fo
         (((route.reference_position).lambda).value) += delta_lambda) {
 
         //            route.draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this);
-        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, thickness, dc, this, String(""));
+        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
 
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -9145,7 +9141,7 @@ void DrawPanel::Render_3D(wxDC* dc, vector<wxPoint> points_coastline, wxColor fo
                 (((route.reference_position).lambda).value) - (lambda_saved.value) < delta_lambda;
                 (((route.reference_position).lambda).value) += delta_lambda_minor) {
 
-                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this, String(""));
+                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
 
             }
 
@@ -9184,7 +9180,7 @@ void DrawPanel::Render_3D(wxDC* dc, vector<wxPoint> points_coastline, wxColor fo
         (route.length).set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
         ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
 
-        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, thickness, dc, this, String(""));
+        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
 
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -9200,7 +9196,7 @@ void DrawPanel::Render_3D(wxDC* dc, vector<wxPoint> points_coastline, wxColor fo
                 (((route.reference_position).phi).value) += delta_phi_minor
                 ) {
 
-                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this, String(""));
+                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
 
             }
 
@@ -12446,11 +12442,21 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
                                 (this->*Set_lambda_phi_min_max)();
                             }
-
+                            
                             
                             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used in RerenderBackground
                             parent->points_coastline_before.clear();
                             (parent->points_coastline_before) = (parent->points_coastline_now);
+                            
+                            //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
+                            points_route_list_before.clear();
+                            points_route_list_before = points_route_list_now;
+                            
+                            points_position_list_before.clear();
+                            points_position_list_before = points_position_list_now;
+                            
+                            reference_positions_route_list_before.clear();
+                            reference_positions_route_list_before = reference_positions_route_list_now;
                             
                             //re-draw the chart
                             (this->*Draw)();
@@ -12627,7 +12633,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
                             
-                            //given that the Positions under consideration has changed, I re-tabulate the Routes and re-paint the charts -> I rerender the Positions and the label of the Position which is being dragged
+                            //given that the Positions under consideration has changed, I re-tabulate the Positions and re-paint the charts -> I rerender the Positions and the label of the Position which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
                             
 #ifdef __APPLE__

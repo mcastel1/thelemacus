@@ -8826,6 +8826,15 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
     for(i=0; i < meridians_now.size(); i++){
         (meridians_now[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
     }
+    
+    //render parallels ticks
+    for(i=0; i < parallel_ticks_now.size(); i++){
+        (parallel_ticks_now[i]).DrawOld((wxGetApp().n_points_minor_ticks.value), foreground_color, thickness, dc, this);
+    }
+    //render parallels
+    for(i=0; i < parallels_now.size(); i++){
+        (parallels_now[i]).DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
+    }
 
 //    //draw the first chunk of intermediate ticks on the longitude axis
 //    if (gamma_lambda != 1) {
@@ -8876,7 +8885,7 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
 //             
 //         }
 
-    //draw labels of meridians
+    //render labels of meridians
     for (i = 0; i < labels_lambda.size(); i++) {
 
         dc->GetTextExtent(labels_lambda[i], &width_label, &height_label);
@@ -8885,60 +8894,60 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
     }
 
 
-    //draw parallels
-    //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
-    (route.type).set(String("l"));
-    (route.Z).set(String(""), M_PI_2, String(""));
-    ((route.reference_position).lambda) = (p_NW.lambda);
-
-    //this loop runs over the latitude of the parallel, which we call phi
-    for (parallels_now.clear(),
-        (phi.value) = (phi_start.value);
-        (phi.value) < (phi_end.value);
-        (phi.value) += delta_phi
-        ) {
-
-        //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
-        ((route.reference_position).phi) = phi;
-        (route.length).set(String(""),
-            Re * cos(phi) * ((
-
-                (((p_NW.lambda) < M_PI) && ((p_SE.lambda) > M_PI)) ? ((p_NW.lambda) - (p_SE.lambda) + 2.0 * M_PI) : ((p_NW.lambda) - (p_SE.lambda))
-
-                ).value), String(""));
-
-        //add the current parallel that is being drawn to parallels
-        parallels_now.push_back(route);
-        //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
-        //here I use DrawOld because Draw cannot handle loxodromes
-        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
-
-        if (gamma_phi != 1) {
-            //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
-
-            //                (route.type).set(String(""), String("o"), String(""));
-            //                (route.Z).set(String(""), M_PI_2, String(""));
-            route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * lambda_span, String(""));
-            //                ((route.reference_position).lambda) = (parent->lambda_min);
-
-            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-            for (
-                (route.reference_position.phi.value) = (phi.value);
-                (route.reference_position.phi.value) - (phi.value) < delta_phi;
-                (route.reference_position.phi.value) += delta_phi_minor
-                ) {
-
-                //                        route.Draw(((wxGetApp().n_points_minor_ticks)).value, 0x0000ff, thickness, this, String(""));
-                //here I use DrawOld because Draw cannot handle loxodromes
-                route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this);
-
-            }
-
-            //                (route.type).set(String(""), String("c"), String(""));
-
-        }
-
-    }
+//    //draw parallels
+//    //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
+//    (route.type).set(String("l"));
+//    (route.Z).set(String(""), M_PI_2, String(""));
+//    ((route.reference_position).lambda) = (p_NW.lambda);
+//
+//    //this loop runs over the latitude of the parallel, which we call phi
+//    for (parallels_now.clear(),
+//        (phi.value) = (phi_start.value);
+//        (phi.value) < (phi_end.value);
+//        (phi.value) += delta_phi
+//        ) {
+//
+//        //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
+//        ((route.reference_position).phi) = phi;
+//        (route.length).set(String(""),
+//            Re * cos(phi) * ((
+//
+//                (((p_NW.lambda) < M_PI) && ((p_SE.lambda) > M_PI)) ? ((p_NW.lambda) - (p_SE.lambda) + 2.0 * M_PI) : ((p_NW.lambda) - (p_SE.lambda))
+//
+//                ).value), String(""));
+//
+//        //add the current parallel that is being drawn to parallels
+//        parallels_now.push_back(route);
+//        //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
+//        //here I use DrawOld because Draw cannot handle loxodromes
+//        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
+//
+//        if (gamma_phi != 1) {
+//            //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
+//
+//            //                (route.type).set(String(""), String("o"), String(""));
+//            //                (route.Z).set(String(""), M_PI_2, String(""));
+//            route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * lambda_span, String(""));
+//            //                ((route.reference_position).lambda) = (parent->lambda_min);
+//
+//            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+//            for (
+//                (route.reference_position.phi.value) = (phi.value);
+//                (route.reference_position.phi.value) - (phi.value) < delta_phi;
+//                (route.reference_position.phi.value) += delta_phi_minor
+//                ) {
+//
+//                //                        route.Draw(((wxGetApp().n_points_minor_ticks)).value, 0x0000ff, thickness, this, String(""));
+//                //here I use DrawOld because Draw cannot handle loxodromes
+//                route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this);
+//
+//            }
+//
+//            //                (route.type).set(String(""), String("c"), String(""));
+//
+//        }
+//
+//    }
 
     //draw labels on parallels
     for (i = 0; i < labels_phi.size(); i++) {
@@ -9338,6 +9347,7 @@ void DrawPanel::Draw_Mercator(void) {
     wxPoint p;
     wxString dummy_label;
     Route route;
+    Angle phi;
 
     //append \t to prefix
     prefix = String("");
@@ -9671,6 +9681,55 @@ void DrawPanel::Draw_Mercator(void) {
             
         }
         
+    }
+    
+    //draw parallels
+    //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
+    route.type.set(String("l"));
+    route.Z.set(String(""), M_PI_2, String(""));
+    (route.reference_position.lambda) = (p_NW.lambda);
+
+    //this loop runs over the latitude of the parallel, which we call phi
+    for (parallels_now.clear(), parallel_ticks_now.clear(), (phi.value) = (phi_start.value);
+        (phi.value) < (phi_end.value);
+        (phi.value) += delta_phi
+        ) {
+
+        //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
+        (route.reference_position.phi) = phi;
+        route.length.set(String(""),
+            Re * cos(phi) * ((
+
+                (((p_NW.lambda) < M_PI) && ((p_SE.lambda) > M_PI)) ? ((p_NW.lambda) - (p_SE.lambda) + 2.0 * M_PI) : ((p_NW.lambda) - (p_SE.lambda))
+
+                ).value), String(""));
+
+        //add the current parallel that is being drawn to parallels
+        parallels_now.push_back(route);
+        //here I use DrawOld because Draw cannot handle loxodromes
+//        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
+
+        if (gamma_phi != 1) {
+            //draw smaller ticks -> set route to a loxodrome pointing towards the E and draw it
+
+             route.length.set(String(""), Re * (wxGetApp().tick_length_over_width_plot_area.value) * lambda_span, String(""));
+
+            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+            for (
+                (route.reference_position.phi.value) = (phi.value);
+                (route.reference_position.phi.value) - (phi.value) < delta_phi;
+                (route.reference_position.phi.value) += delta_phi_minor
+                ) {
+                    
+                    parallel_ticks_now.push_back(route);
+
+                //here I use DrawOld because Draw cannot handle loxodromes
+//                route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this);
+
+            }
+
+        }
+
     }
     
     

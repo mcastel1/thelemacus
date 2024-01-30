@@ -8462,7 +8462,15 @@ void DrawPanel::RerenderSelectionRectangle(void) {
 
 
 //render the coastline by using the set of points points_coastline, meridians, parallels and their labels
-void DrawPanel::RenderBackground(wxDC& dc, vector<wxPoint> points_coastline, wxColour foreground_color, wxColour background_color) {
+void DrawPanel::RenderBackground(
+                                 wxDC& dc,
+                                 vector<Route> parallels,
+                                 vector<Route> meridians,
+                                 vector<Route> parallels_ticks,
+                                 vector<Route> meridians_ticks,
+                                 vector<wxPoint> points_coastline,
+                                 wxColour foreground_color, wxColour background_color
+                                 ) {
 
 //    dc.SetPen(foreground_color);
 //    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
@@ -8484,7 +8492,15 @@ void DrawPanel::RenderBackground(wxDC& dc, vector<wxPoint> points_coastline, wxC
         dc_m_bgbuffer.SetTextForeground(foreground_color);
         dc_m_bgbuffer.SetTextBackground(background_color);
         
-        (this->*Render)(&dc_m_bgbuffer, points_coastline, foreground_color, background_color);
+        (this->*Render)(
+                        &dc_m_bgbuffer,
+                        parallels,
+                        meridians,
+                        parallels_ticks,
+                        meridians_ticks,
+                        points_coastline,
+                        foreground_color,
+                        background_color);
 
         mdc.SelectObject(wxNullBitmap);
 
@@ -8786,7 +8802,13 @@ void DrawPanel::FitAll() {
 }
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color) {
+void DrawPanel::Render_Mercator(wxDC* dc, 
+                                vector<Route> parallels,
+                                vector<Route> meridians,
+                                vector<Route> parallels_ticks,
+                                vector<Route> meridians_ticks,
+                                vector<wxPoint> points_coastline,
+                                wxColor foreground_color, wxColor background_color) {
 
     Angle lambda, phi;
     Route route;
@@ -8814,28 +8836,29 @@ void DrawPanel::Render_Mercator(wxDC* dc, vector<wxPoint> points_coastline, wxCo
     }
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
 
-  
+    
     //set thickness to normal thicnkness
     thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-
-    //render meridians ticks
-    for(i=0; i < meridians_ticks_now.size(); i++){
-        (meridians_ticks_now[i]).Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+    
+    //render parallels
+    for(i=0; i < parallels.size(); i++){
+        (parallels[i]).DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
     }
     //render meridians
-    for(i=0; i < meridians_now.size(); i++){
-        (meridians_now[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
+    for(i=0; i < meridians.size(); i++){
+        (meridians[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
     }
-    
     //render parallels ticks
-    for(i=0; i < parallel_ticks_now.size(); i++){
-        (parallel_ticks_now[i]).DrawOld((wxGetApp().n_points_minor_ticks.value), foreground_color, thickness, dc, this);
+    for(i=0; i < parallels_ticks.size(); i++){
+        (parallels_ticks[i]).DrawOld((wxGetApp().n_points_minor_ticks.value), foreground_color, thickness, dc, this);
     }
-    //render parallels
-    for(i=0; i < parallels_now.size(); i++){
-        (parallels_now[i]).DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
+    //render meridians ticks
+    for(i=0; i < meridians_ticks.size(); i++){
+        (meridians_ticks[i]).Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
     }
-
+  
+    
+  
 //    //draw the first chunk of intermediate ticks on the longitude axis
 //    if (gamma_lambda != 1) {
 //
@@ -9076,7 +9099,12 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 }
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::Render_3D(wxDC* dc, vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color) {
+void DrawPanel::Render_3D(wxDC* dc,
+                          vector<Route> parallels,
+                          vector<Route> meridians,
+                          vector<Route> parallels_ticks,
+                          vector<Route> meridians_ticks,
+                          vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color) {
 
     int i;
     double thickness;
@@ -9097,8 +9125,7 @@ void DrawPanel::Render_3D(wxDC* dc, vector<wxPoint> points_coastline, wxColor fo
     //dc->SetPen(wxPen(foreground_color));
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
 
-
-    //draw coastlines
+    //render coastlines
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
@@ -9111,24 +9138,27 @@ void DrawPanel::Render_3D(wxDC* dc, vector<wxPoint> points_coastline, wxColor fo
     
     //set thickness to normal thicnkness
     thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-
-    //render meridians ticks
-    for(i=0; i < meridians_ticks_now.size(); i++){
-        (meridians_ticks_now[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
+    
+    //render parallels
+    for(i=0; i < parallels.size(); i++){
+        (parallels[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
     }
     //render meridians
-    for(i=0; i < meridians_now.size(); i++){
-        (meridians_now[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
+    for(i=0; i < meridians.size(); i++){
+        (meridians[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
+    }
+    //render parallels ticks
+    for(i=0; i < parallels_ticks.size(); i++){
+        (parallels_ticks[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
+    }
+    //render meridians ticks
+    for(i=0; i < meridians_ticks.size(); i++){
+        (meridians_ticks[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
     }
     
-    //render parallels ticks
-    for(i=0; i < parallel_ticks_now.size(); i++){
-        (parallel_ticks_now[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
-    }
-    //render parallels
-    for(i=0; i < parallels_now.size(); i++){
-        (parallels_now[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
-    }
+    
+ 
+   
 
 
 //    //draw meridians

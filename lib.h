@@ -1860,7 +1860,7 @@ public:
     bool (DrawPanel::*ScreenToProjection)(wxPoint, Projection*);
     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     bool (DrawPanel::*GeoToProjection)(Position, Projection*, bool);
-    void (DrawPanel::*Render)(wxDC*, vector<wxPoint>, wxColor, wxColor);
+    void (DrawPanel::*Render)(wxDC*, vector<Route>, vector<Route>, vector<Route>, vector<Route>, vector<wxPoint>, wxColor, wxColor);
     void (DrawPanel::*ProjectionToDrawPanel)(Projection, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
@@ -1874,7 +1874,7 @@ public:
     void PaintEvent(wxPaintEvent & evt);
     void RerenderBackground(void);
     void RenderAll(wxDC&);
-    void RenderBackground(wxDC&, vector<wxPoint>, wxColor, wxColor);
+    void RenderBackground(wxDC&, vector<Route>, vector<Route>, vector<Route>, vector<Route>, vector<wxPoint>, wxColor, wxColor);
     void RenderRoutes(wxDC&, vector< vector< vector<wxPoint> > >, vector<wxPoint>, wxColor);
     void RerenderRoutes(void);
     void RenderPositions(wxDC&, vector<wxPoint>, wxColor);
@@ -1918,8 +1918,8 @@ public:
     double x_span(void);
     Rotation rotation_start_end(wxPoint, wxPoint);
     
-    void Render_Mercator(wxDC*, vector<wxPoint>, wxColor, wxColor);
-    void Render_3D(wxDC*, vector<wxPoint>, wxColor, wxColor);
+    void Render_Mercator(wxDC*, vector<Route>, vector<Route>, vector<Route>, vector<Route>, vector<wxPoint>, wxColor, wxColor);
+    void Render_3D(wxDC*, vector<Route>, vector<Route>, vector<Route>, vector<Route>, vector<wxPoint>, wxColor, wxColor);
     void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);
     void DrawLabel(const Position&, Angle, Angle, Int, String);
     

@@ -8505,12 +8505,17 @@ void DrawPanel::RenderBackground(
         m_bgbuffer.UseAlpha();
 
         wxMemoryDC mdc(m_bgbuffer);
+
+        mdc.SetPen(wxPen(foreground_color));
+        mdc.SetBrush(wxBrush(foreground_color));
+
         wxGCDC dc_m_bgbuffer(mdc);
 
-        dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
+        //dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
         dc_m_bgbuffer.Clear();
         
         dc_m_bgbuffer.SetPen(wxPen(foreground_color));
+        dc_m_bgbuffer.SetBrush(wxBrush(foreground_color));
         dc_m_bgbuffer.SetTextForeground(foreground_color);
         dc_m_bgbuffer.SetTextBackground(background_color);
         
@@ -8528,6 +8533,7 @@ void DrawPanel::RenderBackground(
     }
 
     dc.SetPen(wxPen(foreground_color));
+    dc.SetBrush(wxBrush(foreground_color));
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
     dc.DrawBitmap(m_bgbuffer, 0, 0, false);
@@ -9181,12 +9187,12 @@ void DrawPanel::Render_3D(wxDC* dc,
         //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
         dc->DrawEllipse(points_coastline[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
-    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
 
     
 //    //set thickness to normal thicnkness
 //    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-   
+    dc->SetPen(wxPen(foreground_color));
+    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
     //render parallels and meridians
     for(i=0; i < grid.size(); i++){
         for (j = 0; j < (grid[i]).size(); j++) {

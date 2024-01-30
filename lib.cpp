@@ -8488,8 +8488,8 @@ void DrawPanel::RerenderSelectionRectangle(void) {
 //render the coastline by using the set of points points_coastline, meridians, parallels and their labels
 void DrawPanel::RenderBackground(
                                  wxDC& dc,
-                                 vector<Route> grid,
-                                 vector<Route> ticks,
+                                 vector< vector< vector<wxPoint> > > grid,
+                                 vector< vector< vector<wxPoint> > > ticks,
                                  vector<wxPoint> points_coastline,
                                  wxColour foreground_color, wxColour background_color
                                  ) {
@@ -8646,7 +8646,7 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
     double thickness, radius;
     wxPoint p;
 
-    //draw Routes
+    //render Routes
     for (i = 0, color_id = 0; i < (points_curves.size()); i++) {
         
         //set the route thickness and pen
@@ -8851,8 +8851,8 @@ void DrawPanel::FitAll() {
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_Mercator(wxDC* dc, 
-                                vector<Route> grid,
-                                vector<Route> ticks,
+                                vector< vector< vector<wxPoint> > > grid,
+                                vector< vector< vector<wxPoint> > > ticks,
                                 vector<wxPoint> points_coastline,
                                 wxColor foreground_color, wxColor background_color) {
 
@@ -9138,8 +9138,8 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_3D(wxDC* dc,
-                          vector<Route> grid,
-                          vector<Route> ticks,
+                          vector< vector< vector<wxPoint> > > grid,
+                          vector< vector< vector<wxPoint> > > ticks,
                           vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color) {
 
     int i;

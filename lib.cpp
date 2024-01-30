@@ -8409,6 +8409,7 @@ void DrawPanel::RerenderBackground(void) {
  
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
+    re_draw = true;
     RenderBackground(
                      dc,
                      grid_now,

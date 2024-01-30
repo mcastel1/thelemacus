@@ -7833,9 +7833,8 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 }
 
 
-
+//get the datapoints of coastlines and store them into parent->points_coastline_now
 void ChartFrame::GetCoastLineData_3D(void) {
-
 
     unsigned long every, l, n, n_points_grid;
     //integer values of min/max lat/lon to be extractd from p_coastline
@@ -7900,8 +7899,6 @@ void ChartFrame::GetCoastLineData_3D(void) {
         for (j = j_min; j < j_max; j++) {
 
             //            ta =clock();
-
-
 
             if (!((i >= -90) && (i <= 90))) {
                 //in this case, i needs to be adjusted because it is not between -90 and +90
@@ -8038,7 +8035,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 }
 
 
-//this function efficiently reads coastline data stored in data_x in the interval of latitudes lambda_min, lambda_max, phi_min, phi_max, and writes this data x and y, writing n_points points at the most
+//this function efficiently reads coastline data stored in data_x in the interval of latitudes lambda_min, lambda_max, phi_min, phi_max, and writes this data x and y, writing n_points points at the most. This data is stored into parent->points_coastline_now 
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
@@ -9499,7 +9496,7 @@ void DrawPanel::Draw_Mercator(void) {
     DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/ + wxPoint(1, 1), &p_NW);
     DrawPanelToGeo(wxPoint(position_plot_area + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/ - wxPoint(1, 1), &p_SE);
 
-    //fetch the data on the region that I am about to plot from the data files.
+    //fetch the data on the region that I am about to plot from the data files and store it into parent->points_coastline_now
     parent->GetCoastLineData_Mercator();
 
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis

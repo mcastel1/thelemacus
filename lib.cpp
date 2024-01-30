@@ -8358,7 +8358,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
     start_label_selection_rectangle = String("");
     end_label_selection_rectangle_now = String("");
+#ifdef _WIN32
     end_label_selection_rectangle_before = String("");
+#endif
     label_dragged_object_now = String("");
 
     //    text_position_start->SetBackgroundColour(wxGetApp().background_color);
@@ -12018,9 +12020,12 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     stringstream s;
     int i, j, l;
 
+#ifdef _WIN32
     //store the former _now positions into the _before positions
     position_screen_before = position_screen_now;
     (parent->parent->position_before) = (parent->parent->position_now);
+    label_position_before = label_position_now;
+#endif
     position_screen_now = wxGetMousePosition();
 
 
@@ -12029,8 +12034,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     //    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
     //    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
 
-        //update the instantaneous position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
-    label_position_before = label_position_now;
+    //update the instantaneous position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
     mouse_in_plot_area = GetMouseGeoPosition(&(parent->parent->position_now));
     if (mouse_in_plot_area) {
         //the mouse has a screen position corresponding to a geographic position -> I write it into label_position_now, otherwise label_position_now is left empty,
@@ -12048,16 +12052,20 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if ((parent->parent->selection_rectangle)) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
 
-        position_end_label_selection_rectangle_before = position_end_label_selection_rectangle_now;
-        end_label_selection_rectangle_before = end_label_selection_rectangle_now;
-        SetLabelAndPosition(position_screen_now, &position_end_label_selection_rectangle_now, &end_label_selection_rectangle_now);
-    
+       
         //clean the previous selection_rectangle from *this and draw the current one
 #ifdef __APPLE__
+        SetLabelAndPosition(position_screen_now, &position_end_label_selection_rectangle_now, &end_label_selection_rectangle_now);
+
         //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this, and paint the new one, because Refresh() triggers a call of PaintEvent
         Refresh();
 #endif
 #ifdef _WIN32
+        position_end_label_selection_rectangle_before = position_end_label_selection_rectangle_now;
+        end_label_selection_rectangle_before = end_label_selection_rectangle_now;
+
+        SetLabelAndPosition(position_screen_now, &position_end_label_selection_rectangle_now, &end_label_selection_rectangle_now);
+
         //on APPLE, the Refresh() command slows down things -> I don't call it but use RerenderSelectionRectangle, which cleans up the former selections rectangle in *this and draws a new one
         RerenderSelectionRectangle();
 #endif
@@ -12719,6 +12727,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             }
                             
                             
+#ifdef __APPLE__
+                            //re-draw the chart
+                            (this->*Draw)();
+                            Refresh();
+#endif
+#ifdef WIN32
                             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used in RerenderBackground
                             parent->points_coastline_before.clear();
                             (parent->points_coastline_before) = (parent->points_coastline_now);
@@ -12740,10 +12754,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //re-draw the chart
                             (this->*Draw)();
-#ifdef __APPLE__
-                            Refresh();
-#endif
-#ifdef WIN32
                             RerenderBackground();
 #endif
                             //							FitAll();
@@ -12831,6 +12841,19 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             
+#ifdef __APPLE__
+                            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
+                                                ((parent->parent->data->route_list)[(parent->parent->highlighted_route)]).reference_position,
+                                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                                                                                                 );
+                            
+                            //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts -> I rerender the Routes and the label of the Route which is being dragged
+                            ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
+                            
+                            ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
+#endif
+#ifdef _WIN32
                             //show the coordinates of the reference position of the Route that is being dragged
                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
@@ -12849,13 +12872,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
                             
+                            
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts -> I rerender the Routes and the label of the Route which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
                             
-#ifdef __APPLE__
-                            ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
-#endif
-#ifdef _WIN32
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderRoutes();
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderDraggedObjectLabel();
 #endif
@@ -12887,18 +12907,25 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         }
 
-//                        //draw the label of the coordinates of the Position which is being dragged
-//                        //store the string with the coordinated of the Position that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-//                        label_dragged_object_before = label_dragged_object_now;
-//                        position_label_dragged_object_before = position_label_dragged_object_now;
-//                        SetLabelAndPosition(position_now_drag, &position_label_dragged_object_now, &label_dragged_object_now);
-
                         //update the data of the Position under consideration in listcontrol_positions
                         ((parent->parent->data->position_list)[(parent->parent->highlighted_position)]).update_wxListCtrl((parent->parent->highlighted_position), parent->parent->listcontrol_positions);
 
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             
+#ifdef __APPLE__
+                            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
+                                                (parent->parent->data->position_list)[(parent->parent->highlighted_position)],
+                                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                                                );
+                            
+                            //given that the Positions under consideration has changed, I re-tabulate the Positions and re-paint the charts -> I rerender the Positions and the label of the Position which is being dragged
+                            ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
+
+                            (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
+#endif
+#ifdef _WIN32
                             //show the coordinates of the reference position of the Route that is being dragged
                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
@@ -12915,11 +12942,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-paint the charts -> I rerender the Positions and the label of the Position which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-                            
-#ifdef __APPLE__
-                            (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
-#endif
-#ifdef _WIN32
+
+
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderPositions();
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderDraggedObjectLabel();
 #endif

@@ -12106,7 +12106,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             
             //obtain the label and position of the selection rectangle for each DrawPanel
             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                 (parent->parent->screen_position_now),
+                                                                                 (parent->parent->geo_position_now),
                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now),
                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now)
                                                                                  );
@@ -12529,25 +12529,40 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
     if ((parent->parent->selection_rectangle)) {
         //start drawing a selection rectangle
+        
+        int i;
+        bool check;
+        
+        (parent->parent->geo_position_start) = (parent->parent->geo_position_now);
+        //        GetMouseGeoPosition(&(parent->parent->geo_position_start));
+        //        position_start_selection = (parent->parent->screen_position_now);
+        
+        //store the position at the beginning of the selection process, to compute the zoom factor later
+        for(i=0, check = false; i<(parent->parent->chart_frames).size(); i++){
+            
+            if ((((parent->parent->chart_frames)[i])->draw_panel->*GeoToProjection)((parent->parent->geo_position_start), &start_selection, false)) {
+                //geo_position_start is valid in the i-th DrawPanel -> start the selection rectangle in the i-th DrawPanel
+                
+                ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
+                                                                                     (parent->parent->geo_position_now),
+                                                                                     &(((parent->parent->chart_frames)[i])->draw_panel->position_start_label_selection_rectangle),
+                                                                                     &(((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle));
 
-        GetMouseGeoPosition(&((parent->parent)->geo_position_start));
-        position_start_selection = (parent->parent->screen_position_now);
-        //stores the position at the beginning of the selection process, to compute the zoom factor later
-        if ((this->*ScreenToProjection)(position_start_selection, &start_selection)) {
-            //position_start_selection is valid -> start the selection rectangle
+                ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
+                check = true;
 
-            SetLabelAndPosition((parent->parent->screen_position_now), &position_start_label_selection_rectangle, &start_label_selection_rectangle);
+            }
+            
+            if(!check){
+                //geo_position_start is invalid in all DrawPanels -> delete the selection rectangle by setting selection_rectangle to false
+                
+                (parent->parent->selection_rectangle) = false;
+                
+            }
 
         }
-        else {
-            //position_start_selection is not vlid -> delete the selection rectangle by setting selection_rectangle to false
+        
 
-            (parent->parent->selection_rectangle) = false;
-            //I call Refresh to delete the currently drawn selection rectangle
-            Refresh();
-            //			FitAll();
-
-        }
 
 
     }

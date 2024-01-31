@@ -1884,6 +1884,7 @@ public:
     void RenderDraggedObjectLabel(wxDC&);
     void RerenderDraggedObjectLabel(void);
     void RenderSelectionRectangle(wxDC&, wxPoint, wxColor, wxColor);
+    void RenderSelectionRectangle(wxDC&, Position, wxColor, wxColor);
     void RerenderSelectionRectangle(void);
     void RenderSelectionRectangleLabels(wxDC&);
     void TabulateRoutes(void);

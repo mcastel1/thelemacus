@@ -8542,6 +8542,17 @@ void DrawPanel::RenderBackground(
 }
 
 
+//same as  DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position_screen, wxColour foreground_color, wxColour background_color), but it takes a geographic opsition rather than a screen position as input
+void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position position, wxColour foreground_color, wxColour background_color){
+    
+    wxPoint p;
+    
+    GeoToScreen(position, &p);
+    RenderSelectionRectangle(dc, p, foreground_color, background_color);
+    
+}
+
+
 //render a selection rectangle with end position position_screen, foreground color foreground_color and backgrund color background_color
 void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position_screen, wxColour foreground_color, wxColour background_color){
     
@@ -11899,10 +11910,6 @@ void DrawPanel::ShowCoordinates(Position q, String* label) {
 //given a geographic Positiojn q, if q lies within *this, write in label a text with the geographic coordinates corresponding to q, and write in *position the position of the label close to q (with some margin, for clarity). Otherwise, write "" in label and does nothing witg poisition
 void DrawPanel::SetLabelAndPosition(Position q, wxPoint* position, String* label) {
     
-    string xx;
-    
-    xx = parent->projection->name->GetValue().ToStdString();
-
     if (
         /*GeoToDrawPanel converts q into the wxPoint position, reckoned with respect to the origin *this*/(this->GeoToDrawPanel)(q, position, false)) {
 
@@ -11917,8 +11924,6 @@ void DrawPanel::SetLabelAndPosition(Position q, wxPoint* position, String* label
         
     }
     
-    cout << "x";
-
 }
 
 
@@ -12092,14 +12097,31 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
     if ((parent->parent->selection_rectangle)) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
-
-       
+        
         //clean the previous selection_rectangle from *this and draw the current one
 #ifdef __APPLE__
-        SetLabelAndPosition(position_screen_now, &position_end_label_selection_rectangle_now, &end_label_selection_rectangle_now);
-
+        
+        
+        for(i=0; i<(parent->parent->chart_frames.size()); i++){
+            
+            //set position_screen_now of every DrawPanel to position_screen_now of *this
+            (((parent->parent->chart_frames)[i])->draw_panel->position_screen_now) = position_screen_now;
+            
+            //obtain the label and position of the selection rectangle for each DrawPanel
+            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
+                                                                                 (((parent->parent->chart_frames)[i])->draw_panel->position_screen_now),
+                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now),
+                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now)
+                                                                                 );
+         
+            
+        }
+        
         //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this, and paint the new one, because Refresh() triggers a call of PaintEvent
-        Refresh();
+        parent->parent->RefreshAll();
+        
+        
+
 #endif
 #ifdef _WIN32
         position_end_label_selection_rectangle_before = position_end_label_selection_rectangle_now;

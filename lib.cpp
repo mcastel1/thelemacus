@@ -8453,7 +8453,7 @@ void DrawPanel::RerenderSelectionRectangle(void) {
     wxClientDC dc(this);
     
     //render a selection rectangle with color wxGetApp().background_color to clean the preceeding one
-    RenderSelectionRectangle(dc, position_screen_before, wxGetApp().background_color, wxGetApp().background_color);
+    RenderSelectionRectangle(dc, (parent->parent->screen_position_before), wxGetApp().background_color, wxGetApp().background_color);
     
     //draw the label of the end point of selection_rectangle on top of the old one with color background_color, in order to delete the old one
     /*
@@ -8480,7 +8480,7 @@ void DrawPanel::RerenderSelectionRectangle(void) {
   
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
-    RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderSelectionRectangle(dc, (parent->parent->screen_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc);
 
 }
@@ -8581,26 +8581,26 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position_screen, wxCo
         //right vertical edge of rectangle
         (Route(
                String("o"),
-               (parent->parent->position_start),
-               Angle(M_PI * (1.0 - GSL_SIGN((((q.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * fabs((((q.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).phi).normalize_pm_pi_ret()).value)))
+               (parent->parent->geo_position_start),
+               Angle(M_PI * (1.0 - GSL_SIGN((((q.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * fabs((((q.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
                )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
         
         //left vertical edge of rectangle
         (Route(
                String("o"),
                q,
-               Angle(M_PI * (1.0 + GSL_SIGN((((q.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * fabs((((q.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).phi).normalize_pm_pi_ret()).value)))
+               Angle(M_PI * (1.0 + GSL_SIGN((((q.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * fabs((((q.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
                )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
         
         //bottom horizontal edge of rectangle
         (Route(
                String("l"),
-               (parent->parent->position_start),
+               (parent->parent->geo_position_start),
                //change this by introducing if
-               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((q.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * cos((parent->parent->position_start).phi) * fabs((((q.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).lambda).normalize_pm_pi_ret()).value)))
+               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((q.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((((q.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
                )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
         
         //top horizontal edge of rectangle
@@ -8608,8 +8608,8 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position_screen, wxCo
                String("l"),
                q,
                //change this by introducing if
-               Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((q.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * cos(q.phi) * fabs((((q.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->position_start).lambda).normalize_pm_pi_ret()).value)))
+               Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((q.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * cos(q.phi) * fabs((((q.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
                )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
         
         
@@ -8646,7 +8646,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
     
     //draw selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
-        RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderSelectionRectangle(dc, (parent->parent->screen_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
         RenderSelectionRectangleLabels(dc);
     }
 
@@ -11521,7 +11521,7 @@ inline bool DrawPanel::ScreenToDrawPanel(wxPoint p, wxPoint* q) {
 
 }
 
-//converts the point p on the screen (which is supposed to lie in the plot area) into geographic Position q and it writes into q only if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
+//converts the point p on the screen into geographic Position q and it writes into q only if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
 bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position* q) {
 
     Projection temp;
@@ -11613,7 +11613,7 @@ inline bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position* q) {
 
 }
 
-//converts the point p on the screen (which is supposed to lie in the plot area), to the  Mercator projection q of the relative geographic position, by writing into q only if q!=NULL. It returns true/false if q lies within the boundaris x_min .. y_max
+//convert the point p on the screen to the  Mercator projection q of the relative geographic position, by writing into q only if q!=NULL. It returns true/false if q lies within the boundaris x_min .. y_max
 inline bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q) {
 
     Projection temp;
@@ -12054,9 +12054,9 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
 //This function obtains the geographical Position p of the mouse hovering on the map of the world. It returns true if the mouse is in the plot area, false otherwise
 bool DrawPanel::GetMouseGeoPosition(Position* p) {
 
-    //	position_screen_now = wxGetMousePosition();
+    //	(parent->parent->screen_position_now) = wxGetMousePosition();
 
-    return ((this->*ScreenToGeo)(position_screen_now, p));
+    return ((this->*ScreenToGeo)((parent->parent->screen_position_now), p));
 
 }
 
@@ -12065,27 +12065,27 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     wxPoint q;
     stringstream s;
     int i, j, l;
+    
+    //    cout << "\nMouse moved";
+    //    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
+    //    cout << "Position of mouse screen = {" << (parent->parent->screen_position_now).x << " , " << (parent->parent->screen_position_now).y << "}\n";
+    //    cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-position_draw_panel).x << " , " << ((parent->parent->screen_position_now)-position_draw_panel).y << "}\n";
+
 
 #ifdef _WIN32
     //store the former _now positions into the _before positions
-    position_screen_before = position_screen_now;
-    (parent->parent->position_before) = (parent->parent->position_now);
+    (parent->parent->screen_position_before) = (parent->parent->screen_position_now);
+    (parent->parent->geo_position_before) = (parent->parent->geo_position_now);
     label_position_before = label_position_now;
 #endif
-    position_screen_now = wxGetMousePosition();
-
-
-    //    cout << "\nMouse moved";
-    //    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
-    //    cout << "Position of mouse screen = {" << position_screen_now.x << " , " << position_screen_now.y << "}\n";
-    //    cout << "Position of mouse draw panel = {" << (position_screen_now-position_draw_panel).x << " , " << (position_screen_now-position_draw_panel).y << "}\n";
-
-    //update the instantaneous position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
-    mouse_in_plot_area = GetMouseGeoPosition(&(parent->parent->position_now));
+    
+    //update the instantaneous screen and geographic position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
+    (parent->parent->screen_position_now) = wxGetMousePosition();
+    mouse_in_plot_area = (this->*ScreenToGeo)((parent->parent->screen_position_now), &((parent->parent->geo_position_now)));
     if (mouse_in_plot_area) {
         //the mouse has a screen position corresponding to a geographic position -> I write it into label_position_now, otherwise label_position_now is left empty,
 
-        label_position_now = String((parent->parent->position_now.to_string(display_precision.value)));
+        label_position_now = String((parent->parent->geo_position_now.to_string(display_precision.value)));
 
     }
     else {
@@ -12104,12 +12104,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         
         for(i=0; i<(parent->parent->chart_frames.size()); i++){
             
-            //set position_screen_now of every DrawPanel to position_screen_now of *this
-            (((parent->parent->chart_frames)[i])->draw_panel->position_screen_now) = position_screen_now;
-            
             //obtain the label and position of the selection rectangle for each DrawPanel
             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                 (((parent->parent->chart_frames)[i])->draw_panel->position_screen_now),
+                                                                                 (parent->parent->screen_position_now),
                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now),
                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now)
                                                                                  );
@@ -12119,18 +12116,19 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         
         //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this, and paint the new one, because Refresh() triggers a call of PaintEvent
         parent->parent->RefreshAll();
-        
-        
 
 #endif
+
 #ifdef _WIN32
+        
         position_end_label_selection_rectangle_before = position_end_label_selection_rectangle_now;
         end_label_selection_rectangle_before = end_label_selection_rectangle_now;
 
-        SetLabelAndPosition(position_screen_now, &position_end_label_selection_rectangle_now, &end_label_selection_rectangle_now);
+        SetLabelAndPosition((parent->parent->screen_position_now), &position_end_label_selection_rectangle_now, &end_label_selection_rectangle_now);
 
         //on APPLE, the Refresh() command slows down things -> I don't call it but use RerenderSelectionRectangle, which cleans up the former selections rectangle in *this and draws a new one
         RerenderSelectionRectangle();
+        
 #endif
 
 
@@ -12142,7 +12140,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
-        position_draw_panel_now = position_screen_now - position_draw_panel;
+        position_draw_panel_now = (parent->parent->screen_position_now) - position_draw_panel;
 
         for (highlighted_route_old = ((parent->parent)->highlighted_route), ((parent->parent)->highlighted_route) = -1, i = 0;
             i < (((parent->parent)->data)->route_list).size();
@@ -12239,7 +12237,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
             GeoToScreen((((parent->parent)->data)->position_list)[i], &q);
 
-            if (sqrt(gsl_pow_2((position_screen_now.x) - (q.x)) + gsl_pow_2((position_screen_now.y) - (q.y))) <
+            if (sqrt(gsl_pow_2(((parent->parent->screen_position_now).x) - (q.x)) + gsl_pow_2(((parent->parent->screen_position_now).y) - (q.y))) <
                 4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth())) {
                 //the mouse is over a position
 
@@ -12532,13 +12530,13 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
     if ((parent->parent->selection_rectangle)) {
         //start drawing a selection rectangle
 
-        GetMouseGeoPosition(&((parent->parent)->position_start));
-        position_start_selection = position_screen_now;
+        GetMouseGeoPosition(&((parent->parent)->geo_position_start));
+        position_start_selection = (parent->parent->screen_position_now);
         //stores the position at the beginning of the selection process, to compute the zoom factor later
         if ((this->*ScreenToProjection)(position_start_selection, &start_selection)) {
             //position_start_selection is valid -> start the selection rectangle
 
-            SetLabelAndPosition(position_screen_now, &position_start_label_selection_rectangle, &start_label_selection_rectangle);
+            SetLabelAndPosition((parent->parent->screen_position_now), &position_start_label_selection_rectangle, &start_label_selection_rectangle);
 
         }
         else {
@@ -12557,7 +12555,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         //finish drawing a selection rectangle
 
         GetMouseGeoPosition(&((parent->parent)->position_end));
-        position_end_selection = position_screen_now;
+        position_end_selection = (parent->parent->screen_position_now);
 
         //store the position at the end of the selection process, to compute the zoom factor later
         if ((this->*ScreenToProjection)(position_end_selection, &end_selection)) {
@@ -12571,23 +12569,23 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     //sets the new values of lambda_min, lambda_max, phi_min and phi_max
                     //                delete chart;
                     //I convert all the angles to the format between -pi and pi, so I can sort them numerically
-                    (((parent->parent)->position_start).phi).normalize_pm_pi();
-                    (((parent->parent)->position_start).lambda).normalize_pm_pi();
+                    (((parent->parent)->geo_position_start).phi).normalize_pm_pi();
+                    (((parent->parent)->geo_position_start).lambda).normalize_pm_pi();
                     (((parent->parent)->position_end).phi).normalize_pm_pi();
                     (((parent->parent)->position_end).lambda).normalize_pm_pi();
                     //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the values of ((parent->parent)->p_start).lambda, ... ((parent->parent)->p_end).phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc. While I do this, I take care of the case where the selection rectangle may encompass the Greenwich antimeridian 
-                    if ((((parent->parent)->position_start).lambda) > (((parent->parent)->position_end).lambda)) {
+                    if ((((parent->parent)->geo_position_start).lambda) > (((parent->parent)->position_end).lambda)) {
 
-                        if ((((parent->parent)->position_start).lambda.value) * (((parent->parent)->position_end).lambda.value) > 0.0) {
+                        if ((((parent->parent)->geo_position_start).lambda.value) * (((parent->parent)->position_end).lambda.value) > 0.0) {
 
-                            (parent->lambda_min) = (((parent->parent)->position_start).lambda);
+                            (parent->lambda_min) = (((parent->parent)->geo_position_start).lambda);
                             (parent->lambda_max) = (((parent->parent)->position_end).lambda);
 
                         }
                         else {
 
                             (parent->lambda_min) = (((parent->parent)->position_end).lambda);
-                            (parent->lambda_max) = (((parent->parent)->position_start).lambda);
+                            (parent->lambda_max) = (((parent->parent)->geo_position_start).lambda);
 
                         }
 
@@ -12595,27 +12593,27 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     }
                     else {
 
-                        if ((((parent->parent)->position_start).lambda.value) * (((parent->parent)->position_end).lambda.value) > 0.0) {
+                        if ((((parent->parent)->geo_position_start).lambda.value) * (((parent->parent)->position_end).lambda.value) > 0.0) {
 
                             (parent->lambda_min) = (((parent->parent)->position_end).lambda);
-                            (parent->lambda_max) = (((parent->parent)->position_start).lambda);
+                            (parent->lambda_max) = (((parent->parent)->geo_position_start).lambda);
 
                         }
                         else {
 
-                            (parent->lambda_min) = (((parent->parent)->position_start).lambda);
+                            (parent->lambda_min) = (((parent->parent)->geo_position_start).lambda);
                             (parent->lambda_max) = (((parent->parent)->position_end).lambda);
 
 
                         }
 
                     }
-                    if ((((parent->parent)->position_start).phi) > (((parent->parent)->position_end).phi)) {
-                        (parent->phi_max) = (((parent->parent)->position_start).phi);
+                    if ((((parent->parent)->geo_position_start).phi) > (((parent->parent)->position_end).phi)) {
+                        (parent->phi_max) = (((parent->parent)->geo_position_start).phi);
                         (parent->phi_min) = (((parent->parent)->position_end).phi);
                     }
                     else {
-                        (parent->phi_min) = (((parent->parent)->position_start).phi);
+                        (parent->phi_min) = (((parent->parent)->geo_position_start).phi);
                         (parent->phi_max) = (((parent->parent)->position_end).phi);
                     }
                     //I normalize lambda_min, ..., phi_max for future use.
@@ -12624,8 +12622,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     (parent->phi_min).normalize();
                     (parent->phi_max).normalize();
 
-                    (((parent->parent)->position_start).phi).normalize();
-                    (((parent->parent)->position_start).lambda).normalize();
+                    (((parent->parent)->geo_position_start).phi).normalize();
+                    (((parent->parent)->geo_position_start).lambda).normalize();
                     (((parent->parent)->position_end).phi).normalize();
                     (((parent->parent)->position_end).lambda).normalize();
 
@@ -12662,16 +12660,16 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 //compute position in the middle of selection rectangle and set it to circle_observer.reference_position
                 (circle_observer.reference_position) = Position(
                     Angle(
-                        (((((parent->parent)->position_start).lambda).normalize_pm_pi_ret().value) + ((((parent->parent)->position_end).lambda).normalize_pm_pi_ret().value)) / 2.0
+                        (((((parent->parent)->geo_position_start).lambda).normalize_pm_pi_ret().value) + ((((parent->parent)->position_end).lambda).normalize_pm_pi_ret().value)) / 2.0
                     ),
                     Angle(
-                        (((((parent->parent)->position_start).phi).normalize_pm_pi_ret().value) + ((((parent->parent)->position_end).phi).normalize_pm_pi_ret().value)) / 2.0
+                        (((((parent->parent)->geo_position_start).phi).normalize_pm_pi_ret().value) + ((((parent->parent)->position_end).phi).normalize_pm_pi_ret().value)) / 2.0
                     )
                 );
 
                 //compute omega by picking the largest angular distance between the middle of selection rectangle and its corners
-                (circle_observer.reference_position).distance(((parent->parent)->position_start), &l1, String(""), String(""));
-                (circle_observer.reference_position).distance(Position(((parent->parent)->position_start).lambda, ((parent->parent)->position_end).phi), &l2, String(""), String(""));
+                (circle_observer.reference_position).distance(((parent->parent)->geo_position_start), &l1, String(""), String(""));
+                (circle_observer.reference_position).distance(Position(((parent->parent)->geo_position_start).lambda, ((parent->parent)->position_end).phi), &l2, String(""), String(""));
                 (circle_observer.omega).set(String(""), (max(l1, l2).value) / Re, String(""));
 
 
@@ -15748,7 +15746,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //set the reference position of the transporting Route to the initial position of the object that has been transported: in thiw way, the transporting Route will look nice on the chart
         if ((parent->transported_object) == String("position")) {
 
-            //store the starting position in position_start
+            //store the starting position in geo_position_start
             ((parent->data->route_list)[(parent->i_transporting_route)]).reference_position = (parent->data->position_list)[(parent->i_object_to_transport)];
 
         }
@@ -15756,7 +15754,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
             if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")) {
 
-                //store the starting reference position in position_start
+                //store the starting reference position in geo_position_start
                 ((parent->data->route_list)[(parent->i_transporting_route)]).reference_position = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
 
             }
@@ -21164,7 +21162,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
             if ((parent->transported_object) == String("position")) {
 
-                //store the starting position in position_start
+                //store the starting position in geo_position_start
                 start = (parent->data->position_list)[(parent->i_object_to_transport)];
 
             }
@@ -21172,7 +21170,7 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
                 if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")) {
 
-                    //store the starting reference position in position_start
+                    //store the starting reference position in geo_position_start
                     start = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
 
                 }

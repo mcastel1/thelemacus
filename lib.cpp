@@ -8542,19 +8542,19 @@ void DrawPanel::RenderBackground(
 }
 
 
-//same as  DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position_screen, wxColour foreground_color, wxColour background_color), but it takes a geographic opsition rather than a screen position as input
-void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position position, wxColour foreground_color, wxColour background_color){
+//same as  DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color), but it takes a screen position as input rather than a  geographic Position
+void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint screen_position, wxColour foreground_color, wxColour background_color){
     
-    wxPoint p;
+    Position p;
     
-    GeoToScreen(position, &p);
+    (this->*ScreenToGeo)(screen_position, &p);
     RenderSelectionRectangle(dc, p, foreground_color, background_color);
     
 }
 
 
-//render a selection rectangle with end position position_screen, foreground color foreground_color and backgrund color background_color
-void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position_screen, wxColour foreground_color, wxColour background_color){
+//render a selection rectangle with end Position geo_position (geographic position), foreground color foreground_color and backgrund color background_color
+void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color){
     
     dc.SetPen(foreground_color);
     dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
@@ -8563,35 +8563,36 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position_screen, wxCo
     
     if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
         
+        wxPoint p;
+        
+        GeoToScreen(geo_position, &p);
+        
         dc.DrawRectangle(
                          (drawpanel_position_start.x) - (draw_panel_origin.x),
                          (drawpanel_position_start.y) - (draw_panel_origin.y),
-                         (position_screen.x) - (drawpanel_position_start.x),
-                         (position_screen.y) - (drawpanel_position_start.y)
+                         (p.x) - (drawpanel_position_start.x),
+                         (p.y) - (drawpanel_position_start.y)
                          );
         
     }
     
     if ((parent->projection->name->GetValue()) == wxString("3D")) {
         
-        Position q;
-        
-        ((this->*ScreenToGeo)(position_screen, &q));
-        
+            
         //right vertical edge of rectangle
         (Route(
                String("o"),
                (parent->parent->geo_position_start),
-               Angle(M_PI * (1.0 - GSL_SIGN((((q.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * fabs((((q.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+               Angle(M_PI * (1.0 - GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
                )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
         
         //left vertical edge of rectangle
         (Route(
                String("o"),
-               q,
-               Angle(M_PI * (1.0 + GSL_SIGN((((q.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * fabs((((q.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+               geo_position,
+               Angle(M_PI * (1.0 + GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
                )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
         
         //bottom horizontal edge of rectangle
@@ -8599,17 +8600,17 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position_screen, wxCo
                String("l"),
                (parent->parent->geo_position_start),
                //change this by introducing if
-               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((q.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((((q.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
                )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
         
         //top horizontal edge of rectangle
         (Route(
                String("l"),
-               q,
+               geo_position,
                //change this by introducing if
-               Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((q.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * cos(q.phi) * fabs((((q.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+               Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * cos(geo_position.phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
                )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
         
         
@@ -8646,7 +8647,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
     
     //draw selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
-        RenderSelectionRectangle(dc, (parent->parent->screen_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderSelectionRectangle(dc, (parent->parent->geo_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
         RenderSelectionRectangleLabels(dc);
     }
 

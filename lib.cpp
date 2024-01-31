@@ -8469,8 +8469,6 @@ void DrawPanel::RerenderSelectionRectangle(void) {
 
     
     //re-render all objects in *this which may have been partially cancelled by the clean operation above
-    RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderSelectionRectangleLabels(dc);
     RenderBackground(
                      dc,
                      grid_now,
@@ -8479,9 +8477,12 @@ void DrawPanel::RerenderSelectionRectangle(void) {
                      wxGetApp().foreground_color,
                      wxGetApp().background_color
                      );
+  
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
-    
+    RenderSelectionRectangle(dc, position_screen_now, wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderSelectionRectangleLabels(dc);
+
 }
 
 
@@ -8506,12 +8507,12 @@ void DrawPanel::RenderBackground(
 
         wxMemoryDC mdc(m_bgbuffer);
 
-        mdc.SetPen(wxPen(foreground_color));
-        mdc.SetBrush(wxBrush(foreground_color));
+//        mdc.SetPen(wxPen(foreground_color));
+//        mdc.SetBrush(wxBrush(foreground_color));
 
         wxGCDC dc_m_bgbuffer(mdc);
-
-        //dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
+        //this needs to be commented out in order to not show a 'trail' when dragging
+        //        dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
         dc_m_bgbuffer.Clear();
         
         dc_m_bgbuffer.SetPen(wxPen(foreground_color));
@@ -8533,7 +8534,7 @@ void DrawPanel::RenderBackground(
     }
 
     dc.SetPen(wxPen(foreground_color));
-    dc.SetBrush(wxBrush(foreground_color));
+    dc.SetBrush(wxBrush(background_color));
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
     dc.DrawBitmap(m_bgbuffer, 0, 0, false);

@@ -12543,7 +12543,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         //store the position at the beginning of the selection process, to compute the zoom factor later
         for(i=0, check = false; i<(parent->parent->chart_frames).size(); i++){
             
-            if ((((parent->parent->chart_frames)[i])->draw_panel->*GeoToProjection)((parent->parent->geo_position_start), &projection_start, false)) {
+            if ((((parent->parent->chart_frames)[i])->draw_panel->*GeoToProjection)((parent->parent->geo_position_start), &(((parent->parent->chart_frames)[i])->draw_panel->projection_start), false)) {
                 //geo_position_start is valid in the i-th DrawPanel -> start the selection rectangle in the i-th DrawPanel
                 
                 //convert geo_position_start into the drawpanel position for the i-th DrawPanel

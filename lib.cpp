@@ -8564,10 +8564,10 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position_screen, wxCo
     if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
         
         dc.DrawRectangle(
-                         (position_start_selection.x) - (position_draw_panel.x),
-                         (position_start_selection.y) - (position_draw_panel.y),
-                         (position_screen.x) - (position_start_selection.x),
-                         (position_screen.y) - (position_start_selection.y)
+                         (drawpanel_position_start.x) - (draw_panel_origin.x),
+                         (drawpanel_position_start.y) - (draw_panel_origin.y),
+                         (position_screen.x) - (drawpanel_position_start.x),
+                         (position_screen.y) - (drawpanel_position_start.y)
                          );
         
     }
@@ -10196,7 +10196,7 @@ void DrawPanel::Draw_3D(void) {
     
     
     //updates the position of the DrawPanel *this
-    position_draw_panel = (this->GetScreenPosition());
+    draw_panel_origin = (this->GetScreenPosition());
 
     //tell PaintEvent that everything but highligghteable objects (coastlines, meridians ... ) must be re-drawn
     re_draw = true;
@@ -11528,7 +11528,7 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position* q) {
     bool output;
 
     //updates the position of the DrawPanel *this
-    position_draw_panel = (this->GetScreenPosition());
+    draw_panel_origin = (this->GetScreenPosition());
 
 
     output = ScreenToMercator(p, &temp);
@@ -11548,9 +11548,9 @@ bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position* q) {
 inline bool DrawPanel::DrawPanelToGeo(wxPoint p, Position* q) {
 
     //computes the poisition of the DrawPanel *this which will be needed in the following
-    position_draw_panel = (this->GetScreenPosition());
+    draw_panel_origin = (this->GetScreenPosition());
 
-    return(this->*ScreenToGeo)(p + position_draw_panel, q);
+    return(this->*ScreenToGeo)(p + draw_panel_origin, q);
 
 }
 
@@ -11620,10 +11620,10 @@ inline bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q) {
     bool check_x;
 
     //updates the position of the draw pane this
-    position_draw_panel = (this->GetScreenPosition());
+    draw_panel_origin = (this->GetScreenPosition());
 
-    (temp.x) = x_min + (((double)(p.x) - ((position_draw_panel.x) + (position_plot_area.x))) / ((double)(size_plot_area.GetWidth()))) * x_span();
-    (temp.y) = y_min - (((double)(p.y)) - ((position_draw_panel.y) + (position_plot_area.y) + (size_plot_area.GetHeight()))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
+    (temp.x) = x_min + (((double)(p.x) - ((draw_panel_origin.x) + (position_plot_area.x))) / ((double)(size_plot_area.GetWidth()))) * x_span();
+    (temp.y) = y_min - (((double)(p.y)) - ((draw_panel_origin.y) + (position_plot_area.y) + (size_plot_area.GetHeight()))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
 
     if (q) {
         (q->x) = (temp.x);
@@ -11660,10 +11660,10 @@ inline bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q) {
     d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
 
     //updates the position of the draw pane this
-    position_draw_panel = (this->GetScreenPosition());
+    draw_panel_origin = (this->GetScreenPosition());
 
-    (temp.x) = x_min + ((((double)(p.x)) - ((position_draw_panel.x) + (position_plot_area.x))) / ((double)(size_plot_area.GetWidth()))) * (x_max - x_min);
-    (temp.y) = y_min - (((double)(p.y)) - ((position_draw_panel.y) + (position_plot_area.y) + (size_plot_area.GetHeight()))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
+    (temp.x) = x_min + ((((double)(p.x)) - ((draw_panel_origin.x) + (position_plot_area.x))) / ((double)(size_plot_area.GetWidth()))) * (x_max - x_min);
+    (temp.y) = y_min - (((double)(p.y)) - ((draw_panel_origin.y) + (position_plot_area.y) + (size_plot_area.GetHeight()))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
 
     //I pulled out a factor (temp.x)^2 from arg_sqrt for clarity
     arg_sqrt = -((gsl_sf_pow_int((d.value), 2) * (-1 + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2)) + 2 * (d.value) * (gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2))));
@@ -11755,13 +11755,13 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 inline void DrawPanel::GeoToScreen(Position q, wxPoint* p) {
 
     //updates the position of the draw pane this
-    position_draw_panel = (this->GetScreenPosition());
+    draw_panel_origin = (this->GetScreenPosition());
 
 
     GeoToDrawPanel(q, p, false);
 
-    (p->x) += (position_draw_panel.x);
-    (p->y) += (position_draw_panel.y);
+    (p->x) += (draw_panel_origin.x);
+    (p->y) += (draw_panel_origin.y);
 
 }
 
@@ -12069,14 +12069,16 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     //    cout << "\nMouse moved";
     //    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
     //    cout << "Position of mouse screen = {" << (parent->parent->screen_position_now).x << " , " << (parent->parent->screen_position_now).y << "}\n";
-    //    cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-position_draw_panel).x << " , " << ((parent->parent->screen_position_now)-position_draw_panel).y << "}\n";
+    //    cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-draw_panel_origin).x << " , " << ((parent->parent->screen_position_now)-draw_panel_origin).y << "}\n";
 
 
 #ifdef _WIN32
+    
     //store the former _now positions into the _before positions
     (parent->parent->screen_position_before) = (parent->parent->screen_position_now);
     (parent->parent->geo_position_before) = (parent->parent->geo_position_now);
     label_position_before = label_position_now;
+    
 #endif
     
     //update the instantaneous screen and geographic position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
@@ -12140,7 +12142,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
-        position_draw_panel_now = (parent->parent->screen_position_now) - position_draw_panel;
+        position_draw_panel_now = (parent->parent->screen_position_now) - draw_panel_origin;
 
         for (highlighted_route_old = ((parent->parent)->highlighted_route), ((parent->parent)->highlighted_route) = -1, i = 0;
             i < (((parent->parent)->data)->route_list).size();
@@ -12390,8 +12392,8 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             //given that the drag is finished, I set to empty label_dragged_object
             label_dragged_object_now = String("");
 
-            if (!(((((position_draw_panel.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (position_draw_panel.x) + (position_plot_area.x) + (size_plot_area.GetWidth()))) &&
-                (((position_draw_panel.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (position_draw_panel.y) + (position_plot_area.y) + (size_plot_area.GetHeight())))))) {
+            if (!(((((draw_panel_origin.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (draw_panel_origin.x) + (position_plot_area.x) + (size_plot_area.GetWidth()))) &&
+                (((draw_panel_origin.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (draw_panel_origin.y) + (position_plot_area.y) + (size_plot_area.GetHeight())))))) {
                 //in this case, drag_end_position lies out the plot area
 
                 if (((parent->parent)->highlighted_route) != -1) {
@@ -12535,13 +12537,20 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         
         (parent->parent->geo_position_start) = (parent->parent->geo_position_now);
         //        GetMouseGeoPosition(&(parent->parent->geo_position_start));
-        //        position_start_selection = (parent->parent->screen_position_now);
+        //        drawpanel_position_start = (parent->parent->screen_position_now);
         
         //store the position at the beginning of the selection process, to compute the zoom factor later
         for(i=0, check = false; i<(parent->parent->chart_frames).size(); i++){
             
-            if ((((parent->parent->chart_frames)[i])->draw_panel->*GeoToProjection)((parent->parent->geo_position_start), &start_selection, false)) {
+            if ((((parent->parent->chart_frames)[i])->draw_panel->*GeoToProjection)((parent->parent->geo_position_start), &projection_start, false)) {
                 //geo_position_start is valid in the i-th DrawPanel -> start the selection rectangle in the i-th DrawPanel
+                
+                //convert geo_position_start into the drawpanel position for the i-th DrawPanel
+                ((parent->parent->chart_frames)[i])->draw_panel->GeoToDrawPanel(
+                                                                                (parent->parent->geo_position_start),
+                                                                                &(((parent->parent->chart_frames)[i])->draw_panel->drawpanel_position_start),
+                                                                                true);
+
                 
                 ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                      (parent->parent->geo_position_now),
@@ -12570,15 +12579,15 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         //finish drawing a selection rectangle
 
         GetMouseGeoPosition(&((parent->parent)->position_end));
-        position_end_selection = (parent->parent->screen_position_now);
+        drawpanel_position_end = (parent->parent->screen_position_now);
 
         //store the position at the end of the selection process, to compute the zoom factor later
-        if ((this->*ScreenToProjection)(position_end_selection, &end_selection)) {
-            //position_end_selection is valid
+        if ((this->*ScreenToProjection)(drawpanel_position_end, &projection_end)) {
+            //drawpanel_position_end is valid
 
             if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
-                if ((parent->ComputeZoomFactor_Mercator(fabs((end_selection.x) - (start_selection.x))))) {
+                if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end.x) - (projection_start.x))))) {
                     //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
 
                     //sets the new values of lambda_min, lambda_max, phi_min and phi_max

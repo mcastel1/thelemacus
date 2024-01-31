@@ -12543,7 +12543,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         //store the position at the beginning of the selection process, to compute the zoom factor later
         for(i=0, check = false; i<(parent->parent->chart_frames).size(); i++){
             
-            if ((((parent->parent->chart_frames)[i])->draw_panel->*GeoToProjection)((parent->parent->geo_position_start), &(((parent->parent->chart_frames)[i])->draw_panel->projection_start), false)) {
+            if (
+                (((parent->parent->chart_frames)[i])->draw_panel->*(((parent->parent->chart_frames)[i])->draw_panel->GeoToProjection))((parent->parent->geo_position_start), &(((parent->parent->chart_frames)[i])->draw_panel->projection_start), false)) {
                 //geo_position_start is valid in the i-th DrawPanel -> start the selection rectangle in the i-th DrawPanel
                 
                 //convert geo_position_start into the drawpanel position for the i-th DrawPanel
@@ -12577,7 +12578,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
     }
     else {
-        //finish drawing a selection rectangle
+        //end drawing a selection rectangle
+        
+        int i;
 
         GetMouseGeoPosition(&((parent->parent)->position_end));
         drawpanel_position_end = (parent->parent->screen_position_now);
@@ -12585,7 +12588,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         //store the position at the end of the selection process, to compute the zoom factor later
         if ((this->*ScreenToProjection)(drawpanel_position_end, &projection_end)) {
             //drawpanel_position_end is valid
-
+            
             if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
                 if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end.x) - (projection_start.x))))) {
@@ -12629,7 +12632,6 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             (parent->lambda_min) = (((parent->parent)->geo_position_start).lambda);
                             (parent->lambda_max) = (((parent->parent)->position_end).lambda);
 
-
                         }
 
                     }
@@ -12653,7 +12655,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     (((parent->parent)->position_end).lambda).normalize();
 
                     (this->*Draw)();
-                    Refresh();
+                    parent->parent->RefreshAll();
                     FitAll();
 
                     parent->UpdateSlider();
@@ -12703,7 +12705,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 rotation = (rotation * Rotation(circle_observer.reference_position, reference_position_old));
 
                 (this->*Draw)();
-                Refresh();
+                parent->parent->RefreshAll();
                 FitAll();
 
                 parent->UpdateSlider();
@@ -12713,17 +12715,22 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
             }
 
-            //I set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
-            start_label_selection_rectangle = String("");
-            end_label_selection_rectangle_now = String("");
+            //set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
+            
+            for(i=0; i<((parent->parent->chart_frames).size()); i++){
+                (((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle) = String("");
+                (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now) = String("");
+            }
 
         }
         else {
             //the  end position for the selected rectangle is not valid -> cancel the rectangle by setting selection_rectangle to false and by setting to empty the text fields of the geographical positions of the selection triangle
 
             (parent->parent->selection_rectangle) = false;
-            start_label_selection_rectangle = String("");
-            end_label_selection_rectangle_now = String("");
+            for(i=0; i<((parent->parent->chart_frames).size()); i++){
+                (((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle) = String("");
+                (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now) = String("");
+            }
 
         }
 

@@ -1875,7 +1875,7 @@ public:
     void RerenderBackground(void);
     void RenderAll(wxDC&);
     void RenderBackground(wxDC&, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >, vector<wxPoint>, wxColor, wxColor);
-    void RenderRoutes(wxDC&, vector< vector< vector<wxPoint> > >, vector<wxPoint>, wxColor);
+    void RenderRoutes(wxDC&, vector< vector< vector<wxPoint> > >, vector<wxPoint>, int, wxColor);
     void RerenderRoutes(void);
     void RenderPositions(wxDC&, vector<wxPoint>, wxColor);
     void RerenderPositions(void);

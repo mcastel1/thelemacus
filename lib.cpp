@@ -12172,15 +12172,15 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 #ifdef _WIN32
         
+        //on WIN32, the Refresh() command slows down things -> I don't call it but use RerenderSelectionRectangle, which cleans up the former selections rectangle in *this and draws a new one
+        
         for(i=0; i<(parent->parent->chart_frames.size()); i++){
-            
             
             (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now);
             (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now);
             
             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->geo_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now));
             
-            //on APPLE, the Refresh() command slows down things -> I don't call it but use RerenderSelectionRectangle, which cleans up the former selections rectangle in *this and draws a new one
             ((parent->parent->chart_frames)[i])->draw_panel->RerenderSelectionRectangle();
             
         }
@@ -12197,6 +12197,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
         //save the id of the Route highlighted at the preceeding step into highlighted_route_before
         (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
+        
         for ((parent->parent->highlighted_route_now) = -1, i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
 
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
@@ -12285,7 +12286,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         }
 
 
-        //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
+        //run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
         for ((parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now), (parent->parent->highlighted_position_now) = -1, i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
 
             GeoToScreen((((parent->parent)->data)->position_list)[i], &q);
@@ -12310,27 +12311,44 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             }
 
         }
-
+        
         if (((parent->parent->highlighted_route_before) != (parent->parent->highlighted_route_now)) || ((parent->parent->highlighted_position_before) != (parent->parent->highlighted_position_now))) {
-            //the highlighted Route has changed-> I will call Refresh, which triggers PaintEvent, to re-draw Routes with the right thickness
-
-            for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-                (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
-            }
-
-        }
-
-    }
-
-    //clean the previous label of mouse position from *this and draw the current one
+            //the highlighted Route has changed -> update the chart
+            
 #ifdef __APPLE__
-    //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this and paint the new one, because Refresh() triggers a call of PaintEvent
-    Refresh();
+            
+            //on APPLE call Refresh, which triggers PaintEvent, to re-draw Routes with the right thickness
+            parent->parent->RefreshAll();
+            
 #endif
 #ifdef _WIN32
-    //on APPLE, the Refresh() command slows down things -> I don't call it but use RerenderMousePositionLabel, which cleans up the former label of the mouse position in *this and draws a new one
-    RerenderMousePositionLabel();
+            //on WIN32 Refresh() is slow -> call RerenderRoutes to re-draw the Routes with the right thickness 
+            
+            
 #endif
+            
+        }else{
+            //the highlighted Route has not changed ->  the chart does not need to be updated, but the coordinates of the instantaneous mouse position do -> call
+            
+#ifdef __APPLE__
+            
+            //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this and paint the new one and thus update the coordinates of the instantaneous mouse postion, because Refresh() triggers a call of PaintEvent
+            Refresh();
+            
+#endif
+#ifdef _WIN32
+            //on WIN32, the Refresh() command slows down things -> I don't call it but use RerenderMousePositionLabel, which cleans up the former label of the mouse position in *this and draws a new one
+            
+            RerenderMousePositionLabel();
+            
+#endif
+            
+        }
+        
+    }
+
+
+
     
     event.Skip(true);
     

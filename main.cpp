@@ -103,7 +103,8 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
-- check why the meridian ticks form triangles in mercator projeciton 
+ - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
+- check why the meridian ticks form triangles in mercator projeciton
  - when you zoom in in 3d projection all the positions appear at the center of the disk
  - when you drag a position on a ChartFrame, its label is not shown in the other ChartFrames
 - remove wxScrollEventHandler ... and similar stuff

@@ -12166,13 +12166,18 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 #ifdef _WIN32
         
-        position_end_label_selection_rectangle_before = position_end_label_selection_rectangle_now;
-        end_label_selection_rectangle_before = end_label_selection_rectangle_now;
-
-        SetLabelAndPosition((parent->parent->screen_position_now), &position_end_label_selection_rectangle_now, &end_label_selection_rectangle_now);
-
-        //on APPLE, the Refresh() command slows down things -> I don't call it but use RerenderSelectionRectangle, which cleans up the former selections rectangle in *this and draws a new one
-        RerenderSelectionRectangle();
+        for(i=0; i<(parent->parent->chart_frames.size()); i++){
+            
+            
+            (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now);
+            (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now);
+            
+            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->screen_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now));
+            
+            //on APPLE, the Refresh() command slows down things -> I don't call it but use RerenderSelectionRectangle, which cleans up the former selections rectangle in *this and draws a new one
+            ((parent->parent->chart_frames)[i])->draw_panel->RerenderSelectionRectangle();
+            
+        }
         
 #endif
 

@@ -2175,12 +2175,15 @@ void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[ma
     vector< vector<wxPoint> > v;
 
     DrawOld(n_points, draw_panel, &v, prefix);
-
-    //    if(v.size() > 1){
-    for (i = 0; i < v.size(); i++) {
-        dc->DrawSpline((int)((v[i]).size()), (v[i]).data());
-    }
-    //    }
+    
+        for (i = 0; i < (v.size()); i++) {
+            //run over all chunks of the Route written in v
+            if(((v[i]).size()) > 1){
+                //the i-th chunk v[i] has at least two points -> draw it
+                dc->DrawSpline((int)((v[i]).size()), (v[i]).data());
+            }
+        }
+    
 
 }
 
@@ -2285,16 +2288,20 @@ void Route::Draw(unsigned int n_points, Color foreground_color, Color background
 }
 
 void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
-
+    
     int i;
     vector< vector<wxPoint> > v;
-
+    
     Draw(n_points, draw_panel, &v, prefix);
-
-    for (i = 0; i < v.size(); i++) {
-        dc->DrawSpline((int)((v[i]).size()), (v[i]).data());
+    
+    for (i = 0; i < (v.size()); i++) {
+        //run over all chunks of the Route written in v
+        if(((v[i]).size()) > 1){
+            //the i-th chunk v[i] has at least two points -> draw it
+            dc->DrawSpline((int)((v[i]).size()), (v[i]).data());
+        }
     }
-
+    
 }
 
 //tabulate the points of Route *this in any projection of draw_panel and writes them into v
@@ -8574,7 +8581,7 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColo
     //                         ((p.y)-(draw_panel_origin.y)) - (drawpanel_position_start.y)
     //                         );
     
-    //I draw the four edges of the rectangle in a way that is independent of the projection used 
+    //I draw the four edges of the rectangle in a way that is independent of the projection used
     //right vertical edge of rectangle
     (Route(
            String("o"),

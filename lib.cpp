@@ -12242,7 +12242,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 
                         //sets the highlighted route to i, so as to use highlighted_route in other functions
-                        ((parent->parent)->highlighted_route_now) = i;
+                        (parent->parent->highlighted_route_now) = i;
 
                         parent->parent->listcontrol_routes->EnsureVisible(i);
                         if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
@@ -12389,7 +12389,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 
 
-        if ((((parent->parent)->highlighted_route_now) == -1) && (((parent->parent)->highlighted_position) == -1)) {
+        if (((parent->parent->highlighted_route_now) == -1) && (((parent->parent)->highlighted_position) == -1)) {
             //in this case, I was dragging the chart (not a Route nor  a Position)
 
             if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
@@ -12450,10 +12450,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 (((draw_panel_origin.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (draw_panel_origin.y) + (position_plot_area.y) + (size_plot_area.GetHeight())))))) {
                 //in this case, drag_end_position lies out the plot area
 
-                if (((parent->parent)->highlighted_route_now) != -1) {
+                if ((parent->parent->highlighted_route_now) != -1) {
                     //in this case, I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
 
-                    (((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route_now)]).reference_position) = route_reference_position_drag_start;
+                    (((((parent->parent)->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position) = route_reference_position_drag_start;
 
                     TabulateRoutes();
                     Refresh();
@@ -12507,7 +12507,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
         }
 
         //if, when the left button of the mouse was down, the mouse was hovering over a Route, then this Route and the related Sight (if any) is selectd in listcontrol_routes and listcontrol_sights, respectively, and highlighted in color
-        if (((parent->parent)->highlighted_route_now) != -1) {
+        if ((parent->parent->highlighted_route_now) != -1) {
 
             //deselect any previously selected item in listcontrol_routes, if any
             ((parent->parent)->listcontrol_routes)->DeselectAll();
@@ -12525,16 +12525,16 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             //set the beckgorund color of the Route in listcontrol_routes in ListFrame to the color of selected items
             ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour((parent->parent)->highlighted_route_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
 
-            if ((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route_now)]).related_sight).value != -1) {
+            if ((((((parent->parent)->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value != -1) {
                 //the selected Route is related to a Sight
 
 
 
                 //select the related Sight in ListFrame
-                ((parent->parent)->listcontrol_sights)->SetItemState((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route_now)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                ((parent->parent)->listcontrol_sights)->SetItemState((((((parent->parent)->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 
                 //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
-                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[((parent->parent)->highlighted_route_now)]).related_sight).value, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
 
             }
 

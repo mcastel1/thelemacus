@@ -8568,10 +8568,10 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColo
         GeoToScreen(geo_position, &p);
         
         dc.DrawRectangle(
-                         (drawpanel_position_start.x) - (draw_panel_origin.x),
-                         (drawpanel_position_start.y) - (draw_panel_origin.y),
-                         (p.x) - (drawpanel_position_start.x),
-                         (p.y) - (drawpanel_position_start.y)
+                         (drawpanel_position_start.x),
+                         (drawpanel_position_start.y),
+                         ((p.x)-(draw_panel_origin.x)) - (drawpanel_position_start.x),
+                         ((p.y)-(draw_panel_origin.y)) - (drawpanel_position_start.y)
                          );
         
     }

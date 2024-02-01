@@ -8412,7 +8412,7 @@ void DrawPanel::RerenderBackground(void) {
                      wxGetApp().background_color
                      );
     //wipe out the Routes at the preceeding mouse position
-    RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, (parent->parent->highlighted_route_before), wxGetApp().background_color);
     //wipe out the Positions at the preceeding mouse position
     RenderPositions(dc, points_position_list_before,  wxGetApp().background_color);
  
@@ -8427,7 +8427,7 @@ void DrawPanel::RerenderBackground(void) {
                      wxGetApp().foreground_color,
                      wxGetApp().background_color
                      );
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
   
 }
@@ -8485,7 +8485,7 @@ void DrawPanel::RerenderSelectionRectangle(void) {
                      wxGetApp().background_color
                      );
   
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     RenderSelectionRectangle(dc, (parent->parent->geo_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc);
@@ -8683,7 +8683,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
                      wxGetApp().foreground_color,
                      wxGetApp().background_color
                      );
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     RenderMousePositionLabel(dc);
     
@@ -8754,7 +8754,7 @@ void DrawPanel::RerenderRoutes(void){
     wxClientDC dc(this);
 
     //wipe out the Routes at the preceeding mouse position
-    RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, wxGetApp().background_color);
+    RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, (parent->parent->highlighted_route_before), wxGetApp().background_color);
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(
@@ -8765,7 +8765,7 @@ void DrawPanel::RerenderRoutes(void){
                      wxGetApp().foreground_color,
                      wxGetApp().background_color
                      );
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     
 }
@@ -8787,7 +8787,7 @@ void DrawPanel::RerenderPositions(void){
                      wxGetApp().foreground_color,
                      wxGetApp().background_color
                      );
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     
 }
@@ -8872,7 +8872,7 @@ void DrawPanel::RerenderDraggedObjectLabel(void) {
                      wxGetApp().foreground_color,
                      wxGetApp().background_color
                      );
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     RenderDraggedObjectLabel(dc);
     

@@ -12143,13 +12143,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if ((parent->parent->selection_rectangle)) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
         
-        //clean the previous selection_rectangle from *this and draw the current one
-#ifdef __APPLE__
-        
-        
         for(i=0; i<(parent->parent->chart_frames.size()); i++){
             
-            //obtain the label and position of the selection rectangle for each DrawPanel
+            //write the label and position of the selection rectangle for each DrawPanel into end_label_selection_rectangle_now and position_end_label_selection_rectangle_now, respectively
             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                  (parent->parent->geo_position_now),
                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now),
@@ -12158,6 +12154,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
          
             
         }
+        
+#ifdef __APPLE__
         
         //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this, and paint the new one, because Refresh() triggers a call of PaintEvent
         parent->parent->RefreshAll();
@@ -12172,7 +12170,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now);
             (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now);
             
-            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->screen_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now));
+            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->geo_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now));
             
             //on APPLE, the Refresh() command slows down things -> I don't call it but use RerenderSelectionRectangle, which cleans up the former selections rectangle in *this and draws a new one
             ((parent->parent->chart_frames)[i])->draw_panel->RerenderSelectionRectangle();

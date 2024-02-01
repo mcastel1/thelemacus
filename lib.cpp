@@ -8460,7 +8460,7 @@ void DrawPanel::RerenderSelectionRectangle(void) {
     wxClientDC dc(this);
     
     //render a selection rectangle with color wxGetApp().background_color to clean the preceeding one
-    RenderSelectionRectangle(dc, (parent->parent->screen_position_before), wxGetApp().background_color, wxGetApp().background_color);
+    RenderSelectionRectangle(dc, (parent->parent->geo_position_before), wxGetApp().background_color, wxGetApp().background_color);
     
     //draw the label of the end point of selection_rectangle on top of the old one with color background_color, in order to delete the old one
     /*
@@ -8487,7 +8487,7 @@ void DrawPanel::RerenderSelectionRectangle(void) {
   
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
-    RenderSelectionRectangle(dc, (parent->parent->screen_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
+    RenderSelectionRectangle(dc, (parent->parent->geo_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc);
 
 }

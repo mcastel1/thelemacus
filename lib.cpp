@@ -12127,8 +12127,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     //update the instantaneous screen and geographic position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
     (parent->parent->screen_position_now) = wxGetMousePosition();
     mouse_in_plot_area = (this->*ScreenToGeo)((parent->parent->screen_position_now), &((parent->parent->geo_position_now)));
-    if (mouse_in_plot_area) {
-        //the mouse has a screen position corresponding to a geographic position -> I write it into label_position_now, otherwise label_position_now is left empty,
+    if (mouse_in_plot_area && (!parent->parent->selection_rectangle)) {
+        //the mouse has a screen position corresponding to a geographic position and no selection rectangle is being drawn -> I show the instantaneous mouse coordinates : I write them into label_position_now, otherwise label_position_now is left empty,
 
         label_position_now = String((parent->parent->geo_position_now.to_string(display_precision.value)));
 

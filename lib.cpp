@@ -12593,10 +12593,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 //geo_position_start is valid in the i-th DrawPanel -> start the selection rectangle in the i-th DrawPanel
                 
                 //convert geo_position_start into the drawpanel position for the i-th DrawPanel
-                ((parent->parent->chart_frames)[i])->draw_panel->GeoToDrawPanel(
-                                                                                (parent->parent->geo_position_start),
-                                                                                &(((parent->parent->chart_frames)[i])->draw_panel->drawpanel_position_start),
-                                                                                true);
+//                ((parent->parent->chart_frames)[i])->draw_panel->GeoToDrawPanel(
+//                                                                                (parent->parent->geo_position_start),
+//                                                                                &(((parent->parent->chart_frames)[i])->draw_panel->drawpanel_position_start),
+//                                                                                true);
 
                 
                 ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(

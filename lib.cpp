@@ -8804,7 +8804,7 @@ void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, wxColor foregr
     for (i = 0, color_id = 0; i < (points.size()); i++) {
 
         //set thickness and pen
-        if (i == (parent->parent->highlighted_position)) {
+        if (i == (parent->parent->highlighted_position_now)) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = thickness;
         }
@@ -12289,7 +12289,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 
         //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
-        for (highlighted_position_old = (parent->parent->highlighted_position), ((parent->parent)->highlighted_position) = -1, i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
+        for (highlighted_position_old = (parent->parent->highlighted_position_now), ((parent->parent)->highlighted_position_now) = -1, i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
 
             GeoToScreen((((parent->parent)->data)->position_list)[i], &q);
 
@@ -12297,8 +12297,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth())) {
                 //the mouse is over a position
 
-                //sets the highlighted position to i, so as to use highlighted_position in other functions
-                ((parent->parent)->highlighted_position) = i;
+                //sets the highlighted position to i, so as to use highlighted_position_now in other functions
+                ((parent->parent)->highlighted_position_now) = i;
 
                 ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                 parent->parent->listcontrol_positions->EnsureVisible(i);
@@ -12314,7 +12314,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
         }
 
-        if (((parent->parent->highlighted_route_before) != (parent->parent->highlighted_route_now)) || (highlighted_position_old != (parent->parent->highlighted_position))) {
+        if (((parent->parent->highlighted_route_before) != (parent->parent->highlighted_route_now)) || (highlighted_position_old != (parent->parent->highlighted_position_now))) {
             //the highlighted Route has changed-> I will call Refresh, which triggers PaintEvent, to re-draw Routes with the right thickness
 
             for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
@@ -12389,7 +12389,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 
 
-        if (((parent->parent->highlighted_route_now) == -1) && (((parent->parent)->highlighted_position) == -1)) {
+        if (((parent->parent->highlighted_route_now) == -1) && (((parent->parent)->highlighted_position_now) == -1)) {
             //in this case, I was dragging the chart (not a Route nor  a Position)
 
             if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
@@ -12463,15 +12463,15 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
                 }
 
-                if ((((parent->parent)->highlighted_position) != -1)) {
+                if ((((parent->parent)->highlighted_position_now) != -1)) {
                     //in this case, I am dragging a position: I restore the position under consideration to its value at the beginning of the drag
 
                     //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
-                    (this->*ScreenToGeo)(position_start_drag, &((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]));
+                    (this->*ScreenToGeo)(position_start_drag, &((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position_now)]));
 
 
                     //update the coordinates of the Position under consideration in listcontrol_positions
-                    ((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position)]).update_wxListCtrl(((parent->parent)->highlighted_position), (parent->parent)->listcontrol_positions);
+                    ((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position_now)]).update_wxListCtrl(((parent->parent)->highlighted_position_now), (parent->parent)->listcontrol_positions);
 
                     //given that the position under consideration has changed, I re-pain the chart
                     Refresh();
@@ -12490,7 +12490,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
         //the left button of the mouse has not been lifted at the end of a drag
 
         //if, when the left button of the mouse was down, the mouse was hovering over a Position, then this position is selectd in listcontrol_positions and highlighted in color
-        if (((parent->parent)->highlighted_position) != -1) {
+        if (((parent->parent)->highlighted_position_now) != -1) {
 
             //deselect any previously selected item in listcontrol_positions, if any
             ((parent->parent)->listcontrol_positions)->DeselectAll();
@@ -12499,10 +12499,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             parent->parent->SetFocus();  // focus on the ListFrame
 
             //select the highlighted position in ListFrame
-            ((parent->parent)->listcontrol_positions)->SetItemState((parent->parent)->highlighted_position, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+            ((parent->parent)->listcontrol_positions)->SetItemState((parent->parent)->highlighted_position_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 
             //set the beckgorund color of the Position in listcontrol_positions in ListFrame to the color of selected items
-            ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour((parent->parent)->highlighted_position, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+            ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour((parent->parent)->highlighted_position_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
 
         }
 
@@ -12845,7 +12845,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
             if ((this->*ScreenToGeo)(position_now_drag, NULL)) {
                 //position_drag_now is a valid Position
 
-                if ((((parent->parent->highlighted_route_now) == -1) && ((parent->parent->highlighted_position) == -1))) {
+                if ((((parent->parent->highlighted_route_now) == -1) && ((parent->parent->highlighted_position_now) == -1))) {
                     //the whole chart is being dragged (the mouse is not over a Route nor a Position while dragging)
 
                     (parent->dragging_chart) = true;
@@ -13060,7 +13060,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                     }
 
-                    if ((parent->parent->highlighted_position) != -1) {
+                    if ((parent->parent->highlighted_position_now) != -1) {
                         //a Position is being dragged
 
                         wxPoint p;
@@ -13068,23 +13068,23 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
                             //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
-                            (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position)]));
+                            (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]));
 
                         }
 
                         if ((((parent->projection)->name)->GetValue()) == wxString("3D")) {
 
-                            //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                            //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                             rotation_now_drag =
                                 (rotation.inverse()) *
                                 rotation_start_end(position_start_drag, position_now_drag) *
                                 rotation;
-                            geo_start_drag.rotate(String(""), rotation_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position)]), String(""));
+                            geo_start_drag.rotate(String(""), rotation_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]), String(""));
 
                         }
 
                         //update the data of the Position under consideration in listcontrol_positions
-                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position)]).update_wxListCtrl((parent->parent->highlighted_position), parent->parent->listcontrol_positions);
+                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]).update_wxListCtrl((parent->parent->highlighted_position_now), parent->parent->listcontrol_positions);
 
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
@@ -13101,7 +13101,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
                             //obtain the coordinates of the reference position of the Route that is being dragged
                              ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                 (parent->parent->data->position_list)[(parent->parent->highlighted_position)],
+                                                 (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
                                                  );
@@ -16616,7 +16616,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 
         //no positions nor routes are highlighted when ListFrame is constructed
         highlighted_route_now = -1;
-        highlighted_position = -1;
+        highlighted_position_now = -1;
 
         menu_bar = new wxMenuBar;
         menu_app = new wxMenu;
@@ -17554,11 +17554,11 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
     //	            cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
 
         //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
-    MousePositionOnListControl(listcontrol_sights, &highlighted_sight);
-    MousePositionOnListControl(listcontrol_positions, &highlighted_position);
+    MousePositionOnListControl(listcontrol_sights, &highlighted_sight_now);
+    MousePositionOnListControl(listcontrol_positions, &highlighted_position_now);
     MousePositionOnListControl(listcontrol_routes, &highlighted_route_now);
 
-    if ((highlighted_sight == wxNOT_FOUND) && (highlighted_position == wxNOT_FOUND) && (highlighted_route_now == wxNOT_FOUND)) {
+    if ((highlighted_sight_now == wxNOT_FOUND) && (highlighted_position_now == wxNOT_FOUND) && (highlighted_route_now == wxNOT_FOUND)) {
         //the mouse is not hovering over an element in listcontrol_sights nor listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights
 
         //set the beckgorund color of the Routes in listcontrol_sights and listcontrol_routes  and the background color of the Positions in listcontrol_positions to white
@@ -17576,14 +17576,14 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
     else {
         //the mouse is hovering over either an element of listcontrol_sights, or an element of listcontrol_routes, or an element of listcontrol_positions
 
-        if ((highlighted_sight != wxNOT_FOUND) && enable_highlight) {
+        if ((highlighted_sight_now != wxNOT_FOUND) && enable_highlight) {
             // the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
 
-            highlighted_route_now = ((((data->sight_list)[highlighted_sight]).related_route).value);
+            highlighted_route_now = ((((data->sight_list)[highlighted_sight_now]).related_route).value);
 
             for (i = 0; i < (listcontrol_sights->GetItemCount()); i++) {
 
-                if (i == highlighted_sight) {
+                if (i == highlighted_sight_now) {
 
                     //set the beckgorund color of the sight in listcontrol_sights and of its related route to a highlight color
                     listcontrol_sights->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
@@ -17607,12 +17607,12 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
         }
 
 
-        if (highlighted_position != wxNOT_FOUND) {
+        if (highlighted_position_now != wxNOT_FOUND) {
             //the mouse is hovering over an element of listcontrool_positions -> highlight it and the related position in listcontrol_positions, and set  a white background in all other leements in listcontrol_positions
 
             for (i = 0; i < (listcontrol_positions->GetItemCount()); i++) {
 
-                if (i == highlighted_position) {
+                if (i == highlighted_position_now) {
 
                     //set the beckgorund color of the Position in listcontrol_positions to a highlight color
                     listcontrol_positions->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));

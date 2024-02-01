@@ -10773,70 +10773,78 @@ template<class T> void ChartFrame::MoveWest(T& event) {
 
 //if a key is pressed in the keyboard, I call this function
 void DrawPanel::KeyDown(wxKeyEvent& event) {
-
+    
     switch (event.GetKeyCode()) {
-
-    case WXK_UP:
-
-        parent->MoveNorth<wxKeyEvent>(event);
-
-        break;
-
-    case WXK_DOWN:
-
-        parent->MoveSouth<wxKeyEvent>(event);
-
-        break;
-
-    case WXK_LEFT:
-
-        parent->MoveWest<wxKeyEvent>(event);
-
-        break;
-
-    case WXK_RIGHT:
-
-        parent->MoveEast<wxKeyEvent>(event);
-
-        break;
-
-    case WXK_ESCAPE:
-
-        //If the user presses esc, I cancel the selection process with the rectangle and call FitAll to re-draw the chart without the selection rectangle
-        (parent->parent->selection_rectangle) = false;
-        start_label_selection_rectangle = String("");
-        end_label_selection_rectangle_now = String("");
-            end_label_selection_rectangle_before = String("");
-        Refresh();
-        FitAll();
-
-        break;
-
-    case WXK_PLUS:
-        //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
-
-        if (event.ControlDown()) {
-            parent->SetSlider(((parent->slider)->GetValue()) * 2);
-        }
-
-        break;
-
-
-    case WXK_MINUS:
-        //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
-
-        if (event.ControlDown()) {
-            parent->SetSlider(round(((parent->slider)->GetValue()) / 2.0));
-        }
-
-        break;
-
+            
+        case WXK_UP:
+            
+            parent->MoveNorth<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_DOWN:
+            
+            parent->MoveSouth<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_LEFT:
+            
+            parent->MoveWest<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_RIGHT:
+            
+            parent->MoveEast<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_ESCAPE:
+            
+            int i;
+            
+            //If the user presses esc, I cancel the selection process with the rectangle in all ChartFrames and call RefreshAll and FitAll to re-draw the chart without the selection rectangle
+            (parent->parent->selection_rectangle) = false;
+            
+            for(i=0; i<(parent->parent->chart_frames.size()); i++){
+                
+                (((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle) = String("");
+                (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now) = String("");
+                (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_before) = String("");
+                
+            }
+            
+            parent->parent->RefreshAll();
+            FitAll();
+            
+            break;
+            
+        case WXK_PLUS:
+            //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
+            
+            if (event.ControlDown()) {
+                parent->SetSlider(((parent->slider)->GetValue()) * 2);
+            }
+            
+            break;
+            
+            
+        case WXK_MINUS:
+            //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
+            
+            if (event.ControlDown()) {
+                parent->SetSlider(round(((parent->slider)->GetValue()) / 2.0));
+            }
+            
+            break;
+            
     }
-
+    
     //    }
-
+    
     event.Skip(true);
-
+    
 }
 
 //moves (makes slide) to the east the chart

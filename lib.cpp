@@ -8722,6 +8722,7 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
         
         if(foreground_color != wxNullColour){
             dc.SetPen(wxPen(foreground_color, thickness));
+            dc.SetBrush(wxBrush(foreground_color));
         }else{
             dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
         }
@@ -12321,9 +12322,22 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             parent->parent->RefreshAll();
             
 #endif
+
 #ifdef _WIN32
             //on WIN32 Refresh() is slow -> call RerenderRoutes to re-draw the Routes with the right thickness
-            
+
+            for(i=0; i<((parent->parent->chart_frames).size()); i++){
+
+                //copy the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels, in such a way that RerenderRoutes() will be able to wipe out the Routes and their reference Positions
+                ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
+                (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
+
+                ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
+                (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
+
+                ((parent->parent->chart_frames)[i])->draw_panel->RerenderRoutes();
+
+            }
             
 #endif
             

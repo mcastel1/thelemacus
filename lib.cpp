@@ -8561,60 +8561,95 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColo
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
     
-    if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
-        
-        wxPoint p;
-        
-        GeoToScreen(geo_position, &p);
-        
-        dc.DrawRectangle(
-                         (drawpanel_position_start.x),
-                         (drawpanel_position_start.y),
-                         ((p.x)-(draw_panel_origin.x)) - (drawpanel_position_start.x),
-                         ((p.y)-(draw_panel_origin.y)) - (drawpanel_position_start.y)
-                         );
-        
-    }
+    //    if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
     
-    if ((parent->projection->name->GetValue()) == wxString("3D")) {
-        
-            
-        //right vertical edge of rectangle
-        (Route(
-               String("o"),
-               (parent->parent->geo_position_start),
-               Angle(M_PI * (1.0 - GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
-               )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
-        
-        //left vertical edge of rectangle
-        (Route(
-               String("o"),
-               geo_position,
-               Angle(M_PI * (1.0 + GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
-               )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
-        
-        //bottom horizontal edge of rectangle
-        (Route(
-               String("l"),
-               (parent->parent->geo_position_start),
-               //change this by introducing if
-               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
-               )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
-        
-        //top horizontal edge of rectangle
-        (Route(
-               String("l"),
-               geo_position,
-               //change this by introducing if
-               Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-               Length(Re * cos(geo_position.phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
-               )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
-        
-        
-    }
+    //        wxPoint p;
+    //
+    //        GeoToScreen(geo_position, &p);
+    //
+    //        dc.DrawRectangle(
+    //                         (drawpanel_position_start.x),
+    //                         (drawpanel_position_start.y),
+    //                         ((p.x)-(draw_panel_origin.x)) - (drawpanel_position_start.x),
+    //                         ((p.y)-(draw_panel_origin.y)) - (drawpanel_position_start.y)
+    //                         );
+    
+    //I draw the four edges of the rectangle in a way that is independent of the projection used 
+    //right vertical edge of rectangle
+    (Route(
+           String("o"),
+           (parent->parent->geo_position_start),
+           Angle(M_PI * (1.0 - GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+           Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+           )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+    
+    //left vertical edge of rectangle
+    (Route(
+           String("o"),
+           geo_position,
+           Angle(M_PI * (1.0 + GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+           Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+           )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+    
+    //bottom horizontal edge of rectangle
+    (Route(
+           String("l"),
+           (parent->parent->geo_position_start),
+           //change this by introducing if
+           Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+           Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+           )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+    
+    //top horizontal edge of rectangle
+    (Route(
+           String("l"),
+           geo_position,
+           //change this by introducing if
+           Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+           Length(Re * cos(geo_position.phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+           )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+    
+    //    }
+    //
+    //    if ((parent->projection->name->GetValue()) == wxString("3D")) {
+    
+    
+    //        //right vertical edge of rectangle
+    //        (Route(
+    //               String("o"),
+    //               (parent->parent->geo_position_start),
+    //               Angle(M_PI * (1.0 - GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+    //               Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+    //               )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+    //
+    //        //left vertical edge of rectangle
+    //        (Route(
+    //               String("o"),
+    //               geo_position,
+    //               Angle(M_PI * (1.0 + GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+    //               Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+    //               )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+    //
+    //        //bottom horizontal edge of rectangle
+    //        (Route(
+    //               String("l"),
+    //               (parent->parent->geo_position_start),
+    //               //change this by introducing if
+    //               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+    //               Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+    //               )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+    //
+    //        //top horizontal edge of rectangle
+    //        (Route(
+    //               String("l"),
+    //               geo_position,
+    //               //change this by introducing if
+    //               Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+    //               Length(Re * cos(geo_position.phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+    //               )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+    //
+    //
+    //    }
     
 }
 

@@ -12190,17 +12190,14 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
     }
     else {
-        //If the mouse is not being dragged, I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
-
-        int highlighted_position_old;
-
+        //no selection rectangle is being drawn -> I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
 
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
         position_draw_panel_now = (parent->parent->screen_position_now) - draw_panel_origin;
 
-        for ((parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now), (parent->parent->highlighted_route_now) = -1, i = 0;
-            i < (((parent->parent)->data)->route_list).size();
-            i++) {
+        //save the id of the Route highlighted at the preceeding step into highlighted_route_before
+        (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
+        for ((parent->parent->highlighted_route_now) = -1, i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
 
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
             //when only a fraction of the Routes is Drawn, this will create a problem ---
@@ -12289,7 +12286,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 
         //I run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
-        for (highlighted_position_old = (parent->parent->highlighted_position_now), ((parent->parent)->highlighted_position_now) = -1, i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
+        for ((parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now), (parent->parent->highlighted_position_now) = -1, i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
 
             GeoToScreen((((parent->parent)->data)->position_list)[i], &q);
 
@@ -12314,7 +12311,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
         }
 
-        if (((parent->parent->highlighted_route_before) != (parent->parent->highlighted_route_now)) || (highlighted_position_old != (parent->parent->highlighted_position_now))) {
+        if (((parent->parent->highlighted_route_before) != (parent->parent->highlighted_route_now)) || ((parent->parent->highlighted_position_before) != (parent->parent->highlighted_position_now))) {
             //the highlighted Route has changed-> I will call Refresh, which triggers PaintEvent, to re-draw Routes with the right thickness
 
             for (i = 0; i < (parent->parent->chart_frames).size(); i++) {

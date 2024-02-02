@@ -2175,15 +2175,15 @@ void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[ma
     vector< vector<wxPoint> > v;
 
     DrawOld(n_points, draw_panel, &v, prefix);
-    
-        for (i = 0; i < (v.size()); i++) {
-            //run over all chunks of the Route written in v
-            if(((v[i]).size()) > 1){
-                //the i-th chunk v[i] has at least two points -> draw it
-                dc->DrawSpline((int)((v[i]).size()), (v[i]).data());
-            }
+
+    for (i = 0; i < (v.size()); i++) {
+        //run over all chunks of the Route written in v
+        if (((v[i]).size()) > 1) {
+            //the i-th chunk v[i] has at least two points -> draw it
+            dc->DrawSpline((int)((v[i]).size()), (v[i]).data());
         }
-    
+    }
+
 
 }
 
@@ -2288,20 +2288,20 @@ void Route::Draw(unsigned int n_points, Color foreground_color, Color background
 }
 
 void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
-    
+
     int i;
     vector< vector<wxPoint> > v;
-    
+
     Draw(n_points, draw_panel, &v, prefix);
-    
+
     for (i = 0; i < (v.size()); i++) {
         //run over all chunks of the Route written in v
-        if(((v[i]).size()) > 1){
+        if (((v[i]).size()) > 1) {
             //the i-th chunk v[i] has at least two points -> draw it
             dc->DrawSpline((int)((v[i]).size()), (v[i]).data());
         }
     }
-    
+
 }
 
 //tabulate the points of Route *this in any projection of draw_panel and writes them into v
@@ -8390,101 +8390,101 @@ END_EVENT_TABLE()
 
 
 void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
-    
+
     wxPaintDC dc(this);
-    
+
     RenderAll(dc);
 
 }
 
 
 void DrawPanel::RerenderBackground(void) {
-    
+
     wxClientDC dc(this);
-    
+
     //wipe out the background at the preceeding step of the drag by painting on it with background_color
     RenderBackground(
-                     dc,
-                     grid_before,
-                     ticks_before,
-                     parent->points_coastline_before,
-                     wxGetApp().background_color,
-                     wxGetApp().background_color
-                     );
+        dc,
+        grid_before,
+        ticks_before,
+        parent->points_coastline_before,
+        wxGetApp().background_color,
+        wxGetApp().background_color
+    );
     //wipe out the Routes at the preceeding mouse position
     RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, (parent->parent->highlighted_route_before), wxGetApp().background_color);
     //wipe out the Positions at the preceeding mouse position
-    RenderPositions(dc, points_position_list_before,  wxGetApp().background_color);
- 
-    
+    RenderPositions(dc, points_position_list_before, wxGetApp().background_color);
+
+
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     re_draw = true;
     RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color
-                     );
+        dc,
+        grid_now,
+        ticks_now,
+        parent->points_coastline_now,
+        wxGetApp().foreground_color,
+        wxGetApp().background_color
+    );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
-  
+
 }
 
 //erase label_position_before, the label of the previous mouse position before the last mouse movement, by drawing on top of it with color background_color, and draw the new label
 void DrawPanel::RerenderMousePositionLabel(void) {
-    
+
     wxClientDC dc(this);
-    
+
     //wipe out position_label_position_before by writin the text in position_label_position_before with color backgound_color
     /*
      dc.SetTextForeground(wxGetApp().background_color);
      dc.SetTextBackground(wxGetApp().background_color);
      dc.DrawText(wxString(label_position_before.value), position_label_position_now);
      */
-    
-    //wipe out position_label_position_before by writing on top of it a rectangle filled with color backgound_color
+
+     //wipe out position_label_position_before by writing on top of it a rectangle filled with color backgound_color
     dc.SetPen(wxGetApp().background_color);
     dc.SetBrush(wxBrush(wxGetApp().background_color));
     dc.DrawRectangle(position_label_position_now, label_position_before.get_size(this));
-    
+
     RenderMousePositionLabel(dc);
-    
+
 }
 
 
 //erase selection_rectangle_before, by drawing on top of it with color background_color, and draw the new selection_rectangle
 void DrawPanel::RerenderSelectionRectangle(void) {
-    
+
     wxClientDC dc(this);
-    
+
     //render a selection rectangle with color wxGetApp().background_color to clean the preceeding one
     RenderSelectionRectangle(dc, (parent->parent->geo_position_before), wxGetApp().background_color, wxGetApp().background_color);
-    
+
     //draw the label of the end point of selection_rectangle on top of the old one with color background_color, in order to delete the old one
     /*
      dc.SetTextForeground(wxGetApp().background_color);
      dc.SetTextBackground(wxGetApp().background_color);
      dc.DrawText(wxString(end_label_selection_rectangle_before.value), position_end_label_selection_rectangle_before);
      */
-    //draw a white rectangle on top of the label of the previous end point of the selection rectangle, to wipe it out
+     //draw a white rectangle on top of the label of the previous end point of the selection rectangle, to wipe it out
     dc.SetPen(wxGetApp().background_color);
     dc.SetBrush(wxBrush(wxGetApp().background_color));
     dc.DrawRectangle(position_end_label_selection_rectangle_before, end_label_selection_rectangle_before.get_size(this));
     dc.DrawRectangle(position_start_label_selection_rectangle, start_label_selection_rectangle.get_size(this));
 
-    
+
     //re-render all objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color
-                     );
-  
+        dc,
+        grid_now,
+        ticks_now,
+        parent->points_coastline_now,
+        wxGetApp().foreground_color,
+        wxGetApp().background_color
+    );
+
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     RenderSelectionRectangle(dc, (parent->parent->geo_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
@@ -8495,18 +8495,18 @@ void DrawPanel::RerenderSelectionRectangle(void) {
 
 //render the coastline by using the set of points points_coastline, meridians, parallels and their labels
 void DrawPanel::RenderBackground(
-                                 wxDC& dc,
-                                 vector< vector< vector<wxPoint> > > grid,
-                                 vector< vector< vector<wxPoint> > > ticks,
-                                 vector<wxPoint> points_coastline,
-                                 wxColour foreground_color, wxColour background_color
-                                 ) {
+    wxDC& dc,
+    vector< vector< vector<wxPoint> > > grid,
+    vector< vector< vector<wxPoint> > > ticks,
+    vector<wxPoint> points_coastline,
+    wxColour foreground_color, wxColour background_color
+) {
 
-//    dc.SetPen(foreground_color);
-//    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
-//    dc.SetTextForeground(foreground_color);
-//    dc.SetTextBackground(background_color);
- 
+    //    dc.SetPen(foreground_color);
+    //    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
+    //    dc.SetTextForeground(foreground_color);
+    //    dc.SetTextBackground(background_color);
+
     if (re_draw) {
 
         m_bgbuffer.Create(size_chart, 32);
@@ -8514,26 +8514,26 @@ void DrawPanel::RenderBackground(
 
         wxMemoryDC mdc(m_bgbuffer);
 
-//        mdc.SetPen(wxPen(foreground_color));
-//        mdc.SetBrush(wxBrush(foreground_color));
+        //        mdc.SetPen(wxPen(foreground_color));
+        //        mdc.SetBrush(wxBrush(foreground_color));
 
         wxGCDC dc_m_bgbuffer(mdc);
         //this needs to be commented out in order to not show a 'trail' when dragging
-        //        dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
-        dc_m_bgbuffer.Clear();
-        
+        dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
+        //dc_m_bgbuffer.Clear();
+
         dc_m_bgbuffer.SetPen(wxPen(foreground_color));
         dc_m_bgbuffer.SetBrush(wxBrush(foreground_color));
         dc_m_bgbuffer.SetTextForeground(foreground_color);
         dc_m_bgbuffer.SetTextBackground(background_color);
-        
+
         (this->*Render)(
-                        &dc_m_bgbuffer,
-                        grid,
-                        ticks,
-                        points_coastline,
-                        foreground_color,
-                        background_color);
+            &dc_m_bgbuffer,
+            grid,
+            ticks,
+            points_coastline,
+            foreground_color,
+            background_color);
 
         mdc.SelectObject(wxNullBitmap);
 
@@ -8550,26 +8550,26 @@ void DrawPanel::RenderBackground(
 
 
 //same as  DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color), but it takes a screen position as input rather than a  geographic Position
-void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint screen_position, wxColour foreground_color, wxColour background_color){
-    
+void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint screen_position, wxColour foreground_color, wxColour background_color) {
+
     Position p;
-    
+
     (this->*ScreenToGeo)(screen_position, &p);
     RenderSelectionRectangle(dc, p, foreground_color, background_color);
-    
+
 }
 
 
 //render a selection rectangle with end Position geo_position (geographic position), foreground color foreground_color and backgrund color background_color
-void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color){
-    
+void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color) {
+
     dc.SetPen(foreground_color);
     dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
-    
+
     //    if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
-    
+
     //        wxPoint p;
     //
     //        GeoToScreen(geo_position, &p);
@@ -8580,47 +8580,47 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColo
     //                         ((p.x)-(draw_panel_origin.x)) - (drawpanel_position_start.x),
     //                         ((p.y)-(draw_panel_origin.y)) - (drawpanel_position_start.y)
     //                         );
-    
+
     //I draw the four edges of the rectangle in a way that is independent of the projection used
     //right vertical edge of rectangle
     (Route(
-           String("o"),
-           (parent->parent->geo_position_start),
-           Angle(M_PI * (1.0 - GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-           Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
-           )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
-    
+        String("o"),
+        (parent->parent->geo_position_start),
+        Angle(M_PI * (1.0 - GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+        Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+    )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+
     //left vertical edge of rectangle
     (Route(
-           String("o"),
-           geo_position,
-           Angle(M_PI * (1.0 + GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-           Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
-           )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
-    
+        String("o"),
+        geo_position,
+        Angle(M_PI * (1.0 + GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+        Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+    )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+
     //bottom horizontal edge of rectangle
     (Route(
-           String("l"),
-           (parent->parent->geo_position_start),
-           //change this by introducing if
-           Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-           Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
-           )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
-    
+        String("l"),
+        (parent->parent->geo_position_start),
+        //change this by introducing if
+        Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+        Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+    )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+
     //top horizontal edge of rectangle
     (Route(
-           String("l"),
-           geo_position,
-           //change this by introducing if
-           Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-           Length(Re * cos(geo_position.phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
-           )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
-    
+        String("l"),
+        geo_position,
+        //change this by introducing if
+        Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+        Length(Re * cos(geo_position.phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+    )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+
     //    }
     //
     //    if ((parent->projection->name->GetValue()) == wxString("3D")) {
-    
-    
+
+
     //        //right vertical edge of rectangle
     //        (Route(
     //               String("o"),
@@ -8657,36 +8657,36 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColo
     //
     //
     //    }
-    
+
 }
 
 
 //draw the label of the start and end point of selection_rectangle with foreground and background colrs foreground_color and background_color, respectively
-void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc){
-    
+void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc) {
+
     dc.SetTextForeground(wxGetApp().foreground_color);
     dc.SetTextBackground(wxGetApp().background_color);
-    
+
     dc.DrawText(wxString(end_label_selection_rectangle_now.value), position_end_label_selection_rectangle_now);
     dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
-    
+
 }
 
 
 void DrawPanel::RenderAll(wxDC& dc) {
 
     RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color
-                     );
+        dc,
+        grid_now,
+        ticks_now,
+        parent->points_coastline_now,
+        wxGetApp().foreground_color,
+        wxGetApp().background_color
+    );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     RenderMousePositionLabel(dc);
-    
+
     //draw selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
         RenderSelectionRectangle(dc, (parent->parent->geo_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
@@ -8709,7 +8709,7 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
 
     //render Routes
     for (i = 0, color_id = 0; i < (points_curves.size()); i++) {
-        
+
         //set the route thickness and pen
         if (i == (parent->parent->highlighted_route_now)) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
@@ -8719,78 +8719,79 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
             thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = 4 * thickness;
         }
-        
-        if(foreground_color != wxNullColour){
+
+        if (foreground_color != wxNullColour) {
             dc.SetPen(wxPen(foreground_color, thickness));
             dc.SetBrush(wxBrush(foreground_color));
-        }else{
+        }
+        else {
             dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
         }
-        
+
         //draw  reference_position[i] only if it is included in the plot area
         if (DrawPanelToGeo(reference_positions[i], NULL)) {
             dc.DrawCircle(reference_positions[i], radius);
         }
-        
+
         //draw the route points
         //run over all connected chunks of routes
         for (j = 0; j < (points_curves[i]).size(); j++) {
-            
+
             if ((points_curves[i][j]).size() > 1) {
                 //I need to add this consdition to make sure that I am not drawing an empty connected chunk
-                
+
                 dc.DrawSpline((int)((points_curves[i][j]).size()), (points_curves[i][j]).data());
-                
+
             }
-            
+
         }
-        
+
     }
-    
+
 }
 
 //wipe out all Routes on *this and re-draw them
-void DrawPanel::RerenderRoutes(void){
-    
+void DrawPanel::RerenderRoutes(void) {
+
     wxClientDC dc(this);
 
     //wipe out the Routes at the preceeding mouse position
     RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, (parent->parent->highlighted_route_before), wxGetApp().background_color);
-    
+
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color
-                     );
+        dc,
+        grid_now,
+        ticks_now,
+        parent->points_coastline_now,
+        wxGetApp().foreground_color,
+        wxGetApp().background_color
+    );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
-    
+
 }
 
 
-void DrawPanel::RerenderPositions(void){
-    
+void DrawPanel::RerenderPositions(void) {
+
     wxClientDC dc(this);
 
     //wipe out the Positions at the preceeding mouse position
-    RenderPositions(dc, points_position_list_before,  wxGetApp().background_color);
-    
+    RenderPositions(dc, points_position_list_before, wxGetApp().background_color);
+
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color
-                     );
+        dc,
+        grid_now,
+        ticks_now,
+        parent->points_coastline_now,
+        wxGetApp().foreground_color,
+        wxGetApp().background_color
+    );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
-    
+
 }
 
 //render the Positions:  if foreground_color == wxNullColour, this method uses as foreground color the colors in color_list, otherwise it uses foreground_color
@@ -8801,7 +8802,7 @@ void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, wxColor foregr
     wxPoint p;
 
 
-        //draw Positions
+    //draw Positions
     for (i = 0, color_id = 0; i < (points.size()); i++) {
 
         //set thickness and pen
@@ -8813,10 +8814,11 @@ void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, wxColor foregr
             thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = 4 * thickness;
         }
-        
-        if(foreground_color != wxNullColour){
+
+        if (foreground_color != wxNullColour) {
             dc.SetPen(wxPen(foreground_color, thickness));
-        }else{
+        }
+        else {
             dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
         }
 
@@ -8848,35 +8850,35 @@ void DrawPanel::RenderDraggedObjectLabel(wxDC& dc) {
 
 //erase the previous label of the object which is being dragged, by drawing on top of it with color background_color, and draw the new one
 void DrawPanel::RerenderDraggedObjectLabel(void) {
-    
+
     wxClientDC dc(this);
-    
+
     //wipe out position_label_position_before by writin the text in position_label_position_before with color backgound_color
     /*
      dc.SetTextForeground(wxGetApp().background_color);
      dc.SetTextBackground(wxGetApp().background_color);
      dc.DrawText(wxString(label_position_before.value), position_label_position_now);
      */
-    
-    //wipe out position_label_position_before by writing on top of it a rectangle filled with color backgound_color
+
+     //wipe out position_label_position_before by writing on top of it a rectangle filled with color backgound_color
     dc.SetPen(wxGetApp().background_color);
     dc.SetBrush(wxBrush(wxGetApp().background_color));
     dc.DrawRectangle(position_label_dragged_object_before, label_dragged_object_before.get_size(this));
-    
-    
+
+
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color
-                     );
+        dc,
+        grid_now,
+        ticks_now,
+        parent->points_coastline_now,
+        wxGetApp().foreground_color,
+        wxGetApp().background_color
+    );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
     RenderDraggedObjectLabel(dc);
-    
+
 }
 
 
@@ -8912,11 +8914,11 @@ void DrawPanel::FitAll() {
 }
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::Render_Mercator(wxDC* dc, 
-                                vector< vector< vector<wxPoint> > > grid,
-                                vector< vector< vector<wxPoint> > > ticks,
-                                vector<wxPoint> points_coastline,
-                                wxColor foreground_color, wxColor background_color) {
+void DrawPanel::Render_Mercator(wxDC* dc,
+    vector< vector< vector<wxPoint> > > grid,
+    vector< vector< vector<wxPoint> > > ticks,
+    vector<wxPoint> points_coastline,
+    wxColor foreground_color, wxColor background_color) {
 
     Angle lambda, phi;
     Route route;
@@ -8933,7 +8935,7 @@ void DrawPanel::Render_Mercator(wxDC* dc,
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
 
-    
+
     //render coastlines
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color));
@@ -8943,85 +8945,85 @@ void DrawPanel::Render_Mercator(wxDC* dc,
     }
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
 
-    
+
     //set thickness to normal thicnkness
 //    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-    
+
     //render parallels and meridians
-    for(i=0; i < grid.size(); i++){
+    for (i = 0; i < grid.size(); i++) {
         for (j = 0; j < (grid[i]).size(); j++) {
-            
-//            (grid[i]).DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
-            
+
+            //            (grid[i]).DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
+
             if ((grid[i][j]).size() > 1) {
-                    dc->DrawLines((int)((grid[i][j]).size()), (grid[i][j]).data());
+                dc->DrawLines((int)((grid[i][j]).size()), (grid[i][j]).data());
             }
 
         }
     }
     //render parallels and meridian ticks
-    for(i=0; i < ticks.size(); i++){
+    for (i = 0; i < ticks.size(); i++) {
         for (j = 0; j < (ticks[i]).size(); j++) {
-            
-//            (ticks[i]).DrawOld((wxGetApp().n_points_minor_ticks.value), foreground_color, thickness, dc, this);
+
+            //            (ticks[i]).DrawOld((wxGetApp().n_points_minor_ticks.value), foreground_color, thickness, dc, this);
             if ((ticks[i][j]).size() > 1) {
                 dc->DrawLines((int)((ticks[i][j]).size()), (ticks[i][j]).data());
             }
         }
     }
-  
-    
-  
-//    //draw the first chunk of intermediate ticks on the longitude axis
-//    if (gamma_lambda != 1) {
-//
-//        //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-//        for ((route.reference_position.lambda.value) = (lambda_start.value) - delta_lambda;
-//            (route.reference_position.lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
-//            (route.reference_position.lambda.value) += delta_lambda_minor) {
-//
-//            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-//
-//        }
-//
-//    }
-//
-//    (route.length).set(String(""), Re * ((((p_NW.phi).normalize_pm_pi_ret()).value) - (((p_SE.phi).normalize_pm_pi_ret()).value)), String(""));
-//
-//    for (meridians_now.clear(),
-//         (route.reference_position.lambda.value) = (lambda_start.value);
-//         (route.reference_position.lambda.value) < (lambda_end.value);
-//         (route.reference_position.lambda.value) += delta_lambda) {
-//             
-//             //add the current meridian that is being drawn (route) to meridians
-//             meridians_now.push_back(route);
-//             //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
-//             //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
-//             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
-//             
-//             if (gamma_lambda != 1) {
-//                 //draw intermediate ticks on the longitude axis
-//                 
-//                 (lambda_saved.value) = (route.reference_position.lambda.value);
-//                 (route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
-//                 
-//                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-//                 for ((route.reference_position.lambda.value) = (lambda_saved.value);
-//                      (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
-//                      (route.reference_position.lambda.value) += delta_lambda_minor) {
-//                     
-//                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-//                     
-//                 }
-//                 
-//                 (route.length).set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
-//                 (route.reference_position.lambda.value) = (lambda_saved.value);
-//                 
-//             }
-//             
-//         }
 
-    //render labels of meridians
+
+
+    //    //draw the first chunk of intermediate ticks on the longitude axis
+    //    if (gamma_lambda != 1) {
+    //
+    //        //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+    //        for ((route.reference_position.lambda.value) = (lambda_start.value) - delta_lambda;
+    //            (route.reference_position.lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
+    //            (route.reference_position.lambda.value) += delta_lambda_minor) {
+    //
+    //            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+    //
+    //        }
+    //
+    //    }
+    //
+    //    (route.length).set(String(""), Re * ((((p_NW.phi).normalize_pm_pi_ret()).value) - (((p_SE.phi).normalize_pm_pi_ret()).value)), String(""));
+    //
+    //    for (meridians_now.clear(),
+    //         (route.reference_position.lambda.value) = (lambda_start.value);
+    //         (route.reference_position.lambda.value) < (lambda_end.value);
+    //         (route.reference_position.lambda.value) += delta_lambda) {
+    //             
+    //             //add the current meridian that is being drawn (route) to meridians
+    //             meridians_now.push_back(route);
+    //             //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
+    //             //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
+    //             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
+    //             
+    //             if (gamma_lambda != 1) {
+    //                 //draw intermediate ticks on the longitude axis
+    //                 
+    //                 (lambda_saved.value) = (route.reference_position.lambda.value);
+    //                 (route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
+    //                 
+    //                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+    //                 for ((route.reference_position.lambda.value) = (lambda_saved.value);
+    //                      (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
+    //                      (route.reference_position.lambda.value) += delta_lambda_minor) {
+    //                     
+    //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+    //                     
+    //                 }
+    //                 
+    //                 (route.length).set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
+    //                 (route.reference_position.lambda.value) = (lambda_saved.value);
+    //                 
+    //             }
+    //             
+    //         }
+
+        //render labels of meridians
     for (i = 0; i < labels_lambda.size(); i++) {
 
         dc->GetTextExtent(labels_lambda[i], &width_label, &height_label);
@@ -9030,62 +9032,62 @@ void DrawPanel::Render_Mercator(wxDC* dc,
     }
 
 
-//    //draw parallels
-//    //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
-//    (route.type).set(String("l"));
-//    (route.Z).set(String(""), M_PI_2, String(""));
-//    ((route.reference_position).lambda) = (p_NW.lambda);
-//
-//    //this loop runs over the latitude of the parallel, which we call phi
-//    for (parallels_now.clear(),
-//        (phi.value) = (phi_start.value);
-//        (phi.value) < (phi_end.value);
-//        (phi.value) += delta_phi
-//        ) {
-//
-//        //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
-//        ((route.reference_position).phi) = phi;
-//        (route.length).set(String(""),
-//            Re * cos(phi) * ((
-//
-//                (((p_NW.lambda) < M_PI) && ((p_SE.lambda) > M_PI)) ? ((p_NW.lambda) - (p_SE.lambda) + 2.0 * M_PI) : ((p_NW.lambda) - (p_SE.lambda))
-//
-//                ).value), String(""));
-//
-//        //add the current parallel that is being drawn to parallels
-//        parallels_now.push_back(route);
-//        //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
-//        //here I use DrawOld because Draw cannot handle loxodromes
-//        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
-//
-//        if (gamma_phi != 1) {
-//            //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
-//
-//            //                (route.type).set(String(""), String("o"), String(""));
-//            //                (route.Z).set(String(""), M_PI_2, String(""));
-//            route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * lambda_span, String(""));
-//            //                ((route.reference_position).lambda) = (parent->lambda_min);
-//
-//            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-//            for (
-//                (route.reference_position.phi.value) = (phi.value);
-//                (route.reference_position.phi.value) - (phi.value) < delta_phi;
-//                (route.reference_position.phi.value) += delta_phi_minor
-//                ) {
-//
-//                //                        route.Draw(((wxGetApp().n_points_minor_ticks)).value, 0x0000ff, thickness, this, String(""));
-//                //here I use DrawOld because Draw cannot handle loxodromes
-//                route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this);
-//
-//            }
-//
-//            //                (route.type).set(String(""), String("c"), String(""));
-//
-//        }
-//
-//    }
+    //    //draw parallels
+    //    //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
+    //    (route.type).set(String("l"));
+    //    (route.Z).set(String(""), M_PI_2, String(""));
+    //    ((route.reference_position).lambda) = (p_NW.lambda);
+    //
+    //    //this loop runs over the latitude of the parallel, which we call phi
+    //    for (parallels_now.clear(),
+    //        (phi.value) = (phi_start.value);
+    //        (phi.value) < (phi_end.value);
+    //        (phi.value) += delta_phi
+    //        ) {
+    //
+    //        //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
+    //        ((route.reference_position).phi) = phi;
+    //        (route.length).set(String(""),
+    //            Re * cos(phi) * ((
+    //
+    //                (((p_NW.lambda) < M_PI) && ((p_SE.lambda) > M_PI)) ? ((p_NW.lambda) - (p_SE.lambda) + 2.0 * M_PI) : ((p_NW.lambda) - (p_SE.lambda))
+    //
+    //                ).value), String(""));
+    //
+    //        //add the current parallel that is being drawn to parallels
+    //        parallels_now.push_back(route);
+    //        //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
+    //        //here I use DrawOld because Draw cannot handle loxodromes
+    //        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
+    //
+    //        if (gamma_phi != 1) {
+    //            //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
+    //
+    //            //                (route.type).set(String(""), String("o"), String(""));
+    //            //                (route.Z).set(String(""), M_PI_2, String(""));
+    //            route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * lambda_span, String(""));
+    //            //                ((route.reference_position).lambda) = (parent->lambda_min);
+    //
+    //            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+    //            for (
+    //                (route.reference_position.phi.value) = (phi.value);
+    //                (route.reference_position.phi.value) - (phi.value) < delta_phi;
+    //                (route.reference_position.phi.value) += delta_phi_minor
+    //                ) {
+    //
+    //                //                        route.Draw(((wxGetApp().n_points_minor_ticks)).value, 0x0000ff, thickness, this, String(""));
+    //                //here I use DrawOld because Draw cannot handle loxodromes
+    //                route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this);
+    //
+    //            }
+    //
+    //            //                (route.type).set(String(""), String("c"), String(""));
+    //
+    //        }
+    //
+    //    }
 
-    //draw labels on parallels
+        //draw labels on parallels
     for (i = 0; i < labels_phi.size(); i++) {
 
         dc->GetTextExtent(labels_phi[i], &width_label, &height_label);
@@ -9213,9 +9215,9 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 void DrawPanel::Render_3D(wxDC* dc,
-                          vector< vector< vector<wxPoint> > > grid,
-                          vector< vector< vector<wxPoint> > > ticks,
-                          vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color) {
+    vector< vector< vector<wxPoint> > > grid,
+    vector< vector< vector<wxPoint> > > ticks,
+    vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color) {
 
     int i, j;
     Double d;
@@ -9244,15 +9246,15 @@ void DrawPanel::Render_3D(wxDC* dc,
         dc->DrawEllipse(points_coastline[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
 
-    
-//    //set thickness to normal thicnkness
-//    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+
+    //    //set thickness to normal thicnkness
+    //    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
     dc->SetPen(wxPen(foreground_color));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
     //render parallels and meridians
-    for(i=0; i < grid.size(); i++){
+    for (i = 0; i < grid.size(); i++) {
         for (j = 0; j < (grid[i]).size(); j++) {
-            
+
             //        (grid[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
             if ((grid[i][j]).size() > 1) {
                 dc->DrawSpline((int)((grid[i][j]).size()), (grid[i][j]).data());
@@ -9260,64 +9262,64 @@ void DrawPanel::Render_3D(wxDC* dc,
         }
     }
     //render parallel and meridian ticks
-    for(i=0; i < ticks.size(); i++){
+    for (i = 0; i < ticks.size(); i++) {
         for (j = 0; j < (ticks[i]).size(); j++) {
-            
+
             //        (ticks[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
             if ((ticks[i][j]).size() > 1) {
                 dc->DrawSpline((int)((ticks[i][j]).size()), (ticks[i][j]).data());
             }
         }
     }
-    
 
-//    //draw meridians
-//    //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-//    (route.type).set(String("o"));
-//    (route.length).set(String(""), Re * M_PI, String(""));
-//    (route.Z).set(String(""), 0.0, String(""));
-//    ((route.reference_position).phi) = -M_PI_2;
-//
-//    for (meridians_now.clear(),
-//        (route.reference_position.lambda.value) = (lambda_start.value);
-//        (route.reference_position.lambda.value) < (lambda_end.value);
-//        (route.reference_position.lambda.value) += delta_lambda) {
-//
-//        //add the current meridian that is being drawn (route) to meridians
-//        meridians_now.push_back(route);
-//        //            route.draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this);
-//        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
-//
-//        if (gamma_lambda != 1) {
-//            //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
-//
-//            (lambda_saved.value) = (route.reference_position.lambda.value);
-//            phi_saved = ((route.reference_position).phi);
-//            Z_saved = (route.Z);
-//
-//            (route.Z).set(String(""), 0.0, String(""));
-//            (route.length).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
-//            ((route.reference_position).phi) = phi_middle;
-//
-//            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-//            for ((route.reference_position.lambda.value) = (lambda_saved.value);
-//                (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
-//                (route.reference_position.lambda.value) += delta_lambda_minor) {
-//
-//                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-//
-//            }
-//
-//            (route.length).set(String(""), Re * M_PI, String(""));
-//            (route.Z) = Z_saved;
-//            (route.reference_position.lambda.value) = (lambda_saved.value);
-//            ((route.reference_position).phi) = phi_saved;
-//
-//        }
-//
-//    }
 
-    //render labels of meridians
+    //    //draw meridians
+    //    //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
+    //    (route.type).set(String("o"));
+    //    (route.length).set(String(""), Re * M_PI, String(""));
+    //    (route.Z).set(String(""), 0.0, String(""));
+    //    ((route.reference_position).phi) = -M_PI_2;
+    //
+    //    for (meridians_now.clear(),
+    //        (route.reference_position.lambda.value) = (lambda_start.value);
+    //        (route.reference_position.lambda.value) < (lambda_end.value);
+    //        (route.reference_position.lambda.value) += delta_lambda) {
+    //
+    //        //add the current meridian that is being drawn (route) to meridians
+    //        meridians_now.push_back(route);
+    //        //            route.draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this);
+    //        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
+    //
+    //        if (gamma_lambda != 1) {
+    //            //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
+    //
+    //            (lambda_saved.value) = (route.reference_position.lambda.value);
+    //            phi_saved = ((route.reference_position).phi);
+    //            Z_saved = (route.Z);
+    //
+    //            (route.Z).set(String(""), 0.0, String(""));
+    //            (route.length).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
+    //            ((route.reference_position).phi) = phi_middle;
+    //
+    //            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+    //            for ((route.reference_position.lambda.value) = (lambda_saved.value);
+    //                (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
+    //                (route.reference_position.lambda.value) += delta_lambda_minor) {
+    //
+    //                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+    //
+    //            }
+    //
+    //            (route.length).set(String(""), Re * M_PI, String(""));
+    //            (route.Z) = Z_saved;
+    //            (route.reference_position.lambda.value) = (lambda_saved.value);
+    //            ((route.reference_position).phi) = phi_saved;
+    //
+    //        }
+    //
+    //    }
+
+        //render labels of meridians
     for (i = 0; i < labels_lambda.size(); i++) {
 
         dc->GetTextExtent(labels_lambda[i], &width_label, &height_label);
@@ -9326,52 +9328,52 @@ void DrawPanel::Render_3D(wxDC* dc,
     }
 
 
-//    //draw parallels
-//    //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
-//    (route.type).set(String("c"));
-//    ((route.reference_position).lambda) = lambda_middle;
-//
-//    //this loop runs over the latitude of the parallel, which we call phi
-//    for (parallels_now.clear(),
-//        (phi.value) = (phi_start.value);
-//        (phi.value) < (phi_end.value);
-//        (phi.value) += delta_phi
-//        ) {
-//
-//        //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
-//        (route.omega).set(String(""), M_PI_2 - fabs(phi.value), String(""));
-//        (route.length).set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
-//        ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
-//
-//        //add the current parallel that is being drawn to parallels
-//        parallels_now.push_back(route);
-//        route.Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
-//
-//        if (gamma_phi != 1) {
-//            //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
-//
-//            (route.type).set(String("o"));
-//            (route.Z).set(String(""), M_PI_2, String(""));
-//            (route.length).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
-//
-//            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-//            for (
-//                (route.reference_position.phi.value) = (phi.value);
-//                (route.reference_position.phi.value) - (phi.value) < delta_phi;
-//                (route.reference_position.phi.value) += delta_phi_minor
-//                ) {
-//
-//                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-//
-//            }
-//
-//            (route.type).set(String("c"));
-//
-//        }
-//
-//    }
+    //    //draw parallels
+    //    //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
+    //    (route.type).set(String("c"));
+    //    ((route.reference_position).lambda) = lambda_middle;
+    //
+    //    //this loop runs over the latitude of the parallel, which we call phi
+    //    for (parallels_now.clear(),
+    //        (phi.value) = (phi_start.value);
+    //        (phi.value) < (phi_end.value);
+    //        (phi.value) += delta_phi
+    //        ) {
+    //
+    //        //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
+    //        (route.omega).set(String(""), M_PI_2 - fabs(phi.value), String(""));
+    //        (route.length).set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
+    //        ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
+    //
+    //        //add the current parallel that is being drawn to parallels
+    //        parallels_now.push_back(route);
+    //        route.Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
+    //
+    //        if (gamma_phi != 1) {
+    //            //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
+    //
+    //            (route.type).set(String("o"));
+    //            (route.Z).set(String(""), M_PI_2, String(""));
+    //            (route.length).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
+    //
+    //            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
+    //            for (
+    //                (route.reference_position.phi.value) = (phi.value);
+    //                (route.reference_position.phi.value) - (phi.value) < delta_phi;
+    //                (route.reference_position.phi.value) += delta_phi_minor
+    //                ) {
+    //
+    //                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+    //
+    //            }
+    //
+    //            (route.type).set(String("c"));
+    //
+    //        }
+    //
+    //    }
 
-    //draw labels on parallels
+        //draw labels on parallels
     for (i = 0; i < labels_phi.size(); i++) {
 
         dc->GetTextExtent(labels_phi[i], &width_label, &height_label);
@@ -9424,7 +9426,7 @@ void DrawPanel::TabulateRoutes(void) {
     for (i = 0; i < (points_route_list_now.size()); i++) {
         (points_route_list_now[i]).clear();
     }
-    
+
     reference_positions_route_list_now.clear();
     reference_positions_route_list_now.resize((parent->parent->data->route_list.size()));
 
@@ -9443,12 +9445,13 @@ void DrawPanel::TabulateRoutes(void) {
             ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list_now.data()) + i, String(""));
 
         }
-        
+
         //write the reference Positions into reference_positions_route_list_now
-        if(GeoToDrawPanel(((parent->parent->data->route_list)[i]).reference_position, &p, false)){
+        if (GeoToDrawPanel(((parent->parent->data->route_list)[i]).reference_position, &p, false)) {
             //the reference position falls in the plot area -> write it into reference_positions_route_list_now
             reference_positions_route_list_now[i] = p;
-        }else{
+        }
+        else {
             //the reference position does not fall in the plot area -> write a 'Null' value into reference_positions_route_list_now which will be ignored in other methods because it lies outside the plot area
             reference_positions_route_list_now[i] = wxPoint(0, 0);
         }
@@ -9471,16 +9474,17 @@ void DrawPanel::TabulatePositions(void) {
 
     //tabulate the points of Positions
     for (i = 0; i < (parent->parent->data->position_list.size()); i++) {
-        
+
         //write the reference Positions into reference_positions_route_list_now
-        if(GeoToDrawPanel((parent->parent->data->position_list)[i], &p, false)){
+        if (GeoToDrawPanel((parent->parent->data->position_list)[i], &p, false)) {
             //the  position falls in the plot area -> write it into points_position_list_now
             points_position_list_now[i] = p;
-        }else{
+        }
+        else {
             //the  position does not fall in the plot area -> write a 'Null' value into points_position_list_now which will be ignored in other methods because it lies outside the plot area
             points_position_list_now[i] = wxPoint(0, 0);
         }
- 
+
     }
 
 }
@@ -9771,72 +9775,72 @@ void DrawPanel::Draw_Mercator(void) {
         DrawLabel(q, parent->lambda_max, parent->lambda_min, label_precision, String("EW"));
 
     }
-    
+
     grid_now.clear();
     ticks_now.clear();
-    
+
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String("o"));
     route.Z.set(String(""), 0.0, String(""));
     (route.reference_position.phi) = (p_SE.phi);
-    
+
     //draw the first chunk of intermediate ticks on the longitude axis
     if (gamma_lambda != 1) {
-        
+
         route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
-        
+
         //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
         for ((route.reference_position.lambda.value) = (lambda_start.value) - delta_lambda;
-             (route.reference_position.lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
-             (route.reference_position.lambda.value) += delta_lambda_minor) {
-            
-//            ticks_now.push_back(route);
-            ticks_now.resize((ticks_now.size())+1);
+            (route.reference_position.lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
+            (route.reference_position.lambda.value) += delta_lambda_minor) {
+
+            //            ticks_now.push_back(route);
+            ticks_now.resize((ticks_now.size()) + 1);
             route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
-            
+
             //            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-            
+
         }
-        
+
     }
-    
-    
-    for ((route.length).set(String(""), Re * (((p_NW.phi.normalize_pm_pi_ret()).value) - ((p_SE.phi.normalize_pm_pi_ret()).value)), String("")),
-         (route.reference_position.lambda.value) = (lambda_start.value);
-         (route.reference_position.lambda.value) < (lambda_end.value);
-         (route.reference_position.lambda.value) += delta_lambda) {
-        
+
+
+    for ((route.length).set(String(""), Re* (((p_NW.phi.normalize_pm_pi_ret()).value) - ((p_SE.phi.normalize_pm_pi_ret()).value)), String("")),
+        (route.reference_position.lambda.value) = (lambda_start.value);
+        (route.reference_position.lambda.value) < (lambda_end.value);
+        (route.reference_position.lambda.value) += delta_lambda) {
+
         //add the current meridian that is being drawn (route) to meridians_now
 //        grid_now.push_back(route);
-        grid_now.resize((grid_now.size())+1);
+        grid_now.resize((grid_now.size()) + 1);
         route.Draw((parent->parent->data->n_points_routes.value), this, &(grid_now.back()), String(""));
         //             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
-        
+
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis
-            
+
             (lambda_saved.value) = (route.reference_position.lambda.value);
             (route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
-            
+
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for ((route.reference_position.lambda.value) = (lambda_saved.value);
-                 (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
-                 (route.reference_position.lambda.value) += delta_lambda_minor) {
-                
+                (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
+                (route.reference_position.lambda.value) += delta_lambda_minor) {
+
                 //                ticks_now.push_back(route);
-                ticks_now.resize((ticks_now.size())+1);
+                ticks_now.resize((ticks_now.size()) + 1);
                 route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(grid_now.back()), String(""));
                 //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
             }
-            
+
             route.length.set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
             (route.reference_position.lambda.value) = (lambda_saved.value);
-            
+
         }
-        
+
     }
-    
+
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     route.type.set(String("l"));
@@ -9860,7 +9864,7 @@ void DrawPanel::Draw_Mercator(void) {
 
         //add the current parallel that is being drawn to parallels
 //        grid_now.push_back(route);
-        grid_now.resize((grid_now.size())+1);
+        grid_now.resize((grid_now.size()) + 1);
         route.DrawOld((parent->parent->data->n_points_routes.value), this, &(grid_now.back()), String(""));
         //here I use DrawOld because Draw cannot handle loxodromes
 //        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
@@ -9868,7 +9872,7 @@ void DrawPanel::Draw_Mercator(void) {
         if (gamma_phi != 1) {
             //draw smaller ticks -> set route to a loxodrome pointing towards the E and draw it
 
-             route.length.set(String(""), Re * (wxGetApp().tick_length_over_width_plot_area.value) * lambda_span, String(""));
+            route.length.set(String(""), Re * (wxGetApp().tick_length_over_width_plot_area.value) * lambda_span, String(""));
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for (
@@ -9876,10 +9880,10 @@ void DrawPanel::Draw_Mercator(void) {
                 (route.reference_position.phi.value) - (phi.value) < delta_phi;
                 (route.reference_position.phi.value) += delta_phi_minor
                 ) {
-                    
-//                    ticks_now.push_back(route);
-                    ticks_now.resize((ticks_now.size())+1);
-                    route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
+
+                //                    ticks_now.push_back(route);
+                ticks_now.resize((ticks_now.size()) + 1);
+                route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
                 //here I use DrawOld because Draw cannot handle loxodromes
 //                route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this);
 
@@ -9888,8 +9892,8 @@ void DrawPanel::Draw_Mercator(void) {
         }
 
     }
-    
-    
+
+
     TabulateRoutes();
     TabulatePositions();
 
@@ -10135,11 +10139,11 @@ void DrawPanel::Draw_3D(void) {
         DrawLabel(q, parent->lambda_max, parent->lambda_min, label_precision, String("EW"));
 
     }
-    
-    
+
+
     grid_now.clear();
     ticks_now.clear();
-    
+
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     (route.type).set(String("o"));
@@ -10148,15 +10152,15 @@ void DrawPanel::Draw_3D(void) {
     ((route.reference_position).phi) = -M_PI_2;
 
     for ((route.reference_position.lambda.value) = (lambda_start.value);
-         (route.reference_position.lambda.value) < (lambda_end.value);
-         (route.reference_position.lambda.value) += delta_lambda) {
-        
+        (route.reference_position.lambda.value) < (lambda_end.value);
+        (route.reference_position.lambda.value) += delta_lambda) {
+
         //add the current meridian that is being drawn (route) to meridians
         //        grid_now.push_back(route);
-        grid_now.resize((grid_now.size())+1);
+        grid_now.resize((grid_now.size()) + 1);
         route.Draw((parent->parent->data->n_points_routes.value), this, &(grid_now.back()), String(""));
         //        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
-        
+
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
 
@@ -10173,10 +10177,10 @@ void DrawPanel::Draw_3D(void) {
                 (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
                 (route.reference_position.lambda.value) += delta_lambda_minor) {
 
-//                ticks_now.push_back(route);
-                ticks_now.resize((ticks_now.size())+1);
+                //                ticks_now.push_back(route);
+                ticks_now.resize((ticks_now.size()) + 1);
                 route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
-//                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+                //                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
 
             }
 
@@ -10188,7 +10192,7 @@ void DrawPanel::Draw_3D(void) {
         }
 
     }
-    
+
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     (route.type).set(String("c"));
@@ -10196,49 +10200,49 @@ void DrawPanel::Draw_3D(void) {
 
     //this loop runs over the latitude of the parallel, which we call phi
     for ((phi.value) = (phi_start.value);
-         (phi.value) < (phi_end.value);
-         (phi.value) += delta_phi
-         ) {
-        
+        (phi.value) < (phi_end.value);
+        (phi.value) += delta_phi
+        ) {
+
         //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
         (route.omega).set(String(""), M_PI_2 - fabs(phi.value), String(""));
         (route.length).set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
         ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
-        
+
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);
-        grid_now.resize((grid_now.size())+1);
+        grid_now.resize((grid_now.size()) + 1);
         route.Draw((parent->parent->data->n_points_routes.value), this, &(grid_now.back()), String(""));
         //        route.Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
-        
+
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
-            
+
             (route.type).set(String("o"));
             (route.Z).set(String(""), M_PI_2, String(""));
             (route.length).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
-            
+
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for (
-                 (route.reference_position.phi.value) = (phi.value);
-                 (route.reference_position.phi.value) - (phi.value) < delta_phi;
-                 (route.reference_position.phi.value) += delta_phi_minor
-                 ) {
-                     
-                     //                    ticks_now.push_back(route);
-                     ticks_now.resize((ticks_now.size())+1);
-                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
-                     //                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-                     
-                 }
-            
+                (route.reference_position.phi.value) = (phi.value);
+                (route.reference_position.phi.value) - (phi.value) < delta_phi;
+                (route.reference_position.phi.value) += delta_phi_minor
+                ) {
+
+                //                    ticks_now.push_back(route);
+                ticks_now.resize((ticks_now.size()) + 1);
+                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
+                //                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+
+            }
+
             route.type.set(String("c"));
-            
+
         }
-        
+
     }
-    
-    
+
+
     //updates the position of the DrawPanel *this
     draw_panel_origin = (this->GetScreenPosition());
 
@@ -10774,78 +10778,78 @@ template<class T> void ChartFrame::MoveWest(T& event) {
 
 //if a key is pressed in the keyboard, I call this function
 void DrawPanel::KeyDown(wxKeyEvent& event) {
-    
+
     switch (event.GetKeyCode()) {
-            
-        case WXK_UP:
-            
-            parent->MoveNorth<wxKeyEvent>(event);
-            
-            break;
-            
-        case WXK_DOWN:
-            
-            parent->MoveSouth<wxKeyEvent>(event);
-            
-            break;
-            
-        case WXK_LEFT:
-            
-            parent->MoveWest<wxKeyEvent>(event);
-            
-            break;
-            
-        case WXK_RIGHT:
-            
-            parent->MoveEast<wxKeyEvent>(event);
-            
-            break;
-            
-        case WXK_ESCAPE:
-            
-            int i;
-            
-            //If the user presses esc, I cancel the selection process with the rectangle in all ChartFrames and call RefreshAll and FitAll to re-draw the chart without the selection rectangle
-            (parent->parent->selection_rectangle) = false;
-            
-            for(i=0; i<(parent->parent->chart_frames.size()); i++){
-                
-                (((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle) = String("");
-                (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now) = String("");
-                (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_before) = String("");
-                
-            }
-            
-            parent->parent->RefreshAll();
-            FitAll();
-            
-            break;
-            
-        case WXK_PLUS:
-            //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
-            
-            if (event.ControlDown()) {
-                parent->SetSlider(((parent->slider)->GetValue()) * 2);
-            }
-            
-            break;
-            
-            
-        case WXK_MINUS:
-            //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
-            
-            if (event.ControlDown()) {
-                parent->SetSlider(round(((parent->slider)->GetValue()) / 2.0));
-            }
-            
-            break;
-            
+
+    case WXK_UP:
+
+        parent->MoveNorth<wxKeyEvent>(event);
+
+        break;
+
+    case WXK_DOWN:
+
+        parent->MoveSouth<wxKeyEvent>(event);
+
+        break;
+
+    case WXK_LEFT:
+
+        parent->MoveWest<wxKeyEvent>(event);
+
+        break;
+
+    case WXK_RIGHT:
+
+        parent->MoveEast<wxKeyEvent>(event);
+
+        break;
+
+    case WXK_ESCAPE:
+
+        int i;
+
+        //If the user presses esc, I cancel the selection process with the rectangle in all ChartFrames and call RefreshAll and FitAll to re-draw the chart without the selection rectangle
+        (parent->parent->selection_rectangle) = false;
+
+        for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
+
+            (((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle) = String("");
+            (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now) = String("");
+            (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_before) = String("");
+
+        }
+
+        parent->parent->RefreshAll();
+        FitAll();
+
+        break;
+
+    case WXK_PLUS:
+        //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
+
+        if (event.ControlDown()) {
+            parent->SetSlider(((parent->slider)->GetValue()) * 2);
+        }
+
+        break;
+
+
+    case WXK_MINUS:
+        //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
+
+        if (event.ControlDown()) {
+            parent->SetSlider(round(((parent->slider)->GetValue()) / 2.0));
+        }
+
+        break;
+
     }
-    
+
     //    }
-    
+
     event.Skip(true);
-    
+
 }
 
 //moves (makes slide) to the east the chart
@@ -11498,62 +11502,62 @@ template<class P> CheckSign<P>::CheckSign(AngleField<P>* p_in) {
 
 //checks the value of the sign in the GUI field
 template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
-    
+
     P* f = (p->parent);
-    
+
     //I proceed only if the progam is not is in idling mode
     if (!(f->idling)) {
-        
+
         unsigned int i;
         bool check;
-        
+
         //I check whether the name in the GUI field sign matches one of the sign values in the list signs
         if ((p->format) == String("")) {
             //if the AngleField p has no sign, the check is ok
-            
+
             check = true;
-            
+
         }
         else {
             //if the AngleField p has a sign, I check it
-            
+
             for (check = false, i = 0; (i < ((p->signs).GetCount())) && (!check); i++) {
                 if (((p->sign)->GetValue()) == (p->signs)[i]) {
                     check = true;
                 }
             }
-            
+
         }
-        
-        
+
+
         if (check || ((((p->sign)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->sign)->GetValue()).ToStdString())) == String("")))) {
             //p->sign either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
-            
+
             //if check is true (false) -> set sign_ok to true (false)
             (p->sign_ok) = check;
-            
+
             if ((p->format) != String("")) {
                 //there exists a p->sign field
-                
+
                 //the background color is set to white, because in this case there is no erroneous value in sign
                 (p->sign)->SetForegroundColour(wxGetApp().foreground_color);
                 (p->sign)->SetFont(wxGetApp().default_font);
             }
-            
+
         }
         else {
-            
+
             (f->print_error_message)->SetAndCall((p->sign), String("Sign is not valid!"), String("Sign must be +-, NS or EW."), (wxGetApp().path_file_error_icon));
             (p->sign_ok) = false;
-            
+
         }
-        
+
         f->AllOk();
-        
+
     }
-    
+
     event.Skip(true);
-    
+
 }
 
 
@@ -11961,7 +11965,7 @@ void DrawPanel::ShowCoordinates(Position q, String* label) {
 
 //given a geographic Positiojn q, if q lies within *this, write in label a text with the geographic coordinates corresponding to q, and write in *position the position of the label close to q (with some margin, for clarity). Otherwise, write "" in label and does nothing witg poisition
 void DrawPanel::SetLabelAndPosition(Position q, wxPoint* position, String* label) {
-    
+
     if (
         /*GeoToDrawPanel converts q into the wxPoint position, reckoned with respect to the origin *this*/(this->GeoToDrawPanel)(q, position, false)) {
 
@@ -11973,9 +11977,9 @@ void DrawPanel::SetLabelAndPosition(Position q, wxPoint* position, String* label
 
         (*label) = String("");
 
-        
+
     }
-    
+
 }
 
 
@@ -12117,7 +12121,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     wxPoint q;
     stringstream s;
     int i, j, l;
-    
+
     //    cout << "\nMouse moved";
     //    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
     //    cout << "Position of mouse screen = {" << (parent->parent->screen_position_now).x << " , " << (parent->parent->screen_position_now).y << "}\n";
@@ -12125,14 +12129,14 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 
 #ifdef _WIN32
-    
+
     //store the former _now positions into the _before positions
     (parent->parent->screen_position_before) = (parent->parent->screen_position_now);
     (parent->parent->geo_position_before) = (parent->parent->geo_position_now);
     label_position_before = label_position_now;
-    
+
 #endif
-    
+
     //update the instantaneous screen and geographic position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
     (parent->parent->screen_position_now) = wxGetMousePosition();
     mouse_in_plot_area = (this->*ScreenToGeo)((parent->parent->screen_position_now), &((parent->parent->geo_position_now)));
@@ -12151,41 +12155,41 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
     if ((parent->parent->selection_rectangle)) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
-        
-        for(i=0; i<(parent->parent->chart_frames.size()); i++){
-            
+
+        for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
+
             //write the label and position of the selection rectangle for each DrawPanel into end_label_selection_rectangle_now and position_end_label_selection_rectangle_now, respectively
             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                 (parent->parent->geo_position_now),
-                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now),
-                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now)
-                                                                                 );
-         
-            
+                (parent->parent->geo_position_now),
+                &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now),
+                &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now)
+            );
+
+
         }
-        
+
 #ifdef __APPLE__
-        
+
         //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this, and paint the new one, because Refresh() triggers a call of PaintEvent
         parent->parent->RefreshAll();
 
 #endif
 
 #ifdef _WIN32
-        
+
         //on WIN32, the Refresh() command slows down things -> I don't call it but use RerenderSelectionRectangle, which cleans up the former selections rectangle in *this and draws a new one
-        
-        for(i=0; i<(parent->parent->chart_frames.size()); i++){
-            
+
+        for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
+
             (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now);
             (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now);
-            
+
             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->geo_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now));
-            
+
             ((parent->parent->chart_frames)[i])->draw_panel->RerenderSelectionRectangle();
-            
+
         }
-        
+
 #endif
 
 
@@ -12198,7 +12202,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
         //save the id of the Route highlighted at the preceeding step into highlighted_route_before
         (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
-        
+
         for ((parent->parent->highlighted_route_now) = -1, i = 0; i < (parent->parent->data->route_list).size(); i++) {
 
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
@@ -12311,21 +12315,21 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             }
 
         }
-        
+
         if (((parent->parent->highlighted_route_before) != (parent->parent->highlighted_route_now)) || ((parent->parent->highlighted_position_before) != (parent->parent->highlighted_position_now))) {
             //the highlighted Route or Position has changed -> update the chart
-            
+
 #ifdef __APPLE__
-            
+
             //on APPLE call Refresh, which triggers PaintEvent, to re-draw Routes with the right thickness
             parent->parent->RefreshAll();
-            
+
 #endif
 
 #ifdef _WIN32
             //on WIN32 Refresh() is slow -> call RerenderRoutes to re-draw the Routes with the right thickness
 
-            for(i=0; i<((parent->parent->chart_frames).size()); i++){
+            for (i = 0; i < ((parent->parent->chart_frames).size()); i++) {
 
                 //copy the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels, in such a way that RerenderRoutes() will be able to wipe out the Routes and their reference Positions
                 ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
@@ -12337,34 +12341,35 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 ((parent->parent->chart_frames)[i])->draw_panel->RerenderRoutes();
 
             }
-            
+
 #endif
-            
-        }else{
+
+        }
+        else {
             //the highlighted Route has not changed ->  the chart does not need to be updated, but the coordinates of the instantaneous mouse position do -> call
-            
+
 #ifdef __APPLE__
-            
+
             //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this and paint the new one and thus update the coordinates of the instantaneous mouse postion, because Refresh() triggers a call of PaintEvent
             Refresh();
-            
+
 #endif
 #ifdef _WIN32
             //on WIN32, the Refresh() command slows down things -> I don't call it but use RerenderMousePositionLabel, which cleans up the former label of the mouse position in *this and draws a new one
-            
+
             RerenderMousePositionLabel();
-            
+
 #endif
-            
+
         }
-        
+
     }
 
 
 
-    
+
     event.Skip(true);
-    
+
 }
 
 //if the left button of the mouse is pressed, I record its position as the starting position of a (potential) mouse-dragging event
@@ -12613,54 +12618,54 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
     if ((parent->parent->selection_rectangle)) {
         //start drawing a selection rectangle
-        
+
         int i;
         bool check;
-        
+
         (parent->parent->geo_position_start) = (parent->parent->geo_position_now);
         //        GetMouseGeoPosition(&(parent->parent->geo_position_start));
         //        drawpanel_position_start = (parent->parent->screen_position_now);
-        
+
         //store the position at the beginning of the selection process, to compute the zoom factor later
-        for(i=0, check = false; i<(parent->parent->chart_frames).size(); i++){
-            
+        for (i = 0, check = false; i < (parent->parent->chart_frames).size(); i++) {
+
             if (
                 (((parent->parent->chart_frames)[i])->draw_panel->*(((parent->parent->chart_frames)[i])->draw_panel->GeoToProjection))((parent->parent->geo_position_start), &(((parent->parent->chart_frames)[i])->draw_panel->projection_start), false)) {
                 //geo_position_start is valid in the i-th DrawPanel -> start the selection rectangle in the i-th DrawPanel
-                
+
                 //convert geo_position_start into the drawpanel position for the i-th DrawPanel
 //                ((parent->parent->chart_frames)[i])->draw_panel->GeoToDrawPanel(
 //                                                                                (parent->parent->geo_position_start),
 //                                                                                &(((parent->parent->chart_frames)[i])->draw_panel->drawpanel_position_start),
 //                                                                                true);
 
-                
+
                 ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                     (parent->parent->geo_position_now),
-                                                                                     &(((parent->parent->chart_frames)[i])->draw_panel->position_start_label_selection_rectangle),
-                                                                                     &(((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle));
+                    (parent->parent->geo_position_now),
+                    &(((parent->parent->chart_frames)[i])->draw_panel->position_start_label_selection_rectangle),
+                    &(((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle));
 
                 ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
                 check = true;
 
             }
-            
-            if(!check){
+
+            if (!check) {
                 //geo_position_start is invalid in all DrawPanels -> delete the selection rectangle by setting selection_rectangle to false
-                
+
                 (parent->parent->selection_rectangle) = false;
-                
+
             }
 
         }
-        
+
 
 
 
     }
     else {
         //end drawing a selection rectangle
-        
+
         int i;
 
         GetMouseGeoPosition(&((parent->parent)->position_end));
@@ -12669,7 +12674,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         //store the position at the end of the selection process, to compute the zoom factor later
         if ((this->*ScreenToProjection)(drawpanel_position_end, &projection_end)) {
             //drawpanel_position_end is valid
-            
+
             if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
                 if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end.x) - (projection_start.x))))) {
@@ -12797,8 +12802,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             }
 
             //set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
-            
-            for(i=0; i<((parent->parent->chart_frames).size()); i++){
+
+            for (i = 0; i < ((parent->parent->chart_frames).size()); i++) {
                 (((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle) = String("");
                 (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now) = String("");
             }
@@ -12808,7 +12813,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             //the  end position for the selected rectangle is not valid -> cancel the rectangle by setting selection_rectangle to false and by setting to empty the text fields of the geographical positions of the selection triangle
 
             (parent->parent->selection_rectangle) = false;
-            for(i=0; i<((parent->parent->chart_frames).size()); i++){
+            for (i = 0; i < ((parent->parent->chart_frames).size()); i++) {
                 (((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle) = String("");
                 (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now) = String("");
             }
@@ -12899,8 +12904,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
                                 (this->*Set_lambda_phi_min_max)();
                             }
-                            
-                            
+
+
 #ifdef __APPLE__
                             //re-draw the chart
                             (this->*Draw)();
@@ -12910,22 +12915,22 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used in RerenderBackground
                             parent->points_coastline_before.clear();
                             (parent->points_coastline_before) = (parent->points_coastline_now);
-                            
+
                             grid_before.clear();
                             grid_before = grid_now;
                             ticks_before.clear();
                             ticks_before = ticks_now;
-                     
+
                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
                             points_route_list_before.clear();
                             points_route_list_before = points_route_list_now;
-                            
+
                             points_position_list_before.clear();
                             points_position_list_before = points_position_list_now;
-                            
+
                             reference_positions_route_list_before.clear();
                             reference_positions_route_list_before = reference_positions_route_list_now;
-                            
+
                             //re-draw the chart
                             (this->*Draw)();
                             RerenderBackground();
@@ -12952,29 +12957,29 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used in RerenderBackground
                         parent->points_coastline_before.clear();
                         (parent->points_coastline_before) = (parent->points_coastline_now);
-                        
+
                         grid_before.clear();
                         grid_before = grid_now;
                         ticks_before.clear();
                         ticks_before = ticks_now;
-                 
+
                         //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
                         points_route_list_before.clear();
                         points_route_list_before = points_route_list_now;
-                        
+
                         points_position_list_before.clear();
                         points_position_list_before = points_position_list_now;
-                        
+
                         reference_positions_route_list_before.clear();
                         reference_positions_route_list_before = reference_positions_route_list_now;
-                        
+
                         //re-draw the chart
                         (this->*Draw)();
                         RerenderBackground();
 
 #endif
 
-                        
+
                         //						FitAll();
 
                     }
@@ -13034,16 +13039,16 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         }
 
-                     
-                  
+
+
 
                         //update the data of the Route under consideration in listcontrol_routes
                         (((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).update_wxListCtrl((parent->parent->highlighted_route_now), parent->parent->listcontrol_routes);
-                        
-                        
+
+
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             //on APPLE, I compute the coordinates of the reference position of the Route that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the 'before/now' method :store in label_dragged_object_before and position_label_dragged_object_before the label and position -> compute the new position and label -> call Rerender* methods, which clean up the old content of *this, doing the same thing as Refresh() but faster.
-                            
+
 #ifdef _WIN32
 
                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
@@ -13051,41 +13056,41 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
 
 #endif
-                            
+
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position,
-                                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
-                                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
-                                                );
+                                ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position,
+                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                            );
 
 #ifdef __APPLE__
-                            
-                           //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts -> I rerender the Routes and the label of the Route which is being dragged
+
+                            //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts -> I rerender the Routes and the label of the Route which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
                             ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
-                            
+
 #endif
 #ifdef _WIN32
 
                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels
                             ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
-                            
+
                             ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
-                            
-                            
+
+
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts -> I rerender the Routes and the label of the Route which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-                            
+
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderRoutes();
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderDraggedObjectLabel();
-                            
+
 #endif
-                            
+
                         }
-                        
+
                     }
 
                     if ((parent->parent->highlighted_position_now) != -1) {
@@ -13117,39 +13122,39 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             //on APPLE, I compute the coordinates of the Position that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the 'before/now' method :store in label_dragged_object_before and position_label_dragged_object_before the label and position -> compute the new position and label -> call Rerender* methods, which clean up the old content of *this, doing the same thing as Refresh(), but faster.
- 
+
 #ifdef _WIN32
 
-                            
+
                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                              (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
-                              (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
-    
+                            (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
+                            (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
+
 
 #endif
                             //obtain the coordinates of the reference position of the Route that is being dragged
-                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                 (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
-                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
-                                                 &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
-                                                 );
-  
+                            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
+                                (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
+                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                            );
+
 #ifdef __APPLE__
-                           
+
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-paint the charts -> I rerender the Positions and the label of the Position which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
                             (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
 #endif
 #ifdef _WIN32
- 
+
                             ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
-                            
+
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-paint the charts -> I rerender the Positions and the label of the Position which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderPositions();
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderDraggedObjectLabel();
-                            
+
 #endif
 
                         }
@@ -15758,7 +15763,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
 
         }
     }
-    
+
 
     //writes the values of the GUI fields in the non-GUI fields
     get(event);
@@ -17691,15 +17696,15 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 
 #ifdef __APPLE__
     //on APPLE I call Refresh() to trigger PaintEvent() in all DrawPanels and re-render the Routes/Positions with the new configuration of highlighted Routes/Positions
-    
+
     RefreshAll();
-    
+
 #endif
-    
+
 #ifdef _WIN32
     //on WIN32 Refresh() is slow -> I call RerenderRoutes and RerenderPositions in all DrawPanels
-    
-    for(i=0; i<(chart_frames.size()); i++){
+
+    for (i = 0; i < (chart_frames.size()); i++) {
         (chart_frames[i])->draw_panel->RerenderRoutes();
         (chart_frames[i])->draw_panel->RerenderPositions();
     }

@@ -8349,12 +8349,12 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     //    rotation.print(String("initial rotation"), String(""), cout);
 
     //allocates points_route_list and ts_route_list
-//    points_route_list_now.resize((((parent->parent)->data)->route_list).size());
-//    reference_positions_route_list_now.resize((((parent->parent)->data)->route_list).size());
-//    for (i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
+//    points_route_list_now.resize((parent->parent->data->route_list).size());
+//    reference_positions_route_list_now.resize((parent->parent->data->route_list).size());
+//    for (i = 0; i < (parent->parent->data->route_list).size(); i++) {
 //        (points_route_list_now[i]).clear();
 //    }
-//    points_position_list_now.resize((((parent->parent)->data)->route_list).size());
+//    points_position_list_now.resize((parent->parent->data->route_list).size());
 
 
     idling = false;
@@ -9420,7 +9420,7 @@ void DrawPanel::TabulateRoutes(void) {
     wxPoint p;
 
     //resize points_route_list_now and reference_position_route_list_now, which needs to have the same size as (data->route_list), and clear up points_route_list
-    points_route_list_now.resize((((parent->parent)->data)->route_list).size());
+    points_route_list_now.resize((parent->parent->data->route_list).size());
     for (i = 0; i < (points_route_list_now.size()); i++) {
         (points_route_list_now[i]).clear();
     }
@@ -9429,18 +9429,18 @@ void DrawPanel::TabulateRoutes(void) {
     reference_positions_route_list_now.resize((parent->parent->data->route_list.size()));
 
     //tabulate the points of routes
-    for (i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
+    for (i = 0; i < (parent->parent->data->route_list).size(); i++) {
 
         //write the points of the curves corresponding to the Routes into points_route_list_now
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
-        if (((((parent->parent)->data)->route_list)[i]).type != String("l")) {
+        if (((parent->parent->data->route_list)[i]).type != String("l")) {
 
-            ((((parent->parent)->data)->route_list)[i]).Draw((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list_now.data()) + i, String(""));
+            ((parent->parent->data->route_list)[i]).Draw((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list_now.data()) + i, String(""));
 
         }
         else {
 
-            ((((parent->parent)->data)->route_list)[i]).DrawOld((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list_now.data()) + i, String(""));
+            ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list_now.data()) + i, String(""));
 
         }
         
@@ -12199,18 +12199,16 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         //save the id of the Route highlighted at the preceeding step into highlighted_route_before
         (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
         
-        for ((parent->parent->highlighted_route_now) = -1, i = 0; i < (((parent->parent)->data)->route_list).size(); i++) {
+        for ((parent->parent->highlighted_route_now) = -1, i = 0; i < (parent->parent->data->route_list).size(); i++) {
 
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
             //when only a fraction of the Routes is Drawn, this will create a problem ---
             ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
             //when only a fraction of the Routes is Drawn, this will create a problem ---
 
-            if ((((((parent->parent)->data)->route_list)[i]).related_sight).value != -1) {
-                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[i]).related_sight).value, wxGetApp().background_color);
+            if ((((parent->parent->data->route_list)[i]).related_sight).value != -1) {
+                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((parent->parent->data->route_list)[i]).related_sight).value, wxGetApp().background_color);
             }
-
-
 
             for (j = 0; j < (points_route_list_now[i]).size(); j++) {
 
@@ -12250,8 +12248,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
                         //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                         ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-                        if ((((((parent->parent)->data)->route_list)[i]).related_sight).value != -1) {
-                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[i]).related_sight).value, (wxGetApp().color_selected_item));
+                        if ((((parent->parent->data->route_list)[i]).related_sight).value != -1) {
+                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((parent->parent->data->route_list)[i]).related_sight).value, (wxGetApp().color_selected_item));
                         }
 
 
@@ -12287,7 +12285,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         }
 
 
-        //run over all the positions, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_positions
+        //run over all the Positions, check if the mouse is hovering over one of them, and change the background color of the related Position in listcontrol_positions
         for ((parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now), (parent->parent->highlighted_position_now) = -1, i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
 
             GeoToScreen((((parent->parent)->data)->position_list)[i], &q);
@@ -12482,7 +12480,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 if ((parent->parent->highlighted_route_now) != -1) {
                     //in this case, I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
 
-                    (((((parent->parent)->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position) = route_reference_position_drag_start;
+                    (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position) = route_reference_position_drag_start;
 
                     TabulateRoutes();
                     Refresh();
@@ -12554,16 +12552,16 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             //set the beckgorund color of the Route in listcontrol_routes in ListFrame to the color of selected items
             ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour((parent->parent)->highlighted_route_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
 
-            if ((((((parent->parent)->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value != -1) {
+            if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value != -1) {
                 //the selected Route is related to a Sight
 
 
 
                 //select the related Sight in ListFrame
-                ((parent->parent)->listcontrol_sights)->SetItemState((((((parent->parent)->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                ((parent->parent)->listcontrol_sights)->SetItemState((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 
                 //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
-                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((((parent->parent)->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
 
             }
 

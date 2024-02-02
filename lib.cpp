@@ -8972,127 +8972,21 @@ void DrawPanel::Render_Mercator(wxDC* dc,
         }
     }
 
-
-
-    //    //draw the first chunk of intermediate ticks on the longitude axis
-    //    if (gamma_lambda != 1) {
-    //
-    //        //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-    //        for ((route.reference_position.lambda.value) = (lambda_start.value) - delta_lambda;
-    //            (route.reference_position.lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
-    //            (route.reference_position.lambda.value) += delta_lambda_minor) {
-    //
-    //            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-    //
-    //        }
-    //
-    //    }
-    //
-    //    (route.length).set(String(""), Re * ((((p_NW.phi).normalize_pm_pi_ret()).value) - (((p_SE.phi).normalize_pm_pi_ret()).value)), String(""));
-    //
-    //    for (meridians_now.clear(),
-    //         (route.reference_position.lambda.value) = (lambda_start.value);
-    //         (route.reference_position.lambda.value) < (lambda_end.value);
-    //         (route.reference_position.lambda.value) += delta_lambda) {
-    //             
-    //             //add the current meridian that is being drawn (route) to meridians
-    //             meridians_now.push_back(route);
-    //             //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
-    //             //here I use DrawOld because Draw with an orthodrom would require a circle_observer which encompasses all the chart : for a mercator projection which comprises most of the Earth, the circle observer does not encompass the whole chart
-    //             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
-    //             
-    //             if (gamma_lambda != 1) {
-    //                 //draw intermediate ticks on the longitude axis
-    //                 
-    //                 (lambda_saved.value) = (route.reference_position.lambda.value);
-    //                 (route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
-    //                 
-    //                 //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-    //                 for ((route.reference_position.lambda.value) = (lambda_saved.value);
-    //                      (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
-    //                      (route.reference_position.lambda.value) += delta_lambda_minor) {
-    //                     
-    //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-    //                     
-    //                 }
-    //                 
-    //                 (route.length).set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
-    //                 (route.reference_position.lambda.value) = (lambda_saved.value);
-    //                 
-    //             }
-    //             
-    //         }
-
-        //render labels of meridians
+    
+    //render labels of meridians
     for (i = 0; i < labels_lambda.size(); i++) {
-
+        
         dc->GetTextExtent(labels_lambda[i], &width_label, &height_label);
         dc->DrawText(labels_lambda[i], positions_labels_lambda[i] + wxPoint(-width_label / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)));
-
+        
     }
-
-
-    //    //draw parallels
-    //    //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
-    //    (route.type).set(String("l"));
-    //    (route.Z).set(String(""), M_PI_2, String(""));
-    //    ((route.reference_position).lambda) = (p_NW.lambda);
-    //
-    //    //this loop runs over the latitude of the parallel, which we call phi
-    //    for (parallels_now.clear(),
-    //        (phi.value) = (phi_start.value);
-    //        (phi.value) < (phi_end.value);
-    //        (phi.value) += delta_phi
-    //        ) {
-    //
-    //        //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
-    //        ((route.reference_position).phi) = phi;
-    //        (route.length).set(String(""),
-    //            Re * cos(phi) * ((
-    //
-    //                (((p_NW.lambda) < M_PI) && ((p_SE.lambda) > M_PI)) ? ((p_NW.lambda) - (p_SE.lambda) + 2.0 * M_PI) : ((p_NW.lambda) - (p_SE.lambda))
-    //
-    //                ).value), String(""));
-    //
-    //        //add the current parallel that is being drawn to parallels
-    //        parallels_now.push_back(route);
-    //        //            route.Draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this, String(""));
-    //        //here I use DrawOld because Draw cannot handle loxodromes
-    //        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
-    //
-    //        if (gamma_phi != 1) {
-    //            //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
-    //
-    //            //                (route.type).set(String(""), String("o"), String(""));
-    //            //                (route.Z).set(String(""), M_PI_2, String(""));
-    //            route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * lambda_span, String(""));
-    //            //                ((route.reference_position).lambda) = (parent->lambda_min);
-    //
-    //            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-    //            for (
-    //                (route.reference_position.phi.value) = (phi.value);
-    //                (route.reference_position.phi.value) - (phi.value) < delta_phi;
-    //                (route.reference_position.phi.value) += delta_phi_minor
-    //                ) {
-    //
-    //                //                        route.Draw(((wxGetApp().n_points_minor_ticks)).value, 0x0000ff, thickness, this, String(""));
-    //                //here I use DrawOld because Draw cannot handle loxodromes
-    //                route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this);
-    //
-    //            }
-    //
-    //            //                (route.type).set(String(""), String("c"), String(""));
-    //
-    //        }
-    //
-    //    }
-
-        //draw labels on parallels
+    
+    //draw labels on parallels
     for (i = 0; i < labels_phi.size(); i++) {
-
+        
         dc->GetTextExtent(labels_phi[i], &width_label, &height_label);
         dc->DrawText(labels_phi[i], positions_labels_phi[i] + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2));
-
+        
     }
 
 }
@@ -9273,115 +9167,22 @@ void DrawPanel::Render_3D(wxDC* dc,
     }
 
 
-    //    //draw meridians
-    //    //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    //    (route.type).set(String("o"));
-    //    (route.length).set(String(""), Re * M_PI, String(""));
-    //    (route.Z).set(String(""), 0.0, String(""));
-    //    ((route.reference_position).phi) = -M_PI_2;
-    //
-    //    for (meridians_now.clear(),
-    //        (route.reference_position.lambda.value) = (lambda_start.value);
-    //        (route.reference_position.lambda.value) < (lambda_end.value);
-    //        (route.reference_position.lambda.value) += delta_lambda) {
-    //
-    //        //add the current meridian that is being drawn (route) to meridians
-    //        meridians_now.push_back(route);
-    //        //            route.draw(((((parent->parent)->data)->n_points_routes).value), 0x808080, thickness, this);
-    //        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
-    //
-    //        if (gamma_lambda != 1) {
-    //            //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
-    //
-    //            (lambda_saved.value) = (route.reference_position.lambda.value);
-    //            phi_saved = ((route.reference_position).phi);
-    //            Z_saved = (route.Z);
-    //
-    //            (route.Z).set(String(""), 0.0, String(""));
-    //            (route.length).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
-    //            ((route.reference_position).phi) = phi_middle;
-    //
-    //            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-    //            for ((route.reference_position.lambda.value) = (lambda_saved.value);
-    //                (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
-    //                (route.reference_position.lambda.value) += delta_lambda_minor) {
-    //
-    //                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-    //
-    //            }
-    //
-    //            (route.length).set(String(""), Re * M_PI, String(""));
-    //            (route.Z) = Z_saved;
-    //            (route.reference_position.lambda.value) = (lambda_saved.value);
-    //            ((route.reference_position).phi) = phi_saved;
-    //
-    //        }
-    //
-    //    }
 
-        //render labels of meridians
+    //render labels of meridians
     for (i = 0; i < labels_lambda.size(); i++) {
-
+        
         dc->GetTextExtent(labels_lambda[i], &width_label, &height_label);
         dc->DrawText(labels_lambda[i], positions_labels_lambda[i] + wxPoint(-width_label / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)));
-
+        
     }
-
-
-    //    //draw parallels
-    //    //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
-    //    (route.type).set(String("c"));
-    //    ((route.reference_position).lambda) = lambda_middle;
-    //
-    //    //this loop runs over the latitude of the parallel, which we call phi
-    //    for (parallels_now.clear(),
-    //        (phi.value) = (phi_start.value);
-    //        (phi.value) < (phi_end.value);
-    //        (phi.value) += delta_phi
-    //        ) {
-    //
-    //        //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
-    //        (route.omega).set(String(""), M_PI_2 - fabs(phi.value), String(""));
-    //        (route.length).set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
-    //        ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
-    //
-    //        //add the current parallel that is being drawn to parallels
-    //        parallels_now.push_back(route);
-    //        route.Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
-    //
-    //        if (gamma_phi != 1) {
-    //            //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
-    //
-    //            (route.type).set(String("o"));
-    //            (route.Z).set(String(""), M_PI_2, String(""));
-    //            (route.length).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
-    //
-    //            //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-    //            for (
-    //                (route.reference_position.phi.value) = (phi.value);
-    //                (route.reference_position.phi.value) - (phi.value) < delta_phi;
-    //                (route.reference_position.phi.value) += delta_phi_minor
-    //                ) {
-    //
-    //                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-    //
-    //            }
-    //
-    //            (route.type).set(String("c"));
-    //
-    //        }
-    //
-    //    }
-
-        //draw labels on parallels
+    
+    //render labels on parallels
     for (i = 0; i < labels_phi.size(); i++) {
-
+        
         dc->GetTextExtent(labels_phi[i], &width_label, &height_label);
         dc->DrawText(labels_phi[i], positions_labels_phi[i] + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2));
-
+        
     }
-
-
 
     //draw horizon circle
     //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer

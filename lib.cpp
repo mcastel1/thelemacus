@@ -12210,6 +12210,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((parent->parent->data->route_list)[i]).related_sight).value, wxGetApp().background_color);
             }
 
+            //run over Routes and check whether the mouse is hovering over one of them
             for (j = 0; j < (points_route_list_now[i]).size(); j++) {
 
                 for (l = 0; l < ((int)((points_route_list_now[i][j]).size())) - 1; l++) {
@@ -12286,9 +12287,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 
         //run over all the Positions, check if the mouse is hovering over one of them, and change the background color of the related Position in listcontrol_positions
-        for ((parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now), (parent->parent->highlighted_position_now) = -1, i = 0; i < (((parent->parent)->data)->position_list).size(); i++) {
+        for ((parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now), (parent->parent->highlighted_position_now) = -1, i = 0; i < (parent->parent->data->position_list).size(); i++) {
 
-            GeoToScreen((((parent->parent)->data)->position_list)[i], &q);
+            GeoToScreen((parent->parent->data->position_list)[i], &q);
 
             if (sqrt(gsl_pow_2(((parent->parent->screen_position_now).x) - (q.x)) + gsl_pow_2(((parent->parent->screen_position_now).y) - (q.y))) <
                 4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth())) {
@@ -12312,7 +12313,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         }
         
         if (((parent->parent->highlighted_route_before) != (parent->parent->highlighted_route_now)) || ((parent->parent->highlighted_position_before) != (parent->parent->highlighted_position_now))) {
-            //the highlighted Route has changed -> update the chart
+            //the highlighted Route or Position has changed -> update the chart
             
 #ifdef __APPLE__
             
@@ -12494,11 +12495,11 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                     //in this case, I am dragging a position: I restore the position under consideration to its value at the beginning of the drag
 
                     //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
-                    (this->*ScreenToGeo)(position_start_drag, &((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position_now)]));
+                    (this->*ScreenToGeo)(position_start_drag, &((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]));
 
 
                     //update the coordinates of the Position under consideration in listcontrol_positions
-                    ((((parent->parent)->data)->position_list)[((parent->parent)->highlighted_position_now)]).update_wxListCtrl(((parent->parent)->highlighted_position_now), (parent->parent)->listcontrol_positions);
+                    ((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]).update_wxListCtrl(((parent->parent)->highlighted_position_now), (parent->parent)->listcontrol_positions);
 
                     //given that the position under consideration has changed, I re-pain the chart
                     Refresh();

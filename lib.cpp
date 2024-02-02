@@ -8341,8 +8341,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     circle_observer.type = String("c");
 
     //clears the vector label_phi because tehre are not y labels yet.
-    parallels_and_meridians_labels.resize(0);
-    positions_parallels_and_meridians_labels.resize(0);
+    parallels_and_meridians_labels_now.resize(0);
+    positions_parallels_and_meridians_labels_now.resize(0);
 
     //    rotation.print(String("initial rotation"), String(""), cout);
 
@@ -8972,9 +8972,9 @@ void DrawPanel::Render_Mercator(wxDC* dc,
     
 
     //render labels on parallels and meridians
-    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
+    for (i = 0; i < parallels_and_meridians_labels_now.size(); i++) {
         
-         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
+         dc->DrawText(parallels_and_meridians_labels_now[i], positions_parallels_and_meridians_labels_now[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
         
     }
 
@@ -9074,21 +9074,21 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
         WriteLabel(q, min, max, precision, mode, &wx_string);
 
 
-        parallels_and_meridians_labels.push_back(wx_string);
-        positions_parallels_and_meridians_labels.push_back(p);
+        parallels_and_meridians_labels_now.push_back(wx_string);
+        positions_parallels_and_meridians_labels_now.push_back(p);
     
         
-        size = String(parallels_and_meridians_labels.back().ToStdString()).get_size(this);
+        size = String(parallels_and_meridians_labels_now.back().ToStdString()).get_size(this);
 
         if (mode == String("NS")) {
             //            I am drawing parallels label
             
-            (positions_parallels_and_meridians_labels.back()) +=  wxPoint(-(size.GetWidth()) - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -(size.GetHeight()) / 2);
+            (positions_parallels_and_meridians_labels_now.back()) +=  wxPoint(-(size.GetWidth()) - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -(size.GetHeight()) / 2);
             
         }else{
             //            I am drawing meridians labels
             
-            (positions_parallels_and_meridians_labels.back()) +=  wxPoint(-(size.GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
+            (positions_parallels_and_meridians_labels_now.back()) +=  wxPoint(-(size.GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
             
         }
 
@@ -9158,9 +9158,9 @@ void DrawPanel::Render_3D(wxDC* dc,
 
     
     //render labels on parallels and meridians
-    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
+    for (i = 0; i < parallels_and_meridians_labels_now.size(); i++) {
         
-        dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
+        dc->DrawText(parallels_and_meridians_labels_now[i], positions_parallels_and_meridians_labels_now[i]/* + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
         
     }
 
@@ -9350,17 +9350,13 @@ void DrawPanel::Draw_Mercator(void) {
     size_label_vertical = (GetTextExtent(wxString((Angle(0, 0.0).to_string(String("NS"), (display_precision.value), false)))).GetHeight());
 
 
-    //clears all labels previously drawn
-    parallels_and_meridians_labels.resize(0);
-    positions_parallels_and_meridians_labels.resize(0);
-
     //set x_min, ..., y_max for the following
     (this->*Set_x_y_min_max)();
 
     //set rectangle_obseerver
     rectangle_observer = MyRectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min), String(""));
 
-    /*I set the aspect ratio between height and width equal to the ratio between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
+    /*set the aspect ratio between height and width equal to the ratio between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
 
     if (!(parent->dragging_chart)) {
         //the ChartFrame is not being dragged -> its size will change -> re-compute its size
@@ -9520,14 +9516,19 @@ void DrawPanel::Draw_Mercator(void) {
             (lambda_start.value) = ceil(((parent->lambda_max).value) / delta_lambda) * delta_lambda;
             (lambda_end.value) = ((parent->lambda_min).value) + 2.0 * M_PI;
 
-
-
         }
 
     }
 
+    
+    //compute labels on parallels and meridians
+    //save parallels_and_meridians_labels_now and positions_parallels_and_meridians_labels_now into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
+    parallels_and_meridians_labels_before = parallels_and_meridians_labels_now;
+    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels_now;
+    parallels_and_meridians_labels_now.resize(0);
+    positions_parallels_and_meridians_labels_now.resize(0);
 
-    //draw labels on parallels
+    //compute labels on parallels
     for (first_label = true,
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * K * 60)))),
@@ -9541,7 +9542,7 @@ void DrawPanel::Draw_Mercator(void) {
 
     }
 
-    //draw labels on meridians
+    //compute labels on meridians
     for (first_label = true,
         //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
         (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_lambda * K * 60)))),
@@ -9699,15 +9700,7 @@ void DrawPanel::Draw_3D(void) {
     Route route;
     unsigned int n_intervals_ticks;
 
-    //client_dc->Clear();
-
-    //clears all labels previously drawn
-    //	for (i = 0; i < label_phi.size(); i++) { (label_phi[i])->Destroy(); }
-    parallels_and_meridians_labels.resize(0);
-    positions_parallels_and_meridians_labels.resize(0);
-
-
-
+    
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
     (parent->zoom_factor).set(String(""), ((circle_observer_0.omega).value) / ((circle_observer.omega).value), String(""));
     (this->*Set_x_y_min_max)();
@@ -9888,7 +9881,15 @@ void DrawPanel::Draw_3D(void) {
     TabulatePositions();
 
 
-    //draw labels on parallels
+    
+    //compute labels on parallels and meridians
+    //save parallels_and_meridians_labels_now and positions_parallels_and_meridians_labels_now into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
+    parallels_and_meridians_labels_before = parallels_and_meridians_labels_now;
+    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels_now;
+    parallels_and_meridians_labels_now.resize(0);
+    positions_parallels_and_meridians_labels_now.resize(0);
+
+    //compute labels on parallels
     for (first_label = true,
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * K * 60)))),
@@ -9902,7 +9903,7 @@ void DrawPanel::Draw_3D(void) {
 
     }
 
-    //draw labels on meridians
+    //compute labels on meridians
     for (first_label = true,
         //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
         (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_lambda * K * 60)))),

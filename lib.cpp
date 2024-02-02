@@ -17691,9 +17691,19 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
     }
 
 #ifdef __APPLE__
+    //on APPLE I call Refresh() to trigger PaintEvent() in all DrawPanels and re-render the Routes/Positions with the new configuration of highlighted Routes/Positions
+    
     RefreshAll();
+    
 #endif
+    
 #ifdef _WIN32
+    //on WIN32 Refresh() is slow -> I call RerenderRoutes and RerenderPositions in all DrawPanels
+    
+    for(i=0; i<(chart_frames.size()); i++){
+        (chart_frames[i])->draw_panel->RerenderRoutes();
+        (chart_frames[i])->draw_panel->RerenderPositions();
+    }
 
 #endif
 

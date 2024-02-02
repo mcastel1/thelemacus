@@ -1851,7 +1851,7 @@ public:
     bool first_label;
     wxMemoryInputStream * memory_input_stream;
     UnsetIdling<DrawPanel>* unset_idling;
-    vector<wxString> labels_lambda, labels_phi;
+    vector<wxString> meridians_labels, parallels_labels;
     vector<wxPoint> positions_labels_lambda, positions_labels_phi;
     vector< vector< vector<wxPoint> > > /*parallels and meridians are stored in this vectors at the current step of the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_now, /*parallels and meridians are stored in these vectors at the preceeding step in the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_before, ticks_now, ticks_before;
     

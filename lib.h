@@ -1851,8 +1851,8 @@ public:
     bool first_label;
     wxMemoryInputStream * memory_input_stream;
     UnsetIdling<DrawPanel>* unset_idling;
-    vector<wxString> meridians_labels, parallels_labels;
-    vector<wxPoint> positions_meridians_labels, positions_parallels_labels;
+    vector<wxString> parallels_and_meridians_labels;
+    vector<wxPoint> positions_parallels_and_meridians_labels;
     vector< vector< vector<wxPoint> > > /*parallels and meridians are stored in this vectors at the current step of the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_now, /*parallels and meridians are stored in these vectors at the preceeding step in the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_before, ticks_now, ticks_before;
     
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers

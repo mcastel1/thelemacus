@@ -8341,10 +8341,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     circle_observer.type = String("c");
 
     //clears the vector label_phi because tehre are not y labels yet.
-    meridians_labels.resize(0);
-    parallels_labels.resize(0);
-    positions_meridians_labels.resize(0);
-    positions_parallels_labels.resize(0);
+    parallels_and_meridians_labels.resize(0);
+    positions_parallels_and_meridians_labels.resize(0);
 
     //    rotation.print(String("initial rotation"), String(""), cout);
 
@@ -8972,17 +8970,11 @@ void DrawPanel::Render_Mercator(wxDC* dc,
     }
 
     
-    //render labels of meridians
-    for (i = 0; i < meridians_labels.size(); i++) {
+
+    //render labels on parallels and meridians
+    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
-        dc->DrawText(meridians_labels[i], positions_meridians_labels[i]/* + wxPoint(-width_label / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))*/);
-        
-    }
-    
-    //render labels on parallels
-    for (i = 0; i < parallels_labels.size(); i++) {
-        
-         dc->DrawText(parallels_labels[i], positions_parallels_labels[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
+         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
         
     }
 
@@ -9071,8 +9063,6 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
 void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision, String mode) {
 
     wxPoint p;
-    vector<wxString>* labels;
-    vector<wxPoint>* positions_labels;
     wxSize size;
 
     if (/* convert temp to draw_panel coordinates p*/GeoToDrawPanel(q, &p, false)) {
@@ -9084,33 +9074,21 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
         WriteLabel(q, min, max, precision, mode, &wx_string);
 
 
-        if (mode == String("NS")) {
-            //if I am drawing parallels labels I let labels point to label_phi
-            labels = &parallels_labels;
-            positions_labels = &positions_parallels_labels;
-        }
-        else {
-            //if I am drawing meridians labels I let labels point to label_lambda
-            labels = &meridians_labels;
-            positions_labels = &positions_meridians_labels;
-        }
-
-
-        labels->push_back(wx_string);
-        positions_labels->push_back(p);
+        parallels_and_meridians_labels.push_back(wx_string);
+        positions_parallels_and_meridians_labels.push_back(p);
     
         
-        size = String(labels->back().ToStdString()).get_size(this);
+        size = String(parallels_and_meridians_labels.back().ToStdString()).get_size(this);
 
         if (mode == String("NS")) {
             //            I am drawing parallels label
             
-            (positions_labels->back()) +=  wxPoint(-(size.GetWidth()) - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -(size.GetHeight()) / 2);
+            (positions_parallels_and_meridians_labels.back()) +=  wxPoint(-(size.GetWidth()) - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -(size.GetHeight()) / 2);
             
         }else{
             //            I am drawing meridians labels
             
-            (positions_labels->back()) +=  wxPoint(-(size.GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
+            (positions_parallels_and_meridians_labels.back()) +=  wxPoint(-(size.GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
             
         }
 
@@ -9178,19 +9156,11 @@ void DrawPanel::Render_3D(wxDC* dc,
         }
     }
 
-
-
-    //render labels of meridians
-    for (i = 0; i < meridians_labels.size(); i++) {
-        
-         dc->DrawText(meridians_labels[i], positions_meridians_labels[i] /*+ wxPoint(-width_label / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))*/);
-        
-    }
     
-    //render labels on parallels
-    for (i = 0; i < parallels_labels.size(); i++) {
+    //render labels on parallels and meridians
+    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
-        dc->DrawText(parallels_labels[i], positions_parallels_labels[i]/* + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
+        dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
         
     }
 
@@ -9381,10 +9351,8 @@ void DrawPanel::Draw_Mercator(void) {
 
 
     //clears all labels previously drawn
-    meridians_labels.resize(0);
-    positions_meridians_labels.resize(0);
-    parallels_labels.resize(0);
-    positions_parallels_labels.resize(0);
+    parallels_and_meridians_labels.resize(0);
+    positions_parallels_and_meridians_labels.resize(0);
 
     //set x_min, ..., y_max for the following
     (this->*Set_x_y_min_max)();
@@ -9734,12 +9702,9 @@ void DrawPanel::Draw_3D(void) {
     //client_dc->Clear();
 
     //clears all labels previously drawn
-//	for (i = 0; i < label_lambda.size(); i++) { (label_lambda[i])->Destroy(); }
-    meridians_labels.resize(0);
-    positions_meridians_labels.resize(0);
     //	for (i = 0; i < label_phi.size(); i++) { (label_phi[i])->Destroy(); }
-    parallels_labels.resize(0);
-    positions_parallels_labels.resize(0);
+    parallels_and_meridians_labels.resize(0);
+    positions_parallels_and_meridians_labels.resize(0);
 
 
 

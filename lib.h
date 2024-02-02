@@ -1862,7 +1862,7 @@ public:
     bool (DrawPanel::*ScreenToProjection)(wxPoint, Projection*);
     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     bool (DrawPanel::*GeoToProjection)(Position, Projection*, bool);
-    void (DrawPanel::*Render)(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >, vector<wxPoint>, wxColor, wxColor);
+    void (DrawPanel::*Render)(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>, vector<wxPoint>, vector<wxPoint>, wxColor, wxColor);
     void (DrawPanel::*ProjectionToDrawPanel)(Projection, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
@@ -1923,7 +1923,8 @@ public:
     
     void Render_Mercator(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>,
                          vector<wxPoint>, vector<wxPoint>, wxColor, wxColor);
-    void Render_3D(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >, vector<wxPoint>, wxColor, wxColor);
+    void Render_3D(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>,
+                    vector<wxPoint>, vector<wxPoint>, wxColor, wxColor);
     void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);
     void DrawLabel(const Position&, Angle, Angle, Int, String);
     

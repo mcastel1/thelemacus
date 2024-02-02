@@ -9103,11 +9103,15 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 }
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::Render_3D(wxDC* dc,
-    vector< vector< vector<wxPoint> > > grid,
-    vector< vector< vector<wxPoint> > > ticks,
-    vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color) {
-
+void DrawPanel::Render_3D(
+                          wxDC* dc,
+                          vector< vector< vector<wxPoint> > > grid,
+                          vector< vector< vector<wxPoint> > > ticks,
+                          vector<wxString> parallels_and_meridians_labels,
+                          vector<wxPoint> positions_parallels_and_meridians_label,
+                          vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color
+                          ) {
+    
     int i, j;
     Double d;
     Angle lambda;

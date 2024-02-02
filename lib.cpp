@@ -8923,7 +8923,6 @@ void DrawPanel::Render_Mercator(wxDC* dc,
     Angle lambda, phi;
     Route route;
     wxPoint p;
-    wxCoord width_label, height_label;
     Projection temp;
     Position q;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
@@ -8976,16 +8975,14 @@ void DrawPanel::Render_Mercator(wxDC* dc,
     //render labels of meridians
     for (i = 0; i < meridians_labels.size(); i++) {
         
-        dc->GetTextExtent(meridians_labels[i], &width_label, &height_label);
-        dc->DrawText(meridians_labels[i], positions_meridians_labels[i] + wxPoint(-width_label / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)));
+        dc->DrawText(meridians_labels[i], positions_meridians_labels[i]/* + wxPoint(-width_label / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))*/);
         
     }
     
-    //draw labels on parallels
+    //render labels on parallels
     for (i = 0; i < parallels_labels.size(); i++) {
         
-        dc->GetTextExtent(parallels_labels[i], &width_label, &height_label);
-        dc->DrawText(parallels_labels[i], positions_parallels_labels[i] + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2));
+         dc->DrawText(parallels_labels[i], positions_parallels_labels[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
         
     }
 
@@ -9070,12 +9067,13 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
 
 }
 
-//This function draws into *this the text label for a parallel or a meridian, by placing it near the Position q. The latitude/longitude in the text label is q.phi/q.lambda, and the labels are wxStaticText objects which are stored in label_phi/label_lambda. min and max are the minimal and maximal latitudes/longitudes that are covered in the drawing process, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively.
+//This function draws into *this the text label for a parallel or a meridian, by placing it near the Position q. The label is pushed back to this->labels and its position is pushed back to this->positions_labels (this position is adjusted with respect to q in such a way that the label look nice and centered). The latitude/longitude in the text label is q.phi/q.lambda. min and max are the minimal and maximal latitudes/longitudes that are covered in the drawing process, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a parallel or a meridian label, respectively.
 void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision, String mode) {
 
     wxPoint p;
     vector<wxString>* labels;
     vector<wxPoint>* positions_labels;
+    wxSize size;
 
     if (/* convert temp to draw_panel coordinates p*/GeoToDrawPanel(q, &p, false)) {
         //if Position q lies on the visible side of the Earth, I proceed and draw its label
@@ -9100,6 +9098,21 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 
         labels->push_back(wx_string);
         positions_labels->push_back(p);
+    
+        
+        size = String(labels->back().ToStdString()).get_size(this);
+
+        if (mode == String("NS")) {
+            //            I am drawing parallels label
+            
+            (positions_labels->back()) +=  wxPoint(-(size.GetWidth()) - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -(size.GetHeight()) / 2);
+            
+        }else{
+            //            I am drawing meridians labels
+            
+            (positions_labels->back()) +=  wxPoint(-(size.GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
+            
+        }
 
         first_label = false;
 
@@ -9123,8 +9136,7 @@ void DrawPanel::Render_3D(wxDC* dc,
     Projection dummy_projection;
     wxPoint p;
     Position q, temp;
-    wxCoord width_label, height_label;
-
+    
 
     //draws a rectangle filled with color wxGetApp().background_color and with border wich color wxGetApp().foregrond_color on bitmap_image, so bitmap_image will have the right background color
     //dc->SetBrush(wxBrush(wxGetApp().background_color));
@@ -9171,16 +9183,14 @@ void DrawPanel::Render_3D(wxDC* dc,
     //render labels of meridians
     for (i = 0; i < meridians_labels.size(); i++) {
         
-        dc->GetTextExtent(meridians_labels[i], &width_label, &height_label);
-        dc->DrawText(meridians_labels[i], positions_meridians_labels[i] + wxPoint(-width_label / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)));
+         dc->DrawText(meridians_labels[i], positions_meridians_labels[i] /*+ wxPoint(-width_label / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))*/);
         
     }
     
     //render labels on parallels
     for (i = 0; i < parallels_labels.size(); i++) {
         
-        dc->GetTextExtent(parallels_labels[i], &width_label, &height_label);
-        dc->DrawText(parallels_labels[i], positions_parallels_labels[i] + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2));
+        dc->DrawText(parallels_labels[i], positions_parallels_labels[i]/* + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
         
     }
 

@@ -8912,12 +8912,16 @@ void DrawPanel::FitAll() {
 }
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::Render_Mercator(wxDC* dc,
-    vector< vector< vector<wxPoint> > > grid,
-    vector< vector< vector<wxPoint> > > ticks,
-    vector<wxPoint> points_coastline,
-    wxColor foreground_color, wxColor background_color) {
-
+void DrawPanel::Render_Mercator(
+                                wxDC* dc,
+                                vector< vector< vector<wxPoint> > > grid,
+                                vector< vector< vector<wxPoint> > > ticks,
+                                vector<wxString> parallels_and_meridians_labels,
+                                vector<wxPoint> positions_parallels_and_meridians_label,
+                                vector<wxPoint> points_coastline,
+                                wxColor foreground_color, wxColor background_color
+                                ) {
+    
     Angle lambda, phi;
     Route route;
     wxPoint p;

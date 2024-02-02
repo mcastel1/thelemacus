@@ -1921,7 +1921,8 @@ public:
     double x_span(void);
     Rotation rotation_start_end(wxPoint, wxPoint);
     
-    void Render_Mercator(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >, vector<wxPoint>, wxColor, wxColor);
+    void Render_Mercator(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>,
+                         vector<wxPoint>, vector<wxPoint>, wxColor, wxColor);
     void Render_3D(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >, vector<wxPoint>, wxColor, wxColor);
     void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);
     void DrawLabel(const Position&, Angle, Angle, Int, String);

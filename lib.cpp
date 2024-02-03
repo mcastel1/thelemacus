@@ -8936,7 +8936,7 @@ void DrawPanel::Render_Mercator(
                                 vector< vector< vector<wxPoint> > > grid,
                                 vector< vector< vector<wxPoint> > > ticks,
                                 vector<wxString> parallels_and_meridians_labels,
-                                vector<wxPoint> positions_parallels_and_meridians_label,
+                                vector<wxPoint> positions_parallels_and_meridians_labels,
                                 vector<wxPoint> points_coastline,
                                 wxColor foreground_color, wxColor background_color
                                 ) {
@@ -8995,9 +8995,9 @@ void DrawPanel::Render_Mercator(
     
 
     //render labels on parallels and meridians
-    for (i = 0; i < parallels_and_meridians_labels_now.size(); i++) {
+    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
-         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
+        dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
         
     }
 
@@ -9127,7 +9127,7 @@ void DrawPanel::Render_3D(
                           vector< vector< vector<wxPoint> > > grid,
                           vector< vector< vector<wxPoint> > > ticks,
                           vector<wxString> parallels_and_meridians_labels,
-                          vector<wxPoint> positions_parallels_and_meridians_label,
+                          vector<wxPoint> positions_parallels_and_meridians_labels,
                           vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color
                           ) {
     
@@ -9185,7 +9185,7 @@ void DrawPanel::Render_3D(
 
     
     //render labels on parallels and meridians
-    for (i = 0; i < parallels_and_meridians_labels_now.size(); i++) {
+    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
         

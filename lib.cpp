@@ -8406,7 +8406,15 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
 void DrawPanel::RerenderBackground(void) {
 
+    int i;
     wxClientDC dc(this);
+    
+    //clear previous labels
+    dc.SetPen(wxPen(wxGetApp().background_color));
+    dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
+    for (i = 0; i < parallels_and_meridians_labels_before.size(); i++) {
+        dc.DrawRectangle(positions_parallels_and_meridians_labels_before[i], String((parallels_and_meridians_labels_before[i]).ToStdString()).get_size(&dc));
+    }
 
     //wipe out the background at the preceeding step of the drag by painting on it with background_color
     RenderBackground(
@@ -9000,16 +9008,9 @@ void DrawPanel::Render_Mercator(
     
 
     //render labels on parallels and meridians
-    
-    //clear previous labels
-    dc->SetPen(wxPen(background_color));
-    dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
-        dc->DrawRectangle(positions_parallels_and_meridians_labels[i], String((parallels_and_meridians_labels[i]).ToStdString()).get_size(dc));
-    }
-    
-    //render new labels
+    dc->SetPen(wxPen(foreground_color));
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+    dc->SetBackgroundMode(wxSOLID);
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
@@ -9200,15 +9201,9 @@ void DrawPanel::Render_3D(
 
     
     //render labels on parallels and meridians
-    //clear previous labels
-    dc->SetPen(wxPen(background_color));
-    dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
-        dc->DrawRectangle(positions_parallels_and_meridians_labels[i], String((parallels_and_meridians_labels[i]).ToStdString()).get_size(dc));
-    }
-    
-    //render new labels
+    dc->SetPen(wxPen(foreground_color));
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+    dc->SetBackgroundMode(wxSOLID);
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);

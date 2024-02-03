@@ -8969,7 +8969,6 @@ void DrawPanel::Render_Mercator(
     for (i = 0; i < points_coastline.size(); i++) {
         dc->DrawEllipse(points_coastline[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
-    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
 
 
     //set thickness to normal thicnkness
@@ -9001,6 +9000,16 @@ void DrawPanel::Render_Mercator(
     
 
     //render labels on parallels and meridians
+    
+    //clear previous labels
+    dc->SetPen(wxPen(background_color));
+    dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
+    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
+        dc->DrawRectangle(positions_parallels_and_meridians_labels[i], String((parallels_and_meridians_labels[i]).ToStdString()).get_size(dc));
+    }
+    
+    //render new labels
+    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
@@ -9191,15 +9200,29 @@ void DrawPanel::Render_3D(
 
     
     //render labels on parallels and meridians
+    //clear previous labels
+    dc->SetPen(wxPen(background_color));
+    dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
+    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
+        dc->DrawRectangle(positions_parallels_and_meridians_labels[i], String((parallels_and_meridians_labels[i]).ToStdString()).get_size(dc));
+    }
+    
+    //render new labels
+    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
         
     }
+    
+    
 
     //draw horizon circle
     //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
     //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection temp: the resulting temp.y is the radius of the circular horizon of the earth in 3d projection cooordinates
+    dc->SetPen(wxPen(foreground_color));
+    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
+    
     //set q
     (q.lambda).set(String(""), 0.0, String(""));
     (q.phi) = (circle_observer.omega);

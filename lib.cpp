@@ -8738,7 +8738,7 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
     for (i = 0, color_id = 0; i < (points_curves.size()); i++) {
 
         //set the route thickness and pen
-        if (i == (parent->parent->highlighted_route_now)) {
+        if (i == highlighted_route) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = thickness;
         }
@@ -8749,7 +8749,7 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
 
         if (foreground_color != wxNullColour) {
             dc.SetPen(wxPen(foreground_color, thickness));
-            dc.SetBrush(wxBrush(foreground_color));
+            //dc.SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
         }
         else {
             dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
@@ -12145,7 +12145,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         }
 
         if (((parent->parent->highlighted_route_before) != (parent->parent->highlighted_route_now)) || ((parent->parent->highlighted_position_before) != (parent->parent->highlighted_position_now))) {
-            //the highlighted Route or Position has changed -> update the chart
+            //the highlighted Route or Position has changed -> update the charts
 
 #ifdef __APPLE__
 

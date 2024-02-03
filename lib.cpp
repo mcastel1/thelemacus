@@ -17427,7 +17427,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 
     //	            cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
     
-    //save the id of the Route highlighted at the preceeding step into highlighted_route_before
+    //save the id of the  Sight Route and Position highlighted at the preceeding step into highlighted_route_before
     highlighted_sight_before = highlighted_sight_now;
     highlighted_route_before = highlighted_route_now;
     highlighted_position_before = highlighted_position_now;
@@ -17459,7 +17459,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
         if ((highlighted_sight_now != wxNOT_FOUND) && enable_highlight) {
             // the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
 
-            highlighted_route_now = ((((data->sight_list)[highlighted_sight_now]).related_route).value);
+            highlighted_route_now = (((data->sight_list)[highlighted_sight_now]).related_route.value);
 
             for (i = 0; i < (listcontrol_sights->GetItemCount()); i++) {
 
@@ -17540,23 +17540,28 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
         }
 
     }
-
+    
+    if((highlighted_sight_before != highlighted_sight_now) || (highlighted_route_before != highlighted_route_now) || (highlighted_position_before != highlighted_position_now)){
+        //the highlighted Sight, or Route or Position has changed -> re-render the charts 
+        
 #ifdef __APPLE__
-    //on APPLE I call Refresh() to trigger PaintEvent() in all DrawPanels and re-render the Routes/Positions with the new configuration of highlighted Routes/Positions
-
-    RefreshAll();
-
+        //on APPLE I call Refresh() to trigger PaintEvent() in all DrawPanels and re-render the Routes/Positions with the new configuration of highlighted Routes/Positions
+        
+        RefreshAll();
+        
 #endif
-
+        
 #ifdef _WIN32
-    //on WIN32 Refresh() is slow -> I call RerenderRoutes and RerenderPositions in all DrawPanels
-
-    for (i = 0; i < (chart_frames.size()); i++) {
-        (chart_frames[i])->draw_panel->RerenderRoutes();
-        (chart_frames[i])->draw_panel->RerenderPositions();
-    }
-
+        //on WIN32 Refresh() is slow -> I call RerenderRoutes and RerenderPositions in all DrawPanels
+        
+        for (i = 0; i < (chart_frames.size()); i++) {
+            (chart_frames[i])->draw_panel->RerenderRoutes();
+            (chart_frames[i])->draw_panel->RerenderPositions();
+        }
+        
 #endif
+        
+    }
 
 
     event.Skip(true);

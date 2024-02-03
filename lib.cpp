@@ -8457,7 +8457,7 @@ void DrawPanel::RerenderMousePositionLabel(void) {
      //wipe out position_label_position_before by writing on top of it a rectangle filled with color backgound_color
     dc.SetPen(wxGetApp().background_color);
     dc.SetBrush(wxBrush(wxGetApp().background_color));
-    dc.DrawRectangle(position_label_position_now, label_position_before.get_size(this));
+    dc.DrawRectangle(position_label_position_now, label_position_before.get_size(&dc));
 
     RenderMousePositionLabel(dc);
 
@@ -8481,8 +8481,8 @@ void DrawPanel::RerenderSelectionRectangle(void) {
      //draw a white rectangle on top of the label of the previous end point of the selection rectangle, to wipe it out
     dc.SetPen(wxGetApp().background_color);
     dc.SetBrush(wxBrush(wxGetApp().background_color));
-    dc.DrawRectangle(position_end_label_selection_rectangle_before, end_label_selection_rectangle_before.get_size(this));
-    dc.DrawRectangle(position_start_label_selection_rectangle, start_label_selection_rectangle.get_size(this));
+    dc.DrawRectangle(position_end_label_selection_rectangle_before, end_label_selection_rectangle_before.get_size(&dc));
+    dc.DrawRectangle(position_start_label_selection_rectangle, start_label_selection_rectangle.get_size(&dc));
 
     
     //re-render all objects in *this which may have been partially cancelled by the clean operation above
@@ -8886,7 +8886,7 @@ void DrawPanel::RerenderDraggedObjectLabel(void) {
      //wipe out position_label_position_before by writing on top of it a rectangle filled with color backgound_color
     dc.SetPen(wxGetApp().background_color);
     dc.SetBrush(wxBrush(wxGetApp().background_color));
-    dc.DrawRectangle(position_label_dragged_object_before, label_dragged_object_before.get_size(this));
+    dc.DrawRectangle(position_label_dragged_object_before, label_dragged_object_before.get_size(&dc));
     
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
@@ -8915,8 +8915,6 @@ void DrawPanel::FitAll() {
     //	client_dc = new wxClientDC(this);
     //	//    client_dc->SetParent(this);
     //	(this->*Render)(client_dc);
-
-
 
         //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
     this->SetMinSize(size_chart);

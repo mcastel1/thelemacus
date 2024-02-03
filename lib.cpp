@@ -12027,10 +12027,11 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
         position_draw_panel_now = (parent->parent->screen_position_now) - draw_panel_origin;
-
-        //save the id of the Route highlighted at the preceeding step into highlighted_route_before
+        
+        //save the id of the Sight and Route highlighted at the preceeding step into highlighted_route_before
+        (parent->parent->highlighted_sight_before) = (parent->parent->highlighted_sight_now);
         (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
-
+        
         for ((parent->parent->highlighted_route_now) = -1, i = 0; i < (parent->parent->data->route_list).size(); i++) {
 
             //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
@@ -12071,7 +12072,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                         //the mouse is overing over a Route
 
 
-                        //sets the highlighted route to i, so as to use highlighted_route in other functions
+                        //set the highlighted route to i, so as to use highlighted_route in other functions
                         (parent->parent->highlighted_route_now) = i;
 
                         parent->parent->listcontrol_routes->EnsureVisible(i);
@@ -12079,10 +12080,20 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                             parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->data->route_list)[i]).related_sight.value);
                         }
 
-                        //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
+                        //set highlighted_sight_now and the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                         ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-                        if ((((parent->parent->data->route_list)[i]).related_sight).value != -1) {
-                            ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((parent->parent->data->route_list)[i]).related_sight).value, (wxGetApp().color_selected_item));
+                        if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
+                            
+                            (parent->parent->highlighted_sight_now) = (((parent->parent->data->route_list)[i]).related_sight.value);
+                            
+                            parent->parent->listcontrol_sights->SetItemBackgroundColour(
+                                                                                        (parent->parent->highlighted_sight_now),
+                                                                                        (wxGetApp().color_selected_item)
+                                                                                        );
+                        }else{
+                            
+                            (parent->parent->highlighted_sight_now) = -1;
+
                         }
 
 
@@ -12119,7 +12130,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 
         //run over all the Positions, check if the mouse is hovering over one of them, and change the background color of the related Position in listcontrol_positions
-        for ((parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now), (parent->parent->highlighted_position_now) = -1, i = 0; i < (parent->parent->data->position_list).size(); i++) {
+        (parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now);
+        
+        for ((parent->parent->highlighted_position_now) = -1, i = 0; i < (parent->parent->data->position_list).size(); i++) {
 
             GeoToScreen((parent->parent->data->position_list)[i], &q);
 
@@ -17413,6 +17426,12 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
     int i, j;
 
     //	            cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
+    
+    //save the id of the Route highlighted at the preceeding step into highlighted_route_before
+    highlighted_sight_before = highlighted_sight_now;
+    highlighted_route_before = highlighted_route_now;
+    highlighted_position_before = highlighted_position_now;
+
 
         //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
     MousePositionOnListControl(listcontrol_sights, &highlighted_sight_now);

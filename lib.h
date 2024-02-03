@@ -132,7 +132,8 @@ public:
     bool split_file_path(String*, String*, String*, String);
     String filename_without_folder_nor_extension(String);
     bool is_a_file_path(String);
-    wxSize get_size(wxWindow* p);
+    wxSize get_size(wxWindow*);
+    wxSize get_size(wxDC*);
     vector<String> split(void);
     
     bool operator==(const String&), operator!=(const String&);

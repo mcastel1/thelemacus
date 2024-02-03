@@ -749,6 +749,14 @@ wxSize String::get_size(wxWindow* p) {
 
 }
 
+
+//return the size of this as displayed in the wxDC dc
+wxSize String::get_size(wxDC* dc) {
+
+    return (dc->GetTextExtent(wxString(value)));
+
+}
+
 //split *this into multiple strings which were separated by a "\n" into *this, and return a vector containig them
 vector<String> String::split(void) {
 

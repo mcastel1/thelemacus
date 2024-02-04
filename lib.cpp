@@ -8541,8 +8541,8 @@ void DrawPanel::RenderBackground(
 
         wxGCDC dc_m_bgbuffer(mdc);
         //this needs to be commented out in order to not show a 'trail' when dragging
-        dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
-        //dc_m_bgbuffer.Clear();
+        //dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
+        dc_m_bgbuffer.Clear();
         
         dc_m_bgbuffer.SetPen(wxPen(foreground_color));
         dc_m_bgbuffer.SetBrush(wxBrush(foreground_color));
@@ -12028,8 +12028,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
         position_draw_panel_now = (parent->parent->screen_position_now) - draw_panel_origin;
         
-        //save the id of the Sight and Route highlighted at the preceeding step into highlighted_route_before
-        (parent->parent->highlighted_sight_before) = (parent->parent->highlighted_sight_now);
+        //save the id of the Route highlighted at the preceeding step into highlighted_route_before
         (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
         
         for ((parent->parent->highlighted_route_now) = -1, i = 0; i < (parent->parent->data->route_list).size(); i++) {
@@ -17428,7 +17427,6 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
     //	            cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
     
     //save the id of the  Sight Route and Position highlighted at the preceeding step into highlighted_route_before
-    highlighted_sight_before = highlighted_sight_now;
     highlighted_route_before = highlighted_route_now;
     highlighted_position_before = highlighted_position_now;
 
@@ -17541,7 +17539,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 
     }
     
-    if((highlighted_sight_before != highlighted_sight_now) || (highlighted_route_before != highlighted_route_now) || (highlighted_position_before != highlighted_position_now)){
+    if((highlighted_route_before != highlighted_route_now) || (highlighted_position_before != highlighted_position_now)){
         //the highlighted Sight, or Route or Position has changed -> re-render the charts 
         
 #ifdef __APPLE__

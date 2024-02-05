@@ -9034,6 +9034,8 @@ void DrawPanel::Render_Mercator(
     //render labels on parallels and meridians
     dc->SetTextForeground(foreground_color);
     dc->SetTextBackground(background_color);
+    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+    dc->SetBackgroundMode(wxSOLID);
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
@@ -9229,6 +9231,8 @@ void DrawPanel::Render_3D(
     //render labels on parallels and meridians
     dc->SetTextForeground(foreground_color);
     dc->SetTextBackground(background_color);
+    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+    dc->SetBackgroundMode(wxSOLID);
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);

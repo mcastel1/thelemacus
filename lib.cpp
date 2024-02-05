@@ -8403,52 +8403,6 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 }
 
 
-void DrawPanel::RerenderBackground(void) {
-
-    wxClientDC dc(this);
-    
-    ////clear previous labels
-    //dc.SetPen(wxPen(wxGetApp().background_color));
-    //dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
-    //for (i = 0; i < parallels_and_meridians_labels_before.size(); i++) {
-    //    dc.DrawRectangle(positions_parallels_and_meridians_labels_before[i], String((parallels_and_meridians_labels_before[i]).ToStdString()).get_size(&dc));
-    //}
-
-    //wipe out the background at the preceeding step of the drag by painting on it with background_color
-    (this->*Render)(
-                     &dc,
-                     grid_before,
-                     ticks_before,
-                     parallels_and_meridians_labels_before,
-                     positions_parallels_and_meridians_labels_before,
-                     parent->points_coastline_before,
-                     wxGetApp().background_color,
-                     wxGetApp().background_color,
-                     wxGetApp().large_thickness.value
-                     );
-    //wipe out the Routes at the preceeding mouse position
-    RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, (parent->parent->highlighted_route_before), wxGetApp().background_color);
-    //wipe out the Positions at the preceeding mouse position
-    RenderPositions(dc, points_position_list_before, (parent->parent->highlighted_position_before), wxGetApp().background_color);
-    
-    
-    //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    re_draw = true;
-    RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parallels_and_meridians_labels_now,
-                     positions_parallels_and_meridians_labels_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color,
-                     wxGetApp().standard_thickness.value
-                     );
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-    RenderPositions(dc, points_position_list_now, (parent->parent->highlighted_position_now), wxNullColour);
-
-}
 
 //erase label_position_before, the label of the previous mouse position before the last mouse movement, by drawing on top of it with color background_color, and draw the new label
 void DrawPanel::RerenderMousePositionLabel(void) {
@@ -12800,7 +12754,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             Refresh();
 #endif
 #ifdef WIN32
-                            //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used in RerenderBackground
+                            //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by MyRefresh()
                             parent->points_coastline_before.clear();
                             (parent->points_coastline_before) = (parent->points_coastline_now);
 
@@ -12842,7 +12796,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         Refresh();
 #endif
 #ifdef WIN32
-                        //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used in RerenderBackground
+                        //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by MyRefresh()
                         parent->points_coastline_before.clear();
                         (parent->points_coastline_before) = (parent->points_coastline_now);
 
@@ -12951,7 +12905,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 #ifdef __APPLE__
 
-                            //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts -> I rerender the Routes and the label of the Route which is being dragged
+                            //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
                             ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
 
@@ -12966,9 +12920,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
 
 
-                            //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts -> I rerender the Routes and the label of the Route which is being dragged
+                            //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-
                             ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
 
 #endif
@@ -13005,7 +12958,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-                            //on APPLE, I compute the coordinates of the Position that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the 'before/now' method :store in label_dragged_object_before and position_label_dragged_object_before the label and position -> compute the new position and label -> call Rerender* methods, which clean up the old content of *this, doing the same thing as Refresh(), but faster.
+                            //on APPLE, I compute the coordinates of the Position that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow ->  I use the MyRefresh() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
+
 
 #ifdef _WIN32
 
@@ -13025,7 +12979,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 #ifdef __APPLE__
 
-                            //given that the Positions under consideration has changed, I re-tabulate the Positions and re-paint the charts -> I rerender the Positions and the label of the Position which is being dragged
+                            //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
                             (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
 #endif
@@ -13034,10 +12988,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
 
-                            //given that the Positions under consideration has changed, I re-tabulate the Positions and re-paint the charts -> I rerender the Positions and the label of the Position which is being dragged
+                            //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
                             ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
-//                            ((parent->parent->chart_frames)[i])->draw_panel->RerenderDraggedObjectLabel();
 
 #endif
 
@@ -17598,7 +17551,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 #endif
         
 #ifdef _WIN32
-        //on WIN32 Refresh() is slow -> I call MyRefresh and RerenderPositions in all DrawPanels
+        //on WIN32 Refresh() is slow -> I use the MyRefresh() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
         
         for (i = 0; i < (chart_frames.size()); i++) {
             (chart_frames[i])->draw_panel->MyRefresh();

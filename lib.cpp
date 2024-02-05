@@ -8791,7 +8791,7 @@ void DrawPanel::RerenderRoutes(void) {
     
     //wipe out the Routes at the preceeding mouse position
     RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, (parent->parent->highlighted_route_before), wxGetApp().background_color);
-    //wipe out the background without painting a wxBitmap
+    //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one 
     (this->*Render)(
                     &dc,
                     grid_now,

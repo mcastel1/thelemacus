@@ -21,6 +21,12 @@
 /*
  
  notes:
+ - erorr message on WIN32 for intellisense "Severity    Code    Description    Project    File    Line    Suppression State    Details
+ Error (active)    E2924    PCH warning: header stop cannot be in a macro or #if block.  An IntelliSense PCH file was not generated.    base    C:\wxWidgets-3.2.4_debug\include\wx\any.h    25" line of error "// Size of the wxAny value buffer.
+ enum
+ {
+     WX_ANY_VALUE_BUFFER_SIZE = 16
+ };" in any.h
  - on APPLE, the cmd (apple) key corresponds to WXK_CONTROL
  - on WIN32, to recognize what character key has been pressed, do (event.GetUnicodeKey()) and check if it is equal to, sai, 'A', not 'a'
  - on WIN32, if you press control key on runtime from within Visual Studio, it will not be detected as WXK_CONTROL, while if you run the exe file from system resources it does.

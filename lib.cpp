@@ -8815,43 +8815,47 @@ void DrawPanel::MyRefresh(void) {
         
     }
     
-    
-    //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parallels_and_meridians_labels_now,
-                     positions_parallels_and_meridians_labels_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color,
-                     wxGetApp().standard_thickness.value
+    if((parent->dragging_chart) || (parent->parent->selection_rectangle) || (parent->parent->dragging_object) || (parent->parent->changing_highlighted_object)){
+        //I am either drawing a selection rectangle, dragging an object or changing the highlighted object -> I need to re-render all GUI objects 
+        
+        //re-render all  objects in *this which may have been partially cancelled by the clean operation above
+        RenderBackground(
+                         dc,
+                         grid_now,
+                         ticks_now,
+                         parallels_and_meridians_labels_now,
+                         positions_parallels_and_meridians_labels_now,
+                         parent->points_coastline_now,
+                         wxGetApp().foreground_color,
+                         wxGetApp().background_color,
+                         wxGetApp().standard_thickness.value
+                         );
+        RenderRoutes(dc,
+                     points_route_list_now,
+                     reference_positions_route_list_now,
+                     (parent->parent->highlighted_route_now), wxNullColour
                      );
-    RenderRoutes(dc, 
-                 points_route_list_now,
-                 reference_positions_route_list_now,
-                 (parent->parent->highlighted_route_now), wxNullColour
-                 );
-    RenderPositions(dc, 
-                    points_position_list_now,
-                    (parent->parent->highlighted_position_now),
-                    wxNullColour
-                    );
-    RenderDraggedObjectLabel(dc,
-                             position_label_dragged_object_now,
-                             label_dragged_object_now,
-                             wxGetApp().foreground_color,
-                             wxGetApp().background_color
-                             );
-    RenderMousePositionLabel(
-                             dc,
-                             label_position_now,
-                             position_label_position_now,
-                             wxGetApp().foreground_color,
-                             wxGetApp().background_color
-                             );
-
+        RenderPositions(dc,
+                        points_position_list_now,
+                        (parent->parent->highlighted_position_now),
+                        wxNullColour
+                        );
+        RenderDraggedObjectLabel(dc,
+                                 position_label_dragged_object_now,
+                                 label_dragged_object_now,
+                                 wxGetApp().foreground_color,
+                                 wxGetApp().background_color
+                                 );
+        RenderMousePositionLabel(
+                                 dc,
+                                 label_position_now,
+                                 position_label_position_now,
+                                 wxGetApp().foreground_color,
+                                 wxGetApp().background_color
+                                 );
+        
+        
+    }
     
     if((parent->parent->selection_rectangle)){
         

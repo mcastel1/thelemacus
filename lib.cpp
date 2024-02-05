@@ -8637,11 +8637,15 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, String
 
     
     //render the labels of the selection rectangle
+    GeoToDrawPanel(geo_position, &position_end_label, false);
+    //wipe out the space occupied by the label
+    dc.SetPen(wxPen(background_color));
+    dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
+    dc.DrawRectangle(position_end_label, end_label.get_size(&dc));
+
+    //render the rectangle
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
-    
-    GeoToDrawPanel(geo_position, &position_end_label, false);
-
     dc.DrawText(wxString(end_label.value), position_end_label);
     dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
 

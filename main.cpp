@@ -104,16 +104,18 @@
  
  ********** THINGS TO FIX ************
 
+ -APPLE
  - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
 - check why the meridian ticks form triangles in mercator projeciton
  - when you zoom in in 3d projection all the positions appear at the center of the disk
- - when you drag a position on a ChartFrame, its label is not shown in the other ChartFrames
 - remove wxScrollEventHandler ... and similar stuff
   - rename Route::t -> time
 - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
  - frames are not resized according to the size of their title
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class
+ 
  on WIN32:
+ 
  - in the 3D projection you render meirdians and parallels twice on top of each other and they look thick -> fix it
  - when you drag the whole chart, the parallels and meridians labels form tiny threads (the rectangle drawn to wipe the _before lablels does not cover them entirely)
  - write the WIN32 part of void MyApp::OnTimer

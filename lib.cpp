@@ -8783,7 +8783,7 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
 }
 
 //wipe out all Routes on *this and re-draw them
-void DrawPanel::RerenderRoutes(void) {
+void DrawPanel::MyRefresh(void) {
 
     wxClientDC dc(this);
     
@@ -12129,7 +12129,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
     }
     else {
-        //no selection rectangle is being drawn -> I run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
+        //no selection rectangle is being drawn
+        
+        //run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
 
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
         position_draw_panel_now = (parent->parent->screen_position_now) - draw_panel_origin;
@@ -12275,18 +12277,18 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 #endif
 
 #ifdef _WIN32
-            //on WIN32 Refresh() is slow -> call RerenderRoutes to re-draw the Routes with the right thickness
+            //on WIN32 Refresh() is slow -> call MyRefresh to re-draw the Routes with the right thickness
 
             for (i = 0; i < ((parent->parent->chart_frames).size()); i++) {
 
-                //copy the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels, in such a way that RerenderRoutes() will be able to wipe out the Routes and their reference Positions
-                ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
-                (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
+//                //copy the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels, in such a way that MyRefresh() will be able to wipe out the Routes and their reference Positions
+//                ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
+//                (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
+//
+//                ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
+//                (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
 
-                ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
-                (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
-
-                ((parent->parent->chart_frames)[i])->draw_panel->RerenderRoutes();
+                ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
 
             }
 
@@ -12786,7 +12788,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
         if (wxGetMouseState().LeftIsDown()) {
 
             if (!mouse_dragging) {
-                //the mouse has started dragging: If I am dragging a Route, I save the starting point of this Route into route_reference_position_drag_now
+                //the mouse has started dragging
+                
+                //If I am dragging a Route, I save the starting point of this Route into route_reference_position_drag_now
 
                 //during the mouse drag, I disable DrawPanel::OnMouseMovement
                 this->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
@@ -12884,7 +12888,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //re-draw the chart
                             (this->*Draw)();
-                            RerenderBackground();
+                            MyRefresh();
 #endif
                             //							FitAll();
 
@@ -12926,19 +12930,16 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //re-draw the chart
                         (this->*Draw)();
-                        RerenderBackground();
+                        MyRefresh();
 
 #endif
-
-
-                        //						FitAll();
 
                     }
 
 
                 }
                 else {
-                    //I am dragging an object (a Position or a Route) (the mouse is over a Route or a Position while dragging)
+                    //an object is being dragged (a Position or a Route)
 
                     unsigned int i;
 
@@ -13035,7 +13036,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-paint the charts -> I rerender the Routes and the label of the Route which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
 
-                            ((parent->parent->chart_frames)[i])->draw_panel->RerenderRoutes();
+                            ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
                             ((parent->parent->chart_frames)[i])->draw_panel->RerenderDraggedObjectLabel();
 
 #endif
@@ -17665,11 +17666,10 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 #endif
         
 #ifdef _WIN32
-        //on WIN32 Refresh() is slow -> I call RerenderRoutes and RerenderPositions in all DrawPanels
+        //on WIN32 Refresh() is slow -> I call MyRefresh and RerenderPositions in all DrawPanels
         
         for (i = 0; i < (chart_frames.size()); i++) {
-            (chart_frames[i])->draw_panel->RerenderRoutes();
-            (chart_frames[i])->draw_panel->RerenderPositions();
+            (chart_frames[i])->draw_panel->MyRefresh();
         }
         
 #endif

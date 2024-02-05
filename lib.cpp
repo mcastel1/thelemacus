@@ -8788,7 +8788,7 @@ void DrawPanel::RerenderRoutes(void) {
 
     wxClientDC dc(this);
     
-    if(dragging_chart){
+    if((parent->dragging_chart)){
         //the whole chart is being dragged -> wipe out all objects at the preceeding step of the drag
         
         //wipe out the Routes at the preceeding mouse position
@@ -8819,7 +8819,7 @@ void DrawPanel::RerenderRoutes(void) {
         
     }
     
-    if(dragging_object){
+    if((parent->parent->dragging_object)){
         
         //wipe out the Routes at the preceeding mouse position
         RenderRoutes(dc,

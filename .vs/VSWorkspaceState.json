@@ -1,4 +1,9 @@
 {
-  "ExpandedNodes": [],
+  "ExpandedNodes": [
+    "",
+    "\\Contents",
+    "\\Contents\\Resources"
+  ],
+  "SelectedNode": "\\main.cpp",
   "PreviewInSolutionExplorer": false
 }

@@ -8409,16 +8409,16 @@ void DrawPanel::RerenderBackground(void) {
     int i;
     wxClientDC dc(this);
     
-    //clear previous labels
-    dc.SetPen(wxPen(wxGetApp().background_color));
-    dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
-    for (i = 0; i < parallels_and_meridians_labels_before.size(); i++) {
-        dc.DrawRectangle(positions_parallels_and_meridians_labels_before[i], String((parallels_and_meridians_labels_before[i]).ToStdString()).get_size(&dc));
-    }
+    ////clear previous labels
+    //dc.SetPen(wxPen(wxGetApp().background_color));
+    //dc.SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_SOLID));
+    //for (i = 0; i < parallels_and_meridians_labels_before.size(); i++) {
+    //    dc.DrawRectangle(positions_parallels_and_meridians_labels_before[i], String((parallels_and_meridians_labels_before[i]).ToStdString()).get_size(&dc));
+    //}
 
     //wipe out the background at the preceeding step of the drag by painting on it with background_color
-    RenderBackground(
-                     dc,
+    (this->*Render)(
+                     &dc,
                      grid_before,
                      ticks_before,
                      parallels_and_meridians_labels_before,
@@ -9032,9 +9032,8 @@ void DrawPanel::Render_Mercator(
     
 
     //render labels on parallels and meridians
-    dc->SetPen(wxPen(foreground_color, thickness));
-    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
-    dc->SetBackgroundMode(wxSOLID);
+    dc->SetTextForeground(foreground_color);
+    dc->SetTextBackground(background_color);
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
@@ -9228,9 +9227,8 @@ void DrawPanel::Render_3D(
 
     
     //render labels on parallels and meridians
-    dc->SetPen(wxPen(foreground_color, thickness));
-    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
-    dc->SetBackgroundMode(wxSOLID);
+    dc->SetTextForeground(foreground_color);
+    dc->SetTextBackground(background_color);
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);

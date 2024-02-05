@@ -8472,46 +8472,46 @@ void DrawPanel::RerenderMousePositionLabel(void) {
 }
 
 
-//erase selection_rectangle_before, by drawing on top of it with color background_color, and draw the new selection_rectangle
-void DrawPanel::RerenderSelectionRectangle(void) {
-
-    wxClientDC dc(this);
-
-    //render a selection rectangle with color wxGetApp().background_color to clean the preceeding one
-    RenderSelectionRectangle(dc, (parent->parent->geo_position_before), wxGetApp().background_color, wxGetApp().background_color);
-
-    //draw the label of the end point of selection_rectangle on top of the old one with color background_color, in order to delete the old one
-    /*
-     dc.SetTextForeground(wxGetApp().background_color);
-     dc.SetTextBackground(wxGetApp().background_color);
-     dc.DrawText(wxString(end_label_selection_rectangle_before.value), position_end_label_selection_rectangle_before);
-     */
-     //draw a white rectangle on top of the label of the previous end point of the selection rectangle, to wipe it out
-    dc.SetPen(wxGetApp().background_color);
-    dc.SetBrush(wxBrush(wxGetApp().background_color));
-    dc.DrawRectangle(position_end_label_selection_rectangle_before, end_label_selection_rectangle_before.get_size(&dc));
-    dc.DrawRectangle(position_start_label_selection_rectangle, start_label_selection_rectangle.get_size(&dc));
-
-    
-    //re-render all objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parallels_and_meridians_labels_now,
-                     positions_parallels_and_meridians_labels_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color,
-                     wxGetApp().standard_thickness.value
-                     );
-
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-    RenderPositions(dc, points_position_list_now, (parent->parent->highlighted_position_now), wxNullColour);
-    RenderSelectionRectangle(dc, (parent->parent->geo_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
-    RenderSelectionRectangleLabels(dc);
-
-}
+////erase selection_rectangle_before, by drawing on top of it with color background_color, and draw the new selection_rectangle
+//void DrawPanel::RerenderSelectionRectangle(void) {
+//
+//    wxClientDC dc(this);
+//
+//    //render a selection rectangle with color wxGetApp().background_color to clean the preceeding one
+//    RenderSelectionRectangle(dc, (parent->parent->geo_position_before), wxGetApp().background_color, wxGetApp().background_color);
+//
+//    //draw the label of the end point of selection_rectangle on top of the old one with color background_color, in order to delete the old one
+//    /*
+//     dc.SetTextForeground(wxGetApp().background_color);
+//     dc.SetTextBackground(wxGetApp().background_color);
+//     dc.DrawText(wxString(end_label_selection_rectangle_before.value), position_end_label_selection_rectangle_before);
+//     */
+//     //draw a white rectangle on top of the label of the previous end point of the selection rectangle, to wipe it out
+//    dc.SetPen(wxGetApp().background_color);
+//    dc.SetBrush(wxBrush(wxGetApp().background_color));
+//    dc.DrawRectangle(position_end_label_selection_rectangle_before, end_label_selection_rectangle_before.get_size(&dc));
+//    dc.DrawRectangle(position_start_label_selection_rectangle, start_label_selection_rectangle.get_size(&dc));
+//
+//    
+//    //re-render all objects in *this which may have been partially cancelled by the clean operation above
+//    RenderBackground(
+//                     dc,
+//                     grid_now,
+//                     ticks_now,
+//                     parallels_and_meridians_labels_now,
+//                     positions_parallels_and_meridians_labels_now,
+//                     parent->points_coastline_now,
+//                     wxGetApp().foreground_color,
+//                     wxGetApp().background_color,
+//                     wxGetApp().standard_thickness.value
+//                     );
+//
+//    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
+//    RenderPositions(dc, points_position_list_now, (parent->parent->highlighted_position_now), wxNullColour);
+//    RenderSelectionRectangle(dc, (parent->parent->geo_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
+//    RenderSelectionRectangleLabels(dc);
+//
+//}
 
 
 //render the coastline by using the set of points points_coastline, meridians, parallels and their labels
@@ -8880,6 +8880,44 @@ void DrawPanel::MyRefresh(void) {
         
     }
     
+    if((parent->parent->selection_rectangle)){
+        
+        //wipe out the preceeding selection rectangle
+        RenderSelectionRectangle(dc,
+                                 (parent->parent->geo_position_before),
+                                 wxGetApp().background_color,
+                                 wxGetApp().background_color
+                                 );
+        
+        //wipe out the Routes at the preceeding mouse position
+        RenderRoutes(dc,
+                     points_route_list_now,
+                     reference_positions_route_list_now,
+                     (parent->parent->highlighted_route_now),
+                     wxGetApp().background_color
+                     );
+        RenderPositions(dc,
+                     points_position_list_now,
+                     (parent->parent->highlighted_position_now),
+                     wxGetApp().background_color
+                     );
+        
+        //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
+        (this->*Render)(
+                        &dc,
+                        grid_now,
+                        ticks_now,
+                        parallels_and_meridians_labels_now,
+                        positions_parallels_and_meridians_labels_now,
+                        parent->points_coastline_now,
+                        wxGetApp().background_color,
+                        wxGetApp().background_color,
+                        wxGetApp().large_thickness.value
+                        );
+
+        
+    }
+    
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(
@@ -8895,6 +8933,18 @@ void DrawPanel::MyRefresh(void) {
                      );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now,  (parent->parent->highlighted_position_now), wxNullColour);
+    
+    if((parent->parent->selection_rectangle)){
+        
+        //re-draw the current selection rectangle
+        RenderSelectionRectangle(dc,
+                                 (parent->parent->geo_position_now),
+                                 wxGetApp().foreground_color,
+                                 wxGetApp().background_color
+                                 );
+        
+        
+    }
 
 }
 
@@ -12111,7 +12161,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 #ifdef _WIN32
 
-        //on WIN32, the Refresh() command slows down things -> I don't call it but use RerenderSelectionRectangle, which cleans up the former selections rectangle in *this and draws a new one
+        //on WIN32, the Refresh() command slows down things -> I don't call it but use MyRefresh(), which cleans up the former selections rectangle in *this and draws a new one
 
         for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
 
@@ -12120,7 +12170,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->geo_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now));
 
-            ((parent->parent->chart_frames)[i])->draw_panel->RerenderSelectionRectangle();
+            ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
 
         }
 

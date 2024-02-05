@@ -8311,7 +8311,6 @@ void ChartFrame::AllOk(void) {
 
 DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wxSize& size_in) : wxPanel(parent_in, wxID_ANY, position_in, size_in, wxTAB_TRAVERSAL, wxT("")) {
 
-    int i;
     String prefix;
 
     prefix = String("");
@@ -8431,7 +8430,7 @@ void DrawPanel::RerenderBackground(void) {
     //wipe out the Routes at the preceeding mouse position
     RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, (parent->parent->highlighted_route_before), wxGetApp().background_color);
     //wipe out the Positions at the preceeding mouse position
-    RenderPositions(dc, points_position_list_before, wxGetApp().background_color);
+    RenderPositions(dc, points_position_list_before, (parent->parent->highlighted_position_before), wxGetApp().background_color);
     
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
@@ -8448,7 +8447,7 @@ void DrawPanel::RerenderBackground(void) {
                      wxGetApp().standard_thickness.value
                      );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-    RenderPositions(dc, points_position_list_now, wxNullColour);
+    RenderPositions(dc, points_position_list_now, (parent->parent->highlighted_position_now), wxNullColour);
 
 }
 
@@ -8509,7 +8508,7 @@ void DrawPanel::RerenderSelectionRectangle(void) {
                      );
 
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-    RenderPositions(dc, points_position_list_now, wxNullColour);
+    RenderPositions(dc, points_position_list_now, (parent->parent->highlighted_position_now), wxNullColour);
     RenderSelectionRectangle(dc, (parent->parent->geo_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
     RenderSelectionRectangleLabels(dc);
 
@@ -8718,7 +8717,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
                      wxGetApp().standard_thickness.value
                      );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-    RenderPositions(dc, points_position_list_now, wxNullColour);
+    RenderPositions(dc, points_position_list_now, (parent->parent->highlighted_position_now),  wxNullColour);
     RenderMousePositionLabel(dc);
 
     //draw selection_rectangle and its labels
@@ -8789,45 +8788,99 @@ void DrawPanel::RerenderRoutes(void) {
 
     wxClientDC dc(this);
     
-    //wipe out the Routes at the preceeding mouse position
-    RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, (parent->parent->highlighted_route_before), wxGetApp().background_color);
-    //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one 
-    (this->*Render)(
-                    &dc,
-                    grid_now,
-                    ticks_now,
-                    parallels_and_meridians_labels_now,
-                    positions_parallels_and_meridians_labels_now,
-                    parent->points_coastline_now,
-                    wxGetApp().background_color,
-                    wxGetApp().background_color,
-                    wxGetApp().large_thickness.value
-                    );
-
-    //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parallels_and_meridians_labels_now,
-                     positions_parallels_and_meridians_labels_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color,
-                     wxGetApp().standard_thickness.value
+    if(dragging_chart){
+        //the whole chart is being dragged -> wipe out all objects at the preceeding step of the drag
+        
+        //wipe out the Routes at the preceeding mouse position
+        RenderRoutes(dc,
+                     points_route_list_before,
+                     reference_positions_route_list_before,
+                     -1,
+                     wxGetApp().background_color
                      );
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-    RenderPositions(dc, points_position_list_now, wxNullColour);
+        RenderPositions(dc,
+                     points_position_list_before,
+                     -1,
+                     wxGetApp().background_color
+                     );
+        
+        //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
+        (this->*Render)(
+                        &dc,
+                        grid_before,
+                        ticks_before,
+                        parallels_and_meridians_labels_before,
+                        positions_parallels_and_meridians_labels_before,
+                        parent->points_coastline_before,
+                        wxGetApp().background_color,
+                        wxGetApp().background_color,
+                        wxGetApp().large_thickness.value
+                        );
+        
+    }
+    
+    if(dragging_object){
+        
+        //wipe out the Routes at the preceeding mouse position
+        RenderRoutes(dc,
+                     points_route_list_before,
+                     reference_positions_route_list_before,
+                     -1,
+                     wxGetApp().background_color
+                     );
+        RenderPositions(dc,
+                     points_position_list_before,
+                     -1,
+                     wxGetApp().background_color
+                     );
+        
+        //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
+        (this->*Render)(
+                        &dc,
+                        grid_now,
+                        ticks_now,
+                        parallels_and_meridians_labels_now,
+                        positions_parallels_and_meridians_labels_now,
+                        parent->points_coastline_now,
+                        wxGetApp().background_color,
+                        wxGetApp().background_color,
+                        wxGetApp().large_thickness.value
+                        );
+        
+        
+    }
 
-}
-
-
-void DrawPanel::RerenderPositions(void) {
-
-    wxClientDC dc(this);
-
-    //wipe out the Positions at the preceeding mouse position
-    RenderPositions(dc, points_position_list_before, wxGetApp().background_color);
+    if(changing_highlighted_object){
+        
+        //wipe out the Routes at the preceeding mouse position
+        RenderRoutes(dc,
+                     points_route_list_now,
+                     reference_positions_route_list_now,
+                     -1,
+                     wxGetApp().background_color
+                     );
+        RenderPositions(dc,
+                     points_position_list_now,
+                     -1,
+                     wxGetApp().background_color
+                     );
+        
+        //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
+        (this->*Render)(
+                        &dc,
+                        grid_now,
+                        ticks_now,
+                        parallels_and_meridians_labels_now,
+                        positions_parallels_and_meridians_labels_now,
+                        parent->points_coastline_now,
+                        wxGetApp().background_color,
+                        wxGetApp().background_color,
+                        wxGetApp().large_thickness.value
+                        );
+        
+        
+    }
+    
     
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(
@@ -8842,12 +8895,37 @@ void DrawPanel::RerenderPositions(void) {
                      wxGetApp().standard_thickness.value
                      );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-    RenderPositions(dc, points_position_list_now, wxNullColour);
+    RenderPositions(dc, points_position_list_now,  (parent->parent->highlighted_position_now), wxNullColour);
+
+}
+
+
+void DrawPanel::RerenderPositions(void) {
+
+    wxClientDC dc(this);
+
+    //wipe out the Positions at the preceeding mouse position
+    RenderPositions(dc, points_position_list_before, (parent->parent->highlighted_position_before), wxGetApp().background_color);
+    
+    //re-render all  objects in *this which may have been partially cancelled by the clean operation above
+    RenderBackground(
+                     dc,
+                     grid_now,
+                     ticks_now,
+                     parallels_and_meridians_labels_now,
+                     positions_parallels_and_meridians_labels_now,
+                     parent->points_coastline_now,
+                     wxGetApp().foreground_color,
+                     wxGetApp().background_color,
+                     wxGetApp().standard_thickness.value
+                     );
+    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
+    RenderPositions(dc, points_position_list_now, (parent->parent->highlighted_position_now), wxNullColour);
 
 }
 
 //render the Positions:  if foreground_color == wxNullColour, this method uses as foreground color the colors in color_list, otherwise it uses foreground_color
-void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, wxColor foreground_color) {
+void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, int highlighted_position, wxColor foreground_color) {
 
     int i, color_id;
     double thickness, radius;
@@ -8858,7 +8936,7 @@ void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, wxColor foregr
     for (i = 0, color_id = 0; i < (points.size()); i++) {
 
         //set thickness and pen
-        if (i == (parent->parent->highlighted_position_now)) {
+        if (i == highlighted_position) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = thickness;
         }
@@ -8931,7 +9009,7 @@ void DrawPanel::RerenderDraggedObjectLabel(void) {
                      wxGetApp().standard_thickness.value
                      );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-    RenderPositions(dc, points_position_list_now, wxNullColour);
+    RenderPositions(dc, points_position_list_now, (parent->parent->highlighted_position_now), wxNullColour);
     RenderDraggedObjectLabel(dc);
 
 }

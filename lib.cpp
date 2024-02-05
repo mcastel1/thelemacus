@@ -8425,7 +8425,8 @@ void DrawPanel::RerenderBackground(void) {
                      positions_parallels_and_meridians_labels_before,
                      parent->points_coastline_before,
                      wxGetApp().background_color,
-                     wxGetApp().background_color
+                     wxGetApp().background_color,
+                     wxGetApp().large_thickness.value
                      );
     //wipe out the Routes at the preceeding mouse position
     RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, (parent->parent->highlighted_route_before), wxGetApp().background_color);
@@ -8443,7 +8444,8 @@ void DrawPanel::RerenderBackground(void) {
                      positions_parallels_and_meridians_labels_now,
                      parent->points_coastline_now,
                      wxGetApp().foreground_color,
-                     wxGetApp().background_color
+                     wxGetApp().background_color,
+                     wxGetApp().standard_thickness.value
                      );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
@@ -8502,7 +8504,8 @@ void DrawPanel::RerenderSelectionRectangle(void) {
                      positions_parallels_and_meridians_labels_now,
                      parent->points_coastline_now,
                      wxGetApp().foreground_color,
-                     wxGetApp().background_color
+                     wxGetApp().background_color,
+                     wxGetApp().standard_thickness.value
                      );
 
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
@@ -8521,7 +8524,9 @@ void DrawPanel::RenderBackground(
                                  vector<wxString> parallels_and_meridians_labels,
                                  vector<wxPoint> positions_parallels_and_meridians_labels,
                                  vector<wxPoint> points_coastline,
-                                 wxColour foreground_color, wxColour background_color
+                                 wxColour foreground_color, 
+                                 wxColour background_color,
+                                 double thickness
                                  ) {
 
     //    dc.SetPen(foreground_color);
@@ -8542,7 +8547,7 @@ void DrawPanel::RenderBackground(
         wxGCDC dc_m_bgbuffer(mdc);
         //this needs to be commented out in order to not show a 'trail' when dragging
         //dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
-//        dc_m_bgbuffer.Clear();
+        //        dc_m_bgbuffer.Clear();
         
         dc_m_bgbuffer.SetPen(wxPen(foreground_color));
         dc_m_bgbuffer.SetBrush(wxBrush(foreground_color));
@@ -8557,7 +8562,8 @@ void DrawPanel::RenderBackground(
                         positions_parallels_and_meridians_labels,
                         points_coastline,
                         foreground_color,
-                        background_color
+                        background_color,
+                        thickness
                         );
         
         mdc.SelectObject(wxNullBitmap);
@@ -8708,7 +8714,8 @@ void DrawPanel::RenderAll(wxDC& dc) {
                      positions_parallels_and_meridians_labels_now,
                      parent->points_coastline_now,
                      wxGetApp().foreground_color,
-                     wxGetApp().background_color
+                     wxGetApp().background_color,
+                     wxGetApp().standard_thickness.value
                      );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
@@ -8743,7 +8750,7 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
             radius = thickness;
         }
         else {
-            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            thickness = (wxGetApp().standard_thickness.value);
             radius = 4 * thickness;
         }
 
@@ -8786,15 +8793,16 @@ void DrawPanel::RerenderRoutes(void) {
     RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, (parent->parent->highlighted_route_before), wxGetApp().background_color);
     //wipe out the background without painting a wxBitmap
     (this->*Render)(
-                     &dc,
-                     grid_now,
-                     ticks_now,
-                     parallels_and_meridians_labels_now,
-                     positions_parallels_and_meridians_labels_now,
-                     parent->points_coastline_now,
-                     wxGetApp().background_color,
-                     wxGetApp().background_color
-                     );
+                    &dc,
+                    grid_now,
+                    ticks_now,
+                    parallels_and_meridians_labels_now,
+                    positions_parallels_and_meridians_labels_now,
+                    parent->points_coastline_now,
+                    wxGetApp().background_color,
+                    wxGetApp().background_color,
+                    wxGetApp().large_thickness.value
+                    );
 
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(
@@ -8805,7 +8813,8 @@ void DrawPanel::RerenderRoutes(void) {
                      positions_parallels_and_meridians_labels_now,
                      parent->points_coastline_now,
                      wxGetApp().foreground_color,
-                     wxGetApp().background_color
+                     wxGetApp().background_color,
+                     wxGetApp().standard_thickness.value
                      );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
@@ -8829,7 +8838,8 @@ void DrawPanel::RerenderPositions(void) {
                      positions_parallels_and_meridians_labels_now,
                      parent->points_coastline_now,
                      wxGetApp().foreground_color,
-                     wxGetApp().background_color
+                     wxGetApp().background_color,
+                     wxGetApp().standard_thickness.value
                      );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
@@ -8853,7 +8863,7 @@ void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, wxColor foregr
             radius = thickness;
         }
         else {
-            thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+            thickness = (wxGetApp().standard_thickness.value);
             radius = 4 * thickness;
         }
 
@@ -8917,7 +8927,8 @@ void DrawPanel::RerenderDraggedObjectLabel(void) {
                      positions_parallels_and_meridians_labels_now,
                      parent->points_coastline_now,
                      wxGetApp().foreground_color,
-                     wxGetApp().background_color
+                     wxGetApp().background_color,
+                     wxGetApp().standard_thickness.value
                      );
     RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
     RenderPositions(dc, points_position_list_now, wxNullColour);
@@ -8963,7 +8974,9 @@ void DrawPanel::Render_Mercator(
                                 vector<wxString> parallels_and_meridians_labels,
                                 vector<wxPoint> positions_parallels_and_meridians_labels,
                                 vector<wxPoint> points_coastline,
-                                wxColor foreground_color, wxColor background_color
+                                wxColor foreground_color, 
+                                wxColor background_color,
+                                double thickness
                                 ) {
     
     Angle lambda, phi;
@@ -8976,14 +8989,14 @@ void DrawPanel::Render_Mercator(
 
     //draw a rectangle (representing the border) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color
     dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
-    dc->SetPen(wxPen(foreground_color));
+    dc->SetPen(wxPen(foreground_color, thickness));
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
 
 
     //render coastlines
     //draw the coastline points into bitmap_image through memory_dc
-    dc->SetPen(wxPen(foreground_color));
+    dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
     for (i = 0; i < points_coastline.size(); i++) {
         dc->DrawEllipse(points_coastline[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
@@ -9019,7 +9032,7 @@ void DrawPanel::Render_Mercator(
     
 
     //render labels on parallels and meridians
-    dc->SetPen(wxPen(foreground_color));
+    dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
     dc->SetBackgroundMode(wxSOLID);
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
@@ -9155,7 +9168,10 @@ void DrawPanel::Render_3D(
                           vector< vector< vector<wxPoint> > > ticks,
                           vector<wxString> parallels_and_meridians_labels,
                           vector<wxPoint> positions_parallels_and_meridians_labels,
-                          vector<wxPoint> points_coastline, wxColor foreground_color, wxColor background_color
+                          vector<wxPoint> points_coastline, 
+                          wxColor foreground_color,
+                          wxColor background_color,
+                          double thickness
                           ) {
     
     int i, j;
@@ -9172,12 +9188,12 @@ void DrawPanel::Render_3D(
 
     //draws a rectangle filled with color wxGetApp().background_color and with border wich color wxGetApp().foregrond_color on bitmap_image, so bitmap_image will have the right background color
     //dc->SetBrush(wxBrush(wxGetApp().background_color));
-    //dc->SetPen(wxPen(foreground_color));
+    //dc->SetPen(wxPen(foreground_color, thickness));
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
 
     //render coastlines
     //draw the coastline points into bitmap_image through memory_dc
-    dc->SetPen(wxPen(foreground_color));
+    dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
     for (i = 0; i < points_coastline.size(); i++) {
         //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
@@ -9187,7 +9203,7 @@ void DrawPanel::Render_3D(
 
     //    //set thickness to normal thicnkness
     //    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-    dc->SetPen(wxPen(foreground_color));
+    dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
     //render parallels and meridians
     for (i = 0; i < grid.size(); i++) {
@@ -9212,7 +9228,7 @@ void DrawPanel::Render_3D(
 
     
     //render labels on parallels and meridians
-    dc->SetPen(wxPen(foreground_color));
+    dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
     dc->SetBackgroundMode(wxSOLID);
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
@@ -9226,7 +9242,7 @@ void DrawPanel::Render_3D(
     //draw horizon circle
     //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
     //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection temp: the resulting temp.y is the radius of the circular horizon of the earth in 3d projection cooordinates
-    dc->SetPen(wxPen(foreground_color));
+    dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
     
     //set q
@@ -9243,7 +9259,7 @@ void DrawPanel::Render_3D(
     dummy_projection = Projection(0.0, ((d.value) * gsl_vector_get(rp, 2)) / ((d.value) + 1.0 + gsl_vector_get(rp, 1)));
     //set the wxPen color for the horizon
 //    dc->SetPen(wxPen(wxGetApp().color_horizon, 1));
-    dc->SetPen(wxPen(foreground_color));
+    dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
     dc->SetBackground(background_color);
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius

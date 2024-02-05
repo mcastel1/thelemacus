@@ -8405,7 +8405,6 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
 void DrawPanel::RerenderBackground(void) {
 
-    int i;
     wxClientDC dc(this);
     
     ////clear previous labels
@@ -8850,7 +8849,7 @@ void DrawPanel::RerenderRoutes(void) {
         
     }
 
-    if(changing_highlighted_object){
+    if((parent->parent->changing_highlighted_object)){
         
         //wipe out the Routes at the preceeding mouse position
         RenderRoutes(dc,
@@ -12140,7 +12139,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         
         for ((parent->parent->highlighted_route_now) = -1, i = 0; i < (parent->parent->data->route_list).size(); i++) {
 
-            //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
+            //set the backgorund color of the Route in listcontrol_routes and of its related sight to white
             //when only a fraction of the Routes is Drawn, this will create a problem ---
             ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
             //when only a fraction of the Routes is Drawn, this will create a problem ---
@@ -12265,6 +12264,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
         if (((parent->parent->highlighted_route_before) != (parent->parent->highlighted_route_now)) || ((parent->parent->highlighted_position_before) != (parent->parent->highlighted_position_now))) {
             //the highlighted Route or Position has changed -> update the charts
+            
+            (parent->parent->changing_highlighted_object) = true;
 
 #ifdef __APPLE__
 
@@ -12290,6 +12291,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             }
 
 #endif
+            
+            (parent->parent->changing_highlighted_object) = false;
+
 
         }
         else {
@@ -16514,6 +16518,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     selecting_route_for_position = false;
     transporting_with_new_route = false;
     transporting_with_selected_route = false;
+    changing_highlighted_object = false;
     abort = false;
     //when a ListFrame is created, no Route nor Position is  being dragged
     dragging_object = false;
@@ -17649,6 +17654,9 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
     if((highlighted_route_before != highlighted_route_now) || (highlighted_position_before != highlighted_position_now)){
         //the highlighted Sight, or Route or Position has changed -> re-render the charts 
         
+        changing_highlighted_object = true;
+
+        
 #ifdef __APPLE__
         //on APPLE I call Refresh() to trigger PaintEvent() in all DrawPanels and re-render the Routes/Positions with the new configuration of highlighted Routes/Positions
         
@@ -17665,6 +17673,8 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
         }
         
 #endif
+        
+        changing_highlighted_object = false;
         
     }
 

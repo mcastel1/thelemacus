@@ -8472,48 +8472,6 @@ void DrawPanel::RerenderMousePositionLabel(void) {
 }
 
 
-////erase selection_rectangle_before, by drawing on top of it with color background_color, and draw the new selection_rectangle
-//void DrawPanel::RerenderSelectionRectangle(void) {
-//
-//    wxClientDC dc(this);
-//
-//    //render a selection rectangle with color wxGetApp().background_color to clean the preceeding one
-//    RenderSelectionRectangle(dc, (parent->parent->geo_position_before), wxGetApp().background_color, wxGetApp().background_color);
-//
-//    //draw the label of the end point of selection_rectangle on top of the old one with color background_color, in order to delete the old one
-//    /*
-//     dc.SetTextForeground(wxGetApp().background_color);
-//     dc.SetTextBackground(wxGetApp().background_color);
-//     dc.DrawText(wxString(end_label_selection_rectangle_before.value), position_end_label_selection_rectangle_before);
-//     */
-//     //draw a white rectangle on top of the label of the previous end point of the selection rectangle, to wipe it out
-//    dc.SetPen(wxGetApp().background_color);
-//    dc.SetBrush(wxBrush(wxGetApp().background_color));
-//    dc.DrawRectangle(position_end_label_selection_rectangle_before, end_label_selection_rectangle_before.get_size(&dc));
-//    dc.DrawRectangle(position_start_label_selection_rectangle, start_label_selection_rectangle.get_size(&dc));
-//
-//    
-//    //re-render all objects in *this which may have been partially cancelled by the clean operation above
-//    RenderBackground(
-//                     dc,
-//                     grid_now,
-//                     ticks_now,
-//                     parallels_and_meridians_labels_now,
-//                     positions_parallels_and_meridians_labels_now,
-//                     parent->points_coastline_now,
-//                     wxGetApp().foreground_color,
-//                     wxGetApp().background_color,
-//                     wxGetApp().standard_thickness.value
-//                     );
-//
-//    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-//    RenderPositions(dc, points_position_list_now, (parent->parent->highlighted_position_now), wxNullColour);
-//    RenderSelectionRectangle(dc, (parent->parent->geo_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
-//    RenderSelectionRectangleLabels(dc);
-//
-//}
-
-
 //render the coastline by using the set of points points_coastline, meridians, parallels and their labels
 void DrawPanel::RenderBackground(
                                  wxDC& dc,
@@ -8684,7 +8642,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
 
     if ((parent->parent->dragging_object)) {
         //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
-        RenderDraggedObjectLabel(dc);
+        RenderDraggedObjectLabel(dc, position_label_dragged_object_now, label_dragged_object_now, wxGetApp().foreground_color, wxGetApp().background_color);
     }
 
 }
@@ -8777,7 +8735,7 @@ void DrawPanel::MyRefresh(void) {
     
     if((parent->parent->dragging_object)){
         
-        //wipe out the Routes at the preceeding mouse position
+        //wipe out the Routes, Positions and label of dragged object at the preceeding dragging configuration
         RenderRoutes(dc,
                      points_route_list_before,
                      reference_positions_route_list_before,
@@ -8789,6 +8747,11 @@ void DrawPanel::MyRefresh(void) {
                      (parent->parent->highlighted_position_now),
                      wxGetApp().background_color
                      );
+        RenderDraggedObjectLabel(dc,
+                                 position_label_dragged_object_before,
+                                 label_dragged_object_before,
+                                 wxGetApp().background_color, wxGetApp().background_color
+                                 );
         
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
@@ -8889,8 +8852,23 @@ void DrawPanel::MyRefresh(void) {
                      wxGetApp().background_color,
                      wxGetApp().standard_thickness.value
                      );
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-    RenderPositions(dc, points_position_list_now,  (parent->parent->highlighted_position_now), wxNullColour);
+    RenderRoutes(dc, 
+                 points_route_list_now,
+                 reference_positions_route_list_now,
+                 (parent->parent->highlighted_route_now), wxNullColour
+                 );
+    RenderPositions(dc, 
+                    points_position_list_now,
+                    (parent->parent->highlighted_position_now),
+                    wxNullColour
+                    );
+    RenderDraggedObjectLabel(dc,
+                             position_label_dragged_object_now,
+                             label_dragged_object_now,
+                             wxGetApp().foreground_color,
+                             wxGetApp().background_color
+                             );
+
     
     if((parent->parent->selection_rectangle)){
         
@@ -8908,29 +8886,6 @@ void DrawPanel::MyRefresh(void) {
 }
 
 
-void DrawPanel::RerenderPositions(void) {
-
-    wxClientDC dc(this);
-
-    //wipe out the Positions at the preceeding mouse position
-    RenderPositions(dc, points_position_list_before, (parent->parent->highlighted_position_before), wxGetApp().background_color);
-    
-    //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parallels_and_meridians_labels_now,
-                     positions_parallels_and_meridians_labels_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color,
-                     wxGetApp().standard_thickness.value
-                     );
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-    RenderPositions(dc, points_position_list_now, (parent->parent->highlighted_position_now), wxNullColour);
-
-}
 
 //render the Positions:  if foreground_color == wxNullColour, this method uses as foreground color the colors in color_list, otherwise it uses foreground_color
 void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, int highlighted_position, wxColor foreground_color) {
@@ -8977,79 +8932,48 @@ void DrawPanel::RenderMousePositionLabel(wxDC& dc) {
 }
 
 
-//render the coordinates of an object (Route or Position) which is being dragged
-void DrawPanel::RenderDraggedObjectLabel(wxDC& dc) {
+//render the coordinates of an object (Route or Position) which is being dragged by rendering the label label_dragged_object at position position_label_dragged_object (reckoned with respect to the origin of *this)
+void DrawPanel::RenderDraggedObjectLabel(wxDC& dc, wxPoint position_label_dragged_object, String  label_dragged_object, wxColor foreground_color, wxColor background_color) {
 
-    dc.SetTextForeground(wxGetApp().foreground_color);
-    dc.DrawText(wxString(label_dragged_object_now.value), position_label_dragged_object_now);
+
+    //wipe out the space occupied by the label
+    dc.SetPen(wxPen(background_color));
+    dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
+    dc.DrawRectangle(position_label_dragged_object, label_dragged_object.get_size(&dc));
+
+    
+    //render label_dragged_object
+    dc.SetTextForeground(foreground_color);
+    dc.SetTextBackground(background_color);
+    dc.DrawText(wxString(label_dragged_object.value), position_label_dragged_object);
 
 }
 
 
-//erase the previous label of the object which is being dragged, by drawing on top of it with color background_color, and draw the new one
-void DrawPanel::RerenderDraggedObjectLabel(void) {
 
-    wxClientDC dc(this);
-
-    //wipe out position_label_position_before by writin the text in position_label_position_before with color backgound_color
-    /*
-     dc.SetTextForeground(wxGetApp().background_color);
-     dc.SetTextBackground(wxGetApp().background_color);
-     dc.DrawText(wxString(label_position_before.value), position_label_position_now);
-     */
-
-     //wipe out position_label_position_before by writing on top of it a rectangle filled with color backgound_color
-    dc.SetPen(wxGetApp().background_color);
-    dc.SetBrush(wxBrush(wxGetApp().background_color));
-    dc.DrawRectangle(position_label_dragged_object_before, label_dragged_object_before.get_size(&dc));
-    
-    
-    //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-    RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parallels_and_meridians_labels_now,
-                     positions_parallels_and_meridians_labels_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color,
-                     wxGetApp().standard_thickness.value
-                     );
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-    RenderPositions(dc, points_position_list_now, (parent->parent->highlighted_position_now), wxNullColour);
-    RenderDraggedObjectLabel(dc);
-
-}
 
 
 //fit the size of the chart, of parent, of parent->panel to the content
 void DrawPanel::FitAll() {
-
-    //	//    Render(dc);
-    //	client_dc->Clear();
-    //	client_dc = new wxClientDC(this);
-    //	//    client_dc->SetParent(this);
-    //	(this->*Render)(client_dc);
-
-        //sets the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
+    
+    //set the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
     this->SetMinSize(size_chart);
     parent->SetMinSize(wxSize(
-        (size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
-        (size_chart.GetHeight()) + ((label_position_now.get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
-    ));
-
+                              (size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
+                              (size_chart.GetHeight()) + ((label_position_now.get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
+                              ));
+    
     //position position_label_position_now at the bottom left corner of *this
     position_label_position_now = wxPoint(
-        ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
-        (size_chart.GetHeight())
-        - (size_label_vertical + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))
-    );
-
+                                          ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
+                                          (size_chart.GetHeight())
+                                          - (size_label_vertical + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))
+                                          );
+    
     (parent->panel)->SetSizerAndFit(parent->sizer_v);
     (parent->panel)->Fit();
     parent->Fit();
-
+    
 }
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
@@ -13008,7 +12932,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-                            //on APPLE, I compute the coordinates of the reference position of the Route that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the 'before/now' method :store in label_dragged_object_before and position_label_dragged_object_before the label and position -> compute the new position and label -> call Rerender* methods, which clean up the old content of *this, doing the same thing as Refresh() but faster.
+                            //on APPLE, I compute the coordinates of the reference position of the Route that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the MyRefresh() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
 
 #ifdef _WIN32
 
@@ -13046,7 +12970,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
 
                             ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
-                            ((parent->parent->chart_frames)[i])->draw_panel->RerenderDraggedObjectLabel();
 
 #endif
 
@@ -13113,8 +13036,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-paint the charts -> I rerender the Positions and the label of the Position which is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-                            ((parent->parent->chart_frames)[i])->draw_panel->RerenderPositions();
-                            ((parent->parent->chart_frames)[i])->draw_panel->RerenderDraggedObjectLabel();
+                            ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
+//                            ((parent->parent->chart_frames)[i])->draw_panel->RerenderDraggedObjectLabel();
 
 #endif
 

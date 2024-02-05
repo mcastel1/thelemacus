@@ -1881,11 +1881,9 @@ public:
     void RenderRoutes(wxDC&, vector< vector< vector<wxPoint> > >, vector<wxPoint>, int, wxColor);
     void MyRefresh(void);
     void RenderPositions(wxDC&, vector<wxPoint>, int, wxColor);
-    void RerenderPositions(void);
     void RenderMousePositionLabel(wxDC&);
     void RerenderMousePositionLabel(void);
-    void RenderDraggedObjectLabel(wxDC&);
-    void RerenderDraggedObjectLabel(void);
+    void RenderDraggedObjectLabel(wxDC&, wxPoint, String, wxColor, wxColor);
     void RenderSelectionRectangle(wxDC&, wxPoint, String, wxColor, wxColor);
     void RenderSelectionRectangle(wxDC&, Position, String, wxColor, wxColor);
     void TabulateRoutes(void);

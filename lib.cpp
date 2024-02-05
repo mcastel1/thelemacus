@@ -8579,36 +8579,26 @@ void DrawPanel::RenderBackground(
 
 
 //same as  DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color), but it takes a screen position as input rather than a  geographic Position
-void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint screen_position, wxColour foreground_color, wxColour background_color) {
+void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint screen_position,  String end_label, wxColour foreground_color, wxColour background_color) {
 
     Position p;
 
     (this->*ScreenToGeo)(screen_position, &p);
-    RenderSelectionRectangle(dc, p, foreground_color, background_color);
+    RenderSelectionRectangle(dc, p, end_label, foreground_color, background_color);
 
 }
 
 
 //render a selection rectangle with end Position geo_position (geographic position), foreground color foreground_color and backgrund color background_color
-void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color) {
+void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, String end_label, wxColour foreground_color, wxColour background_color) {
 
+    wxPoint position_end_label;
+    
     dc.SetPen(foreground_color);
     dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
 
-    //    if ((parent->projection->name->GetValue()) == wxString("Mercator")) {
-
-    //        wxPoint p;
-    //
-    //        GeoToScreen(geo_position, &p);
-    //
-    //        dc.DrawRectangle(
-    //                         (drawpanel_position_start.x),
-    //                         (drawpanel_position_start.y),
-    //                         ((p.x)-(draw_panel_origin.x)) - (drawpanel_position_start.x),
-    //                         ((p.y)-(draw_panel_origin.y)) - (drawpanel_position_start.y)
-    //                         );
 
     //I draw the four edges of the rectangle in a way that is independent of the projection used
     //right vertical edge of rectangle
@@ -8645,61 +8635,25 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColo
         Length(Re * cos(geo_position.phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
     )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
 
-    //    }
-    //
-    //    if ((parent->projection->name->GetValue()) == wxString("3D")) {
+    
+    //render the labels of the selection rectangle
+    dc.SetTextForeground(foreground_color);
+    dc.SetTextBackground(background_color);
+    
+    GeoToDrawPanel(geo_position, &position_end_label, false);
 
-
-    //        //right vertical edge of rectangle
-    //        (Route(
-    //               String("o"),
-    //               (parent->parent->geo_position_start),
-    //               Angle(M_PI * (1.0 - GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-    //               Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
-    //               )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
-    //
-    //        //left vertical edge of rectangle
-    //        (Route(
-    //               String("o"),
-    //               geo_position,
-    //               Angle(M_PI * (1.0 + GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-    //               Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
-    //               )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
-    //
-    //        //bottom horizontal edge of rectangle
-    //        (Route(
-    //               String("l"),
-    //               (parent->parent->geo_position_start),
-    //               //change this by introducing if
-    //               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-    //               Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
-    //               )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
-    //
-    //        //top horizontal edge of rectangle
-    //        (Route(
-    //               String("l"),
-    //               geo_position,
-    //               //change this by introducing if
-    //               Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-    //               Length(Re * cos(geo_position.phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
-    //               )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
-    //
-    //
-    //    }
-
-}
-
-
-//draw the label of the start and end point of selection_rectangle with foreground and background colrs foreground_color and background_color, respectively
-void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc) {
-
-    dc.SetTextForeground(wxGetApp().foreground_color);
-    dc.SetTextBackground(wxGetApp().background_color);
-
-    dc.DrawText(wxString(end_label_selection_rectangle_now.value), position_end_label_selection_rectangle_now);
+    dc.DrawText(wxString(end_label.value), position_end_label);
     dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
 
+
 }
+
+
+////draw the label of the start and end point of selection_rectangle with foreground and background colrs foreground_color and background_color, respectively
+//void DrawPanel::RenderSelectionRectangleLabels(wxDC& dc) {
+//
+//
+//}
 
 
 void DrawPanel::RenderAll(wxDC& dc) {
@@ -8721,8 +8675,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
 
     //draw selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
-        RenderSelectionRectangle(dc, (parent->parent->geo_position_now), wxGetApp().foreground_color, wxGetApp().background_color);
-        RenderSelectionRectangleLabels(dc);
+        RenderSelectionRectangle(dc, (parent->parent->geo_position_now), end_label_selection_rectangle_now, wxGetApp().foreground_color, wxGetApp().background_color);
     }
 
     if ((parent->parent->dragging_object)) {
@@ -8885,6 +8838,7 @@ void DrawPanel::MyRefresh(void) {
         //wipe out the preceeding selection rectangle
         RenderSelectionRectangle(dc,
                                  (parent->parent->geo_position_before),
+                                 end_label_selection_rectangle_before,
                                  wxGetApp().background_color,
                                  wxGetApp().background_color
                                  );
@@ -8939,6 +8893,7 @@ void DrawPanel::MyRefresh(void) {
         //re-draw the current selection rectangle
         RenderSelectionRectangle(dc,
                                  (parent->parent->geo_position_now),
+                                 end_label_selection_rectangle_now,
                                  wxGetApp().foreground_color,
                                  wxGetApp().background_color
                                  );

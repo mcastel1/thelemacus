@@ -8824,12 +8824,12 @@ void DrawPanel::MyRefresh(void) {
         RenderRoutes(dc,
                      points_route_list_before,
                      reference_positions_route_list_before,
-                     -1,
+                     (parent->parent->highlighted_route_now),
                      wxGetApp().background_color
                      );
         RenderPositions(dc,
                      points_position_list_before,
-                     -1,
+                     (parent->parent->highlighted_position_now),
                      wxGetApp().background_color
                      );
         

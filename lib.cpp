@@ -8404,25 +8404,19 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
 
 
-//erase label_position_before, the label of the previous mouse position before the last mouse movement, by drawing on top of it with color background_color, and draw the new label
-void DrawPanel::RerenderMousePositionLabel(void) {
+//render the mouse position with colors foreground_color and background_color
+void DrawPanel::RenderMousePositionLabel(wxDC& dc, String label_position, wxPoint position_label_position, wxColor foreground_color, wxColor background_color) {
 
-    wxClientDC dc(this);
+     //wipe out position_label_position by writing on top of it a rectangle filled with color backgound_color
+    dc.SetPen(background_color);
+    dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
+    dc.DrawRectangle(position_label_position, label_position.get_size(&dc));
 
-    //wipe out position_label_position_before by writin the text in position_label_position_before with color backgound_color
-    /*
-     dc.SetTextForeground(wxGetApp().background_color);
-     dc.SetTextBackground(wxGetApp().background_color);
-     dc.DrawText(wxString(label_position_before.value), position_label_position_now);
-     */
+    dc.SetTextForeground(foreground_color);
+    dc.SetTextBackground(background_color);
+    dc.DrawText(wxString(label_position.value), position_label_position);
 
-     //wipe out position_label_position_before by writing on top of it a rectangle filled with color backgound_color
-    dc.SetPen(wxGetApp().background_color);
-    dc.SetBrush(wxBrush(wxGetApp().background_color));
-    dc.DrawRectangle(position_label_position_now, label_position_before.get_size(&dc));
-
-    RenderMousePositionLabel(dc);
-
+    
 }
 
 
@@ -8585,9 +8579,24 @@ void DrawPanel::RenderAll(wxDC& dc) {
                      wxGetApp().background_color,
                      wxGetApp().standard_thickness.value
                      );
-    RenderRoutes(dc, points_route_list_now, reference_positions_route_list_now, (parent->parent->highlighted_route_now), wxNullColour);
-    RenderPositions(dc, points_position_list_now, (parent->parent->highlighted_position_now),  wxNullColour);
-    RenderMousePositionLabel(dc);
+    RenderRoutes(dc, 
+                 points_route_list_now,
+                 reference_positions_route_list_now,
+                 (parent->parent->highlighted_route_now),
+                 wxNullColour
+                 );
+    RenderPositions(dc, 
+                    points_position_list_now,
+                    (parent->parent->highlighted_position_now),
+                    wxNullColour
+                    );
+    RenderMousePositionLabel(
+                             dc,
+                             label_position_now,
+                             position_label_position_now,
+                             wxGetApp().foreground_color,
+                             wxGetApp().background_color
+                             );
 
     //draw selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
@@ -8655,6 +8664,19 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
 void DrawPanel::MyRefresh(void) {
 
     wxClientDC dc(this);
+    
+    if((parent->parent->mouse_moving)){
+        //the mouse is moving -> wipe out the  mouse position label at the preceeding step of mouse movement
+        
+        RenderMousePositionLabel(
+                                 dc,
+                                 label_position_before,
+                                 position_label_position_now,
+                                 wxGetApp().background_color,
+                                 wxGetApp().background_color
+                                 );
+        
+    }
     
     if((parent->dragging_chart)){
         //the whole chart is being dragged -> wipe out all objects at the preceeding step of the drag
@@ -8822,6 +8844,13 @@ void DrawPanel::MyRefresh(void) {
                              wxGetApp().foreground_color,
                              wxGetApp().background_color
                              );
+    RenderMousePositionLabel(
+                             dc,
+                             label_position_now,
+                             position_label_position_now,
+                             wxGetApp().foreground_color,
+                             wxGetApp().background_color
+                             );
 
     
     if((parent->parent->selection_rectangle)){
@@ -8875,13 +8904,6 @@ void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, int highlighte
         }
 
     }
-
-}
-
-void DrawPanel::RenderMousePositionLabel(wxDC& dc) {
-
-    dc.SetTextForeground(wxGetApp().foreground_color);
-    dc.DrawText(wxString(label_position_now.value), position_label_position_now);
 
 }
 
@@ -11959,6 +11981,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 #endif
 
     //update the instantaneous screen and geographic position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
+    (parent->parent->mouse_moving) = true;
     (parent->parent->screen_position_now) = wxGetMousePosition();
     mouse_in_plot_area = (this->*ScreenToGeo)((parent->parent->screen_position_now), &((parent->parent->geo_position_now)));
     if (mouse_in_plot_area && (!parent->parent->selection_rectangle)) {
@@ -12195,9 +12218,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 #endif
 #ifdef _WIN32
-            //on WIN32, the Refresh() command slows down things -> I don't call it but use RerenderMousePositionLabel, which cleans up the former label of the mouse position in *this and draws a new one
+            //on WIN32, the Refresh() command slows down things -> I use MyRefresh()
 
-            RerenderMousePositionLabel();
+            MyRefresh();
 
 #endif
 
@@ -12206,7 +12229,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     }
 
 
-
+    (parent->parent->mouse_moving) = false;
 
     event.Skip(true);
 
@@ -16406,6 +16429,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     transporting_with_selected_route = false;
     changing_highlighted_object = false;
     abort = false;
+    mouse_moving = false;
     //when a ListFrame is created, no Route nor Position is  being dragged
     dragging_object = false;
 

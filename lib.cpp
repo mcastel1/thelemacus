@@ -8784,18 +8784,17 @@ void DrawPanel::RerenderRoutes(void) {
     
     //wipe out the Routes at the preceeding mouse position
     RenderRoutes(dc, points_route_list_before, reference_positions_route_list_before, (parent->parent->highlighted_route_before), wxGetApp().background_color);
-    //wipe out the background at the preceeding mouse position and current chart configurations
-    RenderBackground(
-        dc,
-        grid_now,
-        ticks_now,
-        parallels_and_meridians_labels_now,
-        positions_parallels_and_meridians_labels_now,
-        parent->points_coastline_now,
-        wxGetApp().background_color,
-        wxGetApp().background_color
-    );
-
+    //wipe out the background without painting a wxBitmap
+    (this->*Render)(
+                     &dc,
+                     grid_now,
+                     ticks_now,
+                     parallels_and_meridians_labels_now,
+                     positions_parallels_and_meridians_labels_now,
+                     parent->points_coastline_now,
+                     wxGetApp().background_color,
+                     wxGetApp().background_color
+                     );
 
     //re-render all  objects in *this which may have been partially cancelled by the clean operation above
     RenderBackground(

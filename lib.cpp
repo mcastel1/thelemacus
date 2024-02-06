@@ -12297,7 +12297,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 
         if (((parent->parent->highlighted_route_now) == -1) && (((parent->parent)->highlighted_position_now) == -1)) {
-            //in this case, I was dragging the chart (not a Route nor  a Position)
+            //I am dragging the chart (not a Route nor  a Position)
 
             if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
 
@@ -12346,19 +12346,39 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
         }
         else {
-            //in this case, I am dragging a Route or Position
+            //I am dragging a Route or Position
+
+            int i;
+
+            //given that the drag is finished, I set to empty label_dragged_object for all ChartFrames
+            for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
+                ((parent->parent->chart_frames[i])->draw_panel->label_dragged_object_now) = String("");
+            }
+
+#ifdef __APPLE__
+            
+            parent->parent->RefreshAll();
+            
+#endif
+
+#ifdef WIN32
+
+
+            for(i=0; i<(parent->parent->chart_frames).size(); i++){
+                (parent->parent->chart_frames[i])->draw_panel->MyRefresh();
+            }
+
+#endif
 
             (parent->parent->dragging_object) = false;
 
-            //given that the drag is finished, I set to empty label_dragged_object
-            label_dragged_object_now = String("");
-
+            
             if (!(((((draw_panel_origin.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (draw_panel_origin.x) + (position_plot_area.x) + (size_plot_area.GetWidth()))) &&
                 (((draw_panel_origin.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (draw_panel_origin.y) + (position_plot_area.y) + (size_plot_area.GetHeight())))))) {
-                //in this case, drag_end_position lies out the plot area
+                // drag_end_position lies out the plot area
 
                 if ((parent->parent->highlighted_route_now) != -1) {
-                    //in this case, I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
+                    //I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
 
                     (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position) = route_reference_position_drag_start;
 
@@ -12371,7 +12391,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 }
 
                 if ((((parent->parent)->highlighted_position_now) != -1)) {
-                    //in this case, I am dragging a position: I restore the position under consideration to its value at the beginning of the drag
+                    // I am dragging a Position: I restore the position under consideration to its value at the beginning of the drag
 
                     //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
                     (this->*ScreenToGeo)(position_start_drag, &((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]));

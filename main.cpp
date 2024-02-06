@@ -122,8 +122,6 @@
  
  on WIN32:
  
- - in the 3D projection you render meirdians and parallels twice on top of each other and they look thick -> fix it
- - when you drag the whole chart, the parallels and meridians labels form tiny threads (the rectangle drawn to wipe the _before lablels does not cover them entirely)
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  */

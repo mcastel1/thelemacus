@@ -8484,21 +8484,20 @@ inline void DrawPanel::RenderBackground(
 }
 
 
-//same as  DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color), but it takes a screen position as input rather than a  geographic Position
-inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint screen_position,  String end_label, wxColour foreground_color, wxColour background_color) {
+//same as  DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color), but it takes a  position (reckoned with respect to the ordigin of *this) as input rather than a  geographic Position
+inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position, wxPoint position_end_label,  String end_label, wxColour foreground_color, wxColour background_color) {
 
     Position p;
 
-    (this->*ScreenToGeo)(screen_position, &p);
-    RenderSelectionRectangle(dc, p, end_label, foreground_color, background_color);
+    DrawPanelToGeo(position, &p);
+    RenderSelectionRectangle(dc, p, position_end_label, end_label, foreground_color, background_color);
 
 }
 
 
-//render a selection rectangle with end Position geo_position (geographic position), foreground color foreground_color and backgrund color background_color
-inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, String end_label, wxColour foreground_color, wxColour background_color) {
+//render a selection rectangle with end Position geo_position (geographic position), foreground color foreground_color and backgrund color background_color, and label at its endpoint end_label located at position_end_label
+inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxPoint position_end_label, String end_label, wxColour foreground_color, wxColour background_color) {
 
-    wxPoint position_end_label;
     
     dc.SetPen(foreground_color);
     dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
@@ -8543,7 +8542,6 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position,
 
     
     //render the labels of the selection rectangle
-    GeoToDrawPanel(geo_position, &position_end_label, false);
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
@@ -8598,9 +8596,9 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                              wxGetApp().background_color
                              );
 
-    //draw selection_rectangle and its labels
+    //render selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
-        RenderSelectionRectangle(dc, (parent->parent->geo_position_now), end_label_selection_rectangle_now, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderSelectionRectangle(dc, (parent->parent->geo_position_now), position_end_label_selection_rectangle_now, end_label_selection_rectangle_now, wxGetApp().foreground_color, wxGetApp().background_color);
     }
 
     if ((parent->parent->dragging_object)) {
@@ -8781,6 +8779,7 @@ inline void DrawPanel::MyRefresh(void) {
         //wipe out the preceeding selection rectangle
         RenderSelectionRectangle(dc,
                                  (parent->parent->geo_position_before),
+                                 position_end_label_selection_rectangle_before,
                                  end_label_selection_rectangle_before,
                                  wxGetApp().background_color,
                                  wxGetApp().background_color
@@ -8861,7 +8860,8 @@ inline void DrawPanel::MyRefresh(void) {
         
         //re-draw the current selection rectangle
         RenderSelectionRectangle(dc,
-                                 (parent->parent->geo_position_now),
+                                 position_end_label_selection_rectangle_now,
+                                 position_end_label_selection_rectangle_now,
                                  end_label_selection_rectangle_now,
                                  wxGetApp().foreground_color,
                                  wxGetApp().background_color
@@ -12004,6 +12004,10 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if ((parent->parent->selection_rectangle)) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
 
+
+
+#ifdef __APPLE__
+
         for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
 
             //write the label and position of the selection rectangle for each DrawPanel into end_label_selection_rectangle_now and position_end_label_selection_rectangle_now, respectively
@@ -12015,9 +12019,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 
         }
-
-#ifdef __APPLE__
-
+        
         //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this, and paint the new one, because Refresh() triggers a call of PaintEvent
         parent->parent->RefreshAll();
 

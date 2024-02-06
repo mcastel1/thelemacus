@@ -1882,8 +1882,8 @@ public:
     void RenderPositions(wxDC&, vector<wxPoint>, int, wxColor);
     void RenderMousePositionLabel(wxDC&, String, wxPoint, wxColor, wxColor);
     void RenderDraggedObjectLabel(wxDC&, wxPoint, String, wxColor, wxColor);
-    void RenderSelectionRectangle(wxDC&, wxPoint, String, wxColor, wxColor);
-    void RenderSelectionRectangle(wxDC&, Position, String, wxColor, wxColor);
+    void RenderSelectionRectangle(wxDC&, wxPoint, wxPoint, String, wxColor, wxColor);
+    void RenderSelectionRectangle(wxDC&, Position, wxPoint, String, wxColor, wxColor);
     void TabulateRoutes(void);
     void TabulatePositions(void);
     void FitAll();

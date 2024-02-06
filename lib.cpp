@@ -8818,8 +8818,8 @@ inline void DrawPanel::MyRefresh(void) {
         //I am either drawing a selection rectangle, dragging an object or changing the highlighted object -> I need to re-render all GUI objects 
         
         //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-        RenderBackground(
-                         dc,
+        (this->*Render)(
+                         &dc,
                          grid_now,
                          ticks_now,
                          parallels_and_meridians_labels_now,

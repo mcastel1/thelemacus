@@ -110,7 +110,8 @@
  
  ********** THINGS TO FIX ************
 
- - when drawing a selection rectangle, the label of the endpoint is not moved to the center of the plot area of it touches the plot area boundary 
+ - end_label_selection_rectangle_now is commont to all chartframes and should be a member of listframe
+ - when drawing a selection rectangle, the label of the endpoint is not moved to the center of the plot area of it touches the plot area boundary
  - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
 - check why the meridian ticks form triangles in mercator projeciton
  - when you zoom in in 3d projection all the positions appear at the center of the disk

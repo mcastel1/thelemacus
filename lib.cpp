@@ -12495,19 +12495,13 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         //        GetMouseGeoPosition(&(parent->parent->geo_position_start));
         //        drawpanel_position_start = (parent->parent->screen_position_now);
 
-        //store the position at the beginning of the selection process, to compute the zoom factor later
+        //store the position at the beginning of the selection process, to compute the zoom factor 
+//run over all ChartFrames : if in the i-th ChartFrame geo_position_start falls within the plot area -> set label and position of the start position of selection_rectangle in that ChartFrame
         for (i = 0, check = false; i < (parent->parent->chart_frames).size(); i++) {
 
             if (
                 (((parent->parent->chart_frames)[i])->draw_panel->*(((parent->parent->chart_frames)[i])->draw_panel->GeoToProjection))((parent->parent->geo_position_start), &(((parent->parent->chart_frames)[i])->draw_panel->projection_start), false)) {
                 //geo_position_start is valid in the i-th DrawPanel -> start the selection rectangle in the i-th DrawPanel
-
-                //convert geo_position_start into the drawpanel position for the i-th DrawPanel
-//                ((parent->parent->chart_frames)[i])->draw_panel->GeoToDrawPanel(
-//                                                                                (parent->parent->geo_position_start),
-//                                                                                &(((parent->parent->chart_frames)[i])->draw_panel->drawpanel_position_start),
-//                                                                                true);
-
 
                 ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                     (parent->parent->geo_position_now),
@@ -12519,16 +12513,16 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
             }
 
+
+        }
+
+
             if (!check) {
                 //geo_position_start is invalid in all DrawPanels -> delete the selection rectangle by setting selection_rectangle to false
 
                 (parent->parent->selection_rectangle) = false;
 
             }
-
-        }
-
-
 
 
     }

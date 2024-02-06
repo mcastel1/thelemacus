@@ -109,15 +109,14 @@
  - move all stuff which is general enough in the code to MyApp class
  
  ********** THINGS TO FIX ************
-
+ 
  - end_label_selection_rectangle_now is commont to all chartframes and should be a member of listframe
- - when drawing a selection rectangle, the label of the endpoint is not moved to the center of the plot area of it touches the plot area boundary
  - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
-- check why the meridian ticks form triangles in mercator projeciton
+ - check why the meridian ticks form triangles in mercator projeciton
  - when you zoom in in 3d projection all the positions appear at the center of the disk
-- remove wxScrollEventHandler ... and similar stuff
-  - rename Route::t -> time
-- when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
+ - remove wxScrollEventHandler ... and similar stuff
+ - rename Route::t -> time
+ - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
  - frames are not resized according to the size of their title
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class
  

@@ -8663,6 +8663,8 @@ inline void DrawPanel::MyRefresh(void) {
 
     wxClientDC dc(this);
     
+    //1. erase _before objects
+    
     if((parent->parent->mouse_moving)){
         //the mouse is moving -> wipe out the  mouse position label at the preceeding step of mouse movement
         
@@ -8683,14 +8685,14 @@ inline void DrawPanel::MyRefresh(void) {
         RenderRoutes(dc,
                      points_route_list_before,
                      reference_positions_route_list_before,
-                     -1,
+                     (parent->parent->highlighted_route_now),
                      wxGetApp().background_color
                      );
         RenderPositions(dc,
-                     points_position_list_before,
-                     -1,
-                     wxGetApp().background_color
-                     );
+                        points_position_list_before,
+                        (parent->parent->highlighted_position_now),
+                        wxGetApp().background_color
+                        );
         
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
@@ -8814,6 +8816,17 @@ inline void DrawPanel::MyRefresh(void) {
         
     }
     
+    
+    //re-render  _new objects
+    
+    RenderMousePositionLabel(
+                             dc,
+                             label_position_now,
+                             position_label_position_now,
+                             wxGetApp().foreground_color,
+                             wxGetApp().background_color
+                             );
+    
     if((parent->dragging_chart) || (parent->parent->selection_rectangle) || (parent->parent->dragging_object) || (parent->parent->changing_highlighted_object)){
         //I am either drawing a selection rectangle, dragging an object or changing the highlighted object -> I need to re-render all GUI objects 
         
@@ -8845,17 +8858,11 @@ inline void DrawPanel::MyRefresh(void) {
                                  wxGetApp().foreground_color,
                                  wxGetApp().background_color
                                  );
-        RenderMousePositionLabel(
-                                 dc,
-                                 label_position_now,
-                                 position_label_position_now,
-                                 wxGetApp().foreground_color,
-                                 wxGetApp().background_color
-                                 );
+
         
         
     }
-    
+
     if((parent->parent->selection_rectangle)){
         
         //re-draw the current selection rectangle
@@ -12004,8 +12011,6 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if ((parent->parent->selection_rectangle)) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
 
-
-
 #ifdef __APPLE__
 
         for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
@@ -13047,10 +13052,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                         rotation = rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
                         
-                        //re-draw the chart
-                        (this->*Draw)();
+  
                         
 #ifdef __APPLE__
+                                     //re-draw the chart
+                        (this->*Draw)();
                         Refresh();
 #endif
                         

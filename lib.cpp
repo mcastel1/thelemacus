@@ -8860,7 +8860,7 @@ inline void DrawPanel::MyRefresh(void) {
         
         //re-draw the current selection rectangle
         RenderSelectionRectangle(dc,
-                                 position_end_label_selection_rectangle_now,
+                                 (parent->parent->geo_position_now),
                                  position_end_label_selection_rectangle_now,
                                  end_label_selection_rectangle_now,
                                  wxGetApp().foreground_color,

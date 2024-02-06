@@ -8394,7 +8394,7 @@ EVT_PAINT(DrawPanel::PaintEvent)
 END_EVENT_TABLE()
 
 
-void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
+inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
     wxPaintDC dc(this);
 
@@ -8405,7 +8405,7 @@ void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
 
 //render the mouse position with colors foreground_color and background_color
-void DrawPanel::RenderMousePositionLabel(wxDC& dc, String label_position, wxPoint position_label_position, wxColor foreground_color, wxColor background_color) {
+inline void DrawPanel::RenderMousePositionLabel(wxDC& dc, String label_position, wxPoint position_label_position, wxColor foreground_color, wxColor background_color) {
 
      //wipe out position_label_position by writing on top of it a rectangle filled with color backgound_color
     dc.SetPen(background_color);
@@ -8421,7 +8421,7 @@ void DrawPanel::RenderMousePositionLabel(wxDC& dc, String label_position, wxPoin
 
 
 //render the coastline by using the set of points points_coastline, meridians, parallels and their labels
-void DrawPanel::RenderBackground(
+inline void DrawPanel::RenderBackground(
                                  wxDC& dc,
                                  vector< vector< vector<wxPoint> > > grid,
                                  vector< vector< vector<wxPoint> > > ticks,
@@ -8485,7 +8485,7 @@ void DrawPanel::RenderBackground(
 
 
 //same as  DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color), but it takes a screen position as input rather than a  geographic Position
-void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint screen_position,  String end_label, wxColour foreground_color, wxColour background_color) {
+inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint screen_position,  String end_label, wxColour foreground_color, wxColour background_color) {
 
     Position p;
 
@@ -8496,7 +8496,7 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint screen_position,  Str
 
 
 //render a selection rectangle with end Position geo_position (geographic position), foreground color foreground_color and backgrund color background_color
-void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, String end_label, wxColour foreground_color, wxColour background_color) {
+inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, String end_label, wxColour foreground_color, wxColour background_color) {
 
     wxPoint position_end_label;
     
@@ -8566,7 +8566,7 @@ void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, String
 //}
 
 
-void DrawPanel::RenderAll(wxDC& dc) {
+inline void DrawPanel::RenderAll(wxDC& dc) {
     
     RenderBackground(
                      dc,
@@ -8611,7 +8611,7 @@ void DrawPanel::RenderAll(wxDC& dc) {
 }
 
 //render the Routes whose point coordinates with respect to the origin of DrawPanel are stored in points_curves, and whose reference-position coordinates with respect to the origin of DrawPanel are stored in reference_positions. the Route #highlighted_route is rendered with larger thickness. If foreground_color != wxNUllColour, the Routes are rendered with the colors in color_list, otherwise they are rendered with foreground_color
-void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > points_curves, vector<wxPoint> reference_positions, int highlighted_route, wxColor foreground_color) {
+inline void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > points_curves, vector<wxPoint> reference_positions, int highlighted_route, wxColor foreground_color) {
 
     int i, j, color_id;
     double thickness, radius;
@@ -8661,7 +8661,7 @@ void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > point
 }
 
 //wipe out all Routes on *this and re-draw them
-void DrawPanel::MyRefresh(void) {
+inline void DrawPanel::MyRefresh(void) {
 
     wxClientDC dc(this);
     
@@ -8875,7 +8875,7 @@ void DrawPanel::MyRefresh(void) {
 
 
 //render the Positions:  if foreground_color == wxNullColour, this method uses as foreground color the colors in color_list, otherwise it uses foreground_color
-void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, int highlighted_position, wxColor foreground_color) {
+inline void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, int highlighted_position, wxColor foreground_color) {
 
     int i, color_id;
     double thickness, radius;
@@ -8913,7 +8913,7 @@ void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, int highlighte
 
 
 //render the coordinates of an object (Route or Position) which is being dragged by rendering the label label_dragged_object at position position_label_dragged_object (reckoned with respect to the origin of *this)
-void DrawPanel::RenderDraggedObjectLabel(wxDC& dc, wxPoint position_label_dragged_object, String  label_dragged_object, wxColor foreground_color, wxColor background_color) {
+inline void DrawPanel::RenderDraggedObjectLabel(wxDC& dc, wxPoint position_label_dragged_object, String  label_dragged_object, wxColor foreground_color, wxColor background_color) {
 
 
     //wipe out the space occupied by the label
@@ -8957,7 +8957,7 @@ void DrawPanel::FitAll() {
 }
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::Render_Mercator(
+inline void DrawPanel::Render_Mercator(
                                 wxDC* dc,
                                 vector< vector< vector<wxPoint> > > grid,
                                 vector< vector< vector<wxPoint> > > ticks,
@@ -9153,7 +9153,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 }
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-void DrawPanel::Render_3D(
+inline void DrawPanel::Render_3D(
                           wxDC* dc,
                           vector< vector< vector<wxPoint> > > grid,
                           vector< vector< vector<wxPoint> > > ticks,
@@ -9267,7 +9267,7 @@ void DrawPanel::Render_3D(
 
 
 //this function tabulates into points_route_list_now and reference_positions_route_list_now the points and reference Positions, respectively, of all Routes. points_route_list will then be used to render the Routes
-void DrawPanel::TabulateRoutes(void) {
+inline void DrawPanel::TabulateRoutes(void) {
 
     unsigned int i;
     wxPoint p;
@@ -9314,7 +9314,7 @@ void DrawPanel::TabulateRoutes(void) {
 
 
 //tabulate into points_position_list_now all the Positions. points_position_list will then be used to render the Positions
-void DrawPanel::TabulatePositions(void) {
+inline void DrawPanel::TabulatePositions(void) {
 
     unsigned int i;
     wxPoint p;
@@ -9343,7 +9343,7 @@ void DrawPanel::TabulatePositions(void) {
 
 
 //draws coastlines, Routes and Positions on the Mercator-projection case
-void DrawPanel::Draw_Mercator(void) {
+inline void DrawPanel::Draw_Mercator(void) {
 
     Projection delta_temp;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
@@ -9760,7 +9760,7 @@ void DrawPanel::Draw_Mercator(void) {
 }
 
 //this function draws coastlines, Routes and Positions in the 3D case
-void DrawPanel::Draw_3D(void) {
+inline void DrawPanel::Draw_3D(void) {
 
     Angle lambda_in, lambda_out, /*phi is an auxiliary variable used in the loop which draws parallels*/phi;
     Position q;
@@ -11425,7 +11425,7 @@ inline bool DrawPanel::ScreenToDrawPanel(wxPoint p, wxPoint* q) {
 }
 
 //converts the point p on the screen into geographic Position q and it writes into q only if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
-bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position* q) {
+inline bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position* q) {
 
     Projection temp;
     bool output;

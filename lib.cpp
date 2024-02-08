@@ -1504,8 +1504,8 @@ Rotation::Rotation(Position p, Position q) {
         rotation_angle.set(String(""), acos(cos_rotation_angle), String(""));
 
 
-        cross((r_p.r), (r_q.r), &omega);
-        gsl_vector_scale(omega, 1.0 / fabs(sin(rotation_angle)));
+        cross((r_p.r), (r_q.r), &(omega.r));
+        gsl_vector_scale((omega.r), 1.0 / fabs(sin(rotation_angle)));
 
         rotation_axis.set_cartesian(String(""), omega, String(""));
 
@@ -3987,31 +3987,25 @@ bool Position::transport(Position* result, Route route, [[maybe_unused]] String 
 //rotates the Position (*this) according to the Rotation s, and writes the result in *p
 void Position::rotate(String name, Rotation r, Position* p, [[maybe_unused]] String prefix) {
 
-    gsl_vector* u, * s;
-
-    u = gsl_vector_alloc(3);
-    s = gsl_vector_alloc(3);
+    Cartesian u, s;
 
     //write (*this) into u in cartesian coordinates
-    gsl_vector_set(u, 0, cos(lambda) * cos(phi));
-    gsl_vector_set(u, 1, -(cos(phi) * sin(lambda)));
-    gsl_vector_set(u, 2, sin(phi));
+    gsl_vector_set((u.r), 0, cos(lambda) * cos(phi));
+    gsl_vector_set((u.r), 1, -(cos(phi) * sin(lambda)));
+    gsl_vector_set((u.r), 2, sin(phi));
 
     //rotate u according to r and write the result in s and then in (*this)
-    gsl_blas_dgemv(CblasNoTrans, 1.0, r.matrix, u, 0.0, s);
+    gsl_blas_dgemv(CblasNoTrans, 1.0, (r.matrix), (u.r), 0.0, (s.r));
 
     //     cout << "\tNorm of u = " << gsl_blas_dnrm2(u);
     //     cout << "\tNorm of s = " << gsl_blas_dnrm2(s);
 
     p->set_cartesian(name, s, prefix);
 
-    gsl_vector_free(u);
-    gsl_vector_free(s);
-
 }
 
 
-Cartesian::Cartesian(void){
+inline Cartesian::Cartesian(void){
     
     r = gsl_vector_alloc(3);
     
@@ -4019,7 +4013,7 @@ Cartesian::Cartesian(void){
 
 
 //construct *this setting its coordinates from the coordinates of the geographic Position p
-Cartesian::Cartesian(Position p){
+inline Cartesian::Cartesian(Position p){
     
     r = gsl_vector_alloc(3);
     

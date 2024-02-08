@@ -7315,8 +7315,8 @@ void Position::set_cartesian(String name, const Cartesian r, [[maybe_unused]] St
         cout << prefix.value << name.value << "\n";
     }
 
-    lambda.set(name_lambda, -atan(gsl_vector_get(r, 0), gsl_vector_get(r, 1)), String(prefix));
-    phi.set(name_phi, asin(gsl_vector_get(r, 2) / gsl_blas_dnrm2(r)), String(prefix));
+    lambda.set(name_lambda, -atan(gsl_vector_get((r.r), 0), gsl_vector_get((r.r), 1)), String(prefix));
+    phi.set(name_phi, asin(gsl_vector_get((r.r), 2) / gsl_blas_dnrm2((r.r))), String(prefix));
 
 }
 
@@ -7865,16 +7865,13 @@ void ChartFrame::GetCoastLineData_3D(void) {
     Projection temp;
     bool check = false, b;
     wxPoint q;
-    gsl_vector* r, * s;
+    Cartesian r, s;
     Position u;
 
-    r = gsl_vector_alloc(3);
-    s = gsl_vector_alloc(3);
-
+    
     //set i_min/max, j_min/max
     i_min = floor(K * (((phi_min).normalize_pm_pi_ret()).value));
     i_max = ceil(K * (((phi_max).normalize_pm_pi_ret()).value));
-
 
     if ((lambda_min == 0.0) && (lambda_max == 0.0)) {
         //in this case,Set_lambda_phi_min_max found out that circle_observer spans all longitudes, thus I set
@@ -7994,13 +7991,13 @@ void ChartFrame::GetCoastLineData_3D(void) {
                 n = ((parent->p_coastline)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
 
                 //set r
-                draw_panel->circle_observer.reference_position.get_cartesian(String(""), r, String(""));
+                draw_panel->circle_observer.reference_position.get_cartesian(String(""), &r, String(""));
                 //set s
                 u.phi.set(String(""), k * ((double)i), String(""));
                 u.lambda.set(String(""), k * ((double)j), String(""));
-                u.get_cartesian(String(""), s, String(""));
+                u.get_cartesian(String(""), &s, String(""));
                 //compute cos
-                gsl_blas_ddot(r, s, &cos);
+                gsl_blas_ddot((r.r), (s.r), &cos);
                 if (cos == 0.0) { cos = 1.0; }
 
 

@@ -2365,7 +2365,7 @@ public:
     /*map[i] is the position in data->route_list of the i-th Route in route_list_for_transport*/
     vector<int> map;
     //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
-    vector< vector< vector<Position> > > p_coastline;
+    vector< vector< vector<Position> > > coastline_points;
     Position /*these are the geographic Positions where the right mouse button is clicked at the beginning, the current and preceeding Position during mouse movement, and the mouse Position and at the end of the drawing process for the selection rectangle*/geo_position_start, geo_position_before, geo_position_now, position_end;
     //the object which is being transported : a "sight" or a "position"
     String transported_object;
@@ -2602,7 +2602,7 @@ public:
     ProjectionField<ChartFrame>* projection;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/lambda_min, lambda_max;
-    //in points_coastline_now (points_coasline_before), I store the 2d coordindates  in DrawPanel coordinates of coastline data p_coastline at the current (preceeding) state of the chart
+    //in points_coastline_now (points_coasline_before), I store the 2d coordindates  in DrawPanel coordinates of coastline data coastline_points at the current (preceeding) state of the chart
     vector<wxPoint> points_coastline_now, points_coastline_before;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling, /*this is true if the chart is being dragged, and thus the size of *this must not change across multiple Draw(s), and false otherwise*/ dragging_chart;

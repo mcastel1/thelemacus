@@ -4025,6 +4025,15 @@ inline Cartesian::Cartesian(Position p){
 }
 
 
+void Cartesian::print(String name, String prefix, ostream& ostr){
+    
+    ostr << prefix.value << name.value << ": {" <<
+    gsl_vector_get(r, 0) << " , " <<
+    gsl_vector_get(r, 1) << " , " <<
+    gsl_vector_get(r, 2) << " }\n";
+
+}
+
 //read from stream input_stream the Position by starting at the current position of input_stream. Here name and search_entire_stream are unused and have been included as arguments of the function in order to match with the format of read_from_stream of other classes and so in order to use template<class C> void read_from_file(C* object, String name, String filename, [[maybe_unused]] String prefix) throughout the code
 template<class S> void Position::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool search_entire_stream, [[maybe_unused]] String prefix) {
 

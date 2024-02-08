@@ -765,6 +765,7 @@ public:
     
     Cartesian();
     Cartesian(Position);
+    void print(String, String, ostream&);
     
 };
 

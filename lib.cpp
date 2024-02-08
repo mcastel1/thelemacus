@@ -11703,18 +11703,6 @@ inline bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
 
             );
 
-        //        if((temp.x) > 0.0){
-        //            //temp.x is positive: for it to fall within the plot area, I only need to check whether it lies betweeen x_min and pi. Given temp.x < pi by definition, I only need to check that temp.x > x_min
-        //
-        //            check_x = ((temp.x) >= x_min);
-        //
-        //        }else{
-        //            //temp.x is negative: for it to fall within the plot area, I only need to check whether it lies betweeen -pi and x_max. Given temp.x > -pi by definition, I only need to check that temp.x < x_max
-        //
-        //            check_x = ((temp.x) <= x_max);
-        //
-        //        }
-        //
     }
 
     check = ((check_x && (y_min <= (temp.y)) && ((temp.y) <= y_max)));
@@ -11744,12 +11732,7 @@ inline bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
 
     }
 
-    //    t_end = clock();
-    //    double t_tot= ((double)(t_end-t_start))/CLOCKS_PER_SEC;
-    //    cout << "t_mer " << t_tot << "s\n";
-
     return out;
-
 
 }
 
@@ -11956,6 +11939,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
         ScreenToProjection = (&DrawPanel::ScreenToMercator);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
+        CartesianToProjection = (&DrawPanel::CartesianToMercator);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_Mercator);
         Set_size_chart = (&DrawPanel::Set_size_chart_Mercator);
@@ -11972,6 +11956,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
         ScreenToProjection = (&DrawPanel::ScreenTo3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
+        CartesianToProjection = (&DrawPanel::CartesianTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_3D);
         Set_size_chart = (&DrawPanel::Set_size_chart_3D);

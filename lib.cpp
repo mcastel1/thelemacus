@@ -8144,6 +8144,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
     FileR file_n_line, file_coastline_data_blocked;
     Position p_temp;
+    Cartesian r_temp;
     string line;
     stringstream ins, message_dialog;
     int i, j;
@@ -8254,10 +8255,11 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                         lambda_temp = std::stod(line.substr(sz));
 
 
-                        (p_temp.lambda).set(String(""), k * lambda_temp, String(""));
-                        (p_temp.phi).set(String(""), k * phi_temp, String(""));
-
-                        (coastline_points[i][j]).push_back(p_temp);
+                        p_temp.lambda.set(String(""), k * lambda_temp, String(""));
+                        p_temp.phi.set(String(""), k * phi_temp, String(""));
+                        p_temp.get_cartesian(String(""), &r_temp, prefix);
+                        
+                        (coastline_points[i][j]).push_back(r_temp);
 
                         pos_beg = pos_end + 1;
                         pos_end = temp.find(" ", pos_beg);

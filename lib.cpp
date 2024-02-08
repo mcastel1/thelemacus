@@ -7387,7 +7387,7 @@ Angle Angle::span(Angle x) {
 }
 
 //puts the angle in the interval [-pi, pi), it does not alter *this and returns the result
-Angle Angle::normalize_pm_pi_ret(void) {
+inline Angle Angle::normalize_pm_pi_ret(void) {
 
     Angle temp;
 

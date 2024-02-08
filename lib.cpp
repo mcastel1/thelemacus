@@ -8013,9 +8013,8 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 
                     //THIS IS THE BOTTLENECK - START
-                    b = (draw_panel->GeoToDrawPanel)((parent->coastline_points)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false);
+                    b = (draw_panel->CartesianToDrawPanel)((parent->coastline_points)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false);
                     //THIS IS THE BOTTLENECK - END
-
 
                     //I write points in data_x and data_y to x and y in such a way to write (((parent->data)->n_points_coastline).value) points to the most
                     if (b) {
@@ -8118,7 +8117,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                     //                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
                     //                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
 
-                    if ((draw_panel->GeoToDrawPanel)((parent->coastline_points)[i - floor_min_lat][j % 360][l * every], &temp, false)) {
+                    if ((draw_panel->CartesianToDrawPanel)((parent->coastline_points)[i - floor_min_lat][j % 360][l * every], &temp, false)) {
 
                         //                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
                         //                            (temp.x) += 2.0*M_PI;
@@ -11785,7 +11784,7 @@ inline bool DrawPanel::CartesianToDrawPanel(Cartesian q, wxPoint* p, bool write)
     bool check;
 
 
-    check = (this->*CartesianToProjection)(q, &temp, write);
+    check = CartesianToProjection(q, &temp, write);
 
     if (check || write) {
 

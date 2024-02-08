@@ -8047,10 +8047,6 @@ void ChartFrame::GetCoastLineData_3D(void) {
     //    cout << "T_I " << T_I/CLOCKS_PER_SEC << "s\n";
     //    cout << "T_II " << T_II/CLOCKS_PER_SEC << "s\n";
 
-    gsl_vector_free(r);
-    gsl_vector_free(s);
-
-
 }
 
 
@@ -8322,13 +8318,6 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     String prefix;
 
     prefix = String("");
-
-    //allocate r and rp for future use
-    r = gsl_vector_alloc(3);
-    rp = gsl_vector_alloc(3);
-    rp_start_drag = gsl_vector_alloc(3);
-    rp_now_drag = gsl_vector_alloc(3);
-    rp_end_drag = gsl_vector_alloc(3);
 
     //client_dc = new wxClientDC(this);
 
@@ -9257,13 +9246,13 @@ inline void DrawPanel::Render_3D(
     (q.phi) = (circle_observer.omega);
 
     //obtain the coordinates of q in the reference frame x'y'z'
-    gsl_vector_set(rp, 0, 0.0);
-    gsl_vector_set(rp, 1, -cos(q.phi));
-    gsl_vector_set(rp, 2, sin((q.phi)));
+    gsl_vector_set((rp.r), 0, 0.0);
+    gsl_vector_set((rp.r), 1, -cos(q.phi));
+    gsl_vector_set((rp.r), 2, sin((q.phi)));
 
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
     d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
-    dummy_projection = Projection(0.0, ((d.value) * gsl_vector_get(rp, 2)) / ((d.value) + 1.0 + gsl_vector_get(rp, 1)));
+    dummy_projection = Projection(0.0, ((d.value) * gsl_vector_get((rp.r), 2)) / ((d.value) + 1.0 + gsl_vector_get((rp.r), 1)));
     //set the wxPen color for the horizon
 //    dc->SetPen(wxPen(wxGetApp().color_horizon, 1));
     dc->SetPen(wxPen(foreground_color, thickness));
@@ -10921,15 +10910,15 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
     //    (circle_observer.omega).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+(d.value))))/(1.0/(1.0+(d.value))) ), String(""));
 
     //consider the vector rp = {0,-1,0}, corresponding to the center of the circle of equal altitude above
-    gsl_vector_set(rp, 0, 0.0);
-    gsl_vector_set(rp, 1, -1.0);
-    gsl_vector_set(rp, 2, 0.0);
+    gsl_vector_set((rp.r), 0, 0.0);
+    gsl_vector_set((rp.r), 1, -1.0);
+    gsl_vector_set((rp.r), 2, 0.0);
 
     //convert rp -> r through rotation^{-1}
-    gsl_blas_dgemv(CblasTrans, 1.0, (rotation).matrix, rp, 0.0, r);
+    gsl_blas_dgemv(CblasTrans, 1.0, (rotation).matrix, (rp.r), 0.0, (r.r));
 
     //obtain the  geographic position of the center of the circle of equal altitude above
-    (circle_observer.reference_position).set_cartesian(String(""), r, String(""));
+    circle_observer.reference_position.set_cartesian(String(""), r, String(""));
 
 
     //set lambda_min/max from circle_observer
@@ -11490,12 +11479,12 @@ inline bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position* q) {
             //set rp
             d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
 
-            gsl_vector_set(rp, 0, (-(temp.x) * sqrt(arg_sqrt) + (d.value) * ((d.value) + 1.0) * (temp.x)) / (gsl_sf_pow_int((d.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2)));
-            gsl_vector_set(rp, 2, (-sqrt(arg_sqrt) * (temp.y) + (d.value) * ((d.value) + 1.0) * (temp.y)) / ((gsl_sf_pow_int((d.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2))));
-            gsl_vector_set(rp, 1, -sqrt(1.0 - (gsl_pow_2(gsl_vector_get(rp, 0)) + gsl_pow_2(gsl_vector_get(rp, 2)))));
+            gsl_vector_set((rp.r), 0, (-(temp.x) * sqrt(arg_sqrt) + (d.value) * ((d.value) + 1.0) * (temp.x)) / (gsl_sf_pow_int((d.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2)));
+            gsl_vector_set((rp.r), 2, (-sqrt(arg_sqrt) * (temp.y) + (d.value) * ((d.value) + 1.0) * (temp.y)) / ((gsl_sf_pow_int((d.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2))));
+            gsl_vector_set((rp.r), 1, -sqrt(1.0 - (gsl_pow_2(gsl_vector_get((rp.r), 0)) + gsl_pow_2(gsl_vector_get((rp.r), 2)))));
 
             //r = (rotation.matrix)^T . rp
-            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
+            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
 
             q->set_cartesian(String(""), r, String(""));
 
@@ -11514,12 +11503,12 @@ inline bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position* q) {
             d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
 
             //from projection, compute the relative point on the x'z' plane, which has y'=0
-            gsl_vector_set(rp, 0, ((d.value) + 1.0) / (d.value) * (temp.x));
-            gsl_vector_set(rp, 2, ((d.value) + 1.0) / (d.value) * (temp.y));
-            gsl_vector_set(rp, 1, 0.0);
+            gsl_vector_set((rp.r), 0, ((d.value) + 1.0) / (d.value) * (temp.x));
+            gsl_vector_set((rp.r), 2, ((d.value) + 1.0) / (d.value) * (temp.y));
+            gsl_vector_set((rp.r), 1, 0.0);
 
             //r = (rotation.matrix)^T . rp
-            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, rp, 0.0, r);
+            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
 
             q->set_cartesian(String(""), r, String(""));
 
@@ -11620,15 +11609,15 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
     //compute rp before hand to rule out early the cases where check = 0
     //set r according equal to the 3d vector corresponding to the geographic position p
-    gsl_vector_set(r, 0, cos((p.lambda)) * cos((p.phi)));
-    gsl_vector_set(r, 1, -(cos((p.phi)) * sin((p.lambda))));
-    gsl_vector_set(r, 2, sin((p.phi)));
-    gsl_vector_set(rp, 1,
-        gsl_matrix_get(rotation.matrix, 1, 0) * gsl_vector_get(r, 0) +
-        gsl_matrix_get(rotation.matrix, 1, 1) * gsl_vector_get(r, 1) +
-        gsl_matrix_get(rotation.matrix, 1, 2) * gsl_vector_get(r, 2)
+    gsl_vector_set((r.r), 0, cos((p.lambda)) * cos((p.phi)));
+    gsl_vector_set((r.r), 1, -(cos((p.phi)) * sin((p.lambda))));
+    gsl_vector_set((r.r), 2, sin((p.phi)));
+    gsl_vector_set((rp.r), 1,
+        gsl_matrix_get(rotation.matrix, 1, 0) * gsl_vector_get((r.r), 0) +
+        gsl_matrix_get(rotation.matrix, 1, 1) * gsl_vector_get((r.r), 1) +
+        gsl_matrix_get(rotation.matrix, 1, 2) * gsl_vector_get((r.r), 2)
     );
-    check = (gsl_vector_get(rp, 1) < -1.0 / (1.0 + (d.value)));
+    check = (gsl_vector_get((rp.r), 1) < -1.0 / (1.0 + (d.value)));
 
 
 
@@ -11643,11 +11632,11 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
             double temp;
 
             //rotate r by rotation, and write the result in rp!
-            gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, r, 0.0, rp);
+            gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, (r.r), 0.0, (rp.r));
 
-            temp = (d.value) / ((d.value) + 1.0 + gsl_vector_get(rp, 1));
-            (q->x) = gsl_vector_get(rp, 0) * temp;
-            (q->y) = gsl_vector_get(rp, 2) * temp;
+            temp = (d.value) / ((d.value) + 1.0 + gsl_vector_get((rp.r), 1));
+            (q->x) = gsl_vector_get((rp.r), 0) * temp;
+            (q->y) = gsl_vector_get((rp.r), 2) * temp;
 
         }
 
@@ -12274,7 +12263,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
     if ((((parent->projection)->name)->GetValue()) == wxString("3D")) {
 
         //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
-        gsl_vector_memcpy(rp_start_drag, rp);
+        gsl_vector_memcpy((rp_start_drag.r), (rp.r));
         rotation_start_drag = rotation;
         geo_start_drag.print(String("position start drag"), String(""), cout);
         rotation_start_drag.print(String("rotation start drag"), String(""), cout);
@@ -12342,7 +12331,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
             if ((((parent->projection)->name)->GetValue()) == wxString("3D")) {
 
-                gsl_vector_memcpy(rp_end_drag, rp);
+                gsl_vector_memcpy((rp_end_drag.r), (rp.r));
                 rotation_end_drag = rotation;
                 geo_end_drag.print(String("position end drag"), String(""), cout);
                 rotation_end_drag.print(String("rotation end drag"), String(""), cout);

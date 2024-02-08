@@ -11753,7 +11753,7 @@ inline bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
 
 }
 
-//this function converts the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p.
+// convert the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p.
 inline bool DrawPanel::GeoToDrawPanel(Position q, wxPoint* p, bool write) {
 
     Projection temp;
@@ -11761,6 +11761,33 @@ inline bool DrawPanel::GeoToDrawPanel(Position q, wxPoint* p, bool write) {
 
 
     check = (this->*GeoToProjection)(q, &temp, write);
+
+    if (check || write) {
+
+        if (p) {
+            (this->*ProjectionToDrawPanel)(temp, p);
+        }
+
+        return check;
+
+    }
+    else {
+
+        return false;
+
+    }
+
+}
+
+
+// convert the cartesian position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Cartesian position, return true and (if p!=NULL),  write the resulting DrawPanel coordinates in p. If q is not a valid Cartesian position,  return false and, if write = true and p!=NULL, it writes the drawpanel position in p.
+inline bool DrawPanel::CartesianToDrawPanel(Cartesian q, wxPoint* p, bool write) {
+
+    Projection temp;
+    bool check;
+
+
+    check = (this->*CartesianToProjection)(q, &temp, write);
 
     if (check || write) {
 

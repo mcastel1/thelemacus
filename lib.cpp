@@ -7294,7 +7294,7 @@ void Angle::enter(String name, [[maybe_unused]] String prefix) {
 }
 
 
-//set the polar coordinates lambda, phi of (*this) from its cartesian coordinates r
+//set the polar coordinates lambda, phi of (*this) from the Cartesian position r
 void Position::set_cartesian(String name, const Cartesian r, [[maybe_unused]] String prefix) {
 
     String new_prefix, name_lambda, name_phi;
@@ -11736,6 +11736,21 @@ inline bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
 
 }
 
+
+
+// If the Projection of q falls within the plot area, write its Projection into p (if p!=NULL) and return true. If not, return false and, if write = true, it writes its Projection in p
+inline bool DrawPanel::CartesianToProjection(Cartesian q, Projection* p, bool write) {
+    
+    Position s;
+    
+    //convert q to the geographic position temp
+    s.set_cartesian(String(""), q, String(""));
+    
+    return((this->*GeoToProjection)(s, p, write));
+    
+}
+
+
 // convert the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p.
 inline bool DrawPanel::GeoToDrawPanel(Position q, wxPoint* p, bool write) {
 
@@ -11939,7 +11954,6 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
         ScreenToProjection = (&DrawPanel::ScreenToMercator);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
-        CartesianToProjection = (&DrawPanel::CartesianToMercator);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_Mercator);
         Set_size_chart = (&DrawPanel::Set_size_chart_Mercator);
@@ -11956,7 +11970,6 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
         ScreenToProjection = (&DrawPanel::ScreenTo3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
-        CartesianToProjection = (&DrawPanel::CartesianTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_3D);
         Set_size_chart = (&DrawPanel::Set_size_chart_3D);

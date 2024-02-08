@@ -1880,7 +1880,6 @@ public:
     bool (DrawPanel::*ScreenToProjection)(wxPoint, Projection*);
     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     bool (DrawPanel::*GeoToProjection)(Position, Projection*, bool);
-    bool (DrawPanel::*CartesianToProjection)(Cartesian, Projection*, bool);
     void (DrawPanel::*Render)(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>, vector<wxPoint>, vector<wxPoint>, wxColor, wxColor, double);
     void (DrawPanel::*ProjectionToDrawPanel)(Projection, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
@@ -1913,10 +1912,9 @@ public:
     bool ScreenTo3D(wxPoint, Projection*);
     bool GeoToDrawPanel(Position, wxPoint*, bool);
     bool CartesianToDrawPanel(Cartesian, wxPoint*, bool);
+    bool CartesianToProjection(Cartesian, Projection*, bool);
     bool GeoTo3D(Position, Projection*, bool);
-    bool CartesianTo3D(Cartesian, Projection*, bool);
     bool GeoToMercator(Position, Projection*, bool);
-    bool CartesianToMercator(Cartesian, Projection*, bool);
     bool ScreenToGeo_Mercator(wxPoint, Position*);
     bool ScreenToGeo_3D(wxPoint, Position*);
     void ProjectionToDrawPanel_Mercator(Projection, wxPoint*);

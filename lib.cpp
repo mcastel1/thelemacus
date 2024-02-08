@@ -1494,21 +1494,17 @@ Rotation::Rotation(Position p, Position q) {
         double cos_rotation_angle;
         Angle rotation_angle;
         Position rotation_axis;
-        gsl_vector* r_p, * r_q, * omega;
-
-        r_p = gsl_vector_alloc(3);
-        r_q = gsl_vector_alloc(3);
-        omega = gsl_vector_alloc(3);
+        Cartesian r_p, r_q, omega;
 
         //transform p and q into cartesian cordinates and write them into r_p and r_q, respectively
-        p.get_cartesian(String(""), r_p, String(""));
-        q.get_cartesian(String(""), r_q, String(""));
+        p.get_cartesian(String(""), &r_p, String(""));
+        q.get_cartesian(String(""), &r_q, String(""));
 
-        gsl_blas_ddot(r_p, r_q, &cos_rotation_angle);
+        gsl_blas_ddot((r_p.r), (r_q.r), &cos_rotation_angle);
         rotation_angle.set(String(""), acos(cos_rotation_angle), String(""));
 
 
-        cross(r_p, r_q, &omega);
+        cross((r_p.r), (r_q.r), &omega);
         gsl_vector_scale(omega, 1.0 / fabs(sin(rotation_angle)));
 
         rotation_axis.set_cartesian(String(""), omega, String(""));
@@ -7305,7 +7301,7 @@ void Angle::enter(String name, [[maybe_unused]] String prefix) {
 
 
 //set the polar coordinates lambda, phi of (*this) from its cartesian coordinates r
-void Position::set_cartesian(String name, const gsl_vector* r, [[maybe_unused]] String prefix) {
+void Position::set_cartesian(String name, const Cartesian r, [[maybe_unused]] String prefix) {
 
     String new_prefix, name_lambda, name_phi;
 
@@ -7331,11 +7327,11 @@ void Position::set_cartesian(String name, const gsl_vector* r, [[maybe_unused]] 
 }
 
 //write the cartesian components of Position p into r
-void Position::get_cartesian([[maybe_unused]] String name, gsl_vector* r, [[maybe_unused]] String prefix) {
+void Position::get_cartesian([[maybe_unused]] String name, Cartesian* r, [[maybe_unused]] String prefix) {
 
-    gsl_vector_set(r, 0, cos(phi) * cos(lambda));
-    gsl_vector_set(r, 1, -cos(phi) * sin(lambda));
-    gsl_vector_set(r, 2, sin(phi));
+    gsl_vector_set((r->r), 0, cos(phi) * cos(lambda));
+    gsl_vector_set((r->r), 1, -cos(phi) * sin(lambda));
+    gsl_vector_set((r->r), 2, sin(phi));
 
 }
 

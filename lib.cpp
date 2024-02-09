@@ -11686,6 +11686,50 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 //convert the Cartesian position p  to the  3D Projection (x,y). / If the Projection of p falls in the visible side of the earth,  write its Projection into *q (if q!=NULL) and return true. If not,  return false and, if write = true,  write its Projection in *q (if q!=NULL)
 inline bool DrawPanel::CartesianTo3D(Cartesian p, Projection* q, bool write) {
     
+    bool check, out;
+
+    gsl_vector_set((rp.r), 1,
+        gsl_matrix_get(rotation.matrix, 1, 0) * gsl_vector_get((p.r), 0) +
+        gsl_matrix_get(rotation.matrix, 1, 1) * gsl_vector_get((p.r), 1) +
+        gsl_matrix_get(rotation.matrix, 1, 2) * gsl_vector_get((p.r), 2)
+    );
+    check = (gsl_vector_get((rp.r), 1) < -1.0 / (1.0 + (d.value)));
+
+
+
+    //    t2 = clock();
+    //    Ta = t2-t1;
+
+
+    if (check || write) {
+
+        if (q != NULL) {
+
+            double temp;
+
+            //rotate r by rotation, and write the result in rp!
+            gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, (p.r), 0.0, (rp.r));
+
+            temp = (d.value) / ((d.value) + 1.0 + gsl_vector_get((rp.r), 1));
+            (q->x) = gsl_vector_get((rp.r), 0) * temp;
+            (q->y) = gsl_vector_get((rp.r), 2) * temp;
+
+        }
+
+        out = check;
+
+
+    }
+    else {
+
+        out = false;
+
+    }
+
+    //    t3 = clock();
+    //    Tb = t3-t2;
+
+    return out;
     
     
 }

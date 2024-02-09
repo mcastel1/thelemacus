@@ -2370,8 +2370,8 @@ public:
     int /*the # of the sight/route/position which is highlighted at the current (_now) or preceeding (_before) step of mouse movement, because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight_now, highlighted_route_now, highlighted_route_before,  highlighted_position_now, highlighted_position_before, /*# of the object to transport or disconnect */i_object_to_transport, i_object_to_disconnect, i_transporting_route;
     /*map[i] is the position in data->route_list of the i-th Route in route_list_for_transport*/
     vector<int> map;
-    //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
-    vector< vector< vector<Cartesian> > > all_coastline_points;
+    //all_coastline_points_Cartesian[i][j] is a vector which contains the the coastline datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
+    vector< vector< vector<Cartesian> > > all_coastline_points_Cartesian;
     Position /*these are the geographic Positions where the right mouse button is clicked at the beginning, the current and preceeding Position during mouse movement, and the mouse Position and at the end of the drawing process for the selection rectangle*/geo_position_start, geo_position_before, geo_position_now, position_end;
     //the object which is being transported : a "sight" or a "position"
     String transported_object;

@@ -8106,7 +8106,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
     }
 
     i_min = floor(K * (phi_min.value));
-    i_max = ((parent->all_coastline_points_Cartesian).size()) + floor_min_lat;
+    i_max = ((parent->all_coastline_points_Position).size()) + floor_min_lat;
 
     n_points_grid = (i_max - i_min + 1) * (j_max - j_min + 1);
 
@@ -8124,18 +8124,18 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 //            flush(cout);
 
                 //count how many datapoints are in data_x[i][j] and in data_y[i][j]
-                n = ((unsigned int)(((parent->all_coastline_points_Cartesian)[i - floor_min_lat][j % 360]).size()));
+                n = ((unsigned int)(((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size()));
 
                 every = (unsigned int)(((double)n) / ((double)(((parent->data)->n_points_plot_coastline_Mercator).value)) * ((double)n_points_grid) */*this factor taks into account of the latitude expansion of Mercator projection*/cos(k * ((double)i)));
                 if (every == 0) { every = 1; }
 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-                for (l = 0; (l * every) < ((parent->all_coastline_points_Cartesian)[i - floor_min_lat][j % 360]).size(); l++) {
+                for (l = 0; (l * every) < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l++) {
 
                     //                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
                     //                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
 
-                    if ((draw_panel->CartesianToDrawPanel)((parent->all_coastline_points_Cartesian)[i - floor_min_lat][j % 360][l * every], &temp, false)) {
+                    if ((draw_panel->CartesianToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l * every], &temp, false)) {
 
                         //                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
                         //                            (temp.x) += 2.0*M_PI;
@@ -8160,8 +8160,8 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 void ListFrame::GetAllCoastLineData(String prefix) {
 
     FileR file_n_line, file_coastline_data_blocked;
-    Position p_temp;
-    Cartesian r_temp;
+    Position p_Position;
+    Cartesian p_Cartesian;
     string line;
     stringstream ins, message_dialog;
     int i, j;
@@ -8237,6 +8237,9 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
                 all_coastline_points_Cartesian.resize(i + 1);
                 (all_coastline_points_Cartesian[i]).resize(360);
+                
+                all_coastline_points_Position.resize(i + 1);
+                (all_coastline_points_Position[i]).resize(360);
 
                 for (j = 0; j < 360; j++) {
 
@@ -8272,13 +8275,16 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                         lambda_temp = std::stod(line.substr(sz));
 
 
-                        p_temp.lambda.set(String(""), k * lambda_temp, String(""));
-                        p_temp.phi.set(String(""), k * phi_temp, String(""));
-                        p_temp.get_cartesian(String(""), &r_temp, prefix);
+                        p_Position.lambda.set(String(""), k * lambda_temp, String(""));
+                        p_Position.phi.set(String(""), k * phi_temp, String(""));
+                        p_Position.get_cartesian(String(""), &p_Cartesian, prefix);
                         
-                        //this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
+                        //push back the position into all_coastline_points_Position
+                        (all_coastline_points_Position[i][j]).push_back(p_Position);
+                        
+                        //push back the position into all_coastline_points_Cartesian: this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
                         (all_coastline_points_Cartesian[i][j]).resize((all_coastline_points_Cartesian[i][j]).size()+1);
-                        (all_coastline_points_Cartesian[i][j]).back() = r_temp;
+                        (all_coastline_points_Cartesian[i][j]).back() = p_Cartesian;
                         
 
                         pos_beg = pos_end + 1;

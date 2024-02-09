@@ -11618,7 +11618,7 @@ inline bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q) {
 }
 
 
-//converts the geographic Position p  to the  3D projection (x,y). / If the projection of p falls in the visible side of the earth, it writes its projection into *q (if q!=NULL) and returns true. If not, it returns false and, if write = true, it writes its projection in *q (if q!=NULL)
+//convert the geographic Position p  to the  3D Projection (x,y). / If the Projection of p falls in the visible side of the earth,  write its Projection into *q (if q!=NULL) and returs true. If not, it returns false and, if write = true,  write its Projection in *q (if q!=NULL)
 inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
 
@@ -11678,6 +11678,13 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
     return out;
 }
 
+
+//convert the Cartesian position p  to the  3D Projection (x,y). / If the Projection of p falls in the visible side of the earth,  write its Projection into *q (if q!=NULL) and return true. If not,  return false and, if write = true,  write its Projection in *q (if q!=NULL)
+inline bool DrawPanel::CartesianTo3D(Cartesian p, Projection* q, bool write) {
+    
+    
+    
+}
 
 
 //this function converts the geographic position p into the screen position p

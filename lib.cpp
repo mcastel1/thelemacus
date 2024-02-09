@@ -8135,7 +8135,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                     //                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
                     //                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
 
-                    if ((draw_panel->CartesianToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l * every], &temp, false)) {
+                    if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l * every], &temp, false)) {
 
                         //                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
                         //                            (temp.x) += 2.0*M_PI;

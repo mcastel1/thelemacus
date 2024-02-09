@@ -11631,9 +11631,13 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
     //compute rp before hand to rule out early the cases where check = 0
     //set r according equal to the 3d vector corresponding to the geographic position p
+    /*
     gsl_vector_set((r.r), 0, cos((p.lambda)) * cos((p.phi)));
     gsl_vector_set((r.r), 1, -(cos((p.phi)) * sin((p.lambda))));
     gsl_vector_set((r.r), 2, sin((p.phi)));
+    */
+    p.get_cartesian(String(""), &r, String(""));
+    
     gsl_vector_set((rp.r), 1,
         gsl_matrix_get(rotation.matrix, 1, 0) * gsl_vector_get((r.r), 0) +
         gsl_matrix_get(rotation.matrix, 1, 1) * gsl_vector_get((r.r), 1) +

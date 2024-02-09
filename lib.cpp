@@ -11627,7 +11627,7 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
     //
     //    t1 = clock();
 
-    bool check, out;
+//    bool check, out;
 
     //compute rp before hand to rule out early the cases where check = 0
     //set r according equal to the 3d vector corresponding to the geographic position p
@@ -11638,6 +11638,8 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
     */
     p.get_cartesian(String(""), &r, String(""));
     
+    return CartesianTo3D(r, q, write);
+    /*
     gsl_vector_set((rp.r), 1,
         gsl_matrix_get(rotation.matrix, 1, 0) * gsl_vector_get((r.r), 0) +
         gsl_matrix_get(rotation.matrix, 1, 1) * gsl_vector_get((r.r), 1) +
@@ -11680,6 +11682,7 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
     //    Tb = t3-t2;
 
     return out;
+     */
 }
 
 

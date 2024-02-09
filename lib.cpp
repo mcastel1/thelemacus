@@ -8276,7 +8276,10 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                         p_temp.phi.set(String(""), k * phi_temp, String(""));
                         p_temp.get_cartesian(String(""), &r_temp, prefix);
                         
-                        (all_coastline_points[i][j]).push_back(r_temp);
+                        //this is the correct way to push back an element into all_coastline_points: if you use all_coastline_points[i][j].push_back(r_temp), the *memory address of all_coastline_points[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points[i][j].r will point to the same adress and thus contain the same value!!
+                        (all_coastline_points[i][j]).resize((all_coastline_points[i][j]).size()+1);
+                        (all_coastline_points[i][j]).back() = r_temp;
+                        
 
                         pos_beg = pos_end + 1;
                         pos_end = temp.find(" ", pos_beg);

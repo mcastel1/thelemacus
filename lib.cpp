@@ -11816,17 +11816,6 @@ inline bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
 
 
 
-// If the Projection of q falls within the plot area, write its Projection into p (if p!=NULL) and return true. If not, return false and, if write = true, it writes its Projection in p
-inline bool DrawPanel::CartesianToProjection(Cartesian q, Projection* p, bool write) {
-    
-    Position s;
-    
-    //convert q to the geographic position temp
-    s.set_cartesian(String(""), q, String(""));
-    
-    return((this->*GeoToProjection)(s, p, write));
-    
-}
 
 
 // convert the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p.
@@ -11862,8 +11851,7 @@ inline bool DrawPanel::CartesianToDrawPanel(Cartesian q, wxPoint* p, bool write)
     Projection temp;
     bool check;
 
-
-    check = CartesianToProjection(q, &temp, write);
+    check = (this->*CartesianToProjection)(q, &temp, write);
 
     if (check || write) {
 
@@ -12030,6 +12018,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
         Render = (&DrawPanel::Render_Mercator);
         ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_Mercator);
         ScreenToProjection = (&DrawPanel::ScreenToMercator);
+        CartesianToProjection = (&DrawPanel::CartesianToMercator);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
         GeoToProjection = (&DrawPanel::GeoToMercator);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
@@ -12046,6 +12035,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
         Render = (&DrawPanel::Render_3D);
         ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_3D);
         ScreenToProjection = (&DrawPanel::ScreenTo3D);
+        CartesianToProjection = (&DrawPanel::CartesianTo3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
         GeoToProjection = (&DrawPanel::GeoTo3D);
         Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);

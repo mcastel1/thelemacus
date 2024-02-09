@@ -4034,6 +4034,15 @@ void Cartesian::print(String name, String prefix, ostream& ostr){
 
 }
 
+
+//copies the content of x.r into this->r. Be careful: without this operator being defined, if you sed a Cartesian a equal to a Cartesian b, the memory adress of a.r is set equal to the memory address of b.r -> as soon as b.r is changed, a.r will be changed as well
+void Cartesian::operator = (const Cartesian& x){
+    
+    gsl_vector_memcpy(r, x.r);
+    
+}
+
+
 //read from stream input_stream the Position by starting at the current position of input_stream. Here name and search_entire_stream are unused and have been included as arguments of the function in order to match with the format of read_from_stream of other classes and so in order to use template<class C> void read_from_file(C* object, String name, String filename, [[maybe_unused]] String prefix) throughout the code
 template<class S> void Position::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool search_entire_stream, [[maybe_unused]] String prefix) {
 
@@ -7933,7 +7942,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
                 if (i < -90) {
 
-                    if ((-(180 + i) - floor_min_lat >= 0) && (-(180 + i) - floor_min_lat < (parent->coastline_points).size())) {
+                    if ((-(180 + i) - floor_min_lat >= 0) && (-(180 + i) - floor_min_lat < (parent->all_coastline_points).size())) {
 
                         i_adjusted = -(180 + i);
                         j_adjusted = 180 + j;
@@ -7951,7 +7960,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
                 if (i > 90) {
 
-                    if ((180 - i - floor_min_lat >= 0) && (180 - i - floor_min_lat < (parent->coastline_points).size())) {
+                    if ((180 - i - floor_min_lat >= 0) && (180 - i - floor_min_lat < (parent->all_coastline_points).size())) {
 
                         i_adjusted = 180 - i;
                         j_adjusted = 180 + j;
@@ -7971,7 +7980,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
             }
             else {
 
-                if ((i - floor_min_lat >= 0) && (i - floor_min_lat < (parent->coastline_points).size())) {
+                if ((i - floor_min_lat >= 0) && (i - floor_min_lat < (parent->all_coastline_points).size())) {
 
                     i_adjusted = i;
                     j_adjusted = j;
@@ -7997,7 +8006,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 
                 //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
-                n = ((parent->coastline_points)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
+                n = ((parent->all_coastline_points)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
 
                 //set r
                 draw_panel->circle_observer.reference_position.get_cartesian(String(""), &r, String(""));
@@ -8018,11 +8027,11 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-                for (l = 0; l < ((parent->coastline_points)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l += every) {
+                for (l = 0; l < ((parent->all_coastline_points)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l += every) {
 
 
                     //THIS IS THE BOTTLENECK - START
-                    b = (draw_panel->CartesianToDrawPanel)((parent->coastline_points)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false);
+                    b = (draw_panel->CartesianToDrawPanel)((parent->all_coastline_points)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false);
                     //THIS IS THE BOTTLENECK - END
 
                     //I write points in data_x and data_y to x and y in such a way to write (((parent->data)->n_points_coastline).value) points to the most
@@ -8097,7 +8106,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
     }
 
     i_min = floor(K * (phi_min.value));
-    i_max = ((parent->coastline_points).size()) + floor_min_lat;
+    i_max = ((parent->all_coastline_points).size()) + floor_min_lat;
 
     n_points_grid = (i_max - i_min + 1) * (j_max - j_min + 1);
 
@@ -8115,18 +8124,18 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 //            flush(cout);
 
                 //count how many datapoints are in data_x[i][j] and in data_y[i][j]
-                n = ((unsigned int)(((parent->coastline_points)[i - floor_min_lat][j % 360]).size()));
+                n = ((unsigned int)(((parent->all_coastline_points)[i - floor_min_lat][j % 360]).size()));
 
                 every = (unsigned int)(((double)n) / ((double)(((parent->data)->n_points_plot_coastline_Mercator).value)) * ((double)n_points_grid) */*this factor taks into account of the latitude expansion of Mercator projection*/cos(k * ((double)i)));
                 if (every == 0) { every = 1; }
 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-                for (l = 0; (l * every) < ((parent->coastline_points)[i - floor_min_lat][j % 360]).size(); l++) {
+                for (l = 0; (l * every) < ((parent->all_coastline_points)[i - floor_min_lat][j % 360]).size(); l++) {
 
                     //                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
                     //                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
 
-                    if ((draw_panel->CartesianToDrawPanel)((parent->coastline_points)[i - floor_min_lat][j % 360][l * every], &temp, false)) {
+                    if ((draw_panel->CartesianToDrawPanel)((parent->all_coastline_points)[i - floor_min_lat][j % 360][l * every], &temp, false)) {
 
                         //                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
                         //                            (temp.x) += 2.0*M_PI;
@@ -8147,7 +8156,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 }
 
 
-//this function fetches the data in ((wxGetApp().path_file_coastline_data_blocked).value) and stores them in data_x, data_y, coastline_points so that they can be read fastly
+//this function fetches the data in ((wxGetApp().path_file_coastline_data_blocked).value) and stores them in data_x, data_y, all_coastline_points so that they can be read fastly
 void ListFrame::GetAllCoastLineData(String prefix) {
 
     FileR file_n_line, file_coastline_data_blocked;
@@ -8226,8 +8235,8 @@ void ListFrame::GetAllCoastLineData(String prefix) {
             abort = false;
             while (/*here, to be safe, I stop the while() if I am not sure that n_line will be called with a valid value*/(360 * i + 360 < (n_line.size())) && (!((file_coastline_data_blocked.value)->eof())) && (!abort)) {
 
-                coastline_points.resize(i + 1);
-                (coastline_points[i]).resize(360);
+                all_coastline_points.resize(i + 1);
+                (all_coastline_points[i]).resize(360);
 
                 for (j = 0; j < 360; j++) {
 
@@ -8267,7 +8276,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                         p_temp.phi.set(String(""), k * phi_temp, String(""));
                         p_temp.get_cartesian(String(""), &r_temp, prefix);
                         
-                        (coastline_points[i][j]).push_back(r_temp);
+                        (all_coastline_points[i][j]).push_back(r_temp);
 
                         pos_beg = pos_end + 1;
                         pos_end = temp.find(" ", pos_beg);

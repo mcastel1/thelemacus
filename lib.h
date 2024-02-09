@@ -1917,6 +1917,7 @@ public:
     bool CartesianToDrawPanel(Cartesian, wxPoint*, bool);
     bool GeoTo3D(Position, Projection*, bool);
     bool CartesianTo3D(Cartesian, Projection*, bool);
+    bool CartesianToMercator(Cartesian, Projection*, bool);
     bool GeoToMercator(Position, Projection*, bool);
     bool ScreenToGeo_Mercator(wxPoint, Position*);
     bool ScreenToGeo_3D(wxPoint, Position*);

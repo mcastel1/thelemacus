@@ -11686,6 +11686,20 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 }
 
 
+
+// If the Projection of q falls within the plot area,  write its Projection into p (if p!=NULL) and return true. If not, it returns false and, if write = true, it writes its projection in q
+inline bool DrawPanel::CartesianToMercator(Cartesian p, Projection* q, bool write) {
+    
+    Position temp;
+    
+    temp.set_cartesian(String(""), p, String(""));
+    
+    return ((this->*GeoToProjection)(temp, q, write));
+    
+    
+}
+
+
 //convert the Cartesian position p  to the  3D Projection (x,y). / If the Projection of p falls in the visible side of the earth,  write its Projection into *q (if q!=NULL) and return true. If not,  return false and, if write = true,  write its Projection in *q (if q!=NULL)
 inline bool DrawPanel::CartesianTo3D(Cartesian p, Projection* q, bool write) {
     
@@ -11736,6 +11750,9 @@ inline bool DrawPanel::CartesianTo3D(Cartesian p, Projection* q, bool write) {
     
     
 }
+
+
+
 
 
 //this function converts the geographic position p into the screen position p

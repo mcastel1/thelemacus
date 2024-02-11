@@ -110,22 +110,14 @@
  - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
 
  ********** THINGS TO FIX ************
-<<<<<<< HEAD
-- check if with the new modifications you can simply draw a text over a text (no longer a rectangle) to delete it 
-- remove wxScrollEventHandler ... and similar stuff
-  - rename Route::t -> time
-- when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
-=======
- 
  - check why the meridian ticks form triangles in mercator projeciton
  - rename Route::t -> time
  - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
->>>>>>> cartesian_coastline_points
  - frames are not resized according to the size of their title
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class
  
  on WIN32:
- 
+ - remove all remaining calls of Refresh() and replace them with MyRefresh(); 
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  */

@@ -1,46 +1,46 @@
-inline double sin(Angle x) {
+inline double sin(const Angle& x) {
 
     return sin(x.value);
 
 }
 
-inline double asin(Double x) {
+inline double asin(const Double& x) {
 
     return asin(x.value);
 
 }
 
-inline double cos(Angle x) {
+inline double cos(const Angle& x) {
 
     return cos(x.value);
 
 }
 
-inline double tan(Angle x) {
+inline double tan(const Angle& x) {
 
     return tan(x.value);
 
 }
 
-inline double csc(Angle x) {
+inline double csc(const Angle& x) {
 
     return csc(x.value);
 
 }
 
-inline double sec(Angle x) {
+inline double sec(const Angle& x) {
 
     return (1.0 / cos(x));
 
 }
 
-inline double cot(Angle x) {
+inline double cot(const Angle& x) {
 
     return cot(x.value);
 
 }
 
-inline double acos(Double x) {
+inline double acos(const Double& x) {
 
     return acos(x.value);
 

@@ -1109,14 +1109,14 @@ String::String() {
 }
 
 //constructor which sets value to s
-String::String(string s) {
+String::String(const string& s) {
 
     value = s;
 
 }
 
 //constructs a string made of the char c
-String::String(char c) {
+String::String(const char& c) {
 
     stringstream temp;
 

@@ -116,8 +116,8 @@ public:
     string value;
     
     String();
-    String(string);
-    String(char);
+    String(const string&);
+    String(const char&);
     void print(String, bool, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
 //    template<class S> void read_ints_from_stream(String, S*, bool, vector<int>*);

@@ -11649,7 +11649,8 @@ inline bool DrawPanel::GeoTo3D(const Position& p, Projection* q, bool write) {
     gsl_vector_set((r.r), 1, -(cos((p.phi)) * sin((p.lambda))));
     gsl_vector_set((r.r), 2, sin((p.phi)));
     */
-    p.getCartesian(String(""), &r, String(""));
+//    p.getCartesian(String(""), &r, String(""));
+    r.setPosition(p);
 
     return CartesianTo3D(r, q, write);
     /*

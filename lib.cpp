@@ -8469,15 +8469,15 @@ inline void DrawPanel::RenderMousePositionLabel(wxDC& dc, String label_position,
 
 //render the coastline by using the set of points points_coastline, meridians, parallels and their labels
 inline void DrawPanel::RenderBackground(
-    wxDC& dc,
-    vector< vector< vector<wxPoint> > > grid,
-    vector< vector< vector<wxPoint> > > ticks,
-    vector<wxString> parallels_and_meridians_labels,
-    vector<wxPoint> positions_parallels_and_meridians_labels,
-    vector<wxPoint> points_coastline,
-    wxColour foreground_color,
-    wxColour background_color,
-    double thickness
+                                        wxDC& dc,
+                                        const vector< vector< vector<wxPoint> > >& grid,
+                                        const vector< vector< vector<wxPoint> > >& ticks,
+                                        const vector<wxString>& parallels_and_meridians_labels,
+                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
+                                        const vector<wxPoint>& points_coastline,
+                                        wxColour foreground_color,
+                                        wxColour background_color,
+                                        double thickness
 ) {
 
     //    dc.SetPen(foreground_color);

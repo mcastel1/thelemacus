@@ -1896,10 +1896,18 @@ public:
     void SetIdling(bool);
     void Draw_Mercator(void);
     void Draw_3D(void);
-    void PaintEvent(wxPaintEvent & evt);
+    void PaintEvent(wxPaintEvent& evt);
     void RenderAll(wxDC&);
     void MyRefresh(void);
-    void RenderBackground(wxDC&, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >, vector<wxString>, vector<wxPoint>, vector<wxPoint>, wxColor, wxColor, double);
+    void RenderBackground(wxDC&,
+                          const vector< vector< vector<wxPoint> > >&,
+                          const vector< vector< vector<wxPoint> > >&,
+                          const vector<wxString>&,
+                          const vector<wxPoint>&,
+                          const vector<wxPoint>&,
+                          wxColor,
+                          wxColor,
+                          double);
     void RenderRoutes(wxDC&, vector< vector< vector<wxPoint> > >, vector<wxPoint>, int, wxColor);
     void RenderPositions(wxDC&, vector<wxPoint>, int, wxColor);
     void RenderMousePositionLabel(wxDC&, String, wxPoint, wxColor, wxColor);

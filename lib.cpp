@@ -11437,7 +11437,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
 
 
 // the screen position p lies within the DrawPanel *this, it returns true and write it into the position q with respect to the DrawPanel *this. Otherwise, it returns alse, and does nothing with q
-inline bool DrawPanel::ScreenToDrawPanel(wxPoint p, wxPoint* q) {
+inline bool DrawPanel::ScreenToDrawPanel(const wxPoint& p, wxPoint* q) {
 
     bool check;
 
@@ -11453,7 +11453,7 @@ inline bool DrawPanel::ScreenToDrawPanel(wxPoint p, wxPoint* q) {
 }
 
 //converts the point p on the screen into geographic Position q and it writes into q only if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
-inline bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position* q) {
+inline bool DrawPanel::ScreenToGeo_Mercator(const wxPoint& p, Position* q) {
 
     Projection temp;
     bool output;
@@ -11476,7 +11476,7 @@ inline bool DrawPanel::ScreenToGeo_Mercator(wxPoint p, Position* q) {
 }
 
 //converts the point p in the DrawPanel coordinates to the relative geographic position q, see specifics of ScreenToGeo_Mercator and ScreenToGeo_3D
-inline bool DrawPanel::DrawPanelToGeo(wxPoint p, Position* q) {
+inline bool DrawPanel::DrawPanelToGeo(const wxPoint& p, Position* q) {
 
     //computes the poisition of the DrawPanel *this which will be needed in the following
     draw_panel_origin = (this->GetScreenPosition());
@@ -11545,7 +11545,7 @@ inline bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position* q) {
 }
 
 //convert the point p on the screen to the  Mercator projection q of the relative geographic position, by writing into q only if q!=NULL. It returns true/false if q lies within the boundaris x_min .. y_max
-inline bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q) {
+inline bool DrawPanel::ScreenToMercator(const wxPoint& p, Projection* q) {
 
     Projection temp;
     bool check_x;
@@ -11582,7 +11582,7 @@ inline bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q) {
 
 
 //converts the point p on the screen (which is supposed to lie in the plot area), to the  3D projection (x,y), which is written in q if q!=NULL. If p lies within /outside the circle of the earth, it returns true/false.
-inline bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q) {
+inline bool DrawPanel::ScreenTo3D(const wxPoint& p, Projection* q) {
 
     Projection temp;
     Double d_temp;
@@ -11621,7 +11621,7 @@ inline bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q) {
 
 
 //convert the geographic Position p  to the  3D Projection (x,y). / If the Projection of p falls in the visible side of the earth,  write its Projection into *q (if q!=NULL) and returs true. If not, it returns false and, if write = true,  write its Projection in *q (if q!=NULL)
-inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
+inline bool DrawPanel::GeoTo3D(const Position& p, Projection* q, bool write) {
 
 
     //    clock_t t1, t2, t3;
@@ -11690,7 +11690,7 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
 
 // If the Projection of q falls within the plot area,  write its Projection into p (if p!=NULL) and return true. If not, it returns false and, if write = true, it writes its projection in q
-inline bool DrawPanel::CartesianToMercator(Cartesian p, Projection* q, bool write) {
+inline bool DrawPanel::CartesianToMercator(const Cartesian& p, Projection* q, bool write) {
 
     Position temp;
 
@@ -11703,7 +11703,7 @@ inline bool DrawPanel::CartesianToMercator(Cartesian p, Projection* q, bool writ
 
 
 //convert the Cartesian position p  to the  3D Projection (x,y). / If the Projection of p falls in the visible side of the earth,  write its Projection into *q (if q!=NULL) and return true. If not,  return false and, if write = true,  write its Projection in *q (if q!=NULL)
-inline bool DrawPanel::CartesianTo3D(Cartesian p, Projection* q, bool write) {
+inline bool DrawPanel::CartesianTo3D(const Cartesian& p, Projection* q, bool write) {
 
     bool check, out;
     
@@ -11763,7 +11763,7 @@ inline bool DrawPanel::CartesianTo3D(Cartesian p, Projection* q, bool write) {
 
 
 //this function converts the geographic position p into the screen position p
-inline void DrawPanel::GeoToScreen(Position q, wxPoint* p) {
+inline void DrawPanel::GeoToScreen(const Position& q, wxPoint* p) {
 
     //updates the position of the draw pane this
     draw_panel_origin = (this->GetScreenPosition());

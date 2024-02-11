@@ -1880,7 +1880,7 @@ public:
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*Draw)(void);
     bool (DrawPanel::*ScreenToProjection)(wxPoint, Projection*);
-    bool (DrawPanel::*CartesianToProjection)(Cartesian, Projection*, bool);
+    bool (DrawPanel::*CartesianToProjection)(const Cartesian&, Projection*, bool);
     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     bool (DrawPanel::*GeoToProjection)(Position, Projection*, bool);
     void (DrawPanel::*Render)(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>, vector<wxPoint>, vector<wxPoint>, wxColor, wxColor, double);
@@ -1908,21 +1908,21 @@ public:
     void TabulatePositions(void);
     void FitAll();
     
-    bool ScreenToDrawPanel(wxPoint, wxPoint*);
-    void GeoToScreen(Position, wxPoint*);
-    bool DrawPanelToGeo(wxPoint, Position*);
-    bool ScreenToMercator(wxPoint, Projection*);
-    bool ScreenTo3D(wxPoint, Projection*);
-    bool GeoToDrawPanel(Position, wxPoint*, bool);
-    bool CartesianToDrawPanel(Cartesian, wxPoint*, bool);
-    bool GeoTo3D(Position, Projection*, bool);
-    bool CartesianTo3D(Cartesian, Projection*, bool);
-    bool CartesianToMercator(Cartesian, Projection*, bool);
-    bool GeoToMercator(Position, Projection*, bool);
-    bool ScreenToGeo_Mercator(wxPoint, Position*);
+    bool ScreenToDrawPanel(const wxPoint&, wxPoint*);
+    void GeoToScreen(const Position&, wxPoint*);
+    bool DrawPanelToGeo(const wxPoint&, Position*);
+    bool ScreenToMercator(const wxPoint&, Projection*);
+    bool ScreenTo3D(const wxPoint&, Projection*);
+    bool GeoToDrawPanel(const Position&, wxPoint*, bool);
+    bool CartesianToDrawPanel(const Cartesian&, wxPoint*, bool);
+    bool GeoTo3D(const Position&, Projection*, bool);
+    bool CartesianTo3D(const Cartesian&, Projection*, bool);
+    bool CartesianToMercator(const Cartesian&, Projection*, bool);
+    bool GeoToMercator(const Position&, Projection*, bool);
+    bool ScreenToGeo_Mercator(const wxPoint&, Position*);
     bool ScreenToGeo_3D(wxPoint, Position*);
-    void ProjectionToDrawPanel_Mercator(Projection, wxPoint*);
-    void ProjectionToDrawPanel_3D(Projection, wxPoint*);
+    void ProjectionToDrawPanel_Mercator(const Projection&, wxPoint*);
+    void ProjectionToDrawPanel_3D(const Projection&, wxPoint*);
     void ShowCoordinates(Position, String*);
     void SetLabelAndPosition(wxPoint, wxPoint*, String*);
     void SetLabelAndPosition(Position, wxPoint*, String*);

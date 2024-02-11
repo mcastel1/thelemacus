@@ -16304,7 +16304,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize, 0);
 
     //bind the function MessageFrame<FF_OK>::KeyDown to the event where a keyboard dey is down
-    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(MessageFrame<FF_OK>::KeyDown), this);
+    panel->Bind(wxEVT_KEY_DOWN, &MessageFrame<FF_OK>::KeyDown, this);
 
 
     //buttons

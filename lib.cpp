@@ -11706,12 +11706,17 @@ inline bool DrawPanel::CartesianToMercator(Cartesian p, Projection* q, bool writ
 inline bool DrawPanel::CartesianTo3D(Cartesian p, Projection* q, bool write) {
 
     bool check, out;
-
+    
     gsl_vector_set((rp.r), 1,
-        gsl_matrix_get(rotation.matrix, 1, 0) * gsl_vector_get((p.r), 0) +
-        gsl_matrix_get(rotation.matrix, 1, 1) * gsl_vector_get((p.r), 1) +
-        gsl_matrix_get(rotation.matrix, 1, 2) * gsl_vector_get((p.r), 2)
-    );
+                   /*
+                    gsl_matrix_get(rotation.matrix, 1, 0) * gsl_vector_get((p.r), 0) +
+                    gsl_matrix_get(rotation.matrix, 1, 1) * gsl_vector_get((p.r), 1) +
+                    gsl_matrix_get(rotation.matrix, 1, 2) * gsl_vector_get((p.r), 2)
+                    */
+                   cblas_ddot(3, (rotation.matrix->data)+3, 1, p.r->data, 1)
+                   );
+    
+    
     check = (gsl_vector_get((rp.r), 1) < -1.0 / (1.0 + (d.value)));
 
 

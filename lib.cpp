@@ -10687,8 +10687,6 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
 
     case WXK_ESCAPE:
 
-        int i;
-
         //If the user presses esc, I cancel the selection process with the rectangle in all ChartFrames and call RefreshAll and FitAll to re-draw the chart without the selection rectangle
         (parent->parent->selection_rectangle) = false;
 
@@ -10696,8 +10694,6 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
         (parent->parent->start_label_selection_rectangle) = String("");
         (parent->parent->end_label_selection_rectangle_now) = String("");
         (parent->parent->end_label_selection_rectangle_before) = String("");
-
-
 
         parent->parent->RefreshAll();
         FitAll();
@@ -11066,12 +11062,12 @@ double DrawPanel::x_span(void) {
 //this function computes x_min, ... y_max from d in the 3D projection
 void DrawPanel::Set_x_y_min_max_3D(void) {
 
-    Double d;
+    Double d_temp;
 
     //set d
-    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+    d_temp.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
 
-    x_min = -((d.value) / sqrt(gsl_pow_2(((d).value) + 1.0) - 1.0));
+    x_min = -((d_temp.value) / sqrt(gsl_pow_2(((d_temp).value) + 1.0) - 1.0));
     x_max = -x_min;
     y_min = x_min;
     y_max = -y_min;
@@ -11501,14 +11497,14 @@ inline bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position* q) {
 
         if (q != NULL) {
 
-            Double d;
+            Double d_temp;
 
             //here I put the sign of (temp.x) in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. For example, for (temp.x)<0, a simple geometrical construction shows that the solution corresponding to the visible side of the sphere is the one with the larger (temp.x) -> I pick the solution with a positive sign in front of the square root through GSL_SIGN((temp.x))
             //set rp
-            d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+            d_temp.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
 
-            gsl_vector_set((rp.r), 0, (-(temp.x) * sqrt(arg_sqrt) + (d.value) * ((d.value) + 1.0) * (temp.x)) / (gsl_sf_pow_int((d.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2)));
-            gsl_vector_set((rp.r), 2, (-sqrt(arg_sqrt) * (temp.y) + (d.value) * ((d.value) + 1.0) * (temp.y)) / ((gsl_sf_pow_int((d.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2))));
+            gsl_vector_set((rp.r), 0, (-(temp.x) * sqrt(arg_sqrt) + (d_temp.value) * ((d_temp.value) + 1.0) * (temp.x)) / (gsl_sf_pow_int((d_temp.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2)));
+            gsl_vector_set((rp.r), 2, (-sqrt(arg_sqrt) * (temp.y) + (d_temp.value) * ((d_temp.value) + 1.0) * (temp.y)) / ((gsl_sf_pow_int((d_temp.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2))));
             gsl_vector_set((rp.r), 1, -sqrt(1.0 - (gsl_pow_2(gsl_vector_get((rp.r), 0)) + gsl_pow_2(gsl_vector_get((rp.r), 2)))));
 
             //r = (rotation.matrix)^T . rp
@@ -11526,13 +11522,13 @@ inline bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position* q) {
 
         if (q != NULL) {
 
-            Double d;
+            Double d_temp;
 
-            d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+            d_temp.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
 
             //from projection, compute the relative point on the x'z' plane, which has y'=0
-            gsl_vector_set((rp.r), 0, ((d.value) + 1.0) / (d.value) * (temp.x));
-            gsl_vector_set((rp.r), 2, ((d.value) + 1.0) / (d.value) * (temp.y));
+            gsl_vector_set((rp.r), 0, ((d_temp.value) + 1.0) / (d_temp.value) * (temp.x));
+            gsl_vector_set((rp.r), 2, ((d_temp.value) + 1.0) / (d_temp.value) * (temp.y));
             gsl_vector_set((rp.r), 1, 0.0);
 
             //r = (rotation.matrix)^T . rp
@@ -11589,10 +11585,10 @@ inline bool DrawPanel::ScreenToMercator(wxPoint p, Projection* q) {
 inline bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q) {
 
     Projection temp;
-    Double d;
+    Double d_temp;
 
     //set d for the following
-    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+    d_temp.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
 
     //updates the position of the draw pane this
     draw_panel_origin = (this->GetScreenPosition());
@@ -11601,7 +11597,7 @@ inline bool DrawPanel::ScreenTo3D(wxPoint p, Projection* q) {
     (temp.y) = y_min - (((double)(p.y)) - ((draw_panel_origin.y) + (position_plot_area.y) + (size_plot_area.GetHeight()))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
 
     //I pulled out a factor (temp.x)^2 from arg_sqrt for clarity
-    arg_sqrt = -((gsl_sf_pow_int((d.value), 2) * (-1 + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2)) + 2 * (d.value) * (gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2))));
+    arg_sqrt = -((gsl_sf_pow_int((d_temp.value), 2) * (-1 + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2)) + 2 * (d_temp.value) * (gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2))));
 
     //if q!=NULL, I write in it the result. I do this even if p lies outside the sphere of the earth
     if (q) {
@@ -12669,8 +12665,6 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
     }
     else {
         //end drawing a selection rectangle
-
-        int i;
 
         GetMouseGeoPosition(&((parent->parent)->position_end));
         drawpanel_position_end = (parent->parent->screen_position_now);

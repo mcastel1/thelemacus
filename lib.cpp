@@ -8393,8 +8393,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
 
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
-    start_label_selection_rectangle = String("");
-    end_label_selection_rectangle_now = String("");
+    (parent->parent->start_label_selection_rectangle) = String("");
+    (parent->parent->end_label_selection_rectangle_now) = String("");
 #ifdef _WIN32
     end_label_selection_rectangle_before = String("");
 #endif
@@ -8576,7 +8576,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position,
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
     dc.DrawText(wxString(end_label.value), position_end_label);
-    dc.DrawText(wxString(start_label_selection_rectangle.value), position_start_label_selection_rectangle);
+    dc.DrawText(wxString(parent->parent->start_label_selection_rectangle.value), position_start_label_selection_rectangle);
 
 
 }
@@ -8623,7 +8623,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
 
     //render selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
-        RenderSelectionRectangle(dc, (parent->parent->geo_position_now), position_end_label_selection_rectangle_now, end_label_selection_rectangle_now, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderSelectionRectangle(dc, parent->parent->geo_position_now, position_end_label_selection_rectangle_now, parent->parent->end_label_selection_rectangle_now, wxGetApp().foreground_color, wxGetApp().background_color);
     }
 
     if ((parent->parent->dragging_object)) {
@@ -8807,7 +8807,7 @@ inline void DrawPanel::MyRefresh(void) {
         RenderSelectionRectangle(dc,
                                  (parent->parent->geo_position_before),
                                  position_end_label_selection_rectangle_before,
-                                 end_label_selection_rectangle_before,
+                                 parent->parent->end_label_selection_rectangle_before,
                                  wxGetApp().background_color,
                                  wxGetApp().background_color
                                  );
@@ -8892,9 +8892,9 @@ inline void DrawPanel::MyRefresh(void) {
         
         //re-draw the current selection rectangle
         RenderSelectionRectangle(dc,
-                                 (parent->parent->geo_position_now),
+                                 parent->parent->geo_position_now,
                                  position_end_label_selection_rectangle_now,
-                                 end_label_selection_rectangle_now,
+                                 parent->parent->end_label_selection_rectangle_now,
                                  wxGetApp().foreground_color,
                                  wxGetApp().background_color
                                  );
@@ -10657,78 +10657,77 @@ template<class T> void ChartFrame::MoveWest(T& event) {
 
 //if a key is pressed in the keyboard, I call this function
 void DrawPanel::KeyDown(wxKeyEvent& event) {
-
+    
     switch (event.GetKeyCode()) {
-
-    case WXK_UP:
-
-        parent->MoveNorth<wxKeyEvent>(event);
-
-        break;
-
-    case WXK_DOWN:
-
-        parent->MoveSouth<wxKeyEvent>(event);
-
-        break;
-
-    case WXK_LEFT:
-
-        parent->MoveWest<wxKeyEvent>(event);
-
-        break;
-
-    case WXK_RIGHT:
-
-        parent->MoveEast<wxKeyEvent>(event);
-
-        break;
-
-    case WXK_ESCAPE:
-
-        int i;
-
-        //If the user presses esc, I cancel the selection process with the rectangle in all ChartFrames and call RefreshAll and FitAll to re-draw the chart without the selection rectangle
-        (parent->parent->selection_rectangle) = false;
-
-        for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
-
-            (((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle) = String("");
-            (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now) = String("");
-            (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_before) = String("");
-
-        }
-
-        parent->parent->RefreshAll();
-        FitAll();
-
-        break;
-
-    case WXK_PLUS:
-        //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
-
-        if (event.ControlDown()) {
-            parent->SetSlider(((parent->slider)->GetValue()) * 2);
-        }
-
-        break;
-
-
-    case WXK_MINUS:
-        //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
-
-        if (event.ControlDown()) {
-            parent->SetSlider(round(((parent->slider)->GetValue()) / 2.0));
-        }
-
-        break;
-
+            
+        case WXK_UP:
+            
+            parent->MoveNorth<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_DOWN:
+            
+            parent->MoveSouth<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_LEFT:
+            
+            parent->MoveWest<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_RIGHT:
+            
+            parent->MoveEast<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_ESCAPE:
+            
+            int i;
+            
+            //If the user presses esc, I cancel the selection process with the rectangle in all ChartFrames and call RefreshAll and FitAll to re-draw the chart without the selection rectangle
+            (parent->parent->selection_rectangle) = false;
+            
+            
+            (parent->parent->start_label_selection_rectangle) = String("");
+            (parent->parent->end_label_selection_rectangle_now) = String("");
+            (parent->parent->end_label_selection_rectangle_before) = String("");
+            
+            
+            
+            parent->parent->RefreshAll();
+            FitAll();
+            
+            break;
+            
+        case WXK_PLUS:
+            //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
+            
+            if (event.ControlDown()) {
+                parent->SetSlider(((parent->slider)->GetValue()) * 2);
+            }
+            
+            break;
+            
+            
+        case WXK_MINUS:
+            //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
+            
+            if (event.ControlDown()) {
+                parent->SetSlider(round(((parent->slider)->GetValue()) / 2.0));
+            }
+            
+            break;
+            
     }
-
+    
     //    }
-
+    
     event.Skip(true);
-
+    
 }
 
 //moves (makes slide) to the east the chart
@@ -12134,7 +12133,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                 (parent->parent->geo_position_now),
                 &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now),
-                &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now)
+                &(parent->parent->end_label_selection_rectangle_now)
             );
 
 
@@ -12646,7 +12645,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                     (parent->parent->geo_position_now),
                     &(((parent->parent->chart_frames)[i])->draw_panel->position_start_label_selection_rectangle),
-                    &(((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle));
+                    &(parent->parent->start_label_selection_rectangle));
 
                 ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
                 check = true;
@@ -12805,22 +12804,17 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             }
 
             //set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
-
-            for (i = 0; i < ((parent->parent->chart_frames).size()); i++) {
-                (((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle) = String("");
-                (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now) = String("");
-            }
-
-        }
-        else {
+            
+            (parent->parent->start_label_selection_rectangle) = String("");
+            (parent->parent->end_label_selection_rectangle_now) = String("");
+            
+        }else {
             //the  end position for the selected rectangle is not valid -> cancel the rectangle by setting selection_rectangle to false and by setting to empty the text fields of the geographical positions of the selection triangle
-
+            
             (parent->parent->selection_rectangle) = false;
-            for (i = 0; i < ((parent->parent->chart_frames).size()); i++) {
-                (((parent->parent->chart_frames)[i])->draw_panel->start_label_selection_rectangle) = String("");
-                (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now) = String("");
-            }
-
+            (parent->parent->start_label_selection_rectangle) = String("");
+            (parent->parent->end_label_selection_rectangle_now) = String("");
+            
         }
 
     }

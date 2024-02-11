@@ -110,7 +110,6 @@
  
  ********** THINGS TO FIX ************
  
- - end_label_selection_rectangle_now is commont to all chartframes and should be a member of listframe
  - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
  - check why the meridian ticks form triangles in mercator projeciton
  - remove wxScrollEventHandler ... and similar stuff

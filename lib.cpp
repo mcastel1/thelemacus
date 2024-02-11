@@ -46,6 +46,17 @@ inline double acos(Double x) {
 
 }
 
+inline Angle normalize_pm_pi_ret(const Angle& x){
+        
+    Angle result;
+
+    result = x;
+    result.normalize_pm_pi();
+
+    return result;
+
+}
+
 //read from file the content after 'name = ' and writes it into the *object (the element of class C). 
 // This works for any class C. On WIN32, if mode = 'RW' then filename is filepath  such as "C:/a/b.txt", while if mode = 'R' then filename is a resource name such as my_resource_file. 
 template<class C> void read_from_file(C* object, String name, String filename, [[maybe_unused]] String mode, [[maybe_unused]] String prefix) {
@@ -11798,7 +11809,7 @@ inline bool DrawPanel::GeoToMercator(const Position& q, Projection* p, bool writ
     Projection temp;
     bool check_x, check, out;
 
-    (temp.x) = -(q.lambda.normalize_pm_pi_ret().value);
+    (temp.x) = -(normalize_pm_pi_ret(q.lambda).value);
     (temp.y) = log(1.0 / cos((q.phi)) + tan((q.phi)));
 
     //compute check_x and, from check_x, compute b

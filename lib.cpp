@@ -4005,41 +4005,41 @@ void Position::rotate(String name, Rotation r, Position* p, [[maybe_unused]] Str
 }
 
 
-inline Cartesian::Cartesian(void){
-    
+inline Cartesian::Cartesian(void) {
+
     r = gsl_vector_alloc(3);
-    
+
 }
 
 
 //construct *this setting its coordinates from the coordinates of the geographic Position p
-inline Cartesian::Cartesian(Position p){
-    
+inline Cartesian::Cartesian(Position p) {
+
     r = gsl_vector_alloc(3);
-    
+
     gsl_vector_set(r, 0, cos(p.phi) * cos(p.lambda));
     gsl_vector_set(r, 1, -cos(p.phi) * sin(p.lambda));
     gsl_vector_set(r, 2, sin(p.phi));
 
-    
+
 }
 
 
-void Cartesian::print(String name, String prefix, ostream& ostr){
-    
+void Cartesian::print(String name, String prefix, ostream& ostr) {
+
     ostr << prefix.value << name.value << ": {" <<
-    gsl_vector_get(r, 0) << " , " <<
-    gsl_vector_get(r, 1) << " , " <<
-    gsl_vector_get(r, 2) << " }\n";
+        gsl_vector_get(r, 0) << " , " <<
+        gsl_vector_get(r, 1) << " , " <<
+        gsl_vector_get(r, 2) << " }\n";
 
 }
 
 
 //copies the content of x.r into this->r. Be careful: without this operator being defined, if you sed a Cartesian a equal to a Cartesian b, the memory adress of a.r is set equal to the memory address of b.r -> as soon as b.r is changed, a.r will be changed as well
-void Cartesian::operator = (const Cartesian& x){
-    
+void Cartesian::operator = (const Cartesian& x) {
+
     gsl_vector_memcpy(r, x.r);
-    
+
 }
 
 
@@ -7886,7 +7886,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
     Cartesian r, s;
     Position u;
 
-    
+
     //set i_min/max, j_min/max
     i_min = floor(K * (((phi_min).normalize_pm_pi_ret()).value));
     i_max = ceil(K * (((phi_max).normalize_pm_pi_ret()).value));
@@ -8237,7 +8237,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
                 all_coastline_points_Cartesian.resize(i + 1);
                 (all_coastline_points_Cartesian[i]).resize(360);
-                
+
                 all_coastline_points_Position.resize(i + 1);
                 (all_coastline_points_Position[i]).resize(360);
 
@@ -8278,14 +8278,14 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                         p_Position.lambda.set(String(""), k * lambda_temp, String(""));
                         p_Position.phi.set(String(""), k * phi_temp, String(""));
                         p_Position.get_cartesian(String(""), &p_Cartesian, prefix);
-                        
+
                         //push back the position into all_coastline_points_Position
                         (all_coastline_points_Position[i][j]).push_back(p_Position);
-                        
+
                         //push back the position into all_coastline_points_Cartesian: this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
-                        (all_coastline_points_Cartesian[i][j]).resize((all_coastline_points_Cartesian[i][j]).size()+1);
+                        (all_coastline_points_Cartesian[i][j]).resize((all_coastline_points_Cartesian[i][j]).size() + 1);
                         (all_coastline_points_Cartesian[i][j]).back() = p_Cartesian;
-                        
+
 
                         pos_beg = pos_end + 1;
                         pos_end = temp.find(" ", pos_beg);
@@ -8396,7 +8396,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     (parent->parent->start_label_selection_rectangle) = String("");
     (parent->parent->end_label_selection_rectangle_now) = String("");
 #ifdef _WIN32
-    end_label_selection_rectangle_before = String("");
+    (parent->parent->end_label_selection_rectangle_before) = String("");
 #endif
     label_dragged_object_now = String("");
 
@@ -8432,7 +8432,7 @@ inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 //render the mouse position with colors foreground_color and background_color
 inline void DrawPanel::RenderMousePositionLabel(wxDC& dc, String label_position, wxPoint position_label_position, wxColor foreground_color, wxColor background_color) {
 
-     //wipe out position_label_position by writing on top of it a rectangle filled with color backgound_color
+    //wipe out position_label_position by writing on top of it a rectangle filled with color backgound_color
     dc.SetPen(background_color);
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
     dc.DrawRectangle(position_label_position, label_position.get_size(&dc));
@@ -8441,22 +8441,22 @@ inline void DrawPanel::RenderMousePositionLabel(wxDC& dc, String label_position,
     dc.SetTextBackground(background_color);
     dc.DrawText(wxString(label_position.value), position_label_position);
 
-    
+
 }
 
 
 //render the coastline by using the set of points points_coastline, meridians, parallels and their labels
 inline void DrawPanel::RenderBackground(
-                                 wxDC& dc,
-                                 vector< vector< vector<wxPoint> > > grid,
-                                 vector< vector< vector<wxPoint> > > ticks,
-                                 vector<wxString> parallels_and_meridians_labels,
-                                 vector<wxPoint> positions_parallels_and_meridians_labels,
-                                 vector<wxPoint> points_coastline,
-                                 wxColour foreground_color, 
-                                 wxColour background_color,
-                                 double thickness
-                                 ) {
+    wxDC& dc,
+    vector< vector< vector<wxPoint> > > grid,
+    vector< vector< vector<wxPoint> > > ticks,
+    vector<wxString> parallels_and_meridians_labels,
+    vector<wxPoint> positions_parallels_and_meridians_labels,
+    vector<wxPoint> points_coastline,
+    wxColour foreground_color,
+    wxColour background_color,
+    double thickness
+) {
 
     //    dc.SetPen(foreground_color);
     //    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
@@ -8477,24 +8477,24 @@ inline void DrawPanel::RenderBackground(
         //this needs to be commented out in order to not show a 'trail' when dragging
         //dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
         //        dc_m_bgbuffer.Clear();
-        
+
         dc_m_bgbuffer.SetPen(wxPen(foreground_color));
         dc_m_bgbuffer.SetBrush(wxBrush(foreground_color));
         dc_m_bgbuffer.SetTextForeground(foreground_color);
         dc_m_bgbuffer.SetTextBackground(background_color);
-        
+
         (this->*Render)(
-                        &dc_m_bgbuffer,
-                        grid,
-                        ticks,
-                        parallels_and_meridians_labels,
-                        positions_parallels_and_meridians_labels,
-                        points_coastline,
-                        foreground_color,
-                        background_color,
-                        thickness
-                        );
-        
+            &dc_m_bgbuffer,
+            grid,
+            ticks,
+            parallels_and_meridians_labels,
+            positions_parallels_and_meridians_labels,
+            points_coastline,
+            foreground_color,
+            background_color,
+            thickness
+            );
+
         mdc.SelectObject(wxNullBitmap);
 
         re_draw = false;
@@ -8510,7 +8510,7 @@ inline void DrawPanel::RenderBackground(
 
 
 //same as  DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color), but it takes a  position (reckoned with respect to the ordigin of *this) as input rather than a  geographic Position
-inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position, wxPoint position_end_label,  String end_label, wxColour foreground_color, wxColour background_color) {
+inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position, wxPoint position_end_label, String end_label, wxColour foreground_color, wxColour background_color) {
 
     Position p;
 
@@ -8523,7 +8523,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position, wxPo
 //render a selection rectangle with end Position geo_position (geographic position), foreground color foreground_color and backgrund color background_color, and label at its endpoint end_label located at position_end_label
 inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxPoint position_end_label, String end_label, wxColour foreground_color, wxColour background_color) {
 
-    
+
     dc.SetPen(foreground_color);
     dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
     dc.SetTextForeground(foreground_color);
@@ -8565,7 +8565,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position,
         Length(Re * cos(geo_position.phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
     )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
 
-    
+
     //render the labels of the selection rectangle
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));
@@ -8590,36 +8590,36 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position,
 
 
 inline void DrawPanel::RenderAll(wxDC& dc) {
-    
+
     RenderBackground(
-                     dc,
-                     grid_now,
-                     ticks_now,
-                     parallels_and_meridians_labels_now,
-                     positions_parallels_and_meridians_labels_now,
-                     parent->points_coastline_now,
-                     wxGetApp().foreground_color,
-                     wxGetApp().background_color,
-                     wxGetApp().standard_thickness.value
-                     );
-    RenderRoutes(dc, 
-                 points_route_list_now,
-                 reference_positions_route_list_now,
-                 (parent->parent->highlighted_route_now),
-                 wxNullColour
-                 );
-    RenderPositions(dc, 
-                    points_position_list_now,
-                    (parent->parent->highlighted_position_now),
-                    wxNullColour
-                    );
+        dc,
+        grid_now,
+        ticks_now,
+        parallels_and_meridians_labels_now,
+        positions_parallels_and_meridians_labels_now,
+        parent->points_coastline_now,
+        wxGetApp().foreground_color,
+        wxGetApp().background_color,
+        wxGetApp().standard_thickness.value
+    );
+    RenderRoutes(dc,
+        points_route_list_now,
+        reference_positions_route_list_now,
+        (parent->parent->highlighted_route_now),
+        wxNullColour
+    );
+    RenderPositions(dc,
+        points_position_list_now,
+        (parent->parent->highlighted_position_now),
+        wxNullColour
+    );
     RenderMousePositionLabel(
-                             dc,
-                             label_position_now,
-                             position_label_position_now,
-                             wxGetApp().foreground_color,
-                             wxGetApp().background_color
-                             );
+        dc,
+        label_position_now,
+        position_label_position_now,
+        wxGetApp().foreground_color,
+        wxGetApp().background_color
+    );
 
     //render selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
@@ -8687,219 +8687,219 @@ inline void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > 
 inline void DrawPanel::MyRefresh(void) {
 
     wxClientDC dc(this);
-    
+
     //1. erase _before objects
-    
-    if((parent->parent->mouse_moving)){
+
+    if ((parent->parent->mouse_moving)) {
         //the mouse is moving -> wipe out the  mouse position label at the preceeding step of mouse movement
-        
+
         RenderMousePositionLabel(
-                                 dc,
-                                 label_position_before,
-                                 position_label_position_now,
-                                 wxGetApp().background_color,
-                                 wxGetApp().background_color
-                                 );
-        
+            dc,
+            label_position_before,
+            position_label_position_now,
+            wxGetApp().background_color,
+            wxGetApp().background_color
+        );
+
     }
-    
-    if((parent->dragging_chart)){
+
+    if ((parent->dragging_chart)) {
         //the whole chart is being dragged -> wipe out all objects at the preceeding step of the drag
-        
+
         //wipe out the Routes at the preceeding mouse position
         RenderRoutes(dc,
-                     points_route_list_before,
-                     reference_positions_route_list_before,
-                     (parent->parent->highlighted_route_now),
-                     wxGetApp().background_color
-                     );
+            points_route_list_before,
+            reference_positions_route_list_before,
+            (parent->parent->highlighted_route_now),
+            wxGetApp().background_color
+        );
         RenderPositions(dc,
-                        points_position_list_before,
-                        (parent->parent->highlighted_position_now),
-                        wxGetApp().background_color
-                        );
-        
+            points_position_list_before,
+            (parent->parent->highlighted_position_now),
+            wxGetApp().background_color
+        );
+
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
-                        &dc,
-                        grid_before,
-                        ticks_before,
-                        parallels_and_meridians_labels_before,
-                        positions_parallels_and_meridians_labels_before,
-                        parent->points_coastline_before,
-                        wxGetApp().background_color,
-                        wxGetApp().background_color,
-                        wxGetApp().large_thickness.value
-                        );
-        
+            &dc,
+            grid_before,
+            ticks_before,
+            parallels_and_meridians_labels_before,
+            positions_parallels_and_meridians_labels_before,
+            parent->points_coastline_before,
+            wxGetApp().background_color,
+            wxGetApp().background_color,
+            wxGetApp().large_thickness.value
+            );
+
     }
-    
-    if((parent->parent->dragging_object)){
-        
+
+    if ((parent->parent->dragging_object)) {
+
         //wipe out the Routes, Positions and label of dragged object at the preceeding dragging configuration
         RenderRoutes(dc,
-                     points_route_list_before,
-                     reference_positions_route_list_before,
-                     (parent->parent->highlighted_route_now),
-                     wxGetApp().background_color
-                     );
+            points_route_list_before,
+            reference_positions_route_list_before,
+            (parent->parent->highlighted_route_now),
+            wxGetApp().background_color
+        );
         RenderPositions(dc,
-                     points_position_list_before,
-                     (parent->parent->highlighted_position_now),
-                     wxGetApp().background_color
-                     );
+            points_position_list_before,
+            (parent->parent->highlighted_position_now),
+            wxGetApp().background_color
+        );
         RenderDraggedObjectLabel(dc,
-                                 position_label_dragged_object_before,
-                                 label_dragged_object_before,
-                                 wxGetApp().background_color, wxGetApp().background_color
-                                 );
-        
+            position_label_dragged_object_before,
+            label_dragged_object_before,
+            wxGetApp().background_color, wxGetApp().background_color
+        );
+
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
-                        &dc,
-                        grid_now,
-                        ticks_now,
-                        parallels_and_meridians_labels_now,
-                        positions_parallels_and_meridians_labels_now,
-                        parent->points_coastline_now,
-                        wxGetApp().background_color,
-                        wxGetApp().background_color,
-                        wxGetApp().large_thickness.value
-                        );
-        
-        
+            &dc,
+            grid_now,
+            ticks_now,
+            parallels_and_meridians_labels_now,
+            positions_parallels_and_meridians_labels_now,
+            parent->points_coastline_now,
+            wxGetApp().background_color,
+            wxGetApp().background_color,
+            wxGetApp().large_thickness.value
+            );
+
+
     }
 
-    if((parent->parent->changing_highlighted_object)){
-        
+    if ((parent->parent->changing_highlighted_object)) {
+
         //wipe out the Routes at the preceeding mouse position
         RenderRoutes(dc,
-                     points_route_list_now,
-                     reference_positions_route_list_now,
-                     (parent->parent->highlighted_route_before),
-                     wxGetApp().background_color
-                     );
+            points_route_list_now,
+            reference_positions_route_list_now,
+            (parent->parent->highlighted_route_before),
+            wxGetApp().background_color
+        );
         RenderPositions(dc,
-                     points_position_list_now,
-                     (parent->parent->highlighted_position_before),
-                     wxGetApp().background_color
-                     );
-        
+            points_position_list_now,
+            (parent->parent->highlighted_position_before),
+            wxGetApp().background_color
+        );
+
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
-                        &dc,
-                        grid_now,
-                        ticks_now,
-                        parallels_and_meridians_labels_now,
-                        positions_parallels_and_meridians_labels_now,
-                        parent->points_coastline_now,
-                        wxGetApp().background_color,
-                        wxGetApp().background_color,
-                        wxGetApp().large_thickness.value
-                        );
-        
-        
+            &dc,
+            grid_now,
+            ticks_now,
+            parallels_and_meridians_labels_now,
+            positions_parallels_and_meridians_labels_now,
+            parent->points_coastline_now,
+            wxGetApp().background_color,
+            wxGetApp().background_color,
+            wxGetApp().large_thickness.value
+            );
+
+
     }
-    
-    if((parent->parent->selection_rectangle)){
-        
+
+    if ((parent->parent->selection_rectangle)) {
+
         //wipe out the preceeding selection rectangle
         RenderSelectionRectangle(dc,
-                                 (parent->parent->geo_position_before),
-                                 position_end_label_selection_rectangle_before,
-                                 parent->parent->end_label_selection_rectangle_before,
-                                 wxGetApp().background_color,
-                                 wxGetApp().background_color
-                                 );
-        
+            (parent->parent->geo_position_before),
+            position_end_label_selection_rectangle_before,
+            parent->parent->end_label_selection_rectangle_before,
+            wxGetApp().background_color,
+            wxGetApp().background_color
+        );
+
         //wipe out the Routes at the preceeding mouse position
         RenderRoutes(dc,
-                     points_route_list_now,
-                     reference_positions_route_list_now,
-                     (parent->parent->highlighted_route_now),
-                     wxGetApp().background_color
-                     );
+            points_route_list_now,
+            reference_positions_route_list_now,
+            (parent->parent->highlighted_route_now),
+            wxGetApp().background_color
+        );
         RenderPositions(dc,
-                     points_position_list_now,
-                     (parent->parent->highlighted_position_now),
-                     wxGetApp().background_color
-                     );
-        
+            points_position_list_now,
+            (parent->parent->highlighted_position_now),
+            wxGetApp().background_color
+        );
+
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
-                        &dc,
-                        grid_now,
-                        ticks_now,
-                        parallels_and_meridians_labels_now,
-                        positions_parallels_and_meridians_labels_now,
-                        parent->points_coastline_now,
-                        wxGetApp().background_color,
-                        wxGetApp().background_color,
-                        wxGetApp().large_thickness.value
-                        );
+            &dc,
+            grid_now,
+            ticks_now,
+            parallels_and_meridians_labels_now,
+            positions_parallels_and_meridians_labels_now,
+            parent->points_coastline_now,
+            wxGetApp().background_color,
+            wxGetApp().background_color,
+            wxGetApp().large_thickness.value
+            );
 
-        
+
     }
-    
-    
+
+
     //re-render  _new objects
-    
+
     RenderMousePositionLabel(
-                             dc,
-                             label_position_now,
-                             position_label_position_now,
-                             wxGetApp().foreground_color,
-                             wxGetApp().background_color
-                             );
-    
-    if((parent->dragging_chart) || (parent->parent->selection_rectangle) || (parent->parent->dragging_object) || (parent->parent->changing_highlighted_object)){
+        dc,
+        label_position_now,
+        position_label_position_now,
+        wxGetApp().foreground_color,
+        wxGetApp().background_color
+    );
+
+    if ((parent->dragging_chart) || (parent->parent->selection_rectangle) || (parent->parent->dragging_object) || (parent->parent->changing_highlighted_object)) {
         //I am either drawing a selection rectangle, dragging an object or changing the highlighted object -> I need to re-render all GUI objects 
-        
+
         //re-render all  objects in *this which may have been partially cancelled by the clean operation above
         (this->*Render)(
-                         &dc,
-                         grid_now,
-                         ticks_now,
-                         parallels_and_meridians_labels_now,
-                         positions_parallels_and_meridians_labels_now,
-                         parent->points_coastline_now,
-                         wxGetApp().foreground_color,
-                         wxGetApp().background_color,
-                         wxGetApp().standard_thickness.value
-                         );
+            &dc,
+            grid_now,
+            ticks_now,
+            parallels_and_meridians_labels_now,
+            positions_parallels_and_meridians_labels_now,
+            parent->points_coastline_now,
+            wxGetApp().foreground_color,
+            wxGetApp().background_color,
+            wxGetApp().standard_thickness.value
+            );
         RenderRoutes(dc,
-                     points_route_list_now,
-                     reference_positions_route_list_now,
-                     (parent->parent->highlighted_route_now), wxNullColour
-                     );
+            points_route_list_now,
+            reference_positions_route_list_now,
+            (parent->parent->highlighted_route_now), wxNullColour
+        );
         RenderPositions(dc,
-                        points_position_list_now,
-                        (parent->parent->highlighted_position_now),
-                        wxNullColour
-                        );
+            points_position_list_now,
+            (parent->parent->highlighted_position_now),
+            wxNullColour
+        );
         RenderDraggedObjectLabel(dc,
-                                 position_label_dragged_object_now,
-                                 label_dragged_object_now,
-                                 wxGetApp().foreground_color,
-                                 wxGetApp().background_color
-                                 );
+            position_label_dragged_object_now,
+            label_dragged_object_now,
+            wxGetApp().foreground_color,
+            wxGetApp().background_color
+        );
 
-        
-        
+
+
     }
 
-    if((parent->parent->selection_rectangle)){
-        
+    if ((parent->parent->selection_rectangle)) {
+
         //re-draw the current selection rectangle
         RenderSelectionRectangle(dc,
-                                 parent->parent->geo_position_now,
-                                 position_end_label_selection_rectangle_now,
-                                 parent->parent->end_label_selection_rectangle_now,
-                                 wxGetApp().foreground_color,
-                                 wxGetApp().background_color
-                                 );
-        
-        
+            parent->parent->geo_position_now,
+            position_end_label_selection_rectangle_now,
+            parent->parent->end_label_selection_rectangle_now,
+            wxGetApp().foreground_color,
+            wxGetApp().background_color
+        );
+
+
     }
 
 }
@@ -8953,7 +8953,7 @@ inline void DrawPanel::RenderDraggedObjectLabel(wxDC& dc, wxPoint position_label
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
     dc.DrawRectangle(position_label_dragged_object, label_dragged_object.get_size(&dc));
 
-    
+
     //render label_dragged_object
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
@@ -8967,40 +8967,40 @@ inline void DrawPanel::RenderDraggedObjectLabel(wxDC& dc, wxPoint position_label
 
 //fit the size of the chart, of parent, of parent->panel to the content
 void DrawPanel::FitAll() {
-    
+
     //set the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
     this->SetMinSize(size_chart);
     parent->SetMinSize(wxSize(
-                              (size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
-                              (size_chart.GetHeight()) + ((label_position_now.get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
-                              ));
-    
+        (size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
+        (size_chart.GetHeight()) + ((label_position_now.get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
+    ));
+
     //position position_label_position_now at the bottom left corner of *this
     position_label_position_now = wxPoint(
-                                          ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
-                                          (size_chart.GetHeight())
-                                          - (size_label_vertical + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))
-                                          );
-    
+        ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
+        (size_chart.GetHeight())
+        - (size_label_vertical + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))
+    );
+
     (parent->panel)->SetSizerAndFit(parent->sizer_v);
     (parent->panel)->Fit();
     parent->Fit();
-    
+
 }
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::Render_Mercator(
-                                wxDC* dc,
-                                vector< vector< vector<wxPoint> > > grid,
-                                vector< vector< vector<wxPoint> > > ticks,
-                                vector<wxString> parallels_and_meridians_labels,
-                                vector<wxPoint> positions_parallels_and_meridians_labels,
-                                vector<wxPoint> points_coastline,
-                                wxColor foreground_color, 
-                                wxColor background_color,
-                                double thickness
-                                ) {
-    
+    wxDC* dc,
+    vector< vector< vector<wxPoint> > > grid,
+    vector< vector< vector<wxPoint> > > ticks,
+    vector<wxString> parallels_and_meridians_labels,
+    vector<wxPoint> positions_parallels_and_meridians_labels,
+    vector<wxPoint> points_coastline,
+    wxColor foreground_color,
+    wxColor background_color,
+    double thickness
+) {
+
     Angle lambda, phi;
     Route route;
     wxPoint p;
@@ -9051,7 +9051,7 @@ inline void DrawPanel::Render_Mercator(
         }
     }
 
-    
+
 
     //render labels on parallels and meridians
     dc->SetTextForeground(foreground_color);
@@ -9059,9 +9059,9 @@ inline void DrawPanel::Render_Mercator(
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
     dc->SetBackgroundMode(wxSOLID);
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
-        
+
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
-        
+
     }
 
 }
@@ -9162,20 +9162,21 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 
         parallels_and_meridians_labels_now.push_back(wx_string);
         positions_parallels_and_meridians_labels_now.push_back(p);
-    
-        
+
+
         size = String(parallels_and_meridians_labels_now.back().ToStdString()).get_size(this);
 
         if (mode == String("NS")) {
             //            I am drawing parallels label
-            
-            (positions_parallels_and_meridians_labels_now.back()) +=  wxPoint(-(size.GetWidth()) - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -(size.GetHeight()) / 2);
-            
-        }else{
+
+            (positions_parallels_and_meridians_labels_now.back()) += wxPoint(-(size.GetWidth()) - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -(size.GetHeight()) / 2);
+
+        }
+        else {
             //            I am drawing meridians labels
-            
-            (positions_parallels_and_meridians_labels_now.back()) +=  wxPoint(-(size.GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
-            
+
+            (positions_parallels_and_meridians_labels_now.back()) += wxPoint(-(size.GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
+
         }
 
         first_label = false;
@@ -9186,17 +9187,17 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::Render_3D(
-                          wxDC* dc,
-                          vector< vector< vector<wxPoint> > > grid,
-                          vector< vector< vector<wxPoint> > > ticks,
-                          vector<wxString> parallels_and_meridians_labels,
-                          vector<wxPoint> positions_parallels_and_meridians_labels,
-                          vector<wxPoint> points_coastline, 
-                          wxColor foreground_color,
-                          wxColor background_color,
-                          double thickness
-                          ) {
-    
+    wxDC* dc,
+    vector< vector< vector<wxPoint> > > grid,
+    vector< vector< vector<wxPoint> > > ticks,
+    vector<wxString> parallels_and_meridians_labels,
+    vector<wxPoint> positions_parallels_and_meridians_labels,
+    vector<wxPoint> points_coastline,
+    wxColor foreground_color,
+    wxColor background_color,
+    double thickness
+) {
+
     int i, j;
     Double d;
     Angle lambda;
@@ -9207,7 +9208,7 @@ inline void DrawPanel::Render_3D(
     Projection dummy_projection;
     wxPoint p;
     Position q, temp;
-    
+
 
     //draws a rectangle filled with color wxGetApp().background_color and with border wich color wxGetApp().foregrond_color on bitmap_image, so bitmap_image will have the right background color
     //dc->SetBrush(wxBrush(wxGetApp().background_color));
@@ -9249,26 +9250,26 @@ inline void DrawPanel::Render_3D(
         }
     }
 
-    
+
     //render labels on parallels and meridians
     dc->SetTextForeground(foreground_color);
     dc->SetTextBackground(background_color);
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
     dc->SetBackgroundMode(wxSOLID);
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
-        
+
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
-        
+
     }
-    
-    
+
+
 
     //draw horizon circle
     //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
     //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection temp: the resulting temp.y is the radius of the circular horizon of the earth in 3d projection cooordinates
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
-    
+
     //set q
     (q.lambda).set(String(""), 0.0, String(""));
     (q.phi) = (circle_observer.omega);
@@ -9622,7 +9623,7 @@ inline void DrawPanel::Draw_Mercator(void) {
 
     }
 
-    
+
     //compute labels on parallels and meridians
     //save parallels_and_meridians_labels_now and positions_parallels_and_meridians_labels_now into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
     parallels_and_meridians_labels_before = parallels_and_meridians_labels_now;
@@ -9802,7 +9803,7 @@ inline void DrawPanel::Draw_3D(void) {
     Route route;
     unsigned int n_intervals_ticks;
 
-    
+
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
     (parent->zoom_factor).set(String(""), ((circle_observer_0.omega).value) / ((circle_observer.omega).value), String(""));
     (this->*Set_x_y_min_max)();
@@ -9983,7 +9984,7 @@ inline void DrawPanel::Draw_3D(void) {
     TabulatePositions();
 
 
-    
+
     //compute labels on parallels and meridians
     //save parallels_and_meridians_labels_now and positions_parallels_and_meridians_labels_now into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
     parallels_and_meridians_labels_before = parallels_and_meridians_labels_now;
@@ -10657,77 +10658,77 @@ template<class T> void ChartFrame::MoveWest(T& event) {
 
 //if a key is pressed in the keyboard, I call this function
 void DrawPanel::KeyDown(wxKeyEvent& event) {
-    
+
     switch (event.GetKeyCode()) {
-            
-        case WXK_UP:
-            
-            parent->MoveNorth<wxKeyEvent>(event);
-            
-            break;
-            
-        case WXK_DOWN:
-            
-            parent->MoveSouth<wxKeyEvent>(event);
-            
-            break;
-            
-        case WXK_LEFT:
-            
-            parent->MoveWest<wxKeyEvent>(event);
-            
-            break;
-            
-        case WXK_RIGHT:
-            
-            parent->MoveEast<wxKeyEvent>(event);
-            
-            break;
-            
-        case WXK_ESCAPE:
-            
-            int i;
-            
-            //If the user presses esc, I cancel the selection process with the rectangle in all ChartFrames and call RefreshAll and FitAll to re-draw the chart without the selection rectangle
-            (parent->parent->selection_rectangle) = false;
-            
-            
-            (parent->parent->start_label_selection_rectangle) = String("");
-            (parent->parent->end_label_selection_rectangle_now) = String("");
-            (parent->parent->end_label_selection_rectangle_before) = String("");
-            
-            
-            
-            parent->parent->RefreshAll();
-            FitAll();
-            
-            break;
-            
-        case WXK_PLUS:
-            //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
-            
-            if (event.ControlDown()) {
-                parent->SetSlider(((parent->slider)->GetValue()) * 2);
-            }
-            
-            break;
-            
-            
-        case WXK_MINUS:
-            //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
-            
-            if (event.ControlDown()) {
-                parent->SetSlider(round(((parent->slider)->GetValue()) / 2.0));
-            }
-            
-            break;
-            
+
+    case WXK_UP:
+
+        parent->MoveNorth<wxKeyEvent>(event);
+
+        break;
+
+    case WXK_DOWN:
+
+        parent->MoveSouth<wxKeyEvent>(event);
+
+        break;
+
+    case WXK_LEFT:
+
+        parent->MoveWest<wxKeyEvent>(event);
+
+        break;
+
+    case WXK_RIGHT:
+
+        parent->MoveEast<wxKeyEvent>(event);
+
+        break;
+
+    case WXK_ESCAPE:
+
+        int i;
+
+        //If the user presses esc, I cancel the selection process with the rectangle in all ChartFrames and call RefreshAll and FitAll to re-draw the chart without the selection rectangle
+        (parent->parent->selection_rectangle) = false;
+
+
+        (parent->parent->start_label_selection_rectangle) = String("");
+        (parent->parent->end_label_selection_rectangle_now) = String("");
+        (parent->parent->end_label_selection_rectangle_before) = String("");
+
+
+
+        parent->parent->RefreshAll();
+        FitAll();
+
+        break;
+
+    case WXK_PLUS:
+        //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
+
+        if (event.ControlDown()) {
+            parent->SetSlider(((parent->slider)->GetValue()) * 2);
+        }
+
+        break;
+
+
+    case WXK_MINUS:
+        //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
+
+        if (event.ControlDown()) {
+            parent->SetSlider(round(((parent->slider)->GetValue()) / 2.0));
+        }
+
+        break;
+
     }
-    
+
     //    }
-    
+
     event.Skip(true);
-    
+
 }
 
 //moves (makes slide) to the east the chart
@@ -11642,7 +11643,7 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
     gsl_vector_set((r.r), 2, sin((p.phi)));
     */
     p.get_cartesian(String(""), &r, String(""));
-    
+
     return CartesianTo3D(r, q, write);
     /*
     gsl_vector_set((rp.r), 1,
@@ -11694,20 +11695,20 @@ inline bool DrawPanel::GeoTo3D(Position p, Projection* q, bool write) {
 
 // If the Projection of q falls within the plot area,  write its Projection into p (if p!=NULL) and return true. If not, it returns false and, if write = true, it writes its projection in q
 inline bool DrawPanel::CartesianToMercator(Cartesian p, Projection* q, bool write) {
-    
+
     Position temp;
-    
+
     temp.set_cartesian(String(""), p, String(""));
-    
+
     return ((this->*GeoToProjection)(temp, q, write));
-    
-    
+
+
 }
 
 
 //convert the Cartesian position p  to the  3D Projection (x,y). / If the Projection of p falls in the visible side of the earth,  write its Projection into *q (if q!=NULL) and return true. If not,  return false and, if write = true,  write its Projection in *q (if q!=NULL)
 inline bool DrawPanel::CartesianTo3D(Cartesian p, Projection* q, bool write) {
-    
+
     bool check, out;
 
     gsl_vector_set((rp.r), 1,
@@ -11752,8 +11753,8 @@ inline bool DrawPanel::CartesianTo3D(Cartesian p, Projection* q, bool write) {
     //    Tb = t3-t2;
 
     return out;
-    
-    
+
+
 }
 
 
@@ -12138,7 +12139,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 
         }
-        
+
         //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this, and paint the new one, because Refresh() triggers a call of PaintEvent
         parent->parent->RefreshAll();
 
@@ -12147,13 +12148,13 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 #ifdef _WIN32
 
         //on WIN32, the Refresh() command slows down things -> I don't call it but use MyRefresh(), which cleans up the former selections rectangle in *this and draws a new one
+        (parent->parent->end_label_selection_rectangle_before) = (parent->parent->end_label_selection_rectangle_now);
 
         for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
 
             (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now);
-            (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now);
 
-            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->geo_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(((parent->parent->chart_frames)[i])->draw_panel->end_label_selection_rectangle_now));
+            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->geo_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(parent->parent->end_label_selection_rectangle_now));
 
             ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
 
@@ -12165,15 +12166,15 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     }
     else {
         //no selection rectangle is being drawn
-        
+
         //run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
 
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
         position_draw_panel_now = (parent->parent->screen_position_now) - draw_panel_origin;
-        
+
         //save the id of the Route highlighted at the preceeding step into highlighted_route_before
         (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
-        
+
         for ((parent->parent->highlighted_route_now) = -1, i = 0; i < (parent->parent->data->route_list).size(); i++) {
 
             //set the backgorund color of the Route in listcontrol_routes and of its related sight to white
@@ -12225,15 +12226,16 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                         //set highlighted_sight_now and the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                         ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                         if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
-                            
+
                             (parent->parent->highlighted_sight_now) = (((parent->parent->data->route_list)[i]).related_sight.value);
-                            
+
                             parent->parent->listcontrol_sights->SetItemBackgroundColour(
-                                                                                        (parent->parent->highlighted_sight_now),
-                                                                                        (wxGetApp().color_selected_item)
-                                                                                        );
-                        }else{
-                            
+                                (parent->parent->highlighted_sight_now),
+                                (wxGetApp().color_selected_item)
+                            );
+                        }
+                        else {
+
                             (parent->parent->highlighted_sight_now) = -1;
 
                         }
@@ -12273,7 +12275,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
         //run over all the Positions, check if the mouse is hovering over one of them, and change the background color of the related Position in listcontrol_positions
         (parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now);
-        
+
         for ((parent->parent->highlighted_position_now) = -1, i = 0; i < (parent->parent->data->position_list).size(); i++) {
 
             GeoToScreen((parent->parent->data->position_list)[i], &q);
@@ -12301,7 +12303,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
         if (((parent->parent->highlighted_route_before) != (parent->parent->highlighted_route_now)) || ((parent->parent->highlighted_position_before) != (parent->parent->highlighted_position_now))) {
             //the highlighted Route or Position has changed -> update the charts
-            
+
             (parent->parent->changing_highlighted_object) = true;
 
 #ifdef __APPLE__
@@ -12316,19 +12318,19 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
             for (i = 0; i < ((parent->parent->chart_frames).size()); i++) {
 
-//                //copy the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels, in such a way that MyRefresh() will be able to wipe out the Routes and their reference Positions
-//                ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
-//                (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
-//
-//                ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
-//                (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
+                //                //copy the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels, in such a way that MyRefresh() will be able to wipe out the Routes and their reference Positions
+                //                ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
+                //                (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
+                //
+                //                ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
+                //                (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
 
                 ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
 
             }
 
 #endif
-            
+
             (parent->parent->changing_highlighted_object) = false;
 
 
@@ -12470,15 +12472,15 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             }
 
 #ifdef __APPLE__
-            
+
             parent->parent->RefreshAll();
-            
+
 #endif
 
 #ifdef WIN32
 
 
-            for(i=0; i<(parent->parent->chart_frames).size(); i++){
+            for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                 (parent->parent->chart_frames[i])->draw_panel->MyRefresh();
             }
 
@@ -12486,7 +12488,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
             (parent->parent->dragging_object) = false;
 
-            
+
             if (!(((((draw_panel_origin.x) + (position_plot_area.x) < (position_end_drag.x)) && ((position_end_drag.x) < (draw_panel_origin.x) + (position_plot_area.x) + (size_plot_area.GetWidth()))) &&
                 (((draw_panel_origin.y) + (position_plot_area.y) < (position_end_drag.y)) && ((position_end_drag.y) < (draw_panel_origin.y) + (position_plot_area.y) + (size_plot_area.GetHeight())))))) {
                 // drag_end_position lies out the plot area
@@ -12656,12 +12658,12 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         }
 
 
-            if (!check) {
-                //geo_position_start is invalid in all DrawPanels -> delete the selection rectangle by setting selection_rectangle to false
+        if (!check) {
+            //geo_position_start is invalid in all DrawPanels -> delete the selection rectangle by setting selection_rectangle to false
 
-                (parent->parent->selection_rectangle) = false;
+            (parent->parent->selection_rectangle) = false;
 
-            }
+        }
 
 
     }
@@ -12804,17 +12806,18 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             }
 
             //set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
-            
+
             (parent->parent->start_label_selection_rectangle) = String("");
             (parent->parent->end_label_selection_rectangle_now) = String("");
-            
-        }else {
+
+        }
+        else {
             //the  end position for the selected rectangle is not valid -> cancel the rectangle by setting selection_rectangle to false and by setting to empty the text fields of the geographical positions of the selection triangle
-            
+
             (parent->parent->selection_rectangle) = false;
             (parent->parent->start_label_selection_rectangle) = String("");
             (parent->parent->end_label_selection_rectangle_now) = String("");
-            
+
         }
 
     }
@@ -12825,86 +12828,86 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
 //this function is called whenever mouse is dragged on *this
 void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
-    
+
     if ((!idling) && (!(parent->idling)) && (!(parent->parent->idling))) {
         //I proceed only if this and its parent and the parent of its parent are not in idling mode
-        
+
         if (wxGetMouseState().LeftIsDown()) {
-            
+
             if (!mouse_dragging) {
                 //the mouse has started dragging
-                
+
                 //If I am dragging a Route, I save the starting point of this Route into route_reference_position_drag_now
-                
+
                 //during the mouse drag, I disable DrawPanel::OnMouseMovement
                 this->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
-                
+
                 if ((parent->parent->highlighted_route_now) != -1) {
                     //set route_reference_position_drag_now to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
-                    
+
                     if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).type) == String("c")) {
-                        
+
                         route_reference_position_drag_start = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position);
-                        
+
                         if ((((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value) != -1) {
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
-                            
+
                             (parent->parent->i_object_to_disconnect) = (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value);
-                            
+
                             parent->parent->Disconnect(event);
-                            
+
                         }
-                        
+
                     }
                     else {
-                        
+
                         route_reference_position_drag_start = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position);
-                        
+
                     }
-                    
-                    
+
+
                 }
-                
+
             }
-            
+
             mouse_dragging = true;
-            
+
             SetCursor(wxCURSOR_HAND);
-            
+
             position_now_drag = wxGetMousePosition();
-            
-            
+
+
             if ((this->*ScreenToGeo)(position_now_drag, NULL)) {
                 //position_drag_now is a valid Position
-                
+
                 if ((((parent->parent->highlighted_route_now) == -1) && ((parent->parent->highlighted_position_now) == -1))) {
                     //the whole chart is being dragged (the mouse is not over a Route nor a Position while dragging)
-                    
+
                     (parent->dragging_chart) = true;
-                    
+
                     if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
                         //I am using the mercator projection
-                        
+
                         Projection p_ceil_min, p_floor_max;
-                        
+
                         (this->*GeoToProjection)(Position(Angle(0.0), Angle(k * floor_max_lat)), &p_floor_max, true);
                         (this->*GeoToProjection)(Position(Angle(0.0), Angle(k * ceil_min_lat)), &p_ceil_min, true);
-                        
-                        
+
+
                         if ((y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_max_start_drag) < (p_floor_max.y)) && (y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min_start_drag) > (p_ceil_min.y))) {
                             //in this case, the drag operation does not end out of the min and max latitude contained in the data files
-                            
+
                             //update x_min, ..., y_max according to the drag.
                             x_min = x_min_start_drag - ((double)((position_now_drag.x) - (position_start_drag.x))) / ((double)(size_plot_area.GetWidth())) * x_span_start_drag;
                             x_max = x_max_start_drag - ((double)((position_now_drag.x) - (position_start_drag.x))) / ((double)(size_plot_area.GetWidth())) * x_span_start_drag;
                             y_min = y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
                             y_max = y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
-                            
+
                             if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
                                 (this->*Set_lambda_phi_min_max)();
                             }
-                            
-                            
+
+
 #ifdef __APPLE__
                             //re-draw the chart
                             (this->*Draw)();
@@ -12914,40 +12917,40 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by MyRefresh()
                             parent->points_coastline_before.clear();
                             (parent->points_coastline_before) = (parent->points_coastline_now);
-                            
+
                             grid_before.clear();
                             grid_before = grid_now;
                             ticks_before.clear();
                             ticks_before = ticks_now;
-                            
+
                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
                             points_route_list_before.clear();
                             points_route_list_before = points_route_list_now;
-                            
+
                             points_position_list_before.clear();
                             points_position_list_before = points_position_list_now;
-                            
+
                             reference_positions_route_list_before.clear();
                             reference_positions_route_list_before = reference_positions_route_list_now;
-                            
+
                             //re-draw the chart
                             (this->*Draw)();
                             MyRefresh();
 #endif
                             //							FitAll();
-                            
+
                         }
-                        
+
                     }
-                    
+
                     if ((((parent->projection)->name)->GetValue()) == wxString("3D")) {
                         //I am using the 3d projection
-                        
+
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                         rotation =
-                        rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+                            rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
 #ifdef __APPLE__
-                        
+
                         //re-render the chart
                         (this->*Draw)();
                         Refresh();
@@ -12956,281 +12959,281 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by MyRefresh()
                         parent->points_coastline_before.clear();
                         (parent->points_coastline_before) = (parent->points_coastline_now);
-                        
+
                         grid_before.clear();
                         grid_before = grid_now;
                         ticks_before.clear();
                         ticks_before = ticks_now;
-                        
+
                         //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
                         points_route_list_before.clear();
                         points_route_list_before = points_route_list_now;
-                        
+
                         points_position_list_before.clear();
                         points_position_list_before = points_position_list_now;
-                        
+
                         reference_positions_route_list_before.clear();
                         reference_positions_route_list_before = reference_positions_route_list_now;
-                        
+
                         //re-draw the chart
                         (this->*Draw)();
                         MyRefresh();
-                        
+
 #endif
-                        
+
                     }
-                    
-                    
+
+
                 }
                 else {
                     //an object is being dragged (a Position or a Route)
-                    
+
                     unsigned int i;
-                    
+
                     (parent->parent->dragging_object) = true;
-                    
+
                     //the data in the file are being modified -> I call
                     parent->parent->OnModifyFile();
-                    
+
                     if ((parent->parent->highlighted_route_now) != -1) {
                         //a Route is being dragged
-                        
+
                         wxPoint q;
-                        
+
                         if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
-                            
+
                             wxPoint p;
-                            
+
                             //convert the coordinates of route_reference_position_drag_now into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (ground) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
-                            
+
                             GeoToDrawPanel(route_reference_position_drag_start, &p, false);
-                            
+
                             //this command is the same for all types of Routes
                             DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
-                            
+
                         }
-                        
-                        
+
+
                         if ((((parent->projection)->name)->GetValue()) == wxString("3D")) {
-                            
+
                             //compose rotation with the rotation resulting from the drag and then apply it to route_reference_position_drag_now: route_reference_position_drag_now -> rotation^{-1}.(rotation due to drag).rotation.route_reference_position_drag_now. In this way, when Render() will plot the position route_reference_position_drag_now, it will apply to route_reference_position_drag_now the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.route_reference_position_drag_now = (rotation due to drag).rotation.route_reference_position_drag_now, which is the desired result (i.e. route_reference_position_drag_now rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                             rotation_now_drag =
-                            (rotation.inverse()) *
-                            rotation_start_end(position_start_drag, position_now_drag) *
-                            rotation;
-                            
+                                (rotation.inverse()) *
+                                rotation_start_end(position_start_drag, position_now_drag) *
+                                rotation;
+
                             //                    (this->*GeoToDrawPanel)(route_reference_position_drag_now, &p);
-                            
+
                             if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).type) == String("c")) {
-                                
+
                                 //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position));
                                 route_reference_position_drag_start.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
-                                
+
                             }
                             else {
-                                
+
                                 route_reference_position_drag_start.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
-                                
+
                             }
-                            
+
                         }
-                        
-                        
-                        
-                        
+
+
+
+
                         //update the data of the Route under consideration in listcontrol_routes
                         (((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).update_wxListCtrl((parent->parent->highlighted_route_now), parent->parent->listcontrol_routes);
-                        
-                        
+
+
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             //on APPLE, I compute the coordinates of the reference position of the Route that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the MyRefresh() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
-                            
+
 #ifdef _WIN32
-                            
+
                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
                             (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
-                            
+
 #endif
-                            
+
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                                 ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position,
-                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
-                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
-                                                                                                 );
-                            
+                                ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position,
+                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                            );
+
 #ifdef __APPLE__
-                            
+
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
                             ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
-                            
+
 #endif
 #ifdef _WIN32
-                            
+
                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels
                             ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
-                            
+
                             ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
-                            
-                            
+
+
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
                             ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
-                            
+
 #endif
-                            
+
                         }
-                        
+
                     }
-                    
+
                     if ((parent->parent->highlighted_position_now) != -1) {
                         //a Position is being dragged
-                        
+
                         wxPoint p;
-                        
+
                         if ((((parent->projection)->name)->GetValue()) == wxString("Mercator")) {
-                            
+
                             //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
                             (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]));
-                            
+
                         }
-                        
+
                         if ((((parent->projection)->name)->GetValue()) == wxString("3D")) {
-                            
+
                             //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                             rotation_now_drag =
-                            (rotation.inverse()) *
-                            rotation_start_end(position_start_drag, position_now_drag) *
-                            rotation;
+                                (rotation.inverse()) *
+                                rotation_start_end(position_start_drag, position_now_drag) *
+                                rotation;
                             geo_start_drag.rotate(String(""), rotation_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]), String(""));
-                            
+
                         }
-                        
+
                         //update the data of the Position under consideration in listcontrol_positions
                         ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]).update_wxListCtrl((parent->parent->highlighted_position_now), parent->parent->listcontrol_positions);
-                        
+
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             //on APPLE, I compute the coordinates of the Position that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow ->  I use the MyRefresh() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
-                            
-                            
+
+
 #ifdef _WIN32
-                            
-                            
+
+
                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
                             (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
-                            
-                            
+
+
 #endif
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                                 (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
-                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
-                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
-                                                                                                 );
-                            
+                                (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
+                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                            );
+
 #ifdef __APPLE__
-                            
+
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
                             (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
 #endif
 #ifdef _WIN32
-                            
+
                             ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
-                            
+
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
                             ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
-                            
+
 #endif
-                            
+
                         }
-                        
+
                     }
-                    
+
                 }
-                
+
             }
             else {
                 //in this case, position_drag_now is not a valid position : in the Mercator projection, this does not make sense and I do nothing. In the 3D projection, I am dragging the chart from outside circle observer (I am rotating the earth) -> I proceed implementing this rotation
-                
-                switch ((parent->projection->name->GetValue().ToStdString())[0]) {
-                        
-                    case 'M': {
-                        //I am using the mercator projection: then the position is invalid and I may print an error message
-                        
-                        //uncomment this if you want an info message to be printed
-                        //print_error_message->SetAndCall(NULL,  String("The drag goes through an invalid point!"), String("The drag must go through valid points."));
-                        
-                        break;
-                        
-                    }
-                        
-                    case '3': {
-                        //I am using the 3d projection: even if the position lies outside the circular boundary of the Earth,  thus this posibtion is a valid position for a drag which rotates the earth about the y' axis -> I do this rotation
-                        
-                        (parent->dragging_chart) = true;
 
-                        //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                        rotation = rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
-                        
-  
-                        
-#ifdef __APPLE__
-                                     //re-draw the chart
-                        (this->*Draw)();
-                        Refresh();
-#endif
-                        
-#ifdef _WIN32
-                        //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by MyRefresh()
-                        parent->points_coastline_before.clear();
-                        (parent->points_coastline_before) = (parent->points_coastline_now);
-                        
-                        grid_before.clear();
-                        grid_before = grid_now;
-                        ticks_before.clear();
-                        ticks_before = ticks_now;
-                        
-                        //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-                        points_route_list_before.clear();
-                        points_route_list_before = points_route_list_now;
-                        
-                        points_position_list_before.clear();
-                        points_position_list_before = points_position_list_now;
-                        
-                        reference_positions_route_list_before.clear();
-                        reference_positions_route_list_before = reference_positions_route_list_now;
-                        
-                        //re-draw the chart
-                        (this->*Draw)();
-                        MyRefresh();
-#endif
-                        
-                        FitAll();
-                        
-                        break;
-                        
-                    }
-                        
-                        
+                switch ((parent->projection->name->GetValue().ToStdString())[0]) {
+
+                case 'M': {
+                    //I am using the mercator projection: then the position is invalid and I may print an error message
+
+                    //uncomment this if you want an info message to be printed
+                    //print_error_message->SetAndCall(NULL,  String("The drag goes through an invalid point!"), String("The drag must go through valid points."));
+
+                    break;
+
                 }
-                
+
+                case '3': {
+                    //I am using the 3d projection: even if the position lies outside the circular boundary of the Earth,  thus this posibtion is a valid position for a drag which rotates the earth about the y' axis -> I do this rotation
+
+                    (parent->dragging_chart) = true;
+
+                    //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
+                    rotation = rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+
+
+
+#ifdef __APPLE__
+                    //re-draw the chart
+                    (this->*Draw)();
+                    Refresh();
+#endif
+
+#ifdef _WIN32
+                    //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by MyRefresh()
+                    parent->points_coastline_before.clear();
+                    (parent->points_coastline_before) = (parent->points_coastline_now);
+
+                    grid_before.clear();
+                    grid_before = grid_now;
+                    ticks_before.clear();
+                    ticks_before = ticks_now;
+
+                    //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
+                    points_route_list_before.clear();
+                    points_route_list_before = points_route_list_now;
+
+                    points_position_list_before.clear();
+                    points_position_list_before = points_position_list_now;
+
+                    reference_positions_route_list_before.clear();
+                    reference_positions_route_list_before = reference_positions_route_list_now;
+
+                    //re-draw the chart
+                    (this->*Draw)();
+                    MyRefresh();
+#endif
+
+                    FitAll();
+
+                    break;
+
+                }
+
+
+                }
+
             }
-            
+
         }
-        
+
     }
-    
+
     event.Skip(true);
-    
+
 }
 
 //this function is called whenever mouse wheel is turned on *this
@@ -17613,13 +17616,13 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
     int i, j;
 
     //	            cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
-    
+
     //save the id of the  Sight Route and Position highlighted at the preceeding step into highlighted_route_before
     highlighted_route_before = highlighted_route_now;
     highlighted_position_before = highlighted_position_now;
 
 
-        //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
+    //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
     MousePositionOnListControl(listcontrol_sights, &highlighted_sight_now);
     MousePositionOnListControl(listcontrol_positions, &highlighted_position_now);
     MousePositionOnListControl(listcontrol_routes, &highlighted_route_now);
@@ -17726,31 +17729,31 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
         }
 
     }
-    
-    if((highlighted_route_before != highlighted_route_now) || (highlighted_position_before != highlighted_position_now)){
+
+    if ((highlighted_route_before != highlighted_route_now) || (highlighted_position_before != highlighted_position_now)) {
         //the highlighted Sight, or Route or Position has changed -> re-render the charts 
-        
+
         changing_highlighted_object = true;
 
-        
+
 #ifdef __APPLE__
         //on APPLE I call Refresh() to trigger PaintEvent() in all DrawPanels and re-render the Routes/Positions with the new configuration of highlighted Routes/Positions
-        
+
         RefreshAll();
-        
+
 #endif
-        
+
 #ifdef _WIN32
         //on WIN32 Refresh() is slow -> I use the MyRefresh() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
-        
+
         for (i = 0; i < (chart_frames.size()); i++) {
             (chart_frames[i])->draw_panel->MyRefresh();
         }
-        
+
 #endif
-        
+
         changing_highlighted_object = false;
-        
+
     }
 
 

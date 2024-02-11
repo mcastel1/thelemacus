@@ -1497,8 +1497,8 @@ Rotation::Rotation(Position p, Position q) {
         Cartesian r_p, r_q, omega;
 
         //transform p and q into cartesian cordinates and write them into r_p and r_q, respectively
-        p.get_cartesian(String(""), &r_p, String(""));
-        q.get_cartesian(String(""), &r_q, String(""));
+        p.getCartesian(String(""), &r_p, String(""));
+        q.getCartesian(String(""), &r_q, String(""));
 
         gsl_blas_ddot((r_p.r), (r_q.r), &cos_rotation_angle);
         rotation_angle.set(String(""), acos(cos_rotation_angle), String(""));
@@ -1507,7 +1507,7 @@ Rotation::Rotation(Position p, Position q) {
         cross((r_p.r), (r_q.r), &(omega.r));
         gsl_vector_scale((omega.r), 1.0 / fabs(sin(rotation_angle)));
 
-        rotation_axis.set_cartesian(String(""), omega, String(""));
+        rotation_axis.setCartesian(String(""), omega, String(""));
 
 
         (*this) = (Rotation(
@@ -4000,7 +4000,7 @@ void Position::rotate(String name, Rotation r, Position* p, [[maybe_unused]] Str
     //     cout << "\tNorm of u = " << gsl_blas_dnrm2(u);
     //     cout << "\tNorm of s = " << gsl_blas_dnrm2(s);
 
-    p->set_cartesian(name, s, prefix);
+    p->setCartesian(name, s, prefix);
 
 }
 
@@ -7313,7 +7313,7 @@ void Angle::enter(String name, [[maybe_unused]] String prefix) {
 
 
 //set the polar coordinates lambda, phi of (*this) from the Cartesian position r
-void Position::set_cartesian(String name, const Cartesian r, [[maybe_unused]] String prefix) {
+void Position::setCartesian(String name, const Cartesian r, [[maybe_unused]] String prefix) {
 
     String new_prefix, name_lambda, name_phi;
 
@@ -7339,7 +7339,7 @@ void Position::set_cartesian(String name, const Cartesian r, [[maybe_unused]] St
 }
 
 //write the cartesian components of Position p into r
-void Position::get_cartesian([[maybe_unused]] String name, Cartesian* r, [[maybe_unused]] String prefix) {
+void Position::getCartesian([[maybe_unused]] String name, Cartesian* r, [[maybe_unused]] String prefix) {
 
     gsl_vector_set((r->r), 0, cos(phi) * cos(lambda));
     gsl_vector_set((r->r), 1, -cos(phi) * sin(lambda));
@@ -8009,11 +8009,11 @@ void ChartFrame::GetCoastLineData_3D(void) {
                 n = ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
 
                 //set r
-                draw_panel->circle_observer.reference_position.get_cartesian(String(""), &r, String(""));
+                draw_panel->circle_observer.reference_position.getCartesian(String(""), &r, String(""));
                 //set s
                 u.phi.set(String(""), k * ((double)i), String(""));
                 u.lambda.set(String(""), k * ((double)j), String(""));
-                u.get_cartesian(String(""), &s, String(""));
+                u.getCartesian(String(""), &s, String(""));
                 //compute cos
                 gsl_blas_ddot((r.r), (s.r), &cos);
                 if (cos == 0.0) { cos = 1.0; }
@@ -8277,7 +8277,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
                         p_Position.lambda.set(String(""), k * lambda_temp, String(""));
                         p_Position.phi.set(String(""), k * phi_temp, String(""));
-                        p_Position.get_cartesian(String(""), &p_Cartesian, prefix);
+                        p_Position.getCartesian(String(""), &p_Cartesian, prefix);
 
                         //push back the position into all_coastline_points_Position
                         (all_coastline_points_Position[i][j]).push_back(p_Position);
@@ -10942,7 +10942,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
     gsl_blas_dgemv(CblasTrans, 1.0, (rotation).matrix, (rp.r), 0.0, (r.r));
 
     //obtain the  geographic position of the center of the circle of equal altitude above
-    circle_observer.reference_position.set_cartesian(String(""), r, String(""));
+    circle_observer.reference_position.setCartesian(String(""), r, String(""));
 
 
     //set lambda_min/max from circle_observer
@@ -11115,11 +11115,11 @@ Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end) {
 
     //call ScreenToGeo_3D to generate rp, and then convert rp into spherical coordinates by writing it into p_start
     ScreenToGeo_3D(start, &temp);
-    p_start.set_cartesian(String(""), rp, String(""));
+    p_start.setCartesian(String(""), rp, String(""));
 
     //call ScreenToGeo_3D to generate rp, and then convert rp into spherical coordinates by writing it into p_end
     ScreenToGeo_3D(end, &temp);
-    p_end.set_cartesian(String(""), rp, String(""));
+    p_end.setCartesian(String(""), rp, String(""));
 
     //construct a Rotation between p_start and p_end by calling the overloaded constructor of the Rotation class
     return(Rotation(p_start, p_end));
@@ -11510,7 +11510,7 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
             //r = (rotation.matrix)^T . rp
             gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
 
-            q->set_cartesian(String(""), r, String(""));
+            q->setCartesian(String(""), r, String(""));
 
         }
 
@@ -11534,7 +11534,7 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
             //r = (rotation.matrix)^T . rp
             gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
 
-            q->set_cartesian(String(""), r, String(""));
+            q->setCartesian(String(""), r, String(""));
 
         }
 
@@ -11638,7 +11638,7 @@ inline bool DrawPanel::GeoTo3D(const Position& p, Projection* q, bool write) {
     gsl_vector_set((r.r), 1, -(cos((p.phi)) * sin((p.lambda))));
     gsl_vector_set((r.r), 2, sin((p.phi)));
     */
-    p.get_cartesian(String(""), &r, String(""));
+    p.getCartesian(String(""), &r, String(""));
 
     return CartesianTo3D(r, q, write);
     /*
@@ -11694,7 +11694,7 @@ inline bool DrawPanel::CartesianToMercator(const Cartesian& p, Projection* q, bo
 
     Position temp;
 
-    temp.set_cartesian(String(""), p, String(""));
+    temp.setCartesian(String(""), p, String(""));
 
     return ((this->*GeoToProjection)(temp, q, write));
 

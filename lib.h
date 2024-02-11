@@ -1879,12 +1879,12 @@ public:
     
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*Draw)(void);
-    bool (DrawPanel::*ScreenToProjection)(wxPoint, Projection*);
+    bool (DrawPanel::*ScreenToProjection)(const wxPoint&, Projection*);
     bool (DrawPanel::*CartesianToProjection)(const Cartesian&, Projection*, bool);
-    bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
-    bool (DrawPanel::*GeoToProjection)(Position, Projection*, bool);
+    bool (DrawPanel::*ScreenToGeo)(const wxPoint&, Position*);
+    bool (DrawPanel::*GeoToProjection)(const Position&, Projection*, bool);
     void (DrawPanel::*Render)(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>, vector<wxPoint>, vector<wxPoint>, wxColor, wxColor, double);
-    void (DrawPanel::*ProjectionToDrawPanel)(Projection, wxPoint*);
+    void (DrawPanel::*ProjectionToDrawPanel)(const Projection&, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
     void (DrawPanel::*Set_size_chart)(void);
@@ -1920,7 +1920,7 @@ public:
     bool CartesianToMercator(const Cartesian&, Projection*, bool);
     bool GeoToMercator(const Position&, Projection*, bool);
     bool ScreenToGeo_Mercator(const wxPoint&, Position*);
-    bool ScreenToGeo_3D(wxPoint, Position*);
+    bool ScreenToGeo_3D(const wxPoint&, Position*);
     void ProjectionToDrawPanel_Mercator(const Projection&, wxPoint*);
     void ProjectionToDrawPanel_3D(const Projection&, wxPoint*);
     void ShowCoordinates(Position, String*);

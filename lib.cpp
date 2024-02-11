@@ -11488,7 +11488,7 @@ inline bool DrawPanel::DrawPanelToGeo(const wxPoint& p, Position* q) {
 
 
 //converts the point p on the screen with a 3D projection, to the relative geographic position q (if q!=NULL). It returns true if p lies within the circle denoting the boundaries of the earth, and false otherwise. If false is returned, q is the geographic position on the earth defined as follows: it lies on the intersection between the Earth and the x'z' plane and on the line between the center of the Earth and the vector rp corresponding to p (such vector rp lies on the x'z' plane)
-inline bool DrawPanel::ScreenToGeo_3D(wxPoint p, Position* q) {
+inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
 
     Projection temp;
 
@@ -11778,7 +11778,7 @@ inline void DrawPanel::GeoToScreen(const Position& q, wxPoint* p) {
 
 
 // If the projection of q falls within the plot area, it writes its projection into p (if p!=NULL) and returns true. If not, it returns false and, if write = true, it writes its projection in p
-inline bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
+inline bool DrawPanel::GeoToMercator(const Position& q, Projection* p, bool write) {
 
     //    clock_t t_start, t_end;
     //    t_start = clock();
@@ -11786,7 +11786,7 @@ inline bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
     Projection temp;
     bool check_x, check, out;
 
-    (temp.x) = -(((q.lambda).normalize_pm_pi_ret()).value);
+    (temp.x) = -(q.lambda.normalize_pm_pi_ret().value);
     (temp.y) = log(1.0 / cos((q.phi)) + tan((q.phi)));
 
     //compute check_x and, from check_x, compute b
@@ -11843,7 +11843,7 @@ inline bool DrawPanel::GeoToMercator(Position q, Projection* p, bool write) {
 
 
 // convert the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p.
-inline bool DrawPanel::GeoToDrawPanel(Position q, wxPoint* p, bool write) {
+inline bool DrawPanel::GeoToDrawPanel(const Position& q, wxPoint* p, bool write) {
 
     Projection temp;
     bool check;
@@ -11870,7 +11870,7 @@ inline bool DrawPanel::GeoToDrawPanel(Position q, wxPoint* p, bool write) {
 
 
 // convert the cartesian position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Cartesian position, return true and (if p!=NULL),  write the resulting DrawPanel coordinates in p. If q is not a valid Cartesian position,  return false and, if write = true and p!=NULL, it writes the drawpanel position in p.
-inline bool DrawPanel::CartesianToDrawPanel(Cartesian q, wxPoint* p, bool write) {
+inline bool DrawPanel::CartesianToDrawPanel(const Cartesian& q, wxPoint* p, bool write) {
 
     Projection temp;
     bool check;
@@ -11895,7 +11895,7 @@ inline bool DrawPanel::CartesianToDrawPanel(Cartesian q, wxPoint* p, bool write)
 }
 
 //this function converts the Mercator projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
-inline void  DrawPanel::ProjectionToDrawPanel_Mercator(Projection q, wxPoint* p) {
+inline void  DrawPanel::ProjectionToDrawPanel_Mercator(const Projection& q, wxPoint* p) {
 
     (p->x) = (position_plot_area.x) + ((q.x) - x_min) / x_span() * (size_plot_area.GetWidth());
     (p->y) = (position_plot_area.y) + (size_plot_area.GetHeight()) - (((q.y) - y_min) / (y_max - y_min) * (size_plot_area.GetHeight()));
@@ -11903,7 +11903,7 @@ inline void  DrawPanel::ProjectionToDrawPanel_Mercator(Projection q, wxPoint* p)
 }
 
 //this function converts the 3D projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
-inline void  DrawPanel::ProjectionToDrawPanel_3D(Projection q, wxPoint* p) {
+inline void  DrawPanel::ProjectionToDrawPanel_3D(const Projection& q, wxPoint* p) {
 
     (p->x) = ((double)(position_plot_area.x)) + (1.0 + (q.x) / x_max) * (((double)(size_plot_area.GetWidth())) / 2.0);
     (p->y) = ((double)(position_plot_area.y)) + (1.0 - (q.y) / y_max) * (((double)(size_plot_area.GetHeight())) / 2.0);

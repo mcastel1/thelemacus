@@ -21,6 +21,12 @@
 /*
  
  notes:
+ - erorr message on WIN32 for intellisense "Severity    Code    Description    Project    File    Line    Suppression State    Details
+ Error (active)    E2924    PCH warning: header stop cannot be in a macro or #if block.  An IntelliSense PCH file was not generated.    base    C:\wxWidgets-3.2.4_debug\include\wx\any.h    25" line of error "// Size of the wxAny value buffer.
+ enum
+ {
+     WX_ANY_VALUE_BUFFER_SIZE = 16
+ };" in any.h
  - on APPLE, the cmd (apple) key corresponds to WXK_CONTROL
  - on WIN32, to recognize what character key has been pressed, do (event.GetUnicodeKey()) and check if it is equal to, sai, 'A', not 'a'
  - on WIN32, if you press control key on runtime from within Visual Studio, it will not be detected as WXK_CONTROL, while if you run the exe file from system resources it does.
@@ -48,8 +54,8 @@
  3. Install Visual Studio: download VisualStudioSetup from https://visualstudio.microsoft.com/downloads/
  4. Istall wxWidgets: download wxMSW-3.2.4-Setup.exe from https://wxwidgets.org/downloads/ and install it in, say,  C:\wxWidgets-3.2.4_debug\
  5. Open  C:\wxWidgets-3.2.4_debug\build\msw\wx_vc17.sln with Visual studio, set everywhere that the mode is multi-threaded debug (not dll) (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)') and build (you may get an error the first time you build, just build multiple times and the error will disappear)
- 6. Open   C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln -> set the mode to Multi Threaded Debug everywhere (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)'). Replace all existing files from Source files with main.h main.cpp lib.h constants.h init.txt, replace all existing Resource files with resource_file_winsows.rc
- 7. Install gsl: download gnu-gsl-for-windows-master.zip from https://github.com/ahmadyan/gnu-gsl-for-windows/tree/master/build.vc11  -> extract it in C:\gnu-gsl-for-windows-master -> open  C:\gnu-gsl-for-windows-master\build.vc11\gsl.lib.sln with Visual Studio. 
+ 6. Open   C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln -> set the mode to Multi Threaded Debug everywhere (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)'). Replace all existing files from Source files with main.h main.cpp lib.cpp lib.h constants.h init.txt, replace all existing Resource files with resource_file_winsows.rc. Rigght-click on lib.cpp -> properties -> configuration properties -> general -> Exclude From build -> yes
+ 7. Install gsl: download gnu-gsl-for-windows-master.zip from https://github.com/ahmadyan/gnu-gsl-for-windows/tree/master/build.vc11  -> extract it in C:\gnu-gsl-for-windows-master -> open  C:\gnu-gsl-for-windows-master\build.vc11\gsl.lib.sln with Visual Studio.
     * Set everything to Multi-Threaded Debug (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)' )
     * Go to Project -> gslib Properties -> general -> C++ language standard -> set 'ISO C++17 Standard (/std:c++17)'
     * Build
@@ -101,15 +107,25 @@
  - Make sure that Draw is not called uselessly some times
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  - move all stuff which is general enough in the code to MyApp class
- 
+ - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
+
  ********** THINGS TO FIX ************
+<<<<<<< HEAD
 - check if with the new modifications you can simply draw a text over a text (no longer a rectangle) to delete it 
 - remove wxScrollEventHandler ... and similar stuff
   - rename Route::t -> time
 - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
+=======
+ 
+ - check why the meridian ticks form triangles in mercator projeciton
+ - rename Route::t -> time
+ - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
+>>>>>>> cartesian_coastline_points
  - frames are not resized according to the size of their title
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class
- for MSW:
+ 
+ on WIN32:
+ 
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  */
@@ -475,6 +491,8 @@ bool MyApp::OnInit() {
     //read min_crossing_angle from file_init
     min_crossing_angle.read_from_file_to(String("minimal crossing angle between circles of equal altitude"), (wxGetApp().path_file_init), String("R"), String(""));
     
+    standard_thickness.set(String("standard thickness"), max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1), String(""));
+    large_thickness.set(String("large thickness"), max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1), String(""));
     
     
     //read the time, and set the background color to either the day or night background color, which are read from file

@@ -51,6 +51,7 @@ class ChartPanel;
 class RouteFrame;
 class DrawPanel;
 class Position;
+class Cartesian;
 class TransportHandler;
 class LengthFormat;
 
@@ -132,7 +133,8 @@ public:
     bool split_file_path(String*, String*, String*, String);
     String filename_without_folder_nor_extension(String);
     bool is_a_file_path(String);
-    wxSize get_size(wxWindow* p);
+    wxSize get_size(wxWindow*);
+    wxSize get_size(wxDC*);
     vector<String> split(void);
     
     bool operator==(const String&), operator!=(const String&);
@@ -723,6 +725,8 @@ inline double phi_mercator(double y){
     
 }
 
+
+//a geographic Position
 class Position{
     
 public:
@@ -733,8 +737,8 @@ public:
     
     Position();
     Position(Angle, Angle);
-    void set_cartesian(String, const gsl_vector*, String);
-    void get_cartesian(String, gsl_vector*, String);
+    void set_cartesian(String, const Cartesian, String);
+    void get_cartesian(String, Cartesian*, String);
     void print(String, String, ostream&);
     void read_from_file_to(String, String, String, String);
     template<class S> void read_from_stream(String, S*, bool, String);
@@ -750,6 +754,22 @@ public:
     void rotate(String, Rotation, Position*, String);
     
 };
+
+
+
+// a three-dimensional cartesian position in the reference frame centered at the earth's origin, with the x-y axes lying on the equator and the x axis aligned with Greenwich meridian
+class Cartesian{
+    
+public:
+    gsl_vector* r;
+    
+    Cartesian();
+    Cartesian(Position);
+    void print(String, String, ostream&);
+    void operator = (const Cartesian&);
+    
+};
+
 
 //this class defines a 'rectangular' area on the Eearth's surface: it is a rectangle with vertices p_NW, p_SE in the Mercator projection
 class MyRectangle{
@@ -817,7 +837,7 @@ public:
     void DrawOld(unsigned int, wxDC*, DrawPanel*, String);
     void DrawOld(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
     
-    void Draw(unsigned int, Color, int, wxDC*, DrawPanel*, String);
+    void Draw(unsigned int, Color, Color, int, wxDC*, DrawPanel*, String);
     void Draw(unsigned int, wxDC*, DrawPanel*, String);
     void Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
     
@@ -1809,7 +1829,7 @@ public:
     
     ChartFrame* parent;
     PrintMessage<DrawPanel, UnsetIdling<DrawPanel> >* print_error_message;
-    wxPoint position_draw_panel, position_plot_area, position_start_selection, position_end_selection, /*the instantaneous positions of the mouse with respect to the screen/draw-panel origin*/ position_screen_now, position_start_drag, position_end_drag, /*the positions where the will be placed the labels start_label_selection_rectangle, end_label_selection_rectangle of the start and end point of selection_rectangle*/ position_start_label_selection_rectangle, position_end_label_selection_rectangle, position_now_drag, position_draw_panel_now, /*the position of label_position_now*/ position_label_position_now, /*the position of label_dragged_object*/ position_label_dragged_object;
+    wxPoint draw_panel_origin, position_plot_area, drawpanel_position_end, position_start_drag, position_end_drag, /*the positions where the will be placed the labels start_label_selection_rectangle, end_label_selection_rectangle_now of the start and end point of selection_rectangle. position_end_label_selection_rectangle_now is the position of the end point of the selection rectangle now, while position_end_label_selection_rectangle_before is the position of the end point of selection rectangle at the preceeding mouse position*/ position_start_label_selection_rectangle, position_end_label_selection_rectangle_now, position_end_label_selection_rectangle_before, position_now_drag, position_draw_panel_now, /*the position of label_position_now*/ position_label_position_now, /*the position of label_dragged_object at the current step of the drag process and at the preceeding step of the drag process, respectively*/ position_label_dragged_object_now, position_label_dragged_object_before;
 
     //size, in pixels, of vertical and horizontal labels
     unsigned int size_label_vertical, size_label_horizontal;
@@ -1819,31 +1839,30 @@ public:
     x_min_0, x_max_0, y_min_0, y_max_0, x_span_0,
     /*the coordinates of the center of the projection when scrolling starts*/ x_center_scrolling, y_center_scrolling,
     /*these are the values of x_min, ... y_max after each sliding event, corresponding to lambda_min, ... , phi_max read from file*/x_min_old, x_max_old, y_min_old, y_max_old, /*these are the angular separations in latitude and longitude between meridians and parallels, respectively */delta_lambda, delta_phi,     /*this is a quantity resulting from the 3D projection: if and only if it is >= 0, then the point under consideration in the 3d projeciton lies on the visible surface of the earth */ arg_sqrt, /*increments in longitude/latitude to draw minor ticks*/delta_lambda_minor, delta_phi_minor, lambda_span, phi_span;
-    Double d;
     //the precision used to print out labels
     Int label_precision;
     
     //the euler angles which specify the orientation of the earth for the 3d representation
     //two auxiliary vectors which will be used later
-    gsl_vector *r, /*vector position in the x'y'z' reference frame used for multiple purposes*/*rp, /*vector position in the x'y'z' reference frame at the beginning, end and current time of mouse drag*/*rp_start_drag, *rp_end_drag, *rp_now_drag;
+     Cartesian r, /*vector position in the x'y'z' reference frame used for multiple purposes*/rp, /*vector position in the x'y'z' reference frame at the beginning, end and current time of mouse drag*/rp_start_drag, rp_end_drag, rp_now_drag;
     Rotation /*the orientation of the Earth at the beginning / current time / end of a drag*/rotation_start_drag, rotation_now_drag, rotation_end_drag, /*the rotation representing the current / initial orientation of the earth*/rotation, rotation_0;
-    Double /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot, and its initial value when this is constructedd, d_0,*/ /*if the mouse hovers over a route and its y coordinate is equal to the y of the route +- (length sceen) * thickness_route_selection_over_length_screen /2, then the relative Route is highlighted in ListFrame*/thickness_route_selection_over_length_screen;
-    String /*the labels that will be drawn on position_start_label_selection_rectangle and position_end_label_selection_rectangle, respectively*/start_label_selection_rectangle, end_label_selection_rectangle, /*this is used to display on the chart the coordinates of a Position that is being dragged or of the reference_position of a Route that is being dragged*/ label_dragged_object, /*text showing the coordinates of the current mouse position on draw_panel*/ label_position_now;
+    Double d, /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot, and its initial value when this is constructedd, d_0,*/ /*if the mouse hovers over a route and its y coordinate is equal to the y of the route +- (length sceen) * thickness_route_selection_over_length_screen /2, then the relative Route is highlighted in ListFrame*/thickness_route_selection_over_length_screen;
+    String /*this is used to display on the chart the coordinates of a Position that is being dragged or of the reference_position of a Route that is being dragged at the current step of the drag process (label_dragged_object_now) or at the preceeding step (label_dragged_object_before)*/ label_dragged_object_now, label_dragged_object_before, /*text showing the coordinates of the current mouse position on draw_panel*/ label_position_now, label_position_before;
 
     bool /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*if re_draw = true (false), then one has to draw the non-highglighteable stuff in DrawPanel (coastlines, paralles, meridians ...  but not Routes nor Positions)*/re_draw, /*this is true if the current mouse position lies in the plot area, false otherwise*/mouse_in_plot_area;
-    Position /*I store in this position the starting point (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the dragging process*/route_position_start_drag, /*current, starting and ending geographic position in a mouse drag process*/ geo_now_drag, geo_start_drag, geo_end_drag, /*the position on the sphere such that the vector between the center of the sphere and the position equals the direction of the rotation axis relative to a mouse drag*/rotation_axis, /*the geographic positions corresponding to the NW (SE) boundary of of the plot area, moved to the interior of the plot area by one pixel. These will be used to plot parallels and meridians in such a way that they don't hit the boundary of the plot area*/p_NW, p_SE;
+    Position /*the starting Position (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the drag process (route_reference_position_drag_start), at the preceeding step of the drag process (route_reference_position_drag_start) and at the current step of the drag process (route_reference_position_drag_now) */route_reference_position_drag_start, route_reference_position_drag_before, route_reference_position_drag_now, /*starting and ending geographic position in a mouse drag process*/  geo_start_drag, geo_end_drag, /*the position on the sphere such that the vector between the center of the sphere and the position equals the direction of the rotation axis relative to a mouse drag*/rotation_axis, /*the geographic positions corresponding to the NW (SE) boundary of of the plot area, moved to the interior of the plot area by one pixel. These will be used to plot parallels and meridians in such a way that they don't hit the boundary of the plot area*/p_NW, p_SE;
     Angle rotation_angle, /*an angle containing the middle longitude/latitude of the current 3D projection, rounded up to the closest value which is a multiple of delta_lambda/phi, used for drawing things in the middle of the projection*/lambda_middle, phi_middle, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/ lambda_start, lambda_end, phi_start, phi_end, lambda_saved, phi_saved, Z_saved;
-    Projection /*the values of (x, y) at the beginning/end of the selection process with a rectangle*/start_selection, end_selection;
+    Projection /*the values of (x, y) at the beginning/end of the selection process with a rectangle*/projection_start, projection_end;
     Route /*this is a circle of equal altitude which is the intersection between the earth's surface and the visibility cone of the observer, whose vertex is at the observer. circle_oberserver.omega is the aperture angle at the center of the earth which specifies the part of the earth surface visible by the observer. circle_observer.rerefence_position is the ground position of the observer: the intersection between the line between the center of the earth and the observer, and the surface of the earth. These exist for the 3D projection only*/circle_observer, /*the same as circle_observer, but at the initial configuration fo the chart*/circle_observer_0;
     //this rectangle represents the rectangle x_min ... y_max in the Mercator projection
     MyRectangle rectangle_observer;
     wxBitmap m_bgbuffer;
     
-    
-    
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list: in this list there are as many elements as the number of connected curves in which the route is cut (because of the meridian lambda = pi). In each of these elements there are the  points, with respect to the origin of DrawPanel, which represent the route_list[i] discretized
-    vector< vector< vector<wxPoint> > > points_route_list;
+    vector< vector< vector<wxPoint> > > points_route_list_now, points_route_list_before;
+    //I store in reference_positions_route_list_now (reference_positions_route_list_before) the coordinates, with respect to the origin of DrawPanel, of the reference positions of the Routes at the current (preceeding) step of a drag process
+    vector<wxPoint> reference_positions_route_list_now, reference_positions_route_list_before, points_position_list_now, points_position_list_before;
     //the i-th element of this vector contains a list of critical values of the parametric angle (t) of the i-th route. At these critical values, route #i crosses the meridian lambda = pi
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
     wxSize size_chart, size_plot_area;
@@ -1852,15 +1871,19 @@ public:
     bool first_label;
     wxMemoryInputStream * memory_input_stream;
     UnsetIdling<DrawPanel>* unset_idling;
-    vector<wxString> labels_lambda, labels_phi;
-    vector<wxPoint> positions_labels_lambda, positions_labels_phi;
+    //labels of parallels and meridians at the current and preceeding chart configuration, respectively
+    vector<wxString> parallels_and_meridians_labels_now, parallels_and_meridians_labels_before;
+    //positions of labels of parallels and meridians at the current and preceeding chart configuration, respectively
+    vector<wxPoint> positions_parallels_and_meridians_labels_now, positions_parallels_and_meridians_labels_before;
+    vector< vector< vector<wxPoint> > > /*parallels and meridians are stored in this vectors at the current step of the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_now, /*parallels and meridians are stored in these vectors at the preceeding step in the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_before, ticks_now, ticks_before;
     
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*Draw)(void);
     bool (DrawPanel::*ScreenToProjection)(wxPoint, Projection*);
+    bool (DrawPanel::*CartesianToProjection)(Cartesian, Projection*, bool);
     bool (DrawPanel::*ScreenToGeo)(wxPoint, Position*);
     bool (DrawPanel::*GeoToProjection)(Position, Projection*, bool);
-    void (DrawPanel::*Render)(wxDC*);
+    void (DrawPanel::*Render)(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>, vector<wxPoint>, vector<wxPoint>, wxColor, wxColor, double);
     void (DrawPanel::*ProjectionToDrawPanel)(Projection, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
@@ -1871,8 +1894,18 @@ public:
     void SetIdling(bool);
     void Draw_Mercator(void);
     void Draw_3D(void);
-    void TabulateRoutes(void);
     void PaintEvent(wxPaintEvent & evt);
+    void RenderAll(wxDC&);
+    void MyRefresh(void);
+    void RenderBackground(wxDC&, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >, vector<wxString>, vector<wxPoint>, vector<wxPoint>, wxColor, wxColor, double);
+    void RenderRoutes(wxDC&, vector< vector< vector<wxPoint> > >, vector<wxPoint>, int, wxColor);
+    void RenderPositions(wxDC&, vector<wxPoint>, int, wxColor);
+    void RenderMousePositionLabel(wxDC&, String, wxPoint, wxColor, wxColor);
+    void RenderDraggedObjectLabel(wxDC&, wxPoint, String, wxColor, wxColor);
+    void RenderSelectionRectangle(wxDC&, wxPoint, wxPoint, String, wxColor, wxColor);
+    void RenderSelectionRectangle(wxDC&, Position, wxPoint, String, wxColor, wxColor);
+    void TabulateRoutes(void);
+    void TabulatePositions(void);
     void FitAll();
     
     bool ScreenToDrawPanel(wxPoint, wxPoint*);
@@ -1881,7 +1914,10 @@ public:
     bool ScreenToMercator(wxPoint, Projection*);
     bool ScreenTo3D(wxPoint, Projection*);
     bool GeoToDrawPanel(Position, wxPoint*, bool);
+    bool CartesianToDrawPanel(Cartesian, wxPoint*, bool);
     bool GeoTo3D(Position, Projection*, bool);
+    bool CartesianTo3D(Cartesian, Projection*, bool);
+    bool CartesianToMercator(Cartesian, Projection*, bool);
     bool GeoToMercator(Position, Projection*, bool);
     bool ScreenToGeo_Mercator(wxPoint, Position*);
     bool ScreenToGeo_3D(wxPoint, Position*);
@@ -1903,8 +1939,10 @@ public:
     double x_span(void);
     Rotation rotation_start_end(wxPoint, wxPoint);
     
-    void Render_Mercator(wxDC*);
-    void Render_3D(wxDC*);
+    void Render_Mercator(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>,
+                         vector<wxPoint>, vector<wxPoint>, wxColor, wxColor, double);
+    void Render_3D(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>,
+                    vector<wxPoint>, vector<wxPoint>, wxColor, wxColor, double);
     void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);
     void DrawLabel(const Position&, Angle, Angle, Int, String);
     
@@ -2317,24 +2355,27 @@ public:
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
     DeletePosition *delete_position;
+    wxPoint /*the instantaneous positions of the mouse with respect to the screen: this position is kept to the right value by DrawPanel::OnMouseMovement method, that is called every time the mouse moves. This variable belongs to ListFrame rather than to single ChartFrames or DrawPanel, because there is a unique screen position for all of them*/ screen_position_now, screen_position_before;
     OnChangeSelectionInListControl<Sight>* on_change_selection_in_listcontrol_sights; OnChangeSelectionInListControl<Route>* on_change_selection_in_listcontrol_routes; OnChangeSelectionInListControl<Position>* on_change_selection_in_listcontrol_positions;
     ExistingRoute *existing_route;
     NewRoute *new_route;
     //a temporary value of data->crossing_route_list
     vector<Route> crossing_route_list_temp;
-    bool selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling, /*this is equal to true if file has been modified, false otherwise*/file_has_been_modified, /*this is equal to true if the file has no name, false otherwise*/file_is_untitled, /*this is true if I am computing the astronomical position, false otherwise*/selecting_route_for_position, /*this is equal to true (false) if the user has (has not) pressed cancel while charts were loading */abort, /*if this is true, I am transporting an object with a new Route, otherwise it is false*/ transporting_with_new_route, /*if this is true, I am transporting an object with an existing Route, otherwise it is false*/ transporting_with_selected_route;
+    bool /*this is true if the mouse is moving, and false otherwise*/mouse_moving, /*this is true if a selection rectangle is being drawn, and false otherwise */selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling, /*this is equal to true if file has been modified, false otherwise*/file_has_been_modified, /*this is equal to true if the file has no name, false otherwise*/file_is_untitled, /*this is true if I am computing the astronomical position, false otherwise*/selecting_route_for_position, /*this is equal to true (false) if the user has (has not) pressed cancel while charts were loading */abort, /*if this is true, I am transporting an object with a new Route, otherwise it is false*/ transporting_with_new_route, /*if this is true, I am transporting an object with an existing Route, otherwise it is false*/ transporting_with_selected_route, /*this is true if a Route or Position is being dragged, and false otherwise*/ dragging_object,    /*this is true if the highlighted Route / Position is being changed and false otherwise */  changing_highlighted_object;
+
     Answer /*if this is y/n, the coastlines are shown/not shown*/show_coastlines, /*if this is y/n, sample_sight.nav is loaded/not loaded at startup*/ load_sample_sight;
     //the file where the data is read and written
     FileRW data_file;
     unsigned int margin;
-    int /*the # of the sight/route/position which is highlighted because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight, highlighted_route, highlighted_position, /*# of the object to transport or disconnect */i_object_to_transport, i_object_to_disconnect, i_transporting_route;
+    int /*the # of the sight/route/position which is highlighted at the current (_now) or preceeding (_before) step of mouse movement, because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight_now, highlighted_route_now, highlighted_route_before,  highlighted_position_now, highlighted_position_before, /*# of the object to transport or disconnect */i_object_to_transport, i_object_to_disconnect, i_transporting_route;
     /*map[i] is the position in data->route_list of the i-th Route in route_list_for_transport*/
     vector<int> map;
-    //data_x[i][j] is a vector which contains the (x-value of) the datapoints within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
-    vector< vector< vector<Position> > > p_coastline;
-    Position /*these are the positions where the right mouse button is clicked at the beginning, current time and at the end of the drawing process for the selection rectangle on the world's chart*/p_start, p_now, p_end;
+    //all_coastline_points_Position/all_coastline_points_Cartesian[i][j] is a vector which contains the the coastline datapoints (in Position/Cartesian format) within the block at (shifted) latitude i and longitude j in file path_file_coastline_data_blocked
+    vector< vector< vector<Position> > > all_coastline_points_Position;
+    vector< vector< vector<Cartesian> > > all_coastline_points_Cartesian;
+    Position /*these are the geographic Positions where the right mouse button is clicked at the beginning, the current and preceeding Position during mouse movement, and the mouse Position and at the end of the drawing process for the selection rectangle*/geo_position_start, geo_position_before, geo_position_now, position_end;
     //the object which is being transported : a "sight" or a "position"
-    String transported_object;
+    String transported_object, /*the labels that will be drawn on position_start_label_selection_rectangle and position_end_label_selection_rectangle_now, respectively. end_label_selection_rectangle_now is the label of the end point of selection rectangle now, while end_label_selection_rectangle_before is the label of the end point of selection rectangle at the preceeding mouse position*/start_label_selection_rectangle, end_label_selection_rectangle_now, end_label_selection_rectangle_before;
     
     //a functor to set/unset idling mode in *this
     SetIdling<ListFrame>* set_idling;
@@ -2568,10 +2609,10 @@ public:
     ProjectionField<ChartFrame>* projection;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/lambda_min, lambda_max;
-    //in p_coastline_draw, I store the 2d coordindates  in DrawPanel coordinates of coastline data p_coastline
-    vector<wxPoint> p_coastline_draw;
+    //in points_coastline_now (points_coasline_before), I store the 2d coordindates  in DrawPanel coordinates of coastline data coastline_points at the current (preceeding) state of the chart
+    vector<wxPoint> points_coastline_now, points_coastline_before;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
-    bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling, /*this is true if the chart is being dragged, and thus the size of *this must not change across multiple Draw(s), and false otherwise*/ dragging_chart, /*this is true if a Route or Position is being dragged, and false otherwise*/ dragging_object;
+    bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling, /*this is true if the chart is being dragged, and thus the size of *this must not change across multiple Draw(s), and false otherwise*/ dragging_chart;
     //This is the actual value of the maximal zoom factor allowed
     Double /*the zoom factor relative to the default configuration of either projection, the zoom factor  is not necessarily equal to the numerical value (slider->GetValue()) shown on the slider*/zoom_factor;
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither ChartFrame::UpdateSliderLabel_Mercator or ChartFrame::UpdateSliderLabel_3D, according to my needs, and similarly for the other pointers

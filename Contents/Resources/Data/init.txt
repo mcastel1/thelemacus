@@ -1,5 +1,5 @@
 #comment lines, such as this one, will be ignored
-show coastlines = y
+show coastlines = n
 artificial horizon = y
 plot coastline every = 10
 index error = 0° 1.9'

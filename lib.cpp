@@ -15372,10 +15372,10 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_cancel->Bind(wxEVT_BUTTON, &PositionFrame::OnPressCancel, this);
 
 
-    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(PositionFrame::KeyDown), this);
-    lat->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(PositionFrame::KeyDown), this);
-    lon->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(PositionFrame::KeyDown), this);
-    label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(PositionFrame::KeyDown), this);
+    panel->Bind(wxEVT_KEY_DOWN, &PositionFrame::KeyDown, this);
+    lat->Bind(wxEVT_KEY_DOWN, &PositionFrame::KeyDown, this);
+    lon->Bind(wxEVT_KEY_DOWN, &PositionFrame::KeyDown, this);
+    label->Bind(wxEVT_KEY_DOWN, &PositionFrame::KeyDown, this);
 
 
     //I enable the reduce button only if position_in is a valid position with the entries propely filled, i.e., only if position_in != NULL

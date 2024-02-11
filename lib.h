@@ -761,10 +761,12 @@ public:
 class Cartesian{
     
 public:
+    
     gsl_vector* r;
     
     Cartesian();
     Cartesian(Position);
+    setPosition(const Position&);
     void print(String, String, ostream&);
     void operator = (const Cartesian&);
     

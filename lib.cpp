@@ -4025,6 +4025,17 @@ inline Cartesian::Cartesian(Position p) {
 }
 
 
+//set *this from the grographic Position p
+inline void Cartesian::setPosition(const Position& p){
+    
+
+    gsl_vector_set(r, 0, cos(p.phi) * cos(p.lambda));
+    gsl_vector_set(r, 1, -cos(p.phi) * sin(p.lambda));
+    gsl_vector_set(r, 2, sin(p.phi));
+    
+    
+}
+
 void Cartesian::print(String name, String prefix, ostream& ostr) {
 
     ostr << prefix.value << name.value << ": {" <<

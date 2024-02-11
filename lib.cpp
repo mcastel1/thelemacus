@@ -10332,7 +10332,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseDrag, draw_panel);
     draw_panel->Bind(wxEVT_MOUSEWHEEL, &DrawPanel::OnMouseWheel, draw_panel);
 
-    slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, wxScrollEventHandler(ChartFrame::OnScroll<wxScrollEvent>), this);
+    slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, &ChartFrame::OnScroll<wxCommandEvent>, this);
     slider->Bind(wxEVT_LEFT_DOWN, &ChartFrame::OnMouseLeftDownOnSlider<wxMouseEvent>, this);
     slider->Bind(wxEVT_LEFT_UP, &ChartFrame::OnMouseLeftUpOnSlider<wxMouseEvent>, this);
 

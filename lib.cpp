@@ -15090,19 +15090,19 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &StringField<SightFrame>::get<wxCommandEvent>, label);
 
     //bind the function SightFrame::KeyDown to the event where a keyboard dey is pressed down in panel, body, ... and all fields
-    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    body->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    limb->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    H_s->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    index_error->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    artificial_horizon_check->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    stopwatch_check->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    height_of_eye->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    master_clock_date->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    master_clock_chrono->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    stopwatch_reading->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    TAI_minus_UTC->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
-    label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(SightFrame::KeyDown), this);
+    panel->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    body->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    limb->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    H_s->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    index_error->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    artificial_horizon_check->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    stopwatch_check->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    height_of_eye->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    master_clock_date->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    master_clock_chrono->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    stopwatch_reading->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    TAI_minus_UTC->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    label->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
 
 
     //I enable the reduce button only if sight_in is a valid sight with the entries propely filled, i.e., only if sight_in != NULL

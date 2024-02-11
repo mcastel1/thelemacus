@@ -10322,8 +10322,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     draw_panel->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
     projection->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
 
-    draw_panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
-    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(DrawPanel::KeyDown), draw_panel);
+    draw_panel->Bind(wxEVT_KEY_DOWN, &DrawPanel::KeyDown, draw_panel);
+    panel->Bind(wxEVT_KEY_DOWN, &DrawPanel::KeyDown, draw_panel);
 
     draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, draw_panel);
     draw_panel->Bind(wxEVT_RIGHT_DOWN, &DrawPanel::OnMouseRightDown, draw_panel);
@@ -15603,19 +15603,19 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
 
     //bind the function SightFrame::KeyDown to the event where a keyboard dey is pressed down in panel, ... and all fields
-    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    type->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    Z->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    omega->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    start_phi->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    start_lambda->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    GP_phi->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    GP_lambda->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    length_format->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    length->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    time->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    speed->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
-    label->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(RouteFrame::KeyDown), this);
+    panel->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
+    type->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
+    Z->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
+    omega->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
+    start_phi->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
+    start_lambda->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
+    GP_phi->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
+    GP_lambda->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
+    length_format->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
+    length->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
+    time->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
+    speed->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
+    label->Bind(wxEVT_KEY_DOWN, &RouteFrame::KeyDown, this);
 
 
     sizer_grid_type->Add(text_type, 0, wxALIGN_CENTER_VERTICAL);
@@ -16410,7 +16410,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     button_b->Bind(wxEVT_BUTTON, *f_b);
     button_b->Bind(wxEVT_BUTTON, *close_frame);
 
-    panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(QuestionFrame::KeyDown<wxKeyEvent>), this);
+    panel->Bind(wxEVT_KEY_DOWN, &QuestionFrame::KeyDown<wxKeyEvent>, this);
 
     //    image = new wxStaticBitmap(panel, wxID_ANY,
     //                               Bitmap(((wxGetApp().path_file_question_icon).value), wxSize(
@@ -16990,11 +16990,11 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         sizer_box_route->Add(listcontrol_routes, 1, wxALL, ((wxGetApp().border).value));
 
         //bing everything to KeyDown method, so when a key is pressed on *this, panel, listcontrol... then KeyDown is called
-        Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
-        panel->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
-        listcontrol_sights->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
-        listcontrol_routes->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
-        listcontrol_positions->Bind(wxEVT_KEY_DOWN, wxKeyEventHandler(ListFrame::KeyDown<wxKeyEvent>), this);
+        Bind(wxEVT_KEY_DOWN, &ListFrame::KeyDown<wxKeyEvent>, this);
+        panel->Bind(wxEVT_KEY_DOWN, &ListFrame::KeyDown<wxKeyEvent>, this);
+        listcontrol_sights->Bind(wxEVT_KEY_DOWN, &ListFrame::KeyDown<wxKeyEvent>, this);
+        listcontrol_routes->Bind(wxEVT_KEY_DOWN, &ListFrame::KeyDown<wxKeyEvent>, this);
+        listcontrol_positions->Bind(wxEVT_KEY_DOWN, &ListFrame::KeyDown<wxKeyEvent>, this);
 
 
         if (load_sample_sight == Answer('y', String(""))) {

@@ -47,7 +47,7 @@ inline double acos(const Double& x) {
 }
 
 
-//return the size of *this if shown in the wxWindow (e.g. a wxtextctr, a wxliscontrol, etc...). This is equivalent to the method String::get_size
+//return the size of *this if shown in the wxWindow (e.g. a wxtextctr, a wxliscontrol, etc...). This is equivalent to the method String::get_size(const String&, wxWindow*)
 wxSize get_size(const String& s, wxWindow* p) {
 
     wxClientDC dc(p);
@@ -56,6 +56,13 @@ wxSize get_size(const String& s, wxWindow* p) {
 
 }
 
+
+//return the size of this as displayed in the wxDC dc. This is equivalent to the method String::get_size(const String&, wxDC*)
+wxSize get_size(const String& s, wxDC* dc) {
+
+    return (dc->GetTextExtent(wxString(s.value)));
+
+}
 
 //put the angle x in the interval [-pi, pi), it does not alter *this and returns the result. This is equivalent to Angle::normalize_pm_pi_ret
 inline Angle normalize_pm_pi_ret(const Angle& x){
@@ -8451,7 +8458,7 @@ inline void DrawPanel::RenderMousePositionLabel(
     //wipe out position_label_position by writing on top of it a rectangle filled with color backgound_color
     dc.SetPen(background_color);
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_label_position, get_size(label_position, this));
+    dc.DrawRectangle(position_label_position, get_size(label_position, &dc));
 
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
@@ -8596,7 +8603,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_end_label, get_size(end_label, this));
+    dc.DrawRectangle(position_end_label, get_size(end_label, &dc));
 
     //render the rectangle
     dc.SetTextForeground(foreground_color);
@@ -8990,7 +8997,7 @@ inline void DrawPanel::RenderDraggedObjectLabel(wxDC& dc,
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_label_dragged_object, get_size(label_dragged_object, this));
+    dc.DrawRectangle(position_label_dragged_object, get_size(label_dragged_object, &dc));
 
 
     //render label_dragged_object

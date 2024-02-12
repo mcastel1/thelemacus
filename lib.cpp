@@ -9095,7 +9095,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
     for (i = 0; i < points_coastline.size(); i++) {
-        dc->DrawEllipse(points_coastline[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
+        dc->DrawEllipse(points_coastline[i], ToDIP(wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value)));
     }
 
 
@@ -9295,7 +9295,7 @@ inline void DrawPanel::Render_3D(
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
     for (i = 0; i < points_coastline.size(); i++) {
         //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
-        dc->DrawEllipse(points_coastline[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
+        dc->DrawEllipse(points_coastline[i], ToDIP(wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value)));
     }
 
 
@@ -10280,10 +10280,10 @@ StaticBitmap::StaticBitmap(wxWindow* parent, String path, [[maybe_unused]] wxSiz
 
     SetBitmap(
         Bitmap(file.name.value,
-            wxSize(
+            ToDIP(wxSize(
                 ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value),
                 ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value)
-            )
+            ))
         )
     );
 
@@ -10375,7 +10375,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     button_show_list = new wxBitmapButton(
         panel,
         wxID_ANY,
-        Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value))),
+        Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
         wxDefaultPosition,
         wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
         wxBU_EXACTFIT | wxSIMPLE_BORDER

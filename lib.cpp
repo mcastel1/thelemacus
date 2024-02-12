@@ -8677,6 +8677,24 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
 
 }
 
+
+void DrawPanel::MyRefresh(void){
+    
+#ifdef __APPLE__
+
+    Refresh();
+    
+#endif
+
+#ifdef _WIN32
+    
+    RefreshWIN32();
+
+#endif
+
+    
+}
+
 //render the Routes whose point coordinates with respect to the origin of DrawPanel are stored in points_curves, and whose reference-position coordinates with respect to the origin of DrawPanel are stored in reference_positions. the Route #highlighted_route is rendered with larger thickness. If foreground_color != wxNUllColour, the Routes are rendered with the colors in color_list, otherwise they are rendered with foreground_color
 inline void DrawPanel::RenderRoutes(
                                     wxDC& dc,

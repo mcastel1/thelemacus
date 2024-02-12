@@ -1906,6 +1906,7 @@ public:
     void Draw_3D(void);
     void PaintEvent(wxPaintEvent& evt);
     void RenderAll(wxDC&);
+    void MyRefresh(void);
     void RefreshWIN32(void);
     void RenderBackground(wxDC&,
                           const vector< vector< vector<wxPoint> > >&,

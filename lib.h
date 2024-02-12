@@ -2633,7 +2633,6 @@ public:
 class ChartFrame: public wxFrame{
     
 public:
-    ChartFrame(ListFrame*, String, const wxString&, const wxPoint&, const wxSize&, String);
     
     ListFrame* parent;
     DrawPanel *draw_panel;
@@ -2657,6 +2656,9 @@ public:
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither ChartFrame::UpdateSliderLabel_Mercator or ChartFrame::UpdateSliderLabel_3D, according to my needs, and similarly for the other pointers
     void (ChartFrame::*UpdateSliderLabel)(void);
     
+    
+    ChartFrame(ListFrame*, String, const wxString&, const wxPoint&, const wxSize&, String);
+
     void GetCoastLineData_Mercator(void);
     void GetCoastLineData_3D(void);
     void UpdateSlider(void);

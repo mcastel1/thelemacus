@@ -8733,8 +8733,9 @@ inline void DrawPanel::RenderRoutes(
 
 }
 
-//wipe out all Routes on *this and re-draw them
-inline void DrawPanel::MyRefresh(void) {
+
+//wipe out all Routes on *this and re-draw them: this method is used to replace on WIN32 the wxWidgets default function Refresh(), which is not efficient on WIN32
+inline void DrawPanel::RefreshWIN32(void) {
 
     wxClientDC dc(this);
 
@@ -12205,7 +12206,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 #ifdef _WIN32
 
-        //on WIN32, the Refresh() command slows down things -> I don't call it but use MyRefresh(), which cleans up the former selections rectangle in *this and draws a new one
+        //on WIN32, the Refresh() command slows down things -> I don't call it but use RefreshWIN32(), which cleans up the former selections rectangle in *this and draws a new one
         (parent->parent->end_label_selection_rectangle_before) = (parent->parent->end_label_selection_rectangle_now);
 
         for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
@@ -12214,7 +12215,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->geo_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(parent->parent->end_label_selection_rectangle_now));
 
-            ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
+            ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
 
         }
 
@@ -12372,18 +12373,18 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 #endif
 
 #ifdef _WIN32
-            //on WIN32 Refresh() is slow -> call MyRefresh to re-draw the Routes with the right thickness
+            //on WIN32 Refresh() is slow -> call RefreshWIN32 to re-draw the Routes with the right thickness
 
             for (i = 0; i < ((parent->parent->chart_frames).size()); i++) {
 
-                //                //copy the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels, in such a way that MyRefresh() will be able to wipe out the Routes and their reference Positions
+                //                //copy the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels, in such a way that RefreshWIN32() will be able to wipe out the Routes and their reference Positions
                 //                ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
                 //                (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
                 //
                 //                ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
                 //                (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
 
-                ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
+                ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
 
             }
 
@@ -12403,9 +12404,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 #endif
 #ifdef _WIN32
-            //on WIN32, the Refresh() command slows down things -> I use MyRefresh()
+            //on WIN32, the Refresh() command slows down things -> I use RefreshWIN32()
 
-            MyRefresh();
+            RefreshWIN32();
 
 #endif
 
@@ -12539,7 +12540,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 
             for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-                (parent->parent->chart_frames[i])->draw_panel->MyRefresh();
+                (parent->parent->chart_frames[i])->draw_panel->RefreshWIN32();
             }
 
 #endif
@@ -12970,7 +12971,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             Refresh();
 #endif
 #ifdef WIN32
-                            //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by MyRefresh()
+                            //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
                             parent->points_coastline_before.clear();
                             (parent->points_coastline_before) = (parent->points_coastline_now);
 
@@ -12991,7 +12992,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //re-draw the chart
                             (this->*Draw)();
-                            MyRefresh();
+                            RefreshWIN32();
 #endif
                             //							FitAll();
 
@@ -13012,7 +13013,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         Refresh();
 #endif
 #ifdef WIN32
-                        //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by MyRefresh()
+                        //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
                         parent->points_coastline_before.clear();
                         (parent->points_coastline_before) = (parent->points_coastline_now);
 
@@ -13033,7 +13034,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //re-draw the chart
                         (this->*Draw)();
-                        MyRefresh();
+                        RefreshWIN32();
 
 #endif
 
@@ -13102,7 +13103,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
 
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-                            //on APPLE, I compute the coordinates of the reference position of the Route that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the MyRefresh() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
+                            //on APPLE, I compute the coordinates of the reference position of the Route that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
 
 #ifdef _WIN32
 
@@ -13138,7 +13139,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-                            ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
+                            ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
 
 #endif
 
@@ -13174,7 +13175,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-                            //on APPLE, I compute the coordinates of the Position that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow ->  I use the MyRefresh() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
+                            //on APPLE, I compute the coordinates of the Position that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow ->  I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
 
 
 #ifdef _WIN32
@@ -13206,7 +13207,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-                            ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
+                            ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
 
 #endif
 
@@ -13249,7 +13250,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 
 #ifdef _WIN32
-                    //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by MyRefresh()
+                    //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
                     parent->points_coastline_before.clear();
                     (parent->points_coastline_before) = (parent->points_coastline_now);
 
@@ -13270,7 +13271,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                     //re-draw the chart
                     (this->*Draw)();
-                    MyRefresh();
+                    RefreshWIN32();
 #endif
 
                     FitAll();
@@ -17800,10 +17801,10 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 #endif
 
 #ifdef _WIN32
-        //on WIN32 Refresh() is slow -> I use the MyRefresh() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
+        //on WIN32 Refresh() is slow -> I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
 
         for (i = 0; i < (chart_frames.size()); i++) {
-            (chart_frames[i])->draw_panel->MyRefresh();
+            (chart_frames[i])->draw_panel->RefreshWIN32();
         }
 
 #endif

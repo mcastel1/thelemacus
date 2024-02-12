@@ -1961,8 +1961,6 @@ public:
     void Set_size_chart_Mercator(void);
     void Set_size_chart_3D(void);
     bool PutBackIn(wxPoint, wxPoint*);
-    bool check(const Projection&);
-    bool check_x(const Projection&);
     double x_span(void);
     Rotation rotation_start_end(wxPoint, wxPoint);
     

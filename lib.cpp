@@ -1709,7 +1709,7 @@ Angle::Angle(void) {
 }
 
 //constructor of Angle, which sets the value of the angle to x, where x is in radians
-Angle::Angle(double x) {
+Angle::Angle(const double& x) {
 
     value = x;
     normalize();
@@ -1717,7 +1717,7 @@ Angle::Angle(double x) {
 }
 
 //constructor of Angle, which sets the value of the angle to deg° min'
-Angle::Angle(unsigned int deg, double min) {
+Angle::Angle(const unsigned int& deg, const double& min) {
 
     value = k * (((double)deg) + min / 60.0);
     normalize();
@@ -1726,7 +1726,7 @@ Angle::Angle(unsigned int deg, double min) {
 
 
 //constructor of Angle, which sets the value of the angle to x and eventually prints *this
-Angle::Angle(String name, double x, [[maybe_unused]] String prefix) {
+Angle::Angle(String name, const double& x, [[maybe_unused]] const String& prefix) {
 
     value = x;
     normalize();

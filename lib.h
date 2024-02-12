@@ -198,9 +198,9 @@ public:
     double value;
     
     Angle();
-    Angle(double);
-    Angle(unsigned int, double);
-    Angle(String, double, String);
+    Angle(const double&);
+    Angle(const unsigned int&, const double&);
+    Angle(String, const double&, const String&);
     void normalize(void);
     Angle normalize_ret(void);
     void normalize_pm_pi(void);

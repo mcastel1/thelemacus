@@ -8452,7 +8452,13 @@ inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
 
 //render the mouse position with colors foreground_color and background_color
-inline void DrawPanel::RenderMousePositionLabel(wxDC& dc, String label_position, wxPoint position_label_position, wxColor foreground_color, wxColor background_color) {
+inline void DrawPanel::RenderMousePositionLabel(
+                                                wxDC& dc,
+                                                const String& label_position,
+                                                const wxPoint& position_label_position,
+                                                wxColor foreground_color,
+                                                wxColor background_color
+                                                ) {
 
     //wipe out position_label_position by writing on top of it a rectangle filled with color backgound_color
     dc.SetPen(background_color);
@@ -8532,7 +8538,12 @@ inline void DrawPanel::RenderBackground(
 
 
 //same as  DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color), but it takes a  position (reckoned with respect to the ordigin of *this) as input rather than a  geographic Position
-inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position, wxPoint position_end_label, String end_label, wxColour foreground_color, wxColour background_color) {
+inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
+                                                const wxPoint& position,
+                                                const wxPoint& position_end_label,
+                                                const String& end_label,
+                                                wxColour foreground_color,
+                                                wxColour background_color) {
 
     Position p;
 
@@ -8543,7 +8554,12 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, wxPoint position, wxPo
 
 
 //render a selection rectangle with end Position geo_position (geographic position), foreground color foreground_color and backgrund color background_color, and label at its endpoint end_label located at position_end_label
-inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxPoint position_end_label, String end_label, wxColour foreground_color, wxColour background_color) {
+inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, 
+                                                const Position& geo_position,
+                                                const wxPoint& position_end_label,
+                                                const String& end_label,
+                                                wxColour foreground_color,
+                                                wxColour background_color) {
 
 
     dc.SetPen(foreground_color);

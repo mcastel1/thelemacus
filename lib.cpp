@@ -46,6 +46,17 @@ inline double acos(const Double& x) {
 
 }
 
+
+//return the size of *this if shown in the wxWindow (e.g. a wxtextctr, a wxliscontrol, etc...). This is equivalent to the method String::get_size
+wxSize get_size(const String& s, wxWindow* p) {
+
+    wxClientDC dc(p);
+
+    return (dc.GetTextExtent(wxString(s.value)));
+
+}
+
+
 inline Angle normalize_pm_pi_ret(const Angle& x){
         
     Angle result;
@@ -1950,40 +1961,15 @@ MyRectangle::MyRectangle(void) {
 
 }
 
+
 //constructor which constructs p_NW and p_SE from p_NW_in and p_SE_in. For this to work, p_NW_in must lie at the NW of p_SE_in
 MyRectangle::MyRectangle(Position p_NW_in, Position p_SE_in, [[maybe_unused]] String prefix) {
-
-    //    Angle phi_N, phi_S, lambda_W, lambda_E;
-    //
-    //    //select the largest longitude among the lonngitudes of a and b, and set the longitude of p_NW to be such longitude. Do the same for the latitude
-    //
-    //    phi_N = max((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
-    //    phi_N.normalize();
-    //
-    //    phi_S = min((a.phi).normalize_pm_pi_ret(), (b.phi).normalize_pm_pi_ret());
-    //    phi_S.normalize();
-    //
-    //    lambda_W = max((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
-    //    lambda_W.normalize();
-    //
-    //    lambda_E = min((a.lambda).normalize_pm_pi_ret(), (b.lambda).normalize_pm_pi_ret());
-    //    lambda_E.normalize();
-
-
-    //    p_NW = Position(lambda_W, phi_N);
-    //    p_SE = Position(lambda_E, phi_S);
-
 
     p_NW = p_NW_in;
     p_SE = p_SE_in;
 
-    //    if(!((((p_NW_in.lambda).normalize_pm_pi_ret()) > ((p_SE_in.lambda).normalize_pm_pi_ret())) && (((p_NW_in.phi).normalize_pm_pi_ret()) > ((p_SE_in.phi).normalize_pm_pi_ret())))){
-    //
-    //        cout << prefix.value << RED << "p_NW and p_SE are not ordered!\n" << RESET;
-    //
-    //    }
-
 }
+
 
 //returns true/false if p is containted in *this
 bool MyRectangle::Contains(Position p) {
@@ -2001,7 +1987,6 @@ bool MyRectangle::Contains(Position p) {
 
         check_lambda = (((p.lambda) < (p_NW.lambda)) || ((p.lambda) > (p_SE.lambda)));
 
-
     }
 
     return(check_lambda &&
@@ -2009,6 +1994,7 @@ bool MyRectangle::Contains(Position p) {
             ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret()))));
 
 }
+
 
 //construct a brand new Route object and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(void) {
@@ -2032,7 +2018,8 @@ Route::Route(String type_in, Position reference_position_in, Angle Z_in, Length 
 
 }
 
-//constructs a brand new Route object of type 'c' and thus sets its related sight to -1, because this Route is not related to any sight yet.  length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
+
+//construct a brand new Route object of type 'c' and thus sets its related sight to -1, because this Route is not related to any sight yet.  length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(String type_in, Position reference_position_in, Angle omega_in) {
 
     type = type_in;
@@ -2047,7 +2034,7 @@ Route::Route(String type_in, Position reference_position_in, Angle omega_in) {
 
 }
 
-//I add the Route this to the wxListCtrl listcontrol
+//add the Route this to the wxListCtrl listcontrol
 void Route::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcontrol) {
 
     unsigned int i;
@@ -8463,7 +8450,7 @@ inline void DrawPanel::RenderMousePositionLabel(
     //wipe out position_label_position by writing on top of it a rectangle filled with color backgound_color
     dc.SetPen(background_color);
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_label_position, label_position.get_size(&dc));
+    dc.DrawRectangle(position_label_position, get_size(label_position, this));
 
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);

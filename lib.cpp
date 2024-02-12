@@ -11152,7 +11152,7 @@ bool DrawPanel::PutBackIn(wxPoint q, wxPoint* p) {
 }
 
 //generate a Rotation from the two points start and end (which are referred to the origin of the screen) in the 3D projection.
-Rotation DrawPanel::rotation_start_end(wxPoint start, wxPoint end) {
+Rotation DrawPanel::rotation_start_end(const wxPoint& start, const wxPoint& end) {
 
     Position temp;
     Position p_start, p_end;

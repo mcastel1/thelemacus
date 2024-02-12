@@ -1962,7 +1962,7 @@ public:
     void Set_size_chart_3D(void);
     bool PutBackIn(wxPoint, wxPoint*);
     double x_span(void);
-    Rotation rotation_start_end(wxPoint, wxPoint);
+    Rotation rotation_start_end(const wxPoint&, const wxPoint&);
     
     void Render_Mercator(wxDC*, 
                          const vector< vector< vector<wxPoint> > >&,

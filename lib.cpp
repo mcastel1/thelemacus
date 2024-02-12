@@ -8656,7 +8656,13 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
 }
 
 //render the Routes whose point coordinates with respect to the origin of DrawPanel are stored in points_curves, and whose reference-position coordinates with respect to the origin of DrawPanel are stored in reference_positions. the Route #highlighted_route is rendered with larger thickness. If foreground_color != wxNUllColour, the Routes are rendered with the colors in color_list, otherwise they are rendered with foreground_color
-inline void DrawPanel::RenderRoutes(wxDC& dc, vector< vector< vector<wxPoint> > > points_curves, vector<wxPoint> reference_positions, int highlighted_route, wxColor foreground_color) {
+inline void DrawPanel::RenderRoutes(
+                                    wxDC& dc,
+                                    const vector< vector< vector<wxPoint> > >& points_curves,
+                                    const vector<wxPoint>& reference_positions,
+                                    int highlighted_route,
+                                    wxColor foreground_color
+                                    ) {
 
     int i, j, color_id;
     double thickness, radius;
@@ -9089,7 +9095,7 @@ inline void DrawPanel::Render_Mercator(
 }
 
 
-//This function writes into *output the text label for a parallel or a meridia. The latitude/longitude in the text label is q.phi/q.lambda, min and max are the minimal and maximal latitudes/longitudes that are covered in the drawing process of the label by DrawPanel::SetLabel, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively. The output is written int *output
+//This function writes into *output the text label for a parallel or a meridian. The latitude/longitude in the text label is q.phi/q.lambda, min and max are the minimal and maximal latitudes/longitudes that are covered in the drawing process of the label by DrawPanel::SetLabel, they must be sorted in such a way that (max.normalize_pm_pi_ret()).value > (min.normalize_pm_pi_ret()).value. mode = "NS" or "EW" specifices whether the label to be plotted is a latitude or a longitude label, respectively. The output is written int *output
 void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precision, String mode, wxString* output) {
 
     double delta;

@@ -1908,12 +1908,21 @@ public:
                           wxColor,
                           wxColor,
                           double);
-    void RenderRoutes(wxDC&, vector< vector< vector<wxPoint> > >, vector<wxPoint>, int, wxColor);
-    void RenderPositions(wxDC&, vector<wxPoint>, int, wxColor);
-    void RenderMousePositionLabel(wxDC&, String, wxPoint, wxColor, wxColor);
-    void RenderDraggedObjectLabel(wxDC&, wxPoint, String, wxColor, wxColor);
-    void RenderSelectionRectangle(wxDC&, wxPoint, wxPoint, String, wxColor, wxColor);
-    void RenderSelectionRectangle(wxDC&, Position, wxPoint, String, wxColor, wxColor);
+    void RenderRoutes(wxDC&,
+                      const vector< vector< vector<wxPoint> > >&,
+                      const vector<wxPoint>&,
+                      int,
+                      wxColor
+                      );
+    void RenderPositions(
+                         wxDC&,
+                         const vector<wxPoint>&,
+                         int,
+                         wxColor);
+    void RenderMousePositionLabel(wxDC&, const String&, const wxPoint&, wxColor, wxColor);
+    void RenderDraggedObjectLabel(wxDC&, const wxPoint&, const String&, wxColor, wxColor);
+    void RenderSelectionRectangle(wxDC&, const wxPoint&, const wxPoint&, const String&, wxColor, wxColor);
+    void RenderSelectionRectangle(wxDC&, const Position&, const wxPoint&, const String&, wxColor, wxColor);
     void TabulateRoutes(void);
     void TabulatePositions(void);
     void FitAll();
@@ -1944,15 +1953,29 @@ public:
     void Set_size_chart_Mercator(void);
     void Set_size_chart_3D(void);
     bool PutBackIn(wxPoint, wxPoint*);
-    bool check(const Projection);
-    bool check_x(const Projection);
+    bool check(const Projection&);
+    bool check_x(const Projection&);
     double x_span(void);
     Rotation rotation_start_end(wxPoint, wxPoint);
     
-    void Render_Mercator(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>,
-                         vector<wxPoint>, vector<wxPoint>, wxColor, wxColor, double);
-    void Render_3D(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>,
-                    vector<wxPoint>, vector<wxPoint>, wxColor, wxColor, double);
+    void Render_Mercator(wxDC*, 
+                         const vector< vector< vector<wxPoint> > >&,
+                         const vector< vector< vector<wxPoint> > >&,
+                         const vector<wxString>&,
+                         const vector<wxPoint>&,
+                         const vector<wxPoint>&,
+                         wxColor,
+                         wxColor,
+                         double);
+    void Render_3D(wxDC*, 
+                   const vector< vector< vector<wxPoint> > >&,
+                   const vector< vector< vector<wxPoint> > >&,
+                   const vector<wxString>&,
+                   const vector<wxPoint>&,
+                   const vector<wxPoint>&,
+                   wxColor,
+                   wxColor,
+                   double);
     void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);
     void DrawLabel(const Position&, Angle, Angle, Int, String);
     

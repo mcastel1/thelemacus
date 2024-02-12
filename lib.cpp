@@ -16840,7 +16840,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxID_ANY,
             Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
-            wxGetApp().size_small_button,
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight<wxCommandEvent>, this);
@@ -16851,7 +16851,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             panel,
             wxID_ANY,
             Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
-            wxDefaultPosition, wxGetApp().size_small_button,
+            wxDefaultPosition,
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
@@ -16862,7 +16863,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             panel,
             wxID_ANY,
             Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button),
-            wxDefaultPosition, wxGetApp().size_small_button,
+            wxDefaultPosition,
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_disconnect_sight->Bind(wxEVT_BUTTON, &ListFrame::OnDisconnectSight, this);
@@ -16875,7 +16877,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxID_ANY,
             Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
-            wxGetApp().size_small_button,
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition<wxCommandEvent>, this);
@@ -16887,7 +16889,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxID_ANY,
             Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
-            wxGetApp().size_small_button,
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
@@ -16899,7 +16901,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxID_ANY,
             Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
-            wxGetApp().size_small_button,
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_transport_route->Bind(wxEVT_BUTTON, &ListFrame::OnTransportRoute, this);
@@ -16911,7 +16913,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxID_ANY,
             Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
-            wxGetApp().size_small_button,
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_disconnect_route->Bind(wxEVT_BUTTON, &ListFrame::OnDisconnectRoute, this);
@@ -16923,7 +16925,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxID_ANY,
             Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
-            wxGetApp().size_small_button,
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute<wxCommandEvent>, this);
@@ -16935,7 +16937,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxID_ANY,
             Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
-            wxGetApp().size_small_button,
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight<wxCommandEvent>, this);
@@ -16947,7 +16949,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxID_ANY,
             Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
-            wxGetApp().size_small_button,
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeletePosition<wxCommandEvent>, this);
@@ -16959,7 +16961,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxID_ANY,
             Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
-            wxGetApp().size_small_button,
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute<wxCommandEvent>, this);

@@ -117,7 +117,8 @@
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class
  
  on WIN32:
- - remove all remaining calls of Refresh() and replace them with RefreshWIN32(); 
+ - use ToDPI in wxSizes to resize them correctly
+ - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  */

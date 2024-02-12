@@ -57,6 +57,7 @@ wxSize get_size(const String& s, wxWindow* p) {
 }
 
 
+//put the angle x in the interval [-pi, pi), it does not alter *this and returns the result. This is equivalent to Angle::normalize_pm_pi_ret
 inline Angle normalize_pm_pi_ret(const Angle& x){
         
     Angle result;
@@ -8560,16 +8561,16 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     (Route(
         String("o"),
         (parent->parent->geo_position_start),
-        Angle(M_PI * (1.0 - GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-        Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+        Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+        Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
     )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
 
     //left vertical edge of rectangle
     (Route(
         String("o"),
         geo_position,
-        Angle(M_PI * (1.0 + GSL_SIGN((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-        Length(Re * fabs((((geo_position.phi).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+        Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
+        Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
     )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
 
     //bottom horizontal edge of rectangle
@@ -8577,8 +8578,8 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         String("l"),
         (parent->parent->geo_position_start),
         //change this by introducing if
-        Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-        Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+        Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+        Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
     )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
 
     //top horizontal edge of rectangle
@@ -8586,8 +8587,8 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         String("l"),
         geo_position,
         //change this by introducing if
-        Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-        Length(Re * cos(geo_position.phi) * fabs((((geo_position.lambda).normalize_pm_pi_ret()).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+        Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+        Length(Re * cos(geo_position.phi) * fabs((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
     )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
 
 
@@ -8595,7 +8596,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_end_label, end_label.get_size(&dc));
+    dc.DrawRectangle(position_end_label, get_size(end_label, this));
 
     //render the rectangle
     dc.SetTextForeground(foreground_color);
@@ -8938,7 +8939,10 @@ inline void DrawPanel::MyRefresh(void) {
 
 
 //render the Positions:  if foreground_color == wxNullColour, this method uses as foreground color the colors in color_list, otherwise it uses foreground_color
-inline void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, int highlighted_position, wxColor foreground_color) {
+inline void DrawPanel::RenderPositions(wxDC& dc, 
+                                       const vector<wxPoint>& points,
+                                       int highlighted_position,
+                                       wxColor foreground_color) {
 
     int i, color_id;
     double thickness, radius;
@@ -8976,13 +8980,17 @@ inline void DrawPanel::RenderPositions(wxDC& dc, vector<wxPoint> points, int hig
 
 
 //render the coordinates of an object (Route or Position) which is being dragged by rendering the label label_dragged_object at position position_label_dragged_object (reckoned with respect to the origin of *this)
-inline void DrawPanel::RenderDraggedObjectLabel(wxDC& dc, wxPoint position_label_dragged_object, String  label_dragged_object, wxColor foreground_color, wxColor background_color) {
+inline void DrawPanel::RenderDraggedObjectLabel(wxDC& dc, 
+                                                const wxPoint& position_label_dragged_object,
+                                                const String& label_dragged_object,
+                                                wxColor foreground_color,
+                                                wxColor background_color) {
 
 
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_label_dragged_object, label_dragged_object.get_size(&dc));
+    dc.DrawRectangle(position_label_dragged_object, get_size(label_dragged_object, this));
 
 
     //render label_dragged_object
@@ -9020,17 +9028,15 @@ void DrawPanel::FitAll() {
 }
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-inline void DrawPanel::Render_Mercator(
-    wxDC* dc,
-    vector< vector< vector<wxPoint> > > grid,
-    vector< vector< vector<wxPoint> > > ticks,
-    vector<wxString> parallels_and_meridians_labels,
-    vector<wxPoint> positions_parallels_and_meridians_labels,
-    vector<wxPoint> points_coastline,
-    wxColor foreground_color,
-    wxColor background_color,
-    double thickness
-) {
+inline void DrawPanel::Render_Mercator(wxDC* dc,
+                                       const vector< vector< vector<wxPoint> > >& grid,
+                                       const vector< vector< vector<wxPoint> > >& ticks,
+                                       const vector<wxString>& parallels_and_meridians_labels,
+                                       const vector<wxPoint>& positions_parallels_and_meridians_labels,
+                                       const vector<wxPoint>& points_coastline,
+                                       wxColor foreground_color,
+                                       wxColor background_color,
+                                       double thickness) {
 
     Angle lambda, phi;
     Route route;
@@ -9218,17 +9224,17 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::Render_3D(
-    wxDC* dc,
-    vector< vector< vector<wxPoint> > > grid,
-    vector< vector< vector<wxPoint> > > ticks,
-    vector<wxString> parallels_and_meridians_labels,
-    vector<wxPoint> positions_parallels_and_meridians_labels,
-    vector<wxPoint> points_coastline,
-    wxColor foreground_color,
-    wxColor background_color,
-    double thickness
-) {
-
+                                 wxDC* dc,
+                                 const vector< vector< vector<wxPoint> > >& grid,
+                                 const vector< vector< vector<wxPoint> > >& ticks,
+                                 const vector<wxString>& parallels_and_meridians_labels,
+                                 const vector<wxPoint>& positions_parallels_and_meridians_labels,
+                                 const vector<wxPoint>& points_coastline,
+                                 wxColor foreground_color,
+                                 wxColor background_color,
+                                 double thickness
+                                 ) {
+    
     int i, j;
     Double d_temp;
     Angle lambda;

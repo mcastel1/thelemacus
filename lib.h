@@ -1885,7 +1885,15 @@ public:
     bool (DrawPanel::*CartesianToProjection)(const Cartesian&, Projection*, bool);
     bool (DrawPanel::*ScreenToGeo)(const wxPoint&, Position*);
     bool (DrawPanel::*GeoToProjection)(const Position&, Projection*, bool);
-    void (DrawPanel::*Render)(wxDC*, vector< vector< vector<wxPoint> > >, vector< vector< vector<wxPoint> > >,  vector<wxString>, vector<wxPoint>, vector<wxPoint>, wxColor, wxColor, double);
+    void (DrawPanel::*Render)(wxDC*, 
+                              const vector< vector< vector<wxPoint> > >&,
+                              const vector< vector< vector<wxPoint> > >&,
+                              const vector<wxString>&,
+                              const vector<wxPoint>&,
+                              const vector<wxPoint>&,
+                              wxColor,
+                              wxColor,
+                              double);
     void (DrawPanel::*ProjectionToDrawPanel)(const Projection&, wxPoint*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);

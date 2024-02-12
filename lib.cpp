@@ -8479,6 +8479,26 @@ inline void DrawPanel::RenderMousePositionLabel(
 }
 
 
+//call either Refresh() or RefreshWIN32 according to the operating system
+void DrawPanel::MyRefresh(){
+    
+#ifdef __APPLE__
+    //I am on apple operating system-> I use the wxWidgets Refresh() method, which is fast
+
+    
+    Refresh();
+
+#endif
+
+#ifdef _WIN32
+//I am on windows operating system-> I call RefreshWIN32() because the wxWidgets Refresh() is slow
+    
+    RefreshWIN32();
+
+#endif
+
+}
+
 //render the coastline by using the set of points points_coastline, meridians, parallels and their labels
 inline void DrawPanel::RenderBackground(
                                         wxDC& dc,

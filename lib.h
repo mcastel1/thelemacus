@@ -1950,10 +1950,10 @@ public:
     bool ScreenToGeo_3D(const wxPoint&, Position*);
     void ProjectionToDrawPanel_Mercator(const Projection&, wxPoint*);
     void ProjectionToDrawPanel_3D(const Projection&, wxPoint*);
-    void ShowCoordinates(Position, String*);
-    void SetLabelAndPosition(wxPoint, wxPoint*, String*);
-    void SetLabelAndPosition(Position, wxPoint*, String*);
-    void SetLabelAndAdjustPosition(Position, wxPoint*, String*);
+    void ShowCoordinates(const Position&, String*);
+    void SetLabelAndPosition(const wxPoint&, wxPoint*, String*);
+    void SetLabelAndPosition(const Position&, wxPoint*, String*);
+    void SetLabelAndAdjustPosition(const Position&, wxPoint*, String*);
     void Set_lambda_phi_min_max_Mercator(void);
     void Set_lambda_phi_min_max_3D(void);
     void Set_x_y_min_max_Mercator(void);

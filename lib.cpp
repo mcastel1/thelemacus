@@ -64,15 +64,26 @@ wxSize get_size(const String& s, wxDC* dc) {
 
 }
 
+
 //put the angle x in the interval [-pi, pi), it does not alter *this and returns the result. This is equivalent to Angle::normalize_pm_pi_ret
 inline Angle normalize_pm_pi_ret(const Angle& x){
         
-    Angle result;
+    Angle temp;
 
-    result = x;
-    result.normalize_pm_pi();
+    temp = x;
 
-    return result;
+    return(temp.normalize_pm_pi_ret());
+
+}
+
+
+string to_string(const Position& p, unsigned int precision) {
+
+    Position temp;
+    
+    temp = p;
+    
+    return (temp.to_string(precision));
 
 }
 
@@ -11151,6 +11162,7 @@ bool DrawPanel::PutBackIn(wxPoint q, wxPoint* p) {
 
 }
 
+
 //generate a Rotation from the two points start and end (which are referred to the origin of the screen) in the 3D projection.
 Rotation DrawPanel::rotation_start_end(const wxPoint& start, const wxPoint& end) {
 
@@ -11958,7 +11970,7 @@ inline void  DrawPanel::ProjectionToDrawPanel_3D(const Projection& q, wxPoint* p
 
 
 //given a Position q if q lies witin *this, write in label a text with the geographic coordinates of q
-void DrawPanel::ShowCoordinates(Position q, String* label) {
+void DrawPanel::ShowCoordinates(const Position& q, String* label) {
 
     wxPoint temp;
 
@@ -11977,7 +11989,7 @@ void DrawPanel::ShowCoordinates(Position q, String* label) {
 
 
 //given a geographic Positiojn q, if q lies within *this, write in label a text with the geographic coordinates corresponding to q, and write in *position the position of the label close to q (with some margin, for clarity). Otherwise, write "" in label and does nothing witg poisition
-void DrawPanel::SetLabelAndPosition(Position q, wxPoint* position, String* label) {
+void DrawPanel::SetLabelAndPosition(const Position& q, wxPoint* position, String* label) {
 
     if (
         /*GeoToDrawPanel converts q into the wxPoint position, reckoned with respect to the origin *this*/(this->GeoToDrawPanel)(q, position, false)) {
@@ -11997,7 +12009,7 @@ void DrawPanel::SetLabelAndPosition(Position q, wxPoint* position, String* label
 
 
 //given a position q with respect to the origin of the screen, if q lies within *this, write in label a text with the geographic coordinates corresponding to q, and write in *position the position of the label close to q (with some margin, for clarity). Otherwise, write "" in label and does nothing witg poisition
-void DrawPanel::SetLabelAndPosition(wxPoint q, wxPoint* position, String* label) {
+void DrawPanel::SetLabelAndPosition(const wxPoint& q, wxPoint* position, String* label) {
 
     if ((this->ScreenToDrawPanel)(q, position)) {
 
@@ -12017,13 +12029,13 @@ void DrawPanel::SetLabelAndPosition(wxPoint q, wxPoint* position, String* label)
 
 
 //given a geographic Position p and its corresponding wxPoint with respect to the origin of this *poisition, write a string containing the geographic coordinates of p into label, and adjust *poistiion in such a way that label is enclosed in *this
-void DrawPanel::SetLabelAndAdjustPosition(Position p, wxPoint* position, String* label) {
+void DrawPanel::SetLabelAndAdjustPosition(const Position& p, wxPoint* position, String* label) {
 
     //the shift that will be applied to the position of *label
     wxPoint shift;
 
     //set the text of *label
-    label->set(String(""), p.to_string(display_precision.value), String(""));
+    label->set(String(""), to_string(p, display_precision.value), String(""));
 
     //the default value of the shift
     shift = wxPoint(

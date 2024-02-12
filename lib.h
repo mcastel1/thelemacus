@@ -2437,6 +2437,7 @@ public:
     
     void set(void);
     void DrawAll(void);
+    void MyRefreshAll(void);
     void RefreshAll(void);
     void TabulateRoutesAll(void);
     void Resize(void);

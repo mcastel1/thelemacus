@@ -17358,11 +17358,20 @@ void ListFrame::DrawAll(void) {
 }
 
 
-//refresh all chart_frames
+//call Refresh()es on all chart_frames
 void ListFrame::RefreshAll(void) {
 
     for (long i = 0; i < (chart_frames.size()); i++) {
         ((chart_frames[i])->draw_panel)->Refresh();
+    }
+
+}
+
+//call MyRefresh on all chart_frames
+void ListFrame::MyRefreshAll(void) {
+
+    for (long i = 0; i < (chart_frames.size()); i++) {
+        ((chart_frames[i])->draw_panel)->MyRefresh();
     }
 
 }

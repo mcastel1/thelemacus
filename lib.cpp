@@ -4012,7 +4012,9 @@ void Position::rotate(String name, Rotation r, Position* p, [[maybe_unused]] Str
     gsl_vector_set((u.r), 2, sin(phi));
 
     //rotate u according to r and write the result in s and then in (*this)
-    gsl_blas_dgemv(CblasNoTrans, 1.0, (r.matrix), (u.r), 0.0, (s.r));
+    //    gsl_blas_dgemv(CblasNoTrans, 1.0, (r.matrix), (u.r), 0.0, (s.r));
+    cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, r.matrix->data, 3, u.r->data, 1, 0, s.r->data, 1);
+
 
     //     cout << "\tNorm of u = " << gsl_blas_dnrm2(u);
     //     cout << "\tNorm of s = " << gsl_blas_dnrm2(s);
@@ -11013,7 +11015,9 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
     gsl_vector_set((rp.r), 2, 0.0);
 
     //convert rp -> r through rotation^{-1}
-    gsl_blas_dgemv(CblasTrans, 1.0, (rotation).matrix, (rp.r), 0.0, (r.r));
+    //    gsl_blas_dgemv(CblasTrans, 1.0, (rotation).matrix, (rp.r), 0.0, (r.r));
+    cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation.matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
+
 
     //obtain the  geographic position of the center of the circle of equal altitude above
     circle_observer.reference_position.setCartesian(String(""), r, String(""));
@@ -11583,7 +11587,9 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
             gsl_vector_set((rp.r), 1, -sqrt(1.0 - (gsl_pow_2(gsl_vector_get((rp.r), 0)) + gsl_pow_2(gsl_vector_get((rp.r), 2)))));
 
             //r = (rotation.matrix)^T . rp
-            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
+            //            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
+            cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation.matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
+
 
             q->setCartesian(String(""), r, String(""));
 
@@ -11607,7 +11613,8 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
             gsl_vector_set((rp.r), 1, 0.0);
 
             //r = (rotation.matrix)^T . rp
-            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
+            //            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
+            cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation.matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
 
             q->setCartesian(String(""), r, String(""));
 
@@ -11717,50 +11724,7 @@ inline bool DrawPanel::GeoTo3D(const Position& p, Projection* q, bool write) {
     r.setPosition(p);
 
     return CartesianTo3D(r, q, write);
-    /*
-    gsl_vector_set((rp.r), 1,
-        gsl_matrix_get(rotation.matrix, 1, 0) * gsl_vector_get((r.r), 0) +
-        gsl_matrix_get(rotation.matrix, 1, 1) * gsl_vector_get((r.r), 1) +
-        gsl_matrix_get(rotation.matrix, 1, 2) * gsl_vector_get((r.r), 2)
-    );
-    check = (gsl_vector_get((rp.r), 1) < -1.0 / (1.0 + (d.value)));
-
-
-
-    //    t2 = clock();
-    //    Ta = t2-t1;
-
-
-    if (check || write) {
-
-        if (q != NULL) {
-
-            double temp;
-
-            //rotate r by rotation, and write the result in rp!
-            gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, (r.r), 0.0, (rp.r));
-
-            temp = (d.value) / ((d.value) + 1.0 + gsl_vector_get((rp.r), 1));
-            (q->x) = gsl_vector_get((rp.r), 0) * temp;
-            (q->y) = gsl_vector_get((rp.r), 2) * temp;
-
-        }
-
-        out = check;
-
-
-    }
-    else {
-
-        out = false;
-
-    }
-
-    //    t3 = clock();
-    //    Tb = t3-t2;
-
-    return out;
-     */
+   
 }
 
 
@@ -11808,8 +11772,9 @@ inline bool DrawPanel::CartesianTo3D(const Cartesian& p, Projection* q, bool wri
             double temp;
 
             //rotate r by rotation, and write the result in rp!
-            gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, (p.r), 0.0, (rp.r));
-
+            //            gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, (p.r), 0.0, (rp.r));
+            cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation.matrix->data, 3, p.r->data, 1, 0, rp.r->data, 1);
+            
             temp = (d.value) / ((d.value) + 1.0 + gsl_vector_get((rp.r), 1));
             (q->x) = gsl_vector_get((rp.r), 0) * temp;
             (q->y) = gsl_vector_get((rp.r), 2) * temp;

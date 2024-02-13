@@ -1606,7 +1606,9 @@ Rotation Rotation::operator *(const Rotation& s) {
 
     Rotation t;
 
-    gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, this->matrix, s.matrix, 0.0, t.matrix);
+//    gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, matrix, s.matrix, 0.0, t.matrix);
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 3, 3, 3, 1, matrix->data, 3, s.matrix->data, 3, 0, t.matrix->data, 3);
+
 
     //extract the Euler angles from the matrix t and write them into t
     t.set(t.matrix);
@@ -11015,8 +11017,8 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
     gsl_vector_set((rp.r), 2, 0.0);
 
     //convert rp -> r through rotation^{-1}
-    //    gsl_blas_dgemv(CblasTrans, 1.0, (rotation).matrix, (rp.r), 0.0, (r.r));
-    cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation.matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
+//        gsl_blas_dgemv(CblasTrans, 1.0, (rotation).matrix, (rp.r), 0.0, (r.r));
+    cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation.matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
 
 
     //obtain the  geographic position of the center of the circle of equal altitude above
@@ -11588,7 +11590,7 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
 
             //r = (rotation.matrix)^T . rp
             //            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
-            cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation.matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
+            cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation.matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
 
 
             q->setCartesian(String(""), r, String(""));
@@ -11614,7 +11616,7 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
 
             //r = (rotation.matrix)^T . rp
             //            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
-            cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation.matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
+            cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation.matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
 
             q->setCartesian(String(""), r, String(""));
 

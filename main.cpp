@@ -47,8 +47,9 @@
  6. To make breakpoints in included files to work in Xcode, create file  ~/.lldbinit and write in it 'settings set target.inline-breakpoint-strategy always'
  7. To build the app with make_app.sh:
  * download the libpng library from https://sourceforge.net/projects/libpng/
- - to set up everything on Windows 10:
+ - to set up everything on Windows 10/11:
  0. With Virtual Box, set up a partition with Windows 10. In the partition, set 2 cores, 13387 MB of base memory, set 'Shared Clipboard' to 'Bidirectional', install 'Guest Additions' and share the folder, say, sight_reduction_program, containing main.cpp, main.h, lib.cpp, lib.h, constants.h etc. Set up 100 GB of disk on the partition, and set it to pre-allocated.
+ 0b. With Parallels Desktop, set up a Windows virtual machine with at least 8GB of memory
  1. Install WinZip
  2. Istall MinGW : download mingw-get-setup from https://sourceforge.net/projects/mingw/
  3. Install Visual Studio: download VisualStudioSetup from https://visualstudio.microsoft.com/downloads/

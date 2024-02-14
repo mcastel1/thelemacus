@@ -3468,9 +3468,9 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
         if (length_format == String("time and speed")) {
             //read time and speed, and set l accordingly
 
-            t.read_from_stream(String("time"), input_stream, false, new_prefix);
+            time.read_from_stream(String("time"), input_stream, false, new_prefix);
             speed.read_from_stream(String("speed"), input_stream, false, new_prefix);
-            length = Length(t, speed);
+            length = Length(time, speed);
 
 
         }
@@ -4261,7 +4261,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
         }
         else {
 
-            t.print(String("time"), new_new_prefix, ostr);
+            time.print(String("time"), new_new_prefix, ostr);
             speed.print(String("speed"), new_new_prefix, ostr);
 
         }
@@ -15544,7 +15544,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     //the field for time to set the Route length
     text_time = new StaticText(panel, wxT("Time"), wxDefaultPosition, wxDefaultSize, 0);
-    time = new ChronoField<RouteFrame>(panel, &(route->t));
+    time = new ChronoField<RouteFrame>(panel, &(route->time));
     //the field for speed to set the Route length
     text_speed = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
     speed = new SpeedField<RouteFrame>(panel, &(route->speed), String("kt"));
@@ -16073,7 +16073,7 @@ void RouteFrame::set(void) {
 
         time->set();
         speed->set();
-        (route->length) = Length(route->t, route->speed);
+        (route->length) = Length(route->time, route->speed);
         length->set();
 
     }
@@ -16107,7 +16107,7 @@ template<class T> void RouteFrame::get(T& event) {
             (route->length_format) = LengthFormat("time and speed");
             time->get(event);
             speed->get(event);
-            (route->length) = Length(route->t, route->speed);
+            (route->length) = Length(route->time, route->speed);
 
         }
         else {

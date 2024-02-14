@@ -700,7 +700,7 @@ public:
     Rotation();
     Rotation(Angle, Angle, Angle);
     Rotation(Position, Position);
-    Rotation operator *(const Rotation&);
+    
     Rotation inverse(void);
     void set(Angle, Angle, Angle);
     void set(gsl_matrix*);
@@ -708,7 +708,8 @@ public:
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
     
-    
+    Rotation operator *(const Rotation&);
+
 };
 
 //this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
@@ -747,12 +748,13 @@ public:
     string to_string(unsigned int);
     bool distance(Position, Length*, String, String);
     bool is_in(Route, String);
-    bool operator==(const Position&);
-    bool operator!=(const Position&);
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
     void rotate(String, Rotation, Position*, String);
     
+    bool operator==(const Position&);
+    bool operator!=(const Position&);
+
 };
 
 
@@ -812,7 +814,7 @@ public:
   
     Length length;
     Speed speed;
-    Chrono t;
+    Chrono time;
     //this is the position in sight_list of the sight linked to route. If there is no sight linked to route, then related_sight = -1.
     Int related_sight;
     //a list of points containing the geo coordinates of points on the Route this

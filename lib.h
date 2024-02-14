@@ -750,7 +750,7 @@ public:
     bool is_in(Route, String);
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
-    void rotate(String, Rotation, Position*, String);
+    void rotate(const String&, const Rotation&, Position*, const String&);
     
     bool operator==(const Position&);
     bool operator!=(const Position&);

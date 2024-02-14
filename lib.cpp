@@ -4004,7 +4004,7 @@ bool Position::transport(Position* result, Route route, [[maybe_unused]] String 
 
 
 //rotates the Position (*this) according to the Rotation s, and writes the result in *p
-void Position::rotate(String name, Rotation r, Position* p, [[maybe_unused]] String prefix) {
+void Position::rotate(const String& name, const Rotation& r, Position* p, [[maybe_unused]] const String& prefix) {
 
     Cartesian u, s;
 

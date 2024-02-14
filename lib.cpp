@@ -8483,6 +8483,26 @@ inline void DrawPanel::RenderMousePositionLabel(
 }
 
 
+//call either Refresh() or RefreshWIN32 according to the operating system
+void DrawPanel::MyRefresh(){
+    
+#ifdef __APPLE__
+    //I am on apple operating system-> I use the wxWidgets Refresh() method, which is fast
+
+    
+    Refresh();
+
+#endif
+
+#ifdef _WIN32
+//I am on windows operating system-> I call RefreshWIN32() because the wxWidgets Refresh() is slow
+    
+    RefreshWIN32();
+
+#endif
+
+}
+
 //render the coastline by using the set of points points_coastline, meridians, parallels and their labels
 inline void DrawPanel::RenderBackground(
                                         wxDC& dc,
@@ -8682,22 +8702,6 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
 }
 
 
-void DrawPanel::MyRefresh(void){
-    
-#ifdef __APPLE__
-
-    Refresh();
-    
-#endif
-
-#ifdef _WIN32
-    
-    RefreshWIN32();
-
-#endif
-
-    
-}
 
 //render the Routes whose point coordinates with respect to the origin of DrawPanel are stored in points_curves, and whose reference-position coordinates with respect to the origin of DrawPanel are stored in reference_positions. the Route #highlighted_route is rendered with larger thickness. If foreground_color != wxNUllColour, the Routes are rendered with the colors in color_list, otherwise they are rendered with foreground_color
 inline void DrawPanel::RenderRoutes(
@@ -12350,30 +12354,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
             (parent->parent->changing_highlighted_object) = true;
 
-#ifdef __APPLE__
-
-            //on APPLE call Refresh, which triggers PaintEvent, to re-draw Routes with the right thickness
-            parent->parent->RefreshAll();
-
-#endif
-
-#ifdef _WIN32
-            //on WIN32 Refresh() is slow -> call RefreshWIN32 to re-draw the Routes with the right thickness
-
-            for (i = 0; i < ((parent->parent->chart_frames).size()); i++) {
-
-                //                //copy the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels, in such a way that RefreshWIN32() will be able to wipe out the Routes and their reference Positions
-                //                ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
-                //                (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
-                //
-                //                ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
-                //                (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
-
-                ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
-
-            }
-
-#endif
+            parent->parent->MyRefreshAll();
 
             (parent->parent->changing_highlighted_object) = false;
 
@@ -12382,18 +12363,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         else {
             //the highlighted Route has not changed ->  the chart does not need to be updated, but the coordinates of the instantaneous mouse position do -> call
 
-#ifdef __APPLE__
-
-            //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this and paint the new one and thus update the coordinates of the instantaneous mouse postion, because Refresh() triggers a call of PaintEvent
-            Refresh();
-
-#endif
-#ifdef _WIN32
-            //on WIN32, the Refresh() command slows down things -> I use RefreshWIN32()
-
-            RefreshWIN32();
-
-#endif
+            MyRefresh();
 
         }
 
@@ -12953,7 +12923,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #ifdef __APPLE__
                             //re-draw the chart
                             (this->*Draw)();
-                            Refresh();
 #endif
 #ifdef WIN32
                             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
@@ -12977,8 +12946,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //re-draw the chart
                             (this->*Draw)();
+<<<<<<< HEAD
                             RefreshWIN32();
+=======
+>>>>>>> pass_by_reference
 #endif
+                            MyRefresh();
                             //							FitAll();
 
                         }
@@ -12995,7 +12968,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //re-render the chart
                         (this->*Draw)();
-                        Refresh();
 #endif
 #ifdef WIN32
                         //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
@@ -13019,9 +12991,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                         //re-draw the chart
                         (this->*Draw)();
-                        RefreshWIN32();
 
 #endif
+                        MyRefresh();
 
                     }
 
@@ -13109,7 +13081,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-                            ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
 
 #endif
 #ifdef _WIN32
@@ -13124,9 +13095,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
+<<<<<<< HEAD
                             ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
+=======
+>>>>>>> pass_by_reference
 
 #endif
+                            
+                            ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
+
 
                         }
 
@@ -13183,7 +13160,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-                            (((parent->parent->chart_frames)[i])->draw_panel)->Refresh();
+
 #endif
 #ifdef _WIN32
 
@@ -13192,9 +13169,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
+<<<<<<< HEAD
                             ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
+=======
+>>>>>>> pass_by_reference
 
 #endif
+                            (((parent->parent->chart_frames)[i])->draw_panel)->MyRefresh();
+
 
                         }
 
@@ -13231,7 +13213,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #ifdef __APPLE__
                     //re-draw the chart
                     (this->*Draw)();
-                    Refresh();
 #endif
 
 #ifdef _WIN32
@@ -13256,8 +13237,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                     //re-draw the chart
                     (this->*Draw)();
+<<<<<<< HEAD
                     RefreshWIN32();
+=======
+>>>>>>> pass_by_reference
 #endif
+                    MyRefresh();
 
                     FitAll();
 
@@ -17324,8 +17309,17 @@ void ListFrame::DrawAll(void) {
 }
 
 
-//refresh all chart_frames
+//call Refresh()es on all chart_frames
 void ListFrame::RefreshAll(void) {
+
+    for (long i = 0; i < (chart_frames.size()); i++) {
+        ((chart_frames[i])->draw_panel)->MyRefresh();
+    }
+
+}
+
+//call MyRefresh on all chart_frames
+void ListFrame::MyRefreshAll(void) {
 
     for (long i = 0; i < (chart_frames.size()); i++) {
         ((chart_frames[i])->draw_panel)->MyRefresh();
@@ -17777,22 +17771,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
 
         changing_highlighted_object = true;
 
-
-#ifdef __APPLE__
-        //on APPLE I call Refresh() to trigger PaintEvent() in all DrawPanels and re-render the Routes/Positions with the new configuration of highlighted Routes/Positions
-
-        RefreshAll();
-
-#endif
-
-#ifdef _WIN32
-        //on WIN32 Refresh() is slow -> I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
-
-        for (i = 0; i < (chart_frames.size()); i++) {
-            (chart_frames[i])->draw_panel->RefreshWIN32();
-        }
-
-#endif
+        MyRefreshAll();
 
         changing_highlighted_object = false;
 

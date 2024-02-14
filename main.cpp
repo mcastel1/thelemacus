@@ -117,12 +117,8 @@
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class
  
  on WIN32:
-<<<<<<< HEAD
- - remove all remaining calls of Refresh() and replace them with RefreshWIN32(); 
-=======
- - when a ChartFrame is first created and when Reset is pressed, parallel and meridian labels are shown very small 
- - remove all remaining calls of Refresh() / RefreshAll() and replace them with MyRefresh()/ MyRefreshAll() as needed ;
->>>>>>> pass_by_reference
+ - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
+ - when a ChartFrame is first created and when Reset is pressed, parallel and meridian labels are shown very small
  - write the WIN32 part of void MyApp::OnTimer
  - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  */

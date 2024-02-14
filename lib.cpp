@@ -12946,10 +12946,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //re-draw the chart
                             (this->*Draw)();
-<<<<<<< HEAD
-                            RefreshWIN32();
-=======
->>>>>>> pass_by_reference
+
 #endif
                             MyRefresh();
                             //							FitAll();
@@ -13095,10 +13092,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-<<<<<<< HEAD
-                            ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
-=======
->>>>>>> pass_by_reference
 
 #endif
                             
@@ -13169,10 +13162,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-<<<<<<< HEAD
-                            ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
-=======
->>>>>>> pass_by_reference
 
 #endif
                             (((parent->parent->chart_frames)[i])->draw_panel)->MyRefresh();
@@ -13214,7 +13203,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     //re-draw the chart
                     (this->*Draw)();
 #endif
-
 #ifdef _WIN32
                     //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
                     parent->points_coastline_before.clear();
@@ -13237,10 +13225,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                     //re-draw the chart
                     (this->*Draw)();
-<<<<<<< HEAD
-                    RefreshWIN32();
-=======
->>>>>>> pass_by_reference
+
 #endif
                     MyRefresh();
 

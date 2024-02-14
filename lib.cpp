@@ -4034,7 +4034,7 @@ inline Cartesian::Cartesian(void) {
 
 
 //construct *this setting its coordinates from the coordinates of the geographic Position p
-inline Cartesian::Cartesian(Position p) {
+inline Cartesian::Cartesian(const Position& p) {
 
     r = gsl_vector_alloc(3);
 

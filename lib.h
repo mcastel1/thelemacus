@@ -767,7 +767,7 @@ public:
     gsl_vector* r;
     
     Cartesian();
-    Cartesian(Position);
+    Cartesian(const Position&);
     void setPosition(const Position&);
     void print(String, String, ostream&);
     void operator = (const Cartesian&);

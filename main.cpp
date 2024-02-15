@@ -597,7 +597,5 @@ bool MyApp::OnInit() {
         return false;
         
     }
-    
-    dummy_frame->~wxFrame();
-    
+        
 }

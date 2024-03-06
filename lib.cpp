@@ -19190,7 +19190,7 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
 
 
 //constructor of a LengthFormatField object, based on the parent frame frame
-template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p) {
+template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p)  : MultipleItemField<P>(panel_of_parent){
 
     parent = ((P*)(panel_of_parent->GetParent()));
     length_format = p;
@@ -19295,11 +19295,11 @@ template<class P> void LengthFormatField<P>::set(void) {
 }
 
 
-template<class P> template<class T> void LengthFormatField<P>::InsertIn(T* host) {
-
-    host->Add(sizer_v);
-
-}
+//template<class P> template<class T> void LengthFormatField<P>::InsertIn(T* host) {
+//
+//    host->Add(sizer_v);
+//
+//}
 
 
 
@@ -19343,11 +19343,11 @@ template<class P> bool LengthFormatField<P>::is_ok(void) {
 }
 
 
-template<class P> template <typename EventTag, typename Method, typename Object> void LengthFormatField<P>::Bind(EventTag tag, Method method, Object object) {
-
-    name->Bind(tag, method, object);
-
-}
+//template<class P> template <typename EventTag, typename Method, typename Object> void LengthFormatField<P>::Bind(EventTag tag, Method method, Object object) {
+//
+//    name->Bind(tag, method, object);
+//
+//}
 
 
 LengthFormat::LengthFormat(void) : String() {

@@ -2049,7 +2049,7 @@ public:
 
 
 //this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a LengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted
-template<class P> class LengthFormatField{
+template<class P> class LengthFormatField: public MultipleItemField<P>{
     
 public:
     
@@ -2067,11 +2067,11 @@ public:
     LengthFormatField(wxPanel*, LengthFormat*);
     void Fill(void);
     void set(void);
-    template<class T> void InsertIn(T*);
+//    template<class T> void InsertIn(T*);
     template<class E> void OnEdit(E&);
     void Enable(bool);
     bool is_ok(void);
-    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+//    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
 

@@ -14028,7 +14028,7 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
                 //insert projection #i into data->recent_bodies
                 wxGetApp().list_frame->data->insert_recent_projection(i);
                 //I update p->name according to the content of data->recent_projections file
-                p->fill_projections();
+                p->Fill();
 
             }
 
@@ -14100,7 +14100,7 @@ template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& even
                 //insert projection #i into data->recent_bodies
                 wxGetApp().list_frame->data->insert_recent_projection(i);
                 //I update p->name according to the content of data->recent_projections file
-                p->fill_length_formats();
+                p->Fill();
 
             }
 
@@ -19017,7 +19017,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-    fill_projections();
+    Fill();
     name->SetValue(items[0]);
     AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -19035,7 +19035,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 
 
 //update the dropdown menu of ProjectionField according to wxGetApp().list_frame->data->recent_projections in such a way that the recent items appear on top of it
-template<class P> void ProjectionField<P>::fill_projections(void) {
+template<class P> void ProjectionField<P>::Fill(void) {
 
     unsigned int i, j;
     wxArrayString projections_temp;
@@ -19125,7 +19125,7 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
 
     }
 
-    fill_projections();
+    Fill();
 
 }
 */
@@ -19154,7 +19154,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-    fill_length_formats();
+    Fill();
     name->SetValue(items[0]);
     AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -19172,7 +19172,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 
 
 //update the dropdown menu of ProjectionField according to wxGetApp().list_frame->data->recent_length_formats in such a way that the recent items appear on top of it
-template<class P> void LengthFormatField<P>::fill_length_formats(void) {
+template<class P> void LengthFormatField<P>::Fill(void) {
 
     unsigned int i, j;
     wxArrayString length_formats_temp;

@@ -2010,12 +2010,12 @@ public:
     wxArrayString  /*this is equal to a standard list of the available graphical types*/items, /*same as projections, but it is fixed and never wrote to: it is a fixed catalog*/catalog;
     //this is the wxComboBox with the name of the projections
     wxComboBox* name;
-    CheckProjection<P>* check;
     vector<int> recent_items;
     bool ok;
-    
+    CheckProjection<P>* check;
+
     ProjectionField(wxPanel*);
-    void fill_projections(void);
+    void Fill(void);
 //    void read_recent_projections(void);
     template<class T> void InsertIn(T*, wxSizerFlags&);
     template<class E> void OnEdit(E&);
@@ -2032,16 +2032,16 @@ public:
     P* parent;
     wxBoxSizer *sizer_h, *sizer_v;
     wxArrayString  /*this is equal to a standard list of the available formats for a length*/items, /*same as length_formats, but it is fixed and never wrote to: it is a fixed catalog*/catalog;
-    //this points to a LengthFormat object, which contains the date written in the GUI field of this
-    LengthFormat* length_format;
     //this is the wxComboBox with the name of the length formats
     wxComboBox* name;
-    CheckLengthFormat<P>* check;
+    //this points to a LengthFormat object, which contains the date written in the GUI field of this
     vector<int> recent_items;
     bool ok;
-    
+    LengthFormat* length_format;
+    CheckLengthFormat<P>* check;
+
     LengthFormatField(wxPanel*, LengthFormat*);
-    void fill_length_formats(void);
+    void Fill(void);
     void set(void);
     template<class T> void InsertIn(T*);
     template<class E> void OnEdit(E&);

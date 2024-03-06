@@ -19011,14 +19011,14 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
     projection_catalog.Add(wxT("Mercator"));
     projection_catalog.Add(wxT("3D"));
     //    projection_catalog.Add(wxT("Lambert"));
-    projections = projection_catalog;
+    items = projection_catalog;
 
     check = new CheckProjection<P>(this);
 
-    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, projections, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
     fill_projections();
-    name->SetValue(projections[0]);
+    name->SetValue(items[0]);
     AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
@@ -19045,35 +19045,35 @@ template<class P> void ProjectionField<P>::fill_projections(void) {
     //save the current value of name in name_temp
     name_temp = (name->GetValue());
     //create the temporary list of projections projections_temp from projection_catalog
-    for (projections_temp.Clear(), i = 0; i < projections.GetCount(); i++) {
+    for (projections_temp.Clear(), i = 0; i < items.GetCount(); i++) {
         projections_temp.Add(projection_catalog[i]);
     }
 
     //I first add to projections the recently selected celestial projections written in (wxGetApp().list_frame->data->recent_projections)
-    for (projections.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_projections.size()); i++) {
+    for (items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_projections.size()); i++) {
 
-        projections.Add(projections_temp[(wxGetApp().list_frame->data->recent_projections)[i]]);
+        items.Add(projections_temp[(wxGetApp().list_frame->data->recent_projections)[i]]);
 
     }
 
     //then, I fill projections with the remaining projections
     for (i = 0; i < projections_temp.GetCount(); i++) {
 
-        for (is_present = false, j = 0; (j < projections.GetCount()) && (!is_present); j++) {
+        for (is_present = false, j = 0; (j < items.GetCount()) && (!is_present); j++) {
 
-            if (projections[j] == projections_temp[i]) {
+            if (items[j] == projections_temp[i]) {
                 is_present = true;
             }
 
         }
 
         if (!is_present) {
-            projections.Add(projections_temp[i]);
+            items.Add(projections_temp[i]);
         }
 
     }
 
-    name->Set(projections);
+    name->Set(items);
     //because name->Set(projections clears the value of name, I set the value of name back to name_temp
     name->SetValue(name_temp);
 
@@ -21126,7 +21126,7 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
     bool success;
 
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    find_and_replace_case_insensitive(name, projections, &success, NULL);
+    find_and_replace_case_insensitive(name, items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid
     ok = success;

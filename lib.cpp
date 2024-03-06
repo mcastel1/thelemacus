@@ -19148,14 +19148,14 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
     length_formats_catalog.Clear();
     length_formats_catalog.Add(wxT("Time and speed"));
     length_formats_catalog.Add(wxT("Length"));
-    length_formats = length_formats_catalog;
+    items = length_formats_catalog;
 
     check = new CheckLengthFormat<P>(this);
 
-    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, length_formats, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
     fill_length_formats();
-    name->SetValue(length_formats[0]);
+    name->SetValue(items[0]);
     AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     name->Bind(wxEVT_COMBOBOX, &LengthFormatField::OnEdit<wxCommandEvent>, this);
@@ -19182,35 +19182,35 @@ template<class P> void LengthFormatField<P>::fill_length_formats(void) {
     //save the current value of name in name_temp
     name_temp = (name->GetValue());
     //create the temporary list of length_formats length_formats_temp from projection_catalog
-    for (length_formats_temp.Clear(), i = 0; i < length_formats.GetCount(); i++) {
+    for (length_formats_temp.Clear(), i = 0; i < items.GetCount(); i++) {
         length_formats_temp.Add(length_formats_catalog[i]);
     }
 
     //I first add to length_formats the recently selected celestial length_formats written in (wxGetApp().list_frame->data->recent_length_formats)
-    for (length_formats.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_length_formats.size()); i++) {
+    for (items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_length_formats.size()); i++) {
 
-        length_formats.Add(length_formats_temp[(wxGetApp().list_frame->data->recent_length_formats)[i]]);
+        items.Add(length_formats_temp[(wxGetApp().list_frame->data->recent_length_formats)[i]]);
 
     }
 
     //then, I fill length_formats with the remaining length_formats
     for (i = 0; i < length_formats_temp.GetCount(); i++) {
 
-        for (is_present = false, j = 0; (j < length_formats.GetCount()) && (!is_present); j++) {
+        for (is_present = false, j = 0; (j < items.GetCount()) && (!is_present); j++) {
 
-            if (length_formats[j] == length_formats_temp[i]) {
+            if (items[j] == length_formats_temp[i]) {
                 is_present = true;
             }
 
         }
 
         if (!is_present) {
-            length_formats.Add(length_formats_temp[i]);
+            items.Add(length_formats_temp[i]);
         }
 
     }
 
-    name->Set(length_formats);
+    name->Set(items);
     //because name->Set(length_formats clears the value of name, I set the value of name back to name_temp
     name->SetValue(name_temp);
 
@@ -19260,7 +19260,7 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
     bool success;
 
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    find_and_replace_case_insensitive(name, length_formats, &success, NULL);
+    find_and_replace_case_insensitive(name, items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid
     ok = success;

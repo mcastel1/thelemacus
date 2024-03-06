@@ -19037,6 +19037,21 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
+
+template<class P> template<class T> void MultipleItemField<P>::InsertIn(T* host) {
+
+    host->Add(sizer_v);
+
+}
+
+
+template<class P> template<class T> void MultipleItemField<P>::InsertIn(T* host, wxSizerFlags& flag) {
+
+    host->Add(sizer_v, flag);
+
+}
+
+
 //constructor of a ProjectionField object, based on the parent frame frame
 template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) : MultipleItemField<P>(panel_of_parent) {
 

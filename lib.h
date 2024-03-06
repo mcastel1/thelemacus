@@ -2001,6 +2001,28 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
+//this class is the parent of all classes for GUI fields which include a list of multiple items to  be selected (such as ProjectionField, LengthFormatField, ...). All members and methods which are common to these children classes are written in this parent class
+template<class P> class MultipleItemField{
+    
+public:
+    
+    P* parent;
+    wxBoxSizer *sizer_h, *sizer_v;
+    wxArrayString  /*this is equal to a standard list of the available types*/items, /*a fixed catalog of the items in this MultipleChoiceField*/catalog;
+    //this is the wxComboBox with the name of the projections
+    wxComboBox* name;
+    vector<int> recent_items;
+    bool ok;
+
+    MultipleItemField(wxPanel*);
+    void Fill(void);
+//    void read_recent_projections(void);
+    template<class T> void InsertIn(T*, wxSizerFlags&);
+    template<class E> void OnEdit(E&);
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+    
+};
+
 template<class P> class ProjectionField{
     
 public:

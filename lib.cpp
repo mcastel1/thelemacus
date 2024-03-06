@@ -19030,6 +19030,13 @@ template<class P> MultipleItemField<P>::MultipleItemField(wxPanel* panel_of_pare
 }
 
 
+template<class P> template <typename EventTag, typename Method, typename Object> void MultipleItemField<P>::Bind(EventTag tag, Method method, Object object) {
+
+    name->Bind(tag, method, object);
+
+}
+
+
 //constructor of a ProjectionField object, based on the parent frame frame
 template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) : MultipleItemField<P>(panel_of_parent) {
 

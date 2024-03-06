@@ -112,7 +112,6 @@
  - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
 
  ********** THINGS TO FIX ************
- - check why the meridian ticks form triangles in mercator projeciton
  - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
  - frames are not resized according to the size of their title
  - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField) must be defined in terms of a parent class

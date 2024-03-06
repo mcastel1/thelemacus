@@ -9795,7 +9795,7 @@ inline void DrawPanel::Draw_Mercator(void) {
 
                 //                ticks_now.push_back(route);
                 ticks_now.resize((ticks_now.size()) + 1);
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(grid_now.back()), String(""));
+                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
                 //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
             }
 

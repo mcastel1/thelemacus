@@ -19013,12 +19013,12 @@ template<class P> MultipleItemField<P>::MultipleItemField(wxPanel* panel_of_pare
 
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-    Fill();
+//    Fill();
     name->SetValue(items[0]);
     AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    name->Bind(wxEVT_COMBOBOX, &MultipleItemField::OnEdit<wxCommandEvent>, this);
-    name->Bind(wxEVT_KEY_UP, &MultipleItemField::OnEdit<wxKeyEvent>, this);
+//    name->Bind(wxEVT_COMBOBOX, &MultipleItemField::OnEdit<wxCommandEvent>, this);
+//    name->Bind(wxEVT_KEY_UP, &MultipleItemField::OnEdit<wxKeyEvent>, this);
 //    name->Bind(wxEVT_KILL_FOCUS, *check);
 
     sizer_h = new wxBoxSizer(wxHORIZONTAL);

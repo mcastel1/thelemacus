@@ -2015,10 +2015,10 @@ public:
     bool ok;
 
     MultipleItemField(wxPanel*);
-    void Fill(void);
+//    void Fill(void);
 //    void read_recent_projections(void);
     template<class T> void InsertIn(T*, wxSizerFlags&);
-    template<class E> void OnEdit(E&);
+//    template<class E> void OnEdit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };

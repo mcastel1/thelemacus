@@ -19066,37 +19066,37 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 template<class P> void ProjectionField<P>::Fill(void) {
 
     unsigned int i, j;
-    wxArrayString projections_temp;
+    wxArrayString items_temp;
     wxString name_temp;
     bool is_present;
 
     //save the current value of name in name_temp
     name_temp = (name->GetValue());
     //create the temporary list of projections projections_temp from catalog
-    for (projections_temp.Clear(), i = 0; i < items.GetCount(); i++) {
-        projections_temp.Add(catalog[i]);
+    for (items_temp.Clear(), i = 0; i < items.GetCount(); i++) {
+        items_temp.Add(catalog[i]);
     }
 
     //I first add to projections the recently selected celestial projections written in (wxGetApp().list_frame->data->recent_projections)
     for (items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_projections.size()); i++) {
 
-        items.Add(projections_temp[(wxGetApp().list_frame->data->recent_projections)[i]]);
+        items.Add(items_temp[(wxGetApp().list_frame->data->recent_projections)[i]]);
 
     }
 
     //then, I fill projections with the remaining projections
-    for (i = 0; i < projections_temp.GetCount(); i++) {
+    for (i=0; i < items_temp.GetCount(); i++) {
 
         for (is_present = false, j = 0; (j < items.GetCount()) && (!is_present); j++) {
 
-            if (items[j] == projections_temp[i]) {
+            if (items[j] == items_temp[i]) {
                 is_present = true;
             }
 
         }
 
         if (!is_present) {
-            items.Add(projections_temp[i]);
+            items.Add(items_temp[i]);
         }
 
     }
@@ -19105,7 +19105,7 @@ template<class P> void ProjectionField<P>::Fill(void) {
     //because name->Set(projections clears the value of name, I set the value of name back to name_temp
     name->SetValue(name_temp);
 
-    projections_temp.Clear();
+    items_temp.Clear();
 
 }
 
@@ -19203,37 +19203,37 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 template<class P> void LengthFormatField<P>::Fill(void) {
 
     unsigned int i, j;
-    wxArrayString length_formats_temp;
+    wxArrayString items_temp;
     wxString name_temp;
     bool is_present;
 
     //save the current value of name in name_temp
     name_temp = (name->GetValue());
     //create the temporary list of length_formats length_formats_temp from catalog
-    for (length_formats_temp.Clear(), i = 0; i < items.GetCount(); i++) {
-        length_formats_temp.Add(catalog[i]);
+    for (items_temp.Clear(), i = 0; i < items.GetCount(); i++) {
+        items_temp.Add(catalog[i]);
     }
 
     //I first add to length_formats the recently selected celestial length_formats written in (wxGetApp().list_frame->data->recent_length_formats)
     for (items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_length_formats.size()); i++) {
 
-        items.Add(length_formats_temp[(wxGetApp().list_frame->data->recent_length_formats)[i]]);
+        items.Add(items_temp[(wxGetApp().list_frame->data->recent_length_formats)[i]]);
 
     }
 
     //then, I fill length_formats with the remaining length_formats
-    for (i = 0; i < length_formats_temp.GetCount(); i++) {
+    for (i=0; i < items_temp.GetCount(); i++) {
 
         for (is_present = false, j = 0; (j < items.GetCount()) && (!is_present); j++) {
 
-            if (items[j] == length_formats_temp[i]) {
+            if (items[j] == items_temp[i]) {
                 is_present = true;
             }
 
         }
 
         if (!is_present) {
-            items.Add(length_formats_temp[i]);
+            items.Add(items_temp[i]);
         }
 
     }
@@ -19242,7 +19242,7 @@ template<class P> void LengthFormatField<P>::Fill(void) {
     //because name->Set(length_formats clears the value of name, I set the value of name back to name_temp
     name->SetValue(name_temp);
 
-    length_formats_temp.Clear();
+    items_temp.Clear();
 
 }
 

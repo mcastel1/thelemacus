@@ -19182,11 +19182,11 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
 
 
 
-template<class P> template <typename EventTag, typename Method, typename Object> void ProjectionField<P>::Bind(EventTag tag, Method method, Object object) {
-
-    name->Bind(tag, method, object);
-
-}
+//template<class P> template <typename EventTag, typename Method, typename Object> void ProjectionField<P>::Bind(EventTag tag, Method method, Object object) {
+//
+//    name->Bind(tag, method, object);
+//
+//}
 
 
 //constructor of a LengthFormatField object, based on the parent frame frame
@@ -21163,11 +21163,11 @@ template<class T> void RouteTypeField::InsertIn(T* host) {
 
 }
 
-template<class P> template<class T> void ProjectionField<P>::InsertIn(T* host, wxSizerFlags& flag) {
-
-    host->Add(sizer_v, flag);
-
-}
+//template<class P> template<class T> void ProjectionField<P>::InsertIn(T* host, wxSizerFlags& flag) {
+//
+//    host->Add(sizer_v, flag);
+//
+//}
 
 //this function is called every time the user modifies the text in this->name: it checks whether the text entered so far in name is valid, if name is valid, it calls OnChooseProjection to select the projection written in name
 template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {

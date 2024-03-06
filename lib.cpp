@@ -21145,23 +21145,6 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
 
 }
 
-//OnSelectInListControlSights::OnSelectInListControlSights(ListFrame* f_in){
-//    
-//    f = f_in;
-//    
-//}
-
-//OnSelectInListControlPositions::OnSelectInListControlPositions(ListFrame* f_in){
-//    
-//    f = f_in;
-//    
-//}
-//
-//OnSelectInListControlRoutes::OnSelectInListControlRoutes(ListFrame* f_in){
-//    
-//    f = f_in;
-//    
-//}
 
 OnSelectRouteInListControlRoutesForTransport::OnSelectRouteInListControlRoutesForTransport(ListFrame* f_in) {
 

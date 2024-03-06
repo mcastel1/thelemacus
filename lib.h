@@ -27,6 +27,7 @@
 
 
 template<class P> class BodyField;
+template<class P> class MultipleItemField;
 template<class P> class ProjectionField;
 template<class P> class LengthFormatField;
 template<class P> class LimbField;
@@ -2014,7 +2015,7 @@ public:
     vector<int> recent_items;
     bool ok;
 
-    MultipleItemField(wxPanel*);
+    MultipleItemField(wxPanel*, const vector<String>&);
 //    void Fill(void);
 //    void read_recent_projections(void);
     template<class T> void InsertIn(T*);

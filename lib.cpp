@@ -19003,12 +19003,18 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
 }
 
 
-//constructor of a MultipleItemField object, which has   frame as parent frame. All items that are general enough to be common to all classes which are inherited from MultipleItemField are initialized here. Items that are specific to the inherited classes will be initialized in the inherited-class constructors
-template<class P> MultipleItemField<P>::MultipleItemField(wxPanel* panel_of_parent){
+//constructor of a MultipleItemField object, which is into *panel_of_parent. The list of items in *this is stored into catalog_in. All items that are general enough to be common to all classes which are inherited from MultipleItemField are initialized here. Items that are specific to the inherited classes will be initialized in the inherited-class constructors
+template<class P> MultipleItemField<P>::MultipleItemField(wxPanel* panel_of_parent, const vector<String>& catalog_in){
+    
+    unsigned int i;
 
+    //set parent
     parent = ((P*)(panel_of_parent->GetParent()));
+    //set catalog equal to catalog_in 
+    for(catalog.Clear(), i=0; i<catalog_in.size(); i++){
+        catalog.push_back(wxString(catalog_in[i].value));
+    }
 
-    catalog.Clear();
     items = catalog;
 
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
@@ -19053,15 +19059,15 @@ template<class P> template<class T> void MultipleItemField<P>::InsertIn(T* host,
 
 
 //constructor of a ProjectionField object, based on the parent frame frame
-template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) : MultipleItemField<P>(panel_of_parent) {
+template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) : MultipleItemField<P>(panel_of_parent, {String("Mercator"), String("3D")}) {
 
     parent = ((P*)(panel_of_parent->GetParent()));
 
-    catalog.Clear();
-    catalog.Add(wxT("Mercator"));
-    catalog.Add(wxT("3D"));
+//    catalog.Clear();
+//    catalog.Add(wxT("Mercator"));
+//    catalog.Add(wxT("3D"));
     //    catalog.Add(wxT("Lambert"));
-    items = catalog;
+//    items = catalog;
 
     check = new CheckProjection<P>(this);
 
@@ -19190,15 +19196,15 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
 
 
 //constructor of a LengthFormatField object, based on the parent frame frame
-template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p)  : MultipleItemField<P>(panel_of_parent){
+template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p)  : MultipleItemField<P>(panel_of_parent, {String("Time and speed"), String("Length")}){
 
     parent = ((P*)(panel_of_parent->GetParent()));
     length_format = p;
 
-    catalog.Clear();
-    catalog.Add(wxT("Time and speed"));
-    catalog.Add(wxT("Length"));
-    items = catalog;
+//    catalog.Clear();
+//    catalog.Add(wxT("Time and speed"));
+//    catalog.Add(wxT("Length"));
+//    items = catalog;
 
     check = new CheckLengthFormat<P>(this);
 

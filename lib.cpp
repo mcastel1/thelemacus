@@ -14084,8 +14084,8 @@ template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& even
         bool check;
 
         //I check whether the name in the GUI field LengthFormat matches one of the LengthFormat names in p->names
-        for (check = false, i = 0; (i < (p->length_formats_catalog).size()) && (!check); i++) {
-            if (((p->name)->GetValue()) == ((p->length_formats_catalog)[i])) {
+        for (check = false, i = 0; (i < (p->catalog).size()) && (!check); i++) {
+            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
                 check = true;
             }
         }
@@ -14119,8 +14119,8 @@ template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& even
 
             temp.str("");
             temp << "Length format must be one of the following: ";
-            for (i = 0; i < ((p->length_formats_catalog).GetCount()); i++) {
-                temp << ((p->length_formats_catalog)[i]).ToStdString() << (i < ((p->length_formats_catalog).GetCount()) - 1 ? ", " : ".");
+            for (i = 0; i < ((p->catalog).GetCount()); i++) {
+                temp << ((p->catalog)[i]).ToStdString() << (i < ((p->catalog).GetCount()) - 1 ? ", " : ".");
             }
 
 
@@ -16101,7 +16101,7 @@ template<class T> void RouteFrame::get(T& event) {
         start_phi->get(event);
         start_lambda->get(event);
 
-        if ((length_format->name->GetValue()) == length_format->length_formats_catalog[0]) {
+        if ((length_format->name->GetValue()) == length_format->catalog[0]) {
             //in the GUI field, lengths are expressed at Chrono x Speed -> get t and v and set in the non-GUI field to true. I also set route->l according to time and speed
 
             (route->length_format) = LengthFormat("time and speed");
@@ -16135,8 +16135,8 @@ template<class E> void RouteFrame::TryToEnableTimeSpeedLength(E& event) {
             int i;
             bool b = false;
 
-            //run over all entries of length_formats_catalog and store in i the id of the entry that is equal to l_format->name->GetValue()
-            for (i = 0; (i < (length_format->length_formats_catalog).size()) && ((length_format->name->GetValue()) != (length_format->length_formats_catalog)[i]); i++) {}
+            //run over all entries of length_format->catalog and store in i the id of the entry that is equal to l_format->name->GetValue()
+            for (i = 0; (i < (length_format->catalog).size()) && ((length_format->name->GetValue()) != (length_format->catalog)[i]); i++) {}
 
             switch (i) {
 
@@ -19145,10 +19145,10 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
     parent = ((P*)(panel_of_parent->GetParent()));
     length_format = p;
 
-    length_formats_catalog.Clear();
-    length_formats_catalog.Add(wxT("Time and speed"));
-    length_formats_catalog.Add(wxT("Length"));
-    items = length_formats_catalog;
+    catalog.Clear();
+    catalog.Add(wxT("Time and speed"));
+    catalog.Add(wxT("Length"));
+    items = catalog;
 
     check = new CheckLengthFormat<P>(this);
 
@@ -19183,7 +19183,7 @@ template<class P> void LengthFormatField<P>::fill_length_formats(void) {
     name_temp = (name->GetValue());
     //create the temporary list of length_formats length_formats_temp from projection_catalog
     for (length_formats_temp.Clear(), i = 0; i < items.GetCount(); i++) {
-        length_formats_temp.Add(length_formats_catalog[i]);
+        length_formats_temp.Add(catalog[i]);
     }
 
     //I first add to length_formats the recently selected celestial length_formats written in (wxGetApp().list_frame->data->recent_length_formats)

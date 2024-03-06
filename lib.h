@@ -2031,7 +2031,7 @@ public:
     
     P* parent;
     wxBoxSizer *sizer_h, *sizer_v;
-    wxArrayString  /*this is equal to a standard list of the available formats for a length*/items, /*same as length_formats, but it is fixed and never wrote to: it is a fixed catalog*/length_formats_catalog;
+    wxArrayString  /*this is equal to a standard list of the available formats for a length*/items, /*same as length_formats, but it is fixed and never wrote to: it is a fixed catalog*/catalog;
     //this points to a LengthFormat object, which contains the date written in the GUI field of this
     LengthFormat* length_format;
     //this is the wxComboBox with the name of the length formats

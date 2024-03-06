@@ -2023,7 +2023,8 @@ public:
     
 };
 
-template<class P> class ProjectionField{
+
+template<class P> class ProjectionField: public MultipleItemField<P>{
     
 public:
     

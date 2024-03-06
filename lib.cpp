@@ -19002,8 +19002,36 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
 
 }
 
+
+//constructor of a MultipleItemField object, which has   frame as parent frame. All items that are general enough to be common to all classes which are inherited from MultipleItemField are initialized here. Items that are specific to the inherited classes will be initialized in the inherited-class constructors
+template<class P> MultipleItemField<P>::MultipleItemField(wxPanel* panel_of_parent){
+
+    parent = ((P*)(panel_of_parent->GetParent()));
+
+    catalog.Clear();
+    items = catalog;
+
+    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    //SetColor(name);
+    Fill();
+    name->SetValue(items[0]);
+    AdjustWidth(name);
+    //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    name->Bind(wxEVT_COMBOBOX, &MultipleItemField::OnEdit<wxCommandEvent>, this);
+    name->Bind(wxEVT_KEY_UP, &MultipleItemField::OnEdit<wxKeyEvent>, this);
+//    name->Bind(wxEVT_KILL_FOCUS, *check);
+
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    sizer_h->Add(name, 0, wxALIGN_CENTER);
+
+}
+
+
 //constructor of a ProjectionField object, based on the parent frame frame
-template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) {
+template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) : MultipleItemField<P>(panel_of_parent) {
 
     parent = ((P*)(panel_of_parent->GetParent()));
 

@@ -14012,8 +14012,8 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
         bool check;
 
         //I check whether the name in the GUI field Projection matches one of the Projection names in p->names
-        for (check = false, i = 0; (i < (p->projection_catalog).size()) && (!check); i++) {
-            if (((p->name)->GetValue()) == ((p->projection_catalog)[i])) {
+        for (check = false, i = 0; (i < (p->catalog).size()) && (!check); i++) {
+            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
                 check = true;
             }
         }
@@ -14047,8 +14047,8 @@ template<class P> template<class T>void CheckProjection<P>::operator()(T& event)
 
             temp.str("");
             temp << "Projection must be one of the following: ";
-            for (i = 0; i < ((p->projection_catalog).GetCount()); i++) {
-                temp << ((p->projection_catalog)[i]).ToStdString() << (i < ((p->projection_catalog).GetCount()) - 1 ? ", " : ".");
+            for (i = 0; i < (p->catalog.GetCount()); i++) {
+                temp << ((p->catalog)[i]).ToStdString() << (i < (p->catalog.GetCount()) - 1 ? ", " : ".");
             }
 
 
@@ -19007,11 +19007,11 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 
     parent = ((P*)(panel_of_parent->GetParent()));
 
-    projection_catalog.Clear();
-    projection_catalog.Add(wxT("Mercator"));
-    projection_catalog.Add(wxT("3D"));
-    //    projection_catalog.Add(wxT("Lambert"));
-    items = projection_catalog;
+    catalog.Clear();
+    catalog.Add(wxT("Mercator"));
+    catalog.Add(wxT("3D"));
+    //    catalog.Add(wxT("Lambert"));
+    items = catalog;
 
     check = new CheckProjection<P>(this);
 
@@ -19044,9 +19044,9 @@ template<class P> void ProjectionField<P>::fill_projections(void) {
 
     //save the current value of name in name_temp
     name_temp = (name->GetValue());
-    //create the temporary list of projections projections_temp from projection_catalog
+    //create the temporary list of projections projections_temp from catalog
     for (projections_temp.Clear(), i = 0; i < items.GetCount(); i++) {
-        projections_temp.Add(projection_catalog[i]);
+        projections_temp.Add(catalog[i]);
     }
 
     //I first add to projections the recently selected celestial projections written in (wxGetApp().list_frame->data->recent_projections)
@@ -19181,7 +19181,7 @@ template<class P> void LengthFormatField<P>::fill_length_formats(void) {
 
     //save the current value of name in name_temp
     name_temp = (name->GetValue());
-    //create the temporary list of length_formats length_formats_temp from projection_catalog
+    //create the temporary list of length_formats length_formats_temp from catalog
     for (length_formats_temp.Clear(), i = 0; i < items.GetCount(); i++) {
         length_formats_temp.Add(catalog[i]);
     }

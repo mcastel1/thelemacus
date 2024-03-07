@@ -15614,8 +15614,9 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     type = new RouteTypeField<RouteFrame>(panel, &(route->type), &(wxGetApp().list_frame->data->recent_route_types));
     //if the Route of *this is for transport, then only show 'loxodrome' and 'orthodrome' in type
     if (for_transport) {
-        type->types.Remove("circle of equal altitude");
-        type->name->Set(type->types);
+        type->catalog.Remove("circle of equal altitude");
+        type->items.Remove("circle of equal altitude");
+        type->name->Set(type->items);
     }
 
     //Z
@@ -18730,8 +18731,8 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
         bool check;
 
         //I check whether the name in the GUI field body matches one of the body names in catalog
-        for (check = false, i = 0; (i < ((p->types).size())) && (!check); i++) {
-            if (((p->name)->GetValue()) == ((p->types)[i])) {
+        for (check = false, i = 0; (i < (p->catalog.size())) && (!check); i++) {
+            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
                 check = true;
             }
         }
@@ -18740,7 +18741,7 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
         if (check) {
 
             //enable/disable the related fields in RouteFrame f
-            enable = ((((p->types)[i]) == wxString("loxodrome")) || (((p->types)[i]) == wxString("orthodrome")));
+            enable = ((((p->catalog)[i]) == wxString("loxodrome")) || (((p->catalog)[i]) == wxString("orthodrome")));
 
             (f->Z)->Enable(enable);
 
@@ -20671,21 +20672,21 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 }
 
 //constructor of a RouteTypeField object, based on the parent frame frame
-template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, String* s, vector<int>* recent_items_in) : MultipleItemField<P, void>(panel_of_parent, NULL, {String("Loxodrome"), String("Orthodrome"), String("Circle of equal altitude")}, recent_items_in) {
+template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, String* s, vector<int>* recent_items_in) : MultipleItemField<P, void>(panel_of_parent, NULL, {String("loxodrome"), String("orthodrome"), String("circle of equal altitude")}, recent_items_in) {
 
     MultipleItemField<P, void>::parent = ((P*)(panel_of_parent->GetParent()));
 //    parent_frame = frame;
     //I link the internal pointers p and c to the respective non-GUI object string
     type = s;
 
-    types.Clear();
-    //tabulate types of Routes
-    types.Add(wxString("loxodrome"));
-    types.Add(wxString("orthodrome"));
-    types.Add(wxString("circle of equal altitude"));
+//    types.Clear();
+//    //tabulate types of Routes
+//    types.Add(wxString("loxodrome"));
+//    types.Add(wxString("orthodrome"));
+//    types.Add(wxString("circle of equal altitude"));
 
     check = new CheckRouteType<P>(this);
-    MultipleItemField<P, void>::name = new wxComboBox(MultipleItemField<P, void>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    MultipleItemField<P, void>::name = new wxComboBox(MultipleItemField<P, void>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, void>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 
     //SetColor(name);
     AdjustWidth(MultipleItemField<P, void>::name);
@@ -20948,14 +20949,14 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
     bool success, enable;
 
 
-    //I check whether the name in the GUI field body matches one of the body names in catalog
-    find_and_replace_case_insensitive(MultipleItemField<P, void>::name, types, &success, &i);
+    //I check whether the name in the GUI field  matches one of the entries  of catalog
+    find_and_replace_case_insensitive(MultipleItemField<P, void>::name, MultipleItemField<P, void>::catalog, &success, &i);
 
     if (success) {
         //the text entered in name is valid
 
         //enable/disable the related fields in RouteFrame f
-        enable = (((types[i]) == wxString("loxodrome")) || ((types[i]) == wxString("orthodrome")));
+        enable = ((((MultipleItemField<P, void>::catalog)[i]) == wxString("loxodrome")) || (((MultipleItemField<P, void>::catalog)[i]) == wxString("orthodrome")));
 
         MultipleItemField<P, void>::parent->Z->Enable(enable);
         MultipleItemField<P, void>::parent->start_phi->Enable(enable && (!(MultipleItemField<P, void>::parent->for_transport)));

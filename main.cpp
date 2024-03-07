@@ -522,7 +522,8 @@ bool MyApp::OnInit() {
     n_recent_bodies.read_from_file_to(String("number of recent bodies"), (wxGetApp().path_file_init), String("R"), String(""));
     n_recent_projections.read_from_file_to(String("number of recent projections"), (wxGetApp().path_file_init), String("R"), String(""));
     n_recent_length_formats.read_from_file_to(String("number of recent length formats"), (wxGetApp().path_file_init), String("R"), String(""));
-    
+    n_recent_route_types.read_from_file_to(String("number of recent route types"), (wxGetApp().path_file_init), String("R"), String(""));
+
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
         
     list_frame = new ListFrame("Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));

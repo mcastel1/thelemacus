@@ -2012,7 +2012,8 @@ public:
     wxArrayString  /*this is equal to a standard list of the available types*/items, /*a fixed catalog of the items in this MultipleChoiceField*/catalog;
     //this is the wxComboBox with the name of the projections
     wxComboBox* name;
-    vector<int> recent_items;
+    //this points to an external vector<int> where the recent items are stored: the Fill() method  reads from *recent_items
+    vector<int>* recent_items;
     bool ok;
 
     MultipleItemField(wxPanel*, const vector<String>&);

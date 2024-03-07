@@ -19219,11 +19219,11 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
     name->Bind(wxEVT_KEY_UP, &LengthFormatField::OnEdit<wxKeyEvent>, this);
     name->Bind(wxEVT_KILL_FOCUS, *check);
 
-    sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    sizer_v = new wxBoxSizer(wxVERTICAL);
+    MultipleItemField<P>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    MultipleItemField<P>::sizer_v = new wxBoxSizer(wxVERTICAL);
 
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(name, 0, wxALIGN_CENTER);
+    MultipleItemField<P>::sizer_v->Add(MultipleItemField<P>::sizer_h, 0, wxALIGN_LEFT);
+    MultipleItemField<P>::sizer_h->Add(name, 0, wxALIGN_CENTER);
 
 }
 

@@ -1025,13 +1025,13 @@ public:
     void print_recent_items(const vector<int>&, String, String, ostream&);
     void insert_recent_item(unsigned int, vector<int>*);
 
-    void insert_recent_body(unsigned int);
+//    void insert_recent_body(unsigned int);
 //    void print_recent_bodies(String, ostream&);
-    void insert_recent_projection(unsigned int);
+//    void insert_recent_projection(unsigned int);
 //    void print_recent_projections(String, ostream&);
-    void insert_recent_length_format(unsigned int);
+//    void insert_recent_length_format(unsigned int);
 //    void print_recent_length_formats(String, ostream&);
-    void insert_recent_route_type(unsigned int);
+//    void insert_recent_route_type(unsigned int);
 //    void print_recent_route_types(String, ostream&);
 
     void menu(String);

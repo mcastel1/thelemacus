@@ -5661,6 +5661,7 @@ void Data::print(bool print_all_routes, String prefix, ostream& ostr) {
     print_recent_items(recent_bodies, String("bodies"), prefix, ostr);
     print_recent_items(recent_projections, String("projections"), prefix, ostr);
     print_recent_items(recent_length_formats, String("length formats"), prefix, ostr);
+    print_recent_items(recent_route_types, String("route types"), prefix, ostr);
     //    print_recent_bodies(prefix, ostr);
 //    print_recent_projections(prefix, ostr);
 //    print_recent_length_formats(prefix, ostr);
@@ -6211,27 +6212,27 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
 
 
 //insert body body_id into recent_bodies
-void Data::insert_recent_body(unsigned int body_id) {
-
-    vector<int>::iterator position;
-
-    position = find(recent_bodies.begin(), recent_bodies.end(), body_id);
-
-    if (position == recent_bodies.end()) {
-        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
-
-        recent_bodies[recent_bodies.size() - 1] = body_id;
-        rotate(recent_bodies.begin(), recent_bodies.end() - 1, recent_bodies.end());
-
-    }
-    else {
-        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
-
-        iter_swap(recent_bodies.begin(), position);
-
-    }
-
-}
+//void Data::insert_recent_body(unsigned int body_id) {
+//
+//    vector<int>::iterator position;
+//
+//    position = find(recent_bodies.begin(), recent_bodies.end(), body_id);
+//
+//    if (position == recent_bodies.end()) {
+//        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
+//
+//        recent_bodies[recent_bodies.size() - 1] = body_id;
+//        rotate(recent_bodies.begin(), recent_bodies.end() - 1, recent_bodies.end());
+//
+//    }
+//    else {
+//        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
+//
+//        iter_swap(recent_bodies.begin(), position);
+//
+//    }
+//
+//}
 
 
 ////print recent_bodies to ostr
@@ -6251,27 +6252,27 @@ void Data::insert_recent_body(unsigned int body_id) {
 
 
 //insert projection projection_id into recent_projections
-void Data::insert_recent_projection(unsigned int projection_id) {
-
-    vector<int>::iterator position;
-
-    position = find(recent_projections.begin(), recent_projections.end(), projection_id);
-
-    if (position == recent_projections.end()) {
-        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
-
-        recent_projections[recent_projections.size() - 1] = projection_id;
-        rotate(recent_projections.begin(), recent_projections.end() - 1, recent_projections.end());
-
-    }
-    else {
-        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
-
-        iter_swap(recent_projections.begin(), position);
-
-    }
-
-}
+//void Data::insert_recent_projection(unsigned int projection_id) {
+//
+//    vector<int>::iterator position;
+//
+//    position = find(recent_projections.begin(), recent_projections.end(), projection_id);
+//
+//    if (position == recent_projections.end()) {
+//        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
+//
+//        recent_projections[recent_projections.size() - 1] = projection_id;
+//        rotate(recent_projections.begin(), recent_projections.end() - 1, recent_projections.end());
+//
+//    }
+//    else {
+//        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
+//
+//        iter_swap(recent_projections.begin(), position);
+//
+//    }
+//
+//}
 
 
 //print recent_items to ostr. Here name is the "[plural name of the item]"  : for example, if I am printing a list of Bodies, name.value = "bodies". This method is used for GUI fields of the format MultipleItemField
@@ -6290,7 +6291,7 @@ void Data::print_recent_items(const vector<int>& recent_items, String name, Stri
 }
 
 
-//insert the item 'item_id' into the vector of items recent_items.  This method is used for GUI fields of the format MultipleItemField
+//insert the item 'item_id' into the vector of items *recent_items.  This method is used for GUI fields of the format MultipleItemField
 void Data::insert_recent_item(unsigned int item_id, vector<int>* recent_items) {
 
     vector<int>::iterator position;
@@ -6330,27 +6331,27 @@ void Data::insert_recent_item(unsigned int item_id, vector<int>* recent_items) {
 //}
 
 //insert the length format length_format_id into recent_length_formats
-void Data::insert_recent_length_format(unsigned int length_format_id) {
-
-    vector<int>::iterator position;
-
-    position = find(recent_length_formats.begin(), recent_length_formats.end(), length_format_id);
-
-    if (position == recent_length_formats.end()) {
-        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
-
-        recent_length_formats[recent_length_formats.size() - 1] = length_format_id;
-        rotate(recent_length_formats.begin(), recent_length_formats.end() - 1, recent_length_formats.end());
-
-    }
-    else {
-        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
-
-        iter_swap(recent_length_formats.begin(), position);
-
-    }
-
-}
+//void Data::insert_recent_length_format(unsigned int length_format_id) {
+//
+//    vector<int>::iterator position;
+//
+//    position = find(recent_length_formats.begin(), recent_length_formats.end(), length_format_id);
+//
+//    if (position == recent_length_formats.end()) {
+//        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
+//
+//        recent_length_formats[recent_length_formats.size() - 1] = length_format_id;
+//        rotate(recent_length_formats.begin(), recent_length_formats.end() - 1, recent_length_formats.end());
+//
+//    }
+//    else {
+//        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
+//
+//        iter_swap(recent_length_formats.begin(), position);
+//
+//    }
+//
+//}
 
 
 //print recent_length_formats to ostr
@@ -6370,27 +6371,27 @@ void Data::insert_recent_length_format(unsigned int length_format_id) {
 
 
 //insert route_type route_type_id into recent_route_types
-void Data::insert_recent_route_type(unsigned int route_type_id) {
-
-    vector<int>::iterator position;
-
-    position = find(recent_route_types.begin(), recent_route_types.end(), route_type_id);
-
-    if (position == recent_route_types.end()) {
-        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
-
-        recent_route_types[recent_route_types.size() - 1] = route_type_id;
-        rotate(recent_route_types.begin(), recent_route_types.end() - 1, recent_route_types.end());
-
-    }
-    else {
-        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
-
-        iter_swap(recent_route_types.begin(), position);
-
-    }
-
-}
+//void Data::insert_recent_route_type(unsigned int route_type_id) {
+//
+//    vector<int>::iterator position;
+//
+//    position = find(recent_route_types.begin(), recent_route_types.end(), route_type_id);
+//
+//    if (position == recent_route_types.end()) {
+//        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
+//
+//        recent_route_types[recent_route_types.size() - 1] = route_type_id;
+//        rotate(recent_route_types.begin(), recent_route_types.end() - 1, recent_route_types.end());
+//
+//    }
+//    else {
+//        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
+//
+//        iter_swap(recent_route_types.begin(), position);
+//
+//    }
+//
+//}
 
 
 //print recent_route_types to ostr
@@ -11474,7 +11475,8 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
                 }
 
                 //insert body #i into data->recent_bodies
-                wxGetApp().list_frame->data->insert_recent_body(i);
+//                wxGetApp().list_frame->data->insert_recent_body(i);
+                wxGetApp().list_frame->data->insert_recent_item(i, &(wxGetApp().list_frame->data->recent_bodies));
                 //I update p->name according to the content of data->recent_bodies file
                 p->fill_bodies();
 
@@ -15431,8 +15433,11 @@ template<class E> void SightFrame::update_recent_items(E& event) {
     i--;
 
     //insert body #i into data->recent_bodies
-    wxGetApp().list_frame->data->insert_recent_body(i);
+//    wxGetApp().list_frame->data->insert_recent_body(i);
+    wxGetApp().list_frame->data->insert_recent_item(i, &(wxGetApp().list_frame->data->recent_bodies));
 
+    
+    
     event.Skip(true);
 
 }
@@ -19222,7 +19227,9 @@ template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON
             if (check) {
 
                 //insert item #i into data->recent_bodies
-                wxGetApp().list_frame->data->insert_recent_projection(i);
+//                wxGetApp().list_frame->data->insert_recent_projection(i);
+                wxGetApp().list_frame->data->insert_recent_item(i, &(wxGetApp().list_frame->data->recent_projections));
+
                 //I update p->name according to the content of data->recent_projections file
                 Fill();
 
@@ -21212,7 +21219,9 @@ template<class P> void BodyField<P>::update_recent_bodies(void) {
 
         if (check) {
             //insert body #i into data->recent_bodies
-            wxGetApp().list_frame->data->insert_recent_body(i);
+//            wxGetApp().list_frame->data->insert_recent_body(i);
+            wxGetApp().list_frame->data->insert_recent_item(i, &(wxGetApp().list_frame->data->recent_bodies));
+
         }
 
     }

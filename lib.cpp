@@ -19198,7 +19198,8 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
 //constructor of a LengthFormatField object, based on the parent frame frame
 template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p)  : MultipleItemField<P>(panel_of_parent, {String("Time and speed"), String("Length")}){
 
-    parent = ((P*)(panel_of_parent->GetParent()));
+    
+    /*here I need to specify that parent is a member of the parent class */MultipleItemField<P>::parent = ((P*)(panel_of_parent->GetParent()));
     length_format = p;
 
 //    catalog.Clear();
@@ -19208,7 +19209,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 
     check = new CheckLengthFormat<P>(this);
 
-    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    name = new wxComboBox(MultipleItemField<P>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
     Fill();
     name->SetValue(items[0]);
@@ -19326,7 +19327,7 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
         name->SetForegroundColour(wxGetApp().foreground_color);
         name->SetFont(wxGetApp().default_font);
         //choses the length format entered in name button_reduce
-        parent->TryToEnableTimeSpeedLength(event);
+        MultipleItemField<P>::parent->TryToEnableTimeSpeedLength(event);
 
     }
 

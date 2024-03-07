@@ -2345,6 +2345,8 @@ public:
 template<class P> class RouteTypeField{
     
 public:
+    
+    P* parent;
     //the parent frame to which this object is attached
     RouteFrame* parent_frame;
     wxArrayString types;
@@ -2358,7 +2360,7 @@ public:
     
     bool ok;
     
-    RouteTypeField(RouteFrame*, String*);
+    RouteTypeField(wxPanel*, String*);
     void set(void);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);

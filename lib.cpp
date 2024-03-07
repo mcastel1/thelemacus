@@ -15570,7 +15570,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     //type:a wxComboBox which indicates the type of the route (loxodrome, orthordrome or circle of equal altitude)
     StaticText* text_type = new StaticText(panel, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0);
-    type = new RouteTypeField<RouteFrame>(this, &(route->type));
+    type = new RouteTypeField<RouteFrame>(panel, &(route->type));
     //if the Route of *this is for transport, then only show 'loxodrome' and 'orthodrome' in type
     if (for_transport) {
         type->types.Remove("circle of equal altitude");
@@ -20630,9 +20630,10 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 }
 
 //constructor of a RouteTypeField object, based on the parent frame frame
-template<class P> RouteTypeField<P>::RouteTypeField(RouteFrame* frame, String* s) {
+template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, String* s) {
 
-    parent_frame = frame;
+    parent = ((P*)(panel_of_parent->GetParent()));
+//    parent_frame = frame;
     //I link the internal pointers p and c to the respective non-GUI object string
     type = s;
 

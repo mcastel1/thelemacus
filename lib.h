@@ -2342,7 +2342,7 @@ public:
 
 
 //GUI field to specify the RouteType, which is inserted into a parent panel of type P
-template<class P> class RouteTypeField{
+template<class P> class RouteTypeField: public MultipleItemField<P, void>{
     
 public:
     
@@ -2360,7 +2360,7 @@ public:
     
     bool ok;
     
-    RouteTypeField(wxPanel*, String*);
+    RouteTypeField(wxPanel*, String*, vector<int>*);
     void set(void);
     template<class T> void get(T&);
     template<class T> void InsertIn(T*);

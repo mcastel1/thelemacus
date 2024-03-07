@@ -20630,7 +20630,7 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 }
 
 //constructor of a RouteTypeField object, based on the parent frame frame
-template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, String* s) {
+template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, String* s, vector<int>* recent_items_in) : MultipleItemField<P, void>(panel_of_parent, NULL, {String("Loxodrome"), String("Orthodrome"), String("Circle of equal altitude")}, recent_items_in) {
 
     parent = ((P*)(panel_of_parent->GetParent()));
 //    parent_frame = frame;

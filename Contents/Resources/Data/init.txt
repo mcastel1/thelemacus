@@ -85,6 +85,7 @@ number of points coastline Mercator = 45000
 number of points coastline 3D = 90000
 load sample sight = y
 number of recent bodies = 3
+number of recent route types = 3
 number of recent projections = 2
 number of recent length formats = 2
 #files in code directory

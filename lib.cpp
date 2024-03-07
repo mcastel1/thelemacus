@@ -5439,6 +5439,7 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
     recent_bodies.resize(wxGetApp().n_recent_bodies.value);
     recent_projections.resize(wxGetApp().n_recent_projections.value);
     recent_length_formats.resize(wxGetApp().n_recent_length_formats.value);
+    recent_route_types.resize(wxGetApp().n_recent_route_types.value);
 
     //	file_init.close(prefix);
 
@@ -6201,6 +6202,7 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
     read_list_from_stream<S>(String("Recent bodies"), input_stream, true, &recent_bodies);
     read_list_from_stream<S>(String("Recent projections"), input_stream, true, &recent_projections);
     read_list_from_stream<S>(String("Recent length formats"), input_stream, true, &recent_length_formats);
+    read_list_from_stream<S>(String("Recent route types"), input_stream, true, &recent_route_types);
 
 }
 
@@ -6307,8 +6309,6 @@ void Data::insert_recent_length_format(unsigned int length_format_id) {
 
 }
 
-
-
 //print recent_length_formats to ostr
 void Data::print_recent_length_formats(String prefix, ostream& ostr) {
 
@@ -6323,6 +6323,47 @@ void Data::print_recent_length_formats(String prefix, ostream& ostr) {
     String(temp.str().c_str()).print(String("Recent length formats"), false, prefix, ostr);
 
 }
+
+
+//insert route_type route_type_id into recent_route_types
+void Data::insert_recent_route_type(unsigned int route_type_id) {
+
+    vector<int>::iterator position;
+
+    position = find(recent_route_types.begin(), recent_route_types.end(), route_type_id);
+
+    if (position == recent_route_types.end()) {
+        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
+
+        recent_route_types[recent_route_types.size() - 1] = route_type_id;
+        rotate(recent_route_types.begin(), recent_route_types.end() - 1, recent_route_types.end());
+
+    }
+    else {
+        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
+
+        iter_swap(recent_route_types.begin(), position);
+
+    }
+
+}
+
+
+//print recent_route_types to ostr
+void Data::print_recent_route_types(String prefix, ostream& ostr) {
+
+    unsigned int i;
+    stringstream temp;
+
+
+    for (temp.str(""), i = 0; i < (recent_route_types.size()) - 1; i++) {
+        temp << recent_route_types[i] << " ";
+    }
+    temp << recent_route_types.back();
+    String(temp.str().c_str()).print(String("Recent route types"), false, prefix, ostr);
+
+}
+
 
 
 bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String prefix) {

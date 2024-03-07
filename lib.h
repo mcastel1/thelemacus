@@ -1005,6 +1005,7 @@ public:
     vector<int> recent_bodies;
     vector<int> recent_projections;
     vector<int> recent_length_formats;
+    vector<int> recent_route_types;
 
     Data(Catalog*, String);
     //~Data();
@@ -1027,6 +1028,8 @@ public:
     void print_recent_projections(String, ostream&);
     void insert_recent_length_format(unsigned int);
     void print_recent_length_formats(String, ostream&);
+    void insert_recent_route_type(unsigned int);
+    void print_recent_route_types(String, ostream&);
 
     void menu(String);
     int compute_position(String);

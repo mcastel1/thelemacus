@@ -19061,7 +19061,7 @@ template<class P> template<class T> void MultipleItemField<P>::InsertIn(T* host,
 //constructor of a ProjectionField object, based on the parent frame frame
 template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) : MultipleItemField<P>(panel_of_parent, {String("Mercator"), String("3D")}) {
 
-    parent = ((P*)(panel_of_parent->GetParent()));
+//    parent = ((P*)(panel_of_parent->GetParent()));
 
 //    catalog.Clear();
 //    catalog.Add(wxT("Mercator"));
@@ -19071,21 +19071,21 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) 
 
     check = new CheckProjection<P>(this);
 
-    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+//    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
     Fill();
-    name->SetValue(items[0]);
-    AdjustWidth(name);
+//    name->SetValue(items[0]);
+//    AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
-    name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
-    name->Bind(wxEVT_KILL_FOCUS, *check);
+    MultipleItemField<P>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
+    MultipleItemField<P>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
+    MultipleItemField<P>::name->Bind(wxEVT_KILL_FOCUS, *check);
 
-    sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    sizer_v = new wxBoxSizer(wxVERTICAL);
+//    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+//    sizer_v = new wxBoxSizer(wxVERTICAL);
 
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(name, 0, wxALIGN_CENTER);
+//    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+//    sizer_h->Add(name, 0, wxALIGN_CENTER);
 
 }
 
@@ -19099,39 +19099,39 @@ template<class P> void ProjectionField<P>::Fill(void) {
     bool is_present;
 
     //save the current value of name in name_temp
-    name_temp = (name->GetValue());
+    name_temp = (MultipleItemField<P>::name->GetValue());
     //create the temporary list of projections projections_temp from catalog
-    for (items_temp.Clear(), i = 0; i < items.GetCount(); i++) {
-        items_temp.Add(catalog[i]);
+    for (items_temp.Clear(), i = 0; i < MultipleItemField<P>::items.GetCount(); i++) {
+        items_temp.Add((MultipleItemField<P>::catalog)[i]);
     }
 
     //I first add to projections the recently selected celestial projections written in (wxGetApp().list_frame->data->recent_projections)
-    for (items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_projections.size()); i++) {
+    for (MultipleItemField<P>::items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_projections.size()); i++) {
 
-        items.Add(items_temp[(wxGetApp().list_frame->data->recent_projections)[i]]);
+        MultipleItemField<P>::items.Add(items_temp[(wxGetApp().list_frame->data->recent_projections)[i]]);
 
     }
 
     //then, I fill projections with the remaining projections
     for (i=0; i < items_temp.GetCount(); i++) {
 
-        for (is_present = false, j = 0; (j < items.GetCount()) && (!is_present); j++) {
+        for (is_present = false, j = 0; (j < MultipleItemField<P>::items.GetCount()) && (!is_present); j++) {
 
-            if (items[j] == items_temp[i]) {
+            if (MultipleItemField<P>::items[j] == items_temp[i]) {
                 is_present = true;
             }
 
         }
 
         if (!is_present) {
-            items.Add(items_temp[i]);
+            MultipleItemField<P>::items.Add(items_temp[i]);
         }
 
     }
 
-    name->Set(items);
+    MultipleItemField<P>::name->Set(MultipleItemField<P>::items);
     //because name->Set(projections clears the value of name, I set the value of name back to name_temp
-    name->SetValue(name_temp);
+    MultipleItemField<P>::name->SetValue(name_temp);
 
     items_temp.Clear();
 
@@ -21183,17 +21183,17 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
     bool success;
 
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    find_and_replace_case_insensitive(name, items, &success, NULL);
+    find_and_replace_case_insensitive(MultipleItemField<P>::name, MultipleItemField<P>::items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid
-    ok = success;
+    MultipleItemField<P>::ok = success;
 
     if (success) {
 
-        name->SetForegroundColour(wxGetApp().foreground_color);
-        name->SetFont(wxGetApp().default_font);
+        MultipleItemField<P>::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P>::name->SetFont(wxGetApp().default_font);
         //choses the projection entered in name button_reduce
-        (parent->draw_panel)->OnChooseProjection(event);
+        MultipleItemField<P>::parent->draw_panel->OnChooseProjection(event);
 
     }
 

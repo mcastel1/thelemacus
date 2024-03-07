@@ -2020,7 +2020,7 @@ public:
 //    template<class T> void (MultipleItemField::*OnChooseItem)(T&);
 
 
-    MultipleItemField(wxPanel*, const vector<String>&, vector<int>*);
+    MultipleItemField(NON_GUI*, wxPanel*, const vector<String>&, vector<int>*);
     void Fill(void);
     void Enable(bool);
 //    void read_recent_projections(void);

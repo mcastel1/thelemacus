@@ -19209,21 +19209,21 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 
     check = new CheckLengthFormat<P>(this);
 
-    name = new wxComboBox(MultipleItemField<P>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    MultipleItemField<P>::name = new wxComboBox(MultipleItemField<P>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
     Fill();
-    name->SetValue(items[0]);
-    AdjustWidth(name);
+    MultipleItemField<P>::name->SetValue((MultipleItemField<P>::items)[0]);
+    AdjustWidth(MultipleItemField<P>::name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    name->Bind(wxEVT_COMBOBOX, &LengthFormatField::OnEdit<wxCommandEvent>, this);
-    name->Bind(wxEVT_KEY_UP, &LengthFormatField::OnEdit<wxKeyEvent>, this);
-    name->Bind(wxEVT_KILL_FOCUS, *check);
+    MultipleItemField<P>::name->Bind(wxEVT_COMBOBOX, &LengthFormatField::OnEdit<wxCommandEvent>, this);
+    MultipleItemField<P>::name->Bind(wxEVT_KEY_UP, &LengthFormatField::OnEdit<wxKeyEvent>, this);
+    MultipleItemField<P>::name->Bind(wxEVT_KILL_FOCUS, *check);
 
     MultipleItemField<P>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
     MultipleItemField<P>::sizer_v = new wxBoxSizer(wxVERTICAL);
 
     MultipleItemField<P>::sizer_v->Add(MultipleItemField<P>::sizer_h, 0, wxALIGN_LEFT);
-    MultipleItemField<P>::sizer_h->Add(name, 0, wxALIGN_CENTER);
+    MultipleItemField<P>::sizer_h->Add(MultipleItemField<P>::name, 0, wxALIGN_CENTER);
 
 }
 
@@ -19237,39 +19237,39 @@ template<class P> void LengthFormatField<P>::Fill(void) {
     bool is_present;
 
     //save the current value of name in name_temp
-    name_temp = (name->GetValue());
+    name_temp = (MultipleItemField<P>::name->GetValue());
     //create the temporary list of length_formats length_formats_temp from catalog
-    for (items_temp.Clear(), i = 0; i < items.GetCount(); i++) {
-        items_temp.Add(catalog[i]);
+    for (items_temp.Clear(), i = 0; i < MultipleItemField<P>::items.GetCount(); i++) {
+        items_temp.Add((MultipleItemField<P>::catalog)[i]);
     }
 
     //I first add to length_formats the recently selected celestial length_formats written in (wxGetApp().list_frame->data->recent_length_formats)
-    for (items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_length_formats.size()); i++) {
+    for (MultipleItemField<P>::items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_length_formats.size()); i++) {
 
-        items.Add(items_temp[(wxGetApp().list_frame->data->recent_length_formats)[i]]);
+        MultipleItemField<P>::items.Add(items_temp[(wxGetApp().list_frame->data->recent_length_formats)[i]]);
 
     }
 
     //then, I fill length_formats with the remaining length_formats
     for (i=0; i < items_temp.GetCount(); i++) {
 
-        for (is_present = false, j = 0; (j < items.GetCount()) && (!is_present); j++) {
+        for (is_present = false, j = 0; (j < MultipleItemField<P>::items.GetCount()) && (!is_present); j++) {
 
-            if (items[j] == items_temp[i]) {
+            if ((MultipleItemField<P>::items)[j] == items_temp[i]) {
                 is_present = true;
             }
 
         }
 
         if (!is_present) {
-            items.Add(items_temp[i]);
+            MultipleItemField<P>::items.Add(items_temp[i]);
         }
 
     }
 
-    name->Set(items);
+    MultipleItemField<P>::name->Set(MultipleItemField<P>::items);
     //because name->Set(length_formats clears the value of name, I set the value of name back to name_temp
-    name->SetValue(name_temp);
+    MultipleItemField<P>::name->SetValue(name_temp);
 
     items_temp.Clear();
 
@@ -19283,7 +19283,7 @@ template<class P> void LengthFormatField<P>::set(void) {
     case 't':
         //length format is time and speed
 
-        name->SetValue(wxString("Time and speed"));
+            MultipleItemField<P>::name->SetValue(wxString("Time and speed"));
 
         break;
 
@@ -19291,13 +19291,13 @@ template<class P> void LengthFormatField<P>::set(void) {
     case 'l':
         //length format is simply length, rather than time and speed
 
-        name->SetValue(wxString("Length"));
+            MultipleItemField<P>::name->SetValue(wxString("Length"));
 
         break;
 
     }
 
-    ok = true;
+    MultipleItemField<P>::ok = true;
 
 }
 
@@ -19317,15 +19317,15 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
     bool success;
 
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    find_and_replace_case_insensitive(name, items, &success, NULL);
+    find_and_replace_case_insensitive(MultipleItemField<P>::name, MultipleItemField<P>::items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid
-    ok = success;
+    MultipleItemField<P>::ok = success;
 
     if (success) {
 
-        name->SetForegroundColour(wxGetApp().foreground_color);
-        name->SetFont(wxGetApp().default_font);
+        MultipleItemField<P>::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P>::name->SetFont(wxGetApp().default_font);
         //choses the length format entered in name button_reduce
         MultipleItemField<P>::parent->TryToEnableTimeSpeedLength(event);
 
@@ -19338,14 +19338,14 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
 //this function enables/disable the LengthFormatField
 template<class P> void LengthFormatField<P>::Enable(bool is_enabled) {
 
-    name->Enable(is_enabled);
+    MultipleItemField<P>::name->Enable(is_enabled);
 
 }
 
 //return true(false) is *this is ok (not ok), i.e., if this->ok = true(false)
 template<class P> bool LengthFormatField<P>::is_ok(void) {
 
-    return(ok);
+    return(MultipleItemField<P>::ok);
 
 }
 

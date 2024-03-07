@@ -2056,12 +2056,12 @@ public:
     
 //    P* parent;
 //    wxBoxSizer *sizer_h, *sizer_v;
-    wxArrayString  /*this is equal to a standard list of the available formats for a length*/items, /*same as length_formats, but it is fixed and never wrote to: it is a fixed catalog*/catalog;
+//    wxArrayString  /*this is equal to a standard list of the available formats for a length*/items, /*same as length_formats, but it is fixed and never wrote to: it is a fixed catalog*/catalog;
     //this is the wxComboBox with the name of the length formats
-    wxComboBox* name;
+//    wxComboBox* name;
     //this points to a LengthFormat object, which contains the date written in the GUI field of this
-    vector<int> recent_items;
-    bool ok;
+//    vector<int> recent_items;
+//    bool ok;
     LengthFormat* length_format;
     CheckLengthFormat<P>* check;
 

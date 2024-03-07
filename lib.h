@@ -2015,6 +2015,8 @@ public:
     //this points to an external vector<int> where the recent items are stored: the Fill() method  reads from *recent_items
     vector<int>* recent_items;
     bool ok;
+//    template<class T> void (MultipleItemField::*OnChooseItem)(T&);
+
 
     MultipleItemField(wxPanel*, const vector<String>&, vector<int>*);
     void Fill(void);

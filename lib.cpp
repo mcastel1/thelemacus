@@ -21137,7 +21137,7 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
 
         MultipleItemField<P>::name->SetForegroundColour(wxGetApp().foreground_color);
         MultipleItemField<P>::name->SetFont(wxGetApp().default_font);
-        //choses the projection entered in name button_reduce
+        //choose the projection entered in name button_reduce
         MultipleItemField<P>::parent->draw_panel->OnChooseProjection(event);
 
     }

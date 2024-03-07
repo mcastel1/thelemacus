@@ -2002,7 +2002,7 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-//this class is the parent of all classes for GUI fields which include a list of multiple items to  be selected (such as ProjectionField, LengthFormatField, ...). All members and methods which are common to these children classes are written in this parent class
+//this class is the parent of all classes for GUI fields which include a list of multiple items to  be selected (such as ProjectionField, LengthFormatField, ...). All members and methods which are common to these children classes are written in this parent class. P is the type of the frame that hosts *this
 template<class P> class MultipleItemField{
     
 public:

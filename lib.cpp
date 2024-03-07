@@ -19139,6 +19139,14 @@ template<class P> void MultipleItemField<P>::Fill(void) {
 }
 
 
+//this function enables/disable the LengthFormatField
+template<class P> void MultipleItemField<P>::Enable(bool is_enabled) {
+
+    name->Enable(is_enabled);
+
+}
+
+
 
 //constructor of a LengthFormatField object, based on the parent frame frame
 template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p, vector<int>* recent_items_in)  : MultipleItemField<P>(panel_of_parent, {String("Time and speed"), String("Length")}, recent_items_in){
@@ -19280,12 +19288,7 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
 
 }
 
-//this function enables/disable the LengthFormatField
-template<class P> void LengthFormatField<P>::Enable(bool is_enabled) {
 
-    MultipleItemField<P>::name->Enable(is_enabled);
-
-}
 
 //return true(false) is *this is ok (not ok), i.e., if this->ok = true(false)
 template<class P> bool LengthFormatField<P>::is_ok(void) {

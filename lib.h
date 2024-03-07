@@ -2002,7 +2002,7 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-//this class is the parent of all classes for GUI fields which include a list of multiple items to  be selected (such as ProjectionField, LengthFormatField, ...). All members and methods which are common to these children classes are written in this parent class. P is the type of the frame that hosts *this
+//this class is the parent of all classes for GUI fields which include a list of multiple items to  be selected (such as ProjectionField, LengthFormatField, ...). All members and methods which are common to these children classes are written in this parent class. P is the type of the frame that hosts *this. NON_GUI is the type of the non-GUI field related to *this: For example, if I create a  class BodyField derived from MultipleItemField, then NON_GUI = Body; if I create a derived class LengthFormatField derived from MultipleItemField, NON_GUI = LengthFormat, etc.
 template<class P> class MultipleItemField{
     
 public:
@@ -2020,6 +2020,7 @@ public:
 
     MultipleItemField(wxPanel*, const vector<String>&, vector<int>*);
     void Fill(void);
+    void Enable(bool);
 //    void read_recent_projections(void);
     template<class T> void InsertIn(T*);
     template<class T> void InsertIn(T*, wxSizerFlags&);
@@ -2073,7 +2074,7 @@ public:
     void set(void);
 //    template<class T> void InsertIn(T*);
     template<class E> void OnEdit(E&);
-    void Enable(bool);
+//    void Enable(bool);
     bool is_ok(void);
 //    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     

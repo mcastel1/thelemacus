@@ -6284,6 +6284,46 @@ void Data::print_recent_projections(String prefix, ostream& ostr) {
 
 }
 
+//insert the length format length_format_id into recent_length_formats
+void Data::insert_recent_length_format(unsigned int length_format_id) {
+
+    vector<int>::iterator position;
+
+    position = find(recent_length_formats.begin(), recent_length_formats.end(), length_format_id);
+
+    if (position == recent_length_formats.end()) {
+        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
+
+        recent_length_formats[recent_length_formats.size() - 1] = length_format_id;
+        rotate(recent_length_formats.begin(), recent_length_formats.end() - 1, recent_length_formats.end());
+
+    }
+    else {
+        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
+
+        iter_swap(recent_length_formats.begin(), position);
+
+    }
+
+}
+
+
+
+//print recent_length_formats to ostr
+void Data::print_recent_length_formats(String prefix, ostream& ostr) {
+
+    unsigned int i;
+    stringstream temp;
+
+
+    for (temp.str(""), i = 0; i < (recent_length_formats.size()) - 1; i++) {
+        temp << recent_length_formats[i] << " ";
+    }
+    temp << recent_length_formats.back();
+    String(temp.str().c_str()).print(String("Recent length formats"), false, prefix, ostr);
+
+}
+
 
 bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String prefix) {
 
@@ -14101,7 +14141,7 @@ template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& even
             if (check) {
 
                 //insert projection #i into data->recent_bodies
-                wxGetApp().list_frame->data->insert_recent_projection(i);
+                wxGetApp().list_frame->data->insert_recent_length_format(i);
                 //I update p->name according to the content of data->recent_projections file
                 p->Fill();
 

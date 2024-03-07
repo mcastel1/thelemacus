@@ -1025,6 +1025,8 @@ public:
     void print_recent_bodies(String, ostream&);
     void insert_recent_projection(unsigned int);
     void print_recent_projections(String, ostream&);
+    void insert_recent_length_format(unsigned int);
+    void print_recent_length_formats(String, ostream&);
 
     void menu(String);
     int compute_position(String);
@@ -2002,7 +2004,7 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-//this class is the parent of all classes for GUI fields which include a list of multiple items to  be selected (such as ProjectionField, LengthFormatField, ...). All members and methods which are common to these children classes are written in this parent class. P is the type of the frame that hosts *this. NON_GUI is the type of the non-GUI field related to *this: For example, if I create a  class BodyField derived from MultipleItemField, then NON_GUI = Body; if I create a derived class LengthFormatField derived from MultipleItemField, NON_GUI = LengthFormat, etc.
+//this class is the parent of all classes for GUI fields which include a list of multiple items to  be selected (such as ProjectionField, LengthFormatField, ...). All members and methods which are common to these children classes are written in this parent class. P is the type of the frame that hosts *this. NON_GUI is the type of the non-GUI field related to *this: For example, if I create a  class BodyField derived from MultipleItemField, then NON_GUI = Body; if I create a derived class LengthFormatField derived from MultipleItemField, NON_GUI = LengthFormat, etc. If there is no non-GUI object associated with *this, I sett NON_GUI = void and call the constructor of MultipleItemField with second argument equal to NULL
 template<class P, class NON_GUI> class MultipleItemField{
     
 public:

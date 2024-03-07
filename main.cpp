@@ -79,6 +79,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+ - condense insert_recent_body,  insert_recent_projection, ... + print_recent_body, print_recent_projection, ... into a pair of methods
  - try  wxDCClipper to quickly delete old image on DrawPanel
  - check whether you can remove Fitall in void ListFrame::DrawAll(void) { and whether it speeds up things
  - all unit fields should have the system              temp << "Available units are: "; message generated in the same way, as in template <class T> void CheckSpeedUnit<P>::operator()

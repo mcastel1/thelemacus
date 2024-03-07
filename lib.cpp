@@ -19040,7 +19040,7 @@ template<class P, class NON_GUI> MultipleItemField<P, NON_GUI>::MultipleItemFiel
 }
 
 
-template<class P> template <typename EventTag, typename Method, typename Object> void MultipleItemField<P>::Bind(EventTag tag, Method method, Object object) {
+template<class P, class NON_GUI> template <typename EventTag, typename Method, typename Object> void MultipleItemField<P, NON_GUI>::Bind(EventTag tag, Method method, Object object) {
 
     name->Bind(tag, method, object);
 
@@ -19048,14 +19048,14 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 
 
-template<class P> template<class T> void MultipleItemField<P>::InsertIn(T* host) {
+template<class P, class NON_GUI> template<class T> void MultipleItemField<P, NON_GUI>::InsertIn(T* host) {
 
     host->Add(sizer_v);
 
 }
 
 
-template<class P> template<class T> void MultipleItemField<P>::InsertIn(T* host, wxSizerFlags& flag) {
+template<class P, class NON_GUI> template<class T> void MultipleItemField<P, NON_GUI>::InsertIn(T* host, wxSizerFlags& flag) {
 
     host->Add(sizer_v, flag);
 

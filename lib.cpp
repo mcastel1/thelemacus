@@ -19004,7 +19004,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
 
 
 //constructor of a MultipleItemField object, which is into *panel_of_parent. The list of items in *this is stored into catalog_in. All items that are general enough to be common to all classes which are inherited from MultipleItemField are initialized here. Items that are specific to the inherited classes will be initialized in the inherited-class constructors
-template<class P, class NON_GUI> MultipleItemField<P, NON_GUI>::MultipleItemField(NON_GUI* object_in, wxPanel* panel_of_parent, const vector<String>& catalog_in, vector<int>* recent_items_in){
+template<class P, class NON_GUI> MultipleItemField<P, NON_GUI>::MultipleItemField(wxPanel* panel_of_parent, NON_GUI* object_in, const vector<String>& catalog_in, vector<int>* recent_items_in){
     
     unsigned int i;
 
@@ -19063,7 +19063,7 @@ template<class P, class NON_GUI> template<class T> void MultipleItemField<P, NON
 
 
 //constructor of a ProjectionField object, based on the parent frame frame
-template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, vector<int>* recent_items_in) : MultipleItemField<P, void>(NULL, panel_of_parent, {String("Mercator"), String("3D")}, recent_items_in) {
+template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, vector<int>* recent_items_in) : MultipleItemField<P, void>(panel_of_parent, NULL, {String("Mercator"), String("3D")}, recent_items_in) {
 
 //    parent = ((P*)(panel_of_parent->GetParent()));
 
@@ -19094,7 +19094,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
 }
 
 
-//update the dropdown menu of ProjectionField according to MultipleItemField<P, NON_GUI>::recent_items in such a way that the recent items appear on top of it
+//update the dropdown menu of MultipleItemField according to MultipleItemField<P, NON_GUI>::recent_items in such a way that the recent items appear on top
 template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Fill(void) {
 
     unsigned int i, j;
@@ -19109,14 +19109,14 @@ template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Fill(void) 
         items_temp.Add((MultipleItemField<P, NON_GUI>::catalog)[i]);
     }
 
-    //I first add to projections the recently selected celestial projections written in (MultipleItemField<P, NON_GUI>::recent_items)
+    //I first add to the items vector the recently selected items written in (MultipleItemField<P, NON_GUI>::recent_items)
     for (MultipleItemField<P, NON_GUI>::items.Clear(), i = 0; i < (MultipleItemField<P, NON_GUI>::recent_items->size()); i++) {
 
         MultipleItemField<P, NON_GUI>::items.Add(items_temp[(*(MultipleItemField<P, NON_GUI>::recent_items))[i]]);
 
     }
 
-    //then, I fill projections with the remaining projections
+    //then, I fill the items vector with the remaining items
     for (i=0; i < items_temp.GetCount(); i++) {
 
         for (is_present = false, j = 0; (j < MultipleItemField<P, NON_GUI>::items.GetCount()) && (!is_present); j++) {
@@ -19152,11 +19152,11 @@ template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Enable(bool
 
 
 //constructor of a LengthFormatField object, based on the parent frame frame
-template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p, vector<int>* recent_items_in)  : MultipleItemField<P, LengthFormat>(p, panel_of_parent, {String("Time and speed"), String("Length")}, recent_items_in){
+template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* object_in, vector<int>* recent_items_in)  : MultipleItemField<P, LengthFormat>(panel_of_parent, object_in, {String("Time and speed"), String("Length")}, recent_items_in){
 
     
 //    /*here I need to specify that parent is a member of the parent class */MultipleItemField<P, LengthFormat>::parent = ((P*)(panel_of_parent->GetParent()));
-    length_format = p;
+//    length_format = p;
 
 //    catalog.Clear();
 //    catalog.Add(wxT("Time and speed"));
@@ -19234,7 +19234,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 //sets the value in the GUI object name equal to the value in the non-GUI LengthFormat object length_format
 template<class P> void LengthFormatField<P>::set(void) {
 
-    switch ((length_format->value)[0]) {
+    switch ((MultipleItemField<P, LengthFormat>::object->value)[0]) {
 
     case 't':
         //length format is time and speed

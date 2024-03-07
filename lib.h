@@ -2020,7 +2020,7 @@ public:
 //    template<class T> void (MultipleItemField::*OnChooseItem)(T&);
 
 
-    MultipleItemField(NON_GUI*, wxPanel*, const vector<String>&, vector<int>*);
+    MultipleItemField(wxPanel*, NON_GUI*, const vector<String>&, vector<int>*);
     void Fill(void);
     void Enable(bool);
 //    void read_recent_projections(void);
@@ -2068,7 +2068,7 @@ public:
     //this points to a LengthFormat object, which contains the date written in the GUI field of this
 //    vector<int> recent_items;
 //    bool ok;
-    LengthFormat* length_format;
+//    LengthFormat* length_format;
     CheckLengthFormat<P>* check;
 
     LengthFormatField(wxPanel*, LengthFormat*, vector<int>*);

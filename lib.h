@@ -2349,19 +2349,19 @@ template<class P> class RouteTypeField: public MultipleItemField<P, void>{
     
 public:
     
-    P* parent;
+//    P* parent;
     //the parent frame to which this object is attached
 //    RouteFrame* parent_frame;
     wxArrayString types;
     //this points to a non-GUI String object, which contains the Route type written in the GUI object this
     String* type;
-    wxBoxSizer *sizer_h, *sizer_v;
+//    wxBoxSizer *sizer_h, *sizer_v;
     
     //this is the wxComboBox with the name of the bodies
-    wxComboBox* name;
+//    wxComboBox* name;
     CheckRouteType<P>* check;
     
-    bool ok;
+//    bool ok;
     
     RouteTypeField(wxPanel*, String*, vector<int>*);
     void set(void);

@@ -6271,6 +6271,46 @@ void Data::insert_recent_projection(unsigned int projection_id) {
 }
 
 
+//print recent_items to ostr. This method is used for GUI fields of the format MultipleItemField
+void Data::print_recent_items(const vector<int>& recent_items, String prefix, ostream& ostr) {
+
+    unsigned int i;
+    stringstream temp;
+
+
+    for (temp.str(""), i = 0; i < (recent_items.size()) - 1; i++) {
+        temp << recent_items[i] << " ";
+    }
+    temp << recent_items.back();
+    String(temp.str().c_str()).print(String("Recent items"), false, prefix, ostr);
+
+}
+
+
+//insert the item 'item_id' into the vector of items recent_items.  This method is used for GUI fields of the format MultipleItemField
+void Data::insert_recent_item(unsigned int item_id, vector<int>* recent_items) {
+
+    vector<int>::iterator position;
+
+    position = find(recent_items->begin(), recent_items->end(), item_id);
+
+    if (position == recent_items->end()) {
+        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
+
+        (*recent_items)[recent_items->size() - 1] = item_id;
+        rotate(recent_items->begin(), recent_items->end() - 1, recent_items->end());
+
+    }
+    else {
+        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
+
+        iter_swap(recent_items->begin(), position);
+
+    }
+
+}
+
+
 //print recent_projections to ostr
 void Data::print_recent_projections(String prefix, ostream& ostr) {
 
@@ -19177,7 +19217,7 @@ template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON
 
             if (check) {
 
-                //insert projection #i into data->recent_bodies
+                //insert item #i into data->recent_bodies
                 wxGetApp().list_frame->data->insert_recent_projection(i);
                 //I update p->name according to the content of data->recent_projections file
                 Fill();

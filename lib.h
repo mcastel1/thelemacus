@@ -73,7 +73,7 @@ class Atmosphere;
 class Answer;
 class Body;
 class String;
-template<class P> class CheckProjection;
+//template<class P> class CheckProjection;
 template<class P> class CheckArcDegree;
 template<class P> class CheckArcMinute;
 template<class P> class TabulateDays;
@@ -1147,30 +1147,30 @@ public:
 };
 
 
-//this checks if an element of the ProjectionField class is valid
-template<class P> class CheckProjection{
-    
-public:
-    
-    ProjectionField<P>* p;
-    
-    CheckProjection(ProjectionField<P>*);
-    template<class T> void operator()(T&);
-    
-};
+////this checks if an element of the ProjectionField class is valid
+//template<class P> class CheckProjection{
+//    
+//public:
+//    
+//    ProjectionField<P>* p;
+//    
+//    CheckProjection(ProjectionField<P>*);
+//    template<class T> void operator()(T&);
+//    
+//};
 
 
-//this checks if an element of the LengthFormatField class is valid
-template<class P> class CheckLengthFormat{
-    
-public:
-    
-    LengthFormatField<P>* p;
-    
-    CheckLengthFormat(LengthFormatField<P>*);
-    template<class T> void operator()(T&);
-    
-};
+////this checks if an element of the LengthFormatField class is valid
+//template<class P> class CheckLengthFormat{
+//    
+//public:
+//    
+//    LengthFormatField<P>* p;
+//    
+//    CheckLengthFormat(LengthFormatField<P>*);
+//    template<class T> void operator()(T&);
+//    
+//};
 
 
 //this checks the value of LimbField

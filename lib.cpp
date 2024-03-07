@@ -14079,148 +14079,148 @@ template<class P> CheckBody<P>::CheckBody(BodyField<P>* p_in) {
 }
 
 
-template<class P> CheckProjection<P>::CheckProjection(ProjectionField<P>* p_in) {
-
-    p = p_in;
-
-}
-
-template<class P> template<class T>void CheckProjection<P>::operator()(T& event) {
-
-    P* f = (p->parent);
-
-    //I proceed only if the progam is not is indling mode
-    if (!(f->idling)) {
-
-        unsigned int i;
-        bool check;
-
-        //I check whether the name in the GUI field Projection matches one of the Projection names in p->names
-        for (check = false, i = 0; (i < (p->catalog).size()) && (!check); i++) {
-            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
-                check = true;
-            }
-        }
-        i--;
-
-        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
-            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
-
-
-            if (check) {
-
-                //insert projection #i into data->recent_bodies
-                wxGetApp().list_frame->data->insert_recent_projection(i);
-                //I update p->name according to the content of data->recent_projections file
-                p->Fill();
-
-            }
-
-
-            //if check is true (false) -> set ok to true (false)
-            (p->ok) = check;
-            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
-            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->name)->SetFont(wxGetApp().default_font);
-            Reset(p->name);
-
-        }
-        else {
-
-            stringstream temp;
-
-            temp.str("");
-            temp << "Projection must be one of the following: ";
-            for (i = 0; i < (p->catalog.GetCount()); i++) {
-                temp << ((p->catalog)[i]).ToStdString() << (i < (p->catalog.GetCount()) - 1 ? ", " : ".");
-            }
-
-
-            (f->print_error_message)->SetAndCall(p->name, String("Projection not found in list of projections!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
-
-            (p->ok) = false;
-
-        }
-
-        f->AllOk();
-
-    }
-
-    event.Skip(true);
-
-}
-
-
-template<class P> CheckLengthFormat<P>::CheckLengthFormat(LengthFormatField<P>* p_in) {
-
-    p = p_in;
-
-}
-
-template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& event) {
-
-    P* f = (p->parent);
-
-    //I proceed only if the progam is not is indling mode
-    if (!(f->idling)) {
-
-        unsigned int i;
-        bool check;
-
-        //I check whether the name in the GUI field LengthFormat matches one of the LengthFormat names in p->names
-        for (check = false, i = 0; (i < (p->catalog).size()) && (!check); i++) {
-            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
-                check = true;
-            }
-        }
-        i--;
-
-        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
-            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+//template<class P> CheckProjection<P>::CheckProjection(ProjectionField<P>* p_in) {
+//
+//    p = p_in;
+//
+//}
+//
+//template<class P> template<class T>void CheckProjection<P>::operator()(T& event) {
+//
+//    P* f = (p->parent);
+//
+//    //I proceed only if the progam is not is indling mode
+//    if (!(f->idling)) {
+//
+//        unsigned int i;
+//        bool check;
+//
+//        //I check whether the name in the GUI field Projection matches one of the Projection names in p->names
+//        for (check = false, i = 0; (i < (p->catalog).size()) && (!check); i++) {
+//            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
+//                check = true;
+//            }
+//        }
+//        i--;
+//
+//        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
+//            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+//
+//
+//            if (check) {
+//
+//                //insert projection #i into data->recent_bodies
+//                wxGetApp().list_frame->data->insert_recent_projection(i);
+//                //I update p->name according to the content of data->recent_projections file
+//                p->Fill();
+//
+//            }
+//
+//
+//            //if check is true (false) -> set ok to true (false)
+//            (p->ok) = check;
+//            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
+//            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
+//            (p->name)->SetFont(wxGetApp().default_font);
+//            Reset(p->name);
+//
+//        }
+//        else {
+//
+//            stringstream temp;
+//
+//            temp.str("");
+//            temp << "Projection must be one of the following: ";
+//            for (i = 0; i < (p->catalog.GetCount()); i++) {
+//                temp << ((p->catalog)[i]).ToStdString() << (i < (p->catalog.GetCount()) - 1 ? ", " : ".");
+//            }
+//
+//
+//            (f->print_error_message)->SetAndCall(p->name, String("Projection not found in list of projections!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+//
+//            (p->ok) = false;
+//
+//        }
+//
+//        f->AllOk();
+//
+//    }
+//
+//    event.Skip(true);
+//
+//}
 
 
-            if (check) {
+//template<class P> CheckLengthFormat<P>::CheckLengthFormat(LengthFormatField<P>* p_in) {
+//
+//    p = p_in;
+//
+//}
 
-                //insert projection #i into data->recent_bodies
-                wxGetApp().list_frame->data->insert_recent_length_format(i);
-                //I update p->name according to the content of data->recent_projections file
-                p->Fill();
-
-            }
-
-
-            //if check is true (false) -> set ok to true (false)
-            (p->ok) = check;
-            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
-            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->name)->SetFont(wxGetApp().default_font);
-            Reset(p->name);
-
-        }
-        else {
-
-            stringstream temp;
-
-            temp.str("");
-            temp << "Length format must be one of the following: ";
-            for (i = 0; i < ((p->catalog).GetCount()); i++) {
-                temp << ((p->catalog)[i]).ToStdString() << (i < ((p->catalog).GetCount()) - 1 ? ", " : ".");
-            }
-
-
-            (f->print_error_message)->SetAndCall(p->name, String("Length format not found in list of length formats!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
-
-            (p->ok) = false;
-
-        }
-
-        f->AllOk();
-
-    }
-
-    event.Skip(true);
-
-}
+//template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& event) {
+//
+//    P* f = (p->parent);
+//
+//    //I proceed only if the progam is not is indling mode
+//    if (!(f->idling)) {
+//
+//        unsigned int i;
+//        bool check;
+//
+//        //I check whether the name in the GUI field LengthFormat matches one of the LengthFormat names in p->names
+//        for (check = false, i = 0; (i < (p->catalog).size()) && (!check); i++) {
+//            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
+//                check = true;
+//            }
+//        }
+//        i--;
+//
+//        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
+//            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+//
+//
+//            if (check) {
+//
+//                //insert projection #i into data->recent_bodies
+//                wxGetApp().list_frame->data->insert_recent_length_format(i);
+//                //I update p->name according to the content of data->recent_projections file
+//                p->Fill();
+//
+//            }
+//
+//
+//            //if check is true (false) -> set ok to true (false)
+//            (p->ok) = check;
+//            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
+//            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
+//            (p->name)->SetFont(wxGetApp().default_font);
+//            Reset(p->name);
+//
+//        }
+//        else {
+//
+//            stringstream temp;
+//
+//            temp.str("");
+//            temp << "Length format must be one of the following: ";
+//            for (i = 0; i < ((p->catalog).GetCount()); i++) {
+//                temp << ((p->catalog)[i]).ToStdString() << (i < ((p->catalog).GetCount()) - 1 ? ", " : ".");
+//            }
+//
+//
+//            (f->print_error_message)->SetAndCall(p->name, String("Length format not found in list of length formats!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+//
+//            (p->ok) = false;
+//
+//        }
+//
+//        f->AllOk();
+//
+//    }
+//
+//    event.Skip(true);
+//
+//}
 
 
 

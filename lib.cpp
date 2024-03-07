@@ -19155,7 +19155,7 @@ template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Enable(bool
 template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p, vector<int>* recent_items_in)  : MultipleItemField<P, LengthFormat>(p, panel_of_parent, {String("Time and speed"), String("Length")}, recent_items_in){
 
     
-//    /*here I need to specify that parent is a member of the parent class */MultipleItemField<P>::parent = ((P*)(panel_of_parent->GetParent()));
+//    /*here I need to specify that parent is a member of the parent class */MultipleItemField<P, LengthFormat>::parent = ((P*)(panel_of_parent->GetParent()));
     length_format = p;
 
 //    catalog.Clear();
@@ -21134,17 +21134,17 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
     bool success;
 
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    find_and_replace_case_insensitive(MultipleItemField<P>::name, MultipleItemField<P>::items, &success, NULL);
+    find_and_replace_case_insensitive(MultipleItemField<P, void>::name, MultipleItemField<P, void>::items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid
-    MultipleItemField<P>::ok = success;
+    MultipleItemField<P, void>::ok = success;
 
     if (success) {
 
-        MultipleItemField<P>::name->SetForegroundColour(wxGetApp().foreground_color);
-        MultipleItemField<P>::name->SetFont(wxGetApp().default_font);
+        MultipleItemField<P, void>::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P, void>::name->SetFont(wxGetApp().default_font);
         //choose the projection entered in name button_reduce
-        MultipleItemField<P>::parent->draw_panel->OnChooseProjection(event);
+        MultipleItemField<P, void>::parent->draw_panel->OnChooseProjection(event);
 
     }
 

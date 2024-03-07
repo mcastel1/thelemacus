@@ -2644,9 +2644,9 @@ public:
     RouteFrame(ListFrame*, Route*, bool, long, const wxString&, const wxPoint&, const wxSize&, String);
     void set(void);
     template<class T> void get(T&);
-    template<class E> void TryToEnableTimeSpeedLength(E&);
+    template<class E> void OnChooseLengthFormatField(E&);
     template<class E> void UpdateLength(E&);
-    void TryToEnableTimeSpeedLength();
+    void OnChooseLengthFormatField();
     void OnPressCancel(wxCommandEvent& event);
     void OnPressOk(wxCommandEvent& event);
     bool is_ok(void);

@@ -16060,7 +16060,7 @@ void RouteFrame::set(void) {
     }
 
     //enable the length or the time and speed fields
-    TryToEnableTimeSpeedLength();
+    OnChooseLengthFormatField();
 
     if ((route->length_format) == String("length")) {
         //the Route length is simply expressed as a length rather than as a time and speed -> set length field
@@ -16125,7 +16125,7 @@ template<class T> void RouteFrame::get(T& event) {
 
 }
 
-template<class E> void RouteFrame::TryToEnableTimeSpeedLength(E& event) {
+template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {
 
     if ((type->is_ok()) && (length_format->is_ok())) {
 
@@ -16222,11 +16222,11 @@ template<class E> void RouteFrame::UpdateLength(E& event) {
 
 
 //same as RouteFrame::OnChooseLengthFormat(E& event), but it does not accept any argument
-void RouteFrame::TryToEnableTimeSpeedLength(void) {
+void RouteFrame::OnChooseLengthFormatField(void) {
 
     wxCommandEvent dummy;
 
-    TryToEnableTimeSpeedLength(dummy);
+    OnChooseLengthFormatField(dummy);
 
 }
 
@@ -18681,7 +18681,7 @@ template<class T>void CheckRouteType::operator()(T& event) {
 
         }
 
-        f->TryToEnableTimeSpeedLength();
+        f->OnChooseLengthFormatField();
 
 
         if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
@@ -19327,7 +19327,7 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
         MultipleItemField<P>::name->SetForegroundColour(wxGetApp().foreground_color);
         MultipleItemField<P>::name->SetFont(wxGetApp().default_font);
         //choses the length format entered in name button_reduce
-        MultipleItemField<P>::parent->TryToEnableTimeSpeedLength(event);
+        MultipleItemField<P>::parent->OnChooseLengthFormatField(event);
 
     }
 
@@ -20960,7 +20960,7 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
     ok = success;
 
     //try to enable time, speed and length
-    parent_frame->TryToEnableTimeSpeedLength(event);
+    parent_frame->OnChooseLengthFormatField(event);
 
     //try to enable button_reduce
     parent_frame->AllOk();

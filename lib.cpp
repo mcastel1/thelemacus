@@ -19091,7 +19091,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
 }
 
 
-//update the dropdown menu of ProjectionField according to wxGetApp().list_frame->data->recent_projections in such a way that the recent items appear on top of it
+//update the dropdown menu of ProjectionField according to MultipleItemField<P>::recent_items in such a way that the recent items appear on top of it
 template<class P> void ProjectionField<P>::Fill(void) {
 
     unsigned int i, j;
@@ -19106,10 +19106,10 @@ template<class P> void ProjectionField<P>::Fill(void) {
         items_temp.Add((MultipleItemField<P>::catalog)[i]);
     }
 
-    //I first add to projections the recently selected celestial projections written in (wxGetApp().list_frame->data->recent_projections)
-    for (MultipleItemField<P>::items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_projections.size()); i++) {
+    //I first add to projections the recently selected celestial projections written in (MultipleItemField<P>::recent_items)
+    for (MultipleItemField<P>::items.Clear(), i = 0; i < (MultipleItemField<P>::recent_items->size()); i++) {
 
-        MultipleItemField<P>::items.Add(items_temp[(wxGetApp().list_frame->data->recent_projections)[i]]);
+        MultipleItemField<P>::items.Add(items_temp[(*(MultipleItemField<P>::recent_items))[i]]);
 
     }
 
@@ -19138,62 +19138,6 @@ template<class P> void ProjectionField<P>::Fill(void) {
 
 }
 
-
-//read from file_recent the recently selected items in the dropdown menu of ProjectionField, store them in wxGetApp().list_frame->data->recent_projections, and update the dropdown menu in such a way that the recent items appear on top of it
-/*
-template<class P> void ProjectionField<P>::read_recent_projections(void) {
-
-    unsigned int i;
-    String s;
-    size_t pos_end;
-
-    if(!(parent->parent->file_is_untitled)){
-        //ListFrame::data_file exists -> read the recently selected items from ListFrame.data_file
-
-#ifdef __APPLE__
-
-        s.read_from_file_to(String("Recent projections"), parent->parent->data_file.name, String("R"), String(""));
-
-#endif
-
-#ifdef _WIN32
-
-        //Fork: If I open a sample sight file at startup stored in Windows resources, use this
-        s.read_from_file_to(String("Recent projections"), parent_frame->parent->data_file.name, String("R"), String(""));
-        //Fork: If I open a file on disk, use this
-//        s.read_from_file_to(String("Recent projections"), parent_frame->parent->data_file.name, String("RW"), String(""));
-
-#endif
-
-        for((wxGetApp().list_frame->data->recent_projections).resize(count((s.value).begin(), (s.value).end(), ' ')), i=0; i<((wxGetApp().list_frame->data->recent_projections).size()); i++) {
-
-            pos_end = (s.value).find(" ", 0);
-            (wxGetApp().list_frame->data->recent_projections)[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
-            (s.value) = ((s.value).substr(pos_end + 1, string::npos));
-
-        }
-
-    }else{
-        //ListFrame::data_file exists -> set the size of (wxGetApp().list_frame->data->recent_projections) to that of catalog->list and set (wxGetApp().list_frame->data->recent_projections)[i] simply to i
-
-        for((wxGetApp().list_frame->data->recent_projections).resize(projections.GetCount()), i=0; i<((wxGetApp().list_frame->data->recent_projections).size()); i++){
-            (wxGetApp().list_frame->data->recent_projections)[i] = i;
-        }
-
-    }
-
-    Fill();
-
-}
-*/
-
-
-
-//template<class P> template <typename EventTag, typename Method, typename Object> void ProjectionField<P>::Bind(EventTag tag, Method method, Object object) {
-//
-//    name->Bind(tag, method, object);
-//
-//}
 
 
 //constructor of a LengthFormatField object, based on the parent frame frame

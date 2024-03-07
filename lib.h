@@ -2016,7 +2016,7 @@ public:
     vector<int>* recent_items;
     bool ok;
 
-    MultipleItemField(wxPanel*, const vector<String>&);
+    MultipleItemField(wxPanel*, const vector<String>&, vector<int>*);
 //    void Fill(void);
 //    void read_recent_projections(void);
     template<class T> void InsertIn(T*);
@@ -2040,7 +2040,7 @@ public:
 //    bool ok;
     CheckProjection<P>* check;
 
-    ProjectionField(wxPanel*);
+    ProjectionField(wxPanel*, vector<int>*);
     void Fill(void);
 //    void read_recent_projections(void);
 //    template<class T> void InsertIn(T*, wxSizerFlags&);
@@ -2066,7 +2066,7 @@ public:
     LengthFormat* length_format;
     CheckLengthFormat<P>* check;
 
-    LengthFormatField(wxPanel*, LengthFormat*);
+    LengthFormatField(wxPanel*, LengthFormat*, vector<int>*);
     void Fill(void);
     void set(void);
 //    template<class T> void InsertIn(T*);

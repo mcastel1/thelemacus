@@ -10390,7 +10390,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     );
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
 
-    projection = new ProjectionField<ChartFrame>(panel);
+    projection = new ProjectionField<ChartFrame>(panel, &(wxGetApp().list_frame->data->recent_projections));
     (projection->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
 
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveNorth<wxCommandEvent>, this);
@@ -15540,7 +15540,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     //format in which lengths are expressed
     StaticText* text_l_format = new StaticText(panel, wxT("Length format"), wxDefaultPosition, wxDefaultSize, 0);
-    length_format = new LengthFormatField<RouteFrame>(panel, &(route->length_format));
+    length_format = new LengthFormatField<RouteFrame>(panel, &(route->length_format), &(wxGetApp().list_frame->data->recent_length_formats));
 
     //the field for time to set the Route length
     text_time = new StaticText(panel, wxT("Time"), wxDefaultPosition, wxDefaultSize, 0);
@@ -19004,7 +19004,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
 
 
 //constructor of a MultipleItemField object, which is into *panel_of_parent. The list of items in *this is stored into catalog_in. All items that are general enough to be common to all classes which are inherited from MultipleItemField are initialized here. Items that are specific to the inherited classes will be initialized in the inherited-class constructors
-template<class P> MultipleItemField<P>::MultipleItemField(wxPanel* panel_of_parent, const vector<String>& catalog_in){
+template<class P> MultipleItemField<P>::MultipleItemField(wxPanel* panel_of_parent, const vector<String>& catalog_in, vector<int>* recent_items_in){
     
     unsigned int i;
 
@@ -19014,6 +19014,7 @@ template<class P> MultipleItemField<P>::MultipleItemField(wxPanel* panel_of_pare
     for(catalog.Clear(), i=0; i<catalog_in.size(); i++){
         catalog.push_back(wxString(catalog_in[i].value));
     }
+    recent_items = recent_items_in;
 
     items = catalog;
 
@@ -19059,7 +19060,7 @@ template<class P> template<class T> void MultipleItemField<P>::InsertIn(T* host,
 
 
 //constructor of a ProjectionField object, based on the parent frame frame
-template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent) : MultipleItemField<P>(panel_of_parent, {String("Mercator"), String("3D")}) {
+template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, vector<int>* recent_items_in) : MultipleItemField<P>(panel_of_parent, {String("Mercator"), String("3D")}, recent_items_in) {
 
 //    parent = ((P*)(panel_of_parent->GetParent()));
 
@@ -19196,7 +19197,7 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
 
 
 //constructor of a LengthFormatField object, based on the parent frame frame
-template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p)  : MultipleItemField<P>(panel_of_parent, {String("Time and speed"), String("Length")}){
+template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p, vector<int>* recent_items_in)  : MultipleItemField<P>(panel_of_parent, {String("Time and speed"), String("Length")}, recent_items_in){
 
     
 //    /*here I need to specify that parent is a member of the parent class */MultipleItemField<P>::parent = ((P*)(panel_of_parent->GetParent()));
@@ -19228,7 +19229,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 }
 
 
-//update the dropdown menu of ProjectionField according to wxGetApp().list_frame->data->recent_length_formats in such a way that the recent items appear on top of it
+//update the dropdown menu of ProjectionField according to (*(MultipleItemField<P>::recent_items)) in such a way that the recent items appear on top of it
 template<class P> void LengthFormatField<P>::Fill(void) {
 
     unsigned int i, j;
@@ -19243,10 +19244,10 @@ template<class P> void LengthFormatField<P>::Fill(void) {
         items_temp.Add((MultipleItemField<P>::catalog)[i]);
     }
 
-    //I first add to length_formats the recently selected celestial length_formats written in (wxGetApp().list_frame->data->recent_length_formats)
-    for (MultipleItemField<P>::items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_length_formats.size()); i++) {
+    //I first add to length_formats the recently selected celestial length_formats written in ((*(MultipleItemField<P>::recent_items)))
+    for (MultipleItemField<P>::items.Clear(), i = 0; i < (MultipleItemField<P>::recent_items->size()); i++) {
 
-        MultipleItemField<P>::items.Add(items_temp[(wxGetApp().list_frame->data->recent_length_formats)[i]]);
+        MultipleItemField<P>::items.Add(items_temp[(*(MultipleItemField<P>::recent_items))[i]]);
 
     }
 

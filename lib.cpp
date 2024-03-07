@@ -15570,7 +15570,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     //type:a wxComboBox which indicates the type of the route (loxodrome, orthordrome or circle of equal altitude)
     StaticText* text_type = new StaticText(panel, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0);
-    type = new RouteTypeField<RouteFrame>(panel, &(route->type));
+    type = new RouteTypeField<RouteFrame>(panel, &(route->type), &(wxGetApp().list_frame->data->recent_route_types));
     //if the Route of *this is for transport, then only show 'loxodrome' and 'orthodrome' in type
     if (for_transport) {
         type->types.Remove("circle of equal altitude");

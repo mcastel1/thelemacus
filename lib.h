@@ -2348,7 +2348,7 @@ public:
     
     P* parent;
     //the parent frame to which this object is attached
-    RouteFrame* parent_frame;
+//    RouteFrame* parent_frame;
     wxArrayString types;
     //this points to a non-GUI String object, which contains the Route type written in the GUI object this
     String* type;

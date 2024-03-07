@@ -18679,7 +18679,7 @@ template<class P> CheckRouteType<P>::CheckRouteType(RouteTypeField<P>* p_in) {
 //this functor checks the wxComboBox containing the Route type, and if it is equal to loxodrome or orthodrome, it enables only  the length, Z and start fields in RouteFrame (the latter if for_transport = false, becasue I don't need a start position if I am using the Route for transport). If it is equal to circle of equal altitude, it enables only the GP and omege fields.
 template<class P> template<class T> void CheckRouteType<P>::operator()(T& event) {
 
-    RouteFrame* f = (p->parent_frame);
+    P* f = (p->parent);
     bool enable;
 
     //I proceed only if the progam is not is indling mode
@@ -20644,7 +20644,7 @@ template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, St
     types.Add(wxString("circle of equal altitude"));
 
     check = new CheckRouteType<P>(this);
-    name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 
     //SetColor(name);
     AdjustWidth(name);
@@ -20916,13 +20916,13 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
         //enable/disable the related fields in RouteFrame f
         enable = (((types[i]) == wxString("loxodrome")) || ((types[i]) == wxString("orthodrome")));
 
-        parent_frame->Z->Enable(enable);
-        parent_frame->start_phi->Enable(enable && (!(parent_frame->for_transport)));
-        parent_frame->start_lambda->Enable(enable && (!(parent_frame->for_transport)));
+        parent->Z->Enable(enable);
+        parent->start_phi->Enable(enable && (!(parent->for_transport)));
+        parent->start_lambda->Enable(enable && (!(parent->for_transport)));
 
-        parent_frame->GP_phi->Enable(!enable);
-        parent_frame->GP_lambda->Enable(!enable);
-        parent_frame->omega->Enable(!enable);
+        parent->GP_phi->Enable(!enable);
+        parent->GP_lambda->Enable(!enable);
+        parent->omega->Enable(!enable);
 
         //because the text in name is valid, I set the background color of name to white
         name->SetForegroundColour(wxGetApp().foreground_color);
@@ -20931,13 +20931,13 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
     }
     else {
 
-        parent_frame->Z->Enable(false);
-        parent_frame->start_phi->Enable(false);
-        parent_frame->start_lambda->Enable(false);
+        parent->Z->Enable(false);
+        parent->start_phi->Enable(false);
+        parent->start_lambda->Enable(false);
 
-        parent_frame->GP_phi->Enable(false);
-        parent_frame->GP_lambda->Enable(false);
-        parent_frame->omega->Enable(false);
+        parent->GP_phi->Enable(false);
+        parent->GP_lambda->Enable(false);
+        parent->omega->Enable(false);
 
     }
 
@@ -20945,10 +20945,10 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
     ok = success;
 
     //try to enable time, speed and length
-    parent_frame->OnChooseLengthFormatField(event);
+    parent->OnChooseLengthFormatField(event);
 
     //try to enable button_reduce
-    parent_frame->AllOk();
+    parent->AllOk();
 
     event.Skip(true);
 
@@ -21019,53 +21019,6 @@ template<class P> void BodyField<P>::fill_bodies(void) {
 }
 
 
-//read from file_recent the recently selected items in the dropdown menu of BodyField, store them in wxGetApp().list_frame->data->recent_bodies, and update the dropdown menu in such a way that the recent items appear on top of it
-/*
-template<class P> void BodyField<P>::read_recent_bodies(void) {
-
-    unsigned int i;
-    String s;
-    size_t pos_end;
-
-    if(!(parent_frame->parent->file_is_untitled)){
-        //ListFrame::data_file exists -> read the recently selected items from ListFrame.data_file
-
-#ifdef __APPLE__
-
-        s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("R"), String(""));
-
-#endif
-
-#ifdef _WIN32
-
-        //Fork: If I open a sample sight file at startup stored in Windows resources, use this
-        s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("R"), String(""));
-        //Fork: If I open a file on disk, use this
-//		s.read_from_file_to(String("Recent bodies"), parent_frame->parent->data_file.name, String("RW"), String(""));
-
-#endif
-
-        for((wxGetApp().list_frame->data->recent_bodies).resize(count((s.value).begin(), (s.value).end(), ' ')), i=0; i<((wxGetApp().list_frame->data->recent_bodies).size()); i++) {
-
-            pos_end = (s.value).find(" ", 0);
-            (wxGetApp().list_frame->data->recent_bodies)[i] = stoi(((s.value).substr(0, pos_end)), NULL, 10);
-            (s.value) = ((s.value).substr(pos_end + 1, string::npos));
-
-        }
-
-    }else{
-        //ListFrame::data_file exists -> set the size of (wxGetApp().list_frame->data->recent_bodies) to that of catalog->list and set (wxGetApp().list_frame->data->recent_bodies)[i] simply to i
-
-        for((wxGetApp().list_frame->data->recent_bodies).resize((catalog->list).size()), i=0; i<((wxGetApp().list_frame->data->recent_bodies).size()); i++){
-            (wxGetApp().list_frame->data->recent_bodies)[i] = i;
-        }
-
-    }
-
-    fill_bodies();
-
-}
- */
 
  //update list_frame->data->insert_recent_bodies according to the body currently written in name 
 template<class P> void BodyField<P>::update_recent_bodies(void) {

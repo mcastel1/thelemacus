@@ -37,7 +37,7 @@ template<class P> class LengthField;
 template<class P> class SpeedField;
 template<class P> class DateField;
 template<class P> class ChronoField;
-class RouteTypeField;
+template<class P> class RouteTypeField;
 template<class P> class StringField;
 class MyApp;
 template<class F> class CloseFrame;
@@ -1449,14 +1449,14 @@ public:
 };
 
 //this checks if a Route type is valid
-class CheckRouteType{
+template<class P> class CheckRouteType{
     
 public:
     
     //the RouteType  field containing the Route type
-    RouteTypeField* p;
+    RouteTypeField<P>* p;
     
-    CheckRouteType(RouteTypeField*);
+    CheckRouteType(RouteTypeField<P>*);
     template<class T> void operator()(T&);
     
     
@@ -2340,7 +2340,9 @@ public:
     
 };
 
-class RouteTypeField{
+
+//GUI field to specify the RouteType, which is inserted into a parent panel of type P
+template<class P> class RouteTypeField{
     
 public:
     //the parent frame to which this object is attached
@@ -2352,7 +2354,7 @@ public:
     
     //this is the wxComboBox with the name of the bodies
     wxComboBox* name;
-    CheckRouteType* check;
+    CheckRouteType<P>* check;
     
     bool ok;
     
@@ -2632,7 +2634,7 @@ public:
     SetIdling<RouteFrame> * set_idling;
     UnsetIdling<RouteFrame> * unset_idling;
     PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >* print_error_message;
-    RouteTypeField *type;
+    RouteTypeField<RouteFrame>* type;
     AngleField<RouteFrame> *Z, *omega, *start_phi, *start_lambda, *GP_phi, *GP_lambda;
     //l_format tells whether the length of Route is written simply as a Length, or as a Speed x a Chrono (a time)
     LengthFormatField<RouteFrame>* length_format;

@@ -15570,7 +15570,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     //type:a wxComboBox which indicates the type of the route (loxodrome, orthordrome or circle of equal altitude)
     StaticText* text_type = new StaticText(panel, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0);
-    type = new RouteTypeField(this, &(route->type));
+    type = new RouteTypeField<RouteFrame>(this, &(route->type));
     //if the Route of *this is for transport, then only show 'loxodrome' and 'orthodrome' in type
     if (for_transport) {
         type->types.Remove("circle of equal altitude");
@@ -18669,7 +18669,7 @@ template<class P> template <class T> void CheckChrono<P>::operator()(T& event) {
 
 }
 
-CheckRouteType::CheckRouteType(RouteTypeField* p_in) {
+template<class P> CheckRouteType<P>::CheckRouteType(RouteTypeField<P>* p_in) {
 
     p = p_in;
 
@@ -18677,7 +18677,7 @@ CheckRouteType::CheckRouteType(RouteTypeField* p_in) {
 }
 
 //this functor checks the wxComboBox containing the Route type, and if it is equal to loxodrome or orthodrome, it enables only  the length, Z and start fields in RouteFrame (the latter if for_transport = false, becasue I don't need a start position if I am using the Route for transport). If it is equal to circle of equal altitude, it enables only the GP and omege fields.
-template<class T>void CheckRouteType::operator()(T& event) {
+template<class P> template<class T> void CheckRouteType<P>::operator()(T& event) {
 
     RouteFrame* f = (p->parent_frame);
     bool enable;
@@ -18938,7 +18938,7 @@ template<class P> template <class T> void ChronoField<P>::get(T& event) {
 
 
 //writes to the non-GUI field angle the values written in the GUI field name
-template <class T> void RouteTypeField::get(T& event) {
+template<class P> template <class T> void RouteTypeField<P>::get(T& event) {
 
 
     if (ok) {
@@ -19647,7 +19647,7 @@ template<class P> void ChronoField<P>::SetBackgroundColor(Color color) {
 }
 
 //sets the value in the GUI object equal to the value in the non-GUI  object string
-void RouteTypeField::set(void) {
+template<class P> void RouteTypeField<P>::set(void) {
 
     switch (((type->value)[0])) {
 
@@ -20630,7 +20630,7 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 }
 
 //constructor of a RouteTypeField object, based on the parent frame frame
-RouteTypeField::RouteTypeField(RouteFrame* frame, String* s) {
+template<class P> RouteTypeField<P>::RouteTypeField(RouteFrame* frame, String* s) {
 
     parent_frame = frame;
     //I link the internal pointers p and c to the respective non-GUI object string
@@ -20642,7 +20642,7 @@ RouteTypeField::RouteTypeField(RouteFrame* frame, String* s) {
     types.Add(wxString("orthodrome"));
     types.Add(wxString("circle of equal altitude"));
 
-    check = new CheckRouteType(this);
+    check = new CheckRouteType<P>(this);
     name = new wxComboBox(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, types, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 
     //SetColor(name);
@@ -20892,16 +20892,15 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
-
-
-bool RouteTypeField::is_ok(void) {
+template<class P> bool RouteTypeField<P>::is_ok(void) {
 
     return(ok);
 
 }
 
+
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
-template<class E> void RouteTypeField::OnEdit(E& event) {
+template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
 
     unsigned int i;
     bool success, enable;
@@ -20955,7 +20954,7 @@ template<class E> void RouteTypeField::OnEdit(E& event) {
 }
 
 //bind all GUI windows in *this to method
-template <typename EventTag, typename Method, typename Object> void RouteTypeField::Bind(EventTag tag, Method method, Object object) {
+template<class P> template <typename EventTag, typename Method, typename Object> void RouteTypeField<P>::Bind(EventTag tag, Method method, Object object) {
 
     name->Bind(tag, method, object);
 
@@ -21149,17 +21148,12 @@ template<class P> template<class T> void ChronoField<P>::InsertIn(T* host) {
 
 }
 
-template<class T> void RouteTypeField::InsertIn(T* host) {
+template<class P> template<class T> void RouteTypeField<P>::InsertIn(T* host) {
 
     host->Add(sizer_v);
 
 }
 
-//template<class P> template<class T> void ProjectionField<P>::InsertIn(T* host, wxSizerFlags& flag) {
-//
-//    host->Add(sizer_v, flag);
-//
-//}
 
 //this function is called every time the user modifies the text in this->name: it checks whether the text entered so far in name is valid, if name is valid, it calls OnChooseProjection to select the projection written in name
 template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {

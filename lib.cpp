@@ -5658,9 +5658,12 @@ void Data::print(bool print_all_routes, String prefix, ostream& ostr) {
     print_routes(print_all_routes, new_prefix, ostr);
     print_positions(new_prefix, ostr);
 
-    print_recent_bodies(prefix, ostr);
-    print_recent_projections(prefix, ostr);
-    print_recent_length_formats(prefix, ostr);
+//    print_recent_bodies(prefix, ostr);
+    print_recent_items(recent_bodies, prefix, ostr);
+    print_recent_items(recent_projections, prefix, ostr);
+    print_recent_items(recent_length_formats, prefix, ostr);
+//    print_recent_projections(prefix, ostr);
+//    print_recent_length_formats(prefix, ostr);
 
 }
 
@@ -6231,20 +6234,20 @@ void Data::insert_recent_body(unsigned int body_id) {
 }
 
 
-//print recent_bodies to ostr
-void Data::print_recent_bodies(String prefix, ostream& ostr) {
-
-    unsigned int i;
-    stringstream temp;
-
-
-    for (temp.str(""), i = 0; i < (recent_bodies.size()) - 1; i++) {
-        temp << recent_bodies[i] << " ";
-    }
-    temp << recent_bodies.back();
-    String(temp.str().c_str()).print(String("Recent bodies"), false, prefix, ostr);
-
-}
+////print recent_bodies to ostr
+//void Data::print_recent_bodies(String prefix, ostream& ostr) {
+//
+//    unsigned int i;
+//    stringstream temp;
+//
+//
+//    for (temp.str(""), i = 0; i < (recent_bodies.size()) - 1; i++) {
+//        temp << recent_bodies[i] << " ";
+//    }
+//    temp << recent_bodies.back();
+//    String(temp.str().c_str()).print(String("Recent bodies"), false, prefix, ostr);
+//
+//}
 
 
 //insert projection projection_id into recent_projections
@@ -6312,19 +6315,19 @@ void Data::insert_recent_item(unsigned int item_id, vector<int>* recent_items) {
 
 
 //print recent_projections to ostr
-void Data::print_recent_projections(String prefix, ostream& ostr) {
-
-    unsigned int i;
-    stringstream temp;
-
-
-    for (temp.str(""), i = 0; i < (recent_projections.size()) - 1; i++) {
-        temp << recent_projections[i] << " ";
-    }
-    temp << recent_projections.back();
-    String(temp.str().c_str()).print(String("Recent projections"), false, prefix, ostr);
-
-}
+//void Data::print_recent_projections(String prefix, ostream& ostr) {
+//
+//    unsigned int i;
+//    stringstream temp;
+//
+//
+//    for (temp.str(""), i = 0; i < (recent_projections.size()) - 1; i++) {
+//        temp << recent_projections[i] << " ";
+//    }
+//    temp << recent_projections.back();
+//    String(temp.str().c_str()).print(String("Recent projections"), false, prefix, ostr);
+//
+//}
 
 //insert the length format length_format_id into recent_length_formats
 void Data::insert_recent_length_format(unsigned int length_format_id) {
@@ -6349,20 +6352,21 @@ void Data::insert_recent_length_format(unsigned int length_format_id) {
 
 }
 
+
 //print recent_length_formats to ostr
-void Data::print_recent_length_formats(String prefix, ostream& ostr) {
-
-    unsigned int i;
-    stringstream temp;
-
-
-    for (temp.str(""), i = 0; i < (recent_length_formats.size()) - 1; i++) {
-        temp << recent_length_formats[i] << " ";
-    }
-    temp << recent_length_formats.back();
-    String(temp.str().c_str()).print(String("Recent length formats"), false, prefix, ostr);
-
-}
+//void Data::print_recent_length_formats(String prefix, ostream& ostr) {
+//
+//    unsigned int i;
+//    stringstream temp;
+//
+//
+//    for (temp.str(""), i = 0; i < (recent_length_formats.size()) - 1; i++) {
+//        temp << recent_length_formats[i] << " ";
+//    }
+//    temp << recent_length_formats.back();
+//    String(temp.str().c_str()).print(String("Recent length formats"), false, prefix, ostr);
+//
+//}
 
 
 //insert route_type route_type_id into recent_route_types
@@ -6390,19 +6394,19 @@ void Data::insert_recent_route_type(unsigned int route_type_id) {
 
 
 //print recent_route_types to ostr
-void Data::print_recent_route_types(String prefix, ostream& ostr) {
-
-    unsigned int i;
-    stringstream temp;
-
-
-    for (temp.str(""), i = 0; i < (recent_route_types.size()) - 1; i++) {
-        temp << recent_route_types[i] << " ";
-    }
-    temp << recent_route_types.back();
-    String(temp.str().c_str()).print(String("Recent route types"), false, prefix, ostr);
-
-}
+//void Data::print_recent_route_types(String prefix, ostream& ostr) {
+//
+//    unsigned int i;
+//    stringstream temp;
+//
+//
+//    for (temp.str(""), i = 0; i < (recent_route_types.size()) - 1; i++) {
+//        temp << recent_route_types[i] << " ";
+//    }
+//    temp << recent_route_types.back();
+//    String(temp.str().c_str()).print(String("Recent route types"), false, prefix, ostr);
+//
+//}
 
 
 

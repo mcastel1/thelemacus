@@ -19199,7 +19199,7 @@ template<class P> void ProjectionField<P>::read_recent_projections(void) {
 template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p)  : MultipleItemField<P>(panel_of_parent, {String("Time and speed"), String("Length")}){
 
     
-    /*here I need to specify that parent is a member of the parent class */MultipleItemField<P>::parent = ((P*)(panel_of_parent->GetParent()));
+//    /*here I need to specify that parent is a member of the parent class */MultipleItemField<P>::parent = ((P*)(panel_of_parent->GetParent()));
     length_format = p;
 
 //    catalog.Clear();
@@ -19209,21 +19209,21 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 
     check = new CheckLengthFormat<P>(this);
 
-    MultipleItemField<P>::name = new wxComboBox(MultipleItemField<P>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+//    MultipleItemField<P>::name = new wxComboBox(MultipleItemField<P>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
     Fill();
-    MultipleItemField<P>::name->SetValue((MultipleItemField<P>::items)[0]);
-    AdjustWidth(MultipleItemField<P>::name);
+//    MultipleItemField<P>::name->SetValue((MultipleItemField<P>::items)[0]);
+//    AdjustWidth(MultipleItemField<P>::name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P>::name->Bind(wxEVT_COMBOBOX, &LengthFormatField::OnEdit<wxCommandEvent>, this);
     MultipleItemField<P>::name->Bind(wxEVT_KEY_UP, &LengthFormatField::OnEdit<wxKeyEvent>, this);
     MultipleItemField<P>::name->Bind(wxEVT_KILL_FOCUS, *check);
 
-    MultipleItemField<P>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    MultipleItemField<P>::sizer_v = new wxBoxSizer(wxVERTICAL);
+//    MultipleItemField<P>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
+//    MultipleItemField<P>::sizer_v = new wxBoxSizer(wxVERTICAL);
 
-    MultipleItemField<P>::sizer_v->Add(MultipleItemField<P>::sizer_h, 0, wxALIGN_LEFT);
-    MultipleItemField<P>::sizer_h->Add(MultipleItemField<P>::name, 0, wxALIGN_CENTER);
+//    MultipleItemField<P>::sizer_v->Add(MultipleItemField<P>::sizer_h, 0, wxALIGN_LEFT);
+//    MultipleItemField<P>::sizer_h->Add(MultipleItemField<P>::name, 0, wxALIGN_CENTER);
 
 }
 

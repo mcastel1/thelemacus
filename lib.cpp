@@ -19063,7 +19063,7 @@ template<class P, class NON_GUI> template<class T> void MultipleItemField<P, NON
 
 
 //constructor of a ProjectionField object, based on the parent frame frame
-template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, vector<int>* recent_items_in) : MultipleItemField<P>(panel_of_parent, {String("Mercator"), String("3D")}, recent_items_in) {
+template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, vector<int>* recent_items_in) : MultipleItemField<P, void>(NULL, panel_of_parent, {String("Mercator"), String("3D")}, recent_items_in) {
 
 //    parent = ((P*)(panel_of_parent->GetParent()));
 
@@ -19077,13 +19077,13 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
 
 //    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-    MultipleItemField<P>::Fill();
+    MultipleItemField<P, void>::Fill();
 //    name->SetValue(items[0]);
 //    AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    MultipleItemField<P>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
-    MultipleItemField<P>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
-    MultipleItemField<P>::name->Bind(wxEVT_KILL_FOCUS, *check);
+    MultipleItemField<P, void>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
+    MultipleItemField<P, void>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
+    MultipleItemField<P, void>::name->Bind(wxEVT_KILL_FOCUS, *check);
 
 //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
 //    sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -19094,8 +19094,8 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
 }
 
 
-//update the dropdown menu of ProjectionField according to MultipleItemField<P>::recent_items in such a way that the recent items appear on top of it
-template<class P> void MultipleItemField<P>::Fill(void) {
+//update the dropdown menu of ProjectionField according to MultipleItemField<P, NON_GUI>::recent_items in such a way that the recent items appear on top of it
+template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Fill(void) {
 
     unsigned int i, j;
     wxArrayString items_temp;
@@ -19103,39 +19103,39 @@ template<class P> void MultipleItemField<P>::Fill(void) {
     bool is_present;
 
     //save the current value of name in name_temp
-    name_temp = (MultipleItemField<P>::name->GetValue());
+    name_temp = (MultipleItemField<P, NON_GUI>::name->GetValue());
     //create the temporary list of projections projections_temp from catalog
-    for (items_temp.Clear(), i = 0; i < MultipleItemField<P>::items.GetCount(); i++) {
-        items_temp.Add((MultipleItemField<P>::catalog)[i]);
+    for (items_temp.Clear(), i = 0; i < MultipleItemField<P, NON_GUI>::items.GetCount(); i++) {
+        items_temp.Add((MultipleItemField<P, NON_GUI>::catalog)[i]);
     }
 
-    //I first add to projections the recently selected celestial projections written in (MultipleItemField<P>::recent_items)
-    for (MultipleItemField<P>::items.Clear(), i = 0; i < (MultipleItemField<P>::recent_items->size()); i++) {
+    //I first add to projections the recently selected celestial projections written in (MultipleItemField<P, NON_GUI>::recent_items)
+    for (MultipleItemField<P, NON_GUI>::items.Clear(), i = 0; i < (MultipleItemField<P, NON_GUI>::recent_items->size()); i++) {
 
-        MultipleItemField<P>::items.Add(items_temp[(*(MultipleItemField<P>::recent_items))[i]]);
+        MultipleItemField<P, NON_GUI>::items.Add(items_temp[(*(MultipleItemField<P, NON_GUI>::recent_items))[i]]);
 
     }
 
     //then, I fill projections with the remaining projections
     for (i=0; i < items_temp.GetCount(); i++) {
 
-        for (is_present = false, j = 0; (j < MultipleItemField<P>::items.GetCount()) && (!is_present); j++) {
+        for (is_present = false, j = 0; (j < MultipleItemField<P, NON_GUI>::items.GetCount()) && (!is_present); j++) {
 
-            if (MultipleItemField<P>::items[j] == items_temp[i]) {
+            if (MultipleItemField<P, NON_GUI>::items[j] == items_temp[i]) {
                 is_present = true;
             }
 
         }
 
         if (!is_present) {
-            MultipleItemField<P>::items.Add(items_temp[i]);
+            MultipleItemField<P, NON_GUI>::items.Add(items_temp[i]);
         }
 
     }
 
-    MultipleItemField<P>::name->Set(MultipleItemField<P>::items);
+    MultipleItemField<P, NON_GUI>::name->Set(MultipleItemField<P, NON_GUI>::items);
     //because name->Set(projections clears the value of name, I set the value of name back to name_temp
-    MultipleItemField<P>::name->SetValue(name_temp);
+    MultipleItemField<P, NON_GUI>::name->SetValue(name_temp);
 
     items_temp.Clear();
 
@@ -19143,7 +19143,7 @@ template<class P> void MultipleItemField<P>::Fill(void) {
 
 
 //this function enables/disable the LengthFormatField
-template<class P> void MultipleItemField<P>::Enable(bool is_enabled) {
+template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Enable(bool is_enabled) {
 
     name->Enable(is_enabled);
 
@@ -19152,7 +19152,7 @@ template<class P> void MultipleItemField<P>::Enable(bool is_enabled) {
 
 
 //constructor of a LengthFormatField object, based on the parent frame frame
-template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p, vector<int>* recent_items_in)  : MultipleItemField<P>(panel_of_parent, {String("Time and speed"), String("Length")}, recent_items_in){
+template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* p, vector<int>* recent_items_in)  : MultipleItemField<P, LengthFormat>(p, panel_of_parent, {String("Time and speed"), String("Length")}, recent_items_in){
 
     
 //    /*here I need to specify that parent is a member of the parent class */MultipleItemField<P>::parent = ((P*)(panel_of_parent->GetParent()));
@@ -19165,21 +19165,21 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 
     check = new CheckLengthFormat<P>(this);
 
-//    MultipleItemField<P>::name = new wxComboBox(MultipleItemField<P>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+//    MultipleItemField<P, LengthFormat>::name = new wxComboBox(MultipleItemField<P, LengthFormat>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, LengthFormat>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-    MultipleItemField<P>::Fill();
-//    MultipleItemField<P>::name->SetValue((MultipleItemField<P>::items)[0]);
-//    AdjustWidth(MultipleItemField<P>::name);
+    MultipleItemField<P, LengthFormat>::Fill();
+//    MultipleItemField<P, LengthFormat>::name->SetValue((MultipleItemField<P, LengthFormat>::items)[0]);
+//    AdjustWidth(MultipleItemField<P, LengthFormat>::name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    MultipleItemField<P>::name->Bind(wxEVT_COMBOBOX, &LengthFormatField::OnEdit<wxCommandEvent>, this);
-    MultipleItemField<P>::name->Bind(wxEVT_KEY_UP, &LengthFormatField::OnEdit<wxKeyEvent>, this);
-    MultipleItemField<P>::name->Bind(wxEVT_KILL_FOCUS, *check);
+    MultipleItemField<P, LengthFormat>::name->Bind(wxEVT_COMBOBOX, &LengthFormatField::OnEdit<wxCommandEvent>, this);
+    MultipleItemField<P, LengthFormat>::name->Bind(wxEVT_KEY_UP, &LengthFormatField::OnEdit<wxKeyEvent>, this);
+    MultipleItemField<P, LengthFormat>::name->Bind(wxEVT_KILL_FOCUS, *check);
 
-//    MultipleItemField<P>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
-//    MultipleItemField<P>::sizer_v = new wxBoxSizer(wxVERTICAL);
+//    MultipleItemField<P, LengthFormat>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
+//    MultipleItemField<P, LengthFormat>::sizer_v = new wxBoxSizer(wxVERTICAL);
 
-//    MultipleItemField<P>::sizer_v->Add(MultipleItemField<P>::sizer_h, 0, wxALIGN_LEFT);
-//    MultipleItemField<P>::sizer_h->Add(MultipleItemField<P>::name, 0, wxALIGN_CENTER);
+//    MultipleItemField<P, LengthFormat>::sizer_v->Add(MultipleItemField<P, LengthFormat>::sizer_h, 0, wxALIGN_LEFT);
+//    MultipleItemField<P, LengthFormat>::sizer_h->Add(MultipleItemField<P, LengthFormat>::name, 0, wxALIGN_CENTER);
 
 }
 
@@ -19239,7 +19239,7 @@ template<class P> void LengthFormatField<P>::set(void) {
     case 't':
         //length format is time and speed
 
-            MultipleItemField<P>::name->SetValue(wxString("Time and speed"));
+            MultipleItemField<P, LengthFormat>::name->SetValue(wxString("Time and speed"));
 
         break;
 
@@ -19247,13 +19247,13 @@ template<class P> void LengthFormatField<P>::set(void) {
     case 'l':
         //length format is simply length, rather than time and speed
 
-            MultipleItemField<P>::name->SetValue(wxString("Length"));
+            MultipleItemField<P, LengthFormat>::name->SetValue(wxString("Length"));
 
         break;
 
     }
 
-    MultipleItemField<P>::ok = true;
+    MultipleItemField<P, LengthFormat>::ok = true;
 
 }
 
@@ -19273,17 +19273,17 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
     bool success;
 
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    find_and_replace_case_insensitive(MultipleItemField<P>::name, MultipleItemField<P>::items, &success, NULL);
+    find_and_replace_case_insensitive(MultipleItemField<P, LengthFormat>::name, MultipleItemField<P, LengthFormat>::items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid
-    MultipleItemField<P>::ok = success;
+    MultipleItemField<P, LengthFormat>::ok = success;
 
     if (success) {
 
-        MultipleItemField<P>::name->SetForegroundColour(wxGetApp().foreground_color);
-        MultipleItemField<P>::name->SetFont(wxGetApp().default_font);
+        MultipleItemField<P, LengthFormat>::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P, LengthFormat>::name->SetFont(wxGetApp().default_font);
         //choses the length format entered in name button_reduce
-        MultipleItemField<P>::parent->OnChooseLengthFormatField(event);
+        MultipleItemField<P, LengthFormat>::parent->OnChooseLengthFormatField(event);
 
     }
 
@@ -19296,7 +19296,7 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
 //return true(false) is *this is ok (not ok), i.e., if this->ok = true(false)
 template<class P> bool LengthFormatField<P>::is_ok(void) {
 
-    return(MultipleItemField<P>::ok);
+    return(MultipleItemField<P, LengthFormat>::ok);
 
 }
 

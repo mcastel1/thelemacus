@@ -2032,7 +2032,7 @@ public:
 };
 
 
-template<class P> class ProjectionField: public MultipleItemField<P>{
+template<class P> class ProjectionField: public MultipleItemField<P, void>{
     
 public:
     
@@ -2056,7 +2056,7 @@ public:
 
 
 //this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a LengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted
-template<class P> class LengthFormatField: public MultipleItemField<P>{
+template<class P> class LengthFormatField: public MultipleItemField<P, LengthFormat>{
     
 public:
     

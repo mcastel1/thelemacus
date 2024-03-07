@@ -2529,7 +2529,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
     case 'c': {
         //the Route this is a circle of equal altitde.  its total length is the length of the circle itself, which reads:
 
-        switch (((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]) {
+        switch ((draw_panel->parent->projection->name->GetValue().ToStdString())[0]) {
 
         case 'M': {
             //I am using the mercator projection

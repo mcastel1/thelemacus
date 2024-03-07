@@ -19147,7 +19147,7 @@ template<class P, class NON_GUI> template<class T> void MultipleItemField<P, NON
 }
 
 
-template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Check(void) {
+template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON_GUI>::Check(E& event) {
 
 //    P* f = (parent);
 
@@ -19192,13 +19192,13 @@ template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Check(void)
             stringstream temp;
 
             temp.str("");
-            temp << "Projection must be one of the following: ";
+            temp << "Item must be one of the following: ";
             for (i = 0; i < (catalog.GetCount()); i++) {
                 temp << (catalog[i]).ToStdString() << (i < (catalog.GetCount()) - 1 ? ", " : ".");
             }
 
 
-            parent->print_error_message->SetAndCall(name, String("Projection not found in list of projections!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+            parent->print_error_message->SetAndCall(name, String("Item not found in list of suitable items!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
 
             ok = false;
 
@@ -19207,6 +19207,8 @@ template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Check(void)
         parent->AllOk();
 
     }
+    
+    event.Skip(true);
 
 
 }
@@ -19222,7 +19224,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
     //    catalog.Add(wxT("Lambert"));
 //    items = catalog;
 
-    check = new CheckProjection<P>(this);
+//    check = new CheckProjection<P>(this);
 
 //    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
@@ -19232,7 +19234,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P, void>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
     MultipleItemField<P, void>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
-    MultipleItemField<P, void>::name->Bind(wxEVT_KILL_FOCUS, *check);
+    MultipleItemField<P, void>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, void>::template Check<wxFocusEvent>, this);
 
 //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
 //    sizer_v = new wxBoxSizer(wxVERTICAL);

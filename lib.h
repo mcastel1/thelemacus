@@ -2029,7 +2029,7 @@ public:
     void Fill(void);
     void Enable(bool);
     bool is_ok(void);
-    void Check(void);
+    template<class E> void Check(E&);
 //    void read_recent_projections(void);
     template<class T> void InsertIn(T*);
     template<class T> void InsertIn(T*, wxSizerFlags&);
@@ -2050,7 +2050,7 @@ public:
 //    wxComboBox* name;
 //    vector<int> recent_items;
 //    bool ok;
-    CheckProjection<P>* check;
+//    CheckProjection<P>* check;
 
     ProjectionField(wxPanel*, vector<int>*);
 //    void Fill(void);

@@ -19184,6 +19184,13 @@ template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Fill(void) 
 
 }
 
+//return true(false) is *this is ok (not ok), i.e., if this->ok = true(false)
+template<class P, class NON_GUI> bool MultipleItemField<P, NON_GUI>::is_ok(void) {
+
+    return(ok);
+
+}
+
 
 //this function enables/disable the LengthFormatField
 template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Enable(bool is_enabled) {
@@ -19333,22 +19340,6 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
     event.Skip(true);
 
 }
-
-
-
-//return true(false) is *this is ok (not ok), i.e., if this->ok = true(false)
-template<class P> bool LengthFormatField<P>::is_ok(void) {
-
-    return(MultipleItemField<P, LengthFormat>::ok);
-
-}
-
-
-//template<class P> template <typename EventTag, typename Method, typename Object> void LengthFormatField<P>::Bind(EventTag tag, Method method, Object object) {
-//
-//    name->Bind(tag, method, object);
-//
-//}
 
 
 LengthFormat::LengthFormat(void) : String() {

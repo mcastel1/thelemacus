@@ -2025,6 +2025,7 @@ public:
     MultipleItemField(wxPanel*, NON_GUI*, const vector<String>&, vector<int>*);
     void Fill(void);
     void Enable(bool);
+    bool is_ok(void);
 //    void read_recent_projections(void);
     template<class T> void InsertIn(T*);
     template<class T> void InsertIn(T*, wxSizerFlags&);
@@ -2079,7 +2080,7 @@ public:
 //    template<class T> void InsertIn(T*);
     template<class E> void OnEdit(E&);
 //    void Enable(bool);
-    bool is_ok(void);
+//    bool is_ok(void);
 //    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };

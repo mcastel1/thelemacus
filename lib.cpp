@@ -20934,11 +20934,11 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
-template<class P> bool RouteTypeField<P>::is_ok(void) {
-
-    return(MultipleItemField<P, void>::ok);
-
-}
+//template<class P> bool RouteTypeField<P>::is_ok(void) {
+//
+//    return(MultipleItemField<P, void>::ok);
+//
+//}
 
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
@@ -20995,12 +20995,12 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
 
 }
 
-//bind all GUI windows in *this to method
-template<class P> template <typename EventTag, typename Method, typename Object> void RouteTypeField<P>::Bind(EventTag tag, Method method, Object object) {
-
-    MultipleItemField<P, void>::name->Bind(tag, method, object);
-
-}
+////bind all GUI windows in *this to method
+//template<class P> template <typename EventTag, typename Method, typename Object> void RouteTypeField<P>::Bind(EventTag tag, Method method, Object object) {
+//
+//    MultipleItemField<P, void>::name->Bind(tag, method, object);
+//
+//}
 
 
 
@@ -21143,11 +21143,11 @@ template<class P> template<class T> void ChronoField<P>::InsertIn(T* host) {
 
 }
 
-template<class P> template<class T> void RouteTypeField<P>::InsertIn(T* host) {
-
-    host->Add(MultipleItemField<P, void>::sizer_v);
-
-}
+//template<class P> template<class T> void RouteTypeField<P>::InsertIn(T* host) {
+//
+//    host->Add(MultipleItemField<P, void>::sizer_v);
+//
+//}
 
 
 //this function is called every time the user modifies the text in this->name: it checks whether the text entered so far in name is valid, if name is valid, it calls OnChooseProjection to select the projection written in name

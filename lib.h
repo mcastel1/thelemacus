@@ -27,7 +27,7 @@
 
 
 template<class P> class BodyField;
-template<class P> class MultipleItemField;
+template<class P, class NON_GUI> class MultipleItemField;
 template<class P> class ProjectionField;
 template<class P> class LengthFormatField;
 template<class P> class LimbField;
@@ -2008,6 +2008,8 @@ template<class P, class NON_GUI> class MultipleItemField{
 public:
     
     P* parent;
+    //the non-GUI object related to *this: for example, if I create a  class BodyField derived from MultipleItemField, then *object will be a Body object
+    NON_GUI* object;
     wxBoxSizer *sizer_h, *sizer_v;
     wxArrayString  /*this is equal to a standard list of the available types*/items, /*a fixed catalog of the items in this MultipleChoiceField*/catalog;
     //this is the wxComboBox with the name of the projections

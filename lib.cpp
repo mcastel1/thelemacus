@@ -19147,6 +19147,70 @@ template<class P, class NON_GUI> template<class T> void MultipleItemField<P, NON
 }
 
 
+template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Check(void) {
+
+//    P* f = (parent);
+
+    //I proceed only if the progam is not is indling mode
+    if (!(parent->idling)) {
+
+        unsigned int i;
+        bool check;
+
+        //I check whether the name in the GUI field Projection matches one of the Projection names in p->names
+        for (check = false, i = 0; (i < catalog.size()) && (!check); i++) {
+            if ((name->GetValue()) == catalog[i]) {
+                check = true;
+            }
+        }
+        i--;
+
+        if (check || (((name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((name->GetValue()).ToStdString())) == String("")))) {
+            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+
+
+            if (check) {
+
+                //insert projection #i into data->recent_bodies
+                wxGetApp().list_frame->data->insert_recent_projection(i);
+                //I update p->name according to the content of data->recent_projections file
+                Fill();
+
+            }
+
+
+            //if check is true (false) -> set ok to true (false)
+            ok = check;
+            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
+            name->SetForegroundColour(wxGetApp().foreground_color);
+            name->SetFont(wxGetApp().default_font);
+            Reset(name);
+
+        }
+        else {
+
+            stringstream temp;
+
+            temp.str("");
+            temp << "Projection must be one of the following: ";
+            for (i = 0; i < (catalog.GetCount()); i++) {
+                temp << (catalog[i]).ToStdString() << (i < (catalog.GetCount()) - 1 ? ", " : ".");
+            }
+
+
+            parent->print_error_message->SetAndCall(name, String("Projection not found in list of projections!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+
+            ok = false;
+
+        }
+
+        parent->AllOk();
+
+    }
+
+
+}
+
 //constructor of a ProjectionField object, based on the parent frame frame
 template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, vector<int>* recent_items_in) : MultipleItemField<P, void>(panel_of_parent, NULL, {String("Mercator"), String("3D")}, recent_items_in) {
 

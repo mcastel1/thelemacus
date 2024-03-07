@@ -2029,6 +2029,7 @@ public:
     void Fill(void);
     void Enable(bool);
     bool is_ok(void);
+    void Check(void);
 //    void read_recent_projections(void);
     template<class T> void InsertIn(T*);
     template<class T> void InsertIn(T*, wxSizerFlags&);

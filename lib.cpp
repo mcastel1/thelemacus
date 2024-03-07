@@ -10523,6 +10523,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
         (projection->name)->SetValue(wxString(projection_in.value));
 
     }
+    projection->value_before_editing = projection->name->GetValue();
 
     //create a dummy_event and then call OnChooseProjection(dummy_event) to set all objects according to the choice of the projeciton above.
     draw_panel->OnChooseProjection(dummy_event);

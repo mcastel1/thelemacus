@@ -14208,7 +14208,7 @@ template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& even
             }
 
 
-            (f->print_error_message)->SetAndCall(p->name, String("Length format not found in list of projections!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+            (f->print_error_message)->SetAndCall(p->name, String("Length format not found in list of length formats!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
 
             (p->ok) = false;
 
@@ -20686,22 +20686,22 @@ template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, St
 //    types.Add(wxString("circle of equal altitude"));
 
     check = new CheckRouteType<P>(this);
-    MultipleItemField<P, void>::name = new wxComboBox(MultipleItemField<P, void>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, void>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+//    MultipleItemField<P, void>::name = new wxComboBox(MultipleItemField<P, void>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, void>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 
     //SetColor(name);
-    AdjustWidth(MultipleItemField<P, void>::name);
+//    AdjustWidth(MultipleItemField<P, void>::name);
     MultipleItemField<P, void>::ok = false;
-    MultipleItemField<P, void>::name->SetValue("");
+//    MultipleItemField<P, void>::name->SetValue("");
     MultipleItemField<P, void>::name->Bind(wxEVT_KILL_FOCUS, *check);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P, void>::name->Bind(wxEVT_COMBOBOX, &RouteTypeField::OnEdit<wxCommandEvent>, this);
     MultipleItemField<P, void>::name->Bind(wxEVT_KEY_UP, &RouteTypeField::OnEdit<wxKeyEvent>, this);
 
-    MultipleItemField<P, void>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    MultipleItemField<P, void>::sizer_v = new wxBoxSizer(wxVERTICAL);
+//    MultipleItemField<P, void>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
+//    MultipleItemField<P, void>::sizer_v = new wxBoxSizer(wxVERTICAL);
 
-    MultipleItemField<P, void>::sizer_v->Add(MultipleItemField<P, void>::sizer_h, 0, wxALIGN_LEFT);
-    MultipleItemField<P, void>::sizer_h->Add(MultipleItemField<P, void>::name, 0, wxALIGN_CENTER);
+//    MultipleItemField<P, void>::sizer_v->Add(MultipleItemField<P, void>::sizer_h, 0, wxALIGN_LEFT);
+//    MultipleItemField<P, void>::sizer_h->Add(MultipleItemField<P, void>::name, 0, wxALIGN_CENTER);
 
 }
 

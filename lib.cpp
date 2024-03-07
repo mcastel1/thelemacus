@@ -19074,7 +19074,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
 
 //    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-    Fill();
+    MultipleItemField<P>::Fill();
 //    name->SetValue(items[0]);
 //    AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -19092,7 +19092,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
 
 
 //update the dropdown menu of ProjectionField according to MultipleItemField<P>::recent_items in such a way that the recent items appear on top of it
-template<class P> void ProjectionField<P>::Fill(void) {
+template<class P> void MultipleItemField<P>::Fill(void) {
 
     unsigned int i, j;
     wxArrayString items_temp;
@@ -19156,7 +19156,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 
 //    MultipleItemField<P>::name = new wxComboBox(MultipleItemField<P>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-    Fill();
+    MultipleItemField<P>::Fill();
 //    MultipleItemField<P>::name->SetValue((MultipleItemField<P>::items)[0]);
 //    AdjustWidth(MultipleItemField<P>::name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -19172,53 +19172,53 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 
 }
 
-
-//update the dropdown menu of ProjectionField according to (*(MultipleItemField<P>::recent_items)) in such a way that the recent items appear on top of it
-template<class P> void LengthFormatField<P>::Fill(void) {
-
-    unsigned int i, j;
-    wxArrayString items_temp;
-    wxString name_temp;
-    bool is_present;
-
-    //save the current value of name in name_temp
-    name_temp = (MultipleItemField<P>::name->GetValue());
-    //create the temporary list of length_formats length_formats_temp from catalog
-    for (items_temp.Clear(), i = 0; i < MultipleItemField<P>::items.GetCount(); i++) {
-        items_temp.Add((MultipleItemField<P>::catalog)[i]);
-    }
-
-    //I first add to length_formats the recently selected celestial length_formats written in ((*(MultipleItemField<P>::recent_items)))
-    for (MultipleItemField<P>::items.Clear(), i = 0; i < (MultipleItemField<P>::recent_items->size()); i++) {
-
-        MultipleItemField<P>::items.Add(items_temp[(*(MultipleItemField<P>::recent_items))[i]]);
-
-    }
-
-    //then, I fill length_formats with the remaining length_formats
-    for (i=0; i < items_temp.GetCount(); i++) {
-
-        for (is_present = false, j = 0; (j < MultipleItemField<P>::items.GetCount()) && (!is_present); j++) {
-
-            if ((MultipleItemField<P>::items)[j] == items_temp[i]) {
-                is_present = true;
-            }
-
-        }
-
-        if (!is_present) {
-            MultipleItemField<P>::items.Add(items_temp[i]);
-        }
-
-    }
-
-    MultipleItemField<P>::name->Set(MultipleItemField<P>::items);
-    //because name->Set(length_formats clears the value of name, I set the value of name back to name_temp
-    MultipleItemField<P>::name->SetValue(name_temp);
-
-    items_temp.Clear();
-
-}
+//
+////update the dropdown menu of ProjectionField according to (*(MultipleItemField<P>::recent_items)) in such a way that the recent items appear on top of it
+//template<class P> void LengthFormatField<P>::Fill(void) {
+//
+//    unsigned int i, j;
+//    wxArrayString items_temp;
+//    wxString name_temp;
+//    bool is_present;
+//
+//    //save the current value of name in name_temp
+//    name_temp = (MultipleItemField<P>::name->GetValue());
+//    //create the temporary list of length_formats length_formats_temp from catalog
+//    for (items_temp.Clear(), i = 0; i < MultipleItemField<P>::items.GetCount(); i++) {
+//        items_temp.Add((MultipleItemField<P>::catalog)[i]);
+//    }
+//
+//    //I first add to length_formats the recently selected celestial length_formats written in ((*(MultipleItemField<P>::recent_items)))
+//    for (MultipleItemField<P>::items.Clear(), i = 0; i < (MultipleItemField<P>::recent_items->size()); i++) {
+//
+//        MultipleItemField<P>::items.Add(items_temp[(*(MultipleItemField<P>::recent_items))[i]]);
+//
+//    }
+//
+//    //then, I fill length_formats with the remaining length_formats
+//    for (i=0; i < items_temp.GetCount(); i++) {
+//
+//        for (is_present = false, j = 0; (j < MultipleItemField<P>::items.GetCount()) && (!is_present); j++) {
+//
+//            if ((MultipleItemField<P>::items)[j] == items_temp[i]) {
+//                is_present = true;
+//            }
+//
+//        }
+//
+//        if (!is_present) {
+//            MultipleItemField<P>::items.Add(items_temp[i]);
+//        }
+//
+//    }
+//
+//    MultipleItemField<P>::name->Set(MultipleItemField<P>::items);
+//    //because name->Set(length_formats clears the value of name, I set the value of name back to name_temp
+//    MultipleItemField<P>::name->SetValue(name_temp);
+//
+//    items_temp.Clear();
+//
+//}
 
 //sets the value in the GUI object name equal to the value in the non-GUI LengthFormat object length_format
 template<class P> void LengthFormatField<P>::set(void) {

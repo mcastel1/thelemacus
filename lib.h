@@ -2017,7 +2017,7 @@ public:
     bool ok;
 
     MultipleItemField(wxPanel*, const vector<String>&, vector<int>*);
-//    void Fill(void);
+    void Fill(void);
 //    void read_recent_projections(void);
     template<class T> void InsertIn(T*);
     template<class T> void InsertIn(T*, wxSizerFlags&);
@@ -2041,7 +2041,7 @@ public:
     CheckProjection<P>* check;
 
     ProjectionField(wxPanel*, vector<int>*);
-    void Fill(void);
+//    void Fill(void);
 //    void read_recent_projections(void);
 //    template<class T> void InsertIn(T*, wxSizerFlags&);
     template<class E> void OnEdit(E&);
@@ -2067,7 +2067,7 @@ public:
     CheckLengthFormat<P>* check;
 
     LengthFormatField(wxPanel*, LengthFormat*, vector<int>*);
-    void Fill(void);
+//    void Fill(void);
     void set(void);
 //    template<class T> void InsertIn(T*);
     template<class E> void OnEdit(E&);

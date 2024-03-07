@@ -5438,6 +5438,7 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
 
     recent_bodies.resize(wxGetApp().n_recent_bodies.value);
     recent_projections.resize(wxGetApp().n_recent_projections.value);
+    recent_length_formats.resize(wxGetApp().n_recent_length_formats.value);
 
     //	file_init.close(prefix);
 
@@ -5658,6 +5659,7 @@ void Data::print(bool print_all_routes, String prefix, ostream& ostr) {
 
     print_recent_bodies(prefix, ostr);
     print_recent_projections(prefix, ostr);
+    print_recent_length_formats(prefix, ostr);
 
 }
 
@@ -6198,6 +6200,7 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
     //read recent bodies and projections and ...
     read_list_from_stream<S>(String("Recent bodies"), input_stream, true, &recent_bodies);
     read_list_from_stream<S>(String("Recent projections"), input_stream, true, &recent_projections);
+    read_list_from_stream<S>(String("Recent length formats"), input_stream, true, &recent_length_formats);
 
 }
 

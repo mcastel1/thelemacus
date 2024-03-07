@@ -19096,6 +19096,9 @@ template<class P, class NON_GUI> MultipleItemField<P, NON_GUI>::MultipleItemFiel
     //set the non-GUI object
     object = object_in;
     
+    //I just created *this, thus it is not being edited 
+    editing = false;
+    
     //set parent
     parent = ((P*)(panel_of_parent->GetParent()));
     //set catalog equal to catalog_in 
@@ -19110,6 +19113,8 @@ template<class P, class NON_GUI> MultipleItemField<P, NON_GUI>::MultipleItemFiel
     //SetColor(name);
 //    Fill();
     name->SetValue(items[0]);
+    //I just filled name with  a valid value, thus I store it in value_before_editing in order to start off with a valid value in value_before_editing
+    value_before_editing = name->GetValue();
     AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
 //    name->Bind(wxEVT_COMBOBOX, &MultipleItemField::OnEdit<wxCommandEvent>, this);
@@ -19185,6 +19190,9 @@ template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON
             name->SetForegroundColour(wxGetApp().foreground_color);
             name->SetFont(wxGetApp().default_font);
             Reset(name);
+            
+            //if the value written in name is correct, I store it in value_before_editing
+            if(ok){value_before_editing = name->GetValue();}
 
         }
         else {
@@ -19204,6 +19212,14 @@ template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON
 
         }
 
+        if (!ok) {
+            //the entered value is not valid: I set the value back to the value before the editing process had started
+            name->SetValue(value_before_editing);
+            ok = true;
+            name->SetForegroundColour(wxGetApp().foreground_color);
+            name->SetFont(wxGetApp().default_font);
+            Reset(name);
+        }
         parent->AllOk();
 
     }
@@ -19245,7 +19261,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
 }
 
 
-//update the dropdown menu of MultipleItemField according to MultipleItemField<P, NON_GUI>::recent_items in such a way that the recent items appear on top
+//update the GUI dropdown menu of MultipleItemField according to MultipleItemField<P, NON_GUI>::recent_items in such a way that the recent items appear on top
 template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Fill(void) {
 
     unsigned int i, j;
@@ -19287,6 +19303,9 @@ template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Fill(void) 
     MultipleItemField<P, NON_GUI>::name->Set(MultipleItemField<P, NON_GUI>::items);
     //because name->Set(projections clears the value of name, I set the value of name back to name_temp
     MultipleItemField<P, NON_GUI>::name->SetValue(name_temp);
+//given that I just filled name with a valid item, I store this item in value_before_editing 
+    value_before_editing = name->GetValue();
+
 
     items_temp.Clear();
 
@@ -21222,6 +21241,11 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
 
     String s;
     bool success;
+    
+    if(!(MultipleItemField<P, void>::editing)){
+        //*the user has started editing *this 
+        (MultipleItemField<P, void>::editing) = true;
+    }
 
     //I check whether the name in the GUI field body matches one of the body names in catalog
     find_and_replace_case_insensitive(MultipleItemField<P, void>::name, MultipleItemField<P, void>::items, &success, NULL);

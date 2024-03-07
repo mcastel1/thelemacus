@@ -2017,11 +2017,13 @@ public:
     NON_GUI* object;
     wxBoxSizer *sizer_h, *sizer_v;
     wxArrayString  /*this is equal to a standard list of the available types*/items, /*a fixed catalog of the items in this MultipleChoiceField*/catalog;
+    //I store the value in name, before name starts being edited, in value_before_editing
+    wxString value_before_editing;
     //this is the wxComboBox with the name of the projections
     wxComboBox* name;
     //this points to an external vector<int> where the recent items are stored: the Fill() method  reads from *recent_items
     vector<int>* recent_items;
-    bool ok;
+    bool ok, /*this is true if *this is being edited, false otherwise*/editing;
 //    template<class T> void (MultipleItemField::*OnChooseItem)(T&);
 
 

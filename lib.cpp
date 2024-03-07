@@ -19321,7 +19321,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 //    catalog.Add(wxT("Length"));
 //    items = catalog;
 
-    check = new CheckLengthFormat<P>(this);
+//    check = new CheckLengthFormat<P>(this);
 
 //    MultipleItemField<P, LengthFormat>::name = new wxComboBox(MultipleItemField<P, LengthFormat>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, LengthFormat>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
@@ -19331,7 +19331,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P, LengthFormat>::name->Bind(wxEVT_COMBOBOX, &LengthFormatField::OnEdit<wxCommandEvent>, this);
     MultipleItemField<P, LengthFormat>::name->Bind(wxEVT_KEY_UP, &LengthFormatField::OnEdit<wxKeyEvent>, this);
-    MultipleItemField<P, LengthFormat>::name->Bind(wxEVT_KILL_FOCUS, *check);
+    MultipleItemField<P, LengthFormat>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, LengthFormat>::template Check<wxFocusEvent>, this);
 
 //    MultipleItemField<P, LengthFormat>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
 //    MultipleItemField<P, LengthFormat>::sizer_v = new wxBoxSizer(wxVERTICAL);

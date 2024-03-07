@@ -2076,7 +2076,7 @@ public:
 //    vector<int> recent_items;
 //    bool ok;
 //    LengthFormat* length_format;
-    CheckLengthFormat<P>* check;
+//    CheckLengthFormat<P>* check;
 
     LengthFormatField(wxPanel*, LengthFormat*, vector<int>*);
 //    void Fill(void);

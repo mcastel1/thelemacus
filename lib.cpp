@@ -5658,10 +5658,10 @@ void Data::print(bool print_all_routes, String prefix, ostream& ostr) {
     print_routes(print_all_routes, new_prefix, ostr);
     print_positions(new_prefix, ostr);
 
-//    print_recent_bodies(prefix, ostr);
-    print_recent_items(recent_bodies, prefix, ostr);
-    print_recent_items(recent_projections, prefix, ostr);
-    print_recent_items(recent_length_formats, prefix, ostr);
+    print_recent_items(recent_bodies, String("bodies"), prefix, ostr);
+    print_recent_items(recent_projections, String("projections"), prefix, ostr);
+    print_recent_items(recent_length_formats, String("length formats"), prefix, ostr);
+    //    print_recent_bodies(prefix, ostr);
 //    print_recent_projections(prefix, ostr);
 //    print_recent_length_formats(prefix, ostr);
 
@@ -6274,8 +6274,8 @@ void Data::insert_recent_projection(unsigned int projection_id) {
 }
 
 
-//print recent_items to ostr. This method is used for GUI fields of the format MultipleItemField
-void Data::print_recent_items(const vector<int>& recent_items, String prefix, ostream& ostr) {
+//print recent_items to ostr. Here name is the "[plural name of the item]"  : for example, if I am printing a list of Bodies, name.value = "bodies". This method is used for GUI fields of the format MultipleItemField
+void Data::print_recent_items(const vector<int>& recent_items, String name, String prefix, ostream& ostr) {
 
     unsigned int i;
     stringstream temp;
@@ -6285,7 +6285,7 @@ void Data::print_recent_items(const vector<int>& recent_items, String prefix, os
         temp << recent_items[i] << " ";
     }
     temp << recent_items.back();
-    String(temp.str().c_str()).print(String("Recent items"), false, prefix, ostr);
+    String(temp.str().c_str()).print(String("Recent ").append(name), false, prefix, ostr);
 
 }
 

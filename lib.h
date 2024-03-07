@@ -1022,7 +1022,7 @@ public:
     void print_positions(String, ostream&);
     void print_routes(bool, String, ostream&);
     
-    void print_recent_items(const vector<int>&, String, ostream&);
+    void print_recent_items(const vector<int>&, String, String, ostream&);
     void insert_recent_item(unsigned int, vector<int>*);
 
     void insert_recent_body(unsigned int);

@@ -130,12 +130,14 @@ public:
     String append(String);
     void appendto(String);
     String prepend(String);
+    void replace_to(const char&, const char&);
     String subString(size_t, size_t);
     bool split_file_path(String*, String*, String*, String);
     String filename_without_folder_nor_extension(String);
     bool is_a_file_path(String);
     wxSize get_size(wxWindow*);
     wxSize get_size(wxDC*);
+    unsigned int get_length(void);
     vector<String> split(void);
     
     bool operator==(const String&), operator!=(const String&);

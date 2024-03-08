@@ -1,22 +1,3 @@
-string my_replace(string s, 
-               char c1, char c2)
-{
-    int l = s.length();
- 
-    // loop to traverse in the string
-    for (int i = 0; i < l; i++) 
-    {
-        // check for c1 and replace
-        if (s[i] == c1)
-            s[i] = c2;
- 
-        // check for c2 and replace
-        else if (s[i] == c2)
-            s[i] = c1;
-    }
-    return s;
-}
-
 inline double sin(const Angle& x) {
 
     return sin(x.value);
@@ -837,6 +818,15 @@ vector<String> String::split(void) {
     return result;
 
 }
+
+
+//return the number of characters in *this
+unsigned int String::get_length(void){
+    
+    return(((unsigned int)(value.length())));
+    
+}
+
 
 void Double::print(String name, String prefix, ostream& ostr) {
 
@@ -3650,6 +3640,23 @@ String String::prepend(String s) {
 
     return output;
 
+}
+
+//replace all the occurrences of a with b in *this and write the result in *this
+void String::replace_to(const char& a, const char& b){
+    
+//    int l = s.length();
+    
+    // loop to traverse in the string
+    for (unsigned int i = 0; i < get_length(); i++){
+        
+        // check for a and replace
+        if(value[i] == a){
+            value[i] = b;
+        }
+        
+    }
+    
 }
 
 //return substring of *this from start with length length

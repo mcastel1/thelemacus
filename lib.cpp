@@ -4878,6 +4878,22 @@ template<class S> void Catalog::read_from_stream([[maybe_unused]] String name, S
 }
 
 
+//return a vector containing the names of the Bodies in *this
+vector<String> Catalog::get_names(void){
+    
+    unsigned int i;
+    vector<String> output;
+    
+    for(i=0, output.clear(); i<list.size(); i++){
+        output.push_back((list[i]).name);
+    }
+    
+    return output;
+    
+    
+}
+
+
 void Catalog::print(String prefix, ostream& ostr) {
 
     unsigned int i;

@@ -2103,7 +2103,7 @@ template<class P> class BodyField{
     
 public:
     //the parent frame to which this object is attached
-    SightFrame* parent_frame;
+    SightFrame* parent;
     wxArrayString  /*this is equal to a standard list of the available bodies, except that on top of the list are the recently selected bodies*/bodies;
     //this points to a Body object, which contains the date written in the GUI field of this
     Body* body;

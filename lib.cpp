@@ -19567,7 +19567,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 
     parent = ((P*)(panel_of_parent->GetParent()));
     //I link the internal pointers p and c to the respective body and body catalog
-    body = p;
+    object = p;
     catalog = c;
 
     //sets the name of file_recent for future use
@@ -19602,7 +19602,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 //sets the value in the GUI object name equal to the value in the non-GUI Body object body
 template<class P> void BodyField<P>::set(void) {
 
-    name->SetValue((body->name).value);
+    name->SetValue((object->name).value);
     ok = true;
 
 }
@@ -19625,7 +19625,7 @@ template<class P> template<class T> void BodyField<P>::get(T& event) {
         i--;
 
         //I set the value of the non-GUI object body to the value obtained from the GUI object.
-        (*body) = (catalog->list)[i];
+        (*object) = (catalog->list)[i];
 
     }
 

@@ -2106,7 +2106,7 @@ public:
     SightFrame* parent;
     wxArrayString  /*this is equal to a standard list of the available bodies, except that on top of the list are the recently selected bodies*/items;
     //this points to a Body object, which contains the date written in the GUI field of this
-    Body* body;
+    Body* object;
     Catalog* catalog;
     wxBoxSizer *sizer_h, *sizer_v;
     

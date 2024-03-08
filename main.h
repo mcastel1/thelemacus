@@ -27,6 +27,7 @@
 #include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 #ifdef _WIN32
 #include <Windows.h>
+#include <regex>
 #endif
 
 

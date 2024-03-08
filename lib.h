@@ -2107,14 +2107,14 @@ public:
 //    SightFrame* parent;
 //    wxArrayString  /*this is equal to a standard list of the available bodies, except that on top of the list are the recently selected bodies*/items;
     //this points to a Body object, which contains the date written in the GUI field of this
-    Body* object;
+//    Body* object;
     Catalog* catalog;
-    wxBoxSizer *sizer_h, *sizer_v;
+//    wxBoxSizer *sizer_h, *sizer_v;
     
     //this is the wxComboBox with the name of the bodies
-    wxComboBox* name;
+//    wxComboBox* name;
     CheckBody<P>* check;
-    bool ok;
+//    bool ok;
     
     BodyField(wxPanel*, Body*, Catalog*, vector<int>*);
     void fill_bodies(void);
@@ -2122,10 +2122,10 @@ public:
     void update_recent_bodies(void);
     void set(void);
     template<class T> void get(T&);
-    template<class T> void InsertIn(T*);
-    bool is_ok(void);
+//    template<class T> void InsertIn(T*);
+//    bool is_ok(void);
     template<class E> void OnEdit(E&);
-    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+//    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
 

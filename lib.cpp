@@ -19583,7 +19583,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 
     MultipleItemField<P, Body>::parent = ((P*)(panel_of_parent->GetParent()));
     //I link the internal pointers p and c to the respective body and body catalog
-    object = p;
+    MultipleItemField<P, Body>::object = p;
     catalog = c;
 
     //sets the name of file_recent for future use
@@ -19591,24 +19591,24 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 
     check = new CheckBody<P>(this);
 
-    name = new wxComboBox(MultipleItemField<P, Body>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, Body>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    MultipleItemField<P, Body>::name = new wxComboBox(MultipleItemField<P, Body>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, Body>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //    name->SetValue("");
     //SetColor(name);
     fill_bodies();
-    AdjustWidth(name);
-    name->Bind(wxEVT_KILL_FOCUS, *check);
+    AdjustWidth(MultipleItemField<P, Body>::name);
+    MultipleItemField<P, Body>::name->Bind(wxEVT_KILL_FOCUS, *check);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    name->Bind(wxEVT_COMBOBOX, &BodyField::OnEdit<wxCommandEvent>, this);
-    name->Bind(wxEVT_KEY_UP, &BodyField::OnEdit<wxKeyEvent>, this);
+    MultipleItemField<P, Body>::name->Bind(wxEVT_COMBOBOX, &BodyField::OnEdit<wxCommandEvent>, this);
+    MultipleItemField<P, Body>::name->Bind(wxEVT_KEY_UP, &BodyField::OnEdit<wxKeyEvent>, this);
 
 
-    ok = false;
+    MultipleItemField<P, Body>::ok = false;
 
-    sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    sizer_v = new wxBoxSizer(wxVERTICAL);
+    MultipleItemField<P, Body>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    MultipleItemField<P, Body>::sizer_v = new wxBoxSizer(wxVERTICAL);
 
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(name, 0, wxALIGN_CENTER);
+    MultipleItemField<P, Body>::sizer_v->Add(MultipleItemField<P, Body>::sizer_h, 0, wxALIGN_LEFT);
+    MultipleItemField<P, Body>::sizer_h->Add(MultipleItemField<P, Body>::name, 0, wxALIGN_CENTER);
 
 }
 
@@ -19618,8 +19618,8 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 //sets the value in the GUI object name equal to the value in the non-GUI Body object body
 template<class P> void BodyField<P>::set(void) {
 
-    name->SetValue((object->name).value);
-    ok = true;
+    MultipleItemField<P, Body>::name->SetValue(MultipleItemField<P, Body>::object->name.value);
+    MultipleItemField<P, Body>::ok = true;
 
 }
 
@@ -19629,19 +19629,19 @@ template<class P> template<class T> void BodyField<P>::get(T& event) {
     unsigned int i;
     bool success;
 
-    if (ok) {
+    if (MultipleItemField<P, Body>::ok) {
         //If the GUI field's content is ok...
 
         //I find the position of the content of the GUI field in the list of  the body names in catalog
         for (success = false, i = 0; (i < (catalog->list).size()) && (!success); i++) {
-            if (String((name->GetValue().ToStdString())) == (((catalog->list)[i]).name)) {
+            if (String(MultipleItemField<P, Body>::name->GetValue().ToStdString()) == (((catalog->list)[i]).name)) {
                 success = true;
             }
         }
         i--;
 
         //I set the value of the non-GUI object body to the value obtained from the GUI object.
-        (*object) = (catalog->list)[i];
+        (*(MultipleItemField<P, Body>::object)) = (catalog->list)[i];
 
     }
 
@@ -20917,11 +20917,11 @@ template<class P> void ChronoField<P>::Enable(bool is_enabled) {
 
 }
 
-template<class P> bool BodyField<P>::is_ok(void) {
-
-    return(ok);
-
-}
+//template<class P> bool BodyField<P>::is_ok(void) {
+//
+//    return(ok);
+//
+//}
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
 template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
@@ -20931,7 +20931,7 @@ template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
 
 
     //I check whether the name in the GUI field body matches one of the valid body names
-    find_and_replace_case_insensitive(name, MultipleItemField<P, Body>::items, &success, &i);
+    find_and_replace_case_insensitive(MultipleItemField<P, Body>::name, MultipleItemField<P, Body>::items, &success, &i);
 
     if (success) {
         //the text entered in name is valid
@@ -20941,8 +20941,8 @@ template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
         (*(MultipleItemField<P, Body>::parent->limb->check))(event);
 
         //because the text in name is valid, I set the background color of name to white
-        name->SetForegroundColour(wxGetApp().foreground_color);
-        name->SetFont(wxGetApp().default_font);
+        MultipleItemField<P, Body>::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P, Body>::name->SetFont(wxGetApp().default_font);
 
     }
     else {
@@ -20955,17 +20955,11 @@ template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
 
 
     //ok is true/false is the text enteres is valid/invalid
-    ok = success;
+    MultipleItemField<P, Body>::ok = success;
     //tries to enable button_reduce
     MultipleItemField<P, Body>::parent->AllOk();
 
     event.Skip(true);
-
-}
-
-template<class P> template <typename EventTag, typename Method, typename Object> void BodyField<P>::Bind(EventTag tag, Method method, Object object) {
-
-    name->Bind(tag, method, object);
 
 }
 
@@ -21189,11 +21183,11 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
 
 
 
-template<class P> template<class T> void BodyField<P>::InsertIn(T* host) {
-
-    host->Add(sizer_v);
-
-}
+//template<class P> template<class T> void BodyField<P>::InsertIn(T* host) {
+//
+//    host->Add(sizer_v);
+//
+//}
 
 
 //update the dropdown menu of BodyField according to wxGetApp().list_frame->data->recent_bodies in such a way that the recent items appear on top of it
@@ -21205,7 +21199,7 @@ template<class P> void BodyField<P>::fill_bodies(void) {
     bool is_present;
 
     //save the current value of name in name_temp
-    name_temp = (name->GetValue());
+    name_temp = (MultipleItemField<P, Body>::name->GetValue());
     //create the temporary list of bodies bodies_temp
     for (bodies_temp.Clear(), i = 0; i < (catalog->list).size(); i++) {
         bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
@@ -21235,9 +21229,9 @@ template<class P> void BodyField<P>::fill_bodies(void) {
 
     }
 
-    name->Set(MultipleItemField<P, Body>::items);
+    MultipleItemField<P, Body>::name->Set(MultipleItemField<P, Body>::items);
     //because name->Set(bodies clears the value of name, I set the value of name back to name_temp
-    name->SetValue(name_temp);
+    MultipleItemField<P, Body>::name->SetValue(name_temp);
 
     bodies_temp.Clear();
 
@@ -21256,7 +21250,7 @@ template<class P> void BodyField<P>::update_recent_bodies(void) {
 
         //I check whether the name in the GUI field body matches one of the body names in catalog if it is (is not) -> check = true (false). I write the id in i
         for (check = false, i = 0; (i < (catalog->list).size()) && (!check); i++) {
-            if (String((name->GetValue().ToStdString())) == (((catalog->list)[i]).name)) {
+            if (String(MultipleItemField<P, Body>::name->GetValue().ToStdString()) == (((catalog->list)[i]).name)) {
                 check = true;
             }
         }

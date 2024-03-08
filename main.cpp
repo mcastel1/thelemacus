@@ -21,54 +21,58 @@
 /*
  
  notes:
- - if there is an odd error 'memory leak' on WIN32, this may be because the sample_sight.nav file presents some corrupted charcters (e.g. infinity sign instead of degree sign). To fix it: remplace Contents/Reources/Data/sample_sight.nav with Contents/Resources/Data/sample_sight_saved.nav
- - erorr message on WIN32 for intellisense "Severity    Code    Description    Project    File    Line    Suppression State    Details
- Error (active)    E2924    PCH warning: header stop cannot be in a macro or #if block.  An IntelliSense PCH file was not generated.    base    C:\wxWidgets-3.2.4_debug\include\wx\any.h    25" line of error "// Size of the wxAny value buffer.
- enum
- {
-     WX_ANY_VALUE_BUFFER_SIZE = 16
- };" in any.h
- - on APPLE, the cmd (apple) key corresponds to WXK_CONTROL
- - on WIN32, to recognize what character key has been pressed, do (event.GetUnicodeKey()) and check if it is equal to, sai, 'A', not 'a'
- - on WIN32, if you press control key on runtime from within Visual Studio, it will not be detected as WXK_CONTROL, while if you run the exe file from system resources it does.
- - on WIN32, keep the output directory as $(wxIntRootDir) : if you set it to Z:\ the program will not run
- - to setup everything on Mac OS (incomplete):
- 1. Download and install boost_1_83_0
- 2. Download and install gsl (gnu scientifc library)
- 3. Download and install wxWidgets
- 4. Open  /Applications/wxWidgets-XXX/samples/minimal/minimal_cocoa.xcodeproj/
- * remove minimal.cpp and insert main.cpp, lib.cpp, main.h, lib.h and constants.h in the project.
- * select both app-static and app-dynamic -> add /usr/local/include/gsl/ /usr/local/include/ /Applications/boost_1_83_0/ $(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include/ $(WXROOT)/include/ to 'User header search path' (you need to split this in multiple lines when you add)
- * select both app-static and app-dynamic -> add -lgsl -lcblas -lboost_filesystem -lboost_system to 'Other linker flags' (you need to split this in multiple lines when you add)
- * select both app-static and app-dynamic -> add '/Applications/boost_1_83_0/stage/lib/' to 'Runpath search paths' and to 'Library Search Paths'
- * select both app-static and app-dynamic -> add '/usr/local/lib' to Library Search Paths
- * select both app-static and app-dynamic  set 'Always search user paths (deprecated)' to 'Yes'
- * set Product -> scheme -> dynamic
- 5. Add all necessary paths by adding, say, 'export PATH="/Applications/wxWidgets-3.2.4/build-cocoa-debug:$PATH"' to ~/.zprofile
- 6. To make breakpoints in included files to work in Xcode, create file  ~/.lldbinit and write in it 'settings set target.inline-breakpoint-strategy always'
- 7. To build the app with make_app.sh:
- * download the libpng library from https://sourceforge.net/projects/libpng/
- - to set up everything on Windows 10/11:
- 0. With Virtual Box, set up a partition with Windows 10. In the partition, set 2 cores, 13387 MB of base memory, set 'Shared Clipboard' to 'Bidirectional', install 'Guest Additions' and share the folder, say, sight_reduction_program, containing main.cpp, main.h, lib.cpp, lib.h, constants.h etc. Set up 100 GB of disk on the partition, and set it to pre-allocated.
- 0b. With Parallels Desktop, set up a Windows virtual machine with at least 8GB of memory
- 1. Install WinZip
- 2. Istall MinGW : download mingw-get-setup from https://sourceforge.net/projects/mingw/
- 3. Install Visual Studio: download VisualStudioSetup from https://visualstudio.microsoft.com/downloads/
- 4. Istall wxWidgets: download wxMSW-3.2.4-Setup.exe from https://wxwidgets.org/downloads/ and install it in, say,  C:\wxWidgets-3.2.4_debug\
- 5. Open  C:\wxWidgets-3.2.4_debug\build\msw\wx_vc17.sln with Visual studio, set everywhere that the mode is multi-threaded debug (not dll) (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)') and build (you may get an error the first time you build, just build multiple times and the error will disappear)
- 6. Open   C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln -> set the mode to Multi Threaded Debug everywhere (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)'). Replace all existing files from Source files with main.h main.cpp lib.cpp lib.h constants.h init.txt, replace all existing Resource files with resource_file_winsows.rc. Rigght-click on lib.cpp -> properties -> configuration properties -> general -> Exclude From build -> yes
- 7. Install gsl: download gnu-gsl-for-windows-master.zip from https://github.com/ahmadyan/gnu-gsl-for-windows/tree/master/build.vc11  -> extract it in C:\gnu-gsl-for-windows-master -> open  C:\gnu-gsl-for-windows-master\build.vc11\gsl.lib.sln with Visual Studio.
-    * Set everything to Multi-Threaded Debug (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)' )
-    * Go to Project -> gslib Properties -> general -> C++ language standard -> set 'ISO C++17 Standard (/std:c++17)'
-    * Build
- 8. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> Add C:\gnu-gsl-for-windows-master\lib\x64\Debug\gsl.lib and  C:\gnu-gsl-for-windows-master\lib\x64\Debug\cblas.lib to  -> project  -> minimal properties -> configuration properties -> linker -> input -> additional dependencies
- 9. Install boost library : download boost_1_83_0.zip (not 84 or later versions!) from https://sourceforge.net/projects/boost/files/boost/1.83.0/boost_1_83_0.zip/download?use_mirror=altushost-swe&use_mirror=altushost-swe&r=https%3A%2F%2Fsourceforge.net%2Fp%2Fboost%2Factivity%2F%3Fpage%3D0%26limit%3D100 -> extract boost_1_83_0.zip to, say,  C:\boost_1_83_0 -> Open command prompt -> cd into  C:\boost_1_83_0 ->  do 'bootstrap' and '>b2 variant=debug link=static runtime-link=static runtime-debugging=on address-model=64 architecture=x86'
- 10. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to  project -> properties -> configuration properties -> VC++ directories ->  include directories, add 'C:\boost_1_83_0' , 'C:\gnu-gsl-for-windows-master' and 'C:\gnu-gsl-for-windows-master\gsl'
- 11. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio-> go to   project ->  minimal properties -> Configuration properties -> VC++ directories -> library directories -> add  'C:\boost_1_83_0\stage\lib'
- 12. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to project -> configuration properties -> general -> C++ language standard  and set ISO C++20 Standard (/std:c++20)
- 13. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to project -> minimal properties -> configuration properties -> general -> set target name to, say, 'Thelemacus_debug'
- 14. Update the paths of the resource files in resource_file_windows.rc
- - on MSW, if you allocate 13387 MB of Base Memory, it runs by clicking on the .exe and with coastlines = y
+ - on APPLE:
+    - the cmd (apple) key corresponds to WXK_CONTROL
+     - to setup everything on Mac OS (incomplete):
+            1. Download and install boost_1_83_0
+            2. Download and install gsl (gnu scientifc library)
+            3. Download and install wxWidgets
+            4. Open  /Applications/wxWidgets-XXX/samples/minimal/minimal_cocoa.xcodeproj/
+            * remove minimal.cpp and insert main.cpp, lib.cpp, main.h, lib.h and constants.h in the project.
+            * select both app-static and app-dynamic -> add /usr/local/include/gsl/ /usr/local/include/ /Applications/boost_1_83_0/ $(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include/ $(WXROOT)/include/ to 'User header search path' (you need to split this in multiple lines when you add)
+            * select both app-static and app-dynamic -> add -lgsl -lcblas -lboost_filesystem -lboost_system to 'Other linker flags' (you need to split this in multiple lines when you add)
+            * select both app-static and app-dynamic -> add '/Applications/boost_1_83_0/stage/lib/' to 'Runpath search paths' and to 'Library Search Paths'
+            * select both app-static and app-dynamic -> add '/usr/local/lib' to Library Search Paths
+            * select both app-static and app-dynamic  set 'Always search user paths (deprecated)' to 'Yes'
+            * set Product -> scheme -> dynamic
+            5. Add all necessary paths by adding, say, 'export PATH="/Applications/wxWidgets-3.2.4/build-cocoa-debug:$PATH"' to ~/.zprofile
+            6. To make breakpoints in included files to work in Xcode, create file  ~/.lldbinit and write in it 'settings set target.inline-breakpoint-strategy always'
+            7. To build the app with make_app.sh:
+            * download the libpng library from https://sourceforge.net/projects/libpng/
+     
+ 
+ - on WIN32:
+        - to recognize what character key has been pressed, do (event.GetUnicodeKey()) and check if it is equal to, sai, 'A', not 'a'
+        - if you press control key on runtime from within Visual Studio, it will not be detected as WXK_CONTROL, while if you run the exe file from system resources it does.
+        - keep the output directory as $(wxIntRootDir) : if you set it to Z:\ the program will not run
+        - if there is an odd error 'memory leak', this may be because the sample_sight.nav file presents some corrupted charcters (e.g. infinity sign instead of degree sign). To fix it: remplace Contents/Reources/Data/sample_sight.nav with Contents/Resources/Data/sample_sight_saved.nav
+         - error message on WIN32 for intellisense "Severity    Code    Description    Project    File    Line    Suppression State    Details
+         Error (active)    E2924    PCH warning: header stop cannot be in a macro or #if block.  An IntelliSense PCH file was not generated.    base    C:\wxWidgets-3.2.4_debug\include\wx\any.h    25" line of error "// Size of the wxAny value buffer.
+         enum
+         {
+             WX_ANY_VALUE_BUFFER_SIZE = 16
+         };" in any.h
+        - if you allocate 13387 MB of Base Memory, it runs by clicking on the .exe and with coastlines = y
+         - to set up everything on Windows 10/11:
+                 0. With Virtual Box, set up a partition with Windows 10. In the partition, set 2 cores, 13387 MB of base memory, set 'Shared Clipboard' to 'Bidirectional', install 'Guest Additions' and share the folder, say, sight_reduction_program, containing main.cpp, main.h, lib.cpp, lib.h, constants.h etc. Set up 100 GB of disk on the partition, and set it to pre-allocated.
+                 0b. With Parallels Desktop, set up a Windows virtual machine with at least 8GB of memory
+                 1. Install WinZip
+                 2. Istall MinGW : download mingw-get-setup from https://sourceforge.net/projects/mingw/
+                 3. Install Visual Studio: download VisualStudioSetup from https://visualstudio.microsoft.com/downloads/
+                 4. Istall wxWidgets: download wxMSW-3.2.4-Setup.exe from https://wxwidgets.org/downloads/ and install it in, say,  C:\wxWidgets-3.2.4_debug\
+                 5. Open  C:\wxWidgets-3.2.4_debug\build\msw\wx_vc17.sln with Visual studio, set everywhere that the mode is multi-threaded debug (not dll) (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)') and build (you may get an error the first time you build, just build multiple times and the error will disappear)
+                 6. Open   C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln -> set the mode to Multi Threaded Debug everywhere (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)'). Replace all existing files from Source files with main.h main.cpp lib.cpp lib.h constants.h init.txt, replace all existing Resource files with resource_file_winsows.rc. Rigght-click on lib.cpp -> properties -> configuration properties -> general -> Exclude From build -> yes
+                 7. Install gsl: download gnu-gsl-for-windows-master.zip from https://github.com/ahmadyan/gnu-gsl-for-windows/tree/master/build.vc11  -> extract it in C:\gnu-gsl-for-windows-master -> open  C:\gnu-gsl-for-windows-master\build.vc11\gsl.lib.sln with Visual Studio.
+                    * Set everything to Multi-Threaded Debug (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)' )
+                    * Go to Project -> gslib Properties -> general -> C++ language standard -> set 'ISO C++17 Standard (/std:c++17)'
+                    * Build
+                 8. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> Add C:\gnu-gsl-for-windows-master\lib\x64\Debug\gsl.lib and  C:\gnu-gsl-for-windows-master\lib\x64\Debug\cblas.lib to  -> project  -> minimal properties -> configuration properties -> linker -> input -> additional dependencies
+                 9. Install boost library : download boost_1_83_0.zip (not 84 or later versions!) from https://sourceforge.net/projects/boost/files/boost/1.83.0/boost_1_83_0.zip/download?use_mirror=altushost-swe&use_mirror=altushost-swe&r=https%3A%2F%2Fsourceforge.net%2Fp%2Fboost%2Factivity%2F%3Fpage%3D0%26limit%3D100 -> extract boost_1_83_0.zip to, say,  C:\boost_1_83_0 -> Open command prompt -> cd into  C:\boost_1_83_0 ->  do 'bootstrap' and '>b2 variant=debug link=static runtime-link=static runtime-debugging=on address-model=64 architecture=x86'
+                 10. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to  project -> properties -> configuration properties -> VC++ directories ->  include directories, add 'C:\boost_1_83_0' , 'C:\gnu-gsl-for-windows-master' and 'C:\gnu-gsl-for-windows-master\gsl'
+                 11. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio-> go to   project ->  minimal properties -> Configuration properties -> VC++ directories -> library directories -> add  'C:\boost_1_83_0\stage\lib'
+                 12. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to project -> configuration properties -> general -> C++ language standard  and set ISO C++20 Standard (/std:c++20)
+                 13. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to project -> minimal properties -> configuration properties -> general -> set target name to, say, 'Thelemacus_debug'
+                 14. Update the paths of the resource files in resource_file_windows.rc
  - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging
  - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
@@ -77,6 +81,8 @@
  - when a new chartframe is created, position it so it is not hidden by the menu bar on top of the screen
  - per creare un progetto xcode con wxwidgets 1. decomprimi il tar.gz di wxwidgets 2. in samples/minimal/ modifical minimal_cocoa mettendoci i files C++ e le referenze in system header search path, library search path, le linking flag, etc.
  - se xcode ti crea nuove copie dei file .cpp e .h quando li aggiungi a un progetto, fai attenzione a deselezioare 'copy items if needed' nel momento in cui li aggiungi al progetto. Non mettere i file in /src/, altrimenti xcode ti crea una copie di quei file nella directory in cui si trova il file .xcodeproj
+ 
+ 
  
  
  ********** THINGS TO ADD/IMPROVE ************
@@ -113,17 +119,19 @@
  - move all stuff which is general enough in the code to MyApp class
  - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
 
- ********** THINGS TO FIX ************
- - in the MultipleItemField, create a pointer OnChooseItem to a templated method of the class (I tried  template<class T> void (MultipleItemField::*OnChooseItem)(T&); but it does not compile), and when MultipleItemField is constructed, let this pointer point to the desired method -> Then you will be able to move OnEdit to the parent class and simplify off things !
- - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
- - frames are not resized according to the size of their title
- - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField, BodyField, LimbField) must be defined in terms of the parent class MultipleItemField 
  
- on WIN32:
- - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
- - when a ChartFrame is first created and when Reset is pressed, parallel and meridian labels are shown very small
- - write the WIN32 part of void MyApp::OnTimer
- - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
+ 
+ 
+ ********** THINGS TO FIX ************
+     - in the MultipleItemField, create a pointer OnChooseItem to a templated method of the class (I tried  template<class T> void (MultipleItemField::*OnChooseItem)(T&); but it does not compile), and when MultipleItemField is constructed, let this pointer point to the desired method -> Then you will be able to move OnEdit to the parent class and simplify off things !
+     - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
+     - frames are not resized according to the size of their title
+     - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField, BodyField, LimbField) must be defined in terms of the parent class MultipleItemField
+on WIN32:
+         - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
+         - when a ChartFrame is first created and when Reset is pressed, parallel and meridian labels are shown very small
+         - write the WIN32 part of void MyApp::OnTimer
+         - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  */
 
 //this function is executed reguarly over time, to check some things

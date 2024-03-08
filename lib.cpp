@@ -19247,31 +19247,12 @@ template<class P, class NON_GUI> template<class T> void MultipleItemField<P, NON
 }
 
 
-//set the value in the GUI object name equal to the value in the non-GUI LengthFormat object 'object'
+//set the value in the GUI object name equal to the value in the non-GUI NON_GUI object 'object'
 template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::set(void) {
         
-    MultipleItemField<P, LengthFormat>::name->SetValue((MultipleItemField<P, LengthFormat>::object->value));
+    MultipleItemField<P, NON_GUI>::name->SetValue((MultipleItemField<P, NON_GUI>::object->value));
 
-//    switch ((MultipleItemField<P, LengthFormat>::object->value)[0]) {
-//
-//    case 't':
-//        //length format is time and speed
-//
-//            MultipleItemField<P, LengthFormat>::name->SetValue(wxString("Time and speed"));
-//
-//        break;
-//
-//
-//    case 'l':
-//        //length format is simply length, rather than time and speed
-//
-//            MultipleItemField<P, LengthFormat>::name->SetValue(wxString("Length"));
-//
-//        break;
-//
-//    }
-//
-    MultipleItemField<P, LengthFormat>::ok = true;
+    MultipleItemField<P, NON_GUI>::ok = true;
 
 }
 

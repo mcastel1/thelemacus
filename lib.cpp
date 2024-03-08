@@ -17193,9 +17193,9 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 
             //Fork
             //Case 1: If I open a sample sight file at startup stored in Windows resources, use this
-            data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String(""));
+            //data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String(""));
             //Case 2: If I open a file on disk, use this
-                        //data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("RW"), String(""));
+                        data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("RW"), String(""));
 
 
 #endif

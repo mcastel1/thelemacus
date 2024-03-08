@@ -21,6 +21,7 @@
 /*
  
  notes:
+ - if there is an odd error 'memory leak' on WIN32, this may be because the sample_sight.nav file presents some corrupted charcters (e.g. infinity sign instead of degree sign). To fix it: remplace Contents/Reources/Data/sample_sight.nav with Contents/Resources/Data/sample_sight_saved.nav
  - erorr message on WIN32 for intellisense "Severity    Code    Description    Project    File    Line    Suppression State    Details
  Error (active)    E2924    PCH warning: header stop cannot be in a macro or #if block.  An IntelliSense PCH file was not generated.    base    C:\wxWidgets-3.2.4_debug\include\wx\any.h    25" line of error "// Size of the wxAny value buffer.
  enum

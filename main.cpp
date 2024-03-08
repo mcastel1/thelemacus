@@ -129,7 +129,7 @@
      - in the MultipleItemField, create a pointer OnChooseItem to a templated method of the class (I tried  template<class T> void (MultipleItemField::*OnChooseItem)(T&); but it does not compile), and when MultipleItemField is constructed, let this pointer point to the desired method -> Then you will be able to move OnEdit to the parent class and simplify off things !
      - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
      - frames are not resized according to the size of their title
-     - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField, BodyField, LimbField) must be defined in terms of the parent class MultipleItemField
+     - all GUI fields which are a dropdown menu with a limited number of choices (ProjectionField, LengthFormatField, RouteTypeField, BodyField) must be defined in terms of the parent class MultipleItemField
 on WIN32:
          - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
          - when a ChartFrame is first created and when Reset is pressed, parallel and meridian labels are shown very small

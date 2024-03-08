@@ -2034,6 +2034,7 @@ public:
 
     MultipleItemField(wxPanel*, NON_GUI*, const vector<String>&, vector<int>*);
     void Fill(void);
+    void set(void);
     void Enable(bool);
     bool is_ok(void);
     template<class E> void Check(E&);
@@ -2087,7 +2088,7 @@ public:
 
     LengthFormatField(wxPanel*, LengthFormat*, vector<int>*);
 //    void Fill(void);
-    void set(void);
+//    void set(void);
 //    template<class T> void InsertIn(T*);
     template<class E> void OnEdit(E&);
 //    void Enable(bool);

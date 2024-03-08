@@ -19228,6 +19228,34 @@ template<class P, class NON_GUI> template<class T> void MultipleItemField<P, NON
 }
 
 
+//set the value in the GUI object name equal to the value in the non-GUI LengthFormat object 'object'
+template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::set(void) {
+        
+    MultipleItemField<P, LengthFormat>::name->SetValue((MultipleItemField<P, LengthFormat>::object->value));
+
+//    switch ((MultipleItemField<P, LengthFormat>::object->value)[0]) {
+//
+//    case 't':
+//        //length format is time and speed
+//
+//            MultipleItemField<P, LengthFormat>::name->SetValue(wxString("Time and speed"));
+//
+//        break;
+//
+//
+//    case 'l':
+//        //length format is simply length, rather than time and speed
+//
+//            MultipleItemField<P, LengthFormat>::name->SetValue(wxString("Length"));
+//
+//        break;
+//
+//    }
+//
+    MultipleItemField<P, LengthFormat>::ok = true;
+
+}
+
 template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON_GUI>::Check(E& event) {
 
 //    P* f = (parent);
@@ -19486,33 +19514,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 //
 //}
 
-//set the value in the GUI object name equal to the value in the non-GUI LengthFormat object 'object'
-template<class P> void LengthFormatField<P>::set(void) {
-        
-    MultipleItemField<P, LengthFormat>::name->SetValue((MultipleItemField<P, LengthFormat>::object->value));
 
-//    switch ((MultipleItemField<P, LengthFormat>::object->value)[0]) {
-//
-//    case 't':
-//        //length format is time and speed
-//
-//            MultipleItemField<P, LengthFormat>::name->SetValue(wxString("Time and speed"));
-//
-//        break;
-//
-//
-//    case 'l':
-//        //length format is simply length, rather than time and speed
-//
-//            MultipleItemField<P, LengthFormat>::name->SetValue(wxString("Length"));
-//
-//        break;
-//
-//    }
-//
-    MultipleItemField<P, LengthFormat>::ok = true;
-
-}
 
 
 //template<class P> template<class T> void LengthFormatField<P>::InsertIn(T* host) {

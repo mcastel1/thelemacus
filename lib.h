@@ -2099,7 +2099,7 @@ public:
 
 
 //P is the type of the frame which hosts *this
-template<class P> class BodyField{
+template<class P> class BodyField : public MultipleItemField<P, Body>{
     
 public:
     //the parent frame to which this object is attached

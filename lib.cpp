@@ -19563,7 +19563,7 @@ LengthFormat::LengthFormat(string input) : String(input) {
 }
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
-template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c) {
+template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, vector<int>* recent_items_in) : MultipleItemField<P, Body>(panel_of_parent, p, {String("sun"), String("moon")}, recent_items_in){
 
     parent = ((P*)(panel_of_parent->GetParent()));
     //I link the internal pointers p and c to the respective body and body catalog

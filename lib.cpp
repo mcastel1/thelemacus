@@ -19486,7 +19486,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 //
 //}
 
-//sets the value in the GUI object name equal to the value in the non-GUI LengthFormat object length_format
+//sets the value in the GUI object name equal to the value in the non-GUI LengthFormat object 'object'
 template<class P> void LengthFormatField<P>::set(void) {
 
     switch ((MultipleItemField<P, LengthFormat>::object->value)[0]) {

@@ -42,6 +42,9 @@
      
  
  - on WIN32:
+        - to read sample_sight.nav from an actual file on disk rather than from WIN32 resources
+            * select "Case 2" in 'Fork ...' in lib.cpp -> the .exe file will look for sample_sight.nav in the folder [folder where .exe file is executed]/Contents/Resources/Data/
+            * put the .exe file in sight_reduction_program folder -> the .exe file will find the sample_sight.nav file in sight_reduction_program/Contents/Resources/Data/
         - to recognize what character key has been pressed, do (event.GetUnicodeKey()) and check if it is equal to, sai, 'A', not 'a'
         - if you press control key on runtime from within Visual Studio, it will not be detected as WXK_CONTROL, while if you run the exe file from system resources it does.
         - keep the output directory as $(wxIntRootDir) : if you set it to Z:\ the program will not run

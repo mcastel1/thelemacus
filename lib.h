@@ -2116,7 +2116,7 @@ public:
     CheckBody<P>* check;
     bool ok;
     
-    BodyField(wxPanel*, Body*, vector<String>&, vector<int>*);
+    BodyField(wxPanel*, Body*, Catalog*, vector<int>*);
     void fill_bodies(void);
 //    void read_recent_bodies(void);
     void update_recent_bodies(void);

@@ -15151,7 +15151,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
 
     StaticText* text_combo_body = new StaticText(panel, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0);
-    body = new BodyField<SightFrame>(panel, &(sight->body), catalog);
+    body = new BodyField<SightFrame>(panel, &(sight->body), catalog, &(wxGetApp().list_frame->data->recent_bodies));
 
     StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0);
     limb = new LimbField<SightFrame>(panel, &(sight->limb));
@@ -19579,7 +19579,7 @@ LengthFormat::LengthFormat(string input) : String(input) {
 }
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
-template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, vector<String>& catalog_in, vector<int>* recent_items_in) : MultipleItemField<P, Body>(panel_of_parent, p, catalog_in, recent_items_in){
+template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c, vector<int>* recent_items_in) : MultipleItemField<P, Body>(panel_of_parent, p, c->get_names(), recent_items_in){
 
     parent = ((P*)(panel_of_parent->GetParent()));
     //I link the internal pointers p and c to the respective body and body catalog

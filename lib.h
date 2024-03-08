@@ -2119,7 +2119,7 @@ public:
     BodyField(wxPanel*, Body*, Catalog*, vector<int>*);
     void fill_bodies(void);
 //    void read_recent_bodies(void);
-    void update_recent_bodies(void);
+//    void update_recent_bodies(void);
     void set(void);
     template<class T> void get(T&);
 //    template<class T> void InsertIn(T*);

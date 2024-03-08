@@ -36,6 +36,17 @@ Data:
 		Route #1:
 			type = o
 			start position:
+				latitude = 3° 2.999999999999989'
+				longitude = 356° 56.99999999999932'
+				label = 
+			starting heading = 33° 2.999999999999829'
+			length format = time and speed
+				time = 02:03:03
+				speed = 3 kt
+			label = vega 2022-01-10 12:52:37 TAI, 2024-01-10 12:52:09 UTC+2
+		Route #2:
+			type = o
+			start position:
 				latitude = 304° 26.76000000000158'
 				longitude = 64° 46.11999999999966'
 				label = 2024-01-11 17:17:38 UTC+2
@@ -44,7 +55,7 @@ Data:
 				time = 03:03:01.23425
 				speed = 1000 kt
 			label = route with speed and time
-		Route #2:
+		Route #3:
 			type = l
 			start position:
 				latitude = 22° 3.000000000000043'
@@ -55,7 +66,7 @@ Data:
 				time = 06:59:45.5436
 				speed = 500 kt
 			label = jlkj
-		Route #3:
+		Route #4:
 			type = c
 			ground position:
 				latitude = 336° 56.99999999999932'
@@ -70,5 +81,5 @@ Data:
 			label = Siamo in biblioteca
 Recent bodies = 3 4 8
 Recent projections = 1 0
-Recent length formats = 1 0
+Recent length formats = 0 1
 Recent route types = 1 2 0

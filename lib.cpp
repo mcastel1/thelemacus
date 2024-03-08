@@ -19256,6 +19256,8 @@ template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::set(void) {
 
 }
 
+
+//this method is called whenever the user kills the focus on the GUI field in order to check the content of the GUI field and do the necessary operations
 template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON_GUI>::Check(E& event) {
 
 //    P* f = (parent);
@@ -19266,7 +19268,7 @@ template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON
         unsigned int i;
         bool check;
 
-        //I check whether the name in the GUI field Projection matches one of the Projection names in p->names
+        //I check whether the conrwnr of the GUI field  matches one of the items in catalog
         for (check = false, i = 0; (i < catalog.size()) && (!check); i++) {
             if ((name->GetValue()) == catalog[i]) {
                 check = true;
@@ -19275,16 +19277,16 @@ template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON
         i--;
 
         if (check || (((name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((name->GetValue()).ToStdString())) == String("")))) {
-            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
-
+            //the GUI field  contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             if (check) {
+                //the content of the GUI field metches one of the items in catalog, i.e., it is valid -> I insert it into recent_items, which points to a suitable location (initialized when *this was constructed)
 
                 //insert item #i into data->recent_bodies
 //                wxGetApp().list_frame->data->insert_recent_projection(i);
-                wxGetApp().list_frame->data->insert_recent_item(i, &(wxGetApp().list_frame->data->recent_projections));
+                wxGetApp().list_frame->data->insert_recent_item(i, recent_items);
 
-                //I update p->name according to the content of data->recent_projections file
+                //I update p->name according to the content of recent_itmes
                 Fill();
 
             }
@@ -19300,8 +19302,8 @@ template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON
             //if the value written in name is correct, I store it in value_before_editing
             if(ok){value_before_editing = name->GetValue();}
 
-        }
-        else {
+        }else{
+            //the GUI field  does not contain a valid text,  it is not empty and with a red background color-> I prompt an error message frame
 
             stringstream temp;
 
@@ -19310,7 +19312,6 @@ template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON
             for (i = 0; i < (catalog.GetCount()); i++) {
                 temp << (catalog[i]).ToStdString() << (i < (catalog.GetCount()) - 1 ? ", " : ".");
             }
-
 
             parent->print_error_message->SetAndCall(name, String("Item not found in list of suitable items!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
 
@@ -21223,34 +21224,34 @@ template<class P> void BodyField<P>::fill_bodies(void) {
 
 
 
- //update list_frame->data->insert_recent_bodies according to the body currently written in name 
-template<class P> void BodyField<P>::update_recent_bodies(void) {
-
-    //I proceed only if the progam is not is indling mode
-    if (!(MultipleItemField<P, Body>::parent->idling)) {
-
-        unsigned int i;
-        bool check;
-
-        //I check whether the name in the GUI field body matches one of the body names in catalog if it is (is not) -> check = true (false). I write the id in i
-        for (check = false, i = 0; (i < (catalog->list).size()) && (!check); i++) {
-            if (String(MultipleItemField<P, Body>::name->GetValue().ToStdString()) == (((catalog->list)[i]).name)) {
-                check = true;
-            }
-        }
-        i--;
-
-
-        if (check) {
-            //insert body #i into data->recent_bodies
-//            wxGetApp().list_frame->data->insert_recent_body(i);
-            wxGetApp().list_frame->data->insert_recent_item(i, &(wxGetApp().list_frame->data->recent_bodies));
-
-        }
-
-    }
-
-}
+// //update list_frame->data->insert_recent_bodies according to the body currently written in name 
+//template<class P> void BodyField<P>::update_recent_bodies(void) {
+//
+//    //I proceed only if the progam is not is indling mode
+//    if (!(MultipleItemField<P, Body>::parent->idling)) {
+//
+//        unsigned int i;
+//        bool check;
+//
+//        //I check whether the name in the GUI field body matches one of the body names in catalog if it is (is not) -> check = true (false). I write the id in i
+//        for (check = false, i = 0; (i < (catalog->list).size()) && (!check); i++) {
+//            if (String(MultipleItemField<P, Body>::name->GetValue().ToStdString()) == (((catalog->list)[i]).name)) {
+//                check = true;
+//            }
+//        }
+//        i--;
+//
+//
+//        if (check) {
+//            //insert body #i into data->recent_bodies
+////            wxGetApp().list_frame->data->insert_recent_body(i);
+//            wxGetApp().list_frame->data->insert_recent_item(i, &(wxGetApp().list_frame->data->recent_bodies));
+//
+//        }
+//
+//    }
+//
+//}
 
 
 template<class P> template<class T> void LimbField<P>::InsertIn(T* host) {

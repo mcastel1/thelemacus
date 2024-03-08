@@ -316,7 +316,8 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
    //regex vowel_re("//");
     //root_directory.value.erase(remove(root_directory.value.begin(), root_directory.value.end(), '\\'), root_directory.value.end());
     //boost::replace_all(root_directory.value, "\\", "\");
-    root_directory.value = my_replace(root_directory.value, '\\', '/');
+    //root_directory.value = my_replace(root_directory.value, '\\', '/');
+    root_directory.replace_to('\\', '/');
 
     (root_directory.value) = (root_directory.value.substr(1, root_directory.value.size() - 2));
     

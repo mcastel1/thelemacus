@@ -19591,7 +19591,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 
     check = new CheckBody<P>(this);
 
-    name = new wxComboBox(MultipleItemField<P, Body>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    name = new wxComboBox(MultipleItemField<P, Body>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, Body>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //    name->SetValue("");
     //SetColor(name);
     fill_bodies();
@@ -20931,13 +20931,13 @@ template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
 
 
     //I check whether the name in the GUI field body matches one of the valid body names
-    find_and_replace_case_insensitive(name, items, &success, &i);
+    find_and_replace_case_insensitive(name, MultipleItemField<P, Body>::items, &success, &i);
 
     if (success) {
         //the text entered in name is valid
 
         //I enable the limb field if and only if the selected body allows for a field and I run check on the existing text in the limb field
-        MultipleItemField<P, Body>::parent->limb->name->Enable((items[i] == wxString("sun")) || (items[i] == wxString("moon")));
+        MultipleItemField<P, Body>::parent->limb->name->Enable(((MultipleItemField<P, Body>::items)[i] == wxString("sun")) || ((MultipleItemField<P, Body>::items)[i] == wxString("moon")));
         (*(MultipleItemField<P, Body>::parent->limb->check))(event);
 
         //because the text in name is valid, I set the background color of name to white
@@ -21212,30 +21212,30 @@ template<class P> void BodyField<P>::fill_bodies(void) {
     }
 
     //I first add to bodies the recently selected celestial bodies written in (wxGetApp().list_frame->data->recent_bodies)
-    for (items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_bodies.size()); i++) {
+    for (MultipleItemField<P, Body>::items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_bodies.size()); i++) {
 
-        items.Add(bodies_temp[(wxGetApp().list_frame->data->recent_bodies)[i]]);
+        MultipleItemField<P, Body>::items.Add(bodies_temp[(wxGetApp().list_frame->data->recent_bodies)[i]]);
 
     }
 
     //then, I fill bodies with the remaining bodies
     for (i = 0; i < bodies_temp.GetCount(); i++) {
 
-        for (is_present = false, j = 0; (j < items.GetCount()) && (!is_present); j++) {
+        for (is_present = false, j = 0; (j < MultipleItemField<P, Body>::items.GetCount()) && (!is_present); j++) {
 
-            if (items[j] == bodies_temp[i]) {
+            if (MultipleItemField<P, Body>::items[j] == bodies_temp[i]) {
                 is_present = true;
             }
 
         }
 
         if (!is_present) {
-            items.Add(bodies_temp[i]);
+            MultipleItemField<P, Body>::items.Add(bodies_temp[i]);
         }
 
     }
 
-    name->Set(items);
+    name->Set(MultipleItemField<P, Body>::items);
     //because name->Set(bodies clears the value of name, I set the value of name back to name_temp
     name->SetValue(name_temp);
 

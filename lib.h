@@ -2117,7 +2117,7 @@ public:
 //    bool ok;
     
     BodyField(wxPanel*, Body*, Catalog*, vector<int>*);
-    void fill_bodies(void);
+//    void fill_bodies(void);
 //    void read_recent_bodies(void);
 //    void update_recent_bodies(void);
     void set(void);

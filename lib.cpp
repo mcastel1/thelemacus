@@ -11520,7 +11520,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 //                wxGetApp().list_frame->data->insert_recent_body(i);
                 wxGetApp().list_frame->data->insert_recent_item(i, &(wxGetApp().list_frame->data->recent_bodies));
                 //I update p->name according to the content of data->recent_bodies file
-                p->fill_bodies();
+                p->Fill();
 
             }
 
@@ -19205,7 +19205,7 @@ template<class P, class NON_GUI> MultipleItemField<P, NON_GUI>::MultipleItemFiel
 
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-//    Fill();
+    Fill();
     name->SetValue(items[0]);
     //I just filled name with  a valid value, thus I store it in value_before_editing in order to start off with a valid value in value_before_editing
     value_before_editing = name->GetValue();
@@ -19351,7 +19351,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
 
 //    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-    MultipleItemField<P, void>::Fill();
+//    MultipleItemField<P, void>::Fill();
 //    name->SetValue(items[0]);
 //    AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -19410,10 +19410,10 @@ template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Fill(void) 
     MultipleItemField<P, NON_GUI>::name->Set(MultipleItemField<P, NON_GUI>::items);
     //because name->Set(projections clears the value of name, I set the value of name back to name_temp
     MultipleItemField<P, NON_GUI>::name->SetValue(name_temp);
-//given that I just filled name with a valid item, I store this item in value_before_editing 
+    //given that I just filled name with a valid item, I store this item in value_before_editing
     value_before_editing = name->GetValue();
-
-
+    
+    
     items_temp.Clear();
 
 }
@@ -19451,7 +19451,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 
 //    MultipleItemField<P, LengthFormat>::name = new wxComboBox(MultipleItemField<P, LengthFormat>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, LengthFormat>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-    MultipleItemField<P, LengthFormat>::Fill();
+//    MultipleItemField<P, LengthFormat>::Fill();
 //    MultipleItemField<P, LengthFormat>::name->SetValue((MultipleItemField<P, LengthFormat>::items)[0]);
 //    AdjustWidth(MultipleItemField<P, LengthFormat>::name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -19579,7 +19579,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 //    MultipleItemField<P, Body>::name = new wxComboBox(MultipleItemField<P, Body>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, Body>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //    name->SetValue("");
     //SetColor(name);
-    fill_bodies();
+//    fill_bodies();
 //    AdjustWidth(MultipleItemField<P, Body>::name);
     MultipleItemField<P, Body>::name->Bind(wxEVT_KILL_FOCUS, *check);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -21175,52 +21175,52 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
 //}
 
 
-//update the dropdown menu of BodyField according to wxGetApp().list_frame->data->recent_bodies in such a way that the recent items appear on top of it
-template<class P> void BodyField<P>::fill_bodies(void) {
-
-    unsigned int i, j;
-    wxArrayString bodies_temp;
-    wxString name_temp;
-    bool is_present;
-
-    //save the current value of name in name_temp
-    name_temp = (MultipleItemField<P, Body>::name->GetValue());
-    //create the temporary list of bodies bodies_temp
-    for (bodies_temp.Clear(), i = 0; i < (catalog->list).size(); i++) {
-        bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
-    }
-
-    //I first add to bodies the recently selected celestial bodies written in (wxGetApp().list_frame->data->recent_bodies)
-    for (MultipleItemField<P, Body>::items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_bodies.size()); i++) {
-
-        MultipleItemField<P, Body>::items.Add(bodies_temp[(wxGetApp().list_frame->data->recent_bodies)[i]]);
-
-    }
-
-    //then, I fill bodies with the remaining bodies
-    for (i = 0; i < bodies_temp.GetCount(); i++) {
-
-        for (is_present = false, j = 0; (j < MultipleItemField<P, Body>::items.GetCount()) && (!is_present); j++) {
-
-            if (MultipleItemField<P, Body>::items[j] == bodies_temp[i]) {
-                is_present = true;
-            }
-
-        }
-
-        if (!is_present) {
-            MultipleItemField<P, Body>::items.Add(bodies_temp[i]);
-        }
-
-    }
-
-    MultipleItemField<P, Body>::name->Set(MultipleItemField<P, Body>::items);
-    //because name->Set(bodies clears the value of name, I set the value of name back to name_temp
-    MultipleItemField<P, Body>::name->SetValue(name_temp);
-
-    bodies_temp.Clear();
-
-}
+////update the dropdown menu of BodyField according to wxGetApp().list_frame->data->recent_bodies in such a way that the recent items appear on top of it
+//template<class P> void BodyField<P>::fill_bodies(void) {
+//
+//    unsigned int i, j;
+//    wxArrayString bodies_temp;
+//    wxString name_temp;
+//    bool is_present;
+//
+//    //save the current value of name in name_temp
+//    name_temp = (MultipleItemField<P, Body>::name->GetValue());
+//    //create the temporary list of bodies bodies_temp
+//    for (bodies_temp.Clear(), i = 0; i < (catalog->list).size(); i++) {
+//        bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
+//    }
+//
+//    //I first add to bodies the recently selected celestial bodies written in (wxGetApp().list_frame->data->recent_bodies)
+//    for (MultipleItemField<P, Body>::items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_bodies.size()); i++) {
+//
+//        MultipleItemField<P, Body>::items.Add(bodies_temp[(wxGetApp().list_frame->data->recent_bodies)[i]]);
+//
+//    }
+//
+//    //then, I fill bodies with the remaining bodies
+//    for (i = 0; i < bodies_temp.GetCount(); i++) {
+//
+//        for (is_present = false, j = 0; (j < MultipleItemField<P, Body>::items.GetCount()) && (!is_present); j++) {
+//
+//            if (MultipleItemField<P, Body>::items[j] == bodies_temp[i]) {
+//                is_present = true;
+//            }
+//
+//        }
+//
+//        if (!is_present) {
+//            MultipleItemField<P, Body>::items.Add(bodies_temp[i]);
+//        }
+//
+//    }
+//
+//    MultipleItemField<P, Body>::name->Set(MultipleItemField<P, Body>::items);
+//    //because name->Set(bodies clears the value of name, I set the value of name back to name_temp
+//    MultipleItemField<P, Body>::name->SetValue(name_temp);
+//
+//    bodies_temp.Clear();
+//
+//}
 
 
 

@@ -19581,7 +19581,7 @@ LengthFormat::LengthFormat(string input) : String(input) {
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c, vector<int>* recent_items_in) : MultipleItemField<P, Body>(panel_of_parent, p, c->get_names(), recent_items_in){
 
-    parent = ((P*)(panel_of_parent->GetParent()));
+    MultipleItemField<P, Body>::parent = ((P*)(panel_of_parent->GetParent()));
     //I link the internal pointers p and c to the respective body and body catalog
     object = p;
     catalog = c;
@@ -19591,7 +19591,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 
     check = new CheckBody<P>(this);
 
-    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    name = new wxComboBox(MultipleItemField<P, Body>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //    name->SetValue("");
     //SetColor(name);
     fill_bodies();
@@ -20937,8 +20937,8 @@ template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
         //the text entered in name is valid
 
         //I enable the limb field if and only if the selected body allows for a field and I run check on the existing text in the limb field
-        ((parent->limb)->name)->Enable((items[i] == wxString("sun")) || (items[i] == wxString("moon")));
-        (*((parent->limb)->check))(event);
+        MultipleItemField<P, Body>::parent->limb->name->Enable((items[i] == wxString("sun")) || (items[i] == wxString("moon")));
+        (*(MultipleItemField<P, Body>::parent->limb->check))(event);
 
         //because the text in name is valid, I set the background color of name to white
         name->SetForegroundColour(wxGetApp().foreground_color);
@@ -20948,8 +20948,8 @@ template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
     else {
         //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body related to limb is invalid
 
-        ((parent->limb)->name)->Enable(false);
-        ((parent->limb)->ok) = false;
+        MultipleItemField<P, Body>::parent->limb->name->Enable(false);
+        MultipleItemField<P, Body>::parent->limb->ok = false;
 
     }
 
@@ -20957,7 +20957,7 @@ template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
     //ok is true/false is the text enteres is valid/invalid
     ok = success;
     //tries to enable button_reduce
-    parent->AllOk();
+    MultipleItemField<P, Body>::parent->AllOk();
 
     event.Skip(true);
 
@@ -21249,7 +21249,7 @@ template<class P> void BodyField<P>::fill_bodies(void) {
 template<class P> void BodyField<P>::update_recent_bodies(void) {
 
     //I proceed only if the progam is not is indling mode
-    if (!(parent->idling)) {
+    if (!(MultipleItemField<P, Body>::parent->idling)) {
 
         unsigned int i;
         bool check;

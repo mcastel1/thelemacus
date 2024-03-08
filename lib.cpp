@@ -19575,7 +19575,7 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 
     check = new CheckBody<P>(this);
 
-    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, bodies, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //    name->SetValue("");
     //SetColor(name);
     fill_bodies();
@@ -20915,13 +20915,13 @@ template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
 
 
     //I check whether the name in the GUI field body matches one of the valid body names
-    find_and_replace_case_insensitive(name, bodies, &success, &i);
+    find_and_replace_case_insensitive(name, items, &success, &i);
 
     if (success) {
         //the text entered in name is valid
 
         //I enable the limb field if and only if the selected body allows for a field and I run check on the existing text in the limb field
-        ((parent->limb)->name)->Enable((bodies[i] == wxString("sun")) || (bodies[i] == wxString("moon")));
+        ((parent->limb)->name)->Enable((items[i] == wxString("sun")) || (items[i] == wxString("moon")));
         (*((parent->limb)->check))(event);
 
         //because the text in name is valid, I set the background color of name to white
@@ -21196,30 +21196,30 @@ template<class P> void BodyField<P>::fill_bodies(void) {
     }
 
     //I first add to bodies the recently selected celestial bodies written in (wxGetApp().list_frame->data->recent_bodies)
-    for (bodies.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_bodies.size()); i++) {
+    for (items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_bodies.size()); i++) {
 
-        bodies.Add(bodies_temp[(wxGetApp().list_frame->data->recent_bodies)[i]]);
+        items.Add(bodies_temp[(wxGetApp().list_frame->data->recent_bodies)[i]]);
 
     }
 
     //then, I fill bodies with the remaining bodies
     for (i = 0; i < bodies_temp.GetCount(); i++) {
 
-        for (is_present = false, j = 0; (j < bodies.GetCount()) && (!is_present); j++) {
+        for (is_present = false, j = 0; (j < items.GetCount()) && (!is_present); j++) {
 
-            if (bodies[j] == bodies_temp[i]) {
+            if (items[j] == bodies_temp[i]) {
                 is_present = true;
             }
 
         }
 
         if (!is_present) {
-            bodies.Add(bodies_temp[i]);
+            items.Add(bodies_temp[i]);
         }
 
     }
 
-    name->Set(bodies);
+    name->Set(items);
     //because name->Set(bodies clears the value of name, I set the value of name back to name_temp
     name->SetValue(name_temp);
 

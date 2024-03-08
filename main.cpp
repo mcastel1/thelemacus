@@ -312,7 +312,9 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 #endif
 #ifdef _WIN32
     //I am on WIN32 operating system: I remove the '\"'that is present in root_directory at the beginning and at the end to obatin a root_directory that can be used as a path
-    
+
+   regex vowel_re("//");
+
     (root_directory.value) = (root_directory.value.substr(1, root_directory.value.size() - 2));
     
 #endif

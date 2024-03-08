@@ -319,6 +319,7 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
     //root_directory.value = my_replace(root_directory.value, '\\', '/');
     root_directory.replace_to('\\', '/');
     (root_directory.value) = (root_directory.value.substr(1, root_directory.value.size() - 2));
+    root_directory.appendto(String("/"));
     
 #endif
     

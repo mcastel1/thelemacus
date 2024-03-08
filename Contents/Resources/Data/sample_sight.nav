@@ -19,9 +19,9 @@ Data:
 		Sight #2:
 			body:
 				Type = star
-				Name = hamal
-				Right ascension = 31° 47.5971599999999'
-				Declination = 23° 27.74525999999994'
+				Name = vega
+				Right ascension = 279° 13.92611999999986'
+				Declination = 38° 46.93896000000009'
 			sextant altitude = 13° 3.000000000000043'
 			index error = 0° 1.9'
 			artificial horizon = n
@@ -68,7 +68,7 @@ Data:
 			latitude = 323° 36.54636500000151'
 			longitude = 315° 55.56999999999789'
 			label = Siamo in biblioteca
-Recent bodies = 12 10 8
+Recent bodies = 3 4 8
 Recent projections = 1 0
 Recent length formats = 1 0
 Recent route types = 1 2 0

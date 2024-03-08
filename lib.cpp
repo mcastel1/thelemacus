@@ -19190,7 +19190,9 @@ template<class P, class NON_GUI> MultipleItemField<P, NON_GUI>::MultipleItemFiel
     
     //I just created *this, thus it is not being edited 
     editing = false;
-    
+    //to be conservative, I set 
+    ok = false;
+
     //set parent
     parent = ((P*)(panel_of_parent->GetParent()));
     //set catalog equal to catalog_in 
@@ -19212,6 +19214,7 @@ template<class P, class NON_GUI> MultipleItemField<P, NON_GUI>::MultipleItemFiel
 //    name->Bind(wxEVT_COMBOBOX, &MultipleItemField::OnEdit<wxCommandEvent>, this);
 //    name->Bind(wxEVT_KEY_UP, &MultipleItemField::OnEdit<wxKeyEvent>, this);
 //    name->Bind(wxEVT_KILL_FOCUS, *check);
+    
 
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -19581,9 +19584,9 @@ LengthFormat::LengthFormat(string input) : String(input) {
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c, vector<int>* recent_items_in) : MultipleItemField<P, Body>(panel_of_parent, p, c->get_names(), recent_items_in){
 
-    MultipleItemField<P, Body>::parent = ((P*)(panel_of_parent->GetParent()));
+//    MultipleItemField<P, Body>::parent = ((P*)(panel_of_parent->GetParent()));
     //I link the internal pointers p and c to the respective body and body catalog
-    MultipleItemField<P, Body>::object = p;
+//    MultipleItemField<P, Body>::object = p;
     catalog = c;
 
     //sets the name of file_recent for future use
@@ -19591,24 +19594,24 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 
     check = new CheckBody<P>(this);
 
-    MultipleItemField<P, Body>::name = new wxComboBox(MultipleItemField<P, Body>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, Body>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+//    MultipleItemField<P, Body>::name = new wxComboBox(MultipleItemField<P, Body>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, Body>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //    name->SetValue("");
     //SetColor(name);
     fill_bodies();
-    AdjustWidth(MultipleItemField<P, Body>::name);
+//    AdjustWidth(MultipleItemField<P, Body>::name);
     MultipleItemField<P, Body>::name->Bind(wxEVT_KILL_FOCUS, *check);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P, Body>::name->Bind(wxEVT_COMBOBOX, &BodyField::OnEdit<wxCommandEvent>, this);
     MultipleItemField<P, Body>::name->Bind(wxEVT_KEY_UP, &BodyField::OnEdit<wxKeyEvent>, this);
 
 
-    MultipleItemField<P, Body>::ok = false;
+//    MultipleItemField<P, Body>::ok = false;
 
-    MultipleItemField<P, Body>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    MultipleItemField<P, Body>::sizer_v = new wxBoxSizer(wxVERTICAL);
+//    MultipleItemField<P, Body>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
+//    MultipleItemField<P, Body>::sizer_v = new wxBoxSizer(wxVERTICAL);
 
-    MultipleItemField<P, Body>::sizer_v->Add(MultipleItemField<P, Body>::sizer_h, 0, wxALIGN_LEFT);
-    MultipleItemField<P, Body>::sizer_h->Add(MultipleItemField<P, Body>::name, 0, wxALIGN_CENTER);
+//    MultipleItemField<P, Body>::sizer_v->Add(MultipleItemField<P, Body>::sizer_h, 0, wxALIGN_LEFT);
+//    MultipleItemField<P, Body>::sizer_h->Add(MultipleItemField<P, Body>::name, 0, wxALIGN_CENTER);
 
 }
 

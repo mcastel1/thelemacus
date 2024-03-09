@@ -2013,7 +2013,7 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-//this class is the parent of all classes for GUI fields which include a list of multiple items to  be selected (such as ProjectionField, LengthFormatField, ...). All members and methods which are common to these children classes are written in this parent class. P is the type of the frame that hosts *this. NON_GUI is the type of the non-GUI field related to *this: For example, if I create a  class BodyField derived from MultipleItemField, then NON_GUI = Body; if I create a derived class LengthFormatField derived from MultipleItemField, NON_GUI = LengthFormat, etc. If there is no non-GUI object associated with *this, I set NON_GUI = void and call the constructor of MultipleItemField with second argument equal to NULL. CHECK is the type of the functor that will be used to check whetehr *this is valid: for example, for a BodyField CHECK = CheckBody<P>
+//this class is the parent of all classes for GUI fields which include a list of multiple items to  be selected (such as ProjectionField, LengthFormatField, ...). All members and methods which are common to these children classes are written in this parent class. P is the type of the frame that hosts *this. NON_GUI is the type of the non-GUI field related to *this: For example, if I create a  class BodyField derived from MultipleItemField, then NON_GUI = Body; if I create a derived class LengthFormatField derived from MultipleItemField, NON_GUI = LengthFormat, etc. If there is no non-GUI object associated with *this, I set NON_GUI = void and call the constructor of MultipleItemField with second argument equal to NULL. CHECK is the type of the functor that will be used to check whetehr *this is valid: for example, for a BodyField CHECK = CheckBody<P>. If the check functor is not defined -> CHECK = void
 template<class P, class NON_GUI, class CHECK> class MultipleItemField{
     
 public:
@@ -2048,7 +2048,7 @@ public:
 };
 
 
-template<class P> class ProjectionField: public MultipleItemField<P, void>{
+template<class P> class ProjectionField: public MultipleItemField<P, void, void>{
     
 public:
     
@@ -2072,7 +2072,7 @@ public:
 
 
 //this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a LengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted
-template<class P> class LengthFormatField: public MultipleItemField<P, LengthFormat>{
+template<class P> class LengthFormatField: public MultipleItemField<P, LengthFormat, void>{
     
 public:
     
@@ -2100,7 +2100,7 @@ public:
 
 
 //P is the type of the frame which hosts *this
-template<class P> class BodyField : public MultipleItemField<P, Body>{
+template<class P> class BodyField : public MultipleItemField<P, Body, CheckBody<P>>{
     
 public:
     //the parent frame to which this object is attached
@@ -2355,7 +2355,7 @@ public:
 
 
 //GUI field to specify the RouteType, which is inserted into a parent panel of type P
-template<class P> class RouteTypeField: public MultipleItemField<P, void>{
+template<class P> class RouteTypeField: public MultipleItemField<P, void, CheckRouteType<P>>{
     
 public:
     

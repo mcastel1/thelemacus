@@ -3044,28 +3044,28 @@ int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle>* t, [[ma
 
         //the parallel of latitude going through the North side of rectangle
         side_N = Route(
-            String("c"),
+            RouteType("c"),
             Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value) * M_PI_2)),
             Angle(M_PI_2 - fabs(((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)))
         );
 
         //the parallel of latitude going through the S side of rectangle
         side_S = Route(
-            String("c"),
+            RouteType("c"),
             Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value) * M_PI_2)),
             Angle(M_PI_2 - fabs(((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)))
         );
 
         //the meridian going through the W side of rectangle
         side_W = Route(
-            String("c"),
+            RouteType("c"),
             Position(((rectangle.p_NW).lambda) + M_PI_2, Angle(0.0)),
             Angle(M_PI_2)
         );
 
         //the meridian going through the E side of rectangle
         side_E = Route(
-            String("c"),
+            RouteType("c"),
             Position(((rectangle.p_SE).lambda) + M_PI_2, Angle(0.0)),
             Angle(M_PI_2)
         );
@@ -5636,7 +5636,7 @@ int Data::compute_position(String prefix) {
             (r.value) /= ((double)((q.size()) * ((q.size()) - 1) / 2));
 
             //computes the circle of equal altitude which represents the error of the sight
-            (error_circle.type) = String("c");
+            (error_circle.type) = RouteType("c");
             (error_circle.reference_position) = center;
             (error_circle.omega.value) = (r.value) / Re;
             (error_circle.label) = String("error on astronomical position");
@@ -8573,7 +8573,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     );
 
     //specify that circle_observer is a circle of equal altitude
-    circle_observer.type = String("c");
+    circle_observer.type = RouteType("c");
 
     //clears the vector label_phi because tehre are not y labels yet.
     parallels_and_meridians_labels_now.resize(0);
@@ -8772,7 +8772,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     //I draw the four edges of the rectangle in a way that is independent of the projection used
     //right vertical edge of rectangle
     (Route(
-        String("o"),
+        RouteType("o"),
         (parent->parent->geo_position_start),
         Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
         Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
@@ -8780,7 +8780,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 
     //left vertical edge of rectangle
     (Route(
-        String("o"),
+           RouteType("o"),
         geo_position,
         Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
         Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
@@ -8788,7 +8788,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 
     //bottom horizontal edge of rectangle
     (Route(
-        String("l"),
+           RouteType("l"),
         (parent->parent->geo_position_start),
         //change this by introducing if
         Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
@@ -8797,7 +8797,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 
     //top horizontal edge of rectangle
     (Route(
-        String("l"),
+           RouteType("l"),
         geo_position,
         //change this by introducing if
         Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),

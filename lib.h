@@ -2378,7 +2378,7 @@ public:
 //    RouteFrame* parent_frame;
 //    wxArrayString types;
     //this points to a non-GUI String object, which contains the Route type written in the GUI object this
-    String* type;
+//    String* type;
 //    wxBoxSizer *sizer_h, *sizer_v;
     
     //this is the wxComboBox with the name of the bodies

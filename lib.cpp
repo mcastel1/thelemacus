@@ -16263,7 +16263,7 @@ void RouteFrame::set(void) {
 //sets the values in all the non-GUI fields equal to the values in the respective GUI fields
 template<class T> void RouteFrame::get(T& event) {
 
-    type->get(event);
+    type->MultipleItemField<RouteFrame, RouteTypeField<RouteFrame>, CheckRouteType<RouteFrame> >::get(event);
 
     if (((type->name)->GetValue()) == wxString("circle of equal altitude")) {
 

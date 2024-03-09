@@ -837,8 +837,8 @@ public:
     Position* points;
     
     Route(void);
-    Route(String, Position, Angle, Length);
-    Route(String, Position, Angle);
+    Route(RouteType, Position, Angle, Length);
+    Route(RouteType, Position, Angle);
     void print(String, String, ostream&);
     void read_from_file_to(String, String, String, String);
     template<class S> void read_from_stream(String, S*, bool, String);

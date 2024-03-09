@@ -19351,7 +19351,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
 
 //    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-//    MultipleItemField<P, void>::Fill();
+//    MultipleItemField<P, void, void>::Fill();
 //    name->SetValue(items[0]);
 //    AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -20916,33 +20916,33 @@ template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
 
 
     //I check whether the name in the GUI field body matches one of the valid body names
-    find_and_replace_case_insensitive(MultipleItemField<P, Body>::name, MultipleItemField<P, Body>::items, &success, &i);
+    find_and_replace_case_insensitive(MultipleItemField<P, Body, CheckBody<P> >::name, MultipleItemField<P, Body, CheckBody<P> >::items, &success, &i);
 
     if (success) {
         //the text entered in name is valid
 
         //I enable the limb field if and only if the selected body allows for a field and I run check on the existing text in the limb field
-        MultipleItemField<P, Body>::parent->limb->name->Enable(((MultipleItemField<P, Body>::items)[i] == wxString("sun")) || ((MultipleItemField<P, Body>::items)[i] == wxString("moon")));
-        (*(MultipleItemField<P, Body>::parent->limb->check))(event);
+        MultipleItemField<P, Body, CheckBody<P> >::parent->limb->name->Enable(((MultipleItemField<P, Body, CheckBody<P> >::items)[i] == wxString("sun")) || ((MultipleItemField<P, Body, CheckBody<P> >::items)[i] == wxString("moon")));
+        (*(MultipleItemField<P, Body, CheckBody<P> >::parent->limb->check))(event);
 
         //because the text in name is valid, I set the background color of name to white
-        MultipleItemField<P, Body>::name->SetForegroundColour(wxGetApp().foreground_color);
-        MultipleItemField<P, Body>::name->SetFont(wxGetApp().default_font);
+        MultipleItemField<P, Body, CheckBody<P> >::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P, Body, CheckBody<P> >::name->SetFont(wxGetApp().default_font);
 
     }
     else {
         //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body related to limb is invalid
 
-        MultipleItemField<P, Body>::parent->limb->name->Enable(false);
-        MultipleItemField<P, Body>::parent->limb->ok = false;
+        MultipleItemField<P, Body, CheckBody<P> >::parent->limb->name->Enable(false);
+        MultipleItemField<P, Body, CheckBody<P> >::parent->limb->ok = false;
 
     }
 
 
     //ok is true/false is the text enteres is valid/invalid
-    MultipleItemField<P, Body>::ok = success;
+    MultipleItemField<P, Body, CheckBody<P> >::ok = success;
     //tries to enable button_reduce
-    MultipleItemField<P, Body>::parent->AllOk();
+    MultipleItemField<P, Body, CheckBody<P> >::parent->AllOk();
 
     event.Skip(true);
 
@@ -21184,39 +21184,39 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
 //    bool is_present;
 //
 //    //save the current value of name in name_temp
-//    name_temp = (MultipleItemField<P, Body>::name->GetValue());
+//    name_temp = (MultipleItemField<P, Body, CheckBody<P> >::name->GetValue());
 //    //create the temporary list of bodies bodies_temp
 //    for (bodies_temp.Clear(), i = 0; i < (catalog->list).size(); i++) {
 //        bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
 //    }
 //
 //    //I first add to bodies the recently selected celestial bodies written in (wxGetApp().list_frame->data->recent_bodies)
-//    for (MultipleItemField<P, Body>::items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_bodies.size()); i++) {
+//    for (MultipleItemField<P, Body, CheckBody<P> >::items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_bodies.size()); i++) {
 //
-//        MultipleItemField<P, Body>::items.Add(bodies_temp[(wxGetApp().list_frame->data->recent_bodies)[i]]);
+//        MultipleItemField<P, Body, CheckBody<P> >::items.Add(bodies_temp[(wxGetApp().list_frame->data->recent_bodies)[i]]);
 //
 //    }
 //
 //    //then, I fill bodies with the remaining bodies
 //    for (i = 0; i < bodies_temp.GetCount(); i++) {
 //
-//        for (is_present = false, j = 0; (j < MultipleItemField<P, Body>::items.GetCount()) && (!is_present); j++) {
+//        for (is_present = false, j = 0; (j < MultipleItemField<P, Body, CheckBody<P> >::items.GetCount()) && (!is_present); j++) {
 //
-//            if (MultipleItemField<P, Body>::items[j] == bodies_temp[i]) {
+//            if (MultipleItemField<P, Body, CheckBody<P> >::items[j] == bodies_temp[i]) {
 //                is_present = true;
 //            }
 //
 //        }
 //
 //        if (!is_present) {
-//            MultipleItemField<P, Body>::items.Add(bodies_temp[i]);
+//            MultipleItemField<P, Body, CheckBody<P> >::items.Add(bodies_temp[i]);
 //        }
 //
 //    }
 //
-//    MultipleItemField<P, Body>::name->Set(MultipleItemField<P, Body>::items);
+//    MultipleItemField<P, Body, CheckBody<P> >::name->Set(MultipleItemField<P, Body, CheckBody<P> >::items);
 //    //because name->Set(bodies clears the value of name, I set the value of name back to name_temp
-//    MultipleItemField<P, Body>::name->SetValue(name_temp);
+//    MultipleItemField<P, Body, CheckBody<P> >::name->SetValue(name_temp);
 //
 //    bodies_temp.Clear();
 //
@@ -21228,14 +21228,14 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
 //template<class P> void BodyField<P>::update_recent_bodies(void) {
 //
 //    //I proceed only if the progam is not is indling mode
-//    if (!(MultipleItemField<P, Body>::parent->idling)) {
+//    if (!(MultipleItemField<P, Body, CheckBody<P> >::parent->idling)) {
 //
 //        unsigned int i;
 //        bool check;
 //
 //        //I check whether the name in the GUI field body matches one of the body names in catalog if it is (is not) -> check = true (false). I write the id in i
 //        for (check = false, i = 0; (i < (catalog->list).size()) && (!check); i++) {
-//            if (String(MultipleItemField<P, Body>::name->GetValue().ToStdString()) == (((catalog->list)[i]).name)) {
+//            if (String(MultipleItemField<P, Body, CheckBody<P> >::name->GetValue().ToStdString()) == (((catalog->list)[i]).name)) {
 //                check = true;
 //            }
 //        }
@@ -21321,23 +21321,23 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
     String s;
     bool success;
     
-    if(!(MultipleItemField<P, void>::editing)){
+    if(!(MultipleItemField<P, void, void>::editing)){
         //*the user has started editing *this 
-        (MultipleItemField<P, void>::editing) = true;
+        (MultipleItemField<P, void, void>::editing) = true;
     }
 
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    find_and_replace_case_insensitive(MultipleItemField<P, void>::name, MultipleItemField<P, void>::items, &success, NULL);
+    find_and_replace_case_insensitive(MultipleItemField<P, void, void>::name, MultipleItemField<P, void, void>::items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid
-    MultipleItemField<P, void>::ok = success;
+    MultipleItemField<P, void, void>::ok = success;
 
     if (success) {
 
-        MultipleItemField<P, void>::name->SetForegroundColour(wxGetApp().foreground_color);
-        MultipleItemField<P, void>::name->SetFont(wxGetApp().default_font);
+        MultipleItemField<P, void, void>::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P, void, void>::name->SetFont(wxGetApp().default_font);
         //choose the projection entered in name button_reduce
-        MultipleItemField<P, void>::parent->draw_panel->OnChooseProjection(event);
+        MultipleItemField<P, void, void>::parent->draw_panel->OnChooseProjection(event);
 
     }
 

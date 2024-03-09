@@ -19257,6 +19257,14 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 
+//set the value in the GUI object name equal to the value in the non-GUI NON_GUI object 'object'
+ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Get(E& event) {
+        
+     
+
+}
+
+
 //this method is called whenever the user kills the focus on the GUI field in order to check the content of the GUI field and do the necessary operations
 template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Check(E& event) {
 

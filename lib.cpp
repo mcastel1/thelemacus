@@ -2036,7 +2036,7 @@ Route::Route(void) {
 
 
 //constructs a brand new Route object of type 'l' or 'o' and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
-Route::Route(String type_in, Position reference_position_in, Angle Z_in, Length l_in) {
+Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Length l_in) {
 
     type = type_in;
     reference_position = reference_position_in;
@@ -2050,7 +2050,7 @@ Route::Route(String type_in, Position reference_position_in, Angle Z_in, Length 
 
 
 //construct a brand new Route object of type 'c' and thus sets its related sight to -1, because this Route is not related to any sight yet.  length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
-Route::Route(String type_in, Position reference_position_in, Angle omega_in) {
+Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) {
 
     type = type_in;
     reference_position = reference_position_in;

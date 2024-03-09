@@ -19075,19 +19075,19 @@ template<class P> template <class T> void ChronoField<P>::get(T& event) {
 template<class P> template <class T> void RouteTypeField<P>::get(T& event) {
 
 
-    if (MultipleItemField<P, void>::ok) {
+    if (MultipleItemField<P, void, CheckRouteType<P> >::ok) {
 
-        if (String((MultipleItemField<P, void>::name->GetValue()).ToStdString()) == String("loxodrome")) {
+        if (String((MultipleItemField<P, void, CheckRouteType<P> >::name->GetValue()).ToStdString()) == String("loxodrome")) {
 
             type->set(String(""), String("l"), String(""));
 
         }
-        if (String((MultipleItemField<P, void>::name->GetValue()).ToStdString()) == String("orthodrome")) {
+        if (String((MultipleItemField<P, void, CheckRouteType<P> >::name->GetValue()).ToStdString()) == String("orthodrome")) {
             type->set(String(""), String("o"), String(""));
 
 
         }
-        if (String((MultipleItemField<P, void>::name->GetValue()).ToStdString()) == String("circle of equal altitude")) {
+        if (String((MultipleItemField<P, void, CheckRouteType<P> >::name->GetValue()).ToStdString()) == String("circle of equal altitude")) {
 
             type->set(String(""), String("c"), String(""));
 
@@ -19181,7 +19181,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
 
 
 //constructor of a MultipleItemField object, which is into *panel_of_parent. The list of items in *this is stored into catalog_in. All items that are general enough to be common to all classes which are inherited from MultipleItemField are initialized here. Items that are specific to the inherited classes will be initialized in the inherited-class constructors
-template<class P, class NON_GUI> MultipleItemField<P, NON_GUI>::MultipleItemField(wxPanel* panel_of_parent, NON_GUI* object_in, const vector<String>& catalog_in, vector<int>* recent_items_in){
+template<class P, class NON_GUI, class CHECK> MultipleItemField<P, NON_GUI, CHECK>::MultipleItemField(wxPanel* panel_of_parent, NON_GUI* object_in, const vector<String>& catalog_in, vector<int>* recent_items_in){
     
     unsigned int i;
 
@@ -19225,7 +19225,7 @@ template<class P, class NON_GUI> MultipleItemField<P, NON_GUI>::MultipleItemFiel
 }
 
 
-template<class P, class NON_GUI> template <typename EventTag, typename Method, typename Object> void MultipleItemField<P, NON_GUI>::Bind(EventTag tag, Method method, Object object) {
+template<class P, class NON_GUI, class CHECK> template <typename EventTag, typename Method, typename Object> void MultipleItemField<P, NON_GUI, CHECK>::Bind(EventTag tag, Method method, Object object) {
 
     name->Bind(tag, method, object);
 
@@ -19233,14 +19233,14 @@ template<class P, class NON_GUI> template <typename EventTag, typename Method, t
 
 
 
-template<class P, class NON_GUI> template<class T> void MultipleItemField<P, NON_GUI>::InsertIn(T* host) {
+template<class P, class NON_GUI, class CHECK> template<class T> void MultipleItemField<P, NON_GUI, CHECK>::InsertIn(T* host) {
 
     host->Add(sizer_v);
 
 }
 
 
-template<class P, class NON_GUI> template<class T> void MultipleItemField<P, NON_GUI>::InsertIn(T* host, wxSizerFlags& flag) {
+template<class P, class NON_GUI, class CHECK> template<class T> void MultipleItemField<P, NON_GUI, CHECK>::InsertIn(T* host, wxSizerFlags& flag) {
 
     host->Add(sizer_v, flag);
 
@@ -19248,17 +19248,17 @@ template<class P, class NON_GUI> template<class T> void MultipleItemField<P, NON
 
 
 //set the value in the GUI object name equal to the value in the non-GUI NON_GUI object 'object'
-template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::set(void) {
+template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::set(void) {
         
-    MultipleItemField<P, NON_GUI>::name->SetValue((MultipleItemField<P, NON_GUI>::object->value));
+    MultipleItemField<P, NON_GUI, CHECK>::name->SetValue((MultipleItemField<P, NON_GUI, CHECK>::object->value));
 
-    MultipleItemField<P, NON_GUI>::ok = true;
+    MultipleItemField<P, NON_GUI, CHECK>::ok = true;
 
 }
 
 
 //this method is called whenever the user kills the focus on the GUI field in order to check the content of the GUI field and do the necessary operations
-template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON_GUI>::Check(E& event) {
+template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Check(E& event) {
 
 //    P* f = (parent);
 
@@ -19337,7 +19337,7 @@ template<class P, class NON_GUI> template<class E> void MultipleItemField<P, NON
 }
 
 //constructor of a ProjectionField object, based on the parent frame frame
-template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, vector<int>* recent_items_in) : MultipleItemField<P, void>(panel_of_parent, NULL, {String("Mercator"), String("3D")}, recent_items_in) {
+template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, vector<int>* recent_items_in) : MultipleItemField<P, void, void>(panel_of_parent, NULL, {String("Mercator"), String("3D")}, recent_items_in) {
 
 //    parent = ((P*)(panel_of_parent->GetParent()));
 
@@ -19355,9 +19355,9 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
 //    name->SetValue(items[0]);
 //    AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    MultipleItemField<P, void>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
-    MultipleItemField<P, void>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
-    MultipleItemField<P, void>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, void>::template Check<wxFocusEvent>, this);
+    MultipleItemField<P, void, void>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
+    MultipleItemField<P, void, void>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
+    MultipleItemField<P, void, void>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, void, void>::template Check<wxFocusEvent>, this);
 
 //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
 //    sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -19369,7 +19369,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
 
 
 //update the GUI dropdown menu of MultipleItemField according to MultipleItemField<P, NON_GUI>::recent_items in such a way that the recent items appear on top
-template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Fill(void) {
+template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::Fill(void) {
 
     unsigned int i, j;
     wxArrayString items_temp;
@@ -19377,39 +19377,39 @@ template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Fill(void) 
     bool is_present;
 
     //save the current value of name in name_temp
-    name_temp = (MultipleItemField<P, NON_GUI>::name->GetValue());
+    name_temp = (MultipleItemField<P, NON_GUI, CHECK>::name->GetValue());
     //create the temporary list of projections projections_temp from catalog
-    for (items_temp.Clear(), i = 0; i < MultipleItemField<P, NON_GUI>::items.GetCount(); i++) {
-        items_temp.Add((MultipleItemField<P, NON_GUI>::catalog)[i]);
+    for (items_temp.Clear(), i = 0; i < MultipleItemField<P, NON_GUI, CHECK>::items.GetCount(); i++) {
+        items_temp.Add((MultipleItemField<P, NON_GUI, CHECK>::catalog)[i]);
     }
 
     //I first add to the items vector the recently selected items written in (MultipleItemField<P, NON_GUI>::recent_items)
-    for (MultipleItemField<P, NON_GUI>::items.Clear(), i = 0; i < (MultipleItemField<P, NON_GUI>::recent_items->size()); i++) {
+    for (MultipleItemField<P, NON_GUI, CHECK>::items.Clear(), i = 0; i < (MultipleItemField<P, NON_GUI, CHECK>::recent_items->size()); i++) {
 
-        MultipleItemField<P, NON_GUI>::items.Add(items_temp[(*(MultipleItemField<P, NON_GUI>::recent_items))[i]]);
+        MultipleItemField<P, NON_GUI, CHECK>::items.Add(items_temp[(*(MultipleItemField<P, NON_GUI, CHECK>::recent_items))[i]]);
 
     }
 
     //then, I fill the items vector with the remaining items
     for (i=0; i < items_temp.GetCount(); i++) {
 
-        for (is_present = false, j = 0; (j < MultipleItemField<P, NON_GUI>::items.GetCount()) && (!is_present); j++) {
+        for (is_present = false, j = 0; (j < MultipleItemField<P, NON_GUI, CHECK>::items.GetCount()) && (!is_present); j++) {
 
-            if (MultipleItemField<P, NON_GUI>::items[j] == items_temp[i]) {
+            if (MultipleItemField<P, NON_GUI, CHECK>::items[j] == items_temp[i]) {
                 is_present = true;
             }
 
         }
 
         if (!is_present) {
-            MultipleItemField<P, NON_GUI>::items.Add(items_temp[i]);
+            MultipleItemField<P, NON_GUI, CHECK>::items.Add(items_temp[i]);
         }
 
     }
 
-    MultipleItemField<P, NON_GUI>::name->Set(MultipleItemField<P, NON_GUI>::items);
+    MultipleItemField<P, NON_GUI, CHECK>::name->Set(MultipleItemField<P, NON_GUI, CHECK>::items);
     //because name->Set(projections clears the value of name, I set the value of name back to name_temp
-    MultipleItemField<P, NON_GUI>::name->SetValue(name_temp);
+    MultipleItemField<P, NON_GUI, CHECK>::name->SetValue(name_temp);
     //given that I just filled name with a valid item, I store this item in value_before_editing
     value_before_editing = name->GetValue();
     
@@ -19419,7 +19419,7 @@ template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Fill(void) 
 }
 
 //return true(false) is *this is ok (not ok), i.e., if this->ok = true(false)
-template<class P, class NON_GUI> bool MultipleItemField<P, NON_GUI>::is_ok(void) {
+template<class P, class NON_GUI, class CHECK> bool MultipleItemField<P, NON_GUI, CHECK>::is_ok(void) {
 
     return(ok);
 
@@ -19427,7 +19427,7 @@ template<class P, class NON_GUI> bool MultipleItemField<P, NON_GUI>::is_ok(void)
 
 
 //this function enables/disable the LengthFormatField
-template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Enable(bool is_enabled) {
+template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::Enable(bool is_enabled) {
 
     name->Enable(is_enabled);
 
@@ -19436,10 +19436,10 @@ template<class P, class NON_GUI> void MultipleItemField<P, NON_GUI>::Enable(bool
 
 
 //constructor of a LengthFormatField object, based on the parent frame frame
-template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* object_in, vector<int>* recent_items_in)  : MultipleItemField<P, LengthFormat>(panel_of_parent, object_in, {String("Time and speed"), String("Length")}, recent_items_in){
+template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* object_in, vector<int>* recent_items_in)  : MultipleItemField<P, LengthFormat, void>(panel_of_parent, object_in, {String("Time and speed"), String("Length")}, recent_items_in){
 
     
-//    /*here I need to specify that parent is a member of the parent class */MultipleItemField<P, LengthFormat>::parent = ((P*)(panel_of_parent->GetParent()));
+//    /*here I need to specify that parent is a member of the parent class */MultipleItemField<P, LengthFormat, void>::parent = ((P*)(panel_of_parent->GetParent()));
 //    length_format = p;
 
 //    catalog.Clear();
@@ -19449,21 +19449,21 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 
 //    check = new CheckLengthFormat<P>(this);
 
-//    MultipleItemField<P, LengthFormat>::name = new wxComboBox(MultipleItemField<P, LengthFormat>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, LengthFormat>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+//    MultipleItemField<P, LengthFormat, void>::name = new wxComboBox(MultipleItemField<P, LengthFormat, void>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, LengthFormat, void>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-//    MultipleItemField<P, LengthFormat>::Fill();
-//    MultipleItemField<P, LengthFormat>::name->SetValue((MultipleItemField<P, LengthFormat>::items)[0]);
-//    AdjustWidth(MultipleItemField<P, LengthFormat>::name);
+//    MultipleItemField<P, LengthFormat, void>::Fill();
+//    MultipleItemField<P, LengthFormat, void>::name->SetValue((MultipleItemField<P, LengthFormat, void>::items)[0]);
+//    AdjustWidth(MultipleItemField<P, LengthFormat, void>::name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    MultipleItemField<P, LengthFormat>::name->Bind(wxEVT_COMBOBOX, &LengthFormatField::OnEdit<wxCommandEvent>, this);
-    MultipleItemField<P, LengthFormat>::name->Bind(wxEVT_KEY_UP, &LengthFormatField::OnEdit<wxKeyEvent>, this);
-    MultipleItemField<P, LengthFormat>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, LengthFormat>::template Check<wxFocusEvent>, this);
+    MultipleItemField<P, LengthFormat, void>::name->Bind(wxEVT_COMBOBOX, &LengthFormatField::OnEdit<wxCommandEvent>, this);
+    MultipleItemField<P, LengthFormat, void>::name->Bind(wxEVT_KEY_UP, &LengthFormatField::OnEdit<wxKeyEvent>, this);
+    MultipleItemField<P, LengthFormat, void>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, LengthFormat, void>::template Check<wxFocusEvent>, this);
 
-//    MultipleItemField<P, LengthFormat>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
-//    MultipleItemField<P, LengthFormat>::sizer_v = new wxBoxSizer(wxVERTICAL);
+//    MultipleItemField<P, LengthFormat, void>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
+//    MultipleItemField<P, LengthFormat, void>::sizer_v = new wxBoxSizer(wxVERTICAL);
 
-//    MultipleItemField<P, LengthFormat>::sizer_v->Add(MultipleItemField<P, LengthFormat>::sizer_h, 0, wxALIGN_LEFT);
-//    MultipleItemField<P, LengthFormat>::sizer_h->Add(MultipleItemField<P, LengthFormat>::name, 0, wxALIGN_CENTER);
+//    MultipleItemField<P, LengthFormat, void>::sizer_v->Add(MultipleItemField<P, LengthFormat, void>::sizer_h, 0, wxALIGN_LEFT);
+//    MultipleItemField<P, LengthFormat, void>::sizer_h->Add(MultipleItemField<P, LengthFormat, void>::name, 0, wxALIGN_CENTER);
 
 }
 
@@ -19533,17 +19533,17 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
     bool success;
 
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    find_and_replace_case_insensitive(MultipleItemField<P, LengthFormat>::name, MultipleItemField<P, LengthFormat>::items, &success, NULL);
+    find_and_replace_case_insensitive(MultipleItemField<P, LengthFormat, void>::name, MultipleItemField<P, LengthFormat, void>::items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid
-    MultipleItemField<P, LengthFormat>::ok = success;
+    MultipleItemField<P, LengthFormat, void>::ok = success;
 
     if (success) {
 
-        MultipleItemField<P, LengthFormat>::name->SetForegroundColour(wxGetApp().foreground_color);
-        MultipleItemField<P, LengthFormat>::name->SetFont(wxGetApp().default_font);
+        MultipleItemField<P, LengthFormat, void>::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P, LengthFormat, void>::name->SetFont(wxGetApp().default_font);
         //choses the length format entered in name button_reduce
-        MultipleItemField<P, LengthFormat>::parent->OnChooseLengthFormatField(event);
+        MultipleItemField<P, LengthFormat, void>::parent->OnChooseLengthFormatField(event);
 
     }
 
@@ -19564,11 +19564,11 @@ LengthFormat::LengthFormat(string input) : String(input) {
 }
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
-template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c, vector<int>* recent_items_in) : MultipleItemField<P, Body>(panel_of_parent, p, c->get_names(), recent_items_in){
+template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c, vector<int>* recent_items_in) : MultipleItemField<P, Body, CheckBody<P> >(panel_of_parent, p, c->get_names(), recent_items_in){
 
-//    MultipleItemField<P, Body>::parent = ((P*)(panel_of_parent->GetParent()));
+//    MultipleItemField<P, Body, CheckBody<P> >::parent = ((P*)(panel_of_parent->GetParent()));
     //I link the internal pointers p and c to the respective body and body catalog
-//    MultipleItemField<P, Body>::object = p;
+//    MultipleItemField<P, Body, CheckBody<P> >::object = p;
     catalog = c;
 
     //sets the name of file_recent for future use
@@ -19576,24 +19576,24 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 
     check = new CheckBody<P>(this);
 
-//    MultipleItemField<P, Body>::name = new wxComboBox(MultipleItemField<P, Body>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, Body>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+//    MultipleItemField<P, Body, CheckBody<P> >::name = new wxComboBox(MultipleItemField<P, Body, CheckBody<P> >::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, Body, CheckBody<P> >::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //    name->SetValue("");
     //SetColor(name);
 //    fill_bodies();
-//    AdjustWidth(MultipleItemField<P, Body>::name);
-    MultipleItemField<P, Body>::name->Bind(wxEVT_KILL_FOCUS, *check);
+//    AdjustWidth(MultipleItemField<P, Body, CheckBody<P> >::name);
+    MultipleItemField<P, Body, CheckBody<P> >::name->Bind(wxEVT_KILL_FOCUS, *check);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    MultipleItemField<P, Body>::name->Bind(wxEVT_COMBOBOX, &BodyField::OnEdit<wxCommandEvent>, this);
-    MultipleItemField<P, Body>::name->Bind(wxEVT_KEY_UP, &BodyField::OnEdit<wxKeyEvent>, this);
+    MultipleItemField<P, Body, CheckBody<P> >::name->Bind(wxEVT_COMBOBOX, &BodyField::OnEdit<wxCommandEvent>, this);
+    MultipleItemField<P, Body, CheckBody<P> >::name->Bind(wxEVT_KEY_UP, &BodyField::OnEdit<wxKeyEvent>, this);
 
 
-//    MultipleItemField<P, Body>::ok = false;
+//    MultipleItemField<P, Body, CheckBody<P> >::ok = false;
 
-//    MultipleItemField<P, Body>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
-//    MultipleItemField<P, Body>::sizer_v = new wxBoxSizer(wxVERTICAL);
+//    MultipleItemField<P, Body, CheckBody<P> >::sizer_h = new wxBoxSizer(wxHORIZONTAL);
+//    MultipleItemField<P, Body, CheckBody<P> >::sizer_v = new wxBoxSizer(wxVERTICAL);
 
-//    MultipleItemField<P, Body>::sizer_v->Add(MultipleItemField<P, Body>::sizer_h, 0, wxALIGN_LEFT);
-//    MultipleItemField<P, Body>::sizer_h->Add(MultipleItemField<P, Body>::name, 0, wxALIGN_CENTER);
+//    MultipleItemField<P, Body, CheckBody<P> >::sizer_v->Add(MultipleItemField<P, Body, CheckBody<P> >::sizer_h, 0, wxALIGN_LEFT);
+//    MultipleItemField<P, Body, CheckBody<P> >::sizer_h->Add(MultipleItemField<P, Body, CheckBody<P> >::name, 0, wxALIGN_CENTER);
 
 }
 
@@ -19603,8 +19603,8 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 //sets the value in the GUI object name equal to the value in the non-GUI Body object body
 template<class P> void BodyField<P>::set(void) {
 
-    MultipleItemField<P, Body>::name->SetValue(MultipleItemField<P, Body>::object->name.value);
-    MultipleItemField<P, Body>::ok = true;
+    MultipleItemField<P, Body, CheckBody<P> >::name->SetValue(MultipleItemField<P, Body, CheckBody<P> >::object->name.value);
+    MultipleItemField<P, Body, CheckBody<P> >::ok = true;
 
 }
 
@@ -19614,19 +19614,19 @@ template<class P> template<class T> void BodyField<P>::get(T& event) {
     unsigned int i;
     bool success;
 
-    if (MultipleItemField<P, Body>::ok) {
+    if (MultipleItemField<P, Body, CheckBody<P> >::ok) {
         //If the GUI field's content is ok...
 
         //I find the position of the content of the GUI field in the list of  the body names in catalog
         for (success = false, i = 0; (i < (catalog->list).size()) && (!success); i++) {
-            if (String(MultipleItemField<P, Body>::name->GetValue().ToStdString()) == (((catalog->list)[i]).name)) {
+            if (String(MultipleItemField<P, Body, CheckBody<P> >::name->GetValue().ToStdString()) == (((catalog->list)[i]).name)) {
                 success = true;
             }
         }
         i--;
 
         //I set the value of the non-GUI object body to the value obtained from the GUI object.
-        (*(MultipleItemField<P, Body>::object)) = (catalog->list)[i];
+        (*(MultipleItemField<P, Body, CheckBody<P> >::object)) = (catalog->list)[i];
 
     }
 

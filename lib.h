@@ -27,7 +27,7 @@
 
 
 template<class P> class BodyField;
-template<class P, class NON_GUI> class MultipleItemField;
+template<class P, class NON_GUI, class CHECK> class MultipleItemField;
 template<class P> class ProjectionField;
 template<class P> class LengthFormatField;
 template<class P> class LimbField;

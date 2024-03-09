@@ -16260,7 +16260,8 @@ void RouteFrame::set(void) {
 
 }
 
-//sets the values in all the non-GUI fields equal to the values in the respective GUI fields
+
+//set the values in all the non-GUI fields equal to the values in the respective GUI fields
 template<class T> void RouteFrame::get(T& event) {
 
     type->MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame> >::get(event);
@@ -19257,10 +19258,15 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 
-//set the value in the GUI object name equal to the value in the non-GUI NON_GUI object 'object'
+//set the value in the non-GUI object 'object' equal to the value in the GUI object name, with no abbreviations used (the value is copied as it is)
  template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Get(E& event) {
         
      
+     if (MultipleItemField<P, NON_GUI, CHECK>::ok) {
+              object->set(String(""), String((MultipleItemField<P, NON_GUI, CHECK>::name->GetValue()).ToStdString()), String(""));
+      }
+
+      event.Skip(true);
 
 }
 

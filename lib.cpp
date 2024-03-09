@@ -19071,33 +19071,33 @@ template<class P> template <class T> void ChronoField<P>::get(T& event) {
 }
 
 
-//writes to the non-GUI field angle the values written in the GUI field name
-template<class P> template <class T> void RouteTypeField<P>::get(T& event) {
-
-
-    if (MultipleItemField<P, RouteTypeField<P>, CheckRouteType<P> >::ok) {
-
-        if (String((MultipleItemField<P, RouteTypeField<P>, CheckRouteType<P> >::name->GetValue()).ToStdString()) == String("loxodrome")) {
-
-            type->set(String(""), String("l"), String(""));
-
-        }
-        if (String((MultipleItemField<P, RouteTypeField<P>, CheckRouteType<P> >::name->GetValue()).ToStdString()) == String("orthodrome")) {
-            type->set(String(""), String("o"), String(""));
-
-
-        }
-        if (String((MultipleItemField<P, RouteTypeField<P>, CheckRouteType<P> >::name->GetValue()).ToStdString()) == String("circle of equal altitude")) {
-
-            type->set(String(""), String("c"), String(""));
-
-        }
-
-    }
-
-    event.Skip(true);
-
-}
+////writes to the non-GUI field angle the values written in the GUI field name
+//template<class P> template <class T> void RouteTypeField<P>::get(T& event) {
+//
+//
+//    if (MultipleItemField<P, RouteTypeField<P>, CheckRouteType<P> >::ok) {
+//
+//        if (String((MultipleItemField<P, RouteTypeField<P>, CheckRouteType<P> >::name->GetValue()).ToStdString()) == String("loxodrome")) {
+//
+//            type->set(String(""), String("l"), String(""));
+//
+//        }
+//        if (String((MultipleItemField<P, RouteTypeField<P>, CheckRouteType<P> >::name->GetValue()).ToStdString()) == String("orthodrome")) {
+//            type->set(String(""), String("o"), String(""));
+//
+//
+//        }
+//        if (String((MultipleItemField<P, RouteTypeField<P>, CheckRouteType<P> >::name->GetValue()).ToStdString()) == String("circle of equal altitude")) {
+//
+//            type->set(String(""), String("c"), String(""));
+//
+//        }
+//
+//    }
+//
+//    event.Skip(true);
+//
+//}
 
 
 void SightFrame::OnPressReduce(wxCommandEvent& event) {
@@ -19870,7 +19870,7 @@ template<class P> void ChronoField<P>::SetBackgroundColor(Color color) {
 //sets the value in the GUI object equal to the value in the non-GUI  object string
 template<class P> void RouteTypeField<P>::set(void) {
 
-    switch (((type->value)[0])) {
+    switch (( (MultipleItemField<P, RouteTypeField<P>, CheckRouteType<P> >::value)[0])) {
 
     case 'l': {
 
@@ -20851,12 +20851,12 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 }
 
 //constructor of a RouteTypeField object, based on the parent frame frame
-template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, String* s, vector<int>* recent_items_in) : MultipleItemField<P, RouteTypeField<P>, CheckRouteType<P> >(panel_of_parent, NULL, {String("loxodrome"), String("orthodrome"), String("circle of equal altitude")}, recent_items_in) {
+template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, RouteType* object_in, vector<int>* recent_items_in) : MultipleItemField<P, RouteTypeField<P>, CheckRouteType<P> >(panel_of_parent, object_in, {String("loxodrome"), String("orthodrome"), String("circle of equal altitude")}, recent_items_in) {
 
     MultipleItemField<P, RouteTypeField<P>, CheckRouteType<P> >::parent = ((P*)(panel_of_parent->GetParent()));
 //    parent_frame = frame;
     //I link the internal pointers p and c to the respective non-GUI object string
-    type = s;
+//    type = s;
 
 //    types.Clear();
 //    //tabulate types of Routes

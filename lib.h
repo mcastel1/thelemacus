@@ -2035,7 +2035,7 @@ public:
 //    template<class T> void (MultipleItemField::*OnChooseItem)(T&);
 
 
-    MultipleItemField(wxPanel*, NON_GUI*, const vector<String>&, vector<int>*);
+    MultipleItemField(wxPanel*, NON_GUI*, CHECK*, const vector<String>&, vector<int>*);
     void Fill(void);
     void set(void);
     void Enable(bool);

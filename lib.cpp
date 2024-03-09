@@ -19180,13 +19180,15 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
 }
 
 
-//constructor of a MultipleItemField object, which is into *panel_of_parent. The list of items in *this is stored into catalog_in. All items that are general enough to be common to all classes which are inherited from MultipleItemField are initialized here. Items that are specific to the inherited classes will be initialized in the inherited-class constructors
-template<class P, class NON_GUI, class CHECK> MultipleItemField<P, NON_GUI, CHECK>::MultipleItemField(wxPanel* panel_of_parent, NON_GUI* object_in, const vector<String>& catalog_in, vector<int>* recent_items_in){
+//constructor of a MultipleItemField object, which is into *panel_of_parent. The list of items in *this is stored into catalog_in. All items that are general enough to be common to all classes which are inherited from MultipleItemField are initialized here. Items that are specific to the inherited classes will be initialized in the inherited-class constructors. check_in points to the functor that will be used to check whether *this is valid: if no check functor is provided, then CHECK = void and check_in = NULL
+template<class P, class NON_GUI, class CHECK> MultipleItemField<P, NON_GUI, CHECK>::MultipleItemField(wxPanel* panel_of_parent, NON_GUI* object_in, CHECK* check_in, const vector<String>& catalog_in, vector<int>* recent_items_in){
     
     unsigned int i;
 
     //set the non-GUI object
     object = object_in;
+    //set the check functor
+    check = check_in;
     
     //I just created *this, thus it is not being edited 
     editing = false;

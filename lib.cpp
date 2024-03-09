@@ -19870,7 +19870,7 @@ template<class P> void ChronoField<P>::SetBackgroundColor(Color color) {
 //sets the value in the GUI object equal to the value in the non-GUI  object string
 template<class P> void RouteTypeField<P>::set(void) {
 
-    switch (( (MultipleItemField<P, RouteType, CheckRouteType<P> >::value)[0])) {
+    switch (( (MultipleItemField<P, RouteType, CheckRouteType<P> >::object->value)[0])) {
 
     case 'l': {
 

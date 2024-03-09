@@ -19863,7 +19863,7 @@ template<class P> void RouteTypeField<P>::set(void) {
 
     case 'l': {
 
-        MultipleItemField<P, void>::name->SetValue(wxString("loxodrome"));
+        MultipleItemField<P, void, CheckRouteType<P> >::name->SetValue(wxString("loxodrome"));
 
         break;
 
@@ -19871,7 +19871,7 @@ template<class P> void RouteTypeField<P>::set(void) {
 
     case 'o': {
 
-        MultipleItemField<P, void>::name->SetValue(wxString("orthodrome"));
+        MultipleItemField<P, void, CheckRouteType<P> >::name->SetValue(wxString("orthodrome"));
 
         break;
 
@@ -19879,7 +19879,7 @@ template<class P> void RouteTypeField<P>::set(void) {
 
     case 'c': {
 
-        MultipleItemField<P, void>::name->SetValue(wxString("circle of equal altitude"));
+        MultipleItemField<P, void, CheckRouteType<P> >::name->SetValue(wxString("circle of equal altitude"));
 
         break;
 
@@ -19887,7 +19887,7 @@ template<class P> void RouteTypeField<P>::set(void) {
 
     }
 
-    MultipleItemField<P, void>::ok = true;
+    MultipleItemField<P, void, CheckRouteType<P> >::ok = true;
 
 }
 
@@ -20840,9 +20840,9 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 }
 
 //constructor of a RouteTypeField object, based on the parent frame frame
-template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, String* s, vector<int>* recent_items_in) : MultipleItemField<P, void>(panel_of_parent, NULL, {String("loxodrome"), String("orthodrome"), String("circle of equal altitude")}, recent_items_in) {
+template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, String* s, vector<int>* recent_items_in) : MultipleItemField<P, void, CheckRouteType<P> >(panel_of_parent, NULL, {String("loxodrome"), String("orthodrome"), String("circle of equal altitude")}, recent_items_in) {
 
-    MultipleItemField<P, void>::parent = ((P*)(panel_of_parent->GetParent()));
+    MultipleItemField<P, void, CheckRouteType<P> >::parent = ((P*)(panel_of_parent->GetParent()));
 //    parent_frame = frame;
     //I link the internal pointers p and c to the respective non-GUI object string
     type = s;
@@ -20854,22 +20854,22 @@ template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, St
 //    types.Add(wxString("circle of equal altitude"));
 
     check = new CheckRouteType<P>(this);
-//    MultipleItemField<P, void>::name = new wxComboBox(MultipleItemField<P, void>::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, void>::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+//    MultipleItemField<P, void, CheckRouteType<P> >::name = new wxComboBox(MultipleItemField<P, void, CheckRouteType<P> >::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, void, CheckRouteType<P> >::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 
     //SetColor(name);
-//    AdjustWidth(MultipleItemField<P, void>::name);
-    MultipleItemField<P, void>::ok = false;
-//    MultipleItemField<P, void>::name->SetValue("");
-    MultipleItemField<P, void>::name->Bind(wxEVT_KILL_FOCUS, *check);
+//    AdjustWidth(MultipleItemField<P, void, CheckRouteType<P> >::name);
+    MultipleItemField<P, void, CheckRouteType<P> >::ok = false;
+//    MultipleItemField<P, void, CheckRouteType<P> >::name->SetValue("");
+    MultipleItemField<P, void, CheckRouteType<P> >::name->Bind(wxEVT_KILL_FOCUS, *check);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    MultipleItemField<P, void>::name->Bind(wxEVT_COMBOBOX, &RouteTypeField::OnEdit<wxCommandEvent>, this);
-    MultipleItemField<P, void>::name->Bind(wxEVT_KEY_UP, &RouteTypeField::OnEdit<wxKeyEvent>, this);
+    MultipleItemField<P, void, CheckRouteType<P> >::name->Bind(wxEVT_COMBOBOX, &RouteTypeField::OnEdit<wxCommandEvent>, this);
+    MultipleItemField<P, void, CheckRouteType<P> >::name->Bind(wxEVT_KEY_UP, &RouteTypeField::OnEdit<wxKeyEvent>, this);
 
-//    MultipleItemField<P, void>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
-//    MultipleItemField<P, void>::sizer_v = new wxBoxSizer(wxVERTICAL);
+//    MultipleItemField<P, void, CheckRouteType<P> >::sizer_h = new wxBoxSizer(wxHORIZONTAL);
+//    MultipleItemField<P, void, CheckRouteType<P> >::sizer_v = new wxBoxSizer(wxVERTICAL);
 
-//    MultipleItemField<P, void>::sizer_v->Add(MultipleItemField<P, void>::sizer_h, 0, wxALIGN_LEFT);
-//    MultipleItemField<P, void>::sizer_h->Add(MultipleItemField<P, void>::name, 0, wxALIGN_CENTER);
+//    MultipleItemField<P, void, CheckRouteType<P> >::sizer_v->Add(MultipleItemField<P, void, CheckRouteType<P> >::sizer_h, 0, wxALIGN_LEFT);
+//    MultipleItemField<P, void, CheckRouteType<P> >::sizer_h->Add(MultipleItemField<P, void, CheckRouteType<P> >::name, 0, wxALIGN_CENTER);
 
 }
 
@@ -21099,7 +21099,7 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 //template<class P> bool RouteTypeField<P>::is_ok(void) {
 //
-//    return(MultipleItemField<P, void>::ok);
+//    return(MultipleItemField<P, void, CheckRouteType<P> >::ok);
 //
 //}
 
@@ -21112,47 +21112,47 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
 
 
     //I check whether the name in the GUI field  matches one of the entries  of catalog
-    find_and_replace_case_insensitive(MultipleItemField<P, void>::name, MultipleItemField<P, void>::catalog, &success, &i);
+    find_and_replace_case_insensitive(MultipleItemField<P, void, CheckRouteType<P> >::name, MultipleItemField<P, void, CheckRouteType<P> >::catalog, &success, &i);
 
     if (success) {
         //the text entered in name is valid
 
         //enable/disable the related fields in RouteFrame f
-        enable = ((((MultipleItemField<P, void>::catalog)[i]) == wxString("loxodrome")) || (((MultipleItemField<P, void>::catalog)[i]) == wxString("orthodrome")));
+        enable = ((((MultipleItemField<P, void, CheckRouteType<P> >::catalog)[i]) == wxString("loxodrome")) || (((MultipleItemField<P, void, CheckRouteType<P> >::catalog)[i]) == wxString("orthodrome")));
 
-        MultipleItemField<P, void>::parent->Z->Enable(enable);
-        MultipleItemField<P, void>::parent->start_phi->Enable(enable && (!(MultipleItemField<P, void>::parent->for_transport)));
-        MultipleItemField<P, void>::parent->start_lambda->Enable(enable && (!(MultipleItemField<P, void>::parent->for_transport)));
+        MultipleItemField<P, void, CheckRouteType<P> >::parent->Z->Enable(enable);
+        MultipleItemField<P, void, CheckRouteType<P> >::parent->start_phi->Enable(enable && (!(MultipleItemField<P, void, CheckRouteType<P> >::parent->for_transport)));
+        MultipleItemField<P, void, CheckRouteType<P> >::parent->start_lambda->Enable(enable && (!(MultipleItemField<P, void, CheckRouteType<P> >::parent->for_transport)));
 
-        MultipleItemField<P, void>::parent->GP_phi->Enable(!enable);
-        MultipleItemField<P, void>::parent->GP_lambda->Enable(!enable);
-        MultipleItemField<P, void>::parent->omega->Enable(!enable);
+        MultipleItemField<P, void, CheckRouteType<P> >::parent->GP_phi->Enable(!enable);
+        MultipleItemField<P, void, CheckRouteType<P> >::parent->GP_lambda->Enable(!enable);
+        MultipleItemField<P, void, CheckRouteType<P> >::parent->omega->Enable(!enable);
 
         //because the text in name is valid, I set the background color of name to white
-        MultipleItemField<P, void>::name->SetForegroundColour(wxGetApp().foreground_color);
-        MultipleItemField<P, void>::name->SetFont(wxGetApp().default_font);
+        MultipleItemField<P, void, CheckRouteType<P> >::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P, void, CheckRouteType<P> >::name->SetFont(wxGetApp().default_font);
 
     }
     else {
 
-        MultipleItemField<P, void>::parent->Z->Enable(false);
-        MultipleItemField<P, void>::parent->start_phi->Enable(false);
-        MultipleItemField<P, void>::parent->start_lambda->Enable(false);
+        MultipleItemField<P, void, CheckRouteType<P> >::parent->Z->Enable(false);
+        MultipleItemField<P, void, CheckRouteType<P> >::parent->start_phi->Enable(false);
+        MultipleItemField<P, void, CheckRouteType<P> >::parent->start_lambda->Enable(false);
 
-        MultipleItemField<P, void>::parent->GP_phi->Enable(false);
-        MultipleItemField<P, void>::parent->GP_lambda->Enable(false);
-        MultipleItemField<P, void>::parent->omega->Enable(false);
+        MultipleItemField<P, void, CheckRouteType<P> >::parent->GP_phi->Enable(false);
+        MultipleItemField<P, void, CheckRouteType<P> >::parent->GP_lambda->Enable(false);
+        MultipleItemField<P, void, CheckRouteType<P> >::parent->omega->Enable(false);
 
     }
 
     //ok is true/false is the text entered is valid/invalid
-    MultipleItemField<P, void>::ok = success;
+    MultipleItemField<P, void, CheckRouteType<P> >::ok = success;
 
     //try to enable time, speed and length
-    MultipleItemField<P, void>::parent->OnChooseLengthFormatField(event);
+    MultipleItemField<P, void, CheckRouteType<P> >::parent->OnChooseLengthFormatField(event);
 
     //try to enable button_reduce
-    MultipleItemField<P, void>::parent->AllOk();
+    MultipleItemField<P, void, CheckRouteType<P> >::parent->AllOk();
 
     event.Skip(true);
 
@@ -21161,7 +21161,7 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
 ////bind all GUI windows in *this to method
 //template<class P> template <typename EventTag, typename Method, typename Object> void RouteTypeField<P>::Bind(EventTag tag, Method method, Object object) {
 //
-//    MultipleItemField<P, void>::name->Bind(tag, method, object);
+//    MultipleItemField<P, void, CheckRouteType<P> >::name->Bind(tag, method, object);
 //
 //}
 
@@ -21310,7 +21310,7 @@ template<class P> template<class T> void ChronoField<P>::InsertIn(T* host) {
 
 //template<class P> template<class T> void RouteTypeField<P>::InsertIn(T* host) {
 //
-//    host->Add(MultipleItemField<P, void>::sizer_v);
+//    host->Add(MultipleItemField<P, void, CheckRouteType<P> >::sizer_v);
 //
 //}
 

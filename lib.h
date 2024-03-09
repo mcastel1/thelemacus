@@ -55,6 +55,7 @@ class Position;
 class Cartesian;
 class TransportHandler;
 class LengthFormat;
+class RouteType;
 
 class Catalog;
 class Limb;
@@ -792,13 +793,24 @@ public:
     
 };
 
-
+//a derived class of String, which stores the type of a Length 
 class LengthFormat: public String{
     
 public:
 
     LengthFormat();
     LengthFormat(string);
+    
+};
+
+
+//a derived class from String, which stores the type of a Route ("loxodrome", "orthodrome", ...)
+class RouteType: public String{
+    
+public:
+
+    RouteType();
+    RouteType(string);
     
 };
 

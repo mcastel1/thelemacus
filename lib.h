@@ -2021,6 +2021,8 @@ public:
     P* parent;
     //the non-GUI object related to *this: for example, if I create a  class BodyField derived from MultipleItemField, then *object will be a Body object
     NON_GUI* object;
+    //a pointer to the functor that will be used to check whether *this is valid
+    CHECK* check;
     wxBoxSizer *sizer_h, *sizer_v;
     wxArrayString  /*this is equal to a standard list of the available types*/items, /*a fixed catalog of the items in this MultipleChoiceField*/catalog;
     //I store the value in name, before name starts being edited, in value_before_editing

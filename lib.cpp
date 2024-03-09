@@ -19574,14 +19574,14 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
     //sets the name of file_recent for future use
 //	file_recent.set_name((wxGetApp().path_file_recent));
 
-    check = new CheckBody<P>(this);
+    MultipleItemField<P, Body, CheckBody<P> >::check = new CheckBody<P>(this);
 
 //    MultipleItemField<P, Body, CheckBody<P> >::name = new wxComboBox(MultipleItemField<P, Body, CheckBody<P> >::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, Body, CheckBody<P> >::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //    name->SetValue("");
     //SetColor(name);
 //    fill_bodies();
 //    AdjustWidth(MultipleItemField<P, Body, CheckBody<P> >::name);
-    MultipleItemField<P, Body, CheckBody<P> >::name->Bind(wxEVT_KILL_FOCUS, *check);
+    MultipleItemField<P, Body, CheckBody<P> >::name->Bind(wxEVT_KILL_FOCUS, *(MultipleItemField<P, Body, CheckBody<P> >::check));
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P, Body, CheckBody<P> >::name->Bind(wxEVT_COMBOBOX, &BodyField::OnEdit<wxCommandEvent>, this);
     MultipleItemField<P, Body, CheckBody<P> >::name->Bind(wxEVT_KEY_UP, &BodyField::OnEdit<wxKeyEvent>, this);
@@ -20853,14 +20853,14 @@ template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, St
 //    types.Add(wxString("orthodrome"));
 //    types.Add(wxString("circle of equal altitude"));
 
-    check = new CheckRouteType<P>(this);
+    MultipleItemField<P, void, CheckRouteType<P> >::check = new CheckRouteType<P>(this);
 //    MultipleItemField<P, void, CheckRouteType<P> >::name = new wxComboBox(MultipleItemField<P, void, CheckRouteType<P> >::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, void, CheckRouteType<P> >::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 
     //SetColor(name);
 //    AdjustWidth(MultipleItemField<P, void, CheckRouteType<P> >::name);
     MultipleItemField<P, void, CheckRouteType<P> >::ok = false;
 //    MultipleItemField<P, void, CheckRouteType<P> >::name->SetValue("");
-    MultipleItemField<P, void, CheckRouteType<P> >::name->Bind(wxEVT_KILL_FOCUS, *check);
+    MultipleItemField<P, void, CheckRouteType<P> >::name->Bind(wxEVT_KILL_FOCUS, *(MultipleItemField<P, void, CheckRouteType<P> >::check));
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P, void, CheckRouteType<P> >::name->Bind(wxEVT_COMBOBOX, &RouteTypeField::OnEdit<wxCommandEvent>, this);
     MultipleItemField<P, void, CheckRouteType<P> >::name->Bind(wxEVT_KEY_UP, &RouteTypeField::OnEdit<wxKeyEvent>, this);

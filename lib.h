@@ -2115,7 +2115,7 @@ public:
     
     //this is the wxComboBox with the name of the bodies
 //    wxComboBox* name;
-    CheckBody<P>* check;
+//    CheckBody<P>* check;
 //    bool ok;
     
     BodyField(wxPanel*, Body*, Catalog*, vector<int>*);
@@ -2371,7 +2371,7 @@ public:
     
     //this is the wxComboBox with the name of the bodies
 //    wxComboBox* name;
-    CheckRouteType<P>* check;
+//    CheckRouteType<P>* check;
     
 //    bool ok;
     

@@ -34,7 +34,7 @@ Data:
 			label = 2024-01-10 12:52:09 UTC+2
 	Routes:
 		Route #1:
-			type = o
+			type = orthodrome
 			start position:
 				latitude = 304° 26.76000000000158'
 				longitude = 64° 46.11999999999966'
@@ -45,7 +45,7 @@ Data:
 				speed = 1000 kt
 			label = route with speed and time
 		Route #2:
-			type = l
+			type = loxodrome
 			start position:
 				latitude = 22° 3.000000000000043'
 				longitude = 356° 56.99999999999932'
@@ -56,7 +56,7 @@ Data:
 				speed = 500 kt
 			label = jlkj
 		Route #3:
-			type = c
+			type = circle of equal altitude
 			ground position:
 				latitude = 336° 56.99999999999932'
 				longitude = 356° 56.99999999999932'

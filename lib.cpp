@@ -820,6 +820,21 @@ vector<String> String::split(void) {
 }
 
 
+//checks whether *this is equal to an element in: if *this is equal to the i-th element in list, retun i. If *this isn't equal to any element in list, return list.size()
+inline int String::position_in_list(const vector<String>& list){
+    
+    unsigned int i;
+    
+    for(i=0; i<list.size(); i++){
+        if((*this) == list[i]){
+            break;
+        }
+    }
+    
+    return i;
+    
+}
+
 //return the number of characters in *this
 unsigned int String::get_length(void){
     

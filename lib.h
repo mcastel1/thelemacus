@@ -140,6 +140,7 @@ public:
     wxSize get_size(wxDC*);
     unsigned int get_length(void);
     vector<String> split(void);
+    int position_in_list(const vector<String>&);
     
     bool operator==(const String&), operator!=(const String&);
     

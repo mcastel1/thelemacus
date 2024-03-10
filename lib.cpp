@@ -2472,9 +2472,10 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
 
     vector<Angle> t;
 
-    switch ((type.value)[0]) {
+    switch (/*(type.value)[0]*/ type.position_in_list(Route_types)) {
 
-    case 'l': {
+    case 0: {
+        //the Route this is a loxodrome
 
         cout << prefix.value << RED << "Cannot execute compute_l_ends: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
 
@@ -2486,7 +2487,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
 
     }
 
-    case 'o': {
+    case 1: {
         //the Route this is an orthodrome
 
         int check = -1;
@@ -2550,7 +2551,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
 
     }
 
-    case 'c': {
+    case 2: {
         //the Route this is a circle of equal altitde.  its total length is the length of the circle itself, which reads:
 
         switch ((draw_panel->parent->projection->name->GetValue().ToStdString())[0]) {

@@ -264,7 +264,7 @@ wxImage RescaleProportionally(wxImage image, const wxSize size) {
 
 bool String::operator==(const String& s) {
 
-    return((((*this).value) == (s.value)));
+    return((value == (s.value)));
 
 }
 
@@ -934,7 +934,7 @@ Length& Length::operator-= (const Length& length) {
 //evaluates whether Length (*this) is larger than r
 bool Length::operator>(const Length& r) {
 
-    return((((*this).value) > (r.value)));
+    return((value > (r.value)));
 
 }
 
@@ -954,14 +954,14 @@ bool Length::operator<=(const Length& r) {
 //evaluates whether Length (*this) is larger than the double r
 bool Length::operator>(const double& r) {
 
-    return((((*this).value) > r));
+    return((value > r));
 
 }
 
 //evaluates whether Length (*this) is smaller than the double r
 bool Length::operator<(const double& r) {
 
-    return((((*this).value) < r));
+    return((value < r));
 
 }
 
@@ -1365,7 +1365,7 @@ Answer::Answer(char c, [[maybe_unused]] String prefix) {
 
 bool Answer::operator==(const Answer& s) {
 
-    return((((*this).value) == (s.value)));
+    return((value == (s.value)));
 
 }
 
@@ -1747,32 +1747,32 @@ Angle::Angle(String name, const double& x, [[maybe_unused]] const String& prefix
 
 bool Angle::operator==(const Angle& x) {
 
-    return((((*this).value) == (x.value)));
+    return((value == (x.value)));
 
 }
 
 bool Angle::operator==(const double& x) {
 
-    return((((*this).value) == x));
+    return((value == x));
 
 }
 
 bool Angle::operator!=(const double& x) {
 
-    return((((*this).value) != x));
+    return((value != x));
 
 }
 
 
 bool Angle::operator>(const Angle& x) {
 
-    return((((*this).value) > (x.value)));
+    return((value > (x.value)));
 
 }
 
 bool Angle::operator>(const double& x) {
 
-    return((((*this).value) > x));
+    return((value > x));
 
 }
 
@@ -7605,12 +7605,12 @@ Angle Angle::span(Angle x) {
 
     if (((*this) < M_PI) && (x > M_PI)) {
 
-        delta.set(String(""), (((*this).value) + (2.0 * M_PI)) - (x.value), String(""));
+        delta.set(String(""), (value + (2.0 * M_PI)) - (x.value), String(""));
 
     }
     else {
 
-        delta.set(String(""), ((*this).value) - (x.value), String(""));
+        delta.set(String(""), value - (x.value), String(""));
 
     }
 

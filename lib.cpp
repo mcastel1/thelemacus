@@ -15709,7 +15709,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     sizer_grid_label = new wxFlexGridSizer(1, 2, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value), (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
     sizer_box_data = new wxStaticBoxSizer(wxVERTICAL, panel, "Data");
     sizer_box_l_format_l_t_v = new wxStaticBoxSizer(wxVERTICAL, panel, "Length");
-    sizer_box_l = new wxStaticBoxSizer(wxVERTICAL, panel, "Time");
+    sizer_box_l = new wxStaticBoxSizer(wxVERTICAL, panel, "Length");
     sizer_box_t_v = new wxStaticBoxSizer(wxVERTICAL, panel, "Time and speed");
     sizer_box_start = new wxStaticBoxSizer(wxVERTICAL, panel, "Start position");
     sizer_box_GP = new wxStaticBoxSizer(wxVERTICAL, panel, "Ground position");
@@ -19899,37 +19899,37 @@ template<class P> void ChronoField<P>::SetBackgroundColor(Color color) {
 
 //sets the value in the GUI object equal to the value in the non-GUI  object string
 template<class P> void RouteTypeField<P>::set(void) {
-
-    switch (( (MultipleItemField<P, RouteType, CheckRouteType<P> >::object->value)[0])) {
-
-    case 'l': {
-
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString("loxodrome"));
-
-        break;
-
+    
+    switch (/*( (MultipleItemField<P, RouteType, CheckRouteType<P> >::object->value)[0])*/ (MultipleItemField<P, RouteType, CheckRouteType<P> >::object)->position_in_list(Route_types)) {
+            
+        case 0: {
+            
+            MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString((Route_types[0]).value));
+            
+            break;
+            
+        }
+            
+        case 1: {
+            
+            MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString((Route_types[1]).value));
+            
+            break;
+            
+        }
+            
+        case 2: {
+            
+            MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString((Route_types[2]).value));
+            
+            break;
+            
+        }
+            
     }
-
-    case 'o': {
-
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString("orthodrome"));
-
-        break;
-
-    }
-
-    case 'c': {
-
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString("circle of equal altitude"));
-
-        break;
-
-    }
-
-    }
-
+    
     MultipleItemField<P, RouteType, CheckRouteType<P> >::ok = true;
-
+    
 }
 
 //sets the value in the GUI object value equal to the value in the non-GUI String object string

@@ -40,8 +40,9 @@ Angle max_lat, min_lat;
 //all possible chars that can enter in a non-negative double
 #define chars_double "+-0123456789."
 #define color_white  (wxColour(255,255,255))
-//the types of Routes are stored here, so I don't have to re-type them everywhere in the codde
+//the types of Routes, Projections are stored here, so I don't have to re-type them everywhere in the codde
 #define Route_types (vector<String> {String("loxordome"), String("orthodrome"), String("circle of equal altitude")})
+#define Projeciton_types (vector<String> {String("Mercator"), String("3D")})
 #define floor_min_lat (floor(K*((min_lat.normalize_pm_pi_ret()).value)))
 #define floor_max_lat (floor(K*((max_lat.normalize_pm_pi_ret()).value)))
 #define ceil_min_lat (ceil(K*((min_lat.normalize_pm_pi_ret()).value)))

@@ -19792,41 +19792,41 @@ template <class P> void AngleField<P>::set(void) {
 
 //set the value in the GUI field *this equal to the value in the non-GUI object *input
 template<class P> void LengthField<P>::set(Length input) {
-
-    switch ((unit_value.value)[0]) {
-
-    case 'n': {
-        //unit = String("nm")
-
-        value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
-        unit->SetValue(wxString("nm"));
-        break;
-
+    
+    switch (/*(unit_value.value)[0]*/ unit_value.position_in_list(unit_types)) {
+            
+        case 0: {
+            //unit = String("nm")
+            
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
+            unit->SetValue(wxString("nm"));
+            break;
+            
+        }
+            
+        case 1: {
+            //unit = String("m")
+            
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
+            unit->SetValue(wxString("m"));
+            
+            break;
+            
+        }
+            
+        case 2: {
+            //unit = String("ft")
+            
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
+            unit->SetValue(wxString("ft"));
+            
+            break;
+            
+        }
+            
     }
-
-    case 'm': {
-        //unit = String("m")
-
-        value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
-        unit->SetValue(wxString("m"));
-
-        break;
-
-    }
-
-    case 'f': {
-        //unit = String("ft")
-
-        value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
-        unit->SetValue(wxString("ft"));
-
-        break;
-
-    }
-
-    }
-
-
+    
+    
 }
 
 

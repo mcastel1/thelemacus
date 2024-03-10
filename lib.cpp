@@ -19367,7 +19367,7 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
 }
 
 //constructor of a ProjectionField object, based on the parent frame frame
-template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, vector<int>* recent_items_in) : MultipleItemField<P, void, void>(panel_of_parent, NULL, {String("Mercator"), String("3D")}, recent_items_in) {
+template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, vector<int>* recent_items_in) : MultipleItemField<P, void, void>(panel_of_parent, NULL, Projeciton_types, recent_items_in) {
 
 //    parent = ((P*)(panel_of_parent->GetParent()));
 

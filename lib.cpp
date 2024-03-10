@@ -2035,7 +2035,7 @@ Route::Route(void) {
 }
 
 
-//constructs a brand new Route object of type 'l' or 'o' and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
+//constructs a brand new Route object of type "loxodrome" or "orthodrome" and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Length l_in) {
 
     type = type_in;
@@ -2049,7 +2049,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
 }
 
 
-//construct a brand new Route object of type 'c' and thus sets its related sight to -1, because this Route is not related to any sight yet.  length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
+//construct a brand new Route object of type "circle of equal altitude" and thus sets its related sight to -1, because this Route is not related to any sight yet.  length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) {
 
     type = type_in;
@@ -3144,7 +3144,7 @@ int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle>* t, [[ma
             t->push_back(u.back());
 
             if ((type == String("circle of equal altitude")) && is_fully_included && (t->size() == 2)) {
-                //*this is  of type 'c', its fully included in rectangle and it does not intersect rectangle
+                //*this is  of type "circle fo equal altitude", its fully included in rectangle and it does not intersect rectangle
 
                 //I set t[1].value = 0.0, so t[0].value = t[1].value = 0.0
                 ((*t)[1]).normalize();
@@ -3993,7 +3993,7 @@ bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
 
 
     if ((route.type) != String("circle of equal altitude")) {
-        //route.type = 'l' or 'o' -> I can transport *this
+        //route.type = "loxodrome" or "orthodrome" -> I can transport *this
 
         Route temp;
 
@@ -4006,7 +4006,7 @@ bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
 
     }
     else {
-        //route.type = 'c' -> I cannot transport *this
+        //route.type = "circle fo equal altitude" -> I cannot transport *this
 
         cout << prefix.value << RED << "Cannot transport a position with a circle of equal altitude!\n" << RESET;
 
@@ -6466,7 +6466,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
 
     cout << prefix.value << "Reducing sight ...\n";
 
-    ((*circle_of_equal_altitude).type.value) = 'c';
+    (circle_of_equal_altitude->type.value) = "circle of equal altitude";
 
     compute_H_a(new_prefix);
     check &= get_coordinates(circle_of_equal_altitude, new_prefix);

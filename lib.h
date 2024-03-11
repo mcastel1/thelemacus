@@ -638,6 +638,17 @@ public:
     
 };
 
+//a derived class from String, which stores the unit of measuer of Length ("nm", "m", "ft", ...)
+class LengthUnit: public String{
+    
+public:
+
+    LengthUnit();
+    LengthUnit(string);
+    
+};
+
+
 
 //a non-GUI object containing a Length
 class Length{
@@ -835,15 +846,6 @@ public:
 };
 
 
-//a derived class from String, which stores the unit of measuer of Length ("nm", "m", "ft", ...)
-class LengthUnit: public String{
-    
-public:
-
-    LengthUnit();
-    LengthUnit(string);
-    
-};
 
 
 //if type = l or o, the parameters specifying the route are reference_position (which in this case is the start position of the Route), alpha, l. if type = c, the parameters specifying the route are reference_position (which in this case is the GP of the circle of equal altitude) and omega.

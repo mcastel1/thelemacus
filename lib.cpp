@@ -20165,11 +20165,17 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     parent_frame = ((P*)(panel_of_parent->GetParent()));
     length = p;
     unit_value = unit_value_in;
+    //these flags will be used in the method InsertIn below, to insert this->unit
+    wxSizerFlags flags;
+
 
     //    ((parent_frame->check_height_of_eye).p) = this;
 
     //initialize check
     check = new CheckLength<P>(this);
+
+    flags.Center();
+
 
     //tabulate the possible units of measure
     units.Clear();
@@ -20190,7 +20196,7 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 
 
 //    (unit->name) = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
-    unit = new LengthUnitField<P>(panel_of_parent, &(length->unit), &(wxGetApp().list_frame->data->recent_length_units));
+    unit = new LengthUnitField<P>((parent_frame->panel), &(length->unit), &(wxGetApp().list_frame->data->recent_length_units));
     //SetColor(unit);
 //    AdjustWidth(unit->name);
     //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
@@ -20204,11 +20210,13 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
-
+    
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(value, 0, wxALIGN_CENTER);
-    sizer_h->Add(unit->name, 0, wxALIGN_CENTER);
-
+    //    sizer_h->Add(unit->name, 0, wxALIGN_CENTER);
+    unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(sizer_h, flags);
+    
+    
 }
 
 

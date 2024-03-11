@@ -20883,7 +20883,7 @@ template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, Ro
 
 
 //constructor of a RouteTypeField object, based on the parent frame frame. No additional check functor is provided to MultiupleItemField (the third template in MultipleItemField is set to void)
-template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, LengthUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, LengthUnit, void >(panel_of_parent, object_in, LengthUnit_types, recent_items_in) {
+template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, LengthUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >(panel_of_parent, object_in, LengthUnit_types, recent_items_in) {
 
 
 //    MultipleItemField<P, LengthUnit, void >::check = new void(this);

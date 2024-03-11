@@ -638,10 +638,15 @@ public:
     
 };
 
+
+//a non-GUI object containing a Length
 class Length{
     
 public:
+    //the value of the length
     double value;
+    //the unit of measure of the length
+    LengthUnit unit;
     
     Length();
     Length(double);

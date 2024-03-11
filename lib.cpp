@@ -7077,17 +7077,28 @@ bool Sight::compute_DH_refraction(String prefix) {
 
 }
 
-//default constructor, which sets value to 0.0 by default
+//default constructor, which sets value to 0.0 by default and the unit to the first entry of LengthUnit_types
 Length::Length() {
 
     value = 0.0;
+    unit = LengthUnit(LengthUnit_types[0]);
 
 }
 
-//constructor which sets value to x
+//constructor which sets value to x  and the unit to the first entry of LengthUnit_types
 Length::Length(double x) {
 
     value = x;
+    unit = LengthUnit(LengthUnit_types[0]);
+
+}
+
+
+//constructor which sets value to x  and the unit to unit_in
+Length::Length(double value_in, const LengthUnit& unit_in) {
+
+    value = value_in;
+    unit = unit_in;
 
 }
 
@@ -19590,7 +19601,7 @@ Projection::Projection(string input) : String(input) {}
 LengthUnit::LengthUnit(void) : String() {}
 
 
-LengthUnit::LengthUnit(string input) : String(input) {}
+LengthUnit::LengthUnit(const String& input) : String(input.value) {}
 
 
 

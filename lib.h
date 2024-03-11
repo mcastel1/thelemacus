@@ -644,7 +644,7 @@ class LengthUnit: public String{
 public:
 
     LengthUnit();
-    LengthUnit(string);
+    LengthUnit(const String&);
     
 };
 
@@ -661,6 +661,7 @@ public:
     
     Length();
     Length(double);
+    Length(double, const LengthUnit&);
     Length(Chrono, Speed);
     
     void set(String, double, String);

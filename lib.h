@@ -57,6 +57,7 @@ class TransportHandler;
 class LengthFormat;
 class RouteType;
 class Projection;
+class LengthUnit;
 
 class Catalog;
 class Limb;
@@ -824,6 +825,17 @@ public:
 
     Projection();
     Projection(string);
+    
+};
+
+
+//a derived class from String, which stores the unit of measuer of Length ("nm", "m", "ft", ...)
+class LengthUnit: public String{
+    
+public:
+
+    LengthUnit();
+    LengthUnit(string);
     
 };
 

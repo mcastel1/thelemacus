@@ -19570,28 +19570,25 @@ LengthFormat::LengthFormat(string input) : String(input) {
 
 }
 
-RouteType::RouteType(void) : String() {
+RouteType::RouteType(void) : String() {}
 
 
-}
+RouteType::RouteType(string input) : String(input) {}
 
 
-RouteType::RouteType(string input) : String(input) {
+
+Projection::Projection(void) : String() {}
 
 
-}
+Projection::Projection(string input) : String(input) {}
 
 
-Projection::Projection(void) : String() {
+LengthUnit::LengthUnit(void) : String() {}
 
 
-}
+LengthUnit::LengthUnit(string input) : String(input) {}
 
 
-Projection::Projection(string input) : String(input) {
-
-
-}
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c, vector<int>* recent_items_in) : MultipleItemField<P, Body, CheckBody<P> >(panel_of_parent, p, c->get_names(), recent_items_in){
@@ -19782,7 +19779,7 @@ template <class P> void AngleField<P>::set(void) {
 //set the value in the GUI field *this equal to the value in the non-GUI object *input
 template<class P> void LengthField<P>::set(Length input) {
     
-    switch (/*(unit_value.value)[0]*/ unit_value.position_in_list(unit_types)) {
+    switch (/*(unit_value.value)[0]*/ unit_value.position_in_list(LengthUnit_types)) {
             
         case 0: {
             //unit = String("nm")

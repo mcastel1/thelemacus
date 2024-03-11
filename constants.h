@@ -45,7 +45,7 @@ Angle max_lat, min_lat;
 #define Projection_types (vector<String> {String("Mercator"), String("3D")})
 #define Limb_types (vector<String> {String("upper"), String("center"), String("lower")})
 #define LengthFormat_types (vector<String> {String("time and speed"), String("length")})
-#define unit_types (vector<String> {String("nm"), String("m"), String("ft")})
+#define LengthUnit_types (vector<String> {String("nm"), String("m"), String("ft")})
 #define floor_min_lat (floor(K*((min_lat.normalize_pm_pi_ret()).value)))
 #define floor_max_lat (floor(K*((max_lat.normalize_pm_pi_ret()).value)))
 #define ceil_min_lat (ceil(K*((min_lat.normalize_pm_pi_ret()).value)))

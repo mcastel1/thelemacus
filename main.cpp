@@ -127,6 +127,7 @@
  
  
  ********** THINGS TO FIX ************
+    - when the user clicks on adding a new Route, if circle of equal altitude is selected in the route type field, the related GUI fields below are inactive -> they should be active 
       - the switch(es) that select the right case according to the first character of a string may lead to mistakes (the first characters of multiple entries may be the same) -> create a list of types for each multi-choice field (such as Route_types) -> replace the switches with String::position_in_list([list]), for example String::position_in_list(Route_types)
      - in the MultipleItemField, create a pointer OnChooseItem to a templated method of the class (I tried  template<class T> void (MultipleItemField::*OnChooseItem)(T&); but it does not compile), and when MultipleItemField is constructed, let this pointer point to the desired method -> Then you will be able to move OnEdit to the parent class and simplify off things !
      - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on

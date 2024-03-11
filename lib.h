@@ -2401,29 +2401,25 @@ template<class P> class RouteTypeField: public MultipleItemField<P, RouteType, C
     
 public:
     
-//    P* parent;
-    //the parent frame to which this object is attached
-//    RouteFrame* parent_frame;
-//    wxArrayString types;
-    //this points to a non-GUI String object, which contains the Route type written in the GUI object this
-//    String* type;
-//    wxBoxSizer *sizer_h, *sizer_v;
-    
-    //this is the wxComboBox with the name of the bodies
-//    wxComboBox* name;
-//    CheckRouteType<P>* check;
-    
-//    bool ok;
     
     RouteTypeField(wxPanel*, RouteType*, vector<int>*);
     void set(void);
-//    template<class T> void get(T&);
-//    template<class T> void InsertIn(T*);
-//    bool is_ok(void);
     template<class E> void OnEdit(E&);
-//    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
+
+
+//GUI field to specify the unit of measure of a Length, which is inserted into a parent panel of type P
+template<class P> class LengthUnitField: public MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >{
+    
+public:
+    
+    LengthUnitField(wxPanel*, LengthUnit*, vector<int>*);
+    void set(void);
+    template<class E> void OnEdit(E&);
+    
+};
+
 
 
 //this class is to define the functor template<class T> void operator()(T&), which is called when the user selects a route with which he wants to transport a sight

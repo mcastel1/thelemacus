@@ -20178,9 +20178,9 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     //SetColor(unit);
     AdjustWidth(unit->name);
     //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
-    unit->SetValue(unit_value.value);
+    unit->name->SetValue(unit_value.value);
     unit_ok = true;
-    unit->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_unit)));
+    unit->name->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_unit)));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     unit->Bind(wxEVT_COMBOBOX, &LengthField::OnEditUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &LengthField::OnEditUnit<wxKeyEvent>, this);
@@ -20191,7 +20191,7 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(value, 0, wxALIGN_CENTER);
-    sizer_h->Add(unit, 0, wxALIGN_CENTER);
+    sizer_h->Add(unit->name, 0, wxALIGN_CENTER);
 
 }
 

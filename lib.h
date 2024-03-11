@@ -1049,6 +1049,7 @@ public:
     vector<int> recent_projections;
     vector<int> recent_length_formats;
     vector<int> recent_route_types;
+    vector<int> recent_length_units;
 
     Data(Catalog*, String);
     //~Data();

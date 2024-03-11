@@ -926,7 +926,7 @@ public:
     String name, type;
     Length radius;
     Angle RA, d;
-    void enter(String, Catalog, String);
+//    void enter(String, Catalog, String);
     bool check(unsigned int*, Catalog, String);
     void print(String, String, ostream&);
     template<class S> bool read_from_stream(String, S*, bool, String);

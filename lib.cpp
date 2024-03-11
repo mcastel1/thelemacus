@@ -6967,32 +6967,7 @@ void Body::print(String name_in, String prefix, ostream& ostr) {
 }
 
 
-void Body::enter(String name_in, Catalog catalog, [[maybe_unused]] String prefix) {
 
-    unsigned int i;
-    string s;
-    String new_prefix;
-
-    //append \t to prefix
-    new_prefix = prefix.append(String("\t"));
-
-
-    do {
-
-
-        cout << prefix.value << "Enter " << name_in.value << ":";
-        s.clear();
-        getline(cin >> ws, s);
-
-        (this->name) = String(s);
-
-    } while (!check(&i, catalog, prefix));
-
-    (*this) = (catalog.list)[i];
-
-    print(name_in, prefix, cout);
-
-}
 
 //this function checks whether the Body's name  is found in the body list comprised in catalog
 bool Body::check(unsigned int* j, Catalog catalog, [[maybe_unused]] String prefix) {

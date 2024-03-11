@@ -3490,7 +3490,7 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 
         length_format.read_from_stream(String("length format"), input_stream, false, new_prefix);
 
-        if (length_format == String("time and speed")) {
+        if (length_format == (LengthFormat_types[0])) {
             //read time and speed, and set l accordingly
 
             time.read_from_stream(String("time"), input_stream, false, new_prefix);
@@ -19441,7 +19441,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 
 
 //constructor of a LengthFormatField object, based on the parent frame frame
-template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* object_in, vector<int>* recent_items_in)  : MultipleItemField<P, LengthFormat, void>(panel_of_parent, object_in, {String("Time and speed"), String("Length")}, recent_items_in){
+template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* object_in, vector<int>* recent_items_in)  : MultipleItemField<P, LengthFormat, void>(panel_of_parent, object_in, LengthFormat_types, recent_items_in){
 
     
 //    /*here I need to specify that parent is a member of the parent class */MultipleItemField<P, LengthFormat, void>::parent = ((P*)(panel_of_parent->GetParent()));

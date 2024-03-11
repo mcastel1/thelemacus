@@ -31,6 +31,7 @@ template<class P, class NON_GUI, class CHECK> class MultipleItemField;
 template<class P> class ProjectionField;
 template<class P> class LengthFormatField;
 template<class P> class LimbField;
+template<class P> class LengthUnitField;
 template<class P, class T> class CheckField;
 template<class P> class AngleField;
 template<class P> class LengthField;
@@ -2244,8 +2245,8 @@ public:
     P* parent_frame;
     //the length value
     wxTextCtrl *value;
-    //units of measure of the length
-    wxComboBox* unit;
+    //units of measure of the Length
+    LengthUnitField<P>* unit;
     wxBoxSizer *sizer_h, *sizer_v;
     Length* length;
     //an array containing all possible units of measure

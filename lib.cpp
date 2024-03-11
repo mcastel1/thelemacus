@@ -14706,19 +14706,19 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
 
         //I check whether the name in the GUI field unit matches one of the unit names in units
         for (check = false, i = 0; (i < (p->units).size()) && (!check); i++) {
-            if (((p->unit)->GetValue()) == (p->units)[i]) {
+            if ((p->unit->name->GetValue()) == (p->units)[i]) {
                 check = true;
             }
         }
         i--;
 
-        if (check || ((((p->unit)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->unit)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
 
             //if check is true (false) -> set unit_ok to true (false)
             (p->unit_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->unit)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->unit)->SetFont(wxGetApp().default_font);
+            p->unit->name->SetForegroundColour(wxGetApp().foreground_color);
+            p->unit->name->SetFont(wxGetApp().default_font);
 
 
         }
@@ -14732,7 +14732,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
                 temp << (p->units)[i].ToStdString() << ((i < (p->units).size() - 1) ? ", " : ".");
             }
 
-            (f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
 
             (p->unit_ok) = false;
 
@@ -14900,7 +14900,7 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
         value->GetValue().ToDouble(&length_temp);
 
 
-        switch (((unit->GetValue()).ToStdString())[0]) {
+        switch (((unit->name->GetValue()).ToStdString())[0]) {
 
         case 'n': {
             //unit = "nm"
@@ -16381,7 +16381,7 @@ template<class E> void RouteFrame::UpdateLength(E& event) {
     else {
 
         length->value->SetValue(wxString(""));
-        length->unit->SetValue(wxString(""));
+        length->unit->name->SetValue(wxString(""));
 
     }
 
@@ -19785,7 +19785,7 @@ template<class P> void LengthField<P>::set(Length input) {
             //unit = String("nm")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
-            unit->SetValue(wxString("nm"));
+            unit->name->SetValue(wxString("nm"));
             break;
             
         }
@@ -19794,7 +19794,7 @@ template<class P> void LengthField<P>::set(Length input) {
             //unit = String("m")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
-            unit->SetValue(wxString("m"));
+            unit->name->SetValue(wxString("m"));
             
             break;
             
@@ -19804,7 +19804,7 @@ template<class P> void LengthField<P>::set(Length input) {
             //unit = String("ft")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
-            unit->SetValue(wxString("ft"));
+            unit->name->SetValue(wxString("ft"));
             
             break;
             
@@ -20174,9 +20174,9 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     value->Bind(wxEVT_KEY_UP, &LengthField::OnEditValue<wxKeyEvent>, this);
 
 
-    unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    (unit->name) = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(unit);
-    AdjustWidth(unit);
+    AdjustWidth(unit->name);
     //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
     unit->SetValue(unit_value.value);
     unit_ok = true;
@@ -20475,14 +20475,14 @@ template<class P> template<class E>  void LengthField<P>::OnEditUnit(E& event) {
     bool success;
 
     //I check whether the name in the GUI field unit matches one of the unit names in units
-    find_and_replace_case_insensitive(unit, units, &success, NULL);
+    find_and_replace_case_insensitive(unit->name, units, &success, NULL);
 
 
     if (success) {
 
         //because the text in value is valid, I set the background color of unit to white
-        unit->SetForegroundColour(wxGetApp().foreground_color);
-        unit->SetFont(wxGetApp().default_font);
+        unit->name->SetForegroundColour(wxGetApp().foreground_color);
+        unit->name->SetFont(wxGetApp().default_font);
 
     }
 

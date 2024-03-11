@@ -10553,7 +10553,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
 
     projection = new ProjectionField<ChartFrame>(panel, &(wxGetApp().list_frame->data->recent_projections));
-    (projection->name)->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
+    projection->name->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
 
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveNorth<wxCommandEvent>, this);
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveSouth<wxCommandEvent>, this);
@@ -19344,7 +19344,7 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
 }
 
 //constructor of a ProjectionField object, based on the parent frame frame
-template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, vector<int>* recent_items_in) : MultipleItemField<P, void, void>(panel_of_parent, NULL, Projection_types, recent_items_in) {
+template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, vector<int>* recent_items_in) : MultipleItemField<P, Projection, void>(panel_of_parent, NULL, Projection_types, recent_items_in) {
 
 //    parent = ((P*)(panel_of_parent->GetParent()));
 
@@ -19358,13 +19358,13 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
 
 //    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-//    MultipleItemField<P, void, void>::Fill();
+//    MultipleItemField<P, Projection, void>::Fill();
 //    name->SetValue(items[0]);
 //    AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    MultipleItemField<P, void, void>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
-    MultipleItemField<P, void, void>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
-//    MultipleItemField<P, void, void>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, void, void>::template Check<wxFocusEvent>, this);
+    MultipleItemField<P, Projection, void>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
+    MultipleItemField<P, Projection, void>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
+//    MultipleItemField<P, Projection, void>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, Projection, void>::template Check<wxFocusEvent>, this);
 
 //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
 //    sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -21349,23 +21349,23 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
     String s;
     bool success;
     
-    if(!(MultipleItemField<P, void, void>::editing)){
+    if(!(MultipleItemField<P, Projection, void>::editing)){
         //*the user has started editing *this 
-        (MultipleItemField<P, void, void>::editing) = true;
+        (MultipleItemField<P, Projection, void>::editing) = true;
     }
 
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    find_and_replace_case_insensitive(MultipleItemField<P, void, void>::name, MultipleItemField<P, void, void>::items, &success, NULL);
+    find_and_replace_case_insensitive(MultipleItemField<P, Projection, void>::name, MultipleItemField<P, Projection, void>::items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid
-    MultipleItemField<P, void, void>::ok = success;
+    MultipleItemField<P, Projection, void>::ok = success;
 
     if (success) {
 
-        MultipleItemField<P, void, void>::name->SetForegroundColour(wxGetApp().foreground_color);
-        MultipleItemField<P, void, void>::name->SetFont(wxGetApp().default_font);
+        MultipleItemField<P, Projection, void>::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P, Projection, void>::name->SetFont(wxGetApp().default_font);
         //choose the projection entered in name button_reduce
-        MultipleItemField<P, void, void>::parent->draw_panel->OnChooseProjection(event);
+        MultipleItemField<P, Projection, void>::parent->draw_panel->OnChooseProjection(event);
 
     }
 

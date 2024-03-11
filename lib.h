@@ -2078,7 +2078,7 @@ public:
 };
 
 
-template<class P> class ProjectionField: public MultipleItemField<P, void, void>{
+template<class P> class ProjectionField: public MultipleItemField<P, Projection, void>{
     
 public:
     

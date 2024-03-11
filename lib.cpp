@@ -19581,6 +19581,18 @@ RouteType::RouteType(string input) : String(input) {
 
 }
 
+
+Projection::Projection(void) : String() {
+
+
+}
+
+
+Projection::Projection(string input) : String(input) {
+
+
+}
+
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
 template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c, vector<int>* recent_items_in) : MultipleItemField<P, Body, CheckBody<P> >(panel_of_parent, p, c->get_names(), recent_items_in){
 

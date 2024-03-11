@@ -56,6 +56,7 @@ class Cartesian;
 class TransportHandler;
 class LengthFormat;
 class RouteType;
+class Projection;
 
 class Catalog;
 class Limb;
@@ -814,6 +815,18 @@ public:
     RouteType(string);
     
 };
+
+
+//a derived class from String, which stores the type of a Projection ("Mercator", "3D", ...)
+class Projection: public String{
+    
+public:
+
+    Projection();
+    Projection(string);
+    
+};
+
 
 //if type = l or o, the parameters specifying the route are reference_position (which in this case is the start position of the Route), alpha, l. if type = c, the parameters specifying the route are reference_position (which in this case is the GP of the circle of equal altitude) and omega.
 class Route{

@@ -4998,9 +4998,9 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
     //set limb column
     if ((body.name == String("sun")) || (body.name == String("moon"))) {
 
-        if (wxString(limb.value) == 'u') { listcontrol->SetItem(i, j++, wxString("upper")); }
-        if (wxString(limb.value) == 'l') { listcontrol->SetItem(i, j++, wxString("lower")); }
-        if (wxString(limb.value) == 'c') { listcontrol->SetItem(i, j++, wxString("center")); }
+        if (wxString(limb.value) == 'u') { listcontrol->SetItem(i, j++, wxString((Limb_types[0].value))); }
+        if (wxString(limb.value) == 'l') { listcontrol->SetItem(i, j++, wxString((Limb_types[2].value))); }
+        if (wxString(limb.value) == 'c') { listcontrol->SetItem(i, j++, wxString((Limb_types[1].value))); }
 
     }
     else {

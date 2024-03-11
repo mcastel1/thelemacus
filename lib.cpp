@@ -2045,7 +2045,7 @@ bool MyRectangle::Contains(Position p) {
 Route::Route(void) {
 
     related_sight.set(String(""), -1, String(""));
-    length_format.set(String("length"));
+    length_format.set((LengthFormat_types[1]));
 
 }
 
@@ -2057,7 +2057,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
     reference_position = reference_position_in;
     Z = Z_in;
     length = l_in;
-    length_format.set(String("length"));
+    length_format.set((LengthFormat_types[1]));
 
     related_sight.set(String(""), -1, String(""));
 
@@ -2071,7 +2071,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
     reference_position = reference_position_in;
     omega = omega_in;
 
-    length_format.set(String("length"));
+    length_format.set((LengthFormat_types[1]));
     //the lenght of the circle of equal altitude is set by default
     length.set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
 
@@ -4296,7 +4296,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
         Z.print(String("starting heading"), new_prefix, ostr);
 
         length_format.print(String("length format"), false, new_prefix, ostr);
-        if ((length_format.value) == "length") {
+        if (length_format == (LengthFormat_types[1])) {
 
             length.print(String("length"), String("nm"), new_new_prefix, ostr);
 
@@ -16129,7 +16129,7 @@ bool RouteFrame::is_ok(void) {
                     (Z->is_ok()) &&
                     ((start_phi->is_ok()) || for_transport) &&
                     ((start_lambda->is_ok()) || for_transport) &&
-                    (((((length_format->name)->GetValue()) == wxString("Time and speed")) && ((time->is_ok()) && (speed->is_ok()))) || ((((length_format->name)->GetValue()) == wxString("Length")) && (length->is_ok())))
+                    (((((length_format->name)->GetValue()) == wxString(((LengthFormat_types[0]).value))) && ((time->is_ok()) && (speed->is_ok()))) || ((((length_format->name)->GetValue()) == wxString(((LengthFormat_types[1]).value))) && (length->is_ok())))
                     )
                 )
 
@@ -16230,7 +16230,7 @@ void RouteFrame::set(void) {
     //enable the length or the time and speed fields
     OnChooseLengthFormatField();
 
-    if ((route->length_format) == String("length")) {
+    if ((route->length_format) == (LengthFormat_types[1])) {
         //the Route length is simply expressed as a length rather than as a time and speed -> set length field
 
         length->set();
@@ -16273,7 +16273,7 @@ template<class T> void RouteFrame::get(T& event) {
         if ((length_format->name->GetValue()) == length_format->catalog[0]) {
             //in the GUI field, lengths are expressed at Chrono x Speed -> get t and v and set in the non-GUI field to true. I also set route->l according to time and speed
 
-            (route->length_format) = LengthFormat("time and speed");
+            (route->length_format) = LengthFormat(((LengthFormat_types[0]).value));
             time->get(event);
             speed->get(event);
             (route->length) = Length(route->time, route->speed);
@@ -16282,7 +16282,7 @@ template<class T> void RouteFrame::get(T& event) {
         else {
             //in the GUI field, lenght are expressed simply as a Length -> get l and set in the non-GUI field to false
 
-            (route->length_format) = LengthFormat("length");
+            (route->length_format) = LengthFormat(((LengthFormat_types[1]).value));
             length->get(event);
 
         }
@@ -16318,7 +16318,7 @@ template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {
             }
 
             case 1: {
-                //l_format->name->GetValue() = "Length" -> enable l, disable v and t
+                //l_format->name->GetValue() = ((LengthFormat_types[1]).value) -> enable l, disable v and t
 
                 b = false;
                 break;
@@ -19449,7 +19449,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 
 //    catalog.Clear();
 //    catalog.Add(wxT("Time and speed"));
-//    catalog.Add(wxT("Length"));
+//    catalog.Add(wxT(((LengthFormat_types[1]).value)));
 //    items = catalog;
 
 //    check = new CheckLengthFormat<P>(this);

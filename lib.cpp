@@ -20867,36 +20867,29 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 //constructor of a RouteTypeField object, based on the parent frame frame
 template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, RouteType* object_in, vector<int>* recent_items_in) : MultipleItemField<P, RouteType, CheckRouteType<P> >(panel_of_parent, object_in, Route_types, recent_items_in) {
 
-    MultipleItemField<P, RouteType, CheckRouteType<P> >::parent = ((P*)(panel_of_parent->GetParent()));
-//    parent_frame = frame;
-    //I link the internal pointers p and c to the respective non-GUI object string
-//    type = s;
-
-//    types.Clear();
-//    //tabulate types of Routes
-//    types.Add(wxString("loxodrome"));
-//    types.Add(wxString("orthodrome"));
-//    types.Add(wxString("circle of equal altitude"));
-
     MultipleItemField<P, RouteType, CheckRouteType<P> >::check = new CheckRouteType<P>(this);
-//    MultipleItemField<P, RouteType, CheckRouteType<P> >::name = new wxComboBox(MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, MultipleItemField<P, RouteType, CheckRouteType<P> >::items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
-
-    //SetColor(name);
-//    AdjustWidth(MultipleItemField<P, RouteType, CheckRouteType<P> >::name);
-    MultipleItemField<P, RouteType, CheckRouteType<P> >::ok = false;
-//    MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue("");
     MultipleItemField<P, RouteType, CheckRouteType<P> >::name->Bind(wxEVT_KILL_FOCUS, *(MultipleItemField<P, RouteType, CheckRouteType<P> >::check));
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P, RouteType, CheckRouteType<P> >::name->Bind(wxEVT_COMBOBOX, &RouteTypeField::OnEdit<wxCommandEvent>, this);
     MultipleItemField<P, RouteType, CheckRouteType<P> >::name->Bind(wxEVT_KEY_UP, &RouteTypeField::OnEdit<wxKeyEvent>, this);
 
-//    MultipleItemField<P, RouteType, CheckRouteType<P> >::sizer_h = new wxBoxSizer(wxHORIZONTAL);
-//    MultipleItemField<P, RouteType, CheckRouteType<P> >::sizer_v = new wxBoxSizer(wxVERTICAL);
+}
 
-//    MultipleItemField<P, RouteType, CheckRouteType<P> >::sizer_v->Add(MultipleItemField<P, RouteType, CheckRouteType<P> >::sizer_h, 0, wxALIGN_LEFT);
-//    MultipleItemField<P, RouteType, CheckRouteType<P> >::sizer_h->Add(MultipleItemField<P, RouteType, CheckRouteType<P> >::name, 0, wxALIGN_CENTER);
+
+
+//constructor of a RouteTypeField object, based on the parent frame frame
+template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, LengthUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >(panel_of_parent, object_in, Route_types, recent_items_in) {
+
+
+    MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::check = new CheckLengthUnit<P>(this);
+    MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::name->Bind(wxEVT_KILL_FOCUS, *(MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::check));
+    //    as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+//    MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::name->Bind(wxEVT_COMBOBOX, &LengthUnitField::OnEdit<wxCommandEvent>, this);
+//    MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::name->Bind(wxEVT_KEY_UP, &LengthUnitField::OnEdit<wxKeyEvent>, this);
 
 }
+ 
+
 
 
 //this function enables/disable all the fields in AngleField

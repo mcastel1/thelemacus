@@ -2415,8 +2415,8 @@ template<class P> class LengthUnitField: public MultipleItemField<P, LengthUnit,
 public:
     
     LengthUnitField(wxPanel*, LengthUnit*, vector<int>*);
-    void set(void);
-    template<class E> void OnEdit(E&);
+//    void set(void);
+//    template<class E> void OnEdit(E&);
     
 };
 

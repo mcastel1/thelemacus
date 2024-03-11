@@ -20877,15 +20877,15 @@ template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, Ro
 
 
 
-//constructor of a RouteTypeField object, based on the parent frame frame
-template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, LengthUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >(panel_of_parent, object_in, Route_types, recent_items_in) {
+//constructor of a RouteTypeField object, based on the parent frame frame. No additional check functor is provided to MultiupleItemField (the third template in MultipleItemField is set to void)
+template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, LengthUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, LengthUnit, void >(panel_of_parent, object_in, LengthUnit_types, recent_items_in) {
 
 
-    MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::check = new CheckLengthUnit<P>(this);
-    MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::name->Bind(wxEVT_KILL_FOCUS, *(MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::check));
+//    MultipleItemField<P, LengthUnit, void >::check = new void(this);
+//    MultipleItemField<P, LengthUnit, void >::name->Bind(wxEVT_KILL_FOCUS, *(MultipleItemField<P, LengthUnit, void >::check));
     //    as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-//    MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::name->Bind(wxEVT_COMBOBOX, &LengthUnitField::OnEdit<wxCommandEvent>, this);
-//    MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::name->Bind(wxEVT_KEY_UP, &LengthUnitField::OnEdit<wxKeyEvent>, this);
+//    MultipleItemField<P, LengthUnit, void >::name->Bind(wxEVT_COMBOBOX, &LengthUnitField::OnEdit<wxCommandEvent>, this);
+//    MultipleItemField<P, LengthUnit, void >::name->Bind(wxEVT_KEY_UP, &LengthUnitField::OnEdit<wxKeyEvent>, this);
 
 }
  

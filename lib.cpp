@@ -19206,6 +19206,8 @@ template<class P, class NON_GUI, class CHECK> MultipleItemField<P, NON_GUI, CHEC
 //    name->Bind(wxEVT_COMBOBOX, &MultipleItemField::OnEdit<wxCommandEvent>, this);
 //    name->Bind(wxEVT_KEY_UP, &MultipleItemField::OnEdit<wxKeyEvent>, this);
 //    name->Bind(wxEVT_KILL_FOCUS, *check);
+    name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, NON_GUI, CHECK>::Check<wxFocusEvent>, this);
+
     
 
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -19362,7 +19364,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P, void, void>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
     MultipleItemField<P, void, void>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
-    MultipleItemField<P, void, void>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, void, void>::template Check<wxFocusEvent>, this);
+//    MultipleItemField<P, void, void>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, void, void>::template Check<wxFocusEvent>, this);
 
 //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
 //    sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -19462,7 +19464,7 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P, LengthFormat, void>::name->Bind(wxEVT_COMBOBOX, &LengthFormatField::OnEdit<wxCommandEvent>, this);
     MultipleItemField<P, LengthFormat, void>::name->Bind(wxEVT_KEY_UP, &LengthFormatField::OnEdit<wxKeyEvent>, this);
-    MultipleItemField<P, LengthFormat, void>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, LengthFormat, void>::template Check<wxFocusEvent>, this);
+//    MultipleItemField<P, LengthFormat, void>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, LengthFormat, void>::template Check<wxFocusEvent>, this);
 
 //    MultipleItemField<P, LengthFormat, void>::sizer_h = new wxBoxSizer(wxHORIZONTAL);
 //    MultipleItemField<P, LengthFormat, void>::sizer_v = new wxBoxSizer(wxVERTICAL);

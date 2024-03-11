@@ -43,6 +43,7 @@ Angle max_lat, min_lat;
 //the types of Routes, Projections, Length units of measure are stored here, so I don't have to re-type them everywhere in the codde
 #define Route_types (vector<String> {String("loxordome"), String("orthodrome"), String("circle of equal altitude")})
 #define Projeciton_types (vector<String> {String("Mercator"), String("3D")})
+#define Limb_types (vector<String> {String("upper"), String("center"), String("lower")})
 #define unit_types (vector<String> {String("nm"), String("m"), String("ft")})
 #define floor_min_lat (floor(K*((min_lat.normalize_pm_pi_ret()).value)))
 #define floor_max_lat (floor(K*((max_lat.normalize_pm_pi_ret()).value)))

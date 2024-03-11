@@ -19954,10 +19954,8 @@ template<class P> LimbField<P>::LimbField(wxPanel* panel_of_parent, Limb* p) {
     check = new CheckLimb<P>(this);
     (check->p) = this;
 
-    limbs.Clear();
-    limbs.Add("upper");
-    limbs.Add("center");
-    limbs.Add("lower");
+    
+    for(limbs.Clear(), i=0; i<Limb_types.size(); i++){limbs.push_back(wxString((Limb_types[i]).value));}
 
     name = new wxCheckListBox(parent_frame->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, limbs, 0, wxDefaultValidator, wxString(""));
     name->Set(limbs);

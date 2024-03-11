@@ -19307,7 +19307,7 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
             Reset(name);
             
             //if the value written in name is correct, I store it in value_before_editing
-            if(ok){value_before_editing = name->GetValue();}
+            if(ok){value_before_editing = (name->GetValue());}
 
         }else{
             //the GUI field  does not contain a valid text,  it is not empty and with a red background color-> I prompt an error message frame
@@ -20175,16 +20175,16 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 
 
 //    (unit->name) = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
-    unit = new LengthUnitField<P>(panel_of_parent, &length_unit, &(wxGetApp().list_frame->data->recent_length_units));
+    unit = new LengthUnitField<P>(panel_of_parent, &(length->unit), &(wxGetApp().list_frame->data->recent_length_units));
     //SetColor(unit);
-    AdjustWidth(unit->name);
+//    AdjustWidth(unit->name);
     //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
-    unit->name->SetValue(unit_value.value);
-    unit_ok = true;
-    unit->name->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_unit)));
+//    unit->name->SetValue(unit_value.value);
+//    unit_ok = true;
+//    unit->name->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_unit)));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    unit->Bind(wxEVT_COMBOBOX, &LengthField::OnEditUnit<wxCommandEvent>, this);
-    unit->Bind(wxEVT_KEY_UP, &LengthField::OnEditUnit<wxKeyEvent>, this);
+    unit->name->Bind(wxEVT_COMBOBOX, &LengthField::OnEditUnit<wxCommandEvent>, this);
+    unit->name->Bind(wxEVT_KEY_UP, &LengthField::OnEditUnit<wxKeyEvent>, this);
 
 
     sizer_h = new wxBoxSizer(wxHORIZONTAL);

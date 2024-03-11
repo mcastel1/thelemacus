@@ -5293,21 +5293,21 @@ void Sight::print(String name, String prefix, ostream& ostr) {
 }
 
 //default constructor
-Projection::Projection(void) {
+PositionProjection::PositionProjection(void) {
 
 }
 
 //custom constructor, which initialized the point with coordinates x, y
-Projection::Projection(const double x_in, const double y_in) {
+PositionProjection::PositionProjection(const double x_in, const double y_in) {
 
     x = x_in;
     y = y_in;
 
 }
 
-Projection Projection::operator+(const Projection& q) {
+PositionProjection PositionProjection::operator+(const PositionProjection& q) {
 
-    Projection p;
+    PositionProjection p;
 
     (p.x) = x + (q.x);
     (p.y) = y + (q.y);
@@ -5316,9 +5316,9 @@ Projection Projection::operator+(const Projection& q) {
 
 }
 
-Projection Projection::operator-(const Projection& q) {
+PositionProjection PositionProjection::operator-(const PositionProjection& q) {
 
-    Projection p;
+    PositionProjection p;
 
     (p.x) = x - (q.x);
     (p.y) = y - (q.y);
@@ -8074,7 +8074,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
     //integer values of min/max lat/lon to be extractd from p_coastline
     int i, j, i_adjusted = 0, j_adjusted = 0, i_min, i_max, j_min, j_max;
     double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
-    Projection temp;
+    PositionProjection temp;
     bool check = false, b;
     wxPoint q;
     Cartesian r, s;
@@ -9248,7 +9248,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     Angle lambda, phi;
     Route route;
     wxPoint p;
-    Projection temp;
+    PositionProjection temp;
     Position q;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     int i, j;
@@ -9449,7 +9449,7 @@ inline void DrawPanel::Render_3D(
     wxString wx_string;
     //this is a list of tabulated points for dummy_route, such as a meridian, which will be created and destroyed just after
     vector<wxPoint> points_dummy_route;
-    Projection dummy_projection;
+    PositionProjection dummy_projection;
     wxPoint p;
     Position q, temp;
 
@@ -9464,7 +9464,7 @@ inline void DrawPanel::Render_3D(
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
     for (i = 0; i < points_coastline.size(); i++) {
-        //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
+        //        ProjectionToDrawPanel_3D(PositionProjection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
         dc->DrawEllipse(points_coastline[i], wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value));
     }
 
@@ -9525,7 +9525,7 @@ inline void DrawPanel::Render_3D(
 
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
     d_temp.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
-    dummy_projection = Projection(0.0, ((d_temp.value) * gsl_vector_get((rp.r), 2)) / ((d_temp.value) + 1.0 + gsl_vector_get((rp.r), 1)));
+    dummy_projection = PositionProjection(0.0, ((d_temp.value) * gsl_vector_get((rp.r), 2)) / ((d_temp.value) + 1.0 + gsl_vector_get((rp.r), 1)));
     //set the wxPen color for the horizon
 //    dc->SetPen(wxPen(wxGetApp().color_horizon, 1));
     dc->SetPen(wxPen(foreground_color, thickness));
@@ -9622,7 +9622,7 @@ inline void DrawPanel::TabulatePositions(void) {
 //draws coastlines, Routes and Positions on the Mercator-projection case
 inline void DrawPanel::Draw_Mercator(void) {
 
-    Projection delta_temp;
+    PositionProjection delta_temp;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
     Position q;
     String prefix, new_prefix;
@@ -10041,7 +10041,7 @@ inline void DrawPanel::Draw_3D(void) {
 
     Angle lambda_in, lambda_out, /*phi is an auxiliary variable used in the loop which draws parallels*/phi;
     Position q;
-    Projection temp;
+    PositionProjection temp;
     wxPoint p;
     wxString dummy_label;
     Route route;
@@ -10702,7 +10702,7 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
 
 
         double delta;
-        Projection p_ceil_min, p_floor_max;
+        PositionProjection p_ceil_min, p_floor_max;
 
         //I set delta as a fraction of y_max - y_min
         delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max) - (draw_panel->y_min));
@@ -10776,7 +10776,7 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
 
 
         double delta;
-        Projection p_ceil_min, p_floor_max;
+        PositionProjection p_ceil_min, p_floor_max;
 
         //I set delta as a fraction of y_max - y_min
         delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max) - (draw_panel->y_min));
@@ -11237,7 +11237,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
 //this function computes x_min, ... y_max and from lambda_min ... phi_max in the Mercator projection
 void DrawPanel::Set_x_y_min_max_Mercator(void) {
 
-    Projection p_min, p_max;
+    PositionProjection p_min, p_max;
     Position temp;
 
     //    (this->*GeoToProjection)(Position(parent->lambda_min, parent->phi_min), &p_min, true);
@@ -11704,7 +11704,7 @@ inline bool DrawPanel::ScreenToDrawPanel(const wxPoint& p, wxPoint* q) {
 //converts the point p on the screen into geographic Position q and it writes into q only if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
 inline bool DrawPanel::ScreenToGeo_Mercator(const wxPoint& p, Position* q) {
 
-    Projection temp;
+    PositionProjection temp;
     bool output;
 
     //updates the position of the DrawPanel *this
@@ -11739,7 +11739,7 @@ inline bool DrawPanel::DrawPanelToGeo(const wxPoint& p, Position* q) {
 //converts the point p on the screen with a 3D projection, to the relative geographic position q (if q!=NULL). It returns true if p lies within the circle denoting the boundaries of the earth, and false otherwise. If false is returned, q is the geographic position on the earth defined as follows: it lies on the intersection between the Earth and the x'z' plane and on the line between the center of the Earth and the vector rp corresponding to p (such vector rp lies on the x'z' plane)
 inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
 
-    Projection temp;
+    PositionProjection temp;
 
     if (ScreenTo3D(p, &temp)) {
         //p lies within the circle of the earth
@@ -11797,9 +11797,9 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
 }
 
 //convert the point p on the screen to the  Mercator projection q of the relative geographic position, by writing into q only if q!=NULL. It returns true/false if q lies within the boundaris x_min .. y_max
-inline bool DrawPanel::ScreenToMercator(const wxPoint& p, Projection* q) {
+inline bool DrawPanel::ScreenToMercator(const wxPoint& p, PositionProjection* q) {
 
-    Projection temp;
+    PositionProjection temp;
     bool check_x;
 
     //updates the position of the draw pane this
@@ -11834,9 +11834,9 @@ inline bool DrawPanel::ScreenToMercator(const wxPoint& p, Projection* q) {
 
 
 //converts the point p on the screen (which is supposed to lie in the plot area), to the  3D projection (x,y), which is written in q if q!=NULL. If p lies within /outside the circle of the earth, it returns true/false.
-inline bool DrawPanel::ScreenTo3D(const wxPoint& p, Projection* q) {
+inline bool DrawPanel::ScreenTo3D(const wxPoint& p, PositionProjection* q) {
 
-    Projection temp;
+    PositionProjection temp;
     Double d_temp;
 
     //set d for the following
@@ -11872,8 +11872,8 @@ inline bool DrawPanel::ScreenTo3D(const wxPoint& p, Projection* q) {
 }
 
 
-//convert the geographic Position p  to the  3D Projection (x,y). / If the Projection of p falls in the visible side of the earth,  write its Projection into *q (if q!=NULL) and returs true. If not, it returns false and, if write = true,  write its Projection in *q (if q!=NULL)
-inline bool DrawPanel::GeoTo3D(const Position& p, Projection* q, bool write) {
+//convert the geographic Position p  to the  3D PositionProjection (x,y). / If the PositionProjection of p falls in the visible side of the earth,  write its PositionProjection into *q (if q!=NULL) and returs true. If not, it returns false and, if write = true,  write its Projection in *q (if q!=NULL)
+inline bool DrawPanel::GeoTo3D(const Position& p, PositionProjection* q, bool write) {
 
 
     //    clock_t t1, t2, t3;
@@ -11899,8 +11899,8 @@ inline bool DrawPanel::GeoTo3D(const Position& p, Projection* q, bool write) {
 
 
 
-// If the Projection of q falls within the plot area,  write its Projection into p (if p!=NULL) and return true. If not, it returns false and, if write = true, it writes its projection in q
-inline bool DrawPanel::CartesianToMercator(const Cartesian& p, Projection* q, bool write) {
+// If the PositionProjection of q falls within the plot area,  write its Projection into p (if p!=NULL) and return true. If not, it returns false and, if write = true, it writes its projection in q
+inline bool DrawPanel::CartesianToMercator(const Cartesian& p, PositionProjection* q, bool write) {
 
     Position temp;
 
@@ -11912,8 +11912,8 @@ inline bool DrawPanel::CartesianToMercator(const Cartesian& p, Projection* q, bo
 }
 
 
-//convert the Cartesian position p  to the  3D Projection (x,y). / If the Projection of p falls in the visible side of the earth,  write its Projection into *q (if q!=NULL) and return true. If not,  return false and, if write = true,  write its Projection in *q (if q!=NULL)
-inline bool DrawPanel::CartesianTo3D(const Cartesian& p, Projection* q, bool write) {
+//convert the Cartesian position p  to the  3D PositionProjection (x,y). / If the PositionProjection of p falls in the visible side of the earth,  write its PositionProjection into *q (if q!=NULL) and return true. If not,  return false and, if write = true,  write its Projection in *q (if q!=NULL)
+inline bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, bool write) {
 
     bool check, out;
     
@@ -11989,12 +11989,12 @@ inline void DrawPanel::GeoToScreen(const Position& q, wxPoint* p) {
 
 
 // If the projection of q falls within the plot area, it writes its projection into p (if p!=NULL) and returns true. If not, it returns false and, if write = true, it writes its projection in p
-inline bool DrawPanel::GeoToMercator(const Position& q, Projection* p, bool write) {
+inline bool DrawPanel::GeoToMercator(const Position& q, PositionProjection* p, bool write) {
 
     //    clock_t t_start, t_end;
     //    t_start = clock();
 
-    Projection temp;
+    PositionProjection temp;
     bool check_x, check, out;
 
     (temp.x) = -(normalize_pm_pi_ret(q.lambda).value);
@@ -12056,7 +12056,7 @@ inline bool DrawPanel::GeoToMercator(const Position& q, Projection* p, bool writ
 // convert the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p.
 inline bool DrawPanel::GeoToDrawPanel(const Position& q, wxPoint* p, bool write) {
 
-    Projection temp;
+    PositionProjection temp;
     bool check;
 
 
@@ -12083,7 +12083,7 @@ inline bool DrawPanel::GeoToDrawPanel(const Position& q, wxPoint* p, bool write)
 // convert the cartesian position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Cartesian position, return true and (if p!=NULL),  write the resulting DrawPanel coordinates in p. If q is not a valid Cartesian position,  return false and, if write = true and p!=NULL, it writes the drawpanel position in p.
 inline bool DrawPanel::CartesianToDrawPanel(const Cartesian& q, wxPoint* p, bool write) {
 
-    Projection temp;
+    PositionProjection temp;
     bool check;
 
     check = (this->*CartesianToProjection)(q, &temp, write);
@@ -12106,7 +12106,7 @@ inline bool DrawPanel::CartesianToDrawPanel(const Cartesian& q, wxPoint* p, bool
 }
 
 //this function converts the Mercator projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
-inline void  DrawPanel::ProjectionToDrawPanel_Mercator(const Projection& q, wxPoint* p) {
+inline void  DrawPanel::ProjectionToDrawPanel_Mercator(const PositionProjection& q, wxPoint* p) {
 
     (p->x) = (position_plot_area.x) + ((q.x) - x_min) / x_span() * (size_plot_area.GetWidth());
     (p->y) = (position_plot_area.y) + (size_plot_area.GetHeight()) - (((q.y) - y_min) / (y_max - y_min) * (size_plot_area.GetHeight()));
@@ -12114,7 +12114,7 @@ inline void  DrawPanel::ProjectionToDrawPanel_Mercator(const Projection& q, wxPo
 }
 
 //this function converts the 3D projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
-inline void  DrawPanel::ProjectionToDrawPanel_3D(const Projection& q, wxPoint* p) {
+inline void  DrawPanel::ProjectionToDrawPanel_3D(const PositionProjection& q, wxPoint* p) {
 
     (p->x) = ((double)(position_plot_area.x)) + (1.0 + (q.x) / x_max) * (((double)(size_plot_area.GetWidth())) / 2.0);
     (p->y) = ((double)(position_plot_area.y)) + (1.0 - (q.y) / y_max) * (((double)(size_plot_area.GetHeight())) / 2.0);
@@ -12596,7 +12596,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
 
                 double delta_y;
-                Projection p_ceil_min, p_floor_max;
+                PositionProjection p_ceil_min, p_floor_max;
 
                 delta_y = ((double)((position_end_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
 
@@ -13064,7 +13064,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
                         //I am using the mercator projection
 
-                        Projection p_ceil_min, p_floor_max;
+                        PositionProjection p_ceil_min, p_floor_max;
 
                         (this->*GeoToProjection)(Position(Angle(0.0), Angle(k * floor_max_lat)), &p_floor_max, true);
                         (this->*GeoToProjection)(Position(Angle(0.0), Angle(k * ceil_min_lat)), &p_ceil_min, true);
@@ -13514,7 +13514,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
     if (((projection->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
 
-        Projection p_min, p_max;
+        PositionProjection p_min, p_max;
 
 
         //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
@@ -14175,7 +14175,7 @@ template<class P> CheckBody<P>::CheckBody(BodyField<P>* p_in) {
 //        unsigned int i;
 //        bool check;
 //
-//        //I check whether the name in the GUI field Projection matches one of the Projection names in p->names
+//        //I check whether the name in the GUI field PositionProjection matches one of the PositionProjection names in p->names
 //        for (check = false, i = 0; (i < (p->catalog).size()) && (!check); i++) {
 //            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
 //                check = true;
@@ -14210,13 +14210,13 @@ template<class P> CheckBody<P>::CheckBody(BodyField<P>* p_in) {
 //            stringstream temp;
 //
 //            temp.str("");
-//            temp << "Projection must be one of the following: ";
+//            temp << "PositionProjection must be one of the following: ";
 //            for (i = 0; i < (p->catalog.GetCount()); i++) {
 //                temp << ((p->catalog)[i]).ToStdString() << (i < (p->catalog.GetCount()) - 1 ? ", " : ".");
 //            }
 //
 //
-//            (f->print_error_message)->SetAndCall(p->name, String("Projection not found in list of projections!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+//            (f->print_error_message)->SetAndCall(p->name, String("PositionProjection not found in list of projections!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
 //
 //            (p->ok) = false;
 //

@@ -20615,44 +20615,45 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 
 //set the value in the GUI object value equal to the value in the non-GUI object Speed
 template<class P> void SpeedField<P>::set(void) {
-
+    
     int i;
-
-    for (i = 0; (i < (unit->catalog.size())) && ((unit->name->GetValue()) != ((unit->catalog)[i])); i++) {}
-
+    
+    //    for (i = 0; (i < (unit->catalog.size())) && ((unit->name->GetValue()) != ((unit->catalog)[i])); i++) {}
+    i = String((unit->name->GetValue()).ToStdString()).position_in_list(unit->catalog);
+    
     switch (i) {
-
-    case 0: {
-        //unit = String("nm")
-
-        value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (speed->value)));
-
-        break;
+            
+        case 0: {
+            //unit =SpeedUnit_types[0]
+            
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (speed->value)));
+            
+            break;
+        }
+            
+        case 1: {
+            //unit = SpeedUnit_types[1]
+            
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to km/h*/(speed->value) * nm));
+            
+            break;
+        }
+            
+        case 2: {
+            //unit = SpeedUnit_types[2]
+            
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm * 1e3 / 3600.0));
+            
+            break;
+        }
+            
     }
-
-    case 1: {
-        //unit = String("km/h")
-
-        value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to km/h*/(speed->value) * nm));
-
-        break;
-    }
-
-    case 2: {
-        //unit = String("ft")
-
-        value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm * 1e3 / 3600.0));
-
-        break;
-    }
-
-    }
-
+    
     unit->name->SetValue((unit->catalog)[i]);
-
+    
     value_ok = true;
     unit_ok = true;
-
+    
 }
 
 

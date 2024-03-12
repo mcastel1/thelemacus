@@ -1917,7 +1917,7 @@ bool Position::distance(Position p, Length* l, String name, [[maybe_unused]] Str
 //if route is a circle of equal altitude, it returns true if *this is into the circle, and zero otherwise. If route is not a circle of equal altitude, it prints an error message and returns false.
 bool Position::is_in(Route route, [[maybe_unused]] String prefix) {
 
-    if ((route.type) == String("circle of equal altitude")) {
+    if ((route.type) == (Route_types[2])) {
 
         Length d;
 
@@ -2064,7 +2064,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
 }
 
 
-//construct a brand new Route object of type "circle of equal altitude" and thus sets its related sight to -1, because this Route is not related to any sight yet.  length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
+//construct a brand new Route object of type ((Route_types[2]).value) and thus sets its related sight to -1, because this Route is not related to any sight yet.  length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) {
 
     type = type_in;
@@ -2699,11 +2699,11 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
     if (type == String("orthodrome")) {
         listcontrol->SetItem(i, j++, wxString("orthodrome"));
     }
-    if (type == String("circle of equal altitude")) {
-        listcontrol->SetItem(i, j++, wxString("circle of equal altitude"));
+    if (type == (Route_types[2])) {
+        listcontrol->SetItem(i, j++, wxString(((Route_types[2]).value)));
     }
 
-    if (type == String("circle of equal altitude")) {
+    if (type == (Route_types[2])) {
         //in this case the type of this is 'circle of equal altitde': the first three fields are thus empty, and I fill in only the last two fields
 
         listcontrol->SetItem(i, j++, wxString(""));
@@ -2775,7 +2775,7 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
 
     check = true;
 
-    if (type == String("circle of equal altitude")) {
+    if (type == (Route_types[2])) {
 
         //these are the two values of the parametric angle t of the Route (*this), for which the distance between q and a point on (*this) vs. t has a maximum or a minimum
         Angle t_1, t_2;
@@ -2865,7 +2865,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
 
-    if (((circle.type) == String("circle of equal altitude"))) {
+    if (((circle.type) == (Route_types[2]))) {
         //circle is a circle of equal altittude
 
         if ((type.value)[0] == 'l') {
@@ -3060,28 +3060,28 @@ int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle>* t, [[ma
 
         //the parallel of latitude going through the North side of rectangle
         side_N = Route(
-            RouteType("circle of equal altitude"),
+            RouteType(((Route_types[2]).value)),
             Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value) * M_PI_2)),
             Angle(M_PI_2 - fabs(((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)))
         );
 
         //the parallel of latitude going through the S side of rectangle
         side_S = Route(
-            RouteType("circle of equal altitude"),
+            RouteType(((Route_types[2]).value)),
             Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value) * M_PI_2)),
             Angle(M_PI_2 - fabs(((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)))
         );
 
         //the meridian going through the W side of rectangle
         side_W = Route(
-            RouteType("circle of equal altitude"),
+            RouteType(((Route_types[2]).value)),
             Position(((rectangle.p_NW).lambda) + M_PI_2, Angle(0.0)),
             Angle(M_PI_2)
         );
 
         //the meridian going through the E side of rectangle
         side_E = Route(
-            RouteType("circle of equal altitude"),
+            RouteType(((Route_types[2]).value)),
             Position(((rectangle.p_SE).lambda) + M_PI_2, Angle(0.0)),
             Angle(M_PI_2)
         );
@@ -3112,7 +3112,7 @@ int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle>* t, [[ma
         }
 
         //push back into u the angle which corresponds to the endpoint of Route *this
-        if (type == String("circle of equal altitude")) {
+        if (type == (Route_types[2])) {
             u.push_back(Angle(2.0 * M_PI));
             (u.back()).value = 2.0 * M_PI;
         }
@@ -3128,7 +3128,7 @@ int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle>* t, [[ma
             if (type == String("orthodrome")) {
                 compute_end(Length(Re * (((u[i]).value) + ((u[i + 1]).value)) / 2.0), String(""));
             }
-            if (type == String("circle of equal altitude")) {
+            if (type == (Route_types[2])) {
                 compute_end(Length(Re * sin(omega) * (((u[i]).value) + ((u[i + 1]).value)) / 2.0), String(""));
             }
 
@@ -3159,7 +3159,7 @@ int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle>* t, [[ma
             //I push back into t the last value of u, wich corresponds to the endpoint of *this  and which has not been pushed back by the loop above
             t->push_back(u.back());
 
-            if ((type == String("circle of equal altitude")) && is_fully_included && (t->size() == 2)) {
+            if ((type == (Route_types[2])) && is_fully_included && (t->size() == 2)) {
                 //*this is  of type "circle fo equal altitude", its fully included in rectangle and it does not intersect rectangle
 
                 //I set t[1].value = 0.0, so t[0].value = t[1].value = 0.0
@@ -3192,7 +3192,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
 
-    if ((route.type) == String("circle of equal altitude")) {
+    if ((route.type) == (Route_types[2])) {
         //route is a circle of equal altitude
 
         if (type == String("orthodrome")) {
@@ -3320,7 +3320,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
         }
         else {
 
-            if (type == String("circle of equal altitude")) {
+            if (type == (Route_types[2])) {
                 //*this is a circle of equal altitude -> I check check whetehr *this and route intersect
 
                 reference_position.distance(route.reference_position, &d, String(""), new_prefix);
@@ -3534,7 +3534,7 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
     new_prefix = prefix.append(String("\t"));
 
 
-    if (!((type == String("circle of equal altitude")) && (route.type == String("circle of equal altitude")))) {
+    if (!((type == (Route_types[2])) && (route.type == (Route_types[2])))) {
 
         cout << prefix.value << "Routes are not circles of equal altitude: this code only computes intersects between circles of equal altitudes\n";
         return (-1);
@@ -4008,7 +4008,7 @@ bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
     new_prefix = prefix.append(String("\t"));
 
 
-    if ((route.type) != String("circle of equal altitude")) {
+    if ((route.type) != (Route_types[2])) {
         //route.type = "loxodrome" or "orthodrome" -> I can transport *this
 
         Route temp;
@@ -4241,7 +4241,7 @@ void Route::compute_end(String prefix) {
 //This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false
 bool Route::compute_end(Length d, [[maybe_unused]] String prefix) {
 
-    if ((type == String("circle of equal altitude")) || (d <= length)) {
+    if ((type == (Route_types[2])) || (d <= length)) {
 
         Length l_saved;
 
@@ -5328,7 +5328,7 @@ PositionProjection PositionProjection::operator-(const PositionProjection& q) {
 }
 
 
-// this function plots the Routes of type String("circle of equal altitude") in route_list in kml forma. WARNING: THIS FUNCTION USES THE SYSTEM() COMMAND AND THUS IT IS NOT PORTABLE ACROSS PLATFORMS. Also, this functions used file_kml, which has been removed from the code, and it should be revised.
+// this function plots the Routes of type (Route_types[2]) in route_list in kml forma. WARNING: THIS FUNCTION USES THE SYSTEM() COMMAND AND THUS IT IS NOT PORTABLE ACROSS PLATFORMS. Also, this functions used file_kml, which has been removed from the code, and it should be revised.
 void Data::print_to_kml(String prefix) {
 
     stringstream line_ins, /*plot_title contains the  title of the Route to be plotted*/ plot_title;
@@ -5356,7 +5356,7 @@ void Data::print_to_kml(String prefix) {
     command.str("");
     for (i = 0; i < (route_list.size()); i++) {
 
-        if (route_list[i].type == String("circle of equal altitude")) {
+        if (route_list[i].type == (Route_types[2])) {
 
             //this is the opening of a path code in kml format
             plot_command << "\\\t<Style id=\\\"" << i << "\\\">\\\n\\\t<LineStyle>\\\n\\\t\\\t<color>" << /*I use the remainder of i in this way, so if i > size of kml_colors, I start back reading from the beginning of kml_colors*/ kml_colors[i % (sizeof(kml_colors) / sizeof(*kml_colors))] << "<\\/color>\\\n\\\t\\\t<width>2<\\/width>\\\n\\\t<\\/LineStyle>\\\n\\\t<\\/Style>\\\n\\\t<Placemark>\\\n\\\t\\\t<name>"
@@ -5653,7 +5653,7 @@ int Data::compute_position(String prefix) {
             (r.value) /= ((double)((q.size()) * ((q.size()) - 1) / 2));
 
             //computes the circle of equal altitude which represents the error of the sight
-            (error_circle.type) = RouteType("circle of equal altitude");
+            (error_circle.type) = RouteType(((Route_types[2]).value));
             (error_circle.reference_position) = center;
             (error_circle.omega.value) = (r.value) / Re;
             (error_circle.label) = String("error on astronomical position");
@@ -6486,7 +6486,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
 
     cout << prefix.value << "Reducing sight ...\n";
 
-    (circle_of_equal_altitude->type.value) = "circle of equal altitude";
+    (circle_of_equal_altitude->type.value) = ((Route_types[2]).value);
 
     compute_H_a(new_prefix);
     check &= get_coordinates(circle_of_equal_altitude, new_prefix);
@@ -6800,7 +6800,7 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
 
     check = true;
 
-    if (type == String("circle of equal altitude")) {
+    if (type == (Route_types[2])) {
 
         if (abs(-tan(reference_position.phi.value) * tan((omega.value))) < 1.0) {
             //im this case ( abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0) there exists a value of t = t_{max} (t_{min}) such that reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and write reference_position.lambda_{t = t_{min}} and reference_position.lambda_{t = t_{max}}] in lambda_min, lambda_max
@@ -8579,7 +8579,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     );
 
     //specify that circle_observer is a circle of equal altitude
-    circle_observer.type = RouteType("circle of equal altitude");
+    circle_observer.type = RouteType(((Route_types[2]).value));
 
     //clears the vector label_phi because tehre are not y labels yet.
     parallels_and_meridians_labels_now.resize(0);
@@ -10334,7 +10334,7 @@ inline void DrawPanel::Draw_3D(void) {
 
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
-    route.type.set(String("circle of equal altitude"));
+    route.type.set((Route_types[2]));
     ((route.reference_position).lambda) = lambda_middle;
 
     //this loop runs over the latitude of the parallel, which we call phi
@@ -10375,7 +10375,7 @@ inline void DrawPanel::Draw_3D(void) {
 
             }
 
-            route.type.set(String("circle of equal altitude"));
+            route.type.set((Route_types[2]));
 
         }
 
@@ -13036,7 +13036,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 if ((parent->parent->highlighted_route_now) != -1) {
                     //set route_reference_position_drag_now to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
 
-                    if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).type) == String("circle of equal altitude")) {
+                    if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
 
                         route_reference_position_drag_start = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position);
 
@@ -13214,7 +13214,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 
                             //                    (this->*GeoToDrawPanel)(route_reference_position_drag_now, &p);
 
-                            if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).type) == String("circle of equal altitude")) {
+                            if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
 
                                 //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position));
                                 route_reference_position_drag_start.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
@@ -13789,10 +13789,10 @@ void AllRoutes::operator()(wxCommandEvent& event) {
 
     unsigned int j;
 
-    //there need to be at list two routes of type "circle of equal altitude" to compute crossings. Here I include all routes of type "circle of equal altitude" into crossing_route_list by writing their index into crossing_route_list
+    //there need to be at list two routes of type ((Route_types[2]).value) to compute crossings. Here I include all routes of type ((Route_types[2]).value) into crossing_route_list by writing their index into crossing_route_list
     for (((f->data)->crossing_route_list).clear(), j = 0; j < ((f->data)->route_list).size(); j++) {
 
-        if ((((((f->data)->route_list))[j]).type.value) == "circle of equal altitude") {
+        if ((((((f->data)->route_list))[j]).type.value) == ((Route_types[2]).value)) {
             ((f->data)->crossing_route_list).push_back(((((f->data)->route_list))[j]));
         }
 
@@ -13814,7 +13814,7 @@ void SomeRoutes::operator()(wxCommandEvent& event) {
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
     for ((f->crossing_route_list_temp.clear()), i = 0; i < ((f->data)->route_list).size(); i++) {
 
-        if ((((f->data)->route_list)[i]).type == String("circle of equal altitude")) {
+        if ((((f->data)->route_list)[i]).type == (Route_types[2])) {
             (f->crossing_route_list_temp).push_back((((f->data)->route_list)[i]));
         }
 
@@ -13885,7 +13885,7 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
             /*condition that the Route is not relatied to a Sight*/
             (((((parent->data->route_list)[i]).related_sight).value) == -1) &&
             /*condition that the Route is not a circle of equal altitude*/
-            (((parent->data->route_list)[i]).type != String("circle of equal altitude")) &&
+            (((parent->data->route_list)[i]).type != (Route_types[2])) &&
             /*condition that the Route does not coincide with the object to transport*/
             (((parent->transported_object) != String("route")) || ((parent->i_object_to_transport) != i))
             ) {
@@ -15712,8 +15712,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     type = new RouteTypeField<RouteFrame>(panel, &(route->type), &(wxGetApp().list_frame->data->recent_route_types));
     //if the Route of *this is for transport, then only show 'loxodrome' and 'orthodrome' in type
     if (for_transport) {
-        type->catalog.Remove("circle of equal altitude");
-        type->items.Remove("circle of equal altitude");
+        type->catalog.Remove(((Route_types[2]).value));
+        type->items.Remove(((Route_types[2]).value));
         type->name->Set(type->items);
     }
 
@@ -16151,7 +16151,7 @@ bool RouteFrame::is_ok(void) {
             ||
 
             (
-                (((type->name)->GetValue()) == wxString("circle of equal altitude")) &&
+                (((type->name)->GetValue()) == wxString(((Route_types[2]).value))) &&
                 ((omega->is_ok()) &&
                     (GP_phi->is_ok()) &&
                     (GP_lambda->is_ok()))
@@ -16211,7 +16211,7 @@ void RouteFrame::set(void) {
     type->set();
     length_format->set();
 
-    if ((route->type.value) == wxString("circle of equal altitude")) {
+    if ((route->type.value) == wxString(((Route_types[2]).value))) {
         //I disable the GUI fields which do not define a circle of equal altitude and set the others
 
         Z->Enable(false);
@@ -16272,7 +16272,7 @@ template<class T> void RouteFrame::get(T& event) {
 
     type->MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame> >::Get(event);
 
-    if (((type->name)->GetValue()) == wxString("circle of equal altitude")) {
+    if (((type->name)->GetValue()) == wxString(((Route_types[2]).value))) {
 
         GP_phi->get(event);
         GP_lambda->get(event);
@@ -16313,7 +16313,7 @@ template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {
 
     if ((type->is_ok()) && (length_format->is_ok())) {
 
-        if ((type->name->GetValue()) != wxString("circle of equal altitude")) {
+        if ((type->name->GetValue()) != wxString(((Route_types[2]).value))) {
             //the Route is either a loxodrome or an orthodrome
 
             int i;
@@ -19094,9 +19094,9 @@ template<class P> template <class T> void ChronoField<P>::get(T& event) {
 //
 //
 //        }
-//        if (String((MultipleItemField<P, RouteType, CheckRouteType<P> >::name->GetValue()).ToStdString()) == String("circle of equal altitude")) {
+//        if (String((MultipleItemField<P, RouteType, CheckRouteType<P> >::name->GetValue()).ToStdString()) == (Route_types[2])) {
 //
-//            type->set(String(""), String("circle of equal altitude"), String(""));
+//            type->set(String(""), (Route_types[2]), String(""));
 //
 //        }
 //

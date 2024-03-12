@@ -835,6 +835,23 @@ inline int String::position_in_list(const vector<String>& list){
     
 }
 
+
+//checks whether *this is equal to an element in: if *this is equal to the i-th element in list, retun i. If *this isn't equal to any element in list, return list.size()
+inline int String::position_in_list(const wxArrayString& list){
+    
+    unsigned int i;
+    
+    for(i=0; i<list.size(); i++){
+        if(value == list[i]){
+            break;
+        }
+    }
+    
+    return i;
+    
+}
+
+
 //return the number of characters in *this
 unsigned int String::get_length(void){
     
@@ -14929,7 +14946,7 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
         
         switch (String((unit->name->GetValue()).ToStdString()).position_in_list(unit->catalog)) {
                 
-            case 'n': {
+            case 0: {
                 //unit = "nm"
                 
                 length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
@@ -14939,7 +14956,7 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
             }
                 
                 
-            case 'm': {
+            case 1: {
                 //unit = "m"
                 
                 length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm), String(""));
@@ -14949,7 +14966,7 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
             }
                 
                 
-            case 'f': {
+            case 2: {
                 //unit = "ft"
                 
                 length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_ft, String(""));

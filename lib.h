@@ -146,7 +146,8 @@ public:
     unsigned int get_length(void);
     vector<String> split(void);
     int position_in_list(const vector<String>&);
-    
+    int position_in_list(const wxArrayString&);
+
     bool operator==(const String&), operator!=(const String&);
     
 };

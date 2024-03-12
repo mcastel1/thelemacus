@@ -59,6 +59,7 @@ class LengthFormat;
 class RouteType;
 class Projection;
 class LengthUnit;
+class SpeedUnit;
 
 class Catalog;
 class Limb;
@@ -648,6 +649,16 @@ public:
     
 };
 
+
+//a derived class from String, which stores the unit of measuer of Speed ("kt", etc...)
+class SpeedUnit: public String{
+    
+public:
+
+    SpeedUnit();
+    SpeedUnit(const String&);
+    
+};
 
 
 //a non-GUI object containing a Length

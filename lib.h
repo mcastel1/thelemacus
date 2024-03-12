@@ -1430,30 +1430,30 @@ public:
     
 };
 
-template<class P> class CheckSpeedUnit{
-    
-public:
-    
-    SpeedField<P>* p;
-    
-    CheckSpeedUnit(SpeedField<P>*);
-    template<class T> void operator()(T&);
-    
-};
+//template<class P> class CheckSpeedUnit{
+//    
+//public:
+//    
+//    SpeedField<P>* p;
+//    
+//    CheckSpeedUnit(SpeedField<P>*);
+//    template<class T> void operator()(T&);
+//    
+//};
 
-template<class P> class CheckSpeed{
-    
-public:
-    
-    //p is the SpeedField which is parent of the CheckSpeed object: the CheckSpeed object checks the validity of the entries in SpeedField
-    SpeedField<P>* p;
-    CheckSpeedValue<P>* check_speed_value;
-    CheckSpeedUnit<P>* check_speed_unit;
-    
-    CheckSpeed(SpeedField<P>*);
-    template <class T> void operator()(T&);
-    
-};
+//template<class P> class CheckSpeed{
+//    
+//public:
+//    
+//    //p is the SpeedField which is parent of the CheckSpeed object: the CheckSpeed object checks the validity of the entries in SpeedField
+//    SpeedField<P>* p;
+//    CheckSpeedValue<P>* check_speed_value;
+////    CheckSpeedUnit<P>* check_speed_unit;
+//    
+//    CheckSpeed(SpeedField<P>*);
+//    template <class T> void operator()(T&);
+//    
+//};
 
 
 template<class P> class CheckString{
@@ -2443,7 +2443,7 @@ public:
 };
 
 //GUI field to specify the unit of measure of a Speed, which is inserted into a parent panel of type P
-template<class P> class SpeedUnitField: public MultipleItemField<P, SpeedUnit, CheckSpeedUnit<P> >{
+template<class P> class SpeedUnitField: public MultipleItemField<P, SpeedUnit, void >{
     
 public:
     

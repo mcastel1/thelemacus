@@ -14838,83 +14838,83 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 
 }
 
-template<class P> CheckSpeedUnit<P>::CheckSpeedUnit(SpeedField<P>* p_in) {
+//template<class P> CheckSpeedUnit<P>::CheckSpeedUnit(SpeedField<P>* p_in) {
+//
+//    p = p_in;
+//
+//}
+//
+////checks the unit in the GUI field in SpeedField
+//template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event) {
+//
+//    P* f = (p->parent_frame);
+//
+//    //I proceed only if the progam is not is indling mode
+//    if (!(f->idling)) {
+//
+//        unsigned int i;
+//        bool check;
+//
+//        //I check whether the name in the GUI field unit matches one of the unit names in (unit->catalog)
+//        for (check = false, i = 0; (i < (p->unit->catalog).size()) && (!check); i++) {
+//            if ((p->unit->name->GetValue()) == (p->unit->catalog)[i]) {
+//                check = true;
+//            }
+//        }
+//        i--;
+//
+//        if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
+//
+//            //if check is true (false) -> set unit_ok to true (false)
+//            (p->unit_ok) = check;
+//            //the background color is set to white, because in this case there is no erroneous value in deg
+//            p->unit->name->SetForegroundColour(wxGetApp().foreground_color);
+//            p->unit->name->SetFont(wxGetApp().default_font);
+//
+//
+//        }
+//        else {
+//
+//            stringstream temp;
+//
+//            temp.str("");
+//            temp << "Available units are: ";
+//            for (i = 0; i < (p->unit->catalog).size(); i++) {
+//                temp << (p->unit->catalog)[i].ToStdString() << ((i < (p->unit->catalog).size() - 1) ? ", " : ".");
+//            }
+//
+//            (f->print_error_message)->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+//
+//            (p->unit_ok) = false;
+//
+//        }
+//
+//        f->AllOk();
+//
+//    }
+//
+//    event.Skip(true);
+//
+//}
 
-    p = p_in;
+//template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
+//
+//    p = p_in;
+//
+//    check_speed_value = new CheckSpeedValue<P>(p);
+////    check_speed_unit = new CheckSpeedUnit<P>(p);
+//
+//}
 
-}
-
-//checks the unit in the GUI field in SpeedField
-template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event) {
-
-    P* f = (p->parent_frame);
-
-    //I proceed only if the progam is not is indling mode
-    if (!(f->idling)) {
-
-        unsigned int i;
-        bool check;
-
-        //I check whether the name in the GUI field unit matches one of the unit names in (unit->catalog)
-        for (check = false, i = 0; (i < (p->unit->catalog).size()) && (!check); i++) {
-            if ((p->unit->name->GetValue()) == (p->unit->catalog)[i]) {
-                check = true;
-            }
-        }
-        i--;
-
-        if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
-
-            //if check is true (false) -> set unit_ok to true (false)
-            (p->unit_ok) = check;
-            //the background color is set to white, because in this case there is no erroneous value in deg
-            p->unit->name->SetForegroundColour(wxGetApp().foreground_color);
-            p->unit->name->SetFont(wxGetApp().default_font);
-
-
-        }
-        else {
-
-            stringstream temp;
-
-            temp.str("");
-            temp << "Available units are: ";
-            for (i = 0; i < (p->unit->catalog).size(); i++) {
-                temp << (p->unit->catalog)[i].ToStdString() << ((i < (p->unit->catalog).size() - 1) ? ", " : ".");
-            }
-
-            (f->print_error_message)->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
-
-            (p->unit_ok) = false;
-
-        }
-
-        f->AllOk();
-
-    }
-
-    event.Skip(true);
-
-}
-
-template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
-
-    p = p_in;
-
-    check_speed_value = new CheckSpeedValue<P>(p);
-    check_speed_unit = new CheckSpeedUnit<P>(p);
-
-}
-
-//this functor checks the whole Speed field by calling the check on its value and unit
-template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
-
-    (*check_speed_value)(event);
-    (*check_speed_unit)(event);
-
-    event.Skip(true);
-
-}
+////this functor checks the whole Speed field by calling the check on its value and unit
+//template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
+//
+//    (*check_speed_value)(event);
+////    (*check_speed_unit)(event);
+//
+//    event.Skip(true);
+//
+//}
 
 
 //write the value of the GUI field in LengthField into the non-GUI field length
@@ -20924,7 +20924,7 @@ template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, 
  
 
 //constructor of a LengthUnitField object, based on the parent frame frame
-template<class P> SpeedUnitField<P>::SpeedUnitField(wxPanel* panel_of_parent, SpeedUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, SpeedUnit, CheckSpeedUnit<P> >(panel_of_parent, object_in, SpeedUnit_types, recent_items_in) {
+template<class P> SpeedUnitField<P>::SpeedUnitField(wxPanel* panel_of_parent, SpeedUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, SpeedUnit, void >(panel_of_parent, object_in, SpeedUnit_types, recent_items_in) {
 
 }
 

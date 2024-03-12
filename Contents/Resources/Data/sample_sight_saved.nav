@@ -34,15 +34,12 @@ Data:
 			label = 2024-01-10 12:52:09 UTC+2
 	Routes:
 		Route #1:
-			type = orthodrome
-			start position:
-				latitude = 304° 26.76000000000158'
-				longitude = 64° 46.11999999999966'
+			type = circle of equal altitude
+			ground position:
+				latitude = 2° 1.999999999999993'
+				longitude = 357° 58.00000000000182'
 				label = 2024-01-11 17:17:38 UTC+2
-			starting heading = 126° 3.230000000000643'
-			length format = time and speed
-				time = 03:03:01.23425
-				speed = 1000 kt
+			aperture angle = 2° 1.999999999999993'
 			label = route with speed and time
 		Route #2:
 			type = loxodrome
@@ -55,7 +52,18 @@ Data:
 				time = 06:59:45.5436
 				speed = 500 kt
 			label = jlkj
-		Route #3:
+        Route #3:
+            type = orthodrome
+            start position:
+                latitude = 22° 3.000000000000043'
+                longitude = 356° 56.99999999999932'
+                label = 2024-01-21 17:04:03 UTC+2
+            starting heading = 19° 3.000000000000043'
+            length format = time and speed
+                time = 06:59:45.5436
+                speed = 500 kt
+            label = jlkj
+		Route #4:
 			type = circle of equal altitude
 			ground position:
 				latitude = 336° 56.99999999999932'
@@ -70,5 +78,6 @@ Data:
 			label = Siamo in biblioteca
 Recent bodies = 12 10 8
 Recent projections = 1 0
-Recent length formats = 1 0
-Recent route types = 1 2 0
+Recent length formats = 0 1
+Recent route types = 2 1 0
+Recent length units = 1 0

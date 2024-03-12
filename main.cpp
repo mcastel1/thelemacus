@@ -89,6 +89,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+ - get rid of number_of_recent_* ints by reading the number of recent items directly dfrom file string
  - condense id RouteTypeField<P>::set(void)
  - condense insert_recent_body,  insert_recent_projection, ... + print_recent_body, print_recent_projection, ... into a pair of methods
  - try  wxDCClipper to quickly delete old image on DrawPanel
@@ -131,7 +132,6 @@
      - in the MultipleItemField, create a pointer OnChooseItem to a templated method of the class (I tried  template<class T> void (MultipleItemField::*OnChooseItem)(T&); but it does not compile), and when MultipleItemField is constructed, let this pointer point to the desired method -> Then you will be able to move OnEdit to the parent class and simplify off things !
      - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
      - frames are not resized according to the size of their title
-     -  GUI fields  SpeedField::unit must be defined in terms of the parent class MultipleItemField
 on WIN32:
          - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
          - when a ChartFrame is first created and when Reset is pressed, parallel and meridian labels are shown very small

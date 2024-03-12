@@ -20543,11 +20543,16 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     parent_frame = ((P*)(panel_of_parent->GetParent()));
     speed = p;
     unit_value = unit_value_in;
+    //these flags will be used in the method InsertIn below, to insert this->unit
+    wxSizerFlags flags;
 
     //    ((parent_frame->check_height_of_eye).p) = this;
 
     //initialize check
     check = new CheckSpeed<P>(this);
+
+    flags.Center();
+
 
     //tabulate the possible units of measure
 //    units.Clear();
@@ -20571,10 +20576,10 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     unit = new SpeedUnitField<P>(parent_frame->panel, &(speed->unit), &(wxGetApp().list_frame->data->recent_speed_units));
     
     //SetColor(unit);
-    AdjustWidth(unit->name);
+//    AdjustWidth(unit->name);
     //I set the value of unit to the unit of measure with with this SpeedField was called in its constructor, and set its value to ok because that is a valid unit of measure
-    unit->name->SetValue(unit_value.value);
-    unit_ok = true;
+//    unit->name->SetValue(unit_value.value);
+//    unit_ok = true;
     unit->name->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_unit)));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     unit->Bind(wxEVT_COMBOBOX, &SpeedField::OnEditUnit<wxCommandEvent>, this);
@@ -20586,8 +20591,9 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(value, 0, wxALIGN_CENTER);
-    sizer_h->Add(unit->name, 0, wxALIGN_CENTER);
-
+    
+    //    sizer_h->Add(unit->name, 0, wxALIGN_CENTER);
+    unit->InsertIn(sizer_h, flags);
 }
 
 

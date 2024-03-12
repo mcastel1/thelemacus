@@ -19304,7 +19304,7 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
             //the GUI field  contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             if (check) {
-                //the content of the GUI field metches one of the items in catalog, i.e., it is valid -> I insert it into recent_items, which points to a suitable location (initialized when *this was constructed)
+                //the content of the GUI field matches one of the items in catalog, i.e., it is valid -> I insert it into recent_items, which points to a suitable location (initialized when *this was constructed)
 
                 //insert item #i into data->recent_bodies
 //                wxGetApp().list_frame->data->insert_recent_projection(i);
@@ -20580,7 +20580,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     //I set the value of unit to the unit of measure with with this SpeedField was called in its constructor, and set its value to ok because that is a valid unit of measure
 //    unit->name->SetValue(unit_value.value);
 //    unit_ok = true;
-    unit->name->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_unit)));
+//    unit->name->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_unit)));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     unit->Bind(wxEVT_COMBOBOX, &SpeedField::OnEditUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &SpeedField::OnEditUnit<wxKeyEvent>, this);
@@ -20594,6 +20594,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     
     //    sizer_h->Add(unit->name, 0, wxALIGN_CENTER);
     unit->InsertIn(sizer_h, flags);
+    
 }
 
 

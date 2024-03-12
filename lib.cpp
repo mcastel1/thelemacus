@@ -1129,16 +1129,29 @@ void Speed::print(String name, String prefix, ostream& ostr) {
 
 }
 
-//constructor of Speed that takes no arguments
-Speed::Speed(void) {}
+//constructor of Speed that takes no arguments, and set the unit to the first entry of SpeedUnit_types
+Speed::Speed(void) {
+    
+    unit = SpeedUnit(SpeedUnit_types[0]);
+    
+}
 
-//constructor of Speed that sets value to value_in
+//constructor of Speed that sets value to value_in, and  the unit to the first entry of SpeedUnit_types
 Speed::Speed(double value_in) {
 
     value = value_in;
+    unit = SpeedUnit(SpeedUnit_types[0]);
 
 }
 
+
+//constructor which sets value to x  and the unit to unit_in
+Speed::Speed(double value_in, const SpeedUnit& unit_in) {
+
+    value = value_in;
+    unit = unit_in;
+
+}
 
 //set the value of *this to x, where x is in kt
 void Speed::set(String name, double x, [[maybe_unused]] String prefix) {

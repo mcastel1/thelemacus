@@ -666,9 +666,9 @@ public:
 class Length{
     
 public:
-    //the value of the length
+    //the value of the Length
     double value;
-    //the unit of measure of the length
+    //the unit of measure of the Length
     LengthUnit unit;
     
     Length();
@@ -694,11 +694,15 @@ class Speed{
     
 public:
     
-    //the value of the Speed, which is expressed in kt
+    //the value of the Speed
     double value;
+    //the unit of measure of the Speed
+    SpeedUnit unit;
+
     
     Speed();
     Speed(double);
+    Speed(double, const SpeedUnit&);
     void set(String, double, String);
     void print(String, String, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);

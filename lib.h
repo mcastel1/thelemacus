@@ -32,6 +32,7 @@ template<class P> class ProjectionField;
 template<class P> class LengthFormatField;
 template<class P> class LimbField;
 template<class P> class LengthUnitField;
+template<class P> class SpeedUnitField;
 template<class P, class T> class CheckField;
 template<class P> class AngleField;
 template<class P> class LengthField;
@@ -2299,8 +2300,8 @@ public:
     P* parent_frame;
     //the speed value
     wxTextCtrl *value;
-    //units of measure of the speed
-    wxComboBox* unit;
+    //units of measure of the Length
+    SpeedUnitField<P>* unit;
     wxBoxSizer *sizer_h, *sizer_v;
     Speed* speed;
     //an array containing all possible units of measure
@@ -2436,10 +2437,18 @@ template<class P> class LengthUnitField: public MultipleItemField<P, LengthUnit,
 public:
     
     LengthUnitField(wxPanel*, LengthUnit*, vector<int>*);
-//    void set(void);
-//    template<class E> void OnEdit(E&);
     
 };
+
+//GUI field to specify the unit of measure of a Speed, which is inserted into a parent panel of type P
+template<class P> class SpeedUnitField: public MultipleItemField<P, SpeedUnit, CheckSpeedUnit<P> >{
+    
+public:
+    
+    SpeedUnitField(wxPanel*, SpeedUnit*, vector<int>*);
+    
+};
+
 
 
 

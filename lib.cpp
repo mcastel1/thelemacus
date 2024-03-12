@@ -14919,51 +14919,51 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 
 //write the value of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void LengthField<P>::get(T& event) {
-
+    
     if (is_ok()) {
-
+        
         double length_temp;
-
+        
         value->GetValue().ToDouble(&length_temp);
-
-
-        switch (((unit->name->GetValue()).ToStdString())[0]) {
-
-        case 'n': {
-            //unit = "nm"
-
-            length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
-
-            break;
-
+        
+        
+        switch (String((unit->name->GetValue()).ToStdString()).position_in_list(unit->catalog)) {
+                
+            case 'n': {
+                //unit = "nm"
+                
+                length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
+                
+                break;
+                
+            }
+                
+                
+            case 'm': {
+                //unit = "m"
+                
+                length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm), String(""));
+                
+                break;
+                
+            }
+                
+                
+            case 'f': {
+                //unit = "ft"
+                
+                length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_ft, String(""));
+                
+                break;
+                
+            }
+                
         }
-
-
-        case 'm': {
-            //unit = "m"
-
-            length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm), String(""));
-
-            break;
-
-        }
-
-
-        case 'f': {
-            //unit = "ft"
-
-            length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_ft, String(""));
-
-            break;
-
-        }
-
-        }
-
+        
     }
-
+    
     event.Skip(true);
-
+    
 }
 
 

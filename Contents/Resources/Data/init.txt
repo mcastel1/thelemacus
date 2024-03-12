@@ -89,6 +89,7 @@ number of recent route types = 3
 number of recent projections = 2
 number of recent length formats = 2
 number of recent length units = 2
+number of recent speed units = 2
 #files in code directory
 name file temp = temp.txt
 #files in data directory

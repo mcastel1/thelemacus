@@ -5512,6 +5512,7 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
     recent_length_formats.resize(wxGetApp().n_recent_length_formats.value);
     recent_route_types.resize(wxGetApp().n_recent_route_types.value);
     recent_length_units.resize(wxGetApp().n_recent_length_units.value);
+    recent_speed_units.resize(wxGetApp().n_recent_speed_units.value);
 
     //	file_init.close(prefix);
 
@@ -5735,9 +5736,7 @@ void Data::print(bool print_all_routes, String prefix, ostream& ostr) {
     print_recent_items(recent_length_formats, String("length formats"), prefix, ostr);
     print_recent_items(recent_route_types, String("route types"), prefix, ostr);
     print_recent_items(recent_length_units, String("length units"), prefix, ostr);
-    //    print_recent_bodies(prefix, ostr);
-//    print_recent_projections(prefix, ostr);
-//    print_recent_length_formats(prefix, ostr);
+    print_recent_items(recent_speed_units, String("speed units"), prefix, ostr);
 
 }
 
@@ -6281,7 +6280,7 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
     read_list_from_stream<S>(String("Recent length formats"), input_stream, true, &recent_length_formats);
     read_list_from_stream<S>(String("Recent route types"), input_stream, true, &recent_route_types);
     read_list_from_stream<S>(String("Recent length units"), input_stream, true, &recent_length_units);
-
+    read_list_from_stream<S>(String("Recent speed units"), input_stream, true, &recent_speed_units);
 
 }
 
@@ -20569,7 +20568,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 
 
 //    (unit->name) = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
-    unit = new SpeedUnitField<P>(parent_frame->panel, (speed->unit), &(wxGetApp().list_frame->data->recent_length_units));
+    unit = new SpeedUnitField<P>(parent_frame->panel, &(speed->unit), &(wxGetApp().list_frame->data->recent_speed_units));
     
     //SetColor(unit);
     AdjustWidth(unit->name);

@@ -1069,11 +1069,7 @@ public:
     vector<Route> crossing_route_list;
     Int n_points_plot_coastline_Mercator, n_points_plot_coastline_3D, n_points_routes, /*the preferred numer of ticks per axis in the chart plot: if there is enough space, I will put this number of ticks. If not, I will plot a nuber of ticks as cloase as possible to the preferred one*/n_intervals_ticks_preferred;
     //the recent bodies, projections, ... selected by the user are stored here
-    vector<int> recent_bodies;
-    vector<int> recent_projections;
-    vector<int> recent_length_formats;
-    vector<int> recent_route_types;
-    vector<int> recent_length_units;
+    vector<int> recent_bodies, recent_projections, recent_length_formats, recent_route_types, recent_length_units, recent_speed_units;
 
     Data(Catalog*, String);
     //~Data();

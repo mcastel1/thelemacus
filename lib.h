@@ -2305,7 +2305,7 @@ public:
     wxBoxSizer *sizer_h, *sizer_v;
     Speed* speed;
     //an array containing all possible units of measure
-    wxArrayString units;
+//    wxArrayString units;
     //the units of measure of the length in this GUI field
     String unit_value;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length

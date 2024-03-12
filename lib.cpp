@@ -14855,9 +14855,9 @@ template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event
         unsigned int i;
         bool check;
 
-        //I check whether the name in the GUI field unit matches one of the unit names in units
-        for (check = false, i = 0; (i < (p->units).size()) && (!check); i++) {
-            if ((p->unit->name->GetValue()) == (p->units)[i]) {
+        //I check whether the name in the GUI field unit matches one of the unit names in (unit->catalog)
+        for (check = false, i = 0; (i < (p->unit->catalog).size()) && (!check); i++) {
+            if ((p->unit->name->GetValue()) == (p->unit->catalog)[i]) {
                 check = true;
             }
         }
@@ -14879,8 +14879,8 @@ template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event
 
             temp.str("");
             temp << "Available units are: ";
-            for (i = 0; i < (p->units).size(); i++) {
-                temp << (p->units)[i].ToStdString() << ((i < (p->units).size() - 1) ? ", " : ".");
+            for (i = 0; i < (p->unit->catalog).size(); i++) {
+                temp << (p->unit->catalog)[i].ToStdString() << ((i < (p->unit->catalog).size() - 1) ? ", " : ".");
             }
 
             (f->print_error_message)->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
@@ -20550,10 +20550,10 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     check = new CheckSpeed<P>(this);
 
     //tabulate the possible units of measure
-    units.Clear();
-    units.Add(wxT("kt"));
-    units.Add(wxT("km/h"));
-    units.Add(wxT("m/s"));
+//    units.Clear();
+//    units.Add(wxT("kt"));
+//    units.Add(wxT("km/h"));
+//    units.Add(wxT("m/s"));
 
 
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
@@ -20596,7 +20596,7 @@ template<class P> void SpeedField<P>::set(void) {
 
     int i;
 
-    for (i = 0; (i < (units.size())) && ((unit->name->GetValue()) != (units[i])); i++) {}
+    for (i = 0; (i < (unit->catalog.size())) && ((unit->name->GetValue()) != ((unit->catalog)[i])); i++) {}
 
     switch (i) {
 
@@ -20626,7 +20626,7 @@ template<class P> void SpeedField<P>::set(void) {
 
     }
 
-    unit->name->SetValue(units[i]);
+    unit->name->SetValue((unit->catalog)[i]);
 
     value_ok = true;
     unit_ok = true;
@@ -20704,8 +20704,8 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
 
     bool success;
 
-    //I check whether the name in the GUI field unit matches one of the unit names in units
-    find_and_replace_case_insensitive(unit->name, units, &success, NULL);
+    //I check whether the name in the GUI field unit matches one of the unit names in (unit->catalog)
+    find_and_replace_case_insensitive(unit->name, (unit->catalog), &success, NULL);
 
 
     if (success) {

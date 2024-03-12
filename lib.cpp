@@ -2050,7 +2050,7 @@ Route::Route(void) {
 }
 
 
-//constructs a brand new Route object of type "loxodrome" or "orthodrome" and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
+//constructs a brand new Route object of type ((Route_types[0]).value) or ((Route_types[1]).value) and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Length l_in) {
 
     type = type_in;
@@ -2250,7 +2250,7 @@ void Route::Draw(unsigned int n_points, Color foreground_color, Color background
     //comoute the end values of l and writes them in s
     compute_l_ends(&s, NULL, draw_panel, prefix);
 
-    if (type == String("loxodrome")) {
+    if (type == (Route_types[0])) {
         //*this is a loxodrome
 
         cout << prefix.value << RED << "Cannot execute Draw: the Route is not an orthodrome nor a circle of equal altitude!\n" << RESET;
@@ -2693,11 +2693,11 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
     listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (int)(i + 1)));
 
     //set type column: I write the extended type names, not the short ones 'l', 'o' and 'c'
-    if (type == String("loxodrome")) {
-        listcontrol->SetItem(i, j++, wxString("loxodrome"));
+    if (type == (Route_types[0])) {
+        listcontrol->SetItem(i, j++, wxString(((Route_types[0]).value)));
     }
-    if (type == String("orthodrome")) {
-        listcontrol->SetItem(i, j++, wxString("orthodrome"));
+    if (type == (Route_types[1])) {
+        listcontrol->SetItem(i, j++, wxString(((Route_types[1]).value)));
     }
     if (type == (Route_types[2])) {
         listcontrol->SetItem(i, j++, wxString(((Route_types[2]).value)));
@@ -3036,7 +3036,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle>* t, [[maybe_unused]] String prefix) {
 
 
-    if (type == String("loxodrome")) {
+    if (type == (Route_types[0])) {
         //*this is a loxodrome
 
         cout << prefix.value << RED << "Cannot determine whether *this is included in rectangle, because *this is a loxodrome!\n" << RESET;
@@ -3107,7 +3107,7 @@ int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle>* t, [[ma
 
 
         //push back into u the angle which corresponds to the endpoint of Route *this
-        if (type == String("orthodrome")) {
+        if (type == (Route_types[1])) {
             u.push_back(Angle((length.value) / Re));
         }
 
@@ -3125,7 +3125,7 @@ int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle>* t, [[ma
         for (output = 0, is_fully_included = true, i = 0; i < (u.size()) - 1; i++) {
 
             //compute the midpoint between two subsequesnt intersections, and write it into this->end. I use u[(i+1) % (u.size())] in such a way that, when i = u.size() -1, this equals u[0], because the last chunk that I want to consider is the one between the last and the first intersection
-            if (type == String("orthodrome")) {
+            if (type == (Route_types[1])) {
                 compute_end(Length(Re * (((u[i]).value) + ((u[i + 1]).value)) / 2.0), String(""));
             }
             if (type == (Route_types[2])) {
@@ -3195,7 +3195,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
     if ((route.type) == (Route_types[2])) {
         //route is a circle of equal altitude
 
-        if (type == String("orthodrome")) {
+        if (type == (Route_types[1])) {
             //*this is an orthodrome -> I check whether route and *this intersect: I compute the minimal distance between a point on *this and the GP (reference position) of route. I do this by checking the distance at the two extrema (at the beginning and at the end of *this), and by looking for an extremum in the middle of *this
 
             vector<Length> s(2);
@@ -3420,7 +3420,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             }
             else {
 
-                if (type == String("loxodrome")) {
+                if (type == (Route_types[0])) {
 
                     cout << new_prefix.value << RED << "Route is a loxodrome, I cannot compute intersection for loxodromes!\n" << RESET;
 
@@ -4009,7 +4009,7 @@ bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
 
 
     if ((route.type) != (Route_types[2])) {
-        //route.type = "loxodrome" or "orthodrome" -> I can transport *this
+        //route.type = ((Route_types[0]).value) or ((Route_types[1]).value) -> I can transport *this
 
         Route temp;
 
@@ -4290,7 +4290,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
 
     type.print(String("type"), true, new_prefix, ostr);
 
-    if ((type == String("loxodrome")) || (type == String("orthodrome"))) {
+    if ((type == (Route_types[0])) || (type == (Route_types[1]))) {
 
         reference_position.print(String("start position"), new_prefix, ostr);
         Z.print(String("starting heading"), new_prefix, ostr);
@@ -8778,7 +8778,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     //I draw the four edges of the rectangle in a way that is independent of the projection used
     //right vertical edge of rectangle
     (Route(
-        RouteType("orthodrome"),
+        RouteType(((Route_types[1]).value)),
         (parent->parent->geo_position_start),
         Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
         Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
@@ -8786,7 +8786,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 
     //left vertical edge of rectangle
     (Route(
-           RouteType("orthodrome"),
+           RouteType(((Route_types[1]).value)),
         geo_position,
         Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
         Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
@@ -8794,7 +8794,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 
     //bottom horizontal edge of rectangle
     (Route(
-           RouteType("loxodrome"),
+           RouteType(((Route_types[0]).value)),
         (parent->parent->geo_position_start),
         //change this by introducing if
         Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
@@ -8803,7 +8803,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 
     //top horizontal edge of rectangle
     (Route(
-           RouteType("loxodrome"),
+           RouteType(((Route_types[0]).value)),
         geo_position,
         //change this by introducing if
         Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
@@ -9578,7 +9578,7 @@ inline void DrawPanel::TabulateRoutes(void) {
 
         //write the points of the curves corresponding to the Routes into points_route_list_now
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
-        if (((parent->parent->data->route_list)[i]).type != String("loxodrome")) {
+        if (((parent->parent->data->route_list)[i]).type != (Route_types[0])) {
 
             ((parent->parent->data->route_list)[i]).Draw((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list_now.data()) + i, String(""));
 
@@ -9923,7 +9923,7 @@ inline void DrawPanel::Draw_Mercator(void) {
 
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    route.type.set(String("orthodrome"));
+    route.type.set(String(((Route_types[1]).value)));
     route.Z.set(String(""), 0.0, String(""));
     (route.reference_position.phi) = (p_SE.phi);
 
@@ -9985,7 +9985,7 @@ inline void DrawPanel::Draw_Mercator(void) {
 
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
-    route.type.set(String("loxodrome"));
+    route.type.set(String(((Route_types[0]).value)));
     route.Z.set(String(""), M_PI_2, String(""));
     (route.reference_position.lambda) = (p_NW.lambda);
 
@@ -10285,7 +10285,7 @@ inline void DrawPanel::Draw_3D(void) {
 
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
-    route.type.set(String("orthodrome"));
+    route.type.set(String(((Route_types[1]).value)));
     (route.length).set(String(""), Re * M_PI, String(""));
     (route.Z).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = -M_PI_2;
@@ -10357,7 +10357,7 @@ inline void DrawPanel::Draw_3D(void) {
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
 
-            route.type.set(String("orthodrome"));
+            route.type.set(String(((Route_types[1]).value)));
             (route.Z).set(String(""), M_PI_2, String(""));
             (route.length).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
 
@@ -16139,7 +16139,7 @@ bool RouteFrame::is_ok(void) {
 
         (
             (
-                ((((type->name)->GetValue()) == wxString("loxodrome")) || (((type->name)->GetValue()) == wxString("orthodrome"))) &&
+                ((((type->name)->GetValue()) == wxString(((Route_types[0]).value))) || (((type->name)->GetValue()) == wxString(((Route_types[1]).value)))) &&
                 (
                     (Z->is_ok()) &&
                     ((start_phi->is_ok()) || for_transport) &&
@@ -16309,6 +16309,8 @@ template<class T> void RouteFrame::get(T& event) {
 
 }
 
+
+//enables/disables the GUI fields in *this accoridng to the choice in type->name (the sleected type of Route)
 template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {
 
     if ((type->is_ok()) && (length_format->is_ok())) {
@@ -18840,7 +18842,7 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
         if (check) {
 
             //enable/disable the related fields in RouteFrame f
-            enable = ((((p->catalog)[i]) == wxString("loxodrome")) || (((p->catalog)[i]) == wxString("orthodrome")));
+            enable = ((((p->catalog)[i]) == wxString(((Route_types[0]).value))) || (((p->catalog)[i]) == wxString(((Route_types[1]).value))));
 
             (f->Z)->Enable(enable);
 
@@ -19084,13 +19086,13 @@ template<class P> template <class T> void ChronoField<P>::get(T& event) {
 //
 //    if (MultipleItemField<P, RouteType, CheckRouteType<P> >::ok) {
 //
-//        if (String((MultipleItemField<P, RouteType, CheckRouteType<P> >::name->GetValue()).ToStdString()) == String("loxodrome")) {
+//        if (String((MultipleItemField<P, RouteType, CheckRouteType<P> >::name->GetValue()).ToStdString()) == (Route_types[0])) {
 //
-//            type->set(String(""), String("loxodrome"), String(""));
+//            type->set(String(""), (Route_types[0]), String(""));
 //
 //        }
-//        if (String((MultipleItemField<P, RouteType, CheckRouteType<P> >::name->GetValue()).ToStdString()) == String("orthodrome")) {
-//            type->set(String(""), String("orthodrome"), String(""));
+//        if (String((MultipleItemField<P, RouteType, CheckRouteType<P> >::name->GetValue()).ToStdString()) == (Route_types[1])) {
+//            type->set(String(""), (Route_types[1]), String(""));
 //
 //
 //        }
@@ -21160,7 +21162,7 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
         //the text entered in name is valid
 
         //enable/disable the related fields in RouteFrame f
-        enable = ((((MultipleItemField<P, RouteType, CheckRouteType<P> >::catalog)[i]) == wxString("loxodrome")) || (((MultipleItemField<P, RouteType, CheckRouteType<P> >::catalog)[i]) == wxString("orthodrome")));
+        enable = ((((MultipleItemField<P, RouteType, CheckRouteType<P> >::catalog)[i]) == wxString(((Route_types[0]).value))) || (((MultipleItemField<P, RouteType, CheckRouteType<P> >::catalog)[i]) == wxString(((Route_types[1]).value))));
 
         MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->Z->Enable(enable);
         MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_phi->Enable(enable && (!(MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->for_transport)));

@@ -14845,19 +14845,19 @@ template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event
 
         //I check whether the name in the GUI field unit matches one of the unit names in units
         for (check = false, i = 0; (i < (p->units).size()) && (!check); i++) {
-            if (((p->unit)->GetValue()) == (p->units)[i]) {
+            if ((p->unit->name->GetValue()) == (p->units)[i]) {
                 check = true;
             }
         }
         i--;
 
-        if (check || ((((p->unit)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->unit)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
 
             //if check is true (false) -> set unit_ok to true (false)
             (p->unit_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->unit)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->unit)->SetFont(wxGetApp().default_font);
+            p->unit->name->SetForegroundColour(wxGetApp().foreground_color);
+            p->unit->name->SetFont(wxGetApp().default_font);
 
 
         }
@@ -14871,7 +14871,7 @@ template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event
                 temp << (p->units)[i].ToStdString() << ((i < (p->units).size() - 1) ? ", " : ".");
             }
 
-            (f->print_error_message)->SetAndCall((p->unit), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
 
             (p->unit_ok) = false;
 
@@ -15760,8 +15760,8 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     //I want SpeedField::OnEditValue and OnEditUnit to be called before RouteFrame::UpdateLength, because RouteFrame::UpdateLength checks the variables value_ok and unit_ok, which must have been set previously by SpeedField::OnEditValue and OnEditUnit, respectively -> To achieve this 1) I unbind SpeedField::OnEditValue and OnEditUnit from speed->value and unit, respectively, (they had been bound previously in the SpeedField constructor) 2) I bind RouteFrame::UpdateLength to speed->value and unit 3) I bind back SpeedField::OnEditValue and OnEditUnit to speed->value and unit, respectively. In this way, the Binding order has changed -> the order in which the event handlers will be called will be the right one. 
     speed->value->Unbind(wxEVT_KEY_UP, &SpeedField<RouteFrame>::OnEditValue<wxKeyEvent>, speed);
-    speed->unit->Unbind(wxEVT_COMBOBOX, &SpeedField<RouteFrame>::OnEditUnit<wxCommandEvent>, speed);
-    speed->unit->Unbind(wxEVT_KEY_UP, &SpeedField<RouteFrame>::OnEditUnit<wxKeyEvent>, speed);
+    speed->unit->name->Unbind(wxEVT_COMBOBOX, &SpeedField<RouteFrame>::OnEditUnit<wxCommandEvent>, speed);
+    speed->unit->name->Unbind(wxEVT_KEY_UP, &SpeedField<RouteFrame>::OnEditUnit<wxKeyEvent>, speed);
     //2)
     speed->Bind(wxEVT_KEY_UP, &RouteFrame::UpdateLength<wxKeyEvent>, this);
     //3)
@@ -20555,13 +20555,13 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     value->Bind(wxEVT_KEY_UP, &SpeedField::OnEditValue<wxKeyEvent>, this);
 
 
-    unit = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    (unit->name) = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(unit);
-    AdjustWidth(unit);
+    AdjustWidth(unit->name);
     //I set the value of unit to the unit of measure with with this SpeedField was called in its constructor, and set its value to ok because that is a valid unit of measure
-    unit->SetValue(unit_value.value);
+    unit->name->SetValue(unit_value.value);
     unit_ok = true;
-    unit->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_unit)));
+    unit->name->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_unit)));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     unit->Bind(wxEVT_COMBOBOX, &SpeedField::OnEditUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &SpeedField::OnEditUnit<wxKeyEvent>, this);
@@ -20572,7 +20572,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(value, 0, wxALIGN_CENTER);
-    sizer_h->Add(unit, 0, wxALIGN_CENTER);
+    sizer_h->Add(unit->name, 0, wxALIGN_CENTER);
 
 }
 
@@ -20582,7 +20582,7 @@ template<class P> void SpeedField<P>::set(void) {
 
     int i;
 
-    for (i = 0; (i < (units.size())) && ((unit->GetValue()) != (units[i])); i++) {}
+    for (i = 0; (i < (units.size())) && ((unit->name->GetValue()) != (units[i])); i++) {}
 
     switch (i) {
 
@@ -20612,7 +20612,7 @@ template<class P> void SpeedField<P>::set(void) {
 
     }
 
-    unit->SetValue(units[i]);
+    unit->name->SetValue(units[i]);
 
     value_ok = true;
     unit_ok = true;
@@ -20629,21 +20629,21 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
 
         value->GetValue().ToDouble(&speed_temp);
 
-        if ((unit->GetValue().ToStdString()) == "kt") {
+        if ((unit->name->GetValue().ToStdString()) == "kt") {
             //unit = String("nm")
             speed->set(String(""), /*the speed is entered in the GUI field is already in nm, thus no need to convert it*/speed_temp, String(""));
 
         }
         else {
             //[m]/[s] = [km]/1e3/[h]*3600 = [kt]/nm/1e3*3600
-            if ((unit->GetValue().ToStdString()) == "km/h") {
+            if ((unit->name->GetValue().ToStdString()) == "km/h") {
                 //unit = String("km/h")
                 speed->set(String(""), /*the speed is entered in the GUI field in km/h, thus I convert it to kt*/speed_temp / nm, String(""));
 
             }
             else {
 
-                if ((unit->GetValue().ToStdString()) == "m/s") {
+                if ((unit->name->GetValue().ToStdString()) == "m/s") {
                     //unit = String("ft")
 
                     speed->set(String(""), /*the speed is entered in the GUI field in m/s, thus I convert it to kt*/speed_temp / (nm * 1e3) * 3600.0, String(""));
@@ -20691,14 +20691,14 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
     bool success;
 
     //I check whether the name in the GUI field unit matches one of the unit names in units
-    find_and_replace_case_insensitive(unit, units, &success, NULL);
+    find_and_replace_case_insensitive(unit->name, units, &success, NULL);
 
 
     if (success) {
 
         //because the text in value is valid, I set the background color of unit to white
-        unit->SetForegroundColour(wxGetApp().foreground_color);
-        unit->SetFont(wxGetApp().default_font);
+        unit->name->SetForegroundColour(wxGetApp().foreground_color);
+        unit->name->SetFont(wxGetApp().default_font);
 
     }
 

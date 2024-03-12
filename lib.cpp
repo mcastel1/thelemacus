@@ -15899,22 +15899,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     }
 
-    //If the user is about to enter a brand new route, then these fields are disabled until a route type si specified
     if (route_in == NULL) {
+        //If the user is about to enter a brand new route, then the GUI fields are disabled/enables according to the currently selected value in *type
 
-        Z->Enable(false);
-        length_format->Enable(false);
-        length->Enable(false);
-        speed->Enable(false);
-        time->Enable(false);
-        text_time->Enable(false);
-        text_speed->Enable(false);
-        text_length->Enable(false);
-        start_phi->Enable(false);
-        start_lambda->Enable(false);
-        GP_phi->Enable(false);
-        GP_lambda->Enable(false);
-        omega->Enable(false);
+        OnChooseLengthFormatField();
 
     }
     else {

@@ -125,6 +125,7 @@
  - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
 
  
+<<<<<<< HEAD
  
  
  ********** THINGS TO FIX ************
@@ -136,6 +137,13 @@ on WIN32:
          - when a ChartFrame is first created and when Reset is pressed, parallel and meridian labels are shown very small
          - write the WIN32 part of void MyApp::OnTimer
          - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
+=======
+ on WIN32:
+ - use ToDPI in wxSizes to resize them correctly
+ - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
+ - write the WIN32 part of void MyApp::OnTimer
+ - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
+>>>>>>> fix_size_win32
  */
 
 //this function is executed reguarly over time, to check some things
@@ -394,7 +402,6 @@ bool MyApp::OnInit() {
     dummy_frame = new wxFrame();
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
     display.GetFromWindow(dummy_frame);
-    dummy_frame->~wxFrame();
     
     rectangle_display = (display.GetClientArea());
     rectangle_display.SetWidth((int)((double)rectangle_display.GetWidth()));
@@ -470,14 +477,14 @@ bool MyApp::OnInit() {
     //----- test for Data::read_from_file_to - end
     
     //set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen
-    size_small_button = wxSize(
+    size_small_button = dummy_frame->ToDIP(wxSize(
                                ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_small_button_over_width_screen).value),
                                ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_small_button_over_width_screen).value)
-                               );
-    size_large_button = wxSize(
+                               ));
+    size_large_button = dummy_frame->ToDIP(wxSize(
                                ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value),
                                ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)
-                               );
+                               ));
     
     
     length_plot_area_over_length_chart.read_from_file_to(String("length of plot area over length of chart"), (wxGetApp().path_file_init), String("R"),  String(""));
@@ -624,6 +631,5 @@ bool MyApp::OnInit() {
         return false;
         
     }
-    
-    
+        
 }

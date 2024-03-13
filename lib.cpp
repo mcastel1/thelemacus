@@ -10740,9 +10740,10 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
     dragging_chart = true;
 
 
-    switch ((((projection->name)->GetValue()).ToStdString())[0]) {
+//    switch ((((projection->name)->GetValue()).ToStdString())[0]) {
+    switch (String(((projection->name)->GetValue()).ToStdString()).position_in_list(Projection_types)) {
 
-    case 'M': {
+    case 0: {
         //I am using the mercator projection
 
 
@@ -10773,7 +10774,7 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
     }
 
 
-    case '3': {
+    case  1: {
         //I am using the 3d projection
 
         Angle /*the angular displacement of the operation MoveNorth*/delta;
@@ -10814,9 +10815,9 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
     //I am dragging the chart and the size of *this will not change -> set 
     dragging_chart = true;
 
-    switch ((((projection->name)->GetValue()).ToStdString())[0]) {
+    switch (String(((projection->name)->GetValue()).ToStdString()).position_in_list(Projection_types)) {
 
-    case 'M': {
+    case 0: {
         //I am using the mercator projection
 
 
@@ -10847,7 +10848,7 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
     }
 
 
-    case '3': {
+    case  1: {
         //I am using the 3d projection
 
         Angle /*the angular displacement of the operation MoveNorth*/delta;
@@ -10886,9 +10887,9 @@ template<class T> void ChartFrame::MoveWest(T& event) {
     dragging_chart = true;
 
 
-    switch ((((projection->name)->GetValue()).ToStdString())[0]) {
+    switch (String(((projection->name)->GetValue()).ToStdString()).position_in_list(Projection_types)) {
 
-    case 'M': {
+    case 0: {
         //I am using the mercator projection
 
 
@@ -10910,7 +10911,7 @@ template<class T> void ChartFrame::MoveWest(T& event) {
     }
 
 
-    case '3': {
+    case  1: {
         //I am using the 3d projection
 
         Angle /*the angular displacement of the operation MoveNorth*/delta;
@@ -11023,9 +11024,9 @@ template<class T> void ChartFrame::MoveEast(T& event) {
     //I am dragging the chart and the size of *this will not change -> set 
     dragging_chart = true;
 
-    switch ((((projection->name)->GetValue()).ToStdString())[0]) {
+    switch (String(((projection->name)->GetValue()).ToStdString()).position_in_list(Projection_types)) {
 
-    case 'M': {
+    case 0: {
         //I am using the mercator projection
 
 
@@ -11047,7 +11048,7 @@ template<class T> void ChartFrame::MoveEast(T& event) {
     }
 
 
-    case '3': {
+    case  1: {
         //I am using the 3d projection
 
         Angle /*the angular displacement of the operation MoveNorth*/delta;

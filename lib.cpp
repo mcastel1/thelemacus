@@ -13050,86 +13050,86 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
 //this function is called whenever mouse is dragged on *this
 void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
-
+    
     if ((!idling) && (!(parent->idling)) && (!(parent->parent->idling))) {
         //I proceed only if this and its parent and the parent of its parent are not in idling mode
-
+        
         if (wxGetMouseState().LeftIsDown()) {
-
+            
             if (!mouse_dragging) {
                 //the mouse has started dragging
-
+                
                 //If I am dragging a Route, I save the starting point of this Route into route_reference_position_drag_now
-
+                
                 //during the mouse drag, I disable DrawPanel::OnMouseMovement
                 this->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
-
+                
                 if ((parent->parent->highlighted_route_now) != -1) {
                     //set route_reference_position_drag_now to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
-
+                    
                     if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
-
+                        
                         route_reference_position_drag_start = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position);
-
+                        
                         if ((((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value) != -1) {
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
-
+                            
                             (parent->parent->i_object_to_disconnect) = (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value);
-
+                            
                             parent->parent->Disconnect(event);
-
+                            
                         }
-
+                        
                     }
                     else {
-
+                        
                         route_reference_position_drag_start = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position);
-
+                        
                     }
-
-
+                    
+                    
                 }
-
+                
             }
-
+            
             mouse_dragging = true;
-
+            
             SetCursor(wxCURSOR_HAND);
-
+            
             position_now_drag = wxGetMousePosition();
-
-
+            
+            
             if ((this->*ScreenToGeo)(position_now_drag, NULL)) {
                 //position_drag_now is a valid Position
-
+                
                 if ((((parent->parent->highlighted_route_now) == -1) && ((parent->parent->highlighted_position_now) == -1))) {
                     //the whole chart is being dragged (the mouse is not over a Route nor a Position while dragging)
-
+                    
                     (parent->dragging_chart) = true;
-
+                    
                     if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
                         //I am using the mercator projection
-
+                        
                         PositionProjection p_ceil_min, p_floor_max;
-
+                        
                         (this->*GeoToProjection)(Position(Angle(0.0), Angle(k * floor_max_lat)), &p_floor_max, true);
                         (this->*GeoToProjection)(Position(Angle(0.0), Angle(k * ceil_min_lat)), &p_ceil_min, true);
-
-
+                        
+                        
                         if ((y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_max_start_drag) < (p_floor_max.y)) && (y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min_start_drag) > (p_ceil_min.y))) {
                             //in this case, the drag operation does not end out of the min and max latitude contained in the data files
-
+                            
                             //update x_min, ..., y_max according to the drag.
                             x_min = x_min_start_drag - ((double)((position_now_drag.x) - (position_start_drag.x))) / ((double)(size_plot_area.GetWidth())) * x_span_start_drag;
                             x_max = x_max_start_drag - ((double)((position_now_drag.x) - (position_start_drag.x))) / ((double)(size_plot_area.GetWidth())) * x_span_start_drag;
                             y_min = y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
                             y_max = y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
-
+                            
                             if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
                                 (this->*Set_lambda_phi_min_max)();
                             }
-
-
+                            
+                            
 #ifdef __APPLE__
                             //re-draw the chart
                             (this->*Draw)();
@@ -13138,41 +13138,41 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
                             parent->points_coastline_before.clear();
                             (parent->points_coastline_before) = (parent->points_coastline_now);
-
+                            
                             grid_before.clear();
                             grid_before = grid_now;
                             ticks_before.clear();
                             ticks_before = ticks_now;
-
+                            
                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
                             points_route_list_before.clear();
                             points_route_list_before = points_route_list_now;
-
+                            
                             points_position_list_before.clear();
                             points_position_list_before = points_position_list_now;
-
+                            
                             reference_positions_route_list_before.clear();
                             reference_positions_route_list_before = reference_positions_route_list_now;
-
+                            
                             //re-draw the chart
                             (this->*Draw)();
-
+                            
 #endif
                             MyRefresh();
                             //							FitAll();
-
+                            
                         }
-
+                        
                     }
-
+                    
                     if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
                         //I am using the 3d projection
-
+                        
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                         rotation =
-                            rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+                        rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
 #ifdef __APPLE__
-
+                        
                         //re-render the chart
                         (this->*Draw)();
 #endif
@@ -13180,283 +13180,284 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
                         parent->points_coastline_before.clear();
                         (parent->points_coastline_before) = (parent->points_coastline_now);
-
+                        
                         grid_before.clear();
                         grid_before = grid_now;
                         ticks_before.clear();
                         ticks_before = ticks_now;
-
+                        
                         //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
                         points_route_list_before.clear();
                         points_route_list_before = points_route_list_now;
-
+                        
                         points_position_list_before.clear();
                         points_position_list_before = points_position_list_now;
-
+                        
                         reference_positions_route_list_before.clear();
                         reference_positions_route_list_before = reference_positions_route_list_now;
-
+                        
                         //re-draw the chart
                         (this->*Draw)();
-
+                        
 #endif
                         MyRefresh();
-
+                        
                     }
-
-
+                    
+                    
                 }
                 else {
                     //an object is being dragged (a Position or a Route)
-
+                    
                     unsigned int i;
-
+                    
                     (parent->parent->dragging_object) = true;
-
+                    
                     //the data in the file are being modified -> I call
                     parent->parent->OnModifyFile();
-
+                    
                     if ((parent->parent->highlighted_route_now) != -1) {
                         //a Route is being dragged
-
+                        
                         wxPoint q;
-
+                        
                         if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
-
+                            
                             wxPoint p;
-
+                            
                             //convert the coordinates of route_reference_position_drag_now into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (ground) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
-
+                            
                             GeoToDrawPanel(route_reference_position_drag_start, &p, false);
-
+                            
                             //this command is the same for all types of Routes
                             DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
-
+                            
                         }
-
-
+                        
+                        
                         if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
-
+                            
                             //compose rotation with the rotation resulting from the drag and then apply it to route_reference_position_drag_now: route_reference_position_drag_now -> rotation^{-1}.(rotation due to drag).rotation.route_reference_position_drag_now. In this way, when Render() will plot the position route_reference_position_drag_now, it will apply to route_reference_position_drag_now the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.route_reference_position_drag_now = (rotation due to drag).rotation.route_reference_position_drag_now, which is the desired result (i.e. route_reference_position_drag_now rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                             rotation_now_drag =
-                                (rotation.inverse()) *
-                                rotation_start_end(position_start_drag, position_now_drag) *
-                                rotation;
-
+                            (rotation.inverse()) *
+                            rotation_start_end(position_start_drag, position_now_drag) *
+                            rotation;
+                            
                             //                    (this->*GeoToDrawPanel)(route_reference_position_drag_now, &p);
-
+                            
                             if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
-
+                                
                                 //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position));
                                 route_reference_position_drag_start.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
-
+                                
                             }
                             else {
-
+                                
                                 route_reference_position_drag_start.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
-
+                                
                             }
-
+                            
                         }
-
-
-
-
+                        
+                        
+                        
+                        
                         //update the data of the Route under consideration in listcontrol_routes
                         (((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).update_wxListCtrl((parent->parent->highlighted_route_now), parent->parent->listcontrol_routes);
-
-
+                        
+                        
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             //on APPLE, I compute the coordinates of the reference position of the Route that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
-
+                            
 #ifdef _WIN32
-
+                            
                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
                             (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
-
+                            
 #endif
-
+                            
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position,
-                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
-                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
-                            );
-
+                                                                                                 ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position,
+                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                                                                                                 );
+                            
 #ifdef __APPLE__
-
+                            
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-
+                            
 #endif
 #ifdef _WIN32
-
+                            
                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels
                             ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
-
+                            
                             ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
-
-
+                            
+                            
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-
+                            
 #endif
                             
                             ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
-
-
+                            
+                            
                         }
-
+                        
                     }
-
+                    
                     if ((parent->parent->highlighted_position_now) != -1) {
                         //a Position is being dragged
-
+                        
                         wxPoint p;
-
+                        
                         if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
-
+                            
                             //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
                             (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]));
-
+                            
                         }
-
+                        
                         if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
-
+                            
                             //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                             rotation_now_drag =
-                                (rotation.inverse()) *
-                                rotation_start_end(position_start_drag, position_now_drag) *
-                                rotation;
+                            (rotation.inverse()) *
+                            rotation_start_end(position_start_drag, position_now_drag) *
+                            rotation;
                             geo_start_drag.rotate(String(""), rotation_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]), String(""));
-
+                            
                         }
-
+                        
                         //update the data of the Position under consideration in listcontrol_positions
                         ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]).update_wxListCtrl((parent->parent->highlighted_position_now), parent->parent->listcontrol_positions);
-
+                        
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             //on APPLE, I compute the coordinates of the Position that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow ->  I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
-
-
+                            
+                            
 #ifdef _WIN32
-
-
+                            
+                            
                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
                             (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
-
-
+                            
+                            
 #endif
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
-                                &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
-                                &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
-                            );
-
+                                                                                                 (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
+                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                                                                                                 );
+                            
 #ifdef __APPLE__
-
+                            
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-
+                            
 #endif
 #ifdef _WIN32
-
+                            
                             ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
                             (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
-
+                            
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-
+                            
 #endif
                             (((parent->parent->chart_frames)[i])->draw_panel)->MyRefresh();
-
-
+                            
+                            
                         }
-
+                        
                     }
-
+                    
                 }
-
+                
             }
             else {
                 //in this case, position_drag_now is not a valid position : in the Mercator projection, this does not make sense and I do nothing. In the 3D projection, I am dragging the chart from outside circle observer (I am rotating the earth) -> I proceed implementing this rotation
-
-                switch ((parent->projection->name->GetValue().ToStdString())[0]) {
-
-                case 'M': {
-                    //I am using the mercator projection: then the position is invalid and I may print an error message
-
-                    //uncomment this if you want an info message to be printed
-                    //print_error_message->SetAndCall(NULL,  String("The drag goes through an invalid point!"), String("The drag must go through valid points."));
-
-                    break;
-
-                }
-
-                case '3': {
-                    //I am using the 3d projection: even if the position lies outside the circular boundary of the Earth,  thus this posibtion is a valid position for a drag which rotates the earth about the y' axis -> I do this rotation
-
-                    (parent->dragging_chart) = true;
-
-                    //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                    rotation = rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
-
-
-
+                
+                switch (String(parent->projection->name->GetValue().ToStdString()).position_in_list(Projection_types)) {
+                        
+                    case 0: {
+                        //I am using the mercator projection: then the position is invalid and I may print an error message
+                        
+                        //uncomment this if you want an info message to be printed
+                        //print_error_message->SetAndCall(NULL,  String("The drag goes through an invalid point!"), String("The drag must go through valid points."));
+                        
+                        break;
+                        
+                    }
+                        
+                    case 1: {
+                        //I am using the 3d projection: even if the position lies outside the circular boundary of the Earth,  thus this posibtion is a valid position for a drag which rotates the earth about the y' axis -> I do this rotation
+                        
+                        (parent->dragging_chart) = true;
+                        
+                        //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
+                        rotation = rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+                        
+                        
+                        
 #ifdef __APPLE__
-                    //re-draw the chart
-                    (this->*Draw)();
+                        //re-draw the chart
+                        (this->*Draw)();
 #endif
 #ifdef _WIN32
-                    //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
-                    parent->points_coastline_before.clear();
-                    (parent->points_coastline_before) = (parent->points_coastline_now);
-
-                    grid_before.clear();
-                    grid_before = grid_now;
-                    ticks_before.clear();
-                    ticks_before = ticks_now;
-
-                    //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-                    points_route_list_before.clear();
-                    points_route_list_before = points_route_list_now;
-
-                    points_position_list_before.clear();
-                    points_position_list_before = points_position_list_now;
-
-                    reference_positions_route_list_before.clear();
-                    reference_positions_route_list_before = reference_positions_route_list_now;
-
-                    //re-draw the chart
-                    (this->*Draw)();
-
+                        //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
+                        parent->points_coastline_before.clear();
+                        (parent->points_coastline_before) = (parent->points_coastline_now);
+                        
+                        grid_before.clear();
+                        grid_before = grid_now;
+                        ticks_before.clear();
+                        ticks_before = ticks_now;
+                        
+                        //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
+                        points_route_list_before.clear();
+                        points_route_list_before = points_route_list_now;
+                        
+                        points_position_list_before.clear();
+                        points_position_list_before = points_position_list_now;
+                        
+                        reference_positions_route_list_before.clear();
+                        reference_positions_route_list_before = reference_positions_route_list_now;
+                        
+                        //re-draw the chart
+                        (this->*Draw)();
+                        
 #endif
-                    MyRefresh();
-
-                    FitAll();
-
-                    break;
-
+                        MyRefresh();
+                        
+                        FitAll();
+                        
+                        break;
+                        
+                    }
+                        
+                        
                 }
-
-
-                }
-
+                
             }
-
+            
         }
-
+        
     }
-
+    
     event.Skip(true);
-
+    
 }
+
 
 //this function is called whenever mouse wheel is turned on *this
 void DrawPanel::OnMouseWheel(wxMouseEvent& event) {

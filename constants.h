@@ -47,7 +47,7 @@ Angle max_lat, min_lat;
 #define LengthFormat_types (vector<String> {String("time and speed"), String("length")})
 #define LengthUnit_types (vector<String> {String("nm"), String("m"), String("ft")})
 #define SpeedUnit_types (vector<String> {String("kt"), String("km/h"), String("m/s")})
-#define ListControl_types (vector<String> {String("sights"), String("positions"), String("routes")})
+#define ListControl_types (vector<String> {String("sight"), String("position"), String("route")})
 #define floor_min_lat (floor(K*((min_lat.normalize_pm_pi_ret()).value)))
 #define floor_max_lat (floor(K*((max_lat.normalize_pm_pi_ret()).value)))
 #define ceil_min_lat (ceil(K*((min_lat.normalize_pm_pi_ret()).value)))

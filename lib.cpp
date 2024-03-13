@@ -8646,16 +8646,18 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     SetBackgroundColour(wxGetApp().background_color);
     //set the border of the chart area 
     SetWindowStyle(wxSIMPLE_BORDER);
+    
+    this->Bind(wxEVT_PAINT, &DrawPanel::PaintEvent, this);
 
 }
 
 
-BEGIN_EVENT_TABLE(DrawPanel, wxPanel)
-
-// catch paint events
-EVT_PAINT(DrawPanel::PaintEvent)
-
-END_EVENT_TABLE()
+//BEGIN_EVENT_TABLE(DrawPanel, wxPanel)
+//
+//// catch paint events
+//EVT_PAINT(DrawPanel::PaintEvent)
+//
+//END_EVENT_TABLE()
 
 
 inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {

@@ -4172,101 +4172,102 @@ template<class S> void Position::read_from_stream([[maybe_unused]] String name, 
 
 //writes into this->end the position on the Route at length this->l along the Route from start
 void Route::compute_end(String prefix) {
-
+    
     //picks the first (and only) character in string type.value
-    switch ((type.value)[0]) {
-
-    case 'o':
-    {
-
-        //orthodrome route
-        Angle t;
-
-        t.set(String(""), (length.value) / Re, prefix);
-
-        (end.phi).set(String(""), asin(cos(Z) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);
-        (end.lambda).set(String(""),
-            -atan(cos(t) * cos(reference_position.lambda) * cos(reference_position.phi) + sin(t) * (sin(Z) * sin(reference_position.lambda) - cos(Z) * cos(reference_position.lambda) * sin(reference_position.phi))
-                ,
-                (cos(reference_position.lambda) * sin(t) * sin(Z) + sin(reference_position.lambda) * (-cos(t) * cos(reference_position.phi) + cos(Z) * sin(t) * sin(reference_position.phi)))),
-            prefix);
-
-        break;
-    }
-
-    case 'l':
-    {
-
-        //loxodrome route
-
-        //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t));
-        int sigma, tau;
-        double C, eta;
-        Angle t;
-
-        eta = sqrt((1.0 - sin(reference_position.phi.value)) / (1.0 + sin(reference_position.phi.value)));
-
-        //tau = +-_{notes}
-        if (((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < 2.0 * M_PI))) { tau = +1; }
-        else { tau = -1; }
-
-        if ((0.0 <= (Z.value)) && ((Z.value) < M_PI)) { sigma = -1; }
-        else { sigma = +1; }
-
-        C = gsl_pow_2(cos(Z));
-
-        /* cout << "sigma = " << sigma << "\n"; */
-        /* cout << "tau = " << tau << "\n"; */
-        /* cout << "C = " << C << "\n"; */
-
-        if (((Z.value) != M_PI_2) && ((Z.value) != 3.0 * M_PI_2)) {
-            //this is the general expression of t vs l for Z != pi/2
-
-            (t.value) = -tau * sqrt((1.0 - C) / C)
+    switch (/*(type.value)[0]*/type.position_in_list(Route_types)) {
+            
+            
+        case 0:{
+            
+            //loxodrome route
+            
+            //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t));
+            int sigma, tau;
+            double C, eta;
+            Angle t;
+            
+            eta = sqrt((1.0 - sin(reference_position.phi.value)) / (1.0 + sin(reference_position.phi.value)));
+            
+            //tau = +-_{notes}
+            if (((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < 2.0 * M_PI))) { tau = +1; }
+            else { tau = -1; }
+            
+            if ((0.0 <= (Z.value)) && ((Z.value) < M_PI)) { sigma = -1; }
+            else { sigma = +1; }
+            
+            C = gsl_pow_2(cos(Z));
+            
+            /* cout << "sigma = " << sigma << "\n"; */
+            /* cout << "tau = " << tau << "\n"; */
+            /* cout << "C = " << C << "\n"; */
+            
+            if (((Z.value) != M_PI_2) && ((Z.value) != 3.0 * M_PI_2)) {
+                //this is the general expression of t vs l for Z != pi/2
+                
+                (t.value) = -tau * sqrt((1.0 - C) / C)
                 * log(1.0 / eta * tan(-tau * sqrt(C) * (length.value) / (2.0 * Re) + atan(sqrt((1.0 - sin(reference_position.phi.value)) / (1.0 + sin(reference_position.phi.value))))));
-
+                
+            }
+            else {
+                //this is the limit of the expression above in the case Z -> pi/2
+                
+                (t.value) = (length.value) * (1.0 + gsl_pow_2(eta)) / (2.0 * Re * eta);
+                
+            }
+            
+            /* t.print("t", prefix, cout); */
+            
+            (end.phi).set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position.phi.value)))), prefix);
+            
+            (end.lambda).set(String(""), (reference_position.lambda.value) + sigma * (t.value), prefix);
+            
+            break;
+            
         }
-        else {
-            //this is the limit of the expression above in the case Z -> pi/2
-
-            (t.value) = (length.value) * (1.0 + gsl_pow_2(eta)) / (2.0 * Re * eta);
-
+            
+        case 1:{
+            
+            //orthodrome route
+            Angle t;
+            
+            t.set(String(""), (length.value) / Re, prefix);
+            
+            (end.phi).set(String(""), asin(cos(Z) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);
+            (end.lambda).set(String(""),
+                             -atan(cos(t) * cos(reference_position.lambda) * cos(reference_position.phi) + sin(t) * (sin(Z) * sin(reference_position.lambda) - cos(Z) * cos(reference_position.lambda) * sin(reference_position.phi))
+                                   ,
+                                   (cos(reference_position.lambda) * sin(t) * sin(Z) + sin(reference_position.lambda) * (-cos(t) * cos(reference_position.phi) + cos(Z) * sin(t) * sin(reference_position.phi)))),
+                             prefix);
+            
+            break;
+            
         }
-
-        /* t.print("t", prefix, cout); */
-
-        (end.phi).set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position.phi.value)))), prefix);
-
-        (end.lambda).set(String(""), (reference_position.lambda.value) + sigma * (t.value), prefix);
-
-        break;
-    }
-
-    case 'c':
-    {
-
-        Angle t;
-        //compute the parametric angle for the circle of equal altitude starting from the length l of the curve, omega  and the Earth's radius
-        //R sin omega = r, r t = l, t = l / (R sin omega)
-        t.set(String(""), (length.value) / (Re * sin(omega)), prefix);
-
-
-        (end.phi).set(String(""), M_PI_2 - acos(cos((omega.value)) * sin(reference_position.phi) - cos(reference_position.phi) * cos((t.value)) * sin((omega.value))), prefix);
-
-        (end.lambda).set(String(""), -(atan((-sin(reference_position.lambda) * (cos(reference_position.phi) * cos((omega.value)) + cos((t.value)) * sin(reference_position.phi) * sin((omega.value))) + cos(reference_position.lambda) * sin((omega.value)) * sin((t.value))) / (cos(reference_position.phi) * cos(reference_position.lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position.lambda) * cos((t.value)) * sin(reference_position.phi) + sin(reference_position.lambda) * sin((t.value)))))), prefix);
-        if (cos(reference_position.phi) * cos(reference_position.lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position.lambda) * cos((t.value)) * sin(reference_position.phi) + sin(reference_position.lambda) * sin((t.value))) <= 0.0) {
-            (end.lambda) -= M_PI;
+            
+        case 2:{
+            
+            Angle t;
+            //compute the parametric angle for the circle of equal altitude starting from the length l of the curve, omega  and the Earth's radius
+            //R sin omega = r, r t = l, t = l / (R sin omega)
+            t.set(String(""), (length.value) / (Re * sin(omega)), prefix);
+            
+            
+            (end.phi).set(String(""), M_PI_2 - acos(cos((omega.value)) * sin(reference_position.phi) - cos(reference_position.phi) * cos((t.value)) * sin((omega.value))), prefix);
+            
+            (end.lambda).set(String(""), -(atan((-sin(reference_position.lambda) * (cos(reference_position.phi) * cos((omega.value)) + cos((t.value)) * sin(reference_position.phi) * sin((omega.value))) + cos(reference_position.lambda) * sin((omega.value)) * sin((t.value))) / (cos(reference_position.phi) * cos(reference_position.lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position.lambda) * cos((t.value)) * sin(reference_position.phi) + sin(reference_position.lambda) * sin((t.value)))))), prefix);
+            if (cos(reference_position.phi) * cos(reference_position.lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position.lambda) * cos((t.value)) * sin(reference_position.phi) + sin(reference_position.lambda) * sin((t.value))) <= 0.0) {
+                (end.lambda) -= M_PI;
+            }
+            
+            break;
+            
         }
-
-        break;
-
+            
     }
-
-    }
-
+    
     (end.label.value) = "";
-
+    
 }
+
 
 //This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false
 bool Route::compute_end(Length d, [[maybe_unused]] String prefix) {

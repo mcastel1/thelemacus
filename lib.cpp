@@ -8867,9 +8867,11 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 
 
 inline void DrawPanel::RenderAll(wxDC& dc) {
+    
+    
 
-    RenderBackground(
-        dc,
+    (this->*Render)(
+        &dc,
         grid_now,
         ticks_now,
         parallels_and_meridians_labels_now,
@@ -8879,6 +8881,8 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
         wxGetApp().background_color,
         wxGetApp().standard_thickness.value
     );
+    
+    
     RenderRoutes(dc,
         points_route_list_now,
         reference_positions_route_list_now,

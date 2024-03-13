@@ -21,6 +21,7 @@
 /*
  
  notes:
+ - to use a lambda capture with CallAfter: `CallAfter([=] {FillAndRaiseOtherFrame();});`
  - on APPLE:
     - the cmd (apple) key corresponds to WXK_CONTROL
      - to setup everything on Mac OS (incomplete):

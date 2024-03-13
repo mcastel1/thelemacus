@@ -2584,10 +2584,10 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
     case 2: {
         //the Route this is a circle of equal altitde.  its total length is the length of the circle itself, which reads:
 
-        switch ((draw_panel->parent->projection->name->GetValue().ToStdString())[0]) {
+        switch (String(draw_panel->parent->projection->name->GetValue().ToStdString()).position_in_list(Projection_types)) {
 
-        case 'M': {
-            //I am using the mercator projection
+        case 0: {
+            //I am using the Projection_types[0] projection
 
             if (inclusion(draw_panel->rectangle_observer, true, &t, String("")) == 1) {
                 //*this is included in rectangle_observer
@@ -2633,8 +2633,8 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
 
         }
 
-        case '3': {
-            //I am using the 3d projection
+        case 1: {
+            //I am using the Projection_types[1] projection
 
             if (inclusion(draw_panel->circle_observer, true, &t, String("")) == 1) {
                 //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth

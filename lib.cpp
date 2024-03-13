@@ -20616,7 +20616,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 //set the value in the GUI object value equal to the value in the non-GUI object Speed
 template<class P> void SpeedField<P>::set(void) {
     
-
+    
     //    for (i = 0; (i < (unit->catalog.size())) && ((unit->name->GetValue()) != ((unit->catalog)[i])); i++) {}
     
     
@@ -20648,7 +20648,7 @@ template<class P> void SpeedField<P>::set(void) {
             
     }
     
-//    unit->name->SetValue((unit->catalog)[i]);
+    //    unit->name->SetValue((unit->catalog)[i]);
     
     value_ok = true;
     unit_ok = true;

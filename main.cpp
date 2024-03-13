@@ -126,7 +126,6 @@
  - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
 
  
-<<<<<<< HEAD
  
  
  ********** THINGS TO FIX ************
@@ -134,17 +133,11 @@
     - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
     - frames are not resized according to the size of their title
 on WIN32:
+        - use ToDPI in wxSizes to resize them correctly
+        - when you zoom in in ChartFrame, the panel in ChartFrame is quiclky increased in size and then resized (it looks like a flash) -> remove this effect
          - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
-         - when a ChartFrame is first created and when Reset is pressed, parallel and meridian labels are shown very small
          - write the WIN32 part of void MyApp::OnTimer
          - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
-=======
- on WIN32:
- - use ToDPI in wxSizes to resize them correctly
- - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
- - write the WIN32 part of void MyApp::OnTimer
- - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
->>>>>>> fix_size_win32
  */
 
 //this function is executed reguarly over time, to check some things

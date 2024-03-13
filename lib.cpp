@@ -2521,11 +2521,11 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
         //the Route this is an orthodrome
 
         int check = -1;
+        
+        switch (/*((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]*/        String(((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())).position_in_list(Projection_types)) {
 
-        switch (((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]) {
-
-        case 'M': {
-            //I am using the mercator projection
+        case 0: {
+            //I am using Projection_types[0]
 
             check = inclusion(draw_panel->rectangle_observer, true, &t, String(""));
 
@@ -2533,8 +2533,8 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
 
         }
 
-        case '3': {
-            //I am using the 3d projection
+        case 1: {
+            //I am using Projection_types[1]
 
             check = inclusion(draw_panel->circle_observer, true, &t, String(""));
 

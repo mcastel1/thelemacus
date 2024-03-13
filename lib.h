@@ -2008,6 +2008,7 @@ public:
     void RenderDraggedObjectLabel(wxDC&, const wxPoint&, const String&, wxColor, wxColor);
     void RenderSelectionRectangle(wxDC&, const wxPoint&, const wxPoint&, const String&, wxColor, wxColor);
     void RenderSelectionRectangle(wxDC&, const Position&, const wxPoint&, const String&, wxColor, wxColor);
+    void CleanAndRenderAll(void);
     void TabulateRoutes(void);
     void TabulatePositions(void);
     void FitAll();

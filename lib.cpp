@@ -8966,6 +8966,55 @@ inline void DrawPanel::RenderRoutes(
 
 }
 
+//clear everything and re-render all GUI objects
+inline void DrawPanel::CleanAndRenderAll(void) {
+    
+    wxClientDC dc(this);
+    
+    
+    dc.Clear();
+    
+    RenderMousePositionLabel(
+                             dc,
+                             label_position_now,
+                             position_label_position_now,
+                             wxGetApp().foreground_color,
+                             wxGetApp().background_color
+                             );
+    
+    (this->*Render)(
+                    &dc,
+                    grid_now,
+                    ticks_now,
+                    parallels_and_meridians_labels_now,
+                    positions_parallels_and_meridians_labels_now,
+                    parent->points_coastline_now,
+                    wxGetApp().foreground_color,
+                    wxGetApp().background_color,
+                    wxGetApp().standard_thickness.value
+                    );
+    
+    RenderRoutes(dc,
+                 points_route_list_now,
+                 reference_positions_route_list_now,
+                 (parent->parent->highlighted_route_now), wxNullColour
+                 );
+    
+    RenderPositions(dc,
+                    points_position_list_now,
+                    (parent->parent->highlighted_position_now),
+                    wxNullColour
+                    );
+    
+    RenderDraggedObjectLabel(dc,
+                             position_label_dragged_object_now,
+                             label_dragged_object_now,
+                             wxGetApp().foreground_color,
+                             wxGetApp().background_color
+                             );
+    
+    
+}
 
 //wipe out all Routes on *this and re-draw them: this method is used to replace on WIN32 the wxWidgets default function Refresh(), which is not efficient on WIN32
 inline void DrawPanel::RefreshWIN32(void) {
@@ -11194,7 +11243,8 @@ template<class T> void ChartFrame::Reset(T& event) {
     (draw_panel->width_chart_0) = ((draw_panel->size_chart).GetWidth());
     (draw_panel->height_chart_0) = ((draw_panel->size_chart).GetHeight());
 
-    draw_panel->Refresh();
+    draw_panel->CleanAndRenderAll();
+    
     draw_panel->FitAll();
 
     UpdateSlider();

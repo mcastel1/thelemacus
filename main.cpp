@@ -90,6 +90,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+ - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
  - get rid of number_of_recent_* ints by reading the number of recent items directly dfrom file string
  - condense id RouteTypeField<P>::set(void)
  - condense insert_recent_body,  insert_recent_projection, ... + print_recent_body, print_recent_projection, ... into a pair of methods
@@ -130,17 +131,14 @@
  
  ********** THINGS TO FIX ************
     - get rid of  CheckLength class: you only need     CheckLengthValue<P>* check_length_value, because to check the length unit you have MultipleITemField::cCheck!
-    - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
     - frames are not resized according to the size of their title
 on WIN32:
         - use ToDPI in wxSizes to resize them correctly
-        - when you zoom in in ChartFrame, the panel in ChartFrame is quiclky increased in size and then resized (it looks like a flash) -> remove this effect
         - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
-        - write the WIN32 part of void MyApp::OnTimer
-        - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder
  */
 
-//this function is executed reguarly over time, to check some things
+
+//this method  is executed reguarly over time, to check whether to switch between light and dark mode
 void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
 #ifdef __APPLE__

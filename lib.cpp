@@ -10158,8 +10158,8 @@ inline void DrawPanel::Draw_3D(void) {
 
     parent->GetCoastLineData_3D();
 
-    if (!(parent->dragging_chart)) {
-        //I am not dragging the chart -> the size of the chart changes -> re-compute it
+    if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
+        //I am not dragging the chart nor scrolling -> the size of the chart may change -> re-compute it
         parent->SetSize(
             (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
             (((wxGetApp().rectangle_display).GetSize()).GetHeight())

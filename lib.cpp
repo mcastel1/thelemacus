@@ -12472,8 +12472,6 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
         }
 
-        //on APPLE, the Refresh() command does not slow down things -> I call it to erase the previous content of *this, and paint the new one, because Refresh() triggers a call of PaintEvent
-        parent->parent->RefreshAll();
 
 #endif
 
@@ -12486,14 +12484,15 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
             (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now);
 
-            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->geo_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(parent->parent->end_label_selection_rectangle_now));
+//            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->geo_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(parent->parent->end_label_selection_rectangle_now));
 
-            ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
+//            ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
 
         }
 
 #endif
 
+        parent->parent->MyRefreshAll();
 
     }
     else {

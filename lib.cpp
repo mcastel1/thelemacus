@@ -9042,8 +9042,8 @@ inline void DrawPanel::RefreshWIN32(void) {
 
     }
 
-    if ((parent->dragging_chart)) {
-        //the whole chart is being dragged -> wipe out all objects at the preceeding step of the drag
+    if ((parent->dragging_chart) || (parent->mouse_scrolling)) {
+        //the whole chart is being dragged or scrolled -> wipe out all objects at the preceeding step of the drag
 
         //wipe out the Routes at the preceeding mouse position
         RenderRoutes(dc,
@@ -9191,7 +9191,7 @@ inline void DrawPanel::RefreshWIN32(void) {
         wxGetApp().background_color
     );
 
-    if ((parent->dragging_chart) || (parent->parent->selection_rectangle) || (parent->parent->dragging_object) || (parent->parent->changing_highlighted_object)) {
+    if ((parent->dragging_chart) || (parent->mouse_scrolling) || (parent->parent->selection_rectangle) || (parent->parent->dragging_object) || (parent->parent->changing_highlighted_object)) {
         //I am either drawing a selection rectangle, dragging an object or changing the highlighted object -> I need to re-render all GUI objects 
 
         //re-render all  objects in *this which may have been partially cancelled by the clean operation above

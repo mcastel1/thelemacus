@@ -1962,6 +1962,7 @@ public:
     bool (DrawPanel::*ScreenToGeo)(const wxPoint&, Position*);
     bool (DrawPanel::*GeoToProjection)(const Position&, PositionProjection*, bool);
     void (DrawPanel::*Render)(wxDC*, 
+                              const wxPoint&, 
                               const vector< vector< vector<wxPoint> > >&,
                               const vector< vector< vector<wxPoint> > >&,
                               const vector<wxString>&,
@@ -1985,6 +1986,7 @@ public:
     void MyRefresh(void);
     void RefreshWIN32(void);
     void RenderBackground(wxDC&,
+                          const wxPoint&, 
                           const vector< vector< vector<wxPoint> > >&,
                           const vector< vector< vector<wxPoint> > >&,
                           const vector<wxString>&,
@@ -2043,6 +2045,7 @@ public:
     Rotation rotation_start_end(const wxPoint&, const wxPoint&);
     
     void Render_Mercator(wxDC*, 
+                         const wxPoint&,
                          const vector< vector< vector<wxPoint> > >&,
                          const vector< vector< vector<wxPoint> > >&,
                          const vector<wxString>&,
@@ -2052,6 +2055,7 @@ public:
                          wxColor,
                          double);
     void Render_3D(wxDC*, 
+                   const wxPoint&,
                    const vector< vector< vector<wxPoint> > >&,
                    const vector< vector< vector<wxPoint> > >&,
                    const vector<wxString>&,

@@ -8715,6 +8715,7 @@ void DrawPanel::MyRefresh(){
 //render the coastline by using the set of points points_coastline, meridians, parallels and their labels
 inline void DrawPanel::RenderBackground(
                                         wxDC& dc,
+                                        const wxPoint& position_plot_area,
                                         const vector< vector< vector<wxPoint> > >& grid,
                                         const vector< vector< vector<wxPoint> > >& ticks,
                                         const vector<wxString>& parallels_and_meridians_labels,
@@ -8749,19 +8750,20 @@ inline void DrawPanel::RenderBackground(
         dc_m_bgbuffer.SetBrush(wxBrush(foreground_color));
         dc_m_bgbuffer.SetTextForeground(foreground_color);
         dc_m_bgbuffer.SetTextBackground(background_color);
-
+        
         (this->*Render)(
-            &dc_m_bgbuffer,
-            grid,
-            ticks,
-            parallels_and_meridians_labels,
-            positions_parallels_and_meridians_labels,
-            points_coastline,
-            foreground_color,
-            background_color,
-            thickness
-            );
-
+                        &dc_m_bgbuffer,
+                        position_plot_area,
+                        grid,
+                        ticks,
+                        parallels_and_meridians_labels,
+                        positions_parallels_and_meridians_labels,
+                        points_coastline,
+                        foreground_color,
+                        background_color,
+                        thickness
+                        );
+        
         mdc.SelectObject(wxNullBitmap);
 
         re_draw = false;
@@ -8872,6 +8874,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
 
     (this->*Render)(
         &dc,
+                    position_plot_area_now,
         grid_now,
         ticks_now,
         parallels_and_meridians_labels_now,
@@ -8990,6 +8993,7 @@ inline void DrawPanel::CleanAndRenderAll(void) {
     
     (this->*Render)(
                     &dc,
+                    position_plot_area_now,
                     grid_now,
                     ticks_now,
                     parallels_and_meridians_labels_now,
@@ -9129,6 +9133,7 @@ inline void DrawPanel::RefreshWIN32(void) {
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
             &dc,
+                        position_plot_area_now,
             grid_now,
             ticks_now,
             parallels_and_meridians_labels_now,
@@ -9169,6 +9174,7 @@ inline void DrawPanel::RefreshWIN32(void) {
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
             &dc,
+                        position_plot_area_now,
             grid_now,
             ticks_now,
             parallels_and_meridians_labels_now,
@@ -9199,6 +9205,7 @@ inline void DrawPanel::RefreshWIN32(void) {
         //re-render all  objects in *this which may have been partially cancelled by the clean operation above
         (this->*Render)(
             &dc,
+                        position_plot_area_now,
             grid_now,
             ticks_now,
             parallels_and_meridians_labels_now,
@@ -9338,6 +9345,7 @@ void DrawPanel::FitAll() {
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::Render_Mercator(wxDC* dc,
+                                       const wxPoint& position_plot_area,
                                        const vector< vector< vector<wxPoint> > >& grid,
                                        const vector< vector< vector<wxPoint> > >& ticks,
                                        const vector<wxString>& parallels_and_meridians_labels,
@@ -9359,7 +9367,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
     dc->SetPen(wxPen(foreground_color, thickness));
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
-    dc->DrawRectangle(position_plot_area_now.x, position_plot_area_now.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
+    dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
 
 
     //render coastlines
@@ -9537,6 +9545,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::Render_3D(
                                  wxDC* dc,
+                                 const wxPoint& position_plot_area,
                                  const vector< vector< vector<wxPoint> > >& grid,
                                  const vector< vector< vector<wxPoint> > >& ticks,
                                  const vector<wxString>& parallels_and_meridians_labels,
@@ -9638,8 +9647,8 @@ inline void DrawPanel::Render_3D(
     dc->SetBackground(background_color);
     //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
     dc->DrawCircle(
-        (position_plot_area_now.x) + (int)(((double)(size_plot_area.GetWidth())) / 2.0),
-        (position_plot_area_now.y) + (int)(((double)(size_plot_area.GetHeight())) / 2.0),
+        (position_plot_area.x) + (int)(((double)(size_plot_area.GetWidth())) / 2.0),
+        (position_plot_area.y) + (int)(((double)(size_plot_area.GetHeight())) / 2.0),
         (dummy_projection.y) / y_max * ((double)(size_plot_area.GetWidth())) / 2.0
     );
 

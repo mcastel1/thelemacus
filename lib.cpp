@@ -9192,7 +9192,7 @@ inline void DrawPanel::RefreshWIN32(void) {
     );
 
     if ((parent->dragging_chart) || (parent->mouse_scrolling) || (parent->parent->selection_rectangle) || (parent->parent->dragging_object) || (parent->parent->changing_highlighted_object)) {
-        //I am either drawing a selection rectangle, dragging an object or changing the highlighted object -> I need to re-render all GUI objects 
+        //I am either drawing a selection rectangle, dragging an object or changing the highlighted object -> I need to re-render all GUI objects
 
         //re-render all  objects in *this which may have been partially cancelled by the clean operation above
         (this->*Render)(
@@ -13622,7 +13622,6 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
         PositionProjection p_min, p_max;
 
-
         //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
         (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - (((double)(((draw_panel->size_chart).GetWidth()) * (draw_panel->x_span_0))) / ((double)(((zoom_factor.value) * (draw_panel->width_chart_0))))) / 2.0;
         (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + (((double)(((draw_panel->size_chart).GetWidth()) * (draw_panel->x_span_0))) / ((double)(((zoom_factor.value) * (draw_panel->width_chart_0))))) / 2.0;
@@ -13638,7 +13637,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
             //            ComputeZoomFactor_Mercator((draw_panel->x_span));
 
             (draw_panel->*(draw_panel->Draw))();
-            draw_panel->Refresh();
+            draw_panel->MyRefresh();
             draw_panel->FitAll();
             UpdateSlider();
 
@@ -13661,7 +13660,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
         ((draw_panel->circle_observer).omega) = (((draw_panel->circle_observer_0).omega) / (zoom_factor.value));
 
         (draw_panel->*(draw_panel->Draw))();
-        draw_panel->Refresh();
+        draw_panel->MyRefresh();
         draw_panel->FitAll();
 
         UpdateSlider();

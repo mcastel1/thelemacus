@@ -9808,8 +9808,8 @@ inline void DrawPanel::Draw_Mercator(void) {
 
     /*set the aspect ratio between height and width equal to the ratio between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
 
-    if (!(parent->dragging_chart)) {
-        //the ChartFrame is not being dragged -> its size will change -> re-compute its size
+    if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
+        //the ChartFrame is not being dragged and the mouse is not scrolling -> the chart's size will change -> re-compute its size
 
         if ((y_max - y_min) > x_span()) {
             //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen

@@ -9061,6 +9061,7 @@ inline void DrawPanel::RefreshWIN32(void) {
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
             &dc,
+                        position_plot_area_before,
             grid_before,
             ticks_before,
             parallels_and_meridians_labels_before,
@@ -9096,6 +9097,7 @@ inline void DrawPanel::RefreshWIN32(void) {
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
             &dc,
+                        position_plot_area_now,
             grid_now,
             ticks_now,
             parallels_and_meridians_labels_now,
@@ -9832,6 +9834,9 @@ inline void DrawPanel::Draw_Mercator(void) {
     //set the size of *this equal to the size of the chart, in such a way that draw_panel can properly contain the chart
     SetSize(size_chart);
 
+    //I am about to modify position_plot_area_now -> save it in position_plot_area_before
+    position_plot_area_before = position_plot_area_now;
+
     //sets size_plot_area and stores into position_plot_area the screen position of the top-left edge of the plot area.
     if (
         ((size_chart.GetWidth()) - (((int)size_label_horizontal) + 3 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))) * (size_chart.GetHeight()) / (size_chart.GetWidth())
@@ -10171,6 +10176,7 @@ inline void DrawPanel::Draw_3D(void) {
     size_plot_area.SetWidth((size_chart.GetWidth()) * (length_plot_area_over_length_chart.value));
     size_plot_area.SetHeight((size_chart.GetHeight()) * (length_plot_area_over_length_chart.value));
 
+    position_plot_area_before = position_plot_area_now;
     position_plot_area_now = wxPoint((int)(((double)(size_chart.GetWidth())) * (1.0 - (length_plot_area_over_length_chart.value)) / 2.0),
         (int)(((double)(size_chart.GetHeight())) * (1.0 - (length_plot_area_over_length_chart.value)) / 2.0));
 
@@ -13198,6 +13204,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             parent->points_coastline_before.clear();
                             (parent->points_coastline_before) = (parent->points_coastline_now);
                             
+                            position_plot_area_before = position_plot_area_now;
                             grid_before.clear();
                             grid_before = grid_now;
                             ticks_before.clear();
@@ -13240,6 +13247,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         parent->points_coastline_before.clear();
                         (parent->points_coastline_before) = (parent->points_coastline_now);
                         
+                        position_plot_area_before = position_plot_area_now;
                         grid_before.clear();
                         grid_before = grid_now;
                         ticks_before.clear();
@@ -13404,7 +13412,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
 #ifdef _WIN32
                             
-                            
                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
                             (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
@@ -13459,7 +13466,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     }
                         
                     case 1: {
-                        //I am using the 3d projection: even if the position lies outside the circular boundary of the Earth,  thus this posibtion is a valid position for a drag which rotates the earth about the y' axis -> I do this rotation
+                        //I am using the 3d projection: even if the Position lies outside the circular boundary of the Earth,  thus this Position is a valid position for a drag which rotates the earth about the y' axis -> I do this rotation
                         
                         (parent->dragging_chart) = true;
                         
@@ -13477,6 +13484,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         parent->points_coastline_before.clear();
                         (parent->points_coastline_before) = (parent->points_coastline_now);
                         
+                        position_plot_area_before = position_plot_area_now;
                         grid_before.clear();
                         grid_before = grid_now;
                         ticks_before.clear();
@@ -13623,6 +13631,8 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
     points_coastline_before.clear();
     points_coastline_before = points_coastline_now;
     
+    
+    (draw_panel->position_plot_area_before) = (draw_panel->position_plot_area_now);
     draw_panel->grid_before.clear();
     (draw_panel->grid_before) = (draw_panel->grid_now);
     draw_panel->ticks_before.clear();

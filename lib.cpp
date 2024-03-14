@@ -12484,7 +12484,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
             (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now);
 
-//            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->geo_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(parent->parent->end_label_selection_rectangle_now));
+            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((parent->parent->geo_position_now), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(parent->parent->end_label_selection_rectangle_now));
 
 //            ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
 

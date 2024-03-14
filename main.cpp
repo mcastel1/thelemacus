@@ -133,7 +133,6 @@
     - when you add a new Route (and in other occasions) there is a beep (it seems like an error) -> understand what is goign on
     - frames are not resized according to the size of their title
 on WIN32:
-        - end position of selection rectangle is not shown properly
         - use ToDPI in wxSizes to resize them correctly
         - when you zoom in in ChartFrame, the panel in ChartFrame is quiclky increased in size and then resized (it looks like a flash) -> remove this effect
         - remove all remaining calls of Refresh() and replace them with RefreshWIN32();

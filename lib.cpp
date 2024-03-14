@@ -13615,6 +13615,30 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
     }
 
+    
+#ifdef WIN32
+    //I am on WIN32 operating system: I will refresh the plot under the scroll operation, where I will wipe out the graphical objects in the former plot by drawing with background_color on top of them -> I need to keep track of the _before graphical objects and on the current _now graphical objects, and I do it here:
+    
+    //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
+    points_coastline_before.clear();
+    points_coastline_before = points_coastline_now;
+    
+    draw_panel->grid_before.clear();
+    (draw_panel->grid_before) = (draw_panel->grid_now);
+    draw_panel->ticks_before.clear();
+    (draw_panel->ticks_before) = (draw_panel->ticks_now);
+    
+    //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
+    draw_panel->points_route_list_before.clear();
+    (draw_panel->points_route_list_before) = (draw_panel->points_route_list_now);
+    
+    draw_panel->points_position_list_before.clear();
+    (draw_panel->points_position_list_before) = (draw_panel->points_position_list_now);
+    
+    draw_panel->reference_positions_route_list_before.clear();
+    (draw_panel->reference_positions_route_list_before) = (draw_panel->reference_positions_route_list_now);
+    
+#endif
 
 
 

@@ -17604,7 +17604,7 @@ void ListFrame::DrawAll(void) {
 void ListFrame::RefreshAll(void) {
 
     for (long i = 0; i < (chart_frames.size()); i++) {
-        ((chart_frames[i])->draw_panel)->MyRefresh();
+        ((chart_frames[i])->draw_panel)->Refresh();
     }
 
 }

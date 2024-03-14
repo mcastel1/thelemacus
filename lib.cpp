@@ -13628,6 +13628,9 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
     draw_panel->ticks_before.clear();
     (draw_panel->ticks_before) = (draw_panel->ticks_now);
     
+    (draw_panel->parallels_and_meridians_labels_before) = (draw_panel->parallels_and_meridians_labels_now);
+    (draw_panel->positions_parallels_and_meridians_labels_before) = (draw_panel->positions_parallels_and_meridians_labels_now);
+
     //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
     draw_panel->points_route_list_before.clear();
     (draw_panel->points_route_list_before) = (draw_panel->points_route_list_now);

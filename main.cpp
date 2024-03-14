@@ -130,6 +130,7 @@
  
  
  ********** THINGS TO FIX ************
+    - when you add a new Route, the field orthodrome is selected but the fields to enter the length are greyet out
     - get rid of  CheckLength class: you only need     CheckLengthValue<P>* check_length_value, because to check the length unit you have MultipleITemField::cCheck!
     - frames are not resized according to the size of their title
 on WIN32:

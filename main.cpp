@@ -132,7 +132,6 @@
  ********** THINGS TO FIX ************
  on OSX:
  on WIN32:
-        - use ToDPI in wxSizes to resize them correctly
         - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
  */
 

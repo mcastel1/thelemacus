@@ -9325,10 +9325,10 @@ void DrawPanel::FitAll() {
 
     //set the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
     this->SetMinSize(size_chart);
-    parent->SetMinSize(wxSize(
+    parent->SetMinSize(ToDIP(wxSize(
         (size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
         (size_chart.GetHeight()) + ((label_position_now.get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
-    ));
+    )));
 
     //position position_label_position_now at the bottom left corner of *this
     position_label_position_now = wxPoint(
@@ -10665,7 +10665,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
         wxID_ANY,
         Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
         wxDefaultPosition,
-        wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
+       ToDIP(wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
         wxBU_EXACTFIT | wxSIMPLE_BORDER
     );
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
@@ -15479,9 +15479,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
     //sets common_width to the width of the largest entry in the left column, in this case the StaticText containing "Master-clock UTC date and hour of sight"
     common_width = GetTextExtent(wxS("Master-clock UTC date and hour of sight   ")).GetWidth();
-    text_combo_body->SetMinSize(wxSize(common_width, -1));
-    text_date->SetMinSize(wxSize(common_width, -1));
-    text_label->SetMinSize(wxSize(common_width, -1));
+    text_combo_body->SetMinSize(ToDIP(wxSize(common_width, -1)));
+    text_date->SetMinSize(ToDIP(wxSize(common_width, -1)));
+    text_label->SetMinSize(ToDIP(wxSize(common_width, -1)));
 
     sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
     sizer->Add(sizer_box_time, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
@@ -15724,9 +15724,9 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
     //sets common_width to the width of the largest entry in the left column, in this case the StaticText containing "Longitude"
     common_width = GetTextExtent(wxS("Longitude   ")).GetWidth();
-    text_lat->SetMinSize(wxSize(common_width, -1));
-    text_lon->SetMinSize(wxSize(common_width, -1));
-    text_label->SetMinSize(wxSize(common_width, -1));
+    text_lat->SetMinSize(ToDIP(wxSize(common_width, -1)));
+    text_lon->SetMinSize(ToDIP(wxSize(common_width, -1)));
+    text_label->SetMinSize(ToDIP(wxSize(common_width, -1)));
 
     //add the various elements to sizer, by inserting a border of (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value) in all directions
     sizer->Add(sizer_box_measurement, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
@@ -15988,9 +15988,9 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     //set the sizes of elements in each of the wxStaticBoxSizers to the same value -> the columns across different both sizers will be aligned vertically
     //sets common_width to the width of the largest entry in the left column, in this case the wxStaticText containing "Longitude"
     common_width = GetTextExtent(wxS("Longitude   ")).GetWidth();
-    text_Z->SetMinSize(wxSize(common_width, -1));
-    text_omega->SetMinSize(wxSize(common_width, -1));
-    text_label->SetMinSize(wxSize(common_width, -1));
+    text_Z->SetMinSize(ToDIP(wxSize(common_width, -1)));
+    text_omega->SetMinSize(ToDIP(wxSize(common_width, -1)));
+    text_label->SetMinSize(ToDIP(wxSize(common_width, -1)));
 
     //add the various elements to sizer, by inserting a border of (((wxGetApp().rectangle_display).GetSize()).GetWidth())*(length_border_over_length_screen.value) in all directions
     sizer->Add(sizer_box_data, 0, wxEXPAND | wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));
@@ -17357,27 +17357,27 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 
 
         set();
-
+        
         //button to show map
         button_show_map = new wxBitmapButton(
-            panel,
-            wxID_ANY,
-            Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value))),
-            wxDefaultPosition,
-            wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
-            wxBU_EXACTFIT | wxSIMPLE_BORDER
-        );
+                                             panel,
+                                             wxID_ANY,
+                                             Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                             wxDefaultPosition,
+                                             ToDIP(wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
+                                             wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                             );
         button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowChart<wxCommandEvent>, &wxGetApp());
-
+        
         //button to compute astronomical position
         button_compute_position = new wxBitmapButton(
-            panel,
-            wxID_ANY,
-            Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - wxSize(((wxGetApp().border).value), ((wxGetApp().border).value))),
-            wxDefaultPosition,
-            wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
-            wxBU_EXACTFIT | wxSIMPLE_BORDER
-        );
+                                                     panel,
+                                                     wxID_ANY,
+                                                     Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                                     wxDefaultPosition,
+                                                     ToDIP(wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
+                                                     wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                                     );
         button_compute_position->Bind(wxEVT_BUTTON, &ListFrame::ComputePosition<wxCommandEvent>, this);
 
 
@@ -17414,7 +17414,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         );
         button_add_route->Bind(wxEVT_BUTTON, &ListFrame::OnAddRoute, this);
 
-        extract_colors = new wxTextCtrl(panel, wxID_ANY, wxS(""), wxDefaultPosition, wxSize(0, 0));
+        extract_colors = new wxTextCtrl(panel, wxID_ANY, wxS(""), wxDefaultPosition, ToDIP(wxSize(0, 0)));
 
 
         sizer_buttons_sight->Add(button_add_sight, 0, wxALIGN_CENTER);

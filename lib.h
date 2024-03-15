@@ -2830,6 +2830,25 @@ public:
     
 };
 
+//a hanlder to make a general motion (i.e., drag the chart, transport a Position, ...) with an animation
+class MotionHandler{
+    
+public:
+    
+    //the functor that calls *this
+    ListFrame* parent;
+    wxTimer* timer;
+    //at each step of the transport, *route_chunk is set to be a part of the full Route used to transport the object
+    Route *route_chunk;
+    //the position during the transport process at 'time' t
+    Position start;
+    //a counter of the step in the animation, running from 0 to n_animation_steps
+    long t;
+    
+    MotionHandler(ListFrame*);
+    
+};
+
 
 //a hanlder to transport a Route or Position with an animation
 class GraphicalObjectTransportHandler{

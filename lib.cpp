@@ -21774,6 +21774,57 @@ ChartTransportHandler::ChartTransportHandler(ListFrame* parent_in) : MotionHandl
 
 //this method iterates the animation
 void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
+    
+    if (t < (wxGetApp().n_animation_steps.value)) {
+
+        if (t == 0) {
+            //the transport has just started
+
+            (route_chunk->reference_position) = start;
+
+            //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
+            for (long i = 0; i < (parent->chart_frames.size()); i++) {
+                ((parent->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
+            }
+
+            //I brind all ChartFrames to front to show the animation
+            wxGetApp().ShowChart(event);
+
+        }
+        else {
+            //the transport animation is in progress -> do the next chunk
+
+            route_chunk->length.set(
+                String(""),
+                (((parent->data->route_list)[parent->i_transporting_route]).length.value) *
+                (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
+                ,
+                String(""));
+
+
+           
+
+            parent->RefreshAll();
+            //            cout << "\t\t t= " << t << "\n";
+
+        }
+
+        t++;
+
+    }
+    else {
+        //the transport  is over
+      
+        //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
+        (*(parent->unset_idling))();
+        for (long i = 0; i < (parent->chart_frames.size()); i++) {
+            ((parent->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
+        }
+
+      
+        timer->Stop();
+
+    }
 
 
 }

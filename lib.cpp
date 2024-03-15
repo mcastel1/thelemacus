@@ -15080,7 +15080,7 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
 //if an item in listcontrol_sights/positions/routes is selected, I transport the Sight/Position/Route under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event) {
 
-    (f->transport_handler) = new TransportHandler(f);
+    (f->transport_handler) = new GraphicalObjectTransportHandler(f);
 
     //now I no longer need route_list to contain only the available Routes for transport -> I put back all the Routes before the transport into route_list by copying route_list_saved into route_list.
     // PaintEvent() will need points_route_list to be updated according to this change -> I call TabulateRoutesAll() to update points_route_list
@@ -15127,7 +15127,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 //if a new item listcontrol_routes is created, I transport the sight/position under consideration with such Route
 template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& event) {
 
-    (f->transport_handler) = new TransportHandler(f);
+    (f->transport_handler) = new GraphicalObjectTransportHandler(f);
 
     //the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
     (f->i_transporting_route) = ((f->listcontrol_routes)->GetItemCount()) - 1;
@@ -21570,19 +21570,19 @@ template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_i
 
 }
 
-TransportHandler::TransportHandler(ListFrame* parent_in) {
+GraphicalObjectTransportHandler::GraphicalObjectTransportHandler(ListFrame* parent_in) {
 
     timer = new wxTimer();
     route_chunk = new Route();
 
     parent = parent_in;
     t = 0;
-    timer->Bind(wxEVT_TIMER, &TransportHandler::OnTimer, this);
+    timer->Bind(wxEVT_TIMER, &GraphicalObjectTransportHandler::OnTimer, this);
 
 }
 
 //this method iterates the animation
-void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
+void GraphicalObjectTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
     if (t < (wxGetApp().n_animation_steps.value)) {
 

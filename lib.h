@@ -55,7 +55,7 @@ class RouteFrame;
 class DrawPanel;
 class Position;
 class Cartesian;
-class TransportHandler;
+class GraphicalObjectTransportHandler;
 class LengthFormat;
 class RouteType;
 class Projection;
@@ -2509,7 +2509,7 @@ public:
     ListControl<Route>* listcontrol_routes;
     ListControl<Position>* listcontrol_positions;
     //this is used to transport objects listed in *this
-    TransportHandler* transport_handler;
+    GraphicalObjectTransportHandler* transport_handler;
     //extract_colors is created only to detect the background and foreground colors set by the operating systems, it has no other use. As a result, its size will be set to zero.
     wxTextCtrl* extract_colors;
     wxPanel *panel;
@@ -2831,8 +2831,8 @@ public:
 };
 
 
-//a hanlder to transport a Route or Position
-class TransportHandler{
+//a hanlder to transport a Route or Position with an animation
+class GraphicalObjectTransportHandler{
     
 public:
     
@@ -2846,7 +2846,7 @@ public:
     //a counter of the step in the animation, running from 0 to n_animation_steps
     long t;
     
-    TransportHandler(ListFrame*);
+    GraphicalObjectTransportHandler(ListFrame*);
     void OnTimer(wxTimerEvent&);
     
 };

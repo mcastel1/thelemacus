@@ -90,7 +90,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
- - handle light/dark mode on WIN32 and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
+ - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
  - get rid of number_of_recent_* ints by reading the number of recent items directly dfrom file string
  - condense id RouteTypeField<P>::set(void)
  - condense insert_recent_body,  insert_recent_projection, ... + print_recent_body, print_recent_projection, ... into a pair of methods

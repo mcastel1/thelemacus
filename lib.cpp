@@ -20617,13 +20617,13 @@ template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event) 
 }
 
 
-//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
+//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entere   d so far in unit is valid and runs AllOk
 template<class P> template<class E>  void LengthField<P>::OnEditUnit(E& event) {
 
     bool success;
 
     //I check whether the name in the GUI field unit matches one of the unit names in units
-    find_and_replace_case_insensitive(unit->name, units, &success, NULL);
+    find_and_replace_case_insensitive(unit->name, unit->catalog, &success, NULL);
 
 
     if (success) {

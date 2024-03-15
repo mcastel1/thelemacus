@@ -12738,9 +12738,6 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                     Refresh();
                     FitAll();
 
-                    //uncomment this if you want to print an error message
-                    //                     print_error_message->SetAndCall(NULL, String("Chart outside boundaries!"), String("The chart must lie within the boundaries."));
-
                 }
 
             }
@@ -12799,7 +12796,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                     Refresh();
                     FitAll();
 
-                    print_error_message->SetAndCall(NULL, String("Route ground or start position outside plot area!"), String("Route start or start position must lie within the plot area."), (wxGetApp().path_file_error_icon));
+                    print_error_message->SetAndCall(NULL, String("Error"), String("Route ground or start position outside plot area! Route start or start position must lie within the plot area."), (wxGetApp().path_file_error_icon));
 
                 }
 
@@ -12817,7 +12814,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                     Refresh();
                     FitAll();
 
-                    print_error_message->SetAndCall(NULL, String("Position outside plot area!"), String("The position must lie within the plot area."), (wxGetApp().path_file_error_icon));
+                    print_error_message->SetAndCall(NULL, String("Error"), String("Position outside plot area! The position must lie within the plot area."), (wxGetApp().path_file_error_icon));
 
                 }
 
@@ -13691,7 +13688,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
             //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
 
             //uncomment this if you want to print an error message
-            //print_error_message->SetAndCall(NULL, String("You moved the slider: Chart outside  boundaries!"), String("The chart must lie within the boundaries."));
+            //print_error_message->SetAndCall(NULL, String("Error"), String("You moved the slider: Chart outside  boundaries! The chart must lie within the boundaries."));
 
             //I reset the chart to its original configuration
             Reset<T>(event);
@@ -13914,7 +13911,7 @@ void ExistingRoute::operator()(wxCommandEvent& event) {
     copy((f->data->route_list).begin(), (f->data->route_list).end(), (f->route_list_saved).begin());
 
     //print an info message
-    (f->print_question_message)->SetAndCall(NULL, String("You are about to transport with an existing route"), String("Select the Route and press enter.\nDo you want to continue?"), String("Yes"), String("No, I want to cancel"));
+    (f->print_question_message)->SetAndCall(NULL, String(""), String("You are about to transport with an existing route. Select the Route and press enter.\nDo you want to continue?"), String("Yes"), String("No, I want to cancel"));
 
     event.Skip(true);
 
@@ -14104,7 +14101,7 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event) {
 
         print_question = new PrintQuestion<ListFrame, DeleteRoute, DeleteRoute>(parent, parent->delete_route_and_related_sight, parent->delete_route);
 
-        print_question->SetAndCall(NULL, String("The route that you are about to remove is related to a sight"), String("Do you want to remove the sight related to this route?"), String("Yes"), String("No"));
+        print_question->SetAndCall(NULL, String(""), String("The route that you are about to remove is related to a sight. Do you want to remove the sight related to this route?"), String("Yes"), String("No"));
 
         //        question_frame->Show(true);
 
@@ -17569,7 +17566,7 @@ void ListFrame::OnComputePosition(void) {
     if (out == -1) {
         //the position could not be computed
 
-        print_error_message->SetAndCall(NULL, String("I could not compute the astronomical position!"), String("No routes yield valid crossings"), (wxGetApp().path_file_error_icon));
+        print_error_message->SetAndCall(NULL, String("Error"), String("I could not compute the astronomical position! No routes yield valid crossings"), (wxGetApp().path_file_error_icon));
 
     }
     else {
@@ -17577,7 +17574,7 @@ void ListFrame::OnComputePosition(void) {
         if (out == 0) {
             //the position couldbe computed by using only some crossings/Routes
 
-            print_error_message->SetAndCall(NULL, String("Not all routes could be used to compute the astronomical position!"), String("Rome routes yield invalid crossings"), (wxGetApp().path_file_warning_icon));
+            print_error_message->SetAndCall(NULL, String("Warning"), String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."), (wxGetApp().path_file_warning_icon));
 
         }
 
@@ -17740,7 +17737,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event) {
     transported_object = String("sight");
 
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
-    print_question->SetAndCall(NULL, String("You want to transport a sight"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport?"), String("Existing route"), String("New route"));
 
     OnModifyFile();
 

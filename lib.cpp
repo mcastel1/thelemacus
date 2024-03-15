@@ -14855,8 +14855,8 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
         bool check;
 
         //I check whether the name in the GUI field unit matches one of the unit names in units
-        for (check = false, i = 0; (i < (p->units).size()) && (!check); i++) {
-            if ((p->unit->name->GetValue()) == (p->units)[i]) {
+        for (check = false, i = 0; (i < LengthUnit_types.size()) && (!check); i++) {
+            if ((p->unit->name->GetValue()) == wxString((LengthUnit_types[i]).value)) {
                 check = true;
             }
         }
@@ -14878,8 +14878,8 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
 
             temp.str("");
             temp << "Available units are: ";
-            for (i = 0; i < (p->units).size(); i++) {
-                temp << (p->units)[i].ToStdString() << ((i < (p->units).size() - 1) ? ", " : ".");
+            for (i = 0; i < LengthUnit_types.size(); i++) {
+                temp << (LengthUnit_types[i]).value << ((i < LengthUnit_types.size() - 1) ? ", " : ".");
             }
 
             (f->print_error_message)->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
@@ -20307,14 +20307,6 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     check = new CheckLength<P>(this);
 
     flags.Center();
-
-
-    //tabulate the possible units of measure
-    units.Clear();
-    units.Add(wxT("nm"));
-    units.Add(wxT("m"));
-    units.Add(wxT("ft"));
-
 
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     //SetColor(value);

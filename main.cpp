@@ -130,7 +130,6 @@
  
  
  ********** THINGS TO FIX ************
-    - add h m s in ChronoField
     - get rid of  CheckLength class: you only need     CheckLengthValue<P>* check_length_value, because to check the length unit you have MultipleITemField::cCheck!
     - frames are not resized according to the size of their title
 on WIN32:

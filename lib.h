@@ -2401,7 +2401,7 @@ public:
     //second text control
     wxTextCtrl *second;
     //texts
-    StaticText* separation_text_1, *separation_text_2;
+    StaticText* static_text_1, *static_text_2, *static_text_3;
     wxBoxSizer *sizer_h, *sizer_v;
     //this points to a Date object, which contains the date written in the GUI fields of this
     Chrono* chrono;

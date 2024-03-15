@@ -20992,7 +20992,7 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
     hour->Bind(wxEVT_COMBOBOX, &ChronoField::OnEditHour<wxCommandEvent>, this);
     hour->Bind(wxEVT_KEY_UP, &ChronoField::OnEditHour<wxKeyEvent>, this);
 
-    separation_text_1 = new StaticText((parent_frame->panel), wxT("h"), wxDefaultPosition, wxDefaultSize, 0);
+    static_text_1 = new StaticText((parent_frame->panel), wxT("h"), wxDefaultPosition, wxDefaultSize, 0);
 
     minute = new wxComboBox(parent_frame->panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, minutes, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(minute);
@@ -21005,7 +21005,7 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
     minute->Bind(wxEVT_COMBOBOX, &ChronoField::OnEditMinute<wxCommandEvent>, this);
     minute->Bind(wxEVT_KEY_UP, &ChronoField::OnEditMinute<wxKeyEvent>, this);
 
-    separation_text_2 = new StaticText((parent_frame->panel), wxT("m"), wxDefaultPosition, wxDefaultSize, 0);
+    static_text_2 = new StaticText((parent_frame->panel), wxT("m"), wxDefaultPosition, wxDefaultSize, 0);
 
     second = new wxTextCtrl(parent_frame->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     second->SetInitialSize(second->GetSizeFromTextSize(second->GetTextExtent(wxS(sample_width_floating_point_field))));
@@ -21015,6 +21015,7 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
     second->Bind(wxEVT_KILL_FOCUS, *(check->check_second));
     //as text is changed in second from the user with either a keyboard button, call OnEditSecond
     second->Bind(wxEVT_KEY_UP, &ChronoField::OnEditSecond<wxKeyEvent>, this);
+    static_text_3 = new StaticText((parent_frame->panel), wxT("s"), wxDefaultPosition, wxDefaultSize, 0);
 
 
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -21022,10 +21023,11 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(hour, 0, wxALIGN_CENTER);
-    sizer_h->Add(separation_text_1, wxALIGN_CENTER);
+    sizer_h->Add(static_text_1, 0, wxALIGN_CENTER);
     sizer_h->Add(minute, 0, wxALIGN_CENTER);
-    sizer_h->Add(separation_text_2, wxALIGN_CENTER);
+    sizer_h->Add(static_text_2, 0, wxALIGN_CENTER);
     sizer_h->Add(second, 0, wxALIGN_CENTER);
+    sizer_h->Add(static_text_3, 0, wxALIGN_CENTER);
 
 }
 

@@ -11645,7 +11645,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall(p->name, String("Body not found in catalog!"), String("Body must be in catalog."), (wxGetApp().path_file_error_icon));
+            (f->print_error_message)->SetAndCall(p->name, String("Error"), String("Body not found in catalog! Body must be in catalog."), (wxGetApp().path_file_error_icon));
 
             (p->ok) = false;
 
@@ -11700,7 +11700,7 @@ template<class P> template<class T> void CheckLimb<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall(p->name, String("Limb not valid!"), String("Limb must be upper, center or lower."), (wxGetApp().path_file_error_icon));
+            (f->print_error_message)->SetAndCall(p->name, String("Error"), String("Limb not valid! Limb must be upper, center or lower."), (wxGetApp().path_file_error_icon));
             (p->ok) = false;
 
         }
@@ -11791,7 +11791,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->sign), String("Sign is not valid!"), String("Sign must be +-, NS or EW."), (wxGetApp().path_file_error_icon));
+            (f->print_error_message)->SetAndCall((p->sign), String("Error"), String("Sign is not valid! Sign must be +-, NS or EW."), (wxGetApp().path_file_error_icon));
             (p->sign_ok) = false;
 
         }

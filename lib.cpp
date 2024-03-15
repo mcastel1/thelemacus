@@ -13002,18 +13002,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     }
                     else {
 
-                        if ((parent->parent->geo_position_start.lambda.value) * (parent->parent->position_end.lambda.value) > 0.0) {
-
                             (parent->lambda_min) = (((parent->parent)->position_end).lambda);
                             (parent->lambda_max) = (((parent->parent)->geo_position_start).lambda);
-
-                        }
-                        else {
-
-                            (parent->lambda_min) = (((parent->parent)->geo_position_start).lambda);
-                            (parent->lambda_max) = (((parent->parent)->position_end).lambda);
-
-                        }
 
                     }
                     if ((((parent->parent)->geo_position_start).phi) > (((parent->parent)->position_end).phi)) {

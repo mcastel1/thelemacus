@@ -130,7 +130,6 @@
  
  
  ********** THINGS TO FIX ************
-        - when you make a selection rectangle in the mercator projection that encompasses the greenwich meridian, the selection is incorrect
  on OSX:
  on WIN32:
         - use ToDPI in wxSizes to resize them correctly

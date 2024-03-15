@@ -12986,7 +12986,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the values of ((parent->parent)->p_start).lambda, ... ((parent->parent)->p_end).phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc. While I do this, I take care of the case where the selection rectangle may encompass the Greenwich antimeridian 
                     if ((parent->parent->geo_position_start.lambda) > (parent->parent->position_end.lambda)) {
 
-                        if ((((parent->parent)->geo_position_start).lambda.value) * (((parent->parent)->position_end).lambda.value) > 0.0) {
+                        if ((parent->parent->geo_position_start.lambda.value) * (parent->parent->position_end.lambda.value) > 0.0) {
 
                             (parent->lambda_min) = (((parent->parent)->geo_position_start).lambda);
                             (parent->lambda_max) = (((parent->parent)->position_end).lambda);
@@ -13002,7 +13002,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     }
                     else {
 
-                        if ((((parent->parent)->geo_position_start).lambda.value) * (((parent->parent)->position_end).lambda.value) > 0.0) {
+                        if ((parent->parent->geo_position_start.lambda.value) * (parent->parent->position_end.lambda.value) > 0.0) {
 
                             (parent->lambda_min) = (((parent->parent)->position_end).lambda);
                             (parent->lambda_max) = (((parent->parent)->geo_position_start).lambda);

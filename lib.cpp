@@ -21583,11 +21583,6 @@ MotionHandler::MotionHandler(ListFrame* parent_in){
 
 GraphicalFeatureTransportHandler::GraphicalFeatureTransportHandler(ListFrame* parent_in) : MotionHandler(parent_in){
 
-//    timer = new wxTimer();
-//    route_chunk = new Route();
-
-//    parent = parent_in;
-//    t = 0;x
     timer->Bind(wxEVT_TIMER, &GraphicalFeatureTransportHandler::OnTimer, this);
 
 }
@@ -21765,5 +21760,20 @@ void GraphicalFeatureTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& ev
         timer->Stop();
 
     }
+
+}
+
+
+ChartTransportHandler::ChartTransportHandler(ListFrame* parent_in) : MotionHandler(parent_in){
+
+    timer->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);
+
+}
+
+
+
+//this method iterates the animation
+void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
+
 
 }

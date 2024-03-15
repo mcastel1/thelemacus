@@ -2855,17 +2855,18 @@ class GraphicalFeatureTransportHandler: public MotionHandler{
     
 public:
     
-    //the functor that calls *this
-//    ListFrame* parent;
-//    wxTimer* timer;
-    //at each step of the transport, *route_chunk is set to be a part of the full Route used to transport the object
-//    Route *route_chunk;
-    //the position during the transport process at 'time' t 
-//    Position start;
-    //a counter of the step in the animation, running from 0 to n_animation_steps
-//    long t;
-    
     GraphicalFeatureTransportHandler(ListFrame*);
+    void OnTimer(wxTimerEvent&);
+    
+};
+
+
+//a hanlder to move  the chart with an animation
+class ChartTransportHandler: public MotionHandler{
+    
+public:
+    
+    ChartTransportHandler(ListFrame*);
     void OnTimer(wxTimerEvent&);
     
 };

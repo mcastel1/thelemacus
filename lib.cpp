@@ -16032,6 +16032,13 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     if (route_in == NULL) {
         //If the user is about to enter a brand new route, then the GUI fields are disabled/enables according to the currently selected value in *type
 
+        //set as route type the most recent item in recetn _route_types: set first type->object and then write in type the value written in type->object
+        type->object->set(Route_types[wxGetApp().list_frame->data->recent_route_types.front()]);
+        type->MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame> >::set();
+        
+        length_format->object->set(LengthFormat_types[wxGetApp().list_frame->data->recent_length_formats.front()]);
+        length_format->MultipleItemField<RouteFrame, LengthFormat, void >::set();
+
         OnChooseLengthFormatField();
 
     }

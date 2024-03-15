@@ -17770,7 +17770,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event) {
 
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
-    print_question->SetAndCall(NULL, String("You want to transport a position"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With what route do you want to transport?"), String("Existing route"), String("New route"));
 
     OnModifyFile();
 
@@ -17836,7 +17836,7 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
 
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
-    print_question->SetAndCall(NULL, String("You want to transport a route"), String("With what route do you want to transport?"), String("Existing route"), String("New route"));
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With what route do you want to transport?"), String("Existing route"), String("New route"));
 
     OnModifyFile();
 
@@ -17928,7 +17928,7 @@ template<class E> void ListFrame::Disconnect(E& event) {
     }
 
     //print an info message
-    print_warning_message->SetAndCall(NULL, String("The route which is being dragged was related to a sight!"), String("Disconnecting the route from the sight."), (wxGetApp().path_file_warning_icon));
+    print_warning_message->SetAndCall(NULL, String("Warning"), String("The route which is being dragged was related to a sight! Disconnecting the route from the sight."), (wxGetApp().path_file_warning_icon));
 
     //the Route has been disconnected from the sight -> a new Route which is not connected to any Sight is created -> the data of the file have been modified
     OnModifyFile();
@@ -18163,7 +18163,7 @@ template<class E> void ListFrame::OnPressCtrlW([[maybe_unused]] E& event) {
         save_and_reset = new SaveAndReset<ListFrame>(this);
         print_question = new PrintQuestion<ListFrame, SaveAndReset<ListFrame>, ResetListFrame>(this, save_and_reset, reset_list_frame);
 
-        print_question->SetAndCall(NULL, String("You pressed Ctrl+W"), String("You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
+        print_question->SetAndCall(NULL, String("Warning"), String("You pressed Ctrl+W. You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
 
     }
     else {
@@ -18472,24 +18472,6 @@ void SightFrame::TimeIntervalOk([[maybe_unused]] String prefix) {
 
 
 }
-
-//prompt an error message to signal to the user if the entered time of sight lies outside ephemerides data
-
-//template<class T> void SightFrame::OnEditTime(T& event){
-//    
-//    //compute time_interval_ok
-//    TimeIntervalOk(String(""));
-//    
-//    if(!time_interval_ok){
-//        //time_interval_ok = false -> prompt error message
-//
-//        print_error_message->SetAndCall(NULL, String("Time not covered by ephemerides' data!"), String("Time must be covered by emphmerides data"));
-//        
-//    }
-//    
-//    event.Skip(true);
-//    
-//}
 
 
 void SightFrame::OnPressCancel([[maybe_unused]] wxCommandEvent& event) {

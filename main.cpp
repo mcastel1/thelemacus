@@ -130,8 +130,9 @@
  
  
  ********** THINGS TO FIX ************
-    - frames are not resized according to the size of their title
-on WIN32:
+        - when you make a selection rectangle in the mercator projection that encompasses the greenwich meridian, the selection is incorrect
+ on OSX:
+ on WIN32:
         - use ToDPI in wxSizes to resize them correctly
         - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
  */

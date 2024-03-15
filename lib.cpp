@@ -12979,10 +12979,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     //sets the new values of lambda_min, lambda_max, phi_min and phi_max
                     //                delete chart;
                     //I convert all the angles to the format between -pi and pi, so I can sort them numerically
-                    (((parent->parent)->geo_position_start).phi).normalize_pm_pi();
-                    (((parent->parent)->geo_position_start).lambda).normalize_pm_pi();
-                    (((parent->parent)->position_end).phi).normalize_pm_pi();
-                    (((parent->parent)->position_end).lambda).normalize_pm_pi();
+                    parent->parent->geo_position_start.phi.normalize_pm_pi();
+                    parent->parent->geo_position_start.lambda.normalize_pm_pi();
+                    parent->parent->position_end.phi.normalize_pm_pi();
+                    parent->parent->position_end.lambda.normalize_pm_pi();
                     //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the values of ((parent->parent)->p_start).lambda, ... ((parent->parent)->p_end).phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc. While I do this, I take care of the case where the selection rectangle may encompass the Greenwich antimeridian 
                     if ((parent->parent->geo_position_start.lambda) > (parent->parent->position_end.lambda)) {
 

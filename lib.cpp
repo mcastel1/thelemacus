@@ -16039,6 +16039,9 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
         length_format->object->set(LengthFormat_types[wxGetApp().list_frame->data->recent_length_formats.front()]);
         length_format->MultipleItemField<RouteFrame, LengthFormat, void >::set();
 
+        //call this to enable/disable the GUI fields in according to the choice of RouteType
+        type->OnEdit();
+        //call this to enable/disable the GUI fields according ot the choice of LengthFormat
         OnChooseLengthFormatField();
 
     }
@@ -21335,101 +21338,14 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
 
 }
 
-////bind all GUI windows in *this to method
-//template<class P> template <typename EventTag, typename Method, typename Object> void RouteTypeField<P>::Bind(EventTag tag, Method method, Object object) {
-//
-//    MultipleItemField<P, RouteType, CheckRouteType<P> >::name->Bind(tag, method, object);
-//
-//}
-
-
-
-
-//template<class P> template<class T> void BodyField<P>::InsertIn(T* host) {
-//
-//    host->Add(sizer_v);
-//
-//}
-
-
-////update the dropdown menu of BodyField according to wxGetApp().list_frame->data->recent_bodies in such a way that the recent items appear on top of it
-//template<class P> void BodyField<P>::fill_bodies(void) {
-//
-//    unsigned int i, j;
-//    wxArrayString bodies_temp;
-//    wxString name_temp;
-//    bool is_present;
-//
-//    //save the current value of name in name_temp
-//    name_temp = (MultipleItemField<P, Body, CheckBody<P> >::name->GetValue());
-//    //create the temporary list of bodies bodies_temp
-//    for (bodies_temp.Clear(), i = 0; i < (catalog->list).size(); i++) {
-//        bodies_temp.Add(((catalog->list)[i]).name.value.c_str());
-//    }
-//
-//    //I first add to bodies the recently selected celestial bodies written in (wxGetApp().list_frame->data->recent_bodies)
-//    for (MultipleItemField<P, Body, CheckBody<P> >::items.Clear(), i = 0; i < (wxGetApp().list_frame->data->recent_bodies.size()); i++) {
-//
-//        MultipleItemField<P, Body, CheckBody<P> >::items.Add(bodies_temp[(wxGetApp().list_frame->data->recent_bodies)[i]]);
-//
-//    }
-//
-//    //then, I fill bodies with the remaining bodies
-//    for (i = 0; i < bodies_temp.GetCount(); i++) {
-//
-//        for (is_present = false, j = 0; (j < MultipleItemField<P, Body, CheckBody<P> >::items.GetCount()) && (!is_present); j++) {
-//
-//            if (MultipleItemField<P, Body, CheckBody<P> >::items[j] == bodies_temp[i]) {
-//                is_present = true;
-//            }
-//
-//        }
-//
-//        if (!is_present) {
-//            MultipleItemField<P, Body, CheckBody<P> >::items.Add(bodies_temp[i]);
-//        }
-//
-//    }
-//
-//    MultipleItemField<P, Body, CheckBody<P> >::name->Set(MultipleItemField<P, Body, CheckBody<P> >::items);
-//    //because name->Set(bodies clears the value of name, I set the value of name back to name_temp
-//    MultipleItemField<P, Body, CheckBody<P> >::name->SetValue(name_temp);
-//
-//    bodies_temp.Clear();
-//
-//}
-
-
-
-// //update list_frame->data->insert_recent_bodies according to the body currently written in name 
-//template<class P> void BodyField<P>::update_recent_bodies(void) {
-//
-//    //I proceed only if the progam is not is indling mode
-//    if (!(MultipleItemField<P, Body, CheckBody<P> >::parent->idling)) {
-//
-//        unsigned int i;
-//        bool check;
-//
-//        //I check whether the name in the GUI field body matches one of the body names in catalog if it is (is not) -> check = true (false). I write the id in i
-//        for (check = false, i = 0; (i < (catalog->list).size()) && (!check); i++) {
-//            if (String(MultipleItemField<P, Body, CheckBody<P> >::name->GetValue().ToStdString()) == (((catalog->list)[i]).name)) {
-//                check = true;
-//            }
-//        }
-//        i--;
-//
-//
-//        if (check) {
-//            //insert body #i into data->recent_bodies
-////            wxGetApp().list_frame->data->insert_recent_body(i);
-//            wxGetApp().list_frame->data->insert_recent_item(i, &(wxGetApp().list_frame->data->recent_bodies));
-//
-//        }
-//
-//    }
-//
-//}
-
+template<class P> void RouteTypeField<P>::OnEdit(void){
+    
+    wxCommandEvent dummy;
+    
+    OnEdit(dummy);
+    
+    
+}
 
 template<class P> template<class T> void LimbField<P>::InsertIn(T* host) {
 

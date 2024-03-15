@@ -134,7 +134,6 @@
     - get rid of  CheckLength class: you only need     CheckLengthValue<P>* check_length_value, because to check the length unit you have MultipleITemField::cCheck!
     - frames are not resized according to the size of their title
 on WIN32:
-        - when I open a new Route and loxodrome is selected, the field Ground position is not greyed out 
         - use ToDPI in wxSizes to resize them correctly
         - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
  */

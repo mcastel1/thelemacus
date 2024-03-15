@@ -2435,6 +2435,7 @@ public:
     RouteTypeField(wxPanel*, RouteType*, vector<int>*);
     void set(void);
     template<class E> void OnEdit(E&);
+    void OnEdit();
     
 };
 

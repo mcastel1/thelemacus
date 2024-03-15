@@ -2567,6 +2567,7 @@ public:
     void DrawAll(void);
     void MyRefreshAll(void);
     void RefreshAll(void);
+    void TabulatePositionsAll(void);
     void TabulateRoutesAll(void);
     void Resize(void);
     

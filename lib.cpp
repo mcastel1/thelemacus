@@ -17617,6 +17617,15 @@ void ListFrame::TabulateRoutesAll(void) {
 
 }
 
+//tabulate Positions in all chart_frames
+void ListFrame::TabulatePositionsAll(void) {
+
+    for (long i = 0; i < (chart_frames.size()); i++) {
+        (chart_frames[i])->draw_panel->TabulatePositions();
+    }
+
+}
+
 
 //fit the size of all listcontrols inside *this to their respective content and resize the respective sizers and *this to fit the new size of the listcontrols
 void ListFrame::Resize(void) {
@@ -21629,6 +21638,8 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 (parent->data->position_list)[(parent->i_object_to_transport)].transport_to(*route_chunk, String(""));
                 //                (route_chunk->reference_position) = (parent->data->position_list)[(parent->i_object_to_transport)];
 
+                parent->TabulatePositionsAll();
+                
             }
             else {
 
@@ -21640,9 +21651,10 @@ void TransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
                 }
 
+                parent->TabulateRoutesAll();
+                
             }
 
-            parent->TabulateRoutesAll();
             parent->RefreshAll();
             //            cout << "\t\t t= " << t << "\n";
 

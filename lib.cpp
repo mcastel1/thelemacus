@@ -17396,7 +17396,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxID_ANY,
             Bitmap(wxGetApp().path_file_plus_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
-            (wxGetApp().size_small_button),
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
@@ -17407,7 +17407,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxID_ANY,
             Bitmap(wxGetApp().path_file_plus_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
-            (wxGetApp().size_small_button),
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_add_position->Bind(wxEVT_BUTTON, &ListFrame::OnAddPosition, this);
@@ -17418,7 +17418,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxID_ANY,
             Bitmap(wxGetApp().path_file_plus_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
-            (wxGetApp().size_small_button),
+            wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_add_route->Bind(wxEVT_BUTTON, &ListFrame::OnAddRoute, this);

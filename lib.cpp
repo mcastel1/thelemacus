@@ -21573,7 +21573,7 @@ template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_i
 MotionHandler::MotionHandler(ListFrame* parent_in){
 
     timer = new wxTimer();
-    route_chunk = new Route();
+//    route_chunk = new Route();
 
     parent = parent_in;
     t = 0;
@@ -21582,6 +21582,9 @@ MotionHandler::MotionHandler(ListFrame* parent_in){
 }
 
 GraphicalFeatureTransportHandler::GraphicalFeatureTransportHandler(ListFrame* parent_in) : MotionHandler(parent_in){
+
+    //allocate *route_chunk
+    route_chunk = new Route();
 
     timer->Bind(wxEVT_TIMER, &GraphicalFeatureTransportHandler::OnTimer, this);
 

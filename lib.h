@@ -2867,6 +2867,7 @@ class ChartTransportHandler: public MotionHandler{
 public:
     
     ChartTransportHandler(ListFrame*);
+    void MoveChart(const Position&, const Position&);
     void OnTimer(wxTimerEvent&);
     
 };

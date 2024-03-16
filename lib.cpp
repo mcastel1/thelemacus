@@ -21770,7 +21770,12 @@ ChartTransportHandler::ChartTransportHandler(ListFrame* parent_in) : MotionHandl
 
 }
 
-
+//move the center of the chart from position a to position b
+void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
+    
+    
+    
+}
 
 //this method iterates the animation
 void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {

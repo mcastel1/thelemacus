@@ -21583,8 +21583,8 @@ MotionHandler::MotionHandler(ListFrame* parent_in){
 
 GraphicalFeatureTransportHandler::GraphicalFeatureTransportHandler(ListFrame* parent_in) : MotionHandler(parent_in){
 
-    //allocate *route_chunk
-    route_chunk = new Route();
+    //allocate *route
+    route = new Route();
 
     timer->Bind(wxEVT_TIMER, &GraphicalFeatureTransportHandler::OnTimer, this);
 
@@ -21598,7 +21598,7 @@ void GraphicalFeatureTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& ev
         if (t == 0) {
             //the transport has just started
 
-            (*route_chunk) = (parent->data->route_list)[parent->i_transporting_route];
+            (*route) = (parent->data->route_list)[parent->i_transporting_route];
 
             if ((parent->transported_object) == String("position")) {
 
@@ -21617,7 +21617,7 @@ void GraphicalFeatureTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& ev
 
             }
 
-            (route_chunk->reference_position) = start;
+            (route->reference_position) = start;
 
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
             for (long i = 0; i < (parent->chart_frames.size()); i++) {
@@ -21633,7 +21633,7 @@ void GraphicalFeatureTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& ev
         else {
             //the transport animation is in progress -> do the next chunk
 
-            route_chunk->length.set(
+            route->length.set(
                 String(""),
                 (((parent->data->route_list)[parent->i_transporting_route]).length.value) *
                 (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
@@ -21644,7 +21644,7 @@ void GraphicalFeatureTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& ev
             if ((parent->transported_object) == String("position")) {
 
                 (parent->data->position_list)[(parent->i_object_to_transport)] = start;
-                (parent->data->position_list)[(parent->i_object_to_transport)].transport_to(*route_chunk, String(""));
+                (parent->data->position_list)[(parent->i_object_to_transport)].transport_to(*route, String(""));
                 //                (route_chunk->reference_position) = (parent->data->position_list)[(parent->i_object_to_transport)];
 
                 parent->TabulatePositionsAll();
@@ -21655,8 +21655,8 @@ void GraphicalFeatureTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& ev
                 if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")) {
 
                     (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position) = start;
-                    ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to(*route_chunk, String(""));
-                    //                    (route_chunk->reference_position) = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
+                    ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to(*route, String(""));
+                    //                    (route->reference_position) = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
 
                 }
 
@@ -21776,7 +21776,7 @@ ChartTransportHandler::ChartTransportHandler(ListFrame* parent_in) : MotionHandl
 //move the center of the chart from position a to position b
 void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
     
-    //here make sure that route_chunk has as a starting Position a and as end position b
+    //here make sure that route has as a starting Position a and as end position b
     
     
     
@@ -21790,7 +21790,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         if (t == 0) {
             //the transport has just started
 
-            (route_chunk->reference_position) = start;
+            (route->reference_position) = start;
 
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
             for (long i = 0; i < (parent->chart_frames.size()); i++) {
@@ -21804,7 +21804,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         else {
             //the transport animation is in progress -> do the next chunk
 
-            route_chunk->length.set(
+            route->length.set(
                 String(""),
                 (((parent->data->route_list)[parent->i_transporting_route]).length.value) *
                 (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))

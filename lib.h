@@ -2868,7 +2868,7 @@ class ChartTransportHandler: public MotionHandler{
 public:
     
     //routes[i] contains a pointer to a Route used to do the transport for parent->chart_frames[i]
-    vector<Route*> routes;
+    vector<Route> routes;
     
     ChartTransportHandler(ListFrame*);
     void MoveChart(const Position&, const Position&);

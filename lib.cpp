@@ -21774,6 +21774,20 @@ ChartTransportHandler::ChartTransportHandler(ListFrame* parent_in) : MotionHandl
 
 //move the center of the chart from position a to position b
 void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
+
+    unsigned int i;
+    
+    
+    
+    for(i=0; i<parent->chart_frames.size(); i++){
+        routes.push_back(Route(
+                               RouteType((Route_types[0]).value), 
+                               a,
+                               Angle(0.0),
+                               Length(0.0)
+                               ));
+        
+    }
     
     //here make sure that route has as a starting Position a and as end position b
     

@@ -15080,7 +15080,7 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
 //if an item in listcontrol_sights/positions/routes is selected, I transport the Sight/Position/Route under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event) {
 
-    (f->transport_handler) = new GraphicalFeatureTransportHandler(f);
+//    (f->transport_handler) = new GraphicalFeatureTransportHandler(f);
 
     //now I no longer need route_list to contain only the available Routes for transport -> I put back all the Routes before the transport into route_list by copying route_list_saved into route_list.
     // PaintEvent() will need points_route_list to be updated according to this change -> I call TabulateRoutesAll() to update points_route_list
@@ -15092,7 +15092,10 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     (f->i_transporting_route) = (f->map)[((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
 
     if (((f->transported_object) == String("sight")) || (f->transported_object) == String("route")) {
-        //the transported object is either a Sight or a Route
+        //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
+
+        GraphicalFeatureTransportHandler<Route>* transport_handler;
+
 
         String new_label;
 
@@ -15103,22 +15106,38 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
             (f->i_object_to_transport) = (((((f->data)->sight_list)[(f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
 
         }
+        
+        transport_handler = new GraphicalFeatureTransportHandler<Route>(f, &((f->data->route_list)[(f->i_object_to_transport)]));
 
+        //the animation starts here
+        transport_handler->timer->Start(
+            /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
+            (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
+            wxTIMER_CONTINUOUS);
+
+        
     }
 
     if ((f->transported_object) == String("position")) {
 
+        GraphicalFeatureTransportHandler<Position>* transport_handler;
+
+        
         //the id of the Position that will be transported,
         (f->i_object_to_transport) = ((int)(((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
+        
+        transport_handler = new GraphicalFeatureTransportHandler<Position>(f, &((f->data->position_list)[(f->i_object_to_transport)]));
+
+        
+        //the animation starts here
+        transport_handler->timer->Start(
+            /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
+            (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
+            wxTIMER_CONTINUOUS);
 
     }
 
-    //the animation starts here
-    f->transport_handler->timer->Start(
-        /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
-        (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
-        wxTIMER_CONTINUOUS);
-
+  
     event.Skip(true);
 
 }
@@ -15150,10 +15169,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
             
 
         }
-        else {
-
-
-        }
+        
         
         transport_handler = new GraphicalFeatureTransportHandler<Route>(f, &((f->data->route_list)[(f->i_object_to_transport)]));
         
@@ -21601,7 +21617,7 @@ MotionHandler::MotionHandler(ListFrame* parent_in){
 
 }
 
-template<class NON_GUI> GraphicalFeatureTransportHandler::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in) : MotionHandler(parent_in){
+template<class NON_GUI> GraphicalFeatureTransportHandler<NON_GUI>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in) : MotionHandler(parent_in){
 
     object = object_in;
     
@@ -21614,7 +21630,7 @@ template<class NON_GUI> GraphicalFeatureTransportHandler::GraphicalFeatureTransp
 }
 
 //this method iterates the animation
-void GraphicalFeatureTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
+template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
     if (t < (wxGetApp().n_animation_steps.value)) {
 

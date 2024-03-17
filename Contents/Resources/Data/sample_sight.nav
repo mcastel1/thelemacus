@@ -68,6 +68,16 @@ Data:
 				label = 2024-01-21 17:04:03 UTC+2
 			aperture angle = 45° 2.999999999999829'
 			label = lkjnb
+		Route #5:
+			type = orthodrome
+			start position:
+				latitude = 336° 17.00000000000159'
+				longitude = 236° 56.99999999999761'
+				label = 
+			starting heading = 289° 34.42542000000003'
+			length format = length
+				length = 3000 nm
+			label = Michele 
 	Positions:
 		Position #1:
 			latitude = 323° 36.54636500000151'
@@ -76,6 +86,6 @@ Data:
 Recent bodies = 12 10 8
 Recent projections = 1 0
 Recent length formats = 1 0
-Recent route types = 0 1 2
-Recent length units = 1 0
+Recent route types = 1 0 2
+Recent length units = 0 1
 Recent speed units = 0 1

@@ -15127,7 +15127,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 //if a new item listcontrol_routes is created, I transport the sight/position under consideration with such Route
 template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& event) {
 
-    (f->transport_handler) = new GraphicalFeatureTransportHandler(f);
+//transport_handler = new GraphicalFeatureTransportHandler(f);
 
     //the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
     (f->i_transporting_route) = ((f->listcontrol_routes)->GetItemCount()) - 1;
@@ -15135,25 +15135,41 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     //	(f->listcontrol_routes)->SetItem((f->i_transporting_route), 2, wxString(""), -1);
 
     if (((f->transported_object) == String("sight")) || ((f->transported_object) == String("route"))) {
-        //I am transporting a Sight or the Route related to it
+        //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
+        
+        GraphicalFeatureTransportHandler<Route>* transport_handler;
+
+//        transport_handler = new GraphicalFeatureTransportHandler(f);
+
 
         if ((f->transported_object) == String("sight")) {
+            
 
-            //the id of the Route or Position that will be transported
+            //the id of the Route that will be transported
             (f->i_object_to_transport) = (((((f->data)->sight_list)[(f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
+            
 
         }
         else {
 
 
         }
+        
+        transport_handler = new GraphicalFeatureTransportHandler<Route>(f, &((f->data->route_list)[(f->i_object_to_transport)]));
+
 
     }
 
     if ((f->transported_object) == String("position")) {
+        //I am transporting a Position: allocate transport_handler with template NON_GUI = Position
+        
+        GraphicalFeatureTransportHandler<Position>* transport_handler;
+
 
         //the id of the Route or Position that will be transported
         (f->i_object_to_transport) = ((int)(f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+        
+        transport_handler = new GraphicalFeatureTransportHandler<Position>(f, &((f->data->position_list)[(f->i_object_to_transport)]));
 
     }
 

@@ -21642,7 +21642,8 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
             if ((parent->transported_object) == String("position")) {
 
                 //store the starting position in geo_position_start
-                start = (parent->data->position_list)[(parent->i_object_to_transport)];
+//                start = (parent->data->position_list)[(parent->i_object_to_transport)];
+                start = (*((Position*)object));
 
             }
             else {
@@ -21653,6 +21654,9 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                     start = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
 
                 }
+                
+                start = (((Route*)object)->reference_position);
+
 
             }
 

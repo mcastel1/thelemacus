@@ -21743,14 +21743,14 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                 String new_label;
 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-                (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position) = start;
+                (((Route*)object)->reference_position) = start;
                 ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to((parent->data->route_list)[parent->i_transporting_route], String(""));
 
 
                 //update labels
 
                 //the new label which will be given to the transported Route
-                new_label = (((parent->data->route_list)[(parent->i_object_to_transport)]).label).append(String(" transported with ")).append(((((parent->data)->route_list)[parent->i_transporting_route]).label));
+                new_label = ((Route*)object)->label.append(String(" transported with ")).append(((((parent->data)->route_list)[parent->i_transporting_route]).label));
 
                 //set back listcontrol_routes to route_list, in order to include all Routes (not only those which are not related to a Sight)
                 parent->listcontrol_routes->set((parent->data)->route_list, false);
@@ -21758,13 +21758,13 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                 if (parent->transported_object == String("sight")) {
                     //I am transporting a Route related to a Sight -> disconnect the Route from the sight
 
-                    (parent->i_object_to_disconnect) = ((((parent->data->route_list)[(parent->i_object_to_transport)]).related_sight).value);
+                    (parent->i_object_to_disconnect) = (((Route*)object)->related_sight.value);
                     parent->Disconnect(event);
 
                 }
 
                 //change the label of Route #(parent->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
-                (((parent->data->route_list)[(parent->i_object_to_transport)]).label) = new_label;
+                (((Route*)object)->label) = new_label;
 
             }
 

@@ -55,7 +55,7 @@ class RouteFrame;
 class DrawPanel;
 class Position;
 class Cartesian;
-class GraphicalFeatureTransportHandler;
+template <class NON_GUI> class GraphicalFeatureTransportHandler;
 class LengthFormat;
 class RouteType;
 class Projection;
@@ -2849,14 +2849,15 @@ public:
 
 
 //a hanlder to transport a Route or Position with an animation
-class GraphicalFeatureTransportHandler: public MotionHandler{
+template <class NON_GUI> class GraphicalFeatureTransportHandler: public MotionHandler{
     
 public:
     
+    NON_GUI* object;
     //at each step of the transport, *route is set to be a part of the full Route used to transport the object
     Route *route;
     
-    GraphicalFeatureTransportHandler(ListFrame*);
+    GraphicalFeatureTransportHandler(ListFrame*, NON_GUI*);
     void OnTimer(wxTimerEvent&);
     
 };

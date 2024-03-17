@@ -21580,10 +21580,13 @@ MotionHandler::MotionHandler(ListFrame* parent_in){
 
 }
 
-GraphicalFeatureTransportHandler::GraphicalFeatureTransportHandler(ListFrame* parent_in) : MotionHandler(parent_in){
+template<class NON_GUI> GraphicalFeatureTransportHandler::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in) : MotionHandler(parent_in){
 
+    object = object_in;
+    
     //allocate *route
     route = new Route();
+    
 
     timer->Bind(wxEVT_TIMER, &GraphicalFeatureTransportHandler::OnTimer, this);
 

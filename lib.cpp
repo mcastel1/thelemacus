@@ -15107,7 +15107,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
         }
         
-        transport_handler = new GraphicalFeatureTransportHandler<Route>(f, &((f->data->route_list)[(f->i_object_to_transport)]));
+        transport_handler = new GraphicalFeatureTransportHandler<Route>(f, &((f->data->route_list)[(f->i_object_to_transport)]), (f->transported_object));
 
         //the animation starts here
         transport_handler->timer->Start(
@@ -15126,7 +15126,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         //the id of the Position that will be transported,
         (f->i_object_to_transport) = ((int)(((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
-        transport_handler = new GraphicalFeatureTransportHandler<Position>(f, &((f->data->position_list)[(f->i_object_to_transport)]));
+        transport_handler = new GraphicalFeatureTransportHandler<Position>(f, &((f->data->position_list)[(f->i_object_to_transport)]), (f->transported_object));
 
         
         //the animation starts here
@@ -15171,7 +15171,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         }
         
         
-        transport_handler = new GraphicalFeatureTransportHandler<Route>(f, &((f->data->route_list)[(f->i_object_to_transport)]));
+        transport_handler = new GraphicalFeatureTransportHandler<Route>(f, &((f->data->route_list)[(f->i_object_to_transport)]), (f->transported_object));
         
         //the animation starts here
         transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0, wxTIMER_CONTINUOUS);
@@ -15189,7 +15189,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         //the id of the Route or Position that will be transported
         (f->i_object_to_transport) = ((int)(f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
         
-        transport_handler = new GraphicalFeatureTransportHandler<Position>(f, &((f->data->position_list)[(f->i_object_to_transport)]));
+        transport_handler = new GraphicalFeatureTransportHandler<Position>(f, &((f->data->position_list)[(f->i_object_to_transport)]), (f->transported_object));
 
         //the animation starts here
         transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0, wxTIMER_CONTINUOUS);
@@ -21640,7 +21640,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
             (*route) = (parent->data->route_list)[parent->i_transporting_route];
 
-            if ((parent->transported_object) == String("position")) {
+            if (type_of_transported_object == String("position")) {
 
                 //store the starting position in geo_position_start
 //                start = (parent->data->position_list)[(parent->i_object_to_transport)];
@@ -21649,7 +21649,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
             }
             else {
 
-                if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")) {
+                if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                     //store the starting reference position in geo_position_start
                     start = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
@@ -21685,7 +21685,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                 String(""));
 
 
-            if ((parent->transported_object) == String("position")) {
+            if (type_of_transported_object == String("position")) {
 
 //                (parent->data->position_list)[(parent->i_object_to_transport)] = start;
                 (*((Position*)object)) = start;
@@ -21697,7 +21697,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
             }
             else {
 
-                if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")) {
+                if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                     (((Route*)object)->reference_position) = start;
 //                    ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to(*route, String(""));
@@ -21721,7 +21721,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
     else {
         //the transport  is over
 
-        if ((parent->transported_object) == String("position")) {
+        if (type_of_transported_object == String("position")) {
 
             //do the whole transport rather than combining many little transports, to avoid rounding errors
             (*((Position*)object)) = start;
@@ -21739,7 +21739,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
         }
         else {
 
-            if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")) {
+            if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                 String new_label;
 

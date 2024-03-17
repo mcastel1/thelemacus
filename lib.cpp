@@ -21686,8 +21686,9 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
             if ((parent->transported_object) == String("position")) {
 
-                (parent->data->position_list)[(parent->i_object_to_transport)] = start;
-                (parent->data->position_list)[(parent->i_object_to_transport)].transport_to(*route, String(""));
+//                (parent->data->position_list)[(parent->i_object_to_transport)] = start;
+                (*((Position*)object)) = start;
+                ((Position*)object)->transport_to(*route, String(""));
                 //                (route_chunk->reference_position) = (parent->data->position_list)[(parent->i_object_to_transport)];
 
                 parent->TabulatePositionsAll();
@@ -21697,8 +21698,9 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
                 if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")) {
 
-                    (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position) = start;
-                    ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to(*route, String(""));
+                    (((Route*)object)->reference_position) = start;
+//                    ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to(*route, String(""));
+                    ((Route*)object)->reference_position.transport_to(*route, String(""));
                     //                    (route->reference_position) = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
 
                 }
@@ -21721,16 +21723,16 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
         if ((parent->transported_object) == String("position")) {
 
             //do the whole transport rather than combining many little transports, to avoid rounding errors
-            ((parent->data->position_list)[(parent->i_object_to_transport)]) = start;
-            ((parent->data->position_list)[(parent->i_object_to_transport)]).transport_to((parent->data->route_list)[parent->i_transporting_route], String(""));
+            (*((Position*)object)) = start;
+            ((Position*)object)->transport_to((parent->data->route_list)[parent->i_transporting_route], String(""));
 
 
             //update labels
             //change the label of Position #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
-            (((parent->data->position_list)[(parent->i_object_to_transport)]).label) = (((parent->data->position_list)[(parent->i_object_to_transport)]).label).append(String(" transported with ")).append((((parent->data->route_list)[parent->i_transporting_route]).label));
+            (((Position*)object)->label) = ((Position*)object)->label.append(String(" transported with ")).append((((parent->data->route_list)[parent->i_transporting_route]).label));
 
             //update the Position information in f
-            ((parent->data->position_list)[(parent->i_object_to_transport)]).update_wxListCtrl((parent->i_object_to_transport), parent->listcontrol_positions);
+            ((Position*)object)->update_wxListCtrl((parent->i_object_to_transport), parent->listcontrol_positions);
 
 
         }

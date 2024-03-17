@@ -2854,10 +2854,12 @@ template <class NON_GUI> class GraphicalFeatureTransportHandler: public MotionHa
 public:
     
     NON_GUI* object;
+    //the type of the object that is being transported (String("position") or String("route"), ...)
+    String type_of_transported_object;
     //at each step of the transport, *route is set to be a part of the full Route used to transport the object
     Route *route;
     
-    GraphicalFeatureTransportHandler(ListFrame*, NON_GUI*);
+    GraphicalFeatureTransportHandler(ListFrame*, NON_GUI*, const String&);
     void OnTimer(wxTimerEvent&);
     
 };

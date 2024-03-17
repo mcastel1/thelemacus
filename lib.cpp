@@ -21617,9 +21617,10 @@ MotionHandler::MotionHandler(ListFrame* parent_in){
 
 }
 
-template<class NON_GUI> GraphicalFeatureTransportHandler<NON_GUI>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in) : MotionHandler(parent_in){
+template<class NON_GUI> GraphicalFeatureTransportHandler<NON_GUI>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in, const String& type_of_transported_object_in) : MotionHandler(parent_in){
 
     object = object_in;
+    type_of_transported_object = type_of_transported_object_in;
     
     //allocate *route
     route = new Route();

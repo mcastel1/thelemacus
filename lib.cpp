@@ -15156,6 +15156,10 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         }
         
         transport_handler = new GraphicalFeatureTransportHandler<Route>(f, &((f->data->route_list)[(f->i_object_to_transport)]));
+        
+        //the animation starts here
+        transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0, wxTIMER_CONTINUOUS);
+
 
 
     }
@@ -15171,10 +15175,11 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         
         transport_handler = new GraphicalFeatureTransportHandler<Position>(f, &((f->data->position_list)[(f->i_object_to_transport)]));
 
+        //the animation starts here
+        transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0, wxTIMER_CONTINUOUS);
+
     }
 
-    //the animation starts here
-    f->transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0, wxTIMER_CONTINUOUS);
 
     event.Skip(true);
 

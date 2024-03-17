@@ -2848,7 +2848,7 @@ public:
 };
 
 
-//a hanlder to transport a Route or Position with an animation
+//a hanlder to transport a non-GUI object of type NON_GUI (NON_GUI may be equal to Position, Route, ...)  with an animation
 template <class NON_GUI> class GraphicalFeatureTransportHandler: public MotionHandler{
     
 public:

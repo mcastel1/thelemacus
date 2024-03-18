@@ -2860,6 +2860,7 @@ public:
     Route transporting_route, transporting_route_temp;
     
     GraphicalFeatureTransportHandler(ListFrame*, NON_GUI*, const String&, const Route&);
+    void Transport(void);
     void OnTimer(wxTimerEvent&);
     
 };

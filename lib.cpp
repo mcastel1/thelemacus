@@ -21668,6 +21668,18 @@ template<class NON_GUI> GraphicalFeatureTransportHandler<NON_GUI>::GraphicalFeat
 
 }
 
+
+//this method iterates the animation
+template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::Transport(void) {
+    
+    //the animation transport starts here
+    timer->Start(
+        /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
+        (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
+        wxTIMER_CONTINUOUS);
+    
+}
+
 //this method iterates the animation
 template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 

@@ -21769,7 +21769,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                                                                    
                                                                    ); i++) {}
             
-            ((Position*)transported_object)->update_wxListCtrl((parent->i_object_to_transport), parent->listcontrol_positions);
+            ((Position*)transported_object)->update_wxListCtrl(i, parent->listcontrol_positions);
 
 
         }

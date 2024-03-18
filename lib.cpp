@@ -46,6 +46,17 @@ inline double acos(const Double& x) {
 
 }
 
+//find the  position in v of element with memory address x and return the position. If no element is found, return v.size()
+template<class T> unsigned int position_in_vector(T* x, const vector<T>& v){
+    
+    unsigned int i;
+    
+    for (i=0; (i<(v.size())) && (x != (v.data() + i)); i++) {}
+    
+    return i;
+    
+}
+
 
 //return the size of *this if shown in the wxWindow (e.g. a wxtextctr, a wxliscontrol, etc...). This is equivalent to the method String::get_size(const String&, wxWindow*)
 wxSize get_size(const String& s, wxWindow* p) {

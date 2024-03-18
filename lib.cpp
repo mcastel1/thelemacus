@@ -21682,7 +21682,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
         if (t == 0) {
             //the transport has just started
 
-            transporting_route_temp = (parent->data->route_list)[parent->i_transporting_route];
+            transporting_route_temp = transporting_route;
 
             if (type_of_transported_object == String("position")) {
 
@@ -21714,7 +21714,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
             transporting_route_temp.length.set(
                 String(""),
-                (((parent->data->route_list)[parent->i_transporting_route]).length.value) *
+                (transporting_route.length.value) *
                 (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
                 ,
                 String(""));
@@ -21756,11 +21756,11 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
             //do the whole transport rather than combining many little transports, to avoid rounding errors
             (*((Position*)object)) = start;
-            ((Position*)object)->transport_to((parent->data->route_list)[parent->i_transporting_route], String(""));
+            ((Position*)object)->transport_to(transporting_route, String(""));
 
 
             //update labels
-            (((Position*)object)->label) = ((Position*)object)->label.append(String(" transported with ")).append((((parent->data->route_list)[parent->i_transporting_route]).label));
+            (((Position*)object)->label) = ((Position*)object)->label.append(String(" transported with ")).append((transporting_route.label));
 
             //update the Position information in f
             ((Position*)object)->update_wxListCtrl((parent->i_object_to_transport), parent->listcontrol_positions);
@@ -21775,7 +21775,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
                 (((Route*)object)->reference_position) = start;
-                ((Route*)object)->reference_position.transport_to((parent->data->route_list)[parent->i_transporting_route], String(""));
+                ((Route*)object)->reference_position.transport_to(transporting_route, String(""));
 
 
                 //update labels
@@ -21872,57 +21872,6 @@ void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
 
 //this method iterates the animation
 void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
-    
-//    if (t < (wxGetApp().n_animation_steps.value)) {
-//
-//        if (t == 0) {
-//            //the transport has just started
-//
-//            (route->reference_position) = start;
-//
-//            //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
-//            for (long i = 0; i < (parent->chart_frames.size()); i++) {
-//                ((parent->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
-//            }
-//
-//            //I brind all ChartFrames to front to show the animation
-//            wxGetApp().ShowChart(event);
-//
-//        }
-//        else {
-//            //the transport animation is in progress -> do the next chunk
-//
-//            route->length.set(
-//                String(""),
-//                (((parent->data->route_list)[parent->i_transporting_route]).length.value) *
-//                (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
-//                ,
-//                String(""));
-//
-//
-//           
-//
-//            parent->RefreshAll();
-//            //            cout << "\t\t t= " << t << "\n";
-//
-//        }
-//
-//        t++;
-//
-//    }
-//    else {
-//        //the transport  is over
-//      
-//        //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
-//        (*(parent->unset_idling))();
-//        for (long i = 0; i < (parent->chart_frames.size()); i++) {
-//            ((parent->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
-//        }
-//
-//      
-//        timer->Stop();
-//
-//    }
 
 
 }

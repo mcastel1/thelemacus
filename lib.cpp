@@ -21669,9 +21669,6 @@ template<class NON_GUI> GraphicalFeatureTransportHandler<NON_GUI>::GraphicalFeat
     type_of_transported_object = type_of_transported_object_in;
     transporting_route = transporting_route_in;
     
-    //allocate *transporting_route_temp
-    transporting_route_temp = new Route();
-    
 
     timer->Bind(wxEVT_TIMER, &GraphicalFeatureTransportHandler::OnTimer, this);
 
@@ -21685,7 +21682,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
         if (t == 0) {
             //the transport has just started
 
-            (*transporting_route_temp) = (parent->data->route_list)[parent->i_transporting_route];
+            transporting_route_temp = (parent->data->route_list)[parent->i_transporting_route];
 
             if (type_of_transported_object == String("position")) {
 
@@ -21706,7 +21703,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
             }
 
-            (transporting_route_temp->reference_position) = start;
+            (transporting_route_temp.reference_position) = start;
 
             //I brind all ChartFrames to front to show the animation
             wxGetApp().ShowChart(event);
@@ -21715,7 +21712,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
         else {
             //the transport animation is in progress -> do the next chunk
 
-            transporting_route_temp->length.set(
+            transporting_route_temp.length.set(
                 String(""),
                 (((parent->data->route_list)[parent->i_transporting_route]).length.value) *
                 (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
@@ -21726,7 +21723,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
             if (type_of_transported_object == String("position")) {
 
                 (*((Position*)object)) = start;
-                ((Position*)object)->transport_to(*transporting_route_temp, String(""));
+                ((Position*)object)->transport_to(transporting_route_temp, String(""));
 
                 parent->TabulatePositionsAll();
                 
@@ -21736,7 +21733,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                     (((Route*)object)->reference_position) = start;
-                    ((Route*)object)->reference_position.transport_to(*transporting_route_temp, String(""));
+                    ((Route*)object)->reference_position.transport_to(transporting_route_temp, String(""));
 
                 }
 

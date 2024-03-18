@@ -2465,7 +2465,7 @@ class OnSelectRouteInListControlRoutesForTransport{
 public:
     
     //parent frame
-    ListFrame* f;
+    ListFrame* parent;
     //    UnsetIdling<ListFrame>* unset_idling;
     
     //constructor, which sets the parent frame
@@ -2482,7 +2482,7 @@ class OnNewRouteInListControlRoutesForTransport{
 public:
     
     //parent frame
-    ListFrame* f;
+    ListFrame* parent;
     
     //constructor, which sets the parent frame
     OnNewRouteInListControlRoutesForTransport(ListFrame*);

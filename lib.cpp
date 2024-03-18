@@ -15093,34 +15093,34 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
     //now I no longer need route_list to contain only the available Routes for transport -> I put back all the Routes before the transport into route_list by copying route_list_saved into route_list.
     // PaintEvent() will need points_route_list to be updated according to this change -> I call TabulateRoutesAll() to update points_route_list
-    f->data->route_list.resize((f->route_list_saved.size()));
-    copy((f->route_list_saved.begin()), (f->route_list_saved.end()), (f->data->route_list.begin()));
-    f->TabulateRoutesAll();
+    parent->data->route_list.resize((parent->route_list_saved.size()));
+    copy((parent->route_list_saved.begin()), (parent->route_list_saved.end()), (parent->data->route_list.begin()));
+    parent->TabulateRoutesAll();
 
     //this is the # of the transporting Route in the full Route list given by data->route_list
-    (f->i_transporting_route) = (f->map)[(f->listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
+    (parent->i_transporting_route) = (parent->map)[(parent->listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
 
 
-    if (((f->transported_object) == String("sight")) || (f->transported_object) == String("route")) {
+    if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")) {
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
 
         String new_label;
         GraphicalFeatureTransportHandler<Route>* transport_handler;
 
         
-        if ((f->transported_object) == String("sight")) {
+        if ((parent->transported_object) == String("sight")) {
             //the transported object is a Sight
 
             //the id of the Route that will be transported is the one of the Route related to the Sight that is being transported
-            (f->i_object_to_transport) = ((((f->data->sight_list)[(f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
+            (parent->i_object_to_transport) = ((((parent->data->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
 
         }
         
         transport_handler = new GraphicalFeatureTransportHandler<Route>(
-                                                                        f,
-                                                                        &((f->data->route_list)[(f->i_object_to_transport)]),
-                                                                        (f->transported_object),
-                                                                        ((f->data->route_list)[(f->i_transporting_route)])
+                                                                        parent,
+                                                                        &((parent->data->route_list)[(parent->i_object_to_transport)]),
+                                                                        (parent->transported_object),
+                                                                        ((parent->data->route_list)[(parent->i_transporting_route)])
                                                                         );
 
         //start the transport
@@ -15128,19 +15128,19 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
     }
 
-    if ((f->transported_object) == String("position")) {
+    if ((parent->transported_object) == String("position")) {
 
         GraphicalFeatureTransportHandler<Position>* transport_handler;
 
         
         //the id of the Position that will be transported,
-        (f->i_object_to_transport) = ((int)((f->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
+        (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
         transport_handler = new GraphicalFeatureTransportHandler<Position>(
-                                                                           f,
-                                                                           &((f->data->position_list)[(f->i_object_to_transport)]),
-                                                                           (f->transported_object),
-                                                                           ((f->data->route_list)[(f->i_transporting_route)])
+                                                                           parent,
+                                                                           &((parent->data->position_list)[(parent->i_object_to_transport)]),
+                                                                           (parent->transported_object),
+                                                                           ((parent->data->route_list)[(parent->i_transporting_route)])
                                                                            );
 
         
@@ -15160,7 +15160,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     
     
     //the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
-    (f->i_transporting_route) = ((f->listcontrol_routes)->GetItemCount()) - 1;
+    (parent->i_transporting_route) = ((parent->listcontrol_routes)->GetItemCount()) - 1;
     //given that the transporting Route has no meaningful starting position, I write "" in its position field
     //	(f->listcontrol_routes)->SetItem((f->i_transporting_route), 2, wxString(""), -1);
     
@@ -15169,7 +15169,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 //        ((f->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((f->chart_frames)[i])->draw_panel);
 //    }
 
-    if (((f->transported_object) == String("sight")) || ((f->transported_object) == String("route"))) {
+    if (((parent->transported_object) == String("sight")) || ((parent->transported_object) == String("route"))) {
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
         
         GraphicalFeatureTransportHandler<Route>* transport_handler;
@@ -15177,21 +15177,21 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 //        transport_handler = new GraphicalFeatureTransportHandler(f);
 
 
-        if ((f->transported_object) == String("sight")) {
+        if ((parent->transported_object) == String("sight")) {
             
 
             //the id of the Route that will be transported
-            (f->i_object_to_transport) = (((((f->data)->sight_list)[(f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
+            (parent->i_object_to_transport) = (((((parent->data)->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
             
 
         }
         
         
         transport_handler = new GraphicalFeatureTransportHandler<Route>(
-                                                                        f,
-                                                                        &((f->data->route_list)[(f->i_object_to_transport)]),
-                                                                        (f->transported_object),
-                                                                        ((f->data->route_list)[(f->i_transporting_route)])
+                                                                        parent,
+                                                                        &((parent->data->route_list)[(parent->i_object_to_transport)]),
+                                                                        (parent->transported_object),
+                                                                        ((parent->data->route_list)[(parent->i_transporting_route)])
                                                                         );
         
         //start the transport
@@ -15199,19 +15199,19 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 
     }
 
-    if ((f->transported_object) == String("position")) {
+    if ((parent->transported_object) == String("position")) {
         //I am transporting a Position: allocate transport_handler with template NON_GUI = Position
         
         GraphicalFeatureTransportHandler<Position>* transport_handler;
 
 
         //the id of the Route or Position that will be transported
-        (f->i_object_to_transport) = ((int)(f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+        (parent->i_object_to_transport) = ((int)(parent->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
         
-        transport_handler = new GraphicalFeatureTransportHandler<Position>(f, 
-                                                                           &((f->data->position_list)[(f->i_object_to_transport)]),
-                                                                           (f->transported_object),
-                                                                           ((f->data->route_list)[(f->i_transporting_route)])
+        transport_handler = new GraphicalFeatureTransportHandler<Position>(parent, 
+                                                                           &((parent->data->position_list)[(parent->i_object_to_transport)]),
+                                                                           (parent->transported_object),
+                                                                           ((parent->data->route_list)[(parent->i_transporting_route)])
                                                                            );
 
         //start the transport
@@ -21478,13 +21478,13 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
 
 OnSelectRouteInListControlRoutesForTransport::OnSelectRouteInListControlRoutesForTransport(ListFrame* f_in) {
 
-    f = f_in;
+    parent = f_in;
 
 }
 
 OnNewRouteInListControlRoutesForTransport::OnNewRouteInListControlRoutesForTransport(ListFrame* f_in) {
 
-    f = f_in;
+    parent = f_in;
 
 }
 

@@ -15092,11 +15092,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
     //this is the # of the transporting Route in the full Route list given by data->route_list
     (f->i_transporting_route) = (f->map)[((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
-    
-    //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
-    for (i = 0; i < (f->chart_frames.size()); i++) {
-        ((f->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((f->chart_frames)[i])->draw_panel);
-    }
+
 
 
     if (((f->transported_object) == String("sight")) || (f->transported_object) == String("route")) {
@@ -15155,13 +15151,6 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
     }
     
-    //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
-    (*(f->unset_idling))();
-    for (i = 0; i < (f->chart_frames.size()); i++) {
-        ((f->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((f->chart_frames)[i])->draw_panel);
-    }
-
-
   
     event.Skip(true);
 
@@ -21681,8 +21670,14 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
         if (t == 0) {
             //the transport has just started
+            
 
             transporting_route_temp = transporting_route;
+            
+            //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
+            for (unsigned int i = 0; i < (parent->chart_frames.size()); i++) {
+                ((parent->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
+            }
 
             if (type_of_transported_object == String("position")) {
 
@@ -21800,6 +21795,9 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
             }
 
         }
+        
+        //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
+        (*(parent->unset_idling))();
 
         parent->listcontrol_sights->set((parent->data->sight_list), false);
         parent->listcontrol_routes->set((parent->data->route_list), false);
@@ -21807,6 +21805,11 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
         //re-draw everything
         parent->DrawAll();
 
+        for (unsigned int i = 0; i < (parent->chart_frames.size()); i++) {
+            ((parent->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
+        }
+
+        
         //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
         parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_change_selection_in_listcontrol_routes));
         parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, *(parent->on_change_selection_in_listcontrol_routes));
@@ -21815,7 +21818,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
         if ((parent->transporting_with_selected_route)) {
             //I am transporting with an existing, selected Route
 
-            //the transport is over -> I bind back DrawPanel::OnMouseMovement to mouse movements
+            //the transport is over -> I reverse the Bind/Unbind(s) made before the transport started
             (parent->transporting_with_selected_route) = false;
             parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_ACTIVATED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
             parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyRoute<wxListEvent>, parent);

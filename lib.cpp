@@ -15115,7 +15115,12 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
         }
         
-        transport_handler = new GraphicalFeatureTransportHandler<Route>(f, &((f->data->route_list)[(f->i_object_to_transport)]), (f->transported_object));
+        transport_handler = new GraphicalFeatureTransportHandler<Route>(
+                                                                        f,
+                                                                        &((f->data->route_list)[(f->i_object_to_transport)]),
+                                                                        (f->transported_object),
+                                                                        ((f->data->route_list)[(f->i_transporting_route)])
+                                                                        );
 
         //the animation starts here
         transport_handler->timer->Start(
@@ -15134,7 +15139,12 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         //the id of the Position that will be transported,
         (f->i_object_to_transport) = ((int)(((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
-        transport_handler = new GraphicalFeatureTransportHandler<Position>(f, &((f->data->position_list)[(f->i_object_to_transport)]), (f->transported_object));
+        transport_handler = new GraphicalFeatureTransportHandler<Position>(
+                                                                           f,
+                                                                           &((f->data->position_list)[(f->i_object_to_transport)]),
+                                                                           (f->transported_object),
+                                                                           ((f->data->route_list)[(f->i_transporting_route)])
+                                                                           );
 
         
         //the animation starts here
@@ -15193,7 +15203,12 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         }
         
         
-        transport_handler = new GraphicalFeatureTransportHandler<Route>(f, &((f->data->route_list)[(f->i_object_to_transport)]), (f->transported_object));
+        transport_handler = new GraphicalFeatureTransportHandler<Route>(
+                                                                        f,
+                                                                        &((f->data->route_list)[(f->i_object_to_transport)]),
+                                                                        (f->transported_object),
+                                                                        ((f->data->route_list)[(f->i_transporting_route)])
+                                                                        );
         
         //the animation starts here
         transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0, wxTIMER_CONTINUOUS);
@@ -15211,7 +15226,11 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         //the id of the Route or Position that will be transported
         (f->i_object_to_transport) = ((int)(f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
         
-        transport_handler = new GraphicalFeatureTransportHandler<Position>(f, &((f->data->position_list)[(f->i_object_to_transport)]), (f->transported_object));
+        transport_handler = new GraphicalFeatureTransportHandler<Position>(f, 
+                                                                           &((f->data->position_list)[(f->i_object_to_transport)]),
+                                                                           (f->transported_object),
+                                                                           ((f->data->route_list)[(f->i_transporting_route)])
+                                                                           );
 
         //the animation starts here
         transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0, wxTIMER_CONTINUOUS);
@@ -21644,10 +21663,11 @@ MotionHandler::MotionHandler(ListFrame* parent_in){
 
 }
 
-template<class NON_GUI> GraphicalFeatureTransportHandler<NON_GUI>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in, const String& type_of_transported_object_in) : MotionHandler(parent_in){
+template<class NON_GUI> GraphicalFeatureTransportHandler<NON_GUI>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in,  const String& type_of_transported_object_in, const Route& transporting_route_in) : MotionHandler(parent_in){
 
     object = object_in;
     type_of_transported_object = type_of_transported_object_in;
+    transporting_route = transporting_route_in;
     
     //allocate *route
     route = new Route();

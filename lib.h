@@ -2857,9 +2857,9 @@ public:
     //the type of the object that is being transported (String("position") or String("route"), ...)
     String type_of_transported_object;
     //at each step of the transport, *route is set to be a part of the full Route used to transport the object
-    Route *route;
+    Route transporting_route, *route;
     
-    GraphicalFeatureTransportHandler(ListFrame*, NON_GUI*, const String&);
+    GraphicalFeatureTransportHandler(ListFrame*, NON_GUI*, const String&, const Route&);
     void OnTimer(wxTimerEvent&);
     
 };

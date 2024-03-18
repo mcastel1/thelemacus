@@ -15174,9 +15174,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         
         GraphicalFeatureTransportHandler<Route>* transport_handler;
 
-//        transport_handler = new GraphicalFeatureTransportHandler(f);
-
-
+        
         if ((parent->transported_object) == String("sight")) {
             
 
@@ -15218,12 +15216,6 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         transport_handler->Transport();
 
     }
-    
-//    //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
-//    (*(f->unset_idling))();
-//    for (i = 0; i<(f->chart_frames.size()); i++) {
-//        ((f->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((f->chart_frames)[i])->draw_panel);
-//    }
 
     event.Skip(true);
 

@@ -15124,11 +15124,8 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                         ((f->data->route_list)[(f->i_transporting_route)])
                                                                         );
 
-        //the animation starts here
-        transport_handler->timer->Start(
-            /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
-            (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
-            wxTIMER_CONTINUOUS);
+        //start the transport
+        transport_handler->Transport();
 
     }
 
@@ -15148,11 +15145,8 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                            );
 
         
-        //the animation starts here
-        transport_handler->timer->Start(
-            /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
-            (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
-            wxTIMER_CONTINUOUS);
+        //start the transport
+        transport_handler->Transport();
 
     }
     
@@ -15204,10 +15198,8 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
                                                                         ((f->data->route_list)[(f->i_transporting_route)])
                                                                         );
         
-        //the animation starts here
-        transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0, wxTIMER_CONTINUOUS);
-
-
+        //start the transport
+        transport_handler->Transport();
 
     }
 
@@ -15226,8 +15218,8 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
                                                                            ((f->data->route_list)[(f->i_transporting_route)])
                                                                            );
 
-        //the animation starts here
-        transport_handler->timer->Start(/*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/(wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0, wxTIMER_CONTINUOUS);
+        //start the transport
+        transport_handler->Transport();
 
     }
     

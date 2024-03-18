@@ -21748,6 +21748,8 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
         //the transport  is over
 
         if (type_of_transported_object == String("position")) {
+            
+            unsigned int i;
 
             //do the whole transport rather than combining many little transports, to avoid rounding errors
             (*((Position*)transported_object)) = start;
@@ -21758,6 +21760,15 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
             (((Position*)transported_object)->label) = ((Position*)transported_object)->label.append(String(" transported with ")).append((transporting_route.label));
 
             //update the Position information in f
+            
+            for (i=0; (i<(parent->data->position_list.size())) && (
+                                                                   
+                                                                   
+                                                                   ((Position*)transported_object) != (parent->data->position_list.data() + i)
+                                                                   
+                                                                   
+                                                                   ); i++) {}
+            
             ((Position*)transported_object)->update_wxListCtrl((parent->i_object_to_transport), parent->listcontrol_positions);
 
 

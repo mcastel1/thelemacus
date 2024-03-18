@@ -2853,8 +2853,8 @@ template <class NON_GUI> class GraphicalFeatureTransportHandler: public MotionHa
     
 public:
     
-    NON_GUI* object;
-    //the type of the object that is being transported (String("position") or String("route"), ...)
+    NON_GUI* transported_object;
+    //the type of the transported_object that is being transported (String("position") or String("route"), ...)
     String type_of_transported_object;
     //at each step of the transport, *transporting_route_temp is set to be a part of the full Route (transporting_route) used to transport the object
     Route transporting_route, transporting_route_temp;

@@ -21654,7 +21654,7 @@ MotionHandler::MotionHandler(ListFrame* parent_in){
 
 template<class NON_GUI> GraphicalFeatureTransportHandler<NON_GUI>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in,  const String& type_of_transported_object_in, const Route& transporting_route_in) : MotionHandler(parent_in){
 
-    object = object_in;
+    transported_object = object_in;
     type_of_transported_object = type_of_transported_object_in;
     transporting_route = transporting_route_in;
     
@@ -21682,18 +21682,18 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
             if (type_of_transported_object == String("position")) {
 
                 //store the starting position in geo_position_start
-                start = (*((Position*)object));
+                start = (*((Position*)transported_object));
 
             }else {
 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                     //store the starting reference position in geo_position_start
-                    start = (((Route*)object)->reference_position);
+                    start = (((Route*)transported_object)->reference_position);
 
                 }
                 
-                start = (((Route*)object)->reference_position);
+                start = (((Route*)transported_object)->reference_position);
 
 
             }
@@ -21717,8 +21717,8 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
             if (type_of_transported_object == String("position")) {
 
-                (*((Position*)object)) = start;
-                ((Position*)object)->transport_to(transporting_route_temp, String(""));
+                (*((Position*)transported_object)) = start;
+                ((Position*)transported_object)->transport_to(transporting_route_temp, String(""));
 
                 parent->TabulatePositionsAll();
                 
@@ -21727,8 +21727,8 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
-                    (((Route*)object)->reference_position) = start;
-                    ((Route*)object)->reference_position.transport_to(transporting_route_temp, String(""));
+                    (((Route*)transported_object)->reference_position) = start;
+                    ((Route*)transported_object)->reference_position.transport_to(transporting_route_temp, String(""));
 
                 }
 
@@ -21750,15 +21750,15 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
         if (type_of_transported_object == String("position")) {
 
             //do the whole transport rather than combining many little transports, to avoid rounding errors
-            (*((Position*)object)) = start;
-            ((Position*)object)->transport_to(transporting_route, String(""));
+            (*((Position*)transported_object)) = start;
+            ((Position*)transported_object)->transport_to(transporting_route, String(""));
 
 
             //update labels
-            (((Position*)object)->label) = ((Position*)object)->label.append(String(" transported with ")).append((transporting_route.label));
+            (((Position*)transported_object)->label) = ((Position*)transported_object)->label.append(String(" transported with ")).append((transporting_route.label));
 
             //update the Position information in f
-            ((Position*)object)->update_wxListCtrl((parent->i_object_to_transport), parent->listcontrol_positions);
+            ((Position*)transported_object)->update_wxListCtrl((parent->i_object_to_transport), parent->listcontrol_positions);
 
 
         }
@@ -21769,14 +21769,14 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                 String new_label;
 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-                (((Route*)object)->reference_position) = start;
-                ((Route*)object)->reference_position.transport_to(transporting_route, String(""));
+                (((Route*)transported_object)->reference_position) = start;
+                ((Route*)transported_object)->reference_position.transport_to(transporting_route, String(""));
 
 
                 //update labels
 
                 //the new label which will be given to the transported Route
-                new_label = ((Route*)object)->label.append(String(" transported with ")).append((transporting_route.label));
+                new_label = ((Route*)transported_object)->label.append(String(" transported with ")).append((transporting_route.label));
 
                 //set back listcontrol_routes to route_list, in order to include all Routes (not only those which are not related to a Sight)
                 parent->listcontrol_routes->set((parent->data->route_list), false);
@@ -21784,13 +21784,13 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                 if (parent->transported_object == String("sight")) {
                     //I am transporting a Route related to a Sight -> disconnect the Route from the sight
 
-                    (parent->i_object_to_disconnect) = (((Route*)object)->related_sight.value);
+                    (parent->i_object_to_disconnect) = (((Route*)transported_object)->related_sight.value);
                     parent->Disconnect(event);
 
                 }
 
                 //change the label of *object by appending to it 'translated with [label of the translating Route]'
-                (((Route*)object)->label) = new_label;
+                (((Route*)transported_object)->label) = new_label;
 
             }
 

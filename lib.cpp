@@ -21677,7 +21677,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                     //store the starting reference position in geo_position_start
-                    start = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
+                    start = (((Route*)object)->reference_position);
 
                 }
                 
@@ -21705,10 +21705,8 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
             if (type_of_transported_object == String("position")) {
 
-//                (parent->data->position_list)[(parent->i_object_to_transport)] = start;
                 (*((Position*)object)) = start;
                 ((Position*)object)->transport_to(*route, String(""));
-                //                (route_chunk->reference_position) = (parent->data->position_list)[(parent->i_object_to_transport)];
 
                 parent->TabulatePositionsAll();
                 
@@ -21718,9 +21716,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                     (((Route*)object)->reference_position) = start;
-//                    ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to(*route, String(""));
                     ((Route*)object)->reference_position.transport_to(*route, String(""));
-                    //                    (route->reference_position) = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
 
                 }
 
@@ -21747,7 +21743,6 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
 
             //update labels
-            //change the label of Position #(f->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
             (((Position*)object)->label) = ((Position*)object)->label.append(String(" transported with ")).append((((parent->data->route_list)[parent->i_transporting_route]).label));
 
             //update the Position information in f

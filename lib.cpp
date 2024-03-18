@@ -15091,34 +15091,29 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
 //if an item in listcontrol_sights/positions/routes is selected, I transport the Sight/Position/Route under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event) {
     
-    unsigned int i;
-
-//    (f->transport_handler) = new GraphicalFeatureTransportHandler(f);
-
     //now I no longer need route_list to contain only the available Routes for transport -> I put back all the Routes before the transport into route_list by copying route_list_saved into route_list.
     // PaintEvent() will need points_route_list to be updated according to this change -> I call TabulateRoutesAll() to update points_route_list
-    ((f->data)->route_list).resize((f->route_list_saved).size());
-    copy((f->route_list_saved).begin(), (f->route_list_saved).end(), ((f->data)->route_list).begin());
+    f->data->route_list.resize((f->route_list_saved.size()));
+    copy((f->route_list_saved.begin()), (f->route_list_saved.end()), (f->data->route_list.begin()));
     f->TabulateRoutesAll();
 
     //this is the # of the transporting Route in the full Route list given by data->route_list
-    (f->i_transporting_route) = (f->map)[((f->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
+    (f->i_transporting_route) = (f->map)[(f->listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
 
 
 
     if (((f->transported_object) == String("sight")) || (f->transported_object) == String("route")) {
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
 
+        String new_label;
         GraphicalFeatureTransportHandler<Route>* transport_handler;
 
-
-        String new_label;
-
+        
         if ((f->transported_object) == String("sight")) {
             //the transported object is a Sight
 
             //the id of the Route that will be transported is the one of the Route related to the Sight that is being transported
-            (f->i_object_to_transport) = (((((f->data)->sight_list)[(f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
+            (f->i_object_to_transport) = ((((f->data->sight_list)[(f->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
 
         }
         
@@ -15135,7 +15130,6 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
             (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
             wxTIMER_CONTINUOUS);
 
-        
     }
 
     if ((f->transported_object) == String("position")) {
@@ -15144,7 +15138,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
         
         //the id of the Position that will be transported,
-        (f->i_object_to_transport) = ((int)(((f->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
+        (f->i_object_to_transport) = ((int)((f->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
         transport_handler = new GraphicalFeatureTransportHandler<Position>(
                                                                            f,
@@ -21760,8 +21754,6 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
         if (type_of_transported_object == String("position")) {
             
-            unsigned int i;
-
             //do the whole transport rather than combining many little transports, to avoid rounding errors
             (*((Position*)transported_object)) = start;
             ((Position*)transported_object)->transport_to(transporting_route, String(""));
@@ -21769,18 +21761,6 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
             //update labels
             (((Position*)transported_object)->label) = ((Position*)transported_object)->label.append(String(" transported with ")).append((transporting_route.label));
-
-
-//            for (i=0; (i<(parent->data->position_list.size())) && (
-//                                                                   
-//                                                                   
-//                                                                   ((Position*)transported_object) != (parent->data->position_list.data() + i)
-//                                                                   
-//                                                                   
-//                                                                   ); i++) {}
-//            unsigned int test;
-//            test  = position_in_vector<Position>(((Position*)transported_object), parent->data->position_list);
-            
             
             //update the Position information in f
             ((Position*)transported_object)->update_wxListCtrl(

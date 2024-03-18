@@ -21758,7 +21758,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
                 (((Route*)object)->reference_position) = start;
-                ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position.transport_to((parent->data->route_list)[parent->i_transporting_route], String(""));
+                ((Route*)object)->reference_position.transport_to((parent->data->route_list)[parent->i_transporting_route], String(""));
 
 
                 //update labels
@@ -21777,7 +21777,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
                 }
 
-                //change the label of Route #(parent->i_object_to_transport) by appending to it 'translated with [label of the translating Route]'
+                //change the label of *object by appending to it 'translated with [label of the translating Route]'
                 (((Route*)object)->label) = new_label;
 
             }

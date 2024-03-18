@@ -21789,13 +21789,15 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                 //set back listcontrol_routes to route_list, in order to include all Routes (not only those which are not related to a Sight)
                 parent->listcontrol_routes->set((parent->data->route_list), false);
 
-                if (parent->transported_object == String("sight")) {
-                    //I am transporting a Route related to a Sight -> disconnect the Route from the sight
+                if ((parent->transported_object == String("sight")) || ( ((parent->transported_object == String("route")) && ((((Route*)transported_object)->related_sight.value) != -1)) )) {
+                    //I am transporting a Sight (i.e., Route related to a Sight) or I am transporting a Route that is connected to a Sight -> disconnect the Route from the sight
 
                     (parent->i_object_to_disconnect) = (((Route*)transported_object)->related_sight.value);
                     parent->Disconnect(event);
 
                 }
+                
+            
 
                 //change the label of *object by appending to it 'translated with [label of the translating Route]'
                 (((Route*)transported_object)->label) = new_label;

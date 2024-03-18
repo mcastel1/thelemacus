@@ -21770,17 +21770,23 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
             //update labels
             (((Position*)transported_object)->label) = ((Position*)transported_object)->label.append(String(" transported with ")).append((transporting_route.label));
 
+
+//            for (i=0; (i<(parent->data->position_list.size())) && (
+//                                                                   
+//                                                                   
+//                                                                   ((Position*)transported_object) != (parent->data->position_list.data() + i)
+//                                                                   
+//                                                                   
+//                                                                   ); i++) {}
+//            unsigned int test;
+//            test  = position_in_vector<Position>(((Position*)transported_object), parent->data->position_list);
+            
+            
             //update the Position information in f
-            
-            for (i=0; (i<(parent->data->position_list.size())) && (
-                                                                   
-                                                                   
-                                                                   ((Position*)transported_object) != (parent->data->position_list.data() + i)
-                                                                   
-                                                                   
-                                                                   ); i++) {}
-            
-            ((Position*)transported_object)->update_wxListCtrl(i, parent->listcontrol_positions);
+            ((Position*)transported_object)->update_wxListCtrl(
+                                                               position_in_vector<Position>(((Position*)transported_object), parent->data->position_list),
+                                                               parent->listcontrol_positions
+                                                               );
 
 
         }

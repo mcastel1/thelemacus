@@ -73,7 +73,7 @@ Data:
 			start position:
 				latitude = 336° 17.00000000000159'
 				longitude = 236° 56.99999999999761'
-				label = 
+				label = 2024-03-18 13:35:58 UTC+2
 			starting heading = 289° 34.42542000000003'
 			length format = length
 				length = 3000 nm
@@ -83,6 +83,10 @@ Data:
 			latitude = 323° 36.54636500000151'
 			longitude = 315° 55.56999999999789'
 			label = Siamo in biblioteca
+		Position #2:
+			latitude = 16° 13.05338689690828'
+			longitude = 45° 41.20075273385268'
+			label =  transported with Michele 
 Recent bodies = 12 10 8
 Recent projections = 1 0
 Recent length formats = 1 0

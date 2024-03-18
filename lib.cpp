@@ -21781,10 +21781,10 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                 //update labels
 
                 //the new label which will be given to the transported Route
-                new_label = ((Route*)object)->label.append(String(" transported with ")).append(((((parent->data)->route_list)[parent->i_transporting_route]).label));
+                new_label = ((Route*)object)->label.append(String(" transported with ")).append((transporting_route.label));
 
                 //set back listcontrol_routes to route_list, in order to include all Routes (not only those which are not related to a Sight)
-                parent->listcontrol_routes->set((parent->data)->route_list, false);
+                parent->listcontrol_routes->set((parent->data->route_list), false);
 
                 if (parent->transported_object == String("sight")) {
                     //I am transporting a Route related to a Sight -> disconnect the Route from the sight

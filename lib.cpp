@@ -2110,6 +2110,8 @@ Route::Route(const RouteType& type_in, const Position& p_start, const Position& 
     
     type = type_in;
 
+    reference_position = p_start;
+    
     switch ( type.position_in_list(Route_types)) {
             
         case 0:{

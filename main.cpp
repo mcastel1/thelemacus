@@ -351,7 +351,6 @@ bool MyApp::OnInit() {
     b = Position(Angle(3.54236943807), Angle(.423895720));
     route = new Route(RouteType(Route_types[0].value), a, b);
     
-    route->set_length(12.);
     
     
     unsigned int i;

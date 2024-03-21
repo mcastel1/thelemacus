@@ -17515,15 +17515,15 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 
 #endif
             
-            //test for Route between two points
-            //
+            //test for Route between two points: I construct a loxodrome that connects (data->position_list)[0] to (data->position_list)[1]
+            /*
             Route* r;
             r = new Route(RouteType(Route_types[0]), (data->position_list)[0], (data->position_list)[1]);
             r->compute_end(String(""));
             
-//            data∫®->route_list.push_back(*r);
+            data->route_list.push_back(*r);
             
-            //
+            */
             
             
             file_is_untitled = false;

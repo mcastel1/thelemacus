@@ -2131,6 +2131,8 @@ Route::Route(const RouteType& type_in, const Position& p_start, const Position& 
             }else{
                 Z = Z + M_PI;
             }
+            //set length according to t* (see notes)
+            set_length(fabs((p_end.lambda.value) - (p_start.lambda.value)));
 
             break;
             

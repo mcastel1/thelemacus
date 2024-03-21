@@ -131,7 +131,7 @@
  
  
  ********** THINGS TO FIX ************
-        - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude 
+        - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
         - if you create a new Route to transport and click on the Route type dropdwon menu, there are only two items in the menu (loxodfrome and orthodrome) but the recent_items still has 3 entries as for a regular Route -> segmentation fault
  on OSX:
  on WIN32:
@@ -343,6 +343,15 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 }
 
 bool MyApp::OnInit() {
+    
+    
+    Route* route;
+    Position a, b;
+    a = Position(Angle(.3235876239), Angle(.432975879));
+    b = Position(Angle(3.54236943807), Angle(.423895720));
+    route = new Route(RouteType(Route_types[0].value), a, b);
+    
+    route->set_length(12.);
     
     
     unsigned int i;

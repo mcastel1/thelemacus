@@ -2106,28 +2106,48 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
 
 
 //build a Route of ty[e type that connects position_start and position_end
-Route::Route(const RouteType& type_in, const Position& position_start, const Position& position_end){
+Route::Route(const RouteType& type_in, const Position& p_start, const Position& p_end){
     
     type = type_in;
 
     switch ( type.position_in_list(Route_types)) {
             
-        case 0:
+        case 0:{
             //*this is a loxodrome
             
+            PositionProjection projection_start, projection_end;
+            
+            projection_start.SetMercator(p_start);
+            projection_end.SetMercator(p_end);
+            
+            //set Z
+            Z.set(
+                     String(""),
+                     GSL_SIGN((projection_end.y) - (projection_start.y))*sqrt(1.0/(1.0 + gsl_pow_2(((projection_end.x) - (projection_start.x))/((projection_end.y) - (projection_start.y))))),
+                     String("")
+                     );
+            if((projection_end.y) > (projection_start.y)){
+                Z = Z*(-1.0);
+            }else{
+                Z = Z + M_PI;
+            }
+
             break;
             
-        case 1:
+        }
+            
+        case 1:{
             //*this is an orthodrome
             
             
             break;
+            }
             
-        case 2:
+        case 2:{
             //*this is a circle of equal altitude
             
             cout << RED << "Cannot create a circle of equal altitute taht connects two positions!\n" << RESET;
-            break;
+            break;}
 
     }
     

@@ -14149,7 +14149,7 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
             /*condition that the Route is not a circle of equal altitude*/
             (((parent->data->route_list)[i]).type != (Route_types[2])) &&
             /*condition that the Route does not coincide with the object to transport*/
-            (((parent->transported_object) != String("route")) || ((parent->i_object_to_transport) != i))
+            (((parent->transported_object_type) != String("route")) || ((parent->i_object_to_transport) != i))
             ) {
 
             (parent->route_list_for_transport).push_back((parent->data->route_list)[i]);
@@ -15231,14 +15231,14 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     (parent->i_transporting_route) = (parent->map)[(parent->listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
 
 
-    if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")) {
+    if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
 
         String new_label;
         GraphicalFeatureTransportHandler<Route>* transport_handler;
 
         
-        if ((parent->transported_object) == String("sight")) {
+        if ((parent->transported_object_type) == String("sight")) {
             //the transported object is a Sight
 
             //the id of the Route that will be transported is the one of the Route related to the Sight that is being transported
@@ -15249,7 +15249,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         transport_handler = new GraphicalFeatureTransportHandler<Route>(
                                                                         parent,
                                                                         &((parent->data->route_list)[(parent->i_object_to_transport)]),
-                                                                        (parent->transported_object),
+                                                                        (parent->transported_object_type),
                                                                         ((parent->data->route_list)[(parent->i_transporting_route)])
                                                                         );
 
@@ -15258,7 +15258,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
     }
 
-    if ((parent->transported_object) == String("position")) {
+    if ((parent->transported_object_type) == String("position")) {
 
         GraphicalFeatureTransportHandler<Position>* transport_handler;
 
@@ -15269,7 +15269,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         transport_handler = new GraphicalFeatureTransportHandler<Position>(
                                                                            parent,
                                                                            &((parent->data->position_list)[(parent->i_object_to_transport)]),
-                                                                           (parent->transported_object),
+                                                                           (parent->transported_object_type),
                                                                            ((parent->data->route_list)[(parent->i_transporting_route)])
                                                                            );
 
@@ -15292,13 +15292,13 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     (parent->i_transporting_route) = ((parent->listcontrol_routes)->GetItemCount()) - 1;
 
 
-    if (((parent->transported_object) == String("sight")) || ((parent->transported_object) == String("route"))) {
+    if (((parent->transported_object_type) == String("sight")) || ((parent->transported_object_type) == String("route"))) {
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
         
         GraphicalFeatureTransportHandler<Route>* transport_handler;
 
         
-        if ((parent->transported_object) == String("sight")) {
+        if ((parent->transported_object_type) == String("sight")) {
             
 
             //the id of the Route that will be transported
@@ -15311,7 +15311,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         transport_handler = new GraphicalFeatureTransportHandler<Route>(
                                                                         parent,
                                                                         &((parent->data->route_list)[(parent->i_object_to_transport)]),
-                                                                        (parent->transported_object),
+                                                                        (parent->transported_object_type),
                                                                         ((parent->data->route_list)[(parent->i_transporting_route)])
                                                                         );
         
@@ -15320,7 +15320,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 
     }
 
-    if ((parent->transported_object) == String("position")) {
+    if ((parent->transported_object_type) == String("position")) {
         //I am transporting a Position: allocate transport_handler with template NON_GUI = Position
         
         GraphicalFeatureTransportHandler<Position>* transport_handler;
@@ -15331,7 +15331,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         
         transport_handler = new GraphicalFeatureTransportHandler<Position>(parent, 
                                                                            &((parent->data->position_list)[(parent->i_object_to_transport)]),
-                                                                           (parent->transported_object),
+                                                                           (parent->transported_object_type),
                                                                            ((parent->data->route_list)[(parent->i_transporting_route)])
                                                                            );
 
@@ -16380,7 +16380,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
 
         //set the reference position of the transporting Route to the initial position of the object that has been transported: in thiw way, the transporting Route will look nice on the chart
-        if ((parent->transported_object) == String("position")) {
+        if ((parent->transported_object_type) == String("position")) {
 
             //store the starting position in geo_position_start
             ((parent->data->route_list)[(parent->i_transporting_route)]).reference_position = (parent->data->position_list)[(parent->i_object_to_transport)];
@@ -16388,7 +16388,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         }
         else {
 
-            if (((parent->transported_object) == String("sight")) || (parent->transported_object) == String("route")) {
+            if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
 
                 //store the starting reference position in geo_position_start
                 ((parent->data->route_list)[(parent->i_transporting_route)]).reference_position = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
@@ -17924,7 +17924,7 @@ template<class E> void ListFrame::OnModifySight(E& event) {
 void ListFrame::OnTransportSight(wxCommandEvent& event) {
 
     //I am transporting a Route (related to a Sight)
-    transported_object = String("sight");
+    transported_object_type = String("sight");
 
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
     print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport?"), String("Existing route"), String("New route"));
@@ -17956,7 +17956,7 @@ void ListFrame::OnDisconnectRoute(wxCommandEvent& event) {
 void ListFrame::OnTransportPosition(wxCommandEvent& event) {
 
     // I am transporting a Position
-    transported_object = String("position");
+    transported_object_type = String("position");
 
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
@@ -18017,7 +18017,7 @@ template<class E> void ListFrame::OnModifyRoute(E& event) {
 void ListFrame::OnTransportRoute(wxCommandEvent& event) {
 
     //I am transporting a Route
-    transported_object = String("route");
+    transported_object_type = String("route");
 
     //I store the # of the selected Route into i_object_to_transport
     i_object_to_transport = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
@@ -21917,7 +21917,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
                 //set back listcontrol_routes to route_list, in order to include all Routes (not only those which are not related to a Sight)
                 parent->listcontrol_routes->set((parent->data->route_list), false);
 
-                if ((parent->transported_object == String("sight")) || ( ((parent->transported_object == String("route")) && ((((Route*)transported_object)->related_sight.value) != -1)) )) {
+                if ((parent->transported_object_type == String("sight")) || ( ((parent->transported_object_type == String("route")) && ((((Route*)transported_object)->related_sight.value) != -1)) )) {
                     //I am transporting a Sight (i.e., Route related to a Sight) or I am transporting a Route that is connected to a Sight -> disconnect the Route from the sight
 
                     (parent->i_object_to_disconnect) = (((Route*)transported_object)->related_sight.value);

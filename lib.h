@@ -1106,7 +1106,7 @@ public:
 };
 
 
-//this class denotes a point in a 2D projection of the sphere
+//this class denotes a point in a generic 2D projection of the sphere
 class PositionProjection{
     
 public:
@@ -1115,6 +1115,7 @@ public:
     
     PositionProjection();
     PositionProjection(const double, const double);
+    void SetMercator(const Position&);
     PositionProjection operator+(const PositionProjection&), operator-(const PositionProjection&);
     
     

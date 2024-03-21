@@ -5398,6 +5398,14 @@ PositionProjection PositionProjection::operator-(const PositionProjection& q) {
 
 }
 
+//set x and y equal to the Mercator projections of the Position p
+inline void PositionProjection::SetMercator(const Position& p){
+    
+    x = -(normalize_pm_pi_ret(p.lambda).value);
+    y = log(1.0 / cos((p.phi)) + tan((p.phi)));
+    
+}
+
 
 // this function plots the Routes of type (Route_types[2]) in route_list in kml forma. WARNING: THIS FUNCTION USES THE SYSTEM() COMMAND AND THUS IT IS NOT PORTABLE ACROSS PLATFORMS. Also, this functions used file_kml, which has been removed from the code, and it should be revised.
 void Data::print_to_kml(String prefix) {

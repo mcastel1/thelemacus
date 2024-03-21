@@ -848,7 +848,8 @@ class RouteType: public String{
 public:
 
     RouteType();
-    RouteType(string);
+    RouteType(const String&);
+    RouteType(const string&);
     
 };
 

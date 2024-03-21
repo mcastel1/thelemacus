@@ -344,14 +344,15 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
-    
-    Route* route;
-    Position a, b;
-    a = Position(Angle(1.3235876239), Angle(0.432975879));
-    b = Position(Angle(1.54236943807), Angle(-1.324));
-    route = new Route(RouteType(Route_types[0].value), a, b);
-    route->compute_end(String(""));
-    
+    //test for     Route(const RouteType&, const Position&, const Position&);
+    /*
+     Route* route;
+     Position a, b;
+     a = Position(Angle(1.3235876239), Angle(0.432975879));
+     b = Position(Angle(1.54236943807), Angle(-1.324));
+     route = new Route(RouteType(Route_types[0].value), a, b);
+     route->compute_end(String(""));
+     */
     
     unsigned int i;
     Int n_chart_frames;

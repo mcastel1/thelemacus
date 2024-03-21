@@ -15289,7 +15289,14 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
         
         //start the transport
-        transport_handler->Transport();
+        
+//        parent->CallAfter(
+//                  [=]  {
+//        transport_handler->Transport();
+//                  }
+//                  );
+        
+        
 
     }
     
@@ -21818,6 +21825,8 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
         if (t == 0) {
             //the transport has just started
             
+            //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
+            (*(parent->set_idling))();
 
             transporting_route_temp = transporting_route;
             

@@ -15259,20 +15259,33 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     }
 
     if ((parent->transported_object_type) == String("position")) {
-
+        
         GraphicalFeatureTransportHandler<Position>* transport_handler;
-
+        //auxiliary_transport_handler will be used to transport the transporting Route in such a way that its starting point coincides with the object to transport. Then the actual transport of transported_object will be done, and then the transporting Route is transported back to its original position
+        GraphicalFeatureTransportHandler<Route>* auxiliary_transport_handler;
 
         
         //the id of the Position that will be transported,
         (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
+        
+        auxiliary_transport_handler = new GraphicalFeatureTransportHandler<Route>(
+                                                                                  parent,
+                                                                                  &(parent->data->route_list)[(parent->i_transporting_route)],
+                                                                                  String("route"),
+                                                                                  Route(RouteType(Route_types[0]), (parent->data->route_list)[(parent->i_transporting_route)].reference_position, ((parent->data->position_list)[(parent->i_object_to_transport)]))
+                                                                                  );
+
         transport_handler = new GraphicalFeatureTransportHandler<Position>(
                                                                            parent,
                                                                            &((parent->data->position_list)[(parent->i_object_to_transport)]),
                                                                            (parent->transported_object_type),
                                                                            ((parent->data->route_list)[(parent->i_transporting_route)])
                                                                            );
+
+        //these timers of auxiliary_transport_handler and transport_handler run at the same time -> change this with CallAfter and a lambda call
+        //start the auxiliary transport
+        auxiliary_transport_handler->Transport();
 
         
         //start the transport

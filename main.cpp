@@ -21,6 +21,7 @@
 /*
  
  notes:
+ - be careful when you debug with breakpoints stuff that include timers ! You may stop at a breakpoint, but the timer in the code has started running and is running while you are stopped at the breakpoint
  - to use a lambda capture with CallAfter: `CallAfter([=] {FillAndRaiseOtherFrame();});`
  - on APPLE:
     - replace SetMercatorAndNormalize whenever you can

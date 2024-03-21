@@ -2471,8 +2471,6 @@ public:
     
     //parent frame
     ListFrame* parent;
-    //auxiliary_transport_handler will be used to transport the transporting Route in such a way that its starting point coincides with the object to transport. Then the actual transport of transported_object will be done, and then the transporting Route is transported back to its original position
-    GraphicalFeatureTransportHandler<Route>* auxiliary_transport_handler;
     //    UnsetIdling<ListFrame>* unset_idling;
     
     //constructor, which sets the parent frame

@@ -15262,6 +15262,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 
         GraphicalFeatureTransportHandler<Position>* transport_handler;
 
+
         
         //the id of the Position that will be transported,
         (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));

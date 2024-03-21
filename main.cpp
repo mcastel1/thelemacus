@@ -347,8 +347,8 @@ bool MyApp::OnInit() {
     
     Route* route;
     Position a, b;
-    a = Position(Angle(.3235876239), Angle(.432975879));
-    b = Position(Angle(.54236943807), Angle(.423895720));
+    a = Position(Angle(1.3235876239), Angle(0.432975879));
+    b = Position(Angle(1.54236943807), Angle(-1.324));
     route = new Route(RouteType(Route_types[0].value), a, b);
     route->compute_end(String(""));
     

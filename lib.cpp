@@ -11404,22 +11404,24 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
 
 //this function computes x_min, ... y_max and from lambda_min ... phi_max in the Mercator projection
 void DrawPanel::Set_x_y_min_max_Mercator(void) {
-
+    
     PositionProjection p_min, p_max;
     Position temp;
-
+    
     //    (this->*GeoToProjection)(Position(parent->lambda_min, parent->phi_min), &p_min, true);
     //    (this->*GeoToProjection)(Position(parent->lambda_max, parent->phi_max), &p_max, true);
-
+    
     temp = Position(parent->lambda_min, parent->phi_min);
-    (p_min.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
-    (p_min.y) = log(1.0 / cos((temp.phi)) + tan((temp.phi)));
-
+    //    (p_min.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
+    //    (p_min.y) = log(1.0 / cos((temp.phi)) + tan((temp.phi)));
+    p_min.SetMercator(temp);
+    
     temp = Position(parent->lambda_max, parent->phi_max);
-    (p_max.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
-    (p_max.y) = log(1.0 / cos((temp.phi)) + tan((temp.phi)));
-
-
+    //    (p_max.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
+    //    (p_max.y) = log(1.0 / cos((temp.phi)) + tan((temp.phi)));
+    p_max.SetMercator(temp);
+    
+    
     x_min = (p_min.x);
     y_min = (p_min.y);
     x_max = (p_max.x);

@@ -4239,12 +4239,17 @@ void Route::set_length(double t){
             
             double C, s, eta;
         
-            
             C = gsl_pow_2(cos(Z));
             s = GSL_SIGN(cos(Z));
             eta = sqrt((1-sin((reference_position.phi)))/(1+sin((reference_position.phi))));
             
-            s * 2.0*Re/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t )  ) );
+            //set the length format, the length unit and the value of the length from t
+            length_format.set(String(""), LengthFormat_types[1], String(""));
+            length.unit.set(String(""), LengthUnit_types[0], String(""));
+            length.set(
+                       String(""),
+                       s * 2.0*Re/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t ) ) ),
+                       String(""));
      
             break;
             

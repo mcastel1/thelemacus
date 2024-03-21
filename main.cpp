@@ -131,6 +131,7 @@
  
  
  ********** THINGS TO FIX ************
+        - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude 
         - if you create a new Route to transport and click on the Route type dropdwon menu, there are only two items in the menu (loxodfrome and orthodrome) but the recent_items still has 3 entries as for a regular Route -> segmentation fault
  on OSX:
  on WIN32:

@@ -12165,8 +12165,9 @@ inline bool DrawPanel::GeoToMercator(const Position& q, PositionProjection* p, b
     PositionProjection temp;
     bool check_x, check, out;
 
-    (temp.x) = -(normalize_pm_pi_ret(q.lambda).value);
-    (temp.y) = log(1.0 / cos((q.phi)) + tan((q.phi)));
+//    (temp.x) = -(normalize_pm_pi_ret(q.lambda).value);
+//    (temp.y) = log(1.0 / cos((q.phi)) + tan((q.phi)));
+    temp.SetMercator(q);
 
     //compute check_x and, from check_x, compute b
     if (x_min <= x_max) {

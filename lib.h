@@ -1117,6 +1117,7 @@ public:
     
     PositionProjection();
     PositionProjection(const double, const double);
+    void SetMercator(const Position&);
     void SetMercatorAndNormalize(const Position&);
     PositionProjection operator+(const PositionProjection&), operator-(const PositionProjection&);
     

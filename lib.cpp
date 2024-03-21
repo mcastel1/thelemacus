@@ -5470,11 +5470,28 @@ PositionProjection PositionProjection::operator-(const PositionProjection& q) {
 
 }
 
-//set x and y equal to the Mercator projections of the Position p
+
+//normalize p.lambda, then set x and y equal to the Mercator projections of the Position p
+inline void PositionProjection::SetMercator(const Position& p){
+    
+    x = -(p.lambda.value);
+    y = log(1.0 / cos((p.phi)) + tan((p.phi)));
+    
+}
+
+
+//normalize p.lambda, then set x and y equal to the Mercator projections of the Position p
 inline void PositionProjection::SetMercatorAndNormalize(const Position& p){
     
-    x = -(normalize_pm_pi_ret(p.lambda).value);
-    y = log(1.0 / cos((p.phi)) + tan((p.phi)));
+    Position temp;
+    
+    temp = p;
+    temp.lambda.normalize_pm_pi();
+    
+    SetMercator(temp);
+    
+//    x = -(normalize_pm_pi_ret(p.lambda).value);
+//    y = log(1.0 / cos((p.phi)) + tan((p.phi)));
     
 }
 
@@ -7746,7 +7763,8 @@ Angle Angle::normalize_ret(void) {
     return temp;
 }
 
-//puts the angle in the interval [-pi, pi) and writes the result in *this
+
+//put the angle *this in the interval [-pi, pi) and write the result in *this
 void Angle::normalize_pm_pi(void) {
 
     normalize();

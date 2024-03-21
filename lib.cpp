@@ -2111,7 +2111,7 @@ Route::Route(const RouteType& type_in, const Position& p_start, const Position& 
     type = type_in;
 
     reference_position = p_start;
-    
+   
     switch ( type.position_in_list(Route_types)) {
             
         case 0:{
@@ -2119,8 +2119,10 @@ Route::Route(const RouteType& type_in, const Position& p_start, const Position& 
             
             PositionProjection projection_start, projection_end;
             
-            projection_start.SetMercator(p_start);
-            projection_end.SetMercator(p_end);
+            projection_start.SetMercatorAndNormalize(p_start);
+            projection_end.SetMercatorAndNormalize(p_end);
+            
+            reference_position.phi.normalize_pm_pi();
             
             //set Z
             Z.set(
@@ -2135,6 +2137,7 @@ Route::Route(const RouteType& type_in, const Position& p_start, const Position& 
             }
             //set length according to t* (see notes)
             set_length(fabs((p_end.lambda.value) - (p_start.lambda.value)));
+            
 
             break;
             
@@ -3154,28 +3157,28 @@ int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle>* t, [[ma
 
         //the parallel of latitude going through the North side of rectangle
         side_N = Route(
-            RouteType(((Route_types[2]).value)),
+            RouteType(Route_types[2]),
             Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value) * M_PI_2)),
             Angle(M_PI_2 - fabs(((((rectangle.p_NW).phi).normalize_pm_pi_ret()).value)))
         );
 
         //the parallel of latitude going through the S side of rectangle
         side_S = Route(
-            RouteType(((Route_types[2]).value)),
+            RouteType(Route_types[2]),
             Position(Angle(0.0), Angle(GSL_SIGN((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value) * M_PI_2)),
             Angle(M_PI_2 - fabs(((((rectangle.p_SE).phi).normalize_pm_pi_ret()).value)))
         );
 
         //the meridian going through the W side of rectangle
         side_W = Route(
-            RouteType(((Route_types[2]).value)),
+            RouteType(Route_types[2]),
             Position(((rectangle.p_NW).lambda) + M_PI_2, Angle(0.0)),
             Angle(M_PI_2)
         );
 
         //the meridian going through the E side of rectangle
         side_E = Route(
-            RouteType(((Route_types[2]).value)),
+            RouteType(Route_types[2]),
             Position(((rectangle.p_SE).lambda) + M_PI_2, Angle(0.0)),
             Angle(M_PI_2)
         );
@@ -5468,7 +5471,7 @@ PositionProjection PositionProjection::operator-(const PositionProjection& q) {
 }
 
 //set x and y equal to the Mercator projections of the Position p
-inline void PositionProjection::SetMercator(const Position& p){
+inline void PositionProjection::SetMercatorAndNormalize(const Position& p){
     
     x = -(normalize_pm_pi_ret(p.lambda).value);
     y = log(1.0 / cos((p.phi)) + tan((p.phi)));
@@ -11483,12 +11486,12 @@ void DrawPanel::Set_x_y_min_max_Mercator(void) {
     temp = Position(parent->lambda_min, parent->phi_min);
     //    (p_min.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
     //    (p_min.y) = log(1.0 / cos((temp.phi)) + tan((temp.phi)));
-    p_min.SetMercator(temp);
+    p_min.SetMercatorAndNormalize(temp);
     
     temp = Position(parent->lambda_max, parent->phi_max);
     //    (p_max.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
     //    (p_max.y) = log(1.0 / cos((temp.phi)) + tan((temp.phi)));
-    p_max.SetMercator(temp);
+    p_max.SetMercatorAndNormalize(temp);
     
     
     x_min = (p_min.x);
@@ -12238,7 +12241,7 @@ inline bool DrawPanel::GeoToMercator(const Position& q, PositionProjection* p, b
 
 //    (temp.x) = -(normalize_pm_pi_ret(q.lambda).value);
 //    (temp.y) = log(1.0 / cos((q.phi)) + tan((q.phi)));
-    temp.SetMercator(q);
+    temp.SetMercatorAndNormalize(q);
 
     //compute check_x and, from check_x, compute b
     if (x_min <= x_max) {
@@ -17494,14 +17497,15 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 
 #endif
             
-            
+            //test for Route between two points
             /*
-             Route* r;
-             r = new Route(Route(RouteType(Route_types[0].value), (data->position_list)[0], (data->position_list)[1]));
-             
-             data->route_list.push_back(*r);
-    
-             */
+            Route* r;
+            r = new Route(RouteType(Route_types[0]), (data->position_list)[0], (data->position_list)[1]);
+            r->compute_end(String(""));
+            
+//            data∫®->route_list.push_back(*r);
+            
+            */
             
             
             file_is_untitled = false;

@@ -23,7 +23,7 @@
  notes:
  - to use a lambda capture with CallAfter: `CallAfter([=] {FillAndRaiseOtherFrame();});`
  - on APPLE:
-    - replace SetMercator whenever you can
+    - replace SetMercatorAndNormalize whenever you can
     - the cmd (apple) key corresponds to WXK_CONTROL
      - to setup everything on Mac OS (incomplete):
             1. Download and install boost_1_83_0

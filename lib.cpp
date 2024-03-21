@@ -2105,10 +2105,31 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
 }
 
 
-//build a Route that connects position_start and position_end
-Route::Route(const Position& position_start, const Position& position_end){
+//build a Route of ty[e type that connects position_start and position_end
+Route::Route(const RouteType& type_in, const Position& position_start, const Position& position_end){
     
-    
+    type = type_in;
+
+    switch ( type.position_in_list(Route_types)) {
+            
+        case 0:
+            //*this is a loxodrome
+            
+            break;
+            
+        case 1:
+            //*this is an orthodrome
+            
+            
+            break;
+            
+        case 2:
+            //*this is a circle of equal altitude
+            
+            cout << RED << "Cannot create a circle of equal altitute taht connects two positions!\n" << RESET;
+            break;
+
+    }
     
 }
 

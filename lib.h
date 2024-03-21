@@ -890,7 +890,7 @@ public:
     
     Route(void);
     Route(RouteType, Position, Angle, Length);
-    Route(const Position&, const Position&);
+    Route(const RouteType&, const Position&, const Position&);
     Route(RouteType, Position, Angle);
     void print(String, String, ostream&);
     void read_from_file_to(String, String, String, String);

@@ -2125,7 +2125,7 @@ Route::Route(const RouteType& type_in, const Position& p_start, const Position& 
             //set Z
             Z.set(
                      String(""),
-                     GSL_SIGN((projection_end.y) - (projection_start.y))*sqrt(1.0/(1.0 + gsl_pow_2(((projection_end.x) - (projection_start.x))/((projection_end.y) - (projection_start.y))))),
+                     -GSL_SIGN((projection_end.x) - (projection_start.x))*acos(sqrt(1.0/(1.0 + gsl_pow_2(((projection_end.x) - (projection_start.x))/((projection_end.y) - (projection_start.y)))))),
                      String("")
                      );
             if((projection_end.y) > (projection_start.y)){
@@ -4279,7 +4279,7 @@ void Route::set_length(double t){
 }
 
 
-//writes into this->end the position on the Route at length this->l along the Route from start
+//write into this->end the Position on the Route at length this->l along the Route from start
 void Route::compute_end(String prefix) {
     
     //picks the first (and only) character in string type.value

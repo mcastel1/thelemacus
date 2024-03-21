@@ -17493,6 +17493,17 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 
 
 #endif
+            
+            
+            /*
+             Route* r;
+             r = new Route(Route(RouteType(Route_types[0].value), (data->position_list)[0], (data->position_list)[1]));
+             
+             data->route_list.push_back(*r);
+    
+             */
+            
+            
             file_is_untitled = false;
             menu_file->Enable(wxID_HIGHEST + 7, true);
             set();

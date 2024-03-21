@@ -2119,10 +2119,10 @@ Route::Route(const RouteType& type_in, const Position& p_start, const Position& 
             
             PositionProjection projection_start, projection_end;
             
-            projection_start.SetMercatorAndNormalize(p_start);
-            projection_end.SetMercatorAndNormalize(p_end);
+            projection_start.SetMercator(p_start);
+            projection_end.SetMercator(p_end);
             
-            reference_position.phi.normalize_pm_pi();
+//            reference_position.phi.normalize_pm_pi();
             
             //set Z
             Z.set(
@@ -17516,14 +17516,14 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 #endif
             
             //test for Route between two points
-            /*
+            //
             Route* r;
             r = new Route(RouteType(Route_types[0]), (data->position_list)[0], (data->position_list)[1]);
             r->compute_end(String(""));
             
 //            data∫®->route_list.push_back(*r);
             
-            */
+            //
             
             
             file_is_untitled = false;

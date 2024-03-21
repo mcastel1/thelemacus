@@ -4229,6 +4229,46 @@ template<class S> void Position::read_from_stream([[maybe_unused]] String name, 
 }
 
 
+//set length equal to l(t), where l(t) is the value of the curvilinear length corresponding to the parametric coordinate t
+void Route::set_length(double t){
+    
+    switch ( type.position_in_list(Route_types)) {
+            
+        case 0:{
+            //*this is a loxodrome
+            
+            double C, s, eta;
+        
+            
+            C = gsl_pow_2(cos(Z));
+            s = GSL_SIGN(cos(Z));
+            eta = sqrt((1-sin((reference_position.phi)))/(1+sin((reference_position.phi))));
+            
+            s * 2.0*Re/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t )  ) );
+     
+            break;
+            
+        }
+            
+        case 1:{
+            //*this is an orthodrome
+            
+            
+            break;
+            }
+            
+        case 2:{
+            //*this is a circle of equal altitude
+            
+            break;
+            
+        }
+            
+    }
+    
+    
+}
+
 
 //writes into this->end the position on the Route at length this->l along the Route from start
 void Route::compute_end(String prefix) {

@@ -895,6 +895,7 @@ public:
     void print(String, String, ostream&);
     void read_from_file_to(String, String, String, String);
     template<class S> void read_from_stream(String, S*, bool, String);
+    void set_length(double);
     void compute_end(String);
     bool compute_end(Length, String);
     int crossing(Route, vector<Position>*, double*, String);

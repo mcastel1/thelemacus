@@ -18659,17 +18659,24 @@ void SightFrame::set(void) {
 //write the content in the GUI fields into the non=GUI fields, and check whether all the fields in SightFrame are ok and whether the time of sight lies within the ephemerides' time span:
 bool SightFrame::is_ok(void) {
 
+    bool time_interval_ok_before;
+    
     wxCommandEvent dummy;
 
     get(dummy);
 
+    //becore time_inverval_ok is recomputed, store its value into time_interval_ok_before
+    time_interval_ok_before = time_interval_ok;
+
+    
     //runs TimeIntervalOk to compute time_interval_ok, which will be used to determine whether button_reduce is enabled or not
     TimeIntervalOk(String(""));
     
-    if(!time_interval_ok){
-        //the time interval lies outside the interval of ephemerides' data
+    if((!time_interval_ok) && time_interval_ok_before){
+        //the time interval lies outside the interval of ephemerides' data and it was ok before -> prompt an error message 
         
-        
+        print_error_message->SetAndCall(NULL, String("Error"), String("Time not included in ephemerides' data!"), (wxGetApp().path_file_error_icon));
+
     }
 
 //    text_time_interval_not_ok->SetLabel(wxString(time_interval_ok ? "" : "Time not enclosed in ephemerides' data!"));

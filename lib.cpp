@@ -15239,7 +15239,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
         
         String new_label;
-        GraphicalFeatureTransportHandler<Route>* transport_handler;
+        GraphicalFeatureTransportHandler<Route, void>* transport_handler;
         
         
         if ((parent->transported_object_type) == String("sight")) {
@@ -15250,11 +15250,12 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
             
         }
         
-        transport_handler = new GraphicalFeatureTransportHandler<Route>(
+        transport_handler = new GraphicalFeatureTransportHandler<Route, void>(
                                                                         parent,
                                                                         &((parent->data->route_list)[(parent->i_object_to_transport)]),
                                                                         (parent->transported_object_type),
-                                                                        ((parent->data->route_list)[(parent->i_transporting_route)])
+                                                                        ((parent->data->route_list)[(parent->i_transporting_route)]),
+                                                                              NULL
                                                                         );
         
         //start the transport
@@ -15263,27 +15264,29 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
     if ((parent->transported_object_type) == String("position")) {
         
-        GraphicalFeatureTransportHandler<Position>* transport_handler;
+        GraphicalFeatureTransportHandler<Position, void>* transport_handler;
         //auxiliary_transport_handler will be used to transport the transporting Route in such a way that its starting point coincides with the object to transport. Then the actual transport of transported_object will be done, and then the transporting Route is transported back to its original position
-        GraphicalFeatureTransportHandler<Route>* auxiliary_transport_handler;
+        GraphicalFeatureTransportHandler<Route, void>* auxiliary_transport_handler;
         
         
         //the id of the Position that will be transported,
         (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
         
-        auxiliary_transport_handler = new GraphicalFeatureTransportHandler<Route>(
+        auxiliary_transport_handler = new GraphicalFeatureTransportHandler<Route, void>(
                                                                                   parent,
                                                                                   &(parent->data->route_list)[(parent->i_transporting_route)],
                                                                                   String("route"),
-                                                                                  Route(RouteType(Route_types[0]), (parent->data->route_list)[(parent->i_transporting_route)].reference_position, ((parent->data->position_list)[(parent->i_object_to_transport)]))
+                                                                                  Route(RouteType(Route_types[0]), (parent->data->route_list)[(parent->i_transporting_route)].reference_position, ((parent->data->position_list)[(parent->i_object_to_transport)])),
+                                                                                        NULL
                                                                                   );
         
-        transport_handler = new GraphicalFeatureTransportHandler<Position>(
+        transport_handler = new GraphicalFeatureTransportHandler<Position, void>(
                                                                            parent,
                                                                            &((parent->data->position_list)[(parent->i_object_to_transport)]),
                                                                            (parent->transported_object_type),
-                                                                           ((parent->data->route_list)[(parent->i_transporting_route)])
+                                                                           ((parent->data->route_list)[(parent->i_transporting_route)]),
+                                                                                 NULL
                                                                            );
         
         //these timers of auxiliary_transport_handler and transport_handler run at the same time -> change this with CallAfter and a lambda call
@@ -15317,80 +15320,82 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     if (((parent->transported_object_type) == String("sight")) || ((parent->transported_object_type) == String("route"))) {
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
         
-        GraphicalFeatureTransportHandler<Route>* transport_handler;
+        GraphicalFeatureTransportHandler<Route, void>* transport_handler;
 
         
         if ((parent->transported_object_type) == String("sight")) {
             
-
+            
             //the id of the Route that will be transported
             (parent->i_object_to_transport) = (((((parent->data)->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
             
-
+            
         }
         
         
-        transport_handler = new GraphicalFeatureTransportHandler<Route>(
-                                                                        parent,
-                                                                        &((parent->data->route_list)[(parent->i_object_to_transport)]),
-                                                                        (parent->transported_object_type),
-                                                                        ((parent->data->route_list)[(parent->i_transporting_route)])
-                                                                        );
+        transport_handler = new GraphicalFeatureTransportHandler<Route, void>(
+                                                                              parent,
+                                                                              &((parent->data->route_list)[(parent->i_object_to_transport)]),
+                                                                              (parent->transported_object_type),
+                                                                              ((parent->data->route_list)[(parent->i_transporting_route)]),
+                                                                              NULL
+                                                                              );
         
         //start the transport
         (*transport_handler)();
-
+        
     }
-
+    
     if ((parent->transported_object_type) == String("position")) {
         //I am transporting a Position: allocate transport_handler with template NON_GUI = Position
         
-        GraphicalFeatureTransportHandler<Position>* transport_handler;
-
-
+        GraphicalFeatureTransportHandler<Position, void>* transport_handler;
+        
+        
         //the id of the Route or Position that will be transported
         (parent->i_object_to_transport) = ((int)(parent->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
         
-        transport_handler = new GraphicalFeatureTransportHandler<Position>(parent, 
-                                                                           &((parent->data->position_list)[(parent->i_object_to_transport)]),
-                                                                           (parent->transported_object_type),
-                                                                           ((parent->data->route_list)[(parent->i_transporting_route)])
-                                                                           );
-
+        transport_handler = new GraphicalFeatureTransportHandler<Position, void>(parent,
+                                                                                 &((parent->data->position_list)[(parent->i_object_to_transport)]),
+                                                                                 (parent->transported_object_type),
+                                                                                 ((parent->data->route_list)[(parent->i_transporting_route)]),
+                                                                                 NULL
+                                                                                 );
+        
         //start the transport
-(*transport_handler)();
+        (*transport_handler)();
     }
-
+    
     event.Skip(true);
-
+    
 }
 
 
 
 template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void) {
-
+    
     SetIdling<T>* set_idling;
     UnsetIdling<T>* unset_idling;
-
+    
     set_idling = new SetIdling<T>(f);
     unset_idling = new UnsetIdling<T>(f);
-
+    
     //I may be about to prompt a temporary dialog window, thus I set f->idling to true
     (*set_idling)();
-
+    
     if (control != NULL) {
-
+        
         if (((control->GetForegroundColour()) != (wxGetApp().error_color))) {
-
+            
             message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame->Show(true);
             message_frame->Raise();
-
+            
             // control->SetFocus();
             control->SetForegroundColour((wxGetApp().error_color));
             control->SetFont(wxGetApp().error_font);
             //                Reset(control);
-
+            
         }
 
     }
@@ -21794,11 +21799,12 @@ MotionHandler::MotionHandler(ListFrame* parent_in){
 
 }
 
-template<class NON_GUI> GraphicalFeatureTransportHandler<NON_GUI>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in,  const String& type_of_transported_object_in, const Route& transporting_route_in) : MotionHandler(parent_in){
+template<class NON_GUI, class F> GraphicalFeatureTransportHandler<NON_GUI, F>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in,  const String& type_of_transported_object_in, const Route& transporting_route_in, F* f_in) : MotionHandler(parent_in){
 
     transported_object = object_in;
     type_of_transported_object = type_of_transported_object_in;
     transporting_route = transporting_route_in;
+    f = f_in;
     
 
     timer->Bind(wxEVT_TIMER, &GraphicalFeatureTransportHandler::OnTimer, this);
@@ -21807,7 +21813,7 @@ template<class NON_GUI> GraphicalFeatureTransportHandler<NON_GUI>::GraphicalFeat
 
 
 //this method triggers the animation
-template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::operator()(void) {
+template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, F>::operator()(void) {
     
     //the animation transport starts here
     timer->Start(
@@ -21818,7 +21824,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::operator
 }
 
 //this method iterates the animation
-template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
+template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
     if((t < (wxGetApp().n_animation_steps.value))) {
         //the time parameter is undedr its maximum value

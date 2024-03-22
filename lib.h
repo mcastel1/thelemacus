@@ -55,7 +55,7 @@ class RouteFrame;
 class DrawPanel;
 class Position;
 class Cartesian;
-template <class NON_GUI> class GraphicalFeatureTransportHandler;
+template <class NON_GUI, class F> class GraphicalFeatureTransportHandler;
 class LengthFormat;
 class RouteType;
 class Projection;
@@ -2854,7 +2854,7 @@ public:
 
 
 //a hanlder to transport a non-GUI object of type NON_GUI (NON_GUI may be equal to Position, Route, ...)  with an animation
-template <class NON_GUI> class GraphicalFeatureTransportHandler: public MotionHandler{
+template <class NON_GUI, class F> class GraphicalFeatureTransportHandler: public MotionHandler{
     
 public:
     
@@ -2863,8 +2863,9 @@ public:
     String type_of_transported_object;
     //at each step of the transport, *transporting_route_temp is set to be a part of the full Route (transporting_route) used to transport the object
     Route transporting_route, transporting_route_temp;
+    F* f;
     
-    GraphicalFeatureTransportHandler(ListFrame*, NON_GUI*, const String&, const Route&);
+    GraphicalFeatureTransportHandler(ListFrame*, NON_GUI*, const String&, const Route&, F*);
     void operator()(void);
 
     void OnTimer(wxTimerEvent&);

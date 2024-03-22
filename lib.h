@@ -1323,6 +1323,22 @@ public:
     
 };
 
+
+//this functor sets the non-GUI object *object_a  (for example, a Position, Route...) of type NON_GUI equal to *object_b
+template<class NON_GUI> class SetObject{
+    
+public:
+    
+    SetObject(NON_GUI*);
+    
+    //the frame which called this struct
+    NON_GUI *object_a, *object_b;
+    
+    void operator()(void);
+    
+};
+
+
 template<class P> class TabulateDays{
     
 public:

@@ -15239,7 +15239,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
         
         String new_label;
-        GraphicalFeatureTransportHandler<Route, void>* transport_handler;
+        GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> >* transport_handler;
         
         
         if ((parent->transported_object_type) == String("sight")) {
@@ -15250,13 +15250,13 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
             
         }
         
-        transport_handler = new GraphicalFeatureTransportHandler<Route, void>(
-                                                                        parent,
-                                                                        &((parent->data->route_list)[(parent->i_object_to_transport)]),
-                                                                        (parent->transported_object_type),
-                                                                        ((parent->data->route_list)[(parent->i_transporting_route)]),
-                                                                              NULL
-                                                                        );
+        transport_handler = new GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> >(
+                                                                                                 parent,
+                                                                                                 &((parent->data->route_list)[(parent->i_object_to_transport)]),
+                                                                                                 (parent->transported_object_type),
+                                                                                                 ((parent->data->route_list)[(parent->i_transporting_route)]),
+                                                                                                 parent->unset_idling
+                                                                                                 );
         
         //start the transport
         (*transport_handler)();
@@ -15264,46 +15264,46 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
     if ((parent->transported_object_type) == String("position")) {
         
-        GraphicalFeatureTransportHandler<Position, void>* transport_handler;
+        GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> >* transport_handler;
         //auxiliary_transport_handler will be used to transport the transporting Route in such a way that its starting point coincides with the object to transport. Then the actual transport of transported_object will be done, and then the transporting Route is transported back to its original position
-        GraphicalFeatureTransportHandler<Route, void>* auxiliary_transport_handler;
+        GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> > >* auxiliary_transport_handler;
         
         
         //the id of the Position that will be transported,
         (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
         
-        auxiliary_transport_handler = new GraphicalFeatureTransportHandler<Route, void>(
-                                                                                  parent,
-                                                                                  &(parent->data->route_list)[(parent->i_transporting_route)],
-                                                                                  String("route"),
-                                                                                  Route(RouteType(Route_types[0]), (parent->data->route_list)[(parent->i_transporting_route)].reference_position, ((parent->data->position_list)[(parent->i_object_to_transport)])),
-                                                                                        NULL
-                                                                                  );
+        auxiliary_transport_handler = new GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> > >(
+                                                                                                                                                        parent,
+                                                                                                                                                        &(parent->data->route_list)[(parent->i_transporting_route)],
+                                                                                                                                                        String("route"),
+                                                                                                                                                        Route(RouteType(Route_types[0]), (parent->data->route_list)[(parent->i_transporting_route)].reference_position, ((parent->data->position_list)[(parent->i_object_to_transport)])),
+                                                                                                                                                        transport_handler
+                                                                                                                                                        );
         
-        transport_handler = new GraphicalFeatureTransportHandler<Position, void>(
-                                                                           parent,
-                                                                           &((parent->data->position_list)[(parent->i_object_to_transport)]),
-                                                                           (parent->transported_object_type),
-                                                                           ((parent->data->route_list)[(parent->i_transporting_route)]),
-                                                                                 NULL
-                                                                           );
+        transport_handler = new GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> >(
+                                                                                                    parent,
+                                                                                                    &((parent->data->position_list)[(parent->i_object_to_transport)]),
+                                                                                                    (parent->transported_object_type),
+                                                                                                    ((parent->data->route_list)[(parent->i_transporting_route)]),
+                                                                                                    parent->unset_idling
+                                                                                                    );
         
         //these timers of auxiliary_transport_handler and transport_handler run at the same time -> change this with CallAfter and a lambda call
         //start the auxiliary transport
         (*auxiliary_transport_handler)();
-        (*transport_handler)();
+        //        (*transport_handler)();
         
     }
     
-    parent->CallAfter([this, transporting_route_saved]()->void {
-        //set (parent->data->route_list)[(parent->i_transporting_route)] equal to its value before the transport, update parent and re-draw everthing
-        (parent->data->route_list)[(parent->i_transporting_route)]  = transporting_route_saved;
-        parent->listcontrol_sights->set((parent->data->sight_list), false);
-        parent->listcontrol_routes->set((parent->data->route_list), false);
-        parent->Resize();
-        parent->DrawAll();
-    });
+//    parent->CallAfter([this, transporting_route_saved]()->void {
+//        //set (parent->data->route_list)[(parent->i_transporting_route)] equal to its value before the transport, update parent and re-draw everthing
+//        (parent->data->route_list)[(parent->i_transporting_route)]  = transporting_route_saved;
+//        parent->listcontrol_sights->set((parent->data->sight_list), false);
+//        parent->listcontrol_routes->set((parent->data->route_list), false);
+//        parent->Resize();
+//        parent->DrawAll();
+//    });
     
     event.Skip(true);
     
@@ -15320,7 +15320,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     if (((parent->transported_object_type) == String("sight")) || ((parent->transported_object_type) == String("route"))) {
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
         
-        GraphicalFeatureTransportHandler<Route, void>* transport_handler;
+        GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> >* transport_handler;
 
         
         if ((parent->transported_object_type) == String("sight")) {
@@ -15333,12 +15333,12 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         }
         
         
-        transport_handler = new GraphicalFeatureTransportHandler<Route, void>(
+        transport_handler = new GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> >(
                                                                               parent,
                                                                               &((parent->data->route_list)[(parent->i_object_to_transport)]),
                                                                               (parent->transported_object_type),
                                                                               ((parent->data->route_list)[(parent->i_transporting_route)]),
-                                                                              NULL
+                                                                              parent->unset_idling
                                                                               );
         
         //start the transport
@@ -15349,17 +15349,17 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     if ((parent->transported_object_type) == String("position")) {
         //I am transporting a Position: allocate transport_handler with template NON_GUI = Position
         
-        GraphicalFeatureTransportHandler<Position, void>* transport_handler;
+        GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> >* transport_handler;
         
         
         //the id of the Route or Position that will be transported
         (parent->i_object_to_transport) = ((int)(parent->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
         
-        transport_handler = new GraphicalFeatureTransportHandler<Position, void>(parent,
+        transport_handler = new GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> >(parent,
                                                                                  &((parent->data->position_list)[(parent->i_object_to_transport)]),
                                                                                  (parent->transported_object_type),
                                                                                  ((parent->data->route_list)[(parent->i_transporting_route)]),
-                                                                                 NULL
+                                                                                 parent->unset_idling
                                                                                  );
         
         //start the transport
@@ -22002,7 +22002,10 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         }
 
         timer->Stop();
-        (*(parent->unset_idling))();
+        
+        if(f != NULL){
+            (*f)();
+        }
 
     }
 

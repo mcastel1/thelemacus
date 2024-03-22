@@ -15221,6 +15221,8 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
 //if an item in listcontrol_sights/positions/routes is selected, I transport the Sight/Position/Route under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event) {
     
+    Route transporting_route_saved;
+    
     //now I no longer need route_list to contain only the available Routes for transport -> I put back all the Routes before the transport into route_list by copying route_list_saved into route_list.
     // PaintEvent() will need points_route_list to be updated according to this change -> I call TabulateRoutesAll() to update points_route_list
     parent->data->route_list.resize((parent->route_list_saved.size()));
@@ -15230,7 +15232,9 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     //this is the # of the transporting Route in the full Route list given by data->route_list
     (parent->i_transporting_route) = (parent->map)[(parent->listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
 
-
+    //during the animation, (parent->data->route_list)[(parent->i_transporting_route)] will be transported -> there may be accumulating numerical errors when I transport it back -> I store it in transporting_route_saved and then set (parent->data->route_list)[(parent->i_transporting_route)] equal to transporting_route_saved at the end of the whole animation
+    transporting_route_saved = (parent->data->route_list)[(parent->i_transporting_route)];
+    
     if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
 
@@ -15286,11 +15290,11 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         //these timers of auxiliary_transport_handler and transport_handler run at the same time -> change this with CallAfter and a lambda call
         //start the auxiliary transport
         auxiliary_transport_handler->Transport();
-//        transport_handler->Transport();
-        
-        
         transport_handler->Transport();
         
+        
+        (parent->data->route_list)[(parent->i_transporting_route)]  = transporting_route_saved;
+
 
     }
     

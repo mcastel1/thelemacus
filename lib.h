@@ -1324,13 +1324,15 @@ public:
 };
 
 
-//this functor sets the non-GUI object *object_a  (for example, a Position, Route...) of type NON_GUI equal to *object_b
-template<class NON_GUI> class SetObject{
+//this functor sets the non-GUI object *object_a  (for example, a Position, Route...) of type NON_GUI equal to *object_b and sets and redraws everything in the parent of type P
+template<class NON_GUI, class P> class SetObjectAndRedraw{
     
 public:
-    NON_GUI *object_a, *object_b;
+    NON_GUI *object_a;
+    NON_GUI object_b;
+    P* parent;
 
-    SetObject(NON_GUI*, NON_GUI*);
+    SetObjectAndRedraw(NON_GUI*, const NON_GUI, P*);
     
     void operator()(void);
     

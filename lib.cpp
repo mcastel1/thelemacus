@@ -14798,18 +14798,24 @@ template<class P> template <class T> void CheckAngle<P>::operator()(T& event) {
 }
 
 
-template<class NON_GUI> SetObject<NON_GUI>::SetObject(NON_GUI* object_a_in, NON_GUI* object_b_in){
+template<class NON_GUI, class P> SetObjectAndRedraw<NON_GUI, P>::SetObjectAndRedraw(NON_GUI* object_a_in, const NON_GUI object_b_in, P* parent_in){
     
     object_a = object_a_in;
     object_b = object_b_in;
+    parent = parent_in;
 
 }
 
 
 //set *object_a equal to *object_b
-template<class NON_GUI> void SetObject<NON_GUI>::operator()(void){
+template<class NON_GUI, class P> void SetObjectAndRedraw<NON_GUI, P>::operator()(void){
     
-    (*object_a) = (*object_b);
+    (*object_a) = object_b;
+    
+    parent->listcontrol_sights->set((parent->data->sight_list), false);
+    parent->listcontrol_routes->set((parent->data->route_list), false);
+    parent->Resize();
+    parent->DrawAll();
 
 }
 
@@ -15282,12 +15288,12 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     if ((parent->transported_object_type) == String("position")) {
         
         Route transporting_route_saved;
-        SetObject<Route>* set_back_transporting_route;
+        SetObjectAndRedraw<Route, ListFrame>* set_back_transporting_route;
         //auxiliary_transport_handler_inbound will be used to transport the transporting Route in such a way that its starting point coincides with the object to transport at the end of the transport (inbound), to set the transporting Route back where it was at the beginning
-        GraphicalFeatureTransportHandler<Route, SetObject<Route> >* auxiliary_transport_handler_inbound;
-        GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, SetObject<Route> > >* transport_handler;
+        GraphicalFeatureTransportHandler<Route, SetObjectAndRedraw<Route, ListFrame> >* auxiliary_transport_handler_inbound;
+        GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, SetObjectAndRedraw<Route, ListFrame> > >* transport_handler;
         //auxiliary_transport_handler_outbount will be used to transport the transporting Route in such a way that its starting point coincides with the object to transport at the beginning of the transport (outbound). Then the actual transport of transported_object will be done, and then the transporting Route is transported back to its original position
-        GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, SetObject<Route> > > >* auxiliary_transport_handler_outbound;
+        GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, SetObjectAndRedraw<Route, ListFrame> > > >* auxiliary_transport_handler_outbound;
         
         
         transporting_route_saved = (parent->data->route_list)[(parent->i_transporting_route)];
@@ -15295,11 +15301,12 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         //the id of the Position that will be transported,
         (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
-        set_back_transporting_route = new SetObject<Route>(
-                                                           &(parent->data->route_list)[(parent->i_transporting_route)],
-                                                           &transporting_route_saved
-                                                           );
-        auxiliary_transport_handler_inbound = new GraphicalFeatureTransportHandler<Route, SetObject<Route> >(parent,
+        set_back_transporting_route = new SetObjectAndRedraw<Route, ListFrame>(
+                                                                      &(parent->data->route_list)[(parent->i_transporting_route)],
+                                                                      transporting_route_saved,
+                                                                      parent
+                                                                      );
+        auxiliary_transport_handler_inbound = new GraphicalFeatureTransportHandler<Route, SetObjectAndRedraw<Route, ListFrame> >(parent,
                                                                                                              &(parent->data->route_list)[(parent->i_transporting_route)],
                                                                                                              String("route"),
                                                                                                              Route(RouteType(Route_types[0]),
@@ -15307,14 +15314,14 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                                                    (parent->data->route_list)[(parent->i_transporting_route)].reference_position),
                                                                                                              set_back_transporting_route
                                                                                                              );
-        transport_handler = new GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, SetObject<Route> > >(
+        transport_handler = new GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, SetObjectAndRedraw<Route, ListFrame> > >(
                                                                                                                                         parent,
                                                                                                                                         &((parent->data->position_list)[(parent->i_object_to_transport)]),
                                                                                                                                         (parent->transported_object_type),
                                                                                                                                         ((parent->data->route_list)[(parent->i_transporting_route)]),
                                                                                                                                         auxiliary_transport_handler_inbound
                                                                                                                                         );
-        auxiliary_transport_handler_outbound = new GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, SetObject<Route> > > >(
+        auxiliary_transport_handler_outbound = new GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, SetObjectAndRedraw<Route, ListFrame> > > >(
                                                                                                                                                                                                      parent,
                                                                                                                                                                                                      &(parent->data->route_list)[(parent->i_transporting_route)],
                                                                                                                                                                                                      String("route"),

@@ -136,6 +136,7 @@
         - if you create a new Route to transport and click on the Route type dropdwon menu, there are only two items in the menu (loxodfrome and orthodrome) but the recent_items still has 3 entries as for a regular Route -> segmentation fault
  on OSX:
  on WIN32:
+        - some images are still too large (see image of button to show chart in ListFrame)
         - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
  */
 

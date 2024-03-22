@@ -15264,35 +15264,46 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
     if ((parent->transported_object_type) == String("position")) {
         
-        GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> >* transport_handler;
-        //auxiliary_transport_handler will be used to transport the transporting Route in such a way that its starting point coincides with the object to transport. Then the actual transport of transported_object will be done, and then the transporting Route is transported back to its original position
-        GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> > >* auxiliary_transport_handler;
+        //auxiliary_transport_handler_outbount will be used to transport the transporting Route in such a way that its starting point coincides with the object to transport at the beginning of the transport (outbound). Then the actual transport of transported_object will be done, and then the transporting Route is transported back to its original position
+        GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> > > >* auxiliary_transport_handler_outbound;
+        GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> > >* transport_handler;
+       //auxiliary_transport_handler_inbound will be used to transport the transporting Route in such a way that its starting point coincides with the object to transport at the end of the transport (inbound), to set the transporting Route back where it was at the beginning
+        GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> >* auxiliary_transport_handler_inbound;
+ 
         
         
         //the id of the Position that will be transported,
         (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
         
-        transport_handler = new GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> >(
-                                                                                                    parent,
-                                                                                                    &((parent->data->position_list)[(parent->i_object_to_transport)]),
-                                                                                                    (parent->transported_object_type),
-                                                                                                    ((parent->data->route_list)[(parent->i_transporting_route)]),
-                                                                                                    parent->unset_idling
-                                                                                                    );
-        auxiliary_transport_handler = new GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> > >(
-                                                                                                                                                        parent,
-                                                                                                                                                        &(parent->data->route_list)[(parent->i_transporting_route)],
-                                                                                                                                                        String("route"),
-                                                                                                                                                        Route(RouteType(Route_types[0]), (parent->data->route_list)[(parent->i_transporting_route)].reference_position, ((parent->data->position_list)[(parent->i_object_to_transport)])),
-                                                                                                                                                        transport_handler
-                                                                                                                                                        );
+        auxiliary_transport_handler_inbound = new GraphicalFeatureTransportHandler<Route,  UnsetIdling<ListFrame> >(parent,
+                                                                                                                    &(parent->data->route_list)[(parent->i_transporting_route)],
+                                                                                                                    String("route"),
+                                                                                                                    Route(RouteType(Route_types[0]),
+                                                                                                                          ((parent->data->position_list)[(parent->i_object_to_transport)]),
+                                                                                                                          (parent->data->route_list)[(parent->i_transporting_route)].reference_position),
+                                                                                                                    parent->unset_idling
+                                                                                                                    );
+        transport_handler = new GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> > >(
+                                                                                                                                              parent,
+                                                                                                                                              &((parent->data->position_list)[(parent->i_object_to_transport)]),
+                                                                                                                                              (parent->transported_object_type),
+                                                                                                                                              ((parent->data->route_list)[(parent->i_transporting_route)]),
+                                                                                                                                              auxiliary_transport_handler_inbound
+                                                                                                                                              );
+        auxiliary_transport_handler_outbound = new GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> > > >(
+                                                                                                                                                                                                           parent,
+                                                                                                                                                                                                           &(parent->data->route_list)[(parent->i_transporting_route)],
+                                                                                                                                                                                                           String("route"),
+                                                                                                                                                                                                           Route(RouteType(Route_types[0]), (parent->data->route_list)[(parent->i_transporting_route)].reference_position, ((parent->data->position_list)[(parent->i_object_to_transport)])),
+                                                                                                                                                                                                           transport_handler
+                                                                                                                                                                                                           );
         
 
         
         //these timers of auxiliary_transport_handler and transport_handler run at the same time -> change this with CallAfter and a lambda call
         //start the auxiliary transport
-        (*auxiliary_transport_handler)();
+        (*auxiliary_transport_handler_outbound)();
         //        (*transport_handler)();
         
     }

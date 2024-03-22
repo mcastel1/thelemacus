@@ -44,8 +44,8 @@ Data:
 		Route #2:
 			type = loxodrome
 			start position:
-				latitude = 22° 3.000000000000043'
-				longitude = 356° 56.99999999999932'
+				latitude = 331° 9.410086378336473'
+				longitude = 121° 34.9201249999993'
 				label = 2024-01-21 17:04:03 UTC+2
 			starting heading = 19° 3.000000000000043'
 			length format = time and speed
@@ -84,8 +84,8 @@ Data:
 			longitude = 315° 55.56999999999789'
 			label = Siamo in biblioteca
 		Position #2:
-			latitude = 16° 13.05338689690828'
-			longitude = 45° 41.20075273385268'
+			latitude = 0° 35.11778503992902'
+			longitude = 59° 12.07925000000046'
 			label =  transported with Michele 
 Recent bodies = 12 10 8
 Recent projections = 1 0

@@ -15286,16 +15286,10 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         //these timers of auxiliary_transport_handler and transport_handler run at the same time -> change this with CallAfter and a lambda call
         //start the auxiliary transport
         auxiliary_transport_handler->Transport();
-
-        
-        //start the transport
-        
-//        parent->CallAfter(
-//                  [=]  {
 //        transport_handler->Transport();
-//                  }
-//                  );
         
+        
+        transport_handler->Transport();
         
 
     }
@@ -21820,10 +21814,11 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::Transpor
 //this method iterates the animation
 template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
-    if (t < (wxGetApp().n_animation_steps.value)) {
+    if((t < (wxGetApp().n_animation_steps.value))) {
+        //the time parameter is undedr its maximum value
 
-        if (t == 0) {
-            //the transport has just started
+        if((t == 0) && (!(parent->idling))) {
+            //I am at the beginning of the transport and *parent is not in idling mode -> proceed with the transport
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
             (*(parent->set_idling))();
@@ -21858,9 +21853,12 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
             //I brind all ChartFrames to front to show the animation
             wxGetApp().ShowChart(event);
+            
+            t++;
 
         }
-        else {
+        
+        if(t > 0){
             //the transport animation is in progress -> do the next chunk
 
             transporting_route_temp.length.set(
@@ -21894,13 +21892,12 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
 
             parent->RefreshAll();
             //            cout << "\t\t t= " << t << "\n";
+            
+            t++;
 
         }
 
-        t++;
-
-    }
-    else {
+    }else {
         //the transport  is over
 
         if (type_of_transported_object == String("position")) {
@@ -21958,7 +21955,6 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
         }
         
         //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
-        (*(parent->unset_idling))();
 
         parent->listcontrol_sights->set((parent->data->sight_list), false);
         parent->listcontrol_routes->set((parent->data->route_list), false);
@@ -21994,6 +21990,7 @@ template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::OnTimer(
         }
 
         timer->Stop();
+        (*(parent->unset_idling))();
 
     }
 

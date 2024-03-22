@@ -10803,7 +10803,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
         wxID_ANY,
         Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
         wxDefaultPosition,
-       ToDIP(wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
+       wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
         wxBU_EXACTFIT | wxSIMPLE_BORDER
     );
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
@@ -17624,7 +17624,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
                                              wxID_ANY,
                                              Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
                                              wxDefaultPosition,
-                                             ToDIP(wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
+                                             (wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
                                              wxBU_EXACTFIT | wxSIMPLE_BORDER
                                              );
         button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowChart<wxCommandEvent>, &wxGetApp());
@@ -17635,7 +17635,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
                                                      wxID_ANY,
                                                      Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
                                                      wxDefaultPosition,
-                                                     ToDIP(wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
+                                                     (wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
                                                      wxBU_EXACTFIT | wxSIMPLE_BORDER
                                                      );
         button_compute_position->Bind(wxEVT_BUTTON, &ListFrame::ComputePosition<wxCommandEvent>, this);

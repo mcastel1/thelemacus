@@ -1,0 +1,82 @@
+Last login: Fri Mar 22 14:52:24 on ttys006
+michele@Micheles-MacBook-Pro ~ % cd ~/Dropbox/homochirality/gillespie
+michele@Micheles-MacBook-Pro gillespie % ls
+gillespie
+michele@Micheles-MacBook-Pro gillespie % cd fil
+cd: no such file or directory: fil
+michele@Micheles-MacBook-Pro gillespie % cd gillespie 
+michele@Micheles-MacBook-Pro gillespie % ls
+gillespie		gillespie alias		gillespie.xcodeproj
+michele@Micheles-MacBook-Pro gillespie % cd fil
+cd: no such file or directory: fil
+michele@Micheles-MacBook-Pro gillespie % cd gillespie
+michele@Micheles-MacBook-Pro gillespie % ls
+bits.cpp		bitset.hpp		double.hpp		gillespie.entitlements	lib.cpp			main.o			run_mesopsl.slurm~	test_bits.nb
+bits.hpp		connect_mesopsl.sh	fraction.cpp		int.cpp			main.cpp		mesopsl			system.cpp		unsigned_int.cpp
+bitset.cpp		double.cpp		fraction.hpp		int.hpp			main.hpp		run_mesopsl.slurm	system.hpp		unsigned_int.hpp
+michele@Micheles-MacBook-Pro gillespie % grh
+HEAD is now at 1b3476d added substraction of 1 to a[0]
+michele@Micheles-MacBook-Pro gillespie %  g++ main.cpp -llapack -lgsl -lcblas -lm -O3 -Wno-deprecated -I ./ -I/usr/local/include/gsl/ -o main.o -Wall -DHAVE_INLINE
+
+michele@Micheles-MacBook-Pro gillespie %  ./main.o -s 0 -S 5
+
+
+Time for [n_bits*S] Iterate()s without bits = 		 2.78130000e-02s
+Time for S Iterate()s with bits = 		         9.28800000e-03s
+
+
+dummy print: {3573 1330 3207 2483 7910 7655 2393 7646 2364 2532 329 2419 1138 5822 7910 4040 2827 3587 1476 1510 6452 2393 4409 3809 7979 5628 1178 494 7170 7150 7066 5558 5124 2472 6252 1689 5260 6977 414 841 6188 1736 4607 4535 4635 6137 5475 5203 7617 1272 1392 3396 3396 1972 2923 3285 2923 5467 891 1977 444 4512 424 4159 }
+00
+michele@Micheles-MacBook-Pro gillespie %  g++ main.cpp -llapack -lgsl -lcblas -lm -O3 -Wno-deprecated -I ./ -I/usr/local/include/gsl/ -o main.o -Wall -DHAVE_INLINE
+
+michele@Micheles-MacBook-Pro gillespie %  ./main.o -s 0 -S 5                                                                                                       
+
+
+Time for [n_bits*S] Iterate()s without bits = 		 2.77030000e-02s
+Time for S Iterate()s with bits = 		         9.35000000e-03s
+
+
+dummy print: {3573 1330 3207 2483 7910 7655 2393 7646 2364 2532 329 2419 1138 5822 7910 4040 2827 3587 1476 1510 6452 2393 4409 3809 7979 5628 1178 494 7170 7150 7066 5558 5124 2472 6252 1689 5260 6977 414 841 6188 1736 4607 4535 4635 6137 5475 5203 7617 1272 1392 3396 3396 1972 2923 3285 2923 5467 891 1977 444 4512 424 4159 }
+00
+michele@Micheles-MacBook-Pro gillespie %  ./main.o -s 0 -S 5
+
+\
+Time for [n_bits*S] Iterate()s without bits = 		 2.73040000e-02s
+Time for S Iterate()s with bits = 		         9.23100000e-03s
+
+
+dummy print: {3573 1330 3207 2483 7910 7655 2393 7646 2364 2532 329 2419 1138 5822 7910 4040 2827 3587 1476 1510 6452 2393 4409 3809 7979 5628 1178 494 7170 7150 7066 5558 5124 2472 6252 1689 5260 6977 414 841 6188 1736 4607 4535 4635 6137 5475 5203 7617 1272 1392 3396 3396 1972 2923 3285 2923 5467 891 1977 444 4512 424 4159 }
+00
+michele@Micheles-MacBook-Pro gillespie %  g++ main.cpp -llapack -lgsl -lcblas -lm -O3 -Wno-deprecated -I ./ -I/usr/local/include/gsl/ -o main.o -Wall -DHAVE_INLINE
+
+michele@Micheles-MacBook-Pro gillespie %  ./main.o -s 0 -S 5                                                                                                       
+
+
+Time for [n_bits*S] Iterate()s without bits = 		 2.92500000e-02s
+Time for S Iterate()s with bits = 		         9.06600000e-03s
+
+Gain bits/nobits = 3.22634017e+00
+
+dummy print: {3573 1330 3207 2483 7910 7655 2393 7646 2364 2532 329 2419 1138 5822 7910 4040 2827 3587 1476 1510 6452 2393 4409 3809 7979 5628 1178 494 7170 7150 7066 5558 5124 2472 6252 1689 5260 6977 414 841 6188 1736 4607 4535 4635 6137 5475 5203 7617 1272 1392 3396 3396 1972 2923 3285 2923 5467 891 1977 444 4512 424 4159 }
+00
+michele@Micheles-MacBook-Pro gillespie %  g++ main.cpp -llapack -lgsl -lcblas -lm -O3 -Wno-deprecated -I ./ -I/usr/local/include/gsl/ -o main.o -Wall -DHAVE_INLINE
+
+michele@Micheles-MacBook-Pro gillespie %  ./main.o -s 0 -S 5                                                                                                       
+
+
+Time for [n_bits*S] Iterate()s without bits = 		 2.89300000e-02s
+Time for S Iterate()s with bits = 		         5.52500000e-03s
+
+Gain bits/nobits = 5.23619910e+00
+
+dummy print: {27 27 51 33 68 65 42 17 36 36 41 60 12 12 57 27 59 36 66 17 27 57 59 0 41 27 42 0 12 60 51 0 12 13 16 68 82 73 57 57 58 36 102 60 57 57 42 49 58 55 42 50 60 36 66 76 36 41 60 12 59 42 46 41 }
+00
+michele@Micheles-MacBook-Pro gillespie % grh
+HEAD is now at b0414d1 Print out gain
+michele@Micheles-MacBook-Pro gillespie %  g++ main.cpp -llapack -lgsl -lcblas -lm -O3 -Wno-deprecated -I ./ -I/usr/local/include/gsl/ -o main.o -Wall -DHAVE_INLINE
+
+michele@Micheles-MacBook-Pro gillespie %  ./main.o -s 0 -S 5                                                                                                       
+
+zsh: segmentation fault  ./main.o -s 0 -S 5
+michele@Micheles-MacBook-Pro gillespie %  ./main.o -N 128 -s 0 -S 5
+

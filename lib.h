@@ -2853,7 +2853,7 @@ public:
 };
 
 
-//a hanlder to transport a non-GUI object of type NON_GUI (NON_GUI may be equal to Position, Route, ...)  with an animation
+//a hanlder to transport a non-GUI object of type NON_GUI (NON_GUI may be equal to Position, Route, ...)  with an animation. When the transport is over, this may exectued a functor of type F. If nothing is supposed to be exectued at the end of the transport, set F = void
 template <class NON_GUI, class F> class GraphicalFeatureTransportHandler: public MotionHandler{
     
 public:

@@ -15293,11 +15293,18 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         transport_handler->Transport();
         
         
-        (parent->data->route_list)[(parent->i_transporting_route)]  = transporting_route_saved;
 
 
     }
-    
+
+    parent->CallAfter([this, transporting_route_saved]()->void {
+        //set (parent->data->route_list)[(parent->i_transporting_route)] equal to its value before the transport, update parent and re-draw everthing
+        (parent->data->route_list)[(parent->i_transporting_route)]  = transporting_route_saved;
+        parent->listcontrol_sights->set((parent->data->sight_list), false);
+        parent->listcontrol_routes->set((parent->data->route_list), false);
+        parent->Resize();
+        parent->DrawAll();
+    });
   
     event.Skip(true);
 

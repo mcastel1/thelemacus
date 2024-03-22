@@ -14797,6 +14797,23 @@ template<class P> template <class T> void CheckAngle<P>::operator()(T& event) {
 
 }
 
+
+template<class NON_GUI> SetObject<NON_GUI>::SetObject(NON_GUI* object_a_in, NON_GUI* object_b_in){
+    
+    object_a = object_a_in;
+    object_b = object_b_in;
+
+}
+
+
+//set *object_a equal to *object_b
+template<class NON_GUI> void SetObject<NON_GUI>::operator()(void){
+    
+    (*object_a) = (*object_b);
+
+}
+
+
 template<class P> CheckDate<P>::CheckDate(DateField<P>* p_in) {
 
     p = p_in;

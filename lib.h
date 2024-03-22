@@ -1328,11 +1328,9 @@ public:
 template<class NON_GUI> class SetObject{
     
 public:
-    
-    SetObject(NON_GUI*);
-    
-    //the frame which called this struct
     NON_GUI *object_a, *object_b;
+
+    SetObject(NON_GUI*, NON_GUI*);
     
     void operator()(void);
     

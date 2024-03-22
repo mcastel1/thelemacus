@@ -15273,6 +15273,13 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
         
+        transport_handler = new GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> >(
+                                                                                                    parent,
+                                                                                                    &((parent->data->position_list)[(parent->i_object_to_transport)]),
+                                                                                                    (parent->transported_object_type),
+                                                                                                    ((parent->data->route_list)[(parent->i_transporting_route)]),
+                                                                                                    parent->unset_idling
+                                                                                                    );
         auxiliary_transport_handler = new GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> > >(
                                                                                                                                                         parent,
                                                                                                                                                         &(parent->data->route_list)[(parent->i_transporting_route)],
@@ -15281,13 +15288,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                                                                                         transport_handler
                                                                                                                                                         );
         
-        transport_handler = new GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> >(
-                                                                                                    parent,
-                                                                                                    &((parent->data->position_list)[(parent->i_object_to_transport)]),
-                                                                                                    (parent->transported_object_type),
-                                                                                                    ((parent->data->route_list)[(parent->i_transporting_route)]),
-                                                                                                    parent->unset_idling
-                                                                                                    );
+
         
         //these timers of auxiliary_transport_handler and transport_handler run at the same time -> change this with CallAfter and a lambda call
         //start the auxiliary transport
@@ -21829,7 +21830,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
     if((t < (wxGetApp().n_animation_steps.value))) {
         //the time parameter is undedr its maximum value
 
-        if((t == 0) && (!(parent->idling))) {
+        if(t == 0) {
             //I am at the beginning of the transport and *parent is not in idling mode -> proceed with the transport
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes

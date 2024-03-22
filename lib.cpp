@@ -15228,26 +15228,26 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     parent->data->route_list.resize((parent->route_list_saved.size()));
     copy((parent->route_list_saved.begin()), (parent->route_list_saved.end()), (parent->data->route_list.begin()));
     parent->TabulateRoutesAll();
-
+    
     //this is the # of the transporting Route in the full Route list given by data->route_list
     (parent->i_transporting_route) = (parent->map)[(parent->listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
-
+    
     //during the animation, (parent->data->route_list)[(parent->i_transporting_route)] will be transported -> there may be accumulating numerical errors when I transport it back -> I store it in transporting_route_saved and then set (parent->data->route_list)[(parent->i_transporting_route)] equal to transporting_route_saved at the end of the whole animation
     transporting_route_saved = (parent->data->route_list)[(parent->i_transporting_route)];
     
     if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
-
+        
         String new_label;
         GraphicalFeatureTransportHandler<Route>* transport_handler;
-
+        
         
         if ((parent->transported_object_type) == String("sight")) {
             //the transported object is a Sight
-
+            
             //the id of the Route that will be transported is the one of the Route related to the Sight that is being transported
             (parent->i_object_to_transport) = ((((parent->data->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
-
+            
         }
         
         transport_handler = new GraphicalFeatureTransportHandler<Route>(
@@ -15256,18 +15256,17 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                         (parent->transported_object_type),
                                                                         ((parent->data->route_list)[(parent->i_transporting_route)])
                                                                         );
-
+        
         //start the transport
-        transport_handler->Transport();
-
+        (*transport_handler)();
     }
-
+    
     if ((parent->transported_object_type) == String("position")) {
         
         GraphicalFeatureTransportHandler<Position>* transport_handler;
         //auxiliary_transport_handler will be used to transport the transporting Route in such a way that its starting point coincides with the object to transport. Then the actual transport of transported_object will be done, and then the transporting Route is transported back to its original position
         GraphicalFeatureTransportHandler<Route>* auxiliary_transport_handler;
-
+        
         
         //the id of the Position that will be transported,
         (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
@@ -15279,24 +15278,21 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                   String("route"),
                                                                                   Route(RouteType(Route_types[0]), (parent->data->route_list)[(parent->i_transporting_route)].reference_position, ((parent->data->position_list)[(parent->i_object_to_transport)]))
                                                                                   );
-
+        
         transport_handler = new GraphicalFeatureTransportHandler<Position>(
                                                                            parent,
                                                                            &((parent->data->position_list)[(parent->i_object_to_transport)]),
                                                                            (parent->transported_object_type),
                                                                            ((parent->data->route_list)[(parent->i_transporting_route)])
                                                                            );
-
+        
         //these timers of auxiliary_transport_handler and transport_handler run at the same time -> change this with CallAfter and a lambda call
         //start the auxiliary transport
-        auxiliary_transport_handler->Transport();
-        transport_handler->Transport();
+        (*auxiliary_transport_handler)();
+        (*transport_handler)();
         
-        
-
-
     }
-
+    
     parent->CallAfter([this, transporting_route_saved]()->void {
         //set (parent->data->route_list)[(parent->i_transporting_route)] equal to its value before the transport, update parent and re-draw everthing
         (parent->data->route_list)[(parent->i_transporting_route)]  = transporting_route_saved;
@@ -15305,9 +15301,9 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         parent->Resize();
         parent->DrawAll();
     });
-  
+    
     event.Skip(true);
-
+    
 }
 
 
@@ -15342,7 +15338,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
                                                                         );
         
         //start the transport
-        transport_handler->Transport();
+        (*transport_handler)();
 
     }
 
@@ -15362,8 +15358,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
                                                                            );
 
         //start the transport
-        transport_handler->Transport();
-
+(*transport_handler)();
     }
 
     event.Skip(true);
@@ -21811,8 +21806,8 @@ template<class NON_GUI> GraphicalFeatureTransportHandler<NON_GUI>::GraphicalFeat
 }
 
 
-//this method iterates the animation
-template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::Transport(void) {
+//this method triggers the animation
+template<class NON_GUI> void GraphicalFeatureTransportHandler<NON_GUI>::operator()(void) {
     
     //the animation transport starts here
     timer->Start(

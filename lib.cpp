@@ -15623,8 +15623,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
 
     //message and image shown if the time entered by the user is not covered by ephemerides' data. Both are set to empty at the construction of SightFrame
-    text_time_interval_not_ok = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize, 0);
-    image_time_interval_status = new wxStaticBitmap(panel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize);
+//    text_time_interval_not_ok = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize, 0);
+//    image_time_interval_status = new wxStaticBitmap(panel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize);
 
     //label
     StaticText* text_label = new StaticText(panel, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0);
@@ -15705,8 +15705,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     sizer_grid_time->Add(text_TAI_minus_UTC);
     TAI_minus_UTC->InsertIn<wxFlexGridSizer>(sizer_grid_time);
 
-    sizer_grid_time->Add(text_time_interval_not_ok);
-    sizer_grid_time->Add(image_time_interval_status);
+//    sizer_grid_time->Add(text_time_interval_not_ok);
+//    sizer_grid_time->Add(image_time_interval_status);
 
     sizer_grid_label->Add(text_label);
     label->InsertIn<wxFlexGridSizer>(sizer_grid_label);
@@ -18665,14 +18665,20 @@ bool SightFrame::is_ok(void) {
 
     //runs TimeIntervalOk to compute time_interval_ok, which will be used to determine whether button_reduce is enabled or not
     TimeIntervalOk(String(""));
+    
+    if(!time_interval_ok){
+        //the time interval lies outside the interval of ephemerides' data
+        
+        
+    }
 
-    text_time_interval_not_ok->SetLabel(wxString(time_interval_ok ? "" : "Time not enclosed in ephemerides' data!"));
-
-    image_time_interval_status->SetBitmap(
-        time_interval_ok ?
-        wxNullBitmap :
-        Bitmap(wxGetApp().path_file_warning_icon, wxGetApp().size_small_button)
-    );
+//    text_time_interval_not_ok->SetLabel(wxString(time_interval_ok ? "" : "Time not enclosed in ephemerides' data!"));
+//
+//    image_time_interval_status->SetBitmap(
+//        time_interval_ok ?
+//        wxNullBitmap :
+//        Bitmap(wxGetApp().path_file_warning_icon, wxGetApp().size_small_button)
+//    );
 
     return(
         (body->is_ok()) &&

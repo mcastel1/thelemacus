@@ -15284,13 +15284,13 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
             
         }
         
-        transport_handler = new GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> >(
-                                                                                                 parent,
-                                                                                                 &((parent->data->route_list)[(parent->i_object_to_transport)]),
-                                                                                                 (parent->transported_object_type),
-                                                                                                 ((parent->data->route_list)[(parent->i_transporting_route)]),
-                                                                                                 parent->unset_idling
-                                                                                                 );
+//        transport_handler = new GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> >(
+//                                                                                                 parent,
+//                                                                                                 &((parent->data->route_list)[(parent->i_object_to_transport)]),
+//                                                                                                 (parent->transported_object_type),
+//                                                                                                 ((parent->data->route_list)[(parent->i_transporting_route)]),
+//                                                                                                 parent->unset_idling
+//                                                                                                 );
         
         //start the transport
         (*transport_handler)();
@@ -15306,7 +15306,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, SetObjectAndRedraw<Route, ListFrame> > > >* auxiliary_transport_handler_outbound;
         
         
-        transporting_route_saved = (parent->data->route_list)[(parent->i_transporting_route)];
+        //        transporting_route_saved = (parent->data->route_list)[(parent->i_transporting_route)];
         
         //the id of the Position that will be transported,
         (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));

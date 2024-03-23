@@ -15260,6 +15260,12 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     //during the animation, (parent->data->route_list)[(parent->i_transporting_route)] will be transported -> there may be accumulating numerical errors when I transport it back -> I store it in transporting_route_saved and then set (parent->data->route_list)[(parent->i_transporting_route)] equal to transporting_route_saved at the end of the whole animation
     transporting_route_saved = (parent->data->route_list)[(parent->i_transporting_route)];
     
+    set_back_transporting_route = new SetObjectAndRedraw<Route, ListFrame>(
+                                                                  &(parent->data->route_list)[(parent->i_transporting_route)],
+                                                                  transporting_route_saved,
+                                                                  parent
+                                                                  );
+    
     if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
         
@@ -15311,11 +15317,6 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         //the id of the Position that will be transported,
         (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
         
-        set_back_transporting_route = new SetObjectAndRedraw<Route, ListFrame>(
-                                                                      &(parent->data->route_list)[(parent->i_transporting_route)],
-                                                                      transporting_route_saved,
-                                                                      parent
-                                                                      );
         auxiliary_transport_handler_inbound = new GraphicalFeatureTransportHandler<Route, SetObjectAndRedraw<Route, ListFrame> >(parent,
                                                                                                              &(parent->data->route_list)[(parent->i_transporting_route)],
                                                                                                              String("route"),

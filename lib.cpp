@@ -15245,6 +15245,8 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event) {
     
     Route transporting_route_saved;
+    //set_back_transporting_route is used to set the transporting Route back to its original value after the animation transport is finished, in order to avoid the accumulation of numerical errors if one transported it back 
+    SetObjectAndRedraw<Route, ListFrame>* set_back_transporting_route;
     
     //now I no longer need route_list to contain only the available Routes for transport -> I put back all the Routes before the transport into route_list by copying route_list_saved into route_list.
     // PaintEvent() will need points_route_list to be updated according to this change -> I call TabulateRoutesAll() to update points_route_list
@@ -15287,8 +15289,6 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     
     if ((parent->transported_object_type) == String("position")) {
         
-        Route transporting_route_saved;
-        SetObjectAndRedraw<Route, ListFrame>* set_back_transporting_route;
         //auxiliary_transport_handler_inbound will be used to transport the transporting Route in such a way that its starting point coincides with the object to transport at the end of the transport (inbound), to set the transporting Route back where it was at the beginning
         GraphicalFeatureTransportHandler<Route, SetObjectAndRedraw<Route, ListFrame> >* auxiliary_transport_handler_inbound;
         GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, SetObjectAndRedraw<Route, ListFrame> > >* transport_handler;

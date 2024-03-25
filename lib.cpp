@@ -16092,16 +16092,18 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     print_error_message = new PrintMessage<RouteFrame, UnsetIdling<RouteFrame> >(this, unset_idling);
 
     //if this RouteFrame has been constructed with route_in = NULL, then I allocate a new Route object with the pointer this->route and set list_route to a 'NULL' value (list_route = -1). Otherwise, the pointer route_in points to a valid Route object -> I let this->route point to route_in, and set list_route to list_route_in.
-    //if I am adding a brand new route, I name button_ok 'Add'. Otherwise I name it "Modify"
+    //if I am adding a brand new route, I name button_ok 'Add' if I am not adding it for transport, while I name button_ok 'Transport' if I am adding the Route for transport. Otherwise I name it "Modify"
     if (route_in != NULL) {
         route = route_in;
         position_in_listcontrol_routes = position_in_listcontrol_routes_in;
-        label_button_ok.set(String(""), String("Add"), String(""));
+        label_button_ok.set(String(""), String("Modify"), String(""));
     }
     else {
         route = new Route();
         position_in_listcontrol_routes = -1;
-        label_button_ok.set(String(""), String("Modify"), String(""));
+//        label_button_ok.set(String(""), String("Add"), String(""));
+        label_button_ok.set(String(""), String((for_transport ? "Transport" : "Add")), String(""));
+
     }
 
 

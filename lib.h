@@ -2451,7 +2451,7 @@ template<class P> class RouteTypeField: public MultipleItemField<P, RouteType, C
 public:
     
     
-    RouteTypeField(wxPanel*, RouteType*, vector<int>*);
+    RouteTypeField(wxPanel*, RouteType*, const vector<String>&, vector<int>*);
     void set(void);
     template<class E> void OnEdit(E&);
     void OnEdit();

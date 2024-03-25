@@ -16125,9 +16125,9 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     StaticText* text_type = new StaticText(panel, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0);
     //if the Route of *this is for transport, then only show 'loxodrome' and 'orthodrome' in type
     if (for_transport) {
-        type = new RouteTypeField<RouteFrame>(panel, &(route->type), &(wxGetApp().list_frame->data->recent_route_for_transport_types));
+        type = new RouteTypeField<RouteFrame>(panel, &(route->type), Route_for_transport_types, &(wxGetApp().list_frame->data->recent_route_for_transport_types));
     }else{
-        type = new RouteTypeField<RouteFrame>(panel, &(route->type), &(wxGetApp().list_frame->data->recent_route_types));
+        type = new RouteTypeField<RouteFrame>(panel, &(route->type), Route_types,  &(wxGetApp().list_frame->data->recent_route_types));
     }
 
     //Z
@@ -21343,7 +21343,7 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 }
 
 //constructor of a RouteTypeField object, based on the parent frame frame
-template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, RouteType* object_in, vector<int>* recent_items_in) : MultipleItemField<P, RouteType, CheckRouteType<P> >(panel_of_parent, object_in, Route_types, recent_items_in) {
+template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, RouteType* object_in, const vector<String>& route_types_in, vector<int>* recent_items_in) : MultipleItemField<P, RouteType, CheckRouteType<P> >(panel_of_parent, object_in, route_types_in, recent_items_in) {
 
     MultipleItemField<P, RouteType, CheckRouteType<P> >::check = new CheckRouteType<P>(this);
     MultipleItemField<P, RouteType, CheckRouteType<P> >::name->Bind(wxEVT_KILL_FOCUS, *(MultipleItemField<P, RouteType, CheckRouteType<P> >::check));

@@ -5666,6 +5666,7 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
     recent_projections.resize(wxGetApp().n_recent_projections.value);
     recent_length_formats.resize(wxGetApp().n_recent_length_formats.value);
     recent_route_types.resize(wxGetApp().n_recent_route_types.value);
+    recent_route_for_transport_types.resize(wxGetApp().n_recent_route_for_transport_types.value);
     recent_length_units.resize(wxGetApp().n_recent_length_units.value);
     recent_speed_units.resize(wxGetApp().n_recent_speed_units.value);
 
@@ -5890,6 +5891,7 @@ void Data::print(bool print_all_routes, String prefix, ostream& ostr) {
     print_recent_items(recent_projections, String("projections"), prefix, ostr);
     print_recent_items(recent_length_formats, String("length formats"), prefix, ostr);
     print_recent_items(recent_route_types, String("route types"), prefix, ostr);
+    print_recent_items(recent_route_for_transport_types, String("route for transport types"), prefix, ostr);
     print_recent_items(recent_length_units, String("length units"), prefix, ostr);
     print_recent_items(recent_speed_units, String("speed units"), prefix, ostr);
 
@@ -6434,6 +6436,7 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
     read_list_from_stream<S>(String("Recent projections"), input_stream, true, &recent_projections);
     read_list_from_stream<S>(String("Recent length formats"), input_stream, true, &recent_length_formats);
     read_list_from_stream<S>(String("Recent route types"), input_stream, true, &recent_route_types);
+    read_list_from_stream<S>(String("Recent route for transport types"), input_stream, true, &recent_route_for_transport_types);
     read_list_from_stream<S>(String("Recent length units"), input_stream, true, &recent_length_units);
     read_list_from_stream<S>(String("Recent speed units"), input_stream, true, &recent_speed_units);
 
@@ -16120,12 +16123,11 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     //type:a wxComboBox which indicates the type of the route (loxodrome, orthordrome or circle of equal altitude)
     StaticText* text_type = new StaticText(panel, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0);
-    type = new RouteTypeField<RouteFrame>(panel, &(route->type), &(wxGetApp().list_frame->data->recent_route_types));
     //if the Route of *this is for transport, then only show 'loxodrome' and 'orthodrome' in type
     if (for_transport) {
-        type->catalog.Remove(((Route_types[2]).value));
-        type->items.Remove(((Route_types[2]).value));
-        type->name->Set(type->items);
+        type = new RouteTypeField<RouteFrame>(panel, &(route->type), &(wxGetApp().list_frame->data->recent_route_for_transport_types));
+    }else{
+        type = new RouteTypeField<RouteFrame>(panel, &(route->type), &(wxGetApp().list_frame->data->recent_route_types));
     }
 
     //Z
@@ -16313,8 +16315,13 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     if (route_in == NULL) {
         //If the user is about to enter a brand new route, then the GUI fields are disabled/enables according to the currently selected value in *type
 
-        //set as route type the most recent item in recetn _route_types: set first type->object and then write in type the value written in type->object
-        type->object->set(Route_types[wxGetApp().list_frame->data->recent_route_types.front()]);
+        //set as route type the most recent item in recetn _route_types (or recent route_for_transport_types if the new Route has been created for a transport): set first type->object and then write in type the value written in type->object
+
+        if(for_transport){
+            type->object->set(Route_types[wxGetApp().list_frame->data->recent_route_for_transport_types.front()]);
+        }else{
+            type->object->set(Route_types[wxGetApp().list_frame->data->recent_route_types.front()]);
+        }
         type->MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame> >::set();
         
         length_format->object->set(LengthFormat_types[wxGetApp().list_frame->data->recent_length_formats.front()]);

@@ -12894,6 +12894,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
             //the drag operation has ended -> I set
             (parent->dragging_chart) = false;
+            (parent->parent->i_object_to_disconnect) = -1;
 
         }
         else {
@@ -13265,7 +13266,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 this->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
                 
                 if ((parent->parent->highlighted_route_now) != -1) {
-                    //set route_reference_position_drag_now to the start position (if the route is a loxodrome / orthodrome) or to the ground position (if the route is a circle of equal altitutde)
+                    //set route_reference_position_drag_now to the start Position (if the route is a loxodrome / orthodrome) or to the ground Position (if the route is a circle of equal altitutde)
                     
                     if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
                         
@@ -16458,6 +16459,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             //because I am modifying and thus altering the Route, I disconnect it from its related sight
             (parent->i_object_to_disconnect) = (route->related_sight.value);
             parent->DisconnectAndPromptMessage(event);
+            //set i_obeject_to_disconnect to its original value
+            (parent->i_object_to_disconnect) = -1;
 
         }
 

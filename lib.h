@@ -1328,11 +1328,10 @@ public:
 template<class NON_GUI, class P> class ToDoAtEndOfTransport{
     
 public:
-    NON_GUI *object_a;
-    NON_GUI object_b;
+    NON_GUI *object_a, *object_b;
     P* parent;
 
-    ToDoAtEndOfTransport(NON_GUI*, const NON_GUI, P*);
+    ToDoAtEndOfTransport(NON_GUI*, NON_GUI*, P*);
     
     void operator()(void);
     

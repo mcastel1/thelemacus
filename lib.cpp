@@ -14802,7 +14802,7 @@ template<class P> template <class T> void CheckAngle<P>::operator()(T& event) {
 }
 
 
-template<class NON_GUI, class P> ToDoAtEndOfTransport<NON_GUI, P>::ToDoAtEndOfTransport(NON_GUI* object_a_in, const NON_GUI object_b_in, P* parent_in){
+template<class NON_GUI, class P> ToDoAtEndOfTransport<NON_GUI, P>::ToDoAtEndOfTransport(NON_GUI* object_a_in, NON_GUI* object_b_in, P* parent_in){
     
     object_a = object_a_in;
     object_b = object_b_in;
@@ -14811,11 +14811,11 @@ template<class NON_GUI, class P> ToDoAtEndOfTransport<NON_GUI, P>::ToDoAtEndOfTr
 }
 
 
-//set *object_a equal to *object_b if object_a != NULL, and to the other tasks to be done at the end of a transport 
+//set *object_a equal to *object_b if object_a != NULL, and to the other tasks to be done at the end of a transport
 template<class NON_GUI, class P> void ToDoAtEndOfTransport<NON_GUI, P>::operator()(void){
     
     if(object_a){
-        (*object_a) = object_b;
+        (*object_a) = (*object_b);
     }
     
     if((parent->i_object_to_disconnect) != -1){
@@ -15260,8 +15260,8 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event) {
     
     Route transporting_route_saved;
-    //set_back_transporting_route is used to set the transporting Route back to its original value after the animation transport is finished, in order to avoid the accumulation of numerical errors if one transported it back
-    ToDoAtEndOfTransport<Route, ListFrame>* set_back_transporting_route;
+    //do the tasks tha need to be done at the end of the transport: set_back_transporting_route is used to set the transporting Route back to its original value after the animation transport is finished, in order to avoid the accumulation of numerical errors if one transported it back
+    ToDoAtEndOfTransport<Route, ListFrame>* to_do_at_end_of_transport;
     
     //now I no longer need route_list to contain only the available Routes for transport -> I put back all the Routes before the transport into route_list by copying route_list_saved into route_list.
     // PaintEvent() will need points_route_list to be updated according to this change -> I call TabulateRoutesAll() to update points_route_list
@@ -15275,9 +15275,9 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     //during the animation, (parent->data->route_list)[(parent->i_transporting_route)] will be transported -> there may be accumulating numerical errors when I transport it back -> I store it in transporting_route_saved and then set (parent->data->route_list)[(parent->i_transporting_route)] equal to transporting_route_saved at the end of the whole animation
     transporting_route_saved = (parent->data->route_list)[(parent->i_transporting_route)];
     
-    set_back_transporting_route = new ToDoAtEndOfTransport<Route, ListFrame>(
+    to_do_at_end_of_transport = new ToDoAtEndOfTransport<Route, ListFrame>(
                                                                   &(parent->data->route_list)[(parent->i_transporting_route)],
-                                                                  transporting_route_saved,
+                                                                  &transporting_route_saved,
                                                                   parent
                                                                   );
     
@@ -15320,7 +15320,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                                              Route(RouteType(Route_types[0]),
                                                                                                                    ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position,
                                                                                                                    transporting_route_saved.reference_position),
-                                                                                                             set_back_transporting_route
+                                                                                                             to_do_at_end_of_transport
                                                                                                              );
         transport_handler = new GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> > >(
                                                                                                                                         parent,
@@ -15364,7 +15364,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                                              Route(RouteType(Route_types[0]),
                                                                                                                    ((parent->data->position_list)[(parent->i_object_to_transport)]),
                                                                                                                    transporting_route_saved.reference_position),
-                                                                                                             set_back_transporting_route
+                                                                                                             to_do_at_end_of_transport
                                                                                                              );
         transport_handler = new GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> > >(
                                                                                                                                         parent,
@@ -15409,12 +15409,20 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     
     //the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
     (parent->i_transporting_route) = ((parent->listcontrol_routes)->GetItemCount()) - 1;
+    //do the tasks tha need to be done at the end of the transport
+    ToDoAtEndOfTransport<Route, ListFrame>* to_do_at_end_of_transport;
+
+    to_do_at_end_of_transport = new ToDoAtEndOfTransport<Route, ListFrame>(
+                                                                  NULL,
+                                                                  NULL,
+                                                                  parent
+                                                                  );
 
 
     if (((parent->transported_object_type) == String("sight")) || ((parent->transported_object_type) == String("route"))) {
         //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
         
-        GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> >* transport_handler;
+        GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> >* transport_handler;
 
         
         if ((parent->transported_object_type) == String("sight")) {
@@ -15427,13 +15435,13 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         }
         
         
-        transport_handler = new GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> >(
-                                                                              parent,
-                                                                              &((parent->data->route_list)[(parent->i_object_to_transport)]),
-                                                                              (parent->transported_object_type),
-                                                                              ((parent->data->route_list)[(parent->i_transporting_route)]),
-                                                                              parent->unset_idling
-                                                                              );
+        transport_handler = new GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> >(
+                                                                                                                 parent,
+                                                                                                                 &((parent->data->route_list)[(parent->i_object_to_transport)]),
+                                                                                                                 (parent->transported_object_type),
+                                                                                                                 ((parent->data->route_list)[(parent->i_transporting_route)]),
+                                                                                                                 to_do_at_end_of_transport
+                                                                                                                 );
         
         //start the transport
         (*transport_handler)();
@@ -15443,18 +15451,18 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     if ((parent->transported_object_type) == String("position")) {
         //I am transporting a Position: allocate transport_handler with template NON_GUI = Position
         
-        GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> >* transport_handler;
+        GraphicalFeatureTransportHandler<Position, ToDoAtEndOfTransport<Route, ListFrame> >* transport_handler;
         
         
         //the id of the Route or Position that will be transported
         (parent->i_object_to_transport) = ((int)(parent->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
         
-        transport_handler = new GraphicalFeatureTransportHandler<Position, UnsetIdling<ListFrame> >(parent,
-                                                                                 &((parent->data->position_list)[(parent->i_object_to_transport)]),
-                                                                                 (parent->transported_object_type),
-                                                                                 ((parent->data->route_list)[(parent->i_transporting_route)]),
-                                                                                 parent->unset_idling
-                                                                                 );
+        transport_handler = new GraphicalFeatureTransportHandler<Position, ToDoAtEndOfTransport<Route, ListFrame> >(parent,
+                                                                                                                    &((parent->data->position_list)[(parent->i_object_to_transport)]),
+                                                                                                                    (parent->transported_object_type),
+                                                                                                                    ((parent->data->route_list)[(parent->i_transporting_route)]),
+                                                                                                                    to_do_at_end_of_transport
+                                                                                                                    );
         
         //start the transport
         (*transport_handler)();

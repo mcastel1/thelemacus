@@ -1324,15 +1324,15 @@ public:
 };
 
 
-//this functor sets the non-GUI object *object_a  (for example, a Position, Route...) of type NON_GUI equal to *object_b and sets and redraws everything in the parent of type P
-template<class NON_GUI, class P> class SetObjectAndRedraw{
+//this functor does all the necessary tasks to be done at the end of an animated transporty: sets the non-GUI object *object_a  (for example, a Position, Route...) of type NON_GUI equal to *object_b, sets and redraws everything in the parent of type P, ...
+template<class NON_GUI, class P> class ToDoAtEndOfTransport{
     
 public:
     NON_GUI *object_a;
     NON_GUI object_b;
     P* parent;
 
-    SetObjectAndRedraw(NON_GUI*, const NON_GUI, P*);
+    ToDoAtEndOfTransport(NON_GUI*, const NON_GUI, P*);
     
     void operator()(void);
     

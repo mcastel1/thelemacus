@@ -14812,6 +14812,15 @@ template<class NON_GUI, class P> void SetObjectAndRedraw<NON_GUI, P>::operator()
     
     (*object_a) = object_b;
     
+    if((parent->i_object_to_disconnect) != -1){
+        
+        //print an info message
+        parent->print_warning_message->SetAndCall(NULL, String("Warning"), String("The transported route  was related to a sight! The route has been disconnected from the sight."), (wxGetApp().path_file_warning_icon));
+        
+       (parent->i_object_to_disconnect) = -1;
+        
+    }
+    
     parent->listcontrol_sights->set((parent->data->sight_list), false);
     parent->listcontrol_routes->set((parent->data->route_list), false);
     parent->Resize();
@@ -17192,6 +17201,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     mouse_moving = false;
     //when a ListFrame is created, no Route nor Position is  being dragged
     dragging_object = false;
+    i_object_to_disconnect = -1;
 
 
     set_idling = new SetIdling<ListFrame>(this);

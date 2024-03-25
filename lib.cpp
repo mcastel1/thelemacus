@@ -18192,8 +18192,8 @@ template<class E> void ListFrame::OnPressDeleteRoute(E& event) {
 
 }
 
-//disconnects sight i_sight from its related Route and prompt a message frame to inform the user
-template<class E> void ListFrame::DisconnectAndPromptMessage(E& event) {
+//disconnects sight i_sight from its related Route
+template<class E> void ListFrame::Disconnect(E& event) {
 
     int i_route;
 
@@ -18222,12 +18222,23 @@ template<class E> void ListFrame::DisconnectAndPromptMessage(E& event) {
 
     }
 
+    //the Route has been disconnected from the sight -> a new Route which is not connected to any Sight is created -> the data of the file has been modified
+    OnModifyFile();
+
+    event.Skip(true);
+
+}
+
+
+//disconnects sight i_sight from its related Route and prompt a message frame to inform the user
+template<class E> void ListFrame::DisconnectAndPromptMessage(E& event) {
+
+    Disconnect<E>(event);
+
     //print an info message
     print_warning_message->SetAndCall(NULL, String("Warning"), String("The route which is being dragged was related to a sight! Disconnecting the route from the sight."), (wxGetApp().path_file_warning_icon));
 
-    //the Route has been disconnected from the sight -> a new Route which is not connected to any Sight is created -> the data of the file have been modified
-    OnModifyFile();
-
+ 
     event.Skip(true);
 
 }

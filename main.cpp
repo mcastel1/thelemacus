@@ -93,6 +93,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+ - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
  - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
  - get rid of number_of_recent_* ints by reading the number of recent items directly dfrom file string
  - condense id RouteTypeField<P>::set(void)
@@ -133,11 +134,9 @@
  
  
  ********** THINGS TO FIX ************
-        - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
         - if you create a new Route to transport and click on the Route type dropdwon menu, there are only two items in the menu (loxodfrome and orthodrome) but the recent_items still has 3 entries as for a regular Route -> segmentation fault
  on OSX:
  on WIN32:
-        - some images are still too large (see image of button to show chart in ListFrame)
         - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
  */
 

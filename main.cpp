@@ -21,6 +21,7 @@
 /*
  
  notes:
+ - when I do the animation transprot with show coastlines = y, the animations are much slower than with show coastlines = n, because the charts are heavy for the cpu
  - be careful when you debug with breakpoints stuff that include timers ! You may stop at a breakpoint, but the timer in the code has started running and is running while you are stopped at the breakpoint
  - to use a lambda capture with CallAfter: `CallAfter([=] {FillAndRaiseOtherFrame();});`
  - on APPLE:

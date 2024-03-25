@@ -2612,7 +2612,7 @@ public:
     void OnDisconnectRoute(wxCommandEvent&);
     template<class E> void OnPressDeleteRoute(E&);
     
-    template<class E> void Disconnect(E&);
+    template<class E> void DisconnectAndPromptMessage(E&);
     
     void OnAddChartFrame(wxCommandEvent&);
     void OnCloseActiveChartFrame(wxCommandEvent&);

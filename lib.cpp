@@ -13276,7 +13276,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             (parent->parent->i_object_to_disconnect) = (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value);
                             
-                            parent->parent->Disconnect(event);
+                            parent->parent->DisconnectAndPromptMessage(event);
                             
                         }
                         
@@ -16448,7 +16448,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
             //because I am modifying and thus altering the Route, I disconnect it from its related sight
             (parent->i_object_to_disconnect) = (route->related_sight.value);
-            parent->Disconnect(event);
+            parent->DisconnectAndPromptMessage(event);
 
         }
 
@@ -18045,7 +18045,7 @@ void ListFrame::OnDisconnectSight(wxCommandEvent& event) {
 
     //set i_object_to_disconnect to the currently selected Sight in listcontrol_sights and call Disconnect to disconnect that Sight from its related Route
     i_object_to_disconnect = ((int)(listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
-    Disconnect(event);
+    DisconnectAndPromptMessage(event);
 
 }
 
@@ -18054,7 +18054,7 @@ void ListFrame::OnDisconnectRoute(wxCommandEvent& event) {
 
     //set i_object_to_disconnect to the currently selected Route in listcontrol_routes and call Disconnect to disconnect that Route from its related Sight
     i_object_to_disconnect = (((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight.value);
-    Disconnect(event);
+    DisconnectAndPromptMessage(event);
 
 }
 
@@ -18192,8 +18192,8 @@ template<class E> void ListFrame::OnPressDeleteRoute(E& event) {
 
 }
 
-//disconnects sight i_sight from its related Route
-template<class E> void ListFrame::Disconnect(E& event) {
+//disconnects sight i_sight from its related Route and prompt a message frame to inform the user
+template<class E> void ListFrame::DisconnectAndPromptMessage(E& event) {
 
     int i_route;
 
@@ -22047,7 +22047,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                     //I am transporting a Sight (i.e., Route related to a Sight) or I am transporting a Route that is connected to a Sight -> disconnect the Route from the sight
 
                     (parent->i_object_to_disconnect) = (((Route*)transported_object)->related_sight.value);
-                    parent->Disconnect(event);
+                    parent->DisconnectAndPromptMessage(event);
 
                 }
                 

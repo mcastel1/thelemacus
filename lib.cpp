@@ -15259,7 +15259,6 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
 //if an item in listcontrol_sights/positions/routes is selected, I transport the Sight/Position/Route under consideration with such Route
 template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(T& event) {
     
-    Route transporting_route_saved;
     //do the tasks tha need to be done at the end of the transport: set_back_transporting_route is used to set the transporting Route back to its original value after the animation transport is finished, in order to avoid the accumulation of numerical errors if one transported it back
     ToDoAtEndOfTransport<Route, ListFrame>* to_do_at_end_of_transport;
     
@@ -15273,11 +15272,11 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     (parent->i_transporting_route) = (parent->map)[(parent->listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))];
     
     //during the animation, (parent->data->route_list)[(parent->i_transporting_route)] will be transported -> there may be accumulating numerical errors when I transport it back -> I store it in transporting_route_saved and then set (parent->data->route_list)[(parent->i_transporting_route)] equal to transporting_route_saved at the end of the whole animation
-    transporting_route_saved = (parent->data->route_list)[(parent->i_transporting_route)];
+    (parent->transporting_route_saved) = (parent->data->route_list)[(parent->i_transporting_route)];
     
     to_do_at_end_of_transport = new ToDoAtEndOfTransport<Route, ListFrame>(
                                                                   &(parent->data->route_list)[(parent->i_transporting_route)],
-                                                                  &transporting_route_saved,
+                                                                  &(parent->transporting_route_saved),
                                                                   parent
                                                                   );
     
@@ -15319,7 +15318,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                                              String("route"),
                                                                                                              Route(RouteType(Route_types[0]),
                                                                                                                    ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position,
-                                                                                                                   transporting_route_saved.reference_position),
+                                                                                                                   (parent->transporting_route_saved).reference_position),
                                                                                                              to_do_at_end_of_transport
                                                                                                              );
         transport_handler = new GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> > >(
@@ -15333,7 +15332,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                                                                                                                                      parent,
                                                                                                                                                                                                      &(parent->data->route_list)[(parent->i_transporting_route)],
                                                                                                                                                                                                      String("route"),
-                                                                                                                                                                                                     Route(RouteType(Route_types[0]), transporting_route_saved.reference_position, ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position),
+                                                                                                                                                                                                     Route(RouteType(Route_types[0]), (parent->transporting_route_saved).reference_position, ((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position),
                                                                                                                                                                                                                       transport_handler
                                                                                                                                                                                                                       );
         
@@ -15353,7 +15352,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> > > >* auxiliary_transport_handler_outbound;
         
         
-        //        transporting_route_saved = (parent->data->route_list)[(parent->i_transporting_route)];
+        //        (parent->transporting_route_saved) = (parent->data->route_list)[(parent->i_transporting_route)];
         
         //the id of the Position that will be transported,
         (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
@@ -15363,7 +15362,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                                              String("route"),
                                                                                                              Route(RouteType(Route_types[0]),
                                                                                                                    ((parent->data->position_list)[(parent->i_object_to_transport)]),
-                                                                                                                   transporting_route_saved.reference_position),
+                                                                                                                   (parent->transporting_route_saved).reference_position),
                                                                                                              to_do_at_end_of_transport
                                                                                                              );
         transport_handler = new GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> > >(
@@ -15377,7 +15376,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                                                                                                                                      parent,
                                                                                                                                                                                                      &(parent->data->route_list)[(parent->i_transporting_route)],
                                                                                                                                                                                                      String("route"),
-                                                                                                                                                                                                     Route(RouteType(Route_types[0]), transporting_route_saved.reference_position, ((parent->data->position_list)[(parent->i_object_to_transport)])),
+                                                                                                                                                                                                     Route(RouteType(Route_types[0]), (parent->transporting_route_saved).reference_position, ((parent->data->position_list)[(parent->i_object_to_transport)])),
                                                                                                                                                                                                      transport_handler
                                                                                                                                                                                                      );
         
@@ -15390,9 +15389,9 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
     }
     
-//    parent->CallAfter([this, transporting_route_saved]()->void {
+//    parent->CallAfter([this, (parent->transporting_route_saved)]()->void {
 //        //set (parent->data->route_list)[(parent->i_transporting_route)] equal to its value before the transport, update parent and re-draw everthing
-//        (parent->data->route_list)[(parent->i_transporting_route)]  = transporting_route_saved;
+//        (parent->data->route_list)[(parent->i_transporting_route)]  = (parent->transporting_route_saved);
 //        parent->listcontrol_sights->set((parent->data->sight_list), false);
 //        parent->listcontrol_routes->set((parent->data->route_list), false);
 //        parent->Resize();

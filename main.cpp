@@ -136,7 +136,6 @@
  ********** THINGS TO FIX ************
  on OSX:
  on WIN32:
-        - an error is prompted when you transport an object with an existing Route
         - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
  */
 

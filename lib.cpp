@@ -22156,14 +22156,11 @@ ChartTransportHandler::ChartTransportHandler(ListFrame* parent_in) : MotionHandl
 }
 
 //move the center of the chart from position a to position b
-void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
+void ChartTransportHandler::operator()(const Position& a, const Position& b) {
+//void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
     
     //set route equal to a loxodrom connecting a and b
     route = Route(Route_types[0], a, b);
-    
-    
-    
-    
     
     
 }

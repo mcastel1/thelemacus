@@ -2899,7 +2899,7 @@ public:
     Route route;
     
     ChartTransportHandler(ListFrame*);
-    void MoveChart(const Position&, const Position&);
+    void operator()(const Position&, const Position&);
     void OnTimer(wxTimerEvent&);
     
 };

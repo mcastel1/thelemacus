@@ -2862,6 +2862,9 @@ public:
     wxTimer* timer;
     //the position during the transport process at 'time' t
     Position start;
+    //transporting_route is the Route used to do the transport. At each step of the transport, transporting_route_temp is set to be a part of the full Route (transporting_route) used to do the transport
+    Route transporting_route, transporting_route_temp;
+
     //a counter of the step in the animation, running from 0 to n_animation_steps
     long t;
     
@@ -2878,8 +2881,6 @@ public:
     NON_GUI* transported_object;
     //the type of the transported_object that is being transported (String("position") or String("route"), ...)
     String type_of_transported_object;
-    //at each step of the transport, *transporting_route_temp is set to be a part of the full Route (transporting_route) used to transport the object
-    Route transporting_route, transporting_route_temp;
     F* f;
     
     GraphicalFeatureTransportHandler(ListFrame*, NON_GUI*, const String&, const Route&, F*);
@@ -2895,10 +2896,8 @@ class ChartTransportHandler: public MotionHandler{
     
 public:
     
-    //route is the Route used to do the transport for all parent->chart_frames[i]
-    Route route;
     
-    ChartTransportHandler(ListFrame*, const Position&, const Position&);
+    ChartTransportHandler(ListFrame*, const Route&);
     void operator()(void);
     void OnTimer(wxTimerEvent&);
     

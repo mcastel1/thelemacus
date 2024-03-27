@@ -22149,10 +22149,10 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 }
 
 
-ChartTransportHandler::ChartTransportHandler(ListFrame* parent_in, const Position& a, const Position& b) : MotionHandler(parent_in){
+ChartTransportHandler::ChartTransportHandler(ListFrame* parent_in, const Route& transporting_route_in) : MotionHandler(parent_in){
     
     //set route equal to a loxodrom connecting a and b
-    route = Route(Route_types[0], a, b);
+    transporting_route = transporting_route_in;
 
     timer->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);
 

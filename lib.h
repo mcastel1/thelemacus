@@ -2898,8 +2898,8 @@ public:
     //route is the Route used to do the transport for all parent->chart_frames[i]
     Route route;
     
-    ChartTransportHandler(ListFrame*);
-    void operator()(const Position&, const Position&);
+    ChartTransportHandler(ListFrame*, const Position&, const Position&);
+    void operator()(void);
     void OnTimer(wxTimerEvent&);
     
 };

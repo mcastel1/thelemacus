@@ -22149,18 +22149,25 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 }
 
 
-ChartTransportHandler::ChartTransportHandler(ListFrame* parent_in) : MotionHandler(parent_in){
+ChartTransportHandler::ChartTransportHandler(ListFrame* parent_in, const Position& a, const Position& b) : MotionHandler(parent_in){
+    
+    //set route equal to a loxodrom connecting a and b
+    route = Route(Route_types[0], a, b);
 
     timer->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);
 
 }
 
-//move the center of the chart from position a to position b
-void ChartTransportHandler::operator()(const Position& a, const Position& b) {
+
+//prompt the movement of the center of the chart from position a to position b
+void ChartTransportHandler::operator()(void) {
 //void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
     
-    //set route equal to a loxodrom connecting a and b
-    route = Route(Route_types[0], a, b);
+    //the animation transport starts here
+    timer->Start(
+        /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
+        (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
+        wxTIMER_CONTINUOUS);
     
     
 }

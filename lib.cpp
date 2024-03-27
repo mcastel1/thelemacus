@@ -22157,26 +22157,11 @@ ChartTransportHandler::ChartTransportHandler(ListFrame* parent_in) : MotionHandl
 
 //move the center of the chart from position a to position b
 void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
-
-    unsigned int i;
+    
+    //set route equal to a loxodrom connecting a and b
+    route = Route(Route_types[0], a, b);
     
     
-    for(i=0; i<parent->chart_frames.size(); i++){
-        routes.push_back(Route(
-                               RouteType((Route_types[
-                                                    //if chart_frames[i] uses a Mercator projection then route[i] will be a loxodrome (because a loxodrome is best adapted to transport the chart with the Mercator projection), while if it uses a 3D projection then route[i] will be an orthodrome (because an orthodrome is best adapted to transport a chart with the 3D projection)
-                                                    
-                                                      (String(((parent->chart_frames)[i])->projection->name->GetValue().ToStdString()).position_in_list(Projection_types) == 0 ? 0 : 1)
-                                                      
-                                                      ]).value),
-                               a,
-                               //SET THESE CORRECTLY
-                               Angle(0.0),
-                               Length(0.0)
-                               //SET THESE CORRECTLY
-                               ));
-        
-    }
     
     
     

@@ -22213,7 +22213,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     //set start equal to the Position corresponding to the top-left corner of the chart
                     start = Position(chart_frame->lambda_max, chart_frame->phi_max);
-                    //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle 
+                    //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle
                     p_NW.NormalizeAndSetMercator(start);
                     p_SE.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
                     projection_size = p_NW - p_SE;
@@ -22261,6 +22261,18 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                 case 0: {
                     //I am using Projection_types[0]
+                    
+                    Position p_NW, p_SE;
+                    PositionProjection q;
+                    
+                    start.transport(&p_NW, transporting_route_temp, String(""));
+                    chart_frame->lambda_max = p_NW.lambda;
+                    chart_frame->phi_max = p_NW.phi;
+                    
+                    q.SetMercator(p_NW);
+                    q + projection_size;
+//                    (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(q, &p_SE);
+                    
                     
                     
                     break;

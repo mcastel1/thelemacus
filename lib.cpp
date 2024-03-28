@@ -22229,12 +22229,12 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         if(t > 0){
             //the transport animation is in progress -> do the next chunk
 
-//            transporting_route_temp.length.set(
-//                String(""),
-//                (transporting_route.length.value) *
-//                (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
-//                ,
-//                String(""));
+            transporting_route_temp.length.set(
+                String(""),
+                (transporting_route.length.value) *
+                (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
+                ,
+                String(""));
 //
 //
 //            if (type_of_transported_object == String("position")) {
@@ -22249,8 +22249,8 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 //
 //                if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 //
-//                    (((Route*)transported_object)->reference_position) = start;
-//                    ((Route*)transported_object)->reference_position.transport_to(transporting_route_temp, String(""));
+            (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position = start;
+            (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
 //
 //                }
 //
@@ -22270,9 +22270,9 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
 //        if (type_of_transported_object == String("position")) {
             
-//            //do the whole transport rather than combining many little transports, to avoid rounding errors
-//            (*((Position*)transported_object)) = start;
-//            ((Position*)transported_object)->transport_to(transporting_route, String(""));
+            //do the whole transport rather than combining many little transports, to avoid rounding errors
+        (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position = start;
+        (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
 //
 //
 //            //update labels
@@ -22340,15 +22340,15 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 //        parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, *(parent->on_change_selection_in_listcontrol_routes));
 
 
-        if ((parent->transporting_with_selected_route)) {
-            //I am transporting with an existing, selected Route
-
-            //the transport is over -> I reverse the Bind/Unbind(s) made before the transport started
-            (parent->transporting_with_selected_route) = false;
-//            parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_ACTIVATED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
-//            parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyRoute<wxListEvent>, parent);
-
-        }
+//        if ((parent->transporting_with_selected_route)) {
+//            //I am transporting with an existing, selected Route
+//
+//            //the transport is over -> I reverse the Bind/Unbind(s) made before the transport started
+//            (parent->transporting_with_selected_route) = false;
+////            parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_ACTIVATED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
+////            parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyRoute<wxListEvent>, parent);
+//
+//        }
 
 //        if ((parent->transporting_with_new_route)) {
 //            //I am tranporting with a new Route

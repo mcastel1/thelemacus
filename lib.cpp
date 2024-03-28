@@ -2042,14 +2042,14 @@ void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
 }
 
 
-MyRectangle::MyRectangle(void) {
+PositionRectangle::PositionRectangle(void) {
 
 
 }
 
 
 //constructor which constructs p_NW and p_SE from p_NW_in and p_SE_in. For this to work, p_NW_in must lie at the NW of p_SE_in
-MyRectangle::MyRectangle(Position p_NW_in, Position p_SE_in, [[maybe_unused]] String prefix) {
+PositionRectangle::PositionRectangle(Position p_NW_in, Position p_SE_in, [[maybe_unused]] String prefix) {
 
     p_NW = p_NW_in;
     p_SE = p_SE_in;
@@ -2058,7 +2058,7 @@ MyRectangle::MyRectangle(Position p_NW_in, Position p_SE_in, [[maybe_unused]] St
 
 
 //returns true/false if p is containted in *this
-bool MyRectangle::Contains(Position p) {
+bool PositionRectangle::Contains(Position p) {
 
     bool check_lambda;
 
@@ -3129,8 +3129,8 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
 }
 
-//If *this is a loxodrome, return -1 because I don't know how to determine whetehr the loxodrome is included in a MyRectangle. Otherwise, if *this is included into the MyRectangle rectangle it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it reallocates t and writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this entirely lies within circle and write_t = true, it returns t[0] = t[1] = 0.0
-int Route::inclusion(MyRectangle rectangle, bool write_t, vector<Angle>* t, [[maybe_unused]] String prefix) {
+//If *this is a loxodrome, return -1 because I don't know how to determine whetehr the loxodrome is included in a PositionRectangle. Otherwise, if *this is included into the PositionRectangle rectangle it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it reallocates t and writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this entirely lies within circle and write_t = true, it returns t[0] = t[1] = 0.0
+int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t, [[maybe_unused]] String prefix) {
 
 
     if (type == (Route_types[0])) {
@@ -9964,7 +9964,7 @@ inline void DrawPanel::Draw_Mercator(void) {
     (this->*Set_x_y_min_max)();
 
     //set rectangle_obseerver
-    rectangle_observer = MyRectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min), String(""));
+    rectangle_observer = PositionRectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min), String(""));
 
     /*set the aspect ratio between height and width equal to the ratio between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
 
@@ -22211,6 +22211,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     //set start equal to the Position corresponding to the top-left corner of the chart
                     start = Position(chart_frame->lambda_min, chart_frame->phi_max);
+                    PositionRectangle(start, Position(chart_frame->lambda_max, chart_frame->phi_min), String(""));
                     
                     
                     break;

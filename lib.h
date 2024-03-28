@@ -819,15 +819,15 @@ public:
 
 
 //this class defines a 'rectangular' area on the Eearth's surface: it is a rectangle with vertices p_NW, p_SE in the Mercator projection
-class MyRectangle{
+class PositionRectangle{
     
 public:
     
     //thw two Positions which constitute the vertices of the rectangle: p is the NW vertex, p_SE is the SE vertex
     Position p_NW, p_SE;
     
-    MyRectangle();
-    MyRectangle(Position, Position, String);
+    PositionRectangle();
+    PositionRectangle(Position, Position, String);
     bool Contains(Position);
     
 };
@@ -903,7 +903,7 @@ public:
     int crossing(Route, vector<Position>*, double*, String);
     static double lambda_minus_pi(double, void*);
     int inclusion(Route, bool, vector<Angle>*, String);
-    int inclusion(MyRectangle, bool, vector<Angle>*, String);
+    int inclusion(PositionRectangle, bool, vector<Angle>*, String);
     int intersection(Route, bool, vector<Angle>*, String);
     bool closest_point_to(Position*, Angle*, Position, String);
     void add_to_wxListCtrl(long, wxListCtrl*);
@@ -1954,7 +1954,7 @@ public:
     PositionProjection /*the values of (x, y) at the beginning/end of the selection process with a rectangle*/projection_start, projection_end;
     Route /*this is a circle of equal altitude which is the intersection between the earth's surface and the visibility cone of the observer, whose vertex is at the observer. circle_oberserver.omega is the aperture angle at the center of the earth which specifies the part of the earth surface visible by the observer. circle_observer.rerefence_position is the ground position of the observer: the intersection between the line between the center of the earth and the observer, and the surface of the earth. These exist for the 3D projection only*/circle_observer, /*the same as circle_observer, but at the initial configuration fo the chart*/circle_observer_0;
     //this rectangle represents the rectangle x_min ... y_max in the Mercator projection
-    MyRectangle rectangle_observer;
+    PositionRectangle rectangle_observer;
     wxBitmap m_bgbuffer;
     
     wxSizer* sizer_h, *sizer_v;

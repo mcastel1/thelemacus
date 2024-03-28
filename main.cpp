@@ -302,7 +302,7 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
     
    
     chart_transport_handler = new ChartTransportHandler(
-                          list_frame,
+                          (list_frame->chart_frames)[0],
                           Route(Route_types[0],
                                 list_frame->chart_frames[0]->draw_panel->circle_observer.reference_position.antipode(),
                                 list_frame->chart_frames[0]->draw_panel->circle_observer.reference_position)

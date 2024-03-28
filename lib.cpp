@@ -11986,9 +11986,11 @@ inline bool DrawPanel::ScreenToGeo_Mercator(const wxPoint& p, Position* q) {
 
     if (q != NULL) {
 
-        (q->lambda).set(String(""), k * lambda_mercator(temp.x), String(""));
-        (q->phi).set(String(""), k * phi_mercator(temp.y), String(""));
+//        (q->lambda).set(String(""), k * lambda_mercator(temp.x), String(""));
+//        (q->phi).set(String(""), k * phi_mercator(temp.y), String(""));
 
+        ProjectionToGeo_Mercator(temp, q);
+        
     }
 
     return output;
@@ -12390,6 +12392,8 @@ inline void  DrawPanel::ProjectionToDrawPanel_Mercator(const PositionProjection&
 //convert the Mercator Projection q into the Position p
 inline void  DrawPanel::ProjectionToGeo_Mercator(const PositionProjection& q, Position* p) {
 
+    (p->lambda).set(String(""), k * lambda_mercator(q.x), String(""));
+    (p->phi).set(String(""), k * phi_mercator(q.y), String(""));
   
 }
 

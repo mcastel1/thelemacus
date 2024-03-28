@@ -134,6 +134,7 @@
  
  
  ********** THINGS TO FIX ************
+ - code method DrawPanel::ProjectionToGeo_3D
  - line ~ 608 in main.cpp -> put back //                        projection,
  - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:

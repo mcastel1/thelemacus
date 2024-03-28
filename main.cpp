@@ -134,6 +134,8 @@
  
  
  ********** THINGS TO FIX ************
+ - line ~ 608 in main.cpp -> put back //                        projection,
+ - ChartFrame must take as an argument for the projection f Projection object, not a String 
  on OSX:
  on WIN32:
         - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
@@ -605,7 +607,8 @@ bool MyApp::OnInit() {
             
             (list_frame->chart_frames)[i] = new ChartFrame(
                                                            list_frame,
-                                                           projection,
+//                                                           projection,
+                                                           String(""),
                                                            s.str(),
                                                            wxDefaultPosition,
                                                            wxDefaultSize,

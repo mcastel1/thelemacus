@@ -22001,7 +22001,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             (transporting_route_temp.reference_position) = start;
 
             //I brind all ChartFrames to front to show the animation
-            wxGetApp().ShowChart(event);
+//            wxGetApp().ShowChart(event);
             
             t++;
 
@@ -22203,7 +22203,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
  
 
             //I bring all ChartFrames to front to show the animation
-            wxGetApp().ShowChart(event);
+//            wxGetApp().ShowChart(event);
             
             t++;
 

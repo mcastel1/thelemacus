@@ -299,17 +299,12 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
     
     //
     ChartTransportHandler* chart_transport_handler;
-    Position start;
     
-    //construct a start position with an offset
-    start = list_frame->chart_frames[0]->draw_panel->circle_observer.reference_position;
-    start.lambda = start.lambda + M_PI/12.0;
-    start.phi = start.phi - M_PI/12.0;
-
+   
     chart_transport_handler = new ChartTransportHandler(
                           list_frame,
                           Route(Route_types[0],
-                                start,
+                                list_frame->chart_frames[0]->draw_panel->circle_observer.reference_position.antipode(),
                                 list_frame->chart_frames[0]->draw_panel->circle_observer.reference_position)
                           );
     chart_transport_handler->operator()();

@@ -2892,13 +2892,15 @@ public:
 };
 
 
-//a hanlder to move  the chart with an animation
+//a hanlder to move the chart of a given ChartFrame with an animation
 class ChartTransportHandler: public MotionHandler{
     
 public:
     
+    //a poitner to the ChartFrame whose chart is being moved
+    ChartFrame* chart;
     
-    ChartTransportHandler(ListFrame*, const Route&);
+    ChartTransportHandler(ChartFrame*, const Route&);
     void operator()(void);
     void OnTimer(wxTimerEvent&);
     

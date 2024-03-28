@@ -22161,7 +22161,9 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 }
 
 
-ChartTransportHandler::ChartTransportHandler(ListFrame* parent_in, const Route& transporting_route_in) : MotionHandler(parent_in){
+ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in) : MotionHandler(chart_in->parent){
+    
+    chart = chart_in;
     
     //set route equal to a loxodrom connecting a and b
     transporting_route = transporting_route_in;

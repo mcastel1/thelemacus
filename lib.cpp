@@ -4142,7 +4142,7 @@ Position Position::antipode(void){
     
 }
 
-//transport the Position *this with the Route route and write the result in *result. If route is not a circle of equal altitude, the transport is done and true is returned, otherwise no transport is done and false is returned. result needs to be allocated before this method is called 
+//transport the Position *this with the Route route and write the result in *result. If route is not a circle of equal altitude, the transport is done and true is returned, otherwise no transport is done and false is returned. result needs to be allocated before this method is called
 bool Position::transport(Position* result, Route route, [[maybe_unused]] String prefix) {
 
     return(result->transport_to(route, prefix));
@@ -22227,14 +22227,14 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 case 0: {
                     //I am using Projection_types[0]
                     
-                    PositionProjection p_NW, p_SE;
+                    PositionProjection q_NW, q_SE;
                     
                     //set start equal to the Position corresponding to the top-left corner of the chart
                     start = Position(chart_frame->lambda_max, chart_frame->phi_max);
                     //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle
-                    p_NW.NormalizeAndSetMercator(start);
-                    p_SE.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
-                    projection_size = p_NW - p_SE;
+                    q_NW.NormalizeAndSetMercator(start);
+                    q_SE.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
+                    projection_size = q_NW - q_SE;
                     
                     
                     

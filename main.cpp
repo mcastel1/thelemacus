@@ -273,7 +273,7 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
     }
     
     
-    for (i = 0; i < ((list_frame->chart_frames).size()); i++) {
+    for (i=0; i<(list_frame->chart_frames.size()); i++) {
         
         ((list_frame->chart_frames)[i])->Show(true);
         ((list_frame->chart_frames)[i])->Raise();
@@ -298,18 +298,20 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
     
     
     //
-    ChartTransportHandler* chart_transport_handler;
+    vector<ChartTransportHandler*> chart_transport_handler(list_frame->chart_frames.size());
     
-   
-    chart_transport_handler = new ChartTransportHandler(
-                          (list_frame->chart_frames)[0],
-                          Route(Route_types[0],
-                                list_frame->chart_frames[0]->draw_panel->circle_observer.reference_position.antipode(),
-                                list_frame->chart_frames[0]->draw_panel->circle_observer.reference_position)
-                          );
-    chart_transport_handler->operator()();
-    //
-    
+    for (i=0; i<(list_frame->chart_frames.size()); i++) {
+        
+        
+        chart_transport_handler[i] = new ChartTransportHandler(
+                                                               (list_frame->chart_frames)[i],
+                                                               Route(Route_types[0],
+                                                                     list_frame->chart_frames[i]->draw_panel->circle_observer.reference_position.antipode(),
+                                                                     list_frame->chart_frames[i]->draw_panel->circle_observer.reference_position)
+                                                               );
+        chart_transport_handler[i]->operator()();
+        //
+    }
     
 }
 

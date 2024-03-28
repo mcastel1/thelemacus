@@ -22189,6 +22189,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
             transporting_route_temp = transporting_route;
             
+            (parent->chart_frames[0]->draw_panel->rotation_start_drag) = (parent->chart_frames[0]->draw_panel->rotation);
+
+            
+            
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
             for (unsigned int i = 0; i < (parent->chart_frames.size()); i++) {
                 ((parent->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
@@ -22255,14 +22259,8 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
             
             ((parent->chart_frames)[0]->draw_panel->rotation) =
-            rotation_start_end(start, position_now_drag) * rotation_start_drag;
+            rotation_start_end(start, position_now_drag) * (parent->chart_frames[0]->draw_panel->rotation_start_drag);
             
-//
-//                }
-//
-//                parent->TabulateRoutesAll();
-//                
-//            }
 
             (((parent->chart_frames)[0]->draw_panel)->*(((parent->chart_frames)[0]->draw_panel)->Draw))();
             (parent->chart_frames)[0]->draw_panel->MyRefresh();
@@ -22284,7 +22282,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         
         position_end_drag = wxGetMousePosition();
         gsl_vector_memcpy((rp_end_drag.r), (rp.r));
-        rotation_end_drag = rotation;
+        (parent->chart_frames[0]->draw_panel->rotation_end_drag) = (parent->chart_frames[0]->draw_panel->rotation);
 
         (parent->chart_frames[0]->dragging_chart) = false;
 //        (parent->parent->i_object_to_disconnect) = -1;

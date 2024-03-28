@@ -67,9 +67,10 @@ display precision = 2
 time zone = +2
 relative displacement = 0.1
 omega draw 3d = 89° 32.157897987'
-default projection = 3D
+default projection = Mercator
+
 #the number of chart frames opened when the program starts
-number chart frames = 2
+number chart frames = 1
 #initial rotation with which the 3D projection is displayed
 rotation 0 =
 alpha = 128° 3.43879'

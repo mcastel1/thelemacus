@@ -1119,7 +1119,7 @@ public:
     PositionProjection();
     PositionProjection(const double, const double);
     void SetMercator(const Position&);
-    void SetMercatorAndNormalize(const Position&);
+    void NormalizeAndSetMercator(const Position&);
     PositionProjection operator+(const PositionProjection&), operator-(const PositionProjection&);
     
     
@@ -2899,6 +2899,8 @@ public:
     
     //a poitner to the ChartFrame whose chart is being moved
     ChartFrame* chart_frame;
+    //the size (in Mercator projection x,y) of the projection in the mercator projection: this is stored and used during the transport in such a way that the size of the projection stays the same through the transport
+    PositionProjection projection_size;
     
     ChartTransportHandler(ChartFrame*, const Route&);
     void operator()(void);

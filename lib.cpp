@@ -5492,7 +5492,7 @@ inline void PositionProjection::SetMercator(const Position& p){
 
 
 //normalize p.lambda, then set x and y equal to the Mercator projections of the Position p
-inline void PositionProjection::SetMercatorAndNormalize(const Position& p){
+inline void PositionProjection::NormalizeAndSetMercator(const Position& p){
     
     Position temp;
     
@@ -11515,12 +11515,12 @@ void DrawPanel::Set_x_y_min_max_Mercator(void) {
     temp = Position(parent->lambda_min, parent->phi_min);
     //    (p_min.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
     //    (p_min.y) = log(1.0 / cos((temp.phi)) + tan((temp.phi)));
-    p_min.SetMercatorAndNormalize(temp);
+    p_min.NormalizeAndSetMercator(temp);
     
     temp = Position(parent->lambda_max, parent->phi_max);
     //    (p_max.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
     //    (p_max.y) = log(1.0 / cos((temp.phi)) + tan((temp.phi)));
-    p_max.SetMercatorAndNormalize(temp);
+    p_max.NormalizeAndSetMercator(temp);
     
     
     x_min = (p_min.x);
@@ -12270,7 +12270,7 @@ inline bool DrawPanel::GeoToMercator(const Position& q, PositionProjection* p, b
 
 //    (temp.x) = -(normalize_pm_pi_ret(q.lambda).value);
 //    (temp.y) = log(1.0 / cos((q.phi)) + tan((q.phi)));
-    temp.SetMercatorAndNormalize(q);
+    temp.NormalizeAndSetMercator(q);
 
     //compute check_x and, from check_x, compute b
     if (x_min <= x_max) {
@@ -22209,8 +22209,17 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 case 0: {
                     //I am using Projection_types[0]
                     
+                    PositionProjection p_NW, p_SE;
+                    
                     //set start equal to the Position corresponding to the top-left corner of the chart
-                    start = Position(chart_frame->lambda_min, chart_frame->phi_max);
+                    start = Position(chart_frame->lambda_max, chart_frame->phi_max);
+                    //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle 
+                    p_NW.NormalizeAndSetMercator(start);
+                    p_SE.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
+                    projection_size = p_NW - p_SE;
+                    
+                    
+                    
                     PositionRectangle(start, Position(chart_frame->lambda_max, chart_frame->phi_min), String(""));
                     
                     

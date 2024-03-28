@@ -2112,7 +2112,7 @@ Route::Route(const RouteType& type_in, const Position& p_start, const Position& 
 
     reference_position = p_start;
    
-    switch ( type.position_in_list(Route_types)) {
+    switch (type.position_in_list(Route_types)) {
             
         case 0:{
             //*this is a loxodrome
@@ -22238,7 +22238,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     
                     
-                    PositionRectangle(start, Position(chart_frame->lambda_max, chart_frame->phi_min), String(""));
+//                    PositionRectangle(start, Position(chart_frame->lambda_max, chart_frame->phi_min), String(""));
                     
                     
                     break;

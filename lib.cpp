@@ -12385,6 +12385,21 @@ inline void  DrawPanel::ProjectionToDrawPanel_Mercator(const PositionProjection&
 
 }
 
+
+
+//convert the Mercator Projection q into the Position p
+inline void  DrawPanel::ProjectionToGeo_Mercator(const PositionProjection& q, Position* p) {
+
+  
+}
+
+//convert the Mercator Projection q into the Position p
+inline void  DrawPanel::ProjectionToGeo_3D(const PositionProjection& q, Position* p) {
+
+  
+}
+
+
 //this function converts the 3D projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
 inline void  DrawPanel::ProjectionToDrawPanel_3D(const PositionProjection& q, wxPoint* p) {
 

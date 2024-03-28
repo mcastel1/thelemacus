@@ -12524,6 +12524,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
         Draw = (&DrawPanel::Draw_Mercator);
         Render = (&DrawPanel::Render_Mercator);
         ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_Mercator);
+        ProjectionToGeo = (&DrawPanel::ProjectionToGeo_Mercator);
         ScreenToProjection = (&DrawPanel::ScreenToMercator);
         CartesianToProjection = (&DrawPanel::CartesianToMercator);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
@@ -12541,6 +12542,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
         Draw = (&DrawPanel::Draw_3D);
         Render = (&DrawPanel::Render_3D);
         ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_3D);
+        ProjectionToGeo = (&DrawPanel::ProjectionToGeo_3D);
         ScreenToProjection = (&DrawPanel::ScreenTo3D);
         CartesianToProjection = (&DrawPanel::CartesianTo3D);
         ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);

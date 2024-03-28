@@ -2584,32 +2584,32 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
 
     }
 
-    case 1: {
-        //the Route this is an orthodrome
-
-        int check = -1;
-        
-        switch (/*((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())[0]*/        String(((((draw_panel->parent->projection)->name)->GetValue()).ToStdString())).position_in_list(Projection_types)) {
-
-        case 0: {
-            //I am using Projection_types[0]
-
-            check = inclusion(draw_panel->rectangle_observer, true, &t, String(""));
-
-            break;
-
-        }
-
         case 1: {
-            //I am using Projection_types[1]
-
-            check = inclusion(draw_panel->circle_observer, true, &t, String(""));
-
-            break;
-
-        }
-
-        }
+            //the Route this is an orthodrome
+            
+            int check = -1;
+            
+            switch (String((draw_panel->parent->projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
+                    
+                case 0: {
+                    //I am using Projection_types[0]
+                    
+                    check = inclusion(draw_panel->rectangle_observer, true, &t, String(""));
+                    
+                    break;
+                    
+                }
+                    
+                case 1: {
+                    //I am using Projection_types[1]
+                    
+                    check = inclusion(draw_panel->circle_observer, true, &t, String(""));
+                    
+                    break;
+                    
+                }
+                    
+            }
 
 
         if (check == 1) {

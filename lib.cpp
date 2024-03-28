@@ -22255,7 +22255,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
             
             ((parent->chart_frames)[0]->draw_panel->rotation) =
-            rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+            rotation_start_end(start, position_now_drag) * rotation_start_drag;
             
 //
 //                }

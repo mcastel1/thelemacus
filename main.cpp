@@ -135,7 +135,7 @@
  
  ********** THINGS TO FIX ************
  - line ~ 608 in main.cpp -> put back //                        projection,
- - ChartFrame must take as an argument for the projection f Projection object, not a String 
+ - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:
  on WIN32:
         - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
@@ -299,7 +299,13 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
     
     //
     ChartTransportHandler* chart_transport_handler;
+    Position start;
     
+    //construct a start position with an offset
+    start = list_frame->chart_frames[0]->draw_panel->circle_observer.reference_position;
+    start.lambda = start.lambda + M_PI/12.0;
+    start.phi = start.phi - M_PI/12.0;
+
     chart_transport_handler = new ChartTransportHandler(
                           list_frame,
                           Route(Route_types[0], list_frame->chart_frames[0]->draw_panel->circle_observer.reference_position, list_frame->chart_frames[0]->draw_panel->circle_observer.reference_position)

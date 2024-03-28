@@ -304,13 +304,49 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
     for (i=0; i<(list_frame->chart_frames.size()); i++) {
         
         
-        chart_transport_handler[i] = new ChartTransportHandler(
-                                                               (list_frame->chart_frames)[i],
-                                                               Route(Route_types[0],
-                                                                     list_frame->chart_frames[i]->draw_panel->circle_observer.reference_position.antipode(),
-                                                                     list_frame->chart_frames[i]->draw_panel->circle_observer.reference_position)
-                                                               );
-        chart_transport_handler[i]->operator()();
+        switch (String((list_frame->chart_frames[i]->projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
+                
+            case 0: {
+                //I am using Projection_types[0]
+                
+                chart_transport_handler[i] = new ChartTransportHandler(
+                                                                       (list_frame->chart_frames)[i],
+                                                                       Route(
+                                                                             Route_types[0],
+                                                                             Position((list_frame->chart_frames[i]->lambda_min) + M_PI, list_frame->chart_frames[i]->phi_max),
+                                                                             Position(list_frame->chart_frames[i]->lambda_min, list_frame->chart_frames[i]->phi_max)
+                                                                             )
+                                                                       );
+                   
+                
+                break;
+                
+            }
+                
+            case 1: {
+                //I am using Projection_types[1]
+                
+                chart_transport_handler[i] = new ChartTransportHandler(
+                                                                       (list_frame->chart_frames)[i],
+                                                                       Route(
+                                                                             Route_types[0],
+                                                                             list_frame->chart_frames[i]->draw_panel->circle_observer.reference_position.antipode(),
+                                                                             list_frame->chart_frames[i]->draw_panel->circle_observer.reference_position
+                                                                             )
+                                                                       );
+
+                
+                
+                break;
+                
+            }
+                
+        }
+        
+        
+        
+        
+         chart_transport_handler[i]->operator()();
         //
     }
     

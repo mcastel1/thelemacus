@@ -294,6 +294,17 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
         
     }
     
+    
+    //
+    ChartTransportHandler* chart_transport_handler;
+    
+    chart_transport_handler = new ChartTransportHandler(
+                          list_frame,
+                          Route(Route_types[0], list_frame->chart_frames[0]->draw_panel->circle_observer.reference_position, list_frame->chart_frames[0]->draw_panel->circle_observer.reference_position)
+                          );
+    //
+    
+    
 }
 
 //shows ListFrame and positions it properly on the screen

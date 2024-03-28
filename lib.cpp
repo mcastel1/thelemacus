@@ -22185,7 +22185,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
             (*(parent->set_idling))();
 
-//            transporting_route_temp = transporting_route;
+            transporting_route_temp = transporting_route;
             
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
             for (unsigned int i = 0; i < (parent->chart_frames.size()); i++) {
@@ -22202,8 +22202,14 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 //                if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 //
 //                    //store the starting reference position in geo_position_start
-//                    start = (((Route*)transported_object)->reference_position);
-//
+            
+            
+            //THIS SUPPOSES THAT THERE IS ONLY ONE CHARTFRAME AND THAT IT IS WITH THE 3D PROJECTION
+            start = (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position;
+            //THIS SUPPOSES THAT THERE IS ONLY ONE CHARTFRAME AND THAT IT IS WITH THE 3D PROJECTION
+ 
+            
+            
 //                }
 //                
 //                start = (((Route*)transported_object)->reference_position);
@@ -22213,7 +22219,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
 //            (transporting_route_temp.reference_position) = start;
 
-            //I brind all ChartFrames to front to show the animation
+            //I bring all ChartFrames to front to show the animation
             wxGetApp().ShowChart(event);
             
             t++;

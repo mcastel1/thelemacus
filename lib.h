@@ -2898,7 +2898,7 @@ class ChartTransportHandler: public MotionHandler{
 public:
     
     //a poitner to the ChartFrame whose chart is being moved
-    ChartFrame* chart;
+    ChartFrame* chart_frame;
     
     ChartTransportHandler(ChartFrame*, const Route&);
     void operator()(void);

@@ -8465,9 +8465,6 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
     unsigned int l, n = 0, every = 0, n_points_grid = 0;
     wxPoint temp;
 
-    //    //set x_min, ..., y_max for the following
-    //    draw_panel->Set_x_y_min_max_Mercator();
-
     //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
     phi_min.normalize_pm_pi();
     phi_max.normalize_pm_pi();
@@ -11413,8 +11410,8 @@ template<class T> void ChartFrame::Reset(T& event) {
     (draw_panel->*(draw_panel->Draw))();
 
     //now that (size_chart.GetWidth()) and (size_chart.GetHeight()) have been set, I set width_chart_0 and height_chart_0 equal to width_chart and (size_chart.GetHeight())
-    (draw_panel->width_chart_0) = ((draw_panel->size_chart).GetWidth());
-    (draw_panel->height_chart_0) = ((draw_panel->size_chart).GetHeight());
+    (draw_panel->width_chart_0) = (draw_panel->size_chart.GetWidth());
+    (draw_panel->height_chart_0) = (draw_panel->size_chart.GetHeight());
 
     draw_panel->CleanAndRenderAll();
     
@@ -22163,7 +22160,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
 ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in) : MotionHandler(chart_in->parent){
     
-    chart = chart_in;
+    chart_frame = chart_in;
     
     //set route equal to a loxodrom connecting a and b
     transporting_route = transporting_route_in;
@@ -22198,19 +22195,43 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
             (*(parent->set_idling))();
-            (chart->dragging_chart) = true;
-            (chart->draw_panel->rotation_start_drag) = (chart->draw_panel->rotation);
+            (chart_frame->dragging_chart) = true;
 
             transporting_route_temp = transporting_route;
             
 
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
-            chart->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart->draw_panel);
+            chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
             
        
-            //THIS SUPPOSES THAT THERE IS ONLY ONE CHARTFRAME AND THAT IT IS WITH THE 3D PROJECTION
-            start = chart->draw_panel->circle_observer.reference_position;
-            //THIS SUPPOSES THAT THERE IS ONLY ONE CHARTFRAME AND THAT IT IS WITH THE 3D PROJECTION
+            switch (String((chart_frame->projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
+                    
+                case 0: {
+                    //I am using Projection_types[0]
+                    
+                    //set start equal to the Position corresponding to the top-left corner of the chart
+                    start = Position(chart_frame->lambda_min, chart_frame->phi_max);
+                    
+                    
+                    break;
+                    
+                }
+                    
+                case 1: {
+                    //I am using Projection_types[1]
+                    
+                    //set the rotation to start the chart movement and the starting point
+                    (chart_frame->draw_panel->rotation_start_drag) = (chart_frame->draw_panel->rotation);
+                    start = chart_frame->draw_panel->circle_observer.reference_position;
+                    
+                    break;
+                    
+                }
+                    
+            }
+            
+
+         
             
             t++;
 
@@ -22226,16 +22247,34 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                                                ,
                                                String(""));
             
-            chart->draw_panel->circle_observer.reference_position = start;
-            chart->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
-            (chart->draw_panel->rotation) = Rotation(
-                                                     start,
-                                                     chart->draw_panel->circle_observer.reference_position
-                                                     ) * (chart->draw_panel->rotation_start_drag);
+            switch (String((chart_frame->projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
+                    
+                case 0: {
+                    //I am using Projection_types[0]
+                    
+                    
+                    break;
+                    
+                }
+                    
+                case 1: {
+                    //I am using Projection_types[1]
+                    
+                    chart_frame->draw_panel->circle_observer.reference_position = start;
+                          chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
+                          (chart_frame->draw_panel->rotation) = Rotation(
+                                                                   start,
+                                                                   chart_frame->draw_panel->circle_observer.reference_position
+                                                                   ) * (chart_frame->draw_panel->rotation_start_drag);
+                 
+                    break;
+                    
+                }
+                    
+            }
             
-            
-            (chart->draw_panel->*(chart->draw_panel->Draw))();
-            chart->draw_panel->MyRefresh();
+            (chart_frame->draw_panel->*(chart_frame->draw_panel->Draw))();
+            chart_frame->draw_panel->MyRefresh();
 
             //            cout << "\t\t t= " << t << "\n";
             
@@ -22246,20 +22285,40 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     }else {
         //the transport  is over
 
-            
-        //do the whole transport rather than combining many little transports, to avoid rounding errors
-        chart->draw_panel->circle_observer.reference_position = start;
-        chart->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
         
-        gsl_vector_memcpy((chart->draw_panel->rp_end_drag.r), (chart->draw_panel->rp.r));
-        (chart->draw_panel->rotation_end_drag) = (chart->draw_panel->rotation);
+        switch (String((chart_frame->projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
+                
+            case 0: {
+                //I am using Projection_types[0]
+                
+                
+                break;
+                
+            }
+                
+            case 1: {
+                //I am using Projection_types[1]
+                
+                //do the whole transport rather than combining many little transports, to avoid rounding errors
+                chart_frame->draw_panel->circle_observer.reference_position = start;
+                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
+                
+                gsl_vector_memcpy((chart_frame->draw_panel->rp_end_drag.r), (chart_frame->draw_panel->rp.r));
+                (chart_frame->draw_panel->rotation_end_drag) = (chart_frame->draw_panel->rotation);
 
-        (chart->dragging_chart) = false;
+                break;
+                
+            }
+                
+        }
+            
+
+        (chart_frame->dragging_chart) = false;
 
         //re-draw everything
         parent->DrawAll();
 
-        chart->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart->draw_panel);
+        chart_frame->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
         
         timer->Stop();
         (*(parent->unset_idling))();

@@ -4130,6 +4130,17 @@ bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
 
 }
 
+//return the antipode of *this on the earth
+Position Position::antipode(void){
+    
+    Position result;
+    
+    result.lambda = lambda + M_PI;
+    result.phi = phi - (2.0*M_PI);
+    
+    return result;
+    
+}
 
 //transport the Position *this with the Route route and write the result in *result. If route is not a circle of equal altitude, the transport is done and true is returned, otherwise no transport is done and false is returned. result is allocated
 bool Position::transport(Position* result, Route route, [[maybe_unused]] String prefix) {

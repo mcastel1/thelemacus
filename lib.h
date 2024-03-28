@@ -787,6 +787,7 @@ public:
     template<class S> void read_from_stream(String, S*, bool, String);
     bool transport(Position*, Route, String);
     bool transport_to(Route, String);
+    Position antipode(void);
     string to_string(unsigned int);
     bool distance(Position, Length*, String, String);
     bool is_in(Route, String);

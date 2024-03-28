@@ -22254,7 +22254,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position = start;
             (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
             
-            rotation =
+            ((parent->chart_frames)[0]->draw_panel->rotation) =
             rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
             
 //
@@ -22264,8 +22264,8 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 //                
 //            }
 
-            (this->*Draw)();
-            MyRefresh();
+            (((parent->chart_frames)[0]->draw_panel)->*(((parent->chart_frames)[0]->draw_panel)->Draw))();
+            (parent->chart_frames)[0]->draw_panel->MyRefresh();
 
             //            cout << "\t\t t= " << t << "\n";
             
@@ -22286,8 +22286,8 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         gsl_vector_memcpy((rp_end_drag.r), (rp.r));
         rotation_end_drag = rotation;
 
-        (parent->dragging_chart) = false;
-        (parent->parent->i_object_to_disconnect) = -1;
+        (parent->chart_frames[0]->dragging_chart) = false;
+//        (parent->parent->i_object_to_disconnect) = -1;
 
 
 //

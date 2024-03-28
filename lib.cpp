@@ -12857,6 +12857,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             //I am dragging the chart (not a Route nor  a Position)
 
             if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+                //I am using the Mercator projection
 
                 double delta_y;
                 PositionProjection p_ceil_min, p_floor_max;
@@ -22184,6 +22185,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
             (*(parent->set_idling))();
+            (parent->chart_frames[0]->dragging_chart) = true;
 
             transporting_route_temp = transporting_route;
             
@@ -22251,6 +22253,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 //
             (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position = start;
             (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
+            
+            rotation =
+            rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+            
 //
 //                }
 //
@@ -22258,7 +22264,9 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 //                
 //            }
 
-            parent->RefreshAll();
+            (this->*Draw)();
+            MyRefresh();
+
             //            cout << "\t\t t= " << t << "\n";
             
             t++;
@@ -22273,6 +22281,15 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             //do the whole transport rather than combining many little transports, to avoid rounding errors
         (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position = start;
         (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
+        
+        position_end_drag = wxGetMousePosition();
+        gsl_vector_memcpy((rp_end_drag.r), (rp.r));
+        rotation_end_drag = rotation;
+
+        (parent->dragging_chart) = false;
+        (parent->parent->i_object_to_disconnect) = -1;
+
+
 //
 //
 //            //update labels

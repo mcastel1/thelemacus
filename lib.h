@@ -2063,7 +2063,7 @@ public:
     bool PutBackIn(wxPoint, wxPoint*);
     double x_span(void);
     Rotation rotation_start_end(const wxPoint&, const wxPoint&);
-    
+
     void Render_Mercator(wxDC*, 
                          const wxPoint&,
                          const vector< vector< vector<wxPoint> > >&,

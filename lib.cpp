@@ -22186,10 +22186,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
             (*(parent->set_idling))();
             (parent->chart_frames[0]->dragging_chart) = true;
+            (parent->chart_frames[0]->draw_panel->rotation_start_drag) = (parent->chart_frames[0]->draw_panel->rotation);
 
             transporting_route_temp = transporting_route;
             
-            (parent->chart_frames[0]->draw_panel->rotation_start_drag) = (parent->chart_frames[0]->draw_panel->rotation);
 
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
             for (unsigned int i = 0; i < (parent->chart_frames.size()); i++) {
@@ -22221,9 +22221,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
             (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position = start;
             (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
-            
-            ((parent->chart_frames)[0]->draw_panel->rotation) =
-            (parent->chart_frames)[0]->draw_panel->rotation_start_end(start, position_now_drag) * (parent->chart_frames[0]->draw_panel->rotation_start_drag);
+            ((parent->chart_frames)[0]->draw_panel->rotation) = Rotation(
+                                                                         start,
+                                                                         (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position
+                                                                         ) * (parent->chart_frames[0]->draw_panel->rotation_start_drag);
             
 
             (((parent->chart_frames)[0]->draw_panel)->*(((parent->chart_frames)[0]->draw_panel)->Draw))();
@@ -22244,7 +22245,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
         
         
-        position_end_drag = wxGetMousePosition();
+//        position_end_drag = wxGetMousePosition();
         gsl_vector_memcpy(( (parent->chart_frames)[0]->draw_panel->rp_end_drag.r), ( (parent->chart_frames)[0]->draw_panel->rp.r));
         (parent->chart_frames[0]->draw_panel->rotation_end_drag) = (parent->chart_frames[0]->draw_panel->rotation);
 

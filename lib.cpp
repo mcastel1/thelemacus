@@ -22198,25 +22198,19 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
             (*(parent->set_idling))();
-            (parent->chart_frames[0]->dragging_chart) = true;
-            (parent->chart_frames[0]->draw_panel->rotation_start_drag) = (parent->chart_frames[0]->draw_panel->rotation);
+            (chart->dragging_chart) = true;
+            (chart->draw_panel->rotation_start_drag) = (chart->draw_panel->rotation);
 
             transporting_route_temp = transporting_route;
             
 
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
-            for (unsigned int i = 0; i < (parent->chart_frames.size()); i++) {
-                ((parent->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
-            }
-       
+            chart->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart->draw_panel);
             
+       
             //THIS SUPPOSES THAT THERE IS ONLY ONE CHARTFRAME AND THAT IT IS WITH THE 3D PROJECTION
-            start = (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position;
+            start = chart->draw_panel->circle_observer.reference_position;
             //THIS SUPPOSES THAT THERE IS ONLY ONE CHARTFRAME AND THAT IT IS WITH THE 3D PROJECTION
- 
-
-            //I bring all ChartFrames to front to show the animation
-//            wxGetApp().ShowChart(event);
             
             t++;
 
@@ -22228,20 +22222,20 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             transporting_route_temp.length.set(
                 String(""),
                 (transporting_route.length.value) *
-                (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
-                ,
-                String(""));
-
-            (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position = start;
-            (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
-            ((parent->chart_frames)[0]->draw_panel->rotation) = Rotation(
-                                                                         start,
-                                                                         (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position
-                                                                         ) * (parent->chart_frames[0]->draw_panel->rotation_start_drag);
+                                               (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
+                                               ,
+                                               String(""));
             
-
-            (((parent->chart_frames)[0]->draw_panel)->*(((parent->chart_frames)[0]->draw_panel)->Draw))();
-            (parent->chart_frames)[0]->draw_panel->MyRefresh();
+            chart->draw_panel->circle_observer.reference_position = start;
+            chart->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
+            (chart->draw_panel->rotation) = Rotation(
+                                                     start,
+                                                     chart->draw_panel->circle_observer.reference_position
+                                                     ) * (chart->draw_panel->rotation_start_drag);
+            
+            
+            (chart->draw_panel->*(chart->draw_panel->Draw))();
+            chart->draw_panel->MyRefresh();
 
             //            cout << "\t\t t= " << t << "\n";
             
@@ -22254,23 +22248,19 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
             
         //do the whole transport rather than combining many little transports, to avoid rounding errors
-        (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position = start;
-        (parent->chart_frames)[0]->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
+        chart->draw_panel->circle_observer.reference_position = start;
+        chart->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
         
-        
-//        position_end_drag = wxGetMousePosition();
-        gsl_vector_memcpy(( (parent->chart_frames)[0]->draw_panel->rp_end_drag.r), ( (parent->chart_frames)[0]->draw_panel->rp.r));
-        (parent->chart_frames[0]->draw_panel->rotation_end_drag) = (parent->chart_frames[0]->draw_panel->rotation);
+        gsl_vector_memcpy((chart->draw_panel->rp_end_drag.r), (chart->draw_panel->rp.r));
+        (chart->draw_panel->rotation_end_drag) = (chart->draw_panel->rotation);
 
-        (parent->chart_frames[0]->dragging_chart) = false;
+        (chart->dragging_chart) = false;
 
         //re-draw everything
         parent->DrawAll();
 
-        for (unsigned int i = 0; i < (parent->chart_frames.size()); i++) {
-            ((parent->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
-        }
-
+        chart->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart->draw_panel);
+        
         timer->Stop();
         (*(parent->unset_idling))();
         
@@ -22279,7 +22269,5 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 //        }
 
     }
-    
-
 
 }

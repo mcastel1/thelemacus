@@ -22259,7 +22259,8 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
             transporting_route_temp = transporting_route;
             
-
+            start = transporting_route.reference_position;
+ 
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
             chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
             
@@ -22271,10 +22272,9 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     PositionProjection q_NE, q_SW;
                     
-                    //set start equal to the Position corresponding to the top-left corner of the chart
-                    start = Position(chart_frame->lambda_max, chart_frame->phi_max);
+            
                     //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle
-                    q_NE.NormalizeAndSetMercator(start);
+                    q_NE.NormalizeAndSetMercator(Position(chart_frame->lambda_max, chart_frame->phi_max));
                     q_SW.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
                     projection_size = q_NE - q_SW;
                     

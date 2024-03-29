@@ -4278,20 +4278,36 @@ void Route::set_length(double t){
         case 0:{
             //*this is a loxodrome
             
-            double C, s, eta;
+            double C, eta;
         
             C = gsl_pow_2(cos(Z));
-            s = GSL_SIGN(cos(Z));
             eta = sqrt((1-sin((reference_position.phi)))/(1+sin((reference_position.phi))));
-            
+
             //set the length format, the length unit and the value of the length from t
             length_format.set(String(""), LengthFormat_types[1], String(""));
             length.unit.set(String(""), LengthUnit_types[0], String(""));
-            length.set(
-                       String(""),
-                       s * 2.0*Re/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t ) ) ),
-                       String(""));
-     
+            
+            if(fabs(C) > epsilon_double){
+                //I am not in the special case where Z = pi/2 or 3 pi /2 (i.e., C = 0)
+                
+                double s;
+                
+                s = GSL_SIGN(cos(Z));
+                length.set(
+                           String(""),
+                           s * 2.0*Re/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t ) ) ),
+                           String(""));
+                
+            }else{
+                //I am in the special case where Z = pi/2 or 3 pi /2 (i.e., C = 0) -> set the length by using the analytical limit C->0 for  expression of the length
+                
+                length.set(
+                           String(""),
+                           2.0*Re*t*eta/(1.0+gsl_pow_2(eta)),
+                           String(""));
+                
+            }
+            
             break;
             
         }

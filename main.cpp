@@ -134,10 +134,11 @@
  
  
  ********** THINGS TO FIX ************
- - when an object is transported charts are not brought to front to show the animation
- - code method DrawPanel::ProjectionToGeo_3D
- - clean up useless objects in charttrnasporthandler
- - ChartFrame must take as an argument for the projection f Projection object, not a String
+     - changing `number of points coastline Mercator` in the init file does not change the number of plotted coastline points as it should, the number of plotted coastline points has nothing to do with `number of points coastline Mercator` 
+     - when an object is transported charts are not brought to front to show the animation
+     - code method DrawPanel::ProjectionToGeo_3D
+     - clean up useless objects in charttrnasporthandler
+     - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:
  on WIN32:
         - remove all remaining calls of Refresh() and replace them with RefreshWIN32();

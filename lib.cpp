@@ -22373,6 +22373,19 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             case 0: {
                 //I am using Projection_types[0]
                 
+                PositionProjection temp;
+
+                
+                start.transport(&p_NE, transporting_route, String(""));
+                (chart_frame->lambda_max) = (p_NE.lambda);
+                (chart_frame->phi_max) =( p_NE.phi);
+                
+                temp.SetMercator(p_NE);
+                (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(temp - projection_size, &p_SW);
+                
+                (chart_frame->lambda_min) = p_SW.lambda;
+                (chart_frame->phi_min) = p_SW.phi;
+
                 
                 break;
                 

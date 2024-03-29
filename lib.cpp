@@ -22269,14 +22269,14 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 case 0: {
                     //I am using Projection_types[0]
                     
-                    PositionProjection q_NW, q_SE;
+                    PositionProjection q_NE, q_SW;
                     
                     //set start equal to the Position corresponding to the top-left corner of the chart
                     start = Position(chart_frame->lambda_max, chart_frame->phi_max);
                     //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle
-                    q_NW.NormalizeAndSetMercator(start);
-                    q_SE.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
-                    projection_size = q_NW - q_SE;
+                    q_NE.NormalizeAndSetMercator(start);
+                    q_SW.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
+                    projection_size = q_NE - q_SW;
                     
                     
                     
@@ -22324,14 +22324,16 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     PositionProjection temp;
                     
-                    start.transport(&p_NW, transporting_route_temp, String(""));
-                    chart_frame->lambda_max = p_NW.lambda;
-                    chart_frame->phi_max = p_NW.phi;
+                    start.transport(&p_NE, transporting_route_temp, String(""));
+                    chart_frame->lambda_max = p_NE.lambda;
+                    chart_frame->phi_max = p_NE.phi;
                     
-                    temp.SetMercator(p_NW);
-                    (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(temp - projection_size, &p_SE);
+                    temp.SetMercator(p_NE);
+                    (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(temp - projection_size, &p_SW);
                     
-                    
+                    chart_frame->lambda_min = p_SW.lambda;
+                    chart_frame->phi_min = p_SW.phi;
+          
                     
                     break;
                     

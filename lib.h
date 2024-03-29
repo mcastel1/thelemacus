@@ -2904,7 +2904,7 @@ public:
     ChartFrame* chart_frame;
     //the size (in Mercator projection x,y) of the projection in the mercator projection: this is stored and used during the transport in such a way that the size of the projection stays the same through the transport
     PositionProjection projection_size;
-    Position p_NW, p_SE;
+    Position p_NE, p_SW;
     
     ChartTransportHandler(ChartFrame*, const Route&);
     void operator()(void);

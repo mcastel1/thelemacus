@@ -134,8 +134,9 @@
  
  
  ********** THINGS TO FIX ************
+ - when an object is transported charts are not brought to front to show the animation
  - code method DrawPanel::ProjectionToGeo_3D
- - line ~ 608 in main.cpp -> put back //                        projection,
+ - clean up useless objects in charttrnasporthandler
  - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:
  on WIN32:
@@ -657,14 +658,10 @@ bool MyApp::OnInit() {
                                                            wxDefaultSize,
                                                            String("")
                                                            );
-            //        ((list_frame->chart_frames)[i])->Show(true);
-            //        ((list_frame->chart_frames)[i])->Raise();
+
             
         }
         
-        
-        //bring either of these wxFrames to front
-        //    list_frame->Raise();
         
         //fore/background color is determined from the default background color of extract_colors
         foreground_color = Color(list_frame->extract_colors->GetForegroundColour());

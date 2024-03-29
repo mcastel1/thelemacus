@@ -313,7 +313,7 @@ template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
                                                                        (list_frame->chart_frames)[i],
                                                                        Route(
                                                                              Route_types[0],
-                                                                             Position((list_frame->chart_frames[i]->lambda_min) - (M_PI/2.0), list_frame->chart_frames[i]->phi_max),
+                                                                             Position((list_frame->chart_frames[i]->lambda_min) - (M_PI), list_frame->chart_frames[i]->phi_max),
                                                                              Position(list_frame->chart_frames[i]->lambda_min, list_frame->chart_frames[i]->phi_max)
                                                                              )
                                                                        );

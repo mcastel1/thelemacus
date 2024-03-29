@@ -650,8 +650,8 @@ bool MyApp::OnInit() {
             
             (list_frame->chart_frames)[i] = new ChartFrame(
                                                            list_frame,
-//                                                           projection,
-                                                           String(""),
+                                                           projection,
+//                                                           String(""),
                                                            s.str(),
                                                            wxDefaultPosition,
                                                            wxDefaultSize,

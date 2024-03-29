@@ -1801,19 +1801,25 @@ Angle::Angle(String name, const double& x, [[maybe_unused]] const String& prefix
 
 }
 
-bool Angle::operator==(const Angle& x) {
+inline bool Angle::operator==(const Angle& x) {
 
     return((value == (x.value)));
 
 }
 
-bool Angle::operator==(const double& x) {
+inline bool Angle::operator!=(const Angle& x) {
+
+    return(!((*this) == x));
+
+}
+
+inline bool Angle::operator==(const double& x) {
 
     return((value == x));
 
 }
 
-bool Angle::operator!=(const double& x) {
+inline bool Angle::operator!=(const double& x) {
 
     return((value != x));
 
@@ -2106,7 +2112,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
 
 
 //build a Route of ty[e type that connects position_start and position_end
-Route::Route(const RouteType& type_in, const Position& p_start, const Position& p_end){
+Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
     
     type = type_in;
 
@@ -2121,23 +2127,41 @@ Route::Route(const RouteType& type_in, const Position& p_start, const Position& 
             
             projection_start.SetMercator(p_start);
             projection_end.SetMercator(p_end);
+
             
-//            reference_position.phi.normalize_pm_pi();
-            
-            //set Z
-            Z.set(
-                     String(""),
-                     -GSL_SIGN((projection_end.x) - (projection_start.x))*acos(sqrt(1.0/(1.0 + gsl_pow_2(((projection_end.x) - (projection_start.x))/((projection_end.y) - (projection_start.y)))))),
-                     String("")
-                     );
-            if((projection_end.y) > (projection_start.y)){
-                Z = Z*(-1.0);
+            if(p_start.phi != p_end.phi){
+                //I am not in the special case where p_start and p_end have the same latitude
+                
+                
+                //            reference_position.phi.normalize_pm_pi();
+                
+                //set Z
+                Z.set(
+                      String(""),
+                      -GSL_SIGN((projection_end.x) - (projection_start.x))*acos(sqrt(1.0/(1.0 + gsl_pow_2(((projection_end.x) - (projection_start.x))/((projection_end.y) - (projection_start.y)))))),
+                      String("")
+                      );
+                if((projection_end.y) > (projection_start.y)){
+                    Z = Z*(-1.0);
+                }else{
+                    Z = Z + M_PI;
+                }
+                       
             }else{
-                Z = Z + M_PI;
+                //I am in the special case where p_start and p_end have the same latitude
+                
+                //set Z
+                Z.set(
+                      String(""),
+                      -GSL_SIGN((projection_end.x) - (projection_start.x))*M_PI_2 + M_PI,
+                      String("")
+                      );
+                
             }
+            
             //set length according to t* (see notes)
             set_length(fabs((p_end.lambda.value) - (p_start.lambda.value)));
-            
+
 
             break;
             

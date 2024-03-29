@@ -229,7 +229,7 @@ public:
     string deg_to_string(String, unsigned int);
     string min_to_string(String, unsigned int);
     
-    bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator > (const Angle&), operator > (const double&);
+    bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator !=(const Angle&), operator > (const Angle&), operator > (const double&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&), operator * (const double&);
     Angle& operator +=(const Angle&), &operator +=(const double&), &operator -=(const Angle&), &operator -=(const double&);
     
@@ -892,7 +892,7 @@ public:
     
     Route(void);
     Route(RouteType, Position, Angle, Length);
-    Route(const RouteType&, const Position&, const Position&);
+    Route(const RouteType&, Position, Position);
     Route(RouteType, Position, Angle);
     void print(String, String, ostream&);
     void read_from_file_to(String, String, String, String);

@@ -137,7 +137,6 @@
     - check whether `points_coastline_now.push_back(temp);` is a bottleneck
      - changing `number of points coastline Mercator` in the init file does not change the number of plotted coastline points as it should, the number of plotted coastline points has nothing to do with `number of points coastline Mercator`
      - code method DrawPanel::ProjectionToGeo_3D
-     - clean up useless objects in charttrnasporthandler
      - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:
  on WIN32:

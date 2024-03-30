@@ -10923,7 +10923,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     projection->value_before_editing = projection->name->GetValue();
 
     //create a dummy_event and then call OnChooseProjection(dummy_event) to set all objects according to the choice of the projeciton above.
-    draw_panel->OnChooseProjection(dummy_event);
+//    draw_panel->OnChooseProjection(dummy_event);
+    draw_panel->SetProjection(dummy_event);
 
     //stores the x_min .. y_max, (size_chart.GetWidth()), height chart the first time that the chart is shown into x_min_0 ... height_chart_0
     (draw_panel->x_min_0) = (draw_panel->x_min);
@@ -12621,8 +12622,10 @@ void DrawPanel::SetLabelAndAdjustPosition(const Position& p, wxPoint* position, 
 
 }
 
-template<class E> void DrawPanel::OnChooseProjection(E& event) {
 
+//set ChartFrame title and all quantities according to a chosen projection
+template<class E> void DrawPanel::SetProjection(E& event) {
+    
     stringstream s;
     String temp;
     size_t pos;
@@ -12636,9 +12639,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
     //put together temp and the new name of the projection type and write the result into the title of parent
     s.str("");
     s << (temp.value) << " - " << (((parent->projection)->name)->GetValue().ToStdString()) << " projection";
-    //
     temp.set(String(""), s.str(), String(""));
-    //
     parent->SetLabel(wxString(s.str().c_str()));
 
 
@@ -12677,8 +12678,16 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
 
     }
+    
+    event.Skip(true);
 
-    //reset everything and draw
+}
+
+
+//this method is called when the used has chosen Projection -> set all quantities according to the chosen Projection and call Reset to re-render everything
+template<class E> void DrawPanel::OnChooseProjection(E& event) {
+
+    SetProjection<E>(event);
     parent->Reset<E>(event);
 
     event.Skip(true);

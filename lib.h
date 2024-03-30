@@ -2100,6 +2100,7 @@ public:
     void OnMouseDrag(wxMouseEvent&);
     void OnMouseWheel(wxMouseEvent&);
     template<class E> void OnChooseProjection(E&);
+    template<class E> void SetProjection(E&);
     void KeyDown(wxKeyEvent&);
     
 //    DECLARE_EVENT_TABLE()

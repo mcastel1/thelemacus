@@ -22426,12 +22426,12 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     //I am using Projection_types[1]
                     
                     chart_frame->draw_panel->circle_observer.reference_position = start;
-                          chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
-                          (chart_frame->draw_panel->rotation) = Rotation(
+                    chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
+                    (chart_frame->draw_panel->rotation) = Rotation(
                                                                    start,
                                                                    chart_frame->draw_panel->circle_observer.reference_position
                                                                    ) * (chart_frame->draw_panel->rotation_start_drag);
-                 
+                    
                     break;
                     
                 }
@@ -22481,18 +22481,18 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             case 0: {
                 //I am using Projection_types[0]
                 
-                PositionProjection temp;
-
-                
-                start.transport(&p_NE, transporting_route, String(""));
-                (chart_frame->lambda_max) = (p_NE.lambda);
-                (chart_frame->phi_max) =( p_NE.phi);
-                
-                temp.SetMercator(p_NE);
-                (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(temp - projection_size, &p_SW);
-                
-                (chart_frame->lambda_min) = p_SW.lambda;
-                (chart_frame->phi_min) = p_SW.phi;
+//                PositionProjection temp;
+//
+//                
+//                start.transport(&p_NE, transporting_route, String(""));
+//                (chart_frame->lambda_max) = (p_NE.lambda);
+//                (chart_frame->phi_max) =( p_NE.phi);
+//                
+//                temp.SetMercator(p_NE);
+//                (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(temp - projection_size, &p_SW);
+//                
+//                (chart_frame->lambda_min) = p_SW.lambda;
+//                (chart_frame->phi_min) = p_SW.phi;
 
                 
                 break;
@@ -22502,9 +22502,9 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             case 1: {
                 //I am using Projection_types[1]
                 
-                //do the whole transport rather than combining many little transports, to avoid rounding errors
-                chart_frame->draw_panel->circle_observer.reference_position = start;
-                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
+//                //do the whole transport rather than combining many little transports, to avoid rounding errors
+//                chart_frame->draw_panel->circle_observer.reference_position = start;
+//                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
                 
                 gsl_vector_memcpy((chart_frame->draw_panel->rp_end_drag.r), (chart_frame->draw_panel->rp.r));
                 (chart_frame->draw_panel->rotation_end_drag) = (chart_frame->draw_panel->rotation);
@@ -22519,7 +22519,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         (chart_frame->dragging_chart) = false;
 
         //re-draw everything
-        parent->DrawAll();
+//        parent->DrawAll();
 
         chart_frame->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
         

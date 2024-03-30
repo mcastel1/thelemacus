@@ -134,7 +134,8 @@
  
  
  ********** THINGS TO FIX ************
-    - when you start the app with > 1 chartframes, the 3D ones are fixed with the Earth set vertically 
+    - check that the sequence used to transport with the gsl_sf_psi_n yields 1.0 at the last t - > if this is the case, remove useless last transport in GraphiCalFeatureTransportHandler 
+    - when you start the app with > 1 chartframes, the 3D ones are fixed with the Earth set vertically
     - check whether `points_coastline_now.push_back(temp);` is a bottleneck
      - changing `number of points coastline Mercator` in the init file does not change the number of plotted coastline points as it should, the number of plotted coastline points has nothing to do with `number of points coastline Mercator`
      - code method DrawPanel::ProjectionToGeo_3D

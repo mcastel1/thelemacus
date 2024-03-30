@@ -2839,6 +2839,7 @@ public:
     template<class T> void MoveEast(T&);
     template<class T> void KeyDown(T&);
     template<class T> void Reset(T&);
+    template<class T> void ResetAndRender(T&);
     void Animate(void);
     
     //this is created for testing

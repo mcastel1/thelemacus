@@ -10878,7 +10878,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveSouth<wxCommandEvent>, this);
     button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveWest<wxCommandEvent>, this);
     button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveEast<wxCommandEvent>, this);
-    button_reset->Bind(wxEVT_BUTTON, &ChartFrame::Reset<wxCommandEvent>, this);
+    button_reset->Bind(wxEVT_BUTTON, &ChartFrame::ResetAndRender<wxCommandEvent>, this);
 
     //bind all the elemetns of *this to KeyDown method
     Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
@@ -11413,7 +11413,8 @@ template<class T> void ChartFrame::KeyDown(T& event) {
 
 }
 
-//resets the chart to its starting configuration for x_min ... y_max
+
+//reset the chart to its starting configuration for x_min ... y_max
 template<class T> void ChartFrame::Reset(T& event) {
 
     idling = false;
@@ -11454,18 +11455,29 @@ template<class T> void ChartFrame::Reset(T& event) {
     (draw_panel->y_min_0) = (draw_panel->y_min);
     (draw_panel->y_max_0) = (draw_panel->y_max);
 
-    (draw_panel->*(draw_panel->PreRender))();
+ 
 
-    //now that (size_chart.GetWidth()) and (size_chart.GetHeight()) have been set, I set width_chart_0 and height_chart_0 equal to width_chart and (size_chart.GetHeight())
-    (draw_panel->width_chart_0) = (draw_panel->size_chart.GetWidth());
-    (draw_panel->height_chart_0) = (draw_panel->size_chart.GetHeight());
+    event.Skip(true);
 
-    draw_panel->CleanAndRenderAll();
+}
+
+
+//call Reset and Render everything
+template<class T> void ChartFrame::ResetAndRender(T& event) {
     
-    draw_panel->FitAll();
-    UpdateSlider();
-    Animate();
+    Reset<T>(event);
+    
+    (draw_panel->*(draw_panel->PreRender))();
+     //now that (size_chart.GetWidth()) and (size_chart.GetHeight()) have been set, I set width_chart_0 and height_chart_0 equal to width_chart and (size_chart.GetHeight())
+     (draw_panel->width_chart_0) = (draw_panel->size_chart.GetWidth());
+     (draw_panel->height_chart_0) = (draw_panel->size_chart.GetHeight());
 
+     draw_panel->CleanAndRenderAll();
+     
+     draw_panel->FitAll();
+     UpdateSlider();
+     Animate();
+    
     event.Skip(true);
 
 }

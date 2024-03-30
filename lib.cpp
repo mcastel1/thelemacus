@@ -22438,10 +22438,6 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
             }
             
-#ifdef __APPLE__
-            //re-draw the chart
-            (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();
-#endif
 #ifdef WIN32
             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
             chart_frame->points_coastline_before.clear();
@@ -22463,10 +22459,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             chart_frame->draw_panel->reference_positions_route_list_before.clear();
             (chart_frame->draw_panel->reference_positions_route_list_before) = (chart_frame->draw_panel->reference_positions_route_list_now);
             
+   
+#endif
             //re-draw the chart
             (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();
-            
-#endif
             chart_frame->draw_panel->MyRefresh();
             //
 

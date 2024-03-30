@@ -254,7 +254,7 @@ template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event) {
 }
 
 //shows all ChartFrames and positions them properly on the screen
-template<class T> void MyApp::ShowChart([[maybe_unused]] T& event) {
+template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
     
     unsigned int i;
     //the spacing between one frame and another in the x and y direction, respectively

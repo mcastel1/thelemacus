@@ -11003,7 +11003,7 @@ template<class T> void ChartFrame::OnPressCtrlW(T& event) {
     }
 
     //given that one ChartFrame is gone, I show all ChartFrames and positions them properly on the screen
-    wxGetApp().ShowChart(event);
+    wxGetApp().ShowCharts(event);
 
 }
 
@@ -13258,7 +13258,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
                     parent->UpdateSlider();
                     //the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen
-                    wxGetApp().ShowChart(event);
+                    wxGetApp().ShowCharts(event);
 
                 }
                 else {
@@ -13308,7 +13308,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
                 parent->UpdateSlider();
                 //the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen
-                wxGetApp().ShowChart(event);
+                wxGetApp().ShowCharts(event);
 
 
             }
@@ -14757,7 +14757,7 @@ template <class T> void ShowAll::operator()(T& event) {
     show_frame = new ShowFrame<ListFrame>(frame);
 
     (*show_frame)(event);
-    wxGetApp().ShowChart(event);
+    wxGetApp().ShowCharts(event);
 
     event.Skip(true);
 
@@ -17777,7 +17777,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
                                              (wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
                                              wxBU_EXACTFIT | wxSIMPLE_BORDER
                                              );
-        button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowChart<wxCommandEvent>, &wxGetApp());
+        button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowCharts<wxCommandEvent>, &wxGetApp());
         
         //button to compute astronomical position
         button_compute_position = new wxBitmapButton(
@@ -17924,7 +17924,7 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event) {
     );
     //    (chart_frames.back())->Show(true);
 
-    wxGetApp().ShowChart(event);
+    wxGetApp().ShowCharts(event);
 
 
 

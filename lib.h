@@ -2838,6 +2838,7 @@ public:
     template<class T> void MoveEast(T&);
     template<class T> void KeyDown(T&);
     template<class T> void Reset(T&);
+    void Animate(void);
     
     //this is created for testing
     UnsetIdling<ChartFrame> *unset_idling;

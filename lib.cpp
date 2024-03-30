@@ -11477,6 +11477,58 @@ template<class T> void ChartFrame::Reset(T& event) {
 }
 
 
+//makes a nice animation to present *this, by dragging the center of the chart to the desired Position from a Position on the antipodes
+void ChartFrame::Animate(void){
+    
+    ChartTransportHandler* chart_transport_handler;
+    
+    
+    //allocate chart_transport_handler and set the starting Position and the Route for the transport
+    switch (String((projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
+            
+        case 0: {
+            //I am using Projection_types[0]
+            
+            chart_transport_handler = new ChartTransportHandler(
+                                                                this,
+                                                                Route(
+                                                                      Route_types[0],
+                                                                      Position(lambda_max, phi_max).antipode_lambda(),
+                                                                      Position(lambda_max, phi_max)
+                                                                      )
+                                                                );
+            
+            
+            break;
+            
+        }
+            
+        case 1: {
+            //I am using Projection_types[1]
+            
+            chart_transport_handler = new ChartTransportHandler(
+                                                                this,
+                                                                Route(
+                                                                      Route_types[0],
+                                                                      draw_panel->circle_observer.reference_position.antipode(),
+                                                                      draw_panel->circle_observer.reference_position
+                                                                      )
+                                                                );
+            
+            
+            
+            break;
+            
+        }
+            
+    }
+    
+    //trigger the animation
+    chart_transport_handler->operator()();
+    
+}
+
+
 void DrawPanel::SetIdling(bool b) {
 
     idling = b;

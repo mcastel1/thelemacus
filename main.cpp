@@ -303,57 +303,11 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
 }
 
 
-//makes a nice animation to present charts, by dragging them to the desired point from a point on the antipodes
+//make a nice animation to present all charts, by dragging them to the desired point from a point on the antipodes
 inline void MyApp::AnimateCharts(void){
 
-    vector<ChartTransportHandler*> chart_transport_handler(list_frame->chart_frames.size());
-    unsigned int i;
-    
-    
-    for (i=0; i<(list_frame->chart_frames.size()); i++) {
-        
-        
-        switch (String((list_frame->chart_frames[i]->projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
-                
-            case 0: {
-                //I am using Projection_types[0]
-                
-                chart_transport_handler[i] = new ChartTransportHandler(
-                                                                       (list_frame->chart_frames)[i],
-                                                                       Route(
-                                                                             Route_types[0],
-                                                                             Position(list_frame->chart_frames[i]->lambda_max, list_frame->chart_frames[i]->phi_max).antipode_lambda(),
-                                                                             Position(list_frame->chart_frames[i]->lambda_max, list_frame->chart_frames[i]->phi_max)
-                                                                             )
-                                                                       );
-                   
-                
-                break;
-                
-            }
-                
-            case 1: {
-                //I am using Projection_types[1]
-                
-                chart_transport_handler[i] = new ChartTransportHandler(
-                                                                       (list_frame->chart_frames)[i],
-                                                                       Route(
-                                                                             Route_types[0],
-                                                                             list_frame->chart_frames[i]->draw_panel->circle_observer.reference_position.antipode(),
-                                                                             list_frame->chart_frames[i]->draw_panel->circle_observer.reference_position
-                                                                             )
-                                                                       );
-
-                
-                
-                break;
-                
-            }
-                
-        }
-        
-         chart_transport_handler[i]->operator()();
-        
+    for(unsigned int i=0; i<(list_frame->chart_frames.size()); i++){
+        ((list_frame->chart_frames)[i])->Animate();
     }
     
 }

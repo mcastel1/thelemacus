@@ -11469,8 +11469,8 @@ template<class T> void ChartFrame::Reset(T& event) {
     draw_panel->CleanAndRenderAll();
     
     draw_panel->FitAll();
-
     UpdateSlider();
+    Animate();
 
     event.Skip(true);
 
@@ -21891,7 +21891,7 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
         MultipleItemField<P, Projection, void>::name->SetForegroundColour(wxGetApp().foreground_color);
         MultipleItemField<P, Projection, void>::name->SetFont(wxGetApp().default_font);
         //choose the projection entered in name button_reduce
-        MultipleItemField<P, Projection, void>::parent->draw_panel->OnChooseProjection(event);
+//        MultipleItemField<P, Projection, void>::parent->draw_panel->OnChooseProjection(event);
 
     }
 

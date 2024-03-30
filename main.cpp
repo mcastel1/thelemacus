@@ -259,9 +259,9 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
     //the spacing between one frame and another in the x and y direction, respectively
     double delta_x, delta_y;
     
-    i = (((list_frame->menu_bar)->GetSize()).GetHeight());
+    i = (list_frame->menu_bar->GetSize().GetHeight());
     
-    if (((list_frame->chart_frames).size()) > 1) {
+    if ((list_frame->chart_frames.size()) > 1) {
         //if ((list_frame->chart_frames).size() > 1 it makes sens to introduce delta_x, delta_y
         
         delta_x = (((double)(rectangle_display.GetWidth())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetWidth()))) / 2.0 - 2.0 * ((wxGetApp().border).value)) / ((double)(((list_frame->chart_frames).size()) - 1));
@@ -283,7 +283,7 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
         ((list_frame->chart_frames)[i])->Raise();
         ((list_frame->chart_frames)[i])->SetPosition(wxPoint(
                                                              
-                                                             (((double)((((list_frame->chart_frames)[0])->GetSize()).GetWidth())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetWidth()))) / 2.0 + ((wxGetApp().border).value) + delta_x * ((double)i)
+                                                             (((double)(((list_frame->chart_frames)[0])->GetSize().GetWidth())) - ((double)(((list_frame->chart_frames)[i])->GetSize().GetWidth()))) / 2.0 + ((wxGetApp().border).value) + delta_x * ((double)i)
                                                              ,
 #ifdef __APPLE__
                                                              //I am on APPLE operating system -> there is a menu bar
@@ -294,7 +294,7 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
                                                              
 #endif
                                                              
-                                                             (((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)((((list_frame->chart_frames)[i])->GetSize()).GetHeight()))) / 2.0 + ((wxGetApp().border).value) + delta_y * ((double)i)
+                                                             (((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)(((list_frame->chart_frames)[i])->GetSize().GetHeight()))) / 2.0 + (wxGetApp().border.value) + delta_y * ((double)i)
                                                              
                                                              ));
         

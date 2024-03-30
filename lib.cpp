@@ -13509,7 +13509,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             reference_positions_route_list_before = reference_positions_route_list_now;
                             
                             //re-draw the chart
-                            (this->*Draw)();
+                            (this->*PreRender)();
                             
 #endif
                             MyRefresh();
@@ -13552,7 +13552,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         reference_positions_route_list_before = reference_positions_route_list_now;
                         
                         //re-draw the chart
-                        (this->*Draw)();
+                        (this->*PreRender)();
                         
 #endif
                         MyRefresh();
@@ -13789,7 +13789,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         reference_positions_route_list_before = reference_positions_route_list_now;
                         
                         //re-draw the chart
-                        (this->*Draw)();
+                        (this->*PreRender)();
                         
 #endif
                         MyRefresh();
@@ -22438,8 +22438,37 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
             }
             
+#ifdef __APPLE__
+            //re-draw the chart
             (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();
+#endif
+#ifdef WIN32
+            //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
+            chart_frame->points_coastline_before.clear();
+            (chart_frame->points_coastline_before) = (chart_frame->points_coastline_now);
+            
+            (chart_frame->draw_panel->position_plot_area_before) = (chart_frame->draw_panel->position_plot_area_now);
+            chart_frame->draw_panel->grid_before.clear();
+            (chart_frame->draw_panel->grid_before) = (chart_frame->draw_panel->grid_now);
+            chart_frame->draw_panel->ticks_before.clear();
+           ( chart_frame->draw_panel->ticks_before) = (chart_frame->draw_panel->ticks_now);
+            
+            //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
+            chart_frame->draw_panel->points_route_list_before.clear();
+            (chart_frame->draw_panel->points_route_list_before) = (chart_frame->draw_panel->points_route_list_now);
+            
+            chart_frame->draw_panel->points_position_list_before.clear();
+            (chart_frame->draw_panel->points_position_list_before) = (chart_frame->draw_panel->points_position_list_now);
+            
+            chart_frame->draw_panel->reference_positions_route_list_before.clear();
+            (chart_frame->draw_panel->reference_positions_route_list_before) = (chart_frame->draw_panel->reference_positions_route_list_now);
+            
+            //re-draw the chart
+            (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();
+            
+#endif
             chart_frame->draw_panel->MyRefresh();
+            //
 
             //            cout << "\t\t t= " << t << "\n";
             

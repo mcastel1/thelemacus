@@ -14824,6 +14824,9 @@ template <class T> void ShowAll::operator()(T& event) {
     show_frame = new ShowFrame<ListFrame>(frame);
 
     (*show_frame)(event);
+    for(unsigned int i=0; i<wxGetApp().list_frame->chart_frames.size(); i++){
+        wxGetApp().list_frame->chart_frames[i]->Reset(event);
+    }
     wxGetApp().ShowCharts(event);
     wxGetApp().AnimateCharts();
 

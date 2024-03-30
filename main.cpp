@@ -134,7 +134,8 @@
  
  
  ********** THINGS TO FIX ************
-    - when a selection rectangle is grown the animation is triggered  and the chart does not end in the area of the rectangle -> disable the animation trigger in this case 
+    - check whether `points_coastline_now.push_back(temp);` is a bottleneck
+    - when a selection rectangle is grown the animation is triggered  and the chart does not end in the area of the rectangle -> disable the animation trigger in this case
      - changing `number of points coastline Mercator` in the init file does not change the number of plotted coastline points as it should, the number of plotted coastline points has nothing to do with `number of points coastline Mercator`
      - when an object is transported charts are not brought to front to show the animation
      - code method DrawPanel::ProjectionToGeo_3D

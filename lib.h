@@ -1977,8 +1977,8 @@ public:
     vector<wxPoint> positions_parallels_and_meridians_labels_now, positions_parallels_and_meridians_labels_before;
     vector< vector< vector<wxPoint> > > /*parallels and meridians are stored in this vectors at the current step of the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_now, /*parallels and meridians are stored in these vectors at the preceeding step in the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_before, ticks_now, ticks_before;
     
-    //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::Draw_Mercator or DrawPanel::Draw_3D, according to my needs, and similarly for the other pointers
-    void (DrawPanel::*Draw)(void);
+    //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::PreRenderMercator or DrawPanel::PreRender3D, according to my needs, and similarly for the other pointers
+    void (DrawPanel::*PreRender)(void);
     bool (DrawPanel::*ScreenToProjection)(const wxPoint&, PositionProjection*);
     bool (DrawPanel::*CartesianToProjection)(const Cartesian&, PositionProjection*, bool);
     bool (DrawPanel::*ScreenToGeo)(const wxPoint&, Position*);
@@ -2002,8 +2002,8 @@ public:
     DrawPanel(ChartPanel*, const wxPoint& position_in, const wxSize& size_in);
 
     void SetIdling(bool);
-    void Draw_Mercator(void);
-    void Draw_3D(void);
+    void PreRenderMercator(void);
+    void PreRender3D(void);
     void PaintEvent(wxPaintEvent& evt);
     void RenderAll(wxDC&);
     void MyRefresh(void);

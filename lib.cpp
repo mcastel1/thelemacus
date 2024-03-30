@@ -2274,7 +2274,7 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, Dra
     unsigned int i;
     Length s;
 
-    //sets color and width of memory_dc to the ones supported as arguments of Draw
+    //sets color and width of memory_dc to the ones supported as arguments of PreRender
     dc->SetPen(wxPen(color, width));
     dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
 
@@ -2364,7 +2364,7 @@ void Route::Draw(unsigned int n_points, Color foreground_color, Color background
     wxPoint temp, q;
     vector<Length> s;
 
-    //sets color and width of memory_dc to the ones supported as arguments of Draw
+    //sets color and width of memory_dc to the ones supported as arguments of PreRender
     dc->SetPen(wxPen(foreground_color, width));
     dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
 
@@ -8775,7 +8775,7 @@ void ChartFrame::SetIdling(bool b) {
 //I call this function when I know that all GUI fields are properly filled in ChartFrame, and thus set the non GUI Angle objects relative to the Euler angles for the rotation of the 3D earth,  and draw everything
 void ChartFrame::AllOk(void) {
 
-    (draw_panel->*(draw_panel->Draw))();
+    (draw_panel->*(draw_panel->PreRender))();
     draw_panel->Refresh();
     draw_panel->FitAll();
 
@@ -9935,7 +9935,7 @@ inline void DrawPanel::TabulatePositions(void) {
 
 
 //draws coastlines, Routes and Positions on the Mercator-projection case
-inline void DrawPanel::Draw_Mercator(void) {
+inline void DrawPanel::PreRenderMercator(void) {
 
     PositionProjection delta_temp;
     unsigned int n_intervals_ticks, n_intervals_ticks_max;
@@ -9953,7 +9953,7 @@ inline void DrawPanel::Draw_Mercator(void) {
     //client_dc->Clear();
 
 
-    //here I compute multiple quantities relative to the y axis: this computation is done here, at the very beginning of Draw_Mercator, because these quantitites will be needed immediatly to compute size_label_horizontal
+    //here I compute multiple quantities relative to the y axis: this computation is done here, at the very beginning of PreRenderMercator, because these quantitites will be needed immediatly to compute size_label_horizontal
     //set phi_start, phi_end and delta_phi
     phi_span = (((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value);
 
@@ -10355,7 +10355,7 @@ inline void DrawPanel::Draw_Mercator(void) {
 }
 
 //this function draws coastlines, Routes and Positions in the 3D case
-inline void DrawPanel::Draw_3D(void) {
+inline void DrawPanel::PreRender3D(void) {
 
     Angle lambda_in, lambda_out, /*phi is an auxiliary variable used in the loop which draws parallels*/phi;
     Position q;
@@ -10973,7 +10973,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     panel->Fit();
     Fit();
 
-    (draw_panel->*(draw_panel->Draw))();
+    (draw_panel->*(draw_panel->PreRender))();
     draw_panel->Refresh();
     draw_panel->FitAll();
 
@@ -11073,7 +11073,7 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
     }
 
     //re-draw the charton
-    (draw_panel->*(draw_panel->Draw))();
+    (draw_panel->*(draw_panel->PreRender))();
     draw_panel->Refresh();
     draw_panel->FitAll();
 
@@ -11145,7 +11145,7 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
     }
 
     //re-draw the chart
-    (draw_panel->*(draw_panel->Draw))();
+    (draw_panel->*(draw_panel->PreRender))();
     draw_panel->Refresh();
     draw_panel->FitAll();
 
@@ -11210,7 +11210,7 @@ template<class T> void ChartFrame::MoveWest(T& event) {
     }
 
     //re-draw the chart
-    (draw_panel->*(draw_panel->Draw))();
+    (draw_panel->*(draw_panel->PreRender))();
     draw_panel->Refresh();
     draw_panel->FitAll();
 
@@ -11347,7 +11347,7 @@ template<class T> void ChartFrame::MoveEast(T& event) {
     }
 
     //re-draw the chart
-    (draw_panel->*(draw_panel->Draw))();
+    (draw_panel->*(draw_panel->PreRender))();
     draw_panel->Refresh();
     draw_panel->FitAll();
 
@@ -11454,7 +11454,7 @@ template<class T> void ChartFrame::Reset(T& event) {
     (draw_panel->y_min_0) = (draw_panel->y_min);
     (draw_panel->y_max_0) = (draw_panel->y_max);
 
-    (draw_panel->*(draw_panel->Draw))();
+    (draw_panel->*(draw_panel->PreRender))();
 
     //now that (size_chart.GetWidth()) and (size_chart.GetHeight()) have been set, I set width_chart_0 and height_chart_0 equal to width_chart and (size_chart.GetHeight())
     (draw_panel->width_chart_0) = (draw_panel->size_chart.GetWidth());
@@ -12637,9 +12637,9 @@ template<class E> void DrawPanel::SetProjection(E& event) {
 
 
     if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
-        //if in projection "mercator" is selected, then I let the Draw function pointer point to Draw_Mercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
+        //if in projection "mercator" is selected, then I let the Draw function pointer point to PreRenderMercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
 
-        Draw = (&DrawPanel::Draw_Mercator);
+        PreRender = (&DrawPanel::PreRenderMercator);
         Render = (&DrawPanel::Render_Mercator);
         ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_Mercator);
         ProjectionToGeo = (&DrawPanel::ProjectionToGeo_Mercator);
@@ -12655,9 +12655,9 @@ template<class E> void DrawPanel::SetProjection(E& event) {
     }
 
     if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
-        //if in projection ((Projection_types[1]).value) is selected, then I let the Draw function pointer point to Draw_3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
+        //if in projection ((Projection_types[1]).value) is selected, then I let the Draw function pointer point to PreRender3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
 
-        Draw = (&DrawPanel::Draw_3D);
+        PreRender = (&DrawPanel::PreRender3D);
         Render = (&DrawPanel::Render_3D);
         ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_3D);
         ProjectionToGeo = (&DrawPanel::ProjectionToGeo_3D);
@@ -13015,7 +13015,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                     (this->*Set_lambda_phi_min_max)();
 
                     //re-draw the chart
-                    (this->*Draw)();
+                    (this->*PreRender)();
                     Refresh();
                     FitAll();
 
@@ -13307,7 +13307,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     (((parent->parent)->position_end).phi).normalize();
                     (((parent->parent)->position_end).lambda).normalize();
 
-                    (this->*Draw)();
+                    (this->*PreRender)();
                     parent->parent->RefreshAll();
                     FitAll();
 
@@ -13357,7 +13357,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
                 rotation = (rotation * Rotation(circle_observer.reference_position, reference_position_old));
 
-                (this->*Draw)();
+                (this->*PreRender)();
                 parent->parent->RefreshAll();
                 FitAll();
 
@@ -13473,7 +13473,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
 #ifdef __APPLE__
                             //re-draw the chart
-                            (this->*Draw)();
+                            (this->*PreRender)();
 #endif
 #ifdef WIN32
                             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
@@ -13516,7 +13516,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #ifdef __APPLE__
                         
                         //re-render the chart
-                        (this->*Draw)();
+                        (this->*PreRender)();
 #endif
 #ifdef WIN32
                         //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
@@ -13753,7 +13753,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
 #ifdef __APPLE__
                         //re-draw the chart
-                        (this->*Draw)();
+                        (this->*PreRender)();
 #endif
 #ifdef _WIN32
                         //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
@@ -13949,7 +13949,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
             (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
             //            ComputeZoomFactor_Mercator((draw_panel->x_span));
 
-            (draw_panel->*(draw_panel->Draw))();
+            (draw_panel->*(draw_panel->PreRender))();
             draw_panel->MyRefresh();
             draw_panel->FitAll();
             UpdateSlider();
@@ -13972,7 +13972,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
         ((draw_panel->circle_observer).omega) = (((draw_panel->circle_observer_0).omega) / (zoom_factor.value));
 
-        (draw_panel->*(draw_panel->Draw))();
+        (draw_panel->*(draw_panel->PreRender))();
         draw_panel->MyRefresh();
         draw_panel->FitAll();
 
@@ -18042,13 +18042,13 @@ void ListFrame::OnComputePosition(void) {
 }
 
 
-//calls Draw and FitAll in all che ChartFrames which are children of *this
+//calls PreRender and FitAll in all che ChartFrames which are children of *this
 void ListFrame::DrawAll(void) {
 
     for (long i = 0; i < (chart_frames.size()); i++) {
 
         //I call FitAll() because the positions have changed, so I need to re-draw the chart
-        (((chart_frames[i])->draw_panel)->*(((chart_frames[i])->draw_panel)->Draw))();
+        (((chart_frames[i])->draw_panel)->*(((chart_frames[i])->draw_panel)->PreRender))();
         ((chart_frames[i])->draw_panel)->Refresh();
         ((chart_frames[i])->draw_panel)->FitAll();
 
@@ -22425,7 +22425,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
             }
             
-            (chart_frame->draw_panel->*(chart_frame->draw_panel->Draw))();
+            (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();
             chart_frame->draw_panel->MyRefresh();
 
             //            cout << "\t\t t= " << t << "\n";

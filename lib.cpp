@@ -11441,15 +11441,8 @@ template<class T> void ChartFrame::Reset(T& event) {
         zoom_factor.set(String(""), 1.0, String(""));
         ComputeZoomFactor_3D();
 
-        //        (draw_panel->rotation_0) = Rotation(
-        //                                            Angle(String("Euler angle alpha"), -M_PI_2, String("")),
-        //                                            Angle(String("Euler angle beta"), 0.0, String("")),
-        //                                            Angle(String("Euler angle gamma"), 0.0, String(""))
-        //                                            );
         (draw_panel->rotation_0).read_from_file_to(String("rotation 0"), (wxGetApp().path_file_init), String("R"), String(""));
-
         (draw_panel->rotation) = (draw_panel->rotation_0);
-
         draw_panel->Set_x_y_min_max_3D();
         (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
 

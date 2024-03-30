@@ -134,6 +134,7 @@
  
  
  ********** THINGS TO FIX ************
+    - when you start the app with > 1 chartframes, the 3D ones are fixed with the Earth set vertically 
     - check whether `points_coastline_now.push_back(temp);` is a bottleneck
      - changing `number of points coastline Mercator` in the init file does not change the number of plotted coastline points as it should, the number of plotted coastline points has nothing to do with `number of points coastline Mercator`
      - code method DrawPanel::ProjectionToGeo_3D

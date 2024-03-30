@@ -11004,6 +11004,7 @@ template<class T> void ChartFrame::OnPressCtrlW(T& event) {
 
     //given that one ChartFrame is gone, I show all ChartFrames and positions them properly on the screen
     wxGetApp().ShowCharts(event);
+    wxGetApp().AnimateCharts();
 
 }
 
@@ -14758,6 +14759,7 @@ template <class T> void ShowAll::operator()(T& event) {
 
     (*show_frame)(event);
     wxGetApp().ShowCharts(event);
+    wxGetApp().AnimateCharts();
 
     event.Skip(true);
 
@@ -17925,6 +17927,7 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event) {
     //    (chart_frames.back())->Show(true);
 
     wxGetApp().ShowCharts(event);
+    wxGetApp().AnimateCharts();
 
 
 

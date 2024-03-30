@@ -302,8 +302,16 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
     }
     
     
-    //
+    
+}
+
+
+//makes a nice animation to present charts, by dragging them to the desired point from a point on the antipodes
+inline void MyApp::AnimateCharts(void){
+
     vector<ChartTransportHandler*> chart_transport_handler(list_frame->chart_frames.size());
+    unsigned int i;
+    
     
     for (i=0; i<(list_frame->chart_frames.size()); i++) {
         
@@ -347,11 +355,8 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
                 
         }
         
-        
-        
-        
          chart_transport_handler[i]->operator()();
-        //
+        
     }
     
 }

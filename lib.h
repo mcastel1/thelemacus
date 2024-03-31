@@ -2832,6 +2832,7 @@ public:
     template<class T> void OnPressCtrlW(T&);
     void SetIdling(bool);
     void AllOk(void);
+    void EnableAll(bool);
     
     template<class T> void MoveNorth(T&);
     template<class T> void MoveSouth(T&);

@@ -8781,6 +8781,21 @@ void ChartFrame::AllOk(void) {
 
 }
 
+
+//enable all GUI fields (buttons, slider, etc) in *this if enable  = true, and disable them otherwise
+void ChartFrame::EnableAll(bool enable){
+    
+    button_reset->Enable(enable);
+    button_up->Enable(enable);
+    button_down->Enable(enable);
+    button_left->Enable(enable);
+    button_right->Enable(enable);
+    slider->Enable(enable);
+    projection->Enable(enable);
+    
+}
+
+
 DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wxSize& size_in) : wxPanel(parent_in, wxID_ANY, position_in, size_in, wxTAB_TRAVERSAL, wxT("")) {
 
     String prefix;
@@ -22320,11 +22335,15 @@ ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& 
 void ChartTransportHandler::operator()(void) {
 //void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
     
-    //the animation transport starts here
-    timer->Start(
-        /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
-        (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
-        wxTIMER_CONTINUOUS);
+    if(!(parent->idling)){
+        
+        //the animation transport starts here (only if the parent ChartFrame is not in idling mode)
+        timer->Start(
+                     /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
+                     (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
+                     wxTIMER_CONTINUOUS);
+        
+    }
     
     
 }
@@ -22342,6 +22361,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
             (*(parent->set_idling))();
             (chart_frame->dragging_chart) = true;
+            chart_frame->EnableAll(false);
 
             transporting_route_temp = transporting_route;
             
@@ -22520,6 +22540,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
 
         (chart_frame->dragging_chart) = false;
+        chart_frame->EnableAll(true);
 
         //re-draw everything
 //        parent->DrawAll();

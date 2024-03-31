@@ -8562,14 +8562,26 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
                 //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
                 //            flush(cout);
+                
 
                 //count how many datapoints are in data_x[i][j] and in data_y[i][j]
                 n = ((unsigned int)(((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size()));
-
+                
                 every = (unsigned int)(((double)n) / ((double)((parent->data->n_points_plot_coastline_Mercator).value)) * ((double)n_points_grid) */*this factor taks into account of the latitude expansion of Mercator projection*/cos(k * ((double)i)));
                 if (every == 0) { every = 1; }
+                
+                
+                /*
+                 here the total number of plotted points for a given i and j is
+                 
+                 ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() / every =
+                 ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() / (((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() * n_points_plot_coastline_mercator / n_points_grid / cos(k i) =
+                  = n_points_plot_coastline_mercator / n_points_grid / cos(k i )
+                 
+                 */
+                
 
-                //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
+                //run over data_x)[i - floor_min_lat][j % 360] by picking one point every [every] points
                 for (l = 0; (l * every) < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l++) {
 
                     //                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];

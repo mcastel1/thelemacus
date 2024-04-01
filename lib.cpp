@@ -8582,12 +8582,12 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 
 
                 //run over data_x)[i - floor_min_lat][j % 360] by picking one point every [every] points
-                for (l = 0; (l * every) < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l++) {
+                for (l = 0; l < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l+=every) {
 
                     //                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
                     //                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
 
-                    if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l * every], &temp, false)) {
+                    if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
 
                         //                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
                         //                            (temp.x) += 2.0*M_PI;

@@ -8568,30 +8568,13 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //                    if (every == 0){
 //                        every = 1;
 //                    }
-                    
-                    
-                    /*
-                     here the total number of plotted points for a given i and j is
-                     
-                     ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() / every =
-                     ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() / (((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() * n_points_plot_coastline_mercator / n_points_grid / cos(k i) =
-                     = n_points_plot_coastline_mercator / n_points_grid / cos(k i )
-                     
-                     */
-                    
+                
                     
                     //run over data_x)[i - floor_min_lat][j % 360] by picking one point every [every] points
                     for (l = 0; l < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l+=every) {
                         
-                        //                    (temp.x) = (parent->data_x)[i - floor_min_lat][j % 360][l*every];
-                        //                    (temp.y) = (parent->data_y)[i - floor_min_lat][j % 360][l*every];
-                        
                         if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
-                            
-                            //                        if(((draw_panel->x_max) < (draw_panel->x_min)) && ((temp.x) < (draw_panel->x_max))){
-                            //                            (temp.x) += 2.0*M_PI;
-                            //                        }
-                            
+                        
                             points_coastline_now.push_back(temp);
                             
                         }

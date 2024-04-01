@@ -8514,7 +8514,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned long long int l, n = 0, every = 0, /*roughly the number of cells in a latitude-longitude grid where paralles and meiridans are spaced by one degree*/n_grid_cells = 0;
+    unsigned long long int l, p, n = 0, every = 0, n_Positions;
     wxPoint temp;
 
     //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
@@ -8548,41 +8548,43 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
     i_min = floor(K * (phi_min.value));
     i_max = ((parent->all_coastline_points_Position).size()) + floor_min_lat;
 
-    n_grid_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
+//    n_grid_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
+    
+
+    
 
     if ((parent->show_coastlines) == Answer('y', String(""))) {
 
         points_coastline_now.clear();
         
-        every = (unsigned long long int)(((double)all_coastline_points_Position) / ((double)(parent->data->n_points_plot_coastline_Mercator.value)) /**cos(k * ((double)i))*/);
+        for(n_Positions=0, i = i_min; i < i_max; i++) {
+            for(j = j_min; j < j_max; j++) {
+                
+                n_Positions += (parent->all_coastline_points_Position)[i - floor_min_lat][j % 360].size();
+                
+            }
+        }
+        
+        every = (unsigned long long int)(((double)n_Positions) / ((double)(parent->data->n_points_plot_coastline_Mercator.value)) /**cos(k * ((double)i))*/);
 
-        for (i = i_min; i < i_max; i++) {
-            for (j = j_min; j < j_max; j++) {
+        for(p=0, i = i_min; i < i_max; i++) {
+            for(j = j_min; j < j_max; j++) {
                 
                 cout << "i = " << i << " j = " << j << "\tsize = " << ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() << endl;
-
-                //count how many datapoints are in data_x[i][j] and in data_y[i][j]
-//                n = ((unsigned long long int)(((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size()));
                 
-//                if(n!=0){
-
-//                    if (every == 0){
-//                        every = 1;
-//                    }
-                
+                //run over the Positions by picking one Position every [every] Positions
+                for (l = p; l < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l+=every) {
                     
-                    //run over data_x)[i - floor_min_lat][j % 360] by picking one point every [every] points
-                    for (l = 0; l < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l+=every) {
+                    if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
                         
-                        if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
-                        
-                            points_coastline_now.push_back(temp);
-                            
-                        }
+                        points_coastline_now.push_back(temp);
                         
                     }
                     
-//                }
+                }
+                
+                p = l - ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size();
+                
 
             }
         }

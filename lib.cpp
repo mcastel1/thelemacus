@@ -8555,10 +8555,14 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         points_coastline_now.clear();
 
         for (i = i_min; i < i_max; i++) {
-
+            
+  
             //        cout << "\n i = " << i;
 
             for (j = j_min; j < j_max; j++) {
+                
+                cout << "i = " << i << " j = " << j << "\tsize = " << ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() << endl;
+
 
                 //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
                 //            flush(cout);
@@ -8570,9 +8574,9 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 if(n!=0){
                     
                     every = (unsigned int)(((double)n) / ((double)((parent->data->n_points_plot_coastline_Mercator).value)) * ((double)n_grid_cells) /**cos(k * ((double)i))*/);
-                    if (every == 0){
-                        every = 1;
-                    }
+//                    if (every == 0){
+//                        every = 1;
+//                    }
                     
                     
                     /*

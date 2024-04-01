@@ -8570,8 +8570,8 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         for(p=0, i = i_min; i < i_max; i++) {
             for(j = j_min; j < j_max; j++) {
                 
-                cout << "i = " << i << " j = " << j << "\tsize = " << ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() << endl;
-                
+//                cout << "i = " << i << " j = " << j << "\tsize = " << ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() << endl;
+//                
                 //run over the Positions by picking one Position every [every] Positions
                 for (l = p; l < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l+=every) {
                     

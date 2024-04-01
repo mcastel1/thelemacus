@@ -8514,7 +8514,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned int l, n = 0, every = 0, n_points_grid = 0;
+    unsigned int l, n = 0, every = 0, /*roughly the number of cells in a latitude-longitude grid where paralles and meiridans are spaced by one degree*/n_grid_cells = 0;
     wxPoint temp;
 
     //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
@@ -8548,7 +8548,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
     i_min = floor(K * (phi_min.value));
     i_max = ((parent->all_coastline_points_Position).size()) + floor_min_lat;
 
-    n_points_grid = (i_max - i_min + 1) * (j_max - j_min + 1);
+    n_grid_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
 
     if ((parent->show_coastlines) == Answer('y', String(""))) {
 
@@ -8567,7 +8567,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 //count how many datapoints are in data_x[i][j] and in data_y[i][j]
                 n = ((unsigned int)(((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size()));
                 
-                every = (unsigned int)(((double)n) / ((double)((parent->data->n_points_plot_coastline_Mercator).value)) * ((double)n_points_grid) */*this factor taks into account of the latitude expansion of Mercator projection*/cos(k * ((double)i)));
+                every = (unsigned int)(((double)n) / ((double)((parent->data->n_points_plot_coastline_Mercator).value)) * ((double)n_grid_cells) */*this factor taks into account of the latitude expansion of Mercator projection*/cos(k * ((double)i)));
                 if (every == 0) { every = 1; }
                 
                 

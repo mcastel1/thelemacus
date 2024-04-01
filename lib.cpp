@@ -8553,6 +8553,8 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
     if ((parent->show_coastlines) == Answer('y', String(""))) {
 
         points_coastline_now.clear();
+        
+        every = (unsigned long long int)(((double)all_coastline_points_Position) / ((double)(parent->data->n_points_plot_coastline_Mercator.value)) /**cos(k * ((double)i))*/);
 
         for (i = i_min; i < i_max; i++) {
             for (j = j_min; j < j_max; j++) {
@@ -8560,11 +8562,10 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 cout << "i = " << i << " j = " << j << "\tsize = " << ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() << endl;
 
                 //count how many datapoints are in data_x[i][j] and in data_y[i][j]
-                n = ((unsigned long long int)(((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size()));
+//                n = ((unsigned long long int)(((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size()));
                 
-                if(n!=0){
-                    
-                    every = (unsigned long long int)(((double)n) / ((double)((parent->data->n_points_plot_coastline_Mercator).value)) * ((double)n_grid_cells) /**cos(k * ((double)i))*/);
+//                if(n!=0){
+
 //                    if (every == 0){
 //                        every = 1;
 //                    }
@@ -8581,7 +8582,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                         
                     }
                     
-                }
+//                }
 
             }
         }

@@ -8569,7 +8569,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 
                 if(n!=0){
                     
-                    every = (unsigned int)(((double)n) / ((double)((parent->data->n_points_plot_coastline_Mercator).value)) * ((double)n_grid_cells) */*this factor taks into account of the latitude expansion of Mercator projection*/cos(k * ((double)i)));
+                    every = (unsigned int)(((double)n) / ((double)((parent->data->n_points_plot_coastline_Mercator).value)) * ((double)n_grid_cells) /**cos(k * ((double)i))*/);
                     if (every == 0){
                         every = 1;
                     }
@@ -8602,6 +8602,8 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                         }
                         
                     }
+                    
+                    
                     
                 }
 

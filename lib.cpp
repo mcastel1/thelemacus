@@ -8514,7 +8514,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned int l, n = 0, every = 0, /*roughly the number of cells in a latitude-longitude grid where paralles and meiridans are spaced by one degree*/n_grid_cells = 0;
+    unsigned long long int l, n = 0, every = 0, /*roughly the number of cells in a latitude-longitude grid where paralles and meiridans are spaced by one degree*/n_grid_cells = 0;
     wxPoint temp;
 
     //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
@@ -8555,25 +8555,16 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         points_coastline_now.clear();
 
         for (i = i_min; i < i_max; i++) {
-            
-  
-            //        cout << "\n i = " << i;
-
             for (j = j_min; j < j_max; j++) {
                 
                 cout << "i = " << i << " j = " << j << "\tsize = " << ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() << endl;
 
-
-                //            cout << "\nCalled data_x[" << i - floor_min_lat << "][" << j % 360;
-                //            flush(cout);
-                
-
                 //count how many datapoints are in data_x[i][j] and in data_y[i][j]
-                n = ((unsigned int)(((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size()));
+                n = ((unsigned long long int)(((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size()));
                 
                 if(n!=0){
                     
-                    every = (unsigned int)(((double)n) / ((double)((parent->data->n_points_plot_coastline_Mercator).value)) * ((double)n_grid_cells) /**cos(k * ((double)i))*/);
+                    every = (unsigned long long int)(((double)n) / ((double)((parent->data->n_points_plot_coastline_Mercator).value)) * ((double)n_grid_cells) /**cos(k * ((double)i))*/);
 //                    if (every == 0){
 //                        every = 1;
 //                    }
@@ -8607,12 +8598,9 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                         
                     }
                     
-                    
-                    
                 }
 
             }
-
         }
 
     }

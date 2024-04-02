@@ -134,7 +134,8 @@
  
  
  ********** THINGS TO FIX ************
-    - if I zoom in with a rectangle on a newly created mercator projection on the E part of the chart, I get the error that zoom factor is incorrect 
+    - if I zoom in with a rectangle on a newly created mercator projection on the E part of the chart, I get the error that zoom factor is incorrect
+    - if I zoom in with selection rectangle in mercator projeciton, it crashes
     - use the method in GetCoastlineData_Mercator also in GetCoastlineData_3D
     - use the Mercator dilation factor dy/d(R phi) to renormalize the number of points per unit surface
     - make sure that if one animation (A) is triggered when anotherone (B) is in progress, (A) does not start

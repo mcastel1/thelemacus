@@ -12706,7 +12706,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
 template<class E> void DrawPanel::OnChooseProjection(E& event) {
 
     SetProjection<E>(event);
-    parent->Reset<E>(event);
+    parent->ResetAndRender<E>(event);
 
     event.Skip(true);
 

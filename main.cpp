@@ -134,7 +134,8 @@
  
  
  ********** THINGS TO FIX ************
-    - when you choose a projection from the dropdown menu, the projection shjould be changed immediately 
+    - use the Mercator dilation factor dy/d(R phi) to renormalize the number of points per unit surface
+    - when you choose a projection from the dropdown menu, the projection shjould be changed immediately
     - make sure that if one animation (A) is triggered when anotherone (B) is in progress, (A) does not start
     - if you close a chartframe when an animation is in progress the app crashes
     - check that the sequence used to transport with the gsl_sf_psi_n yields 1.0 at the last t - > if this is the case, remove useless last transport in GraphiCalFeatureTransportHandler

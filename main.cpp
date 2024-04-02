@@ -134,14 +134,10 @@
  
  
  ********** THINGS TO FIX ************
-    - if I zoom in with a rectangle on a newly created mercator projection on the E part of the chart, I get the error that zoom factor is incorrect
-    - if I zoom in with selection rectangle in mercator projeciton, it crashes
     - use the method in GetCoastlineData_Mercator also in GetCoastlineData_3D
     - use the Mercator dilation factor dy/d(R phi) to renormalize the number of points per unit surface
-    - make sure that if one animation (A) is triggered when anotherone (B) is in progress, (A) does not start
-    - if you close a chartframe when an animation is in progress the app crashes
+    - make sure that if one animation (A) is triggered when anotherone (B) is in progress, (A) does not start (if you close a chartframe when an animation is in progress the app crashes)
     - check that the sequence used to transport with the gsl_sf_psi_n yields 1.0 at the last t - > if this is the case, remove useless last transport in GraphiCalFeatureTransportHandler
-    - check whether `points_coastline_now.push_back(temp);` is a bottleneck
      - changing `number of points coastline Mercator` in the init file does not change the number of plotted coastline points as it should, the number of plotted coastline points has nothing to do with `number of points coastline Mercator`
      - code method DrawPanel::ProjectionToGeo_3D
      - ChartFrame must take as an argument for the projection f Projection object, not a String

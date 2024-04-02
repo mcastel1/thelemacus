@@ -8363,7 +8363,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
     //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
     n_points_grid = (i_max - i_min + 1) * (j_max - j_min + 1);
 
-    points_coastline_now.clear();
+//    points_coastline_now.clear();
 
     //    clock_t t_start, t_end/*, ta, tb*/;
     //    double T_I, T_II;
@@ -8374,7 +8374,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
     //    t_start = clock();
 
 
-    for (i = i_min; i < i_max; i++) {
+    for (size_points_coastline_now=0, i = i_min; i < i_max; i++) {
 
         for (j = j_min; j < j_max; j++) {
 
@@ -8480,7 +8480,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
                     //I write points in data_x and data_y to x and y in such a way to write (((parent->data)->n_points_coastline).value) points to the most
                     if (b) {
 
-                        points_coastline_now.push_back(q);
+                        points_coastline_now[size_points_coastline_now++];
 
                     }
 

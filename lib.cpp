@@ -8480,7 +8480,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
                     //I write points in data_x and data_y to x and y in such a way to write (((parent->data)->n_points_coastline).value) points to the most
                     if (b) {
 
-                        points_coastline_now[size_points_coastline_now++];
+                        points_coastline_now[size_points_coastline_now++] = q;
 
                     }
 
@@ -8514,9 +8514,8 @@ void ChartFrame::GetCoastLineData_3D(void) {
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned long long int l, p, n = 0, every = 0, n_Positions;
+    unsigned long long int l, p,  every = 0;
     wxPoint temp;
-    vector<Position*> tab;
 
     //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
     phi_min.normalize_pm_pi();
@@ -8553,21 +8552,18 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
     if ((parent->show_coastlines) == Answer('y', String(""))) {
 
-        points_coastline_now.clear();
+//        points_coastline_now.clear();
         
-
-                
-        for(n_Positions=0, i = i_min; i < i_max; i++) {
+        for(size_points_coastline_now=0, i = i_min; i < i_max; i++) {
             for(j = j_min; j < j_max; j++) {
                 
-                n_Positions += (parent->all_coastline_points_Position)[i - floor_min_lat][j % 360].size();
+                size_points_coastline_now += (parent->all_coastline_points_Position)[i - floor_min_lat][j % 360].size();
                 
             }
         }
-        
-        every = (unsigned long long int)(((double)n_Positions) / ((double)(parent->data->n_points_plot_coastline_Mercator.value)) /**cos(k * ((double)i))*/);
+        every = (unsigned long long int)(((double)size_points_coastline_now) / ((double)(parent->data->n_points_plot_coastline_Mercator.value)) /**cos(k * ((double)i))*/);
 
-        for(p=0, i = i_min; i < i_max; i++) {
+        for(size_points_coastline_now=0, p=0, i = i_min; i < i_max; i++) {
             for(j = j_min; j < j_max; j++) {
                 
 //                cout << "i = " << i << " j = " << j << "\tsize = " << ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() << endl;
@@ -8577,7 +8573,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                     
                     if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
                         
-                        points_coastline_now.push_back(temp);
+                        points_coastline_now[size_points_coastline_now++] = temp;
                         
                     }
                     
@@ -8587,30 +8583,6 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 
             }
         }
-        
-        for(p=0, tab.resize(n), i = i_min; i < i_max; i++){
-            for(j = j_min; j < j_max; j++){
-                for(l=0; l<((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l++){
-                    
-                    
-                    tab[p++] = &((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l]);
-                    
-                }
-            }
-        }
-        every = (unsigned long long int)(((double)n) / ((double)((parent->data->n_points_plot_coastline_Mercator).value)) /**cos(k * ((double)i))*/);
-                
-        
-        for(p=0; p<tab.size(); p+=every) {
-                       
-            if ((draw_panel->GeoToDrawPanel)((*(tab[p])), &temp, false)) {
-
-                points_coastline_now.push_back(temp);
-                
-            }
-               
-        }
-        
         
     }
     
@@ -8772,7 +8744,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
                 (wxGetApp().progress_dialog)->Update(max_dialog);
                 cout << prefix.value << "... done.\n";
-
+                
             }
 
             file_coastline_data_blocked.close(String(""));
@@ -8957,6 +8929,7 @@ inline void DrawPanel::RenderBackground(
                                         const vector< vector< vector<wxPoint> > >& ticks,
                                         const vector<wxString>& parallels_and_meridians_labels,
                                         const vector<wxPoint>& positions_parallels_and_meridians_labels,
+                                        const unsigned long long int& size_points_coastline,
                                         const vector<wxPoint>& points_coastline,
                                         wxColour foreground_color,
                                         wxColour background_color,
@@ -8995,6 +8968,7 @@ inline void DrawPanel::RenderBackground(
                         ticks,
                         parallels_and_meridians_labels,
                         positions_parallels_and_meridians_labels,
+                        size_points_coastline,
                         points_coastline,
                         foreground_color,
                         background_color,
@@ -9108,50 +9082,51 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 inline void DrawPanel::RenderAll(wxDC& dc) {
     
     
-
+    
     (this->*Render)(
-        &dc,
+                    &dc,
                     position_plot_area_now,
-        grid_now,
-        ticks_now,
-        parallels_and_meridians_labels_now,
-        positions_parallels_and_meridians_labels_now,
-        parent->points_coastline_now,
-        wxGetApp().foreground_color,
-        wxGetApp().background_color,
-        wxGetApp().standard_thickness.value
-    );
+                    grid_now,
+                    ticks_now,
+                    parallels_and_meridians_labels_now,
+                    positions_parallels_and_meridians_labels_now,
+                    parent->size_points_coastline_now,
+                    parent->points_coastline_now,
+                    wxGetApp().foreground_color,
+                    wxGetApp().background_color,
+                    wxGetApp().standard_thickness.value
+                    );
     
     
     RenderRoutes(dc,
-        points_route_list_now,
-        reference_positions_route_list_now,
-        (parent->parent->highlighted_route_now),
-        wxNullColour
-    );
+                 points_route_list_now,
+                 reference_positions_route_list_now,
+                 (parent->parent->highlighted_route_now),
+                 wxNullColour
+                 );
     RenderPositions(dc,
-        points_position_list_now,
-        (parent->parent->highlighted_position_now),
-        wxNullColour
-    );
+                    points_position_list_now,
+                    (parent->parent->highlighted_position_now),
+                    wxNullColour
+                    );
     RenderMousePositionLabel(
-        dc,
-        label_position_now,
-        position_label_position_now,
-        wxGetApp().foreground_color,
-        wxGetApp().background_color
-    );
-
+                             dc,
+                             label_position_now,
+                             position_label_position_now,
+                             wxGetApp().foreground_color,
+                             wxGetApp().background_color
+                             );
+    
     //render selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
         RenderSelectionRectangle(dc, parent->parent->geo_position_now, position_end_label_selection_rectangle_now, parent->parent->end_label_selection_rectangle_now, wxGetApp().foreground_color, wxGetApp().background_color);
     }
-
+    
     if ((parent->parent->dragging_object)) {
         //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
         RenderDraggedObjectLabel(dc, position_label_dragged_object_now, label_dragged_object_now, wxGetApp().foreground_color, wxGetApp().background_color);
     }
-
+    
 }
 
 
@@ -9235,6 +9210,7 @@ inline void DrawPanel::CleanAndRenderAll(void) {
                     ticks_now,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
+                    parent->size_points_coastline_now,
                     parent->points_coastline_now,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
@@ -9296,23 +9272,24 @@ inline void DrawPanel::RefreshWIN32(void) {
         RenderPositions(dc,
             points_position_list_before,
             (parent->parent->highlighted_position_now),
-            wxGetApp().background_color
-        );
-
+                        wxGetApp().background_color
+                        );
+        
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
-            &dc,
+                        &dc,
                         position_plot_area_before,
-            grid_before,
-            ticks_before,
-            parallels_and_meridians_labels_before,
-            positions_parallels_and_meridians_labels_before,
-            parent->points_coastline_before,
-            wxGetApp().background_color,
-            wxGetApp().background_color,
-            wxGetApp().large_thickness.value
-            );
-
+                        grid_before,
+                        ticks_before,
+                        parallels_and_meridians_labels_before,
+                        positions_parallels_and_meridians_labels_before,
+                        parent->size_points_coastline_before,
+                        parent->points_coastline_before,
+                        wxGetApp().background_color,
+                        wxGetApp().background_color,
+                        wxGetApp().large_thickness.value
+                        );
+        
     }
 
     if ((parent->parent->dragging_object)) {
@@ -9327,29 +9304,30 @@ inline void DrawPanel::RefreshWIN32(void) {
         RenderPositions(dc,
             points_position_list_before,
             (parent->parent->highlighted_position_now),
-            wxGetApp().background_color
-        );
+                        wxGetApp().background_color
+                        );
         RenderDraggedObjectLabel(dc,
-            position_label_dragged_object_before,
-            label_dragged_object_before,
-            wxGetApp().background_color, wxGetApp().background_color
-        );
-
+                                 position_label_dragged_object_before,
+                                 label_dragged_object_before,
+                                 wxGetApp().background_color, wxGetApp().background_color
+                                 );
+        
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
-            &dc,
+                        &dc,
                         position_plot_area_now,
-            grid_now,
-            ticks_now,
-            parallels_and_meridians_labels_now,
-            positions_parallels_and_meridians_labels_now,
-            parent->points_coastline_now,
-            wxGetApp().background_color,
-            wxGetApp().background_color,
-            wxGetApp().large_thickness.value
-            );
-
-
+                        grid_now,
+                        ticks_now,
+                        parallels_and_meridians_labels_now,
+                        positions_parallels_and_meridians_labels_now,
+                        parent->size_points_coastline_now,
+                        parent->points_coastline_now,
+                        wxGetApp().background_color,
+                        wxGetApp().background_color,
+                        wxGetApp().large_thickness.value
+                        );
+        
+        
     }
 
     if ((parent->parent->changing_highlighted_object)) {
@@ -9366,24 +9344,25 @@ inline void DrawPanel::RefreshWIN32(void) {
             (parent->parent->highlighted_position_before),
             wxGetApp().background_color
         );
-
+        
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
-            &dc,
+                        &dc,
                         position_plot_area_now,
-            grid_now,
-            ticks_now,
-            parallels_and_meridians_labels_now,
-            positions_parallels_and_meridians_labels_now,
-            parent->points_coastline_now,
-            wxGetApp().background_color,
-            wxGetApp().background_color,
-            wxGetApp().large_thickness.value
-            );
-
-
+                        grid_now,
+                        ticks_now,
+                        parallels_and_meridians_labels_now,
+                        positions_parallels_and_meridians_labels_now,
+                        parent->size_points_coastline_now,
+                        parent->points_coastline_now,
+                        wxGetApp().background_color,
+                        wxGetApp().background_color,
+                        wxGetApp().large_thickness.value
+                        );
+        
+        
     }
-
+    
     if ((parent->parent->selection_rectangle)) {
 
         //wipe out the preceeding selection rectangle
@@ -9406,23 +9385,24 @@ inline void DrawPanel::RefreshWIN32(void) {
             points_position_list_now,
             (parent->parent->highlighted_position_now),
             wxGetApp().background_color
-        );
-
+                        );
+        
         //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
         (this->*Render)(
-            &dc,
+                        &dc,
                         position_plot_area_now,
-            grid_now,
-            ticks_now,
-            parallels_and_meridians_labels_now,
-            positions_parallels_and_meridians_labels_now,
-            parent->points_coastline_now,
-            wxGetApp().background_color,
-            wxGetApp().background_color,
-            wxGetApp().large_thickness.value
-            );
-
-
+                        grid_now,
+                        ticks_now,
+                        parallels_and_meridians_labels_now,
+                        positions_parallels_and_meridians_labels_now,
+                        parent->size_points_coastline_now,
+                        parent->points_coastline_now,
+                        wxGetApp().background_color,
+                        wxGetApp().background_color,
+                        wxGetApp().large_thickness.value
+                        );
+        
+        
     }
 
 
@@ -9438,24 +9418,25 @@ inline void DrawPanel::RefreshWIN32(void) {
 
     if ((parent->dragging_chart) || (parent->mouse_scrolling) || (parent->parent->selection_rectangle) || (parent->parent->dragging_object) || (parent->parent->changing_highlighted_object)) {
         //I am either drawing a selection rectangle, dragging an object or changing the highlighted object -> I need to re-render all GUI objects
-
+        
         //re-render all  objects in *this which may have been partially cancelled by the clean operation above
         (this->*Render)(
-            &dc,
+                        &dc,
                         position_plot_area_now,
-            grid_now,
-            ticks_now,
-            parallels_and_meridians_labels_now,
-            positions_parallels_and_meridians_labels_now,
-            parent->points_coastline_now,
-            wxGetApp().foreground_color,
-            wxGetApp().background_color,
-            wxGetApp().standard_thickness.value
-            );
+                        grid_now,
+                        ticks_now,
+                        parallels_and_meridians_labels_now,
+                        positions_parallels_and_meridians_labels_now,
+                        parent->size_points_coastline_now,
+                        parent->points_coastline_now,
+                        wxGetApp().foreground_color,
+                        wxGetApp().background_color,
+                        wxGetApp().standard_thickness.value
+                        );
         RenderRoutes(dc,
-            points_route_list_now,
-            reference_positions_route_list_now,
-            (parent->parent->highlighted_route_now), wxNullColour
+                     points_route_list_now,
+                     reference_positions_route_list_now,
+                     (parent->parent->highlighted_route_now), wxNullColour
         );
         RenderPositions(dc,
             points_position_list_now,
@@ -9587,6 +9568,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
                                        const vector< vector< vector<wxPoint> > >& ticks,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
+                                       const unsigned long long int& size_points_coastline,
                                        const vector<wxPoint>& points_coastline,
                                        wxColor foreground_color,
                                        wxColor background_color,
@@ -9611,7 +9593,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for (i = 0; i < points_coastline.size(); i++) {
+    for (i = 0; i < size_points_coastline; i++) {
         dc->DrawEllipse(points_coastline[i], ToDIP(wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value)));
     }
 
@@ -9787,6 +9769,7 @@ inline void DrawPanel::Render_3D(
                                  const vector< vector< vector<wxPoint> > >& ticks,
                                  const vector<wxString>& parallels_and_meridians_labels,
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
+                                 const unsigned long long int& size_points_coastline,
                                  const vector<wxPoint>& points_coastline,
                                  wxColor foreground_color,
                                  wxColor background_color,
@@ -9814,7 +9797,7 @@ inline void DrawPanel::Render_3D(
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for (i = 0; i < points_coastline.size(); i++) {
+    for (i = 0; i < size_points_coastline; i++) {
         //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
         dc->DrawEllipse(points_coastline[i], ToDIP(wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value)));
     }
@@ -10831,6 +10814,7 @@ StaticBitmap::StaticBitmap(wxWindow* parent, String path, [[maybe_unused]] wxSiz
 ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {
 
     stringstream s;
+    unsigned long long int i, j;
     String new_prefix, default_projection, color;
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
     StaticText* empty_text_1, * empty_text_2, * empty_text_3, * empty_text_4, * empty_text_5;
@@ -10862,6 +10846,19 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     (wxGetApp().zoom_factor_max).read_from_file_to(String("maximal zoom factor"), (wxGetApp().path_file_init), String("R"), String(""));
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
+    
+    //set the size of points_coastline_now and points_coastline_before equal to their maximum possible size, so I won't have to resize them at every step
+    for(size_points_coastline_now=0, i=0; i<(parent->all_coastline_points_Position.size()); i++){
+        for (j=0; j<((parent->all_coastline_points_Position)[i]).size(); j++) {
+            size_points_coastline_now += ((parent->all_coastline_points_Position)[i][j]).size();
+        }
+    }
+    size_points_coastline_before = size_points_coastline_now;
+    points_coastline_now.resize(size_points_coastline_now);
+    points_coastline_before.resize(size_points_coastline_before);
+    size_points_coastline_before = size_points_coastline_now = 0;
+
+        
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 
 
@@ -13529,9 +13526,11 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 #ifdef WIN32
                             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
-                            parent->points_coastline_before.clear();
-                            (parent->points_coastline_before) = (parent->points_coastline_now);
-                            
+//                            parent->points_coastline_before.clear();
+                            //                            (parent->points_coastline_before) = (parent->points_coastline_now);
+                            (parent->size_points_coastline_before) = (parent->size_points_coastline_now);
+                            copy_n(parent->points_coastline_now.begin(), parent->size_points_coastline_now, parent->points_coastline_before.begin() );
+
                             position_plot_area_before = position_plot_area_now;
                             grid_before.clear();
                             grid_before = grid_now;
@@ -13572,9 +13571,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 #ifdef WIN32
                         //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
-                        parent->points_coastline_before.clear();
-                        (parent->points_coastline_before) = (parent->points_coastline_now);
-                        
+                        (parent->size_points_coastline_before) = (parent->size_points_coastline_now);
+                        copy_n(parent->points_coastline_now.begin(), parent->size_points_coastline_now, parent->points_coastline_before.begin() );
+
                         position_plot_area_before = position_plot_area_now;
                         grid_before.clear();
                         grid_before = grid_now;

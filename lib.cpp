@@ -8516,7 +8516,6 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
     unsigned long long int l, p, n = 0, every = 0, n_Positions;
     wxPoint temp;
-    vector<Position*> tab;
 
     //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
     phi_min.normalize_pm_pi();
@@ -8555,8 +8554,6 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
         points_coastline_now.clear();
         
-
-                
         for(n_Positions=0, i = i_min; i < i_max; i++) {
             for(j = j_min; j < j_max; j++) {
                 
@@ -8587,30 +8584,6 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 
             }
         }
-        
-        for(p=0, tab.resize(n), i = i_min; i < i_max; i++){
-            for(j = j_min; j < j_max; j++){
-                for(l=0; l<((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l++){
-                    
-                    
-                    tab[p++] = &((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l]);
-                    
-                }
-            }
-        }
-        every = (unsigned long long int)(((double)n) / ((double)((parent->data->n_points_plot_coastline_Mercator).value)) /**cos(k * ((double)i))*/);
-                
-        
-        for(p=0; p<tab.size(); p+=every) {
-                       
-            if ((draw_panel->GeoToDrawPanel)((*(tab[p])), &temp, false)) {
-
-                points_coastline_now.push_back(temp);
-                
-            }
-               
-        }
-        
         
     }
     

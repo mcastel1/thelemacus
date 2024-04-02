@@ -13526,8 +13526,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 #ifdef WIN32
                             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
-//                            parent->points_coastline_before.clear();
-                            //                            (parent->points_coastline_before) = (parent->points_coastline_now);
                             (parent->size_points_coastline_before) = (parent->size_points_coastline_now);
                             copy_n(parent->points_coastline_now.begin(), parent->size_points_coastline_now, parent->points_coastline_before.begin() );
 
@@ -13808,8 +13806,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 #ifdef _WIN32
                         //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
-                        parent->points_coastline_before.clear();
-                        (parent->points_coastline_before) = (parent->points_coastline_now);
+                        (parent->size_points_coastline_before) = (parent->size_points_coastline_now);
+                        copy_n(parent->points_coastline_now.begin(), parent->size_points_coastline_now, parent->points_coastline_before.begin() );
                         
                         position_plot_area_before = position_plot_area_now;
                         grid_before.clear();
@@ -13955,9 +13953,9 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
     //I am on WIN32 operating system: I will refresh the plot under the scroll operation, where I will wipe out the graphical objects in the former plot by drawing with background_color on top of them -> I need to keep track of the _before graphical objects and on the current _now graphical objects, and I do it here:
     
     //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
-    points_coastline_before.clear();
-    points_coastline_before = points_coastline_now;
-    
+    (parent->size_points_coastline_before) = (parent->size_points_coastline_now);
+    copy_n(parent->points_coastline_now.begin(), parent->size_points_coastline_now, parent->points_coastline_before.begin() );
+
     
     (draw_panel->position_plot_area_before) = (draw_panel->position_plot_area_now);
     draw_panel->grid_before.clear();
@@ -22487,9 +22485,9 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
 #ifdef WIN32
             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
-            chart_frame->points_coastline_before.clear();
-            (chart_frame->points_coastline_before) = (chart_frame->points_coastline_now);
-            
+            (parent->size_points_coastline_before) = (parent->size_points_coastline_now);
+            copy_n(parent->points_coastline_now.begin(), parent->size_points_coastline_now, parent->points_coastline_before.begin() );
+
             (chart_frame->draw_panel->position_plot_area_before) = (chart_frame->draw_panel->position_plot_area_now);
             chart_frame->draw_panel->grid_before.clear();
             (chart_frame->draw_panel->grid_before) = (chart_frame->draw_panel->grid_now);

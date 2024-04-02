@@ -2807,7 +2807,9 @@ public:
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/lambda_min, lambda_max;
     //in points_coastline_now (points_coasline_before), I store the 2d coordindates  in DrawPanel coordinates of coastline data coastline_points at the current (preceeding) state of the chart
-    vector< wxPoint* > points_coastline_now, points_coastline_before;
+    //the number of first  entries in points_coastline_now and points_coastline_before, respectively, which have been filled 
+    unsigned long long int size_points_coastline_now, size_points_coastline_before;
+    vector<wxPoint> points_coastline_now, points_coastline_before;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling, /*this is true if the chart is being dragged, and thus the size of *this must not change across multiple Draw(s), and false otherwise*/ dragging_chart;
     //This is the actual value of the maximal zoom factor allowed

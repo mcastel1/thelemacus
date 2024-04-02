@@ -9544,15 +9544,15 @@ void DrawPanel::FitAll() {
     //set the size of the DrawPanel and of the ChartFrame which is its parent and fit the size of ChartFrame parent in such a way that it just fits its content
     this->SetMinSize(size_chart);
     parent->SetMinSize(ToDIP(wxSize(
-        (size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
-        (size_chart.GetHeight()) + ((label_position_now.get_size(this)).GetHeight()) + 6 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
+        (size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value),
+        (size_chart.GetHeight()) + ((label_position_now.get_size(this)).GetHeight()) + 6 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value)
     )));
 
     //position position_label_position_now at the bottom left corner of *this
     position_label_position_now = wxPoint(
-        ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
+        (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value),
         (size_chart.GetHeight())
-        - (size_label_vertical + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))
+        - (size_label_vertical + (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))
     );
 
     (parent->panel)->SetSizerAndFit(parent->sizer_v);
@@ -9634,7 +9634,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     dc->SetBackgroundMode(wxSOLID);
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
 
-        dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
+        dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
 
     }
     //WIN32: THESE LINES YIELD PARALLEL AND MERIDIAN LABELS WITH THE CORRECT SIZE
@@ -9745,13 +9745,13 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
         if (mode == String("NS")) {
             //            I am drawing parallels label
 
-            (positions_parallels_and_meridians_labels_now.back()) += wxPoint(-(size.GetWidth()) - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -(size.GetHeight()) / 2);
+            (positions_parallels_and_meridians_labels_now.back()) += wxPoint(-(size.GetWidth()) - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value), -(size.GetHeight()) / 2);
 
         }
         else {
             //            I am drawing meridians labels
 
-            (positions_parallels_and_meridians_labels_now.back()) += wxPoint(-(size.GetWidth()) / 2, ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value));
+            (positions_parallels_and_meridians_labels_now.back()) += wxPoint(-(size.GetWidth()) / 2, (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value));
 
         }
 
@@ -9836,7 +9836,7 @@ inline void DrawPanel::Render_3D(
     dc->SetBackgroundMode(wxSOLID);
     for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
 
-        dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
+        dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
 
     }
 
@@ -10068,8 +10068,8 @@ inline void DrawPanel::PreRenderMercator(void) {
 
     //sets size_plot_area and stores into position_plot_area the screen position of the top-left edge of the plot area.
     if (
-        ((size_chart.GetWidth()) - (((int)size_label_horizontal) + 3 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))) * (size_chart.GetHeight()) / (size_chart.GetWidth())
-        < (size_chart.GetHeight()) - (((int)size_label_vertical) + 3 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))
+        ((size_chart.GetWidth()) - (((int)size_label_horizontal) + 3 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))) * (size_chart.GetHeight()) / (size_chart.GetWidth())
+        < (size_chart.GetHeight()) - (((int)size_label_vertical) + 3 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))
         ) {
         //if I set size_plot_area's width first to leave room for parallel labels and label_position_now, then there is enough space to set size_plot_area's height by keeping the aspect ratio
 
@@ -10083,8 +10083,8 @@ inline void DrawPanel::PreRenderMercator(void) {
         size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight()) / (size_chart.GetWidth()));
 
         position_plot_area_now = wxPoint(
-            ((int)size_label_horizontal) + 2 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
-            (((int)(size_chart.GetHeight())) - (((int)(size_plot_area.GetHeight())) + ((int)size_label_vertical) + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))) / 2
+            ((int)size_label_horizontal) + 2 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value),
+            (((int)(size_chart.GetHeight())) - (((int)(size_plot_area.GetHeight())) + ((int)size_label_vertical) + (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))) / 2
         );
 
     }
@@ -10100,7 +10100,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         );
         size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth()) / (size_chart.GetHeight()));
 
-        if (((size_plot_area.GetHeight()) * (size_chart.GetWidth()) / (size_chart.GetHeight())) < ((size_chart.GetWidth()) - (((int)size_label_horizontal) + 3 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)))) {
+        if (((size_plot_area.GetHeight()) * (size_chart.GetWidth()) / (size_chart.GetHeight())) < ((size_chart.GetWidth()) - (((int)size_label_horizontal) + 3 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value)))) {
             //good: there is enough space
 
         }
@@ -10111,12 +10111,12 @@ inline void DrawPanel::PreRenderMercator(void) {
 
         position_plot_area_now = wxPoint(
 
-            (((int)(size_chart.GetWidth())) - (((int)(size_plot_area.GetWidth())) - ((int)size_label_horizontal) - ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))) / 2
+            (((int)(size_chart.GetWidth())) - (((int)(size_plot_area.GetWidth())) - ((int)size_label_horizontal) - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))) / 2
 
 
             ,
 
-            ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
+            (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value)
 
         );
 
@@ -10789,8 +10789,8 @@ StaticBitmap::StaticBitmap(wxWindow* parent, String path, [[maybe_unused]] wxSiz
     SetBitmap(
         Bitmap(file.name.value,
             ToDIP(wxSize(
-                ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value),
-                ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value)
+                (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value),
+                (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value)
             ))
         )
     );
@@ -10903,7 +10903,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
         wxID_ANY,
         Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
         wxDefaultPosition,
-       wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
+       wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
         wxBU_EXACTFIT | wxSIMPLE_BORDER
     );
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
@@ -12632,27 +12632,27 @@ void DrawPanel::SetLabelAndAdjustPosition(const Position& p, wxPoint* position, 
 
     //the default value of the shift
     shift = wxPoint(
-        ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value),
-        ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)
+        (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value),
+        (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value)
     );
 
 
-    if ((position->x) + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value) + ((label->get_size(this)).x) > (size_plot_area.x) + (position_plot_area_now.x)) {
+    if ((position->x) + (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value) + ((label->get_size(this)).x) > (size_plot_area.x) + (position_plot_area_now.x)) {
         //label does not fit into *this: it goes beyond the right edge of *this -> move it to the left
 
         shift -= wxPoint(
-            (((label->get_size(this)).x) + 2 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value)),
+            (((label->get_size(this)).x) + 2 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value)),
             0
         );
 
     }
 
-    if ((position->y) + ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value) + ((label->get_size(this)).y) > (size_plot_area.y) + (position_plot_area_now.y)) {
+    if ((position->y) + (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value) + ((label->get_size(this)).y) > (size_plot_area.y) + (position_plot_area_now.y)) {
         //label does not fit into *this: it goes beyond the bottom edge of *this -> move up shift
 
         shift -= wxPoint(
             0,
-            (((label->get_size(this)).y) + 2 * ((wxGetApp().rectangle_display).GetWidth()) * (length_border_over_length_screen.value))
+            (((label->get_size(this)).y) + 2 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))
         );
 
     }
@@ -12869,7 +12869,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                                 (((points_route_list_now[i][j][l]).y) + ((double)(((points_route_list_now[i][j][l + 1]).y) - ((points_route_list_now[i][j][l]).y))) / ((double)(((points_route_list_now[i][j][l + 1]).x) - ((points_route_list_now[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list_now[i][j][l]).x))))
                             )
 
-                            <= (thickness_route_selection_over_length_screen.value) * ((double)((wxGetApp().rectangle_display).GetWidth())) / 2.0
+                            <= (thickness_route_selection_over_length_screen.value) * ((double)(wxGetApp().rectangle_display.GetWidth())) / 2.0
                             )
                         ) {
                         //the mouse is overing over a Route
@@ -17138,8 +17138,8 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
                              image_path,
                              //I use ToDIP to adjust the size independently of the screen resolution
                              ToDIP(wxSize(
-                                          ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value),
-                                          ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value)
+                                          (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value),
+                                          (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value)
                                           ))
                              );
 
@@ -17182,8 +17182,8 @@ template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event) {
 //
 //    gc->SetFont(*wxNORMAL_FONT, *wxBLACK);
 //    gc->DrawBitmap(*m_bitmap, 0, 0,
-//                   ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
-//                   ((wxGetApp().rectangle_display).GetWidth())*((wxGetApp().size_message_image_over_width_screen).value)
+//                   (wxGetApp().rectangle_display.GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
+//                   (wxGetApp().rectangle_display.GetWidth())*((wxGetApp().size_message_image_over_width_screen).value)
 //                   );
 //
 //}
@@ -17238,8 +17238,8 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
                              path_icon_file,
                              //I use ToDIP to adjust the size independently of the screen resolution
                              ToDIP(wxSize(
-                                          ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value),
-                                          ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value)
+                                          (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value),
+                                          (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_message_image_over_width_screen).value)
                                           ))
                              );
 
@@ -17884,7 +17884,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
                                              wxID_ANY,
                                              Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
                                              wxDefaultPosition,
-                                             (wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
+                                             (wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
                                              wxBU_EXACTFIT | wxSIMPLE_BORDER
                                              );
         button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowCharts<wxCommandEvent>, &wxGetApp());
@@ -17895,7 +17895,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
                                                      wxID_ANY,
                                                      Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
                                                      wxDefaultPosition,
-                                                     (wxSize(((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
+                                                     (wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
                                                      wxBU_EXACTFIT | wxSIMPLE_BORDER
                                                      );
         button_compute_position->Bind(wxEVT_BUTTON, &ListFrame::ComputePosition<wxCommandEvent>, this);

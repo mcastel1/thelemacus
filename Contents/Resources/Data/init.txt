@@ -1,5 +1,7 @@
 #comment lines, such as this one, will be ignored
 show coastlines = y
+number of points coastline Mercator = 10000
+number of points coastline 3D = 1000
 artificial horizon = y
 plot coastline every = 10
 index error = 0° 1.9'
@@ -82,8 +84,6 @@ night foreground color = (255,255,255)
 day background color = (224,224,224)
 night background color = (40,40,43)
 point size = 1
-number of points coastline Mercator = 1000
-number of points coastline 3D = 1000
 load sample sight = y
 number of recent bodies = 3
 number of recent route types = 3

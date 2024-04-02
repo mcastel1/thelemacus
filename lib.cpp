@@ -10969,8 +10969,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     (draw_panel->y_min_0) = (draw_panel->y_min);
     (draw_panel->y_max_0) = (draw_panel->y_max);
     (draw_panel->x_span_0) = (draw_panel->x_span());
-    (draw_panel->width_chart_0) = ((draw_panel->size_chart).GetWidth());
-    (draw_panel->height_chart_0) = ((draw_panel->size_chart).GetHeight());
+    (draw_panel->width_chart_0) = (draw_panel->size_chart.GetWidth());
+    (draw_panel->height_chart_0) = (draw_panel->size_chart.GetHeight());
 
 
     sizer_buttons->Add(empty_text_1, 0, wxALL, (((wxGetApp().rectangle_display).GetSize()).GetWidth()) * (length_border_over_length_screen.value));

@@ -8514,7 +8514,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned long long int l, p, n = 0, every = 0, n_Positions;
+    unsigned long long int l, p,  every = 0;
     wxPoint temp;
 
     //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
@@ -8554,17 +8554,16 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
 //        points_coastline_now.clear();
         
-        for(n_Positions=0, i = i_min; i < i_max; i++) {
+        for(size_points_coastline_now=0, i = i_min; i < i_max; i++) {
             for(j = j_min; j < j_max; j++) {
                 
-                n_Positions += (parent->all_coastline_points_Position)[i - floor_min_lat][j % 360].size();
+                size_points_coastline_now += (parent->all_coastline_points_Position)[i - floor_min_lat][j % 360].size();
                 
             }
         }
-        
-        every = (unsigned long long int)(((double)n_Positions) / ((double)(parent->data->n_points_plot_coastline_Mercator.value)) /**cos(k * ((double)i))*/);
+        every = (unsigned long long int)(((double)size_points_coastline_now) / ((double)(parent->data->n_points_plot_coastline_Mercator.value)) /**cos(k * ((double)i))*/);
 
-        for(p=0, i = i_min; i < i_max; i++) {
+        for(size_points_coastline_now=0, p=0, i = i_min; i < i_max; i++) {
             for(j = j_min; j < j_max; j++) {
                 
 //                cout << "i = " << i << " j = " << j << "\tsize = " << ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() << endl;

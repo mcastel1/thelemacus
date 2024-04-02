@@ -8745,7 +8745,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
                 (wxGetApp().progress_dialog)->Update(max_dialog);
                 cout << prefix.value << "... done.\n";
-
+                
             }
 
             file_coastline_data_blocked.close(String(""));
@@ -10815,6 +10815,7 @@ StaticBitmap::StaticBitmap(wxWindow* parent, String path, [[maybe_unused]] wxSiz
 ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {
 
     stringstream s;
+    unsigned long long int i, j;
     String new_prefix, default_projection, color;
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
     StaticText* empty_text_1, * empty_text_2, * empty_text_3, * empty_text_4, * empty_text_5;
@@ -10846,6 +10847,19 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     (wxGetApp().zoom_factor_max).read_from_file_to(String("maximal zoom factor"), (wxGetApp().path_file_init), String("R"), String(""));
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
+    
+    //set the size of points_coastline_now and points_coastline_before equal to their maximum possible size, so I won't have to resize them at every step
+    for(size_points_coastline_now=0, i=0; i<(parent->all_coastline_points_Position.size()); i++){
+        for (j=0; j<((parent->all_coastline_points_Position)[i]).size(); j++) {
+            size_points_coastline_now += ((parent->all_coastline_points_Position)[i][j]).size();
+        }
+    }
+    size_points_coastline_before = size_points_coastline_now;
+    points_coastline_now.resize(size_points_coastline_now);
+    points_coastline_before.resize(size_points_coastline_before);
+    size_points_coastline_before = size_points_coastline_now = 0;
+
+        
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 
 

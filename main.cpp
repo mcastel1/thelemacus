@@ -134,6 +134,7 @@
  
  
  ********** THINGS TO FIX ************
+    - use the method in GetCoastlineData_Mercator also in GetCoastlineData_3D
     - use the Mercator dilation factor dy/d(R phi) to renormalize the number of points per unit surface
     - make sure that if one animation (A) is triggered when anotherone (B) is in progress, (A) does not start
     - if you close a chartframe when an animation is in progress the app crashes

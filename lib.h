@@ -2006,7 +2006,7 @@ public:
     void PreRenderMercator(void);
     void PreRender3D(void);
     void PaintEvent(wxPaintEvent&);
-    void PaintNow(void);
+//    void PaintNow(void);
     void RenderAll(wxDC&);
     void MyRefresh(void);
     void RefreshWIN32(void);

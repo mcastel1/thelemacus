@@ -22563,6 +22563,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
         (chart_frame->dragging_chart) = false;
         chart_frame->EnableAll(true);
+        chart_frame->Fit();
 
         //re-draw everything
 //        parent->DrawAll();

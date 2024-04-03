@@ -8566,8 +8566,25 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         for(size_points_coastline_now=0, p=0, i = i_min; i < i_max; i++) {
             for(j = j_min; j < j_max; j++) {
                 
-//                cout << "i = " << i << " j = " << j << "\tsize = " << ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size() << endl;
-//                
+
+                /*
+                 dN = number of coastline points per lat/lon grid dOmega
+                 dS = surface on the Mercator projection corresponding to dOmega
+                 
+                 
+                 dN' = C * dN
+                 
+                 I require dN'/dS = const (independent of lat and long)
+                 dN'/dS = C * dN/dS = C * dN/dOmega * dOmega/dS
+                 
+                 dS/dOmega ~ 1/cos(phi)
+                 dOmega/dS ~ cos(phi)
+                 
+                 set C = <dN/dOmega> / (dN/dOmega) / dOmega/dS -> dN'/dS = <dN/dOmega>.
+                 
+                 */
+                
+
                 //run over the Positions by picking one Position every [every] Positions
                 for (l = p; l < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l+=every) {
                     

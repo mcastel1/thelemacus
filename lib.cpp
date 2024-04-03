@@ -10945,7 +10945,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveSouth<wxCommandEvent>, this);
     button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveWest<wxCommandEvent>, this);
     button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveEast<wxCommandEvent>, this);
-    button_reset->Bind(wxEVT_BUTTON, &ChartFrame::ResetAndRender<wxCommandEvent>, this);
+    button_reset->Bind(wxEVT_BUTTON, &ChartFrame::ResetRenderAnimate<wxCommandEvent>, this);
 
     //bind all the elemetns of *this to KeyDown method
     Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
@@ -11530,7 +11530,7 @@ template<class T> void ChartFrame::Reset(T& event) {
 
 
 //call Reset and Render everything
-template<class T> void ChartFrame::ResetAndRender(T& event) {
+template<class T> void ChartFrame::ResetRender(T& event) {
     
     Reset<T>(event);
     
@@ -11548,6 +11548,16 @@ template<class T> void ChartFrame::ResetAndRender(T& event) {
     event.Skip(true);
 
 }
+
+
+template<class T> void ChartFrame::ResetRenderAnimate(T& event) {
+    
+    ResetRender(event);
+    Animate();
+
+}
+
+
 
 
 //makes a nice animation to present *this, by dragging the center of the chart to the desired Position from a Position on the antipodes
@@ -12760,7 +12770,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
 template<class E> void DrawPanel::OnChooseProjection(E& event) {
 
     SetProjection<E>(event);
-    parent->ResetAndRender<E>(event);
+    parent->ResetRender<E>(event);
     parent->Animate();
 
     event.Skip(true);
@@ -14893,7 +14903,7 @@ template <class T> void ShowAll::operator()(T& event) {
 
     (*show_frame)(event);
     for(unsigned int i=0; i<wxGetApp().list_frame->chart_frames.size(); i++){
-        wxGetApp().list_frame->chart_frames[i]->ResetAndRender(event);
+        wxGetApp().list_frame->chart_frames[i]->ResetRender(event);
     }
     wxGetApp().ShowCharts(event);
     wxGetApp().AnimateCharts();

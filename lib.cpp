@@ -8901,6 +8901,12 @@ inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 
 }
 
+inline void DrawPanel::PaintNow(void){
+    
+    wxClientDC dc(this);
+    
+    RenderAll(dc);
+}
 
 
 //render the mouse position with colors foreground_color and background_color
@@ -22415,7 +22421,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
  
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
             chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
-            
+            chart_frame->draw_panel->Unbind(wxEVT_PAINT, &DrawPanel::PaintEvent, chart_frame->draw_panel);
        
             switch (String((chart_frame->projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
                     
@@ -22532,7 +22538,8 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 #endif
             //re-draw the chart
             (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();
-            chart_frame->draw_panel->MyRefresh();
+//            chart_frame->draw_panel->MyRefresh();
+            chart_frame->draw_panel->PaintNow();
             //
 
             //            cout << "\t\t t= " << t << "\n";
@@ -22593,6 +22600,8 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 //        parent->DrawAll();
 
         chart_frame->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
+        chart_frame->draw_panel->Bind(wxEVT_PAINT, &DrawPanel::PaintEvent, chart_frame->draw_panel);
+
         
         timer->Stop();
         (*(parent->unset_idling))();

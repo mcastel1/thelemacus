@@ -134,7 +134,7 @@
  
  
  ********** THINGS TO FIX ************
-    - the app stalls when I draw a selection rectangle or scroll to zoom in, and z is zero sometimes - > fix this 
+    - the app stalls when I draw a selection rectangle or scroll to zoom in, and z is zero sometimes, lambda_min = lambda_max, x_min = x_max, size_chart.y = 0- > fix this 
     - during animations of chart movement, disable the instantaneous mouse position on bottom left of drawpanel
     - use the method in GetCoastlineData_Mercator also in GetCoastlineData_3D
     - use the Mercator dilation factor dy/d(R phi) to renormalize the number of points per unit surface

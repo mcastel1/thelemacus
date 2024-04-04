@@ -10991,9 +10991,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     }
     projection->value_before_editing = projection->name->GetValue();
 
-    //create a dummy_event and then call OnChooseProjection(dummy_event) to set all objects according to the choice of the projeciton above.
-//    draw_panel->OnChooseProjection(dummy_event);
+    //create a dummy_event and then call SetProjection(dummy_event) to set all objects according to the choice of the projeciton above.
+    //    draw_panel->OnChooseProjection(dummy_event);
     draw_panel->SetProjection(dummy_event);
+    ResetRender(dummy_event);
 
     //stores the x_min .. y_max, (size_chart.GetWidth()), height chart the first time that the chart is shown into x_min_0 ... height_chart_0
     (draw_panel->x_min_0) = (draw_panel->x_min);

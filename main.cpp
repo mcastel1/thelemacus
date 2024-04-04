@@ -134,8 +134,7 @@
  
  
  ********** THINGS TO FIX ************
-    - the app stalls when I draw a selection rectangle or scroll to zoom in, and z is zero sometimes, lambda_min = lambda_max, x_min = x_max, size_chart.y = 0, x_span_0 = 0- > fix this
-    - during animations of chart movement, disable the instantaneous mouse position on bottom left of drawpanel
+     - during animations of chart movement, disable the instantaneous mouse position on bottom left of drawpanel
     - use the method in GetCoastlineData_Mercator also in GetCoastlineData_3D
     - use the Mercator dilation factor dy/d(R phi) to renormalize the number of points per unit surface
     - make sure that if one animation (A) is triggered when anotherone (B) is in progress, (A) does not start (if you close a chartframe when an animation is in progress the app crashes)

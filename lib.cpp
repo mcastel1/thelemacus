@@ -10903,10 +10903,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     sizer_slider = new wxBoxSizer(wxVERTICAL);
     sizer_buttons = new wxGridSizer(3, 3, 0, 0);
     
-    //resize points_coastline_now and points_coastline_before to their maximum size so they won't have to be resized every time 
-    points_coastline_now.resize(parent->all_coastline_points_Position.size());
-    points_coastline_before.resize(parent->all_coastline_points_Position.size());
-
     //initialize the variable neededed for slider
     //allocate the slider
     slider = new wxSlider(panel, wxID_ANY, 1, 1, (int)((wxGetApp().zoom_factor_max).value), wxDefaultPosition, wxDefaultSize, wxSL_VERTICAL);

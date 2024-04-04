@@ -8374,7 +8374,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
     //    t_start = clock();
 
 
-    for (size_points_coastline_now=0, i = i_min; i < i_max; i++) {
+    for (n_filled_entries_points_coastline_now=0, i = i_min; i < i_max; i++) {
 
         for (j = j_min; j < j_max; j++) {
 
@@ -8480,7 +8480,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
                     //I write points in data_x and data_y to x and y in such a way to write (((parent->data)->n_points_coastline).value) points to the most
                     if (b) {
 
-                        points_coastline_now[size_points_coastline_now++] = q;
+                        points_coastline_now[n_filled_entries_points_coastline_now++] = q;
 
                     }
 
@@ -8563,7 +8563,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         }
         every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_Mercator.value)) /**cos(k * ((double)i))*/);
 
-        for(size_points_coastline_now=0, p=0, i = i_min; i < i_max; i++) {
+        for(n_filled_entries_points_coastline_now=0, p=0, i = i_min; i < i_max; i++) {
             for(j = j_min; j < j_max; j++) {
                 
 
@@ -8599,7 +8599,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                     
                     if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
                         
-                        points_coastline_now[size_points_coastline_now++] = temp;
+                        points_coastline_now[n_filled_entries_points_coastline_now++] = temp;
                         
                     }
                     
@@ -9122,7 +9122,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                     ticks_now,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
-                    parent->size_points_coastline_now,
+                    parent->n_filled_entries_points_coastline_now,
                     parent->points_coastline_now,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
@@ -9242,7 +9242,7 @@ inline void DrawPanel::CleanAndRenderAll(void) {
                     ticks_now,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
-                    parent->size_points_coastline_now,
+                    parent->n_filled_entries_points_coastline_now,
                     parent->points_coastline_now,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
@@ -9315,7 +9315,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_before,
                         parallels_and_meridians_labels_before,
                         positions_parallels_and_meridians_labels_before,
-                        parent->size_points_coastline_before,
+                        parent->n_filled_entries_points_coastline_before,
                         parent->points_coastline_before,
                         wxGetApp().background_color,
                         wxGetApp().background_color,
@@ -9352,7 +9352,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->size_points_coastline_now,
+                        parent->n_filled_entries_points_coastline_now,
                         parent->points_coastline_now,
                         wxGetApp().background_color,
                         wxGetApp().background_color,
@@ -9385,7 +9385,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->size_points_coastline_now,
+                        parent->n_filled_entries_points_coastline_now,
                         parent->points_coastline_now,
                         wxGetApp().background_color,
                         wxGetApp().background_color,
@@ -9427,7 +9427,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->size_points_coastline_now,
+                        parent->n_filled_entries_points_coastline_now,
                         parent->points_coastline_now,
                         wxGetApp().background_color,
                         wxGetApp().background_color,
@@ -9459,7 +9459,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->size_points_coastline_now,
+                        parent->n_filled_entries_points_coastline_now,
                         parent->points_coastline_now,
                         wxGetApp().foreground_color,
                         wxGetApp().background_color,
@@ -10880,15 +10880,15 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     unset_idling = new UnsetIdling<ChartFrame>(this);
     
     //set the size of points_coastline_now and points_coastline_before equal to their maximum possible size, so I won't have to resize them at every step
-    for(size_points_coastline_now=0, i=0; i<(parent->all_coastline_points_Position.size()); i++){
+    for(n_filled_entries_points_coastline_now=0, i=0; i<(parent->all_coastline_points_Position.size()); i++){
         for (j=0; j<((parent->all_coastline_points_Position)[i]).size(); j++) {
-            size_points_coastline_now += ((parent->all_coastline_points_Position)[i][j]).size();
+            n_filled_entries_points_coastline_now += ((parent->all_coastline_points_Position)[i][j]).size();
         }
     }
-    size_points_coastline_before = size_points_coastline_now;
-    points_coastline_now.resize(size_points_coastline_now);
-    points_coastline_before.resize(size_points_coastline_before);
-    size_points_coastline_before = size_points_coastline_now = 0;
+    n_filled_entries_points_coastline_before = n_filled_entries_points_coastline_now;
+    points_coastline_now.resize(n_filled_entries_points_coastline_now);
+    points_coastline_before.resize(n_filled_entries_points_coastline_before);
+    n_filled_entries_points_coastline_before = n_filled_entries_points_coastline_now = 0;
 
         
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
@@ -13566,8 +13566,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 #ifdef WIN32
                             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
-                            (parent->size_points_coastline_before) = (parent->size_points_coastline_now);
-                            copy_n(parent->points_coastline_now.begin(), parent->size_points_coastline_now, parent->points_coastline_before.begin() );
+                            (parent->n_filled_entries_points_coastline_before) = (parent->n_filled_entries_points_coastline_now);
+                            copy_n(parent->points_coastline_now.begin(), parent->n_filled_entries_points_coastline_now, parent->points_coastline_before.begin() );
 
                             position_plot_area_before = position_plot_area_now;
                             grid_before.clear();
@@ -13609,8 +13609,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 #ifdef WIN32
                         //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
-                        (parent->size_points_coastline_before) = (parent->size_points_coastline_now);
-                        copy_n(parent->points_coastline_now.begin(), parent->size_points_coastline_now, parent->points_coastline_before.begin() );
+                        (parent->n_filled_entries_points_coastline_before) = (parent->n_filled_entries_points_coastline_now);
+                        copy_n(parent->points_coastline_now.begin(), parent->n_filled_entries_points_coastline_now, parent->points_coastline_before.begin() );
 
                         position_plot_area_before = position_plot_area_now;
                         grid_before.clear();
@@ -13846,8 +13846,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 #ifdef _WIN32
                         //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
-                        (parent->size_points_coastline_before) = (parent->size_points_coastline_now);
-                        copy_n(parent->points_coastline_now.begin(), parent->size_points_coastline_now, parent->points_coastline_before.begin() );
+                        (parent->n_filled_entries_points_coastline_before) = (parent->n_filled_entries_points_coastline_now);
+                        copy_n(parent->points_coastline_now.begin(), parent->n_filled_entries_points_coastline_now, parent->points_coastline_before.begin() );
                         
                         position_plot_area_before = position_plot_area_now;
                         grid_before.clear();
@@ -13993,8 +13993,8 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
     //I am on WIN32 operating system: I will refresh the plot under the scroll operation, where I will wipe out the graphical objects in the former plot by drawing with background_color on top of them -> I need to keep track of the _before graphical objects and on the current _now graphical objects, and I do it here:
     
     //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
-    size_points_coastline_before = size_points_coastline_now;
-    copy_n(points_coastline_now.begin(), size_points_coastline_now, points_coastline_before.begin());
+    n_filled_entries_points_coastline_before = n_filled_entries_points_coastline_now;
+    copy_n(points_coastline_now.begin(), n_filled_entries_points_coastline_now, points_coastline_before.begin());
 
     
     (draw_panel->position_plot_area_before) = (draw_panel->position_plot_area_now);
@@ -22525,8 +22525,8 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
 #ifdef WIN32
             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
-            (chart_frame->size_points_coastline_before) = (chart_frame->size_points_coastline_now);
-            copy_n(chart_frame->points_coastline_now.begin(), chart_frame->size_points_coastline_now, chart_frame->points_coastline_before.begin() );
+            (chart_frame->n_filled_entries_points_coastline_before) = (chart_frame->n_filled_entries_points_coastline_now);
+            copy_n(chart_frame->points_coastline_now.begin(), chart_frame->n_filled_entries_points_coastline_now, chart_frame->points_coastline_before.begin() );
 
             (chart_frame->draw_panel->position_plot_area_before) = (chart_frame->draw_panel->position_plot_area_now);
             chart_frame->draw_panel->grid_before.clear();

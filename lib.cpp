@@ -8514,8 +8514,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
     int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned long long int l, n, p, n_cells, every = 0;
-    double z;
+    unsigned long long int l, n, p, n_cells, every = 0, every_ij = 0;
     wxPoint temp;
 
     //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
@@ -8585,15 +8584,18 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                  
                  */
                 
-                z =
-                cos(k * ((double)i)) * ((double)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size())/
-                (((double)n)/((double)n_cells));
+                every_ij =
+                ceil(((double)every)*cos(k * ((double)i)) * ((double)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size())/
+                (((double)n)/((double)n_cells)));
+                if(every_ij == 0){
+                    every_ij = 1;
+                }
                 
                 
                 
 
                 //run over the Positions by picking one Position every [every] Positions
-                for (l = p; l < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l+=ceil(((double)every)*z)) {
+                for (l = p; l < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l+=every_ij) {
                     
                     if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
                         

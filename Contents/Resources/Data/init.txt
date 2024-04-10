@@ -1,5 +1,5 @@
 #comment lines, such as this one, will be ignored
-show coastlines = n
+show coastlines = y
 number of points coastline Mercator = 80000
 number of points coastline 3D = 400000
 artificial horizon = y

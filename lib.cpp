@@ -8410,8 +8410,8 @@ void ChartFrame::GetCoastLineData_3D(void) {
                     //set r
                     draw_panel->circle_observer.reference_position.getCartesian(String(""), &r, String(""));
                     //set s
-                    u.phi.set(String(""), k * ((double)i), String(""));
-                    u.lambda.set(String(""), k * ((double)j), String(""));
+                    u.phi.set(String(""), k * ((double)i_adjusted), String(""));
+                    u.lambda.set(String(""), k * ((double)j_adjusted), String(""));
                     u.getCartesian(String(""), &s, String(""));
                     //compute cos
                     gsl_blas_ddot((r.r), (s.r), &cos);

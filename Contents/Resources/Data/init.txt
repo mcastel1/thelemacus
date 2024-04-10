@@ -1,5 +1,5 @@
 #comment lines, such as this one, will be ignored
-show coastlines = n
+show coastlines = y
 number of points coastline Mercator = 80000
 number of points coastline 3D = 1000
 artificial horizon = y
@@ -69,7 +69,8 @@ display precision = 2
 time zone = +2
 relative displacement = 0.1
 omega draw 3d = 89° 32.157897987'
-default projection = Mercator
+#default projection = Mercator
+default projection = 3D
 
 #the number of chart frames opened when the program starts
 number chart frames = 1

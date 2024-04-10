@@ -8324,7 +8324,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
     int i, j, i_adjusted = 0, j_adjusted = 0, i_min, i_max, j_min, j_max;
     double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
     PositionProjection temp;
-    bool check = false, b;
+    bool check = false;
     wxPoint q;
     Cartesian r, s;
     Position u;
@@ -8362,124 +8362,221 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
     //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
     n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
-
-
-    for (n_filled_entries_points_coastline_now=0, i = i_min; i < i_max; i++) {
-
-        for (j = j_min; j < j_max; j++) {
-
-            //            ta =clock();
-
-            if (!((i >= -90) && (i <= 90))) {
-                //in this case, i needs to be adjusted because it is not between -90 and +90
-
-                if (i < -90) {
-
-                    if ((-(180 + i) - floor_min_lat >= 0) && (-(180 + i) - floor_min_lat < (parent->all_coastline_points_Cartesian).size())) {
-
-                        i_adjusted = -(180 + i);
-                        j_adjusted = 180 + j;
-
-                        check = true;
-
+    
+    if ((parent->show_coastlines) == Answer('y', String(""))) {
+        
+//        for(n=0, i = i_min; i < i_max; i++) {
+//            for(j = j_min; j < j_max; j++) {
+//                
+//                n += (parent->all_coastline_points_Cartesian)[i - floor_min_lat][j % 360].size();
+//                
+//            }
+//        }
+//        every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_3D.value)));
+        
+        
+        //
+        for (n=0, i = i_min; i < i_max; i++) {
+            for (j = j_min; j < j_max; j++) {
+                
+                
+                //convert i,j into i_adjusted, j_adjusted
+                if (!((i >= -90) && (i <= 90))) {
+                    //in this case, i needs to be adjusted because it is not between -90 and +90
+                    
+                    if (i < -90) {
+                        
+                        if ((-(180 + i) - floor_min_lat >= 0) && (-(180 + i) - floor_min_lat < (parent->all_coastline_points_Cartesian).size())) {
+                            
+                            i_adjusted = -(180 + i);
+                            j_adjusted = 180 + j;
+                            
+                            check = true;
+                            
+                        }
+                        else {
+                            
+                            check = false;
+                            
+                        }
+                        
                     }
-                    else {
-
-                        check = false;
-
+                    
+                    if (i > 90) {
+                        
+                        if ((180 - i - floor_min_lat >= 0) && (180 - i - floor_min_lat < (parent->all_coastline_points_Cartesian).size())) {
+                            
+                            i_adjusted = 180 - i;
+                            j_adjusted = 180 + j;
+                            
+                            check = true;
+                            
+                        }
+                        else {
+                            
+                            check = false;
+                            
+                        }
+                        
                     }
-
-                }
-
-                if (i > 90) {
-
-                    if ((180 - i - floor_min_lat >= 0) && (180 - i - floor_min_lat < (parent->all_coastline_points_Cartesian).size())) {
-
-                        i_adjusted = 180 - i;
-                        j_adjusted = 180 + j;
-
-                        check = true;
-
-                    }
-                    else {
-
-                        check = false;
-
-                    }
-
-                }
-
-
-            }
-            else {
-
-                if ((i - floor_min_lat >= 0) && (i - floor_min_lat < (parent->all_coastline_points_Cartesian).size())) {
-
-                    i_adjusted = i;
-                    j_adjusted = j;
-
-                    check = true;
-
+                    
+                    
                 }
                 else {
-
-                    check = false;
-
-                }
-
-            }
-
-
-
-            if (check) {
-
-
-                //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
-                n = ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
-
-                //set r
-                draw_panel->circle_observer.reference_position.getCartesian(String(""), &r, String(""));
-                //set s
-                u.phi.set(String(""), k * ((double)i), String(""));
-                u.lambda.set(String(""), k * ((double)j), String(""));
-                u.getCartesian(String(""), &s, String(""));
-                //compute cos
-                gsl_blas_ddot((r.r), (s.r), &cos);
-                if (cos == 0.0) { cos = 1.0; }
-
-
-                //I plot every 'every' data points. I include the factor 1/cos in such a way that the farther the point (i,j) from circle_observer.reference_position, the less data points I plot, because plotting more would be pointless. In this way, points (i,j) which are close to circle_observer.reference_position (which are nearly parallel to the plane of the screen and thus well visible) are plotted with a lot of points, and the other way around
-                every = (unsigned long)(((double)n) / ((double)(((parent->data)->n_points_plot_coastline_3D).value)) * ((double)n_points_grid) / cos);
-                if (every == 0) { every = 1; }
-
-
-
-
-                //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-                for (l = 0; l < ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l += every) {
-
-
-                    //THIS IS THE BOTTLENECK - START
-                    b = (draw_panel->CartesianToDrawPanel)((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false);
-                    //THIS IS THE BOTTLENECK - END
-
-                    //I write points in data_x and data_y to x and y in such a way to write (((parent->data)->n_points_coastline).value) points to the most
-                    if (b) {
-
-                        points_coastline_now[n_filled_entries_points_coastline_now++] = q;
-
+                    
+                    if ((i - floor_min_lat >= 0) && (i - floor_min_lat < (parent->all_coastline_points_Cartesian).size())) {
+                        
+                        i_adjusted = i;
+                        j_adjusted = j;
+                        
+                        check = true;
+                        
                     }
-
-
-
+                    else {
+                        
+                        check = false;
+                        
+                    }
+                    
                 }
-
-
+                
+                
+                
+                if (check) {
+                    
+                    n += (parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360].size();
+                    
+                }
+                
+                
             }
-
-   
+            
         }
+        
+        every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_3D.value)));
+              
+        
+        
+        //
+        
+        
+        for (n_filled_entries_points_coastline_now=0, p=0, i = i_min; i < i_max; i++) {
+            for (j = j_min; j < j_max; j++) {
+                
+                
+                //convert i,j into i_adjusted, j_adjusted
+                if (!((i >= -90) && (i <= 90))) {
+                    //in this case, i needs to be adjusted because it is not between -90 and +90
+                    
+                    if (i < -90) {
+                        
+                        if ((-(180 + i) - floor_min_lat >= 0) && (-(180 + i) - floor_min_lat < (parent->all_coastline_points_Cartesian).size())) {
+                            
+                            i_adjusted = -(180 + i);
+                            j_adjusted = 180 + j;
+                            
+                            check = true;
+                            
+                        }
+                        else {
+                            
+                            check = false;
+                            
+                        }
+                        
+                    }
+                    
+                    if (i > 90) {
+                        
+                        if ((180 - i - floor_min_lat >= 0) && (180 - i - floor_min_lat < (parent->all_coastline_points_Cartesian).size())) {
+                            
+                            i_adjusted = 180 - i;
+                            j_adjusted = 180 + j;
+                            
+                            check = true;
+                            
+                        }
+                        else {
+                            
+                            check = false;
+                            
+                        }
+                        
+                    }
+                    
+                    
+                }
+                else {
+                    
+                    if ((i - floor_min_lat >= 0) && (i - floor_min_lat < (parent->all_coastline_points_Cartesian).size())) {
+                        
+                        i_adjusted = i;
+                        j_adjusted = j;
+                        
+                        check = true;
+                        
+                    }
+                    else {
+                        
+                        check = false;
+                        
+                    }
+                    
+                }
+                
+                
+                
+                if (check) {
+                    
+                    
+//                    //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
+//                    n = ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
+                    
+                
+                    //set r
+                    draw_panel->circle_observer.reference_position.getCartesian(String(""), &r, String(""));
+                    //set s
+                    u.phi.set(String(""), k * ((double)i), String(""));
+                    u.lambda.set(String(""), k * ((double)j), String(""));
+                    u.getCartesian(String(""), &s, String(""));
+                    //compute cos
+                    gsl_blas_ddot((r.r), (s.r), &cos);
+                    if (cos == 0.0) { cos = 1.0; }
+                    
+                    
+                    //I plot every 'every_ij' data points. I include the factor 1/cos in such a way that the farther the point (i,j) from circle_observer.reference_position, the less data points I plot, because plotting more would be pointless. In this way, points (i,j) which are close to circle_observer.reference_position (which are nearly parallel to the plane of the screen and thus well visible) are plotted with a lot of points, and the other way around
+//                    every = (unsigned long)(((double)n) / ((double)(((parent->data)->n_points_plot_coastline_3D).value)) * ((double)n_points_grid) / cos);
+//                    if (every == 0) { every = 1; }
+                    every_ij =
+                    ceil(((double)every)/cos * ((double)((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size())/
+                    (((double)n)/((double)n_cells)));
+                    if(every_ij == 0){
+                        every_ij = 1;
+                    }
+                    
+                    
+                    
+                    //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
+                    for (l = p; l < ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l += every_ij) {
+                        
+                        if((draw_panel->CartesianToDrawPanel)((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false)) {
+                            
+                            points_coastline_now[n_filled_entries_points_coastline_now++] = q;
+                            
+                        }
+             
+                    }
+                    
+                    p = l - ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
 
+                    
+                }
+                
+                
+            }
+            
+        }
+        
     }
 
 }

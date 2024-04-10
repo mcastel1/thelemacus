@@ -8319,7 +8319,7 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 //get the datapoints of coastlines and store them into parent->points_coastline_now
 void ChartFrame::GetCoastLineData_3D(void) {
 
-    unsigned long every, l, n, n_points_grid;
+    unsigned long long int l, n, p, n_cells, every = 0, every_ij = 0;
     //integer values of min/max lat/lon to be extractd from p_coastline
     int i, j, i_adjusted = 0, j_adjusted = 0, i_min, i_max, j_min, j_max;
     double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
@@ -8361,17 +8361,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 
     //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
-    n_points_grid = (i_max - i_min + 1) * (j_max - j_min + 1);
-
-//    points_coastline_now.clear();
-
-    //    clock_t t_start, t_end/*, ta, tb*/;
-    //    double T_I, T_II;
-
-    //    T_I=0.0;
-    //    T_II=0.0;
-
-    //    t_start = clock();
+    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
 
 
     for (n_filled_entries_points_coastline_now=0, i = i_min; i < i_max; i++) {
@@ -8439,10 +8429,6 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
             }
 
-            //            tb=clock();
-            //            T_I+=tb-ta;
-            //            
-            //            ta=clock();
 
 
             if (check) {
@@ -8491,21 +8477,10 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
             }
 
-            //            tb=clock();
-            //            T_II+=tb-ta;
-
-
-
+   
         }
 
     }
-
-    //    t_end = clock();
-    //    double t_tot = t_end-t_start;
-
-    //    cout << "t_tot " << t_tot/CLOCKS_PER_SEC << " s\n";
-    //    cout << "T_I " << T_I/CLOCKS_PER_SEC << "s\n";
-    //    cout << "T_II " << T_II/CLOCKS_PER_SEC << "s\n";
 
 }
 

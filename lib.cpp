@@ -12215,6 +12215,76 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
 }
 
 
+//if i needs to be adjusted because it is not between -90 and +90, this method adjusts the pair of latitude, longitude (in arcdegrees) (i, j) and, if the pair is valud with respect to the latitude bounbdaries, it writes the adjusted vlaues in (*i_adjustged, *j_adjusted) and returns true, while it returns false otherwise 
+inline bool DrawPanel::AdjustLatitudeLongitude3D(int i, int j, int* i_adjusted, int* j_adjusted){
+    
+    bool check;
+    
+    //convert i,j into (*i_adjusted), (*j_adjusted)
+    if (!((i >= -90) && (i <= 90))) {
+        //in this case, i needs to be adjusted because it is not between -90 and +90
+        
+        if (i < -90) {
+            
+            if ((-(180 + i) - floor_min_lat >= 0) && (-(180 + i) - floor_min_lat < (parent->parent->all_coastline_points_Cartesian).size())) {
+                
+                (*i_adjusted) = -(180 + i);
+                (*j_adjusted) = 180 + j;
+                
+                check = true;
+                
+            }
+            else {
+                
+                check = false;
+                
+            }
+            
+        }
+        
+        if (i > 90) {
+            
+            if ((180 - i - floor_min_lat >= 0) && (180 - i - floor_min_lat < (parent->parent->all_coastline_points_Cartesian).size())) {
+                
+                (*i_adjusted) = 180 - i;
+                (*j_adjusted) = 180 + j;
+                
+                check = true;
+                
+            }
+            else {
+                
+                check = false;
+                
+            }
+            
+        }
+        
+        
+    }
+    else {
+        
+        if ((i - floor_min_lat >= 0) && (i - floor_min_lat < (parent->parent->all_coastline_points_Cartesian).size())) {
+            
+            (*i_adjusted) = i;
+            (*j_adjusted) = j;
+            
+            check = true;
+            
+        }
+        else {
+            
+            check = false;
+            
+        }
+        
+    }
+    
+    return check;
+    
+    
+}
+
 // the screen position p lies within the DrawPanel *this, it returns true and write it into the position q with respect to the DrawPanel *this. Otherwise, it returns alse, and does nothing with q
 inline bool DrawPanel::ScreenToDrawPanel(const wxPoint& p, wxPoint* q) {
 

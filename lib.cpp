@@ -22432,6 +22432,9 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
             chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
 //            chart_frame->draw_panel->Unbind(wxEVT_PAINT, &DrawPanel::PaintEvent, chart_frame->draw_panel);
+            
+            (chart_frame->draw_panel->label_position_now) = String("");
+
        
             switch (String((chart_frame->projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
                     

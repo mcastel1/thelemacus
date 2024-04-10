@@ -134,11 +134,7 @@
  
  
  ********** THINGS TO FIX ************
-     - during animations of chart movement, disable the instantaneous mouse position on bottom left of drawpanel
-    - use the method in GetCoastlineData_Mercator also in GetCoastlineData_3D
-    - use the Mercator dilation factor dy/d(R phi) to renormalize the number of points per unit surface
-    - make sure that if one animation (A) is triggered when anotherone (B) is in progress, (A) does not start (if you close a chartframe when an animation is in progress the app crashes)
-     - changing `number of points coastline Mercator` in the init file does not change the number of plotted coastline points as it should, the number of plotted coastline points has nothing to do with `number of points coastline Mercator`
+     - use the method in GetCoastlineData_Mercator also in GetCoastlineData_3D
      - code method DrawPanel::ProjectionToGeo_3D
      - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:

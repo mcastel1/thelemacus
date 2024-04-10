@@ -2041,7 +2041,7 @@ public:
     void TabulatePositions(void);
     void FitAll();
     
-    bool AdjustLatitudeLongitude3D(int, int, int*, int*);
+    bool AdjustLatitudeLongitude3D(const int&, const int&, int*, int*);
     bool ScreenToDrawPanel(const wxPoint&, wxPoint*);
     void GeoToScreen(const Position&, wxPoint*);
     bool DrawPanelToGeo(const wxPoint&, Position*);

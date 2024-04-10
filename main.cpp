@@ -390,10 +390,10 @@ bool MyApp::OnInit() {
     cout << "You have Apple Operating System" << "\n";
     
     //to build the app on mac
-        where_am_I(String(""));
+//        where_am_I(String(""));
     //to develop the app with Xcode on OSX
     //new Mac
-    //    root_directory = String("/Users/michele/Documents/sight_reduction_program/");
+        root_directory = String("/Users/michele/Documents/sight_reduction_program/");
     //old Mac
     //    root_directory = String("/Users/macbookpro/Documents/sight_reduction_program/");
 

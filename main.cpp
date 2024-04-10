@@ -134,7 +134,6 @@
  
  
  ********** THINGS TO FIX ************
-     - use the method in GetCoastlineData_Mercator also in GetCoastlineData_3D
      - code method DrawPanel::ProjectionToGeo_3D
      - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:

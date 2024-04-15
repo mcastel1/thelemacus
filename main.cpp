@@ -134,6 +134,7 @@
  
  
  ********** THINGS TO FIX ************
+    - in the 3d projection, some chunks of coastlines are empty of points while others are full of many, useless points
      - code method DrawPanel::ProjectionToGeo_3D
      - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:

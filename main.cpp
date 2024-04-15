@@ -138,7 +138,6 @@
      - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:
  on WIN32:
-        - remove all remaining calls of Refresh() and replace them with RefreshWIN32();
  */
 
 

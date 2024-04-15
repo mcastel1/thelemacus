@@ -8411,8 +8411,8 @@ void ChartFrame::GetCoastLineData_3D(void) {
                     
                 
                     //set s
-                    u.phi.set(String(""), k * ((double)i_adjusted), String(""));
-                    u.lambda.set(String(""), k * ((double)j_adjusted), String(""));
+                    u.phi.set(String(""), k * ((double)i), String(""));
+                    u.lambda.set(String(""), k * ((double)j), String(""));
                     u.getCartesian(String(""), &s, String(""));
                     //compute cos
                     gsl_blas_ddot((r.r), (s.r), &cos);
@@ -18091,7 +18091,8 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event) {
 
     chart_frames.back()->Reset(event);
     wxGetApp().ShowCharts(event);
-    wxGetApp().AnimateCharts();
+    //    wxGetApp().AnimateCharts();
+    chart_frames.back()->Animate();
 
 
 

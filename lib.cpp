@@ -8373,6 +8373,9 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //        }
 //        every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_3D.value)));
         
+        //set r
+        draw_panel->circle_observer.reference_position.getCartesian(String(""), &r, String(""));
+        
         
         //
         for (n=0, i = i_min; i < i_max; i++) {
@@ -8407,8 +8410,6 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //                    n = ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
                     
                 
-                    //set r
-                    draw_panel->circle_observer.reference_position.getCartesian(String(""), &r, String(""));
                     //set s
                     u.phi.set(String(""), k * ((double)i_adjusted), String(""));
                     u.lambda.set(String(""), k * ((double)j_adjusted), String(""));

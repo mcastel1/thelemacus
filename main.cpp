@@ -134,7 +134,7 @@
  
  
  ********** THINGS TO FIX ************
-    - in the 3d projection, some chunks of coastlines are empty of points while others are full of many, useless points
+    - in the 3d projection, some chunks of coastlines are empty of points while others are full of many, useless points: this may be because you start reading a new block with a given i, j starting with entry #l that is already too advanced in the vector -> change the definition of l
      - code method DrawPanel::ProjectionToGeo_3D
      - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:

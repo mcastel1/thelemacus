@@ -8319,7 +8319,7 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 //get the datapoints of coastlines and store them into parent->points_coastline_now
 void ChartFrame::GetCoastLineData_3D(void) {
 
-    unsigned long long int l, n, p, n_cells, every = 0, every_ij = 0;
+    unsigned long long int l, n, p, n_cells, every = 0, every_ij = 0, n_points_per_cell;
     //integer values of min/max lat/lon to be extractd from p_coastline
     int i, j, i_adjusted = 0, j_adjusted = 0, i_min, i_max, j_min, j_max;
     double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
@@ -8394,11 +8394,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
         }
         
         every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_3D.value)));
-              
-        
-        
-        //
-        
+        n_points_per_cell = ((unsigned long long int)((double)n)/((double)n_cells));
         
         for (n_filled_entries_points_coastline_now=0, p=0, i = i_min; i < i_max; i++) {
             for (j = j_min; j < j_max; j++) {
@@ -8432,7 +8428,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
                     
                     
                     //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-                    for (l = p; l < ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l += every_ij) {
+                    for (l = min(p, ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size() - n_points_per_cell); l < ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l += every_ij) {
                         
                         if((draw_panel->CartesianToDrawPanel)((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false)) {
                             

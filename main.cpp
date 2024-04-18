@@ -134,8 +134,7 @@
  
  
  ********** THINGS TO FIX ************
-    - in the 3d projection, some chunks of coastlines are empty of points while others are full of many, useless points: this may be because you start reading a new block with a given i, j starting with entry #l that is already too advanced in the vector -> change the definition of l
-     - code method DrawPanel::ProjectionToGeo_3D
+    - code method DrawPanel::ProjectionToGeo_3D
      - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:
  on WIN32:
@@ -390,9 +389,8 @@ bool MyApp::OnInit() {
     cout << "You have Apple Operating System" << "\n";
     
     //to build the app on mac
-//            where_am_I(String(""));
+    //            where_am_I(String(""));
     //to develop the app with Xcode on OSX
-    //new Mac
     root_directory = String("/Users/michele/Documents/sight_reduction_program/");
 
 #endif

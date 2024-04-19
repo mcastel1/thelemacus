@@ -134,6 +134,10 @@
  
  
  ********** THINGS TO FIX ************
+    - rewrite the coastline data by using polygons:
+        * in ~/Documents/sight_reduction_program/Contents/Resources/Data/land_polygons/osm_land_polygons_simplifyGeom_0point005_areaGT1e6_aggregated.shp.kml you can find a collection of polygons: each polygon is a closed loop of a coastline, such as an island
+        * take ~/Documents/sight_reduction_program/Contents/Resources/Data/land_polygons/osm_land_polygons_simplifyGeom_0point005_areaGT1e6_aggregated.shp.kml and extract from it a file with multiple data block: each data block corresponds to a polygon and it containts a collection of (latitude, longitude) pairs corresponding to the poitns of the polygon
+        * make Thelemacus read that file and trace **lines** instead of single points in DrawPanel to represent the coastlines: this should allow you to get a way better resolution and make things smoother and faster !!!
     - code method DrawPanel::ProjectionToGeo_3D
      - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:

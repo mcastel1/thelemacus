@@ -8589,35 +8589,35 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 #endif
 
         //read file n_line and store it into vector n_line
-        file_n_line.open(String(""));
-
-        cout << prefix.value << "Reading file ...\n";
-
-        for (i = 0, abort = false; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i < (n_line.size())) && (!((file_n_line.value)->eof())) && (!abort); i++) {
-
-            line.clear();
-            ins.clear();
-
-            getline(*(file_n_line.value), line);
-            ins << line;
-            ins >> (n_line[i]);
-            //        cout << "\nn_line[" << i << "] = " << n_line[i];
-
-            percentage_dialog = 100.0 * ((double)i) / ((double)(n_line.size()));
-            message_dialog.str("");
-            message_dialog << "\nLoading chart structure ... " << ((int)percentage_dialog) << "%";
-            abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
-
-        }
-
-        if ((!abort)) {
-
-            (wxGetApp().progress_dialog)->Update(max_dialog);
-            cout << prefix.value << "... done.\n";
-
-        }
-
-        file_n_line.close(String(""));
+//        file_n_line.open(String(""));
+//
+//        cout << prefix.value << "Reading file ...\n";
+//
+//        for (i = 0, abort = false; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i < (n_line.size())) && (!((file_n_line.value)->eof())) && (!abort); i++) {
+//
+//            line.clear();
+//            ins.clear();
+//
+//            getline(*(file_n_line.value), line);
+//            ins << line;
+//            ins >> (n_line[i]);
+//            //        cout << "\nn_line[" << i << "] = " << n_line[i];
+//
+//            percentage_dialog = 100.0 * ((double)i) / ((double)(n_line.size()));
+//            message_dialog.str("");
+//            message_dialog << "\nLoading chart structure ... " << ((int)percentage_dialog) << "%";
+//            abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
+//
+//        }
+//
+//        if ((!abort)) {
+//
+//            (wxGetApp().progress_dialog)->Update(max_dialog);
+//            cout << prefix.value << "... done.\n";
+//
+//        }
+//
+//        file_n_line.close(String(""));
 
 
         //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
@@ -8635,13 +8635,14 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
             i = 0;
             abort = false;
-            while (/*here, to be safe, I stop the while() if I am not sure that n_line will be called with a valid value*/(360 * i + 360 < (n_line.size())) && (!((coastline_file.value)->eof())) && (!abort)) {
+            while ((!((coastline_file.value)->eof())) && (!abort)) {
 
                 all_coastline_points_Cartesian.resize(i + 1);
-                (all_coastline_points_Cartesian[i]).resize(360);
-
+//                (all_coastline_points_Cartesian[i]).resize(360);
                 all_coastline_points_Position.resize(i + 1);
-                (all_coastline_points_Position[i]).resize(360);
+//                (all_coastline_points_Position[i]).resize(360);
+                
+                getline(*(coastline_file.value), line);
 
                 for (j = 0; j < 360; j++) {
 

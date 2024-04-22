@@ -8614,13 +8614,13 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
             coastline_file.open(String(""));
             cout << prefix.value << "Reading file ...\n";
-            message_dialog.str("");
-            message_dialog << "\nLoading chart structure ... 100%\nLoading charts ... ";
-            (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxString(message_dialog.str().c_str()), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_SMOOTH | wxPD_ELAPSED_TIME | wxPD_REMAINING_TIME | wxPD_APP_MODAL);
-#ifdef _WIN32
-            //if I am on WIN32, I set the icon from the icon set in the .rc file
-            (wxGetApp().progress_dialog)->SetIcon(wxICON(app_icon));
-#endif
+//            message_dialog.str("");
+//            message_dialog << "\nLoading chart structure ... 100%\nLoading charts ... ";
+//            (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxString(message_dialog.str().c_str()), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_SMOOTH | wxPD_ELAPSED_TIME | wxPD_REMAINING_TIME | wxPD_APP_MODAL);
+//#ifdef _WIN32
+//            //if I am on WIN32, I set the icon from the icon set in the .rc file
+//            (wxGetApp().progress_dialog)->SetIcon(wxICON(app_icon));
+//#endif
 
             i = 0;
             abort = false;
@@ -8662,29 +8662,28 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                 
                 
 //                percentage_dialog = 100.0 * ((double)i) / (((double)(n_line.size())) / 360.0);
-                percentage_dialog = 50.0;
-                message_dialog.str("");
-                message_dialog << "\nLoading chart structure ... 100%\nLoading charts ... " << ((int)percentage_dialog) << "%";
-                abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
+//                message_dialog.str("");
+//                message_dialog << "\nLoading chart structure ... 100%\nLoading charts ... " << ((int)percentage_dialog) << "%";
+//                abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
                 
                 getline(*(coastline_file.value), line);
                 i++;
                 
             }
             
-            if ((!abort)) {
-                
-                (wxGetApp().progress_dialog)->Update(max_dialog);
-                cout << prefix.value << "... done.\n";
-                
-            }
+//            if ((!abort)) {
+//                
+//                (wxGetApp().progress_dialog)->Update(max_dialog);
+//                cout << prefix.value << "... done.\n";
+//                
+//            }
 
             coastline_file.close(String(""));
 
         }
 
         //destroy the progress_dialog so if the user aborts the loading process there are no pending frames while closing the application
-        wxGetApp().progress_dialog->Destroy();
+//        wxGetApp().progress_dialog->Destroy();
 //        n_line.clear();
 
     }

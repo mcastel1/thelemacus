@@ -24,6 +24,7 @@ int main(int argc, const char * argv[]) {
     ifstream infile;
     stringstream infile_name;
     string line;
+    size_t pos;
 
     
     infile_name.str("");
@@ -42,7 +43,11 @@ int main(int argc, const char * argv[]) {
             getline(infile, line);
         }while(line.find("<coordinates>") == std::string::npos);
         getline(infile, line);
+        line = line.substr(7, line.size());
         
+        pos = 0;
+        pos = line.find("\t");
+
         cout << line << endl;
         
         

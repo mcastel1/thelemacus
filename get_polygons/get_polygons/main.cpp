@@ -1,7 +1,15 @@
 //
 //  main.cpp
 //  get_polygons
-// this code reads the input file sm_land_polygons_simplifyGeom_0point005_areaGT1e6_aggregated.kml and extracts from it, for each polygon, the latitude and longitude of each point in the polygon, and writes the lat and long to the outfile polygon.dat in a clearly readable format  -> polygons.dat will then be read by Thelemacus 
+/* this code reads the input file sm_land_polygons_simplifyGeom_0point005_areaGT1e6_aggregated.kml and extracts from it, for each polygon, the latitude and longitude of each point in the polygon, and writes the lat and long to the outfile polygon.dat in a clearly readable format  -> polygons.dat will then be read by Thelemacus
+ 
+The format of the output is
+[number of points in polygon]: [longitude of first point] [latitude of first point] [longitude of second point] [latitude of second point] ...
+[number of points in polygon]: [longitude of first point] [latitude of first point] [longitude of second point] [latitude of second point] ...
+...
+ 
+ where latitude and longitude are expressed in radians and the longitude is positive in the West direction
+ */
 //  Created by Michele on 19/04/2024.
 //
 
@@ -15,6 +23,8 @@
 #include <algorithm>
 #include <list>
 #include <stdio.h>
+
+#define k (2.0*M_PI/360.0)
 
 
 using namespace std;
@@ -79,7 +89,7 @@ int main(int argc, const char * argv[]) {
         
         outfile << lambda.size() << ": ";
         for(unsigned long long int i=0; i<lambda.size(); ++i){
-            outfile << lambda[i] << "\t" << phi[i] << "\t";
+            outfile << -k*lambda[i] << "\t" << k*phi[i] << "\t";
         }
         outfile << endl;
 

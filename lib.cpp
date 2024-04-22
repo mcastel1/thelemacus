@@ -8559,7 +8559,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
     int i/*, j*/;
 //    string::size_type sz;
     //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
-    vector<unsigned int> n_line;
+//    vector<unsigned int> n_line;
 //    unsigned int l/*, n = 0*/;
 //    char* buffer = NULL;
     size_t pos_beg, pos_end;
@@ -8570,13 +8570,13 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
         file_n_line.set_name((wxGetApp().path_file_n_line));
         coastline_file.set_name((wxGetApp().path_coastline_file));
-        n_line.resize((360 * (floor_max_lat - floor_min_lat + 1)));
+//        n_line.resize((360 * (floor_max_lat - floor_min_lat + 1)));
 
-        (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxT("\nLoading chart structure ..."), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_SMOOTH | wxPD_ELAPSED_TIME | wxPD_REMAINING_TIME | wxPD_APP_MODAL);
-#ifdef _WIN32
-        //if I am on WIN32, I set the icon from the icon set in the .rc file
-        (wxGetApp().progress_dialog)->SetIcon(wxICON(app_icon));
-#endif
+//        (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxT("\nLoading chart structure ..."), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_SMOOTH | wxPD_ELAPSED_TIME | wxPD_REMAINING_TIME | wxPD_APP_MODAL);
+//#ifdef _WIN32
+//        //if I am on WIN32, I set the icon from the icon set in the .rc file
+//        (wxGetApp().progress_dialog)->SetIcon(wxICON(app_icon));
+//#endif
 
         //read file n_line and store it into vector n_line
 //        file_n_line.open(String(""));
@@ -8606,11 +8606,10 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 //            cout << prefix.value << "... done.\n";
 //
 //        }
-//
+
 //        file_n_line.close(String(""));
 
 
-        //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
         if ((!abort)) {
 
             coastline_file.open(String(""));
@@ -8625,36 +8624,17 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
             i = 0;
             abort = false;
+            
+            getline(*(coastline_file.value), line);
             while ((!((coastline_file.value)->eof())) && (!abort)) {
                 //run through polygons
                 
                 all_coastline_points_Cartesian.resize(i + 1);
-                //                (all_coastline_points_Cartesian[i]).resize(360);
                 all_coastline_points_Position.resize(i + 1);
-                //                (all_coastline_points_Position[i]).resize(360);
                 
-                getline(*(coastline_file.value), line);
-                
-                //                for (j = 0; j < 360; j++) {
-                
-                //                    // read data as a block:
-                //                    (coastline_file.value)->seekg(n_line[360 * i + j], (coastline_file.value)->beg);
-                //
-                //                    l = n_line[360 * i + j + 1] - n_line[360 * i + j] - 1;
-                //                    if (buffer != NULL) { delete[] buffer; }
-                //                    buffer = new char[l];
-                //
-                //                    (coastline_file.value)->read(buffer, l);
-                //                    string temp(buffer, l);
-                
-                //count how many datapoints are in temp
-                //                n = ((unsigned int)count(temp.begin(), temp.end(), ','));
-                
-                //                    l = 0;
                 pos_beg = line.find(":", 0)+1;
                 do{
                     //run through points of a polygon
-
                     
                     //read longitude
                     pos_end = line.find("\t", pos_beg);
@@ -8668,39 +8648,18 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                     phi_temp = stod(temp);
 
                     pos_beg = pos_end+1;
-                    
-                    
-                    //                        replace(line.begin(), line.end(), ' ', '\n');
-                    //                        replace(line.begin(), line.end(), ',', ' ');
-                    //
-                    //                        //                    ins.clear();
-                    //                        //                    ins << line;
-                    //                        //                    ins >> phi_temp >> lambda_temp;
-                    //
-                    //
-                    //
+      
                     p_Position.lambda.set(String(""), lambda_temp, String(""));
                     p_Position.phi.set(String(""), phi_temp, String(""));
                     p_Position.getCartesian(String(""), &p_Cartesian, prefix);
-                    //
                     //push back the position into all_coastline_points_Position
                     all_coastline_points_Position.back().push_back(p_Position);
-                    //
                     //                        //push back the position into all_coastline_points_Cartesian: this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
                     //                        (all_coastline_points_Cartesian[i][j]).resize((all_coastline_points_Cartesian[i][j]).size() + 1);
                     all_coastline_points_Cartesian.back().push_back(p_Cartesian);
-                    //
-                    //
-                    //                        pos_beg = pos_end + 1;
-                    //                        pos_end = temp.find(" ", pos_beg);
-                    //
-                    //                        l++;
                     
                 }while(pos_beg != line.size() );
                 
-                //                    temp.clear();
-                
-                //                }
                 
 //                percentage_dialog = 100.0 * ((double)i) / (((double)(n_line.size())) / 360.0);
                 percentage_dialog = 50.0;
@@ -8708,6 +8667,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                 message_dialog << "\nLoading chart structure ... 100%\nLoading charts ... " << ((int)percentage_dialog) << "%";
                 abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
                 
+                getline(*(coastline_file.value), line);
                 i++;
                 
             }
@@ -8725,7 +8685,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
         //destroy the progress_dialog so if the user aborts the loading process there are no pending frames while closing the application
         wxGetApp().progress_dialog->Destroy();
-        n_line.clear();
+//        n_line.clear();
 
     }
 

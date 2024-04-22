@@ -8561,7 +8561,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //this function fetches the data in ((wxGetApp().path_file_coastline_data_blocked).value) and stores them in data_x, data_y, all_coastline_points so that they can be read fastly
 void ListFrame::GetAllCoastLineData(String prefix) {
 
-    FileR file_n_line, file_coastline_data_blocked;
+    FileR file_n_line, coastline_file;
     Position p_Position;
     Cartesian p_Cartesian;
     string line;
@@ -8579,7 +8579,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
         //in file_init, show coastlines = y
 
         file_n_line.set_name((wxGetApp().path_file_n_line));
-        file_coastline_data_blocked.set_name((wxGetApp().path_file_coastline_data_blocked));
+        coastline_file.set_name((wxGetApp().path_coastline_file));
         n_line.resize((360 * (floor_max_lat - floor_min_lat + 1)));
 
         (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxT("\nLoading chart structure ..."), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_SMOOTH | wxPD_ELAPSED_TIME | wxPD_REMAINING_TIME | wxPD_APP_MODAL);
@@ -8623,7 +8623,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
         //read in map_conv_blocked.csv the points with i_min <= latitude <= i_max, and j_min <= longitude <= j_max
         if ((!abort)) {
 
-            file_coastline_data_blocked.open(String(""));
+            coastline_file.open(String(""));
             cout << prefix.value << "Reading file ...\n";
             message_dialog.str("");
             message_dialog << "\nLoading chart structure ... 100%\nLoading charts ... ";
@@ -8635,7 +8635,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
             i = 0;
             abort = false;
-            while (/*here, to be safe, I stop the while() if I am not sure that n_line will be called with a valid value*/(360 * i + 360 < (n_line.size())) && (!((file_coastline_data_blocked.value)->eof())) && (!abort)) {
+            while (/*here, to be safe, I stop the while() if I am not sure that n_line will be called with a valid value*/(360 * i + 360 < (n_line.size())) && (!((coastline_file.value)->eof())) && (!abort)) {
 
                 all_coastline_points_Cartesian.resize(i + 1);
                 (all_coastline_points_Cartesian[i]).resize(360);
@@ -8646,13 +8646,13 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                 for (j = 0; j < 360; j++) {
 
                     // read data as a block:
-                    (file_coastline_data_blocked.value)->seekg(n_line[360 * i + j], (file_coastline_data_blocked.value)->beg);
+                    (coastline_file.value)->seekg(n_line[360 * i + j], (coastline_file.value)->beg);
 
                     l = n_line[360 * i + j + 1] - n_line[360 * i + j] - 1;
                     if (buffer != NULL) { delete[] buffer; }
                     buffer = new char[l];
 
-                    (file_coastline_data_blocked.value)->read(buffer, l);
+                    (coastline_file.value)->read(buffer, l);
                     string temp(buffer, l);
 
                     //count how many datapoints are in temp
@@ -8716,7 +8716,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                 
             }
 
-            file_coastline_data_blocked.close(String(""));
+            coastline_file.close(String(""));
 
         }
 

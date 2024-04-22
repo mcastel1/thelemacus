@@ -14,6 +14,7 @@
 #include <sstream>
 #include <algorithm>
 #include <list>
+#include <stdio.h>
 
 
 using namespace std;
@@ -22,7 +23,8 @@ int main(int argc, const char * argv[]) {
     
     ifstream infile;
     stringstream infile_name;
-    
+    string line;
+
     
     infile_name.str("");
     infile_name << "/Users/michele/Documents/sight_reduction_program/Contents/Resources/Data/land_polygons/osm_land_polygons_simplifyGeom_0point005_areaGT1e6_aggregated.kml";
@@ -34,6 +36,12 @@ int main(int argc, const char * argv[]) {
     }
     
     
+    do{
+        getline(infile, line);
+        
+        
+    }while(line.find("</coordinates>") == std::string::npos);
+  
     
 
     infile.close();

@@ -8564,16 +8564,16 @@ void ListFrame::GetAllCoastLineData(String prefix) {
     FileR file_n_line, coastline_file;
     Position p_Position;
     Cartesian p_Cartesian;
-    string line;
+    string line, temp;
     stringstream ins, message_dialog;
-    int i, j;
-    string::size_type sz;
+    int i/*, j*/;
+//    string::size_type sz;
     //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
     vector<unsigned int> n_line;
-    unsigned int l/*, n = 0*/;
-    char* buffer = NULL;
+//    unsigned int l/*, n = 0*/;
+//    char* buffer = NULL;
     size_t pos_beg, pos_end;
-    double lambda_temp, phi_temp, percentage_dialog;
+    double /*lambda_temp, phi_temp,*/ percentage_dialog;
 
     if (show_coastlines == Answer('y', String(""))) {
         //in file_init, show coastlines = y
@@ -8660,44 +8660,52 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                     //                n = ((unsigned int)count(temp.begin(), temp.end(), ','));
 
 //                    l = 0;
-                    pos_beg = 0;
-                    pos_end = line.find(":", pos_beg)+1;
-                    while (pos_end != (string::npos)) {
+                    pos_beg = line.find(":", 0)+1;
+                    do{
 
-//                        line.clear();
-                        line.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+                        //read longitude
+                        pos_end = line.find("\t", pos_beg);
+                        temp = line.substr(pos_beg, pos_end - pos_beg);
+                        
+                        //read latitude 
+                        pos_beg = pos_end+1;
+                        pos_end = line.find("\t", pos_beg);
+                        temp = line.substr(pos_beg, pos_end - pos_beg);
 
-                        replace(line.begin(), line.end(), ' ', '\n');
-                        replace(line.begin(), line.end(), ',', ' ');
+                        
+                        
+                        
+//                        replace(line.begin(), line.end(), ' ', '\n');
+//                        replace(line.begin(), line.end(), ',', ' ');
+//
+//                        //                    ins.clear();
+//                        //                    ins << line;
+//                        //                    ins >> phi_temp >> lambda_temp;
+//
+//                        phi_temp = std::stod(line, &sz);
+//                        lambda_temp = std::stod(line.substr(sz));
+//
+//
+//                        p_Position.lambda.set(String(""), k * lambda_temp, String(""));
+//                        p_Position.phi.set(String(""), k * phi_temp, String(""));
+//                        p_Position.getCartesian(String(""), &p_Cartesian, prefix);
+//
+//                        //push back the position into all_coastline_points_Position
+//                        (all_coastline_points_Position[i][j]).push_back(p_Position);
+//
+//                        //push back the position into all_coastline_points_Cartesian: this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
+//                        (all_coastline_points_Cartesian[i][j]).resize((all_coastline_points_Cartesian[i][j]).size() + 1);
+//                        (all_coastline_points_Cartesian[i][j]).back() = p_Cartesian;
+//
+//
+//                        pos_beg = pos_end + 1;
+//                        pos_end = temp.find(" ", pos_beg);
+//
+//                        l++;
 
-                        //                    ins.clear();
-                        //                    ins << line;
-                        //                    ins >> phi_temp >> lambda_temp;
+                    }while((pos_end != (string::npos)) );
 
-                        phi_temp = std::stod(line, &sz);
-                        lambda_temp = std::stod(line.substr(sz));
-
-
-                        p_Position.lambda.set(String(""), k * lambda_temp, String(""));
-                        p_Position.phi.set(String(""), k * phi_temp, String(""));
-                        p_Position.getCartesian(String(""), &p_Cartesian, prefix);
-
-                        //push back the position into all_coastline_points_Position
-                        (all_coastline_points_Position[i][j]).push_back(p_Position);
-
-                        //push back the position into all_coastline_points_Cartesian: this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
-                        (all_coastline_points_Cartesian[i][j]).resize((all_coastline_points_Cartesian[i][j]).size() + 1);
-                        (all_coastline_points_Cartesian[i][j]).back() = p_Cartesian;
-
-
-                        pos_beg = pos_end + 1;
-                        pos_end = temp.find(" ", pos_beg);
-
-                        l++;
-
-                    };
-
-                    temp.clear();
+//                    temp.clear();
 
 //                }
 

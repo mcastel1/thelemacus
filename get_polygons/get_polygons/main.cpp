@@ -23,8 +23,10 @@ int main(int argc, const char * argv[]) {
     
     ifstream infile;
     stringstream infile_name;
-    string line;
-    size_t pos;
+    string line, t;
+    size_t pos_start, pos_end;
+    vector<double> lambda;
+    vector<double> phi;
 
     
     infile_name.str("");
@@ -37,6 +39,10 @@ int main(int argc, const char * argv[]) {
     }
     
     while(!infile.eof()){
+        //I am focusing on a given polygon
+        
+        lambda.clear();
+        phi.clear();
         
         //read the file until </coordinates> is found
         do{
@@ -45,8 +51,25 @@ int main(int argc, const char * argv[]) {
         getline(infile, line);
         line = line.substr(7, line.size());
         
-        pos = 0;
-        pos = line.find("\t");
+        pos_start = 0;
+        do{
+            //go through the points of the polygon
+            
+            //read the longitude
+            pos_end = line.find(",", pos_start);
+            t = line.substr(pos_start, pos_end-pos_start);
+            lambda.push_back(stod(t));
+            
+            //read the latitude
+            pos_start = pos_end + 1;
+            pos_end = line.find(",", pos_start);
+            t = line.substr(pos_start, pos_end-pos_start);
+            phi.push_back(stod(t));
+            
+            pos_start = line.find(" ", pos_start) +1;
+            
+        }while(line.find(",", pos_start) !=  string::npos);
+
 
         cout << line << endl;
         

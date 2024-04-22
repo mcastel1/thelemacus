@@ -7,83 +7,36 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "4B1EA2FD-F319-4D46-89D0-6127007E7E18"
+            uuid = "B42A9051-D64E-4C8C-92E8-E700A39FF01B"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "get_polygons/main.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
             landmarkName = "main(argc, argv)"
             landmarkType = "9">
-            <Locations>
-               <Location
-                  uuid = "4B1EA2FD-F319-4D46-89D0-6127007E7E18 - 83bcb9b1fdc74e91"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "main"
-                  moduleName = "get_polygons"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/michele/Documents/sight_reduction_program/get_polygons/get_polygons/main.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "44"
-                  endingLineNumber = "44"
-                  offsetFromSymbolStart = "580">
-               </Location>
-               <Location
-                  uuid = "4B1EA2FD-F319-4D46-89D0-6127007E7E18 - 83bcb9b1fdc74eb0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "main"
-                  moduleName = "get_polygons"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/michele/Documents/sight_reduction_program/get_polygons/get_polygons/main.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "45"
-                  endingLineNumber = "45"
-                  offsetFromSymbolStart = "580">
-               </Location>
-               <Location
-                  uuid = "4B1EA2FD-F319-4D46-89D0-6127007E7E18 - 83bcb9b1fdc74eb0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "main"
-                  moduleName = "get_polygons"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/michele/Documents/sight_reduction_program/get_polygons/get_polygons/main.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "45"
-                  endingLineNumber = "45"
-                  offsetFromSymbolStart = "564">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "BC558C4A-755C-4E8B-B8E3-4D52216DA85F"
+            uuid = "8093270A-C1E7-47A7-9E12-7CE8F3949B31"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "get_polygons/main.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
             landmarkName = "main(argc, argv)"
             landmarkType = "9">
             <Locations>
                <Location
-                  uuid = "BC558C4A-755C-4E8B-B8E3-4D52216DA85F - 83bcb9b1fdc74e34"
+                  uuid = "8093270A-C1E7-47A7-9E12-7CE8F3949B31 - 83bcb9b1fdc749e6"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -93,12 +46,12 @@
                   urlString = "file:///Users/michele/Documents/sight_reduction_program/get_polygons/get_polygons/main.cpp"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "41"
-                  endingLineNumber = "41"
-                  offsetFromSymbolStart = "512">
+                  startingLineNumber = "55"
+                  endingLineNumber = "55"
+                  offsetFromSymbolStart = "692">
                </Location>
                <Location
-                  uuid = "BC558C4A-755C-4E8B-B8E3-4D52216DA85F - 83bcb9b1fdc74e53"
+                  uuid = "8093270A-C1E7-47A7-9E12-7CE8F3949B31 - 83bcb9b1fdc749e6"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -108,71 +61,8 @@
                   urlString = "file:///Users/michele/Documents/sight_reduction_program/get_polygons/get_polygons/main.cpp"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "42"
-                  endingLineNumber = "42"
-                  offsetFromSymbolStart = "512">
-               </Location>
-               <Location
-                  uuid = "BC558C4A-755C-4E8B-B8E3-4D52216DA85F - 83bcb9b1fdc74e53"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "main"
-                  moduleName = "get_polygons"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/michele/Documents/sight_reduction_program/get_polygons/get_polygons/main.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "42"
-                  endingLineNumber = "42"
-                  offsetFromSymbolStart = "496">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "971F35CC-DDF3-4F9C-A6AC-EBD486256DFE"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "get_polygons/main.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "main(argc, argv)"
-            landmarkType = "9">
-            <Locations>
-               <Location
-                  uuid = "971F35CC-DDF3-4F9C-A6AC-EBD486256DFE - 83bcb9b1fdc74805"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "main"
-                  moduleName = "get_polygons"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/michele/Documents/sight_reduction_program/get_polygons/get_polygons/main.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "56"
-                  endingLineNumber = "56"
-                  offsetFromSymbolStart = "672">
-               </Location>
-               <Location
-                  uuid = "971F35CC-DDF3-4F9C-A6AC-EBD486256DFE - 83bcb9b1fdc7496a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "main"
-                  moduleName = "get_polygons"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/michele/Documents/sight_reduction_program/get_polygons/get_polygons/main.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "51"
-                  endingLineNumber = "51"
+                  startingLineNumber = "55"
+                  endingLineNumber = "55"
                   offsetFromSymbolStart = "676">
                </Location>
             </Locations>
@@ -181,15 +71,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "587525C4-CD40-40C9-BCB1-6273F1C4EA30"
-            shouldBeEnabled = "Yes"
+            uuid = "418AD836-E17C-4B4D-AD14-AE15EE487531"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "get_polygons/main.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "main(argc, argv)"
             landmarkType = "9">
          </BreakpointContent>

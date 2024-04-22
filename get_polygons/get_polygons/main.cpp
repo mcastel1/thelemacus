@@ -22,7 +22,8 @@ using namespace std;
 int main(int argc, const char * argv[]) {
     
     ifstream infile;
-    stringstream infile_name;
+    ofstream outfile;
+    stringstream infile_name, outfile_name;
     string line, t;
     size_t pos_start, pos_end;
     vector<double> lambda;
@@ -31,7 +32,13 @@ int main(int argc, const char * argv[]) {
     
     infile_name.str("");
     infile_name << "/Users/michele/Documents/sight_reduction_program/Contents/Resources/Data/land_polygons/osm_land_polygons_simplifyGeom_0point005_areaGT1e6_aggregated.kml";
-    infile.open(infile_name.str().c_str());
+    infile.open(infile_name.str().c_str());  
+    infile.precision(16);
+    
+    outfile_name.str("");
+    outfile_name << "/Users/michele/Documents/sight_reduction_program/Contents/Resources/Data/land_polygons/polygons.dat";
+    outfile.open(outfile_name.str().c_str());
+    outfile.precision(16);
     
     if(!infile){
         cout << "\nError opening file " << infile_name.str().c_str()  << ".";
@@ -69,6 +76,12 @@ int main(int argc, const char * argv[]) {
             pos_start = line.find(" ", pos_start) +1;
             
         }while(line.find(",", pos_start) !=  string::npos);
+        
+        outfile << lambda.size() << ": ";
+        for(unsigned long long int i=0; i<lambda.size(); ++i){
+            outfile << lambda[i] << "\t" << phi[i] << "\t";
+        }
+        outfile << endl;
 
 
         cout << line << endl;
@@ -78,6 +91,7 @@ int main(int argc, const char * argv[]) {
     
 
     infile.close();
+    outfile.close();
     
     return 0;
     

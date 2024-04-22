@@ -8319,136 +8319,126 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 //get the datapoints of coastlines and store them into parent->points_coastline_now
 void ChartFrame::GetCoastLineData_3D(void) {
 
-    unsigned long long int l, n, p, n_cells, every = 0, every_ij = 0, n_points_per_cell;
-    //integer values of min/max lat/lon to be extractd from p_coastline
-    int i, j, i_adjusted = 0, j_adjusted = 0, i_min, i_max, j_min, j_max;
-    double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
-    PositionProjection temp;
-    wxPoint q;
-    Cartesian r, s;
-    Position u;
-
-
-    //set i_min/max, j_min/max
-    i_min = floor(K * (((phi_min).normalize_pm_pi_ret()).value));
-    i_max = ceil(K * (((phi_max).normalize_pm_pi_ret()).value));
-
-    if ((lambda_min == 0.0) && (lambda_max == 0.0)) {
-        //in this case,Set_lambda_phi_min_max found out that circle_observer spans all longitudes, thus I set
-
-        j_min = 0;
-        j_max = 360;
-
-    }
-    else {
-        //in this case, Set_lambda_phi_min_max found out that there are two finite longitudes which encircle circle_observer, thus I set
-
-        if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
-
-            j_min = floor(K * (lambda_max.value));
-            j_max = 360 + ceil(K * (lambda_min.value));
-
-        }
-        else {
-
-            j_min = floor(K * (lambda_max.value));
-            j_max = ceil(K * (lambda_min.value));
-
-        }
-
-    }
-
-
-    //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
-    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
-    
-    if ((parent->show_coastlines) == Answer('y', String(""))) {
-        
-//        for(n=0, i = i_min; i < i_max; i++) {
-//            for(j = j_min; j < j_max; j++) {
+//    unsigned long long int l, n, p, n_cells, every = 0, every_ij = 0, n_points_per_cell;
+//    //integer values of min/max lat/lon to be extractd from p_coastline
+//    int i, j, i_adjusted = 0, j_adjusted = 0, i_min, i_max, j_min, j_max;
+//    double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
+//    PositionProjection temp;
+//    wxPoint q;
+//    Cartesian r, s;
+//    Position u;
+//
+//
+//    //set i_min/max, j_min/max
+//    i_min = floor(K * (((phi_min).normalize_pm_pi_ret()).value));
+//    i_max = ceil(K * (((phi_max).normalize_pm_pi_ret()).value));
+//
+//    if ((lambda_min == 0.0) && (lambda_max == 0.0)) {
+//        //in this case,Set_lambda_phi_min_max found out that circle_observer spans all longitudes, thus I set
+//
+//        j_min = 0;
+//        j_max = 360;
+//
+//    }
+//    else {
+//        //in this case, Set_lambda_phi_min_max found out that there are two finite longitudes which encircle circle_observer, thus I set
+//
+//        if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
+//
+//            j_min = floor(K * (lambda_max.value));
+//            j_max = 360 + ceil(K * (lambda_min.value));
+//
+//        }
+//        else {
+//
+//            j_min = floor(K * (lambda_max.value));
+//            j_max = ceil(K * (lambda_min.value));
+//
+//        }
+//
+//    }
+//
+//
+//    //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
+//    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
+//    
+//    if ((parent->show_coastlines) == Answer('y', String(""))) {
+//        
+//        //set r
+//        draw_panel->circle_observer.reference_position.getCartesian(String(""), &r, String(""));
+//        
+//        //
+//        for (n=0, i = i_min; i < i_max; i++) {
+//            for (j = j_min; j < j_max; j++) {
 //                
-//                n += (parent->all_coastline_points_Cartesian)[i - floor_min_lat][j % 360].size();
+//                
+//                if ((draw_panel->AdjustLatitudeLongitude3D(i, j, &i_adjusted, &j_adjusted))) {
+//                    
+//                    n += (parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360].size();
+//                    
+//                }
+//                
 //                
 //            }
+//            
 //        }
+//        
 //        every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_3D.value)));
-        
-        //set r
-        draw_panel->circle_observer.reference_position.getCartesian(String(""), &r, String(""));
-        
-        
-        //
-        for (n=0, i = i_min; i < i_max; i++) {
-            for (j = j_min; j < j_max; j++) {
-                
-                
-                if ((draw_panel->AdjustLatitudeLongitude3D(i, j, &i_adjusted, &j_adjusted))) {
-                    
-                    n += (parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360].size();
-                    
-                }
-                
-                
-            }
-            
-        }
-        
-        every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_3D.value)));
-        n_points_per_cell = ((unsigned long long int)((double)n)/((double)n_cells));
-        
-        for (n_filled_entries_points_coastline_now=0, p=0, i = i_min; i < i_max; i++) {
-            for (j = j_min; j < j_max; j++) {
-                
-                if ((draw_panel->AdjustLatitudeLongitude3D(i, j, &i_adjusted, &j_adjusted))) {
-
-                    
-//                    //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
-//                    n = ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
-                    
-                
-                    //set s
-                    u.phi.set(String(""), k * ((double)i), String(""));
-                    u.lambda.set(String(""), k * ((double)j), String(""));
-                    u.getCartesian(String(""), &s, String(""));
-                    //compute cos
-                    gsl_blas_ddot((r.r), (s.r), &cos);
-                    if (cos == 0.0) { cos = 1.0; }
-                    
-                    
-                    //I plot every 'every_ij' data points. I include the factor 1/cos in such a way that the farther the point (i,j) from circle_observer.reference_position, the less data points I plot, because plotting more would be pointless. In this way, points (i,j) which are close to circle_observer.reference_position (which are nearly parallel to the plane of the screen and thus well visible) are plotted with a lot of points, and the other way around
-//                    every = (unsigned long)(((double)n) / ((double)(((parent->data)->n_points_plot_coastline_3D).value)) * ((double)n_points_grid) / cos);
-//                    if (every == 0) { every = 1; }
-                    every_ij =
-                    ceil(((double)every)/cos * ((double)((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size())/
-                    (((double)n)/((double)n_cells)));
-                    if(every_ij == 0){
-                        every_ij = 1;
-                    }
-                    
-                    
-                    
-                    //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-                    for (l = min(p, ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size() - n_points_per_cell); l < ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l += every_ij) {
-                        
-                        if((draw_panel->CartesianToDrawPanel)((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false)) {
-                            
-                            points_coastline_now[n_filled_entries_points_coastline_now++] = q;
-                            
-                        }
-             
-                    }
-                    
-                    p = l - ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
-
-                    
-                }
-                
-                
-            }
-            
-        }
-        
-    }
+//        n_points_per_cell = ((unsigned long long int)((double)n)/((double)n_cells));
+//        
+//        for (n_filled_entries_points_coastline_now=0, p=0, i = i_min; i < i_max; i++) {
+//            for (j = j_min; j < j_max; j++) {
+//                
+//                if ((draw_panel->AdjustLatitudeLongitude3D(i, j, &i_adjusted, &j_adjusted))) {
+//
+//                    
+////                    //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
+////                    n = ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
+//                    
+//                
+//                    //set s
+//                    u.phi.set(String(""), k * ((double)i), String(""));
+//                    u.lambda.set(String(""), k * ((double)j), String(""));
+//                    u.getCartesian(String(""), &s, String(""));
+//                    //compute cos
+//                    gsl_blas_ddot((r.r), (s.r), &cos);
+//                    if (cos == 0.0) { cos = 1.0; }
+//                    
+//                    
+//                    //I plot every 'every_ij' data points. I include the factor 1/cos in such a way that the farther the point (i,j) from circle_observer.reference_position, the less data points I plot, because plotting more would be pointless. In this way, points (i,j) which are close to circle_observer.reference_position (which are nearly parallel to the plane of the screen and thus well visible) are plotted with a lot of points, and the other way around
+////                    every = (unsigned long)(((double)n) / ((double)(((parent->data)->n_points_plot_coastline_3D).value)) * ((double)n_points_grid) / cos);
+////                    if (every == 0) { every = 1; }
+//                    every_ij =
+//                    ceil(((double)every)/cos * ((double)((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size())/
+//                    (((double)n)/((double)n_cells)));
+//                    if(every_ij == 0){
+//                        every_ij = 1;
+//                    }
+//                    
+//                    
+//                    
+//                    //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
+//                    for (l = min(p, ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size() - n_points_per_cell); l < ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l += every_ij) {
+//                        
+//                        if((draw_panel->CartesianToDrawPanel)((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false)) {
+//                            
+//                            points_coastline_now[n_filled_entries_points_coastline_now++] = q;
+//                            
+//                        }
+//             
+//                    }
+//                    
+//                    p = l - ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
+//
+//                    
+//                }
+//                
+//                
+//            }
+//            
+//        }
+//        
+//    }
 
 }
 
@@ -8456,104 +8446,104 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //this function efficiently reads coastline data stored in data_x in the interval of latitudes lambda_min, lambda_max, phi_min, phi_max, and writes this data x and y, writing n_points points at the most. This data is stored into parent->points_coastline_now 
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
-    int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned long long int l, n, p, n_cells, every = 0, every_ij = 0;
-    wxPoint temp;
-
-    //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
-    phi_min.normalize_pm_pi();
-    phi_max.normalize_pm_pi();
-
-
-    if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
-
-        j_min = floor(K * ((lambda_max).value));
-        j_max = ceil(K * (((lambda_min).value) + 2.0 * M_PI));
-
-    }
-    else {
-
-        if (lambda_min > lambda_max) {
-
-            j_min = floor(K * ((lambda_max).value));
-            j_max = ceil(K * ((lambda_min).value));
-
-        }
-        else {
-
-            j_min = floor(K * ((lambda_max).value));
-            j_max = ceil(K * (((lambda_min).value) + 2.0 * M_PI));
-
-        }
-
-    }
-
-    i_min = floor(K * (phi_min.value));
-    i_max = ((parent->all_coastline_points_Position).size()) + floor_min_lat;
-
-    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
-
-    if ((parent->show_coastlines) == Answer('y', String(""))) {
-
-//        points_coastline_now.clear();
-        
-        for(n=0, i = i_min; i < i_max; i++) {
-            for(j = j_min; j < j_max; j++) {
-                
-                n += (parent->all_coastline_points_Position)[i - floor_min_lat][j % 360].size();
-                
-            }
-        }
-        every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_Mercator.value)) /**cos(k * ((double)i))*/);
-
-        for(n_filled_entries_points_coastline_now=0, p=0, i = i_min; i < i_max; i++) {
-            for(j = j_min; j < j_max; j++) {
-                
-
-                /*
-                 dN = number of coastline points per lat/lon grid dOmega
-                 dS = surface on the Mercator projection corresponding to dOmega
-                 
-                 
-                 dN' = C * dN
-                 
-                 I require dN'/dS = const (independent of lat and long)
-                 dN'/dS = C * dN/dS = C * dN/dOmega * dOmega/dS
-                 
-                 dS/dOmega ~ 1/cos(phi)
-                 dOmega/dS ~ cos(phi)
-                 
-                 set C = <dN/dOmega> / (dN/dOmega) / dOmega/dS -> dN'/dS = <dN/dOmega>.
-                 
-                 */
-                
-                every_ij =
-                ceil(((double)every)*cos(k * ((double)i)) * ((double)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size())/
-                (((double)n)/((double)n_cells)));
-                if(every_ij == 0){
-                    every_ij = 1;
-                }
-                
-                
-                
-
-                //run over the Positions by picking one Position every [every] Positions
-                for (l = p; l < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l+=every_ij) {
-                    
-                    if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
-                        
-                        points_coastline_now[n_filled_entries_points_coastline_now++] = temp;
-                        
-                    }
-                    
-                }
-                
-                p = l - ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size();
-                
-            }
-        }
-        
-    }
+//    int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
+//    unsigned long long int l, n, p, n_cells, every = 0, every_ij = 0;
+//    wxPoint temp;
+//
+//    //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
+//    phi_min.normalize_pm_pi();
+//    phi_max.normalize_pm_pi();
+//
+//
+//    if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
+//
+//        j_min = floor(K * ((lambda_max).value));
+//        j_max = ceil(K * (((lambda_min).value) + 2.0 * M_PI));
+//
+//    }
+//    else {
+//
+//        if (lambda_min > lambda_max) {
+//
+//            j_min = floor(K * ((lambda_max).value));
+//            j_max = ceil(K * ((lambda_min).value));
+//
+//        }
+//        else {
+//
+//            j_min = floor(K * ((lambda_max).value));
+//            j_max = ceil(K * (((lambda_min).value) + 2.0 * M_PI));
+//
+//        }
+//
+//    }
+//
+//    i_min = floor(K * (phi_min.value));
+//    i_max = ((parent->all_coastline_points_Position).size()) + floor_min_lat;
+//
+//    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
+//
+//    if ((parent->show_coastlines) == Answer('y', String(""))) {
+//
+////        points_coastline_now.clear();
+//        
+//        for(n=0, i = i_min; i < i_max; i++) {
+//            for(j = j_min; j < j_max; j++) {
+//                
+//                n += (parent->all_coastline_points_Position)[i - floor_min_lat][j % 360].size();
+//                
+//            }
+//        }
+//        every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_Mercator.value)) /**cos(k * ((double)i))*/);
+//
+//        for(n_filled_entries_points_coastline_now=0, p=0, i = i_min; i < i_max; i++) {
+//            for(j = j_min; j < j_max; j++) {
+//                
+//
+//                /*
+//                 dN = number of coastline points per lat/lon grid dOmega
+//                 dS = surface on the Mercator projection corresponding to dOmega
+//                 
+//                 
+//                 dN' = C * dN
+//                 
+//                 I require dN'/dS = const (independent of lat and long)
+//                 dN'/dS = C * dN/dS = C * dN/dOmega * dOmega/dS
+//                 
+//                 dS/dOmega ~ 1/cos(phi)
+//                 dOmega/dS ~ cos(phi)
+//                 
+//                 set C = <dN/dOmega> / (dN/dOmega) / dOmega/dS -> dN'/dS = <dN/dOmega>.
+//                 
+//                 */
+//                
+//                every_ij =
+//                ceil(((double)every)*cos(k * ((double)i)) * ((double)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size())/
+//                (((double)n)/((double)n_cells)));
+//                if(every_ij == 0){
+//                    every_ij = 1;
+//                }
+//                
+//                
+//                
+//
+//                //run over the Positions by picking one Position every [every] Positions
+//                for (l = p; l < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l+=every_ij) {
+//                    
+//                    if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
+//                        
+//                        points_coastline_now[n_filled_entries_points_coastline_now++] = temp;
+//                        
+//                    }
+//                    
+//                }
+//                
+//                p = l - ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size();
+//                
+//            }
+//        }
+//        
+//    }
     
 }
 
@@ -8636,7 +8626,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
             i = 0;
             abort = false;
             while ((!((coastline_file.value)->eof())) && (!abort)) {
-                //run throug polygons
+                //run through polygons
                 
                 all_coastline_points_Cartesian.resize(i + 1);
                 //                (all_coastline_points_Cartesian[i]).resize(360);
@@ -8663,7 +8653,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                 //                    l = 0;
                 pos_beg = line.find(":", 0)+1;
                 do{
-                    //run through the points of a polygon
+                    //run through points of a polygon
 
                     
                     //read longitude
@@ -10836,11 +10826,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     unset_idling = new UnsetIdling<ChartFrame>(this);
     
     //set the size of points_coastline_now and points_coastline_before equal to their maximum possible size, so I won't have to resize them at every step
-    for(n_filled_entries_points_coastline_now=0, i=0; i<(parent->all_coastline_points_Position.size()); i++){
-        for (j=0; j<((parent->all_coastline_points_Position)[i]).size(); j++) {
-            n_filled_entries_points_coastline_now += ((parent->all_coastline_points_Position)[i][j]).size();
-        }
-    }
+    //    for(n_filled_entries_points_coastline_now=0, i=0; i<(parent->all_coastline_points_Position.size()); i++){
+    //        for (j=0; j<((parent->all_coastline_points_Position)[i]).size(); j++) {
+    //            n_filled_entries_points_coastline_now += ((parent->all_coastline_points_Position)[i][j]).size();
+    //        }
+    //    }
     n_filled_entries_points_coastline_before = n_filled_entries_points_coastline_now;
     points_coastline_now.resize(n_filled_entries_points_coastline_now);
     points_coastline_before.resize(n_filled_entries_points_coastline_before);

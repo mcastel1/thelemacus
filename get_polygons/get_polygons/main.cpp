@@ -1,7 +1,7 @@
 //
 //  main.cpp
 //  get_polygons
-//
+// this code reads the input file sm_land_polygons_simplifyGeom_0point005_areaGT1e6_aggregated.kml and extracts from it, for each polygon, the latitude and longitude of each point in the polygon, and writes the lat and long to the outfile polygon.dat in a clearly readable format  -> polygons.dat will then be read by Thelemacus 
 //  Created by Michele on 19/04/2024.
 //
 

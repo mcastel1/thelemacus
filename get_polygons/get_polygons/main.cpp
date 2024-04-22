@@ -35,13 +35,18 @@ int main(int argc, const char * argv[]) {
         return 0;
     }
     
-    
-    do{
+    while(!infile.eof()){
+        
+        //read the file until </coordinates> is found
+        do{
+            getline(infile, line);
+        }while(line.find("<coordinates>") == std::string::npos);
         getline(infile, line);
         
+        cout << line << endl;
         
-    }while(line.find("</coordinates>") == std::string::npos);
-  
+        
+    }
     
 
     infile.close();

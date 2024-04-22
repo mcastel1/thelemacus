@@ -8636,90 +8636,91 @@ void ListFrame::GetAllCoastLineData(String prefix) {
             i = 0;
             abort = false;
             while ((!((coastline_file.value)->eof())) && (!abort)) {
-
+                
                 all_coastline_points_Cartesian.resize(i + 1);
-//                (all_coastline_points_Cartesian[i]).resize(360);
+                //                (all_coastline_points_Cartesian[i]).resize(360);
                 all_coastline_points_Position.resize(i + 1);
-//                (all_coastline_points_Position[i]).resize(360);
+                //                (all_coastline_points_Position[i]).resize(360);
                 
                 getline(*(coastline_file.value), line);
-
-//                for (j = 0; j < 360; j++) {
-
-//                    // read data as a block:
-//                    (coastline_file.value)->seekg(n_line[360 * i + j], (coastline_file.value)->beg);
-//
-//                    l = n_line[360 * i + j + 1] - n_line[360 * i + j] - 1;
-//                    if (buffer != NULL) { delete[] buffer; }
-//                    buffer = new char[l];
-//
-//                    (coastline_file.value)->read(buffer, l);
-//                    string temp(buffer, l);
-
-                    //count how many datapoints are in temp
-                    //                n = ((unsigned int)count(temp.begin(), temp.end(), ','));
-
-//                    l = 0;
-                    pos_beg = line.find(":", 0)+1;
-                    do{
-
-                        //read longitude
-                        pos_end = line.find("\t", pos_beg);
-                        temp = line.substr(pos_beg, pos_end - pos_beg);
-                        
-                        //read latitude 
-                        pos_beg = pos_end+1;
-                        pos_end = line.find("\t", pos_beg);
-                        temp = line.substr(pos_beg, pos_end - pos_beg);
-
-                        
-                        
-                        
-//                        replace(line.begin(), line.end(), ' ', '\n');
-//                        replace(line.begin(), line.end(), ',', ' ');
-//
-//                        //                    ins.clear();
-//                        //                    ins << line;
-//                        //                    ins >> phi_temp >> lambda_temp;
-//
-//                        phi_temp = std::stod(line, &sz);
-//                        lambda_temp = std::stod(line.substr(sz));
-//
-//
-//                        p_Position.lambda.set(String(""), k * lambda_temp, String(""));
-//                        p_Position.phi.set(String(""), k * phi_temp, String(""));
-//                        p_Position.getCartesian(String(""), &p_Cartesian, prefix);
-//
-//                        //push back the position into all_coastline_points_Position
-//                        (all_coastline_points_Position[i][j]).push_back(p_Position);
-//
-//                        //push back the position into all_coastline_points_Cartesian: this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
-//                        (all_coastline_points_Cartesian[i][j]).resize((all_coastline_points_Cartesian[i][j]).size() + 1);
-//                        (all_coastline_points_Cartesian[i][j]).back() = p_Cartesian;
-//
-//
-//                        pos_beg = pos_end + 1;
-//                        pos_end = temp.find(" ", pos_beg);
-//
-//                        l++;
-
-                    }while((pos_end != (string::npos)) );
-
-//                    temp.clear();
-
-//                }
-
-                percentage_dialog = 100.0 * ((double)i) / (((double)(n_line.size())) / 360.0);
+                
+                //                for (j = 0; j < 360; j++) {
+                
+                //                    // read data as a block:
+                //                    (coastline_file.value)->seekg(n_line[360 * i + j], (coastline_file.value)->beg);
+                //
+                //                    l = n_line[360 * i + j + 1] - n_line[360 * i + j] - 1;
+                //                    if (buffer != NULL) { delete[] buffer; }
+                //                    buffer = new char[l];
+                //
+                //                    (coastline_file.value)->read(buffer, l);
+                //                    string temp(buffer, l);
+                
+                //count how many datapoints are in temp
+                //                n = ((unsigned int)count(temp.begin(), temp.end(), ','));
+                
+                //                    l = 0;
+                pos_beg = line.find(":", 0)+1;
+                do{
+                    
+                    //read longitude
+                    pos_end = line.find("\t", pos_beg);
+                    temp = line.substr(pos_beg, pos_end - pos_beg);
+                    
+                    //read latitude
+                    pos_beg = pos_end+1;
+                    pos_end = line.find("\t", pos_beg);
+                    temp = line.substr(pos_beg, pos_end - pos_beg);
+                    
+                    pos_beg = pos_end+1;
+                    
+                    
+                    //                        replace(line.begin(), line.end(), ' ', '\n');
+                    //                        replace(line.begin(), line.end(), ',', ' ');
+                    //
+                    //                        //                    ins.clear();
+                    //                        //                    ins << line;
+                    //                        //                    ins >> phi_temp >> lambda_temp;
+                    //
+                    //                        phi_temp = std::stod(line, &sz);
+                    //                        lambda_temp = std::stod(line.substr(sz));
+                    //
+                    //
+                    //                        p_Position.lambda.set(String(""), k * lambda_temp, String(""));
+                    //                        p_Position.phi.set(String(""), k * phi_temp, String(""));
+                    //                        p_Position.getCartesian(String(""), &p_Cartesian, prefix);
+                    //
+                    //                        //push back the position into all_coastline_points_Position
+                    //                        (all_coastline_points_Position[i][j]).push_back(p_Position);
+                    //
+                    //                        //push back the position into all_coastline_points_Cartesian: this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
+                    //                        (all_coastline_points_Cartesian[i][j]).resize((all_coastline_points_Cartesian[i][j]).size() + 1);
+                    //                        (all_coastline_points_Cartesian[i][j]).back() = p_Cartesian;
+                    //
+                    //
+                    //                        pos_beg = pos_end + 1;
+                    //                        pos_end = temp.find(" ", pos_beg);
+                    //
+                    //                        l++;
+                    
+                }while(pos_beg != line.size() );
+                
+                //                    temp.clear();
+                
+                //                }
+                
+//                percentage_dialog = 100.0 * ((double)i) / (((double)(n_line.size())) / 360.0);
+                percentage_dialog = 50.0;
                 message_dialog.str("");
                 message_dialog << "\nLoading chart structure ... 100%\nLoading charts ... " << ((int)percentage_dialog) << "%";
                 abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
-
+                
                 i++;
-
+                
             }
-
+            
             if ((!abort)) {
-
+                
                 (wxGetApp().progress_dialog)->Update(max_dialog);
                 cout << prefix.value << "... done.\n";
                 

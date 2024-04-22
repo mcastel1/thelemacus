@@ -8644,28 +8644,28 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                 
                 getline(*(coastline_file.value), line);
 
-                for (j = 0; j < 360; j++) {
+//                for (j = 0; j < 360; j++) {
 
-                    // read data as a block:
-                    (coastline_file.value)->seekg(n_line[360 * i + j], (coastline_file.value)->beg);
-
-                    l = n_line[360 * i + j + 1] - n_line[360 * i + j] - 1;
-                    if (buffer != NULL) { delete[] buffer; }
-                    buffer = new char[l];
-
-                    (coastline_file.value)->read(buffer, l);
-                    string temp(buffer, l);
+//                    // read data as a block:
+//                    (coastline_file.value)->seekg(n_line[360 * i + j], (coastline_file.value)->beg);
+//
+//                    l = n_line[360 * i + j + 1] - n_line[360 * i + j] - 1;
+//                    if (buffer != NULL) { delete[] buffer; }
+//                    buffer = new char[l];
+//
+//                    (coastline_file.value)->read(buffer, l);
+//                    string temp(buffer, l);
 
                     //count how many datapoints are in temp
                     //                n = ((unsigned int)count(temp.begin(), temp.end(), ','));
 
-                    l = 0;
+//                    l = 0;
                     pos_beg = 0;
-                    pos_end = temp.find(" ", pos_beg);
+                    pos_end = line.find(":", pos_beg)+1;
                     while (pos_end != (string::npos)) {
 
-                        line.clear();
-                        line = temp.substr(pos_beg, pos_end - pos_beg + 1).c_str();
+//                        line.clear();
+                        line.substr(pos_beg, pos_end - pos_beg + 1).c_str();
 
                         replace(line.begin(), line.end(), ' ', '\n');
                         replace(line.begin(), line.end(), ',', ' ');
@@ -8699,7 +8699,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
                     temp.clear();
 
-                }
+//                }
 
                 percentage_dialog = 100.0 * ((double)i) / (((double)(n_line.size())) / 360.0);
                 message_dialog.str("");

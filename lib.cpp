@@ -8890,7 +8890,7 @@ inline void DrawPanel::RenderBackground(
                                         const vector<wxString>& parallels_and_meridians_labels,
                                         const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                         const vector<unsigned long long int>& n_filled_entries_polygons,
-                                        const vector< vector<wxPoint> >& points_coastline,
+                                        const vector<wxPoint>& points_coastline,
                                         wxColour foreground_color,
                                         wxColour background_color,
                                         double thickness

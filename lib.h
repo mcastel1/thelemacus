@@ -2016,7 +2016,7 @@ public:
                           const vector<wxString>&,
                           const vector<wxPoint>&,
                           const vector<unsigned long long int>&,
-                          const vector< vector<wxPoint> >&,
+                          const vector<wxPoint>&,
                           wxColor,
                           wxColor,
                           double);

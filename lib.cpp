@@ -9550,7 +9550,9 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
     for (i = 0; i < points_coastline.size(); i++) {
+        if((points_coastline[i]).size() > 1){
             dc->DrawLines((int)((points_coastline[i]).size()), (points_coastline[i]).data());
+        }
     }
 
 

@@ -64,37 +64,42 @@ int main(int argc, const char * argv[]) {
         //read the file until </coordinates> is found
         do{
             getline(infile, line);
-        }while(line.find("<coordinates>") == std::string::npos);
-        getline(infile, line);
-        line = line.substr(7, line.size());
+        }while((line.find("<coordinates>") == std::string::npos) && (!infile.eof()));
         
-        pos_start = 0;
-        do{
-            //go through the points of the polygon
+        if(!infile.eof()){
             
-            //read the longitude
-            pos_end = line.find(",", pos_start);
-            t = line.substr(pos_start, pos_end-pos_start);
-            lambda.push_back(stod(t));
+            getline(infile, line);
+            line = line.substr(7, line.size());
             
-            //read the latitude
-            pos_start = pos_end + 1;
-            pos_end = line.find(",", pos_start);
-            t = line.substr(pos_start, pos_end-pos_start);
-            phi.push_back(stod(t));
+            pos_start = 0;
+            do{
+                //go through the points of the polygon
+                
+                //read the longitude
+                pos_end = line.find(",", pos_start);
+                t = line.substr(pos_start, pos_end-pos_start);
+                lambda.push_back(stod(t));
+                
+                //read the latitude
+                pos_start = pos_end + 1;
+                pos_end = line.find(",", pos_start);
+                t = line.substr(pos_start, pos_end-pos_start);
+                phi.push_back(stod(t));
+                
+                pos_start = line.find(" ", pos_start) +1;
+                
+            }while(line.find(",", pos_start) !=  string::npos);
             
-            pos_start = line.find(" ", pos_start) +1;
+            outfile << lambda.size() << ":";
+            for(unsigned long long int i=0; i<lambda.size(); ++i){
+                outfile << "\t" << -k*lambda[i] << "\t" << k*phi[i];
+            }
+            outfile << endl;
             
-        }while(line.find(",", pos_start) !=  string::npos);
-        
-        outfile << lambda.size() << ": ";
-        for(unsigned long long int i=0; i<lambda.size(); ++i){
-            outfile << -k*lambda[i] << "\t" << k*phi[i] << "\t";
+            
+            cout << line << endl;
+            
         }
-        outfile << endl;
-
-
-        cout << line << endl;
         
         
     }

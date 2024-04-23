@@ -7,15 +7,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B42A9051-D64E-4C8C-92E8-E700A39FF01B"
+            uuid = "8D844F13-D7B8-427F-BED4-C7E539749C7E"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "get_polygons/main.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
             landmarkName = "main(argc, argv)"
             landmarkType = "9">
          </BreakpointContent>
@@ -23,20 +23,20 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8093270A-C1E7-47A7-9E12-7CE8F3949B31"
+            uuid = "6C7073D9-584D-4526-9EEB-CCDD06EB66F3"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "get_polygons/main.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
             landmarkName = "main(argc, argv)"
             landmarkType = "9">
             <Locations>
                <Location
-                  uuid = "8093270A-C1E7-47A7-9E12-7CE8F3949B31 - 83bcb9b1fdc74881"
+                  uuid = "6C7073D9-584D-4526-9EEB-CCDD06EB66F3 - 83bcb9b1fdc7b693"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -46,12 +46,12 @@
                   urlString = "file:///Users/michele/Documents/sight_reduction_program/get_polygons/get_polygons/main.cpp"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "60"
-                  endingLineNumber = "60"
-                  offsetFromSymbolStart = "716">
+                  startingLineNumber = "106"
+                  endingLineNumber = "106"
+                  offsetFromSymbolStart = "1656">
                </Location>
                <Location
-                  uuid = "8093270A-C1E7-47A7-9E12-7CE8F3949B31 - 83bcb9b1fdc74881"
+                  uuid = "6C7073D9-584D-4526-9EEB-CCDD06EB66F3 - 83bcb9b1fdc7b6d1"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -61,9 +61,9 @@
                   urlString = "file:///Users/michele/Documents/sight_reduction_program/get_polygons/get_polygons/main.cpp"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "60"
-                  endingLineNumber = "60"
-                  offsetFromSymbolStart = "900">
+                  startingLineNumber = "108"
+                  endingLineNumber = "108"
+                  offsetFromSymbolStart = "1744">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -71,15 +71,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "418AD836-E17C-4B4D-AD14-AE15EE487531"
+            uuid = "50B375BA-CCDA-4A43-8662-A78A39B88E19"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "get_polygons/main.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
             landmarkName = "main(argc, argv)"
             landmarkType = "9">
          </BreakpointContent>

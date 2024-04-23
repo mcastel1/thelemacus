@@ -2812,8 +2812,7 @@ public:
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/lambda_min, lambda_max;
     //in points_coastline_now (points_coasline_before), I store the 2d coordindates  in DrawPanel coordinates of coastline data coastline_points at the current (preceeding) state of the chart
-    //the number of  entries in points_coastline_now and points_coastline_before (starting from the beginning of the vectors), respectively, which have been filled
-    unsigned long long int n_filled_entries_points_coastline_now, n_filled_entries_points_coastline_before;
+    vector<unsigned long long int> n_filled_entries_points_coastline_now, n_filled_entries_points_coastline_before;
     //points_coastline_now/beforre[i] contains the points of the i-th polygon of the coastlines
     vector< vector<wxPoint> > points_coastline_now, points_coastline_before;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false

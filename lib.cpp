@@ -8447,7 +8447,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
     int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned long long int i, j, l, n, p, n_cells, every = 0, every_ij = 0;
+    unsigned long long int i, j, l, n, p, n_cells/*, every = 0, every_ij = 0*/;
     wxPoint temp;
 
     //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
@@ -8487,22 +8487,19 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         
         
         
-        for(points_coastline_now.clear(), p=0, i=0; i < parent->all_coastline_points_Position.size(); i++) {
+        for(p=0, i=0, l=0; i<parent->all_coastline_points_Position.size(); i++) {
             //run through polygons
             
-            for(points_coastline_now.resize(points_coastline_now.size()+1), j=p; j<(parent->all_coastline_points_Position[i]).size(); /*TO REDUCE NUMBER OF POINTS, INCREASE j INCREMENT HERE */j += (wxGetApp().n_points_plot_coastline_Mercator.value)){
+            for(j=p; j<(parent->all_coastline_points_Position[i]).size(); j+=(wxGetApp().n_points_plot_coastline_Mercator.value)){
                 //run through points in a polygon
                 
                 if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i][j], &temp, false)) {
-                    
-                    points_coastline_now[i].push_back(temp);
-                    
+                    points_coastline_now[l++].push_back(temp);
                 }
                 
             }
             
             p = j - ((parent->all_coastline_points_Position[i]).size());
-
 
         }
         
@@ -10820,7 +10817,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //    points_coastline_now.resize(n_filled_entries_points_coastline_now);
     //    points_coastline_before.resize(n_filled_entries_points_coastline_before);
     //    n_filled_entries_points_coastline_before = n_filled_entries_points_coastline_now = 0;
-
+    
+    //points_coastline_now/before and n_filled_entries_points_coastline_now/before are resized to their maximum possible value
+    for(i=0, j=0; i<parent->all_coastline_points_Position.size(); i++) {
+        j += (parent->all_coastline_points_Position[i].size());
+    }
+    points_coastline_now.resize(j);
+    points_coastline_before.resize(j);
         
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 

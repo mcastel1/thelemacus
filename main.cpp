@@ -134,6 +134,7 @@
  
  
  ********** THINGS TO FIX ************
+    - put back ommented method Render_3D
     - put back progress dialog when polygons work
     - put back '//set the size of points_coastline_now and points_ ... '
     - rewrite the coastline data by using polygons:

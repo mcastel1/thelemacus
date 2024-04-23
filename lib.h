@@ -1990,7 +1990,7 @@ public:
                               const vector<wxString>&,
                               const vector<wxPoint>&,
                               const unsigned long long int&,
-                              const vector<wxPoint>&,
+                              const vector< vector<wxPoint> >&,
                               wxColor,
                               wxColor,
                               double);
@@ -2017,7 +2017,7 @@ public:
                           const vector<wxString>&,
                           const vector<wxPoint>&,
                           const unsigned long long int&,
-                          const vector<wxPoint>&,
+                          const vector< vector<wxPoint> >&,
                           wxColor,
                           wxColor,
                           double);
@@ -2080,7 +2080,7 @@ public:
                          const vector<wxString>&,
                          const vector<wxPoint>&,
                          const unsigned long long int&,
-                         const vector<wxPoint>&,
+                         const vector< vector<wxPoint> >&,
                          wxColor,
                          wxColor,
                          double);
@@ -2091,7 +2091,7 @@ public:
                    const vector<wxString>&,
                    const vector<wxPoint>&,
                    const unsigned long long int&,
-                   const vector<wxPoint>&,
+                   const vector< vector<wxPoint> >&,
                    wxColor,
                    wxColor,
                    double);

@@ -8884,7 +8884,7 @@ inline void DrawPanel::RenderBackground(
                                         const vector<wxString>& parallels_and_meridians_labels,
                                         const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                         const unsigned long long int& size_points_coastline,
-                                        const vector<wxPoint>& points_coastline,
+                                        const vector< vector<wxPoint> >& points_coastline,
                                         wxColour foreground_color,
                                         wxColour background_color,
                                         double thickness
@@ -9523,7 +9523,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                        const unsigned long long int& size_points_coastline,
-                                       const vector<wxPoint>& points_coastline,
+                                       const vector< vector<wxPoint> >& points_coastline,
                                        wxColor foreground_color,
                                        wxColor background_color,
                                        double thickness) {
@@ -9724,107 +9724,107 @@ inline void DrawPanel::Render_3D(
                                  const vector<wxString>& parallels_and_meridians_labels,
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                  const unsigned long long int& size_points_coastline,
-                                 const vector<wxPoint>& points_coastline,
+                                 const vector< vector<wxPoint> >& points_coastline,
                                  wxColor foreground_color,
                                  wxColor background_color,
                                  double thickness
                                  ) {
     
-    int i, j;
-    Double d_temp;
-    Angle lambda;
-    stringstream s;
-    wxString wx_string;
-    //this is a list of tabulated points for dummy_route, such as a meridian, which will be created and destroyed just after
-    vector<wxPoint> points_dummy_route;
-    PositionProjection dummy_projection;
-    wxPoint p;
-    Position q, temp;
-
-
-    //draws a rectangle filled with color wxGetApp().background_color and with border wich color wxGetApp().foregrond_color on bitmap_image, so bitmap_image will have the right background color
-    //dc->SetBrush(wxBrush(wxGetApp().background_color));
-    //dc->SetPen(wxPen(foreground_color, thickness));
-    //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
-
-    //render coastlines
-    //draw the coastline points into bitmap_image through memory_dc
-    dc->SetPen(wxPen(foreground_color, thickness));
-    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for (i = 0; i < size_points_coastline; i++) {
-        //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
-        dc->DrawEllipse(points_coastline[i], ToDIP(wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value)));
-    }
-
-
-    //    //set thickness to normal thicnkness
-    //    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-    dc->SetPen(wxPen(foreground_color, thickness));
-    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
-    //render parallels and meridians
-    for (i = 0; i < grid.size(); i++) {
-        for (j = 0; j < (grid[i]).size(); j++) {
-
-            //        (grid[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
-            if ((grid[i][j]).size() > 1) {
-                dc->DrawSpline((int)((grid[i][j]).size()), (grid[i][j]).data());
-            }
-        }
-    }
-    //render parallel and meridian ticks
-    for (i = 0; i < ticks.size(); i++) {
-        for (j = 0; j < (ticks[i]).size(); j++) {
-
-            //        (ticks[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
-            if ((ticks[i][j]).size() > 1) {
-                dc->DrawSpline((int)((ticks[i][j]).size()), (ticks[i][j]).data());
-            }
-        }
-    }
-
-
-    //render labels on parallels and meridians
-    dc->SetTextForeground(foreground_color);
-    dc->SetTextBackground(background_color);
-    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
-    dc->SetBackgroundMode(wxSOLID);
-    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
-
-        dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
-
-    }
-
-
-
-    //draw horizon circle
-    //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
-    //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection temp: the resulting temp.y is the radius of the circular horizon of the earth in 3d projection cooordinates
-    dc->SetPen(wxPen(foreground_color, thickness));
-    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
-
-    //set q
-    (q.lambda).set(String(""), 0.0, String(""));
-    (q.phi) = (circle_observer.omega);
-
-    //obtain the coordinates of q in the reference frame x'y'z'
-    gsl_vector_set((rp.r), 0, 0.0);
-    gsl_vector_set((rp.r), 1, -cos(q.phi));
-    gsl_vector_set((rp.r), 2, sin((q.phi)));
-
-    //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
-    d_temp.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
-    dummy_projection = PositionProjection(0.0, ((d_temp.value) * gsl_vector_get((rp.r), 2)) / ((d_temp.value) + 1.0 + gsl_vector_get((rp.r), 1)));
-    //set the wxPen color for the horizon
-//    dc->SetPen(wxPen(wxGetApp().color_horizon, 1));
-    dc->SetPen(wxPen(foreground_color, thickness));
-    dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
-    dc->SetBackground(background_color);
-    //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
-    dc->DrawCircle(
-        (position_plot_area.x) + (int)(((double)(size_plot_area.GetWidth())) / 2.0),
-        (position_plot_area.y) + (int)(((double)(size_plot_area.GetHeight())) / 2.0),
-        (dummy_projection.y) / y_max * ((double)(size_plot_area.GetWidth())) / 2.0
-    );
+//    int i, j;
+//    Double d_temp;
+//    Angle lambda;
+//    stringstream s;
+//    wxString wx_string;
+//    //this is a list of tabulated points for dummy_route, such as a meridian, which will be created and destroyed just after
+//    vector<wxPoint> points_dummy_route;
+//    PositionProjection dummy_projection;
+//    wxPoint p;
+//    Position q, temp;
+//
+//
+//    //draws a rectangle filled with color wxGetApp().background_color and with border wich color wxGetApp().foregrond_color on bitmap_image, so bitmap_image will have the right background color
+//    //dc->SetBrush(wxBrush(wxGetApp().background_color));
+//    //dc->SetPen(wxPen(foreground_color, thickness));
+//    //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
+//
+//    //render coastlines
+//    //draw the coastline points into bitmap_image through memory_dc
+//    dc->SetPen(wxPen(foreground_color, thickness));
+//    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
+//    for (i = 0; i < size_points_coastline; i++) {
+//        //        ProjectionToDrawPanel_3D(Projection((parent->x_3d)[i], (parent->y_3d)[i]), &p);
+//        dc->DrawEllipse(points_coastline[i], ToDIP(wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value)));
+//    }
+//
+//
+//    //    //set thickness to normal thicnkness
+//    //    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
+//    dc->SetPen(wxPen(foreground_color, thickness));
+//    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
+//    //render parallels and meridians
+//    for (i = 0; i < grid.size(); i++) {
+//        for (j = 0; j < (grid[i]).size(); j++) {
+//
+//            //        (grid[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
+//            if ((grid[i][j]).size() > 1) {
+//                dc->DrawSpline((int)((grid[i][j]).size()), (grid[i][j]).data());
+//            }
+//        }
+//    }
+//    //render parallel and meridian ticks
+//    for (i = 0; i < ticks.size(); i++) {
+//        for (j = 0; j < (ticks[i]).size(); j++) {
+//
+//            //        (ticks[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
+//            if ((ticks[i][j]).size() > 1) {
+//                dc->DrawSpline((int)((ticks[i][j]).size()), (ticks[i][j]).data());
+//            }
+//        }
+//    }
+//
+//
+//    //render labels on parallels and meridians
+//    dc->SetTextForeground(foreground_color);
+//    dc->SetTextBackground(background_color);
+//    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+//    dc->SetBackgroundMode(wxSOLID);
+//    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
+//
+//        dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
+//
+//    }
+//
+//
+//
+//    //draw horizon circle
+//    //draw the circle repreentig the edge of the earth by creating a circle of equal altitude centered at GP_observer and with aperture omega_observer
+//    //set q to a point on the prime meridian and latitude equal to the maximal latitude of circle_observer, and convert it to 3D projection temp: the resulting temp.y is the radius of the circular horizon of the earth in 3d projection cooordinates
+//    dc->SetPen(wxPen(foreground_color, thickness));
+//    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
+//
+//    //set q
+//    (q.lambda).set(String(""), 0.0, String(""));
+//    (q.phi) = (circle_observer.omega);
+//
+//    //obtain the coordinates of q in the reference frame x'y'z'
+//    gsl_vector_set((rp.r), 0, 0.0);
+//    gsl_vector_set((rp.r), 1, -cos(q.phi));
+//    gsl_vector_set((rp.r), 2, sin((q.phi)));
+//
+//    //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
+//    d_temp.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+//    dummy_projection = PositionProjection(0.0, ((d_temp.value) * gsl_vector_get((rp.r), 2)) / ((d_temp.value) + 1.0 + gsl_vector_get((rp.r), 1)));
+//    //set the wxPen color for the horizon
+////    dc->SetPen(wxPen(wxGetApp().color_horizon, 1));
+//    dc->SetPen(wxPen(foreground_color, thickness));
+//    dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
+//    dc->SetBackground(background_color);
+//    //convert r.y to DrawPanel coordinates and trace a circle with the resulting radius
+//    dc->DrawCircle(
+//        (position_plot_area.x) + (int)(((double)(size_plot_area.GetWidth())) / 2.0),
+//        (position_plot_area.y) + (int)(((double)(size_plot_area.GetHeight())) / 2.0),
+//        (dummy_projection.y) / y_max * ((double)(size_plot_area.GetWidth())) / 2.0
+//    );
 
 }
 

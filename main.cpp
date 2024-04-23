@@ -136,7 +136,7 @@
  ********** THINGS TO FIX ************
     - put back ommented method Render_3D
     - put back progress dialog when polygons work
-    - put back '//set the size of points_coastline_now and points_ ...  _before = n_filled_entries_points_coastline_now = 0;'
+    - put back '//set the size of points_coastline_now and points_ ... '
     - rewrite the coastline data by using polygons:
         * in ~/Documents/sight_reduction_program/Contents/Resources/Data/land_polygons/osm_land_polygons_simplifyGeom_0point005_areaGT1e6_aggregated.shp.kml you can find a collection of polygons: each polygon is a closed loop of a coastline, such as an island
         * take ~/Documents/sight_reduction_program/Contents/Resources/Data/land_polygons/osm_land_polygons_simplifyGeom_0point005_areaGT1e6_aggregated.shp.kml and extract from it a file with multiple data block: each data block corresponds to a polygon and it containts a collection of (latitude, longitude) pairs corresponding to the poitns of the polygon

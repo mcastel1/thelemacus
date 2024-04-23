@@ -8502,6 +8502,8 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
             }
 
         }
+        
+
 
         
 //        for(n=0, i = i_min; i < i_max; i++) {
@@ -13563,6 +13565,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #ifdef WIN32
                             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
                             (parent->n_filled_entries_points_coastline_before) = (parent->n_filled_entries_points_coastline_now);
+                            parent->points_coastline_before.resize(parent->points_coastline_now.size());
                             copy_n(parent->points_coastline_now.begin(), parent->points_coastline_now.size(), parent->points_coastline_before.begin() );
 
                             position_plot_area_before = position_plot_area_now;
@@ -13606,6 +13609,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #ifdef WIN32
                         //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
                         (parent->n_filled_entries_points_coastline_before) = (parent->n_filled_entries_points_coastline_now);
+                        parent->points_coastline_before.resize(parent->points_coastline_now.size());
                         copy_n(parent->points_coastline_now.begin(), parent->points_coastline_now.size(), parent->points_coastline_before.begin() );
 
                         position_plot_area_before = position_plot_area_now;
@@ -13843,6 +13847,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #ifdef _WIN32
                         //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
                         (parent->n_filled_entries_points_coastline_before) = (parent->n_filled_entries_points_coastline_now);
+                        parent->points_coastline_before.resize(parent->points_coastline_now.size());
                         copy_n(parent->points_coastline_now.begin(), parent->points_coastline_now.size(), parent->points_coastline_before.begin() );
                         
                         position_plot_area_before = position_plot_area_now;
@@ -13990,6 +13995,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
     
     //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
     n_filled_entries_points_coastline_before = n_filled_entries_points_coastline_now;
+    points_coastline_before.resize(points_coastline_now.size());
     copy_n(points_coastline_now.begin(), points_coastline_now.size(), points_coastline_before.begin());
 
     
@@ -22526,6 +22532,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 #ifdef WIN32
             //I am about to update points_coastline_now-> save the previous configuration of points_coastline into points_coastline_before, which will be used by RefreshWIN32()
             (chart_frame->n_filled_entries_points_coastline_before) = (chart_frame->n_filled_entries_points_coastline_now);
+            chart_frame->points_coastline_before.resize(chart_frame->points_coastline_now.size());
             copy_n(chart_frame->points_coastline_now.begin(), chart_frame->points_coastline_now.size(), chart_frame->points_coastline_before.begin() );
 
             (chart_frame->draw_panel->position_plot_area_before) = (chart_frame->draw_panel->position_plot_area_now);

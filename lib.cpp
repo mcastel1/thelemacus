@@ -8495,7 +8495,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 //run through points in a polygon
                 
                 if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i][j], &temp, false)) {
-                    points_coastline_now[l++].push_back(temp);
+                    points_coastline_now[l++] = temp;
                     n_filled_entries_polygons_now[i]++;
                 }
                 
@@ -9529,7 +9529,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                        const vector<unsigned long long int>& n_filled_entries_polygons,
-                                       const vector< vector<wxPoint> >& points_polygons,
+                                       const vector<wxPoint>& points_polygons,
                                        wxColor foreground_color,
                                        wxColor background_color,
                                        double thickness) {
@@ -9732,7 +9732,7 @@ inline void DrawPanel::Render_3D(
                                  const vector<wxString>& parallels_and_meridians_labels,
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                  const vector<unsigned long long int> & n_filled_entries_polygons,
-                                 const vector< vector<wxPoint> >& points_coastline,
+                                 const vector<wxPoint>& points_coastline,
                                  wxColor foreground_color,
                                  wxColor background_color,
                                  double thickness

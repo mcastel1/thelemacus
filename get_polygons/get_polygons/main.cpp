@@ -92,7 +92,7 @@ int main(int argc, const char * argv[]) {
             
             outfile << lambda.size() << ":";
             for(unsigned long long int i=0; i<lambda.size(); ++i){
-                outfile << "\t" << -k*lambda[i] << "\t" << k*phi[i];
+                outfile << " " << -k*lambda[i] << " " << k*phi[i];
             }
             outfile << endl;
             

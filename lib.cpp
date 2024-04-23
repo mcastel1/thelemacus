@@ -8446,8 +8446,8 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //this function efficiently reads coastline data stored in data_x in the interval of latitudes lambda_min, lambda_max, phi_min, phi_max, and writes this data x and y, writing n_points points at the most. This data is stored into parent->points_coastline_now 
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
-    int i, j, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned long long int l, n, p, n_cells, every = 0, every_ij = 0;
+    int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
+    unsigned long long int i, j, l, n, p, n_cells, every = 0, every_ij = 0;
     wxPoint temp;
 
     //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
@@ -8487,10 +8487,10 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         
         
         
-        for(points_coastline_now.clear(), i=0; i < parent->all_coastline_points_Position.size(); i++) {
+        for(points_coastline_now.clear(), p=0, i=0; i < parent->all_coastline_points_Position.size(); i++) {
             //run through polygons
             
-            for(points_coastline_now.resize(points_coastline_now.size()+1), j=0; j<(parent->all_coastline_points_Position[i]).size(); /*TO REDUCE NUMBER OF POINTS, INCREASE j INCREMENT HERE */j += (wxGetApp().n_points_plot_coastline_Mercator.value)){
+            for(points_coastline_now.resize(points_coastline_now.size()+1), j=p; j<(parent->all_coastline_points_Position[i]).size(); /*TO REDUCE NUMBER OF POINTS, INCREASE j INCREMENT HERE */j += (wxGetApp().n_points_plot_coastline_Mercator.value)){
                 //run through points in a polygon
                 
                 if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i][j], &temp, false)) {
@@ -8500,6 +8500,9 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 }
                 
             }
+            
+            p = j - ((parent->all_coastline_points_Position[i]).size());
+
 
         }
         

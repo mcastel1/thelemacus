@@ -5577,7 +5577,7 @@ void Data::print_to_kml(String prefix) {
         //replace line with number of points for routes in plot_dummy.plt
     plot_command.str("");
     command.str("");
-    n_points_routes.read_from_file_to(String("number of points for routes"), (wxGetApp().path_file_init), String("R"), new_prefix);
+    wxGetApp().n_points_routes.read_from_file_to(String("number of points for routes"), (wxGetApp().path_file_init), String("R"), new_prefix);
 
 
 
@@ -5598,11 +5598,11 @@ void Data::print_to_kml(String prefix) {
 
 
 
-            for (j = 0; j < (unsigned int)(n_points_routes.value); j++) {
+            for (j = 0; j < (unsigned int)(wxGetApp().n_points_routes.value); j++) {
 
                 //I consider a Length equal to a temporary value of the length of the route, which spans between 0 and 2.0*M_PI*(Re*sin(((route_list[i]).omega.value))) across the for loop over j
                 //I compute the coordinate of the endpoint of route_list[i] for the ((route_list[i]).l) above
-                (route_list[i]).compute_end(Length(2.0 * M_PI * (Re * sin(((route_list[i]).omega.value))) * ((double)j) / ((double)(n_points_routes.value - 1))), new_prefix);
+                (route_list[i]).compute_end(Length(2.0 * M_PI * (Re * sin(((route_list[i]).omega.value))) * ((double)j) / ((double)(wxGetApp().n_points_routes.value - 1))), new_prefix);
 
                 //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude, and in the third altitude (I am not interested in altitude, thus is set it to 0); The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90.
 
@@ -5716,14 +5716,14 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
 //	file_init.open(String("in"), prefix);
 
     //read number of intervals for ticks from file_init
-    n_intervals_ticks_preferred.read_from_file_to(String("preferred number of intervals for ticks"), wxGetApp().path_file_init, String("R"), new_prefix);
+    wxGetApp().n_intervals_ticks_preferred.read_from_file_to(String("preferred number of intervals for ticks"), wxGetApp().path_file_init, String("R"), new_prefix);
 
     //read number of points for routes from file_init
-    n_points_routes.read_from_file_to(String("number of points for routes"), wxGetApp().path_file_init, String("R"), new_prefix);
+    wxGetApp().n_points_routes.read_from_file_to(String("number of points for routes"), wxGetApp().path_file_init, String("R"), new_prefix);
 
     //read n_points_plot_coastline_* from file_init
-    n_points_plot_coastline_Mercator.read_from_file_to(String("number of points coastline Mercator"), wxGetApp().path_file_init, String("R"), new_prefix);
-    n_points_plot_coastline_3D.read_from_file_to(String("number of points coastline 3D"), wxGetApp().path_file_init, String("R"), new_prefix);
+    wxGetApp().n_points_plot_coastline_Mercator.read_from_file_to(String("number of points coastline Mercator"), wxGetApp().path_file_init, String("R"), new_prefix);
+    wxGetApp().n_points_plot_coastline_3D.read_from_file_to(String("number of points coastline 3D"), wxGetApp().path_file_init, String("R"), new_prefix);
 
     recent_bodies.resize(wxGetApp().n_recent_bodies.value);
     recent_projections.resize(wxGetApp().n_recent_projections.value);
@@ -8985,7 +8985,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         (parent->parent->geo_position_start),
         Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
         Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
-    )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+    )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
 
     //left vertical edge of rectangle
     (Route(
@@ -8993,7 +8993,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         geo_position,
         Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
         Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
-    )).Draw((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+    )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
 
     //bottom horizontal edge of rectangle
     (Route(
@@ -9002,7 +9002,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         //change this by introducing if
         Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
         Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
-    )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+    )).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
 
     //top horizontal edge of rectangle
     (Route(
@@ -9011,7 +9011,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         //change this by introducing if
         Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
         Length(Re * cos(geo_position.phi) * fabs((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
-    )).DrawOld((((parent->parent->data)->n_points_routes).value), &dc, this, String(""));
+    )).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
 
 
     //render the labels of the selection rectangle
@@ -9859,12 +9859,12 @@ inline void DrawPanel::TabulateRoutes(void) {
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
         if (((parent->parent->data->route_list)[i]).type != (Route_types[0])) {
 
-            ((parent->parent->data->route_list)[i]).Draw((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list_now.data()) + i, String(""));
+            ((parent->parent->data->route_list)[i]).Draw((unsigned int)(wxGetApp().n_points_routes.value), this, (points_route_list_now.data()) + i, String(""));
 
         }
         else {
 
-            ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)((((parent->parent)->data)->n_points_routes).value), this, (points_route_list_now.data()) + i, String(""));
+            ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)(wxGetApp().n_points_routes.value), this, (points_route_list_now.data()) + i, String(""));
 
         }
 
@@ -9956,7 +9956,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
 
     delta_phi = k / ((double)gamma_phi);
-    while (((((parent->parent)->data)->n_intervals_ticks_preferred).value) * delta_phi < phi_span) {
+    while (((wxGetApp().n_intervals_ticks_preferred).value) * delta_phi < phi_span) {
         if (delta_phi == k / ((double)gamma_phi)) { delta_phi += k * 4.0 / ((double)gamma_phi); }
         else { delta_phi += k * 5.0 / ((double)gamma_phi); }
     }
@@ -10095,7 +10095,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.GetWidth())) / ((double)size_label_horizontal)));
     n_intervals_ticks = min(
-        (unsigned int)((((parent->parent)->data)->n_intervals_ticks_preferred).value),
+        (unsigned int)(wxGetApp().n_intervals_ticks_preferred.value),
         n_intervals_ticks_max
     );
 
@@ -10238,7 +10238,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         //add the current meridian that is being drawn (route) to meridians_now
 //        grid_now.push_back(route);
         grid_now.resize((grid_now.size()) + 1);
-        route.Draw((parent->parent->data->n_points_routes.value), this, &(grid_now.back()), String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
         //             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
 
         if (gamma_lambda != 1) {
@@ -10289,7 +10289,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         //add the current parallel that is being drawn to parallels
 //        grid_now.push_back(route);
         grid_now.resize((grid_now.size()) + 1);
-        route.DrawOld((parent->parent->data->n_points_routes.value), this, &(grid_now.back()), String(""));
+        route.DrawOld((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
         //here I use DrawOld because Draw cannot handle loxodromes
 //        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
 
@@ -10370,7 +10370,7 @@ inline void DrawPanel::PreRender3D(void) {
         (int)(((double)(size_chart.GetHeight())) * (1.0 - (length_plot_area_over_length_chart.value)) / 2.0));
 
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
-    n_intervals_ticks = (unsigned int)((((parent->parent)->data)->n_intervals_ticks_preferred).value);
+    n_intervals_ticks = (unsigned int)(wxGetApp().n_intervals_ticks_preferred.value);
 
 
     //here I set up things to plot paralles and meridians in Render_3D
@@ -10482,7 +10482,7 @@ inline void DrawPanel::PreRender3D(void) {
     }
 
     delta_phi = k / ((double)gamma_phi);
-    while (((((parent->parent)->data)->n_intervals_ticks_preferred).value) * delta_phi < phi_span) {
+    while (((wxGetApp().n_intervals_ticks_preferred).value) * delta_phi < phi_span) {
         if (delta_phi == k / ((double)gamma_phi)) { delta_phi += k * 4.0 / ((double)gamma_phi); }
         else { delta_phi += k * 5.0 / ((double)gamma_phi); }
     }
@@ -10580,7 +10580,7 @@ inline void DrawPanel::PreRender3D(void) {
         //add the current meridian that is being drawn (route) to meridians
         //        grid_now.push_back(route);
         grid_now.resize((grid_now.size()) + 1);
-        route.Draw((parent->parent->data->n_points_routes.value), this, &(grid_now.back()), String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
         //        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
 
         if (gamma_lambda != 1) {
@@ -10634,7 +10634,7 @@ inline void DrawPanel::PreRender3D(void) {
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);
         grid_now.resize((grid_now.size()) + 1);
-        route.Draw((parent->parent->data->n_points_routes.value), this, &(grid_now.back()), String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
         //        route.Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
 
         if (gamma_phi != 1) {

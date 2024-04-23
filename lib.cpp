@@ -8450,38 +8450,38 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
     unsigned long long int i, j, l, n, p, n_cells/*, every = 0, every_ij = 0*/;
     wxPoint temp;
 
-    //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
-    phi_min.normalize_pm_pi();
-    phi_max.normalize_pm_pi();
-
-
-    if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
-
-        j_min = floor(K * ((lambda_max).value));
-        j_max = ceil(K * (((lambda_min).value) + 2.0 * M_PI));
-
-    }
-    else {
-
-        if (lambda_min > lambda_max) {
-
-            j_min = floor(K * ((lambda_max).value));
-            j_max = ceil(K * ((lambda_min).value));
-
-        }
-        else {
-
-            j_min = floor(K * ((lambda_max).value));
-            j_max = ceil(K * (((lambda_min).value) + 2.0 * M_PI));
-
-        }
-
-    }
-
-    i_min = floor(K * (phi_min.value));
-    i_max = ((parent->all_coastline_points_Position).size()) + floor_min_lat;
-
-    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
+//    //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
+//    phi_min.normalize_pm_pi();
+//    phi_max.normalize_pm_pi();
+//
+//
+//    if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
+//
+//        j_min = floor(K * ((lambda_max).value));
+//        j_max = ceil(K * (((lambda_min).value) + 2.0 * M_PI));
+//
+//    }
+//    else {
+//
+//        if (lambda_min > lambda_max) {
+//
+//            j_min = floor(K * ((lambda_max).value));
+//            j_max = ceil(K * ((lambda_min).value));
+//
+//        }
+//        else {
+//
+//            j_min = floor(K * ((lambda_max).value));
+//            j_max = ceil(K * (((lambda_min).value) + 2.0 * M_PI));
+//
+//        }
+//
+//    }
+//
+//    i_min = floor(K * (phi_min.value));
+//    i_max = ((parent->all_coastline_points_Position).size()) + floor_min_lat;
+//
+//    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
 
     if ((parent->show_coastlines) == Answer('y', String(""))) {
         

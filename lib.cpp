@@ -9547,8 +9547,13 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for (i = 0; i < size_points_coastline; i++) {
-        dc->DrawEllipse(points_coastline[i], ToDIP(wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value)));
+    for (i = 0; i < points_coastline.size(); i++) {
+        for(j=0; j< (points_coastline[i]).size(); j++){
+            dc->DrawLines((int)((points_coastline[i]).size()), (points_coastline[i]).data(), 0, 0);
+
+        }
+        
+//        dc->DrawEllipse(points_coastline[i], ToDIP(wxSize(wxGetApp().point_size.value, wxGetApp().point_size.value)));
     }
 
 

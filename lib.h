@@ -2571,7 +2571,7 @@ public:
     int /*the # of the sight/route/position which is highlighted at the current (_now) or preceeding (_before) step of mouse movement, because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight_now, highlighted_route_now, highlighted_route_before,  highlighted_position_now, highlighted_position_before, /*# of the object to transport or disconnect */i_object_to_transport, i_object_to_disconnect, i_transporting_route;
     /*map[i] is the position in data->route_list of the i-th Route in route_list_for_transport*/
     vector<int> map;
-    //all_coastline_points_Position/all_coastline_points_Cartesian[i] is a vector which contains the the coastline datapoints (in Position/Cartesian format) of polygon #i at 
+    //all_coastline_points_Position/all_coastline_points_Cartesian[i] is a vector which contains the the coastline datapoints (in Position/Cartesian format) of polygon #i at
     vector< vector<Position> > all_coastline_points_Position;
     vector< vector<Cartesian> > all_coastline_points_Cartesian;
     Position /*these are the geographic Positions where the right mouse button is clicked at the beginning, the current and preceeding Position during mouse movement, and the mouse Position and at the end of the drawing process for the selection rectangle*/geo_position_start, geo_position_before, geo_position_now, position_end;
@@ -2815,7 +2815,8 @@ public:
     //in points_coastline_now (points_coasline_before), I store the 2d coordindates  in DrawPanel coordinates of coastline data coastline_points at the current (preceeding) state of the chart
     //the number of  entries in points_coastline_now and points_coastline_before (starting from the beginning of the vectors), respectively, which have been filled
     unsigned long long int n_filled_entries_points_coastline_now, n_filled_entries_points_coastline_before;
-    vector<wxPoint> points_coastline_now, points_coastline_before;
+    //points_coastline_now/beforre[i] contains the points of the i-th polygon of the coastlines
+    vector< vector<wxPoint> > points_coastline_now, points_coastline_before;
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling, /*this is true if the chart is being dragged, and thus the size of *this must not change across multiple Draw(s), and false otherwise*/ dragging_chart;
     //This is the actual value of the maximal zoom factor allowed

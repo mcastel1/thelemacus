@@ -134,6 +134,7 @@
  
  
  ********** THINGS TO FIX ************
+    - move     Int n_points_plot_coastline_Mercator, n_points_plot_coastline_3D, n_points_routes, n_intervals_ticks_preferred to MyApp
     - put back ommented method Render_3D
     - put back progress dialog when polygons work
     - put back '//set the size of points_coastline_now and points_ ... '

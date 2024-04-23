@@ -8649,7 +8649,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                 all_coastline_points_Cartesian.resize(i + 1);
                 all_coastline_points_Position.resize(i + 1);
                 
-                pos_beg = line.find(":", 0)+2;
+                pos_beg = line.find(":  ", 0)+3;
                 do{
                     //run through points of a polygon
                     
@@ -8660,7 +8660,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                     
                     //read latitude
                     pos_beg = pos_end+1;
-                    pos_end = line.find(" ", pos_beg);
+                    pos_end = line.find("  ", pos_beg);
                     temp = line.substr(pos_beg, pos_end - pos_beg);
                     phi_temp = stod(temp);
 
@@ -8674,11 +8674,10 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                     //                        (all_coastline_points_Cartesian[i][j]).resize((all_coastline_points_Cartesian[i][j]).size() + 1);
                     all_coastline_points_Cartesian.back().push_back(p_Cartesian);
                     
-                    if(line.find(" ", pos_end+1) !=  string::npos){
-                        pos_beg = pos_end+1;
-                    }
+                    pos_beg = pos_end+2;
+                    
 
-                }while(line.find(" ", pos_end+1) !=  string::npos);
+                }while(pos_end !=  string::npos);
                 
                 
 //                percentage_dialog = 100.0 * ((double)i) / (((double)(n_line.size())) / 360.0);

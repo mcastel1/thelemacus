@@ -8490,7 +8490,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         for(points_coastline_now.clear(), i=0; i < parent->all_coastline_points_Position.size(); i++) {
             //run through polygons
             
-            for(points_coastline_now.resize(points_coastline_now.size()+1), j=0; j<(parent->all_coastline_points_Position[i]).size(); j++){
+            for(points_coastline_now.resize(points_coastline_now.size()+1), j=0; j<(parent->all_coastline_points_Position[i]).size(); /*TO REDUCE NUMBER OF POINTS, INCREASE j INCREMENT HERE */j+=50){
                 //run through points in a polygon
                 
                 if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i][j], &temp, false)) {

@@ -8490,13 +8490,13 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         for(p=0, i=0, l=0; i<parent->all_coastline_points_Position.size(); i++) {
             //run through polygons
             
-            n_filled_entries_points_coastline_now[i] = 0;
+            n_filled_entries_polygons_now[i] = 0;
             for(j=p; j<(parent->all_coastline_points_Position[i]).size(); j+=(wxGetApp().n_points_plot_coastline_Mercator.value)){
                 //run through points in a polygon
                 
                 if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i][j], &temp, false)) {
                     points_coastline_now[l++].push_back(temp);
-                    n_filled_entries_points_coastline_now[i]++;
+                    n_filled_entries_polygons_now[i]++;
                 }
                 
             }
@@ -8889,7 +8889,7 @@ inline void DrawPanel::RenderBackground(
                                         const vector< vector< vector<wxPoint> > >& ticks,
                                         const vector<wxString>& parallels_and_meridians_labels,
                                         const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                        const unsigned long long int& size_points_coastline,
+                                        const vector<unsigned long long int>& n_filled_entries_polygons,
                                         const vector< vector<wxPoint> >& points_coastline,
                                         wxColour foreground_color,
                                         wxColour background_color,
@@ -8928,7 +8928,7 @@ inline void DrawPanel::RenderBackground(
                         ticks,
                         parallels_and_meridians_labels,
                         positions_parallels_and_meridians_labels,
-                        size_points_coastline,
+                        n_filled_entries_polygons,
                         points_coastline,
                         foreground_color,
                         background_color,
@@ -9050,7 +9050,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                     ticks_now,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
-                    parent->n_filled_entries_points_coastline_now,
+                    parent->n_filled_entries_polygons_now,
                     parent->points_coastline_now,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
@@ -9170,7 +9170,7 @@ inline void DrawPanel::CleanAndRenderAll(void) {
                     ticks_now,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
-                    parent->n_filled_entries_points_coastline_now,
+                    parent->n_filled_entries_polygons_now,
                     parent->points_coastline_now,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
@@ -9243,7 +9243,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_before,
                         parallels_and_meridians_labels_before,
                         positions_parallels_and_meridians_labels_before,
-                        parent->n_filled_entries_points_coastline_before,
+                        parent->n_filled_entries_polygons_before,
                         parent->points_coastline_before,
                         wxGetApp().background_color,
                         wxGetApp().background_color,
@@ -9280,7 +9280,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->n_filled_entries_points_coastline_now,
+                        parent->n_filled_entries_polygons_now,
                         parent->points_coastline_now,
                         wxGetApp().background_color,
                         wxGetApp().background_color,
@@ -9313,7 +9313,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->n_filled_entries_points_coastline_now,
+                        parent->n_filled_entries_polygons_now,
                         parent->points_coastline_now,
                         wxGetApp().background_color,
                         wxGetApp().background_color,
@@ -9355,7 +9355,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->n_filled_entries_points_coastline_now,
+                        parent->n_filled_entries_polygons_now,
                         parent->points_coastline_now,
                         wxGetApp().background_color,
                         wxGetApp().background_color,
@@ -9387,7 +9387,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->n_filled_entries_points_coastline_now,
+                        parent->n_filled_entries_polygons_now,
                         parent->points_coastline_now,
                         wxGetApp().foreground_color,
                         wxGetApp().background_color,
@@ -9528,8 +9528,8 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
                                        const vector< vector< vector<wxPoint> > >& ticks,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                       const unsigned long long int& size_points_coastline,
-                                       const vector< vector<wxPoint> >& points_coastline,
+                                       const vector<unsigned long long int>& n_filled_entries_polygons,
+                                       const vector< vector<wxPoint> >& points_polygons,
                                        wxColor foreground_color,
                                        wxColor background_color,
                                        double thickness) {
@@ -9553,9 +9553,9 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for (i = 0; i < points_coastline.size(); i++) {
-        if((points_coastline[i]).size() > 1){
-            dc->DrawLines((int)((points_coastline[i]).size()), (points_coastline[i]).data());
+    for (i = 0; i < points_polygons.size(); i++) {
+        if((points_polygons[i]).size() > 1){
+            dc->DrawLines((int)((points_polygons[i]).size()), (points_polygons[i]).data());
         }
     }
 
@@ -9731,7 +9731,7 @@ inline void DrawPanel::Render_3D(
                                  const vector< vector< vector<wxPoint> > >& ticks,
                                  const vector<wxString>& parallels_and_meridians_labels,
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                 const unsigned long long int& size_points_coastline,
+                                 const vector<unsigned long long int> & n_filled_entries_polygons,
                                  const vector< vector<wxPoint> >& points_coastline,
                                  wxColor foreground_color,
                                  wxColor background_color,
@@ -10825,9 +10825,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
         j += (parent->all_coastline_points_Position[i].size());
     }
     points_coastline_now.resize(j);
-    n_filled_entries_points_coastline_now.resize(parent->all_coastline_points_Position.size());
+    n_filled_entries_polygons_now.resize(parent->all_coastline_points_Position.size());
     points_coastline_before.resize(j);
-    n_filled_entries_points_coastline_before.resize(parent->all_coastline_points_Position.size());
+    n_filled_entries_polygons_before.resize(parent->all_coastline_points_Position.size());
 
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 

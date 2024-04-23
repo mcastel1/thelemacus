@@ -8654,18 +8654,17 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                     //run through points of a polygon
                     
                     //read longitude
-                    pos_end = line.find("\t", pos_beg);
+                    pos_end = line.find(" ", pos_beg);
                     temp = line.substr(pos_beg, pos_end - pos_beg);
                     lambda_temp = stod(temp);
                     
                     //read latitude
                     pos_beg = pos_end+1;
-                    pos_end = line.find("\t", pos_beg);
+                    pos_end = line.find(" ", pos_beg);
                     temp = line.substr(pos_beg, pos_end - pos_beg);
                     phi_temp = stod(temp);
 
-                    pos_beg = pos_end+1;
-      
+
                     p_Position.lambda.set(String(""), lambda_temp, String(""));
                     p_Position.phi.set(String(""), phi_temp, String(""));
                     p_Position.getCartesian(String(""), &p_Cartesian, prefix);
@@ -8675,7 +8674,11 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                     //                        (all_coastline_points_Cartesian[i][j]).resize((all_coastline_points_Cartesian[i][j]).size() + 1);
                     all_coastline_points_Cartesian.back().push_back(p_Cartesian);
                     
-                }while(line.find("\t", pos_beg) !=  string::npos);
+                    if(line.find(" ", pos_end+1) !=  string::npos){
+                        pos_beg = pos_end+1;
+                    }
+
+                }while(line.find(" ", pos_end+1) !=  string::npos);
                 
                 
 //                percentage_dialog = 100.0 * ((double)i) / (((double)(n_line.size())) / 360.0);

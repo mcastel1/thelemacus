@@ -8490,11 +8490,13 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         for(p=0, i=0, l=0; i<parent->all_coastline_points_Position.size(); i++) {
             //run through polygons
             
+            n_filled_entries_points_coastline_now[i] = 0;
             for(j=p; j<(parent->all_coastline_points_Position[i]).size(); j+=(wxGetApp().n_points_plot_coastline_Mercator.value)){
                 //run through points in a polygon
                 
                 if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i][j], &temp, false)) {
                     points_coastline_now[l++].push_back(temp);
+                    n_filled_entries_points_coastline_now[i]++;
                 }
                 
             }
@@ -10823,8 +10825,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
         j += (parent->all_coastline_points_Position[i].size());
     }
     points_coastline_now.resize(j);
+    n_filled_entries_points_coastline_now.resize(parent->all_coastline_points_Position.size());
     points_coastline_before.resize(j);
-        
+    n_filled_entries_points_coastline_before.resize(parent->all_coastline_points_Position.size());
+
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 
 

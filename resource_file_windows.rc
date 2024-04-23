@@ -55,7 +55,7 @@ paris_sights DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/
 catalog DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/catalog.txt"
 j2000_to_itrf93	DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/j2000_to_itrf93.txt"
 jupiter	DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/jupiter.txt"
-map_conv_blocked DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/map_conv_blocked.csv"
+polygons DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/polygons.dat"
 moon DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/moon.txt"
 n_line_map_conv_blocked	DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/n_line_map_conv_blocked.txt"
 saturn DATA "Z:/Documents/sight_reduction_program/Contents/Resources/Data/saturn.txt"

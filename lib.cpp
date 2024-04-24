@@ -8525,13 +8525,14 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
          every = [number of coastline data points in lambda_min ... phi_max] / n_points_plot_coastline_Mercator ~
          ( ((phi_max.normalize_pm_pi_ret() - phi_min.normalize_pm_pi_ret()).value)*((lambda_max.normalize_pm_pi_ret() - lambda_min.normalize_pm_pi_ret()).value) ) / ( (ceil_max_lat - floor_min_lat)*2*M_PI ) * [total number of coastline data points] / n_points_plot_coastline_Mercator
          */
-        every = (wxGetApp().n_points_plot_coastline_Mercator.value);
+        every = (parent->n_all_coastline_points) * fabs(( ((phi_max.normalize_pm_pi_ret() - phi_min.normalize_pm_pi_ret()).value)*((lambda_max.normalize_pm_pi_ret() - lambda_min.normalize_pm_pi_ret()).value) ) / ( k*(ceil_max_lat - floor_min_lat)*2*M_PI )) / (wxGetApp().n_points_plot_coastline_Mercator.value);
+        if(every==0){every = 1;}
         
         for(p=0, i=0, l=0; i<parent->all_coastline_points_Position.size(); i++) {
             //run through polygons
             
             n_filled_entries_polygons_now[i] = 0;
-            for(j=p; j<(parent->all_coastline_points_Position[i]).size(); j+=(wxGetApp().n_points_plot_coastline_Mercator.value)){
+            for(j=p; j<(parent->all_coastline_points_Position[i]).size(); j+=every){
                 //run through points in a polygon
                 
                 if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i][j], &temp, false)) {

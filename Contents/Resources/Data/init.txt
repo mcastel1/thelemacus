@@ -1,6 +1,6 @@
 #comment lines, such as this one, will be ignored
 show coastlines = y
-number of points coastline Mercator = 100
+number of points coastline Mercator = 1000
 number of points coastline 3D = 100
 artificial horizon = y
 plot coastline every = 10

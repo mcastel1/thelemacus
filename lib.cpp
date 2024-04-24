@@ -1603,8 +1603,8 @@ Rotation::Rotation(Position p, Position q) {
         Cartesian r_p, r_q, omega;
 
         //transform p and q into cartesian cordinates and write them into r_p and r_q, respectively
-        p.getCartesian(String(""), &r_p, String(""));
-        q.getCartesian(String(""), &r_q, String(""));
+        p.getCartesian(&r_p);
+        q.getCartesian(&r_q);
 
         gsl_blas_ddot((r_p.r), (r_q.r), &cos_rotation_angle);
         rotation_angle.set(String(""), acos(cos_rotation_angle), String(""));
@@ -7780,13 +7780,24 @@ void Position::setCartesian(String name, const Cartesian r, [[maybe_unused]] Str
 
 }
 
-//write the cartesian components of Position p into r
-void Position::getCartesian([[maybe_unused]] String name, Cartesian* r, [[maybe_unused]] String prefix) {
+//write the cartesian components of Position p into *r
+void Position::getCartesian(Cartesian* r) {
 
     gsl_vector_set((r->r), 0, cos(phi) * cos(lambda));
     gsl_vector_set((r->r), 1, -cos(phi) * sin(lambda));
     gsl_vector_set((r->r), 2, sin(phi));
 
+}
+
+//same as Position::getCartesian(Cartesian* r) , but it returns the Cartesian position rather than writing it into *r
+Cartesian Position::getCartesian(void){
+    
+    Cartesian temp;
+    
+    getCartesian(&temp);
+    
+    return temp;
+    
 }
 
 void Position::print(String name, String prefix, ostream& ostr) {
@@ -8693,7 +8704,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
 
                     p_Position.lambda.set(String(""), lambda_temp, String(""));
                     p_Position.phi.set(String(""), phi_temp, String(""));
-                    p_Position.getCartesian(String(""), &p_Cartesian, prefix);
+                    p_Cartesian = p_Position.getCartesian();
                     //push back the position into all_coastline_points_Position
                     all_coastline_points_Position.back().push_back(p_Position);
                     //                        //push back the position into all_coastline_points_Cartesian: this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
@@ -12833,10 +12844,10 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     stringstream s;
     int i, j, l;
 
-    //    cout << "\nMouse moved";
+        cout << "\nMouse moved";
     //    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
     //    cout << "Position of mouse screen = {" << (parent->parent->screen_position_now).x << " , " << (parent->parent->screen_position_now).y << "}\n";
-    //    cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-draw_panel_origin).x << " , " << ((parent->parent->screen_position_now)-draw_panel_origin).y << "}\n";
+        cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-draw_panel_origin).x << " , " << ((parent->parent->screen_position_now)-draw_panel_origin).y << "}\n";
 
 
 #ifdef _WIN32

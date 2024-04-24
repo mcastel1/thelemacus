@@ -781,7 +781,8 @@ public:
     Position();
     Position(Angle, Angle);
     void setCartesian(String, const Cartesian, String);
-    void getCartesian(String, Cartesian*, String);
+    void getCartesian(Cartesian*);
+    Cartesian getCartesian(void);
     void print(String, String, ostream&);
     void read_from_file_to(String, String, String, String);
     template<class S> void read_from_stream(String, S*, bool, String);

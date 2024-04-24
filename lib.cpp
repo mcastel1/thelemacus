@@ -8319,16 +8319,16 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 //get the datapoints of coastlines and store them into parent->points_coastline_now
 void ChartFrame::GetCoastLineData_3D(void) {
 
-//    unsigned long long int l, n, p, n_cells, every = 0, every_ij = 0, n_points_per_cell;
-//    //integer values of min/max lat/lon to be extractd from p_coastline
-//    int i, j, i_adjusted = 0, j_adjusted = 0, i_min, i_max, j_min, j_max;
+    unsigned long long int l, i, j, /*n, */p/*, n_cells, every = 0, every_ij = 0, n_points_per_cell*/;
+    //integer values of min/max lat/lon to be extractd from p_coastline
+   /* int , i_adjusted = 0, j_adjusted = 0, i_min, i_max, j_min, j_max;*/
 //    double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
-//    PositionProjection temp;
-//    wxPoint q;
-//    Cartesian r, s;
-//    Position u;
-//
-//
+    PositionProjection temp;
+    wxPoint q;
+    Cartesian r, s;
+    Position u;
+
+
 //    //set i_min/max, j_min/max
 //    i_min = floor(K * (((phi_min).normalize_pm_pi_ret()).value));
 //    i_max = ceil(K * (((phi_max).normalize_pm_pi_ret()).value));
@@ -8361,12 +8361,34 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //
 //    //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
 //    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
-//    
-//    if ((parent->show_coastlines) == Answer('y', String(""))) {
-//        
-//        //set r
+    
+    if ((parent->show_coastlines) == Answer('y', String(""))) {
+
+        for(p=0, i=0, l=0; i<parent->all_coastline_points_Cartesian.size(); i++) {
+            //run through polygons
+            
+            n_filled_entries_polygons_now[i] = 0;
+            for(j=p; j<(parent->all_coastline_points_Cartesian[i]).size(); j+=(wxGetApp().n_points_plot_coastline_3D.value)){
+                //run through points in a polygon
+
+                
+                if((draw_panel->CartesianToDrawPanel)((parent->all_coastline_points_Cartesian)[i][j], &q, false)) {
+                    
+                    points_coastline_now[l++] = q;
+                    n_filled_entries_polygons_now[i]++;
+
+                }
+                
+                
+            }
+            
+            p = j - ((parent->all_coastline_points_Cartesian[i]).size());
+
+        }
+        
+        //set r
 //        draw_panel->circle_observer.reference_position.getCartesian(String(""), &r, String(""));
-//        
+        
 //        //
 //        for (n=0, i = i_min; i < i_max; i++) {
 //            for (j = j_min; j < j_max; j++) {
@@ -8382,7 +8404,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //            }
 //            
 //        }
-//        
+        
 //        every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_3D.value)));
 //        n_points_per_cell = ((unsigned long long int)((double)n)/((double)n_cells));
 //        
@@ -8437,8 +8459,8 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //            }
 //            
 //        }
-//        
-//    }
+        
+    }
 
 }
 

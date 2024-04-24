@@ -8480,7 +8480,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
 //    int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned long long int i, j, l, p/*, n, n_cells, every = 0, every_ij = 0*/;
+    unsigned long long int i, j, l, p, every/*, n, n_cells, every_ij = 0*/;
     wxPoint temp;
 
 //    //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
@@ -8518,7 +8518,14 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
     if ((parent->show_coastlines) == Answer('y', String(""))) {
         
+        ( ((phi_max.normalize_pm_pi_ret() - phi_min.normalize_pm_pi_ret()).value)*((lambda_max.normalize_pm_pi_ret() - lambda_min.normalize_pm_pi_ret()).value) ) / ( (ceil_max_lat - floor_min_lat)*2*M_PI );
         
+        /*
+         the number of points plotted is [number of coastline data points in lambda_min ... phi_max] / every = n_points_plot_coastline_Mercator ->
+         every = [number of coastline data points in lambda_min ... phi_max] / n_points_plot_coastline_Mercator ~
+         ( ((phi_max.normalize_pm_pi_ret() - phi_min.normalize_pm_pi_ret()).value)*((lambda_max.normalize_pm_pi_ret() - lambda_min.normalize_pm_pi_ret()).value) ) / ( (ceil_max_lat - floor_min_lat)*2*M_PI ) * [total number of coastline data points] / n_points_plot_coastline_Mercator
+         */
+        every = (wxGetApp().n_points_plot_coastline_Mercator.value);
         
         for(p=0, i=0, l=0; i<parent->all_coastline_points_Position.size(); i++) {
             //run through polygons

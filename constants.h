@@ -53,6 +53,7 @@ Angle max_lat, min_lat;
 #define floor_min_lat (floor(K*((min_lat.normalize_pm_pi_ret()).value)))
 #define floor_max_lat (floor(K*((max_lat.normalize_pm_pi_ret()).value)))
 #define ceil_min_lat (ceil(K*((min_lat.normalize_pm_pi_ret()).value)))
+#define ceil_max_lat (ceil(K*((max_lat.normalize_pm_pi_ret()).value)))
 //latitude span
 #define span_lat ((floor_max_lat-floor_min_lat+1)
 #define outfile_precision 16

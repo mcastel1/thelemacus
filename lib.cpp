@@ -8684,6 +8684,7 @@ void ListFrame::LoadCoastLineData(String prefix) {
 //#endif
 
             i = 0;
+            n_all_coastline_points = 0;
             abort = false;
             
             getline(*(coastline_file.value), line);
@@ -8721,6 +8722,8 @@ void ListFrame::LoadCoastLineData(String prefix) {
                     //here I allocate a completely new space for  all_coastline_points_Cartesian[i].back(), so all memory adresses in all_coastline_points_Cartesian[i][0], all_coastline_points_Cartesian[i][1], ... wil be differernt and all the points in there will be different
                     all_coastline_points_Cartesian[i].back() = Cartesian();
                     all_coastline_points_Cartesian[i].back() = p_Cartesian;
+                    
+                    n_all_coastline_points++;
                     
                     pos_beg = pos_end+2;
                     

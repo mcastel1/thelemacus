@@ -2573,6 +2573,8 @@ public:
     vector<int> map;
     //all_coastline_points_Position/all_coastline_points_Cartesian[i] is a vector which contains the the coastline datapoints (in Position/Cartesian format) of polygon #i at
     vector< vector<Position> > all_coastline_points_Position;
+    //the total number of coastline points present in the coastline data file
+    unsigned long long int n_all_coastline_points;
     vector< vector<Cartesian> > all_coastline_points_Cartesian;
     Position /*these are the geographic Positions where the right mouse button is clicked at the beginning, the current and preceeding Position during mouse movement, and the mouse Position and at the end of the drawing process for the selection rectangle*/geo_position_start, geo_position_before, geo_position_now, position_end;
     //the object which is being transported : a "sight" or a "position"

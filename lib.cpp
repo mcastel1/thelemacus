@@ -8534,7 +8534,13 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         p_NE0.SetMercator(Position(Angle(0.0), Angle(k*ceil_max_lat)));
         
         
-        every = (parent->n_all_coastline_points) * ( ( (p_SW.x - p_NE.x) * (p_SW.y - p_NE.y) ) / ( 2.0*M_PI*(p_NE0.y - p_SW0.y) ) ) / (wxGetApp().n_points_plot_coastline_Mercator.value);
+        double t;
+        
+        if((lambda_min < M_PI) && (lambda_max > M_PI)){p_NE.x += 2.0*M_PI;}
+        
+        t = ( ( (p_NE.x - p_SW.x) * (p_NE.y - p_SW.y) ) / ( 2.0*M_PI*(p_NE0.y - p_SW0.y) ) );
+        
+        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (p_NE.x - p_SW.x) * (p_NE.y - p_SW.y) ) / ( 2.0*M_PI*(p_NE0.y - p_SW0.y) ) ) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
         if(every==0){every = 1;}
         
         for(p=0, i=0, l=0; i<parent->all_coastline_points_Position.size(); i++) {
@@ -8555,6 +8561,11 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
         }
         
+        for(i=0, j=0; i<                    n_filled_entries_polygons_now.size(); ++i){
+            j+=n_filled_entries_polygons_now[i];
+        }
+        
+
 
 
         

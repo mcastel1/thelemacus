@@ -2604,7 +2604,7 @@ public:
     void TabulateRoutesAll(void);
     void Resize(void);
     
-    void GetAllCoastLineData(String);
+    void LoadCoastLineData(String);
     
     void OnAddSight(wxCommandEvent&);
     template<class E> void OnModifySight(E&);
@@ -2812,7 +2812,7 @@ public:
     ProjectionField<ChartFrame>* projection;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/lambda_min, lambda_max;
-    //a vector of the points of the coastlines in DrawPanel coordinates: these are points of polygons concatenated in the linear arrays points_coastline_now/ before. These vectors are allocated to their maximal possible size, but only the number of entries specified by n_filled_entries_polygons_now/before are filled with sensible numbers to be used 
+    //a vector of the points of the coastlines in DrawPanel coordinates: these are points of polygons concatenated in the linear arrays points_coastline_now/ before. These vectors are allocated to their maximal possible size, but only the number of entries specified by n_filled_entries_polygons_now/before are filled with sensible numbers to be used
     vector<wxPoint> points_coastline_now, points_coastline_before;
     //the number of points stored for polygon #i in points_coastline_now/before[i] is n_filled_entries_polygons_now/before[i]
     vector<unsigned long long int> n_filled_entries_polygons_now, n_filled_entries_polygons_before;

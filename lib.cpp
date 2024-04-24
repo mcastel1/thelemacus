@@ -8479,8 +8479,8 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //this function efficiently reads coastline data stored in data_x in the interval of latitudes lambda_min, lambda_max, phi_min, phi_max, and writes this data x and y, writing n_points points at the most. This data is stored into parent->points_coastline_now 
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
-    int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned long long int i, j, l, n, p, n_cells/*, every = 0, every_ij = 0*/;
+//    int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
+    unsigned long long int i, j, l, p/*, n, n_cells, every = 0, every_ij = 0*/;
     wxPoint temp;
 
 //    //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
@@ -8603,7 +8603,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
 
 //this function fetches the data in ((wxGetApp().path_file_coastline_data_blocked).value) and stores them in data_x, data_y, all_coastline_points so that they can be read fastly
-void ListFrame::GetAllCoastLineData(String prefix) {
+void ListFrame::LoadCoastLineData(String prefix) {
 
     FileR file_n_line, coastline_file;
     Position p_Position;
@@ -8711,7 +8711,7 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                     //push back the position into all_coastline_points_Cartesian: this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
                     //                  BE CAREFUL ABOUT THIS POTENTIAL BUG
                     (all_coastline_points_Cartesian[i]).resize((all_coastline_points_Cartesian[i]).size() + 1);
-                    //here I allocate a completely new space for  all_coastline_points_Cartesian[i].back(), so all memory adresses in all_coastline_points_Cartesian[i][0], all_coastline_points_Cartesian[i][1], ... wil be differernt and all the points in there will be different 
+                    //here I allocate a completely new space for  all_coastline_points_Cartesian[i].back(), so all memory adresses in all_coastline_points_Cartesian[i][0], all_coastline_points_Cartesian[i][1], ... wil be differernt and all the points in there will be different
                     all_coastline_points_Cartesian[i].back() = Cartesian();
                     all_coastline_points_Cartesian[i].back() = p_Cartesian;
                     
@@ -17538,7 +17538,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     load_sample_sight.read_from_file_to(String("load sample sight"), (wxGetApp().path_file_init), String("R"), String(""));
 
 
-    GetAllCoastLineData(String(""));
+    LoadCoastLineData(String(""));
 
     if (!abort) {
         //the user has not pressed cancel while charts were loading -> I proceed

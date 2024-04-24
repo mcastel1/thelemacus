@@ -8707,9 +8707,12 @@ void ListFrame::GetAllCoastLineData(String prefix) {
                     p_Cartesian = p_Position.getCartesian();
                     //push back the position into all_coastline_points_Position
                     all_coastline_points_Position.back().push_back(p_Position);
-                    //                        //push back the position into all_coastline_points_Cartesian: this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
-                    //                        (all_coastline_points_Cartesian[i][j]).resize((all_coastline_points_Cartesian[i][j]).size() + 1);
-                    all_coastline_points_Cartesian.back().push_back(p_Cartesian);
+                    //                  BE CAREFUL ABOUT THIS POTENTIAL BUG
+                    //push back the position into all_coastline_points_Cartesian: this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
+                    //                  BE CAREFUL ABOUT THIS POTENTIAL BUG
+                    (all_coastline_points_Cartesian[i]).resize((all_coastline_points_Cartesian[i]).size() + 1);
+                    all_coastline_points_Cartesian[i].back() = Cartesian();
+                    all_coastline_points_Cartesian[i].back() = p_Cartesian;
                     
                     pos_beg = pos_end+2;
                     

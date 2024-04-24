@@ -2812,9 +2812,11 @@ public:
     ProjectionField<ChartFrame>* projection;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/lambda_min, lambda_max;
-    //in points_coastline_now (points_coasline_before), I store the 2d coordindates  in DrawPanel coordinates of coastline data coastline_points at the current (preceeding) state of the chart
-    vector<unsigned long long int> n_filled_entries_polygons_now, n_filled_entries_polygons_before;
+    //a vector of the points of the coastlines in DrawPanel coordinates: these are points of polygons concatenated in the linear arrays points_coastline_now/ before. These vectors are allocated to their maximal possible size, but only the number of entries specified by n_filled_entries_polygons_now/before are filled with sensible numbers to be used 
     vector<wxPoint> points_coastline_now, points_coastline_before;
+    //the number of points stored for polygon #i in points_coastline_now/before[i] is n_filled_entries_polygons_now/before[i]
+    vector<unsigned long long int> n_filled_entries_polygons_now, n_filled_entries_polygons_before;
+
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling, /*this is true if the chart is being dragged, and thus the size of *this must not change across multiple Draw(s), and false otherwise*/ dragging_chart;
     //This is the actual value of the maximal zoom factor allowed

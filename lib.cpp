@@ -8518,17 +8518,23 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
     if ((parent->show_coastlines) == Answer('y', String(""))) {
         
+        PositionProjection p_SW, p_NE, p_SW0, p_NE0;
+        
 //        ( ((phi_max.normalize_pm_pi_ret() - phi_min.normalize_pm_pi_ret()).value)*((lambda_max.normalize_pm_pi_ret() - lambda_min.normalize_pm_pi_ret()).value) ) / ( (ceil_max_lat - floor_min_lat)*2*M_PI );
         
         /*
          the number of points plotted is [number of coastline data points in lambda_min ... phi_max] / every = n_points_plot_coastline_Mercator ->
-         every = [number of coastline data points in lambda_min ... phi_max] / n_points_plot_coastline_Mercator ~
-         ( ((phi_max.normalize_pm_pi_ret() - phi_min.normalize_pm_pi_ret()).value)*((lambda_max.normalize_pm_pi_ret() - lambda_min.normalize_pm_pi_ret()).value) ) / ( (ceil_max_lat - floor_min_lat)*2*M_PI ) * [total number of coastline data points] / n_points_plot_coastline_Mercator
+         every = [number of coastline data points in x_min ... y_max] / n_points_plot_coastline_Mercator ~
+         ( (x) * [total number of coastline data points] / n_points_plot_coastline_Mercator
          */
         
- 
+        p_SW.SetMercator(Position(lambda_min, phi_min));
+        p_NE.SetMercator(Position(lambda_max, phi_max));
+        p_SW0.SetMercator(Position(Angle(0.0), Angle(k*floor_min_lat)));
+        p_NE0.SetMercator(Position(Angle(0.0), Angle(k*ceil_max_lat)));
         
-        every = (parent->n_all_coastline_points) * fabs(( ((phi_max.normalize_pm_pi_ret() - phi_min.normalize_pm_pi_ret()).value)*((lambda_max.normalize_pm_pi_ret() - lambda_min.normalize_pm_pi_ret()).value) ) / ( k*(ceil_max_lat - floor_min_lat)*2*M_PI )) / (wxGetApp().n_points_plot_coastline_Mercator.value);
+        
+        every = (parent->n_all_coastline_points) * ( ( (p_SW.x - p_NE.x) * (p_SW.y - p_NE.y) ) / ( 2.0*M_PI*(p_NE0.y - p_SW0.y) ) ) / (wxGetApp().n_points_plot_coastline_Mercator.value);
         if(every==0){every = 1;}
         
         for(p=0, i=0, l=0; i<parent->all_coastline_points_Position.size(); i++) {

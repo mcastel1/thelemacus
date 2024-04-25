@@ -8528,19 +8528,19 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
          ( (x) * [total number of coastline data points] / n_points_plot_coastline_Mercator
          */
         
-        p_SW.SetMercator(Position(lambda_min, phi_min));
-        p_NE.SetMercator(Position(lambda_max, phi_max));
+        p_SW.SetMercator(Position(Angle(0.0), phi_min));
+        p_NE.SetMercator(Position(Angle(0.0), phi_max));
         p_SW0.SetMercator(Position(Angle(0.0), Angle(k*floor_min_lat)));
         p_NE0.SetMercator(Position(Angle(0.0), Angle(k*ceil_max_lat)));
         
         
         double t;
         
-        if((lambda_min < M_PI) && (lambda_max > M_PI)){p_NE.x += 2.0*M_PI;}
+//        if((lambda_min < M_PI) && (lambda_max > M_PI)){p_NE.x += 2.0 * M_PI;}
         
-        t = ( ( (p_NE.x - p_SW.x) * (p_NE.y - p_SW.y) ) / ( 2.0*M_PI*(p_NE0.y - p_SW0.y) ) );
+        t = ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0) *(p_NE0.y - p_SW0.y) ) );
         
-        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (p_NE.x - p_SW.x) * (p_NE.y - p_SW.y) ) / ( 2.0*M_PI*(p_NE0.y - p_SW0.y) ) ) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
+        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0)  *(p_NE0.y - p_SW0.y) ) ) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
         if(every==0){every = 1;}
         
         for(p=0, i=0, l=0; i<parent->all_coastline_points_Position.size(); i++) {
@@ -11007,14 +11007,17 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //create a dummy_event and then call SetProjection(dummy_event) to set all objects according to the choice of the projeciton above.
     //    draw_panel->OnChooseProjection(dummy_event);
     draw_panel->SetProjection(dummy_event);
-    ResetRender(dummy_event);
 
     //stores the x_min .. y_max, (size_chart.GetWidth()), height chart the first time that the chart is shown into x_min_0 ... height_chart_0
+    (draw_panel->*(draw_panel->Set_x_y_min_max))();
     (draw_panel->x_min_0) = (draw_panel->x_min);
     (draw_panel->x_max_0) = (draw_panel->x_max);
     (draw_panel->y_min_0) = (draw_panel->y_min);
     (draw_panel->y_max_0) = (draw_panel->y_max);
     (draw_panel->x_span_0) = (draw_panel->x_span());
+    
+    ResetRender(dummy_event);
+
     (draw_panel->width_chart_0) = (draw_panel->size_chart.GetWidth());
     (draw_panel->height_chart_0) = (draw_panel->size_chart.GetHeight());
 

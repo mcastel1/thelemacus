@@ -22309,10 +22309,16 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
             transporting_route_temp = transporting_route;
             
-            //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
+            //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
             for (unsigned int i = 0; i < (parent->chart_frames.size()); i++) {
                 ((parent->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
             }
+            parent->listcontrol_sights->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
+            parent->listcontrol_positions->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
+            parent->listcontrol_routes->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
+            parent->panel->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
+
+            
 
             if (type_of_transported_object == String("position")) {
 
@@ -22455,10 +22461,15 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         parent->Resize();
         //re-draw everything
         parent->DrawAll();
-
+        
+        //re-bind DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement once the transport is over
         for (unsigned int i = 0; i < (parent->chart_frames.size()); i++) {
             ((parent->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
         }
+        parent->listcontrol_sights->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
+        parent->listcontrol_positions->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
+        parent->listcontrol_routes->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
+        parent->panel->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
 
         
         //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl

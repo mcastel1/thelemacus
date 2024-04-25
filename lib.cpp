@@ -22533,9 +22533,13 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
             start = transporting_route.reference_position;
  
-            //during the transport, I disconnect DrawPanel::OnMouseMovement from mouse movements
+            //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
             chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
-//            chart_frame->draw_panel->Unbind(wxEVT_PAINT, &DrawPanel::PaintEvent, chart_frame->draw_panel);
+            chart_frame->parent->listcontrol_sights->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+            chart_frame->parent->listcontrol_positions->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+            chart_frame->parent->listcontrol_routes->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+            chart_frame->parent->panel->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+
             
             (chart_frame->draw_panel->label_position_now) = String("");
 
@@ -22640,7 +22644,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             chart_frame->draw_panel->grid_before.clear();
             (chart_frame->draw_panel->grid_before) = (chart_frame->draw_panel->grid_now);
             chart_frame->draw_panel->ticks_before.clear();
-           ( chart_frame->draw_panel->ticks_before) = (chart_frame->draw_panel->ticks_now);
+            (chart_frame->draw_panel->ticks_before) = (chart_frame->draw_panel->ticks_now);
             
             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
             chart_frame->draw_panel->points_route_list_before.clear();
@@ -22714,20 +22718,16 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         chart_frame->EnableAll(true);
         chart_frame->Fit();
 
-        //re-draw everything
-//        parent->DrawAll();
-
+        //bind back all the methoud that have been unbound at the beginnign of the transport
         chart_frame->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
-//        chart_frame->draw_panel->Bind(wxEVT_PAINT, &DrawPanel::PaintEvent, chart_frame->draw_panel);
-
-        
+        chart_frame->parent->listcontrol_sights->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+        chart_frame->parent->listcontrol_positions->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+        chart_frame->parent->listcontrol_routes->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+        chart_frame->parent->panel->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+    
         timer->Stop();
         (*(parent->unset_idling))();
         
-//        if(f != NULL){
-//            (*f)();
-//        }
-
     }
 
 }

@@ -134,7 +134,6 @@
  
  
  ********** THINGS TO FIX ************
-    - disable ListFrame::OnMouseMovement when animations are played
     - put back progress dialog when polygons work
     - code method DrawPanel::ProjectionToGeo_3D
      - ChartFrame must take as an argument for the projection f Projection object, not a String

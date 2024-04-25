@@ -134,7 +134,9 @@
  
  
  ********** THINGS TO FIX ************
-    - probably because of the progress dialog, the app won't close if you press 'No' in the disclaimer 
+    - when you draw a selection rectangle from W to E in mercator projhection the result is wrong
+    - remove horizontal wide lines in mercator projection 
+    - probably because of the progress dialog, the app won't close if you press 'No' in the disclaimer
     - code method DrawPanel::ProjectionToGeo_3D
      - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:

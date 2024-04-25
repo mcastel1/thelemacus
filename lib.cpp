@@ -8534,14 +8534,14 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         p_NE0.SetMercator(Position(Angle(0.0), Angle(k*ceil_max_lat)));
         
         
-        double t;
-        unsigned long long int n_points_in_chart;
+        //        double t;
+        //        unsigned long long int n_points_in_chart;
         
-//        if((lambda_min < M_PI) && (lambda_max > M_PI)){p_NE.x += 2.0 * M_PI;}
+        //        if((lambda_min < M_PI) && (lambda_max > M_PI)){p_NE.x += 2.0 * M_PI;}
         
-        t = ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0) *(p_NE0.y - p_SW0.y) ) );
+        //        t = ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0) *(p_NE0.y - p_SW0.y) ) );
         
-        n_points_in_chart = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0)  *(p_NE0.y - p_SW0.y) ) )));
+        //        n_points_in_chart = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0)  *(p_NE0.y - p_SW0.y) ) )));
         
         every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0)  *(p_NE0.y - p_SW0.y) ) ) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
         if(every==0){every = 1;}
@@ -8567,10 +8567,10 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         for(i=0, j=0; i<n_filled_entries_polygons_now.size(); ++i){
             j+=n_filled_entries_polygons_now[i];
         }
-        cout << "Number of plotted points = " << j << endl;
-        cout << "Number of points in chart = " << n_points_in_chart << endl;
-        cout << "Every = " << every << endl;
-        cout << "t = " << t << endl;
+//        cout << "Number of plotted points = " << j << endl;
+//        cout << "Number of points in chart = " << n_points_in_chart << endl;
+//        cout << "Every = " << every << endl;
+//        cout << "t = " << t << endl;
 
 
 

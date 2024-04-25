@@ -8375,14 +8375,14 @@ void ChartFrame::GetCoastLineData_3D(void) {
     
     if ((parent->show_coastlines) == Answer('y', String(""))) {
         
-        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * (  draw_panel->circle_observer.omega.value ) / ( draw_panel->circle_observer_0.omega.value ) ) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value)));
+        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * (  draw_panel->circle_observer.omega.value ) / ( draw_panel->circle_observer_0.omega.value ) ) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
         if(every==0){every = 1;}
 
         for(p=0, i=0, l=0; i<parent->all_coastline_points_Cartesian.size(); i++) {
             //run through polygons
             
             n_filled_entries_polygons_now[i] = 0;
-            for(j=p; j<(parent->all_coastline_points_Cartesian[i]).size(); j+=(wxGetApp().n_points_plot_coastline_3D.value)){
+            for(j=p; j<(parent->all_coastline_points_Cartesian[i]).size(); j+=every){
                 //run through points in a polygon
 
                 

@@ -22318,13 +22318,18 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
                 //store the starting position in geo_position_start
                 start = (*((Position*)transported_object));
-
+                //highlight the Position that is being transported
+                parent->highlighted_position_now = position_in_vector<Position>(((Position*)transported_object), parent->data->position_list);
+                
             }else {
 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                     //store the starting reference position in geo_position_start
                     start = (((Route*)transported_object)->reference_position);
+                    //highlight the Position that is being transported
+                    parent->highlighted_route_now = position_in_vector<Route>(((Route*)transported_object), parent->data->route_list);
+     
 
                 }
                 
@@ -22388,6 +22393,8 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             
             //do the whole transport rather than combining many little transports, to avoid rounding errors
             (*((Position*)transported_object)) = start;
+            //un-highlight the Position that is being transported
+            parent->highlighted_position_now = -1;
             ((Position*)transported_object)->transport_to(transporting_route, String(""));
 
 
@@ -22407,6 +22414,9 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                 String new_label;
+                
+                //un-highlight the Route that is being transported
+                parent->highlighted_route_now = -1;
 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
                 (((Route*)transported_object)->reference_position) = start;

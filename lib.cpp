@@ -8330,7 +8330,7 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 //get the datapoints of coastlines and store them into parent->points_coastline_now
 void ChartFrame::GetCoastLineData_3D(void) {
 
-    unsigned long long int l, i, j, /*n, */p/*, n_cells, every = 0, every_ij = 0, n_points_per_cell*/;
+    unsigned long long int l, i, j, every, /*n, */p/*, n_cells, every_ij = 0, n_points_per_cell*/;
     //integer values of min/max lat/lon to be extractd from p_coastline
    /* int , i_adjusted = 0, j_adjusted = 0, i_min, i_max, j_min, j_max;*/
 //    double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
@@ -8374,6 +8374,9 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
     
     if ((parent->show_coastlines) == Answer('y', String(""))) {
+        
+        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * (  draw_panel->circle_observer.omega.value ) / ( draw_panel->circle_observer_0.omega.value ) ) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value)));
+        if(every==0){every = 1;}
 
         for(p=0, i=0, l=0; i<parent->all_coastline_points_Cartesian.size(); i++) {
             //run through polygons

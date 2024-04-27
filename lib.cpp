@@ -8381,7 +8381,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
         for(p=0, i=0, l=0; i<parent->coastline_polygons_Cartesian.size(); i++) {
             //run through polygons
             
-            n_filled_entries_polygons_now[i] = 0;
+            polygon_position_now[i] = 0;
             for(j=p; j<(parent->coastline_polygons_Cartesian[i]).size(); j+=every){
                 //run through points in a polygon
 
@@ -8389,7 +8389,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
                 if((draw_panel->CartesianToDrawPanel)((parent->coastline_polygons_Cartesian)[i][j], &q, false)) {
                     
                     coastline_polygons_now[l++] = q;
-                    n_filled_entries_polygons_now[i]++;
+                    polygon_position_now[i]++;
 
                 }
                 
@@ -8422,7 +8422,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //        every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_3D.value)));
 //        n_points_per_cell = ((unsigned long long int)((double)n)/((double)n_cells));
 //        
-//        for (n_filled_entries_polygons_now=0, p=0, i = i_min; i < i_max; i++) {
+//        for (polygon_position_now=0, p=0, i = i_min; i < i_max; i++) {
 //            for (j = j_min; j < j_max; j++) {
 //                
 //                if ((draw_panel->AdjustLatitudeLongitude3D(i, j, &i_adjusted, &j_adjusted))) {
@@ -8458,7 +8458,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //                        
 //                        if((draw_panel->CartesianToDrawPanel)((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false)) {
 //                            
-//                            coastline_polygons_now[n_filled_entries_polygons_now++] = q;
+//                            coastline_polygons_now[polygon_position_now++] = q;
 //                            
 //                        }
 //             
@@ -8552,13 +8552,13 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         for(p=0, i=0, l=0; i<parent->coastline_polygons_Position.size(); i++) {
             //run through polygons
             
-            n_filled_entries_polygons_now[i] = 0;
+            polygon_position_now[i] = 0;
             for(j=p; j<(parent->coastline_polygons_Position[i]).size(); j+=every){
                 //run through points in a polygon
                 
                 if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[i][j], &temp, false)) {
                     coastline_polygons_now[l++] = temp;
-                    n_filled_entries_polygons_now[i]++;
+                    polygon_position_now[i]++;
                 }
                 
             }
@@ -8567,8 +8567,8 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
         }
         
-        for(i=0, j=0; i<n_filled_entries_polygons_now.size(); ++i){
-            j+=n_filled_entries_polygons_now[i];
+        for(i=0, j=0; i<polygon_position_now.size(); ++i){
+            j+=polygon_position_now[i];
         }
 //        cout << "Number of plotted points = " << j << endl;
 //        cout << "Number of points in chart = " << n_points_in_chart << endl;
@@ -8587,7 +8587,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //        }
 //        every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_Mercator.value)) /**cos(k * ((double)i))*/);
 //
-//        for(n_filled_entries_polygons_now=0, p=0, i = i_min; i < i_max; i++) {
+//        for(polygons_position_now=0, p=0, i = i_min; i < i_max; i++) {
 //            for(j = j_min; j < j_max; j++) {
 //                
 //
@@ -8623,7 +8623,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //                    
 //                    if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
 //                        
-//                        coastline_polygons_now[n_filled_entries_polygons_now++] = temp;
+//                        coastline_polygons_now[polygons_position_now++] = temp;
 //                        
 //                    }
 //                    
@@ -9127,7 +9127,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                     ticks_now,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
-                    parent->n_filled_entries_polygons_now,
+                    parent->polygon_position_now,
                     parent->coastline_polygons_now,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
@@ -9247,7 +9247,7 @@ inline void DrawPanel::CleanAndRenderAll(void) {
                     ticks_now,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
-                    parent->n_filled_entries_polygons_now,
+                    parent->polygon_position_now,
                     parent->coastline_polygons_now,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
@@ -9320,7 +9320,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_before,
                         parallels_and_meridians_labels_before,
                         positions_parallels_and_meridians_labels_before,
-                        parent->n_filled_entries_polygons_before,
+                        parent->polygon_position_before,
                         parent->coastline_polygons_before,
                         wxGetApp().background_color,
                         wxGetApp().background_color,
@@ -9357,7 +9357,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->n_filled_entries_polygons_now,
+                        parent->polygon_position_now,
                         parent->coastline_polygons_now,
                         wxGetApp().background_color,
                         wxGetApp().background_color,
@@ -9390,7 +9390,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->n_filled_entries_polygons_now,
+                        parent->polygon_position_now,
                         parent->coastline_polygons_now,
                         wxGetApp().background_color,
                         wxGetApp().background_color,
@@ -9432,7 +9432,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->n_filled_entries_polygons_now,
+                        parent->polygon_position_now,
                         parent->coastline_polygons_now,
                         wxGetApp().background_color,
                         wxGetApp().background_color,
@@ -9464,7 +9464,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->n_filled_entries_polygons_now,
+                        parent->polygon_position_now,
                         parent->coastline_polygons_now,
                         wxGetApp().foreground_color,
                         wxGetApp().background_color,
@@ -10898,24 +10898,24 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     unset_idling = new UnsetIdling<ChartFrame>(this);
     
     //set the size of coastline_polygons_now and coastline_polygons_before equal to their maximum possible size, so I won't have to resize them at every step
-    //    for(n_filled_entries_polygons_now=0, i=0; i<(parent->coastline_polygons_Position.size()); i++){
+    //    for(polygon_position_now=0, i=0; i<(parent->coastline_polygons_Position.size()); i++){
     //        for (j=0; j<((parent->coastline_polygons_Position)[i]).size(); j++) {
-    //            n_filled_entries_polygons_now += ((parent->coastline_polygons_Position)[i][j]).size();
+    //            polygon_position_now += ((parent->coastline_polygons_Position)[i][j]).size();
     //        }
     //    }
-    //    n_filled_entries_polygons_before = n_filled_entries_polygons_now;
-    //    coastline_polygons_now.resize(n_filled_entries_polygons_now);
-    //    coastline_polygons_before.resize(n_filled_entries_polygons_before);
-    //    n_filled_entries_polygons_before = n_filled_entries_polygons_now = 0;
+    //    polygon_position_before = polygon_position_now;
+    //    coastline_polygons_now.resize(polygon_position_now);
+    //    coastline_polygons_before.resize(polygon_position_before);
+    //    polygon_position_before = polygon_position_now = 0;
     
-    //coastline_polygons_now/before and n_filled_entries_polygons_now/before are resized to their maximum possible value
+    //coastline_polygons_now/before and polygon_position_now/before are resized to their maximum possible value
     for(i=0, j=0; i<parent->coastline_polygons_Position.size(); i++) {
         j += (parent->coastline_polygons_Position[i].size());
     }
     coastline_polygons_now.resize(j);
-    n_filled_entries_polygons_now.resize(parent->coastline_polygons_Position.size());
+    polygon_position_now.resize(parent->coastline_polygons_Position.size());
     coastline_polygons_before.resize(j);
-    n_filled_entries_polygons_before.resize(parent->coastline_polygons_Position.size());
+    polygon_position_before.resize(parent->coastline_polygons_Position.size());
 
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 
@@ -13665,7 +13665,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 #ifdef WIN32
                             //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-                            (parent->n_filled_entries_polygons_before) = (parent->n_filled_entries_polygons_now);
+                            (parent->polygon_position_before) = (parent->polygon_position_now);
 //                            parent->coastline_polygons_before.resize(parent->coastline_polygons_now.size());
                             copy_n(parent->coastline_polygons_now.begin(), parent->coastline_polygons_now.size(), parent->coastline_polygons_before.begin() );
 
@@ -13709,7 +13709,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 #ifdef WIN32
                         //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-                        (parent->n_filled_entries_polygons_before) = (parent->n_filled_entries_polygons_now);
+                        (parent->polygon_position_before) = (parent->polygon_position_now);
 //                        parent->coastline_polygons_before.resize(parent->coastline_polygons_now.size());
                         copy_n(parent->coastline_polygons_now.begin(), parent->coastline_polygons_now.size(), parent->coastline_polygons_before.begin() );
 
@@ -13947,7 +13947,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #endif
 #ifdef _WIN32
                         //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-                        (parent->n_filled_entries_polygons_before) = (parent->n_filled_entries_polygons_now);
+                        (parent->polygon_position_before) = (parent->polygon_position_now);
 //                        parent->coastline_polygons_before.resize(parent->coastline_polygons_now.size());
                         copy_n(parent->coastline_polygons_now.begin(), parent->coastline_polygons_now.size(), parent->coastline_polygons_before.begin() );
                         
@@ -14095,7 +14095,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
     //I am on WIN32 operating system: I will refresh the plot under the scroll operation, where I will wipe out the graphical objects in the former plot by drawing with background_color on top of them -> I need to keep track of the _before graphical objects and on the current _now graphical objects, and I do it here:
     
     //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-    n_filled_entries_polygons_before = n_filled_entries_polygons_now;
+    polygon_position_before = polygon_position_now;
 //    coastline_polygons_before.resize(coastline_polygons_now.size());
     copy_n(coastline_polygons_now.begin(), coastline_polygons_now.size(), coastline_polygons_before.begin());
 
@@ -22657,7 +22657,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
 #ifdef WIN32
             //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-            (chart_frame->n_filled_entries_polygons_before) = (chart_frame->n_filled_entries_polygons_now);
+            (chart_frame->polygon_position_before) = (chart_frame->polygon_position_now);
 //            chart_frame->coastline_polygons_before.resize(chart_frame->coastline_polygons_now.size());
             copy_n(chart_frame->coastline_polygons_now.begin(), chart_frame->coastline_polygons_now.size(), chart_frame->coastline_polygons_before.begin() );
 

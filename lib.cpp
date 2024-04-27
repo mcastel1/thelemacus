@@ -9654,16 +9654,16 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for(i = 0, j=0; i < polygon_positions.size(); i++) {
+    for(i = 0; i < polygon_positions.size()-1; i++) {
         //run through polygons
         
-        if(polygon_positions[i] > 1){
+//        if(polygon_positions[i] > 1){
             
-            dc->DrawLines((int)(polygon_positions[i]), points_polygons.data() + j);
+            dc->DrawLines((int)(polygon_positions[i+1] - polygon_positions[i]), (points_polygons.data()) + polygon_positions[i]);
             
-        }
+//        }
         
-        j+=polygon_positions[i];
+//        j+=polygon_positions[i];
     }
 
 

@@ -2814,9 +2814,9 @@ public:
     ProjectionField<ChartFrame>* projection;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/lambda_min, lambda_max;
-    //a vector of the points of the coastlines in DrawPanel coordinates: these are points of polygons concatenated in the linear arrays points_coastline_now/ before. The i-th polygon is stored n points_coastline_now/before[polygon_position_now/before[i]], points_coastline_now[polygon_position_now/before[i]+1], ..., points_coastline_now[polygon_position_now/before[i+1]-1]
-    vector<wxPoint> points_coastline_now, points_coastline_before;
-    //the number of points stored for polygon #i in points_coastline_now/before[i] is n_filled_entries_polygons_now/before[i]
+    //a vector of the points of the coastlines in DrawPanel coordinates: these are points of polygons concatenated in the linear arrays coastline_polygons_now/ before. The i-th polygon is stored n coastline_polygons_now/before[polygon_position_now/before[i]], coastline_polygons_now[polygon_position_now/before[i]+1], ..., coastline_polygons_now[polygon_position_now/before[i+1]-1]
+    vector<wxPoint> coastline_polygons_now, points_coastline_before;
+    //the number of points stored for polygon #i in coastline_polygons_now/before[i] is n_filled_entries_polygons_now/before[i]
     vector<unsigned long long int> n_filled_entries_polygons_now, n_filled_entries_polygons_before;
 
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false

@@ -9655,6 +9655,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
     for(i = 0, j=0; i < polygon_positions.size(); i++) {
+        //run through polygons
         
         if(polygon_positions[i] > 1){
             

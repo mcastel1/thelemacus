@@ -8551,10 +8551,16 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0)  *(p_NE0.y - p_SW0.y) ) ) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
         if(every==0){every = 1;}
         
-        for(new_polygon=true, p=0, i=0, l=0, n_added_polygons=0; i<parent->coastline_polygons_Position.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0; i<parent->coastline_polygons_Position.size(); i++) {
             //run through polygons
             
-            polygon_position_now[i] = l;
+            new_polygon=true;
+            n_added_polygons++;
+            if(n_added_polygons > polygon_position_now.size()){
+                polygon_position_now.resize(n_added_polygons);
+            }
+            polygon_position_now[n_added_polygons-1] = l;
+            
             for(j=p; j<(parent->coastline_polygons_Position[i]).size(); j+=every){
                 //run through points in a polygon
                 
@@ -8570,9 +8576,13 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                     //(parent->coastline_polygons_Position)[i][j] is not a valid point -> I start a new polygon
                     
                     //updated polygon_position_now with the position of the new polygon
-                    polygon_position_now[n_added_polygons++] = l;
                     new_polygon = true;
-                    
+                    n_added_polygons++;
+                    if(n_added_polygons > polygon_position_now.size()){
+                        polygon_position_now.resize(n_added_polygons);
+                    }
+                    polygon_position_now[n_added_polygons-1] = l;
+
                 }
                 
             }
@@ -8581,9 +8591,9 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
         }
         
-        for(i=0, j=0; i<polygon_position_now.size(); ++i){
-            j+=polygon_position_now[i];
-        }
+//        for(i=0, j=0; i<polygon_position_now.size(); ++i){
+//            j+=polygon_position_now[i];
+//        }
 //        cout << "Number of plotted points = " << j << endl;
 //        cout << "Number of points in chart = " << n_points_in_chart << endl;
 //        cout << "Every = " << every << endl;
@@ -8980,7 +8990,7 @@ inline void DrawPanel::RenderBackground(
                                         const vector< vector< vector<wxPoint> > >& ticks,
                                         const vector<wxString>& parallels_and_meridians_labels,
                                         const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                        const vector<unsigned long long int>& n_filled_entries_polygons,
+                                        const vector<unsigned long long int>& polygon_positions,
                                         const vector<wxPoint>& points_coastline,
                                         wxColour foreground_color,
                                         wxColour background_color,
@@ -9019,7 +9029,7 @@ inline void DrawPanel::RenderBackground(
                         ticks,
                         parallels_and_meridians_labels,
                         positions_parallels_and_meridians_labels,
-                        n_filled_entries_polygons,
+                        polygon_positions,
                         points_coastline,
                         foreground_color,
                         background_color,
@@ -9619,7 +9629,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
                                        const vector< vector< vector<wxPoint> > >& ticks,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                       const vector<unsigned long long int>& n_filled_entries_polygons,
+                                       const vector<unsigned long long int>& polygon_positions,
                                        const vector<wxPoint>& points_polygons,
                                        wxColor foreground_color,
                                        wxColor background_color,
@@ -9644,15 +9654,15 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for(i = 0, j=0; i < n_filled_entries_polygons.size(); i++) {
+    for(i = 0, j=0; i < polygon_positions.size(); i++) {
         
-        if(n_filled_entries_polygons[i] > 1){
+        if(polygon_positions[i] > 1){
             
-            dc->DrawLines((int)(n_filled_entries_polygons[i]), points_polygons.data() + j);
+            dc->DrawLines((int)(polygon_positions[i]), points_polygons.data() + j);
             
         }
         
-        j+=n_filled_entries_polygons[i];
+        j+=polygon_positions[i];
     }
 
 
@@ -9827,7 +9837,7 @@ inline void DrawPanel::Render_3D(
                                  const vector< vector< vector<wxPoint> > >& ticks,
                                  const vector<wxString>& parallels_and_meridians_labels,
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                 const vector<unsigned long long int> & n_filled_entries_polygons,
+                                 const vector<unsigned long long int> & polygon_positions,
                                  const vector<wxPoint>& points_polygons,
                                  wxColor foreground_color,
                                  wxColor background_color,
@@ -9855,15 +9865,15 @@ inline void DrawPanel::Render_3D(
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for(i = 0, j=0; i < n_filled_entries_polygons.size(); i++) {
+    for(i = 0, j=0; i < polygon_positions.size(); i++) {
         
-        if(n_filled_entries_polygons[i] > 1){
+        if(polygon_positions[i] > 1){
             
-            dc->DrawLines((int)(n_filled_entries_polygons[i]), points_polygons.data() + j);
+            dc->DrawLines((int)(polygon_positions[i]), points_polygons.data() + j);
             
         }
         
-        j+=n_filled_entries_polygons[i];
+        j+=polygon_positions[i];
     }
 
 

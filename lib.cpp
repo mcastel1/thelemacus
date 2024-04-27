@@ -8378,15 +8378,15 @@ void ChartFrame::GetCoastLineData_3D(void) {
         every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * (  draw_panel->circle_observer.omega.value ) / ( draw_panel->circle_observer_0.omega.value ) ) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
         if(every==0){every = 1;}
 
-        for(p=0, i=0, l=0; i<parent->all_coastline_points_Cartesian.size(); i++) {
+        for(p=0, i=0, l=0; i<parent->coastline_polygons_Cartesian.size(); i++) {
             //run through polygons
             
             n_filled_entries_polygons_now[i] = 0;
-            for(j=p; j<(parent->all_coastline_points_Cartesian[i]).size(); j+=every){
+            for(j=p; j<(parent->coastline_polygons_Cartesian[i]).size(); j+=every){
                 //run through points in a polygon
 
                 
-                if((draw_panel->CartesianToDrawPanel)((parent->all_coastline_points_Cartesian)[i][j], &q, false)) {
+                if((draw_panel->CartesianToDrawPanel)((parent->coastline_polygons_Cartesian)[i][j], &q, false)) {
                     
                     points_coastline_now[l++] = q;
                     n_filled_entries_polygons_now[i]++;
@@ -8396,7 +8396,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
                 
             }
             
-            p = j - ((parent->all_coastline_points_Cartesian[i]).size());
+            p = j - ((parent->coastline_polygons_Cartesian[i]).size());
 
         }
         
@@ -8410,7 +8410,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //                
 //                if ((draw_panel->AdjustLatitudeLongitude3D(i, j, &i_adjusted, &j_adjusted))) {
 //                    
-//                    n += (parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360].size();
+//                    n += (parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360].size();
 //                    
 //                }
 //                
@@ -8429,7 +8429,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //
 //                    
 ////                    //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
-////                    n = ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
+////                    n = ((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
 //                    
 //                
 //                    //set s
@@ -8445,7 +8445,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 ////                    every = (unsigned long)(((double)n) / ((double)(((parent->data)->n_points_plot_coastline_3D).value)) * ((double)n_points_grid) / cos);
 ////                    if (every == 0) { every = 1; }
 //                    every_ij =
-//                    ceil(((double)every)/cos * ((double)((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size())/
+//                    ceil(((double)every)/cos * ((double)((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size())/
 //                    (((double)n)/((double)n_cells)));
 //                    if(every_ij == 0){
 //                        every_ij = 1;
@@ -8454,9 +8454,9 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //                    
 //                    
 //                    //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-//                    for (l = min(p, ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size() - n_points_per_cell); l < ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l += every_ij) {
+//                    for (l = min(p, ((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size() - n_points_per_cell); l < ((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l += every_ij) {
 //                        
-//                        if((draw_panel->CartesianToDrawPanel)((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false)) {
+//                        if((draw_panel->CartesianToDrawPanel)((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false)) {
 //                            
 //                            points_coastline_now[n_filled_entries_polygons_now++] = q;
 //                            
@@ -8464,7 +8464,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //             
 //                    }
 //                    
-//                    p = l - ((parent->all_coastline_points_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
+//                    p = l - ((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
 //
 //                    
 //                }
@@ -8515,7 +8515,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //    }
 //
 //    i_min = floor(K * (phi_min.value));
-//    i_max = ((parent->all_coastline_points_Position).size()) + floor_min_lat;
+//    i_max = ((parent->coastline_polygons_Position).size()) + floor_min_lat;
 //
 //    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
 
@@ -8549,21 +8549,21 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0)  *(p_NE0.y - p_SW0.y) ) ) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
         if(every==0){every = 1;}
         
-        for(p=0, i=0, l=0; i<parent->all_coastline_points_Position.size(); i++) {
+        for(p=0, i=0, l=0; i<parent->coastline_polygons_Position.size(); i++) {
             //run through polygons
             
             n_filled_entries_polygons_now[i] = 0;
-            for(j=p; j<(parent->all_coastline_points_Position[i]).size(); j+=every){
+            for(j=p; j<(parent->coastline_polygons_Position[i]).size(); j+=every){
                 //run through points in a polygon
                 
-                if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i][j], &temp, false)) {
+                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[i][j], &temp, false)) {
                     points_coastline_now[l++] = temp;
                     n_filled_entries_polygons_now[i]++;
                 }
                 
             }
             
-            p = j - ((parent->all_coastline_points_Position[i]).size());
+            p = j - ((parent->coastline_polygons_Position[i]).size());
 
         }
         
@@ -8581,7 +8581,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //        for(n=0, i = i_min; i < i_max; i++) {
 //            for(j = j_min; j < j_max; j++) {
 //                
-//                n += (parent->all_coastline_points_Position)[i - floor_min_lat][j % 360].size();
+//                n += (parent->coastline_polygons_Position)[i - floor_min_lat][j % 360].size();
 //                
 //            }
 //        }
@@ -8609,7 +8609,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //                 */
 //                
 //                every_ij =
-//                ceil(((double)every)*cos(k * ((double)i)) * ((double)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size())/
+//                ceil(((double)every)*cos(k * ((double)i)) * ((double)((parent->coastline_polygons_Position)[i - floor_min_lat][j % 360]).size())/
 //                (((double)n)/((double)n_cells)));
 //                if(every_ij == 0){
 //                    every_ij = 1;
@@ -8619,9 +8619,9 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //                
 //
 //                //run over the Positions by picking one Position every [every] Positions
-//                for (l = p; l < ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size(); l+=every_ij) {
+//                for (l = p; l < ((parent->coastline_polygons_Position)[i - floor_min_lat][j % 360]).size(); l+=every_ij) {
 //                    
-//                    if ((draw_panel->GeoToDrawPanel)((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
+//                    if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
 //                        
 //                        points_coastline_now[n_filled_entries_polygons_now++] = temp;
 //                        
@@ -8629,7 +8629,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //                    
 //                }
 //                
-//                p = l - ((parent->all_coastline_points_Position)[i - floor_min_lat][j % 360]).size();
+//                p = l - ((parent->coastline_polygons_Position)[i - floor_min_lat][j % 360]).size();
 //                
 //            }
 //        }
@@ -8721,8 +8721,8 @@ void ListFrame::LoadCoastLineData(String prefix) {
             while ((!((coastline_file.value)->eof())) && (!abort)) {
                 //run through polygons
                 
-                all_coastline_points_Cartesian.resize(i + 1);
-                all_coastline_points_Position.resize(i + 1);
+                coastline_polygons_Cartesian.resize(i + 1);
+                coastline_polygons_Position.resize(i + 1);
                 
                 pos_beg = line.find(":  ", 0)+3;
                 do{
@@ -8743,15 +8743,15 @@ void ListFrame::LoadCoastLineData(String prefix) {
                     p_Position.lambda.set(String(""), lambda_temp, String(""));
                     p_Position.phi.set(String(""), phi_temp, String(""));
                     p_Cartesian = p_Position.getCartesian();
-                    //push back the position into all_coastline_points_Position
-                    all_coastline_points_Position.back().push_back(p_Position);
+                    //push back the position into coastline_polygons_Position
+                    coastline_polygons_Position.back().push_back(p_Position);
                     //                  BE CAREFUL ABOUT THIS POTENTIAL BUG
-                    //push back the position into all_coastline_points_Cartesian: this is the correct way to push back an element into all_coastline_points_Cartesian: if you use all_coastline_points_Cartesian[i][j].push_back(r_temp), the *memory address of all_coastline_points_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of all_coastline_points_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
+                    //push back the position into coastline_polygons_Cartesian: this is the correct way to push back an element into coastline_polygons_Cartesian: if you use coastline_polygons_Cartesian[i][j].push_back(r_temp), the *memory address of coastline_polygons_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of coastline_polygons_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
                     //                  BE CAREFUL ABOUT THIS POTENTIAL BUG
-                    (all_coastline_points_Cartesian[i]).resize((all_coastline_points_Cartesian[i]).size() + 1);
-                    //here I allocate a completely new space for  all_coastline_points_Cartesian[i].back(), so all memory adresses in all_coastline_points_Cartesian[i][0], all_coastline_points_Cartesian[i][1], ... wil be differernt and all the points in there will be different
-                    all_coastline_points_Cartesian[i].back() = Cartesian();
-                    all_coastline_points_Cartesian[i].back() = p_Cartesian;
+                    (coastline_polygons_Cartesian[i]).resize((coastline_polygons_Cartesian[i]).size() + 1);
+                    //here I allocate a completely new space for  coastline_polygons_Cartesian[i].back(), so all memory adresses in coastline_polygons_Cartesian[i][0], coastline_polygons_Cartesian[i][1], ... wil be differernt and all the points in there will be different
+                    coastline_polygons_Cartesian[i].back() = Cartesian();
+                    coastline_polygons_Cartesian[i].back() = p_Cartesian;
                     
                     n_all_coastline_points++;
                     
@@ -10898,9 +10898,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     unset_idling = new UnsetIdling<ChartFrame>(this);
     
     //set the size of points_coastline_now and points_coastline_before equal to their maximum possible size, so I won't have to resize them at every step
-    //    for(n_filled_entries_polygons_now=0, i=0; i<(parent->all_coastline_points_Position.size()); i++){
-    //        for (j=0; j<((parent->all_coastline_points_Position)[i]).size(); j++) {
-    //            n_filled_entries_polygons_now += ((parent->all_coastline_points_Position)[i][j]).size();
+    //    for(n_filled_entries_polygons_now=0, i=0; i<(parent->coastline_polygons_Position.size()); i++){
+    //        for (j=0; j<((parent->coastline_polygons_Position)[i]).size(); j++) {
+    //            n_filled_entries_polygons_now += ((parent->coastline_polygons_Position)[i][j]).size();
     //        }
     //    }
     //    n_filled_entries_polygons_before = n_filled_entries_polygons_now;
@@ -10909,13 +10909,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, String projection_in, const wxSt
     //    n_filled_entries_polygons_before = n_filled_entries_polygons_now = 0;
     
     //points_coastline_now/before and n_filled_entries_polygons_now/before are resized to their maximum possible value
-    for(i=0, j=0; i<parent->all_coastline_points_Position.size(); i++) {
-        j += (parent->all_coastline_points_Position[i].size());
+    for(i=0, j=0; i<parent->coastline_polygons_Position.size(); i++) {
+        j += (parent->coastline_polygons_Position[i].size());
     }
     points_coastline_now.resize(j);
-    n_filled_entries_polygons_now.resize(parent->all_coastline_points_Position.size());
+    n_filled_entries_polygons_now.resize(parent->coastline_polygons_Position.size());
     points_coastline_before.resize(j);
-    n_filled_entries_polygons_before.resize(parent->all_coastline_points_Position.size());
+    n_filled_entries_polygons_before.resize(parent->coastline_polygons_Position.size());
 
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 
@@ -12183,7 +12183,7 @@ inline bool DrawPanel::AdjustLatitudeLongitude3D(const int& i, const int& j, int
         
         if (i < -90) {
             
-            if ((-(180 + i) - floor_min_lat >= 0) && (-(180 + i) - floor_min_lat < (parent->parent->all_coastline_points_Cartesian).size())) {
+            if ((-(180 + i) - floor_min_lat >= 0) && (-(180 + i) - floor_min_lat < (parent->parent->coastline_polygons_Cartesian).size())) {
                 
                 (*i_adjusted) = -(180 + i);
                 (*j_adjusted) = 180 + j;
@@ -12201,7 +12201,7 @@ inline bool DrawPanel::AdjustLatitudeLongitude3D(const int& i, const int& j, int
         
         if (i > 90) {
             
-            if ((180 - i - floor_min_lat >= 0) && (180 - i - floor_min_lat < (parent->parent->all_coastline_points_Cartesian).size())) {
+            if ((180 - i - floor_min_lat >= 0) && (180 - i - floor_min_lat < (parent->parent->coastline_polygons_Cartesian).size())) {
                 
                 (*i_adjusted) = 180 - i;
                 (*j_adjusted) = 180 + j;
@@ -12221,7 +12221,7 @@ inline bool DrawPanel::AdjustLatitudeLongitude3D(const int& i, const int& j, int
     }
     else {
         
-        if ((i - floor_min_lat >= 0) && (i - floor_min_lat < (parent->parent->all_coastline_points_Cartesian).size())) {
+        if ((i - floor_min_lat >= 0) && (i - floor_min_lat < (parent->parent->coastline_polygons_Cartesian).size())) {
             
             (*i_adjusted) = i;
             (*j_adjusted) = j;

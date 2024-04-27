@@ -8484,7 +8484,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
 //    int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
     unsigned long long int i, j, l, p, every/*, n, n_cells, every_ij = 0*/;
-    wxPoint temp;
+    wxPoint q;
 
 //    //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
 //    phi_min.normalize_pm_pi();
@@ -8522,6 +8522,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
     if ((parent->show_coastlines) == Answer('y', String(""))) {
         
         PositionProjection p_SW, p_NE, p_SW0, p_NE0;
+        bool new_polygon;
         
 //        ( ((phi_max.normalize_pm_pi_ret() - phi_min.normalize_pm_pi_ret()).value)*((lambda_max.normalize_pm_pi_ret() - lambda_min.normalize_pm_pi_ret()).value) ) / ( (ceil_max_lat - floor_min_lat)*2*M_PI );
         
@@ -8549,16 +8550,31 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0)  *(p_NE0.y - p_SW0.y) ) ) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
         if(every==0){every = 1;}
         
-        for(p=0, i=0, l=0; i<parent->coastline_polygons_Position.size(); i++) {
+        for(new_polygon=true, p=0, i=0, l=0; i<parent->coastline_polygons_Position.size(); i++) {
             //run through polygons
             
-            polygon_position_now[i] = 0;
+            polygon_position_now[i] = l;
             for(j=p; j<(parent->coastline_polygons_Position[i]).size(); j+=every){
                 //run through points in a polygon
                 
-                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[i][j], &temp, false)) {
-                    coastline_polygons_now[l++] = temp;
-                    polygon_position_now[i]++;
+                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[i][j], &q, false)){
+                    //(parent->coastline_polygons_Position)[i][j] is a valid point
+                    
+                    coastline_polygons_now[l++] = q;
+//                    polygon_position_now[i]++;
+                    
+                    if(new_polygon){new_polygon = false;}
+                    else{new_polygon = false;}
+                    
+                    
+                }else{
+                    //(parent->coastline_polygons_Position)[i][j] is not a valid point
+                    
+                    
+                    if(new_polygon){new_polygon = true;}
+                    else{new_polygon = true;}
+                    
+                    
                 }
                 
             }

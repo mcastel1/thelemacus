@@ -8551,7 +8551,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0)  *(p_NE0.y - p_SW0.y) ) ) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
         if(every==0){every = 1;}
         
-        for(p=0, i=0, l=0, n_added_polygons=0; i<parent->coastline_polygons_Position.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0, polygon_position_now.clear(); i<parent->coastline_polygons_Position.size(); i++) {
             //run through polygons
             
             new_polygon=true;

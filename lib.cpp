@@ -8591,8 +8591,11 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
         }
         
-        polygon_position_now.resize(polygon_position_now.size()+1);
+        if(n_added_polygons+1 > polygon_position_now.size()){
+            polygon_position_now.resize(n_added_polygons+1);
+        }
         polygon_position_now.back() = l;
+        
 
         
 //        for(i=0, j=0; i<polygon_position_now.size(); ++i){
@@ -9661,11 +9664,11 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     for(i = 0; i < polygon_positions.size()-1; i++) {
         //run through polygons
         
-//        if(polygon_positions[i] > 1){
+        if(polygon_positions[i+1] - polygon_positions[i] > 1){
             
             dc->DrawLines((int)(polygon_positions[i+1] - polygon_positions[i]), (points_polygons.data()) + polygon_positions[i]);
             
-//        }
+        }
         
 //        j+=polygon_positions[i];
     }

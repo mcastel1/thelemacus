@@ -8591,6 +8591,10 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
         }
         
+        polygon_position_now.resize(polygon_position_now.size()+1);
+        polygon_position_now.back() = l;
+
+        
 //        for(i=0, j=0; i<polygon_position_now.size(); ++i){
 //            j+=polygon_position_now[i];
 //        }

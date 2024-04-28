@@ -8575,13 +8575,17 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 }else{
                     //(parent->coastline_polygons_Position)[i][j] is not a valid point -> I start a new polygon
                     
-                    //updated polygon_position_now with the position of the new polygon
-                    new_polygon = true;
-                    n_added_polygons++;
-                    if(n_added_polygons > polygon_position_now.size()){
-                        polygon_position_now.resize(n_added_polygons);
+                    if(!new_polygon){
+                        
+                        //updated polygon_position_now with the position of the new polygon
+                        new_polygon = true;
+                        n_added_polygons++;
+                        if(n_added_polygons > polygon_position_now.size()){
+                            polygon_position_now.resize(n_added_polygons);
+                        }
+                        polygon_position_now[n_added_polygons-1] = l;
+                        
                     }
-                    polygon_position_now[n_added_polygons-1] = l;
 
                 }
                 

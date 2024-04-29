@@ -8413,31 +8413,84 @@ void ChartFrame::GetCoastLineData_3D(void) {
         if(every==0){every = 1;}
         
         
-        
-//        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * (  draw_panel->circle_observer.omega.value ) / ( draw_panel->circle_observer_0.omega.value ) ) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
-//        if(every==0){every = 1;}
-
-        for(p=0, i=0, l=0; i<parent->coastline_polygons_Cartesian.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0, polygon_position_now.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
             
-            polygon_position_now[i] = 0;
-            for(j=p; j<(parent->coastline_polygons_Cartesian[i]).size(); j+=every){
+            new_polygon=true;
+            n_added_polygons++;
+            if(n_added_polygons > polygon_position_now.size()){
+                polygon_position_now.resize(n_added_polygons);
+            }
+            polygon_position_now[n_added_polygons-1] = l;
+            
+            //the id of the polygon that is being added, i.e. , the # of the polygon as entry of coastline_polygons_Position
+            m = (parent->coastline_polygons_area_observer)[i];
+            
+            for(j=p; j<(parent->coastline_polygons_Cartesian)[m].size(); j+=every){
                 //run through points in a polygon
-
                 
-                if((draw_panel->CartesianToDrawPanel)((parent->coastline_polygons_Cartesian)[i][j], &q, false)) {
+                if((draw_panel->CartesianToDrawPanel)((parent->coastline_polygons_Cartesian)[m][j], &q, false)){
                     
                     coastline_polygons_now[l++] = q;
-                    polygon_position_now[i]++;
+                    new_polygon = false;
+                    
+                }else{
+                    //(parent->coastline_polygons_Position)[i][j] is not a valid point -> I start a new polygon
+                    
+                    if(!new_polygon){
+                        
+                        //updated polygon_position_now with the position of the new polygon
+                        new_polygon = true;
+                        n_added_polygons++;
+                        if(n_added_polygons > polygon_position_now.size()){
+                            polygon_position_now.resize(n_added_polygons);
+                        }
+                        polygon_position_now[n_added_polygons-1] = l;
+                        
+                    }
 
                 }
                 
-                
             }
             
-            p = j - ((parent->coastline_polygons_Cartesian[i]).size());
+            p = j - ((parent->coastline_polygons_Cartesian[m]).size());
 
         }
+        
+        if(n_added_polygons+1 > polygon_position_now.size()){
+            polygon_position_now.resize(n_added_polygons+1);
+        }
+        polygon_position_now.back() = l;
+
+        
+        
+//        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * (  draw_panel->circle_observer.omega.value ) / ( draw_panel->circle_observer_0.omega.value ) ) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
+//        if(every==0){every = 1;}
+        
+        
+        
+
+//        for(p=0, i=0, l=0; i<parent->coastline_polygons_Cartesian.size(); i++) {
+//            //run through polygons
+//            
+//            polygon_position_now[i] = 0;
+//            for(j=p; j<(parent->coastline_polygons_Cartesian[i]).size(); j+=every){
+//                //run through points in a polygon
+//
+//                
+//                if((draw_panel->CartesianToDrawPanel)((parent->coastline_polygons_Cartesian)[i][j], &q, false)) {
+//                    
+//                    coastline_polygons_now[l++] = q;
+//                    polygon_position_now[i]++;
+//
+//                }
+//                
+//                
+//            }
+//            
+//            p = j - ((parent->coastline_polygons_Cartesian[i]).size());
+//
+//        }
         
         //set r
 //        draw_panel->circle_observer.reference_position.getCartesian(String(""), &r, String(""));

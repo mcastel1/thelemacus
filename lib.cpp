@@ -8682,7 +8682,7 @@ void ListFrame::LoadCoastLineData(String prefix) {
     Cartesian p_Cartesian;
     string line, temp;
     stringstream ins, message_dialog;
-    int i/*, j*/;
+    unsigned long long int i, j;
 //    string::size_type sz;
     //n_line[k] is the char count to be inserted in seekg to access directly to line k of file output, without going through all the lines in the file
 //    vector<unsigned int> n_line;
@@ -8790,7 +8790,13 @@ void ListFrame::LoadCoastLineData(String prefix) {
                     //here I allocate a completely new space for  coastline_polygons_Cartesian[i].back(), so all memory adresses in coastline_polygons_Cartesian[i][0], coastline_polygons_Cartesian[i][1], ... wil be differernt and all the points in there will be different
                     coastline_polygons_Cartesian[i].back() = Cartesian();
                     coastline_polygons_Cartesian[i].back() = p_Cartesian;
+//                    
+//                    unsigned int i_t, j_t;
+//                    
+//                    i_t = floor(K*(p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat);
+//                    j_t = floor(K*(p_Position.lambda.value));
                     
+                    // polygon #i contains the point p_Position that falls within lat/long K*(p_Position.phi.normalize_pm_pi_ret().value) , floor(K*(p_Position.lambda.value)) -> I add i to coastline_polygons_map[floor(K*(p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat)][floor(K*(p_Position.lambda.value))]
                     coastline_polygons_map[floor(K*(p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat)][floor(K*(p_Position.lambda.value))].push_back(i);
                     
                     n_all_coastline_points++;
@@ -8819,6 +8825,20 @@ void ListFrame::LoadCoastLineData(String prefix) {
             }
 
             coastline_file.close(String(""));
+            
+//            unsigned long long int l;
+            //given the way in which I added polygons to coastline_polygons_map, there may be duplicates in oastline_polygons_map[i][j] -> I delete them
+            for(i=0/*, l=0*/; i<coastline_polygons_map.size(); i++){
+                for(j=0; j<coastline_polygons_map[i].size(); j++){
+                    
+                    sort(coastline_polygons_map[i][j].begin(), coastline_polygons_map[i][j].end());
+                    coastline_polygons_map[i][j].erase(unique( coastline_polygons_map[i][j].begin(), coastline_polygons_map[i][j].end() ), coastline_polygons_map[i][j].end());
+                    
+//                    l+= coastline_polygons_map[i][j].size();
+                    
+                }
+                
+            }
 
         }
 

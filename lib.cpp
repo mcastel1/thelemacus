@@ -8791,6 +8791,8 @@ void ListFrame::LoadCoastLineData(String prefix) {
                     coastline_polygons_Cartesian[i].back() = Cartesian();
                     coastline_polygons_Cartesian[i].back() = p_Cartesian;
                     
+                    coastline_polygons_map[floor(K*(p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat)][floor(K*(p_Position.lambda.value))].push_back(i);
+                    
                     n_all_coastline_points++;
                     
                     pos_beg = pos_end+2;

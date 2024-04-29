@@ -8574,8 +8574,8 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         //count the total number of points included in the polygons of coastline_polygons_map_rectangle_observer and store them in m
         //set every in such a way that the total number of plotted points is n_points_plot_coastline_Mercator, no matter what the size of rectangle_observer
         for(m=0, i=0; i<parent->coastline_polygons_map_rectangle_observer.size(); i++) {
-            for(j=0; j<(parent->coastline_polygons_Position)[(parent->coastline_polygons_map_rectangle_observer)[i]].size(); j++){
-                if((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[(parent->coastline_polygons_map_rectangle_observer)[i]][j], NULL, false)){
+            for(j=0; j<(parent->coastline_polygons_Mercator)[(parent->coastline_polygons_map_rectangle_observer)[i]].size(); j++){
+                if(draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[(parent->coastline_polygons_map_rectangle_observer)[i]][j], &q, false)){
                     m++;
                 }
             }
@@ -8605,7 +8605,6 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 
                 if (draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[m][j], &q, false)) {
                     
-//                }
                 
 //                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[m][j], &q, false)){
                     //(parent->coastline_polygons_Position)[i][j] is a valid point
@@ -8640,80 +8639,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
             polygon_position_now.resize(n_added_polygons+1);
         }
         polygon_position_now.back() = l;
-        //
-        
-        
-        
-        
-        
 
-        
-//        for(i=0, j=0; i<polygon_position_now.size(); ++i){
-//            j+=polygon_position_now[i];
-//        }
-//        cout << "Number of plotted points = " << j << endl;
-//        cout << "Number of points in chart = " << n_points_in_chart << endl;
-//        cout << "Every = " << every << endl;
-//        cout << "t = " << t << endl;
-
-
-
-        
-//        for(n=0, i = i_min; i < i_max; i++) {
-//            for(j = j_min; j < j_max; j++) {
-//                
-//                n += (parent->coastline_polygons_Position)[i - floor_min_lat][j % 360].size();
-//                
-//            }
-//        }
-//        every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_Mercator.value)) /**cos(k * ((double)i))*/);
-//
-//        for(polygons_position_now=0, p=0, i = i_min; i < i_max; i++) {
-//            for(j = j_min; j < j_max; j++) {
-//                
-//
-//                /*
-//                 dN = number of coastline points per lat/lon grid dOmega
-//                 dS = surface on the Mercator projection corresponding to dOmega
-//                 
-//                 
-//                 dN' = C * dN
-//                 
-//                 I require dN'/dS = const (independent of lat and long)
-//                 dN'/dS = C * dN/dS = C * dN/dOmega * dOmega/dS
-//                 
-//                 dS/dOmega ~ 1/cos(phi)
-//                 dOmega/dS ~ cos(phi)
-//                 
-//                 set C = <dN/dOmega> / (dN/dOmega) / dOmega/dS -> dN'/dS = <dN/dOmega>.
-//                 
-//                 */
-//                
-//                every_ij =
-//                ceil(((double)every)*cos(k * ((double)i)) * ((double)((parent->coastline_polygons_Position)[i - floor_min_lat][j % 360]).size())/
-//                (((double)n)/((double)n_cells)));
-//                if(every_ij == 0){
-//                    every_ij = 1;
-//                }
-//                
-//                
-//                
-//
-//                //run over the Positions by picking one Position every [every] Positions
-//                for (l = p; l < ((parent->coastline_polygons_Position)[i - floor_min_lat][j % 360]).size(); l+=every_ij) {
-//                    
-//                    if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[i - floor_min_lat][j % 360][l], &temp, false)) {
-//                        
-//                        coastline_polygons_now[polygons_position_now++] = temp;
-//                        
-//                    }
-//                    
-//                }
-//                
-//                p = l - ((parent->coastline_polygons_Position)[i - floor_min_lat][j % 360]).size();
-//                
-//            }
-//        }
         
     }
     
@@ -12821,6 +12747,13 @@ inline bool DrawPanel::ProjectionToDrawPanel_Mercator(const PositionProjection& 
             
             (p->x) = (position_plot_area_now.x) + ((q.x) - x_min) / x_span() * (size_plot_area.GetWidth());
             (p->y) = (position_plot_area_now.y) + (size_plot_area.GetHeight()) - (((q.y) - y_min) / (y_max - y_min) * (size_plot_area.GetHeight()));
+            
+            
+            //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian: if q->x is smaller than x_max, then it nees to be translated to the right by the size of the plot area in order to be plotted
+            if ((x_max < x_min) && ((q.x) <= x_max)) {
+                (p->x) += size_plot_area.x;
+            }
+
             
         }
         

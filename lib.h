@@ -1994,7 +1994,7 @@ public:
                               wxColor,
                               wxColor,
                               double);
-    bool (DrawPanel::*ProjectionToDrawPanel)(const PositionProjection&, wxPoint*);
+    bool (DrawPanel::*ProjectionToDrawPanel)(const PositionProjection&, wxPoint*, bool);
     void (DrawPanel::*ProjectionToGeo)(const PositionProjection&, Position*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
@@ -2055,8 +2055,8 @@ public:
     bool GeoToMercator(const Position&, PositionProjection*, bool);
     bool ScreenToGeo_Mercator(const wxPoint&, Position*);
     bool ScreenToGeo_3D(const wxPoint&, Position*);
-    bool ProjectionToDrawPanel_Mercator(const PositionProjection&, wxPoint*);
-    bool ProjectionToDrawPanel_3D(const PositionProjection&, wxPoint*);
+    bool ProjectionToDrawPanel_Mercator(const PositionProjection&, wxPoint*, bool);
+    bool ProjectionToDrawPanel_3D(const PositionProjection&, wxPoint*, bool);
     void ProjectionToGeo_Mercator(const PositionProjection&, Position*);
     void ProjectionToGeo_3D(const PositionProjection&, Position*);
     void ShowCoordinates(const Position&, String*);

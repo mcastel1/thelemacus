@@ -8603,7 +8603,11 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
             for(j=p; j<(parent->coastline_polygons_Position)[m].size(); j+=every){
                 //run through points in a polygon
                 
-                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[m][j], &q, false)){
+                if (draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[m][j], &q, false)) {
+                    
+//                }
+                
+//                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[m][j], &q, false)){
                     //(parent->coastline_polygons_Position)[i][j] is a valid point
                     
                     coastline_polygons_now[l++] = q;
@@ -12489,7 +12493,7 @@ inline bool DrawPanel::ScreenToMercator(const wxPoint& p, PositionProjection* q)
         (q->y) = (temp.y);
     }
 
-
+    //MOVE UP TO A SINGLE METHOD
     if (x_min <= x_max) {
         //this is the 'normal' configuration where the boundaries of the chart do not encompass the meridian lambda = pi
 
@@ -12503,8 +12507,9 @@ inline bool DrawPanel::ScreenToMercator(const wxPoint& p, PositionProjection* q)
 
     }
 
-
     return ((check_x && (y_min <= (temp.y)) && ((temp.y) <= y_max)));
+    //MOVE UP TO A SINGLE METHOD
+
 
 }
 
@@ -12677,6 +12682,7 @@ inline bool DrawPanel::GeoToMercator(const Position& q, PositionProjection* p, b
 //    (temp.y) = log(1.0 / cos((q.phi)) + tan((q.phi)));
     temp.NormalizeAndSetMercator(q);
 
+    //MOVE UP TO A SINGLE METHOD
     //compute check_x and, from check_x, compute b
     if (x_min <= x_max) {
         //this is the 'normal' configuration where the boundaries of the chart do not encompass the meridian lambda = pi
@@ -12696,6 +12702,7 @@ inline bool DrawPanel::GeoToMercator(const Position& q, PositionProjection* p, b
     }
 
     check = ((check_x && (y_min <= (temp.y)) && ((temp.y) <= y_max)));
+    //MOVE UP TO A SINGLE METHOD
 
     if (check || write) {
         //if the point falls within the plot area, write it into x, y
@@ -12742,7 +12749,7 @@ inline bool DrawPanel::GeoToDrawPanel(const Position& q, wxPoint* p, bool write)
     if (check || write) {
 
         if (p) {
-            (this->*ProjectionToDrawPanel)(temp, p);
+            (this->*ProjectionToDrawPanel)(temp, p, true);
         }
 
         return check;
@@ -12768,7 +12775,7 @@ inline bool DrawPanel::CartesianToDrawPanel(const Cartesian& q, wxPoint* p, bool
     if (check || write) {
 
         if (p) {
-            (this->*ProjectionToDrawPanel)(temp, p);
+            (this->*ProjectionToDrawPanel)(temp, p, true);
         }
 
         return check;
@@ -12782,16 +12789,50 @@ inline bool DrawPanel::CartesianToDrawPanel(const Cartesian& q, wxPoint* p, bool
 
 }
 
-//this function converts the Mercator projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
-inline bool  DrawPanel::ProjectionToDrawPanel_Mercator(const PositionProjection& q, wxPoint* p) {
-
-    (p->x) = (position_plot_area_now.x) + ((q.x) - x_min) / x_span() * (size_plot_area.GetWidth());
-    (p->y) = (position_plot_area_now.y) + (size_plot_area.GetHeight()) - (((q.y) - y_min) / (y_max - y_min) * (size_plot_area.GetHeight()));
+//converts the Mercator projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel.   If q is a valid PositionProjection , return true and (if p!=NULL),  write the resulting DrawPanel coordinates in p. If q is not a valid  PositionProjection,  return false and, if write = true and p!=NULL, write the DrawPanel position in p.
+inline bool DrawPanel::ProjectionToDrawPanel_Mercator(const PositionProjection& q, wxPoint* p, bool write) {
     
-    return(((q.x) >= x_min) && ((q.x) <= x_max) && ((q.y) >= y_min) && ((q.y) <= y_max));
+    bool check;
+    
+    //MOVE UP TO A SINGLE METHOD
+    //compute check and, from check, compute b
+    if (x_min <= x_max) {
+        //this is the 'normal' configuration where the boundaries of the chart do not encompass the meridian lambda = pi
+
+        check = ((x_min <= (q.x)) && ((q.x) <= x_max));
+
+    }else {
+        //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
+
+        check = (((x_min <= (q.x)) && ((q.x) <= x_max + 2.0 * M_PI)) ||
+
+            ((x_min - 2.0 * M_PI <= (q.x)) && ((q.x) <= x_max))
+
+            );
+
+    }
+    check &= ((y_min <= (q.y)) && ((q.y) <= y_max));
+    //MOVE UP TO A SINGLE METHOD
+
+    
+    if(check || write){
+        
+        if(p){
+            
+            (p->x) = (position_plot_area_now.x) + ((q.x) - x_min) / x_span() * (size_plot_area.GetWidth());
+            (p->y) = (position_plot_area_now.y) + (size_plot_area.GetHeight()) - (((q.y) - y_min) / (y_max - y_min) * (size_plot_area.GetHeight()));
+            
+        }
+        
+        return check;
+        
+    }else{
+        
+        return false;
+        
+    }
 
 }
-
 
 
 //convert the Mercator Projection q into the Position p
@@ -12802,6 +12843,7 @@ inline void  DrawPanel::ProjectionToGeo_Mercator(const PositionProjection& q, Po
   
 }
 
+
 //convert the Mercator Projection q into the Position p
 inline void  DrawPanel::ProjectionToGeo_3D(const PositionProjection& q, Position* p) {
 
@@ -12809,16 +12851,31 @@ inline void  DrawPanel::ProjectionToGeo_3D(const PositionProjection& q, Position
 }
 
 
-//this function converts the 3D projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
-inline bool  DrawPanel::ProjectionToDrawPanel_3D(const PositionProjection& q, wxPoint* p) {
-
-    (p->x) = ((double)(position_plot_area_now.x)) + (1.0 + (q.x) / x_max) * (((double)(size_plot_area.GetWidth())) / 2.0);
-    (p->y) = ((double)(position_plot_area_now.y)) + (1.0 - (q.y) / y_max) * (((double)(size_plot_area.GetHeight())) / 2.0);
+//this function converts the 3D PositionProjection q into the DrawPanel position p, reckoned with respect to the origin of the mercator DrawPanel.  If q is a valid PositionProjection, return true and (if p!=NULL), write the resulting DrawPanel coordinates in p. If q is not a valid  PositionProjection,  return false and, if write = true and p!=NULL, write the DrawPanel position in p.
+inline bool DrawPanel::ProjectionToDrawPanel_3D(const PositionProjection& q, wxPoint* p, bool write) {
     
-    return(
-           (fabs(q.x) <= x_max) && (fabs(q.y) <= y_max)
-           );
-
+    bool check;
+    
+    check = ((fabs(q.x) <= x_max) && (fabs(q.y) <= y_max));
+    
+    
+    if(check || write){
+        
+        if(p){
+            
+            (p->x) = ((double)(position_plot_area_now.x)) + (1.0 + (q.x) / x_max) * (((double)(size_plot_area.GetWidth())) / 2.0);
+            (p->y) = ((double)(position_plot_area_now.y)) + (1.0 - (q.y) / y_max) * (((double)(size_plot_area.GetHeight())) / 2.0);
+         
+        }
+        
+        return check;
+        
+    }else{
+        
+        return false;
+        
+    }
+    
 }
 
 

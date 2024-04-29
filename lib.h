@@ -2573,9 +2573,11 @@ public:
     vector<int> map;
     //coastline_polygons_Position/coastline_polygons_Cartesian[i] is a vector which contains the the coastline datapoints (in Position/Cartesian format) of polygon #i at
     vector< vector<Position> > coastline_polygons_Position;
+    vector< vector<Cartesian> > coastline_polygons_Cartesian;
+    //coastline_polygons_map[i][j] contans a list of polygon ids (i.e., an unsigned int denoting an entry in coastline_polygons_Position) that denote all polygons that fall within latitude / longitude i + floor_min_lat, j
+    vector< vector< vector<unsigned long long int> > > coastline_polygons_map;
     //the total number of coastline points present in the coastline data file
     unsigned long long int n_all_coastline_points;
-    vector< vector<Cartesian> > coastline_polygons_Cartesian;
     Position /*these are the geographic Positions where the right mouse button is clicked at the beginning, the current and preceeding Position during mouse movement, and the mouse Position and at the end of the drawing process for the selection rectangle*/geo_position_start, geo_position_before, geo_position_now, position_end;
     //the object which is being transported : a "sight" or a "position"
     String transported_object_type, /*the labels that will be drawn on position_start_label_selection_rectangle and position_end_label_selection_rectangle_now, respectively. end_label_selection_rectangle_now is the label of the end point of selection rectangle now, while end_label_selection_rectangle_before is the label of the end point of selection rectangle at the preceeding mouse position*/start_label_selection_rectangle, end_label_selection_rectangle_now, end_label_selection_rectangle_before;

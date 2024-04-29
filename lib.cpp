@@ -8340,7 +8340,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
     unsigned long long int l, i, j, every, /*n, */p/*, n_cells, every_ij = 0, n_points_per_cell*/;
     //integer values of min/max lat/lon to be extractd from p_coastline
-   /* int , i_adjusted = 0, j_adjusted = 0, i_min, i_max, j_min, j_max;*/
+    int/*  i_adjusted = 0, j_adjusted = 0,*/ i_min, i_max, j_min, j_max;
 //    double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
     PositionProjection temp;
     wxPoint q;
@@ -8348,38 +8348,35 @@ void ChartFrame::GetCoastLineData_3D(void) {
     Position u;
 
 
-//    //set i_min/max, j_min/max
-//    i_min = floor(K * (((phi_min).normalize_pm_pi_ret()).value));
-//    i_max = ceil(K * (((phi_max).normalize_pm_pi_ret()).value));
-//
-//    if ((lambda_min == 0.0) && (lambda_max == 0.0)) {
-//        //in this case,Set_lambda_phi_min_max found out that circle_observer spans all longitudes, thus I set
-//
-//        j_min = 0;
-//        j_max = 360;
-//
-//    }
-//    else {
-//        //in this case, Set_lambda_phi_min_max found out that there are two finite longitudes which encircle circle_observer, thus I set
-//
-//        if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
-//
-//            j_min = floor(K * (lambda_max.value));
-//            j_max = 360 + ceil(K * (lambda_min.value));
-//
-//        }
-//        else {
-//
-//            j_min = floor(K * (lambda_max.value));
-//            j_max = ceil(K * (lambda_min.value));
-//
-//        }
-//
-//    }
-//
-//
-//    //the number of points in the grid of coastline data which will be used, where each point of the grid corresponds to one integer value of latitude and longitude
-//    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
+    //set i_min/max, j_min/max
+    i_min = floor(K * (phi_min.normalize_pm_pi_ret().value));
+    i_max = ceil(K * (phi_max.normalize_pm_pi_ret().value));
+
+    if ((lambda_min == 0.0) && (lambda_max == 0.0)) {
+        //in this case,Set_lambda_phi_min_max found out that circle_observer spans all longitudes, thus I set
+
+        j_min = 0;
+        j_max = 360;
+
+    }
+    else {
+        //in this case, Set_lambda_phi_min_max found out that there are two finite longitudes which encircle circle_observer, thus I set
+
+        if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
+
+            j_min = floor(K * (lambda_max.value));
+            j_max = 360 + ceil(K * (lambda_min.value));
+
+        }
+        else {
+
+            j_min = floor(K * (lambda_max.value));
+            j_max = ceil(K * (lambda_min.value));
+
+        }
+
+    }
+
     
     if ((parent->show_coastlines) == Answer('y', String(""))) {
         
@@ -8524,11 +8521,10 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
     i_min = floor(K * (phi_min.normalize_pm_pi_ret().value));
     i_max = floor(K * (phi_max.normalize_pm_pi_ret().value));
 
-//    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
 
     if ((parent->show_coastlines) == Answer('y', String(""))) {
         
-        PositionProjection p_SW, p_NE, p_SW0, p_NE0;
+//        PositionProjection p_SW, p_NE, p_SW0, p_NE0;
         unsigned long long int n_added_polygons;
         bool new_polygon;
         
@@ -8540,10 +8536,10 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
          ( (x) * [total number of coastline data points] / n_points_plot_coastline_Mercator
          */
         
-        p_SW.SetMercator(Position(Angle(0.0), phi_min));
-        p_NE.SetMercator(Position(Angle(0.0), phi_max));
-        p_SW0.SetMercator(Position(Angle(0.0), Angle(k*floor_min_lat)));
-        p_NE0.SetMercator(Position(Angle(0.0), Angle(k*ceil_max_lat)));
+//        p_SW.SetMercator(Position(Angle(0.0), phi_min));
+//        p_NE.SetMercator(Position(Angle(0.0), phi_max));
+//        p_SW0.SetMercator(Position(Angle(0.0), Angle(k*floor_min_lat)));
+//        p_NE0.SetMercator(Position(Angle(0.0), Angle(k*ceil_max_lat)));
         
         
         //        double t;

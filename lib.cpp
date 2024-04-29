@@ -8563,9 +8563,6 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         for(parent->coastline_polygons_map_rectangle_observer.clear(), i=i_min-floor_min_lat; i<i_max-floor_min_lat; i++) {
             for(j=j_min; j<j_max; j++) {
                 
-                
-                cout << " size = " <<  (parent->coastline_polygons_map)[i][j % 360].size();
-                
                 for(l=0; l<(parent->coastline_polygons_map)[i][j % 360].size(); l++){
                     parent->coastline_polygons_map_rectangle_observer.push_back((parent->coastline_polygons_map)[i][j % 360][l]);
                 }

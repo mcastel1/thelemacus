@@ -8402,7 +8402,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
         
         
         //count the total number of points included in the polygons of coastline_polygons_area_observer and store them in m
-        //set every in such a way that the total number of plotted points is n_points_plot_coastline_Mercator, no matter what the size of rectangle_observer
+        //set every in such a way that the total number of plotted points is n_points_plot_coastline_3D, no matter what the size of rectangle_observer
         for(m=0, i=0; i<parent->coastline_polygons_area_observer.size(); i++) {
             for(j=0; j<(parent->coastline_polygons_Cartesian)[(parent->coastline_polygons_area_observer)[i]].size(); j++){
                 
@@ -8412,7 +8412,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
                 
             }
         }
-        every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
+        every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_3D.value))));
         if(every==0){every = 1;}
         
         

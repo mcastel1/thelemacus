@@ -1,11 +1,11 @@
 #comment lines, such as this one, will be ignored
 show coastlines = y
 #reasonable values for OSX
-#number of points coastline Mercator = 20000
-#number of points coastline 3D = 30000
+number of points coastline Mercator = 50000
+number of points coastline 3D = 40000
 #reasonable values for WIN32
-number of points coastline Mercator = 5000
-number of points coastline 3D = 5000
+#number of points coastline Mercator = 5000
+#number of points coastline 3D = 5000
 artificial horizon = y
 plot coastline every = 10
 index error = 0° 1.9'

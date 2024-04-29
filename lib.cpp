@@ -8561,6 +8561,9 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 
             }
         }
+        sort(parent->coastline_polygons_map_rectangle_observer.begin(), parent->coastline_polygons_map_rectangle_observer.end());
+        parent->coastline_polygons_map_rectangle_observer.erase(unique( parent->coastline_polygons_map_rectangle_observer.begin(), parent->coastline_polygons_map_rectangle_observer.end() ), parent->coastline_polygons_map_rectangle_observer.end());
+        
         
         for(p=0, i=0, l=0, n_added_polygons=0, polygon_position_now.clear(); i<parent->coastline_polygons_Position.size(); i++) {
             //run through polygons

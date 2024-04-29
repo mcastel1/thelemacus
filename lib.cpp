@@ -8569,8 +8569,10 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 
             }
         }
-        sort(parent->coastline_polygons_map_rectangle_observer.begin(), parent->coastline_polygons_map_rectangle_observer.end());
-        parent->coastline_polygons_map_rectangle_observer.erase(unique( parent->coastline_polygons_map_rectangle_observer.begin(), parent->coastline_polygons_map_rectangle_observer.end() ), parent->coastline_polygons_map_rectangle_observer.end());
+        delete_duplicates(&(parent->coastline_polygons_map_rectangle_observer));
+        
+//        sort(parent->coastline_polygons_map_rectangle_observer.begin(), parent->coastline_polygons_map_rectangle_observer.end());
+//        parent->coastline_polygons_map_rectangle_observer.erase(unique( parent->coastline_polygons_map_rectangle_observer.begin(), parent->coastline_polygons_map_rectangle_observer.end() ), parent->coastline_polygons_map_rectangle_observer.end());
         
         
         for(p=0, i=0, l=0, n_added_polygons=0, polygon_position_now.clear(); i<parent->coastline_polygons_Position.size(); i++) {
@@ -8856,10 +8858,12 @@ void ListFrame::LoadCoastLineData(String prefix) {
             for(i=0/*, l=0*/; i<coastline_polygons_map.size(); i++){
                 for(j=0; j<coastline_polygons_map[i].size(); j++){
                     
-                    sort(coastline_polygons_map[i][j].begin(), coastline_polygons_map[i][j].end());
-                    coastline_polygons_map[i][j].erase(unique( coastline_polygons_map[i][j].begin(), coastline_polygons_map[i][j].end() ), coastline_polygons_map[i][j].end());
+                    delete_duplicates(&(coastline_polygons_map[i][j]));
                     
-//                    l+= coastline_polygons_map[i][j].size();
+//                    sort(coastline_polygons_map[i][j].begin(), coastline_polygons_map[i][j].end());
+//                    coastline_polygons_map[i][j].erase(unique( coastline_polygons_map[i][j].begin(), coastline_polygons_map[i][j].end() ), coastline_polygons_map[i][j].end());
+//                    
+////                    l+= coastline_polygons_map[i][j].size();
                     
                 }
                 

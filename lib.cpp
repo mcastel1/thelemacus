@@ -8737,6 +8737,9 @@ void ListFrame::LoadCoastLineData(String prefix) {
 
 
         if ((!abort)) {
+            
+            coastline_polygons_map.resize(ceil_max_lat - floor_min_lat);
+            for(i=0; i<coastline_polygons_map.size(); i++){coastline_polygons_map[i].resize(360);}
 
             coastline_file.open(String(""));
             cout << prefix.value << "Reading file ...\n";

@@ -8376,6 +8376,9 @@ void ChartFrame::GetCoastLineData_3D(void) {
         }
 
     }
+    
+    if(i_min < floor_min_lat){i_min = floor_min_lat;}
+    if(i_max > ceil_max_lat){i_max = ceil_max_lat;}
 
     
     if ((parent->show_coastlines) == Answer('y', String(""))) {

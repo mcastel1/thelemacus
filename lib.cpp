@@ -12783,10 +12783,12 @@ inline bool DrawPanel::CartesianToDrawPanel(const Cartesian& q, wxPoint* p, bool
 }
 
 //this function converts the Mercator projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
-inline void  DrawPanel::ProjectionToDrawPanel_Mercator(const PositionProjection& q, wxPoint* p) {
+inline bool  DrawPanel::ProjectionToDrawPanel_Mercator(const PositionProjection& q, wxPoint* p) {
 
     (p->x) = (position_plot_area_now.x) + ((q.x) - x_min) / x_span() * (size_plot_area.GetWidth());
     (p->y) = (position_plot_area_now.y) + (size_plot_area.GetHeight()) - (((q.y) - y_min) / (y_max - y_min) * (size_plot_area.GetHeight()));
+    
+    return(((q.x) >= x_min) && ((q.x) <= x_max) && ((q.y) >= y_min) && ((q.y) <= y_max));
 
 }
 
@@ -12808,10 +12810,14 @@ inline void  DrawPanel::ProjectionToGeo_3D(const PositionProjection& q, Position
 
 
 //this function converts the 3D projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel
-inline void  DrawPanel::ProjectionToDrawPanel_3D(const PositionProjection& q, wxPoint* p) {
+inline bool  DrawPanel::ProjectionToDrawPanel_3D(const PositionProjection& q, wxPoint* p) {
 
     (p->x) = ((double)(position_plot_area_now.x)) + (1.0 + (q.x) / x_max) * (((double)(size_plot_area.GetWidth())) / 2.0);
     (p->y) = ((double)(position_plot_area_now.y)) + (1.0 - (q.y) / y_max) * (((double)(size_plot_area.GetHeight())) / 2.0);
+    
+    return(
+           (fabs(q.x) <= x_max) && (fabs(q.y) <= y_max)
+           );
 
 }
 

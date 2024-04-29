@@ -1994,7 +1994,7 @@ public:
                               wxColor,
                               wxColor,
                               double);
-    void (DrawPanel::*ProjectionToDrawPanel)(const PositionProjection&, wxPoint*);
+    bool (DrawPanel::*ProjectionToDrawPanel)(const PositionProjection&, wxPoint*);
     void (DrawPanel::*ProjectionToGeo)(const PositionProjection&, Position*);
     void (DrawPanel::*Set_x_y_min_max)(void);
     void (DrawPanel::*Set_lambda_phi_min_max)(void);
@@ -2055,8 +2055,8 @@ public:
     bool GeoToMercator(const Position&, PositionProjection*, bool);
     bool ScreenToGeo_Mercator(const wxPoint&, Position*);
     bool ScreenToGeo_3D(const wxPoint&, Position*);
-    void ProjectionToDrawPanel_Mercator(const PositionProjection&, wxPoint*);
-    void ProjectionToDrawPanel_3D(const PositionProjection&, wxPoint*);
+    bool ProjectionToDrawPanel_Mercator(const PositionProjection&, wxPoint*);
+    bool ProjectionToDrawPanel_3D(const PositionProjection&, wxPoint*);
     void ProjectionToGeo_Mercator(const PositionProjection&, Position*);
     void ProjectionToGeo_3D(const PositionProjection&, Position*);
     void ShowCoordinates(const Position&, String*);
@@ -2571,7 +2571,7 @@ public:
     int /*the # of the sight/route/position which is highlighted at the current (_now) or preceeding (_before) step of mouse movement, because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight_now, highlighted_route_now, highlighted_route_before,  highlighted_position_now, highlighted_position_before, /*# of the object to transport or disconnect */i_object_to_transport, i_object_to_disconnect, i_transporting_route;
     /*map[i] is the position in data->route_list of the i-th Route in route_list_for_transport*/
     vector<int> map;
-    //coastline_polygons_Position/Cartesian/Mercator[i] is a vector which contains the the coastline datapoints (in Position/Cartesian/Mercator projection format) of polygon #i 
+    //coastline_polygons_Position/Cartesian/Mercator[i] is a vector which contains the the coastline datapoints (in Position/Cartesian/Mercator projection format) of polygon #i
     vector< vector<Position> > coastline_polygons_Position;
     vector< vector<Cartesian> > coastline_polygons_Cartesian;
     vector< vector<PositionProjection> > coastline_polygons_Mercator;

@@ -8559,16 +8559,20 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         if(every==0){every = 1;}
         
         
-        
-        for(parent->coastline_polygons_map_rectangle_observer.clear(), i=i_min; i<i_max; i++) {
+        //go through coastline_polygons_map and fetch the polygons that fall within rectangle_observer and store their ids into coastline_polygons_map_rectangle_observer
+        for(parent->coastline_polygons_map_rectangle_observer.clear(), i=i_min-floor_min_lat; i<i_max-floor_min_lat; i++) {
             for(j=j_min; j<j_max; j++) {
                 
-                for(l=0; l<(parent->coastline_polygons_map)[i+floor_min_lat][j % 360].size(); l++){
-                    parent->coastline_polygons_map_rectangle_observer.push_back((parent->coastline_polygons_map)[i+floor_min_lat][j % 360][l]);
+                
+                cout << " size = " <<  (parent->coastline_polygons_map)[i][j % 360].size();
+                
+                for(l=0; l<(parent->coastline_polygons_map)[i][j % 360].size(); l++){
+                    parent->coastline_polygons_map_rectangle_observer.push_back((parent->coastline_polygons_map)[i][j % 360][l]);
                 }
                 
             }
         }
+        //the procedure above may lead to duplicates into coastline_polygons_map_rectangle_observer -> delete them
         delete_duplicates(&(parent->coastline_polygons_map_rectangle_observer));
         
 //        sort(parent->coastline_polygons_map_rectangle_observer.begin(), parent->coastline_polygons_map_rectangle_observer.end());

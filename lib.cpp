@@ -9758,7 +9758,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
 
-
+    //MOVE UP TO A SINGLE METHOD
     //render coastlines
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color, thickness));
@@ -9774,6 +9774,8 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
         
 //        j+=polygon_positions[i];
     }
+    //MOVE UP TO A SINGLE METHOD
+
 
 
     //set thickness to normal thicnkness
@@ -9971,20 +9973,24 @@ inline void DrawPanel::Render_3D(
     //dc->SetPen(wxPen(foreground_color, thickness));
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
 
+    //MOVE UP TO A SINGLE METHOD
     //render coastlines
     //draw the coastline points into bitmap_image through memory_dc
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for(i = 0, j=0; i < polygon_positions.size(); i++) {
+    for(i = 0; i < polygon_positions.size()-1; i++) {
+        //run through polygons
         
-        if(polygon_positions[i] > 1){
+        if(polygon_positions[i+1] - polygon_positions[i] > 1){
             
-            dc->DrawLines((int)(polygon_positions[i]), points_polygons.data() + j);
+            dc->DrawLines((int)(polygon_positions[i+1] - polygon_positions[i]), (points_polygons.data()) + polygon_positions[i]);
             
         }
         
-        j+=polygon_positions[i];
+//        j+=polygon_positions[i];
     }
+    //MOVE UP TO A SINGLE METHOD
+
 
 
     //    //set thickness to normal thicnkness

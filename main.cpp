@@ -93,7 +93,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
- - move up all code blocks that look alike into a function
+ - move up all code blocks that look alike into a function (marked with `    //MOVE UP TO A SINGLE METHOD`)
  - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
  - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
  - get rid of number_of_recent_* ints by reading the number of recent items directly dfrom file string

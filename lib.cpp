@@ -57,6 +57,14 @@ template<class T> unsigned int position_in_vector(T* x, const vector<T>& v){
     
 }
 
+//delete duplicates from vector v
+template<class T> void delete_duplicates(vector<T> v){
+    
+    sort(v.begin(), v.end());
+    v.erase(unique(v.begin(), v.end()), v.end());
+    
+}
+
 
 //return the size of *this if shown in the wxWindow (e.g. a wxtextctr, a wxliscontrol, etc...). This is equivalent to the method String::get_size(const String&, wxWindow*)
 wxSize get_size(const String& s, wxWindow* p) {

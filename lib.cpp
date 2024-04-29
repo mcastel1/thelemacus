@@ -8555,8 +8555,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         
         //        n_points_in_chart = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0)  *(p_NE0.y - p_SW0.y) ) )));
         
-        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0)  *(p_NE0.y - p_SW0.y) ) ) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
-        if(every==0){every = 1;}
+  
         
         
         //go through coastline_polygons_map and fetch the polygons that fall within rectangle_observer and store their ids into coastline_polygons_map_rectangle_observer
@@ -8572,6 +8571,13 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         //the procedure above may lead to duplicates into coastline_polygons_map_rectangle_observer -> delete them
         delete_duplicates(&(parent->coastline_polygons_map_rectangle_observer));
         
+        //count the total number of points included in the polygons of coastline_polygons_map_rectangle_observer and store them in m
+        for(m=0, i=0; i<parent->coastline_polygons_map_rectangle_observer.size(); i++){
+            m+=parent->coastline_polygons_Position[(parent->coastline_polygons_map_rectangle_observer)[i]].size();
+        }
+        //set every in such a way that the total number of plotted points is n_points_plot_coastline_Mercator, no matter what the size of rectangle_observer 
+        every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
+        if(every==0){every = 1;}
 
         
         for(p=0, i=0, l=0, n_added_polygons=0, polygon_position_now.clear(); i<parent->coastline_polygons_map_rectangle_observer.size(); i++) {
@@ -8821,14 +8827,19 @@ void ListFrame::LoadCoastLineData(String prefix) {
                     coastline_polygons_Cartesian[i].back() = p_Cartesian;
 //                    
 //                    unsigned int i_t, j_t;
-//                    
+////                    
 //                    i_t = floor(K*(p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat);
 //                    j_t = floor(K*(p_Position.lambda.value));
+
+
+                    if ((floor(K * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat) >=0 ) && (floor(K * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat) < coastline_polygons_map.size())) {
+                        // polygon #i contains the point p_Position that falls within lat/long K*(p_Position.phi.normalize_pm_pi_ret().value) , floor(K*(p_Position.lambda.value)) -> I add i to coastline_polygons_map[floor(K*(p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat)][floor(K*(p_Position.lambda.value))]
+                        coastline_polygons_map[floor(K * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat)][floor(K * (p_Position.lambda.value))].push_back(i);
+                        n_all_coastline_points++;
+
+                    }
                     
-                    // polygon #i contains the point p_Position that falls within lat/long K*(p_Position.phi.normalize_pm_pi_ret().value) , floor(K*(p_Position.lambda.value)) -> I add i to coastline_polygons_map[floor(K*(p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat)][floor(K*(p_Position.lambda.value))]
-                    coastline_polygons_map[floor(K*(p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat)][floor(K*(p_Position.lambda.value))].push_back(i);
                     
-                    n_all_coastline_points++;
                     
                     pos_beg = pos_end+2;
                     
@@ -12983,10 +12994,10 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     stringstream s;
     int i, j, l;
 
-        cout << "\nMouse moved";
+//        cout << "\nMouse moved";
     //    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
     //    cout << "Position of mouse screen = {" << (parent->parent->screen_position_now).x << " , " << (parent->parent->screen_position_now).y << "}\n";
-        cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-draw_panel_origin).x << " , " << ((parent->parent->screen_position_now)-draw_panel_origin).y << "}\n";
+//        cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-draw_panel_origin).x << " , " << ((parent->parent->screen_position_now)-draw_panel_origin).y << "}\n";
 
 
 #ifdef _WIN32

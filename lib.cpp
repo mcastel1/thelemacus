@@ -8380,6 +8380,12 @@ void ChartFrame::GetCoastLineData_3D(void) {
     
     if ((parent->show_coastlines) == Answer('y', String(""))) {
         
+        unsigned long long int n_added_polygons;
+        bool new_polygon;
+        
+        
+        
+        
         every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * (  draw_panel->circle_observer.omega.value ) / ( draw_panel->circle_observer_0.omega.value ) ) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
         if(every==0){every = 1;}
 
@@ -8554,24 +8560,24 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
   
         
         
-        //go through coastline_polygons_map and fetch the polygons that fall within rectangle_observer and store their ids into coastline_polygons_map_rectangle_observer
-        for(parent->coastline_polygons_map_rectangle_observer.clear(), i=i_min-floor_min_lat; i<i_max-floor_min_lat; i++) {
+        //go through coastline_polygons_map and fetch the polygons that fall within rectangle_observer and store their ids into coastline_polygons_area_observer
+        for(parent->coastline_polygons_area_observer.clear(), i=i_min-floor_min_lat; i<i_max-floor_min_lat; i++) {
             for(j=j_min; j<j_max; j++) {
                 
                 for(l=0; l<(parent->coastline_polygons_map)[i][j % 360].size(); l++){
-                    parent->coastline_polygons_map_rectangle_observer.push_back((parent->coastline_polygons_map)[i][j % 360][l]);
+                    parent->coastline_polygons_area_observer.push_back((parent->coastline_polygons_map)[i][j % 360][l]);
                 }
                 
             }
         }
-        //the procedure above may lead to duplicates into coastline_polygons_map_rectangle_observer -> delete them
-        delete_duplicates(&(parent->coastline_polygons_map_rectangle_observer));
+        //the procedure above may lead to duplicates into coastline_polygons_area_observer -> delete them
+        delete_duplicates(&(parent->coastline_polygons_area_observer));
         
-        //count the total number of points included in the polygons of coastline_polygons_map_rectangle_observer and store them in m
+        //count the total number of points included in the polygons of coastline_polygons_area_observer and store them in m
         //set every in such a way that the total number of plotted points is n_points_plot_coastline_Mercator, no matter what the size of rectangle_observer
-        for(m=0, i=0; i<parent->coastline_polygons_map_rectangle_observer.size(); i++) {
-            for(j=0; j<(parent->coastline_polygons_Mercator)[(parent->coastline_polygons_map_rectangle_observer)[i]].size(); j++){
-                if(draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[(parent->coastline_polygons_map_rectangle_observer)[i]][j], &q, false)){
+        for(m=0, i=0; i<parent->coastline_polygons_area_observer.size(); i++) {
+            for(j=0; j<(parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]].size(); j++){
+                if(draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]][j], &q, false)){
                     m++;
                 }
             }
@@ -8583,7 +8589,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //        if(every==0){every = 1;}
 
         
-        for(p=0, i=0, l=0, n_added_polygons=0, polygon_position_now.clear(); i<parent->coastline_polygons_map_rectangle_observer.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0, polygon_position_now.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
             
             new_polygon=true;
@@ -8594,7 +8600,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
             polygon_position_now[n_added_polygons-1] = l;
             
             //the id of the polygon that is being added, i.e. , the # of the polygon as entry of coastline_polygons_Position
-            m = (parent->coastline_polygons_map_rectangle_observer)[i];
+            m = (parent->coastline_polygons_area_observer)[i];
             
             for(j=p; j<(parent->coastline_polygons_Position)[m].size(); j+=every){
                 //run through points in a polygon

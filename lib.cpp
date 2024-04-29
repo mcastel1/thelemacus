@@ -8338,7 +8338,7 @@ ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxS
 //get the datapoints of coastlines and store them into parent->coastline_polygons_now
 void ChartFrame::GetCoastLineData_3D(void) {
 
-    unsigned long long int l, i, j, every, /*n, */p/*, n_cells, every_ij = 0, n_points_per_cell*/;
+    unsigned long long int i, j;
     //integer values of min/max lat/lon to be extractd from p_coastline
     int/*  i_adjusted = 0, j_adjusted = 0,*/ i_min, i_max, j_min, j_max;
 //    double /*the cosine of the angle between the vector with latitude and longitude i, j (see below) and the vector that connects the center ofr the Earth to circle_observer.reference_position*/cos;
@@ -8380,14 +8380,40 @@ void ChartFrame::GetCoastLineData_3D(void) {
     
     if ((parent->show_coastlines) == Answer('y', String(""))) {
         
-        unsigned long long int n_added_polygons;
+        unsigned long long int  l, p, m, every, n_added_polygons;
         bool new_polygon;
         
         
+        //go through coastline_polygons_map and fetch the polygons that fall within rectangle_observer and store their ids into coastline_polygons_area_observer
+        for(parent->coastline_polygons_area_observer.clear(), i=i_min-floor_min_lat; i<i_max-floor_min_lat; i++) {
+            for(j=j_min; j<j_max; j++) {
+                
+                for(l=0; l<(parent->coastline_polygons_map)[i][j % 360].size(); l++){
+                    parent->coastline_polygons_area_observer.push_back((parent->coastline_polygons_map)[i][j % 360][l]);
+                }
+                
+            }
+        }
+        //the procedure above may lead to duplicates into coastline_polygons_area_observer -> delete them
+        delete_duplicates(&(parent->coastline_polygons_area_observer));
         
         
-        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * (  draw_panel->circle_observer.omega.value ) / ( draw_panel->circle_observer_0.omega.value ) ) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
+        //count the total number of points included in the polygons of coastline_polygons_area_observer and store them in m
+        //set every in such a way that the total number of plotted points is n_points_plot_coastline_Mercator, no matter what the size of rectangle_observer
+        for(m=0, i=0; i<parent->coastline_polygons_area_observer.size(); i++) {
+            for(j=0; j<(parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]].size(); j++){
+                if(draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]][j], &q, false)){
+                    m++;
+                }
+            }
+        }
+        every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
         if(every==0){every = 1;}
+        
+        
+        
+//        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * (  draw_panel->circle_observer.omega.value ) / ( draw_panel->circle_observer_0.omega.value ) ) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
+//        if(every==0){every = 1;}
 
         for(p=0, i=0, l=0; i<parent->coastline_polygons_Cartesian.size(); i++) {
             //run through polygons
@@ -8494,7 +8520,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
     int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned long long int i, j, l, p, m, every/*, n, n_cells, every_ij = 0*/;
+    unsigned long long int i, j;
     wxPoint q;
 
 //    //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
@@ -8531,7 +8557,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
     if ((parent->show_coastlines) == Answer('y', String(""))) {
         
 //        PositionProjection p_SW, p_NE, p_SW0, p_NE0;
-        unsigned long long int n_added_polygons;
+        unsigned long long int n_added_polygons, l, p, m, every;
         bool new_polygon;
         
 //        ( ((phi_max.normalize_pm_pi_ret() - phi_min.normalize_pm_pi_ret()).value)*((lambda_max.normalize_pm_pi_ret() - lambda_min.normalize_pm_pi_ret()).value) ) / ( (ceil_max_lat - floor_min_lat)*2*M_PI );

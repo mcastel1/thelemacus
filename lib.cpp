@@ -57,11 +57,11 @@ template<class T> unsigned int position_in_vector(T* x, const vector<T>& v){
     
 }
 
-//delete duplicates from vector v
-template<class T> void delete_duplicates(vector<T> v){
+//delete duplicates from vector *v
+template<class T> void delete_duplicates(vector<T>* v){
     
-    sort(v.begin(), v.end());
-    v.erase(unique(v.begin(), v.end()), v.end());
+    sort(v->begin(), v->end());
+    v->erase(unique(v->begin(), v->end()), v->end());
     
 }
 

@@ -8401,10 +8401,12 @@ void ChartFrame::GetCoastLineData_3D(void) {
         //count the total number of points included in the polygons of coastline_polygons_area_observer and store them in m
         //set every in such a way that the total number of plotted points is n_points_plot_coastline_Mercator, no matter what the size of rectangle_observer
         for(m=0, i=0; i<parent->coastline_polygons_area_observer.size(); i++) {
-            for(j=0; j<(parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]].size(); j++){
-                if(draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]][j], &q, false)){
+            for(j=0; j<(parent->coastline_polygons_Cartesian)[(parent->coastline_polygons_area_observer)[i]].size(); j++){
+                
+                if((draw_panel->CartesianToDrawPanel((parent->coastline_polygons_Cartesian)[(parent->coastline_polygons_area_observer)[i]][j], &q, false))){
                     m++;
                 }
+                
             }
         }
         every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
@@ -8603,9 +8605,13 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         //set every in such a way that the total number of plotted points is n_points_plot_coastline_Mercator, no matter what the size of rectangle_observer
         for(m=0, i=0; i<parent->coastline_polygons_area_observer.size(); i++) {
             for(j=0; j<(parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]].size(); j++){
-                if(draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]][j], &q, false)){
+                
+                if((draw_panel->*(draw_panel->ProjectionToDrawPanel))((parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]][j], &q, false)){
+                
+//                if(draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]][j], &q, false)){
                     m++;
                 }
+                
             }
         }
         every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
@@ -8631,9 +8637,9 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
             for(j=p; j<(parent->coastline_polygons_Position)[m].size(); j+=every){
                 //run through points in a polygon
                 
-                if (draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[m][j], &q, false)) {
-                    
-                
+                if((draw_panel->*(draw_panel->ProjectionToDrawPanel))((parent->coastline_polygons_Mercator)[m][j], &q, false)){
+//                if (draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[m][j], &q, false)) {
+
 //                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[m][j], &q, false)){
                     //(parent->coastline_polygons_Position)[i][j] is a valid point
                     

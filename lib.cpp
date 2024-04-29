@@ -8722,6 +8722,7 @@ void ListFrame::LoadCoastLineData(String prefix) {
     FileR file_n_line, coastline_file;
     Position p_Position;
     Cartesian p_Cartesian;
+    PositionProjection p_Mercator;
     string line, temp;
     stringstream ins, message_dialog;
     unsigned long long int i, j;
@@ -8828,6 +8829,10 @@ void ListFrame::LoadCoastLineData(String prefix) {
                     p_Position.lambda.set(String(""), lambda_temp, String(""));
                     p_Position.phi.set(String(""), phi_temp, String(""));
                     p_Cartesian = p_Position.getCartesian();
+                    p_Mercator.NormalizeAndSetMercator(p_Position);
+                    
+                    
+                    
                     //push back the position into coastline_polygons_Position
                     coastline_polygons_Position.back().push_back(p_Position);
                     //                  BE CAREFUL ABOUT THIS  BUG THAT MAY ARISE AGAIN IN THE FUTURE
@@ -8837,11 +8842,8 @@ void ListFrame::LoadCoastLineData(String prefix) {
                     //here I allocate a completely new space for  coastline_polygons_Cartesian[i].back(), so all memory adresses in coastline_polygons_Cartesian[i][0], coastline_polygons_Cartesian[i][1], ... wil be differernt and all the points in there will be different
                     coastline_polygons_Cartesian[i].back() = Cartesian();
                     coastline_polygons_Cartesian[i].back() = p_Cartesian;
-//                    
-//                    unsigned int i_t, j_t;
-////                    
-//                    i_t = floor(K*(p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat);
-//                    j_t = floor(K*(p_Position.lambda.value));
+                    
+                    coastline_polygons_Mercator.back().push_back(p_Mercator);
 
 
                     if ((floor(K * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat) >=0 ) && (floor(K * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat) < coastline_polygons_map.size())) {

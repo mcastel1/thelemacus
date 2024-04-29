@@ -8491,7 +8491,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
     int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned long long int i, j, l, p, every/*, n, n_cells, every_ij = 0*/;
+    unsigned long long int i, j, l, p, m, every/*, n, n_cells, every_ij = 0*/;
     wxPoint q;
 
 //    //transform the values i_min, i_max in a format appropriate for GetCoastLineData: normalize the minimal and maximal latitudes in such a way that they lie in the interval [-pi, pi], because this is the format which is taken by GetCoastLineData
@@ -8575,11 +8575,9 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         //the procedure above may lead to duplicates into coastline_polygons_map_rectangle_observer -> delete them
         delete_duplicates(&(parent->coastline_polygons_map_rectangle_observer));
         
-//        sort(parent->coastline_polygons_map_rectangle_observer.begin(), parent->coastline_polygons_map_rectangle_observer.end());
-//        parent->coastline_polygons_map_rectangle_observer.erase(unique( parent->coastline_polygons_map_rectangle_observer.begin(), parent->coastline_polygons_map_rectangle_observer.end() ), parent->coastline_polygons_map_rectangle_observer.end());
+
         
-        
-        for(p=0, i=0, l=0, n_added_polygons=0, polygon_position_now.clear(); i<parent->coastline_polygons_Position.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0, polygon_position_now.clear(); i<parent->coastline_polygons_map_rectangle_observer.size(); i++) {
             //run through polygons
             
             new_polygon=true;
@@ -8589,10 +8587,13 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
             }
             polygon_position_now[n_added_polygons-1] = l;
             
-            for(j=p; j<(parent->coastline_polygons_Position[i]).size(); j+=every){
+            //the id of the polygon that is being added, i.e. , the # of the polygon as entry of coastline_polygons_Position
+            m = (parent->coastline_polygons_map_rectangle_observer)[i];
+            
+            for(j=p; j<(parent->coastline_polygons_Position)[m].size(); j+=every){
                 //run through points in a polygon
                 
-                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[i][j], &q, false)){
+                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[m][j], &q, false)){
                     //(parent->coastline_polygons_Position)[i][j] is a valid point
                     
                     coastline_polygons_now[l++] = q;
@@ -8617,7 +8618,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 
             }
             
-            p = j - ((parent->coastline_polygons_Position[i]).size());
+            p = j - ((parent->coastline_polygons_Position[m]).size());
 
         }
         

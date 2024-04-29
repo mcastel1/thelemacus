@@ -8482,7 +8482,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //this function efficiently reads coastline data stored in data_x in the interval of latitudes lambda_min, lambda_max, phi_min, phi_max, and writes this data x and y, writing n_points points at the most. This data is stored into parent->coastline_polygons_now 
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
-//    int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
+    int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
     unsigned long long int i, j, l, p, every/*, n, n_cells, every_ij = 0*/;
     wxPoint q;
 
@@ -8491,32 +8491,31 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //    phi_max.normalize_pm_pi();
 //
 //
-//    if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
-//
-//        j_min = floor(K * ((lambda_max).value));
-//        j_max = ceil(K * (((lambda_min).value) + 2.0 * M_PI));
-//
-//    }
-//    else {
-//
-//        if (lambda_min > lambda_max) {
-//
-//            j_min = floor(K * ((lambda_max).value));
-//            j_max = ceil(K * ((lambda_min).value));
-//
-//        }
-//        else {
-//
-//            j_min = floor(K * ((lambda_max).value));
-//            j_max = ceil(K * (((lambda_min).value) + 2.0 * M_PI));
-//
-//        }
-//
-//    }
-//
-//    i_min = floor(K * (phi_min.value));
-//    i_max = ((parent->coastline_polygons_Position).size()) + floor_min_lat;
-//
+    if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
+
+        j_min = floor(K * (lambda_max.value));
+        j_max = ceil(K * ((lambda_min.value) + 2.0*M_PI));
+
+    }else {
+
+        if (lambda_min > lambda_max) {
+
+            j_min = floor(K * (lambda_max.value));
+            j_max = ceil(K * (lambda_min.value));
+
+        }
+        else {
+
+            j_min = floor(K * (lambda_max.value));
+            j_max = ceil(K * ((lambda_min.value) + 2.0*M_PI));
+
+        }
+
+    }
+
+    i_min = floor(K * (phi_min.normalize_pm_pi_ret().value));
+    i_max = floor(K * (phi_max.normalize_pm_pi_ret().value));
+
 //    n_cells = (i_max - i_min + 1) * (j_max - j_min + 1);
 
     if ((parent->show_coastlines) == Answer('y', String(""))) {

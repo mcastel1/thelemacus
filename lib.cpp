@@ -8406,7 +8406,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
         for(m=0, i=0; i<parent->coastline_polygons_area_observer.size(); i++) {
             for(j=0; j<(parent->coastline_polygons_Cartesian)[(parent->coastline_polygons_area_observer)[i]].size(); j++){
                 
-                if((draw_panel->CartesianToDrawPanel((parent->coastline_polygons_Cartesian)[(parent->coastline_polygons_area_observer)[i]][j], &q, false))){
+                if(((draw_panel->*(draw_panel->CartesianToProjection))((parent->coastline_polygons_Cartesian)[(parent->coastline_polygons_area_observer)[i]][j], NULL, false))){
                     m++;
                 }
                 
@@ -8662,7 +8662,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         for(m=0, i=0; i<parent->coastline_polygons_area_observer.size(); i++) {
             for(j=0; j<(parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]].size(); j++){
                 
-                if((draw_panel->*(draw_panel->ProjectionToDrawPanel))((parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]][j], &q, false)){
+                if((draw_panel->*(draw_panel->ProjectionToDrawPanel))((parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]][j], NULL, false)){
                 
 //                if(draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]][j], &q, false)){
                     m++;

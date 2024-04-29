@@ -93,6 +93,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+ - move up all code blocks that look alike into a function
  - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
  - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
  - get rid of number_of_recent_* ints by reading the number of recent items directly dfrom file string
@@ -135,7 +136,6 @@
  
  ********** THINGS TO FIX ************
     - when you draw a selection rectangle from W to E in mercator projhection the result is wrong
-    - remove horizontal wide lines in mercator projection 
     - probably because of the progress dialog, the app won't close if you press 'No' in the disclaimer
     - code method DrawPanel::ProjectionToGeo_3D
      - ChartFrame must take as an argument for the projection f Projection object, not a String

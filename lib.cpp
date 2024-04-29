@@ -8572,12 +8572,19 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         delete_duplicates(&(parent->coastline_polygons_map_rectangle_observer));
         
         //count the total number of points included in the polygons of coastline_polygons_map_rectangle_observer and store them in m
-        for(m=0, i=0; i<parent->coastline_polygons_map_rectangle_observer.size(); i++){
-            m+=parent->coastline_polygons_Position[(parent->coastline_polygons_map_rectangle_observer)[i]].size();
+        //set every in such a way that the total number of plotted points is n_points_plot_coastline_Mercator, no matter what the size of rectangle_observer
+        for(m=0, i=0; i<parent->coastline_polygons_map_rectangle_observer.size(); i++) {
+            for(j=0; j<(parent->coastline_polygons_Position)[(parent->coastline_polygons_map_rectangle_observer)[i]].size(); j++){
+                if((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[(parent->coastline_polygons_map_rectangle_observer)[i]][j], NULL, false)){
+                    m++;
+                }
+            }
         }
-        //set every in such a way that the total number of plotted points is n_points_plot_coastline_Mercator, no matter what the size of rectangle_observer 
         every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
         if(every==0){every = 1;}
+        
+//        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0)  *(p_NE0.y - p_SW0.y) ) ) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
+//        if(every==0){every = 1;}
 
         
         for(p=0, i=0, l=0, n_added_polygons=0, polygon_position_now.clear(); i<parent->coastline_polygons_map_rectangle_observer.size(); i++) {

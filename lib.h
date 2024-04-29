@@ -2571,9 +2571,10 @@ public:
     int /*the # of the sight/route/position which is highlighted at the current (_now) or preceeding (_before) step of mouse movement, because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight_now, highlighted_route_now, highlighted_route_before,  highlighted_position_now, highlighted_position_before, /*# of the object to transport or disconnect */i_object_to_transport, i_object_to_disconnect, i_transporting_route;
     /*map[i] is the position in data->route_list of the i-th Route in route_list_for_transport*/
     vector<int> map;
-    //coastline_polygons_Position/coastline_polygons_Cartesian[i] is a vector which contains the the coastline datapoints (in Position/Cartesian format) of polygon #i at
+    //coastline_polygons_Position/Cartesian/Mercator[i] is a vector which contains the the coastline datapoints (in Position/Cartesian/Mercator projection format) of polygon #i 
     vector< vector<Position> > coastline_polygons_Position;
     vector< vector<Cartesian> > coastline_polygons_Cartesian;
+    vector< vector<PositionProjection> > coastline_polygons_Mercator;
     //coastline_polygons_map[i][j] contans a list of polygon ids (i.e., an unsigned int denoting an entry in coastline_polygons_Position) that denote all polygons that fall within latitude / longitude i + floor_min_lat, j
     vector< vector< vector<unsigned long long int> > > coastline_polygons_map;
     //the total number of coastline points present in the coastline data file

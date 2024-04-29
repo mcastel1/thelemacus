@@ -8780,6 +8780,10 @@ void ListFrame::LoadCoastLineData(String prefix) {
 
         if ((!abort)) {
             
+            coastline_polygons_Position.clear();
+            coastline_polygons_Cartesian.clear();
+            coastline_polygons_Mercator.clear();
+            
             coastline_polygons_map.resize(ceil_max_lat - floor_min_lat);
             for(i=0; i<coastline_polygons_map.size(); i++){coastline_polygons_map[i].resize(360);}
 
@@ -8801,9 +8805,10 @@ void ListFrame::LoadCoastLineData(String prefix) {
             while ((!((coastline_file.value)->eof())) && (!abort)) {
                 //run through polygons
                 
-                coastline_polygons_Cartesian.resize(i + 1);
                 coastline_polygons_Position.resize(i + 1);
-                
+                coastline_polygons_Cartesian.resize(i + 1);
+                coastline_polygons_Mercator.resize(i + 1);
+
                 pos_beg = line.find(":  ", 0)+3;
                 do{
                     //run through points of a polygon
@@ -8825,9 +8830,9 @@ void ListFrame::LoadCoastLineData(String prefix) {
                     p_Cartesian = p_Position.getCartesian();
                     //push back the position into coastline_polygons_Position
                     coastline_polygons_Position.back().push_back(p_Position);
-                    //                  BE CAREFUL ABOUT THIS POTENTIAL BUG
+                    //                  BE CAREFUL ABOUT THIS  BUG THAT MAY ARISE AGAIN IN THE FUTURE
                     //push back the position into coastline_polygons_Cartesian: this is the correct way to push back an element into coastline_polygons_Cartesian: if you use coastline_polygons_Cartesian[i][j].push_back(r_temp), the *memory address of coastline_polygons_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of coastline_polygons_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
-                    //                  BE CAREFUL ABOUT THIS POTENTIAL BUG
+                    //                  BE CAREFUL ABOUT THIS  BUG THAT MAY ARISE AGAIN IN THE FUTURE
                     (coastline_polygons_Cartesian[i]).resize((coastline_polygons_Cartesian[i]).size() + 1);
                     //here I allocate a completely new space for  coastline_polygons_Cartesian[i].back(), so all memory adresses in coastline_polygons_Cartesian[i][0], coastline_polygons_Cartesian[i][1], ... wil be differernt and all the points in there will be different
                     coastline_polygons_Cartesian[i].back() = Cartesian();

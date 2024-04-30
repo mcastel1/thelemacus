@@ -2010,6 +2010,13 @@ public:
     void RenderAll(wxDC&);
     void MyRefresh(void);
     void RefreshWIN32(void);
+    void RenderPolygons(wxDC*,
+                        const vector<unsigned long long int>&,
+                        const vector<wxPoint>&,
+                        wxColor,
+                        wxColor,
+                        double 
+                        );
     void RenderBackground(wxDC&,
                           const wxPoint&, 
                           const vector< vector< vector<wxPoint> > >&,

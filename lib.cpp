@@ -9738,6 +9738,33 @@ void DrawPanel::FitAll() {
 
 }
 
+
+//render the polygons stored in points_polygons and polygon_positions
+inline void DrawPanel::RenderPolygons(wxDC* dc,
+                                      const vector<unsigned long long int>& polygon_positions,
+                                      const vector<wxPoint>& points_polygons,
+                                      wxColor foreground_color,
+                                      wxColor background_color,
+                                      double thickness) {
+    
+    unsigned long long int i;
+    
+    dc->SetPen(wxPen(foreground_color, thickness));
+    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
+    for(i = 0; i < polygon_positions.size()-1; i++) {
+        //run through polygons
+        
+        if(polygon_positions[i+1] - polygon_positions[i] > 1){
+            
+            dc->DrawLines((int)(polygon_positions[i+1] - polygon_positions[i]), (points_polygons.data()) + polygon_positions[i]);
+            
+        }
+        
+    }
+    
+}
+
+
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::Render_Mercator(wxDC* dc,
                                        const wxPoint& position_plot_area,

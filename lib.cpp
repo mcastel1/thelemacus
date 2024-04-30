@@ -8690,7 +8690,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
             //the id of the polygon that is being added, i.e. , the # of the polygon as entry of coastline_polygons_Position
             m = (parent->coastline_polygons_area_observer)[i];
             
-            for(j=p; j<(parent->coastline_polygons_Position)[m].size(); j+=every){
+            for(j=p; j<(parent->coastline_polygons_Mercator)[m].size(); j+=every){
                 //run through points in a polygon
                 
                 if((draw_panel->*(draw_panel->ProjectionToDrawPanel))((parent->coastline_polygons_Mercator)[m][j], &q, false)){

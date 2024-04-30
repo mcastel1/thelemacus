@@ -8403,17 +8403,22 @@ void ChartFrame::GetCoastLineData_3D(void) {
         
         //count the total number of points included in the polygons of coastline_polygons_area_observer and store them in m
         //set every in such a way that the total number of plotted points is n_points_plot_coastline_3D, no matter what the size of rectangle_observer
-        for(m=0, i=0; i<parent->coastline_polygons_area_observer.size(); i++) {
-            for(j=0; j<(parent->coastline_polygons_Cartesian)[(parent->coastline_polygons_area_observer)[i]].size(); j++){
-                
-                if(((draw_panel->*(draw_panel->CartesianToProjection))((parent->coastline_polygons_Cartesian)[(parent->coastline_polygons_area_observer)[i]][j], NULL, false))){
-                    m++;
-                }
-                
-            }
-        }
-        every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_3D.value))));
+        //        for(m=0, i=0; i<parent->coastline_polygons_area_observer.size(); i++) {
+        //            for(j=0; j<(parent->coastline_polygons_Cartesian)[(parent->coastline_polygons_area_observer)[i]].size(); j++){
+        //                
+        //                if(((draw_panel->*(draw_panel->CartesianToProjection))((parent->coastline_polygons_Cartesian)[(parent->coastline_polygons_area_observer)[i]][j], NULL, false))){
+        //                    m++;
+        //                }
+        //                
+        //            }
+        //        }
+        //        every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_3D.value))));
+        //        if(every==0){every = 1;}
+        
+        //this is a computationally efficient way of estimating every: the number of coastline points falling within circle_observer is estimated as (parent->n_all_coastline_points)*(draw_panel->circle_observer.omega.value))/M_PI), and every is set accordingly in such a way that, for every circle_observer, the number of plotting points is n_points_plot_coastline_3D
+        every = ((unsigned long long int)(((parent->n_all_coastline_points)*(draw_panel->circle_observer.omega.value))/M_PI) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
         if(every==0){every = 1;}
+        
         
         
         for(p=0, i=0, l=0, n_added_polygons=0, polygon_position_now.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {

@@ -135,7 +135,6 @@
  
  
  ********** THINGS TO FIX ************
-    - there is a band of non-plotted points on the right of DrawPanel in mercator projection 
     - when you draw a selection rectangle from W to E in mercator projhection the result is wrong
     - probably because of the progress dialog, the app won't close if you press 'No' in the disclaimer
     - code method DrawPanel::ProjectionToGeo_3D

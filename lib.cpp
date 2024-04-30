@@ -8694,8 +8694,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                 //run through points in a polygon
                 
                 if((draw_panel->*(draw_panel->ProjectionToDrawPanel))((parent->coastline_polygons_Mercator)[m][j], &q, false)){
-//                if (draw_panel->ProjectionToDrawPanel_Mercator((parent->coastline_polygons_Mercator)[m][j], &q, false)) {
-
+                
 //                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[m][j], &q, false)){
                     //(parent->coastline_polygons_Position)[i][j] is a valid point
                     
@@ -12847,7 +12846,7 @@ inline bool DrawPanel::ProjectionToDrawPanel_Mercator(const PositionProjection& 
             
             //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian: if q->x is smaller than x_max, then it nees to be translated to the right by the size of the plot area in order to be plotted
             if ((x_max < x_min) && ((q.x) <= x_max)) {
-                (p->x) += size_plot_area.x;
+                (p->x) += (size_plot_area.GetWidth());
             }
 
             

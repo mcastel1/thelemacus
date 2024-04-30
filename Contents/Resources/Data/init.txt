@@ -1,11 +1,11 @@
 #comment lines, such as this one, will be ignored
 show coastlines = y
 #reasonable values for OSX
-#number of points coastline Mercator = 50000
-#number of points coastline 3D = 40000
+number of points coastline Mercator = 50000
+number of points coastline 3D = 40000
 #reasonable values for WIN32
-number of points coastline Mercator = 5000
-number of points coastline 3D = 5000
+#number of points coastline Mercator = 5000
+#number of points coastline 3D = 5000
 artificial horizon = y
 plot coastline every = 10
 index error = 0° 1.9'
@@ -77,7 +77,7 @@ omega draw 3d = 89° 32.157897987'
 default projection = 3D
 
 #the number of chart frames opened when the program starts
-number chart frames = 1
+number chart frames = 2
 #initial rotation with which the 3D projection is displayed
 rotation 0 =
 alpha = 128° 3.43879'

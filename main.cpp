@@ -138,7 +138,7 @@
     - when you draw a selection rectangle that encompasses the greenwich antimeridian, a rectangle that goes around the earth on the other side is drawn 
     - probably because of the progress dialog, the app won't close if you press 'No' in the disclaimer
     - code method DrawPanel::ProjectionToGeo_3D
-     - ChartFrame must take as an argument for the projection f Projection object, not a String
+    - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:
  on WIN32:
  */

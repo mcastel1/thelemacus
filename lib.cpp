@@ -22725,6 +22725,11 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             chart_frame->parent->listcontrol_positions->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
             chart_frame->parent->listcontrol_routes->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
             chart_frame->parent->panel->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+            
+            //I don't want anything to be highlighted during the chart transport, so I set 
+            (chart_frame->parent->highlighted_route_now) = -1;
+            (chart_frame->parent->highlighted_sight_now) = -1;
+            (chart_frame->parent->highlighted_position_now) = -1;
 
             
             (chart_frame->draw_panel->label_position_now) = String("");

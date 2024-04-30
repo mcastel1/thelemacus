@@ -12733,7 +12733,7 @@ inline bool DrawPanel::GeoToMercator(const Position& q, PositionProjection* p, b
             (p->x) = (temp.x);
             //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian: if p->x is smaller than x_max, then it nees to be translated to the right by 2pi in order to be plotted
             if ((x_max < x_min) && ((p->x) <= x_max)) {
-                (p->x) += 2.0 * M_PI;
+                (p->x) += 2.0*M_PI;
             }
 
             (p->y) = (temp.y);
@@ -12814,6 +12814,7 @@ inline bool DrawPanel::CartesianToDrawPanel(const Cartesian& q, wxPoint* p, bool
 inline bool DrawPanel::ProjectionToDrawPanel_Mercator(const PositionProjection& q, wxPoint* p, bool write) {
     
     bool check;
+    PositionProjection temp;
     
     //MOVE UP TO A SINGLE METHOD
     //compute check and, from check, compute b
@@ -12840,15 +12841,15 @@ inline bool DrawPanel::ProjectionToDrawPanel_Mercator(const PositionProjection& 
         
         if(p){
             
-            (p->x) = (position_plot_area_now.x) + ((q.x) - x_min) / x_span() * (size_plot_area.GetWidth());
-            (p->y) = (position_plot_area_now.y) + (size_plot_area.GetHeight()) - (((q.y) - y_min) / (y_max - y_min) * (size_plot_area.GetHeight()));
+            temp = q;
             
-            
-            //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian: if q->x is smaller than x_max, then it nees to be translated to the right by the size of the plot area in order to be plotted
-            if ((x_max < x_min) && ((q.x) <= x_max)) {
-                (p->x) += (size_plot_area.GetWidth());
+            //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian: if q.x is smaller than x_max, then it nees to be translated to the right by 2 * pi
+            if ((x_max < x_min) && ((temp.x) <= x_max)) {
+                (temp.x) += 2.0*M_PI;
             }
-
+            
+            (p->x) = (position_plot_area_now.x) + ((temp.x) - x_min) / x_span() * (size_plot_area.GetWidth());
+            (p->y) = (position_plot_area_now.y) + (size_plot_area.GetHeight()) - (((temp.y) - y_min) / (y_max - y_min) * (size_plot_area.GetHeight()));
             
         }
         

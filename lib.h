@@ -1120,6 +1120,7 @@ public:
     PositionProjection();
     PositionProjection(const double, const double);
     void SetMercator(const Position&);
+    bool CheckMercator(DrawPanel*);
     void NormalizeAndSetMercator(const Position&);
     PositionProjection operator+(const PositionProjection&), operator-(const PositionProjection&);
     

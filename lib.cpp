@@ -5542,6 +5542,32 @@ PositionProjection PositionProjection::operator-(const PositionProjection& q) {
 }
 
 
+//return true if *this is falls wihtin the plot area of *draw_panel in the Mercator projection, and false otherwise
+inline bool PositionProjection::CheckMercator(DrawPanel* draw_panel){
+    
+    bool output;
+    
+    //MOVE UP TO A SINGLE METHOD
+    if ((draw_panel->x_min) <= (draw_panel->x_max)) {
+        //this is the 'normal' configuration where the boundaries of the chart do not encompass the meridian lambda = pi
+
+        output = (((draw_panel->x_min) <= x) && (x <= (draw_panel->x_max)));
+
+    }
+    else {
+        //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
+
+        output = (((draw_panel->x_min) <= x) && (x <= (draw_panel->x_max) + 2.0 * M_PI));
+
+    }
+
+    output &= (((draw_panel->y_min) <= y) && (y <= (draw_panel->y_max)));
+    
+    return output;
+
+}
+
+
 //normalize p.lambda, then set x and y equal to the Mercator projections of the Position p
 inline void PositionProjection::SetMercator(const Position& p){
     

@@ -15135,9 +15135,9 @@ template <class T> void CloseApp::operator()([[maybe_unused]] T& event) {
 //        }
         ((app->list_frame->chart_frames)[i])->Destroy();
     }
-    if(app->progress_dialog){
-        app->progress_dialog->Destroy();
-    }    
+//    if(app->progress_dialog){
+//        app->progress_dialog->Destroy();
+//    }
     app->list_frame->Destroy();
 
     event.Skip(true);

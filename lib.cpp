@@ -15128,20 +15128,22 @@ template <class T> void CloseApp::operator()([[maybe_unused]] T& event) {
     
     unsigned int i;
     
-    for(i=0; i<app->list_frame->chart_frames.size(); i++){
+    for(; 0<app->list_frame->chart_frames.size(); ){
         
 //        if(((app->list_frame->chart_frames)[i])->chart_transport_handler != NULL){
 //            ((app->list_frame->chart_frames)[i])->chart_transport_handler->timer->Unbind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, ((app->list_frame->chart_frames)[i])->chart_transport_handler);
 //        }
-        ((app->list_frame->chart_frames)[i])->Destroy();
+        ((app->list_frame->chart_frames)[0])->Close();
     }
 //    if(app->progress_dialog){
 //        app->progress_dialog->Destroy();
 //    }
-    app->list_frame->Destroy();
-    app->disclaimer->Destroy();
+    app->list_frame->Close();
+    app->disclaimer->Close();
     
-    event.Skip(true);
+//    app->list_frame->Close();
+    
+//    event.Skip(true);
 
 }
 

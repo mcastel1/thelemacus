@@ -98,6 +98,8 @@ public:
     wxDisplay display;
     //this referrs to the init file
     FileRW file_init;
+    //a functor to properly close *this
+    CloseApp* close_app;
 
 
     virtual bool OnInit();

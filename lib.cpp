@@ -15117,6 +15117,21 @@ template<class F> SaveAndReset<F>::SaveAndReset(F* frame_in) {
 }
 
 
+CloseApp::CloseApp(void){
+    
+}
+
+
+template <class T> void CloseApp::operator()([[maybe_unused]] T& event) {
+
+    event.Skip(true);
+
+
+}
+
+
+
+
 template<class F> CloseFrame<F>::CloseFrame(F* frame_in) {
 
     frame = frame_in;

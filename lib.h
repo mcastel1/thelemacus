@@ -1137,7 +1137,7 @@ class CloseApp{
 public:
     
     CloseApp();
-    void operator()();
+    template<class T>void operator()(T&);
     
 };
 

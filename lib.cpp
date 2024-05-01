@@ -8768,7 +8768,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //this function fetches the data in ((wxGetApp().path_file_coastline_data_blocked).value) and stores them in data_x, data_y, all_coastline_points so that they can be read fastly
 void ListFrame::LoadCoastLineData(String prefix) {
 
-    FileR file_n_line, coastline_file;
+    FileR coastline_file;
     Position p_Position;
     Cartesian p_Cartesian;
     PositionProjection p_Mercator;
@@ -8786,7 +8786,6 @@ void ListFrame::LoadCoastLineData(String prefix) {
     if (show_coastlines == Answer('y', String(""))) {
         //in file_init, show coastlines = y
 
-        file_n_line.set_name((wxGetApp().path_file_n_line));
         coastline_file.set_name((wxGetApp().path_coastline_file));
         coastline_file.count_lines(prefix);
         

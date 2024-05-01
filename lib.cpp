@@ -15139,7 +15139,8 @@ template <class T> void CloseApp::operator()([[maybe_unused]] T& event) {
 //        app->progress_dialog->Destroy();
 //    }
     app->list_frame->Destroy();
-
+    app->disclaimer->Destroy();
+    
     event.Skip(true);
 
 }

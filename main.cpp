@@ -376,7 +376,6 @@ bool MyApp::OnInit() {
     String projection, temp;
     wxFrame* dummy_frame;
     ShowAll* show_all;
-    QuestionFrame< ShowAll, CloseApp >* disclaimer;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
     //    Chrono current_time, dawn, dusk;
     

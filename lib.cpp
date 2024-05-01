@@ -11755,8 +11755,6 @@ template<class T> void ChartFrame::ResetRenderAnimate(T& event) {
 //makes a nice animation to present *this, by dragging the center of the chart to the desired Position from a Position on the antipodes
 void ChartFrame::Animate(void){
     
-    ChartTransportHandler* chart_transport_handler;
-    
     
     //allocate chart_transport_handler and set the starting Position and the Route for the transport
     switch (String((projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {

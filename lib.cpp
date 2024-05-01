@@ -15117,15 +15117,30 @@ template<class F> SaveAndReset<F>::SaveAndReset(F* frame_in) {
 }
 
 
-CloseApp::CloseApp(void){
+CloseApp::CloseApp(MyApp* app_in){
+    
+    app = app_in;
     
 }
 
 
 template <class T> void CloseApp::operator()([[maybe_unused]] T& event) {
+    
+    unsigned int i;
+    
+    for(i=0; i<app->list_frame->chart_frames.size(); i++){
+        
+//        if(((app->list_frame->chart_frames)[i])->chart_transport_handler != NULL){
+//            ((app->list_frame->chart_frames)[i])->chart_transport_handler->timer->Unbind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, ((app->list_frame->chart_frames)[i])->chart_transport_handler);
+//        }
+        ((app->list_frame->chart_frames)[i])->Destroy();
+    }
+    if(app->progress_dialog){
+        app->progress_dialog->Destroy();
+    }    
+    app->list_frame->Destroy();
 
     event.Skip(true);
-
 
 }
 

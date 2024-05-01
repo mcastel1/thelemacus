@@ -1136,7 +1136,9 @@ class CloseApp{
     
 public:
     
-    CloseApp();
+    MyApp* app;
+    
+    CloseApp(MyApp*);
     template<class T>void operator()(T&);
     
 };

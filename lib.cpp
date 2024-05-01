@@ -8840,7 +8840,7 @@ void ListFrame::LoadCoastLineData(String prefix) {
             coastline_file.open(String(""));
             cout << prefix.value << "Reading file ...\n";
             message_dialog.str("");
-            message_dialog << "\nLoading chart structure ... 100%\nLoading charts ... ";
+            message_dialog << "\nLoading charts ... ";
             (wxGetApp().progress_dialog) = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxString(message_dialog.str().c_str()), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_SMOOTH | wxPD_ELAPSED_TIME | wxPD_REMAINING_TIME | wxPD_APP_MODAL);
 #ifdef _WIN32
             //if I am on WIN32, I set the icon from the icon set in the .rc file
@@ -8912,7 +8912,7 @@ void ListFrame::LoadCoastLineData(String prefix) {
                 
                 percentage_dialog = 100.0 * ((double)i) / ((double)(coastline_file.number_of_lines));
                 message_dialog.str("");
-                message_dialog << "\nLoading chart structure ... 100%\nLoading charts ... " << ((int)percentage_dialog) << "%";
+                message_dialog << "\nLoading charts ... " << ((int)percentage_dialog) << "%";
                 abort = (!((wxGetApp().progress_dialog)->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
                 
                 getline(*(coastline_file.value), line);

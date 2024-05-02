@@ -96,7 +96,6 @@
  ********** THINGS TO ADD/IMPROVE ************
  - add the scale factor below the slider in the mercator projection
  - add the height of the observer above the earth surface in the 3d projection
- - the zoom in is too stiff: change the relation between the value of the slider and the zoom factor
  - move up all code blocks that look alike into a function (marked with `    //MOVE UP TO A SINGLE METHOD`)
  - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
  - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer

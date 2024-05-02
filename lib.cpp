@@ -691,52 +691,6 @@ void FileR::count_lines(String prefix) {
 
 }
 
-//If the operating system is WIN32, read the WIN32 resouces file this->name_without_folder_nor_extension, allocates an istringstream containg the file, and returns a pointer to this istringstream
-// If the operating system is different from WIN32, do nothing
-//istringstream* FileR::create_istringstream([[maybe_unused]] String prefix) {
-//
-//#ifdef __APPLE__
-//
-//    cout << prefix.value << RED << "create_istringstream does not work on APPLE operating system!\n" << RESET;
-//
-//#endif
-//
-//
-//#ifdef _WIN32
-//    //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
-//
-//    char* bytes;
-//    HMODULE hModule;
-//    HRSRC hResource;
-//    HGLOBAL hMemory;
-//    DWORD dwSize;
-//    LPVOID lpAddress;
-//    LPCWSTR resource_id;
-//    wstring temp;
-//    istringstream* result;
-//
-//
-//    temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
-//
-//    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
-//    resource_id = (temp.c_str());
-//
-//    hModule = GetModuleHandle(NULL);
-//    hResource = FindResource(hModule, resource_id, L"DATA");
-//    hMemory = LoadResource(hModule, hResource);
-//    dwSize = SizeofResource(hModule, hResource);
-//    lpAddress = LockResource(hMemory);
-//
-//    bytes = new char[dwSize];
-//    memcpy(bytes, lpAddress, dwSize);
-//    result = new istringstream(bytes);
-//
-//    return result;
-//
-//#endif
-//
-//}
-
 
 void Double::set(String name, double x, [[maybe_unused]] String prefix) {
 
@@ -8657,44 +8611,6 @@ void ListFrame::LoadCoastLineData(String prefix) {
 
         coastline_file.set_name((wxGetApp().path_coastline_file));
         coastline_file.count_lines(prefix);
-        
-//        progress_dialog = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxT("\nLoading chart structure ..."), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_SMOOTH | wxPD_ELAPSED_TIME | wxPD_REMAINING_TIME | wxPD_APP_MODAL);
-//#ifdef _WIN32
-//        //if I am on WIN32, I set the icon from the icon set in the .rc file
-//        progress_dialog->SetIcon(wxICON(app_icon));
-//#endif
-
-        //read file n_line and store it into vector n_line
-//        file_n_line.open(String(""));
-//
-//        cout << prefix.value << "Reading file ...\n";
-//
-//        for (i = 0, abort = false; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i < (n_line.size())) && (!((file_n_line.value)->eof())) && (!abort); i++) {
-//
-//            line.clear();
-//            ins.clear();
-//
-//            getline(*(file_n_line.value), line);
-//            ins << line;
-//            ins >> (n_line[i]);
-//            //        cout << "\nn_line[" << i << "] = " << n_line[i];
-//
-//            percentage_dialog = 100.0 * ((double)i) / ((double)(n_line.size()));
-//            message_dialog.str("");
-//            message_dialog << "\nLoading chart structure ... " << ((int)percentage_dialog) << "%";
-//            abort = (!(progress_dialog->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
-//
-//        }
-//
-//        if ((!abort)) {
-//
-//            progress_dialog->Update(max_dialog);
-//            cout << prefix.value << "... done.\n";
-//
-//        }
-
-//        file_n_line.close(String(""));
-
 
         if ((!abort)) {
             
@@ -19968,34 +19884,6 @@ template<class P> template <class T> void ChronoField<P>::get(T& event) {
 }
 
 
-////writes to the non-GUI field angle the values written in the GUI field name
-//template<class P> template <class T> void RouteTypeField<P>::get(T& event) {
-//
-//
-//    if (MultipleItemField<P, RouteType, CheckRouteType<P> >::ok) {
-//
-//        if (String((MultipleItemField<P, RouteType, CheckRouteType<P> >::name->GetValue()).ToStdString()) == (Route_types[0])) {
-//
-//            type->set(String(""), (Route_types[0]), String(""));
-//
-//        }
-//        if (String((MultipleItemField<P, RouteType, CheckRouteType<P> >::name->GetValue()).ToStdString()) == (Route_types[1])) {
-//            type->set(String(""), (Route_types[1]), String(""));
-//
-//
-//        }
-//        if (String((MultipleItemField<P, RouteType, CheckRouteType<P> >::name->GetValue()).ToStdString()) == (Route_types[2])) {
-//
-//            type->set(String(""), (Route_types[2]), String(""));
-//
-//        }
-//
-//    }
-//
-//    event.Skip(true);
-//
-//}
-
 
 void SightFrame::OnPressReduce(wxCommandEvent& event) {
 
@@ -20266,31 +20154,10 @@ template<class P> ProjectionField<P>::ProjectionField(
                                                                                                                              convert_vector<Projection, String>(Projection_types),
                                                                                                                              recent_items_in) {
 
-//    parent = ((P*)(panel_of_parent->GetParent()));
 
-//    catalog.Clear();
-//    catalog.Add(wxT(((Projection_types[0]).value)));
-//    catalog.Add(wxT(((Projection_types[1]).value)));
-    //    catalog.Add(wxT("Lambert"));
-//    items = catalog;
-
-//    check = new CheckProjection<P>(this);
-
-//    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
-    //SetColor(name);
-//    MultipleItemField<P, Projection, void>::Fill();
-//    name->SetValue(items[0]);
-//    AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P, Projection, void>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
     MultipleItemField<P, Projection, void>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
-//    MultipleItemField<P, Projection, void>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, Projection, void>::template Check<wxFocusEvent>, this);
-
-//    sizer_h = new wxBoxSizer(wxHORIZONTAL);
-//    sizer_v = new wxBoxSizer(wxVERTICAL);
-
-//    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-//    sizer_h->Add(name, 0, wxALIGN_CENTER);
 
 }
 

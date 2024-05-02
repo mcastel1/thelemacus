@@ -132,7 +132,8 @@
  
  
  ********** THINGS TO FIX ************
-    - when you draw a selection rectangle that encompasses the greenwich antimeridian, a rectangle that goes around the earth on the other side is drawn 
+    - change projection = (((i % 2) == 0) ? (Projection_types[1]) : (Projection_types[0])); to previous line
+    - when you draw a selection rectangle that encompasses the greenwich antimeridian, a rectangle that goes around the earth on the other side is drawn
     - code method DrawPanel::ProjectionToGeo_3D
  on OSX:
  on WIN32:
@@ -592,7 +593,8 @@ bool MyApp::OnInit() {
         (list_frame->chart_frames).resize(n_chart_frames.value);
         for (i = 0; i < (list_frame->chart_frames).size(); i++) {
             
-            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
+//            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
+            projection = (((i % 2) == 0) ? (Projection_types[1]) : (Projection_types[0]));
             
             //open a Mercator projection for even is and a 3D projection for odd is
             s.str("");

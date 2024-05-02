@@ -16783,6 +16783,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
     unsigned int i;
     stringstream s;
+    ChartTransportHandler* chart_transport_handler;
 
     if (label->value->GetValue().ToStdString() == "") {
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
@@ -16844,6 +16845,20 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     (*(parent->unset_idling))();
     parent->Resize();
     parent->OnModifyFile();
+    //insert the animation here
+    
+    
+    
+    chart_transport_handler = new ChartTransportHandler(
+                                                        this,
+                                                        Route(
+                                                              Route_types[0],
+                                                              draw_panel->circle_observer.reference_position.antipode(),
+                                                              draw_panel->circle_observer.reference_position
+                                                              ),
+                                                        Double(1.0)
+                                                        );
+    
     parent->PreRenderAll();
 
     if ((parent->transporting_with_new_route)) {

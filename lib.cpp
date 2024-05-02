@@ -11029,7 +11029,7 @@ StaticBitmap::StaticBitmap(wxWindow* parent, String path, [[maybe_unused]] wxSiz
 }
 
 
-ChartFrame::ChartFrame(ListFrame* parent_input, const Projection& projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {
+ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {
 
     stringstream s;
     unsigned long long int i, j;
@@ -11166,7 +11166,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, const Projection& projection_in,
     empty_text_5 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize, 0);
 
     //when the ChartFrame is initialized with projection_in = "", I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of projection->name to either of these,
-    if (projection_in == String("")) {
+    if (projection_in == Projection("")) {
         //if the constructor has been called with an empty projection_in, I use the default projection by reading it from the init file.
 
         default_projection.read_from_file_to(String("default projection"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -18343,7 +18343,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 void ListFrame::OnAddChartFrame(wxCommandEvent& event) {
 
     stringstream s;
-    String projection;
+    Projection projection;
 
     //recognizes whether the creation of a new chart frame has been triggered by pressing the ((Projection_types[0]).value) or the ((Projection_types[1]).value) button, and writes the respective proejction namee into projection.
     if (event.GetId() == wxID_HIGHEST + 1) {

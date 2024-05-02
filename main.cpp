@@ -373,7 +373,8 @@ bool MyApp::OnInit() {
     unsigned int i;
     Int n_chart_frames;
     stringstream s;
-    String projection, temp;
+    String temp;
+    Projection projection;
     wxFrame* dummy_frame;
     ShowAll* show_all;
     //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)

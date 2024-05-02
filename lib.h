@@ -2855,7 +2855,7 @@ public:
     //the transport handler used to transport the chart in *this
     ChartTransportHandler* chart_transport_handler;
     
-    ChartFrame(ListFrame*, String, const wxString&, const wxPoint&, const wxSize&, String);
+    ChartFrame(ListFrame*, Projection, const wxString&, const wxPoint&, const wxSize&, String);
 
     void GetCoastLineData_Mercator(void);
     void GetCoastLineData_3D(void);

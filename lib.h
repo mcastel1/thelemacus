@@ -886,7 +886,7 @@ public:
     //if type = l or o -> reference_position = start position, if type = c -> reference_position = ground position
     Position reference_position, end;
     //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude
-    Angle /*this is equal to alpha_notes: it is the azimuth of the vector tangent to the Route at reference_position*/Z, omega;
+    Angle /*this is equal to alpha_notes: it is the azimuth of the vector tangent to the Route at reference_position*/Z, /*the aprture angle, valid only if *this is a circle of equal altitude*/omega;
     //the length of the route
   
     Length length;

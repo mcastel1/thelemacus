@@ -44,7 +44,7 @@ Angle max_lat, min_lat;
 #define Route_types (vector<String> {String("loxodrome"), String("orthodrome"), String("circle of equal altitude")})
 //the type of Routes used to transport a graphical object (i.e., a Position, a Route, etc...)
 #define Route_for_transport_types (vector<String> {Route_types[0], Route_types[1]})
-#define Projection_types (vector<String> {String("Mercator"), String("3D")})
+#define Projection_types (vector<Projection> {Projection("Mercator"), Projection("3D")})
 #define Limb_types (vector<String> {String("upper"), String("center"), String("lower")})
 #define LengthFormat_types (vector<String> {String("time and speed"), String("length")})
 #define LengthUnit_types (vector<String> {String("nm"), String("m"), String("ft")})

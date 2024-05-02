@@ -47,7 +47,7 @@ inline double acos(const Double& x) {
 }
 
 //find the  position in v of element with value x and return the position. If no element is found, return v.size(). Note that this function is different from address_position_in_vector
-template<class T> unsigned int position_in_vector(const T& x, const vector<T>& v){
+template<class T> unsigned int position_in_vector(T x, const vector<T>& v){
     
     unsigned int i;
     

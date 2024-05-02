@@ -11294,7 +11294,7 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
 
 
 //    switch ((((projection->name)->GetValue()).ToStdString())[0]) {
-    switch (String(((projection->name)->GetValue()).ToStdString()).position_in_list(Projection_types)) {
+    switch (position_in_vector(Projection(((projection->name)->GetValue()).ToStdString()), Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -11440,7 +11440,7 @@ template<class T> void ChartFrame::MoveWest(T& event) {
     dragging_chart = true;
 
 
-    switch (String(((projection->name)->GetValue()).ToStdString()).position_in_list(Projection_types)) {
+    switch (position_in_vector(Projection((projection->name->GetValue().ToStdString())), Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -11577,7 +11577,7 @@ template<class T> void ChartFrame::MoveEast(T& event) {
     //I am dragging the chart and the size of *this will not change -> set 
     dragging_chart = true;
 
-    switch (String(((projection->name)->GetValue()).ToStdString()).position_in_list(Projection_types)) {
+    switch (position_in_vector(Projection((projection->name->GetValue().ToStdString())), Projection_types)) {
 
     case 0: {
         //I am using the mercator projection

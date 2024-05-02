@@ -2635,7 +2635,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
             
             int check = -1;
             
-            switch (String((draw_panel->parent->projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
+            switch (position_in_vector(Projection((draw_panel->parent->projection->name->GetValue().ToStdString())), Projection_types)) {
                     
                 case 0: {
                     //I am using Projection_types[0]

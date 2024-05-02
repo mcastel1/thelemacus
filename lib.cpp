@@ -11775,7 +11775,7 @@ void ChartFrame::Animate(void){
     
     
     //allocate chart_transport_handler and set the starting Position and the Route for the transport
-    switch (String((projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
+    switch (position_in_vector(Projection((projection->name->GetValue().ToStdString())), Projection_types)) {
             
         case 0: {
             //I am using Projection_types[0]
@@ -14100,7 +14100,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
             else {
                 //in this case, position_drag_now is not a valid position : in the Mercator projection, this does not make sense and I do nothing. In the 3D projection, I am dragging the chart from outside circle observer (I am rotating the earth) -> I proceed implementing this rotation
                 
-                switch (String(parent->projection->name->GetValue().ToStdString()).position_in_list(Projection_types)) {
+                switch (position_in_vector(Projection((parent->projection->name->GetValue().ToStdString())), Projection_types)) {
                         
                     case 0: {
                         //I am using the mercator projection: then the position is invalid and I may print an error message
@@ -22784,7 +22784,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             (chart_frame->draw_panel->label_position_now) = String("");
 
        
-            switch (String((chart_frame->projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
+            switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
                     
                 case 0: {
                     //I am using Projection_types[0]
@@ -22836,7 +22836,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                                                ,
                                                String(""));
             
-            switch (String((chart_frame->projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
+            switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
                     
                 case 0: {
                     //I am using Projection_types[0]
@@ -22914,7 +22914,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         //the transport  is over
 
         
-        switch (String((chart_frame->projection->name->GetValue().ToStdString())).position_in_list(Projection_types)) {
+        switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
                 
             case 0: {
                 //I am using Projection_types[0]

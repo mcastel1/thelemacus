@@ -21,6 +21,7 @@
 /*
  
  notes:
+ - declare progress dialogs on the heap (i.e., not as wxProgressDialog* progress_dialog; progress_dialog = new ...,) but on the stack (i.e., as  wxProgressDialog progress_dialog([constructor arguments])). This is because if you declare them on the heap, the progress dialog will stay forever open and it will prevent the app from closing. On the other hand, if you declare it on the stack , it will be destroyed authomatically once the method that calls it stops running
  - when I do the animation transprot with show coastlines = y, the animations are much slower than with show coastlines = n, because the charts are heavy for the cpu
  - be careful when you debug with breakpoints stuff that include timers ! You may stop at a breakpoint, but the timer in the code has started running and is running while you are stopped at the breakpoint
  - to use a lambda capture with CallAfter: `CallAfter([=] {FillAndRaiseOtherFrame();});`
@@ -136,7 +137,6 @@
  
  ********** THINGS TO FIX ************
     - when you draw a selection rectangle that encompasses the greenwich antimeridian, a rectangle that goes around the earth on the other side is drawn 
-    - probably because of the progress dialog, the app won't close if you press 'No' in the disclaimer
     - code method DrawPanel::ProjectionToGeo_3D
     - ChartFrame must take as an argument for the projection f Projection object, not a String
  on OSX:

@@ -88,8 +88,6 @@ public:
     wxTimer* timer;
     //the disclaimer window shown at the beginning of the app
     QuestionFrame< ShowAll, CloseApp >* disclaimer;
-    //a progress dialog to show progress during time-consuming operations
-    wxProgressDialog* progress_dialog;
     //type of the Boost library which contains the local time, intended as the time of the machine where the app is running
     boost::posix_time::ptime local_time;
     wxSystemSettings* settings;

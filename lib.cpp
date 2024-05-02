@@ -692,6 +692,17 @@ void FileR::count_lines(String prefix) {
 }
 
 
+//empty constructor
+inline Double::Double(void){}
+
+//constructor that sets value to  x
+inline Double::Double(const double &x){
+    
+    value = x;
+    
+}
+
+
 void Double::set(String name, double x, [[maybe_unused]] String prefix) {
 
     String new_prefix;
@@ -11560,7 +11571,9 @@ void ChartFrame::Animate(void){
                                                                       Route_types[0],
                                                                       Position(lambda_max, phi_max).antipode_lambda(),
                                                                       Position(lambda_max, phi_max)
-                                                                      )
+                                                                      ),
+                                                                Double(1.0),
+                                                                Double(1.0)
                                                                 );
             
             
@@ -22486,7 +22499,9 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 }
 
 
-ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in) : MotionHandler(chart_in->parent){
+ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, Double& zoom_fator_start, Double& zooom_factor_end) : MotionHandler(chart_in->parent){
+    
+    
     
     chart_frame = chart_in;
     

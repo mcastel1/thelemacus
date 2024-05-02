@@ -197,6 +197,8 @@ class Double{
 public:
     double value;
     
+    Double();
+    Double(const double&);
     bool equal_approx(Double);
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
@@ -2955,7 +2957,7 @@ public:
     PositionProjection projection_size;
     Position p_NE, p_SW;
     
-    ChartTransportHandler(ChartFrame*, const Route&);
+    ChartTransportHandler(ChartFrame*, const Route&, Double&, Double&);
     void operator()(void);
     void OnTimer(wxTimerEvent&);
     

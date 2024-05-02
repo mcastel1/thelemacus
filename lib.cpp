@@ -17953,6 +17953,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         );
         button_modify_sight->Bind(wxEVT_BUTTON, &ListFrame::OnModifySight<wxCommandEvent>, this);
         button_modify_sight->Enable(false);
+        button_modify_sight->SetToolTip(wxString("Modify the selected sight"));
 
         //button to transport a sight
         button_transport_sight = new wxBitmapButton(
@@ -17965,6 +17966,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         );
         button_transport_sight->Bind(wxEVT_BUTTON, &ListFrame::OnTransportSight, this);
         button_transport_sight->Enable(false);
+        button_transport_sight->SetToolTip(wxString("Transport the selected sight"));
+
 
         //button to disconnect a sight
         button_disconnect_sight = new wxBitmapButton(
@@ -17977,6 +17980,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         );
         button_disconnect_sight->Bind(wxEVT_BUTTON, &ListFrame::OnDisconnectSight, this);
         button_disconnect_sight->Enable(false);
+        button_disconnect_sight->SetToolTip(wxString("Disconnect the selected sight from its route"));
+
 
 
         //button to modify a position
@@ -17990,6 +17995,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         );
         button_modify_position->Bind(wxEVT_BUTTON, &ListFrame::OnModifyPosition<wxCommandEvent>, this);
         button_modify_position->Enable(false);
+        button_modify_position->SetToolTip(wxString("Modify the selected position"));
 
         //button to transport a position
         button_transport_position = new wxBitmapButton(
@@ -18002,6 +18008,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         );
         button_transport_position->Bind(wxEVT_BUTTON, &ListFrame::OnTransportPosition, this);
         button_transport_position->Enable(false);
+        button_transport_position->SetToolTip(wxString("Transport the selected position"));
 
         //button to transport a Route
         button_transport_route = new wxBitmapButton(
@@ -18014,6 +18021,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         );
         button_transport_route->Bind(wxEVT_BUTTON, &ListFrame::OnTransportRoute, this);
         button_transport_route->Enable(false);
+        button_transport_route->SetToolTip(wxString("Transport the selected route"));
 
         //button to disconect a Route
         button_disconnect_route = new wxBitmapButton(
@@ -18026,6 +18034,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         );
         button_disconnect_route->Bind(wxEVT_BUTTON, &ListFrame::OnDisconnectRoute, this);
         button_disconnect_route->Enable(false);
+        button_disconnect_route->SetToolTip(wxString("Disconnect the selected route from its sight"));
+
 
         //button to modify a route
         button_modify_route = new wxBitmapButton(
@@ -18038,6 +18048,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         );
         button_modify_route->Bind(wxEVT_BUTTON, &ListFrame::OnModifyRoute<wxCommandEvent>, this);
         button_modify_route->Enable(false);
+        button_modify_route->SetToolTip(wxString("Modify the selected route"));
 
         //button to delete a sight
         button_delete_sight = new wxBitmapButton(
@@ -18050,6 +18061,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         );
         button_delete_sight->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteSight<wxCommandEvent>, this);
         button_delete_sight->Enable(false);
+        button_delete_sight->SetToolTip(wxString("Delete the selected sight"));
 
         //button to delete a position
         button_delete_position = new wxBitmapButton(
@@ -18075,6 +18087,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         );
         button_delete_route->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeleteRoute<wxCommandEvent>, this);
         button_delete_route->Enable(false);
+        button_delete_route->SetToolTip(wxString("Delete the selected route"));
 
 
         //listcontrol_sights with sights
@@ -18284,6 +18297,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_add_sight->Bind(wxEVT_BUTTON, &ListFrame::OnAddSight, this);
+        button_add_sight->SetToolTip(wxString("Add a sight"));
+
 
         //button to add a position
         button_add_position = new wxBitmapButton(
@@ -18295,6 +18310,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_add_position->Bind(wxEVT_BUTTON, &ListFrame::OnAddPosition, this);
+        button_add_position->SetToolTip(wxString("Add a position"));
 
         //button to add a route
         button_add_route = new wxBitmapButton(
@@ -18306,7 +18322,9 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             wxBU_EXACTFIT | wxSIMPLE_BORDER
         );
         button_add_route->Bind(wxEVT_BUTTON, &ListFrame::OnAddRoute, this);
+        button_add_route->SetToolTip(wxString("Add a route"));
 
+        
         extract_colors = new wxTextCtrl(panel, wxID_ANY, wxS(""), wxDefaultPosition, ToDIP(wxSize(0, 0)));
 
 

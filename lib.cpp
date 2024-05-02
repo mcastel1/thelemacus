@@ -11156,15 +11156,18 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
         wxBU_EXACTFIT | wxSIMPLE_BORDER
     );
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
+    button_show_list->SetToolTip(wxString("Show the list of sights, positions and routes"));
 
     projection = new ProjectionField<ChartFrame>(panel, &(wxGetApp().list_frame->data->recent_projections));
     projection->name->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
+    projection->SetToolTip(String("Choose the projection used in the chart"));
 
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveNorth<wxCommandEvent>, this);
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveSouth<wxCommandEvent>, this);
     button_left->Bind(wxEVT_BUTTON, &ChartFrame::MoveWest<wxCommandEvent>, this);
     button_right->Bind(wxEVT_BUTTON, &ChartFrame::MoveEast<wxCommandEvent>, this);
     button_reset->Bind(wxEVT_BUTTON, &ChartFrame::ResetRenderAnimate<wxCommandEvent>, this);
+    button_reset->SetToolTip("Reset the chart");
 
     //bind all the elemetns of *this to KeyDown method
     Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
@@ -11185,6 +11188,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     slider->Bind(wxEVT_COMMAND_SLIDER_UPDATED, &ChartFrame::OnScroll<wxCommandEvent>, this);
     slider->Bind(wxEVT_LEFT_DOWN, &ChartFrame::OnMouseLeftDownOnSlider<wxMouseEvent>, this);
     slider->Bind(wxEVT_LEFT_UP, &ChartFrame::OnMouseLeftUpOnSlider<wxMouseEvent>, this);
+    slider->SetToolTip(wxString("Zoom in or out"));
 
     empty_text_1 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize, 0);
     empty_text_2 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize, 0);
@@ -18274,6 +18278,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
                                              wxBU_EXACTFIT | wxSIMPLE_BORDER
                                              );
         button_show_map->Bind(wxEVT_BUTTON, &MyApp::ShowCharts<wxCommandEvent>, &wxGetApp());
+        button_show_map->SetToolTip(wxString("Show the chart"));
         
         //button to compute astronomical position
         button_compute_position = new wxBitmapButton(
@@ -18285,6 +18290,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
                                                      wxBU_EXACTFIT | wxSIMPLE_BORDER
                                                      );
         button_compute_position->Bind(wxEVT_BUTTON, &ListFrame::ComputePosition<wxCommandEvent>, this);
+        button_compute_position->SetToolTip(wxString("Compute the astronomical position"));
 
 
         //button to add a sight
@@ -20281,6 +20287,15 @@ template<class P, class NON_GUI, class CHECK> template <typename EventTag, typen
     name->Bind(tag, method, object);
 
 }
+
+
+//set a tooltip with text text to *this
+template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::SetToolTip(const String& text) {
+
+    name->SetToolTip(wxString(text.value));
+
+}
+
 
 
 

@@ -2171,6 +2171,8 @@ public:
     template<class T> void InsertIn(T*, wxSizerFlags&);
 //    template<class E> void OnEdit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+    void SetToolTip(const String&);
+    
     
 };
 

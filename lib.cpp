@@ -17940,6 +17940,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         sizer_box_sight = new wxStaticBoxSizer(wxVERTICAL, panel, "Sights");
         sizer_box_position = new wxStaticBoxSizer(wxVERTICAL, panel, "Positions");
         sizer_box_route = new wxStaticBoxSizer(wxVERTICAL, panel, "Routes");
+        
 
         //button to modify a sight
         button_modify_sight = new wxBitmapButton(
@@ -18061,6 +18062,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         );
         button_delete_position->Bind(wxEVT_BUTTON, &ListFrame::OnPressDeletePosition<wxCommandEvent>, this);
         button_delete_position->Enable(false);
+        button_delete_position->SetToolTip(wxString("Delete the selected position"));
 
         //button to delete a route
         button_delete_route = new wxBitmapButton(
@@ -18081,6 +18083,9 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         disableable_buttons.push_back(button_transport_sight);
         //    disableable_buttons.push_back(button_disconnect_sight);
         disableable_buttons.push_back(button_delete_sight);
+        
+        
+        
 
         listcontrol_sights = new ListControl<Sight>(panel, disableable_buttons, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL);
         on_change_selection_in_listcontrol_sights = new OnChangeSelectionInListControl<Sight>(listcontrol_sights, String("sight"));

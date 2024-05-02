@@ -14,6 +14,8 @@
 #include "wx/graphics.h"
 #include "wx/dcgraph.h"
 #include "wx/progdlg.h"
+#include <wx/tooltip.h>
+
 
 
 

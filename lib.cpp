@@ -22587,6 +22587,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     //set the rotation to start the chart movement and the starting point
                     (chart_frame->draw_panel->rotation_start_drag) = (chart_frame->draw_panel->rotation);
                     start = chart_frame->draw_panel->circle_observer.reference_position;
+                    omega_start = chart_frame->draw_panel->circle_observer.omega;
                     
                     break;
                     
@@ -22638,6 +22639,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     chart_frame->draw_panel->circle_observer.reference_position = start;
                     chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
+                    chart_frame->draw_panel->circle_observer.omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
                     (chart_frame->draw_panel->rotation) = Rotation(
                                                                    start,
                                                                    chart_frame->draw_panel->circle_observer.reference_position

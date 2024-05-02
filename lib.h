@@ -2956,6 +2956,8 @@ public:
     //the size (in Mercator projection x,y) of the projection in the mercator projection: this is stored and used during the transport in such a way that the size of the projection stays the same through the transport
     PositionProjection projection_size;
     Position p_NE, p_SW;
+    //for the 3d projectionb: the aperture angles of circle_observer  at the beginning and at the end of the transport, respectively
+    Angle omega_start, omega_end;
     
     ChartTransportHandler(ChartFrame*, const Route&, const Double&);
     void operator()(void);

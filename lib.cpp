@@ -46,8 +46,20 @@ inline double acos(const Double& x) {
 
 }
 
-//find the  position in v of element with memory address x and return the position. If no element is found, return v.size()
-template<class T> unsigned int position_in_vector(T* x, const vector<T>& v){
+//find the  position in v of element with value x and return the position. If no element is found, return v.size(). Note that this function is different from address_position_in_vector
+template<class T> unsigned int position_in_vector(const T& x, const vector<T>& v){
+    
+    unsigned int i;
+    
+    for (i=0; (i<(v.size())) && (x != v[i]); i++){}
+    
+    return i;
+    
+}
+
+
+//find the  position in v of element with memory address x and return the position. If no element is found, return v.size(). Note that this function is different from position_in_vector
+template<class T> unsigned int address_position_in_vector(T* x, const vector<T>& v){
     
     unsigned int i;
     
@@ -56,6 +68,8 @@ template<class T> unsigned int position_in_vector(T* x, const vector<T>& v){
     return i;
     
 }
+
+
 
 //delete duplicates from vector *v
 template<class T> void delete_duplicates(vector<T>* v){
@@ -22525,7 +22539,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 //store the starting position in geo_position_start
                 start = (*((Position*)transported_object));
                 //highlight the Position that is being transported
-                parent->highlighted_position_now = position_in_vector<Position>(((Position*)transported_object), parent->data->position_list);
+                parent->highlighted_position_now = address_position_in_vector<Position>(((Position*)transported_object), parent->data->position_list);
                 
             }else {
 
@@ -22534,7 +22548,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                     //store the starting reference position in geo_position_start
                     start = (((Route*)transported_object)->reference_position);
                     //highlight the Position that is being transported
-                    parent->highlighted_route_now = position_in_vector<Route>(((Route*)transported_object), parent->data->route_list);
+                    parent->highlighted_route_now = address_position_in_vector<Route>(((Route*)transported_object), parent->data->route_list);
      
 
                 }
@@ -22609,7 +22623,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             
             //update the Position information in f
             ((Position*)transported_object)->update_wxListCtrl(
-                                                               position_in_vector<Position>(((Position*)transported_object), parent->data->position_list),
+                                                               address_position_in_vector<Position>(((Position*)transported_object), parent->data->position_list),
                                                                parent->listcontrol_positions
                                                                );
 

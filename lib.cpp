@@ -10850,6 +10850,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
 
 
+
     this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnPressCtrlW<wxCloseEvent>, this);
 
     mouse_scrolling = false;
@@ -10900,6 +10901,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     (wxGetApp().e_zoom).read_from_file_to(String("exponent zoom"), (wxGetApp().path_file_init), String("R"), String(""));
     (wxGetApp().a_zoom).set(String(""), (-1.0 + ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
     (wxGetApp().b_zoom).set(String(""), (pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value) - ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
+    draw_panel->circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
 
 
     //text field showing the current value of the zoom slider
@@ -11500,7 +11502,7 @@ template<class T> void ChartFrame::Reset(T& event) {
     if (((projection->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
         //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
 
-        ((draw_panel->circle_observer_0).omega).read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
+        draw_panel->circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
         zoom_factor.set(String(""), 1.0, String(""));
         ComputeZoomFactor_3D();
 
@@ -22500,13 +22502,13 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
 
 //constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with zoom factor zoom_factor_end at end fo the transport. *this will transport the charts in such a way that the zoom factor will be equal to zoom_factor_end at the end of the transport
-ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& zooom_factor_end) : MotionHandler(chart_in->parent){
+ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& zoom_factor_end) : MotionHandler(chart_in->parent){
     
     chart_frame = chart_in;
-    
     //set route equal to a loxodrom connecting a and b
     transporting_route = transporting_route_in;
-
+    omega_end.set(String(""), (chart_frame->draw_panel->circle_observer_0.omega.value) / (zoom_factor_end.value), String(""));
+    
     timer->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);
 
 }

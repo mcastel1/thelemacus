@@ -90,13 +90,13 @@ day background color = (224,224,224)
 night background color = (40,40,43)
 point size = 1
 load sample sight = y
-number of recent bodies = 3
-number of recent route types = 3
-number of recent route for transport types = 2
-number of recent projections = 2
-number of recent length formats = 2
-number of recent length units = 2
-number of recent speed units = 2
+#number of recent bodies = 3
+#number of recent route types = 3
+#number of recent route for transport types = 2
+#number of recent projections = 2
+#number of recent length formats = 2
+#number of recent length units = 2
+#number of recent speed units = 2
 #files in code directory
 name file temp = temp.txt
 #files in data directory

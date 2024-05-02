@@ -97,7 +97,6 @@
  - move up all code blocks that look alike into a function (marked with `    //MOVE UP TO A SINGLE METHOD`)
  - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
  - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
- - get rid of number_of_recent_* ints by reading the number of recent items directly dfrom file string
  - condense id RouteTypeField<P>::set(void)
  - condense insert_recent_body,  insert_recent_projection, ... + print_recent_body, print_recent_projection, ... into a pair of methods
  - try  wxDCClipper to quickly delete old image on DrawPanel
@@ -560,13 +559,13 @@ bool MyApp::OnInit() {
     highlight_color = color_selected_item;
     dark_mode = (settings->GetAppearance()).IsDark();
     
-    n_recent_bodies.read_from_file_to(String("number of recent bodies"), (wxGetApp().path_file_init), String("R"), String(""));
-    n_recent_projections.read_from_file_to(String("number of recent projections"), (wxGetApp().path_file_init), String("R"), String(""));
-    n_recent_length_formats.read_from_file_to(String("number of recent length formats"), (wxGetApp().path_file_init), String("R"), String(""));
-    n_recent_route_types.read_from_file_to(String("number of recent route types"), (wxGetApp().path_file_init), String("R"), String(""));
-    n_recent_route_for_transport_types.read_from_file_to(String("number of recent route for transport types"), (wxGetApp().path_file_init), String("R"), String(""));
-    n_recent_length_units.read_from_file_to(String("number of recent length units"), (wxGetApp().path_file_init), String("R"), String(""));
-    n_recent_speed_units.read_from_file_to(String("number of recent speed units"), (wxGetApp().path_file_init), String("R"), String(""));
+//    n_recent_bodies.read_from_file_to(String("number of recent bodies"), (wxGetApp().path_file_init), String("R"), String(""));
+//    n_recent_projections.read_from_file_to(String("number of recent projections"), (wxGetApp().path_file_init), String("R"), String(""));
+//    n_recent_length_formats.read_from_file_to(String("number of recent length formats"), (wxGetApp().path_file_init), String("R"), String(""));
+//    n_recent_route_types.read_from_file_to(String("number of recent route types"), (wxGetApp().path_file_init), String("R"), String(""));
+//    n_recent_route_for_transport_types.read_from_file_to(String("number of recent route for transport types"), (wxGetApp().path_file_init), String("R"), String(""));
+//    n_recent_length_units.read_from_file_to(String("number of recent length units"), (wxGetApp().path_file_init), String("R"), String(""));
+//    n_recent_speed_units.read_from_file_to(String("number of recent speed units"), (wxGetApp().path_file_init), String("R"), String(""));
 
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
         

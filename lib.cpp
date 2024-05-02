@@ -5785,13 +5785,13 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
     wxGetApp().n_points_plot_coastline_Mercator.read_from_file_to(String("number of points coastline Mercator"), wxGetApp().path_file_init, String("R"), new_prefix);
     wxGetApp().n_points_plot_coastline_3D.read_from_file_to(String("number of points coastline 3D"), wxGetApp().path_file_init, String("R"), new_prefix);
 
-    recent_bodies.resize(wxGetApp().n_recent_bodies.value);
-    recent_projections.resize(wxGetApp().n_recent_projections.value);
-    recent_length_formats.resize(wxGetApp().n_recent_length_formats.value);
-    recent_route_types.resize(wxGetApp().n_recent_route_types.value);
-    recent_route_for_transport_types.resize(wxGetApp().n_recent_route_for_transport_types.value);
-    recent_length_units.resize(wxGetApp().n_recent_length_units.value);
-    recent_speed_units.resize(wxGetApp().n_recent_speed_units.value);
+//    recent_bodies.resize(wxGetApp().n_recent_bodies.value);
+//    recent_projections.resize(wxGetApp().n_recent_projections.value);
+//    recent_length_formats.resize(wxGetApp().n_recent_length_formats.value);
+//    recent_route_types.resize(wxGetApp().n_recent_route_types.value);
+//    recent_route_for_transport_types.resize(wxGetApp().n_recent_route_for_transport_types.value);
+//    recent_length_units.resize(wxGetApp().n_recent_length_units.value);
+//    recent_speed_units.resize(wxGetApp().n_recent_speed_units.value);
 
     //	file_init.close(prefix);
 

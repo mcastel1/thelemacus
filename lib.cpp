@@ -18110,7 +18110,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         //    listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_sights);
         listcontrol_sights->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_sights);
         listcontrol_sights->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_sights);
-
+        listcontrol_sights->SetToolTip(wxString("List of sights"));
 
         headers.clear();
         headers.push_back(wxString("Number"));
@@ -18145,7 +18145,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         on_change_selection_in_listcontrol_positions = new OnChangeSelectionInListControl<Position>(listcontrol_positions, String("position"));
         listcontrol_positions->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_positions);
         listcontrol_positions->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_positions);
-        //    listcontrol_positions->Bind(wxEVT_MOTION, &ListFrame::OnMouseOnListControlPositions, this);
+        listcontrol_positions->SetToolTip(wxString("List of positions"));
 
         headers.clear();
         headers.push_back(wxString("Number"));
@@ -18170,6 +18170,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         //    listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_select_in_listcontrol_routes);
         listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *on_change_selection_in_listcontrol_routes);
         listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, *on_change_selection_in_listcontrol_routes);
+        listcontrol_routes->SetToolTip(wxString("List of routes"));
         //I bind ListFrame::OnMouseMovement to listcontrol_sights, listcontrol_routes and to panel, because I want ListFrame::OnMouseMovement to be called when the mouse is either on listcontrol_sights, listcontrol_routes and on panel
         listcontrol_sights->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, this);
         listcontrol_positions->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, this);

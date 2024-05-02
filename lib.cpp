@@ -15130,15 +15130,15 @@ CloseApp::CloseApp(MyApp* app_in){
 
 template <class T> void CloseApp::operator()([[maybe_unused]] T& event) {
     
-    unsigned int i;
+//    unsigned int i;
     
-    for(; 0<app->list_frame->chart_frames.size(); ){
-        
-        if(((app->list_frame->chart_frames)[0])->chart_transport_handler != NULL){
-            ((app->list_frame->chart_frames)[0])->chart_transport_handler->timer->Unbind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, ((app->list_frame->chart_frames)[0])->chart_transport_handler);
-        }
-        ((app->list_frame->chart_frames)[0])->Close();
-    }
+//    for(; 0<app->list_frame->chart_frames.size(); ){
+//        
+//        if(((app->list_frame->chart_frames)[0])->chart_transport_handler != NULL){
+//            ((app->list_frame->chart_frames)[0])->chart_transport_handler->timer->Unbind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, ((app->list_frame->chart_frames)[0])->chart_transport_handler);
+//        }
+//        ((app->list_frame->chart_frames)[0])->Close();
+//    }
 //    if(app->progress_dialog){
 //        app->progress_dialog->Destroy();
 //    }

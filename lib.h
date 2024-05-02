@@ -2957,7 +2957,7 @@ public:
     PositionProjection projection_size;
     Position p_NE, p_SW;
     
-    ChartTransportHandler(ChartFrame*, const Route&, Double&, Double&);
+    ChartTransportHandler(ChartFrame*, const Route&, const Double&);
     void operator()(void);
     void OnTimer(wxTimerEvent&);
     

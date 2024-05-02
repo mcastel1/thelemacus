@@ -11572,7 +11572,6 @@ void ChartFrame::Animate(void){
                                                                       Position(lambda_max, phi_max).antipode_lambda(),
                                                                       Position(lambda_max, phi_max)
                                                                       ),
-                                                                Double(1.0),
                                                                 Double(1.0)
                                                                 );
             
@@ -11590,7 +11589,8 @@ void ChartFrame::Animate(void){
                                                                       Route_types[0],
                                                                       draw_panel->circle_observer.reference_position.antipode(),
                                                                       draw_panel->circle_observer.reference_position
-                                                                      )
+                                                                      ),
+                                                                Double(1.0)
                                                                 );
             
             
@@ -22499,9 +22499,8 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 }
 
 
-ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, Double& zoom_fator_start, Double& zooom_factor_end) : MotionHandler(chart_in->parent){
-    
-    
+//constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with zoom factor zoom_factor_end at end fo the transport. *this will transport the charts in such a way that the zoom factor will be equal to zoom_factor_end at the end of the transport
+ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& zooom_factor_end) : MotionHandler(chart_in->parent){
     
     chart_frame = chart_in;
     
@@ -22572,17 +22571,12 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     PositionProjection q_NE, q_SW;
                     
-            
+    
                     //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle
                     q_NE.NormalizeAndSetMercator(Position(chart_frame->lambda_max, chart_frame->phi_max));
                     q_SW.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
                     projection_size = q_NE - q_SW;
-                    
-                    
-                    
-//                    PositionRectangle(start, Position(chart_frame->lambda_max, chart_frame->phi_min), String(""));
-                    
-                    
+                     
                     break;
                     
                 }

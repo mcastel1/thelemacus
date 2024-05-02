@@ -22680,6 +22680,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             //re-draw the chart
             (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();
             chart_frame->draw_panel->MyRefresh();
+            chart_frame->UpdateSlider();
 //            chart_frame->draw_panel->PaintNow();
             //
 

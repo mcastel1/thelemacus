@@ -101,10 +101,10 @@
  - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
  - condense id RouteTypeField<P>::set(void)
  - try  wxDCClipper to quickly delete old image on DrawPanel
- - check whether you can remove Fitall in void ListFrame::DrawAll(void) { and whether it speeds up things
+ - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things
  - all unit fields should have the system              temp << "Available units are: "; message generated in the same way, as in template <class T> void CheckSpeedUnit<P>::operator()
  - when you enable / disable a field, enable/disable its wxStaticTexts and wxBoxSizers as well
- - check whether you can remove Fitall in void ListFrame::DrawAll(void) { and whether it speeds up things 
+ - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things 
  - add instrumental error
  - add readme file
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
@@ -162,7 +162,7 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         }
         
         //I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
-        list_frame->DrawAll();
+        list_frame->PreRenderAll();
     }
     
     dark_mode = (settings->GetAppearance()).IsDark();

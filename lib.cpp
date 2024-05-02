@@ -14466,7 +14466,7 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
     parent->data->route_list.resize((parent->route_list_for_transport).size());
     copy((parent->route_list_for_transport).begin(), (parent->route_list_for_transport).end(), ((parent->data)->route_list).begin());
     parent->TabulateRoutesAll();
-    parent->DrawAll();
+    parent->PreRenderAll();
 
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will double clock on an item in listcontrol (or single-click it and then press enter), I perform the transport
     parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyRoute<wxListEvent>, parent);
@@ -14662,7 +14662,7 @@ void DeleteRoute::operator()(wxCommandEvent& event) {
     (*(f->on_change_selection_in_listcontrol_routes))(event);
     f->Resize();
     //given that a Route has been removed, I re-draw everything
-    f->DrawAll();
+    f->PreRenderAll();
 
     event.Skip(true);
 
@@ -14909,7 +14909,7 @@ template <class T> void ResetListFrame::operator()(T& event) {
     //resize, set an 'untitled' label for the new, empty ListFrame, and update the chartframes
     p->Resize();
     p->SetLabel(wxString("untitled"));
-    p->DrawAll();
+    p->PreRenderAll();
 
     event.Skip(true);
 
@@ -15166,7 +15166,7 @@ template<class NON_GUI, class P> void ToDoAtEndOfTransport<NON_GUI, P>::operator
     parent->listcontrol_sights->set((parent->data->sight_list), false);
     parent->listcontrol_routes->set((parent->data->route_list), false);
     parent->Resize();
-    parent->DrawAll();
+    parent->PreRenderAll();
 
 }
 
@@ -15731,7 +15731,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 //        parent->listcontrol_sights->set((parent->data->sight_list), false);
 //        parent->listcontrol_routes->set((parent->data->route_list), false);
 //        parent->Resize();
-//        parent->DrawAll();
+//        parent->PreRenderAll();
 //    });
     
     event.Skip(true);
@@ -16770,7 +16770,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     (*(parent->unset_idling))();
     parent->Resize();
     parent->OnModifyFile();
-    parent->DrawAll();
+    parent->PreRenderAll();
 
     event.Skip(true);
 
@@ -16844,7 +16844,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     (*(parent->unset_idling))();
     parent->Resize();
     parent->OnModifyFile();
-    parent->DrawAll();
+    parent->PreRenderAll();
 
     if ((parent->transporting_with_new_route)) {
         //if I am adding a new Route for transport, call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
@@ -16873,7 +16873,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         parent->listcontrol_routes->set((parent->data->route_list), false);
         parent->Resize();
         parent->OnModifyFile();
-        parent->DrawAll();
+        parent->PreRenderAll();
 
     }
 
@@ -18021,7 +18021,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             menu_file->Enable(wxID_HIGHEST + 7, true);
             set();
             SetLabel(data_file.name.value);
-            DrawAll();
+            PreRenderAll();
 
         }
         else {
@@ -18261,7 +18261,7 @@ void ListFrame::OnComputePosition(void) {
         }
 
         set();
-        DrawAll();
+        PreRenderAll();
 
     }
 
@@ -18269,7 +18269,7 @@ void ListFrame::OnComputePosition(void) {
 
 
 //calls PreRender and FitAll in all che ChartFrames which are children of *this
-void ListFrame::DrawAll(void) {
+void ListFrame::PreRenderAll(void) {
 
     for (long i = 0; i < (chart_frames.size()); i++) {
 
@@ -18835,7 +18835,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event) {
             SetLabel(wxString((data_file.name).value));
             //resize and draw all charts according to the newly loaded data
             Resize();
-            DrawAll();
+            PreRenderAll();
 
         }
 
@@ -19971,7 +19971,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     (*(parent->unset_idling))();
     parent->Resize();
     parent->OnModifyFile();
-    parent->DrawAll();
+    parent->PreRenderAll();
 
     event.Skip(true);
 
@@ -22455,7 +22455,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         parent->listcontrol_routes->set((parent->data->route_list), false);
         parent->Resize();
         //re-draw everything
-        parent->DrawAll();
+        parent->PreRenderAll();
         
         //re-bind DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement once the transport is over
         for (unsigned int i = 0; i < (parent->chart_frames.size()); i++) {

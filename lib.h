@@ -2633,7 +2633,7 @@ public:
     ListFrame(const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     void set(void);
-    void DrawAll(void);
+    void PreRenderAll(void);
     void MyRefreshAll(void);
     void RefreshAll(void);
     void TabulatePositionsAll(void);

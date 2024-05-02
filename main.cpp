@@ -94,24 +94,23 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+ - add the scale factor below the slider in the mercator projection
+ - add the height of the observer above the earth surface in the 3d projection
+ - the zoom in is too stiff: change the relation between the value of the slider and the zoom factor
  - move up all code blocks that look alike into a function (marked with `    //MOVE UP TO A SINGLE METHOD`)
  - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
  - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
  - condense id RouteTypeField<P>::set(void)
- - condense insert_recent_body,  insert_recent_projection, ... + print_recent_body, print_recent_projection, ... into a pair of methods
  - try  wxDCClipper to quickly delete old image on DrawPanel
  - check whether you can remove Fitall in void ListFrame::DrawAll(void) { and whether it speeds up things
  - all unit fields should have the system              temp << "Available units are: "; message generated in the same way, as in template <class T> void CheckSpeedUnit<P>::operator()
  - when you enable / disable a field, enable/disable its wxStaticTexts and wxBoxSizers as well
  - check whether you can remove Fitall in void ListFrame::DrawAll(void) { and whether it speeds up things 
->>>>>>> speed_time
- - when transporting a sight allow the user to enter speed and time instead of distance
  - add instrumental error
- - readme file
+ - add readme file
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
  - check whether you can speed up Draw3D by tabulating stuff it i < 90  etc
  - center name of file in top bar of ListFrame
- - add popup when mouse on button
  - propose to donate to the user
  - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
  - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
@@ -126,7 +125,6 @@
  - move all constants to the init file , such as  the 0.15 in  'position_plot_area_now = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);'
  - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer
  - replace use of epsilon_double with more proper methods
- - Make sure that Draw is not called uselessly some times
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  - move all stuff which is general enough in the code to MyApp class
  - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1

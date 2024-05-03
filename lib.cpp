@@ -22579,11 +22579,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
             start = transporting_route.reference_position;
             
-            cout << "******************* Before the transport *******************" << endl;
-            transporting_route.compute_end(String(""));
-            transporting_route.end.print(String("Expected arrival position"), String("\t"), cout);
-            chart_frame->draw_panel->circle_observer.reference_position.print(String("Circle observer reference position"), String("\t"), cout);
-
+  
             //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
             chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
             chart_frame->parent->listcontrol_sights->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
@@ -22631,6 +22627,12 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
             }
             
+            cout << "******************* Before the transport *******************" << endl;
+            transporting_route.compute_end(String(""));
+            transporting_route.reference_position.print(String("Start position of transporting route"), String("\t"), cout);
+            transporting_route.end.print(String("Expected arrival position"), String("\t"), cout);
+            chart_frame->draw_panel->circle_observer.reference_position.print(String("Circle observer reference position"), String("\t"), cout);
+
 
          
             

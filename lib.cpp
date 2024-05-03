@@ -4155,12 +4155,12 @@ bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
 }
 
 //return the antipode of *this on the earth
-Position Position::antipode(void){
+Position Position::half(void){
     
     Position result;
     
-    result.lambda = lambda + M_PI;
-    result.phi = phi - (2.0*M_PI);
+    result.lambda = lambda/2.0;
+    result.phi = phi/2.0;
     
     return result;
     
@@ -11589,7 +11589,7 @@ void ChartFrame::Animate(void){
                                                                 this,
                                                                 Route(
                                                                       Route_types[0],
-                                                                      draw_panel->circle_observer.reference_position.antipode(),
+                                                                      draw_panel->circle_observer.reference_position.half(),
                                                                       draw_panel->circle_observer.reference_position
                                                                       ),
                                                                 Double(1.0)
@@ -22582,7 +22582,8 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             cout << "******************* Before the transport *******************" << endl;
             transporting_route.compute_end(String(""));
             transporting_route.end.print(String("Expected arrival position"), String("\t"), cout);
- 
+            chart_frame->draw_panel->circle_observer.reference_position.print(String("Circle observer reference position"), String("\t"), cout);
+
             //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
             chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
             chart_frame->parent->listcontrol_sights->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
@@ -22675,18 +22676,23 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     chart_frame->draw_panel->circle_observer.reference_position = start;
                     chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
-                           (chart_frame->draw_panel->rotation) = Rotation(
+                    (chart_frame->draw_panel->rotation) = Rotation(
                                                                    start,
                                                                    chart_frame->draw_panel->circle_observer.reference_position
                                                                    ) * (chart_frame->draw_panel->rotation_start_drag);
                     chart_frame->draw_panel->circle_observer.omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
- 
+                    
                     
                     break;
                     
                 }
                     
             }
+            
+            cout << "********* t = " << t << " *************";
+            transporting_route_temp.compute_end(String(""));
+            transporting_route_temp.end.print(String("Expected arrival point with transporting_route_temp"), String("\t\t"), cout);
+            
             
 #ifdef WIN32
             //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
@@ -22775,7 +22781,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         cout << "******************* After the transport *******************" << endl;
         transporting_route.compute_end(String(""));
         transporting_route.end.print(String("Expected arrival position"), String("\t"), cout);
-        chart_frame->draw_panel->circle_observer.reference_position.print(String("Arrival position"), String("\t"), cout);
+        chart_frame->draw_panel->circle_observer.reference_position.print(String("Circle observer reference position"), String("\t"), cout);
         
 
         (chart_frame->dragging_chart) = false;

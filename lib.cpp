@@ -16795,7 +16795,6 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
     unsigned int i;
     stringstream s;
-    ChartTransportHandler* chart_transport_handler;
 
     if (label->value->GetValue().ToStdString() == "") {
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
@@ -16865,8 +16864,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     
     for(i=0; i<parent->chart_frames.size(); i++){
         
-        ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position.print(String("reference position before the animation"), String("\t"), cout);
-        route->reference_position.print(String("target position of the animation"), String("\t"), cout);
+//        ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position.print(String("reference position before the animation"), String("\t"), cout);
+//        route->reference_position.print(String("target position of the animation"), String("\t"), cout);
         
         ((parent->chart_frames)[i])->chart_transport_handler = new ChartTransportHandler(
                                                                                          ((parent->chart_frames)[i]),
@@ -22645,11 +22644,11 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
             }
             
-            cout << "******************* Before the transport *******************" << endl;
-            transporting_route.compute_end(String(""));
-            transporting_route.reference_position.print(String("Start position of transporting route"), String("\t"), cout);
-            transporting_route.end.print(String("Expected arrival position"), String("\t"), cout);
-            chart_frame->draw_panel->circle_observer.reference_position.print(String("Circle observer reference position"), String("\t"), cout);
+//            cout << "******************* Before the transport *******************" << endl;
+//            transporting_route.compute_end(String(""));
+//            transporting_route.reference_position.print(String("Start position of transporting route"), String("\t"), cout);
+//            transporting_route.end.print(String("Expected arrival position"), String("\t"), cout);
+//            chart_frame->draw_panel->circle_observer.reference_position.print(String("Circle observer reference position"), String("\t"), cout);
 
 
          
@@ -22697,21 +22696,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     transporting_route_temp.compute_end(String(""));
                     
                     //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
-
                     chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation) * Rotation(transporting_route_temp.end, chart_frame->draw_panel->circle_observer.reference_position)));
                     
                     (chart_frame->draw_panel->circle_observer.reference_position) = (transporting_route_temp.end);
-//                    chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
-                    
-                    
-                    
 
-
-                    
-//                    chart_frame->draw_panel->rotation.set(Rotation(
-//                                                                   start,
-//                                                                   chart_frame->draw_panel->circle_observer.reference_position
-//                                                                   ) * (chart_frame->draw_panel->rotation_start_drag));
                     chart_frame->draw_panel->circle_observer.omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
                     
                     
@@ -22721,10 +22709,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
             }
             
-            cout << "********* t = " << t << " *************" << endl;
-            transporting_route_temp.compute_end(String(""));
-            transporting_route_temp.end.print(String("Expected arrival point with transporting_route_temp"), String("\t\t"), cout);
-            chart_frame->draw_panel->circle_observer.reference_position.print(String("Reference position"), String("\t\t"), cout);
+//            cout << "********* t = " << t << " *************" << endl;
+//            transporting_route_temp.compute_end(String(""));
+//            transporting_route_temp.end.print(String("Expected arrival point with transporting_route_temp"), String("\t\t"), cout);
+//            chart_frame->draw_panel->circle_observer.reference_position.print(String("Reference position"), String("\t\t"), cout);
             
             
 #ifdef WIN32
@@ -22816,10 +22804,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 
         }
             
-        cout << "******************* After the transport *******************" << endl;
-        transporting_route.compute_end(String(""));
-        transporting_route.end.print(String("Expected arrival position"), String("\t"), cout);
-        chart_frame->draw_panel->circle_observer.reference_position.print(String("Circle observer reference position"), String("\t"), cout);
+//        cout << "******************* After the transport *******************" << endl;
+//        transporting_route.compute_end(String(""));
+//        transporting_route.end.print(String("Expected arrival position"), String("\t"), cout);
+//        chart_frame->draw_panel->circle_observer.reference_position.print(String("Circle observer reference position"), String("\t"), cout);
         
 
         (chart_frame->dragging_chart) = false;

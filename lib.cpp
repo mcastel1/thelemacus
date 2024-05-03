@@ -16847,17 +16847,18 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     parent->OnModifyFile();
     //insert the animation here
     
-    
-    
-    chart_transport_handler = new ChartTransportHandler(
-                                                        this,
-                                                        Route(
-                                                              Route_types[0],
-                                                              draw_panel->circle_observer.reference_position.antipode(),
-                                                              draw_panel->circle_observer.reference_position
-                                                              ),
-                                                        Double(1.0)
-                                                        );
+    for(i=0; i<parent->chart_frames.size(); i++){
+        
+        ((parent->chart_frames)[i])->chart_transport_handler = new ChartTransportHandler(
+                                                                                         ((parent->chart_frames)[i]),
+                                                            Route(
+                                                                  Route_types[0],
+                                                                  draw_panel->circle_observer.reference_position.antipode(),
+                                                                  draw_panel->circle_observer.reference_position
+                                                                  ),
+                                                            Double(1.0)
+                                                            );
+    }
     
     parent->PreRenderAll();
 

@@ -22783,19 +22783,16 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 //I am using Projection_types[1]
                 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-//                chart_frame->draw_panel->circle_observer.reference_position = start;
-//                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
+                chart_frame->draw_panel->circle_observer.reference_position = start;
+                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
+
+                /*
+                 note that here I cannot simply obtain the rotation at the end of the transport by doing      `chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation) * Rotation(transporting_route_temp.end, chart_frame->draw_panel->circle_observer.reference_position)));`
+                 because this would yield a rotation obtained by following a great circle as a transporting Route , while here transporting_route may also be a loxodrome 
+                 */
                 
-                //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
-//                chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation(chart_frame->draw_panel->circle_observer.reference_position, start)));
                 
                 
-//                chart_frame->draw_panel->rotation.set(Rotation(
-//                                                               start,
-//                                                               chart_frame->draw_panel->circle_observer.reference_position
-//                                                               ) * (chart_frame->draw_panel->rotation_start_drag));
-                
-//                gsl_vector_memcpy((chart_frame->draw_panel->rp_end_drag.r), (chart_frame->draw_panel->rp.r));
                 chart_frame->draw_panel->rotation_end_drag.set((chart_frame->draw_panel->rotation));
 
                 break;

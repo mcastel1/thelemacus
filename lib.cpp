@@ -8819,11 +8819,11 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     circle_observer.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), prefix);
     thickness_route_selection_over_length_screen.read_from_file_to(String("thickness route selection over length screen"), (wxGetApp().path_file_init), String("R"), prefix);
 
-    rotation = Rotation(
-        Angle(String("Euler angle alpha"), -M_PI_2, String("")),
-        Angle(String("Euler angle beta"), 0.0, String("")),
-        Angle(String("Euler angle gamma"), 0.0, String(""))
-    );
+    rotation.set(Rotation(
+                          Angle(String("Euler angle alpha"), -M_PI_2, String("")),
+                          Angle(String("Euler angle beta"), 0.0, String("")),
+                          Angle(String("Euler angle gamma"), 0.0, String(""))
+                          ));
 
     //specify that circle_observer is a circle of equal altitude
     circle_observer.type = RouteType(((Route_types[2]).value));
@@ -11136,9 +11136,9 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
         delta = ((draw_panel->circle_observer).omega) * ((wxGetApp().relative_displacement).value);
 
         //since I am moving north, I increase the b Euler ancgle of rotation
-        ((draw_panel->rotation).b) += delta;
+        (draw_panel->rotation.b) += delta;
         //I update rotation->matrix
-        (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
+        draw_panel->rotation.set(draw_panel->rotation.a, draw_panel->rotation.b, draw_panel->rotation.c);
 
 
 
@@ -11210,9 +11210,9 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
         delta = ((draw_panel->circle_observer).omega) * ((wxGetApp().relative_displacement).value);
 
         //since I am moving north, I increase the b Euler ancgle of rotation
-        ((draw_panel->rotation).b) -= delta;
+        (draw_panel->rotation.b) -= delta;
         //I update rotation->matrix
-        (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
+        draw_panel->rotation.set(draw_panel->rotation.a, draw_panel->rotation.b, draw_panel->rotation.c);
 
         break;
 
@@ -11273,9 +11273,9 @@ template<class T> void ChartFrame::MoveWest(T& event) {
         delta = ((draw_panel->circle_observer).omega) * ((wxGetApp().relative_displacement).value);
 
         //since I am moving north, I increase the b Euler ancgle of rotation
-        ((draw_panel->rotation).a) -= delta;
+        (draw_panel->rotation.a) -= delta;
         //I update rotation->matrix
-        (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
+        draw_panel->rotation.set(draw_panel->rotation.a, draw_panel->rotation.b, draw_panel->rotation.c);
 
 
 
@@ -11410,9 +11410,9 @@ template<class T> void ChartFrame::MoveEast(T& event) {
         delta = ((draw_panel->circle_observer).omega) * ((wxGetApp().relative_displacement).value);
 
         //since I am moving north, I increase the b Euler ancgle of rotation
-        ((draw_panel->rotation).a) += delta;
+        (draw_panel->rotation.a) += delta;
         //I update rotation->matrix
-        (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
+        draw_panel->rotation.set(draw_panel->rotation.a, draw_panel->rotation.b, draw_panel->rotation.c);
 
 
 
@@ -11520,7 +11520,7 @@ template<class T> void ChartFrame::Reset(T& event) {
         ComputeZoomFactor_3D();
 
         (draw_panel->rotation_0).read_from_file_to(String("rotation 0"), (wxGetApp().path_file_init), String("R"), String(""));
-        (draw_panel->rotation) = (draw_panel->rotation_0);
+        draw_panel->rotation.set(draw_panel->rotation_0);
         draw_panel->Set_x_y_min_max_3D();
         (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
 
@@ -13143,8 +13143,8 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
         //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
         gsl_vector_memcpy((rp_start_drag.r), (rp.r));
         rotation_start_drag.set(rotation);
-        geo_start_drag.print(String("position start drag"), String(""), cout);
-//        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
+        //        geo_start_drag.print(String("position start drag"), String(""), cout);
+        //        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
 
     }
 
@@ -13753,10 +13753,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
                             
                             //compose rotation with the rotation resulting from the drag and then apply it to route_reference_position_drag_now: route_reference_position_drag_now -> rotation^{-1}.(rotation due to drag).rotation.route_reference_position_drag_now. In this way, when Render() will plot the position route_reference_position_drag_now, it will apply to route_reference_position_drag_now the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.route_reference_position_drag_now = (rotation due to drag).rotation.route_reference_position_drag_now, which is the desired result (i.e. route_reference_position_drag_now rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
-                            rotation_now_drag =
+                            rotation_now_drag.set(
                             (rotation.inverse()) *
                             rotation_start_end(position_start_drag, position_now_drag) *
-                            rotation;
+                            rotation);
                             
                             //                    (this->*GeoToDrawPanel)(route_reference_position_drag_now, &p);
                             
@@ -13846,7 +13846,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             (rotation.inverse()) *
                             rotation_start_end(position_start_drag, position_now_drag) *
                             rotation;
-                            geo_start_drag.rotate(String(""), rotation_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]), String(""));
+                            geo_start_drag.rotate(String(""), rotation_now_drag, &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]), String(""));
                             
                         }
                         

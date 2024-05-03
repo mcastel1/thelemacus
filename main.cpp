@@ -132,7 +132,6 @@
  
  
  ********** THINGS TO FIX ************
-    - put back  wxGetApp().AnimateCharts();
     - replace `f ((type.value)[0] == 'l') {` and similar cases where one needs to tell whether a route is loxodrome, orthodrome or circle of equal altitude with a switch which uses position_in_vector
     - some angles that are integer multiple of a defgree are shown as 29 deg 60 ' -> fix it
     - change projection = (((i % 2) == 0) ? (Projection_types[1]) : (Projection_types[0])); to previous line

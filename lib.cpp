@@ -15023,7 +15023,7 @@ template <class T> void ShowAll::operator()(T& event) {
         wxGetApp().list_frame->chart_frames[i]->ResetRender(event);
     }
     wxGetApp().ShowCharts(event);
-//    wxGetApp().AnimateCharts();
+    wxGetApp().AnimateCharts();
 
     event.Skip(true);
 
@@ -18247,7 +18247,7 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event) {
 
     chart_frames.back()->Reset(event);
     wxGetApp().ShowCharts(event);
-    //    wxGetApp().AnimateCharts();
+    wxGetApp().AnimateCharts();
     chart_frames.back()->Animate();
 
 
@@ -22631,10 +22631,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     //set the rotation to start the chart movement and the starting point
                     
                     //when the animation starts, I moved the circle_observer.reference_postiion from the previous Position to a new (shifted) one, which is equal to start, and the latter is the starting point of the animation -> I need to update rotation in such a way that, when the animation starts, it starts with the rotation consistent with the shifted circle_observer.reference_position (start). Then, I update circle_observer.reference_postion by setting it equal to start and store rotation into rotation_start_drag -> The animation is ready to start
-                    chart_frame->draw_panel->rotation.set(Rotation(
-                                                                   (chart_frame->draw_panel->circle_observer.reference_position),
-                                                                   start
-                                                                   ) * (chart_frame->draw_panel->rotation));
+//                    chart_frame->draw_panel->rotation.set(Rotation(
+//                                                                   (chart_frame->draw_panel->circle_observer.reference_position),
+//                                                                   start
+//                                                                   ) * (chart_frame->draw_panel->rotation));
                     chart_frame->draw_panel->rotation_start_drag.set((chart_frame->draw_panel->rotation));
                     (chart_frame->draw_panel->circle_observer.reference_position) = start;
                     omega_start = chart_frame->draw_panel->circle_observer.omega;
@@ -22694,12 +22694,24 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 case 1: {
                     //I am using Projection_types[1]
                     
-                    chart_frame->draw_panel->circle_observer.reference_position = start;
-                    chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
-                    chart_frame->draw_panel->rotation.set(Rotation(
-                                                                   start,
-                                                                   chart_frame->draw_panel->circle_observer.reference_position
-                                                                   ) * (chart_frame->draw_panel->rotation_start_drag));
+                    transporting_route_temp.compute_end(String(""));
+                    
+                    //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
+
+                    chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation) * Rotation(transporting_route_temp.end, chart_frame->draw_panel->circle_observer.reference_position)));
+                    
+                    (chart_frame->draw_panel->circle_observer.reference_position) = (transporting_route_temp.end);
+//                    chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
+                    
+                    
+                    
+
+
+                    
+//                    chart_frame->draw_panel->rotation.set(Rotation(
+//                                                                   start,
+//                                                                   chart_frame->draw_panel->circle_observer.reference_position
+//                                                                   ) * (chart_frame->draw_panel->rotation_start_drag));
                     chart_frame->draw_panel->circle_observer.omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
                     
                     
@@ -22785,10 +22797,15 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
                 chart_frame->draw_panel->circle_observer.reference_position = start;
                 chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
-                chart_frame->draw_panel->rotation.set(Rotation(
-                                                               start,
-                                                               chart_frame->draw_panel->circle_observer.reference_position
-                                                               ) * (chart_frame->draw_panel->rotation_start_drag));
+                
+                //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
+                chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation(chart_frame->draw_panel->circle_observer.reference_position, start)));
+                
+                
+//                chart_frame->draw_panel->rotation.set(Rotation(
+//                                                               start,
+//                                                               chart_frame->draw_panel->circle_observer.reference_position
+//                                                               ) * (chart_frame->draw_panel->rotation_start_drag));
                 
                 gsl_vector_memcpy((chart_frame->draw_panel->rp_end_drag.r), (chart_frame->draw_panel->rp.r));
                 chart_frame->draw_panel->rotation_end_drag.set((chart_frame->draw_panel->rotation));

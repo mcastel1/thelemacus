@@ -13142,9 +13142,9 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
 
         //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
         gsl_vector_memcpy((rp_start_drag.r), (rp.r));
-        rotation_start_drag = rotation;
+        rotation_start_drag.set(rotation);
         geo_start_drag.print(String("position start drag"), String(""), cout);
-        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
+//        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
 
     }
 
@@ -13683,8 +13683,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //I am using the 3d projection
                         
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                        rotation =
-                        rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+                        rotation.set(rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag);
 #ifdef __APPLE__
                         
                         //re-render the chart
@@ -13920,7 +13919,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         (parent->dragging_chart) = true;
                         
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                        rotation = rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+                        rotation.set(rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag);
                         
                         
                         
@@ -22636,7 +22635,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                                                                    (chart_frame->draw_panel->circle_observer.reference_position),
                                                                    start
                                                                    ) * (chart_frame->draw_panel->rotation));
-                    (chart_frame->draw_panel->rotation_start_drag) = (chart_frame->draw_panel->rotation);
+                    chart_frame->draw_panel->rotation_start_drag.set((chart_frame->draw_panel->rotation));
                     (chart_frame->draw_panel->circle_observer.reference_position) = start;
                     omega_start = chart_frame->draw_panel->circle_observer.omega;
                     
@@ -22697,10 +22696,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     chart_frame->draw_panel->circle_observer.reference_position = start;
                     chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
-                    (chart_frame->draw_panel->rotation) = Rotation(
+                    chart_frame->draw_panel->rotation.set(Rotation(
                                                                    start,
                                                                    chart_frame->draw_panel->circle_observer.reference_position
-                                                                   ) * (chart_frame->draw_panel->rotation_start_drag);
+                                                                   ) * (chart_frame->draw_panel->rotation_start_drag));
                     chart_frame->draw_panel->circle_observer.omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
                     
                     
@@ -22785,10 +22784,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
                 chart_frame->draw_panel->circle_observer.reference_position = start;
                 chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
-                (chart_frame->draw_panel->rotation) = Rotation(
+                chart_frame->draw_panel->rotation.set(Rotation(
                                                                start,
                                                                chart_frame->draw_panel->circle_observer.reference_position
-                                                               ) * (chart_frame->draw_panel->rotation_start_drag);
+                                                               ) * (chart_frame->draw_panel->rotation_start_drag));
                 
                 gsl_vector_memcpy((chart_frame->draw_panel->rp_end_drag.r), (chart_frame->draw_panel->rp.r));
                 (chart_frame->draw_panel->rotation_end_drag) = (chart_frame->draw_panel->rotation);

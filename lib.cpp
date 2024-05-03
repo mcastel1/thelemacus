@@ -22578,6 +22578,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             transporting_route_temp = transporting_route;
             
             start = transporting_route.reference_position;
+            
+            cout << "******************* Before the transport *******************" << endl;
+            transporting_route.compute_end(String(""));
+            transporting_route.end.print(String("Expected arrival position"), String("\t"), cout);
  
             //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
             chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
@@ -22617,7 +22621,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     //set the rotation to start the chart movement and the starting point
                     (chart_frame->draw_panel->rotation_start_drag) = (chart_frame->draw_panel->rotation);
-                    start = chart_frame->draw_panel->circle_observer.reference_position;
+                    (chart_frame->draw_panel->circle_observer.reference_position) = start;
                     omega_start = chart_frame->draw_panel->circle_observer.omega;
                     
                     break;
@@ -22768,6 +22772,11 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 
         }
             
+        cout << "******************* After the transport *******************" << endl;
+        transporting_route.compute_end(String(""));
+        transporting_route.end.print(String("Expected arrival position"), String("\t"), cout);
+        chart_frame->draw_panel->circle_observer.reference_position.print(String("Arrival position"), String("\t"), cout);
+        
 
         (chart_frame->dragging_chart) = false;
         chart_frame->EnableAll(true);

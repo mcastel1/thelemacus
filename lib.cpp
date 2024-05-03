@@ -22643,6 +22643,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                                                ,
                                                String(""));
             
+            
             switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
                     
                 case 0: {
@@ -22670,11 +22671,12 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     chart_frame->draw_panel->circle_observer.reference_position = start;
                     chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
-                    chart_frame->draw_panel->circle_observer.omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
-                    (chart_frame->draw_panel->rotation) = Rotation(
+                           (chart_frame->draw_panel->rotation) = Rotation(
                                                                    start,
                                                                    chart_frame->draw_panel->circle_observer.reference_position
                                                                    ) * (chart_frame->draw_panel->rotation_start_drag);
+                    chart_frame->draw_panel->circle_observer.omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
+ 
                     
                     break;
                     
@@ -22749,9 +22751,13 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             case 1: {
                 //I am using Projection_types[1]
                 
-//                //do the whole transport rather than combining many little transports, to avoid rounding errors
-//                chart_frame->draw_panel->circle_observer.reference_position = start;
-//                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
+                //do the whole transport rather than combining many little transports, to avoid rounding errors
+                chart_frame->draw_panel->circle_observer.reference_position = start;
+                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
+                (chart_frame->draw_panel->rotation) = Rotation(
+                                                               start,
+                                                               chart_frame->draw_panel->circle_observer.reference_position
+                                                               ) * (chart_frame->draw_panel->rotation_start_drag);
                 
                 gsl_vector_memcpy((chart_frame->draw_panel->rp_end_drag.r), (chart_frame->draw_panel->rp.r));
                 (chart_frame->draw_panel->rotation_end_drag) = (chart_frame->draw_panel->rotation);

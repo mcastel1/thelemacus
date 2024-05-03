@@ -13141,7 +13141,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
     if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
 
         //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
-        gsl_vector_memcpy((rp_start_drag.r), (rp.r));
+        //        gsl_vector_memcpy((rp_start_drag.r), (rp.r));
         rotation_start_drag.set(rotation);
         //        geo_start_drag.print(String("position start drag"), String(""), cout);
         //        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
@@ -13207,7 +13207,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
             if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
 
-                gsl_vector_memcpy((rp_end_drag.r), (rp.r));
+//                gsl_vector_memcpy((rp_end_drag.r), (rp.r));
                 rotation_end_drag.set(rotation);
 //                geo_end_drag.print(String("position end drag"), String(""), cout);
 //                rotation_end_drag.print(String("rotation end drag"), String(""), cout);
@@ -22783,11 +22783,11 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 //I am using Projection_types[1]
                 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-                chart_frame->draw_panel->circle_observer.reference_position = start;
-                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
+//                chart_frame->draw_panel->circle_observer.reference_position = start;
+//                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
                 
                 //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
-                chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation(chart_frame->draw_panel->circle_observer.reference_position, start)));
+//                chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation(chart_frame->draw_panel->circle_observer.reference_position, start)));
                 
                 
 //                chart_frame->draw_panel->rotation.set(Rotation(
@@ -22795,7 +22795,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 //                                                               chart_frame->draw_panel->circle_observer.reference_position
 //                                                               ) * (chart_frame->draw_panel->rotation_start_drag));
                 
-                gsl_vector_memcpy((chart_frame->draw_panel->rp_end_drag.r), (chart_frame->draw_panel->rp.r));
+//                gsl_vector_memcpy((chart_frame->draw_panel->rp_end_drag.r), (chart_frame->draw_panel->rp.r));
                 chart_frame->draw_panel->rotation_end_drag.set((chart_frame->draw_panel->rotation));
 
                 break;

@@ -16853,6 +16853,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     
     for(i=0; i<parent->chart_frames.size(); i++){
         
+        ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position.print(String("reference position before the animation"), String("\t"), cout);
+        route->reference_position.print(String("target position of the animation"), String("\t"), cout);
+        
         ((parent->chart_frames)[i])->chart_transport_handler = new ChartTransportHandler(
                                                                                          ((parent->chart_frames)[i]),
                                                                                          Route(

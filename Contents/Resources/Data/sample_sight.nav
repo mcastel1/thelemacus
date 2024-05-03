@@ -66,11 +66,11 @@ Data:
 		Route #4:
 			type = circle of equal altitude
 			ground position:
-				latitude = 336° 56.99999999999932'
-				longitude = 356° 56.99999999999932'
+				latitude = 29° 59.99999999999979'
+				longitude = 59° 59.99999999999957'
 				label = 2024-01-21 17:04:03 UTC+2
-			aperture angle = 45° 2.999999999999829'
-			label = lkjnb
+			aperture angle = 45° 0'
+			label = Test for animation on new Route
 	Positions:
 		Position #1:
 			latitude = 323° 36.54636500000151'

@@ -132,6 +132,7 @@
  
  
  ********** THINGS TO FIX ************
+    - some angles that are integer multiple of a defgree are shown as 29 deg 60 ' -> fix it 
     - change projection = (((i % 2) == 0) ? (Projection_types[1]) : (Projection_types[0])); to previous line
     - when you draw a selection rectangle that encompasses the greenwich antimeridian, a rectangle that goes around the earth on the other side is drawn
     - code method DrawPanel::ProjectionToGeo_3D

@@ -1581,6 +1581,19 @@ void Rotation::set(gsl_matrix* m) {
 
 }
 
+
+//set the content of *this eqaul to the content of r by copying the content of r into the memory of *this : the memory adresses of *this and r will be left unchanged
+inline void Rotation::set(const Rotation& r){
+    
+    a = (r.a);
+    b = (r.b);
+    c = (r.c);
+    
+    gsl_matrix_memcpy(matrix, r.matrix);
+    
+}
+
+
 //constructor of a Rotation instance which sets the rotation matrix according to three Euler angles
 Rotation::Rotation(Angle a_in, Angle b_in, Angle c_in) {
 

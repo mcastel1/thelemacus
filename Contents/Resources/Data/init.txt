@@ -83,6 +83,11 @@ rotation 0 =
 alpha = 138° 3.43879'
 beta = 7° 3.5304'
 gamma = 219° 11.035789'
+#with this rotation_0 one centers the chart on the Greenwich meridian 
+#rotation 0 =
+#alpha = 270° 0.0'
+#beta = 0° 0.0'
+#gamma = 0° 0.0'
 error color = (255,0,0)
 day foreground color = (0,0,0)
 night foreground color = (255,255,255)

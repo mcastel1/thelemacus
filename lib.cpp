@@ -15023,7 +15023,7 @@ template <class T> void ShowAll::operator()(T& event) {
         wxGetApp().list_frame->chart_frames[i]->ResetRender(event);
     }
     wxGetApp().ShowCharts(event);
-    wxGetApp().AnimateCharts();
+//    wxGetApp().AnimateCharts();
 
     event.Skip(true);
 

@@ -16847,20 +16847,30 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     parent->OnModifyFile();
     //insert the animation here
     
+    
+    //bring all charts to front to show the animation
+    wxGetApp().ShowCharts(event);
+    
     for(i=0; i<parent->chart_frames.size(); i++){
         
         ((parent->chart_frames)[i])->chart_transport_handler = new ChartTransportHandler(
                                                                                          ((parent->chart_frames)[i]),
-                                                            Route(
-                                                                  Route_types[0],
-                                                                  draw_panel->circle_observer.reference_position.antipode(),
-                                                                  draw_panel->circle_observer.reference_position
-                                                                  ),
-                                                            Double(1.0)
-                                                            );
+                                                                                         Route(
+                                                                                               Route_types[0],
+                                                                                               ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position,
+                                                                                               route->reference_position
+                                                                                               ),
+                                                                                         Double(1.0)
+                                                                                         );
+        
+        //trigger the animation
+        ((parent->chart_frames)[i])->chart_transport_handler->operator()();
+
     }
     
-    parent->PreRenderAll();
+
+    
+//    parent->PreRenderAll();
 
     if ((parent->transporting_with_new_route)) {
         //if I am adding a new Route for transport, call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route

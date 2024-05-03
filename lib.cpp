@@ -22709,7 +22709,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
             }
             
-            cout << "********* t = " << t << " *************";
+            cout << "********* t = " << t << " *************" << endl;
             transporting_route_temp.compute_end(String(""));
             transporting_route_temp.end.print(String("Expected arrival point with transporting_route_temp"), String("\t\t"), cout);
             chart_frame->draw_panel->circle_observer.reference_position.print(String("Reference position"), String("\t\t"), cout);

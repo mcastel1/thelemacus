@@ -80,8 +80,8 @@ default projection = 3D
 number chart frames = 1
 #initial rotation with which the 3D projection is displayed
 rotation 0 =
-alpha = 128° 3.43879'
-beta = 57° 3.5304'
+alpha = 138° 3.43879'
+beta = 7° 3.5304'
 gamma = 219° 11.035789'
 error color = (255,0,0)
 day foreground color = (0,0,0)

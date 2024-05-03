@@ -132,7 +132,8 @@
  
  
  ********** THINGS TO FIX ************
-    - some angles that are integer multiple of a defgree are shown as 29 deg 60 ' -> fix it 
+    - replace `f ((type.value)[0] == 'l') {` and similar cases where one needs to tell whether a route is loxodrome, orthodrome or circle of equal altitude with a switch which uses position_in_vector
+    - some angles that are integer multiple of a defgree are shown as 29 deg 60 ' -> fix it
     - change projection = (((i % 2) == 0) ? (Projection_types[1]) : (Projection_types[0])); to previous line
     - when you draw a selection rectangle that encompasses the greenwich antimeridian, a rectangle that goes around the earth on the other side is drawn
     - code method DrawPanel::ProjectionToGeo_3D

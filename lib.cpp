@@ -2184,27 +2184,45 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             //*this is an orthodrome
             
             //p_start and p_end in Cartesian coordinates
-            Cartesian r_start, r_end;
+            Cartesian r_start, r_end, s;
             Angle phi;
+            Position p_a, p_b;
             
             p_start.getCartesian(&r_start);
             p_end.getCartesian(&r_end);
             
-            phi.set(String(""), acos(r_start.dot(r_end)), String(""));
+            reference_position = p_start;
+            
             
             //CHECK AND REVISE
             //set the legnth as the length of the shortest great circle joining p_start and p_end
+            phi.set(String(""), acos(r_start.dot(r_end)), String(""));
             length.set(String(""), Re*(phi.value), String(""));
+            
             //set Z
             Z.set(String(""),
                   acos(-csc(phi) * sec(p_start.phi) * (cos(phi) * sin(p_start.phi) - sin(p_end.phi)) ),
                   String(""));
+            Z+=M_PI;
             
             compute_end(String());
             
+            end.getCartesian(&s);
+            
+//            p_a = end;
+//            
+//            Z += M_PI;
+//            compute_end(String());
+//            p_b = end;
+            
             //pick one of the two solutions for Z by checking which solution yields a longitude that, if I substracto to it p_start.lambda, falls in the same quadrant as p_end.lambda
-            if(GSL_SIGN((end.lambda - p_start.lambda).normalize_pm_pi_ret().value) != GSL_SIGN((p_end.lambda - p_start.lambda).normalize_pm_pi_ret().value)){
+            if(GSL_SIGN(end.lambda.value - p_start.lambda.value) != GSL_SIGN(p_end.lambda.value - p_start.lambda.value)){
+                
                 Z += M_PI;
+                
+            }else{
+                
+                
             }
             //CHECK AND REVISE
             

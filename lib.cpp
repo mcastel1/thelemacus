@@ -198,7 +198,7 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 
 
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.
-inline bool cross(const gsl_vector* a, const gsl_vector* b, gsl_vector** r) {
+inline bool cross_product(const gsl_vector* a, const gsl_vector* b, gsl_vector** r) {
 
     if (((a->size) == 3) && ((b->size) == 3)) {
 
@@ -1623,7 +1623,7 @@ Rotation::Rotation(Position p, Position q) {
         rotation_angle.set(String(""), acos(cos_rotation_angle), String(""));
 
 
-        cross((r_p.r), (r_q.r), &(omega.r));
+        cross_product((r_p.r), (r_q.r), &(omega.r));
         gsl_vector_scale((omega.r), 1.0 / fabs(sin(rotation_angle)));
 
         rotation_axis.setCartesian(String(""), omega, String(""));
@@ -4261,6 +4261,33 @@ inline void Cartesian::setPosition(const Position& p){
     
     
 }
+
+
+//return the dot product between *this and s
+inline double Cartesian::dot(const Cartesian& s){
+    
+    double result;
+    
+    gsl_blas_ddot(r, s.r, &result);
+    
+    return result;
+    
+}
+
+
+//return the cross product between the vector of this and that of s
+inline Cartesian Cartesian::cross(const Cartesian& s){
+    
+    Cartesian result;
+    
+    cross_product(r, s.r, &(result.r));
+    
+    return result;
+    
+}
+
+
+
 
 void Cartesian::print(String name, String prefix, ostream& ostr) {
 

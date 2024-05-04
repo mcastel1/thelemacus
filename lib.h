@@ -821,6 +821,8 @@ public:
     
     Cartesian();
     Cartesian(const Position&);
+    double dot(const Cartesian&);
+    Cartesian cross (const Cartesian&);
     void setPosition(const Position&);
     void print(String, String, ostream&);
     void operator = (const Cartesian&);

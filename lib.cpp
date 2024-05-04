@@ -2128,9 +2128,9 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
 Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
     
     type = type_in;
-
+    
     reference_position = p_start;
-   
+    
     switch (type.position_in_list(Route_types)) {
             
         case 0:{
@@ -2140,7 +2140,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             
             projection_start.SetMercator(p_start);
             projection_end.SetMercator(p_end);
-
+            
             
             if(p_start.phi != p_end.phi){
                 //I am not in the special case where p_start and p_end have the same latitude
@@ -2159,7 +2159,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
                 }else{
                     Z = Z + M_PI;
                 }
-                       
+                
             }else{
                 //I am in the special case where p_start and p_end have the same latitude
                 
@@ -2174,8 +2174,8 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             
             //set length according to t* (see notes)
             set_length(fabs((p_end.lambda.value) - (p_start.lambda.value)));
-
-
+            
+            
             break;
             
         }
@@ -2185,27 +2185,40 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             
             //p_start and p_end in Cartesian coordinates
             Cartesian r_start, r_end;
+            Angle phi;
             
             p_start.getCartesian(&r_start);
             p_end.getCartesian(&r_end);
             
+            phi.set(String(""), acos(r_start.dot(r_end)), String(""));
+            
             //CHECK AND REVISE
             //set the legnth as the length of the shortest great circle joining p_start and p_end
-            length.set(String(""), Re*acos(r_start.dot(r_end)), String(""));
+            length.set(String(""), Re*(phi.value), String(""));
             //set Z
-            Z.set(String(""),  acos(gsl_vector_get(r_start.cross(r_end).r, 2)), String(""));
+            Z.set(String(""),
+                  acos(-csc(phi) * sec(p_start.phi) * (cos(phi) * sin(p_start.phi) - sin(p_end.phi)) ),
+                  String(""));
+            
+            compute_end(String());
+            
+            //pick one of the two solutions for Z by checking which solution yields a longitude that, if I substracto to it p_start.lambda, falls in the same quadrant as p_end.lambda
+            if(GSL_SIGN((end.lambda - p_start.lambda).normalize_pm_pi_ret().value) != GSL_SIGN((p_end.lambda - p_start.lambda).normalize_pm_pi_ret().value)){
+                Z += M_PI;
+            }
             //CHECK AND REVISE
-
+            
             
             break;
-            }
+            
+        }
             
         case 2:{
             //*this is a circle of equal altitude
             
             cout << RED << "Cannot create a circle of equal altitute taht connects two positions!\n" << RESET;
             break;}
-
+            
     }
     
 }

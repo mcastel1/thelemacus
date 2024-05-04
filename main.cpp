@@ -358,8 +358,8 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
-    //test for cross_product and dot_product
-    //
+    //test for my_cross and dot_product
+    /*
     Cartesian a, b;
     
     
@@ -370,9 +370,10 @@ bool MyApp::OnInit() {
     gsl_vector_set(b.r, 1, 5.834576839078903);
     gsl_vector_set(b.r, 2, 3.34345);
     
-    cout << "a.b = " << a.dot(b);
+    a.cross(b).print(String("a x b"), String(""), cout);
+    
      
-     //
+     */
     
 
     unsigned int i;

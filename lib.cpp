@@ -2183,6 +2183,12 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
         case 1:{
             //*this is an orthodrome
             
+            //p_start and p_end in Cartesian coordinates
+            Cartesian r_start, r_end;
+            
+            p_start.getCartesian(&r_start);
+            p_end.getCartesian(&r_end);
+            
             
             break;
             }
@@ -22788,7 +22794,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
                 /*
                  note that here I cannot simply obtain the rotation at the end of the transport by doing      `chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation) * Rotation(transporting_route_temp.end, chart_frame->draw_panel->circle_observer.reference_position)));`
-                 because this would yield a rotation obtained by following a great circle as a transporting Route , while here transporting_route may also be a loxodrome 
+                 because this would yield a rotation obtained by following a great circle as a transporting Route , while here transporting_route may also be a loxodrome
                  */
                 
                 

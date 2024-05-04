@@ -131,7 +131,8 @@
  
  
  
- ********** THINGS TO FIX ************
+ ********** THINGS TO FIX ***********
+    - adapt Route::print to take into account the length format
     - after you press reset the coordinates of the instantaneous mouse position are wrong in the 3d projection
     - replace `f ((type.value)[0] == 'l') {` and similar cases where one needs to tell whether a route is loxodrome, orthodrome or circle of equal altitude with a switch which uses position_in_vector
     - some angles that are integer multiple of a defgree are shown as 29 deg 60 ' -> fix it
@@ -358,20 +359,16 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
-    //test for my_cross and dot_product
     /*
-    Cartesian a, b;
+    Position a(2.32, 4.2), b(1.3, 3.5);
+    Route r(Route_types[1], a,b);
     
     
-    gsl_vector_set(a.r, 0, 1.46343);
-    gsl_vector_set(a.r, 1, .3456343);
-    gsl_vector_set(a.r, 2, .45343463);
-    gsl_vector_set(b.r, 0, 4.4353);
-    gsl_vector_set(b.r, 1, 5.834576839078903);
-    gsl_vector_set(b.r, 2, 3.34345);
-    
-    a.cross(b).print(String("a x b"), String(""), cout);
-    
+    r.compute_end(String(""));
+    r.print(String("orthodrome joining two points"), String(""), cout);
+    b.print(String("b"), String(""), cout);
+    r.end.print(String("endpoint"), String(""), cout);
+
      
      */
     

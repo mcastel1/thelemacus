@@ -358,15 +358,21 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
-    //test for     Route(const RouteType&, const Position&, const Position&);
-    /*
-     Route* route;
-     Position a, b;
-     a = Position(Angle(1.3235876239), Angle(0.432975879));
-     b = Position(Angle(1.54236943807), Angle(-1.324));
-     route = new Route(RouteType(Route_types[0].value), a, b);
-     route->compute_end(String(""));
-     */
+    //test for cross_product and dot_product
+    //
+    Cartesian a, b;
+    
+    
+    gsl_vector_set(a.r, 0, 1.46343);
+    gsl_vector_set(a.r, 1, .3456343);
+    gsl_vector_set(a.r, 2, .45343463);
+    gsl_vector_set(b.r, 0, 4.4353);
+    gsl_vector_set(b.r, 1, 5.834576839078903);
+    gsl_vector_set(b.r, 2, 3.34345);
+    
+    cout << "a.b = " << a.dot(b);
+     
+     //
     
 
     unsigned int i;

@@ -2189,6 +2189,13 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             p_start.getCartesian(&r_start);
             p_end.getCartesian(&r_end);
             
+            //CHECK AND REVISE
+            //set the legnth as the length of the shortest great circle joining p_start and p_end
+            length.set(String(""), Re*acos(r_start.dot(r_end)), String(""));
+            //set Z
+            Z.set(String(""),  acos(gsl_vector_get(r_start.cross(r_end).r, 2)), String(""));
+            //CHECK AND REVISE
+
             
             break;
             }

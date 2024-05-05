@@ -359,19 +359,19 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
-    //
-    Position a(2.32, 1.13), b(1.3, -0.73);
-    Route r(Route_types[1], a,b);
-    r.length_format = LengthFormat(LengthFormat_types[1].value);
-    
-    
-    r.compute_end(String(""));
-    r.print(String("orthodrome joining two points"), String(""), cout);
-    b.print(String("b"), String(""), cout);
-    r.end.print(String("endpoint"), String(""), cout);
-
-     
-     //
+//    //
+//    Position a(.37932, .2380913), b(1.3, -.43233);
+//    Route r(Route_types[1], a,b);
+//    r.length_format = LengthFormat(LengthFormat_types[1].value);
+//    
+//    
+//    r.compute_end(String(""));
+//    r.print(String("orthodrome joining two points"), String(""), cout);
+//    b.print(String("b"), String(""), cout);
+//    r.end.print(String("endpoint"), String(""), cout);
+//
+//     
+//     //
     
 
     unsigned int i;

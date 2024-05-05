@@ -2185,8 +2185,8 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             
             //p_start and p_end in Cartesian coordinates
             Cartesian r_start, r_end, s;
-            Angle phi;
-            Position p_a, p_b;
+            Angle phi, z;
+            Position p_a, p_b, end_1, end_2;
             
             p_start.getCartesian(&r_start);
             p_end.getCartesian(&r_end);
@@ -2199,33 +2199,25 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             phi.set(String(""), acos(r_start.dot(r_end)), String(""));
             length.set(String(""), Re*(phi.value), String(""));
             
-            //set Z
-            Z.set(String(""),
+            //set the tentative solution for the azimuth angle z
+            z.set(String(""),
                   acos(-csc(phi) * sec(p_start.phi) * (cos(phi) * sin(p_start.phi) - sin(p_end.phi)) ),
                   String(""));
-//            Z.value = -(Z.value);
-            
+
+            Z.set(String(""), z.value, String(""));
             compute_end(String());
+            end_1 = end;
             
-            end.getCartesian(&s);
-            s.print(String("cartesian end"), String("\t"), cout);
+            Z.set(String(""), -z.value, String(""));
+            compute_end(String());
+            end_2 = end;
             
-//            p_a = end;
-//            
-//            Z += M_PI;
-//            compute_end(String());
-//            p_b = end;
-            
-            //pick one of the two solutions for Z by checking which solution yields a longitude that, if I substracto to it p_start.lambda, falls in the same quadrant as p_end.lambda
-            if(GSL_SIGN(end.lambda.value - p_start.lambda.value) != GSL_SIGN(p_end.lambda.value - p_start.lambda.value)){
-                
+            if(fabs(end_1.lambda.value - p_end.lambda.value) < fabs(end_2.lambda.value - p_end.lambda.value)){
+                Z.set(String(""), z.value, String(""));
             }else{
-                
-                
+                Z.set(String(""), -z.value, String(""));
             }
-            //CHECK AND REVISE
-            
-            
+
             break;
             
         }

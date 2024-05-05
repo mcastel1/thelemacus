@@ -11666,7 +11666,7 @@ void ChartFrame::Animate(void){
             chart_transport_handler = new ChartTransportHandler(
                                                                 this,
                                                                 Route(
-                                                                      Route_types[0],
+                                                                      Route_types[1],
                                                                       draw_panel->circle_observer.reference_position.half(),
                                                                       draw_panel->circle_observer.reference_position
                                                                       ),

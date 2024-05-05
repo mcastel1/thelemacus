@@ -132,6 +132,7 @@
  
  
  ********** THINGS TO FIX ***********
+    - if you don't load coastline data ther eis a segmentation fault 
     - adapt Route::print to take into account the length format
     - after you press reset the coordinates of the instantaneous mouse position are wrong in the 3d projection
     - replace `f ((type.value)[0] == 'l') {` and similar cases where one needs to tell whether a route is loxodrome, orthodrome or circle of equal altitude with a switch which uses position_in_vector

@@ -360,7 +360,7 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 bool MyApp::OnInit() {
     
     //
-    Position a(2.32, 4.2), b(1.3, 3.5);
+    Position a(2.32, 1.13), b(1.3, -0.73);
     Route r(Route_types[1], a,b);
     r.length_format = LengthFormat(LengthFormat_types[1].value);
     

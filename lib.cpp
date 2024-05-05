@@ -22692,13 +22692,12 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 case 1: {
                     //I am using Projection_types[1]
                     
-                    //set the rotation to start the chart movement and the starting point
+     
                     
-                    //when the animation starts, I moved the circle_observer.reference_postiion from the previous Position to a new (shifted) one, which is equal to start, and the latter is the starting point of the animation -> I need to update rotation in such a way that, when the animation starts, it starts with the rotation consistent with the shifted circle_observer.reference_position (start). Then, I update circle_observer.reference_postion by setting it equal to start and store rotation into rotation_start_drag -> The animation is ready to start
-//                    chart_frame->draw_panel->rotation.set(Rotation(
-//                                                                   (chart_frame->draw_panel->circle_observer.reference_position),
-//                                                                   start
-//                                                                   ) * (chart_frame->draw_panel->rotation));
+                    // start the animation from a Position,
+                    chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation) * Rotation(start, chart_frame->draw_panel->circle_observer.reference_position)));
+
+                    
                     chart_frame->draw_panel->rotation_start_drag.set((chart_frame->draw_panel->rotation));
                     (chart_frame->draw_panel->circle_observer.reference_position) = start;
                     omega_start = chart_frame->draw_panel->circle_observer.omega;

@@ -2203,10 +2203,12 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             Z.set(String(""),
                   acos(-csc(phi) * sec(p_start.phi) * (cos(phi) * sin(p_start.phi) - sin(p_end.phi)) ),
                   String(""));
+            Z.value = -(Z.value);
             
             compute_end(String());
             
             end.getCartesian(&s);
+            s.print(String("cartesian end"), String("\t"), cout);
             
 //            p_a = end;
 //            

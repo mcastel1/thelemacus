@@ -16935,7 +16935,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         ((parent->chart_frames)[i])->chart_transport_handler = new ChartTransportHandler(
                                                                                          ((parent->chart_frames)[i]),
                                                                                          Route(
-                                                                                               Route_types[0],
+                                                                                               Route_types[1],
                                                                                                ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position,
                                                                                                route->reference_position
                                                                                                ),
@@ -22761,7 +22761,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     transporting_route_temp.compute_end(String(""));
                     
                     //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
-                    chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation) * Rotation(transporting_route_temp.end, chart_frame->draw_panel->circle_observer.reference_position)));
+                    chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation(transporting_route_temp.end, start)));
                     
                     (chart_frame->draw_panel->circle_observer.reference_position) = (transporting_route_temp.end);
 
@@ -22851,13 +22851,8 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 chart_frame->draw_panel->circle_observer.reference_position = start;
                 chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
 
-                /*
-                 note that here I cannot simply obtain the rotation at the end of the transport by doing      `chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation) * Rotation(transporting_route_temp.end, chart_frame->draw_panel->circle_observer.reference_position)));`
-                 because this would yield a rotation obtained by following a great circle as a transporting Route , while here transporting_route may also be a loxodrome
-                 */
-                
-                
-                
+//                chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation(transporting_route.end, start)));
+
                 chart_frame->draw_panel->rotation_end_drag.set((chart_frame->draw_panel->rotation));
 
                 break;

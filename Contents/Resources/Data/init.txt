@@ -79,12 +79,12 @@ default projection = 3D
 #the number of chart frames opened when the program starts
 number chart frames = 1
 #initial rotation with which the 3D projection is displayed
-rotation 0 =
+#rotation 0 =
 #alpha = 138° 3.43879'
 #beta = 7° 3.5304'
 #gamma = 219° 11.035789'
 #with this rotation_0 one centers the chart on the Greenwich meridian
-#rotation 0 =
+rotation 0 =
 alpha = 270° 0.0'
 beta = 0° 0.0'
 gamma = 0° 0.0'

@@ -369,9 +369,8 @@ bool MyApp::OnInit() {
 //    r.print(String("orthodrome joining two points"), String(""), cout);
 //    b.print(String("b"), String(""), cout);
 //    r.end.print(String("endpoint"), String(""), cout);
-//
-//     
-//     //
+
+     
     
 
     unsigned int i;

@@ -2194,29 +2194,32 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             reference_position = p_start;
             
             
-            //CHECK AND REVISE
             //set the legnth as the length of the shortest great circle joining p_start and p_end
             phi.set(String(""), acos(r_start.dot(r_end)), String(""));
             length.set(String(""), Re*(phi.value), String(""));
             
-            //set the tentative solution for the azimuth angle z
+            //set the tentative solution for the azimuth angle z: Z may be either z  (solkution 1) or -z (solution 2), I will pick the correct solution later
             z.set(String(""),
                   acos(-csc(phi) * sec(p_start.phi) * (cos(phi) * sin(p_start.phi) - sin(p_end.phi)) ),
                   String(""));
 
+            //consider solution 1, compute end with this solution and store it in end_1
             Z.set(String(""), z.value, String(""));
             compute_end(String());
             end_1 = end;
             
+            //consider solution 2, compute end with this solution and store it in end_2
             Z.set(String(""), -z.value, String(""));
             compute_end(String());
             end_2 = end;
             
+            //check which one among end_1 and end_2 has a longitude closer to p_end and pick the correct solution accordingly
             if(fabs(end_1.lambda.value - p_end.lambda.value) < fabs(end_2.lambda.value - p_end.lambda.value)){
                 Z.set(String(""), z.value, String(""));
             }else{
                 Z.set(String(""), -z.value, String(""));
             }
+            
 
             break;
             

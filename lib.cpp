@@ -22694,7 +22694,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
      
                     
-                    // start the animation from a Position,
+                    //the Position where I start the animation (start) may not coincide with circle_observer.reference_position (for example, I may want to start the animaiton from the antipode of circle_observer.reference_position to show a nice turn of the earth during the animaiton): thus, to start the animation, I need to first set rotation to the rotation that brings circle_observer.reference_position to be centered on start -> to do this, I do 
                     chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation) * Rotation(start, chart_frame->draw_panel->circle_observer.reference_position)));
 
                     

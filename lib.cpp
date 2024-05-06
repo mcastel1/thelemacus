@@ -16978,7 +16978,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
                                                                                          Route(
                                                                                                Route_types[1],
                                                                                                ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position,
-                                                                                               route->reference_position
+                                                                                               target_position
                                                                                                ),
                                                                                          Double(1.0)
                                                                                          );

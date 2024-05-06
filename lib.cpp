@@ -16909,6 +16909,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     stringstream s;
     //the Position where the chart will be centered by the animation triggered when the user presses ok
     Position target_position;
+    //the aperture angle of circle_observer at the end of the animation
+    Angle target_omega;
     
     if (label->value->GetValue().ToStdString() == "") {
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
@@ -16982,17 +16984,19 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 //        route->reference_position.print(String("target position of the animation"), String("\t"), cout);
         
         if(route->type == Route_types[2]){
-            //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position
+            //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route->omega
             
             target_position = route->reference_position;
+            target_omega = route->omega;
             
             
         }else{
-            //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation
+            //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
             
             route->compute_end(Length((route->length)/2.0), String(""));
             target_position = route->end;
             
+            target_omega = (route->length.value)/2.0/Re;
             
         }
         
@@ -17004,7 +17008,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
                                                                                                ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position,
                                                                                                target_position
                                                                                                ),
-                                                                                         Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (parent->circle_observer_0.omega.value) / (route->omega.value) ) )
+                                                                                         Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (parent->circle_observer_0.omega.value) / (target_omega.value) ) )
                                                                                          );
         
         //trigger the animation

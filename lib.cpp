@@ -11737,7 +11737,7 @@ void ChartFrame::Animate(void){
 
 
 //makes a nice animation which centers the chart on *route and adjusts its zoom factor in such a way that *route is clearly visible
-void ListFrame::AnimateToRoute(Route* route){
+void ListFrame::AnimateToRoute(Route route){
     
     unsigned int i;
     //the Position where the chart will be centered by the animation triggered when the user presses ok
@@ -11769,20 +11769,20 @@ void ListFrame::AnimateToRoute(Route* route){
                 //        ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position.print(String("reference position before the animation"), String("\t"), cout);
                 //        route->reference_position.print(String("target position of the animation"), String("\t"), cout);
                 
-                if(route->type == Route_types[2]){
-                    //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route->omega
+                if(route.type == Route_types[2]){
+                    //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
                     
-                    target_position = route->reference_position;
-                    target_omega = route->omega;
+                    target_position = route.reference_position;
+                    target_omega = route.omega;
                     
                     
                 }else{
                     //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
                     
-                    route->compute_end(Length((route->length)/2.0), String(""));
-                    target_position = route->end;
+                    route.compute_end(Length((route.length)/2.0), String(""));
+                    target_position = route.end;
                     
-                    target_omega = (route->length.value)/2.0/Re;
+                    target_omega = (route.length.value)/2.0/Re;
                     
                 }
                 
@@ -17088,7 +17088,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     }
 
     //trigger the animation that centers the chart on *route
-    parent->AnimateToRoute(route);
+    parent->AnimateToRoute(*route);
 
     event.Skip(true);
 

@@ -106,6 +106,7 @@ public:
     template<class T> void OnPressCtrlQ(T&);
     void OnTimer(wxTimerEvent&);
     template<class T> void ShowCharts(T&);
+    void ShowCharts(void);
     void AnimateCharts(void);
     void ShowList(wxCommandEvent&);
     void where_am_I(String);

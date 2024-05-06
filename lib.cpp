@@ -11737,28 +11737,80 @@ void ChartFrame::Animate(void){
 
 
 //makes a nice animation which centers the chart on *route and adjusts its zoom factor in such a way that *route is clearly visible
-void ChartFrame::AnimateToRoute(Route* route){
+void ListFrame::AnimateToRoute(Route* route){
     
-    switch (position_in_vector(Projection((projection->name->GetValue().ToStdString())), Projection_types)) {
-            
-        case 0: {
-            //I am using Projection_types[0]
-            
-            
-            
-            break;
-            
+    unsigned int i;
+    //the Position where the chart will be centered by the animation triggered when the user presses ok
+    Position target_position;
+    //the aperture angle of circle_observer at the end of the animation
+    Angle target_omega;
+
+    for(i=0; i<chart_frames.size(); i++){
+        
+        
+        switch (position_in_vector(Projection(((chart_frames[i])->projection->name->GetValue().ToStdString())), Projection_types)) {
+                
+            case 0: {
+                //I am using Projection_types[0]
+                
+                
+                
+                break;
+                
+            }
+                
+            case 1: {
+                //I am using Projection_types[1]
+                
+                //bring all charts to front to show the animation
+                wxGetApp().ShowCharts();
+                
+                
+                //        ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position.print(String("reference position before the animation"), String("\t"), cout);
+                //        route->reference_position.print(String("target position of the animation"), String("\t"), cout);
+                
+                if(route->type == Route_types[2]){
+                    //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route->omega
+                    
+                    target_position = route->reference_position;
+                    target_omega = route->omega;
+                    
+                    
+                }else{
+                    //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
+                    
+                    route->compute_end(Length((route->length)/2.0), String(""));
+                    target_position = route->end;
+                    
+                    target_omega = (route->length.value)/2.0/Re;
+                    
+                }
+                
+                
+                (chart_frames[i])->chart_transport_handler = new ChartTransportHandler(
+                                                                                       (chart_frames[i]),
+                                                                                       Route(
+                                                                                             Route_types[1],
+                                                                                             (chart_frames[i])->draw_panel->circle_observer.reference_position,
+                                                                                             target_position
+                                                                                             ),
+                                                                                       Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (target_omega.value) ) )
+                                                                                       );
+                
+                //trigger the animation
+                (chart_frames[i])->chart_transport_handler->operator()();
+                
+                
+                
+                
+                
+                
+                break;
+                
+            }
+                
         }
-            
-        case 1: {
-            //I am using Projection_types[1]
-            
-            
-            
-            break;
-            
-        }
-            
+        
     }
     
     
@@ -16938,10 +16990,6 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
     unsigned int i;
     stringstream s;
-    //the Position where the chart will be centered by the animation triggered when the user presses ok
-    Position target_position;
-    //the aperture angle of circle_observer at the end of the animation
-    Angle target_omega;
     
     if (label->value->GetValue().ToStdString() == "") {
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
@@ -16985,8 +17033,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
         for (i = 0; i < (parent->chart_frames.size()); i++) {
 
-            ((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).resize(((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).size() + 1);
-            ((((parent->chart_frames)[i])->draw_panel)->reference_positions_route_list_now).resize(((((parent->chart_frames)[i])->draw_panel)->reference_positions_route_list_now).size() + 1);
+            (((parent->chart_frames)[i])->draw_panel)->points_route_list_now.resize(((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).size() + 1);
+            (((parent->chart_frames)[i])->draw_panel)->reference_positions_route_list_now.resize(((parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now.size() + 1);
 
         }
     }
@@ -17005,50 +17053,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     parent->OnModifyFile();
     //insert the animation here
     
-    
-    //bring all charts to front to show the animation
-    wxGetApp().ShowCharts(event);
-    
-    for(i=0; i<parent->chart_frames.size(); i++){
-        
-//        ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position.print(String("reference position before the animation"), String("\t"), cout);
-//        route->reference_position.print(String("target position of the animation"), String("\t"), cout);
-        
-        if(route->type == Route_types[2]){
-            //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route->omega
-            
-            target_position = route->reference_position;
-            target_omega = route->omega;
-            
-            
-        }else{
-            //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
-            
-            route->compute_end(Length((route->length)/2.0), String(""));
-            target_position = route->end;
-            
-            target_omega = (route->length.value)/2.0/Re;
-            
-        }
-        
-        
-        ((parent->chart_frames)[i])->chart_transport_handler = new ChartTransportHandler(
-                                                                                         ((parent->chart_frames)[i]),
-                                                                                         Route(
-                                                                                               Route_types[1],
-                                                                                               ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position,
-                                                                                               target_position
-                                                                                               ),
-                                                                                         Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (parent->circle_observer_0.omega.value) / (target_omega.value) ) )
-                                                                                         );
-        
-        //trigger the animation
-        ((parent->chart_frames)[i])->chart_transport_handler->operator()();
 
-    }
-    
-
-    
 //    parent->PreRenderAll();
 
     if ((parent->transporting_with_new_route)) {
@@ -17078,9 +17083,12 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         parent->listcontrol_routes->set((parent->data->route_list), false);
         parent->Resize();
         parent->OnModifyFile();
-        parent->PreRenderAll();
+//        parent->PreRenderAll();
 
     }
+
+    //trigger the animation that centers the chart on *route
+    parent->AnimateToRoute(route);
 
     event.Skip(true);
 

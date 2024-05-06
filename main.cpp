@@ -302,6 +302,16 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
 }
 
 
+//same as template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) { but with no event argument
+void MyApp::ShowCharts(void){
+    
+    wxCommandEvent dummy;
+    
+    ShowCharts(dummy);    
+    
+}
+
+
 //make a nice animation to present all charts, by dragging them to the desired point from a point on the antipodes
 inline void MyApp::AnimateCharts(void){
 

@@ -2685,6 +2685,8 @@ public:
     template<class E> void OnPressCtrlShiftS(E&);
     template<class E> void KeyDown(E&);
     template<class T> void ComputePosition(T&);
+    void AnimateToRoute(Route*);
+
     
 };
 
@@ -2893,7 +2895,6 @@ public:
     template<class T> void ResetRender(T&);
     template<class T> void ResetRenderAnimate(T&);
     void Animate(void);
-    void AnimateToRoute(Route*);
     
     //this is created for testing
     UnsetIdling<ChartFrame> *unset_idling;

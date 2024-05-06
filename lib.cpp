@@ -10500,7 +10500,7 @@ inline void DrawPanel::PreRender3D(void) {
 
 
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
-    (parent->zoom_factor).set(String(""), ((circle_observer_0.omega).value) / ((circle_observer.omega).value), String(""));
+    (parent->zoom_factor).set(String(""), (parent->parent->circle_observer_0.omega.value) / (circle_observer.omega.value), String(""));
     (this->*Set_x_y_min_max)();
     (this->*Set_lambda_phi_min_max)();
 
@@ -11002,7 +11002,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     (wxGetApp().e_zoom).read_from_file_to(String("exponent zoom"), (wxGetApp().path_file_init), String("R"), String(""));
     (wxGetApp().a_zoom).set(String(""), (-1.0 + ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
     (wxGetApp().b_zoom).set(String(""), (pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value) - ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
-    draw_panel->circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
+    parent->circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
 
 
     //text field showing the current value of the zoom slider
@@ -11603,7 +11603,7 @@ template<class T> void ChartFrame::Reset(T& event) {
     if (((projection->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
         //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
 
-        draw_panel->circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
+        parent->circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
         zoom_factor.set(String(""), 1.0, String(""));
         ComputeZoomFactor_3D();
 
@@ -11949,7 +11949,7 @@ void ChartFrame::UpdateSliderLabel_3D(void) {
 
     stringstream s;
 
-    s << "1:" << ((unsigned int)((((draw_panel->circle_observer_0).omega).value) / (((draw_panel->circle_observer).omega).value)));
+    s << "1:" << ((unsigned int)((parent->circle_observer_0.omega.value) / (((draw_panel->circle_observer).omega).value)));
 
     text_slider->SetLabel(s.str().c_str());
 
@@ -11982,7 +11982,7 @@ bool ChartFrame::ComputeZoomFactor_3D(void) {
 
     if (output) {
 
-        ((draw_panel->circle_observer).omega).set(String(""), (((draw_panel->circle_observer_0).omega).value) / (zoom_factor.value), String(""));
+        ((draw_panel->circle_observer).omega).set(String(""), (parent->circle_observer_0.omega.value) / (zoom_factor.value), String(""));
 
     }
 
@@ -14232,7 +14232,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
     if (((projection->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
 
-        ((draw_panel->circle_observer).omega) = (((draw_panel->circle_observer_0).omega) / (zoom_factor.value));
+        (draw_panel->circle_observer.omega) = ((parent->circle_observer_0.omega) / (zoom_factor.value));
 
         (draw_panel->*(draw_panel->PreRender))();
         draw_panel->MyRefresh();
@@ -16980,7 +16980,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
                                                                                                ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position,
                                                                                                target_position
                                                                                                ),
-                                                                                         Double( 0.5 *  (((parent->chart_frames)[i])->draw_panel->circle_observer_0.omega.value) / (route->omega.value) )
+                                                                                         Double( 0.5 *  (parent->circle_observer_0.omega.value) / (route->omega.value) )
                                                                                          );
         
         //trigger the animation
@@ -22653,7 +22653,7 @@ ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& 
     chart_frame = chart_in;
     //set route equal to a loxodrom connecting a and b
     transporting_route = transporting_route_in;
-    omega_end.set(String(""), (chart_frame->draw_panel->circle_observer_0.omega.value) / (zoom_factor_end.value), String(""));
+    omega_end.set(String(""), (chart_frame->parent->circle_observer_0.omega.value) / (zoom_factor_end.value), String(""));
     
     timer->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);
 

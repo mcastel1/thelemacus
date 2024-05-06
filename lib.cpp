@@ -10958,7 +10958,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     //set the zoom factor to 1 for the initial configuration of the projection
     zoom_factor.set(String(""), 1.0, String(""));
     //read zoom_factor_max from file_init
-    (wxGetApp().zoom_factor_max).read_from_file_to(String("maximal zoom factor"), (wxGetApp().path_file_init), String("R"), String(""));
+    wxGetApp().zoom_factor_max.read_from_file_to(String("maximal zoom factor"), (wxGetApp().path_file_init), String("R"), String(""));
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
     
@@ -11963,7 +11963,7 @@ bool ChartFrame::ComputeZoomFactor_Mercator(double delta_x) {
 
     temp = ((double)((draw_panel->size_chart).GetWidth())) / ((double)(draw_panel->width_chart_0)) * ((draw_panel->x_max_0) - (draw_panel->x_min_0)) / delta_x;
 
-    output = ((1.0 <= temp) && (temp <= ((double)((wxGetApp().zoom_factor_max).value))));
+    output = ((1.0 <= temp) && (temp <= (wxGetApp().zoom_factor_max.value)));
 
     if (output) {
         zoom_factor.set(String(""), temp, String(""));
@@ -11978,7 +11978,7 @@ bool ChartFrame::ComputeZoomFactor_3D(void) {
 
     bool output;
 
-    output = ((1.0 <= (zoom_factor.value)) && ((zoom_factor.value) <= ((wxGetApp().zoom_factor_max).value)));
+    output = ((1.0 <= (zoom_factor.value)) && ((zoom_factor.value) <= (wxGetApp().zoom_factor_max.value)));
 
     if (output) {
 
@@ -13579,7 +13579,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     //if the zoom factor is not valid, then I print an error message
 
                     s.str("");
-                    s << "Zoom level must be >= 1 and <= " << ((wxGetApp().zoom_factor_max).value) << ".";
+                    s << "Zoom level must be >= 1 and <= " << (wxGetApp().zoom_factor_max.value) << ".";
 
                     //set the title and message for the functor print_error_message, and then call the functor
                     print_error_message->SetAndCall(NULL, String("Zoom level exceeded its maximal value!"), String(s.str().c_str()), (wxGetApp().path_file_error_icon));
@@ -14154,9 +14154,9 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
     }
 
-    if (((zoom_factor.value) > ((wxGetApp().zoom_factor_max).value)) || ((slider->GetValue()) == (slider->GetMax()))) {
+    if (((zoom_factor.value) > (wxGetApp().zoom_factor_max.value)) || ((slider->GetValue()) == (slider->GetMax()))) {
 
-        (zoom_factor.value) = ((wxGetApp().zoom_factor_max).value);
+        (zoom_factor.value) = (wxGetApp().zoom_factor_max.value);
 
     }
 
@@ -22647,7 +22647,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 }
 
 
-//constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with proposed zoom factor proposed _zoom_factor at end fo the transport.  This is a `proposed` zoom factor because, if such proposed zoom factor is < 1 or > zoom_factor_max, the actual zoom factor will be set to 1 and zoom_factor_max, respectively. Othersize, the actual zoom_factor will be equal to proposed_zoom_factor. 
+//constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with proposed zoom factor proposed _zoom_factor at end fo the transport.  This is a `proposed` zoom factor because, if such proposed zoom factor is < 1 or > zoom_factor_max, the actual zoom factor will be set to 1 and zoom_factor_max, respectively. Othersize, the actual zoom_factor will be equal to proposed_zoom_factor.
 ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& proposed_zoom_factor) : MotionHandler(chart_in->parent){
     
     Double zoom_factor;

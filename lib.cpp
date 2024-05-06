@@ -16980,7 +16980,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
                                                                                                ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position,
                                                                                                target_position
                                                                                                ),
-                                                                                         Double( (wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (parent->circle_observer_0.omega.value) / (route->omega.value) )
+                                                                                         Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (parent->circle_observer_0.omega.value) / (route->omega.value) ) )
                                                                                          );
         
         //trigger the animation
@@ -22647,13 +22647,29 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 }
 
 
-//constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with zoom factor zoom_factor_end at end fo the transport. *this will transport the charts in such a way that the zoom factor will be equal to zoom_factor_end at the end of the transport
-ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& zoom_factor_end) : MotionHandler(chart_in->parent){
+//constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with proposed zoom factor proposed _zoom_factor at end fo the transport.  This is a `proposed` zoom factor because, if such proposed zoom factor is < 1 or > zoom_factor_max, the actual zoom factor will be set to 1 and zoom_factor_max, respectively. Othersize, the actual zoom_factor will be equal to proposed_zoom_factor. 
+ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& proposed_zoom_factor) : MotionHandler(chart_in->parent){
+    
+    Double zoom_factor;
     
     chart_frame = chart_in;
     //set route equal to a loxodrom connecting a and b
     transporting_route = transporting_route_in;
-    omega_end.set(String(""), (chart_frame->parent->circle_observer_0.omega.value) / (zoom_factor_end.value), String(""));
+    
+    if(proposed_zoom_factor < 1.0){
+        zoom_factor = 1.0;
+    }else{
+        if(zoom_factor > wxGetApp().zoom_factor_max){
+            zoom_factor = wxGetApp().zoom_factor_max;
+        }else{
+            zoom_factor = proposed_zoom_factor;
+        }
+    }
+    
+    
+    omega_end.set(String(""), (chart_frame->parent->circle_observer_0.omega.value) / (proposed_zoom_factor.value), String(""));
+    
+    
     
     timer->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);
 

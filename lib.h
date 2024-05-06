@@ -2893,6 +2893,7 @@ public:
     template<class T> void ResetRender(T&);
     template<class T> void ResetRenderAnimate(T&);
     void Animate(void);
+    void AnimateToRoute(Route*);
     
     //this is created for testing
     UnsetIdling<ChartFrame> *unset_idling;

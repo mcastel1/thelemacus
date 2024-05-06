@@ -11734,6 +11734,37 @@ void ChartFrame::Animate(void){
 }
 
 
+
+
+//makes a nice animation which centers the chart on *route and adjusts its zoom factor in such a way that *route is clearly visible
+void ChartFrame::AnimateToRoute(Route* route){
+    
+    switch (position_in_vector(Projection((projection->name->GetValue().ToStdString())), Projection_types)) {
+            
+        case 0: {
+            //I am using Projection_types[0]
+            
+            
+            
+            break;
+            
+        }
+            
+        case 1: {
+            //I am using Projection_types[1]
+            
+            
+            
+            break;
+            
+        }
+            
+    }
+    
+    
+}
+
+
 void DrawPanel::SetIdling(bool b) {
 
     idling = b;

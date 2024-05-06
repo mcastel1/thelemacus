@@ -692,7 +692,7 @@ public:
     bool check_valid(String, String);
     string to_string(String, unsigned int);
     bool operator> (const Length&), operator<= (const Length&), operator> (const double&), operator< (const double&), operator==(const Length&), operator!=(const Length&);
-    Length operator + (const Length&), operator - (const Length&);
+    Length operator + (const Length&), operator - (const Length&), operator / (const double&), operator * (const double&);
     Length &operator += (const Length&), &operator -= (const Length&);
     
 };

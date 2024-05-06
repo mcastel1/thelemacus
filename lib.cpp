@@ -1009,7 +1009,7 @@ bool Length::operator<(const double& r) {
 }
 
 
-Length Length::operator+ (const Length& l) {
+Length Length::operator + (const Length& l) {
 
     Length s;
 
@@ -1019,7 +1019,7 @@ Length Length::operator+ (const Length& l) {
 
 }
 
-Length Length::operator- (const Length& l) {
+Length Length::operator - (const Length& l) {
 
     Length s;
 
@@ -1039,6 +1039,29 @@ Length Length::operator- (const Length& l) {
     return s;
 
 }
+
+
+Length Length::operator * (const double& x) {
+
+    Length s;
+
+    (s.value) = value * x;
+
+    return s;
+
+}
+
+
+Length Length::operator / (const double& x) {
+
+    Length s;
+
+    (s.value) = value / x;
+
+    return s;
+
+}
+
 
 
 void Speed::print(String name, String unit, String prefix, ostream& ostr) {

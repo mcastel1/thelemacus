@@ -16860,7 +16860,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
     unsigned int i;
     stringstream s;
-
+    //the Position where the chart will be centered by the animation triggered when the user presses ok
+    Position target_position;
+    
     if (label->value->GetValue().ToStdString() == "") {
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
 
@@ -16931,6 +16933,22 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         
 //        ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position.print(String("reference position before the animation"), String("\t"), cout);
 //        route->reference_position.print(String("target position of the animation"), String("\t"), cout);
+        
+        if(route->type == Route_types[2]){
+            //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position
+            
+            target_position = route->reference_position;
+            
+            
+        }else{
+            //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation
+            
+            route->compute_end(Length((route->length)/2.0), String(""));
+            target_position = route->end;
+            
+            
+        }
+        
         
         ((parent->chart_frames)[i])->chart_transport_handler = new ChartTransportHandler(
                                                                                          ((parent->chart_frames)[i]),

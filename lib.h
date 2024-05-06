@@ -204,7 +204,8 @@ public:
     void read_from_file_to(String, String, String, String);
     void set(String, double, String);
     void print(String, String, ostream&);
-    Double operator+(const Double&);
+    Double operator + (const Double&);
+    bool operator > (const double&), operator > (const Double&), operator < (const double&), operator < (const Double&);
     
 };
 

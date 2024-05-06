@@ -877,7 +877,7 @@ void Double::print(String name, String prefix, ostream& ostr) {
 
 }
 
-Double Double::operator+ (const Double& x) {
+Double Double::operator + (const Double& x) {
 
     Double s;
 
@@ -887,6 +887,30 @@ Double Double::operator+ (const Double& x) {
 
 }
 
+
+bool Double::operator < (const Double& x){
+    
+    return (value < x.value);
+    
+}
+
+bool Double::operator < (const double& x){
+    
+    return (value < x);
+    
+}
+
+bool Double::operator > (const Double& x){
+    
+    return (value > x.value);
+    
+}
+
+bool Double::operator > (const double& x){
+    
+    return (value > x);
+    
+}
 
 //reads an Int from File file, which must be already open, and it search the file from the beginning if search_entire_stream = true, does not search the file from the beginning otherwise. Writes the result in *this
 template<class S> void Int::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool search_entire_stream, [[maybe_unused]] String prefix) {
@@ -22656,7 +22680,7 @@ ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& 
     //set route equal to a loxodrom connecting a and b
     transporting_route = transporting_route_in;
     
-    if(proposed_zoom_factor < 1.0){
+    if(proposed_zoom_factor.value < 1.0){
         zoom_factor = 1.0;
     }else{
         if(zoom_factor > wxGetApp().zoom_factor_max){
@@ -22667,7 +22691,7 @@ ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& 
     }
     
     
-    omega_end.set(String(""), (chart_frame->parent->circle_observer_0.omega.value) / (proposed_zoom_factor.value), String(""));
+    omega_end.set(String(""), (chart_frame->parent->circle_observer_0.omega.value) / (zoom_factor.value), String(""));
     
     
     

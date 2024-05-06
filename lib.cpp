@@ -16980,7 +16980,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
                                                                                                ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position,
                                                                                                target_position
                                                                                                ),
-                                                                                         Double(1.0)
+                                                                                         Double(  (((parent->chart_frames)[i])->draw_panel->circle_observer_0.omega.value) / (route->omega.value) )
                                                                                          );
         
         //trigger the animation

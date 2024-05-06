@@ -90,6 +90,7 @@ beta = 30° 0.0'
 gamma = 30° 0.0'
 error color = (255,0,0)
 day foreground color = (0,0,0)
+chart transport zoom factor coefficient = 0.5
 night foreground color = (255,255,255)
 day background color = (224,224,224)
 night background color = (40,40,43)

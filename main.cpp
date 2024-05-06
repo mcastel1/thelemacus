@@ -481,7 +481,9 @@ bool MyApp::OnInit() {
     size_icon_over_width_screen.read_from_file_to(String("size icon over width screen"), (wxGetApp().path_file_init), String("R"),  String(""));
     size_message_image_over_width_screen.read_from_file_to(String("size message image over width screen"), (wxGetApp().path_file_init), String("R"),  String(""));
     point_size.read_from_file_to(String("point size"), (wxGetApp().path_file_init), String("R"), String(""));
-    
+
+    chart_transport_zoom_factor_coefficient.read_from_file_to(String("chart transport zoom factor coefficient"), (wxGetApp().path_file_init), String("R"),  String(""));
+
     
     //----- test for Data::read_from_file_to - start
     /*

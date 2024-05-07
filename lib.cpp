@@ -11737,17 +11737,19 @@ void ChartFrame::Animate(void){
 
 
 
-//makes an animation which centers the chart on the object object (which may be a Route, Position, ...) and adjust the chart zoom factor in such a way that object is nicely visible at the end of the animation
-template<class T> void ListFrame::AnimateToObject(T object){
+//makes an animation which centers the chart on the object *object_in (which may be a Route, Position, ...) and adjust the chart zoom factor in such a way that *object_in is nicely visible at the end of the animation
+template<class T> void ListFrame::AnimateToObject(T* object_in){
     
     unsigned int i;
     //the Position where the chart will be centered by the animation triggered when the user presses ok
     Position target_position;
     //the aperture angle of circle_observer at the end of the animation
     Angle target_omega;
+    
+    
+
 
     for(i=0; i<chart_frames.size(); i++){
-        
         
         switch (position_in_vector(Projection(((chart_frames[i])->projection->name->GetValue().ToStdString())), Projection_types)) {
                 
@@ -11767,26 +11769,48 @@ template<class T> void ListFrame::AnimateToObject(T object){
                 wxGetApp().ShowCharts();
                 
                 
-                //        ((parent->chart_frames)[i])->draw_panel->circle_observer.reference_position.print(String("reference position before the animation"), String("\t"), cout);
-                //        route->reference_position.print(String("target position of the animation"), String("\t"), cout);
-                
-                if(object.type == Route_types[2]){
-                    //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
+                if(std::is_same<T, Route>::value){
+                    //object is a Route
                     
-                    target_position = object.reference_position;
-                    target_omega = object.omega;
+                    //I introduce the Route* object and set object_in = object by casting object_in into a Route pointer. This is necessary to make this method work with multiple types T (T=Position, T=Route, ...)
+                    Route* object;
                     
+                    object = (Route*)object_in;
                     
-                }else{
-                    //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
-                    
-                    object.compute_end(Length((object.length)/2.0), String(""));
-                    target_position = object.end;
-                    //                    target_position = route.reference_position;
+                   if(object->type == Route_types[2]){
+                       //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
+                       
+                       target_position = object->reference_position;
+                       target_omega = object->omega;
+                       
+                       
+                   }else{
+                       //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
+                       
+                       object->compute_end(Length((object->length)/2.0), String(""));
+                       target_position = object->end;
+                       //                    target_position = route.reference_position;
 
-                    target_omega = (object.length.value)/2.0/Re;
+                       target_omega = (object->length.value)/2.0/Re;
+                       
+                   }
                     
                 }
+                
+                
+                
+                
+                if(std::is_same<T, Position>::value){
+                    //object is a Position
+                    
+//                    target_position = object;
+                    
+
+                    
+                }
+                
+                
+
                 
                 
                 (chart_frames[i])->chart_transport_handler = new ChartTransportHandler(
@@ -17090,7 +17114,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     }
 
     //trigger the animation that centers the chart on *route
-    parent->AnimateToObject(*route);
+    parent->AnimateToObject(route);
 
     event.Skip(true);
 
@@ -18479,7 +18503,7 @@ void ListFrame::OnComputePosition(void) {
         set();
 //        PreRenderAll();
         //bring all charts to the astronomical position with an animation 
-        AnimateToObject(data->route_list.back());
+        AnimateToObject(&(data->route_list.back()));
 
     }
 
@@ -20192,7 +20216,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     
 //    parent->PreRenderAll();
     //animate the charts to bring them to the Route related to the newly reduced Sight
-    parent->AnimateToObject(((parent->data->route_list)[(sight->related_route).value]));
+    parent->AnimateToObject(&((parent->data->route_list)[(sight->related_route).value]));
     
     event.Skip(true);
 

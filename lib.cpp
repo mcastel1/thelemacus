@@ -20177,9 +20177,9 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
 
     }
 
-    (parent->listcontrol_sights)->set((parent->data)->sight_list, false);
+    parent->listcontrol_sights->set(parent->data->sight_list, false);
     //I call listcontrol_routes->set with true because I want to keep the selection in listcontrol_routes
-    (parent->listcontrol_routes)->set((parent->data)->route_list, true);
+    parent->listcontrol_routes->set(parent->data->route_list, true);
 
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
     (*(parent->on_change_selection_in_listcontrol_sights))(event);
@@ -20189,8 +20189,11 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     (*(parent->unset_idling))();
     parent->Resize();
     parent->OnModifyFile();
-    parent->PreRenderAll();
-
+    
+//    parent->PreRenderAll();
+    //animate the charts to bring them to the Route related to the newly reduced Sight
+    parent->AnimateToRoute(((parent->data->route_list)[(sight->related_route).value]));
+    
     event.Skip(true);
 
     Close(TRUE);

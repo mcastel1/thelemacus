@@ -78,10 +78,5 @@ Data:
 			latitude = 48° 51.309166999999860081516089849174'
 			longitude = 357° 35.41566699999748379923403263092'
 			label = My Place (MP)
-Recent bodies = 12 10 8
+Recent bodies = 0 3 5
 Recent projections = 1 0
-Recent length formats = 1 0
-Recent route types = 1 0 2
-Recent route for transport types = 1 0
-Recent length units = 0 1
-Recent speed units = 0 1

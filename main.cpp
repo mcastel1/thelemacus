@@ -132,7 +132,8 @@
  
  
  ********** THINGS TO FIX ***********
-    - the error message "Not all routes could be used ... " should be prompted after the animation is over 
+    - when you zoom onto a Route and the chart is already centeret on that Route, it crashes (in the 3d projection)
+    - the error message "Not all routes could be used ... " should be prompted after the animation is over
     - when you compute the corssing with only two sights omega of the circle of equal altitude for the uncertainty fo the sight is NaN
     - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
     - if you don't load coastline data ther eis a segmentation fault

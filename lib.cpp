@@ -11809,7 +11809,7 @@ template<class T> void ListFrame::AnimateToObject(T* object_in){
                     
                     //the target Position of the animation is *object
                     target_position = (*object);
-                    //Positions do not have a size such as Routes -> I move the chart on the Position with the animation by keeping the same omega as in the beginnign of the animation 
+                    //Positions do not have a size such as Routes -> I move the chart on the Position with the animation by keeping the same omega as in the beginnign of the animation
                     target_omega = ((chart_frames[i])->draw_panel->circle_observer.omega);
                     
                 }
@@ -17008,7 +17008,10 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     (*(parent->unset_idling))();
     parent->Resize();
     parent->OnModifyFile();
-    parent->PreRenderAll();
+    
+//    parent->PreRenderAll();
+    parent->AnimateToObject(position);
+    
 
     event.Skip(true);
 

@@ -11803,9 +11803,14 @@ template<class T> void ListFrame::AnimateToObject(T* object_in){
                 if(std::is_same<T, Position>::value){
                     //object is a Position
                     
-//                    target_position = object;
+                    Position* object;
                     
-
+                    object = ((Position*)object_in);
+                    
+                    //the target Position of the animation is *object
+                    target_position = (*object);
+                    //Positions do not have a size such as Routes -> I move the chart on the Position with the animation by keeping the same omega as in the beginnign of the animation 
+                    target_omega = ((chart_frames[i])->draw_panel->circle_observer.omega);
                     
                 }
                 

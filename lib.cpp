@@ -2177,6 +2177,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
     type = type_in;
     
     reference_position = p_start;
+    (length_format.value) = ((LengthFormat_types[1]).value);
     
     switch (type.position_in_list(Route_types)) {
             

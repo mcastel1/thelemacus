@@ -7330,7 +7330,7 @@ Length::Length(double value_in, const LengthUnit& unit_in) {
 //constructs the Length *this frome time and speed, by setting it equal to time x speed
 Length::Length(Chrono time, Speed speed) {
 
-    set(String("Length obtained from time and speed"), (time.get()) * (speed.value), String(""));
+    set(String(""), (time.get()) * (speed.value), String(""));
 
 }
 

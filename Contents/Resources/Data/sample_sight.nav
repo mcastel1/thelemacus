@@ -55,13 +55,12 @@ Data:
 		Route #3:
 			type = orthodrome
 			start position:
-				latitude = 22° 3.000000000000043'
-				longitude = 356° 56.99999999999932'
+				latitude = 0° 0.0'
+				longitude = 0° 0.0'
 				label = 2024-01-21 17:04:03 UTC+2
 			starting heading = 19° 3.000000000000043'
-			length format = time and speed
-				time = 06:59:45.5436
-				speed = 500 kt
+			length format = length
+				length = 1000 nm
 			label = jlkj
 		Route #4:
 			type = circle of equal altitude
@@ -69,7 +68,7 @@ Data:
 				latitude = 29° 59.99999999999979'
 				longitude = 59° 59.99999999999957'
 				label = 2024-01-21 17:04:03 UTC+2
-			aperture angle = 15° 0'
+			aperture angle = 14° 59.99999999999989'
 			label = Test for animation on new Route
 	Positions:
 		Position #1:

@@ -11781,8 +11781,11 @@ void ListFrame::AnimateToRoute(Route route){
                     //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
                     
                     route.compute_end(Length((route.length)/2.0), String(""));
-                    target_position = route.end;
-                    
+                    //PUT THIS BACK AT THE END OF DEBUGGING
+                    //                    target_position = route.end;
+                    //PUT THIS BACK AT THE END OF DEBUGGING
+                    target_position = route.reference_position;
+
                     target_omega = (route.length.value)/2.0/Re;
                     
                 }

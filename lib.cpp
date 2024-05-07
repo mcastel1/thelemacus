@@ -22975,10 +22975,10 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 //I am using Projection_types[1]
                 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-                chart_frame->draw_panel->circle_observer.reference_position = start;
-                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
+//                chart_frame->draw_panel->circle_observer.reference_position = start;
+//                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
 
-                chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation(transporting_route.end, start)));
+//                chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation(transporting_route.end, start)));
 
                 chart_frame->draw_panel->rotation_end_drag.set((chart_frame->draw_panel->rotation));
 

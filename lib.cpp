@@ -22852,7 +22852,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             transporting_route_temp.length.set(
                 String(""),
                 (transporting_route.length.value) *
-                                               (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
+                                               (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)))))
                                                ,
                                                String(""));
             

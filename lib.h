@@ -2685,7 +2685,7 @@ public:
     template<class E> void OnPressCtrlShiftS(E&);
     template<class E> void KeyDown(E&);
     template<class T> void ComputePosition(T&);
-    void AnimateToRoute(const Route);
+    template<class T> void AnimateToObject(const T);
 
     
 };

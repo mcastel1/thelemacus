@@ -53,7 +53,7 @@ standard thickness over length screen = 1e-3
 time check light dark = 00:00:01
 #the temporal length of animations
 animation time = 00:00:1
-number of animation steps = 5
+number of animation steps = 100
 large thickness over length screen = 5e-3
 size icon over width screen = 4e-2
 size small button over width screen = 2e-2

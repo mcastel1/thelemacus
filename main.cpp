@@ -132,7 +132,8 @@
  
  
  ********** THINGS TO FIX ***********
-    - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors 
+    - when you compute the corssing with only two sights omega of the circle of equal altitude for the uncertainty fo the sight is NaN
+    - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
     - if you don't load coastline data ther eis a segmentation fault
     - adapt Route::print to take into account the length format
     - after you press reset the coordinates of the instantaneous mouse position are wrong in the 3d projection

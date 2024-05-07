@@ -11781,10 +11781,8 @@ void ListFrame::AnimateToRoute(Route route){
                     //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
                     
                     route.compute_end(Length((route.length)/2.0), String(""));
-                    //PUT THIS BACK AT THE END OF DEBUGGING
-                    //                    target_position = route.end;
-                    //PUT THIS BACK AT THE END OF DEBUGGING
-                    target_position = route.reference_position;
+                    target_position = route.end;
+                    //                    target_position = route.reference_position;
 
                     target_omega = (route.length.value)/2.0/Re;
                     
@@ -14585,13 +14583,13 @@ void SomeRoutes::operator()(wxCommandEvent& event) {
 
     int i;
 
-    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position and press enter when done"), (wxGetApp().path_file_warning_icon));
+    f->print_warning_message->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position and press enter when done"), (wxGetApp().path_file_warning_icon));
 
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
-    for ((f->crossing_route_list_temp.clear()), i = 0; i < ((f->data)->route_list).size(); i++) {
+    for ((f->crossing_route_list_temp.clear()), i = 0; i < (f->data->route_list).size(); i++) {
 
         if ((((f->data)->route_list)[i]).type == (Route_types[2])) {
-            (f->crossing_route_list_temp).push_back((((f->data)->route_list)[i]));
+            f->crossing_route_list_temp.push_back(((f->data->route_list)[i]));
         }
 
     }
@@ -18469,6 +18467,7 @@ void ListFrame::OnComputePosition(void) {
 
     }
     else {
+        
 
         if (out == 0) {
             //the position couldbe computed by using only some crossings/Routes
@@ -18478,7 +18477,9 @@ void ListFrame::OnComputePosition(void) {
         }
 
         set();
-        PreRenderAll();
+//        PreRenderAll();
+        //bring all charts to the astronomical position with an animation 
+        AnimateToRoute(data->route_list.back());
 
     }
 

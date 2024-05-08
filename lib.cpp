@@ -22571,7 +22571,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             if (type_of_transported_object == String("position")) {
 
                 //store the starting position in geo_position_start
-                start = (*((Position*)transported_object));
+                (MotionHandler<F>::start) = (*((Position*)transported_object));
                 //highlight the Position that is being transported
                 (MotionHandler<F>::parent)->highlighted_position_now = address_position_in_vector<Position>(((Position*)transported_object), (MotionHandler<F>::parent)->data->position_list);
                 
@@ -22580,19 +22580,19 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                     //store the starting reference position in geo_position_start
-                    start = (((Route*)transported_object)->reference_position);
+                    (MotionHandler<F>::start) = (((Route*)transported_object)->reference_position);
                     //highlight the Position that is being transported
                     (MotionHandler<F>::parent)->highlighted_route_now = address_position_in_vector<Route>(((Route*)transported_object), (MotionHandler<F>::parent)->data->route_list);
      
 
                 }
                 
-                start = (((Route*)transported_object)->reference_position);
+                (MotionHandler<F>::start) = (((Route*)transported_object)->reference_position);
 
 
             }
 
-            ((MotionHandler<F>::transporting_route_temp).reference_position) = start;
+            ((MotionHandler<F>::transporting_route_temp).reference_position) = (MotionHandler<F>::start);
 
             //I brind all ChartFrames to front to show the animation
             wxGetApp().ShowCharts(event);
@@ -22614,7 +22614,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
             if (type_of_transported_object == String("position")) {
 
-                (*((Position*)transported_object)) = start;
+                (*((Position*)transported_object)) = (MotionHandler<F>::start);
                 ((Position*)transported_object)->transport_to((MotionHandler<F>::transporting_route_temp), String(""));
 
                 (MotionHandler<F>::parent)->TabulatePositionsAll();
@@ -22624,7 +22624,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
-                    (((Route*)transported_object)->reference_position) = start;
+                    (((Route*)transported_object)->reference_position) = (MotionHandler<F>::start);
                     ((Route*)transported_object)->reference_position.transport_to((MotionHandler<F>::transporting_route_temp), String(""));
 
                 }
@@ -22646,7 +22646,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         if (type_of_transported_object == String("position")) {
             
             //do the whole transport rather than combining many little transports, to avoid rounding errors
-            (*((Position*)transported_object)) = start;
+            (*((Position*)transported_object)) = (MotionHandler<F>::start);
             //un-highlight the Position that is being transported
             (MotionHandler<F>::parent)->highlighted_position_now = -1;
             ((Position*)transported_object)->transport_to((MotionHandler<F>::transporting_route), String(""));
@@ -22673,7 +22673,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 (MotionHandler<F>::parent)->highlighted_route_now = -1;
 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-                (((Route*)transported_object)->reference_position) = start;
+                (((Route*)transported_object)->reference_position) = (MotionHandler<F>::start);
                 ((Route*)transported_object)->reference_position.transport_to((MotionHandler<F>::transporting_route), String(""));
 
 
@@ -22784,7 +22784,7 @@ ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& 
 
 
 //prompt the movement of the center of the chart from position a to position b
-void ChartTransportHandler::operator()(void) {
+template<class F> void ChartTransportHandler<F>::operator()(void) {
 //void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
     
     if(!(parent->idling)){
@@ -22801,7 +22801,7 @@ void ChartTransportHandler::operator()(void) {
 }
 
 //this method iterates the animation
-void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
+template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
     
     if((t < (wxGetApp().n_animation_steps.value))) {
@@ -22817,7 +22817,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
             (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
             
-            start = (MotionHandler<F>::transporting_route).reference_position;
+            (MotionHandler<F>::start) = (MotionHandler<F>::transporting_route).reference_position;
             
   
             //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
@@ -22859,11 +22859,11 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
      
                     
                     //the Position where I start the animation (start) may not coincide with circle_observer.reference_position (for example, I may want to start the animaiton from the antipode of circle_observer.reference_position to show a nice turn of the earth during the animaiton): thus, to start the animation, I need to first set rotation to the rotation that brings circle_observer.reference_position to be centered on start -> to do this, I do 
-                    chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation) * Rotation(start, chart_frame->draw_panel->circle_observer.reference_position)));
+                    chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation) * Rotation((MotionHandler<F>::start), chart_frame->draw_panel->circle_observer.reference_position)));
 
                     
                     chart_frame->draw_panel->rotation_start_drag.set((chart_frame->draw_panel->rotation));
-                    (chart_frame->draw_panel->circle_observer.reference_position) = start;
+                    (chart_frame->draw_panel->circle_observer.reference_position) = (MotionHandler<F>::start);
                     omega_start = chart_frame->draw_panel->circle_observer.omega;
                     
                     break;
@@ -22903,7 +22903,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     PositionProjection temp;
                     
-                    start.transport(&p_NE, (MotionHandler<F>::transporting_route_temp), String(""));
+                    (MotionHandler<F>::start).transport(&p_NE, (MotionHandler<F>::transporting_route_temp), String(""));
                     (chart_frame->lambda_max) = (p_NE.lambda);
                     (chart_frame->phi_max) = (p_NE.phi);
                     
@@ -22924,7 +22924,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     (MotionHandler<F>::transporting_route_temp).compute_end(String(""));
                     
                     //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
-                    chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation((MotionHandler<F>::transporting_route_temp).end, start)));
+                    chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation((MotionHandler<F>::transporting_route_temp).end, (MotionHandler<F>::start))));
                     
                     (chart_frame->draw_panel->circle_observer.reference_position) = ((MotionHandler<F>::transporting_route_temp).end);
 

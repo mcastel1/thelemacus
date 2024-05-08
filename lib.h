@@ -2915,12 +2915,15 @@ public:
 };
 
 //a hanlder to make a general motion (i.e., drag the chart, transport a Position, ...) with an animation
-class MotionHandler{
+template<class F> class MotionHandler{
     
 public:
     
     //the functor that calls *this
     ListFrame* parent;
+    //the eventual functor to be called at the end of tha motion animation
+    F* f;
+
     wxTimer* timer;
     //the position during the transport process at 'time' t
     Position start;
@@ -2943,7 +2946,6 @@ public:
     NON_GUI* transported_object;
     //the type of the transported_object that is being transported (String("position") or String("route"), ...)
     String type_of_transported_object;
-    F* f;
     
     GraphicalFeatureTransportHandler(ListFrame*, NON_GUI*, const String&, const Route&, F*);
     void operator()(void);

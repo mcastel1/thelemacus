@@ -22742,11 +22742,11 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
         }
 
-        timer->Stop();
+        (MotionHandler<F>::timer)->Stop();
         (*((MotionHandler<F>::parent)->unset_idling))();
         
-        if(f != NULL){
-            (*f)();
+        if((MotionHandler<F>::f) != NULL){
+            (*(MotionHandler<F>::f))();
         }
 
     }
@@ -22755,7 +22755,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
 
 //constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with proposed zoom factor proposed _zoom_factor at end fo the transport.  This is a `proposed` zoom factor because, if such proposed zoom factor is < 1 or > zoom_factor_max, the actual zoom factor will be set to 1 and zoom_factor_max, respectively. Othersize, the actual zoom_factor will be equal to proposed_zoom_factor.
-ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& proposed_zoom_factor) : MotionHandler(chart_in->parent){
+template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& proposed_zoom_factor) : MotionHandler<F>(chart_in->parent){
     
     Double zoom_factor;
     
@@ -22778,7 +22778,7 @@ ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& 
     
     
     
-    timer->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);
+    (MotionHandler<F>::timer)->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);
 
 }
 
@@ -22787,10 +22787,10 @@ ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& 
 template<class F> void ChartTransportHandler<F>::operator()(void) {
 //void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
     
-    if(!(parent->idling)){
+    if(!((MotionHandler<F>::parent)->idling)){
         
         //the animation transport starts here (only if the parent ChartFrame is not in idling mode)
-        timer->Start(
+        (MotionHandler<F>::timer)->Start(
                      /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
                      (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
                      wxTIMER_CONTINUOUS);
@@ -22811,7 +22811,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             //I am at the beginning of the transport and *parent is not in idling mode -> proceed with the transport
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
-            (*(parent->set_idling))();
+            (*((MotionHandler<F>::parent)->set_idling))();
             (chart_frame->dragging_chart) = true;
             chart_frame->EnableAll(false);
 
@@ -23041,8 +23041,8 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
         chart_frame->parent->listcontrol_routes->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
         chart_frame->parent->panel->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
     
-        timer->Stop();
-        (*(parent->unset_idling))();
+        (MotionHandler<F>::timer)->Stop();
+        (*((MotionHandler<F>::parent)->unset_idling))();
         
     }
 

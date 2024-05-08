@@ -2585,64 +2585,6 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if (compute_l_ends_ok) {
 
-
-        /*
-         //run over all chunks of *this which are visible
-         for(j=0; j<(s.size()); j++){
-
-         v->resize((v->size())+1);
-
-         compute_end(Length(((s[j]).value)), String(""));
-         if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
-         (v->back()).push_back(p);
-         }
-
-         //tabulate the Route points of the jth component
-         for(i=1; i<n_points; i++){
-
-         compute_end(Length(((s[j]).value) + (((s[j+1]).value)-((s[j]).value))*((double)(i-1))/((double)(n_points-1))), String(""));
-         lambda_a = (end.lambda);
-
-         compute_end(Length(((s[j]).value) + (((s[j+1]).value)-((s[j]).value))*((double)i)/((double)(n_points-1))), String(""));
-         lambda_b = (end.lambda);
-
-
-
-         if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
-         //end is a valid point
-
-         //                    if(((lambda_b > lambda_a) && (lambda_b > ((draw_panel->parent)->lambda_min)) && (lambda_a < ((draw_panel->parent)->lambda_min))) || ((lambda_b < lambda_a) && (lambda_b < ((draw_panel->parent)->lambda_max)) && (lambda_a > ((draw_panel->parent)->lambda_max)))){
-         //                        //there is a discontinuous jump when *this is drawn
-         //
-         //                        //create a new chunk in v
-         //                        v->resize((v->size())+1);
-         //
-         //                    }
-
-         (v->back()).push_back(p);
-
-         }
-         //                else{
-         //                    //end is a valid point
-         //
-         //                    //create a new chunk in v without adding any point to this chunk
-         //                    v->resize((v->size())+1);
-         //
-         //                }
-
-
-
-         }
-
-
-
-         }
-         */
-
-
-
-
-
          //run over all chunks of *this which are visible
          //given that s contains the number of intersection points of *this and that each pair of intersection point delimits a chunk, and that v contains the chunks, the size of v is equal to thte size of s minus one.
         v->resize((s.size()) - 1);
@@ -2666,20 +2608,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
 
         }
 
-
-        //        //delete chunks with size 1
-        //        for(j=0; j<(v->size()); ){
-        //
-        //            if(((v[j]).size())<=1){
-        //                v->erase(((v->begin())+j));
-        //            }else{
-        //                j++;
-        //            }
-        //
-        //        }
-
-    }
-    else {
+    }else {
 
         //        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
 

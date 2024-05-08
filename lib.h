@@ -87,8 +87,8 @@ template<class P> class CheckArcMinute;
 template<class P> class TabulateDays;
 template<typename FF_OK> class MessageFrame;
 
-class MotionHandler;
-class ChartTransportHandler;
+template<class F> class MotionHandler;
+template<class F> class ChartTransportHandler;
 
 
 //a class for color objects
@@ -2866,7 +2866,7 @@ public:
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither ChartFrame::UpdateSliderLabel_Mercator or ChartFrame::UpdateSliderLabel_3D, according to my needs, and similarly for the other pointers
     void (ChartFrame::*UpdateSliderLabel)(void);
     //the transport handler used to transport the chart in *this
-    ChartTransportHandler* chart_transport_handler;
+    ChartTransportHandler<void>* chart_transport_handler;
     
     ChartFrame(ListFrame*, Projection, const wxString&, const wxPoint&, const wxSize&, String);
 
@@ -2939,7 +2939,7 @@ public:
 
 
 //a hanlder to transport a non-GUI object of type NON_GUI (NON_GUI may be equal to Position, Route, ...)  with an animation. When the transport is over, this may exectued a functor of type F. If nothing is supposed to be exectued at the end of the transport, set F = void
-template <class NON_GUI, class F> class GraphicalFeatureTransportHandler: public MotionHandler{
+template <class NON_GUI, class F> class GraphicalFeatureTransportHandler: public MotionHandler<F>{
     
 public:
     
@@ -2956,7 +2956,7 @@ public:
 
 
 //a hanlder to move the chart of a given ChartFrame with an animation
-class ChartTransportHandler: public MotionHandler{
+template<class F> class ChartTransportHandler: public MotionHandler<F>{
     
 public:
     

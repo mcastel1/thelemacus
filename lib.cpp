@@ -11693,7 +11693,7 @@ void ChartFrame::Animate(void){
         case 0: {
             //I am using Projection_types[0]
             
-            chart_transport_handler = new ChartTransportHandler(
+            chart_transport_handler = new ChartTransportHandler<void>(
                                                                 this,
                                                                 Route(
                                                                       Route_types[0],
@@ -11711,7 +11711,7 @@ void ChartFrame::Animate(void){
         case 1: {
             //I am using Projection_types[1]
             
-            chart_transport_handler = new ChartTransportHandler(
+            chart_transport_handler = new ChartTransportHandler<void>(
                                                                 this,
                                                                 Route(
                                                                       Route_types[1],
@@ -11818,7 +11818,7 @@ template<class T> void ListFrame::AnimateToObject(T* object_in){
 
                 
                 
-                (chart_frames[i])->chart_transport_handler = new ChartTransportHandler(
+                (chart_frames[i])->chart_transport_handler = new ChartTransportHandler<void>(
                                                                                        (chart_frames[i]),
                                                                                        Route(
                                                                                              Route_types[1],
@@ -22507,7 +22507,7 @@ template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_i
 
 }
 
-MotionHandler::MotionHandler(ListFrame* parent_in){
+template<class F> MotionHandler<F>::MotionHandler(ListFrame* parent_in){
 
     timer = new wxTimer();
 
@@ -22519,15 +22519,15 @@ MotionHandler::MotionHandler(ListFrame* parent_in){
 
 
 //constructor of GraphicalFeatureTransportHandler: f_in is the functor to be provided if something is supposed to be executed at the end of the transport (e.g., do another transport, show a MessageFrame, etc...). If nothing is supposed to be executed, set f_in = NULL
-template<class NON_GUI, class F> GraphicalFeatureTransportHandler<NON_GUI, F>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in,  const String& type_of_transported_object_in, const Route& transporting_route_in, F* f_in) : MotionHandler(parent_in){
+template<class NON_GUI, class F> GraphicalFeatureTransportHandler<NON_GUI, F>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in,  const String& type_of_transported_object_in, const Route& transporting_route_in, F* f_in) : MotionHandler<F>(parent_in){
 
     transported_object = object_in;
     type_of_transported_object = type_of_transported_object_in;
-    transporting_route = transporting_route_in;
-    f = f_in;
+    (MotionHandler<F>::transporting_route) = transporting_route_in;
+    (MotionHandler<F>::f) = f_in;
     
 
-    timer->Bind(wxEVT_TIMER, &GraphicalFeatureTransportHandler::OnTimer, this);
+    (MotionHandler<F>::timer)->Bind(wxEVT_TIMER, &GraphicalFeatureTransportHandler::OnTimer, this);
 
 }
 

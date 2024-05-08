@@ -2933,7 +2933,7 @@ public:
     //a counter of the step in the animation, running from 0 to n_animation_steps
     long t;
     
-    MotionHandler(ListFrame*, const Route&);
+    MotionHandler(ListFrame*, const Route&, F*);
     
 };
 

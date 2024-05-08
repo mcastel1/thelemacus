@@ -22597,17 +22597,17 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             //I brind all ChartFrames to front to show the animation
             wxGetApp().ShowCharts(event);
             
-            t++;
+            (MotionHandler<F>::t)++;
 
         }
         
-        if(t > 0){
+        if((MotionHandler<F>::t) > 0){
             //the transport animation is in progress -> do the next chunk
 
             (MotionHandler<F>::transporting_route_temp).length.set(
                 String(""),
                 ((MotionHandler<F>::transporting_route).length.value) *
-                (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
+                (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
                 ,
                 String(""));
 
@@ -22636,7 +22636,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             (MotionHandler<F>::parent)->RefreshAll();
             //            cout << "\t\t t= " << t << "\n";
             
-            t++;
+            (MotionHandler<F>::t)++;
 
         }
 
@@ -22804,10 +22804,10 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
 template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
     
-    if((t < (wxGetApp().n_animation_steps.value))) {
+    if(((MotionHandler<F>::t) < (wxGetApp().n_animation_steps.value))) {
         //the time parameter is undedr its maximum value
 
-        if(t == 0) {
+        if((MotionHandler<F>::t) == 0) {
             //I am at the beginning of the transport and *parent is not in idling mode -> proceed with the transport
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
@@ -22881,17 +22881,17 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
 
          
             
-            t++;
+            (MotionHandler<F>::t)++;
 
         }
         
-        if(t > 0){
+        if((MotionHandler<F>::t) > 0){
             //the transport animation is in progress -> do the next chunk
 
             (MotionHandler<F>::transporting_route_temp).length.set(
                 String(""),
                 ((MotionHandler<F>::transporting_route).length.value) *
-                                               (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)))))
+                                               (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)))))
                                                ,
                                                String(""));
             
@@ -22928,7 +22928,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     
                     (chart_frame->draw_panel->circle_observer.reference_position) = ((MotionHandler<F>::transporting_route_temp).end);
 
-                    chart_frame->draw_panel->circle_observer.omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
+                    chart_frame->draw_panel->circle_observer.omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
                     
                     
                     break;
@@ -22976,7 +22976,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
 
             //            cout << "\t\t t= " << t << "\n";
             
-            t++;
+            (MotionHandler<F>::t)++;
 
         }
 

@@ -22436,7 +22436,9 @@ template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_i
 
 }
 
-template<class F> MotionHandler<F>::MotionHandler(ListFrame* parent_in){
+template<class F> MotionHandler<F>::MotionHandler(ListFrame* parent_in, const Route& transporting_route_in){
+    
+    transporting_route = transporting_route_in;
 
     timer = new wxTimer();
 
@@ -22448,11 +22450,11 @@ template<class F> MotionHandler<F>::MotionHandler(ListFrame* parent_in){
 
 
 //constructor of GraphicalFeatureTransportHandler: f_in is the functor to be provided if something is supposed to be executed at the end of the transport (e.g., do another transport, show a MessageFrame, etc...). If nothing is supposed to be executed, set f_in = NULL
-template<class NON_GUI, class F> GraphicalFeatureTransportHandler<NON_GUI, F>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in,  const String& type_of_transported_object_in, const Route& transporting_route_in, F* f_in) : MotionHandler<F>(parent_in){
+template<class NON_GUI, class F> GraphicalFeatureTransportHandler<NON_GUI, F>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in,  const String& type_of_transported_object_in, const Route& transporting_route_in, F* f_in) : MotionHandler<F>(parent_in, transporting_route_in){
 
     transported_object = object_in;
     type_of_transported_object = type_of_transported_object_in;
-    (MotionHandler<F>::transporting_route) = transporting_route_in;
+//    (MotionHandler<F>::transporting_route) = transporting_route_in;
     (MotionHandler<F>::f) = f_in;
     
 
@@ -22684,13 +22686,11 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
 
 //constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with proposed zoom factor proposed _zoom_factor at end fo the transport.  This is a `proposed` zoom factor because, if such proposed zoom factor is < 1 or > zoom_factor_max, the actual zoom factor will be set to 1 and zoom_factor_max, respectively. Othersize, the actual zoom_factor will be equal to proposed_zoom_factor.
-template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& proposed_zoom_factor) : MotionHandler<F>(chart_in->parent){
+template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& proposed_zoom_factor) : MotionHandler<F>(chart_in->parent, transporting_route_in){
     
     Double zoom_factor;
     
     chart_frame = chart_in;
-    //set route equal to a loxodrom connecting a and b
-    (MotionHandler<F>::transporting_route) = transporting_route_in;
     
     if(proposed_zoom_factor.value < 1.0){
         zoom_factor = 1.0;

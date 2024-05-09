@@ -2968,7 +2968,7 @@ public:
     //for the 3d projectionb: the aperture angles of circle_observer  at the beginning and at the end of the transport, respectively
     Angle omega_start, omega_end;
     
-    ChartTransportHandler(ChartFrame*, const Route&, const Double&);
+    ChartTransportHandler(ChartFrame*, const Route&, const Double&, F*);
     void operator()(void);
     void OnTimer(wxTimerEvent&);
     

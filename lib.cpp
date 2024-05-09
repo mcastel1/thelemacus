@@ -11629,7 +11629,8 @@ void ChartFrame::Animate(void){
                                                                       Position(lambda_max, phi_max).antipode_lambda(),
                                                                       Position(lambda_max, phi_max)
                                                                       ),
-                                                                Double(1.0)
+                                                                Double(1.0),
+                                                                      NULL
                                                                 );
             
             
@@ -11647,7 +11648,8 @@ void ChartFrame::Animate(void){
                                                                       draw_panel->circle_observer.reference_position.half(),
                                                                       draw_panel->circle_observer.reference_position
                                                                       ),
-                                                                Double(1.0)
+                                                                Double(1.0),
+                                                                      NULL
                                                                 );
             
             
@@ -11748,14 +11750,15 @@ template<class T> void ListFrame::AnimateToObject(T* object_in){
                 
                 
                 (chart_frames[i])->chart_transport_handler = new ChartTransportHandler<void>(
-                                                                                       (chart_frames[i]),
-                                                                                       Route(
-                                                                                             Route_types[1],
-                                                                                             (chart_frames[i])->draw_panel->circle_observer.reference_position,
-                                                                                             target_position
-                                                                                             ),
-                                                                                       Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (target_omega.value) ) )
-                                                                                       );
+                                                                                             (chart_frames[i]),
+                                                                                             Route(
+                                                                                                   Route_types[1],
+                                                                                                   (chart_frames[i])->draw_panel->circle_observer.reference_position,
+                                                                                                   target_position
+                                                                                                   ),
+                                                                                             Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (target_omega.value) ) ),
+                                                                                             NULL
+                                                                                             );
                 
                 //trigger the animation
                 (chart_frames[i])->chart_transport_handler->operator()();
@@ -22688,7 +22691,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
 
 //constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with proposed zoom factor proposed _zoom_factor at end fo the transport.  This is a `proposed` zoom factor because, if such proposed zoom factor is < 1 or > zoom_factor_max, the actual zoom factor will be set to 1 and zoom_factor_max, respectively. Othersize, the actual zoom_factor will be equal to proposed_zoom_factor.
-template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& proposed_zoom_factor) : MotionHandler<F>(chart_in->parent, transporting_route_in, NULL){
+template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& proposed_zoom_factor, F* f_in) : MotionHandler<F>(chart_in->parent, transporting_route_in, f_in){
     
     Double zoom_factor;
     

@@ -18436,7 +18436,13 @@ void ListFrame::OnComputePosition(void) {
         if (out == 0) {
             //the position couldbe computed by using only some crossings/Routes
 
-            print_error_message->SetAndCall(NULL, String("Warning"), String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."), (wxGetApp().path_file_warning_icon));
+            //set all parameters to prepare the printing of an error message, which will be called by ChartTransportHandler in AnimateToObject at the end of the animation. To do this, I enter print_error_message as an argument in the call to AnimateToObject
+            print_error_message->control = NULL;
+            print_error_message->message.set(String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."));
+            print_error_message->title.set(String("Warning"));
+            print_error_message->image_path.set(wxGetApp().path_file_warning_icon);
+            
+//            print_error_message->SetAndCall(NULL, String("Warning"), String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."), (wxGetApp().path_file_warning_icon));
 
         }
 

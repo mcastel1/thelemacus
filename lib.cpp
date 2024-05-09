@@ -11763,11 +11763,6 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 //trigger the animation
                 (chart_transport_handlers[i])->operator()();
                 
-                
-                
-                
-                
-                
                 break;
                 
             }
@@ -22687,6 +22682,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         (MotionHandler<F>::timer)->Stop();
         (*((MotionHandler<F>::parent)->unset_idling))();
         
+        //call the functor to be called at the end of the animation, if any
         if((MotionHandler<F>::f) != NULL){
             (*(MotionHandler<F>::f))();
         }
@@ -22983,6 +22979,11 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
     
         (MotionHandler<F>::timer)->Stop();
         (*((MotionHandler<F>::parent)->unset_idling))();
+        
+        //call the functor to be called at the end of the animation, if any
+        if((MotionHandler<F>::f) != NULL){
+            (*(MotionHandler<F>::f))();
+        }
         
     }
 

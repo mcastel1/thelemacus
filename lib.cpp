@@ -11616,7 +11616,7 @@ template<class T> void ChartFrame::ResetRenderAnimate(T& event) {
 void ChartFrame::Animate(void){
     
     //the transport handler used to transport the chart in *this
-    ChartTransportHandler<void>* chart_transport_handler;
+    ChartTransportHandler< UnsetIdling<ListFrame> >* chart_transport_handler;
         
     //allocate chart_transport_handler and set the starting Position and the Route for the transport
     switch (position_in_vector(Projection((projection->name->GetValue().ToStdString())), Projection_types)) {
@@ -11624,7 +11624,7 @@ void ChartFrame::Animate(void){
         case 0: {
             //I am using Projection_types[0]
             
-            chart_transport_handler = new ChartTransportHandler<void>(
+            chart_transport_handler = new ChartTransportHandler< UnsetIdling<ListFrame> >(
                                                                 this,
                                                                 Route(
                                                                       Route_types[0],
@@ -11632,7 +11632,7 @@ void ChartFrame::Animate(void){
                                                                       Position(lambda_max, phi_max)
                                                                       ),
                                                                 Double(1.0),
-                                                                      NULL
+                                                                      parent->unset_idling
                                                                 );
             
             
@@ -11643,7 +11643,7 @@ void ChartFrame::Animate(void){
         case 1: {
             //I am using Projection_types[1]
             
-            chart_transport_handler = new ChartTransportHandler<void>(
+            chart_transport_handler = new ChartTransportHandler< UnsetIdling<ListFrame> >(
                                                                 this,
                                                                 Route(
                                                                       Route_types[1],
@@ -11651,10 +11651,8 @@ void ChartFrame::Animate(void){
                                                                       draw_panel->circle_observer.reference_position
                                                                       ),
                                                                 Double(1.0),
-                                                                      NULL
+                                                                      parent->unset_idling
                                                                 );
-            
-            
             
             break;
             
@@ -11670,7 +11668,7 @@ void ChartFrame::Animate(void){
 
 
 
-//makes an animation which centers the chart on the object *object_in (which may be a Route, Position, ...) and adjust the chart zoom factor in such a way that *object_in is nicely visible at the end of the animation. Here f is the functor of the function that will be called at the end of the animation, and it is entered into the constructor of ChartTransrportHandler. If no functor is to be called at the end of the animation, set F = void and f = NULL
+//makes an animation which centers the chart on the object *object_in (which may be a Route, Position, ...) and adjust the chart zoom factor in such a way that *object_in is nicely visible at the end of the animation. Here f is the functor of the function that will be called at the end of the animation, and it is entered into the constructor of ChartTransrportHandler. If no functor is to be called at the end of the animation, one may let f point to a UnsetIdling<> functoer
 template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
     
     unsigned int i;
@@ -11679,7 +11677,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
     //the aperture angle of circle_observer at the end of the animation
     Angle target_omega;
     //the transport handlers used to transport the chart: there is one ChartTransportHandler per ChartFrame
-    vector<ChartTransportHandler<F>*> chart_transport_handlers;
+    vector< ChartTransportHandler<F>* > chart_transport_handlers;
     
     chart_transport_handlers.resize(chart_frames.size());
     
@@ -15098,25 +15096,9 @@ CloseApp::CloseApp(MyApp* app_in){
 
 template <class T> void CloseApp::operator()([[maybe_unused]] T& event) {
     
-//    unsigned int i;
-    
-//    for(; 0<app->list_frame->chart_frames.size(); ){
-//        
-//        if(((app->list_frame->chart_frames)[0])->chart_transport_handler != NULL){
-//            ((app->list_frame->chart_frames)[0])->chart_transport_handler->timer->Unbind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, ((app->list_frame->chart_frames)[0])->chart_transport_handler);
-//        }
-//        ((app->list_frame->chart_frames)[0])->Close();
-//    }
-//    if(app->progress_dialog){
-//        app->progress_dialog->Destroy();
-//    }
     app->list_frame->Close();
     app->disclaimer->Close();
     
-//    app->list_frame->Close();
-    
-//    event.Skip(true);
-
 }
 
 
@@ -16937,7 +16919,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     parent->OnModifyFile();
     
 //    parent->PreRenderAll();
-    parent->AnimateToObject<Position, void>(position, NULL);
+    parent->AnimateToObject<Position, UnsetIdling<ListFrame> >(position, parent->unset_idling);
     
 
     event.Skip(true);
@@ -17049,7 +17031,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     }
 
     //trigger the animation that centers the chart on *route
-    parent->AnimateToObject<Route, void>(route, NULL);
+    parent->AnimateToObject<Route, UnsetIdling<ListFrame>  >(route, parent->unset_idling);
 
     event.Skip(true);
 
@@ -20157,7 +20139,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     
 //    parent->PreRenderAll();
     //animate the charts to bring them to the Route related to the newly reduced Sight
-    parent->AnimateToObject<Route, void>(&((parent->data->route_list)[(sight->related_route).value]), NULL);
+    parent->AnimateToObject<Route, UnsetIdling<ListFrame> >(&((parent->data->route_list)[(sight->related_route).value]), parent->unset_idling);
     
     event.Skip(true);
 

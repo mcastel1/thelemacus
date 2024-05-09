@@ -11615,7 +11615,9 @@ template<class T> void ChartFrame::ResetRenderAnimate(T& event) {
 //makes a nice animation to present *this, by dragging the center of the chart to the desired Position from a Position on the antipodes
 void ChartFrame::Animate(void){
     
-    
+    //the transport handler used to transport the chart in *this
+    ChartTransportHandler<void>* chart_transport_handler;
+        
     //allocate chart_transport_handler and set the starting Position and the Route for the transport
     switch (position_in_vector(Projection((projection->name->GetValue().ToStdString())), Projection_types)) {
             
@@ -11668,18 +11670,19 @@ void ChartFrame::Animate(void){
 
 
 
-//makes an animation which centers the chart on the object *object_in (which may be a Route, Position, ...) and adjust the chart zoom factor in such a way that *object_in is nicely visible at the end of the animation
-template<class T> void ListFrame::AnimateToObject(T* object_in){
+//makes an animation which centers the chart on the object *object_in (which may be a Route, Position, ...) and adjust the chart zoom factor in such a way that *object_in is nicely visible at the end of the animation. Here f is the functor of the function that will be called at the end of the animation, and it is entered into the constructor of ChartTransrportHandler. If no functor is to be called at the end of the animation, set F = void and f = NULL
+template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
     
     unsigned int i;
     //the Position where the chart will be centered by the animation triggered when the user presses ok
     Position target_position;
     //the aperture angle of circle_observer at the end of the animation
     Angle target_omega;
+    //the transport handlers used to transport the chart: there is one ChartTransportHandler per ChartFrame
+    vector<ChartTransportHandler<F>*> chart_transport_handlers;
     
+    chart_transport_handlers.resize(chart_frames.size());
     
-
-
     for(i=0; i<chart_frames.size(); i++){
         
         switch (position_in_vector(Projection(((chart_frames[i])->projection->name->GetValue().ToStdString())), Projection_types)) {
@@ -11744,12 +11747,9 @@ template<class T> void ListFrame::AnimateToObject(T* object_in){
                     target_omega = ((chart_frames[i])->draw_panel->circle_observer.omega);
                     
                 }
+            
                 
-                
-
-                
-                
-                (chart_frames[i])->chart_transport_handler = new ChartTransportHandler<void>(
+                chart_transport_handlers[i] = new ChartTransportHandler<F>(
                                                                                              (chart_frames[i]),
                                                                                              Route(
                                                                                                    Route_types[1],
@@ -11757,11 +11757,11 @@ template<class T> void ListFrame::AnimateToObject(T* object_in){
                                                                                                    target_position
                                                                                                    ),
                                                                                              Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (target_omega.value) ) ),
-                                                                                             NULL
+                                                                                             f
                                                                                              );
                 
                 //trigger the animation
-                (chart_frames[i])->chart_transport_handler->operator()();
+                (chart_transport_handlers[i])->operator()();
                 
                 
                 
@@ -16942,7 +16942,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     parent->OnModifyFile();
     
 //    parent->PreRenderAll();
-    parent->AnimateToObject(position);
+    parent->AnimateToObject<Position, void>(position, NULL);
     
 
     event.Skip(true);
@@ -17054,7 +17054,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     }
 
     //trigger the animation that centers the chart on *route
-    parent->AnimateToObject(route);
+    parent->AnimateToObject<Route, void>(route, NULL);
 
     event.Skip(true);
 
@@ -18437,19 +18437,19 @@ void ListFrame::OnComputePosition(void) {
             //the position couldbe computed by using only some crossings/Routes
 
             //set all parameters to prepare the printing of an error message, which will be called by ChartTransportHandler in AnimateToObject at the end of the animation. To do this, I enter print_error_message as an argument in the call to AnimateToObject
-            print_error_message->control = NULL;
-            print_error_message->message.set(String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."));
-            print_error_message->title.set(String("Warning"));
-            print_error_message->image_path.set(wxGetApp().path_file_warning_icon);
+            print_warning_message->control = NULL;
+            print_warning_message->message.set(String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."));
+            print_warning_message->title.set(String("Warning"));
+            print_warning_message->image_path.set(wxGetApp().path_file_warning_icon);
             
-//            print_error_message->SetAndCall(NULL, String("Warning"), String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."), (wxGetApp().path_file_warning_icon));
+//            print_warning_message->SetAndCall(NULL, String("Warning"), String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."), (wxGetApp().path_file_warning_icon));
 
         }
 
         set();
 //        PreRenderAll();
         //bring all charts to the astronomical position with an animation 
-        AnimateToObject(&(data->route_list.back()));
+        AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(&(data->route_list.back()), print_warning_message);
 
     }
 
@@ -20162,7 +20162,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     
 //    parent->PreRenderAll();
     //animate the charts to bring them to the Route related to the newly reduced Sight
-    parent->AnimateToObject(&((parent->data->route_list)[(sight->related_route).value]));
+    parent->AnimateToObject<Route, void>(&((parent->data->route_list)[(sight->related_route).value]), NULL);
     
     event.Skip(true);
 

@@ -2685,7 +2685,7 @@ public:
     template<class E> void OnPressCtrlShiftS(E&);
     template<class E> void KeyDown(E&);
     template<class T> void ComputePosition(T&);
-    template<class T> void AnimateToObject(T*);
+    template<class T, class F> void AnimateToObject(T*, F*);
 
     
 };
@@ -2865,8 +2865,6 @@ public:
     Double /*the zoom factor relative to the default configuration of either projection, the zoom factor  is not necessarily equal to the numerical value (slider->GetValue()) shown on the slider*/zoom_factor;
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither ChartFrame::UpdateSliderLabel_Mercator or ChartFrame::UpdateSliderLabel_3D, according to my needs, and similarly for the other pointers
     void (ChartFrame::*UpdateSliderLabel)(void);
-    //the transport handler used to transport the chart in *this
-    ChartTransportHandler<void>* chart_transport_handler;
     
     ChartFrame(ListFrame*, Projection, const wxString&, const wxPoint&, const wxSize&, String);
 

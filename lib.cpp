@@ -16959,16 +16959,15 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
 
-    }
-    else {
+    }else {
         //I am modifying an existing Route
 
-        if ((route->related_sight).value != -1) {
+        if ((route->related_sight) != -1) {
             //the Route that I am moidifying is related to a Sight
 
             //because I am modifying and thus altering the Route, I disconnect it from its related sight
             (parent->i_object_to_disconnect) = (route->related_sight.value);
-            parent->DisconnectAndPromptMessage(event);
+//            parent->DisconnectAndPromptMessage(event);
             //set i_obeject_to_disconnect to its original value
             (parent->i_object_to_disconnect) = -1;
 
@@ -17036,9 +17035,24 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
     }
 
-    //trigger the animation that centers the chart on *route
-    parent->AnimateToObject<Route, UnsetIdling<ListFrame>  >(route, parent->unset_idling);
+    
+    if((position_in_listcontrol_routes != -1) && ((route->related_sight) != -1)){
+        //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_warning_message as an argument, in such a way that, at the end of the animation, this message is prompted
 
+        parent->print_warning_message->control = NULL;
+        parent->print_warning_message->title.set(String(""), String("Warning"), String(""));
+        parent->print_warning_message->message.set(String(""), String("The route which is being modified was related to a sight! Disconnecting the route from the sight."), String(""));
+        
+        parent->AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(route, parent->print_warning_message);
+
+        
+    }else{
+        //I am either entering a new Route or modifying a Route unrelated to a Sight -> in both cases, I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling (intended as 'do nothing special' here) at the end of the animation
+        
+        parent->AnimateToObject<Route, UnsetIdling<ListFrame>  >(route, parent->unset_idling);
+        
+    }
+ 
     event.Skip(true);
 
     Close(TRUE);

@@ -132,6 +132,9 @@
  
  
  ********** THINGS TO FIX ***********
+    - if the user wants to transport something with an existing Route and there are no existing Routes available, there is no way to get out of the transport routine safely.
+ 
+    - add the possiblity to abort the transport operation 
     - when you zoom onto a Route and the chart is already centeret on that Route, it crashes (in the 3d projection)
     - the error message "Not all routes could be used ... " should be prompted after the animation is over
     - when you compute the corssing with only two sights omega of the circle of equal altitude for the uncertainty fo the sight is NaN

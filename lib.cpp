@@ -11678,6 +11678,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
     Angle target_omega;
     //the transport handlers used to transport the chart: there is one ChartTransportHandler per ChartFrame
     vector< ChartTransportHandler<F>* > chart_transport_handlers;
+    Length d;
     
     chart_transport_handlers.resize(chart_frames.size());
     
@@ -11729,9 +11730,6 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                     
                 }
                 
-                
-                
-                
                 if(std::is_same<T, Position>::value){
                     //object is a Position
                     
@@ -11747,19 +11745,26 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 }
             
                 
-                chart_transport_handlers[i] = new ChartTransportHandler<F>(
-                                                                                             (chart_frames[i]),
-                                                                                             Route(
-                                                                                                   Route_types[1],
-                                                                                                   (chart_frames[i])->draw_panel->circle_observer.reference_position,
-                                                                                                   target_position
-                                                                                                   ),
-                                                                                             Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (target_omega.value) ) ),
-                                                                                             f
-                                                                                             );
+                target_position.distance((chart_frames[i])->draw_panel->circle_observer.reference_position, &d, String(""), String(""));
                 
-                //trigger the animation
-                (chart_transport_handlers[i])->operator()();
+                if (d > 0.01 * Re*(chart_frames[i])->draw_panel->circle_observer.omega.value) {
+                    
+                    chart_transport_handlers[i] = new ChartTransportHandler<F>(
+                                                                               (chart_frames[i]),
+                                                                               Route(
+                                                                                     Route_types[1],
+                                                                                     (chart_frames[i])->draw_panel->circle_observer.reference_position,
+                                                                                     target_position
+                                                                                     ),
+                                                                               Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (target_omega.value) ) ),
+                                                                               f
+                                                                               );
+                    
+                    //trigger the animation
+                    (chart_transport_handlers[i])->operator()();
+                    
+                    
+                }
                 
                 break;
                 

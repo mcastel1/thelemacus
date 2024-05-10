@@ -5929,10 +5929,10 @@ int Data::compute_position(String prefix) {
             r.print(String("minimal distance between crossing points"), String("nm"), prefix, cout);
             center.print(String("center crossing"), prefix, cout);
 
-            //I append center to the list of retained crossings, run through all the pairs of crossings except for center, and select the Position in the pair which is closer to center. Crossings are also added to position_list, in such a way that they are shown in the plot
+            //I append center to the list of retained crossings, run through all the pairs of crossings except for center, and select the Position in the pair which is closer to center
             q.clear();
             q.push_back(center);
-            //        position_list.push_back(q[q.size()-1]);
+
             for (i = 0; i < p.size(); i++) {
 
                 if (!(((p[i][0]) == center) || ((p[i][1]) == center))) {
@@ -5950,8 +5950,6 @@ int Data::compute_position(String prefix) {
                         q.push_back(p[i][0]);
 
                     }
-
-                    //                position_list.push_back(q[q.size()-1]);
 
                 }
 
@@ -9889,7 +9887,9 @@ inline void DrawPanel::Render_3D(
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
 
     //render coastlines
-    RenderPolygons(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
+    if((parent->parent->show_coastlines) == Answer('y', String(""))){
+        RenderPolygons(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
+    }
 
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context

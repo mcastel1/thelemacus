@@ -137,7 +137,6 @@
     - add the possiblity to abort the transport operation 
     - when you compute the crossing with only two sights omega of the circle of equal altitude for the uncertainty fo the sight is NaN
     - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
-    - if you don't load coastline data ther eis a segmentation fault
     - adapt Route::print to take into account the length format
     - after you press reset the coordinates of the instantaneous mouse position are wrong in the 3d projection
     - replace `f ((type.value)[0] == 'l') {` and similar cases where one needs to tell whether a route is loxodrome, orthodrome or circle of equal altitude with a switch which uses position_in_vector

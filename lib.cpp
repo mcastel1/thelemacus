@@ -5902,7 +5902,7 @@ int Data::compute_position(String prefix) {
 
 
         if (l > 0) {
-            //there is at least one valid crossing
+            //there is at least one valid crossing -> the astronomical Position can be computed
 
 
             //r is the minimal distance between crossing points. To find the minimum, here I set r to it largest possible value, obtained when the two points are at the antipodes. I find the pair of crossing points which is closest to each other, and set Position center to one of the Positions in this pair. center will thus represent the approximate astronomical position. I will then run over all the pairs of crossing points in p, p[i], and pick either p[i][0] or p[i][1]: I will pick the one which is closest to center
@@ -5954,6 +5954,7 @@ int Data::compute_position(String prefix) {
                 }
 
             }
+            
 
             //compute astronomical position by averaging on all viable crossing points
             center.lambda.value = 0.0;
@@ -5967,48 +5968,60 @@ int Data::compute_position(String prefix) {
             (center.lambda.value) /= ((double)(q.size()));
             (center.phi.value) /= ((double)(q.size()));
             center.label.set(String(""), String("astronomical position"), prefix);
-
-            //compute error on astronomical position
-            (r.value) = 0.0;
-            for (i = 0; i < q.size(); i++) {
-                for (j = i + 1; j < q.size(); j++) {
-
-
-                    (q[i]).distance(q[j], &s, String(""), new_prefix);
-                    r = r + s;
-
-                }
-            }
-            (r.value) /= ((double)((q.size()) * ((q.size()) - 1) / 2));
-
-            //computes the circle of equal altitude which represents the error of the sight
-            (error_circle.type) = RouteType(((Route_types[2]).value));
-            (error_circle.reference_position) = center;
-            (error_circle.omega.value) = (r.value) / Re;
-            (error_circle.label) = String("error on astronomical position");
-            ((error_circle.related_sight).value) = -1;
-
             center.print(String("astronomical position"), prefix, cout);
-            r.print(String("error on astronomical position"), String("nm"), prefix, cout);
 
             position_list.push_back(center);
-            route_list.push_back(error_circle);
 
-            if (l == (crossing_route_list.size()) * ((crossing_route_list.size()) - 1) / 2) {
-                //all Routes in crossing_route_list have been used to get the position
+            
+            if(q.size() > 1){
+                //there are >= 2 crossings -> the error on the astronomical position can be computed
+                
+                //compute error on astronomical position
+                (r.value) = 0.0;
+                for (i = 0; i < q.size(); i++) {
+                    for (j = i + 1; j < q.size(); j++) {
+                        
+                        (q[i]).distance(q[j], &s, String(""), new_prefix);
+                        r = r + s;
+                        
+                    }
+                }
+                (r.value) /= ((double)((q.size()) * ((q.size()) - 1) / 2));
+                
+                //computes the circle of equal altitude which represents the error of the sight
+                (error_circle.type) = RouteType(((Route_types[2]).value));
+                (error_circle.reference_position) = center;
+                (error_circle.omega.value) = (r.value) / Re;
+                (error_circle.label) = String("error on astronomical position");
+                ((error_circle.related_sight).value) = -1;
+                
+                r.print(String("error on astronomical position"), String("nm"), prefix, cout);
+                route_list.push_back(error_circle);
+                
+                
+                if (l == (crossing_route_list.size()) * ((crossing_route_list.size()) - 1) / 2) {
+                    //all Routes in crossing_route_list have been used to get the position
 
-                output = 1;
+                    output = 1;
 
+                }else {
+                    //only some Routes in crossing_route_list have been used to get the position
+
+                    output = 0;
+
+                }
+
+            }else{
+                
+                cout << prefix.value << RED << "I could not compute the error on the astronomical position because there are not enough valid crossings!\n" << RESET;
+                
+                output = -2;
+                
             }
-            else {
-                //only some Routes in crossing_route_list have been used to get the position
 
-                output = 0;
 
-            }
 
-        }
-        else {
+        }else {
 
             cout << prefix.value << RED << "I could not compute the position because there are no valid crossings!\n" << RESET;
             output = -1;

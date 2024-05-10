@@ -25,6 +25,7 @@ pencil_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Imag
 plus_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/plus_icon.png"
 position_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/position_icon.png"
 question_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/question_icon.png"
+info_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/info_icon.png"
 trash_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/trash_icon.png"
 warning_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/warning_icon.png"
 jolly_rogers RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/jolly_rogers.png"

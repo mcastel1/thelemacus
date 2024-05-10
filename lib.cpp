@@ -17059,7 +17059,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
         parent->print_warning_message->control = NULL;
         parent->print_warning_message->title.set(String(""), String("Warning"), String(""));
-        parent->print_warning_message->message.set(String(""), String("The route which is being modified was related to a sight! Disconnecting the route from the sight."), String(""));
+        parent->print_warning_message->message.set(String(""), String("The route which has been modified was related to a sight! Disconnecting the route from the sight."), String(""));
         
         parent->AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(route, parent->print_warning_message);
 
@@ -17769,6 +17769,12 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
     print_question_message = new PrintQuestion<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> >(this, confirm_transport, unset_idling);
     //create extract_color with zero size, because I will need extract_color only to get colors
+    
+    //set icon paths to all print_*_message
+    print_warning_message->image_path = wxGetApp().path_file_warning_icon;
+    print_info_message->image_path = wxGetApp().path_file_info_icon;
+    print_error_message->image_path = wxGetApp().path_file_error_icon;
+
 
     data = new Data(catalog, String(""));
 

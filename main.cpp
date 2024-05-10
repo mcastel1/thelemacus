@@ -133,9 +133,8 @@
  
  ********** THINGS TO FIX ***********
     - if the user wants to transport something with an existing Route and there are no existing Routes available, there is no way to get out of the transport routine safely.
- 
     - add the possiblity to abort the transport operation 
-    - when you compute the corssing with only two sights omega of the circle of equal altitude for the uncertainty fo the sight is NaN
+    - when you compute the crossing with only two sights omega of the circle of equal altitude for the uncertainty fo the sight is NaN
     - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
     - if you don't load coastline data ther eis a segmentation fault
     - adapt Route::print to take into account the length format
@@ -470,6 +469,7 @@ bool MyApp::OnInit() {
     path_file_app_icon = image_directory.append(read_from_file(String("name file app icon"), (wxGetApp().path_file_init), String("R"), String("")));
     path_file_error_icon = image_directory.append(read_from_file(String("name file error icon"), (wxGetApp().path_file_init), String("R"), String("")));
     path_file_warning_icon = image_directory.append(read_from_file(String("name file warning icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_info_icon = image_directory.append(read_from_file(String("name file info icon"), (wxGetApp().path_file_init), String("R"), String("")));
     path_file_question_icon = image_directory.append(read_from_file(String("name file question icon"), (wxGetApp().path_file_init), String("R"), String("")));
     path_file_plus_icon = image_directory.append(read_from_file(String("name file plus icon"), (wxGetApp().path_file_init), String("R"), String("")));
     path_file_list_icon = image_directory.append(read_from_file(String("name file list icon"), (wxGetApp().path_file_init), String("R"), String("")));

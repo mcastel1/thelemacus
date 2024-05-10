@@ -87,8 +87,8 @@ template<class P> class CheckArcMinute;
 template<class P> class TabulateDays;
 template<typename FF_OK> class MessageFrame;
 
-class MotionHandler;
-class ChartTransportHandler;
+template<class F> class MotionHandler;
+template<class F> class ChartTransportHandler;
 
 
 //a class for color objects
@@ -168,7 +168,7 @@ public:
     void set(String, int, String);
     void print(String, String, ostream&);
     
-    bool operator==(const Int&), operator!=(const Int&), operator>(const int&);
+    bool operator == (const Int&), operator != (const Int&), operator == (const int&), operator != (const int&), operator > (const Int&), operator > (const int&);
     
 };
 
@@ -197,12 +197,15 @@ class Double{
 public:
     double value;
     
+    Double();
+    Double(const double&);
     bool equal_approx(Double);
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
     void set(String, double, String);
     void print(String, String, ostream&);
-    Double operator+(const Double&);
+    Double operator + (const Double&);
+    bool operator > (const double&), operator > (const Double&), operator < (const double&), operator < (const Double&);
     
 };
 
@@ -690,7 +693,7 @@ public:
     bool check_valid(String, String);
     string to_string(String, unsigned int);
     bool operator> (const Length&), operator<= (const Length&), operator> (const double&), operator< (const double&), operator==(const Length&), operator!=(const Length&);
-    Length operator + (const Length&), operator - (const Length&);
+    Length operator + (const Length&), operator - (const Length&), operator / (const double&), operator * (const double&);
     Length &operator += (const Length&), &operator -= (const Length&);
     
 };
@@ -751,6 +754,7 @@ public:
     Rotation inverse(void);
     void set(Angle, Angle, Angle);
     void set(gsl_matrix*);
+    void set(const Rotation&);
     void print(String, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
@@ -793,7 +797,7 @@ public:
     template<class S> void read_from_stream(String, S*, bool, String);
     bool transport(Position*, Route, String);
     bool transport_to(Route, String);
-    Position antipode(void);
+    Position half(void);
     Position antipode_lambda(void);
     string to_string(unsigned int);
     bool distance(Position, Length*, String, String);
@@ -818,6 +822,8 @@ public:
     
     Cartesian();
     Cartesian(const Position&);
+    double dot(const Cartesian&);
+    Cartesian cross (const Cartesian&);
     void setPosition(const Position&);
     void print(String, String, ostream&);
     void operator = (const Cartesian&);
@@ -886,7 +892,7 @@ public:
     //if type = l or o -> reference_position = start position, if type = c -> reference_position = ground position
     Position reference_position, end;
     //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude
-    Angle /*this is equal to alpha_notes: it is the azimuth of the vector tangent to the Route at reference_position*/Z, omega;
+    Angle /*this is equal to alpha_notes: it is the azimuth of the vector tangent to the Route at reference_position*/Z, /*the aprture angle, valid only if *this is a circle of equal altitude*/omega;
     //the length of the route
   
     Length length;
@@ -1962,7 +1968,7 @@ public:
     
     //the euler angles which specify the orientation of the earth for the 3d representation
     //two auxiliary vectors which will be used later
-     Cartesian r, /*vector position in the x'y'z' reference frame used for multiple purposes*/rp, /*vector position in the x'y'z' reference frame at the beginning, end and current time of mouse drag*/rp_start_drag, rp_end_drag, rp_now_drag;
+    Cartesian r, /*vector position in the x'y'z' reference frame used for multiple purposes*/rp;
     Rotation /*the orientation of the Earth at the beginning / current time / end of a drag*/rotation_start_drag, rotation_now_drag, rotation_end_drag, /*the rotation representing the current / initial orientation of the earth*/rotation, rotation_0;
     Double d, /*the distance between the plane of the 2d projection and the eye of the observer for the 3d plot, and its initial value when this is constructedd, d_0,*/ /*if the mouse hovers over a route and its y coordinate is equal to the y of the route +- (length sceen) * thickness_route_selection_over_length_screen /2, then the relative Route is highlighted in ListFrame*/thickness_route_selection_over_length_screen;
     String /*this is used to display on the chart the coordinates of a Position that is being dragged or of the reference_position of a Route that is being dragged at the current step of the drag process (label_dragged_object_now) or at the preceeding step (label_dragged_object_before)*/ label_dragged_object_now, label_dragged_object_before, /*text showing the coordinates of the current mouse position on draw_panel*/ label_position_now, label_position_before;
@@ -1971,7 +1977,7 @@ public:
     Position /*the starting Position (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the drag process (route_reference_position_drag_start), at the preceeding step of the drag process (route_reference_position_drag_start) and at the current step of the drag process (route_reference_position_drag_now) */route_reference_position_drag_start, route_reference_position_drag_before, route_reference_position_drag_now, /*starting and ending geographic position in a mouse drag process*/  geo_start_drag, geo_end_drag, /*the position on the sphere such that the vector between the center of the sphere and the position equals the direction of the rotation axis relative to a mouse drag*/rotation_axis, /*the geographic positions corresponding to the NW (SE) boundary of of the plot area, moved to the interior of the plot area by one pixel. These will be used to plot parallels and meridians in such a way that they don't hit the boundary of the plot area*/p_NW, p_SE;
     Angle rotation_angle, /*an angle containing the middle longitude/latitude of the current 3D projection, rounded up to the closest value which is a multiple of delta_lambda/phi, used for drawing things in the middle of the projection*/lambda_middle, phi_middle, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/ lambda_start, lambda_end, phi_start, phi_end, lambda_saved, phi_saved, Z_saved;
     PositionProjection /*the values of (x, y) at the beginning/end of the selection process with a rectangle*/projection_start, projection_end;
-    Route /*this is a circle of equal altitude which is the intersection between the earth's surface and the visibility cone of the observer, whose vertex is at the observer. circle_oberserver.omega is the aperture angle at the center of the earth which specifies the part of the earth surface visible by the observer. circle_observer.rerefence_position is the ground position of the observer: the intersection between the line between the center of the earth and the observer, and the surface of the earth. These exist for the 3D projection only*/circle_observer, /*the same as circle_observer, but at the initial configuration fo the chart*/circle_observer_0;
+    Route /*this is a circle of equal altitude which is the intersection between the earth's surface and the visibility cone of the observer, whose vertex is at the observer. circle_oberserver.omega is the aperture angle at the center of the earth which specifies the part of the earth surface visible by the observer. circle_observer.rerefence_position is the ground position of the observer: the intersection between the line between the center of the earth and the observer, and the surface of the earth. These exist for the 3D projection only*/circle_observer;
     //this rectangle represents the rectangle x_min ... y_max in the Mercator projection
     PositionRectangle rectangle_observer;
     wxBitmap m_bgbuffer;
@@ -2610,6 +2616,7 @@ public:
     vector<unsigned long long int> coastline_polygons_area_observer;
     Position /*these are the geographic Positions where the right mouse button is clicked at the beginning, the current and preceeding Position during mouse movement, and the mouse Position and at the end of the drawing process for the selection rectangle*/geo_position_start, geo_position_before, geo_position_now, position_end;
     //the object which is being transported : a "sight" or a "position"
+    Route /*the same as draw_panel->circle_observer, but at the initial configuration fo the chart*/circle_observer_0;
     String transported_object_type, /*the labels that will be drawn on position_start_label_selection_rectangle and position_end_label_selection_rectangle_now, respectively. end_label_selection_rectangle_now is the label of the end point of selection rectangle now, while end_label_selection_rectangle_before is the label of the end point of selection rectangle at the preceeding mouse position*/start_label_selection_rectangle, end_label_selection_rectangle_now, end_label_selection_rectangle_before;
     
     //a functor to set/unset idling mode in *this
@@ -2631,7 +2638,7 @@ public:
     ListFrame(const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     void set(void);
-    void DrawAll(void);
+    void PreRenderAll(void);
     void MyRefreshAll(void);
     void RefreshAll(void);
     void TabulatePositionsAll(void);
@@ -2678,6 +2685,8 @@ public:
     template<class E> void OnPressCtrlShiftS(E&);
     template<class E> void KeyDown(E&);
     template<class T> void ComputePosition(T&);
+    template<class T, class F> void AnimateToObject(T*, F*);
+
     
 };
 
@@ -2856,8 +2865,6 @@ public:
     Double /*the zoom factor relative to the default configuration of either projection, the zoom factor  is not necessarily equal to the numerical value (slider->GetValue()) shown on the slider*/zoom_factor;
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither ChartFrame::UpdateSliderLabel_Mercator or ChartFrame::UpdateSliderLabel_3D, according to my needs, and similarly for the other pointers
     void (ChartFrame::*UpdateSliderLabel)(void);
-    //the transport handler used to transport the chart in *this
-    ChartTransportHandler* chart_transport_handler;
     
     ChartFrame(ListFrame*, Projection, const wxString&, const wxPoint&, const wxSize&, String);
 
@@ -2906,12 +2913,15 @@ public:
 };
 
 //a hanlder to make a general motion (i.e., drag the chart, transport a Position, ...) with an animation
-class MotionHandler{
+template<class F> class MotionHandler{
     
 public:
     
     //the functor that calls *this
     ListFrame* parent;
+    //the eventual functor to be called at the end of tha motion animation
+    F* f;
+
     wxTimer* timer;
     //the position during the transport process at 'time' t
     Position start;
@@ -2921,20 +2931,19 @@ public:
     //a counter of the step in the animation, running from 0 to n_animation_steps
     long t;
     
-    MotionHandler(ListFrame*);
+    MotionHandler(ListFrame*, const Route&, F*);
     
 };
 
 
 //a hanlder to transport a non-GUI object of type NON_GUI (NON_GUI may be equal to Position, Route, ...)  with an animation. When the transport is over, this may exectued a functor of type F. If nothing is supposed to be exectued at the end of the transport, set F = void
-template <class NON_GUI, class F> class GraphicalFeatureTransportHandler: public MotionHandler{
+template <class NON_GUI, class F> class GraphicalFeatureTransportHandler: public MotionHandler<F>{
     
 public:
     
     NON_GUI* transported_object;
     //the type of the transported_object that is being transported (String("position") or String("route"), ...)
     String type_of_transported_object;
-    F* f;
     
     GraphicalFeatureTransportHandler(ListFrame*, NON_GUI*, const String&, const Route&, F*);
     void operator()(void);
@@ -2945,7 +2954,7 @@ public:
 
 
 //a hanlder to move the chart of a given ChartFrame with an animation
-class ChartTransportHandler: public MotionHandler{
+template<class F> class ChartTransportHandler: public MotionHandler<F>{
     
 public:
     
@@ -2954,8 +2963,10 @@ public:
     //the size (in Mercator projection x,y) of the projection in the mercator projection: this is stored and used during the transport in such a way that the size of the projection stays the same through the transport
     PositionProjection projection_size;
     Position p_NE, p_SW;
+    //for the 3d projectionb: the aperture angles of circle_observer  at the beginning and at the end of the transport, respectively
+    Angle omega_start, omega_end;
     
-    ChartTransportHandler(ChartFrame*, const Route&);
+    ChartTransportHandler(ChartFrame*, const Route&, const Double&, F*);
     void operator()(void);
     void OnTimer(wxTimerEvent&);
     

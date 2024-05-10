@@ -101,10 +101,10 @@
  - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
  - condense id RouteTypeField<P>::set(void)
  - try  wxDCClipper to quickly delete old image on DrawPanel
- - check whether you can remove Fitall in void ListFrame::DrawAll(void) { and whether it speeds up things
+ - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things
  - all unit fields should have the system              temp << "Available units are: "; message generated in the same way, as in template <class T> void CheckSpeedUnit<P>::operator()
  - when you enable / disable a field, enable/disable its wxStaticTexts and wxBoxSizers as well
- - check whether you can remove Fitall in void ListFrame::DrawAll(void) { and whether it speeds up things 
+ - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things 
  - add instrumental error
  - add readme file
  - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
@@ -131,8 +131,19 @@
  
  
  
- ********** THINGS TO FIX ************
-    - when you draw a selection rectangle that encompasses the greenwich antimeridian, a rectangle that goes around the earth on the other side is drawn 
+ ********** THINGS TO FIX ***********
+    - do all you did in move_to_route for the 3D projection also for the Mercator projection 
+    - if the user wants to transport something with an existing Route and there are no existing Routes available, there is no way to get out of the transport routine safely.
+    - add the possiblity to abort the transport operation 
+    - when you compute the crossing with only two sights omega of the circle of equal altitude for the uncertainty fo the sight is NaN
+    - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
+    - if you don't load coastline data ther eis a segmentation fault
+    - adapt Route::print to take into account the length format
+    - after you press reset the coordinates of the instantaneous mouse position are wrong in the 3d projection
+    - replace `f ((type.value)[0] == 'l') {` and similar cases where one needs to tell whether a route is loxodrome, orthodrome or circle of equal altitude with a switch which uses position_in_vector
+    - some angles that are integer multiple of a defgree are shown as 29 deg 60 ' -> fix it
+    - change projection = (((i % 2) == 0) ? (Projection_types[1]) : (Projection_types[0])); to previous line
+    - when you draw a selection rectangle that encompasses the greenwich antimeridian, a rectangle that goes around the earth on the other side is drawn
     - code method DrawPanel::ProjectionToGeo_3D
  on OSX:
  on WIN32:
@@ -162,7 +173,7 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         }
         
         //I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
-        list_frame->DrawAll();
+        list_frame->PreRenderAll();
     }
     
     dark_mode = (settings->GetAppearance()).IsDark();
@@ -296,6 +307,16 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
 }
 
 
+//same as template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) { but with no event argument
+void MyApp::ShowCharts(void){
+    
+    wxCommandEvent dummy;
+    
+    ShowCharts(dummy);    
+    
+}
+
+
 //make a nice animation to present all charts, by dragging them to the desired point from a point on the antipodes
 inline void MyApp::AnimateCharts(void){
 
@@ -354,15 +375,18 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
-    //test for     Route(const RouteType&, const Position&, const Position&);
-    /*
-     Route* route;
-     Position a, b;
-     a = Position(Angle(1.3235876239), Angle(0.432975879));
-     b = Position(Angle(1.54236943807), Angle(-1.324));
-     route = new Route(RouteType(Route_types[0].value), a, b);
-     route->compute_end(String(""));
-     */
+//    //
+//    Position a(.37932, .2380913), b(1.3, -.43233);
+//    Route r(Route_types[1], a,b);
+//    r.length_format = LengthFormat(LengthFormat_types[1].value);
+//    
+//    
+//    r.compute_end(String(""));
+//    r.print(String("orthodrome joining two points"), String(""), cout);
+//    b.print(String("b"), String(""), cout);
+//    r.end.print(String("endpoint"), String(""), cout);
+
+     
     
 
     unsigned int i;
@@ -446,6 +470,7 @@ bool MyApp::OnInit() {
     path_file_app_icon = image_directory.append(read_from_file(String("name file app icon"), (wxGetApp().path_file_init), String("R"), String("")));
     path_file_error_icon = image_directory.append(read_from_file(String("name file error icon"), (wxGetApp().path_file_init), String("R"), String("")));
     path_file_warning_icon = image_directory.append(read_from_file(String("name file warning icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_info_icon = image_directory.append(read_from_file(String("name file info icon"), (wxGetApp().path_file_init), String("R"), String("")));
     path_file_question_icon = image_directory.append(read_from_file(String("name file question icon"), (wxGetApp().path_file_init), String("R"), String("")));
     path_file_plus_icon = image_directory.append(read_from_file(String("name file plus icon"), (wxGetApp().path_file_init), String("R"), String("")));
     path_file_list_icon = image_directory.append(read_from_file(String("name file list icon"), (wxGetApp().path_file_init), String("R"), String("")));
@@ -472,7 +497,10 @@ bool MyApp::OnInit() {
     size_icon_over_width_screen.read_from_file_to(String("size icon over width screen"), (wxGetApp().path_file_init), String("R"),  String(""));
     size_message_image_over_width_screen.read_from_file_to(String("size message image over width screen"), (wxGetApp().path_file_init), String("R"),  String(""));
     point_size.read_from_file_to(String("point size"), (wxGetApp().path_file_init), String("R"), String(""));
-    
+
+    chart_transport_zoom_factor_coefficient.read_from_file_to(String("chart transport zoom factor coefficient"), (wxGetApp().path_file_init), String("R"),  String(""));
+    minimal_animation_distance_over_size_of_observer_region.read_from_file_to(String("minimal animation distance over size of observer region"), (wxGetApp().path_file_init), String("R"),  String(""));
+
     
     //----- test for Data::read_from_file_to - start
     /*
@@ -592,7 +620,8 @@ bool MyApp::OnInit() {
         (list_frame->chart_frames).resize(n_chart_frames.value);
         for (i = 0; i < (list_frame->chart_frames).size(); i++) {
             
-            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
+//            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
+            projection = (((i % 2) == 0) ? (Projection_types[1]) : (Projection_types[0]));
             
             //open a Mercator projection for even is and a 3D projection for odd is
             s.str("");

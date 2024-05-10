@@ -198,7 +198,7 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 
 
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.
-inline bool cross(const gsl_vector* a, const gsl_vector* b, gsl_vector** r) {
+inline bool my_cross(const gsl_vector* a, const gsl_vector* b, gsl_vector** r) {
 
     if (((a->size) == 3) && ((b->size) == 3)) {
 
@@ -345,19 +345,37 @@ void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 }
 
 
-bool Int::operator==(const Int& i) {
+bool Int::operator == (const Int& i) {
 
     return (value == (i.value));
 
 }
 
-bool Int::operator!=(const Int& i) {
+bool Int::operator != (const Int& i) {
 
     return (!((*this) == i));
 
 }
 
-bool Int::operator>(const int& i) {
+bool Int::operator == (const int& i) {
+
+    return (value == i);
+
+}
+
+bool Int::operator != (const int& i) {
+
+    return (!((*this) == i));
+
+}
+
+bool Int::operator > (const Int& i) {
+
+    return(value > (i.value));
+
+}
+
+bool Int::operator > (const int& i) {
 
     return(value > i);
 
@@ -691,51 +709,16 @@ void FileR::count_lines(String prefix) {
 
 }
 
-//If the operating system is WIN32, read the WIN32 resouces file this->name_without_folder_nor_extension, allocates an istringstream containg the file, and returns a pointer to this istringstream
-// If the operating system is different from WIN32, do nothing
-//istringstream* FileR::create_istringstream([[maybe_unused]] String prefix) {
-//
-//#ifdef __APPLE__
-//
-//    cout << prefix.value << RED << "create_istringstream does not work on APPLE operating system!\n" << RESET;
-//
-//#endif
-//
-//
-//#ifdef _WIN32
-//    //I am on WIN32 operating system-> the file is located in the resources incorporated in the .exe file, and I read it from there
-//
-//    char* bytes;
-//    HMODULE hModule;
-//    HRSRC hResource;
-//    HGLOBAL hMemory;
-//    DWORD dwSize;
-//    LPVOID lpAddress;
-//    LPCWSTR resource_id;
-//    wstring temp;
-//    istringstream* result;
-//
-//
-//    temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
-//
-//    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
-//    resource_id = (temp.c_str());
-//
-//    hModule = GetModuleHandle(NULL);
-//    hResource = FindResource(hModule, resource_id, L"DATA");
-//    hMemory = LoadResource(hModule, hResource);
-//    dwSize = SizeofResource(hModule, hResource);
-//    lpAddress = LockResource(hMemory);
-//
-//    bytes = new char[dwSize];
-//    memcpy(bytes, lpAddress, dwSize);
-//    result = new istringstream(bytes);
-//
-//    return result;
-//
-//#endif
-//
-//}
+
+//empty constructor
+inline Double::Double(void){}
+
+//constructor that sets value to  x
+inline Double::Double(const double &x){
+    
+    value = x;
+    
+}
 
 
 void Double::set(String name, double x, [[maybe_unused]] String prefix) {
@@ -912,7 +895,7 @@ void Double::print(String name, String prefix, ostream& ostr) {
 
 }
 
-Double Double::operator+ (const Double& x) {
+Double Double::operator + (const Double& x) {
 
     Double s;
 
@@ -922,6 +905,30 @@ Double Double::operator+ (const Double& x) {
 
 }
 
+
+bool Double::operator < (const Double& x){
+    
+    return (value < x.value);
+    
+}
+
+bool Double::operator < (const double& x){
+    
+    return (value < x);
+    
+}
+
+bool Double::operator > (const Double& x){
+    
+    return (value > x.value);
+    
+}
+
+bool Double::operator > (const double& x){
+    
+    return (value > x);
+    
+}
 
 //reads an Int from File file, which must be already open, and it search the file from the beginning if search_entire_stream = true, does not search the file from the beginning otherwise. Writes the result in *this
 template<class S> void Int::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool search_entire_stream, [[maybe_unused]] String prefix) {
@@ -1044,7 +1051,7 @@ bool Length::operator<(const double& r) {
 }
 
 
-Length Length::operator+ (const Length& l) {
+Length Length::operator + (const Length& l) {
 
     Length s;
 
@@ -1054,7 +1061,7 @@ Length Length::operator+ (const Length& l) {
 
 }
 
-Length Length::operator- (const Length& l) {
+Length Length::operator - (const Length& l) {
 
     Length s;
 
@@ -1074,6 +1081,29 @@ Length Length::operator- (const Length& l) {
     return s;
 
 }
+
+
+Length Length::operator * (const double& x) {
+
+    Length s;
+
+    (s.value) = value * x;
+
+    return s;
+
+}
+
+
+Length Length::operator / (const double& x) {
+
+    Length s;
+
+    (s.value) = value / x;
+
+    return s;
+
+}
+
 
 
 void Speed::print(String name, String unit, String prefix, ostream& ostr) {
@@ -1616,6 +1646,19 @@ void Rotation::set(gsl_matrix* m) {
 
 }
 
+
+//set the content of *this eqaul to the content of r by copying the content of r into the memory of *this : the memory adresses of *this and r will be left unchanged
+inline void Rotation::set(const Rotation& r){
+    
+    a = (r.a);
+    b = (r.b);
+    c = (r.c);
+    
+    gsl_matrix_memcpy(matrix, r.matrix);
+    
+}
+
+
 //constructor of a Rotation instance which sets the rotation matrix according to three Euler angles
 Rotation::Rotation(Angle a_in, Angle b_in, Angle c_in) {
 
@@ -1645,7 +1688,7 @@ Rotation::Rotation(Position p, Position q) {
         rotation_angle.set(String(""), acos(cos_rotation_angle), String(""));
 
 
-        cross((r_p.r), (r_q.r), &(omega.r));
+        my_cross((r_p.r), (r_q.r), &(omega.r));
         gsl_vector_scale((omega.r), 1.0 / fabs(sin(rotation_angle)));
 
         rotation_axis.setCartesian(String(""), omega, String(""));
@@ -2150,9 +2193,10 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
 Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
     
     type = type_in;
-
+    
     reference_position = p_start;
-   
+    (length_format.value) = ((LengthFormat_types[1]).value);
+    
     switch (type.position_in_list(Route_types)) {
             
         case 0:{
@@ -2162,7 +2206,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             
             projection_start.SetMercator(p_start);
             projection_end.SetMercator(p_end);
-
+            
             
             if(p_start.phi != p_end.phi){
                 //I am not in the special case where p_start and p_end have the same latitude
@@ -2181,7 +2225,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
                 }else{
                     Z = Z + M_PI;
                 }
-                       
+                
             }else{
                 //I am in the special case where p_start and p_end have the same latitude
                 
@@ -2196,8 +2240,8 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             
             //set length according to t* (see notes)
             set_length(fabs((p_end.lambda.value) - (p_start.lambda.value)));
-
-
+            
+            
             break;
             
         }
@@ -2205,16 +2249,54 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
         case 1:{
             //*this is an orthodrome
             
+            //p_start and p_end in Cartesian coordinates
+            Cartesian r_start, r_end, s;
+            Angle phi, z;
+            Position p_a, p_b, end_1, end_2;
             
-            break;
+            p_start.getCartesian(&r_start);
+            p_end.getCartesian(&r_end);
+            
+            reference_position = p_start;
+            
+            
+            //set the legnth as the length of the shortest great circle joining p_start and p_end
+            phi.set(String(""), acos(r_start.dot(r_end)), String(""));
+            length.set(String(""), Re*(phi.value), String(""));
+            
+            //set the tentative solution for the azimuth angle z: Z may be either z  (solkution 1) or -z (solution 2), I will pick the correct solution later
+            z.set(String(""),
+                  acos(-csc(phi) * sec(p_start.phi) * (cos(phi) * sin(p_start.phi) - sin(p_end.phi)) ),
+                  String(""));
+
+            //consider solution 1, compute end with this solution and store it in end_1
+            Z.set(String(""), z.value, String(""));
+            compute_end(String());
+            end_1 = end;
+            
+            //consider solution 2, compute end with this solution and store it in end_2
+            Z.set(String(""), -z.value, String(""));
+            compute_end(String());
+            end_2 = end;
+            
+            //check which one among end_1 and end_2 has a longitude closer to p_end and pick the correct solution accordingly
+            if(fabs(end_1.lambda.value - p_end.lambda.value) < fabs(end_2.lambda.value - p_end.lambda.value)){
+                Z.set(String(""), z.value, String(""));
+            }else{
+                Z.set(String(""), -z.value, String(""));
             }
+            
+
+            break;
+            
+        }
             
         case 2:{
             //*this is a circle of equal altitude
             
             cout << RED << "Cannot create a circle of equal altitute taht connects two positions!\n" << RESET;
             break;}
-
+            
     }
     
 }
@@ -2521,64 +2603,6 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if (compute_l_ends_ok) {
 
-
-        /*
-         //run over all chunks of *this which are visible
-         for(j=0; j<(s.size()); j++){
-
-         v->resize((v->size())+1);
-
-         compute_end(Length(((s[j]).value)), String(""));
-         if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
-         (v->back()).push_back(p);
-         }
-
-         //tabulate the Route points of the jth component
-         for(i=1; i<n_points; i++){
-
-         compute_end(Length(((s[j]).value) + (((s[j+1]).value)-((s[j]).value))*((double)(i-1))/((double)(n_points-1))), String(""));
-         lambda_a = (end.lambda);
-
-         compute_end(Length(((s[j]).value) + (((s[j+1]).value)-((s[j]).value))*((double)i)/((double)(n_points-1))), String(""));
-         lambda_b = (end.lambda);
-
-
-
-         if(((draw_panel->GeoToDrawPanel)(end, &p, false))){
-         //end is a valid point
-
-         //                    if(((lambda_b > lambda_a) && (lambda_b > ((draw_panel->parent)->lambda_min)) && (lambda_a < ((draw_panel->parent)->lambda_min))) || ((lambda_b < lambda_a) && (lambda_b < ((draw_panel->parent)->lambda_max)) && (lambda_a > ((draw_panel->parent)->lambda_max)))){
-         //                        //there is a discontinuous jump when *this is drawn
-         //
-         //                        //create a new chunk in v
-         //                        v->resize((v->size())+1);
-         //
-         //                    }
-
-         (v->back()).push_back(p);
-
-         }
-         //                else{
-         //                    //end is a valid point
-         //
-         //                    //create a new chunk in v without adding any point to this chunk
-         //                    v->resize((v->size())+1);
-         //
-         //                }
-
-
-
-         }
-
-
-
-         }
-         */
-
-
-
-
-
          //run over all chunks of *this which are visible
          //given that s contains the number of intersection points of *this and that each pair of intersection point delimits a chunk, and that v contains the chunks, the size of v is equal to thte size of s minus one.
         v->resize((s.size()) - 1);
@@ -2602,20 +2626,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
 
         }
 
-
-        //        //delete chunks with size 1
-        //        for(j=0; j<(v->size()); ){
-        //
-        //            if(((v[j]).size())<=1){
-        //                v->erase(((v->begin())+j));
-        //            }else{
-        //                j++;
-        //            }
-        //
-        //        }
-
-    }
-    else {
+    }else {
 
         //        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
 
@@ -4190,12 +4201,12 @@ bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
 }
 
 //return the antipode of *this on the earth
-Position Position::antipode(void){
+Position Position::half(void){
     
     Position result;
     
-    result.lambda = lambda + M_PI;
-    result.phi = phi - (2.0*M_PI);
+    result.lambda = lambda/2.0;
+    result.phi = phi/2.0;
     
     return result;
     
@@ -4277,6 +4288,33 @@ inline void Cartesian::setPosition(const Position& p){
     
     
 }
+
+
+//return the dot product between *this and s
+inline double Cartesian::dot(const Cartesian& s){
+    
+    double result;
+    
+    gsl_blas_ddot(r, s.r, &result);
+    
+    return result;
+    
+}
+
+
+//return the cross product between the vector of this and that of s
+inline Cartesian Cartesian::cross(const Cartesian& s){
+    
+    Cartesian result;
+    
+    my_cross(r, s.r, &(result.r));
+    
+    return result;
+    
+}
+
+
+
 
 void Cartesian::print(String name, String prefix, ostream& ostr) {
 
@@ -7240,7 +7278,7 @@ Length::Length(double value_in, const LengthUnit& unit_in) {
 //constructs the Length *this frome time and speed, by setting it equal to time x speed
 Length::Length(Chrono time, Speed speed) {
 
-    set(String("Length obtained from time and speed"), (time.get()) * (speed.value), String(""));
+    set(String(""), (time.get()) * (speed.value), String(""));
 
 }
 
@@ -8657,44 +8695,6 @@ void ListFrame::LoadCoastLineData(String prefix) {
 
         coastline_file.set_name((wxGetApp().path_coastline_file));
         coastline_file.count_lines(prefix);
-        
-//        progress_dialog = new wxProgressDialog(wxT("Welcome to Thelemacus!"), wxT("\nLoading chart structure ..."), max_dialog, NULL, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_SMOOTH | wxPD_ELAPSED_TIME | wxPD_REMAINING_TIME | wxPD_APP_MODAL);
-//#ifdef _WIN32
-//        //if I am on WIN32, I set the icon from the icon set in the .rc file
-//        progress_dialog->SetIcon(wxICON(app_icon));
-//#endif
-
-        //read file n_line and store it into vector n_line
-//        file_n_line.open(String(""));
-//
-//        cout << prefix.value << "Reading file ...\n";
-//
-//        for (i = 0, abort = false; /*Here file_n_line must have the same number of lines as n_line but, to be safe, here I stop the for loop if either i reached the size of n_line or file_n_line has reached the end of file*/(i < (n_line.size())) && (!((file_n_line.value)->eof())) && (!abort); i++) {
-//
-//            line.clear();
-//            ins.clear();
-//
-//            getline(*(file_n_line.value), line);
-//            ins << line;
-//            ins >> (n_line[i]);
-//            //        cout << "\nn_line[" << i << "] = " << n_line[i];
-//
-//            percentage_dialog = 100.0 * ((double)i) / ((double)(n_line.size()));
-//            message_dialog.str("");
-//            message_dialog << "\nLoading chart structure ... " << ((int)percentage_dialog) << "%";
-//            abort = (!(progress_dialog->Update(percentage_dialog, wxString(message_dialog.str().c_str()))));
-//
-//        }
-//
-//        if ((!abort)) {
-//
-//            progress_dialog->Update(max_dialog);
-//            cout << prefix.value << "... done.\n";
-//
-//        }
-
-//        file_n_line.close(String(""));
-
 
         if ((!abort)) {
             
@@ -8876,14 +8876,14 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     label_position_now = String("");
 
-    (circle_observer.omega).read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), prefix);
+    circle_observer.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), prefix);
     thickness_route_selection_over_length_screen.read_from_file_to(String("thickness route selection over length screen"), (wxGetApp().path_file_init), String("R"), prefix);
 
-    rotation = Rotation(
-        Angle(String("Euler angle alpha"), -M_PI_2, String("")),
-        Angle(String("Euler angle beta"), 0.0, String("")),
-        Angle(String("Euler angle gamma"), 0.0, String(""))
-    );
+    rotation.set(Rotation(
+                          Angle(String("Euler angle alpha"), -M_PI_2, String("")),
+                          Angle(String("Euler angle beta"), 0.0, String("")),
+                          Angle(String("Euler angle gamma"), 0.0, String(""))
+                          ));
 
     //specify that circle_observer is a circle of equal altitude
     circle_observer.type = RouteType(((Route_types[2]).value));
@@ -10472,7 +10472,7 @@ inline void DrawPanel::PreRender3D(void) {
 
 
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
-    (parent->zoom_factor).set(String(""), ((circle_observer_0.omega).value) / ((circle_observer.omega).value), String(""));
+    (parent->zoom_factor).set(String(""), (parent->parent->circle_observer_0.omega.value) / (circle_observer.omega.value), String(""));
     (this->*Set_x_y_min_max)();
     (this->*Set_lambda_phi_min_max)();
 
@@ -10923,13 +10923,14 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
 
 
+
     this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnPressCtrlW<wxCloseEvent>, this);
 
     mouse_scrolling = false;
     //set the zoom factor to 1 for the initial configuration of the projection
     zoom_factor.set(String(""), 1.0, String(""));
     //read zoom_factor_max from file_init
-    (wxGetApp().zoom_factor_max).read_from_file_to(String("maximal zoom factor"), (wxGetApp().path_file_init), String("R"), String(""));
+    wxGetApp().zoom_factor_max.read_from_file_to(String("maximal zoom factor"), (wxGetApp().path_file_init), String("R"), String(""));
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
     
@@ -10973,6 +10974,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     (wxGetApp().e_zoom).read_from_file_to(String("exponent zoom"), (wxGetApp().path_file_init), String("R"), String(""));
     (wxGetApp().a_zoom).set(String(""), (-1.0 + ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
     (wxGetApp().b_zoom).set(String(""), (pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value) - ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
+    parent->circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
 
 
     //text field showing the current value of the zoom slider
@@ -11194,9 +11196,9 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
         delta = ((draw_panel->circle_observer).omega) * ((wxGetApp().relative_displacement).value);
 
         //since I am moving north, I increase the b Euler ancgle of rotation
-        ((draw_panel->rotation).b) += delta;
+        (draw_panel->rotation.b) += delta;
         //I update rotation->matrix
-        (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
+        draw_panel->rotation.set(draw_panel->rotation.a, draw_panel->rotation.b, draw_panel->rotation.c);
 
 
 
@@ -11268,9 +11270,9 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
         delta = ((draw_panel->circle_observer).omega) * ((wxGetApp().relative_displacement).value);
 
         //since I am moving north, I increase the b Euler ancgle of rotation
-        ((draw_panel->rotation).b) -= delta;
+        (draw_panel->rotation.b) -= delta;
         //I update rotation->matrix
-        (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
+        draw_panel->rotation.set(draw_panel->rotation.a, draw_panel->rotation.b, draw_panel->rotation.c);
 
         break;
 
@@ -11331,9 +11333,9 @@ template<class T> void ChartFrame::MoveWest(T& event) {
         delta = ((draw_panel->circle_observer).omega) * ((wxGetApp().relative_displacement).value);
 
         //since I am moving north, I increase the b Euler ancgle of rotation
-        ((draw_panel->rotation).a) -= delta;
+        (draw_panel->rotation.a) -= delta;
         //I update rotation->matrix
-        (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
+        draw_panel->rotation.set(draw_panel->rotation.a, draw_panel->rotation.b, draw_panel->rotation.c);
 
 
 
@@ -11468,9 +11470,9 @@ template<class T> void ChartFrame::MoveEast(T& event) {
         delta = ((draw_panel->circle_observer).omega) * ((wxGetApp().relative_displacement).value);
 
         //since I am moving north, I increase the b Euler ancgle of rotation
-        ((draw_panel->rotation).a) += delta;
+        (draw_panel->rotation.a) += delta;
         //I update rotation->matrix
-        (draw_panel->rotation).set((draw_panel->rotation).a, (draw_panel->rotation).b, (draw_panel->rotation).c);
+        draw_panel->rotation.set(draw_panel->rotation.a, draw_panel->rotation.b, draw_panel->rotation.c);
 
 
 
@@ -11573,12 +11575,12 @@ template<class T> void ChartFrame::Reset(T& event) {
     if (((projection->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
         //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
 
-        ((draw_panel->circle_observer_0).omega).read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
+        parent->circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
         zoom_factor.set(String(""), 1.0, String(""));
         ComputeZoomFactor_3D();
 
         (draw_panel->rotation_0).read_from_file_to(String("rotation 0"), (wxGetApp().path_file_init), String("R"), String(""));
-        (draw_panel->rotation) = (draw_panel->rotation_0);
+        draw_panel->rotation.set(draw_panel->rotation_0);
         draw_panel->Set_x_y_min_max_3D();
         (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
 
@@ -11631,20 +11633,24 @@ template<class T> void ChartFrame::ResetRenderAnimate(T& event) {
 //makes a nice animation to present *this, by dragging the center of the chart to the desired Position from a Position on the antipodes
 void ChartFrame::Animate(void){
     
-    
+    //the transport handler used to transport the chart in *this
+    ChartTransportHandler< UnsetIdling<ListFrame> >* chart_transport_handler;
+        
     //allocate chart_transport_handler and set the starting Position and the Route for the transport
     switch (position_in_vector(Projection((projection->name->GetValue().ToStdString())), Projection_types)) {
             
         case 0: {
             //I am using Projection_types[0]
             
-            chart_transport_handler = new ChartTransportHandler(
+            chart_transport_handler = new ChartTransportHandler< UnsetIdling<ListFrame> >(
                                                                 this,
                                                                 Route(
                                                                       Route_types[0],
                                                                       Position(lambda_max, phi_max).antipode_lambda(),
                                                                       Position(lambda_max, phi_max)
-                                                                      )
+                                                                      ),
+                                                                Double(1.0),
+                                                                      parent->unset_idling
                                                                 );
             
             
@@ -11655,16 +11661,16 @@ void ChartFrame::Animate(void){
         case 1: {
             //I am using Projection_types[1]
             
-            chart_transport_handler = new ChartTransportHandler(
+            chart_transport_handler = new ChartTransportHandler< UnsetIdling<ListFrame> >(
                                                                 this,
                                                                 Route(
-                                                                      Route_types[0],
-                                                                      draw_panel->circle_observer.reference_position.antipode(),
+                                                                      Route_types[1],
+                                                                      draw_panel->circle_observer.reference_position.half(),
                                                                       draw_panel->circle_observer.reference_position
-                                                                      )
+                                                                      ),
+                                                                Double(1.0),
+                                                                      parent->unset_idling
                                                                 );
-            
-            
             
             break;
             
@@ -11674,6 +11680,119 @@ void ChartFrame::Animate(void){
     
     //trigger the animation
     chart_transport_handler->operator()();
+    
+}
+
+
+
+
+//makes an animation which centers the chart on the object *object_in (which may be a Route, Position, ...) and adjust the chart zoom factor in such a way that *object_in is nicely visible at the end of the animation. Here f is the functor of the function that will be called at the end of the animation, and it is entered into the constructor of ChartTransrportHandler. If no functor is to be called at the end of the animation, one may let f point to a UnsetIdling<> functoer
+template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
+    
+    unsigned int i;
+    //the Position where the chart will be centered by the animation triggered when the user presses ok
+    Position target_position;
+    //the aperture angle of circle_observer at the end of the animation
+    Angle target_omega;
+    //the transport handlers used to transport the chart: there is one ChartTransportHandler per ChartFrame
+    vector< ChartTransportHandler<F>* > chart_transport_handlers;
+    Length d;
+    
+    chart_transport_handlers.resize(chart_frames.size());
+    
+    for(i=0; i<chart_frames.size(); i++){
+        
+        switch (position_in_vector(Projection(((chart_frames[i])->projection->name->GetValue().ToStdString())), Projection_types)) {
+                
+            case 0: {
+                //I am using Projection_types[0]
+                
+                
+                
+                break;
+                
+            }
+                
+            case 1: {
+                //I am using Projection_types[1]
+                
+                //bring all charts to front to show the animation
+                wxGetApp().ShowCharts();
+                
+                
+                if(std::is_same<T, Route>::value){
+                    //object is a Route
+                    
+                    //I introduce the Route* object and set object_in = object by casting object_in into a Route pointer. This is necessary to make this method work with multiple types T (T=Position, T=Route, ...)
+                    Route* object;
+                    
+                    object = (Route*)object_in;
+                    
+                   if(object->type == Route_types[2]){
+                       //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
+                       
+                       target_position = object->reference_position;
+                       target_omega = object->omega;
+                       
+                       
+                   }else{
+                       //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
+                       
+                       object->compute_end(Length((object->length)/2.0), String(""));
+                       target_position = object->end;
+                       //                    target_position = route.reference_position;
+
+                       target_omega = (object->length.value)/2.0/Re;
+                       
+                   }
+                    
+                }
+                
+                if(std::is_same<T, Position>::value){
+                    //object is a Position
+                    
+                    Position* object;
+                    
+                    object = ((Position*)object_in);
+                    
+                    //the target Position of the animation is *object
+                    target_position = (*object);
+                    //Positions do not have a size such as Routes -> I move the chart on the Position with the animation by keeping the same omega as in the beginnign of the animation
+                    target_omega = ((chart_frames[i])->draw_panel->circle_observer.omega);
+                    
+                }
+            
+                //compute the distance between the start and end poisition of the proposed andimation and store it in d
+                target_position.distance((chart_frames[i])->draw_panel->circle_observer.reference_position, &d, String(""), String(""));
+                
+                //I do the animaiton only if the start and end position of the animation are large enough, in order to avoid NaNs in the transporting_route
+                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * Re*(chart_frames[i])->draw_panel->circle_observer.omega.value) {
+                    
+                    chart_transport_handlers[i] = new ChartTransportHandler<F>(
+                                                                               (chart_frames[i]),
+                                                                               Route(
+                                                                                     Route_types[1],
+                                                                                     (chart_frames[i])->draw_panel->circle_observer.reference_position,
+                                                                                     target_position
+                                                                                     ),
+                                                                               Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (target_omega.value) ) ),
+                                                                               f
+                                                                               );
+                    
+                    //trigger the animation
+                    (chart_transport_handlers[i])->operator()();
+                    
+                    
+                }
+                
+                break;
+                
+            }
+                
+        }
+        
+    }
+    
     
 }
 
@@ -11917,7 +12036,7 @@ void ChartFrame::UpdateSliderLabel_3D(void) {
 
     stringstream s;
 
-    s << "1:" << ((unsigned int)((((draw_panel->circle_observer_0).omega).value) / (((draw_panel->circle_observer).omega).value)));
+    s << "1:" << ((unsigned int)((parent->circle_observer_0.omega.value) / (((draw_panel->circle_observer).omega).value)));
 
     text_slider->SetLabel(s.str().c_str());
 
@@ -11931,7 +12050,7 @@ bool ChartFrame::ComputeZoomFactor_Mercator(double delta_x) {
 
     temp = ((double)((draw_panel->size_chart).GetWidth())) / ((double)(draw_panel->width_chart_0)) * ((draw_panel->x_max_0) - (draw_panel->x_min_0)) / delta_x;
 
-    output = ((1.0 <= temp) && (temp <= ((double)((wxGetApp().zoom_factor_max).value))));
+    output = ((1.0 <= temp) && (temp <= (wxGetApp().zoom_factor_max.value)));
 
     if (output) {
         zoom_factor.set(String(""), temp, String(""));
@@ -11946,11 +12065,11 @@ bool ChartFrame::ComputeZoomFactor_3D(void) {
 
     bool output;
 
-    output = ((1.0 <= (zoom_factor.value)) && ((zoom_factor.value) <= ((wxGetApp().zoom_factor_max).value)));
+    output = ((1.0 <= (zoom_factor.value)) && ((zoom_factor.value) <= (wxGetApp().zoom_factor_max.value)));
 
     if (output) {
 
-        ((draw_panel->circle_observer).omega).set(String(""), (((draw_panel->circle_observer_0).omega).value) / (zoom_factor.value), String(""));
+        ((draw_panel->circle_observer).omega).set(String(""), (parent->circle_observer_0.omega.value) / (zoom_factor.value), String(""));
 
     }
 
@@ -13197,10 +13316,10 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
     if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
 
         //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
-        gsl_vector_memcpy((rp_start_drag.r), (rp.r));
-        rotation_start_drag = rotation;
-        geo_start_drag.print(String("position start drag"), String(""), cout);
-        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
+        //        gsl_vector_memcpy((rp_start_drag.r), (rp.r));
+        rotation_start_drag.set(rotation);
+        //        geo_start_drag.print(String("position start drag"), String(""), cout);
+        //        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
 
     }
 
@@ -13263,10 +13382,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
             if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
 
-                gsl_vector_memcpy((rp_end_drag.r), (rp.r));
-                rotation_end_drag = rotation;
-                geo_end_drag.print(String("position end drag"), String(""), cout);
-                rotation_end_drag.print(String("rotation end drag"), String(""), cout);
+//                gsl_vector_memcpy((rp_end_drag.r), (rp.r));
+                rotation_end_drag.set(rotation);
+//                geo_end_drag.print(String("position end drag"), String(""), cout);
+//                rotation_end_drag.print(String("rotation end drag"), String(""), cout);
 
             }
 
@@ -13547,7 +13666,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     //if the zoom factor is not valid, then I print an error message
 
                     s.str("");
-                    s << "Zoom level must be >= 1 and <= " << ((wxGetApp().zoom_factor_max).value) << ".";
+                    s << "Zoom level must be >= 1 and <= " << (wxGetApp().zoom_factor_max.value) << ".";
 
                     //set the title and message for the functor print_error_message, and then call the functor
                     print_error_message->SetAndCall(NULL, String("Zoom level exceeded its maximal value!"), String(s.str().c_str()), (wxGetApp().path_file_error_icon));
@@ -13582,7 +13701,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
                 //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
                 //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
-                rotation = (rotation * Rotation(circle_observer.reference_position, reference_position_old));
+                rotation.set((rotation * Rotation(circle_observer.reference_position, reference_position_old)));
 
                 (this->*PreRender)();
                 parent->parent->RefreshAll();
@@ -13739,8 +13858,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //I am using the 3d projection
                         
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                        rotation =
-                        rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+                        rotation.set(rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag);
 #ifdef __APPLE__
                         
                         //re-render the chart
@@ -13810,10 +13928,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
                             
                             //compose rotation with the rotation resulting from the drag and then apply it to route_reference_position_drag_now: route_reference_position_drag_now -> rotation^{-1}.(rotation due to drag).rotation.route_reference_position_drag_now. In this way, when Render() will plot the position route_reference_position_drag_now, it will apply to route_reference_position_drag_now the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.route_reference_position_drag_now = (rotation due to drag).rotation.route_reference_position_drag_now, which is the desired result (i.e. route_reference_position_drag_now rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
-                            rotation_now_drag =
+                            rotation_now_drag.set(
                             (rotation.inverse()) *
                             rotation_start_end(position_start_drag, position_now_drag) *
-                            rotation;
+                            rotation);
                             
                             //                    (this->*GeoToDrawPanel)(route_reference_position_drag_now, &p);
                             
@@ -13903,7 +14021,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             (rotation.inverse()) *
                             rotation_start_end(position_start_drag, position_now_drag) *
                             rotation;
-                            geo_start_drag.rotate(String(""), rotation_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]), String(""));
+                            geo_start_drag.rotate(String(""), rotation_now_drag, &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]), String(""));
                             
                         }
                         
@@ -13976,7 +14094,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         (parent->dragging_chart) = true;
                         
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                        rotation = rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag;
+                        rotation.set(rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag);
                         
                         
                         
@@ -14123,9 +14241,9 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
     }
 
-    if (((zoom_factor.value) > ((wxGetApp().zoom_factor_max).value)) || ((slider->GetValue()) == (slider->GetMax()))) {
+    if (((zoom_factor.value) > (wxGetApp().zoom_factor_max.value)) || ((slider->GetValue()) == (slider->GetMax()))) {
 
-        (zoom_factor.value) = ((wxGetApp().zoom_factor_max).value);
+        (zoom_factor.value) = (wxGetApp().zoom_factor_max.value);
 
     }
 
@@ -14201,7 +14319,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
     if (((projection->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
 
-        ((draw_panel->circle_observer).omega) = (((draw_panel->circle_observer_0).omega) / (zoom_factor.value));
+        (draw_panel->circle_observer.omega) = ((parent->circle_observer_0.omega) / (zoom_factor.value));
 
         (draw_panel->*(draw_panel->PreRender))();
         draw_panel->MyRefresh();
@@ -14443,13 +14561,13 @@ void SomeRoutes::operator()(wxCommandEvent& event) {
 
     int i;
 
-    (f->print_warning_message)->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position and press enter when done"), (wxGetApp().path_file_warning_icon));
+    f->print_warning_message->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position and press enter when done"), (wxGetApp().path_file_warning_icon));
 
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
-    for ((f->crossing_route_list_temp.clear()), i = 0; i < ((f->data)->route_list).size(); i++) {
+    for ((f->crossing_route_list_temp.clear()), i = 0; i < (f->data->route_list).size(); i++) {
 
         if ((((f->data)->route_list)[i]).type == (Route_types[2])) {
-            (f->crossing_route_list_temp).push_back((((f->data)->route_list)[i]));
+            f->crossing_route_list_temp.push_back(((f->data->route_list)[i]));
         }
 
     }
@@ -14535,7 +14653,7 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
     parent->data->route_list.resize((parent->route_list_for_transport).size());
     copy((parent->route_list_for_transport).begin(), (parent->route_list_for_transport).end(), ((parent->data)->route_list).begin());
     parent->TabulateRoutesAll();
-    parent->DrawAll();
+    parent->PreRenderAll();
 
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will double clock on an item in listcontrol (or single-click it and then press enter), I perform the transport
     parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyRoute<wxListEvent>, parent);
@@ -14731,7 +14849,7 @@ void DeleteRoute::operator()(wxCommandEvent& event) {
     (*(f->on_change_selection_in_listcontrol_routes))(event);
     f->Resize();
     //given that a Route has been removed, I re-draw everything
-    f->DrawAll();
+    f->PreRenderAll();
 
     event.Skip(true);
 
@@ -14978,7 +15096,7 @@ template <class T> void ResetListFrame::operator()(T& event) {
     //resize, set an 'untitled' label for the new, empty ListFrame, and update the chartframes
     p->Resize();
     p->SetLabel(wxString("untitled"));
-    p->DrawAll();
+    p->PreRenderAll();
 
     event.Skip(true);
 
@@ -15002,25 +15120,9 @@ CloseApp::CloseApp(MyApp* app_in){
 
 template <class T> void CloseApp::operator()([[maybe_unused]] T& event) {
     
-//    unsigned int i;
-    
-//    for(; 0<app->list_frame->chart_frames.size(); ){
-//        
-//        if(((app->list_frame->chart_frames)[0])->chart_transport_handler != NULL){
-//            ((app->list_frame->chart_frames)[0])->chart_transport_handler->timer->Unbind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, ((app->list_frame->chart_frames)[0])->chart_transport_handler);
-//        }
-//        ((app->list_frame->chart_frames)[0])->Close();
-//    }
-//    if(app->progress_dialog){
-//        app->progress_dialog->Destroy();
-//    }
     app->list_frame->Close();
     app->disclaimer->Close();
     
-//    app->list_frame->Close();
-    
-//    event.Skip(true);
-
 }
 
 
@@ -15235,7 +15337,7 @@ template<class NON_GUI, class P> void ToDoAtEndOfTransport<NON_GUI, P>::operator
     parent->listcontrol_sights->set((parent->data->sight_list), false);
     parent->listcontrol_routes->set((parent->data->route_list), false);
     parent->Resize();
-    parent->DrawAll();
+    parent->PreRenderAll();
 
 }
 
@@ -15800,7 +15902,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
 //        parent->listcontrol_sights->set((parent->data->sight_list), false);
 //        parent->listcontrol_routes->set((parent->data->route_list), false);
 //        parent->Resize();
-//        parent->DrawAll();
+//        parent->PreRenderAll();
 //    });
     
     event.Skip(true);
@@ -16839,7 +16941,10 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     (*(parent->unset_idling))();
     parent->Resize();
     parent->OnModifyFile();
-    parent->DrawAll();
+    
+//    parent->PreRenderAll();
+    parent->AnimateToObject<Position, UnsetIdling<ListFrame> >(position, parent->unset_idling);
+    
 
     event.Skip(true);
 
@@ -16852,7 +16957,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
     unsigned int i;
     stringstream s;
-
+    
     if (label->value->GetValue().ToStdString() == "") {
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
 
@@ -16872,16 +16977,15 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
 
-    }
-    else {
+    }else {
         //I am modifying an existing Route
 
-        if ((route->related_sight).value != -1) {
+        if ((route->related_sight) != -1) {
             //the Route that I am moidifying is related to a Sight
 
             //because I am modifying and thus altering the Route, I disconnect it from its related sight
             (parent->i_object_to_disconnect) = (route->related_sight.value);
-            parent->DisconnectAndPromptMessage(event);
+//            parent->DisconnectAndPromptMessage(event);
             //set i_obeject_to_disconnect to its original value
             (parent->i_object_to_disconnect) = -1;
 
@@ -16895,8 +16999,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
         for (i = 0; i < (parent->chart_frames.size()); i++) {
 
-            ((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).resize(((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).size() + 1);
-            ((((parent->chart_frames)[i])->draw_panel)->reference_positions_route_list_now).resize(((((parent->chart_frames)[i])->draw_panel)->reference_positions_route_list_now).size() + 1);
+            (((parent->chart_frames)[i])->draw_panel)->points_route_list_now.resize(((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).size() + 1);
+            (((parent->chart_frames)[i])->draw_panel)->reference_positions_route_list_now.resize(((parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now.size() + 1);
 
         }
     }
@@ -16913,7 +17017,10 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     (*(parent->unset_idling))();
     parent->Resize();
     parent->OnModifyFile();
-    parent->DrawAll();
+    //insert the animation here
+    
+
+//    parent->PreRenderAll();
 
     if ((parent->transporting_with_new_route)) {
         //if I am adding a new Route for transport, call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
@@ -16942,10 +17049,28 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         parent->listcontrol_routes->set((parent->data->route_list), false);
         parent->Resize();
         parent->OnModifyFile();
-        parent->DrawAll();
+//        parent->PreRenderAll();
 
     }
 
+    
+    if((position_in_listcontrol_routes != -1) && ((route->related_sight) != -1)){
+        //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_warning_message as an argument, in such a way that, at the end of the animation, this message is prompted
+
+        parent->print_warning_message->control = NULL;
+        parent->print_warning_message->title.set(String(""), String("Warning"), String(""));
+        parent->print_warning_message->message.set(String(""), String("The route which has been modified was related to a sight! Disconnecting the route from the sight."), String(""));
+        
+        parent->AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(route, parent->print_warning_message);
+
+        
+    }else{
+        //I am either entering a new Route or modifying a Route unrelated to a Sight -> in both cases, I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling (intended as 'do nothing special' here) at the end of the animation
+        
+        parent->AnimateToObject<Route, UnsetIdling<ListFrame>  >(route, parent->unset_idling);
+        
+    }
+ 
     event.Skip(true);
 
     Close(TRUE);
@@ -17644,6 +17769,12 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
     print_question_message = new PrintQuestion<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> >(this, confirm_transport, unset_idling);
     //create extract_color with zero size, because I will need extract_color only to get colors
+    
+    //set icon paths to all print_*_message
+    print_warning_message->image_path = wxGetApp().path_file_warning_icon;
+    print_info_message->image_path = wxGetApp().path_file_info_icon;
+    print_error_message->image_path = wxGetApp().path_file_error_icon;
+
 
     data = new Data(catalog, String(""));
 
@@ -18090,7 +18221,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             menu_file->Enable(wxID_HIGHEST + 7, true);
             set();
             SetLabel(data_file.name.value);
-            DrawAll();
+            PreRenderAll();
 
         }
         else {
@@ -18275,7 +18406,7 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event) {
 
     chart_frames.back()->Reset(event);
     wxGetApp().ShowCharts(event);
-    //    wxGetApp().AnimateCharts();
+    wxGetApp().AnimateCharts();
     chart_frames.back()->Animate();
 
 
@@ -18321,16 +18452,25 @@ void ListFrame::OnComputePosition(void) {
 
     }
     else {
+        
 
         if (out == 0) {
             //the position couldbe computed by using only some crossings/Routes
 
-            print_error_message->SetAndCall(NULL, String("Warning"), String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."), (wxGetApp().path_file_warning_icon));
+            //set all parameters to prepare the printing of an error message, which will be called by ChartTransportHandler in AnimateToObject at the end of the animation. To do this, I enter print_error_message as an argument in the call to AnimateToObject
+            print_warning_message->control = NULL;
+            print_warning_message->message.set(String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."));
+            print_warning_message->title.set(String("Warning"));
+            print_warning_message->image_path.set(wxGetApp().path_file_warning_icon);
+            
+//            print_warning_message->SetAndCall(NULL, String("Warning"), String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."), (wxGetApp().path_file_warning_icon));
 
         }
 
         set();
-        DrawAll();
+//        PreRenderAll();
+        //bring all charts to the astronomical position with an animation 
+        AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(&(data->route_list.back()), print_warning_message);
 
     }
 
@@ -18338,7 +18478,7 @@ void ListFrame::OnComputePosition(void) {
 
 
 //calls PreRender and FitAll in all che ChartFrames which are children of *this
-void ListFrame::DrawAll(void) {
+void ListFrame::PreRenderAll(void) {
 
     for (long i = 0; i < (chart_frames.size()); i++) {
 
@@ -18904,7 +19044,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event) {
             SetLabel(wxString((data_file.name).value));
             //resize and draw all charts according to the newly loaded data
             Resize();
-            DrawAll();
+            PreRenderAll();
 
         }
 
@@ -19968,34 +20108,6 @@ template<class P> template <class T> void ChronoField<P>::get(T& event) {
 }
 
 
-////writes to the non-GUI field angle the values written in the GUI field name
-//template<class P> template <class T> void RouteTypeField<P>::get(T& event) {
-//
-//
-//    if (MultipleItemField<P, RouteType, CheckRouteType<P> >::ok) {
-//
-//        if (String((MultipleItemField<P, RouteType, CheckRouteType<P> >::name->GetValue()).ToStdString()) == (Route_types[0])) {
-//
-//            type->set(String(""), (Route_types[0]), String(""));
-//
-//        }
-//        if (String((MultipleItemField<P, RouteType, CheckRouteType<P> >::name->GetValue()).ToStdString()) == (Route_types[1])) {
-//            type->set(String(""), (Route_types[1]), String(""));
-//
-//
-//        }
-//        if (String((MultipleItemField<P, RouteType, CheckRouteType<P> >::name->GetValue()).ToStdString()) == (Route_types[2])) {
-//
-//            type->set(String(""), (Route_types[2]), String(""));
-//
-//        }
-//
-//    }
-//
-//    event.Skip(true);
-//
-//}
-
 
 void SightFrame::OnPressReduce(wxCommandEvent& event) {
 
@@ -20056,9 +20168,9 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
 
     }
 
-    (parent->listcontrol_sights)->set((parent->data)->sight_list, false);
+    parent->listcontrol_sights->set(parent->data->sight_list, false);
     //I call listcontrol_routes->set with true because I want to keep the selection in listcontrol_routes
-    (parent->listcontrol_routes)->set((parent->data)->route_list, true);
+    parent->listcontrol_routes->set(parent->data->route_list, true);
 
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
     (*(parent->on_change_selection_in_listcontrol_sights))(event);
@@ -20068,8 +20180,11 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     (*(parent->unset_idling))();
     parent->Resize();
     parent->OnModifyFile();
-    parent->DrawAll();
-
+    
+//    parent->PreRenderAll();
+    //animate the charts to bring them to the Route related to the newly reduced Sight
+    parent->AnimateToObject<Route, UnsetIdling<ListFrame> >(&((parent->data->route_list)[(sight->related_route).value]), parent->unset_idling);
+    
     event.Skip(true);
 
     Close(TRUE);
@@ -20266,31 +20381,10 @@ template<class P> ProjectionField<P>::ProjectionField(
                                                                                                                              convert_vector<Projection, String>(Projection_types),
                                                                                                                              recent_items_in) {
 
-//    parent = ((P*)(panel_of_parent->GetParent()));
 
-//    catalog.Clear();
-//    catalog.Add(wxT(((Projection_types[0]).value)));
-//    catalog.Add(wxT(((Projection_types[1]).value)));
-    //    catalog.Add(wxT("Lambert"));
-//    items = catalog;
-
-//    check = new CheckProjection<P>(this);
-
-//    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
-    //SetColor(name);
-//    MultipleItemField<P, Projection, void>::Fill();
-//    name->SetValue(items[0]);
-//    AdjustWidth(name);
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P, Projection, void>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
     MultipleItemField<P, Projection, void>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
-//    MultipleItemField<P, Projection, void>::name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, Projection, void>::template Check<wxFocusEvent>, this);
-
-//    sizer_h = new wxBoxSizer(wxHORIZONTAL);
-//    sizer_v = new wxBoxSizer(wxVERTICAL);
-
-//    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-//    sizer_h->Add(name, 0, wxALIGN_CENTER);
 
 }
 
@@ -22372,11 +22466,15 @@ template<class S> void ListControl<S>::GetSelectedItems(vector<long>* selected_i
 
 }
 
-MotionHandler::MotionHandler(ListFrame* parent_in){
+template<class F> MotionHandler<F>::MotionHandler(ListFrame* parent_in, const Route& transporting_route_in, F* f_in){
+    
 
     timer = new wxTimer();
 
     parent = parent_in;
+    transporting_route = transporting_route_in;
+    f = f_in;
+
     t = 0;
 //    timer->Bind(wxEVT_TIMER, &GraphicalObjectTransportHandler::OnTimer, this);
 
@@ -22384,15 +22482,15 @@ MotionHandler::MotionHandler(ListFrame* parent_in){
 
 
 //constructor of GraphicalFeatureTransportHandler: f_in is the functor to be provided if something is supposed to be executed at the end of the transport (e.g., do another transport, show a MessageFrame, etc...). If nothing is supposed to be executed, set f_in = NULL
-template<class NON_GUI, class F> GraphicalFeatureTransportHandler<NON_GUI, F>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in,  const String& type_of_transported_object_in, const Route& transporting_route_in, F* f_in) : MotionHandler(parent_in){
+template<class NON_GUI, class F> GraphicalFeatureTransportHandler<NON_GUI, F>::GraphicalFeatureTransportHandler(ListFrame* parent_in, NON_GUI* object_in,  const String& type_of_transported_object_in, const Route& transporting_route_in, F* f_in) : MotionHandler<F>(parent_in, transporting_route_in, f_in){
 
     transported_object = object_in;
     type_of_transported_object = type_of_transported_object_in;
-    transporting_route = transporting_route_in;
-    f = f_in;
+//    (MotionHandler<F>::transporting_route) = transporting_route_in;
+//    (MotionHandler<F>::f) = f_in;
     
 
-    timer->Bind(wxEVT_TIMER, &GraphicalFeatureTransportHandler::OnTimer, this);
+    (MotionHandler<F>::timer)->Bind(wxEVT_TIMER, &GraphicalFeatureTransportHandler::OnTimer, this);
 
 }
 
@@ -22401,7 +22499,7 @@ template<class NON_GUI, class F> GraphicalFeatureTransportHandler<NON_GUI, F>::G
 template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, F>::operator()(void) {
     
     //the animation transport starts here
-    timer->Start(
+    (MotionHandler<F>::timer)->Start(
         /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
         (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
         wxTIMER_CONTINUOUS);
@@ -22411,97 +22509,97 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 //this method iterates the animation
 template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
-    if((t < (wxGetApp().n_animation_steps.value))) {
+    if(((MotionHandler<F>::t) < (wxGetApp().n_animation_steps.value))) {
         //the time parameter is undedr its maximum value
 
-        if(t == 0) {
+        if((MotionHandler<F>::t) == 0) {
             //I am at the beginning of the transport and *parent is not in idling mode -> proceed with the transport
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
-            (*(parent->set_idling))();
+            (*((MotionHandler<F>::parent)->set_idling))();
 
-            transporting_route_temp = transporting_route;
+            (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
             
             //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
-            for (unsigned int i = 0; i < (parent->chart_frames.size()); i++) {
-                ((parent->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
+            for (unsigned int i = 0; i < ((MotionHandler<F>::parent)->chart_frames.size()); i++) {
+                (((MotionHandler<F>::parent)->chart_frames)[i])->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, (((MotionHandler<F>::parent)->chart_frames)[i])->draw_panel);
             }
-            parent->listcontrol_sights->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
-            parent->listcontrol_positions->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
-            parent->listcontrol_routes->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
-            parent->panel->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
+            (MotionHandler<F>::parent)->listcontrol_sights->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, (MotionHandler<F>::parent));
+            (MotionHandler<F>::parent)->listcontrol_positions->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, (MotionHandler<F>::parent));
+            (MotionHandler<F>::parent)->listcontrol_routes->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, (MotionHandler<F>::parent));
+            (MotionHandler<F>::parent)->panel->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, (MotionHandler<F>::parent));
 
             
 
             if (type_of_transported_object == String("position")) {
 
                 //store the starting position in geo_position_start
-                start = (*((Position*)transported_object));
+                (MotionHandler<F>::start) = (*((Position*)transported_object));
                 //highlight the Position that is being transported
-                parent->highlighted_position_now = address_position_in_vector<Position>(((Position*)transported_object), parent->data->position_list);
+                (MotionHandler<F>::parent)->highlighted_position_now = address_position_in_vector<Position>(((Position*)transported_object), (MotionHandler<F>::parent)->data->position_list);
                 
             }else {
 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                     //store the starting reference position in geo_position_start
-                    start = (((Route*)transported_object)->reference_position);
+                    (MotionHandler<F>::start) = (((Route*)transported_object)->reference_position);
                     //highlight the Position that is being transported
-                    parent->highlighted_route_now = address_position_in_vector<Route>(((Route*)transported_object), parent->data->route_list);
+                    (MotionHandler<F>::parent)->highlighted_route_now = address_position_in_vector<Route>(((Route*)transported_object), (MotionHandler<F>::parent)->data->route_list);
      
 
                 }
                 
-                start = (((Route*)transported_object)->reference_position);
+                (MotionHandler<F>::start) = (((Route*)transported_object)->reference_position);
 
 
             }
 
-            (transporting_route_temp.reference_position) = start;
+            ((MotionHandler<F>::transporting_route_temp).reference_position) = (MotionHandler<F>::start);
 
             //I brind all ChartFrames to front to show the animation
             wxGetApp().ShowCharts(event);
             
-            t++;
+            (MotionHandler<F>::t)++;
 
         }
         
-        if(t > 0){
+        if((MotionHandler<F>::t) > 0){
             //the transport animation is in progress -> do the next chunk
 
-            transporting_route_temp.length.set(
+            (MotionHandler<F>::transporting_route_temp).length.set(
                 String(""),
-                (transporting_route.length.value) *
-                (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
+                ((MotionHandler<F>::transporting_route).length.value) *
+                (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
                 ,
                 String(""));
 
 
             if (type_of_transported_object == String("position")) {
 
-                (*((Position*)transported_object)) = start;
-                ((Position*)transported_object)->transport_to(transporting_route_temp, String(""));
+                (*((Position*)transported_object)) = (MotionHandler<F>::start);
+                ((Position*)transported_object)->transport_to((MotionHandler<F>::transporting_route_temp), String(""));
 
-                parent->TabulatePositionsAll();
+                (MotionHandler<F>::parent)->TabulatePositionsAll();
                 
             }
             else {
 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
-                    (((Route*)transported_object)->reference_position) = start;
-                    ((Route*)transported_object)->reference_position.transport_to(transporting_route_temp, String(""));
+                    (((Route*)transported_object)->reference_position) = (MotionHandler<F>::start);
+                    ((Route*)transported_object)->reference_position.transport_to((MotionHandler<F>::transporting_route_temp), String(""));
 
                 }
 
-                parent->TabulateRoutesAll();
+                (MotionHandler<F>::parent)->TabulateRoutesAll();
                 
             }
 
-            parent->RefreshAll();
+            (MotionHandler<F>::parent)->RefreshAll();
             //            cout << "\t\t t= " << t << "\n";
             
-            t++;
+            (MotionHandler<F>::t)++;
 
         }
 
@@ -22511,19 +22609,19 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         if (type_of_transported_object == String("position")) {
             
             //do the whole transport rather than combining many little transports, to avoid rounding errors
-            (*((Position*)transported_object)) = start;
+            (*((Position*)transported_object)) = (MotionHandler<F>::start);
             //un-highlight the Position that is being transported
-            parent->highlighted_position_now = -1;
-            ((Position*)transported_object)->transport_to(transporting_route, String(""));
+            (MotionHandler<F>::parent)->highlighted_position_now = -1;
+            ((Position*)transported_object)->transport_to((MotionHandler<F>::transporting_route), String(""));
 
 
             //update labels
-            (((Position*)transported_object)->label) = ((Position*)transported_object)->label.append(String(" transported with ")).append((transporting_route.label));
+            (((Position*)transported_object)->label) = ((Position*)transported_object)->label.append(String(" transported with ")).append(((MotionHandler<F>::transporting_route).label));
             
             //update the Position information in f
             ((Position*)transported_object)->update_wxListCtrl(
-                                                               address_position_in_vector<Position>(((Position*)transported_object), parent->data->position_list),
-                                                               parent->listcontrol_positions
+                                                               address_position_in_vector<Position>(((Position*)transported_object), (MotionHandler<F>::parent)->data->position_list),
+                                                               (MotionHandler<F>::parent)->listcontrol_positions
                                                                );
 
 
@@ -22535,26 +22633,26 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 String new_label;
                 
                 //un-highlight the Route that is being transported
-                parent->highlighted_route_now = -1;
+                (MotionHandler<F>::parent)->highlighted_route_now = -1;
 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-                (((Route*)transported_object)->reference_position) = start;
-                ((Route*)transported_object)->reference_position.transport_to(transporting_route, String(""));
+                (((Route*)transported_object)->reference_position) = (MotionHandler<F>::start);
+                ((Route*)transported_object)->reference_position.transport_to((MotionHandler<F>::transporting_route), String(""));
 
 
                 //update labels
 
                 //the new label which will be given to the transported Route
-                new_label = ((Route*)transported_object)->label.append(String(" transported with ")).append((transporting_route.label));
+                new_label = ((Route*)transported_object)->label.append(String(" transported with ")).append(((MotionHandler<F>::transporting_route).label));
 
                 //set back listcontrol_routes to route_list, in order to include all Routes (not only those which are not related to a Sight)
-                parent->listcontrol_routes->set((parent->data->route_list), false);
+                (MotionHandler<F>::parent)->listcontrol_routes->set(((MotionHandler<F>::parent)->data->route_list), false);
 
                 if ((type_of_transported_object == String("sight")) || ( ((type_of_transported_object == String("route")) && ((((Route*)transported_object)->related_sight.value) != -1)) )) {
                     //I am transporting a Sight (i.e., Route related to a Sight) or I am transporting a Route that is connected to a Sight -> disconnect the Route from the sight
 
-                    (parent->i_object_to_disconnect) = (((Route*)transported_object)->related_sight.value);
-                    parent->Disconnect(event);
+                    ((MotionHandler<F>::parent)->i_object_to_disconnect) = (((Route*)transported_object)->related_sight.value);
+                    (MotionHandler<F>::parent)->Disconnect(event);
 
                 }
                 
@@ -22569,49 +22667,50 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         
         //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
 
-        parent->listcontrol_sights->set((parent->data->sight_list), false);
-        parent->listcontrol_routes->set((parent->data->route_list), false);
-        parent->Resize();
+        (MotionHandler<F>::parent)->listcontrol_sights->set(((MotionHandler<F>::parent)->data->sight_list), false);
+        (MotionHandler<F>::parent)->listcontrol_routes->set(((MotionHandler<F>::parent)->data->route_list), false);
+        (MotionHandler<F>::parent)->Resize();
         //re-draw everything
-        parent->DrawAll();
+        (MotionHandler<F>::parent)->PreRenderAll();
         
         //re-bind DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement once the transport is over
-        for (unsigned int i = 0; i < (parent->chart_frames.size()); i++) {
-            ((parent->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, ((parent->chart_frames)[i])->draw_panel);
+        for (unsigned int i = 0; i < ((MotionHandler<F>::parent)->chart_frames.size()); i++) {
+            (((MotionHandler<F>::parent)->chart_frames)[i])->draw_panel->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, (((MotionHandler<F>::parent)->chart_frames)[i])->draw_panel);
         }
-        parent->listcontrol_sights->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
-        parent->listcontrol_positions->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
-        parent->listcontrol_routes->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
-        parent->panel->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, parent);
+        (MotionHandler<F>::parent)->listcontrol_sights->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, (MotionHandler<F>::parent));
+        (MotionHandler<F>::parent)->listcontrol_positions->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, (MotionHandler<F>::parent));
+        (MotionHandler<F>::parent)->listcontrol_routes->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, (MotionHandler<F>::parent));
+        (MotionHandler<F>::parent)->panel->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, (MotionHandler<F>::parent));
 
         
         //re-bind listcontrol_routes to &ListFrame::OnChangeSelectionInListControl
-        parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *(parent->on_change_selection_in_listcontrol_routes));
-        parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, *(parent->on_change_selection_in_listcontrol_routes));
+        (MotionHandler<F>::parent)->listcontrol_routes->Bind(wxEVT_LIST_ITEM_SELECTED, *((MotionHandler<F>::parent)->on_change_selection_in_listcontrol_routes));
+        (MotionHandler<F>::parent)->listcontrol_routes->Bind(wxEVT_LIST_ITEM_DESELECTED, *((MotionHandler<F>::parent)->on_change_selection_in_listcontrol_routes));
 
 
-        if ((parent->transporting_with_selected_route)) {
+        if (((MotionHandler<F>::parent)->transporting_with_selected_route)) {
             //I am transporting with an existing, selected Route
 
             //the transport is over -> I reverse the Bind/Unbind(s) made before the transport started
-            (parent->transporting_with_selected_route) = false;
-            parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_ACTIVATED, *(parent->on_select_route_in_listcontrol_routes_for_transport));
-            parent->listcontrol_routes->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyRoute<wxListEvent>, parent);
+            ((MotionHandler<F>::parent)->transporting_with_selected_route) = false;
+            (MotionHandler<F>::parent)->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_ACTIVATED, *((MotionHandler<F>::parent)->on_select_route_in_listcontrol_routes_for_transport));
+            (MotionHandler<F>::parent)->listcontrol_routes->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyRoute<wxListEvent>, (MotionHandler<F>::parent));
 
         }
 
-        if ((parent->transporting_with_new_route)) {
+        if (((MotionHandler<F>::parent)->transporting_with_new_route)) {
             //I am tranporting with a new Route
 
-            (parent->transporting_with_new_route) = false;
+            ((MotionHandler<F>::parent)->transporting_with_new_route) = false;
 
         }
 
-        timer->Stop();
-        (*(parent->unset_idling))();
+        (MotionHandler<F>::timer)->Stop();
+        (*((MotionHandler<F>::parent)->unset_idling))();
         
-        if(f != NULL){
-            (*f)();
+        //call the functor to be called at the end of the animation, if any
+        if((MotionHandler<F>::f) != NULL){
+            (*(MotionHandler<F>::f))();
         }
 
     }
@@ -22619,26 +22718,41 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 }
 
 
-ChartTransportHandler::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in) : MotionHandler(chart_in->parent){
+//constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with proposed zoom factor proposed _zoom_factor at end fo the transport.  This is a `proposed` zoom factor because, if such proposed zoom factor is < 1 or > zoom_factor_max, the actual zoom factor will be set to 1 and zoom_factor_max, respectively. Othersize, the actual zoom_factor will be equal to proposed_zoom_factor.
+template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& proposed_zoom_factor, F* f_in) : MotionHandler<F>(chart_in->parent, transporting_route_in, f_in){
+    
+    Double zoom_factor;
     
     chart_frame = chart_in;
     
-    //set route equal to a loxodrom connecting a and b
-    transporting_route = transporting_route_in;
-
-    timer->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);
+    if(proposed_zoom_factor.value < 1.0){
+        zoom_factor = 1.0;
+    }else{
+        if(zoom_factor > wxGetApp().zoom_factor_max){
+            zoom_factor = wxGetApp().zoom_factor_max;
+        }else{
+            zoom_factor = proposed_zoom_factor;
+        }
+    }
+    
+    
+    omega_end.set(String(""), (chart_frame->parent->circle_observer_0.omega.value) / (zoom_factor.value), String(""));
+    
+    
+    
+    (MotionHandler<F>::timer)->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);
 
 }
 
 
 //prompt the movement of the center of the chart from position a to position b
-void ChartTransportHandler::operator()(void) {
+template<class F> void ChartTransportHandler<F>::operator()(void) {
 //void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
     
-    if(!(parent->idling)){
+    if(!((MotionHandler<F>::parent)->idling)){
         
         //the animation transport starts here (only if the parent ChartFrame is not in idling mode)
-        timer->Start(
+        (MotionHandler<F>::timer)->Start(
                      /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
                      (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
                      wxTIMER_CONTINUOUS);
@@ -22649,24 +22763,25 @@ void ChartTransportHandler::operator()(void) {
 }
 
 //this method iterates the animation
-void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
+template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
     
-    if((t < (wxGetApp().n_animation_steps.value))) {
+    if(((MotionHandler<F>::t) < (wxGetApp().n_animation_steps.value))) {
         //the time parameter is undedr its maximum value
 
-        if(t == 0) {
+        if((MotionHandler<F>::t) == 0) {
             //I am at the beginning of the transport and *parent is not in idling mode -> proceed with the transport
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
-            (*(parent->set_idling))();
+            (*((MotionHandler<F>::parent)->set_idling))();
             (chart_frame->dragging_chart) = true;
             chart_frame->EnableAll(false);
 
-            transporting_route_temp = transporting_route;
+            (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
             
-            start = transporting_route.reference_position;
- 
+            (MotionHandler<F>::start) = (MotionHandler<F>::transporting_route).reference_position;
+            
+  
             //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
             chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
             chart_frame->parent->listcontrol_sights->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
@@ -22690,17 +22805,12 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     PositionProjection q_NE, q_SW;
                     
-            
+    
                     //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle
                     q_NE.NormalizeAndSetMercator(Position(chart_frame->lambda_max, chart_frame->phi_max));
                     q_SW.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
                     projection_size = q_NE - q_SW;
-                    
-                    
-                    
-//                    PositionRectangle(start, Position(chart_frame->lambda_max, chart_frame->phi_min), String(""));
-                    
-                    
+                     
                     break;
                     
                 }
@@ -22708,9 +22818,15 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 case 1: {
                     //I am using Projection_types[1]
                     
-                    //set the rotation to start the chart movement and the starting point
-                    (chart_frame->draw_panel->rotation_start_drag) = (chart_frame->draw_panel->rotation);
-                    start = chart_frame->draw_panel->circle_observer.reference_position;
+     
+                    
+                    //the Position where I start the animation (start) may not coincide with circle_observer.reference_position (for example, I may want to start the animaiton from the antipode of circle_observer.reference_position to show a nice turn of the earth during the animaiton): thus, to start the animation, I need to first set rotation to the rotation that brings circle_observer.reference_position to be centered on start -> to do this, I do 
+                    chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation) * Rotation((MotionHandler<F>::start), chart_frame->draw_panel->circle_observer.reference_position)));
+
+                    
+                    chart_frame->draw_panel->rotation_start_drag.set((chart_frame->draw_panel->rotation));
+                    (chart_frame->draw_panel->circle_observer.reference_position) = (MotionHandler<F>::start);
+                    omega_start = chart_frame->draw_panel->circle_observer.omega;
                     
                     break;
                     
@@ -22718,22 +22834,29 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
             }
             
+//            cout << "******************* Before the transport *******************" << endl;
+//            (MotionHandler<F>::transporting_route).compute_end(String(""));
+//            (MotionHandler<F>::transporting_route).reference_position.print(String("Start position of transporting route"), String("\t"), cout);
+//            (MotionHandler<F>::transporting_route).end.print(String("Expected arrival position"), String("\t"), cout);
+//            chart_frame->draw_panel->circle_observer.reference_position.print(String("Circle observer reference position"), String("\t"), cout);
+
 
          
             
-            t++;
+            (MotionHandler<F>::t)++;
 
         }
         
-        if(t > 0){
+        if((MotionHandler<F>::t) > 0){
             //the transport animation is in progress -> do the next chunk
 
-            transporting_route_temp.length.set(
+            (MotionHandler<F>::transporting_route_temp).length.set(
                 String(""),
-                (transporting_route.length.value) *
-                                               (M_EULER + gsl_sf_psi_n(0, ((double)(t + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
+                ((MotionHandler<F>::transporting_route).length.value) *
+                                               (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)))))
                                                ,
                                                String(""));
+            
             
             switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
                     
@@ -22742,7 +22865,7 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                     
                     PositionProjection temp;
                     
-                    start.transport(&p_NE, transporting_route_temp, String(""));
+                    (MotionHandler<F>::start).transport(&p_NE, (MotionHandler<F>::transporting_route_temp), String(""));
                     (chart_frame->lambda_max) = (p_NE.lambda);
                     (chart_frame->phi_max) = (p_NE.phi);
                     
@@ -22760,18 +22883,27 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 case 1: {
                     //I am using Projection_types[1]
                     
-                    chart_frame->draw_panel->circle_observer.reference_position = start;
-                    chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route_temp, String(""));
-                    (chart_frame->draw_panel->rotation) = Rotation(
-                                                                   start,
-                                                                   chart_frame->draw_panel->circle_observer.reference_position
-                                                                   ) * (chart_frame->draw_panel->rotation_start_drag);
+                    (MotionHandler<F>::transporting_route_temp).compute_end(String(""));
+                    
+                    //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
+                    chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation((MotionHandler<F>::transporting_route_temp).end, (MotionHandler<F>::start))));
+                    
+                    (chart_frame->draw_panel->circle_observer.reference_position) = ((MotionHandler<F>::transporting_route_temp).end);
+
+                    chart_frame->draw_panel->circle_observer.omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
+                    
                     
                     break;
                     
                 }
                     
             }
+            
+//            cout << "********* t = " << t << " *************" << endl;
+//            (MotionHandler<F>::transporting_route_temp).compute_end(String(""));
+//            (MotionHandler<F>::transporting_route_temp).end.print(String("Expected arrival point with (MotionHandler<F>::transporting_route_temp)"), String("\t\t"), cout);
+//            chart_frame->draw_panel->circle_observer.reference_position.print(String("Reference position"), String("\t\t"), cout);
+            
             
 #ifdef WIN32
             //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
@@ -22800,12 +22932,13 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             //re-draw the chart
             (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();
             chart_frame->draw_panel->MyRefresh();
+            chart_frame->UpdateSlider();
 //            chart_frame->draw_panel->PaintNow();
             //
 
             //            cout << "\t\t t= " << t << "\n";
             
-            t++;
+            (MotionHandler<F>::t)++;
 
         }
 
@@ -22839,12 +22972,13 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             case 1: {
                 //I am using Projection_types[1]
                 
-//                //do the whole transport rather than combining many little transports, to avoid rounding errors
+                //do the whole transport rather than combining many little transports, to avoid rounding errors
 //                chart_frame->draw_panel->circle_observer.reference_position = start;
 //                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
-                
-                gsl_vector_memcpy((chart_frame->draw_panel->rp_end_drag.r), (chart_frame->draw_panel->rp.r));
-                (chart_frame->draw_panel->rotation_end_drag) = (chart_frame->draw_panel->rotation);
+
+//                chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation(transporting_route.end, start)));
+
+                chart_frame->draw_panel->rotation_end_drag.set((chart_frame->draw_panel->rotation));
 
                 break;
                 
@@ -22852,6 +22986,11 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
                 
         }
             
+//        cout << "******************* After the transport *******************" << endl;
+//        transporting_route.compute_end(String(""));
+//        transporting_route.end.print(String("Expected arrival position"), String("\t"), cout);
+//        chart_frame->draw_panel->circle_observer.reference_position.print(String("Circle observer reference position"), String("\t"), cout);
+        
 
         (chart_frame->dragging_chart) = false;
         chart_frame->EnableAll(true);
@@ -22864,8 +23003,13 @@ void ChartTransportHandler::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         chart_frame->parent->listcontrol_routes->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
         chart_frame->parent->panel->Bind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
     
-        timer->Stop();
-        (*(parent->unset_idling))();
+        (MotionHandler<F>::timer)->Stop();
+        (*((MotionHandler<F>::parent)->unset_idling))();
+        
+        //call the functor to be called at the end of the animation, if any
+        if((MotionHandler<F>::f) != NULL){
+            (*(MotionHandler<F>::f))();
+        }
         
     }
 

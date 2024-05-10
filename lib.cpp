@@ -14561,7 +14561,7 @@ void SomeRoutes::operator()(wxCommandEvent& event) {
 
     int i;
 
-    f->print_warning_message->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position and press enter when done"), (wxGetApp().path_file_warning_icon));
+    f->print_info_message->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position and press enter when done"), (wxGetApp().path_file_info_icon));
 
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
     for ((f->crossing_route_list_temp.clear()), i = 0; i < (f->data->route_list).size(); i++) {
@@ -15328,7 +15328,7 @@ template<class NON_GUI, class P> void ToDoAtEndOfTransport<NON_GUI, P>::operator
     if((parent->i_object_to_disconnect) != -1){
         
         //print an info message
-        parent->print_warning_message->SetAndCall(NULL, String("Warning"), String("The transported route  was related to a sight! The route has been disconnected from the sight."), (wxGetApp().path_file_warning_icon));
+        parent->print_info_message->SetAndCall(NULL, String("Warning"), String("The transported route  was related to a sight! The route has been disconnected from the sight."), (wxGetApp().path_file_info_icon));
         
        (parent->i_object_to_disconnect) = -1;
         
@@ -17055,13 +17055,13 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
     
     if((position_in_listcontrol_routes != -1) && ((route->related_sight) != -1)){
-        //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_warning_message as an argument, in such a way that, at the end of the animation, this message is prompted
+        //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
 
-        parent->print_warning_message->control = NULL;
-        parent->print_warning_message->title.set(String(""), String("Warning"), String(""));
-        parent->print_warning_message->message.set(String(""), String("The route which has been modified was related to a sight! Disconnecting the route from the sight."), String(""));
+        parent->print_info_message->control = NULL;
+        parent->print_info_message->title.set(String(""), String("Warning"), String(""));
+        parent->print_info_message->message.set(String(""), String("The route which has been modified was related to a sight! Disconnecting the route from the sight."), String(""));
         
-        parent->AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(route, parent->print_warning_message);
+        parent->AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(route, parent->print_info_message);
 
         
     }else{
@@ -17766,7 +17766,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     select_route = new SelectRoute(this);
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
-    print_info_message = new PrintMessage<ListFrame, SelectRoute >(this, select_route);
+    print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_question_message = new PrintQuestion<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> >(this, confirm_transport, unset_idling);
     //create extract_color with zero size, because I will need extract_color only to get colors
     
@@ -18463,12 +18463,10 @@ void ListFrame::OnComputePosition(void) {
             print_warning_message->title.set(String("Warning"));
             print_warning_message->image_path.set(wxGetApp().path_file_warning_icon);
             
-//            print_warning_message->SetAndCall(NULL, String("Warning"), String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."), (wxGetApp().path_file_warning_icon));
-
         }
 
         set();
-//        PreRenderAll();
+        //        PreRenderAll();
         //bring all charts to the astronomical position with an animation 
         AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(&(data->route_list.back()), print_warning_message);
 
@@ -18841,7 +18839,7 @@ template<class E> void ListFrame::DisconnectAndPromptMessage(E& event) {
     Disconnect<E>(event);
 
     //print an info message
-    print_warning_message->SetAndCall(NULL, String("Warning"), String("The route which is being dragged was related to a sight! Disconnecting the route from the sight."), (wxGetApp().path_file_warning_icon));
+    print_info_message->SetAndCall(NULL, String("Warning"), String("The route which is being dragged was related to a sight! Disconnecting the route from the sight."), (wxGetApp().path_file_info_icon));
 
  
     event.Skip(true);

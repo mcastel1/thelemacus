@@ -75,7 +75,7 @@ relative displacement = 0.1
 omega draw 3d = 89° 32.157897987'
 #default projection = Mercator
 default projection = 3D
-
+minimal animation distance over size of observer region = 1e-2
 #the number of chart frames opened when the program starts
 number chart frames = 1
 #initial rotation with which the 3D projection is displayed

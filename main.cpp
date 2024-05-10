@@ -135,8 +135,6 @@
     - if the user wants to transport something with an existing Route and there are no existing Routes available, there is no way to get out of the transport routine safely.
  
     - add the possiblity to abort the transport operation 
-    - when you zoom onto a Route and the chart is already centeret on that Route, it crashes (in the 3d projection)
-    - the error message "Not all routes could be used ... " should be prompted after the animation is over
     - when you compute the corssing with only two sights omega of the circle of equal altitude for the uncertainty fo the sight is NaN
     - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
     - if you don't load coastline data ther eis a segmentation fault
@@ -500,6 +498,7 @@ bool MyApp::OnInit() {
     point_size.read_from_file_to(String("point size"), (wxGetApp().path_file_init), String("R"), String(""));
 
     chart_transport_zoom_factor_coefficient.read_from_file_to(String("chart transport zoom factor coefficient"), (wxGetApp().path_file_init), String("R"),  String(""));
+    minimal_animation_distance_over_size_of_observer_region.read_from_file_to(String("minimal animation distance over size of observer region"), (wxGetApp().path_file_init), String("R"),  String(""));
 
     
     //----- test for Data::read_from_file_to - start

@@ -168,7 +168,7 @@ public:
     void set(String, int, String);
     void print(String, String, ostream&);
     
-    bool operator==(const Int&), operator!=(const Int&), operator>(const int&);
+    bool operator == (const Int&), operator != (const Int&), operator == (const int&), operator != (const int&), operator > (const Int&), operator > (const int&);
     
 };
 

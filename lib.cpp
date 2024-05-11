@@ -5836,7 +5836,7 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
 }
 
 
-//compute the astronomical position by wriitng it into center, and the circle of uncertainty by writing it into error_cirocle. Then I push back center and error_circle to position_list and route_list, respectively. It returns 1 if all crossings are valid, -1 if no crossings are valid, 0 if some crossings are valid.
+//compute the astronomical position by wriitng it into center, and the circle of uncertainty by writing it into error_cirocle. Then I push back center and error_circle to position_list and route_list, respectively. It returns 0 if all crossings are valid, -1 if no crossings are valid, 1 if some crossings are valid, 2 if the astronomical position could be computed but not its error
 int Data::compute_position(String prefix) {
 
     unsigned int i, j, l;
@@ -5846,6 +5846,7 @@ int Data::compute_position(String prefix) {
     Position center;
     double x;
     Route error_circle;
+    int output;
 
 
     //append \t to prefix
@@ -5856,7 +5857,6 @@ int Data::compute_position(String prefix) {
 
         vector< vector<Position> > p;
         vector<Position> q, q_temp(2);
-        int output;
 
         cout << prefix.value << "Computing crossings between routes :\n";
         for (i = 0; i < crossing_route_list.size(); i++) {
@@ -6002,12 +6002,12 @@ int Data::compute_position(String prefix) {
                 if (l == (crossing_route_list.size()) * ((crossing_route_list.size()) - 1) / 2) {
                     //all Routes in crossing_route_list have been used to get the position
 
-                    output = 1;
+                    output = 0;
 
                 }else {
                     //only some Routes in crossing_route_list have been used to get the position
 
-                    output = 0;
+                    output = 1;
 
                 }
 
@@ -6015,11 +6015,9 @@ int Data::compute_position(String prefix) {
                 
                 cout << prefix.value << RED << "I could not compute the error on the astronomical position because there are not enough valid crossings!\n" << RESET;
                 
-                output = -2;
+                output = 2;
                 
             }
-
-
 
         }else {
 
@@ -6032,16 +6030,17 @@ int Data::compute_position(String prefix) {
         q.clear();
         q_temp.clear();
 
-        return output;
 
-    }
-    else {
+    }else {
         //there are not enough Routes in crossing_route_list -> I cannot compute the crossing
 
         cout << prefix.value << RED << "I could not compute the position because there are no valid Routes!\n" << RESET;
-        return(-1);
-
+        
+        output = -1;
+        
     }
+    
+    return output;
 
 }
 
@@ -18454,34 +18453,68 @@ void ListFrame::OnCloseAllChartFrames(wxCommandEvent& event) {
 //this is the GUI function called when the user wants to compute the position: it calls the non-GUI method data->compute_position and returns GUI error/warning messages according to the output of data->compute_position
 void ListFrame::OnComputePosition(void) {
 
-    int out;
+    int output_compute_position;
 
-    out = (data->compute_position(String("\t")));
+    output_compute_position = (data->compute_position(String("\t")));
 
-    if (out == -1) {
+    if (output_compute_position == -1) {
         //the position could not be computed
 
         print_error_message->SetAndCall(NULL, String("Error"), String("I could not compute the astronomical position! No routes yield valid crossings"), (wxGetApp().path_file_error_icon));
 
-    }
-    else {
+    }else {
         
+        switch (output_compute_position) {
+                
+            case 0:
+                //the astronomical Position couldbe computed by using all crossings/Routes
 
-        if (out == 0) {
-            //the position couldbe computed by using only some crossings/Routes
+     
+                set();
+                //        PreRenderAll();
+                //bring all charts to the astronomical position with an animation and do nothing at the end of the animation
+                AnimateToObject<Route, UnsetIdling<ListFrame> >(&(data->route_list.back()), unset_idling);
 
-            //set all parameters to prepare the printing of an error message, which will be called by ChartTransportHandler in AnimateToObject at the end of the animation. To do this, I enter print_error_message as an argument in the call to AnimateToObject
-            print_warning_message->control = NULL;
-            print_warning_message->message.set(String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."));
-            print_warning_message->title.set(String("Warning"));
-            print_warning_message->image_path.set(wxGetApp().path_file_warning_icon);
+                break;
+                
+                
+            case 1:
+                //the astronomical Position couldbe computed by using only some crossings/Routes
+
+                //set all parameters to prepare the printing of an error message, which will be called by ChartTransportHandler in AnimateToObject at the end of the animation. To do this, I enter print_error_message as an argument in the call to AnimateToObject
+                print_warning_message->control = NULL;
+                print_warning_message->message.set(String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."));
+                print_warning_message->title.set(String("Warning"));
+                print_warning_message->image_path.set(wxGetApp().path_file_warning_icon);
+     
+                set();
+                //bring all charts to the astronomical Position with an animation
+                AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(&(data->route_list.back()), print_warning_message);
+
+                break;
+                
+                
+            case 2:
             
+                //the astronomical Position couldbe computed but not its error (a Position has been added to position_list, but no Route (repreenting its error circle) has been added to route_list
+
+                //set all parameters to prepare the printing of an error message, which will be called by ChartTransportHandler in AnimateToObject at the end of the animation. To do this, I enter print_error_message as an argument in the call to AnimateToObject
+                print_warning_message->control = NULL;
+                print_warning_message->message.set(String("The error on the astronomical position could not be computed!"));
+                print_warning_message->title.set(String("Warning"));
+                print_warning_message->image_path.set(wxGetApp().path_file_warning_icon);
+     
+                set();
+                //bring all charts to the astronomical Position with an animation
+                AnimateToObject<Position, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(&(data->position_list.back()), print_warning_message);
+
+                break;
+ 
         }
 
-        set();
-        //        PreRenderAll();
-        //bring all charts to the astronomical position with an animation 
-        AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(&(data->route_list.back()), print_warning_message);
+            
+        
+
 
     }
 

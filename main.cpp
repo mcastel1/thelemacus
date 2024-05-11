@@ -132,14 +132,13 @@
  
  
  ********** THINGS TO FIX ***********
+    - all icons in light mode must be revised and stored in dark mode 
     - compute_position_button icon changes sometimes
     - do all you did in move_to_route for the 3D projection also for the Mercator projection
     - if the user wants to transport something with an existing Route and there are no existing Routes available, there is no way to get out of the transport routine safely.
     - add the possiblity to abort the transport operation 
-    - when you compute the crossing with only two sights omega of the circle of equal altitude for the uncertainty fo the sight is NaN
     - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
     - adapt Route::print to take into account the length format
-    - after you press reset the coordinates of the instantaneous mouse position are wrong in the 3d projection
     - replace `f ((type.value)[0] == 'l') {` and similar cases where one needs to tell whether a route is loxodrome, orthodrome or circle of equal altitude with a switch which uses position_in_vector
     - some angles that are integer multiple of a defgree are shown as 29 deg 60 ' -> fix it
     - change projection = (((i % 2) == 0) ? (Projection_types[1]) : (Projection_types[0])); to previous line

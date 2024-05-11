@@ -5823,20 +5823,20 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
     wxGetApp().n_points_plot_coastline_Mercator.read_from_file_to(String("number of points coastline Mercator"), wxGetApp().path_file_init, String("R"), new_prefix);
     wxGetApp().n_points_plot_coastline_3D.read_from_file_to(String("number of points coastline 3D"), wxGetApp().path_file_init, String("R"), new_prefix);
 
-//    recent_bodies.resize(wxGetApp().n_recent_bodies.value);
-//    recent_projections.resize(wxGetApp().n_recent_projections.value);
-//    recent_length_formats.resize(wxGetApp().n_recent_length_formats.value);
-//    recent_route_types.resize(wxGetApp().n_recent_route_types.value);
-//    recent_route_for_transport_types.resize(wxGetApp().n_recent_route_for_transport_types.value);
-//    recent_length_units.resize(wxGetApp().n_recent_length_units.value);
-//    recent_speed_units.resize(wxGetApp().n_recent_speed_units.value);
-
-    //	file_init.close(prefix);
-
 }
 
 
-//compute the astronomical position by wriitng it into center, and the circle of uncertainty by writing it into error_cirocle. Then I push back center and error_circle to position_list and route_list, respectively. It returns 0 if all crossings are valid, -1 if no crossings are valid, 1 if some crossings are valid, 2 if the astronomical position could be computed but not its error
+/*compute the astronomical position by wriitng it into center, and the circle of uncertainty by writing it into error_cirocle. Then I push back center and error_circle to position_list and route_list, respectively.
+ Return value:
+    * If all crossings have been used to compute the astronomical position
+        - return 0 if [ # crossings used ] >= 2
+        - return 2 if [ # crossings used ] = 1
+    * If only part of the crossings have been used to compute the astronomical position
+        - return 1 if [ # crossings used ] >= 2
+        - return 2 if [ # crossings used ] = 1
+    * If no crossings could be used to compute the astronomical position , return -1
+ */
+ 
 int Data::compute_position(String prefix) {
 
     unsigned int i, j, l;
@@ -6001,14 +6001,34 @@ int Data::compute_position(String prefix) {
                 
                 if (l == (crossing_route_list.size()) * ((crossing_route_list.size()) - 1) / 2) {
                     //all Routes in crossing_route_list have been used to get the position
+                    
+                    if(l > 1){
+                        // all crossings have been used and there are >= 2 crossings used to compute the astronomical Position -> the error on the astronomical Position could be computed
+                        
+                        output = 0;
+                        
+                    }else{
+                        // all crossings have been used and there is 1 crossing used to compute the astronomical Position  -> the error on the astronomical Position could not be computed
 
-                    output = 0;
+                        output = 2;
+                        
+                    }
 
                 }else {
                     //only some Routes in crossing_route_list have been used to get the position
 
-                    output = 1;
+                    if(l > 1){
+                        // only some crossings have been used  and there are >= 2 crossings used to compute the astronomical Position -> the error on the astronomical Position could be computed
+                        
+                        output = 1;
+                        
+                    }else{
+                        // only some crossings have been used  there is 1 crossing used to compute the astronomical Position -> the error on the astronomical Position could not be computed
 
+                        output = 2;
+                        
+                    }
+                    
                 }
 
             }else{

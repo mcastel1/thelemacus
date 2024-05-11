@@ -18487,11 +18487,9 @@ void ListFrame::OnComputePosition(void) {
         switch (output_compute_position) {
                 
             case 0:
-                //the astronomical Position couldbe computed by using all crossings/Routes
+                //the astronomical Position couldbe computed by using all crossings/Routes and [# used crossings] >= 2
 
-     
                 set();
-                //        PreRenderAll();
                 //bring all charts to the astronomical position with an animation and do nothing at the end of the animation
                 AnimateToObject<Route, UnsetIdling<ListFrame> >(&(data->route_list.back()), unset_idling);
 
@@ -18516,7 +18514,7 @@ void ListFrame::OnComputePosition(void) {
                 
             case 2:
             
-                //the astronomical Position couldbe computed but not its error (a Position has been added to position_list, but no Route (repreenting its error circle) has been added to route_list
+                //the astronomical Position could be computed but not its error -> a Position has been added to position_list, but no Route (repreenting its error circle) has been added to route_list
 
                 //set all parameters to prepare the printing of an error message, which will be called by ChartTransportHandler in AnimateToObject at the end of the animation. To do this, I enter print_error_message as an argument in the call to AnimateToObject
                 print_warning_message->control = NULL;

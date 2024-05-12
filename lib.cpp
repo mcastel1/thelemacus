@@ -11744,6 +11744,32 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
             case 0: {
                 //I am using Projection_types[0]
                 
+                if(std::is_same<T, Route>::value){
+                    //object is a Route
+                    
+                    //I introduce the Route* object and set object_in = object by casting object_in into a Route pointer. This is necessary to make this method work with multiple types T (T=Position, T=Route, ...)
+                    Route* object;
+                    
+                    object = (Route*)object_in;
+                    
+                   if(object->type == Route_types[2]){
+                       //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
+                       
+                       target_position = object->reference_position;
+                       //                       target_omega = object->omega;
+                       
+                       
+                   }else{
+                       //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
+                       
+                       object->compute_end(Length((object->length)/2.0), String(""));
+                       target_position = object->end;
+                       //                       target_omega = (object->length.value)/2.0/Re;
+                       
+                   }
+                    
+                }
+                
                 
                 
                 break;

@@ -11732,6 +11732,11 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
     
     chart_transport_handlers.resize(chart_frames.size());
     
+    
+    //bring all charts to front to show the animation
+    wxGetApp().ShowCharts();
+
+    
     for(i=0; i<chart_frames.size(); i++){
         
         switch (position_in_vector(Projection(((chart_frames[i])->projection->name->GetValue().ToStdString())), Projection_types)) {
@@ -11747,9 +11752,6 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 
             case 1: {
                 //I am using Projection_types[1]
-                
-                //bring all charts to front to show the animation
-                wxGetApp().ShowCharts();
                 
                 
                 if(std::is_same<T, Route>::value){

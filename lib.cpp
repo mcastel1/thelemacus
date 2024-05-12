@@ -11770,6 +11770,43 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                     
                 }
                 
+                if(std::is_same<T, Position>::value){
+                    //object is a Position
+                    
+                    Position* object;
+                    
+                    object = ((Position*)object_in);
+                    
+                    //the target Position of the animation is *object
+                    target_position = (*object);
+                    //Positions do not have a size such as Routes -> I move the chart on the Position with the animation by keeping the same omega as in the beginnign of the animation
+//                    target_omega = ((chart_frames[i])->draw_panel->circle_observer.omega);
+                    
+                }
+                
+                //compute the distance between the start and end poisition of the proposed andimation and store it in d
+//                target_position.distance((chart_frames[i])->draw_panel->circle_observer.reference_position, &d, String(""), String(""));
+//                
+//                //I do the animaiton only if the start and end position of the animation are large enough, in order to avoid NaNs in the transporting_route
+//                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * Re*(chart_frames[i])->draw_panel->circle_observer.omega.value) {
+                //
+                chart_transport_handlers[i] = new ChartTransportHandler<F>(
+                                                                           (chart_frames[i]),
+                                                                           Route(
+                                                                                 Route_types[0],
+                                                                                 (chart_frames[i])->draw_panel->circle_observer.reference_position,
+                                                                                 target_position
+                                                                                 ),
+                                                                           Double( 1.0 ),
+                                                                           f
+                                                                           );
+                
+                //trigger the animation
+                (chart_transport_handlers[i])->operator()();
+                
+                
+                //                }
+                
                 
                 
                 break;

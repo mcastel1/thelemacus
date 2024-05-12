@@ -11779,6 +11779,9 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
             case 1: {
                 //I am using Projection_types[1]
                 
+                //the aperture angle of circle_observer at the end of the animation
+                Angle target_omega;
+                
                 
                 if(std::is_same<T, Route>::value){
                     //object is a Route

@@ -22941,7 +22941,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                 case 0: {
                     //I am using Projection_types[0]
                     
-                    PositionProjection q_NE, q_SW, q_start;
+                    PositionProjection q_NE, q_SW;
                     
     
                     //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle
@@ -23004,20 +23004,24 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                 case 0: {
                     //I am using Projection_types[0]
                     
-                    PositionProjection temp;
+                    PositionProjection q_center;
                     
-                    //transport the starting point of the animation, start, according to transporting_route_temp, and store the result in p_center -> this yields the updated center of the chart 
-                    (MotionHandler<F>::start).transport(&p_center, (MotionHandler<F>::transporting_route_temp), String(""));
+                    //transport the starting point of the animation, start, according to transporting_route_temp, and store the result in p_center -> this yields the updated center of the chart
+                    (MotionHandler<F>::start).transport(&(MotionHandler<F>::p_center), (MotionHandler<F>::transporting_route_temp), String(""));
+                    //transform p_center into a PositionProjection
+                    (chart_frame->draw_panel->*(chart_frame->draw_panel->GeoToProjection))(p_center, &q_center, true);
+
                     
-                    
-                    (chart_frame->lambda_max) = (p_NE.lambda);
-                    (chart_frame->phi_max) = (p_NE.phi);
-                    
-                    temp.SetMercator(p_NE);
-                    (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(temp - projection_size, &p_SW);
-                    
-                    (chart_frame->lambda_min) = p_SW.lambda;
-                    (chart_frame->phi_min) = p_SW.phi;
+//                    
+//                    
+//                    (chart_frame->lambda_max) = (p_NE.lambda);
+//                    (chart_frame->phi_max) = (p_NE.phi);
+//                    
+//                    temp.SetMercator(p_NE);
+//                    (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(temp - projection_size, &p_SW);
+//                    
+//                    (chart_frame->lambda_min) = p_SW.lambda;
+//                    (chart_frame->phi_min) = p_SW.phi;
           
                     
                     break;

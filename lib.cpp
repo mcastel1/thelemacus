@@ -22933,13 +22933,16 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                 case 0: {
                     //I am using Projection_types[0]
                     
-                    PositionProjection q_NE, q_SW;
+                    PositionProjection q_NE, q_SW, q_start;
                     
     
                     //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle
                     q_NE.NormalizeAndSetMercator(Position(chart_frame->lambda_max, chart_frame->phi_max));
                     q_SW.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
                     projection_size = q_NE - q_SW;
+                
+//                    (MotionHandler<F>::start)
+//                    chart_frame->draw_panel->GeoToMercator((MotionHandler<F>::start), &q_start, true);
                      
                     break;
                     

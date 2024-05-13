@@ -11744,6 +11744,9 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
             case 0: {
                 //I am using Projection_types[0]
                 
+                //the center of the Mercator projection
+                Position center;
+                
                 if(std::is_same<T, Route>::value){
                     //object is a Route
                     
@@ -11790,11 +11793,16 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
 //                //I do the animaiton only if the start and end position of the animation are large enough, in order to avoid NaNs in the transporting_route
 //                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * Re*(chart_frames[i])->draw_panel->circle_observer.omega.value) {
                 //
+                
+                center.lambda.set(String(""), (((chart_frames[i])->lambda_min + (chart_frames[i])->lambda_max).value)/2.0, String(""));
+                center.phi.set(String(""), (((chart_frames[i])->phi_min + (chart_frames[i])->phi_max).value)/2.0, String(""));
+                
+                
                 chart_transport_handlers[i] = new ChartTransportHandler<F>(
                                                                            (chart_frames[i]),
                                                                            Route(
                                                                                  Route_types[0],
-                                                                                 (chart_frames[i])->draw_panel->circle_observer.reference_position,
+                                                                                 center,
                                                                                  target_position
                                                                                  ),
                                                                            Double( 1.0 ),

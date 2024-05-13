@@ -23015,16 +23015,13 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     //shift q_center to the NE and to the SW by projection_size/2 -> these will be the updated values of p_NE and p_SE
                     (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(q_center + projection_size/2.0, &p_NE);
                     (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(q_center - projection_size/2.0, &p_SW);
-//
-//                    
-//                    (chart_frame->lambda_max) = (p_NE.lambda);
-//                    (chart_frame->phi_max) = (p_NE.phi);
-//                    
-//                    temp.SetMercator(p_NE);
-//                    (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(temp - projection_size, &p_SW);
-//                    
-//                    (chart_frame->lambda_min) = p_SW.lambda;
-//                    (chart_frame->phi_min) = p_SW.phi;
+
+                    //set lambda / phi min/max according to p_NE and p_SW
+                    (chart_frame->lambda_max) = (p_NE.lambda);
+                    (chart_frame->phi_max) = (p_NE.phi);
+
+                    (chart_frame->lambda_min) = p_SW.lambda;
+                    (chart_frame->phi_min) = p_SW.phi;
           
                     
                     break;

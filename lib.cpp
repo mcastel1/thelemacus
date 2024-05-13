@@ -23011,8 +23011,9 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     //transform p_center into a PositionProjection
                     (chart_frame->draw_panel->*(chart_frame->draw_panel->GeoToProjection))(p_center, &q_center, true);
 
+                    q_center + projection_size/2.0;
                     
-//                    
+//
 //                    
 //                    (chart_frame->lambda_max) = (p_NE.lambda);
 //                    (chart_frame->phi_max) = (p_NE.phi);

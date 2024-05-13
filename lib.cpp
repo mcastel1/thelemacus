@@ -5584,7 +5584,7 @@ PositionProjection::PositionProjection(const double x_in, const double y_in) {
 
 }
 
-PositionProjection PositionProjection::operator+(const PositionProjection& q) {
+inline PositionProjection PositionProjection::operator + (const PositionProjection& q) {
 
     PositionProjection p;
 
@@ -5595,12 +5595,24 @@ PositionProjection PositionProjection::operator+(const PositionProjection& q) {
 
 }
 
-PositionProjection PositionProjection::operator-(const PositionProjection& q) {
+inline PositionProjection PositionProjection::operator - (const PositionProjection& q) {
 
     PositionProjection p;
 
     (p.x) = x - (q.x);
     (p.y) = y - (q.y);
+
+    return p;
+
+}
+
+//divide both members of *this by the number x and return the resulting  PositionProjection
+inline PositionProjection PositionProjection::operator / (const double& q) {
+
+    PositionProjection p;
+
+    (p.x) = x/q;
+    (p.y) = y/q;
 
     return p;
 
@@ -23007,7 +23019,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     PositionProjection q_center;
                     
                     //transport the starting point of the animation, start, according to transporting_route_temp, and store the result in p_center -> this yields the updated center of the chart
-                    (MotionHandler<F>::start).transport(&(MotionHandler<F>::p_center), (MotionHandler<F>::transporting_route_temp), String(""));
+                    (MotionHandler<F>::start).transport(&p_center, (MotionHandler<F>::transporting_route_temp), String(""));
                     //transform p_center into a PositionProjection
                     (chart_frame->draw_panel->*(chart_frame->draw_panel->GeoToProjection))(p_center, &q_center, true);
 

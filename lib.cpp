@@ -23006,7 +23006,10 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     
                     PositionProjection temp;
                     
-                    (MotionHandler<F>::start).transport(&p_NE, (MotionHandler<F>::transporting_route_temp), String(""));
+                    //transport the starting point of the animation, start, according to transporting_route_temp, and store the result in p_center -> this yields the updated center of the chart 
+                    (MotionHandler<F>::start).transport(&p_center, (MotionHandler<F>::transporting_route_temp), String(""));
+                    
+                    
                     (chart_frame->lambda_max) = (p_NE.lambda);
                     (chart_frame->phi_max) = (p_NE.phi);
                     

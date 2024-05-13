@@ -132,7 +132,8 @@
  
  
  ********** THINGS TO FIX ***********
-    - all icons in light mode must be revised and stored in dark mode 
+    - if you aniimate to a route in the mercator projection, do not move the chart and then re-animate to the same Route, it crashes 
+    - all icons in light mode must be revised and stored in dark mode
     - compute_position_button icon changes sometimes
     - do all you did in move_to_route for the 3D projection also for the Mercator projection
     - if the user wants to transport something with an existing Route and there are no existing Routes available, there is no way to get out of the transport routine safely.

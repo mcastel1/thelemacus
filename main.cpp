@@ -132,7 +132,7 @@
  
  
  ********** THINGS TO FIX ***********
-    - all methods in Route, such as compute_end, should handle the case where the Length is written as time x speed 
+    - all methods in Route, such as compute_end, should handle the case where the Length is written as time x speed
     - if you aniimate to a route in the mercator projection, do not move the chart and then re-animate to the same Route, it crashes
     - all icons in light mode must be revised and stored in dark mode
     - compute_position_button icon changes sometimes
@@ -376,18 +376,15 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
-//    //
-//    Position a(.37932, .2380913), b(1.3, -.43233);
-//    Route r(Route_types[1], a,b);
-//    r.length_format = LengthFormat(LengthFormat_types[1].value);
-//    
-//    
-//    r.compute_end(String(""));
-//    r.print(String("orthodrome joining two points"), String(""), cout);
-//    b.print(String("b"), String(""), cout);
-//    r.end.print(String("endpoint"), String(""), cout);
 
-     
+//    //
+//    PositionProjection p;
+//    Route r(Route_types[0], Position(Angle(.325), Angle(.22)), Angle(2.345), Length(2444));
+//    r.size(&p);
+//    
+//    
+//    //
+//    
     
 
     unsigned int i;

@@ -3042,17 +3042,13 @@ void Route::size(PositionProjection* p){
             PositionProjection q;
             
             compute_end(String(""));
-            p->SetMercator(end);
+            p->NormalizeAndSetMercator(end);
             q.SetMercator(reference_position);
             (*p) -= q;
             
-            
-            if(!(((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < 2.0 * M_PI)))){
-                //the latitude of *this decreases  with t -> invert the sides of the rectangle
-                
-                (*p) *= -1.0;
-                
-            }
+            (p->x) = fabs(p->x);
+            (p->y) = fabs(p->y);
+
             
             
             break;
@@ -5764,10 +5760,7 @@ inline void PositionProjection::NormalizeAndSetMercator(const Position& p){
     temp.lambda.normalize_pm_pi();
     
     SetMercator(temp);
-    
-//    x = -(normalize_pm_pi_ret(p.lambda).value);
-//    y = log(1.0 / cos((p.phi)) + tan((p.phi)));
-    
+     
 }
 
 

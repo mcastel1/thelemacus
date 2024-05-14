@@ -17287,8 +17287,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         
     }
     
-    PositionProjection t;
-    route->size(&t);
+//    PositionProjection t;
+//    route->size(&t);
  
     event.Skip(true);
 

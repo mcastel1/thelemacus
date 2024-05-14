@@ -3048,7 +3048,7 @@ void Route::size(PositionProjection* p){
             
             
             if(!(((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < 2.0 * M_PI)))){
-                //the latitude of *this decreases  with t -> invert the sides of the rectangle 
+                //the latitude of *this decreases  with t -> invert the sides of the rectangle
                 
                 (*p) *= -1.0;
                 
@@ -5012,7 +5012,7 @@ void Length::read_from_file_to(String name, String filename, String mode, [[mayb
 }
 
 
-Angle Angle::operator+ (const Angle& angle) {
+Angle Angle::operator + (const Angle& angle) {
 
     Angle temp;
 
@@ -5690,6 +5690,34 @@ inline PositionProjection PositionProjection::operator * (const double& q) {
 
     return p;
 
+}
+
+
+inline void PositionProjection::operator += (const PositionProjection& q) {
+
+    (*this) = (*this) + q;
+    
+}
+
+
+inline void PositionProjection::operator -= (const PositionProjection& q) {
+
+    (*this) = (*this) - q;
+    
+}
+
+
+inline void PositionProjection::operator *= (const double& a) {
+
+    (*this) = (*this) * a;
+    
+}
+
+
+inline void PositionProjection::operator /= (const double& a) {
+
+    (*this) = (*this) / a;
+    
 }
 
 

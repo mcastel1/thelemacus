@@ -240,7 +240,7 @@ public:
     
     bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator !=(const Angle&), operator > (const Angle&), operator > (const double&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&), operator * (const double&);
-    Angle& operator +=(const Angle&), &operator +=(const double&), &operator -=(const Angle&), &operator -=(const double&);
+    Angle& operator +=(const Angle&), &operator += (const double&), &operator -=(const Angle&), &operator -=(const double&);
     
 };
 
@@ -1136,10 +1136,9 @@ public:
     bool CheckMercator(DrawPanel*);
     void NormalizeAndSetMercator(const Position&);
     PositionProjection operator + (const PositionProjection&), operator - (const PositionProjection&), operator / (const double &), operator * (const double &);
-    
-    
-}
-;
+    void operator += (const PositionProjection&), operator -= (const PositionProjection&), operator *= (const double&), operator /= (const double&);
+        
+};
 
 //this class defines a functor to close the app properly
 class CloseApp{

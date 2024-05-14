@@ -3043,7 +3043,7 @@ void Route::size(PositionProjection* p){
             
             compute_end(String(""));
             p->NormalizeAndSetMercator(end);
-            q.SetMercator(reference_position);
+            q.NormalizeAndSetMercator(reference_position);
             (*p) -= q;
             
             (p->x) = fabs(p->x);
@@ -17286,6 +17286,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         parent->AnimateToObject<Route, UnsetIdling<ListFrame>  >(route, parent->unset_idling);
         
     }
+    
+    PositionProjection t;
+    route->size(&t);
  
     event.Skip(true);
 

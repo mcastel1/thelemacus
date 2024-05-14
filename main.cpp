@@ -132,7 +132,8 @@
  
  
  ********** THINGS TO FIX ***********
-    - if you aniimate to a route in the mercator projection, do not move the chart and then re-animate to the same Route, it crashes 
+    - all methods in Route, such as compute_end, should handle the case where the Length is written as time x speed 
+    - if you aniimate to a route in the mercator projection, do not move the chart and then re-animate to the same Route, it crashes
     - all icons in light mode must be revised and stored in dark mode
     - compute_position_button icon changes sometimes
     - do all you did in move_to_route for the 3D projection also for the Mercator projection

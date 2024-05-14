@@ -81,6 +81,7 @@ class Atmosphere;
 class Answer;
 class Body;
 class String;
+class PositionProjection;
 //template<class P> class CheckProjection;
 template<class P> class CheckArcDegree;
 template<class P> class CheckArcMinute;
@@ -919,6 +920,7 @@ public:
     int inclusion(PositionRectangle, bool, vector<Angle>*, String);
     int intersection(Route, bool, vector<Angle>*, String);
     bool closest_point_to(Position*, Angle*, Position, String);
+    void size(PositionProjection*);
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
     

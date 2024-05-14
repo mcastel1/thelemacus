@@ -3022,6 +3022,14 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
 
 }
 
+//obtain the size of *this in the Mercator projection : consider the smallest rectangle that contains *this entirely, and say that this rectangle has, in the Mercator projection, bottom-left and top-right points (0,0) and *p, respectively -> compute the top-right point and write it in *p
+void Route::size(PositionProjection* p){
+    
+    
+    
+    
+    
+}
 
 
 //If circle is not a circle of equal altitude, it returns -1 (error code). Otherwise, if the type of *this is not valid, it returns -1. Otherwise, the type of *this is valid-> if a part of *this is included into  circle, it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and write_t = true, it sets t[0] = t[1] = 0.0
@@ -11769,7 +11777,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 
                 //the center of the Mercator projection
                 Position center;
-                //the size of the rectangle observer at the end of the animation, in units of the coordinates x, y of the Mercator projection 
+                //the size of the rectangle observer at the end of the animation, in units of the coordinates x, y of the Mercator projection
                 Double target_size_rectangle_observer;
                 
                 if(std::is_same<T, Route>::value){

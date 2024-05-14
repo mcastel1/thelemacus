@@ -3036,32 +3036,43 @@ void Route::size(PositionProjection* p){
     
     switch (type.position_in_list(Route_types)) {
             
-        case 0:
+        case 0:{
             //*this is a loxodrome
             
-            if (((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < 2.0 * M_PI))){
-                //the latitude of *this increases with t
+            PositionProjection q;
+            
+            compute_end(String(""));
+            p->SetMercator(end);
+            q.SetMercator(reference_position);
+            (*p) -= q;
+            
+            
+            if(!(((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < 2.0 * M_PI)))){
+                //the latitude of *this decreases  with t -> invert the sides of the rectangle 
                 
+                (*p) *= -1.0;
                 
-            }else{
-                //the latitude of *this decreases  with t
-
-
             }
             
             
             break;
             
-       case 1:
+        }
+            
+        case 1:{
             
             //*this is an orthodrome
             
             break;
             
-       case 2:
+        }
+            
+        case 2:{
             //*this is a circle of equal altitude
             
             break;
+            
+        }
             
 
     }

@@ -17855,6 +17855,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     vector<wxString> headers;
     wxBoxSizer* sizer_listcontrol_routes_plus_buttons, * sizer_big_buttons;
     vector<wxButton*> disableable_buttons;
+    //temporary angles used to read and store the default values of lambda_min ... phi_max from init file
+    Angle lambda_min_temp, lambda_max_temp, phi_min_temp, phi_max_temp;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
     size_t pos_end;
 
@@ -17901,7 +17903,18 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     show_coastlines.read_from_file_to(String("show coastlines"), (wxGetApp().path_file_init), String("R"), String(""));
     //read load_sample_sight from file_init
     load_sample_sight.read_from_file_to(String("load sample sight"), (wxGetApp().path_file_init), String("R"), String(""));
+    
+    //set circle_observer_0.omega
     circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
+    
+    //set rectangle_obseerver
+    //read lambda_min, ...., phi_max from file_init
+    lambda_min_temp.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
+    lambda_max_temp.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
+    phi_min_temp.read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
+    phi_max_temp.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
+    rectangle_observer_0 = PositionRectangle(Position(lambda_min_temp, phi_max_temp), Position(lambda_max_temp, phi_min_temp), String(""));
+
 
 
 

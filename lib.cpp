@@ -5618,6 +5618,18 @@ inline PositionProjection PositionProjection::operator / (const double& q) {
 
 }
 
+//multiply both members of *this by the number x and return the resulting  PositionProjection
+inline PositionProjection PositionProjection::operator * (const double& q) {
+
+    PositionProjection p;
+
+    (p.x) = x*q;
+    (p.y) = y*q;
+
+    return p;
+
+}
+
 
 //return true if *this is falls wihtin the plot area of *draw_panel in the Mercator projection, and false otherwise
 inline bool PositionProjection::CheckMercator(DrawPanel* draw_panel){
@@ -11757,6 +11769,8 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 
                 //the center of the Mercator projection
                 Position center;
+                //the size of the rectangle observer at the end of the animation, in units of the coordinates x, y of the Mercator projection 
+                Double target_size_rectangle_observer;
                 
                 if(std::is_same<T, Route>::value){
                     //object is a Route
@@ -22967,6 +22981,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     //I am using Projection_types[0]
                     
                     PositionProjection q_A, q_B;
+                    Position p_A, p_B;
                     
     
                     //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle
@@ -22975,8 +22990,11 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     projection_size = q_A - q_B;
                     projection_size_start = projection_size;
                     
-                    q_A.NormalizeAndSetMercator(chart_frame->parent->rectangle_observer_0.p_NW);
-                    q_B.NormalizeAndSetMercator(chart_frame->parent->rectangle_observer_0.p_SE);
+                    
+                    p_A = Position(chart_frame->parent->rectangle_observer_0.p_SE.lambda, chart_frame->parent->rectangle_observer_0.p_NW.phi);
+                    p_B = Position(chart_frame->parent->rectangle_observer_0.p_NW.lambda, chart_frame->parent->rectangle_observer_0.p_SE.phi);
+                    q_A.NormalizeAndSetMercator(p_A);
+                    q_B.NormalizeAndSetMercator(p_B);
                     projection_size_end = (q_A - q_B)/(zoom_factor.value);
 
                     
@@ -23045,7 +23063,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     
                     
                     //update projection_size
-                    projection_size = projection_size_start + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
+                    projection_size = projection_size_start + (projection_size_end - projection_size_start) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
 
                     
                     //shift q_center to the NE and to the SW by projection_size/2 -> these will be the updated values of p_NE and p_SE

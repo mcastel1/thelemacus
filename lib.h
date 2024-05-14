@@ -1979,7 +1979,7 @@ public:
     PositionProjection /*the values of (x, y) at the beginning/end of the selection process with a rectangle*/projection_start, projection_end;
     Route /*this is a circle of equal altitude which is the intersection between the earth's surface and the visibility cone of the observer, whose vertex is at the observer. circle_oberserver.omega is the aperture angle at the center of the earth which specifies the part of the earth surface visible by the observer. circle_observer.rerefence_position is the ground position of the observer: the intersection between the line between the center of the earth and the observer, and the surface of the earth. These exist for the 3D projection only*/circle_observer;
     
-    PositionRectangle /* the rectangle x_min ... y_max in the Mercator projection*/rectangle_observer, /*same as rectangle_observer, but for the initial configutaiton of ChartFrame*/rectangle_observer_0;
+    PositionRectangle /* the rectangle x_min ... y_max in the Mercator projection*/rectangle_observer;
     wxBitmap m_bgbuffer;
     
     wxSizer* sizer_h, *sizer_v;
@@ -2616,7 +2616,8 @@ public:
     vector<unsigned long long int> coastline_polygons_area_observer;
     Position /*these are the geographic Positions where the right mouse button is clicked at the beginning, the current and preceeding Position during mouse movement, and the mouse Position and at the end of the drawing process for the selection rectangle*/geo_position_start, geo_position_before, geo_position_now, position_end;
     //the object which is being transported : a "sight" or a "position"
-    Route /*the same as draw_panel->circle_observer, but at the initial configuration fo the chart*/circle_observer_0;
+    Route /*the same as draw_panel->circle_observer, but at the initial configuration of the chart*/circle_observer_0;
+    PositionRectangle /*same DrawPanel::rectangle_observer, but for the initial configutaiton of ChartFrame*/rectangle_observer_0;
     String transported_object_type, /*the labels that will be drawn on position_start_label_selection_rectangle and position_end_label_selection_rectangle_now, respectively. end_label_selection_rectangle_now is the label of the end point of selection rectangle now, while end_label_selection_rectangle_before is the label of the end point of selection rectangle at the preceeding mouse position*/start_label_selection_rectangle, end_label_selection_rectangle_now, end_label_selection_rectangle_before;
     
     //a functor to set/unset idling mode in *this

@@ -3025,7 +3025,21 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
 //obtain the size of *this in the Mercator projection : consider the smallest rectangle that contains *this entirely, and say that this rectangle has, in the Mercator projection, bottom-left and top-right points (0,0) and *p, respectively -> compute the top-right point and write it in *p
 void Route::size(PositionProjection* p){
     
+    int tau;
     
+    if (((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < 2.0 * M_PI))){
+        tau = +1;
+    }else{
+        tau = -1;
+    }
+    
+    
+    //if the length of *this is expresed as time x speed, compute length from time and speed, otherwise the length of *this is already written in then and there is nothing to do
+    if(length_format == LengthFormat_types[0]){
+        
+        length = Length(time, speed);
+        
+    }
     
     
     

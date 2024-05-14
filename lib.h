@@ -1978,8 +1978,8 @@ public:
     Angle rotation_angle, /*an angle containing the middle longitude/latitude of the current 3D projection, rounded up to the closest value which is a multiple of delta_lambda/phi, used for drawing things in the middle of the projection*/lambda_middle, phi_middle, /*lambda/phi_start/end are the start/end values of longidue/latitude adapted in the right form ro the loopws which draw meridians/parallels*/ lambda_start, lambda_end, phi_start, phi_end, lambda_saved, phi_saved, Z_saved;
     PositionProjection /*the values of (x, y) at the beginning/end of the selection process with a rectangle*/projection_start, projection_end;
     Route /*this is a circle of equal altitude which is the intersection between the earth's surface and the visibility cone of the observer, whose vertex is at the observer. circle_oberserver.omega is the aperture angle at the center of the earth which specifies the part of the earth surface visible by the observer. circle_observer.rerefence_position is the ground position of the observer: the intersection between the line between the center of the earth and the observer, and the surface of the earth. These exist for the 3D projection only*/circle_observer;
-    //this rectangle represents the rectangle x_min ... y_max in the Mercator projection
-    PositionRectangle rectangle_observer;
+    
+    PositionRectangle /* the rectangle x_min ... y_max in the Mercator projection*/rectangle_observer, /*same as rectangle_observer, but for the initial configutaiton of ChartFrame*/rectangle_observer_0;
     wxBitmap m_bgbuffer;
     
     wxSizer* sizer_h, *sizer_v;

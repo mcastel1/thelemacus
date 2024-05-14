@@ -22885,7 +22885,6 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 //constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with proposed zoom factor proposed _zoom_factor at end fo the transport.  This is a `proposed` zoom factor because, if such proposed zoom factor is < 1 or > zoom_factor_max, the actual zoom factor will be set to 1 and zoom_factor_max, respectively. Othersize, the actual zoom_factor will be equal to proposed_zoom_factor.
 template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& proposed_zoom_factor, F* f_in) : MotionHandler<F>(chart_in->parent, transporting_route_in, f_in){
     
-    Double zoom_factor;
     
     chart_frame = chart_in;
     
@@ -22967,14 +22966,20 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                 case 0: {
                     //I am using Projection_types[0]
                     
-                    PositionProjection q_NE, q_SW;
+                    PositionProjection q_A, q_B;
                     
     
                     //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle
-                    q_NE.NormalizeAndSetMercator(Position(chart_frame->lambda_max, chart_frame->phi_max));
-                    q_SW.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
-                    projection_size = q_NE - q_SW;
+                    q_A.NormalizeAndSetMercator(Position(chart_frame->lambda_max, chart_frame->phi_max));
+                    q_B.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
+                    projection_size = q_A - q_B;
                     projection_size_start = projection_size;
+                    
+                    q_A.NormalizeAndSetMercator(chart_frame->parent->rectangle_observer_0.p_NW);
+                    q_B.NormalizeAndSetMercator(chart_frame->parent->rectangle_observer_0.p_SE);
+                    projection_size_end = (q_A - q_B)/(zoom_factor.value);
+
+                    
                 
 //                    (MotionHandler<F>::start)
 //                    chart_frame->draw_panel->GeoToMercator((MotionHandler<F>::start), &q_start, true);

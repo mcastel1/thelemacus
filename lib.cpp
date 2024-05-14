@@ -3025,14 +3025,7 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
 //obtain the size of *this in the Mercator projection : consider the smallest rectangle that contains *this entirely, and say that this rectangle has, in the Mercator projection, bottom-left and top-right points (0,0) and *p, respectively -> compute the top-right point and write it in *p
 void Route::size(PositionProjection* p){
     
-    int tau;
-    
-    if (((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < 2.0 * M_PI))){
-        tau = +1;
-    }else{
-        tau = -1;
-    }
-    
+
     
     //if the length of *this is expresed as time x speed, compute length from time and speed, otherwise the length of *this is already written in then and there is nothing to do
     if(length_format == LengthFormat_types[0]){
@@ -3040,6 +3033,42 @@ void Route::size(PositionProjection* p){
         length = Length(time, speed);
         
     }
+    
+    switch (type.position_in_list(Route_types)) {
+            
+        case 0:
+            //*this is a loxodrome
+            
+            if (((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < 2.0 * M_PI))){
+                //the latitude of *this increases with t
+                
+                
+            }else{
+                //the latitude of *this decreases  with t
+
+
+            }
+            
+            
+            break;
+            
+       case 1:
+            
+            //*this is an orthodrome
+            
+            break;
+            
+       case 2:
+            //*this is a circle of equal altitude
+            
+            break;
+            
+
+    }
+    
+    
+    
+
     
     
     
@@ -4444,7 +4473,7 @@ void Route::set_length(double t){
 void Route::compute_end(String prefix) {
     
     //picks the first (and only) character in string type.value
-    switch (/*(type.value)[0]*/type.position_in_list(Route_types)) {
+    switch (type.position_in_list(Route_types)) {
             
             
         case 0:{

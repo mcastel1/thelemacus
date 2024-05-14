@@ -22960,6 +22960,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     q_NE.NormalizeAndSetMercator(Position(chart_frame->lambda_max, chart_frame->phi_max));
                     q_SW.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
                     projection_size = q_NE - q_SW;
+                    projection_size_start = projection_size;
                 
 //                    (MotionHandler<F>::start)
 //                    chart_frame->draw_panel->GeoToMercator((MotionHandler<F>::start), &q_start, true);
@@ -23022,6 +23023,10 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     (MotionHandler<F>::start).transport(&p_center, (MotionHandler<F>::transporting_route_temp), String(""));
                     //transform p_center into a PositionProjection
                     (chart_frame->draw_panel->*(chart_frame->draw_panel->GeoToProjection))(p_center, &q_center, true);
+                    
+                    
+                    //update projection_size
+                    projection_size = projection_size_start + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
 
                     
                     //shift q_center to the NE and to the SW by projection_size/2 -> these will be the updated values of p_NE and p_SE

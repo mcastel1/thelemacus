@@ -2959,8 +2959,8 @@ public:
     
     //a poitner to the ChartFrame whose chart is being moved
     ChartFrame* chart_frame;
-    //the size (in Mercator projection x,y) of the projection in the mercator projection: this is stored and used during the transport in such a way that the size of the projection stays the same through the transport
-    PositionProjection projection_size;
+    
+    PositionProjection /*the size (in Mercator projection x,y) of the projection in the mercator projection: this is stored and used during the transport in such a way that the size of the projection stays the same through the transport*/projection_size, /*same as projection_size, but for the initial step of the animation */projection_size_start;
     //the NS, SW and center Position of the chart, used for the Mercator projections
     Position p_NE, p_SW, p_center;;
     //for the 3d projectionb: the aperture angles of circle_observer  at the beginning and at the end of the transport, respectively

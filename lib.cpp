@@ -11018,8 +11018,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     (wxGetApp().e_zoom).read_from_file_to(String("exponent zoom"), (wxGetApp().path_file_init), String("R"), String(""));
     (wxGetApp().a_zoom).set(String(""), (-1.0 + ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
     (wxGetApp().b_zoom).set(String(""), (pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value) - ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
-    parent->circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
-
+ 
 
     //text field showing the current value of the zoom slider
     s.str("");
@@ -17902,6 +17901,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     show_coastlines.read_from_file_to(String("show coastlines"), (wxGetApp().path_file_init), String("R"), String(""));
     //read load_sample_sight from file_init
     load_sample_sight.read_from_file_to(String("load sample sight"), (wxGetApp().path_file_init), String("R"), String(""));
+    circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
+
 
 
     LoadCoastLineData(String(""));

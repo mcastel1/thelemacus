@@ -245,17 +245,7 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 
 bool MyApp::OnInit() {
     
-
-//    //
-//    PositionProjection p;
-//    Route r(Route_types[0], Position(Angle(.325), Angle(.22)), Angle(2.345), Length(2444));
-//    r.size(&p);
-//    
-//    
-//    //
-//    
     
-
     unsigned int i;
     Int n_chart_frames;
     stringstream s;

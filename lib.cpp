@@ -2166,6 +2166,13 @@ bool PositionRectangle::Contains(Position p) {
 }
 
 
+//return the rectangle of *this in units of x * y of the Mercator projection
+void PositionRectangle::SizeMercator(PositionProjection* p){
+    
+    
+}
+
+
 //construct a brand new Route object and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(void) {
 

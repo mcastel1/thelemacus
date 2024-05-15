@@ -23043,8 +23043,12 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
         case 0:{
             //I am using Projection_types[0]
             
-            projection_size_end = projection_size_start / zoom_factor.value;
+            PositionProjection temp;
             
+            //compute projection_size_end from zoom_factor and rectangle_observer_0
+            chart_frame->parent->rectangle_observer_0.SizeMercator(&temp);
+            projection_size_end = temp / zoom_factor;
+
             
             break;
             
@@ -23053,6 +23057,7 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
         case 1:{
             //I am using Projection_types[1]
 
+            //compute omega_end from zoom_factor and circle_observer_0.omega
             omega_end.set(String(""), (chart_frame->parent->circle_observer_0.omega.value) / (zoom_factor.value), String(""));
 
             break;

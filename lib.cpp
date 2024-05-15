@@ -11875,12 +11875,21 @@ void ChartFrame::Animate(void){
         case 0: {
             //I am using Projection_types[0]
             
+            PositionProjection q_NE, q_SW, q_center;
+            Position p;
+            
+            q_NE.NormalizeAndSetMercator(Position(lambda_max, phi_max));
+            q_SW.NormalizeAndSetMercator(Position(lambda_min, phi_min));
+            q_center = (q_NE + q_SW)/2;
+            
+            (draw_panel->*(draw_panel->ProjectionToGeo))(q_center, &p);
+            
             chart_transport_handler = new ChartTransportHandler< UnsetIdling<ListFrame> >(
                                                                 this,
                                                                 Route(
                                                                       Route_types[0],
-                                                                      Position(lambda_max, phi_max).antipode_lambda(),
-                                                                      Position(lambda_max, phi_max)
+                                                                      p.antipode_lambda(),
+                                                                      p
                                                                       ),
                                                                 Double(1.0),
                                                                       parent->unset_idling

@@ -5701,6 +5701,13 @@ inline PositionProjection PositionProjection::operator / (const double& q) {
 
 }
 
+
+inline PositionProjection PositionProjection::operator / (const Double& q){
+    
+    return ((*this)/(q.value));
+    
+}
+
 //multiply both members of *this by the number x and return the resulting  PositionProjection
 inline PositionProjection PositionProjection::operator * (const double& q) {
 
@@ -23035,6 +23042,8 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
             
         case 0:{
             //I am using Projection_types[0]
+            
+            projection_size_end = projection_size_start / zoom_factor.value;
             
             
             break;

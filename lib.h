@@ -934,6 +934,7 @@ public:
     void Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
     
     bool lambda_min_max(Angle*, Angle*, String);
+    bool phi_min_max(Angle*, Angle*, String);
     void compute_l_ends(vector<Length>*, bool*, DrawPanel*, String);
     
 };

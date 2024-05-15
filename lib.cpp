@@ -7133,7 +7133,8 @@ double Route::lambda_minus_pi(double t, void* route) {
 
 }
 
-//comppute the extremal longidues taken by the points lying on *this, if *this is a circle of equal altitude, and writes them in *lambda_min/max . lambda_min/max are sorted in such a way that lambda_min (max) corredponds to the left (right) edge of *this as seen from an observer lying on the line between the earth's center and reference_position, looking towards the earth's center. If *this is not a circle of equal altitude, an error is printed and lambda_min /max are not touched.
+
+//comppute the extremal longitudes taken by the points lying on *this, if *this is a circle of equal altitude, and writes them in *lambda_min/max . lambda_min/max are sorted in such a way that lambda_min (max) corredponds to the left (right) edge of *this as seen from an observer lying on the line between the earth's center and reference_position, looking towards the earth's center. If *this is not a circle of equal altitude, an error is printed and lambda_min /max are not touched.
 bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]] String prefix) {
 
     String new_prefix;
@@ -7202,8 +7203,7 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
 
             }
 
-        }
-        else {
+        }else {
 
             temp = (*lambda_min);
             (*lambda_min) = (*lambda_max);
@@ -7212,8 +7212,7 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
         }
 
 
-    }
-    else {
+    }else {
 
         cout << prefix.value << RED << "Route is not a circle of equal altitude: lambda min/max can be computed only for a circle of equal altitude!\n" << RESET;
         check &= false;
@@ -7224,6 +7223,58 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
 
 
 }
+
+
+//comppute the extremal latitudes taken by the points lying on *this, if *this is a circle of equal altitude, and write them in *phi_min/max. If *this is not a circle of equal altitude, an error is printed and phi_min /max are not touched.
+bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String prefix) {
+
+    String new_prefix;
+    Angle temp;
+    Position p_min, p_max;
+    bool check;
+
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+    
+    check = true;
+    
+    if(type == (Route_types[2])) {
+        //*this is a circle of equal altitude -> I can compute phi_min / max
+        
+        Angle temp;
+            
+        (length.value) = Re * sin((omega.value)) * 0.0;
+        compute_end(new_prefix);
+        p_max = end;
+        
+        (length.value) = Re * sin((omega.value)) * M_PI;
+        compute_end(new_prefix);
+        p_min = end;
+        
+        //set lambda_min/max in this order, which is eventually rectified at the end of this function
+        (*phi_min) = (p_min.phi);
+        (*phi_max) = (p_max.phi);
+        
+        //sort phi_min and phi_max
+        if ((*phi_min) > (*phi_max)) {
+            
+            temp = (*phi_min);
+            (*phi_min) = (*phi_max);
+            (*phi_max) = temp;
+            
+        }
+        
+    }else {
+            
+        cout << prefix.value << RED << "Route is not a circle of equal altitude: phi min/max can be computed only for a circle of equal altitude!\n" << RESET;
+        check &= false;
+        
+    }
+    
+    return check;
+    
+}
+
 
 
 double Sight::rhs_DH_parallax_and_limb(double h, void* sight) {

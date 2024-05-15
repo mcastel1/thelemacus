@@ -843,7 +843,7 @@ public:
     PositionRectangle();
     PositionRectangle(Position, Position, String);
     bool Contains(Position);
-    void SizeMercator(PositionProjection*);
+    bool SizeMercator(PositionProjection*);
     
 };
 

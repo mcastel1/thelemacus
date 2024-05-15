@@ -2166,9 +2166,27 @@ bool PositionRectangle::Contains(Position p) {
 }
 
 
-//return the rectangle of *this in units of x * y of the Mercator projection
-void PositionRectangle::SizeMercator(PositionProjection* p){
+//if p !=NULL , compute rectangle of *this in units of x * y of the Mercator projection and writes it into *p and returns true, otherwise return false
+bool PositionRectangle::SizeMercator(PositionProjection* p){
+        
+    if(p){
+        
+        Position p_NE, p_SW;
+        PositionProjection q_A, q_B;
+
+        p_NE = Position(p_SE.lambda, p_NW.phi);
+        p_SW = Position(p_NW.lambda, p_SE.phi);
+        q_A.NormalizeAndSetMercator(p_NE);
+        q_B.NormalizeAndSetMercator(p_SW);
+        
+        (*p) = q_A-q_B;
     
+        return true;
+        
+    }else{
+        
+        return false;
+    }
     
 }
 

@@ -23030,8 +23030,31 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
     }
     
     
-    omega_end.set(String(""), (chart_frame->parent->circle_observer_0.omega.value) / (zoom_factor.value), String(""));
     
+    switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
+            
+        case 0:{
+            //I am using Projection_types[0]
+            
+            
+            break;
+            
+        } 
+        
+        case 1:{
+            //I am using Projection_types[1]
+
+            omega_end.set(String(""), (chart_frame->parent->circle_observer_0.omega.value) / (zoom_factor.value), String(""));
+
+            break;
+            
+        }
+            
+            
+    }
+    
+    
+
     
     
     (MotionHandler<F>::timer)->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);

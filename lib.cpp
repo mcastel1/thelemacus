@@ -11852,8 +11852,8 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 
                 //the center of the Mercator projection
                 Position center;
-                //the size of the rectangle observer at the end of the animation, in units of the coordinates x, y of the Mercator projection
-                Double target_size_rectangle_observer;
+                //the size of the object to which the animation is directed, in units of the coordinates x, y of the Mercator projection
+                PositionProjection target_size;
                 
                 if(std::is_same<T, Route>::value){
                     //object is a Route
@@ -11875,7 +11875,8 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        
                        object->compute_end(Length((object->length)/2.0), String(""));
                        target_position = object->end;
-                       //                       target_omega = (object->length.value)/2.0/Re;
+                       //compute the size of the object to which the animation is directed and store it into target_size
+                       object->size(&target_size);
                        
                    }
                     

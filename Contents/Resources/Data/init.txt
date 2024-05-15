@@ -14,8 +14,8 @@ length of plot area over length of chart = 0.8
 length of chart over length of chart frame = 0.8
 length of border over length of screen = 0.003
 #entire world
-minimal latitude = -57° 13.9'
-maximal latitude = 52° 53.2'
+minimal latitude = -77° 13.9'
+maximal latitude = 82° 53.2'
 minimal longitude = 175° 12.45'
 maximal longitude = 185° 0.01'
 #entire world

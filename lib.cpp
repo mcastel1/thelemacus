@@ -3091,6 +3091,11 @@ void Route::size(PositionProjection* p){
         case 2:{
             //*this is a circle of equal altitude
             
+            Angle lambda_min, lambda_max;
+            
+            lambda_min_max(&lambda_min, &lambda_max, String(""));
+            
+            
             break;
             
         }
@@ -7168,8 +7173,7 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
             /* p_max.print(String("p_max"), new_prefix, cout); */
             /* p_min.print(String("p_min"), new_prefix, cout); */
 
-        }
-        else {
+        }else {
             //in this case, reference_position.lambda vs. t has no minimum nor maximum: lambda_min/max are simly given by
 
             //set lambda_min/max in this order, meaning that *this spans all longitudes, from 0 to 2 pi

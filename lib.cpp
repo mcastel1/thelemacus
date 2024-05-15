@@ -23135,27 +23135,25 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     //I am using Projection_types[0]
                     
                     PositionProjection q_A, q_B;
-                    Position p_A, p_B;
+//                    Position p_A, p_B;
                     
     
                     //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle
-                    q_A.NormalizeAndSetMercator(Position(chart_frame->lambda_max, chart_frame->phi_max));
-                    q_B.NormalizeAndSetMercator(Position(chart_frame->lambda_min, chart_frame->phi_min));
-                    projection_size = q_A - q_B;
+                    q_A.NormalizeAndSetMercator(Position(Angle(0.0), chart_frame->phi_max));
+                    q_B.NormalizeAndSetMercator(Position(Angle(0.0), chart_frame->phi_min));
+                    projection_size.x = chart_frame->draw_panel->x_span();
+                    projection_size.y = (q_A.y) - (q_B.y);
                     projection_size_start = projection_size;
                     
                     
-                    p_A = Position(chart_frame->parent->rectangle_observer_0.p_SE.lambda, chart_frame->parent->rectangle_observer_0.p_NW.phi);
-                    p_B = Position(chart_frame->parent->rectangle_observer_0.p_NW.lambda, chart_frame->parent->rectangle_observer_0.p_SE.phi);
-                    q_A.NormalizeAndSetMercator(p_A);
-                    q_B.NormalizeAndSetMercator(p_B);
-                    projection_size_end = (q_A - q_B)/(zoom_factor.value);
+                    q_A.NormalizeAndSetMercator(Position(Angle(0.0), chart_frame->parent->rectangle_observer_0.p_NW.phi));
+                    q_B.NormalizeAndSetMercator(Position(Angle(0.0), chart_frame->parent->rectangle_observer_0.p_SE.phi));
+                    (projection_size_end.x) = chart_frame->draw_panel->x_span_0;
+                    projection_size_end.y = (q_A.y) - (q_B.y);
+                    projection_size_end /= (zoom_factor.value);
 
                     
-                
-//                    (MotionHandler<F>::start)
-//                    chart_frame->draw_panel->GeoToMercator((MotionHandler<F>::start), &q_start, true);
-                     
+                   
                     break;
                     
                 }

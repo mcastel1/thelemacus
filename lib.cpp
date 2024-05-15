@@ -11879,6 +11879,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 Position center;
                 //the size of the object to which the animation is directed, in units of the coordinates x, y of the Mercator projection
                 PositionProjection target_size, size_rectangle_observer_0;
+                Double zoom_factor;
                 
                 if(std::is_same<T, Route>::value){
                     //object is a Route
@@ -11933,6 +11934,8 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 
                 rectangle_observer_0.SizeMercator(&size_rectangle_observer_0);
                 
+                zoom_factor.value = (wxGetApp().chart_transport_zoom_factor_coefficient.value) * min((size_rectangle_observer_0.x)/(target_size.x), (size_rectangle_observer_0.y)/(target_size.y));
+                
                 
                 chart_transport_handlers[i] = new ChartTransportHandler<F>(
                                                                            (chart_frames[i]),
@@ -11941,7 +11944,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                                                                                  center,
                                                                                  target_position
                                                                                  ),
-                                                                           Double( 1.0 ),
+                                                                           zoom_factor,
                                                                            f
                                                                            );
                 

@@ -3091,9 +3091,10 @@ void Route::size(PositionProjection* p){
         case 2:{
             //*this is a circle of equal altitude
             
-            Angle lambda_min, lambda_max;
+            Angle lambda_min, lambda_max, phi_min, phi_max;
             
             lambda_min_max(&lambda_min, &lambda_max, String(""));
+            phi_min_max(&phi_min, &phi_max, String(""));
             
             
             break;

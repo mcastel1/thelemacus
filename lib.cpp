@@ -3064,12 +3064,12 @@ void Route::size(PositionProjection* p){
         case 0:{
             //*this is a loxodrome
             
-            PositionProjection q;
+            PositionProjection temp;
             
             compute_end(String(""));
             p->NormalizeAndSetMercator(end);
-            q.NormalizeAndSetMercator(reference_position);
-            (*p) -= q;
+            temp.NormalizeAndSetMercator(reference_position);
+            (*p) -= temp;
             
             (p->x) = fabs(p->x);
             (p->y) = fabs(p->y);
@@ -3091,11 +3091,18 @@ void Route::size(PositionProjection* p){
         case 2:{
             //*this is a circle of equal altitude
             
+            PositionProjection temp;
             Angle lambda_min, lambda_max, phi_min, phi_max;
             
             lambda_min_max(&lambda_min, &lambda_max, String(""));
             phi_min_max(&phi_min, &phi_max, String(""));
+        
+            temp.NormalizeAndSetMercator(Position(lambda_min, phi_min));
+            p->NormalizeAndSetMercator(Position(lambda_max, phi_max));
             
+            (*p) -= temp;
+            (p->x) = fabs(p->x);
+            (p->y) = fabs(p->y);
             
             break;
             

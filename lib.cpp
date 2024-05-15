@@ -11971,10 +11971,11 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        
                        object->compute_end(Length((object->length)/2.0), String(""));
                        target_position = object->end;
-                       //compute the size of the object to which the animation is directed and store it into target_size
-                       object->size(&target_size);
                        
                    }
+                    
+                    //compute the size of the object to which the animation is directed and store it into target_size
+                    object->size(&target_size);
                     
                 }
                 

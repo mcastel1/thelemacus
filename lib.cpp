@@ -11878,7 +11878,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 //the center of the Mercator projection
                 Position center;
                 //the size of the object to which the animation is directed, in units of the coordinates x, y of the Mercator projection
-                PositionProjection target_size;
+                PositionProjection target_size, size_rectangle_observer_0;
                 
                 if(std::is_same<T, Route>::value){
                     //object is a Route
@@ -11930,6 +11930,8 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 
                 center.lambda.set(String(""), (((chart_frames[i])->lambda_min + (chart_frames[i])->lambda_max).value)/2.0, String(""));
                 center.phi.set(String(""), (((chart_frames[i])->phi_min + (chart_frames[i])->phi_max).value)/2.0, String(""));
+                
+                rectangle_observer_0.SizeMercator(&size_rectangle_observer_0);
                 
                 
                 chart_transport_handlers[i] = new ChartTransportHandler<F>(

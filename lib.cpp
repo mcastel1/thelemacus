@@ -7157,85 +7157,100 @@ double Route::lambda_minus_pi(double t, void* route) {
 
 //comppute the extremal longitudes taken by the points lying on *this, and write them in *lambda_min/max . lambda_min/max are sorted in such a way that lambda_min (max) corredponds to the left (right) edge of *this as seen from an observer lying on the line between the earth's center and reference_position, looking towards the earth's center
 void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]] String prefix) {
-
+    
     String new_prefix;
     Angle t_min, t_max, temp;
     Position p_min, p_max;
-
+    
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-
+    
     if (type == (Route_types[2])) {
-
+        //*this is a circle of equal altitude
+        
         if (abs(-tan(reference_position.phi.value) * tan((omega.value))) < 1.0) {
             //im this case ( abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0) there exists a value of t = t_{max} (t_{min}) such that reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and write reference_position.lambda_{t = t_{min}} and reference_position.lambda_{t = t_{max}}] in lambda_min, lambda_max
-
+            
             //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
             t_max.set(String(""), acos(-tan(reference_position.phi.value) * tan((omega.value))), new_prefix);
             t_min.set(String(""), 2.0 * M_PI - acos(-tan(reference_position.phi.value) * tan((omega.value))), new_prefix);
-
+            
             //p_max =  Position on the circle of equal altitude  at t = t_max
             (length.value) = Re * sin((omega.value)) * (t_max.value);
             compute_end(new_prefix);
             p_max = end;
-
+            
             //p_min =  Position on circle of equal altitude  at t = t_min
             (length.value) = Re * sin((omega.value)) * (t_min.value);
             compute_end(new_prefix);
             p_min = end;
-
+            
             //set lambda_min/max in this order, which is eventually rectified at the end of this function
             (*lambda_min) = (p_min.lambda);
             (*lambda_max) = (p_max.lambda);
-
-
+            
+            
             /* p_max.print(String("p_max"), new_prefix, cout); */
             /* p_min.print(String("p_min"), new_prefix, cout); */
-
+            
         }else {
             //in this case, reference_position.lambda vs. t has no minimum nor maximum: lambda_min/max are simly given by
-
+            
             //set lambda_min/max in this order, meaning that *this spans all longitudes, from 0 to 2 pi
             (*lambda_min).set(String(""), 0.0, String(""));
             (*lambda_max).set(String(""), 0.0, String(""));
-
+            
         }
-
+        
         //sort lambda_min and lambda_max
         if ((*lambda_min) > (*lambda_max)) {
-
+            
             temp = (*lambda_min);
             (*lambda_min) = (*lambda_max);
             (*lambda_max) = temp;
-
+            
         }
-
+        
         //eventually swap lambda_min/max in such a way that lambda_min lies on the left and lambda_max lies on the right as seen from the observer's position looking at the earth's center
         if ((((*lambda_min).value) < M_PI) && (((*lambda_max).value) > M_PI)) {
-
+            
             if (!(((reference_position.lambda) < (*lambda_min)) || ((reference_position.lambda) > (*lambda_max)))) {
-
+                
                 temp = (*lambda_min);
                 (*lambda_min) = (*lambda_max);
                 (*lambda_max) = temp;
-
+                
             }
-
+            
         }else {
+            
+            temp = (*lambda_min);
+            (*lambda_min) = (*lambda_max);
+            (*lambda_max) = temp;
+            
+        }
+        
+        
+    }else {
+        //*this is a loxodrome or an orthodrome: in this case, the longitude along the Route *this is either a constantly increasing or a constantly decreasing function of the parameteric coordiante t -> set the minimal / maximal longitudes as the longitudes of the start and end point of this (or vice-versa)
+        
+        (*lambda_min) = (reference_position.lambda);
+        
+        compute_end(String(""));
+        (*lambda_max) = (end.lambda);
+        
+        if((*lambda_min) > (*lambda_max)){
+            
+            Angle temp;
 
             temp = (*lambda_min);
             (*lambda_min) = (*lambda_max);
             (*lambda_max) = temp;
-
+            
         }
-
-
-    }else {
-
-
+        
     }
-
-
+    
 }
 
 

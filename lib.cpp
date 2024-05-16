@@ -3306,8 +3306,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
 
         return -1;
 
-    }
-    else {
+    }else {
         //the longitude and latitude span of rectangle
 
         Angle lambda_span, phi_span;

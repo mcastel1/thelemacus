@@ -3307,7 +3307,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
         return -1;
 
     }else {
-        //the longitude and latitude span of rectangle
+        //*this is an orthodrome of a circle of equal altitude 
 
         Angle lambda_span, phi_span;
         Route side_N, side_S, side_E, side_W;

@@ -7259,19 +7259,58 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
         case 1:{
             //*this is an orthodrome
             
-            Angle phi_1, phi_2, t_1, t_2;
+            double ts;
+            unsigned int i;
+            //the candidate latitudes for the max and min latitude will be stored in phi
+            vector<Angle> phi;
             
-            t_1.set(String(""), atan(sin(reference_position.phi), cos(Z)*sin(reference_position.phi)), String(""));
-            t_2 = t_1 + M_PI;
             
-            compute_end(Length(Re*(t_1.value)), String(""));
-            phi_1 = end.phi.normalize_pm_pi_ret();
-
-            compute_end(Length(Re*(t_2.value)), String(""));
-            phi_2 = end.phi.normalize_pm_pi_ret();
+            phi.clear();
+            //            t.clear();
             
-            phi_min->set(String(""), min(phi_1.value, phi_2.value), String(""));
-            phi_max->set(String(""), max(phi_1.value, phi_2.value), String(""));
+            ts = atan(sin(reference_position.phi), cos(Z)*sin(reference_position.phi));
+            
+            //inlude in phi the latitude of the starting point of *this
+            compute_end(Length(0.0), String(""));
+            phi.push_back(end.phi.normalize_pm_pi_ret());
+            
+            
+            //there are two potential stationary points for the latitude vs t: include in phi the first one, if it lies on *this
+            if((0.0 <= Re*ts) && (Re*ts <= length)){
+                
+                //                t.push_back(Angle(ts));
+                
+                compute_end(Length(Re*ts), String(""));
+                phi.push_back(end.phi.normalize_pm_pi_ret());
+                
+            }
+            
+            //there are two potential stationary points for the latitude vs t: include in phi the second one, if it lies on *this
+            if((0.0 <= Re*(ts+M_PI)) && (Re*(ts+M_PI) <= length)){
+                
+                //                t.push_back(Angle(ts+M_PI));
+                
+                compute_end(Length(Re*(ts+M_PI)), String(""));
+                phi.push_back(end.phi.normalize_pm_pi_ret());
+                
+            }
+            
+            //*include in *phi the latitude of the endpoint of *this
+            compute_end(String(""));
+            phi.push_back(end.phi.normalize_pm_pi_ret());
+   
+            
+//            t_1.set(String(""), atan(sin(reference_position.phi), cos(Z)*sin(reference_position.phi)), String(""));
+//            t_2 = t_1 + M_PI;
+//            
+//            compute_end(Length(Re*(t_1.value)), String(""));
+//            phi_1 = end.phi.normalize_pm_pi_ret();
+//
+//            compute_end(Length(Re*(t_2.value)), String(""));
+//            phi_2 = end.phi.normalize_pm_pi_ret();
+//            
+//            phi_min->set(String(""), min(phi_1.value, phi_2.value), String(""));
+//            phi_max->set(String(""), max(phi_1.value, phi_2.value), String(""));
 
             check = true;
             

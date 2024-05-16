@@ -3095,8 +3095,7 @@ void Route::size_Mercator(PositionProjection* p){
         }
             
         case 1:{
-            
-            //*this is an orthodrome
+            //*this is an orthodrome -> for orthodromes, the latitude is not a monotonic function of the curvilinear coordinate t -> I compute the maximal and minimal latitude along *this by using phi_min_max
             
             break;
             

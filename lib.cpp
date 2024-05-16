@@ -988,19 +988,19 @@ void Int::print(String name, String prefix, ostream& ostr) {
 
 }
 
-bool Length::operator==(const Length& length) {
+inline bool Length::operator == (const Length& length) {
 
     return (value == (length.value));
 
 }
 
-bool Length::operator!=(const Length& length) {
+inline bool Length::operator != (const Length& length) {
 
     return (!((*this) == length));
 
 }
 
-Length& Length::operator+= (const Length& length) {
+Length& Length::operator += (const Length& length) {
 
     value += (length.value);
 
@@ -1008,7 +1008,7 @@ Length& Length::operator+= (const Length& length) {
 
 }
 
-Length& Length::operator-= (const Length& length) {
+Length& Length::operator -= (const Length& length) {
 
     value -= (length.value);
 
@@ -1017,34 +1017,48 @@ Length& Length::operator-= (const Length& length) {
 }
 
 //evaluates whether Length (*this) is larger than r
-bool Length::operator>(const Length& r) {
+inline bool Length::operator > (const Length& r) {
 
     return((value > (r.value)));
 
 }
 
-bool operator<(const Length& l, const Length& s) {
+bool operator < (const Length& l, const Length& s) {
 
     return((l.value) < (s.value));
 
 }
 
 //evaluates whether Length (*this) is <= r
-bool Length::operator<=(const Length& r) {
+inline bool Length::operator <= (const Length& r) {
 
     return(!((*this) > r));
 
 }
 
-//evaluates whether Length (*this) is larger than the double r
-bool Length::operator>(const double& r) {
+//evaluates whether Length (*this) is >= r
+inline bool Length::operator >= (const Length& r) {
+
+    return(!((*this) < r));
+
+}
+
+//evaluates whether Length (*this) is > than the double r
+inline bool Length::operator > (const double& r) {
 
     return((value > r));
 
 }
 
+//evaluates whether Length (*this) is >= than the double r
+inline bool Length::operator >= (const double& r) {
+
+    return(!((*this) < r));
+
+}
+
 //evaluates whether Length (*this) is smaller than the double r
-bool Length::operator<(const double& r) {
+inline bool Length::operator < (const double& r) {
 
     return((value < r));
 
@@ -7276,7 +7290,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             
             
             //there are two potential stationary points for the latitude vs t: include in phi the first one, if it lies on *this
-            if((0.0 <= Re*ts) && (Re*ts <= length)){
+            if((0.0 <= Re*ts) && (length >= Re*ts)){
                 
                 //                t.push_back(Angle(ts));
                 
@@ -7286,7 +7300,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             }
             
             //there are two potential stationary points for the latitude vs t: include in phi the second one, if it lies on *this
-            if((0.0 <= Re*(ts+M_PI)) && (Re*(ts+M_PI) <= length)){
+            if((0.0 <= Re*(ts+M_PI)) && (length >= Re*(ts+M_PI))){
                 
                 //                t.push_back(Angle(ts+M_PI));
                 

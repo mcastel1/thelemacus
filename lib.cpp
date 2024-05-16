@@ -3064,6 +3064,7 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
 //obtain the size of *this in the Mercator projection : consider the smallest rectangle that contains *this entirely, and say that this rectangle has, in the Mercator projection, bottom-left and top-right points (0,0) and *p, respectively -> compute the top-right point and write it in *p
 void Route::size_Mercator(PositionProjection* p){
     
+    PositionProjection q;
 
     
     //if the length of *this is expresed as time x speed, compute length from time and speed, otherwise the length of *this is already written in then and there is nothing to do
@@ -3073,62 +3074,35 @@ void Route::size_Mercator(PositionProjection* p){
         
     }
     
-    switch (type.position_in_list(Route_types)) {
-            
-        case 0:{
-            //*this is a loxodrome -> for loxodromes, latitude and longitude are either constantly increasing or decreasing along the Route -> I compute the points of maximal and minimal latitude / longitude from the extremal Positions on *this
-            
-            PositionProjection temp;
-            
-            compute_end(String(""));
-            p->NormalizeAndSetMercator(end);
-            temp.NormalizeAndSetMercator(reference_position);
-            (*p) -= temp;
-            
-            (p->x) = fabs(p->x);
-            (p->y) = fabs(p->y);
-
-            
-            
-            break;
-            
-        }
-            
-        case 1:{
-            //*this is an orthodrome -> for orthodromes, the latitude is not a monotonic function of the curvilinear coordinate t -> I compute the maximal and minimal latitude along *this by using phi_min_max
-            
-            break;
-            
-        }
-            
-        case 2:{
-            //*this is a circle of equal altitude
-            
-            PositionProjection temp;
-            Angle lambda_min, lambda_max, phi_min, phi_max;
-            
-            lambda_min_max(&lambda_min, &lambda_max, String(""));
-            phi_min_max(&phi_min, &phi_max, String(""));
+    //in what follows, I store the two points representing the corners of the rectangle ennclosing *this in the Mercator projection in *p and q
+    
+    if(type == Route_types[0]){
+        //*this is a loxodrome -> for loxodromes, latitude and longitude are either constantly increasing or decreasing along the Route -> I compute the points of maximal and minimal latitude / longitude from the extremal Positions on *this
         
-            temp.NormalizeAndSetMercator(Position(lambda_min, phi_min));
-            p->NormalizeAndSetMercator(Position(lambda_max, phi_max));
-            
-            (*p) -= temp;
-            (p->x) = fabs(p->x);
-            (p->y) = fabs(p->y);
-            
-            break;
-            
-        }
-            
-
+        compute_end(String(""));
+        p->NormalizeAndSetMercator(end);
+        q.NormalizeAndSetMercator(reference_position);
+ 
+        
+    }else{
+        //this is an orthodrome or a circle of equal altitude: latitude and longitude are not necessarily monotonic functions of the coordinate t along the curve-> compute them with lambda_min_max and phi_min_max
+        
+        Angle lambda_min, lambda_max, phi_min, phi_max;
+        
+        lambda_min_max(&lambda_min, &lambda_max, String(""));
+        phi_min_max(&phi_min, &phi_max, String(""));
+        
+        q.NormalizeAndSetMercator(Position(lambda_min, phi_min));
+        p->NormalizeAndSetMercator(Position(lambda_max, phi_max));
+        
+        
     }
     
+    //I substract q to *p and store the absolute value of the result in p -> this is the size that *this occupies in the Mercator projection 
     
-    
-
-    
-    
+    (*p) -= q;
+    (p->x) = fabs(p->x);
+    (p->y) = fabs(p->y);
     
 }
 

@@ -248,7 +248,7 @@ bool MyApp::OnInit() {
     //
     Route r;
     Angle phi_min, phi_max;
-    r = Route(Route_types[1], Position(Angle(1.43), Angle(.2)), Angle(2.43), Length(3000.32));
+    r = Route(Route_types[1], Position(Angle(2.32), Angle(1.13)), Angle(2.43), Length(3000.32));
     r.phi_min_max(&phi_min, &phi_max, String(""));
     
     //

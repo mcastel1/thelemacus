@@ -8326,6 +8326,21 @@ string Angle::min_to_string(String mode, unsigned int precision) {
 }
 
 
+//returns true if a.normalize_pm_pi_ret().value < b.normalize_pm_pi_ret().value and false otherwise
+inline bool Angle::strictly_smaller_normalize_pm_pi_ret(Angle& a, Angle& b){
+    
+    return((a.normalize_pm_pi_ret().value) < (b.normalize_pm_pi_ret().value));
+    
+}
+
+//returns true if a.normalize_pm_pi_ret().value > b.normalize_pm_pi_ret().value and false otherwise
+inline bool Angle::strictly_larger_normalize_pm_pi_ret(Angle& a, Angle& b){
+    
+    return((a.normalize_pm_pi_ret().value) > (b.normalize_pm_pi_ret().value));
+    
+}
+
+
 void Limb::print(String name, String prefix, ostream& ostr) {
 
     ostr << prefix.value << name.value << " = " << value << "\n";

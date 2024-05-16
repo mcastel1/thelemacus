@@ -7259,13 +7259,20 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
         case 1:{
             //*this is an orthodrome
             
-            double a, b, c;
+            Angle phi_1, phi_2, t_1, t_2;
             
-            c = sqrt(gsl_pow_2(cos(Z)) * gsl_pow_2(cos(reference_position.phi)) + gsl_pow_2(sin(reference_position.phi)));
-            a = sin(reference_position.phi)/c;
-            b = (cos(Z)*cos(reference_position.phi))/c;
+            t_1.set(String(""), atan(sin(reference_position.phi), cos(Z)*sin(reference_position.phi)), String(""));
+            t_2 = t_1 + M_PI;
+            
+            compute_end(Length(Re*(t_1.value)), String(""));
+            phi_1 = end.phi.normalize_pm_pi_ret();
 
+            compute_end(Length(Re*(t_2.value)), String(""));
+            phi_2 = end.phi.normalize_pm_pi_ret();
             
+            phi_min->set(String(""), min(phi_1.value, phi_2.value), String(""));
+            phi_max->set(String(""), max(phi_1.value, phi_2.value), String(""));
+
             check = true;
             
             break;

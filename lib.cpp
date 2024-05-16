@@ -7232,7 +7232,7 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
 }
 
 
-//comppute the extremal latitudes taken by the points lying on *this, if the type of *this allows it, and write them in *phi_min/max. If the extremal latitudes could not be computed, an error is printed, false is returned, and phi_min /max are not touched; otherwise the maximal and minimal latitude are stored into *phi_min/max, and true is returned 
+//comppute the extremal latitudes taken by the points lying on *this, if the type of *this allows it, and write them in *phi_min/max. If the extremal latitudes could not be computed, an error is printed, false is returned, and phi_min /max are not touched; otherwise the maximal and minimal latitude are stored into *phi_min/max, and true is returned
 bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String prefix) {
 
     String new_prefix;
@@ -7258,6 +7258,12 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
         
         case 1:{
             //*this is an orthodrome
+            
+            double a, b, c;
+            
+            c = sqrt(gsl_pow_2(cos(Z)) * gsl_pow_2(cos(reference_position.phi)) + gsl_pow_2(sin(reference_position.phi)));
+            a = sin(reference_position.phi)/c;
+            b = (cos(Z)*cos(reference_position.phi))/c;
 
             
             check = true;

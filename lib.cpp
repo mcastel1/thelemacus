@@ -3065,13 +3065,11 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
 void Route::size_Mercator(PositionProjection* p){
     
     PositionProjection q;
-
     
+
     //if the length of *this is expresed as time x speed, compute length from time and speed, otherwise the length of *this is already written in then and there is nothing to do
     if(length_format == LengthFormat_types[0]){
-        
         length = Length(time, speed);
-        
     }
     
     //in what follows, I store the two points representing the corners of the rectangle ennclosing *this in the Mercator projection in *p and q
@@ -3098,7 +3096,7 @@ void Route::size_Mercator(PositionProjection* p){
         
     }
     
-    //I substract q to *p and store the absolute value of the result in p -> this is the size that *this occupies in the Mercator projection 
+    //I substract q to *p and store the absolute value of the result in p -> this is the size that *this occupies in the Mercator projection
     
     (*p) -= q;
     (p->x) = fabs(p->x);

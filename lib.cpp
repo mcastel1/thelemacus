@@ -3307,7 +3307,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
         return -1;
 
     }else {
-        //*this is an orthodrome of a circle of equal altitude 
+        //*this is an orthodrome of a circle of equal altitude
 
         Angle lambda_span, phi_span;
         Route side_N, side_S, side_E, side_W;
@@ -11385,8 +11385,8 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
     dragging_chart = true;
 
 
-//    switch ((((projection->name)->GetValue()).ToStdString())[0]) {
-    switch (position_in_vector(Projection(((projection->name)->GetValue()).ToStdString()), Projection_types)) {
+//    switch (((projection->name->GetValue()).ToStdString())[0]) {
+    switch (position_in_vector(Projection((projection->name->GetValue()).ToStdString()), Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -11460,7 +11460,7 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
     //I am dragging the chart and the size of *this will not change -> set 
     dragging_chart = true;
 
-    switch (position_in_vector(Projection(((projection->name)->GetValue()).ToStdString()), Projection_types)) {
+    switch (position_in_vector(Projection((projection->name->GetValue()).ToStdString()), Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -11789,7 +11789,7 @@ template<class T> void ChartFrame::Reset(T& event) {
     idling = false;
     (draw_panel->idling) = false;
 
-    if (((projection->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if ((projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
 
         //read lambda_min, ...., phi_max from file_init
         lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -11804,7 +11804,7 @@ template<class T> void ChartFrame::Reset(T& event) {
 
     }
 
-    if (((projection->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
+    if ((projection->name->GetValue()) == wxString(((Projection_types[1]).value))) {
         //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
 
         parent->circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -12410,13 +12410,13 @@ void ChartFrame::UpdateSlider(void) {
 
     //compute the zoom factor of the chart and write it into zoom_factor
 
-    if (((projection->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if ((projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
 
         ComputeZoomFactor_Mercator((draw_panel->x_span()));
 
     }
 
-    if (((projection->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
+    if ((projection->name->GetValue()) == wxString(((Projection_types[1]).value))) {
         //is this necessary here ?
         ComputeZoomFactor_3D();
 
@@ -13855,7 +13855,7 @@ template<class T> void ChartFrame::OnMouseLeftDownOnSlider(T& event) {
     //mouse scrolling starts
     mouse_scrolling = true;
 
-    if (((projection->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if ((projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
 
         (draw_panel->x_center_scrolling) = ((draw_panel->x_min) + (draw_panel->x_max)) / 2.0;
         (draw_panel->y_center_scrolling) = ((draw_panel->y_min) + (draw_panel->y_max)) / 2.0;
@@ -14606,7 +14606,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
 
 
-    if (((projection->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if ((projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
 
         PositionProjection p_min, p_max;
 
@@ -14643,7 +14643,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
     }
 
-    if (((projection->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
+    if ((projection->name->GetValue()) == wxString(((Projection_types[1]).value))) {
 
         (draw_panel->circle_observer.omega) = ((parent->circle_observer_0.omega) / (zoom_factor.value));
 

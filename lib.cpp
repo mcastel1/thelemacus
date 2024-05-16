@@ -7232,7 +7232,7 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
 }
 
 
-//comppute the extremal latitudes taken by the points lying on *this, if *this is a circle of equal altitude, and write them in *phi_min/max. If *this is not a circle of equal altitude, an error is printed and phi_min /max are not touched.
+//comppute the extremal latitudes taken by the points lying on *this, if the type of *this allows it, and write them in *phi_min/max. If the extremal latitudes could not be computed, an error is printed, false is returned, and phi_min /max are not touched; otherwise the maximal and minimal latitude are stored into *phi_min/max, and true is returned 
 bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String prefix) {
 
     String new_prefix;
@@ -7243,39 +7243,61 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
     
-    check = true;
     
-    if(type == (Route_types[2])) {
-        //*this is a circle of equal altitude -> I can compute phi_min / max
-        
-        Angle temp;
+    switch (type.position_in_list(Route_types)) {
             
-        (length.value) = Re * sin((omega.value)) * 0.0;
-        compute_end(new_prefix);
-        p_max = end;
-        
-        (length.value) = Re * sin((omega.value)) * M_PI;
-        compute_end(new_prefix);
-        p_min = end;
-        
-        //set lambda_min/max in this order, which is eventually rectified at the end of this function
-        (*phi_min) = (p_min.phi);
-        (*phi_max) = (p_max.phi);
-        
-        //sort phi_min and phi_max
-        if ((*phi_min) > (*phi_max)) {
+        case 0:{
+            //*this is a loxodrome
             
-            temp = (*phi_min);
-            (*phi_min) = (*phi_max);
-            (*phi_max) = temp;
+            cout << prefix.value << RED << "Route is a loxodrome: phi min/max cannot be computed  for a loxodrome!\n" << RESET;
+            check = false;
+
+            break;
             
         }
         
-    }else {
+        case 1:{
+            //*this is an orthodrome
+
             
-        cout << prefix.value << RED << "Route is not a circle of equal altitude: phi min/max can be computed only for a circle of equal altitude!\n" << RESET;
-        check &= false;
+            check = true;
+            
+            break;
+            
+        }
         
+        case 2:{
+            //*this is a circle of equal altitude
+
+            Angle temp;
+                
+            (length.value) = Re * sin((omega.value)) * 0.0;
+            compute_end(new_prefix);
+            p_max = end;
+            
+            (length.value) = Re * sin((omega.value)) * M_PI;
+            compute_end(new_prefix);
+            p_min = end;
+            
+            //set lambda_min/max in this order, which is eventually rectified at the end of this function
+            (*phi_min) = (p_min.phi);
+            (*phi_max) = (p_max.phi);
+            
+            //sort phi_min and phi_max
+            if ((*phi_min) > (*phi_max)) {
+                
+                temp = (*phi_min);
+                (*phi_min) = (*phi_max);
+                (*phi_max) = temp;
+                
+            }
+            
+            check = true;
+            
+            break;
+            
+        }
+            
     }
     
     return check;

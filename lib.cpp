@@ -12010,7 +12010,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 //
                 
                 center.lambda.set(String(""), (((chart_frames[i])->lambda_min + (chart_frames[i])->lambda_max).value)/2.0, String(""));
-                center.phi.set(String(""), (((chart_frames[i])->phi_min + (chart_frames[i])->phi_max).value)/2.0, String(""));
+                center.phi.set(String(""), ((((chart_frames[i])->phi_min.normalize_pm_pi_ret().value) + ((chart_frames[i])->phi_max.normalize_pm_pi_ret().value)))/2.0, String(""));
                 
                 rectangle_observer_0.SizeMercator(&size_rectangle_observer_0);
                 

@@ -7155,7 +7155,7 @@ double Route::lambda_minus_pi(double t, void* route) {
 }
 
 
-//comppute the extremal longitudes taken by the points lying on *this, and write them in *lambda_min/max . lambda_min/max are sorted in such a way that lambda_min (max) corredponds to the left (right) edge of *this as seen from an observer lying on the line between the earth's center and reference_position, looking towards the earth's center
+//comppute the extremal (min and max) longitudes taken by the points lying on *this, and write them in *lambda_min and *lambda_max 
 void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]] String prefix) {
     
     String new_prefix;

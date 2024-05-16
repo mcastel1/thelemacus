@@ -7155,18 +7155,15 @@ double Route::lambda_minus_pi(double t, void* route) {
 }
 
 
-//comppute the extremal longitudes taken by the points lying on *this, if *this is a circle of equal altitude, and writes them in *lambda_min/max . lambda_min/max are sorted in such a way that lambda_min (max) corredponds to the left (right) edge of *this as seen from an observer lying on the line between the earth's center and reference_position, looking towards the earth's center. If *this is not a circle of equal altitude, an error is printed and lambda_min /max are not touched.
-bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]] String prefix) {
+//comppute the extremal longitudes taken by the points lying on *this, and write them in *lambda_min/max . lambda_min/max are sorted in such a way that lambda_min (max) corredponds to the left (right) edge of *this as seen from an observer lying on the line between the earth's center and reference_position, looking towards the earth's center
+void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]] String prefix) {
 
     String new_prefix;
     Angle t_min, t_max, temp;
     Position p_min, p_max;
-    bool check;
 
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-
-    check = true;
 
     if (type == (Route_types[2])) {
 
@@ -7235,12 +7232,8 @@ bool Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
 
     }else {
 
-        cout << prefix.value << RED << "Route is not a circle of equal altitude: lambda min/max can be computed only for a circle of equal altitude!\n" << RESET;
-        check &= false;
 
     }
-
-    return check;
 
 
 }

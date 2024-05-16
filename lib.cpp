@@ -7274,13 +7274,11 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             //*this is an orthodrome
             
             double ts;
-            unsigned int i;
             //the candidate latitudes for the max and min latitude will be stored in phi
             vector<Angle> phi;
             
             
             phi.clear();
-            //            t.clear();
             
             ts = atan(sin(reference_position.phi), cos(Z)*sin(reference_position.phi));
             
@@ -7313,19 +7311,6 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             compute_end(String(""));
             phi.push_back(end.phi.normalize_pm_pi_ret());
    
-            
-//            t_1.set(String(""), atan(sin(reference_position.phi), cos(Z)*sin(reference_position.phi)), String(""));
-//            t_2 = t_1 + M_PI;
-//            
-//            compute_end(Length(Re*(t_1.value)), String(""));
-//            phi_1 = end.phi.normalize_pm_pi_ret();
-//
-//            compute_end(Length(Re*(t_2.value)), String(""));
-//            phi_2 = end.phi.normalize_pm_pi_ret();
-//            
-//            phi_min->set(String(""), min(phi_1.value, phi_2.value), String(""));
-//            phi_max->set(String(""), max(phi_1.value, phi_2.value), String(""));
-
             check = true;
             
             break;

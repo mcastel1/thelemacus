@@ -3062,7 +3062,7 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
 }
 
 //obtain the size of *this in the Mercator projection : consider the smallest rectangle that contains *this entirely, and say that this rectangle has, in the Mercator projection, bottom-left and top-right points (0,0) and *p, respectively -> compute the top-right point and write it in *p
-void Route::size(PositionProjection* p){
+void Route::size_Mercator(PositionProjection* p){
     
 
     
@@ -3076,7 +3076,7 @@ void Route::size(PositionProjection* p){
     switch (type.position_in_list(Route_types)) {
             
         case 0:{
-            //*this is a loxodrome
+            //*this is a loxodrome -> for loxodromes, latitude and longitude are either constantly increasing or decreasing along the Route -> I compute the points of maximal and minimal latitude / longitude from the extremal Positions on *this
             
             PositionProjection temp;
             
@@ -12093,7 +12093,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                    }
                     
                     //compute the size of the object to which the animation is directed and store it into target_size
-                    object->size(&target_size);
+                    object->size_Mercator(&target_size);
                     
                 }
                 

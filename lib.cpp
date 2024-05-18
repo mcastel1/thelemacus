@@ -4436,6 +4436,13 @@ template<class S> void Position::read_from_stream([[maybe_unused]] String name, 
 }
 
 
+void Route::set_length_from_time_speed(void){
+    
+    
+    
+}
+
+
 //set length equal to l(t), where l(t) is the value of the curvilinear length corresponding to the parametric coordinate t
 void Route::set_length_from_input(double t){
     

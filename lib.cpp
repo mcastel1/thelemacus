@@ -4436,9 +4436,10 @@ template<class S> void Position::read_from_stream([[maybe_unused]] String name, 
 }
 
 
+//set length according to time and speed
 void Route::set_length_from_time_speed(void){
     
-    
+    length = Length(time, speed);
     
 }
 

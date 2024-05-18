@@ -2278,7 +2278,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             }
             
             //set length according to t* (see notes)
-            set_length(fabs((p_end.lambda.value) - (p_start.lambda.value)));
+            set_length_from_input(fabs((p_end.lambda.value) - (p_start.lambda.value)));
             
             
             break;
@@ -4437,7 +4437,7 @@ template<class S> void Position::read_from_stream([[maybe_unused]] String name, 
 
 
 //set length equal to l(t), where l(t) is the value of the curvilinear length corresponding to the parametric coordinate t
-void Route::set_length(double t){
+void Route::set_length_from_input(double t){
     
     switch ( type.position_in_list(Route_types)) {
             

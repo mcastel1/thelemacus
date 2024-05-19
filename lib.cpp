@@ -2451,6 +2451,7 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, Dra
     dc->SetPen(wxPen(color, width));
     dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
 
+    set_length_from_time_speed();
 
     //tabulate the Route points
     for (/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i = 0; i < n_points; i++) {
@@ -2942,6 +2943,8 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
 
         listcontrol->SetItem(i, j++, wxString(reference_position.to_string((display_precision.value))));
         listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.value), false)));
+        
+        set_length_from_time_speed();
         listcontrol->SetItem(i, j++, wxString(length.to_string(String("nm"), (display_precision.value))));
 
         listcontrol->SetItem(i, j++, wxString(""));
@@ -3763,8 +3766,7 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 
             time.read_from_stream(String("time"), input_stream, false, new_prefix);
             speed.read_from_stream(String("speed"), input_stream, false, new_prefix);
-            length = Length(time, speed);
-
+            set_length_from_time_speed();
 
         }
         else {
@@ -4637,6 +4639,8 @@ void Route::compute_end(String prefix) {
 
 //This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false
 bool Route::compute_end(Length d, [[maybe_unused]] String prefix) {
+    
+    set_length_from_time_speed();
 
     if ((type == (Route_types[2])) || (d <= length)) {
 
@@ -6872,8 +6876,8 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
     (circle_of_equal_altitude->label).set(String(""), String(temp.str()), new_prefix);
 
     check &= compute_H_o(new_prefix);
-    (circle_of_equal_altitude->omega).set(String(""), M_PI_2 - (H_o.value), String(""));
-    (circle_of_equal_altitude->length).set(String(""), 2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), new_prefix);
+    circle_of_equal_altitude->omega.set(String(""), M_PI_2 - (H_o.value), String(""));
+    circle_of_equal_altitude->length.set(String(""), 2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), new_prefix);
 
     if (!check) {
 
@@ -7294,6 +7298,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             //the candidate latitudes for the max and min latitude will be stored in phi
             vector<Angle> phi;
             
+            set_length_from_time_speed();
             
             phi.clear();
             
@@ -10708,7 +10713,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
 
 
-    for ((route.length).set(String(""), Re* (((p_NW.phi.normalize_pm_pi_ret()).value) - ((p_SE.phi.normalize_pm_pi_ret()).value)), String("")),
+    for (route.length.set(String(""), Re* (((p_NW.phi.normalize_pm_pi_ret()).value) - ((p_SE.phi.normalize_pm_pi_ret()).value)), String("")),
         (route.reference_position.lambda.value) = (lambda_start.value);
         (route.reference_position.lambda.value) < (lambda_end.value);
         (route.reference_position.lambda.value) += delta_lambda) {
@@ -10723,7 +10728,7 @@ inline void DrawPanel::PreRenderMercator(void) {
             //draw intermediate ticks on the longitude axis
 
             (lambda_saved.value) = (route.reference_position.lambda.value);
-            (route.length).set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
+            route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for ((route.reference_position.lambda.value) = (lambda_saved.value);
@@ -11047,7 +11052,7 @@ inline void DrawPanel::PreRender3D(void) {
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
-    (route.length).set(String(""), Re * M_PI, String(""));
+    route.length.set(String(""), Re * M_PI, String(""));
     (route.Z).set(String(""), 0.0, String(""));
     ((route.reference_position).phi) = -M_PI_2;
 
@@ -11069,7 +11074,7 @@ inline void DrawPanel::PreRender3D(void) {
             Z_saved = (route.Z);
 
             (route.Z).set(String(""), 0.0, String(""));
-            (route.length).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
+            route.length.set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
             ((route.reference_position).phi) = phi_middle;
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -11084,7 +11089,7 @@ inline void DrawPanel::PreRender3D(void) {
 
             }
 
-            (route.length).set(String(""), Re * M_PI, String(""));
+            route.length.set(String(""), Re * M_PI, String(""));
             (route.Z) = Z_saved;
             (route.reference_position.lambda.value) = (lambda_saved.value);
             ((route.reference_position).phi) = phi_saved;
@@ -11106,7 +11111,7 @@ inline void DrawPanel::PreRender3D(void) {
 
         //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
         (route.omega).set(String(""), M_PI_2 - fabs(phi.value), String(""));
-        (route.length).set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
+        route.length.set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
         ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
 
         //add the current parallel that is being drawn to parallels

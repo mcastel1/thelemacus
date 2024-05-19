@@ -246,12 +246,13 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 bool MyApp::OnInit() {
     
     /*
-    Route r;
-    Angle lambda_min, lambda_max;
-    r = Route(Route_types[0], Position(-1.98152, -1.02028), Position(5.08461,0.571266));
-    r.lambda_min_max(&lambda_min, &lambda_max, String(""));
+    Route a, b;
+    Chrono t;
+    t.set(String(""), 1.24, String(""));
+    Position p(Angle(.4325), Angle(.3423));
+    a = Route(Route_types[0], p, Angle(.2345), 2343);
+    b = Route(Route_types[0], p, Angle(.3423), t, Speed(2343));
     */
-    
     
     unsigned int i;
     Int n_chart_frames;

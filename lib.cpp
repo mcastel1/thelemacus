@@ -3144,7 +3144,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
         else {
             //*this is either an orthodrome or a loxodrome
 
-            if ((type.value)[0] == 'o') {
+            if (type == Route_types[1]) {
                 //*this is an orthodrome
 
                 if (intersection(circle, true, t, new_prefix) == 0) {

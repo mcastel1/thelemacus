@@ -2228,7 +2228,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
 }
 
 
-//build a Route of ty[e type that connects position_start and position_end
+//build a Route of type type that connects position_start and position_end
 Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
     
     type = type_in;
@@ -4518,13 +4518,15 @@ void Route::compute_end(String prefix) {
             
             
         case 0:{
-            
             //loxodrome route
             
             //this is the +- sign appearing in \phi'(t)  = +- sqrt{C/(1-C)} cos(phi(t));
             int sigma, tau;
             double C, eta;
             Angle t;
+            
+            //compute the length of *this from time and speed, if the length is stored in *this as a time * speed
+            set_length_from_time_speed();
             
             eta = sqrt((1.0 - sin(reference_position.phi.value)) / (1.0 + sin(reference_position.phi.value)));
             
@@ -4569,6 +4571,9 @@ void Route::compute_end(String prefix) {
             
             //orthodrome route
             Angle t;
+            
+            //compute the length of *this from time and speed, if the length is stored in *this as a time * speed
+            set_length_from_time_speed();
             
             t.set(String(""), (length.value) / Re, prefix);
             

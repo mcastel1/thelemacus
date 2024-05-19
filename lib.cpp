@@ -2213,16 +2213,33 @@ Route::Route(void) {
 
 }
 
-
-//constructs a brand new Route object of type ((Route_types[0]).value) or ((Route_types[1]).value) and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
-Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Length l_in) {
-
+//constructs a brand new Route. where lengths are written in time * speed than in l. The route type is either ((Route_types[0]).value) or ((Route_types[1]).value) and thus set its related sight to -1, because this Route cannot be related to any sight.
+Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Chrono time_in, Speed speed_in) {
+    
+    length_format.set((LengthFormat_types[0]));
     type = type_in;
+    
+    time = time_in;
+    speed = speed_in;
+    set_length_from_time_speed();
+    
     reference_position = reference_position_in;
     Z = Z_in;
-    length = l_in;
-    length_format.set((LengthFormat_types[1]));
+    related_sight.set(String(""), -1, String(""));
 
+}
+
+
+//constructs a brand new Route. where lengths are written as a simple length rather than as time * speed. The route type is either ((Route_types[0]).value) or ((Route_types[1]).value) and thus set its related sight to -1, because this Route cannot be related to any sight.
+Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Length l_in) {
+
+    length_format.set((LengthFormat_types[1]));
+    type = type_in;
+    
+    length = l_in;
+    
+    reference_position = reference_position_in;
+    Z = Z_in;
     related_sight.set(String(""), -1, String(""));
 
 }

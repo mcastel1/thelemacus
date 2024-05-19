@@ -909,6 +909,7 @@ public:
     
     Route(void);
     Route(RouteType, Position, Angle, Length);
+    Route(RouteType, Position, Angle, Chrono, Speed);
     Route(const RouteType&, Position, Position);
     Route(RouteType, Position, Angle);
     void print(String, String, ostream&);

@@ -27,7 +27,7 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
     
     if(dark_mode != (settings->GetAppearance().IsDark())) {
-        //if the dark mode of the operating system has changed
+        //the dark mode of the operating system has changed
         
         if ((settings->GetAppearance().IsDark())) {
             //the system is in dark mode -> set image path equal to the /Dark folder

@@ -4533,7 +4533,7 @@ void Route::set_length_from_input(double t){
 }
 
 
-//write into this->end the Position on the Route at length this->l along the Route from start
+//write into this->end the Position on the Route at length this->length (which needs to be correclty set before this method is called) along the Route from start
 void Route::compute_end(String prefix) {
     
     //picks the first (and only) character in string type.value
@@ -4548,8 +4548,6 @@ void Route::compute_end(String prefix) {
             double C, eta;
             Angle t;
             
-            //compute the length of *this from time and speed, if the length is stored in *this as a time * speed
-            set_length_from_time_speed();
             
             eta = sqrt((1.0 - sin(reference_position.phi.value)) / (1.0 + sin(reference_position.phi.value)));
             
@@ -4595,9 +4593,7 @@ void Route::compute_end(String prefix) {
             //orthodrome route
             Angle t;
             
-            //compute the length of *this from time and speed, if the length is stored in *this as a time * speed
-            set_length_from_time_speed();
-            
+     
             t.set(String(""), (length.value) / Re, prefix);
             
             (end.phi).set(String(""), asin(cos(Z) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);

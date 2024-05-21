@@ -271,6 +271,14 @@ void MyApp::set_icon_paths(void){
 
 bool MyApp::OnInit() {
     
+//    double x, y;
+//    x = 3254.554367546;
+//    y = round_with_precision(x, 0);
+//    
+//    y = round_with_precision(x, 2);
+//    
+//    y = round_with_precision(x, 1);
+
     /*
     Route a, b;
     Chrono t;

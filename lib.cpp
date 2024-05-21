@@ -1,3 +1,9 @@
+//round the floating point number x with precision `precision`
+inline double round_with_precision(double x, unsigned int precision)
+{
+    return round(x * gsl_pow_int(10.0, precision)) / gsl_pow_int(10.0, precision);
+}
+
 inline double sin(const Angle& x) {
 
     return sin(x.value);
@@ -8224,7 +8230,7 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces) {
 
     //write the arcminute part of the Angle into min
     min.str("");
-    x = (K * value_temp - floor(K * value_temp)) * 60.0;
+    x = round_with_precision((K * value_temp - floor(K * value_temp)) * 60.0, precision);
     if (add_spaces) {
         //sets the fixed precision min, so all angles that are printed out have the same number of decimal points
         min << fixed;

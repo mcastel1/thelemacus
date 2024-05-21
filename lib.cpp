@@ -9470,6 +9470,8 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                                                 const String& end_label,
                                                 wxColour foreground_color,
                                                 wxColour background_color) {
+    
+    Route temp;
 
 
     dc.SetPen(foreground_color);
@@ -9496,13 +9498,16 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
 
     //bottom horizontal edge of rectangle
-    (Route(
-           RouteType(((Route_types[0]).value)),
-        (parent->parent->geo_position_start),
-        //change this by introducing if
-        Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
-        Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
-    )).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
+    
+    temp = (Route(
+                  RouteType(((Route_types[0]).value)),
+               (parent->parent->geo_position_start),
+               //change this by introducing if
+               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+               Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+                  ));
+    
+    temp.DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
 
     //top horizontal edge of rectangle
     (Route(

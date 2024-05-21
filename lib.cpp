@@ -8226,11 +8226,19 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces) {
             }
         }
     }
-    deg << i;
 
+    
     //write the arcminute part of the Angle into min
     min.str("");
+    
+    //round up to the precision `precision`
     x = round_with_precision((K * value_temp - floor(K * value_temp)) * 60.0, precision);
+    //if, after the round up, x is equal to 60.0 (exactly), I set x to 0.0 and increase the defrees by one: in this way, I will never have weird angle vlaues such as 1 degree 60.0'
+    if(x == 60.0){
+        x = 0.0;
+        i++;
+    }
+    
     if (add_spaces) {
         //sets the fixed precision min, so all angles that are printed out have the same number of decimal points
         min << fixed;
@@ -8238,6 +8246,8 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces) {
             min << " ";
         }
     }
+    
+    deg << i;
     min << x;
 
 

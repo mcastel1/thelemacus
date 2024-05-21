@@ -8182,6 +8182,19 @@ void Angle::to_deg_min(unsigned int* deg, double* min) {
 
 }
 
+//convert the angle contained in (*this).value to degrees and minutes format, storted in deg and min,  round up the minutes part with precision `precision`, and re-format deg and min in order to avoid results of the form *deg = 23, *min = 60.0
+void Angle::to_deg_min(unsigned int* deg, double* min, unsigned int precision) {
+
+    to_deg_min(deg, min);
+    (*min) = round_with_precision((*min), precision);
+    if((*min) == 60.0){
+        (*min) = 0.0;
+        (*deg)++;
+    }
+    
+}
+
+
 //convert the angle stored in degrees and minutes format in deg an min in to (*this).vaule
 void Angle::from_sign_deg_min(char sign, unsigned int deg, double min) {
 

@@ -9500,6 +9500,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     //bottom horizontal edge of rectangle
     
     Angle lambda_a, lambda_b;
+    Length l;
     
     lambda_b = geo_position.lambda;
     lambda_a = (parent->parent->geo_position_start.lambda);
@@ -9507,7 +9508,8 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     if(GSL_SIGN((lambda_a.normalize_pm_pi_ret().value)) == GSL_SIGN(lambda_b.normalize_pm_pi_ret().value)){
         //lambda_a and lambda_b lie in the same hemisphere
         
-//        if(
+        l = Length(Re * cos(parent->parent->geo_position_start.phi) * fabs((lambda_b.value) - (lambda_a.value)));
+        
         
         
     }else{

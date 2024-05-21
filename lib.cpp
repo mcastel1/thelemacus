@@ -9502,7 +9502,6 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     temp = (Route(
                   RouteType(((Route_types[0]).value)),
                (parent->parent->geo_position_start),
-               //change this by introducing if
                Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
                Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
                   ));

@@ -2409,6 +2409,8 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
     bool end_connected;
     unsigned int i;
 
+    
+    set_length_from_time_speed();
 
     //tabulate the Route points
     for (/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/v->clear(), end_connected = true, i = 0; i < n_points; i++) {
@@ -3088,9 +3090,7 @@ void Route::size_Mercator(PositionProjection* p){
     
 
     //if the length of *this is expresed as time x speed, compute length from time and speed, otherwise the length of *this is already written in then and there is nothing to do
-    if(length_format == LengthFormat_types[0]){
-        length = Length(time, speed);
-    }
+    set_length_from_time_speed();
     
     //in what follows, I store the two points representing the corners of the rectangle ennclosing *this in the Mercator projection in *p and q
     
@@ -4616,6 +4616,9 @@ void Route::compute_end(String prefix) {
             Angle t;
             //compute the parametric angle for the circle of equal altitude starting from the length l of the curve, omega  and the Earth's radius
             //R sin omega = r, r t = l, t = l / (R sin omega)
+            
+            //compute the length of *this from time and speed, if the length is stored in *this as a time * speed
+            set_length_from_time_speed();
             t.set(String(""), (length.value) / (Re * sin(omega)), prefix);
             
             
@@ -4701,8 +4704,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
 
             length.print(String("length"), String("nm"), new_new_prefix, ostr);
 
-        }
-        else {
+        }else {
 
             time.print(String("time"), new_new_prefix, ostr);
             speed.print(String("speed"), new_new_prefix, ostr);

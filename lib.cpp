@@ -8173,6 +8173,7 @@ void Angle::print(String name, String prefix, ostream& ostr) {
 
 }
 
+
 //convert the angle contained in (*this).value to degrees and minutes format, storted in deg and min
 void Angle::to_deg_min(unsigned int* deg, double* min) {
 
@@ -8181,6 +8182,7 @@ void Angle::to_deg_min(unsigned int* deg, double* min) {
     (*min) = (K * value - 360.0 * floor(K * value / 360.0) - floor(K * value - 360.0 * floor(K * value / 360.0))) * 60.0;
 
 }
+
 
 //convert the angle contained in (*this).value to degrees and minutes format, storted in deg and min,  round up the minutes part with precision `precision`, and re-format deg and min in order to avoid results of the form *deg = 23, *min = 60.0
 void Angle::to_deg_min(unsigned int* deg, double* min, unsigned int precision) {
@@ -17546,7 +17548,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     }else{
         //I am either entering a new Route or modifying a Route unrelated to a Sight -> in both cases, I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling (intended as 'do nothing special' here) at the end of the animation
         
-//        parent->AnimateToObject<Route, UnsetIdling<ListFrame>  >(route, parent->unset_idling);
+        parent->AnimateToObject<Route, UnsetIdling<ListFrame>  >(route, parent->unset_idling);
         
     }
     
@@ -21284,7 +21286,7 @@ template <class P> void AngleField<P>::set(void) {
 
     if (format == String("")) {
 
-        angle->to_deg_min(&deg_temp, &min_temp);
+        angle->to_deg_min(&deg_temp, &min_temp, display_precision.value);
 
     }
     else {
@@ -21296,7 +21298,7 @@ template <class P> void AngleField<P>::set(void) {
             if (format == String("EW")) { sign->SetValue(wxString("W")); }
             if (format == String("NS")) { sign->SetValue(wxString("N")); }
 
-            angle->to_deg_min(&deg_temp, &min_temp);
+            angle->to_deg_min(&deg_temp, &min_temp, display_precision.value);
 
         }
         else {
@@ -21306,7 +21308,7 @@ template <class P> void AngleField<P>::set(void) {
             if (format == String("NS")) { sign->SetValue(wxString("S")); }
 
             (angle_temp.value) = 2.0 * M_PI - (angle->value);
-            angle_temp.to_deg_min(&deg_temp, &min_temp);
+            angle_temp.to_deg_min(&deg_temp, &min_temp, display_precision.value);
 
         }
 

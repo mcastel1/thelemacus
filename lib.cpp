@@ -11126,8 +11126,8 @@ inline void DrawPanel::PreRender3D(void) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
 
             route.type.set(String(((Route_types[1]).value)));
-            (route.Z).set(String(""), M_PI_2, String(""));
-            (route.length).set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
+            route.Z.set(String(""), M_PI_2, String(""));
+            route.length.set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for (
@@ -12103,6 +12103,8 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                    }else{
                        //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
                        
+                       object->set_length_from_time_speed();
+                       
                        object->compute_end(Length((object->length)/2.0), String(""));
                        target_position = object->end;
                        
@@ -12189,6 +12191,8 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        
                    }else{
                        //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
+                       
+                       object->set_length_from_time_speed();
                        
                        object->compute_end(Length((object->length)/2.0), String(""));
                        target_position = object->end;
@@ -17670,7 +17674,9 @@ void RouteFrame::set(void) {
 
         time->set();
         speed->set();
-        (route->length) = Length(route->time, route->speed);
+        
+        route->set_length_from_time_speed();
+        //        (route->length) = Length(route->time, route->speed);
         length->set();
 
     }
@@ -17692,8 +17698,7 @@ template<class T> void RouteFrame::get(T& event) {
         GP_lambda->get(event);
         omega->get(event);
 
-    }
-    else {
+    }else {
 
         Z->get(event);
         start_phi->get(event);
@@ -17707,8 +17712,7 @@ template<class T> void RouteFrame::get(T& event) {
             speed->get(event);
             (route->length) = Length(route->time, route->speed);
 
-        }
-        else {
+        }else {
             //in the GUI field, lenght are expressed simply as a Length -> get l and set in the non-GUI field to false
 
             (route->length_format) = LengthFormat(((LengthFormat_types[1]).value));

@@ -11055,8 +11055,8 @@ inline void DrawPanel::PreRender3D(void) {
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
     route.length.set(String(""), Re * M_PI, String(""));
-    (route.Z).set(String(""), 0.0, String(""));
-    ((route.reference_position).phi) = -M_PI_2;
+    route.Z.set(String(""), 0.0, String(""));
+    (route.reference_position.phi) = -M_PI_2;
 
     for ((route.reference_position.lambda.value) = (lambda_start.value);
         (route.reference_position.lambda.value) < (lambda_end.value);
@@ -11112,9 +11112,9 @@ inline void DrawPanel::PreRender3D(void) {
         ) {
 
         //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
-        (route.omega).set(String(""), M_PI_2 - fabs(phi.value), String(""));
+        route.omega.set(String(""), M_PI_2 - fabs(phi.value), String(""));
         route.length.set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
-        ((route.reference_position).phi).set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
+        route.reference_position.phi.set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
 
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);

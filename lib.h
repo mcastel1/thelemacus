@@ -230,6 +230,7 @@ public:
     void set(String, double, String);
     void print(String, String, ostream&);
     void to_deg_min(unsigned int*, double*);
+    void to_deg_min(unsigned int*, double*, unsigned int);
     void from_sign_deg_min(char, unsigned int, double);
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);

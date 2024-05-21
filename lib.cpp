@@ -16498,8 +16498,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     //pointer to init.txt to read fixed sight data from in there
     String new_prefix;
-    unsigned int deg, common_width;
-    double min;
+    unsigned int common_width;
     bool check = true;
 
 
@@ -16574,8 +16573,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_index_error = new StaticText(panel, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0);
     //If sight_in = NULL, read index error from init file
     if (sight_in == NULL) {
-        (sight->index_error).read_from_file_to(String("index error"), (wxGetApp().path_file_init), String("R"), new_prefix);
-        (sight->index_error).to_deg_min(&deg, &min);
+        sight->index_error.read_from_file_to(String("index error"), (wxGetApp().path_file_init), String("R"), new_prefix);
     }
     index_error = new AngleField<SightFrame>(panel, &(sight->index_error), String("+-"));
     index_error->set();

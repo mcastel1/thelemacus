@@ -7162,8 +7162,8 @@ double Route::lambda_minus_pi(double t, void* route) {
     //append \t to prefix
     new_prefix = ((*r).temp_prefix).append(String("\t"));
 
-    ((*r).length.value) = Re * sin(((*r).omega.value)) * t;
-    (*r).compute_end(new_prefix);
+    (r->length.value) = Re * sin(((*r).omega.value)) * t;
+    r->compute_end(new_prefix);
 
     return(((*r).end.lambda.value) - M_PI);
 

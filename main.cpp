@@ -42,6 +42,9 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
             
         }
         
+        //reset the images of all buttons
+
+        
         //I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
         list_frame->PreRenderAll();
     }
@@ -243,6 +246,29 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
     
 }
 
+
+//set the paths of all icons
+void MyApp::set_icon_paths(void){
+    
+    //files in image directory
+    path_file_app_icon = image_directory.append(read_from_file(String("name file app icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_error_icon = image_directory.append(read_from_file(String("name file error icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_warning_icon = image_directory.append(read_from_file(String("name file warning icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_info_icon = image_directory.append(read_from_file(String("name file info icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_question_icon = image_directory.append(read_from_file(String("name file question icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_plus_icon = image_directory.append(read_from_file(String("name file plus icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_list_icon = image_directory.append(read_from_file(String("name file list icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_position_icon = image_directory.append(read_from_file(String("name file position icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_map_icon = image_directory.append(read_from_file(String("name file map icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_pencil_icon = image_directory.append(read_from_file(String("name file pencil icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_trash_icon = image_directory.append(read_from_file(String("name file trash icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_arrow_icon = image_directory.append(read_from_file(String("name file arrow icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_disconnect_icon = image_directory.append(read_from_file(String("name file disconnect icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_michele_icon = image_directory.append(read_from_file(String("name file michele icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    
+    
+}
+
 bool MyApp::OnInit() {
     
     /*
@@ -331,21 +357,8 @@ bool MyApp::OnInit() {
     path_file_n_line = data_directory.append(read_from_file(String("name file n line"), (wxGetApp().path_file_init), String("R"), String("")));
     path_file_sample_sight = data_directory.append(read_from_file(String("name file sample sight"), (wxGetApp().path_file_init), String("R"), String("")));
     
-    //files in image directory
-    path_file_app_icon = image_directory.append(read_from_file(String("name file app icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_error_icon = image_directory.append(read_from_file(String("name file error icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_warning_icon = image_directory.append(read_from_file(String("name file warning icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_info_icon = image_directory.append(read_from_file(String("name file info icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_question_icon = image_directory.append(read_from_file(String("name file question icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_plus_icon = image_directory.append(read_from_file(String("name file plus icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_list_icon = image_directory.append(read_from_file(String("name file list icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_position_icon = image_directory.append(read_from_file(String("name file position icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_map_icon = image_directory.append(read_from_file(String("name file map icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_pencil_icon = image_directory.append(read_from_file(String("name file pencil icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_trash_icon = image_directory.append(read_from_file(String("name file trash icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_arrow_icon = image_directory.append(read_from_file(String("name file arrow icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_disconnect_icon = image_directory.append(read_from_file(String("name file disconnect icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_michele_icon = image_directory.append(read_from_file(String("name file michele icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    
+    set_icon_paths();
     
     
     data_precision.read_from_file_to(String("data precision"), (wxGetApp().path_file_init), String("R"), String(""));

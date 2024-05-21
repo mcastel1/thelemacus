@@ -110,6 +110,7 @@ public:
     void AnimateCharts(void);
     void ShowList(wxCommandEvent&);
     void where_am_I(String);
+    void set_icon_paths(void);
 
 };
 

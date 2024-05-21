@@ -84,7 +84,10 @@
 \cf2  \cf4 \
 \cf2  \cf4 \
 \cf2  \cf4 \
-\cf2  ********** THINGS TO ADD/IMPROVE ************\cf4 \
+\cf2  ********** THINGS TO ADD/IMPROVE ************\
+\pard\tx593\pardeftab593\partightenfactor0
+\cf2  - code method DrawPanel::ProjectionToGeo_3D\cf4 \
+\pard\tx593\pardeftab593\partightenfactor0
 \cf2  - add the scale factor below the slider in the mercator projection\cf4 \
 \cf2  - add the height of the observer above the earth surface in the 3d projection\cf4 \
 \cf2  - move up all code blocks that look alike into a function (marked with `    //MOVE UP TO A SINGLE METHOD`)\cf4 \
@@ -124,19 +127,15 @@
 \cf2  \cf4 \
 \cf2  ********** THINGS TO FIX ***********\
 	- in Mercator projection some paralles are cut \cf4 \
-\cf2     - if you aniimate to a route in the mercator projection, do not move the chart and then re-animate to the same Route, it crashes\cf4 \
 \cf2     - all icons in light mode must be revised and stored in dark mode\cf4 \
 \cf2     - compute_position_button icon changes sometimes\cf4 \
-\cf2     - do all you did in move_to_route for the 3D projection also for the Mercator projection\cf4 \
 \cf2     - if the user wants to transport something with an existing Route and there are no existing Routes available, there is no way to get out of the transport routine safely.\cf4 \
 \cf2     - add the possiblity to abort the transport operation \cf4 \
 \cf2     - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors\cf4 \
-\cf2     - adapt Route::print to take into account the length format\cf4 \
-\cf2     - replace `f ((type.value)[0] == 'l') \{` and similar cases where one needs to tell whether a route is loxodrome, orthodrome or circle of equal altitude with a switch which uses position_in_vector\cf4 \
+\cf2     - replace `f ((type.value)[0] == 'l') \{` and similar cases where one needs to tell whether a route is loxodrome, orthodrome or circle of equal altitude with a switch which uses position_in_vector\
+	- the app crashes if it is loaded without coastlines\cf4 \
 \cf2     - some angles that are integer multiple of a defgree are shown as 29 deg 60 ' -> fix it\cf4 \
-\cf2     - change projection = (((i % 2) == 0) ? (Projection_types[1]) : (Projection_types[0])); to previous line\cf4 \
 \cf2     - when you draw a selection rectangle that encompasses the greenwich antimeridian, a rectangle that goes around the earth on the other side is drawn\cf4 \
-\cf2     - code method DrawPanel::ProjectionToGeo_3D\cf4 \
 \cf2  on OSX:\cf4 \
 \cf2  on WIN32:\cf4 \
 \cf2  */\cf4 \

@@ -9499,6 +9499,24 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 
     //bottom horizontal edge of rectangle
     
+    Angle lambda_a, lambda_b;
+    
+    lambda_b = geo_position.lambda;
+    lambda_a = (parent->parent->geo_position_start.lambda);
+    
+    if(GSL_SIGN((lambda_a.normalize_pm_pi_ret().value)) == GSL_SIGN(lambda_b.normalize_pm_pi_ret().value)){
+        //lambda_a and lambda_b lie in the same hemisphere
+        
+//        if(
+        
+        
+    }else{
+        //lambda_a and lambda_b lie in different hemispheres
+
+        
+        
+    }
+    
     temp = (Route(
                   RouteType(((Route_types[0]).value)),
                (parent->parent->geo_position_start),

@@ -10028,11 +10028,11 @@ inline void DrawPanel::RenderPolygons(wxDC* dc,
                                       wxColor background_color,
                                       double thickness) {
     
-    unsigned long long int i;
+    long long int i;
     
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for(i = 0; i < polygon_positions.size()-1; i++) {
+    for(i = 0; i < ((long long int)(polygon_positions.size()))-1; i++) {
         //run through polygons
         
         if(polygon_positions[i+1] - polygon_positions[i] > 1){

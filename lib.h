@@ -227,6 +227,7 @@ public:
     Angle normalize_pm_pi_ret(void);
     Angle span(Angle);
     void enter(String, String);
+    void set(double);
     void set(String, double, String);
     void print(String, String, ostream&);
     void to_deg_min(unsigned int*, double*);

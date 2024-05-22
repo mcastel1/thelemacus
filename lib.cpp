@@ -7935,11 +7935,19 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
 
 }
 
-void Angle::set(String name, double x, [[maybe_unused]] String prefix) {
-
+//set the value of *this equal to x and normalize *this
+inline void Angle::set(double x){
+    
     value = x;
     normalize();
-    if (name != String("")) { print(name, prefix, cout); }
+
+}
+
+//call Angle::set(x) and print name with prefix 
+inline void Angle::set(String name, double x, [[maybe_unused]] String prefix) {
+
+    set(x);
+    if(name != String("")) { print(name, prefix, cout); }
 
 }
 

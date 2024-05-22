@@ -14199,9 +14199,19 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     if(GSL_SIGN((lambda_a.normalize_pm_pi_ret().value)) == GSL_SIGN(lambda_b.normalize_pm_pi_ret().value)){
                         //lambda_a and lambda_b lie in the same hemisphere
                    
-                        
-                        (parent->lambda_max) = (parent->parent->position_end.lambda);
-                        (parent->lambda_min) = (parent->parent->geo_position_start.lambda);
+                        if(lambda_b > lambda_a){
+                            
+                            
+                            (parent->lambda_min) = lambda_b;
+                            (parent->lambda_max) = lambda_a;
+                            
+                        }else{
+                            
+                            (parent->lambda_min) = lambda_a;
+                            (parent->lambda_max) = lambda_b;
+              
+                            
+                        }
         
                                 
                     }else{

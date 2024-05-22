@@ -9554,8 +9554,8 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                 
             }else{
            
-                lambda_span.set(fabs((lambda_a.normalize_pm_pi_ret().value) - (lambda_b.normalize_pm_pi_ret().value)));
-                Z = Angle(-M_PI_2);
+                lambda_span.set(fabs((lambda_a.value) - (lambda_b.value)));
+                Z = Angle(M_PI_2);
          
             }
             

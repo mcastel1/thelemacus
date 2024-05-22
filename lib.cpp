@@ -14222,10 +14222,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             
                             if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
                         
-                                
-                                (parent->lambda_max) = (parent->parent->position_end.lambda);
-                                (parent->lambda_min) = (parent->parent->geo_position_start.lambda);
-
+                                (parent->lambda_min) = lambda_a;
+                                (parent->lambda_max) = lambda_b;
                                 
                                 
                                 
@@ -14246,8 +14244,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
                         
                                 
-                                (parent->lambda_max) = (parent->parent->position_end.lambda);
-                                (parent->lambda_min) = (parent->parent->geo_position_start.lambda);
+                                (parent->lambda_min) = lambda_b;
+                                (parent->lambda_max) = lambda_a;
 
                                 
                             }else{

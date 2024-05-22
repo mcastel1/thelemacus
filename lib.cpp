@@ -9526,7 +9526,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     }else{
         //lambda_a and lambda_b lie in different hemispheres
 
-        if((lambda_a.normalize_pm_pi_ret().value) >= 0.0){
+        if(((lambda_a.normalize_pm_pi_ret().value) >= 0.0) && (lambda_b.normalize_pm_pi_ret().value) <= 0.0){
             //lambda_a lies in the poisitive-logitude hemishere (0 < lambda < 180), lambda_b in the nevative-longitude hemisphere (180 < lambda < 360)
             
             lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));

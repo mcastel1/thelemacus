@@ -9479,7 +9479,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                                                 wxColour foreground_color,
                                                 wxColour background_color) {
     
-    Route temp;
+    Angle lambda_a, lambda_b, lambda_span, Z;
 
 
     dc.SetPen(foreground_color);
@@ -9505,13 +9505,14 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
     )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
 
-    //bottom horizontal edge of rectangle
+    //top and bottom horizontal edge of rectangle
     
-    Angle lambda_a, lambda_b, lambda_span, Z;
     
     lambda_a = (parent->parent->geo_position_start.lambda);
     lambda_b = geo_position.lambda;
 
+    
+    //in order to properly draw the top and bottom edges of selection rectangle, I need to tell apart the following cases, and for each case, set lambda_span (the longitude span of the top and bottom edge), and the azimuth Z
     if(GSL_SIGN((lambda_a.normalize_pm_pi_ret().value)) == GSL_SIGN(lambda_b.normalize_pm_pi_ret().value)){
         //lambda_a and lambda_b lie in the same hemisphere
         
@@ -9521,15 +9522,13 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         }else{
             Z = Angle(M_PI_2);
         }
-        
-        
+                
     }else{
         //lambda_a and lambda_b lie in different hemispheres
 
         if((lambda_a.normalize_pm_pi_ret().value) >= 0.0){
             //lambda_a lies in the poisitive-logitude hemishere (0 < lambda < 180), lambda_b in the nevative-longitude hemisphere (180 < lambda < 360)
             
-//            l = Length(Re * cos(parent->parent->geo_position_start.phi) * fabs((lambda_b.value) - (lambda_a.value)));
             lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
             Z = Angle(-M_PI_2);
             
@@ -9543,7 +9542,13 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         
     }
     
-    
+    //now that lambda_span and Z have been set, I drwa the Routes corresponding to the top and bottom horizontal edges
+    Route(
+          RouteType(((Route_types[0]).value)),
+          geo_position,
+          Z+M_PI,
+          Length(Re * cos(geo_position.phi) * (lambda_span.value))
+          ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
     Route(
           RouteType(((Route_types[0]).value)),
           parent->parent->geo_position_start,
@@ -9551,14 +9556,8 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
           Length(Re * cos(parent->parent->geo_position_start.phi) * (lambda_span.value))
           ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
 
-    Route(
-          RouteType(((Route_types[0]).value)),
-          geo_position,
-          Z+M_PI,
-          Length(Re * cos(geo_position.phi) * (lambda_span.value))
-          ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
 
-
+    
     //render the labels of the selection rectangle
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));

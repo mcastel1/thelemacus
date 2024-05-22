@@ -14173,6 +14173,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     parent->parent->position_end.phi.normalize_pm_pi();
                     parent->parent->position_end.lambda.normalize_pm_pi();
                     //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the values of ((parent->parent)->p_start).lambda, ... ((parent->parent)->p_end).phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc. While I do this, I take care of the case where the selection rectangle may encompass the Greenwich antimeridian 
+                    /*
                     if ((parent->parent->geo_position_start.lambda) > (parent->parent->position_end.lambda)) {
                         
                         (parent->lambda_max) = (parent->parent->position_end.lambda);
@@ -14184,7 +14185,57 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         (parent->lambda_max) = (parent->parent->geo_position_start.lambda);
                         
                     }
+                    */
                     
+                    
+                    //
+                    Angle lambda_a, lambda_b;
+                    
+                    lambda_a = (parent->parent->geo_position_start.lambda);
+                    lambda_b = (parent->parent->position_end.lambda);
+
+                    
+                    //in order to properly draw the top and bottom edges of selection rectangle, I need to tell apart the following cases, and for each case, set lambda_span (the longitude span of the top and bottom edge), and the azimuth Z
+                    if(GSL_SIGN((lambda_a.normalize_pm_pi_ret().value)) == GSL_SIGN(lambda_b.normalize_pm_pi_ret().value)){
+                        //lambda_a and lambda_b lie in the same hemisphere
+                        
+                                
+                    }else{
+                        //lambda_a and lambda_b lie in different hemispheres
+
+                        if(((lambda_a.normalize_pm_pi_ret().value) >= 0.0) && (lambda_b.normalize_pm_pi_ret().value) <= 0.0){
+                            //lambda_a lies in the poisitive-logitude hemishere (0 < lambda < 180), lambda_b in the nevative-longitude hemisphere (180 < lambda < 360)
+                            
+                            if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
+                        
+                                
+                            }else{
+                           
+                                
+                            }
+                            
+
+                            
+                        }else{
+                            //lambda_a lies in the negative-logitude hemishere (180 < lambda < 360), lambda_b in the positive-longitude hemisphere (0 < lambda < 180)
+                            
+                            if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
+                        
+                         
+                                
+                            }else{
+                           
+                         
+                            }
+                            
+                            
+                            
+                        }
+                        
+                    }
+                    
+                    //
+                     
                     if ((parent->parent->geo_position_start.phi) > ((parent->parent->position_end).phi)) {
                         (parent->phi_max) = (((parent->parent)->geo_position_start).phi);
                         (parent->phi_min) = (((parent->parent)->position_end).phi);

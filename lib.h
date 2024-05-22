@@ -2859,8 +2859,8 @@ public:
     wxGridSizer* sizer_buttons;
     wxStaticBitmap* image;
     wxSlider* slider;
-    wxBitmapButton* button_show_list;
-    wxButton* button_up, *button_down, *button_left, *button_right, *button_reset;
+    wxBitmapButton *button_show_list, *button_reset;
+    wxButton* button_up, *button_down, *button_left, *button_right;
     ProjectionField<ChartFrame>* projection;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/lambda_min, lambda_max;

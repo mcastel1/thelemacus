@@ -11439,17 +11439,27 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     button_down = new wxButton(panel, wxID_ANY, wxT("S"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
     button_left = new wxButton(panel, wxID_ANY, wxT("W"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
     button_right = new wxButton(panel, wxID_ANY, wxT("E"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
-    button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize);
-
+//    button_reset = new wxButton(panel, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize);
+    
+    
+    button_reset = new wxBitmapButton(
+                                      panel,
+                                      wxID_ANY,
+                                      Bitmap(wxGetApp().path_file_reset_icon, (wxGetApp().size_large_button) - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                      wxDefaultPosition,
+                                      wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
+                                      wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                      );
+    
     //button to show list
     button_show_list = new wxBitmapButton(
-        panel,
-        wxID_ANY,
-        Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
-        wxDefaultPosition,
-       wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
-        wxBU_EXACTFIT | wxSIMPLE_BORDER
-    );
+                                          panel,
+                                          wxID_ANY,
+                                          Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                          wxDefaultPosition,
+                                          wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
+                                          wxBU_EXACTFIT | wxSIMPLE_BORDER
+                                          );
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
     button_show_list->SetToolTip(wxString("Show the list of sights, positions and routes"));
 

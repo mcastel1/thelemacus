@@ -9522,26 +9522,26 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         if((lambda_a.normalize_pm_pi_ret().value) >= 0.0){
             //lambda_a lies in the poisitive-logitude hemishere (0 < lambda < 180), lambda_b in the nevative-longitude hemisphere (180 < lambda < 360)
             
-            l = Length(Re * cos(parent->parent->geo_position_start.phi) * fabs((lambda_a.normalize_pm_pi_ret().value) - (lambda_b.normalize_pm_pi_ret().value)));
-            Z = Angle(M_PI_2);
+            l = Length(Re * cos(parent->parent->geo_position_start.phi) * fabs((lambda_b.value) - (lambda_a.value)));
+            Z = Angle(-M_PI_2);
 
             
         }else{
             //lambda_a lies in the negative-logitude hemishere (180 < lambda < 360), lambda_b in the positive-longitude hemisphere (0 < lambda < 180)
             
-            l = Length(Re * cos(parent->parent->geo_position_start.phi) * fabs((lambda_a.value) - (lambda_b.value)));
+            l = Length(Re * cos(parent->parent->geo_position_start.phi) * fabs((lambda_a.normalize_pm_pi_ret().value) - (lambda_b.normalize_pm_pi_ret().value)));
             Z = Angle(-M_PI_2);
             
         }
         
     }
     
-    temp = (Route(
+    temp = Route(
                   RouteType(((Route_types[0]).value)),
-               (parent->parent->geo_position_start),
-               Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - (parent->parent->geo_position_start.lambda.normalize_pm_pi_ret().value))) / 2.0),
-               Length(Re * cos(parent->parent->geo_position_start.phi) * fabs((normalize_pm_pi_ret(geo_position.lambda).value) - ((parent->parent->geo_position_start.lambda.normalize_pm_pi_ret()).value)))
-                  ));
+                  parent->parent->geo_position_start,
+                  Z,
+                  l
+                  );
     
     temp.DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
 

@@ -14198,7 +14198,11 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     //in order to properly draw the top and bottom edges of selection rectangle, I need to tell apart the following cases, and for each case, set lambda_span (the longitude span of the top and bottom edge), and the azimuth Z
                     if(GSL_SIGN((lambda_a.normalize_pm_pi_ret().value)) == GSL_SIGN(lambda_b.normalize_pm_pi_ret().value)){
                         //lambda_a and lambda_b lie in the same hemisphere
+                   
                         
+                        (parent->lambda_max) = (parent->parent->position_end.lambda);
+                        (parent->lambda_min) = (parent->parent->geo_position_start.lambda);
+        
                                 
                     }else{
                         //lambda_a and lambda_b lie in different hemispheres
@@ -14209,8 +14213,18 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
                         
                                 
+                                (parent->lambda_max) = (parent->parent->position_end.lambda);
+                                (parent->lambda_min) = (parent->parent->geo_position_start.lambda);
+
+                                
+                                
+                                
                             }else{
                            
+                                
+                                (parent->lambda_max) = (parent->parent->position_end.lambda);
+                                (parent->lambda_min) = (parent->parent->geo_position_start.lambda);
+
                                 
                             }
                             
@@ -14221,10 +14235,18 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             
                             if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
                         
-                         
+                                
+                                (parent->lambda_max) = (parent->parent->position_end.lambda);
+                                (parent->lambda_min) = (parent->parent->geo_position_start.lambda);
+
                                 
                             }else{
-                           
+                      
+                                
+                                
+                                (parent->lambda_max) = (parent->parent->position_end.lambda);
+                                (parent->lambda_min) = (parent->parent->geo_position_start.lambda);
+
                          
                             }
                             

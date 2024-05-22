@@ -14130,14 +14130,14 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
     else {
         //end drawing a selection rectangle
 
-        GetMouseGeoPosition(&((parent->parent)->position_end));
+        GetMouseGeoPosition(&(parent->parent->position_end));
         drawpanel_position_end = (parent->parent->screen_position_now);
 
         //store the position at the end of the selection process, to compute the zoom factor later
         if ((this->*ScreenToProjection)(drawpanel_position_end, &projection_end)) {
             //drawpanel_position_end is valid
 
-            if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+            if (((parent->projection->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
 
                 if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end.x) - (projection_start.x))))) {
                     //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
@@ -14162,7 +14162,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
                     }
                     
-                    if ((((parent->parent)->geo_position_start).phi) > (((parent->parent)->position_end).phi)) {
+                    if ((parent->parent->geo_position_start.phi) > ((parent->parent->position_end).phi)) {
                         (parent->phi_max) = (((parent->parent)->geo_position_start).phi);
                         (parent->phi_min) = (((parent->parent)->position_end).phi);
                     }else {
@@ -14170,15 +14170,15 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         (parent->phi_max) = (((parent->parent)->position_end).phi);
                     }
                     //I normalize lambda_min, ..., phi_max for future use.
-                    (parent->lambda_min).normalize();
-                    (parent->lambda_max).normalize();
-                    (parent->phi_min).normalize();
-                    (parent->phi_max).normalize();
+                    parent->lambda_min.normalize();
+                    parent->lambda_max.normalize();
+                    parent->phi_min.normalize();
+                    parent->phi_max.normalize();
 
-                    (((parent->parent)->geo_position_start).phi).normalize();
-                    (parent->parent->geo_position_start.lambda).normalize();
-                    (((parent->parent)->position_end).phi).normalize();
-                    (parent->parent->position_end.lambda).normalize();
+                    parent->parent->geo_position_start.phi.normalize();
+                    parent->parent->geo_position_start.lambda.normalize();
+                    parent->parent->position_end.phi.normalize();
+                    parent->parent->position_end.lambda.normalize();
 
                     (this->*PreRender)();
                     parent->parent->RefreshAll();
@@ -14221,9 +14221,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 );
 
                 //compute omega by picking the largest angular distance between the middle of selection rectangle and its corners
-                (circle_observer.reference_position).distance(((parent->parent)->geo_position_start), &l1, String(""), String(""));
-                (circle_observer.reference_position).distance(Position(((parent->parent)->geo_position_start).lambda, ((parent->parent)->position_end).phi), &l2, String(""), String(""));
-                (circle_observer.omega).set(String(""), (max(l1, l2).value) / Re, String(""));
+                circle_observer.reference_position.distance(((parent->parent)->geo_position_start), &l1, String(""), String(""));
+                circle_observer.reference_position.distance(Position(((parent->parent)->geo_position_start).lambda, ((parent->parent)->position_end).phi), &l2, String(""), String(""));
+                circle_observer.omega.set(String(""), (max(l1, l2).value) / Re, String(""));
 
 
                 //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
@@ -14871,7 +14871,7 @@ bool ChartFrame::SetSlider(unsigned int slider_value) {
         if (!mouse_scrolling) {
             OnMouseLeftDownOnSlider(dummy);
         }
-        (slider)->SetValue(slider_value);
+        slider->SetValue(slider_value);
 
         //call OnScroll to update evrything adter the change of the value of slider
         OnScroll(dummy);

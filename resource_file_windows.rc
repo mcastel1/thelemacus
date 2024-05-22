@@ -22,6 +22,7 @@ error_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Image
 list_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/list_icon.png"
 map_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/map_icon.png"
 pencil_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/pencil_icon.png"
+reset_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/reset_icon.png"
 plus_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/plus_icon.png"
 position_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/position_icon.png"
 question_icon RCDATA "Z:/Documents/sight_reduction_program/Contents/Resources/Images/Light/question_icon.png"

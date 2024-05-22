@@ -9527,7 +9527,10 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 
             
         }else{
+            //lambda_a lies in the negative-logitude hemishere (180 < lambda < 360), lambda_b in the positive-longitude hemisphere (0 < lambda < 180)
             
+            l = Length(Re * cos(parent->parent->geo_position_start.phi) * fabs((lambda_a.value) - (lambda_b.value)));
+            Z = Angle(-M_PI_2);
             
         }
         

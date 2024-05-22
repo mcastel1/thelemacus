@@ -14164,6 +14164,9 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
                 if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end.x) - (projection_start.x))))) {
                     //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
+                    
+                    Angle lambda_a, lambda_b;
+
 
                     //sets the new values of lambda_min, lambda_max, phi_min and phi_max
                     //                delete chart;
@@ -14172,35 +14175,17 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     parent->parent->geo_position_start.lambda.normalize_pm_pi();
                     parent->parent->position_end.phi.normalize_pm_pi();
                     parent->parent->position_end.lambda.normalize_pm_pi();
-                    //I assign the values of lambda_min and lamba_max, phi_min and phi_max from the values of ((parent->parent)->p_start).lambda, ... ((parent->parent)->p_end).phi in such a way that lambda_min correspnds to the longitude of the leftmost edge x_min of the mercator projection, lambda_max to the rightmost one, etc. While I do this, I take care of the case where the selection rectangle may encompass the Greenwich antimeridian 
-                    /*
-                    if ((parent->parent->geo_position_start.lambda) > (parent->parent->position_end.lambda)) {
-                        
-                        (parent->lambda_max) = (parent->parent->position_end.lambda);
-                        (parent->lambda_min) = (parent->parent->geo_position_start.lambda);
-                        
-                    }else {
-                        
-                        (parent->lambda_min) = (parent->parent->position_end.lambda);
-                        (parent->lambda_max) = (parent->parent->geo_position_start.lambda);
-                        
-                    }
-                    */
-                    
-                    
-                    //
-                    Angle lambda_a, lambda_b;
+     
+                
                     
                     lambda_a = (parent->parent->geo_position_start.lambda);
                     lambda_b = (parent->parent->position_end.lambda);
 
-                    
-                    //in order to properly draw the top and bottom edges of selection rectangle, I need to tell apart the following cases, and for each case, set lambda_span (the longitude span of the top and bottom edge), and the azimuth Z
+                    //in order to properly set lambda_min and lambda_max, I need to tell apart the following cases
                     if(GSL_SIGN((lambda_a.normalize_pm_pi_ret().value)) == GSL_SIGN(lambda_b.normalize_pm_pi_ret().value)){
                         //lambda_a and lambda_b lie in the same hemisphere
                    
                         if(lambda_b > lambda_a){
-                            
                             
                             (parent->lambda_min) = lambda_b;
                             (parent->lambda_max) = lambda_a;
@@ -14210,9 +14195,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             (parent->lambda_min) = lambda_a;
                             (parent->lambda_max) = lambda_b;
               
-                            
                         }
-        
                                 
                     }else{
                         //lambda_a and lambda_b lie in different hemispheres
@@ -14225,46 +14208,33 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                                 (parent->lambda_min) = lambda_a;
                                 (parent->lambda_max) = lambda_b;
                                 
-                                
-                                
                             }else{
                            
-                                
-                                (parent->lambda_max) = (parent->parent->position_end.lambda);
-                                (parent->lambda_min) = (parent->parent->geo_position_start.lambda);
-
+                                (parent->lambda_min) = lambda_b;
+                                (parent->lambda_max) = lambda_a;
                                 
                             }
-                            
-
-                            
+                             
                         }else{
                             //lambda_a lies in the negative-logitude hemishere (180 < lambda < 360), lambda_b in the positive-longitude hemisphere (0 < lambda < 180)
                             
                             if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
-                        
                                 
                                 (parent->lambda_min) = lambda_b;
                                 (parent->lambda_max) = lambda_a;
-
                                 
                             }else{
-                      
                                 
-                                
-                                (parent->lambda_max) = (parent->parent->position_end.lambda);
-                                (parent->lambda_min) = (parent->parent->geo_position_start.lambda);
+                                (parent->lambda_min) = lambda_a;
+                                (parent->lambda_max) = lambda_b;
 
-                         
                             }
-                            
-                            
                             
                         }
                         
                     }
                     
-                    //
+                
                      
                     if ((parent->parent->geo_position_start.phi) > ((parent->parent->position_end).phi)) {
                         (parent->phi_max) = (((parent->parent)->geo_position_start).phi);

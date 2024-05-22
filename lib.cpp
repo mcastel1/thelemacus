@@ -9529,14 +9529,37 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         if(((lambda_a.normalize_pm_pi_ret().value) >= 0.0) && (lambda_b.normalize_pm_pi_ret().value) <= 0.0){
             //lambda_a lies in the poisitive-logitude hemishere (0 < lambda < 180), lambda_b in the nevative-longitude hemisphere (180 < lambda < 360)
             
-            lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
-            Z = Angle(-M_PI_2);
+            if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
+        
+                lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
+                Z = Angle(-M_PI_2);
+                
+            }else{
+           
+                lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
+                Z = Angle(-M_PI_2);
+                
+            }
+            
+
             
         }else{
             //lambda_a lies in the negative-logitude hemishere (180 < lambda < 360), lambda_b in the positive-longitude hemisphere (0 < lambda < 180)
             
-            lambda_span.set(fabs((lambda_a.normalize_pm_pi_ret().value) - (lambda_b.normalize_pm_pi_ret().value)));
-            Z = Angle(-M_PI_2);
+            if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
+        
+                lambda_span.set(fabs((lambda_a.normalize_pm_pi_ret().value) - (lambda_b.normalize_pm_pi_ret().value)));
+                Z = Angle(-M_PI_2);
+         
+                
+            }else{
+           
+                lambda_span.set(fabs((lambda_a.normalize_pm_pi_ret().value) - (lambda_b.normalize_pm_pi_ret().value)));
+                Z = Angle(-M_PI_2);
+         
+            }
+            
+            
             
         }
         

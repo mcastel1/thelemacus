@@ -119,6 +119,7 @@ name file warning icon = warning_icon.png
 name file info icon = info_icon.png
 name file plus icon = plus_icon.png
 name file list icon = list_icon.png
+name file reset icon = reset_icon.png
 name file map icon = map_icon.png
 name file pencil icon = pencil_icon.png
 name file trash icon = trash_icon.png

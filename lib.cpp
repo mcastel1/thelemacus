@@ -14124,6 +14124,11 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
         int i;
         bool check;
+        
+        //disable all button_resets while a selection rectangle is being drawn
+        for(i=0; i<parent->parent->chart_frames.size(); i++){
+            parent->parent->chart_frames[i]->button_reset->Enable(false);
+        }
 
         (parent->parent->geo_position_start) = (parent->parent->geo_position_now);
         //        GetMouseGeoPosition(&(parent->parent->geo_position_start));
@@ -14165,11 +14170,13 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
         GetMouseGeoPosition(&(parent->parent->position_end));
         drawpanel_position_end = (parent->parent->screen_position_now);
+        
+        unsigned int i;
 
         //store the position at the end of the selection process, to compute the zoom factor later
         if ((this->*ScreenToProjection)(drawpanel_position_end, &projection_end)) {
             //drawpanel_position_end is valid
-
+            
             if (((parent->projection->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
 
                 if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end.x) - (projection_start.x))))) {
@@ -14338,6 +14345,11 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             (parent->parent->start_label_selection_rectangle) = String("");
             (parent->parent->end_label_selection_rectangle_now) = String("");
 
+        }
+        
+        //disable all button_resets while a selection rectangle is being drawn
+        for(i=0; i<parent->parent->chart_frames.size(); i++){
+            parent->parent->chart_frames[i]->button_reset->Enable(true);
         }
 
     }

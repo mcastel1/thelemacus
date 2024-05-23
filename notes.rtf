@@ -85,7 +85,10 @@
 \cf2  \cf4 \
 \cf2  \cf4 \
 \cf2  ********** THINGS TO ADD/IMPROVE ************\
- - code method DrawPanel::ProjectionToGeo_3D\cf4 \
+\pard\tx593\pardeftab593\partightenfactor0
+\cf2  - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors\
+\pard\tx593\pardeftab593\partightenfactor0
+\cf2  - code method DrawPanel::ProjectionToGeo_3D\cf4 \
 \cf2  - add the scale factor below the slider in the mercator projection\cf4 \
 \cf2  - add the height of the observer above the earth surface in the 3d projection\cf4 \
 \cf2  - move up all code blocks that look alike into a function (marked with `    //MOVE UP TO A SINGLE METHOD`)\cf4 \
@@ -124,14 +127,12 @@
 \cf2  \cf4 \
 \cf2  \cf4 \
 \cf2  ********** THINGS TO FIX ***********\
+	- do what you did for selection rectangle also in the 3d projection \
 	- in RouteFrame, the Modify button is not enabled soon enough, one needs to pointlessly tab through multiple fields to get it to be enabled \
-	- disable reset button as a selection rectangle is being drawn \
 	- in Mercator projection some paralles are cut \cf4 \
 \cf2     - all icons in light mode must be revised and stored in dark mode\cf4 \
-\cf2     - compute_position_button icon changes sometimes\cf4 \
 \cf2     - if the user wants to transport something with an existing Route and there are no existing Routes available, there is no way to get out of the transport routine safely.\cf4 \
 \cf2     - add the possiblity to abort the transport operation \cf4 \
-\cf2     - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors\cf4 \
 \cf2     - replace `f ((type.value)[0] == 'l') \{` and similar cases where one needs to tell whether a route is loxodrome, orthodrome or circle of equal altitude with a switch which uses position_in_vector\
  on OSX:\cf4 \
 \cf2  on WIN32:\cf4 \

@@ -20079,6 +20079,30 @@ bool SightFrame::is_ok(void) {
 //        Bitmap(wxGetApp().path_file_warning_icon, wxGetApp().size_small_button)
 //    );
 
+    //
+    bool check;
+    
+    check = (body->is_ok());
+    
+    check = ((!(((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon")))) || (limb->is_ok()));
+    
+    check =  (H_s->is_ok());
+    
+    check = (index_error->is_ok());
+    
+    check = ((((artificial_horizon_check->checkbox)->GetValue())) || (height_of_eye->is_ok()));
+    
+    check = (master_clock_date->is_ok());
+    
+    check = (master_clock_chrono->is_ok());
+    
+    check = ((!((stopwatch_check->checkbox)->GetValue())) || (stopwatch_reading->is_ok()));
+    
+    check = (TAI_minus_UTC->is_ok());
+    
+    check = time_interval_ok;
+    //
+    
     return(
         (body->is_ok()) &&
         ((!(((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon")))) || (limb->is_ok())) &&

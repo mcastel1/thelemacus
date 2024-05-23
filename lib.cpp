@@ -19376,7 +19376,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event) {
 
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With what route do you want to transport?"), String("Existing route"), String("New route"));
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true);
 
     OnModifyFile();
 
@@ -19442,7 +19442,7 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
 
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With what route do you want to transport?"), String("Existing route"), String("New route"));
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true);
 
     OnModifyFile();
 

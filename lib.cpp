@@ -18299,8 +18299,8 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
     question = question_in;
     answer_y = answer_y_in;
     answer_n = answer_n_in;
-    enable_button_y = true;
-    enable_button_n = true;
+    enable_button_a = true;
+    enable_button_b = true;
 
     f->CallAfter(*this);
 
@@ -18315,11 +18315,22 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
     question = question_in;
     answer_y = answer_y_in;
     answer_n = answer_n_in;
-    enable_button_y = enable_button_y_in;
-    enable_button_n = enable_button_n_in;
+    enable_button_a = enable_button_y_in;
+    enable_button_b = enable_button_n_in;
 
     f->CallAfter(*this);
 
+}
+
+
+//if question_frame != NULL, enable or disable question_frame->button_a/b according to the boolean variables enable_button_a/b
+template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES, FF_NO>::EnableDisableButtons(void) {
+
+    if(question_frame != NULL){
+        question_frame->button_a->Enable(enable_button_a);
+        question_frame->button_b->Enable(enable_button_b);
+    }
+    
 }
 
 template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES, FF_NO>::operator()(void) {
@@ -18346,7 +18357,7 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
                 question_frame->Show(true);
                 question_frame->Raise();
 
-                //                control->SetFocus();
+                EnableDisableButtons();
                 control->SetForegroundColour((wxGetApp().highlight_color));
                 control->SetFont(wxGetApp().highlight_font);
 
@@ -18360,6 +18371,8 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
             question_frame->Show(true);
             question_frame->Raise();
 
+            EnableDisableButtons();
+            
         }
 
     }

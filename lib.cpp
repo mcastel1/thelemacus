@@ -20985,11 +20985,12 @@ template<class P, class NON_GUI, class CHECK> MultipleItemField<P, NON_GUI, CHEC
     //I just filled name with  a valid value, thus I store it in value_before_editing in order to start off with a valid value in value_before_editing
     value_before_editing = name->GetValue();
     AdjustWidth(name);
-    //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-//    name->Bind(wxEVT_COMBOBOX, &MultipleItemField::OnEdit<wxCommandEvent>, this);
-//    name->Bind(wxEVT_KEY_UP, &MultipleItemField::OnEdit<wxKeyEvent>, this);
-//    name->Bind(wxEVT_KILL_FOCUS, *check);
+    //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call Check to check whether what has been entered in name is valid
+    //    name->Bind(wxEVT_COMBOBOX, &MultipleItemField::OnEdit<wxCommandEvent>, this);
+    //    name->Bind(wxEVT_KEY_UP, &MultipleItemField::OnEdit<wxKeyEvent>, this);
+    //    name->Bind(wxEVT_KILL_FOCUS, *check);
     name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, NON_GUI, CHECK>::Check<wxFocusEvent>, this);
+    name->Bind(wxEVT_COMBOBOX, &MultipleItemField<P, NON_GUI, CHECK>::Check<wxCommandEvent>, this);
 
     
 

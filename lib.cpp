@@ -19362,7 +19362,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event) {
     }
     
     
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport?"), String("Existing route"), String("New route"), (n_routes_for_transport > 0 ? true : false), false);
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport?"), String("Existing route"), String("New route"), (n_routes_for_transport > 0 ? true : false), true);
    
 
     OnModifyFile();

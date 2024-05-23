@@ -378,6 +378,7 @@ public:
     wxBoxSizer *sizer_v, *sizer_h, *sizer_buttons;
     wxGridSizer* sizer_grid;
     wxButton* button_a, *button_b;
+    bool enable_button_a, enable_button_b;
     StaticBitmap* image;
     //initialize the functor to close thie QuestionFrame when button_a or button_b will be pressed
     CloseFrame<QuestionFrame>* close_frame;
@@ -387,7 +388,7 @@ public:
     F_B* f_b;
     String string_a, string_b;
     
-    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
+    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, bool, bool, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
     template<class E> void KeyDown(E&);
     
 };

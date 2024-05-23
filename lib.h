@@ -2678,6 +2678,7 @@ public:
     void OnTransportRoute(wxCommandEvent&);
     void OnDisconnectRoute(wxCommandEvent&);
     template<class E> void OnPressDeleteRoute(E&);
+    bool CheckRoutesForTransport(void);
     
     template<class E> void Disconnect(E&);
     template<class E> void DisconnectAndPromptMessage(E&);

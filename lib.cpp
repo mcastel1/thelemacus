@@ -2704,7 +2704,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
 
     vector<Angle> t;
 
-    switch (/*(type.value)[0]*/ type.position_in_list(Route_types)) {
+    switch (type.position_in_list(Route_types)) {
 
     case 0: {
         //the Route this is a loxodrome
@@ -18167,6 +18167,9 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     string_a = string_a_in;
     f_b = f_b_in;
     string_b = string_b_in;
+    
+    enable_button_a = enable_button_a_in;
+    enable_button_b = enable_button_b_in;
 
     //SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));

@@ -19301,12 +19301,39 @@ template<class E> void ListFrame::OnModifySight(E& event) {
 }
 
 void ListFrame::OnTransportSight(wxCommandEvent& event) {
+    
+    unsigned int i, n_routes_for_transport;
 
     //I am transporting a Route (related to a Sight)
     transported_object_type = String("sight");
 
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
+    
+    
+    //only some Routes are viable to be transporting Routes. These are the Routes that: 1. are not related to any sight, 2. that are not circles of equal altitude 3. do not coincide with the object to transport -> I count how many Routes are available for transport and store the result in n_routes_for_transport -> If n_routes_for_transport = 0, I do not allow the user to do the transport with an existing Route by disabling the button("Existing route"
+    for (i = 0, n_routes_for_transport=0; i < data->route_list.size(); i++) {
+
+        if (
+            /*condition that the Route is not relatied to a Sight*/
+            ((((data->route_list)[i]).related_sight.value) == -1) &&
+            /*condition that the Route is not a circle of equal altitude*/
+            (((data->route_list)[i]).type != Route_types[2]) &&
+            /*condition that the Route does not coincide with the object to transport*/
+            ((transported_object_type != String("route")) || (i_object_to_transport != i))
+            ) {
+                
+                n_routes_for_transport++;
+    
+            }
+
+    }
+    
+    
     print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport?"), String("Existing route"), String("New route"));
+    //if n_routes_for_transport = 0 , disable the "Existing route" button, see above
+    if(n_routes_for_transport == 0){
+        print_question->question_frame->button_a->Enable(false);
+    }
 
     OnModifyFile();
 

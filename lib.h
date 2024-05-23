@@ -1935,10 +1935,13 @@ public:
     FF_YES* f_yes;
     FF_NO* f_no;
     QuestionFrame<FF_YES, FF_NO>* question_frame;
+    //these are true/false if the yes/no button are enabled/disabled, respectively
+    bool enable_button_y, enable_button_n;
     
     PrintQuestion(T*, FF_YES*, FF_NO*);
     
     void SetAndCall(wxControl*, String, String, String, String);
+    void SetAndCall(wxControl*, String, String, String, String, bool, bool);
     void operator()(void);
     
     

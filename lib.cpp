@@ -18291,7 +18291,7 @@ template<class T, typename FF_YES, typename FF_NO> PrintQuestion<T, FF_YES, FF_N
 
 }
 
-//set the wxControl, title and question and answers for the functor *this, and I call the functor operator() with CallAfter
+//set the wxControl, title and question and answers for the functor *this, and sett enable_button_y/n both to true,   I call the functor operator() with CallAfter
 template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES, FF_NO>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in) {
 
     control = control_in;
@@ -18299,6 +18299,24 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
     question = question_in;
     answer_y = answer_y_in;
     answer_n = answer_n_in;
+    enable_button_y = true;
+    enable_button_n = true;
+
+    f->CallAfter(*this);
+
+}
+
+
+//set the wxControl, title and question and answers for the functor *this, and set enable_butoon_y/n to enable_button_y/n_in,  I call the functor operator() with CallAfter
+template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES, FF_NO>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in, bool enable_button_y_in, bool enable_button_n_in) {
+
+    control = control_in;
+    title = title_in;
+    question = question_in;
+    answer_y = answer_y_in;
+    answer_n = answer_n_in;
+    enable_button_y = enable_button_y_in;
+    enable_button_n = enable_button_n_in;
 
     f->CallAfter(*this);
 

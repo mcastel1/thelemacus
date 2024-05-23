@@ -17716,36 +17716,36 @@ void RouteFrame::OnPressCancel([[maybe_unused]] wxCommandEvent& event) {
 
 //write the content in the GUI fields into the non-GUI fields, and returns true if all is ok, false otherwise
 bool RouteFrame::is_ok(void) {
-
+    
     wxCommandEvent dummy;
-
+    
     get(dummy);
-
+    
     return((type->is_ok()) &&
-
-        (
+           
+           (
             (
-                ((((type->name)->GetValue()) == wxString(((Route_types[0]).value))) || (((type->name)->GetValue()) == wxString(((Route_types[1]).value)))) &&
-                (
-                    (Z->is_ok()) &&
-                    ((start_phi->is_ok()) || for_transport) &&
-                    ((start_lambda->is_ok()) || for_transport) &&
-                    (((((length_format->name)->GetValue()) == wxString(((LengthFormat_types[0]).value))) && ((time->is_ok()) && (speed->is_ok()))) || ((((length_format->name)->GetValue()) == wxString(((LengthFormat_types[1]).value))) && (length->is_ok())))
-                    )
-                )
-
+             ((((type->name)->GetValue()) == wxString(((Route_types[0]).value))) || (((type->name)->GetValue()) == wxString(((Route_types[1]).value)))) &&
+             (
+              (Z->is_ok()) &&
+              ((start_phi->is_ok()) || for_transport) &&
+              ((start_lambda->is_ok()) || for_transport) &&
+              (((((length_format->name)->GetValue()) == wxString(((LengthFormat_types[0]).value))) && ((time->is_ok()) && (speed->is_ok()))) || ((((length_format->name)->GetValue()) == wxString(((LengthFormat_types[1]).value))) && (length->is_ok())))
+              )
+             )
+            
             ||
-
+            
             (
-                (((type->name)->GetValue()) == wxString(((Route_types[2]).value))) &&
-                ((omega->is_ok()) &&
-                    (GP_phi->is_ok()) &&
-                    (GP_lambda->is_ok()))
-                )
+             (((type->name)->GetValue()) == wxString(((Route_types[2]).value))) &&
+             ((omega->is_ok()) &&
+              (GP_phi->is_ok()) &&
+              (GP_lambda->is_ok()))
+             )
             )
-
-        );
-
+           
+           );
+    
 }
 
 //tries to enable button_ok
@@ -21877,6 +21877,7 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
         sign->SetValue(wxString(""));
         sign_ok = false;
         sign->Bind(wxEVT_KILL_FOCUS, (*(check->check_sign)));
+        sign->Bind(wxEVT_COMBOBOX, (*(check->check_sign)));
         //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEditSign
         sign->Bind(wxEVT_COMBOBOX, &AngleField::OnEditSign<wxCommandEvent>, this);
         sign->Bind(wxEVT_KEY_UP, &AngleField::OnEditSign<wxKeyEvent>, this);

@@ -14349,7 +14349,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 }
                     
                 case 1: {
-                    //I am using the 3d projection 
+                    //I am using the 3d projection
                     
                     Length l1, l2;
                     Position reference_position_old;
@@ -14387,10 +14387,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     //                    )
                     //                );
                     
-                    //compute omega by picking the largest angular distance between the middle of selection rectangle and its corners
+                    //compute omega as half of  the largest angular distance between the middle of selection rectangle and its corners
                     circle_observer.reference_position.distance((parent->parent->geo_position_start), &l1, String(""), String(""));
                     circle_observer.reference_position.distance(Position(parent->parent->geo_position_start.lambda, parent->parent->position_end.phi), &l2, String(""), String(""));
-                    circle_observer.omega.set(String(""), (max(l1, l2).value) / Re, String(""));
+                    circle_observer.omega.set(String(""), ((max(l1, l2).value) / Re)/2.0, String(""));
                     
                     
                     //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one

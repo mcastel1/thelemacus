@@ -14351,20 +14351,40 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 
                 //store the current ground position of circle_observer into reference_position_old
                 reference_position_old = (circle_observer.reference_position);
+                
+                
+                //
+                //in order to properly set lambda_min and lambda_max, I need to tell apart the following cases
+                if(GSL_SIGN((lambda_a.normalize_pm_pi_ret().value)) == GSL_SIGN(lambda_b.normalize_pm_pi_ret().value)){
+                    //lambda_a and lambda_b lie in the same hemisphere
+               
+                    circle_observer.reference_position.lambda.set((lambda_a.normalize_ret() + lambda_b.normalize_ret()).value/2.0);
+                            
+                }else{
+                    //lambda_a and lambda_b lie in different hemispheres
 
-                //compute position in the middle of selection rectangle and set it to circle_observer.reference_position
-                (circle_observer.reference_position) = Position(
-                    Angle(
-                        (((parent->parent->geo_position_start.lambda).normalize_pm_pi_ret().value) + ((parent->parent->position_end.lambda).normalize_pm_pi_ret().value)) / 2.0
-                    ),
-                    Angle(
-                        (((((parent->parent)->geo_position_start).phi).normalize_pm_pi_ret().value) + ((((parent->parent)->position_end).phi).normalize_pm_pi_ret().value)) / 2.0
-                    )
-                );
+                    circle_observer.reference_position.lambda.set((lambda_a.normalize_pm_pi_ret() + lambda_b.normalize_pm_pi_ret()).value/2.0);
+                    
+                }
+                //
+                
+                circle_observer.reference_position.phi = Angle(
+                                                               ((parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value) + (parent->parent->position_end.phi.normalize_pm_pi_ret().value)) / 2.0
+                                                               );
+
+//                //compute position in the middle of selection rectangle and set it to circle_observer.reference_position
+//                (circle_observer.reference_position) = Position(
+//                    Angle(
+//                        (((parent->parent->geo_position_start.lambda).normalize_pm_pi_ret().value) + ((parent->parent->position_end.lambda).normalize_pm_pi_ret().value)) / 2.0
+//                    ),
+//                    Angle(
+//                        (((((parent->parent)->geo_position_start).phi).normalize_pm_pi_ret().value) + ((((parent->parent)->position_end).phi).normalize_pm_pi_ret().value)) / 2.0
+//                    )
+//                );
 
                 //compute omega by picking the largest angular distance between the middle of selection rectangle and its corners
-                circle_observer.reference_position.distance(((parent->parent)->geo_position_start), &l1, String(""), String(""));
-                circle_observer.reference_position.distance(Position(((parent->parent)->geo_position_start).lambda, ((parent->parent)->position_end).phi), &l2, String(""), String(""));
+                circle_observer.reference_position.distance((parent->parent->geo_position_start), &l1, String(""), String(""));
+                circle_observer.reference_position.distance(Position(parent->parent->geo_position_start.lambda, parent->parent->position_end.phi), &l2, String(""), String(""));
                 circle_observer.omega.set(String(""), (max(l1, l2).value) / Re, String(""));
 
 

@@ -9592,22 +9592,24 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         case 1: {
             //I am using Projection_types[1]
             
-            
-            //now that lambda_span and Z have been set, I drwa the Routes corresponding to the top and bottom horizontal edges
-            Route(
-                  RouteType(((Route_types[0]).value)),
-                  geo_position,
-                  Z+M_PI,
-                  Length(Re * cos(geo_position.phi) * (lambda_span.value))
-                  ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
-            Route(
-                  RouteType(((Route_types[0]).value)),
-                  parent->parent->geo_position_start,
-                  Z,
-                  Length(Re * cos(parent->parent->geo_position_start.phi) * (lambda_span.value))
-                  ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
+            //bottom horizontal edge of rectangle
+            (Route(
+                   RouteType(((Route_types[0]).value)),
+                (parent->parent->geo_position_start),
+                //change this by introducing if
+                Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+                Length(Re * cos((parent->parent->geo_position_start).phi) * fabs((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+            )).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
 
-            
+            //top horizontal edge of rectangle
+            (Route(
+                   RouteType(((Route_types[0]).value)),
+                geo_position,
+                //change this by introducing if
+                Angle(M_PI_2 + M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value))) / 2.0),
+                Length(Re * cos(geo_position.phi) * fabs((normalize_pm_pi_ret(geo_position.lambda).value) - ((((parent->parent->geo_position_start).lambda).normalize_pm_pi_ret()).value)))
+            )).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
+
             
             break;
         }

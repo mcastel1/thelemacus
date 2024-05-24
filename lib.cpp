@@ -129,6 +129,14 @@ inline Angle normalize_pm_pi_ret(const Angle& x){
 }
 
 
+//normalize a and b between -pi and pi, and return  the algebraic mean between a.value and b.value
+inline double mean_pm_pi(Angle& a, Angle& b){
+    
+    return(((a.normalize_pm_pi_ret().value) + (b.normalize_pm_pi_ret().value))/2.0);
+    
+}
+
+
 string to_string(const Position& p, unsigned int precision) {
 
     Position temp;
@@ -14360,7 +14368,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     //normalize lambda_a/b and then compute the algebric mean -> this is the correct value of the longitude of circle_observer
                     circle_observer.reference_position.lambda.set((lambda_a.normalize_ret().value + lambda_b.normalize_ret().value)/2.0);
     
-                    //normalize the two latitudes between -pi and pi and then compute the algebraic mean -> this is the correct value of the two latitudes 
+                    //normalize the two latitudes between -pi and pi and then compute the algebraic mean -> this is the correct value of the two latitudes
                     circle_observer.reference_position.phi = Angle(
                                                                    ((parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value) + (parent->parent->position_end.phi.normalize_pm_pi_ret().value)) / 2.0
                                                                    );

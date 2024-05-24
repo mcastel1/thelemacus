@@ -506,10 +506,12 @@ bool MyApp::OnInit() {
         n_chart_frames.read_from_file_to(String("number chart frames"), (wxGetApp().path_file_init), String("R"), String(""));
         (list_frame->chart_frames).resize(n_chart_frames.value);
         for (i = 0; i < (list_frame->chart_frames).size(); i++) {
-            
-            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
-            //            projection = (((i % 2) == 0) ? (Projection_types[1]) : (Projection_types[0]));
-            
+             
+            //HERE YOU CAN SET THE  PROJECTION  LOADED FIRST
+            //            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
+            projection = (((i % 2) == 0) ? (Projection_types[1]) : (Projection_types[0]));
+            //HERE YOU CAN SET THE  PROJECTION  LOADED FIRST
+
             //open a Mercator projection for even is and a 3D projection for odd is
             s.str("");
             s << "Chart #" << i + 1 << " - " << projection.value << " projection";

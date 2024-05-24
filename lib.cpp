@@ -16150,12 +16150,14 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
         bool check;
 
         //I check whether the name in the GUI field unit matches one of the unit names in units
-        for (check = false, i = 0; (i < LengthUnit_types.size()) && (!check); i++) {
-            if ((p->unit->name->GetValue()) == wxString((LengthUnit_types[i]).value)) {
-                check = true;
-            }
-        }
-        i--;
+//        for (check = false, i = 0; (i < LengthUnit_types.size()) && (!check); i++) {
+//            if ((p->unit->name->GetValue()) == wxString((LengthUnit_types[i]).value)) {
+//                check = true;
+//            }
+//        }
+//        i--;
+        
+        p->unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::CheckInCatalog(&check, &i);
 
         if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
 
@@ -16166,8 +16168,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
             p->unit->name->SetFont(wxGetApp().default_font);
 
 
-        }
-        else {
+        }else {
 
             stringstream temp;
 

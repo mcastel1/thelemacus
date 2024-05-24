@@ -14357,7 +14357,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     //store the current ground position of circle_observer into reference_position_old
                     reference_position_old = (circle_observer.reference_position);
                     
+                    //normalize lambda_a/b and then compute the algebric mean -> this is the correct value of the longitude of circle_observer
                     circle_observer.reference_position.lambda.set((lambda_a.normalize_ret().value + lambda_b.normalize_ret().value)/2.0);
+    
+                    //normalize the two latitudes between -pi and pi and then compute the algebraic mean -> this is the correct value of the two latitudes 
                     circle_observer.reference_position.phi = Angle(
                                                                    ((parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value) + (parent->parent->position_end.phi.normalize_pm_pi_ret().value)) / 2.0
                                                                    );

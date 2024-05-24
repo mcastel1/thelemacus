@@ -20071,13 +20071,6 @@ bool SightFrame::is_ok(void) {
 
     }
 
-//    text_time_interval_not_ok->SetLabel(wxString(time_interval_ok ? "" : "Time not enclosed in ephemerides' data!"));
-//
-//    image_time_interval_status->SetBitmap(
-//        time_interval_ok ?
-//        wxNullBitmap :
-//        Bitmap(wxGetApp().path_file_warning_icon, wxGetApp().size_small_button)
-//    );
 
     //
     bool check;

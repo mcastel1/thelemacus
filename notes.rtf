@@ -1,9 +1,11 @@
 {\rtf1\ansi\ansicpg1252\cocoartf2758
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fnil\fcharset0 Menlo-Bold;}
 {\colortbl;\red255\green255\blue255;\red108\green121\blue134;\red31\green31\blue36;\red255\green255\blue255;
-\red84\green130\blue255;}
+\red84\green130\blue255;\red252\green95\blue163;\red103\green183\blue164;\red103\green183\blue164;\red158\green241\blue221;
+\red252\green106\blue93;}
 {\*\expandedcolortbl;;\csgenericrgb\c42394\c47462\c52518;\csgenericrgb\c12054\c12284\c14131;\csgenericrgb\c100000\c100000\c100000\c85000;
-\csgenericrgb\c33019\c51127\c99859;}
+\csgenericrgb\c33019\c51127\c99859;\csgenericrgb\c98839\c37355\c63833;\csgenericrgb\c40538\c71705\c64209;\csgenericrgb\c40392\c71765\c64314;\csgenericrgb\c61961\c94510\c86667;
+\csgenericrgb\c98912\c41558\c36568;}
 \margl1440\margr1440\vieww9000\viewh8400\viewkind0
 \deftab593
 \pard\tx593\pardeftab593\partightenfactor0
@@ -125,7 +127,13 @@
 \cf2  \cf4 \
 \cf2  \cf4 \
 \cf2  ********** THINGS TO FIX ***********\
-	- in RouteFrame the ok button is not enabled when it should be \
+	- remove \cf4    
+\f1\b \cf6 \cb3 bool
+\f0\b0 \cf4 \cb3  check;  check = (\cf7 \cb3 body\cf4 \cb3 ->\cf8 \cb3 is_ok\cf4 \cb3 ());\
+\pard\tx593\pardeftab593\partightenfactor0
+\cf4       check = ((!(((\cf7 \cb3 body\cf4 \cb3 ->\cf7 \cb3 name\cf4 \cb3 ->\cf8 \cb3 GetValue\cf4 \cb3 ()) == \cf9 \cb3 wxString\cf4 \cb3 (\cf10 \cb3 "sun"\cf4 \cb3 )) || ((\cf7 \cb3 body\cf4 \cb3 ->\cf7 \cb3 name\cf4 \cb3 ->\cf8 \cb3 GetValue\cf4 \cb3 ()) == \cf9 \cb3 wxString\cf4 \cb3 (\cf10 \cb3 "moon"\cf4 \cb3 )))) || (\cf7 \cb3 limb\cf4 \cb3 ->\cf8 \cb3 is_ok\cf4 \cb3 ()));\cf2 \
+\pard\tx593\pardeftab593\partightenfactor0
+\cf2 	- in RouteFrame the ok button is not enabled when it should be \
 	- do what you did for selection rectangle also in the 3d projection \
 	- in Mercator projection some paralles are cut \cf4 \
 \cf2     - all icons in light mode must be revised and stored in dark mode\cf4 \

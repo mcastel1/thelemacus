@@ -21264,17 +21264,17 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
     bool success;
 
     //I check whether the name in the GUI field body matches one of the body names in catalog
-    find_and_replace_case_insensitive(MultipleItemField<P, LengthFormat, void>::name, MultipleItemField<P, LengthFormat, void>::items, &success, NULL);
+    find_and_replace_case_insensitive(MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::name, MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid
-    MultipleItemField<P, LengthFormat, void>::ok = success;
+    MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::ok = success;
 
     if (success) {
 
-        MultipleItemField<P, LengthFormat, void>::name->SetForegroundColour(wxGetApp().foreground_color);
-        MultipleItemField<P, LengthFormat, void>::name->SetFont(wxGetApp().default_font);
+        MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::name->SetFont(wxGetApp().default_font);
         //choses the length format entered in name button_reduce
-        MultipleItemField<P, LengthFormat, void>::parent->OnChooseLengthFormatField(event);
+        MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::parent->OnChooseLengthFormatField(event);
 
     }
 

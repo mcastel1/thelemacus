@@ -17812,6 +17812,19 @@ void RouteFrame::KeyDown(wxKeyEvent& event) {
 template<class E> void RouteFrame::Check(E& event) {
 
     (*(type->check))(event);
+    
+    
+    
+    if(((type->name->GetValue()) == wxString((Route_types[0]).value)) || ((type->name->GetValue()) == wxString((Route_types[1]).value))){
+        //*route is either a loxodrome or an orthodrome
+        
+        
+    }else{
+        //*route is a circle of equal altitude 
+        
+        
+    }
+    
     (*(label->check))(event);
 
     event.Skip(true);

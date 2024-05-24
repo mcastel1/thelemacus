@@ -20719,6 +20719,16 @@ template<class P> CheckLengthFormat<P>::CheckLengthFormat(LengthFormatField<P>* 
 }
 
 
+template<class P> template<class T> void CheckLengthFormat<P>::operator()(T& event) {
+
+
+
+    event.Skip(true);
+
+}
+
+
+
 template<class S> OnChangeSelectionInListControl<S>::OnChangeSelectionInListControl(ListControl<S>* caller_in, String type_in) {
 
     caller = caller_in;

@@ -20712,6 +20712,13 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
 }
 
 
+template<class P> CheckLengthFormat<P>::CheckLengthFormat(LengthFormatField<P>* p_in) {
+
+    p = p_in;
+
+}
+
+
 template<class S> OnChangeSelectionInListControl<S>::OnChangeSelectionInListControl(ListControl<S>* caller_in, String type_in) {
 
     caller = caller_in;

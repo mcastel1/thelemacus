@@ -17496,6 +17496,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     }
 
+    //runs checl to write into the `ok` boolean variable of each field, and then AllOk to enable/disable button_reduce according to these `ok` variables
+    Check();
+    AllOk();
+    
     Centre();
 
 }

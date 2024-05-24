@@ -14230,22 +14230,24 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         if ((this->*ScreenToProjection)(drawpanel_position_end, &projection_end)) {
             //drawpanel_position_end is valid
             
+            Angle lambda_a, lambda_b;
+
+
+            //convert all the angles to the format between -pi and pi, so I can sort them numerically
+            parent->parent->geo_position_start.phi.normalize_pm_pi();
+            parent->parent->geo_position_start.lambda.normalize_pm_pi();
+            parent->parent->position_end.phi.normalize_pm_pi();
+            parent->parent->position_end.lambda.normalize_pm_pi();
+            
+            lambda_a = (parent->parent->geo_position_start.lambda);
+            lambda_b = (parent->parent->position_end.lambda);
+            
+
             if (((parent->projection->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
 
                 if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end.x) - (projection_start.x))))) {
                     //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
                     
-                    Angle lambda_a, lambda_b;
-
-
-                    //convert all the angles to the format between -pi and pi, so I can sort them numerically
-                    parent->parent->geo_position_start.phi.normalize_pm_pi();
-                    parent->parent->geo_position_start.lambda.normalize_pm_pi();
-                    parent->parent->position_end.phi.normalize_pm_pi();
-                    parent->parent->position_end.lambda.normalize_pm_pi();
-                    
-                    lambda_a = (parent->parent->geo_position_start.lambda);
-                    lambda_b = (parent->parent->position_end.lambda);
 
                     //in order to properly set lambda_min and lambda_max, I need to tell apart the following cases
                     if(GSL_SIGN((lambda_a.normalize_pm_pi_ret().value)) == GSL_SIGN(lambda_b.normalize_pm_pi_ret().value)){

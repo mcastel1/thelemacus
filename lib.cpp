@@ -9591,6 +9591,21 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             
         case 1: {
             //I am using Projection_types[1]
+            
+            
+            //now that lambda_span and Z have been set, I drwa the Routes corresponding to the top and bottom horizontal edges
+            Route(
+                  RouteType(((Route_types[0]).value)),
+                  geo_position,
+                  Z+M_PI,
+                  Length(Re * cos(geo_position.phi) * (lambda_span.value))
+                  ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
+            Route(
+                  RouteType(((Route_types[0]).value)),
+                  parent->parent->geo_position_start,
+                  Z,
+                  Length(Re * cos(parent->parent->geo_position_start.phi) * (lambda_span.value))
+                  ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
 
             
             

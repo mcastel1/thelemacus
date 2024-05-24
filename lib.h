@@ -2758,6 +2758,7 @@ public:
     void TimeIntervalOk(String);
     void KeyDown(wxKeyEvent&);
     template<class E> void Check(E&);
+    void Check();
     template<class E> void update_recent_items(E&);
 
     //    wxDECLARE_EVENT_TABLE();

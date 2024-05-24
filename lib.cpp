@@ -16944,8 +16944,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     if (sight_in != NULL) { set(); }
 
     //runs checl to write into the `ok` boolean variable of each field, and then AllOk to enable/disable button_reduce according to these `ok` variables
-    wxCommandEvent dummy;
-    this->Check(dummy);
+    Check();
     AllOk();
 
     Centre();
@@ -17025,6 +17024,18 @@ template<class E> void SightFrame::Check(E& event) {
 
 }
 
+
+//same as void SightFrame::Check(E& event)  but without event as an argument
+void SightFrame::Check(void){
+    
+    wxCommandEvent dummy;
+    
+    Check(dummy);
+    
+    
+}
+
+    
 template<class E> void SightFrame::update_recent_items(E& event) {
 
     unsigned int i;

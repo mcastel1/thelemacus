@@ -17818,9 +17818,40 @@ template<class E> void RouteFrame::Check(E& event) {
     if(((type->name->GetValue()) == wxString((Route_types[0]).value)) || ((type->name->GetValue()) == wxString((Route_types[1]).value))){
         //*route is either a loxodrome or an orthodrome
         
+        (*(Z->check))(event);
+        if(!for_transport){
+            //if *route is not a Route for transport, then its starting position matters -> I check it
+            (*(start_phi->check))(event);
+            (*(start_lambda->check))(event);
+        }
+        
+        
+        switch ((String(length_format->name->GetValue().ToStdString()).position_in_list(length_format->catalog))) {
+                
+            case 0:
+                //length format is time x speed
+                
+                (*(time->check))(event);
+                (*(speed->check))(event);
+
+
+                
+                break;   
+                
+            case 1:
+                //length format is simply length
+                
+                (*(length->check))(event);
+
+                
+                break;
+                
+          
+        }
+        
         
     }else{
-        //*route is a circle of equal altitude 
+        //*route is a circle of equal altitude
         
         
     }

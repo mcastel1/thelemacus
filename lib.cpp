@@ -14363,7 +14363,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 }else{
                     //lambda_a and lambda_b lie in different hemispheres
 
-                    circle_observer.reference_position.lambda.set((lambda_a.normalize_pm_pi_ret() + lambda_b.normalize_pm_pi_ret()).value/2.0);
+                    circle_observer.reference_position.lambda.set(((lambda_a.normalize_pm_pi_ret().value) + (lambda_b.normalize_pm_pi_ret().value))/2.0);
                     
                 }
                 //

@@ -17803,6 +17803,17 @@ void RouteFrame::KeyDown(wxKeyEvent& event) {
 
 }
 
+//run check on all the GUI fields that are members of SightFrame
+template<class E> void RouteFrame::Check(E& event) {
+
+    (*(type->check))(event);
+    (*(label->check))(event);
+
+    event.Skip(true);
+
+}
+
+
 
 //set the values in all the GUI fields equal to the values in the respective non-GUI fields
 void RouteFrame::set(void) {

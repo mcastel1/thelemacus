@@ -2847,9 +2847,8 @@ public:
     bool is_ok(void);
     void AllOk(void);
     void KeyDown(wxKeyEvent&);
-    
-    //    wxDECLARE_EVENT_TABLE();
-    
+    template<class E> void Check(E&);
+        
 };
 
 

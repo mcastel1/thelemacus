@@ -16943,7 +16943,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     }
     if (sight_in != NULL) { set(); }
 
-    //runs AllOk to enable/disable button_reduce
+    //runs checl to write into the `ok` boolean variable of each field, and then AllOk to enable/disable button_reduce according to these `ok` variables
+    wxCommandEvent dummy;
+    this->check(dummy);
     AllOk();
 
     Centre();

@@ -21100,6 +21100,25 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 
+// if the content of the GUI field *this  matches one of the items in catalog, write true in *check and write the number of the corresponding entry in catalog in *i. If not, write false in *check and catalog.size() in *i
+template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::CheckInCatalog(bool* check, unsigned int * i) {
+    
+
+    for ((*check) = false, (*i) = 0; ((*i)<catalog.size()) && (!(*check)); (*i)++) {
+        if ((name->GetValue()) == catalog[(*i)]) {
+            (*check) = true;
+        }
+    }
+    
+    if((*check)){
+        (*i)--;
+    }else{
+        (*i) = catalog.size();
+    }
+    
+}
+
+
 //this method is called whenever the user kills the focus on the GUI field in order to check the content of the GUI field and do the necessary operations
 template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Check(E& event) {
 

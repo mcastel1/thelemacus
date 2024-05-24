@@ -2200,6 +2200,7 @@ public:
     template<class E> void Get(E&);
     void Enable(bool);
     bool is_ok(void);
+    void CheckInCatalog(bool*, unsigned int *);
     template<class E> void Check(E&);
 //    void read_recent_projections(void);
     template<class T> void InsertIn(T*);

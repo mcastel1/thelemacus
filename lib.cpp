@@ -17933,46 +17933,62 @@ template<class T> void RouteFrame::get(T& event) {
 //enable/disable the GUI fields in *this accoridng to the choice in type->name (the sleected type of Route)
 template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {
     
-    if ((type->is_ok()) && (length_format->is_ok())) {
+    if ((type->is_ok())) {
+        //type is valid
         
         if ((type->name->GetValue()) != wxString(((Route_types[2]).value))) {
-            //the Route is either a loxodrome or an orthodrome
+            //the Route is either a loxodrome or an orthodrome -> the Route allows for a Length -> enable length_format
             
-            //            int i;
             bool b = false;
             
-            //run over all entries of length_format->catalog and store in i the id of the entry that is equal to l_format->name->GetValue()
-            switch ((String((length_format->name->GetValue().ToStdString())).position_in_list(length_format->catalog))) {
-                    
-                case 0: {
-                    //l_format->name->GetValue() = "Time x speed" -> disable l, enable v and t
-                    
-                    b = true;
-                    break;
-                    
-                }
-                    
-                case 1: {
-                    //l_format->name->GetValue() = ((LengthFormat_types[1]).value) -> enable l, disable v and t
-                    
-                    b = false;
-                    break;
-                    
-                }
-                    
-            }
-            
+            //given that loxodromes and orthodromes allow for a Length, I enable length_format
             length_format->Enable(true);
             
-            time->Enable(b);
-            speed->Enable(b);
-            length->Enable(!b);
-            text_time->Enable(b);
-            text_speed->Enable(b);
-            text_length->Enable(!b);
+            if(length_format->is_ok()){
+                //length_format has a valid content -> enable / disable the relative fields
+                
+                //run over all entries of length_format->catalog and store in i the id of the entry that is equal to l_format->name->GetValue()
+                switch ((String((length_format->name->GetValue().ToStdString())).position_in_list(length_format->catalog))) {
+                        
+                    case 0: {
+                        //l_format->name->GetValue() = "Time x speed" -> disable l, enable v and t
+                        
+                        b = true;
+                        break;
+                        
+                    }
+                        
+                    case 1: {
+                        //l_format->name->GetValue() = ((LengthFormat_types[1]).value) -> enable l, disable v and t
+                        
+                        b = false;
+                        break;
+                        
+                    }
+                        
+                }
+                
+                
+                time->Enable(b);
+                speed->Enable(b);
+                length->Enable(!b);
+                text_time->Enable(b);
+                text_speed->Enable(b);
+                text_length->Enable(!b);
+                
+            }else{
+                //length_format does not have a valid content -> disable all relative fields
+                
+                time->Enable(false);
+                speed->Enable(false);
+                length->Enable(false);
+                text_time->Enable(false);
+                text_speed->Enable(false);
+                text_length->Enable(false);
+                
+            }
             
-        }
-        else {
+        }else {
             //the Route is a circle of equal altitude -> the length is not defined -> disable the length_format field as well as all fields related to the length
             
             length_format->Enable(false);
@@ -17986,8 +18002,8 @@ template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {
             
         }
         
-    }
-    else {
+    }else{
+        //type is not vlaid
         
         length_format->Enable(false);
         
@@ -20647,13 +20663,6 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
 
         unsigned int i;
         bool check;
-
-       //        for (check = false, i = 0; (i < (p->catalog.size())) && (!check); i++) {
-//            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
-//                check = true;
-//            }
-//        }
-//        i--;
       
         //I check whether the name in the GUI field body matches one of the route types  in catalog
         p->CheckInCatalog(&check, &i);

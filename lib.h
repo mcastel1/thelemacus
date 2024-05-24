@@ -85,6 +85,7 @@ class PositionProjection;
 //template<class P> class CheckProjection;
 template<class P> class CheckArcDegree;
 template<class P> class CheckArcMinute;
+template<class P> class CheckLengthFormat;
 template<class P> class TabulateDays;
 template<typename FF_OK> class MessageFrame;
 

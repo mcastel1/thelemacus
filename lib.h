@@ -1505,7 +1505,7 @@ public:
 //    
 //    //p is the SpeedField which is parent of the CheckSpeed object: the CheckSpeed object checks the validity of the entries in SpeedField
 //    SpeedField<P>* p;
-//    CheckSpeedValue<P>* check_speed_value;
+//    CheckSpeedValue<P>* check;
 ////    CheckSpeedUnit<P>* check_speed_unit;
 //    
 //    CheckSpeed(SpeedField<P>*);
@@ -2409,8 +2409,7 @@ public:
     String unit_value;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool value_ok, unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
-//    CheckSpeed<P>* check;
-    CheckSpeedValue<P>* check_speed_value;
+    CheckSpeedValue<P>* check;
 
     
     SpeedField(wxPanel*, Speed*, String);

@@ -16320,7 +16320,7 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 //
 //    p = p_in;
 //
-//    check_speed_value = new CheckSpeedValue<P>(p);
+//    check = new CheckSpeedValue<P>(p);
 ////    check_speed_unit = new CheckSpeedUnit<P>(p);
 //
 //}
@@ -16328,7 +16328,7 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 ////this functor checks the whole Speed field by calling the check on its value and unit
 //template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
 //
-//    (*check_speed_value)(event);
+//    (*check)(event);
 ////    (*check_speed_unit)(event);
 //
 //    event.Skip(true);
@@ -17808,15 +17808,14 @@ void RouteFrame::KeyDown(wxKeyEvent& event) {
 
 }
 
-//run check on all the GUI fields that are members of SightFrame
+//run check on all the GUI fields that are members of SightFrame and write true/false in their ok variables
 template<class E> void RouteFrame::Check(E& event) {
 
     (*(type->check))(event);
     
     
-    
     if(((type->name->GetValue()) == wxString((Route_types[0]).value)) || ((type->name->GetValue()) == wxString((Route_types[1]).value))){
-        //*route is either a loxodrome or an orthodrome
+        //*route is either a loxodrome or an orthodrome -> I check the fields related to loxodromes and orthodromes
         
         (*(Z->check))(event);
         if(!for_transport){
@@ -17824,7 +17823,7 @@ template<class E> void RouteFrame::Check(E& event) {
             (*(start_phi->check))(event);
             (*(start_lambda->check))(event);
         }
-        
+    
         
         switch ((String(length_format->name->GetValue().ToStdString()).position_in_list(length_format->catalog))) {
                 
@@ -17833,8 +17832,6 @@ template<class E> void RouteFrame::Check(E& event) {
                 
                 (*(time->check))(event);
                 (*(speed->check))(event);
-
-
                 
                 break;   
                 
@@ -17842,18 +17839,19 @@ template<class E> void RouteFrame::Check(E& event) {
                 //length format is simply length
                 
                 (*(length->check))(event);
-
                 
                 break;
-                
-          
+            
         }
         
         
     }else{
-        //*route is a circle of equal altitude
+        //*route is a circle of equal altitude ->  I check the fields related to circles of equal altitude
         
-        
+        (*(omega->check))(event);
+        (*(GP_phi->check))(event);
+        (*(GP_lambda->check))(event);
+
     }
     
     (*(label->check))(event);
@@ -22408,8 +22406,8 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 
     //    ((parent_frame->check_height_of_eye).p) = this;
 
-    //initialize check_speed_value
-    check_speed_value = new CheckSpeedValue<P>(this);
+    //initialize check
+    check = new CheckSpeedValue<P>(this);
 
     flags.Center();
 
@@ -22427,7 +22425,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Speed object
     value->SetValue(wxString(""));
     value_ok = false;
-    value->Bind(wxEVT_KILL_FOCUS, (*check_speed_value));
+    value->Bind(wxEVT_KILL_FOCUS, (*check));
     //as text is changed in value by the user with the keyboard, call OnEditValue
     value->Bind(wxEVT_KEY_UP, &SpeedField::OnEditValue<wxKeyEvent>, this);
 

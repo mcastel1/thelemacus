@@ -20647,13 +20647,15 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
         unsigned int i;
         bool check;
 
-        //I check whether the name in the GUI field body matches one of the body names in catalog
-        for (check = false, i = 0; (i < (p->catalog.size())) && (!check); i++) {
-            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
-                check = true;
-            }
-        }
-        i--;
+       //        for (check = false, i = 0; (i < (p->catalog.size())) && (!check); i++) {
+//            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
+//                check = true;
+//            }
+//        }
+//        i--;
+      
+        //I check whether the name in the GUI field body matches one of the route types  in catalog
+        p->CheckInCatalog(&check, &i);
 
         if (check) {
 

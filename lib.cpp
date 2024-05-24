@@ -21113,7 +21113,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
     if((*check)){
         (*i)--;
     }else{
-        (*i) = catalog.size();
+        (*i) = ((unsigned int)(catalog.size()));
     }
     
 }
@@ -21130,13 +21130,15 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
         unsigned int i;
         bool check;
 
-        //I check whether the conrwnr of the GUI field  matches one of the items in catalog
-        for (check = false, i = 0; (i < catalog.size()) && (!check); i++) {
-            if ((name->GetValue()) == catalog[i]) {
-                check = true;
-            }
-        }
-        i--;
+        //        //I check whether the conrwnr of the GUI field  matches one of the items in catalog
+        //        for (check = false, i = 0; (i < catalog.size()) && (!check); i++) {
+        //            if ((name->GetValue()) == catalog[i]) {
+        //                check = true;
+        //            }
+        //        }
+        //        i--;
+        
+        CheckInCatalog(&check, &i);
 
         if (check || (((name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((name->GetValue()).ToStdString())) == String("")))) {
             //the GUI field  contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame

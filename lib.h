@@ -2757,7 +2757,7 @@ public:
     //    template<class T> void OnEditTime(T&);
     void TimeIntervalOk(String);
     void KeyDown(wxKeyEvent&);
-    template<class E> void check(E&);
+    template<class E> void Check(E&);
     template<class E> void update_recent_items(E&);
 
     //    wxDECLARE_EVENT_TABLE();

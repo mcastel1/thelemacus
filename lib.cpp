@@ -16945,7 +16945,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     //runs checl to write into the `ok` boolean variable of each field, and then AllOk to enable/disable button_reduce according to these `ok` variables
     wxCommandEvent dummy;
-    this->check(dummy);
+    this->Check(dummy);
     AllOk();
 
     Centre();
@@ -16997,7 +16997,7 @@ void SightFrame::KeyDown(wxKeyEvent& event) {
 }
 
 //run check on all the GUI fields that are members of SightFrame
-template<class E> void SightFrame::check(E& event) {
+template<class E> void SightFrame::Check(E& event) {
 
     (*(body->check))(event);
     if (((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon"))) {

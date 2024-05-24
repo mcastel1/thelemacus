@@ -2848,6 +2848,7 @@ public:
     void AllOk(void);
     void KeyDown(wxKeyEvent&);
     template<class E> void Check(E&);
+    void Check(void);
         
 };
 

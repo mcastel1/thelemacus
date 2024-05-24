@@ -17465,7 +17465,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     }
 
     if (route_in == NULL) {
-        //If the user is about to enter a brand new route, then the GUI fields are disabled/enables according to the currently selected value in *type
+        //If the user is about to enter a brand new route, then the GUI fields are disabled/enabled according to the currently selected value in *type
 
         //set as route type the most recent item in recetn _route_types (or recent route_for_transport_types if the new Route has been created for a transport): set first type->object and then write in type the value written in type->object
 
@@ -17814,6 +17814,14 @@ template<class E> void RouteFrame::Check(E& event) {
 }
 
 
+void RouteFrame::Check(void) {
+    
+    wxCommandEvent dummy;
+    
+    Check(dummy);
+    
+}
+
 
 //set the values in all the GUI fields equal to the values in the respective non-GUI fields
 void RouteFrame::set(void) {
@@ -17873,6 +17881,7 @@ void RouteFrame::set(void) {
 
     }
 
+    Check();
     label->set();
 
 

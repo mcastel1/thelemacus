@@ -20763,7 +20763,6 @@ template<class P> template<class T> void CheckLengthFormat<P>::operator()(T& eve
             (f->start_phi)->Enable(false);
             (f->start_lambda)->Enable(false);
 
-
             (f->GP_phi)->Enable(false);
             (f->GP_lambda)->Enable(false);
             (f->omega)->Enable(false);
@@ -21341,6 +21340,10 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 
 //constructor of a LengthFormatField object, based on the parent frame frame
 template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_parent, LengthFormat* object_in, vector<int>* recent_items_in)  : MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >(panel_of_parent, object_in, LengthFormat_types, recent_items_in){
+
+    
+    MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::check = new CheckLengthFormat<P>(this);
+    MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::name->Bind(wxEVT_KILL_FOCUS, *(MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::check));
 
     
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit

@@ -127,14 +127,10 @@
 \cf2  \cf4 \
 \cf2  \cf4 \
 \cf2  ********** THINGS TO FIX ***********\
-	- if you enter a wrong lengthformat, lengthformat field is disabled \
 	- remove \cf4    
-\f1\b \cf6 \cb3 bool
-\f0\b0 \cf4 \cb3  check;  check = (\cf7 \cb3 body\cf4 \cb3 ->\cf8 \cb3 is_ok\cf4 \cb3 ());\
-\pard\tx593\pardeftab593\partightenfactor0
-\cf4       check = ((!(((\cf7 \cb3 body\cf4 \cb3 ->\cf7 \cb3 name\cf4 \cb3 ->\cf8 \cb3 GetValue\cf4 \cb3 ()) == \cf9 \cb3 wxString\cf4 \cb3 (\cf10 \cb3 "sun"\cf4 \cb3 )) || ((\cf7 \cb3 body\cf4 \cb3 ->\cf7 \cb3 name\cf4 \cb3 ->\cf8 \cb3 GetValue\cf4 \cb3 ()) == \cf9 \cb3 wxString\cf4 \cb3 (\cf10 \cb3 "moon"\cf4 \cb3 )))) || (\cf7 \cb3 limb\cf4 \cb3 ->\cf8 \cb3 is_ok\cf4 \cb3 ()));\cf2 \
-\pard\tx593\pardeftab593\partightenfactor0
-\cf2 	- in RouteFrame the ok button is not enabled when it should be \
+\f1\b \cf6 bool
+\f0\b0 \cf4  check;  check = (\cf7 body\cf4 ->\cf8 is_ok\cf4 ());\
+      check = ((!(((\cf7 body\cf4 ->\cf7 name\cf4 ->\cf8 GetValue\cf4 ()) == \cf9 wxString\cf4 (\cf10 "sun"\cf4 )) || ((\cf7 body\cf4 ->\cf7 name\cf4 ->\cf8 GetValue\cf4 ()) == \cf9 wxString\cf4 (\cf10 "moon"\cf4 )))) || (\cf7 limb\cf4 ->\cf8 is_ok\cf4 ()));\cf2 \
 	- do what you did for selection rectangle also in the 3d projection \
 	- in Mercator projection some paralles are cut \cf4 \
 \cf2     - all icons in light mode must be revised and stored in dark mode\cf4 \

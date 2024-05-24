@@ -20657,9 +20657,11 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
 
     P* f = (p->parent);
     bool enable;
+    
+    //I first do all the  operations  related to the check that are specific to the LenghtFormat field
 
-    //I proceed only if the progam is not is indling mode
     if (!(f->idling)) {
+        //I proceed only if the progam is not is indling mode
 
         unsigned int i;
         bool check;
@@ -20668,6 +20670,7 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
         p->CheckInCatalog(&check, &i);
 
         if (check) {
+            //the Route type is valid
 
             //enable/disable the related fields in RouteFrame f
             enable = ((((p->catalog)[i]) == wxString(((Route_types[0]).value))) || (((p->catalog)[i]) == wxString(((Route_types[1]).value))));
@@ -20681,8 +20684,8 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
             (f->GP_lambda)->Enable(!enable);
             (f->omega)->Enable(!enable);
 
-        }
-        else {
+        }else{
+            //the Route type is not valid
 
             (f->Z)->Enable(false);
             (f->start_phi)->Enable(false);
@@ -20698,26 +20701,29 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
         f->OnChooseLengthFormatField();
 
 
-        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
-
-            //if check is true (false) -> set ok to true (false)
-            (p->ok) = check;
-            //the background color is set to white, because in this case there is no erroneous value in name
-            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->name)->SetFont(wxGetApp().default_font);
-
-        }
-        else {
-
-            (f->print_error_message)->SetAndCall((p->name), String("Route type not found in list!"), String("Route type must be loxodrome, orthodrome, or circle of equal altitude."), (wxGetApp().path_file_error_icon));
-
-            (p->ok) = false;
-
-        }
-
-        f->AllOk();
+//        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
+//
+//            //if check is true (false) -> set ok to true (false)
+//            (p->ok) = check;
+//            //the background color is set to white, because in this case there is no erroneous value in name
+//            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
+//            (p->name)->SetFont(wxGetApp().default_font);
+//
+//        }
+//        else {
+//
+//            (f->print_error_message)->SetAndCall((p->name), String("Route type not found in list!"), String("Route type must be loxodrome, orthodrome, or circle of equal altitude."), (wxGetApp().path_file_error_icon));
+//
+//            (p->ok) = false;
+//
+//        }
+//
+//        f->AllOk();
 
     }
+    
+    //And then do the check operations related to a general MultipleItem field by calling the Check method of the MultipleItemField parent class
+    p->Check(event);
 
     event.Skip(true);
 

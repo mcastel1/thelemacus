@@ -10843,7 +10843,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     grid_now.clear();
     ticks_now.clear();
 
-    //draw meridians
+    //prerender meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
     route.Z.set(String(""), 0.0, String(""));
@@ -10905,7 +10905,7 @@ inline void DrawPanel::PreRenderMercator(void) {
 
     }
 
-    //draw parallels
+    //prerender parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     route.type.set(String(((Route_types[0]).value)));
     route.Z.set(String(""), M_PI_2, String(""));

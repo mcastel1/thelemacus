@@ -19243,7 +19243,7 @@ void ListFrame::OnAddChartFrame(wxCommandEvent& event) {
 
     chart_frames.back()->Reset(event);
     wxGetApp().ShowCharts(event);
-    wxGetApp().AnimateCharts();
+//    wxGetApp().AnimateCharts();
     chart_frames.back()->Animate();
 
 

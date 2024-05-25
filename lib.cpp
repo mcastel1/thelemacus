@@ -3329,7 +3329,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
         return -1;
 
     }else {
-        //*this is an orthodrome of a circle of equal altitude
+        //*this is an orthodrome or a circle of equal altitude
 
         Angle lambda_span, phi_span;
         Route side_N, side_S, side_E, side_W;
@@ -3422,7 +3422,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
 
                 output = 1;
 
-                //If write_t < write into t the value of the intersections which delimit the chunk of *this which is included in rectangle
+                //If write_t == true, write into t the value of the intersections which delimit the chunk of *this which is included in rectangle
                 if (write_t) {
 
                     t->push_back(u[i]);

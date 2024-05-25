@@ -125,6 +125,7 @@
 \cf2  \cf4 \
 \cf2  \cf4 \
 \cf2  ********** THINGS TO FIX ***********\
+	- p_NW and p_SE in PrerenderMercator are useless: remove them and replace them with lambda_min/max, phi_min/max\
 	- some paralles or meridians in grid in render_mercator congain the same wxPoint iterated many times -> remove them\
 	- remove entries in grid in render_mercator that have size 0\
 	- substitute mean_pm_pi everywhere \

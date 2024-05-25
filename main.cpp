@@ -507,10 +507,7 @@ bool MyApp::OnInit() {
         (list_frame->chart_frames).resize(n_chart_frames.value);
         for (i = 0; i < (list_frame->chart_frames).size(); i++) {
              
-            //HERE YOU CAN SET THE  PROJECTION  LOADED FIRST
-            //            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
-            projection = (((i % 2) == 0) ? (Projection_types[1]) : (Projection_types[0]));
-            //HERE YOU CAN SET THE  PROJECTION  LOADED FIRST
+            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
 
             //open a Mercator projection for even is and a 3D projection for odd is
             s.str("");

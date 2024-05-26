@@ -3440,7 +3440,6 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
             (u.back()).value = 2.0 * M_PI;
         }
 
-        delete_duplicates(&u, &equal_rel_epsilon_double);
         sort(u.begin(), u.end());
 
 
@@ -3482,16 +3481,23 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
 
             //I push back into t the last value of u, wich corresponds to the endpoint of *this  and which has not been pushed back by the loop above
             t->push_back(u.back());
-
+            
+  
             if ((type == (Route_types[2])) && is_fully_included && (t->size() == 2)) {
                 //*this is  of type "circle fo equal altitude", its fully included in rectangle and it does not intersect rectangle
 
                 //I set t[1].value = 0.0, so t[0].value = t[1].value = 0.0
                 ((*t)[1]).normalize();
 
+            }else{
+                
+                //delete duplicates from t
+                delete_duplicates(t, &equal_rel_epsilon_double);                
+                
             }
 
-            //delete duplicates from t
+
+            
             //            set<Angle> t_temp(t->begin(), t->end());
             //            t->assign(t_temp.begin(), t_temp.end());
             //

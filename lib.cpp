@@ -90,11 +90,23 @@ template<class T> unsigned int address_position_in_vector(T* x, const vector<T>&
 
 
 
-//delete duplicates from vector *v
+//delete duplicates from vector *v by removing entries in *v which are equal
 template<class T> void delete_duplicates(vector<T>* v){
     
     sort(v->begin(), v->end());
     v->erase(unique(v->begin(), v->end()), v->end());
+    
+}
+
+//bool (*comparator)(const T&, const T&);
+
+
+
+//delete duplicates from vector *v, by removing entries in *v which are equal according to the comparator
+template<class T> void delete_duplicates(vector<T>* v, bool (*comparator)(const T&, const T&)){
+    
+    sort(v->begin(), v->end());
+    v->erase(unique(v->begin(), v->end(), comparator), v->end());
     
 }
 

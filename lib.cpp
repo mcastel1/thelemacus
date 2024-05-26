@@ -99,10 +99,18 @@ template<class T> void delete_duplicates(vector<T>* v){
 }
 
 
-template<class T> bool equal_epsilon_double(const T& a, const T& b){
+//return true(false) if the relative difference between a and b is smaller, in absolute value, than epsilon_double. If the relative difference cannot be compute because it would imply dividing by zero, return a.value == b.value
+template<class T> bool equal_rel_epsilon_double(const T& a, const T& b){
     
-    if(fabs((a.value) - (b.value)) < epsilon_double){return true;}
-    else{return false;}
+    if((a.value)+(b.value) != 0.0){
+        
+        return (fabs(((a.value) - (b.value))/(((a.value) + (b.value))/2.0)) < epsilon_double);
+       
+    }else{
+        
+        return ((a.value) == (b.value));
+        
+    }
     
 }
 
@@ -3432,7 +3440,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
             (u.back()).value = 2.0 * M_PI;
         }
 
-        delete_duplicates(&u);
+        delete_duplicates(&u, &equal_rel_epsilon_double);
         sort(u.begin(), u.end());
 
 

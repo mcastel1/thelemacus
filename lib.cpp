@@ -10726,8 +10726,8 @@ inline void DrawPanel::PreRenderMercator(void) {
 
     //set p_NW and p_SE
     //updates the position of the draw pane this
-    DrawPanelToGeo(wxPoint(position_plot_area_now) /*I move the NW boundary of the plot area to the interior by one pixel*/ + wxPoint(1, 1), &p_NW);
-    DrawPanelToGeo(wxPoint(position_plot_area_now + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/ - wxPoint(1, 1), &p_SE);
+//    DrawPanelToGeo(wxPoint(position_plot_area_now) /*I move the NW boundary of the plot area to the interior by one pixel*/ + wxPoint(1, 1), &p_NW);
+//    DrawPanelToGeo(wxPoint(position_plot_area_now + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/ - wxPoint(1, 1), &p_SE);
 
     //fetch the data on the region that I am about to plot from the data files and store it into parent->coastline_polygons_now
     parent->GetCoastLineData_Mercator();
@@ -10847,7 +10847,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
     route.Z.set(String(""), 0.0, String(""));
-    (route.reference_position.phi) = (p_SE.phi);
+    (route.reference_position.phi) = ((parent->phi_min));
 
     //draw the first chunk of intermediate ticks on the longitude axis
     if (gamma_lambda != 1) {
@@ -10870,7 +10870,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
 
 
-    for (route.length.set(String(""), Re* (((p_NW.phi.normalize_pm_pi_ret()).value) - ((p_SE.phi.normalize_pm_pi_ret()).value)), String("")),
+    for (route.length.set(String(""), Re* ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String("")),
         (route.reference_position.lambda.value) = (lambda_start.value);
         (route.reference_position.lambda.value) < (lambda_end.value);
         (route.reference_position.lambda.value) += delta_lambda) {
@@ -10909,7 +10909,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     route.type.set(String(((Route_types[0]).value)));
     route.Z.set(String(""), M_PI_2, String(""));
-    (route.reference_position.lambda) = (p_NW.lambda);
+    (route.reference_position.lambda) = ((parent->lambda_min));
 
     //this loop runs over the latitude of the parallel, which we call phi
     for ((phi.value) = (phi_start.value);
@@ -10922,7 +10922,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         route.length.set(String(""),
             Re * cos(phi) * ((
 
-                (((p_NW.lambda) < M_PI) && ((p_SE.lambda) > M_PI)) ? ((p_NW.lambda) - (p_SE.lambda) + 2.0 * M_PI) : ((p_NW.lambda) - (p_SE.lambda))
+                ((((parent->lambda_min)) < M_PI) && (((parent->lambda_max)) > M_PI)) ? (((parent->lambda_min)) - ((parent->lambda_max)) + 2.0 * M_PI) : (((parent->lambda_min)) - ((parent->lambda_max)))
 
                 ).value), String(""));
 

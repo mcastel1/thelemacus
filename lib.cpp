@@ -98,11 +98,28 @@ template<class T> void delete_duplicates(vector<T>* v){
     
 }
 
-//bool (*comparator)(const T&, const T&);
 
+template<class T> bool equal_epsilon_double(const T& a, const T& b){
+    
+    if(fabs((a.value) - (b.value)) < epsilon_double){return true;}
+    else{return false;}
+    
+}
 
+/*
+ delete duplicates from vector *v, by removing entries in *v which are equal according to the comparator. A pointer to the comparator needs to be supplied as second argument. For example, if I define a comparator such as
+ 
+ template<class T> bool compare_epsilon(const T& a, const T& b){
+     
+     if(fabs(a.value - b.value) < 0.1){return true;}
+     else{return false;}
+     
+ }
+ 
+ then I call this method with     delete_duplicates(&t, &compare_epsilon);
 
-//delete duplicates from vector *v, by removing entries in *v which are equal according to the comparator
+ 
+ */
 template<class T> void delete_duplicates(vector<T>* v, bool (*comparator)(const T&, const T&)){
     
     sort(v->begin(), v->end());

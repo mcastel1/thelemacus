@@ -278,8 +278,8 @@ bool MyApp::OnInit() {
 
     t[0].set(.5348609);
     t[1].set(.1);
-    t[2].set(.1);
-    delete_duplicates(&t);
+    t[2].set(.1000000000000000001);
+    delete_duplicates(&t, &equal_epsilon_double);
      
      */
     

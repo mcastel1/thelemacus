@@ -2427,7 +2427,7 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
     set_length_from_time_speed();
 
     //tabulate the Route points
-    for (/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/v->clear(), end_connected = true, i = 0; i < n_points; i++) {
+    for (/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the chart, and thus terminated a connectd component of dummy_route*/v->clear(), end_connected = true, i = 0; i < n_points; i++) {
 
         compute_end(Length((length.value) * ((double)i) / ((double)(n_points - 1))), String(""));
 
@@ -10909,7 +10909,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     route.type.set(String(((Route_types[0]).value)));
     route.Z.set(String(""), M_PI_2, String(""));
-    (route.reference_position.lambda) = ((parent->lambda_min));
+    (route.reference_position.lambda) = (parent->lambda_min);
 
     //this loop runs over the latitude of the parallel, which we call phi
     for ((phi.value) = (phi_start.value);
@@ -11885,73 +11885,82 @@ template<class T> void ChartFrame::MoveWest(T& event) {
 
 //if a key is pressed in the keyboard, I call this function
 void DrawPanel::KeyDown(wxKeyEvent& event) {
-
+    
     switch (event.GetKeyCode()) {
+            
+        case WXK_UP:
+            
+            parent->MoveNorth<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_DOWN:
+            
+            parent->MoveSouth<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_LEFT:
+            
+            parent->MoveWest<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_RIGHT:
+            
+            parent->MoveEast<wxKeyEvent>(event);
+            
+            break;
+            
+        case WXK_ESCAPE:
+            
+            if(parent->parent->selection_rectangle){
+                //If the user presses esc, I cancel the selection process with the rectangle in all ChartFrames, re-enable button_reset in all ChartFrames (because button_reset had been disabled as one started drawing selection_rectangle), and call RefreshAll and FitAll to re-draw the chart without the selection rectangle
 
-    case WXK_UP:
-
-        parent->MoveNorth<wxKeyEvent>(event);
-
-        break;
-
-    case WXK_DOWN:
-
-        parent->MoveSouth<wxKeyEvent>(event);
-
-        break;
-
-    case WXK_LEFT:
-
-        parent->MoveWest<wxKeyEvent>(event);
-
-        break;
-
-    case WXK_RIGHT:
-
-        parent->MoveEast<wxKeyEvent>(event);
-
-        break;
-
-    case WXK_ESCAPE:
-
-        //If the user presses esc, I cancel the selection process with the rectangle in all ChartFrames and call RefreshAll and FitAll to re-draw the chart without the selection rectangle
-        (parent->parent->selection_rectangle) = false;
-
-
-        (parent->parent->start_label_selection_rectangle) = String("");
-        (parent->parent->end_label_selection_rectangle_now) = String("");
-        (parent->parent->end_label_selection_rectangle_before) = String("");
-
-        parent->parent->RefreshAll();
-        FitAll();
-
-        break;
-
-    case WXK_PLUS:
-        //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
-
-        if (event.ControlDown()) {
-            parent->SetSlider(((parent->slider)->GetValue()) * 2);
-        }
-
-        break;
-
-
-    case WXK_MINUS:
-        //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
-
-        if (event.ControlDown()) {
-            parent->SetSlider(round(((parent->slider)->GetValue()) / 2.0));
-        }
-
-        break;
-
+                (parent->parent->selection_rectangle) = false;
+                
+                for(unsigned int i=0; i<parent->parent->chart_frames.size(); i++){
+                    parent->parent->chart_frames[i]->button_reset->Enable(true);
+                    
+                }
+            
+            }
+            
+            
+            (parent->parent->start_label_selection_rectangle) = String("");
+            (parent->parent->end_label_selection_rectangle_now) = String("");
+            (parent->parent->end_label_selection_rectangle_before) = String("");
+            
+            parent->parent->RefreshAll();
+            FitAll();
+            
+            break;
+            
+        case WXK_PLUS:
+            //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
+            
+            if (event.ControlDown()) {
+                parent->SetSlider(((parent->slider)->GetValue()) * 2);
+            }
+            
+            break;
+            
+            
+        case WXK_MINUS:
+            //the - key is pressed and control is pressed too -> I zoom out by dividing the slider value by 2
+            
+            if (event.ControlDown()) {
+                parent->SetSlider(round(((parent->slider)->GetValue()) / 2.0));
+            }
+            
+            break;
+            
     }
-
+    
     //    }
-
+    
     event.Skip(true);
-
+    
 }
 
 //moves (makes slide) to the east the chart

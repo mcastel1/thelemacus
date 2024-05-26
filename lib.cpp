@@ -1907,7 +1907,7 @@ Angle::Angle(String name, const double& x, [[maybe_unused]] const String& prefix
 
 }
 
-inline bool Angle::operator==(const Angle& x) {
+inline bool Angle::operator == (const Angle& x) const{
 
     return((value == (x.value)));
 

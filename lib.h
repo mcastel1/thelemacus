@@ -241,7 +241,7 @@ public:
     string deg_to_string(String, unsigned int);
     string min_to_string(String, unsigned int);
     
-    bool operator == (const Angle&), operator == (const double&), operator != (const double&), operator !=(const Angle&), operator > (const Angle&), operator > (const double&);
+    bool operator == (const Angle&) const, operator == (const double&), operator != (const double&), operator !=(const Angle&), operator > (const Angle&), operator > (const double&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&), operator * (const double&);
     Angle& operator +=(const Angle&), &operator += (const double&), &operator -=(const Angle&), &operator -=(const double&);
     static bool strictly_smaller_normalize_pm_pi_ret(Angle&, Angle&), strictly_larger_normalize_pm_pi_ret(Angle&, Angle&);

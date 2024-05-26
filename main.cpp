@@ -272,22 +272,16 @@ void MyApp::set_icon_paths(void){
 
 bool MyApp::OnInit() {
     
-//    double x, y;
-//    x = 3254.554367546;
-//    y = round_with_precision(x, 0);
-//    
-//    y = round_with_precision(x, 2);
-//    
-//    y = round_with_precision(x, 1);
 
     /*
-    Route a, b;
-    Chrono t;
-    t.set(String(""), 1.24, String(""));
-    Position p(Angle(.4325), Angle(.3423));
-    a = Route(Route_types[0], p, Angle(.2345), 2343);
-    b = Route(Route_types[0], p, Angle(.3423), t, Speed(2343));
-    */
+    vector<Angle> t(3);
+
+    t[0].set(.5348609);
+    t[1].set(.1);
+    t[2].set(.1);
+    delete_duplicates(&t);
+     
+     */
     
     unsigned int i;
     Int n_chart_frames;

@@ -2724,7 +2724,7 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
     bool compute_l_ends_ok;
 
     compute_l_ends(&s, &compute_l_ends_ok, draw_panel, prefix);
-
+ 
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if (compute_l_ends_ok) {
         

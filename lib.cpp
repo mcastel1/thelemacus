@@ -10585,7 +10585,7 @@ inline void DrawPanel::TabulateRoutes(void) {
     reference_positions_route_list_now.resize((parent->parent->data->route_list.size()));
 
     //tabulate the points of routes
-    for (i = 0; i < (parent->parent->data->route_list).size(); i++) {
+    for (i = 0; i < parent->parent->data->route_list.size(); i++) {
 
         //write the points of the curves corresponding to the Routes into points_route_list_now
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if

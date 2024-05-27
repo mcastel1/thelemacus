@@ -2712,6 +2712,8 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
 
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if (compute_l_ends_ok) {
+        
+        bool check;
 
          //run over all chunks of *this which are visible
          //given that s contains the number of intersection points of *this and that each pair of intersection point delimits a chunk, and that v contains the chunks, the size of v is equal to thte size of s minus one.
@@ -2724,14 +2726,21 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
                 
                 //treat the first point as a special one because it m,ay be at the boundary
                 compute_end(Length(((s[j]).value) * (1.0 + epsilon_double)), String(""));
-                if (((draw_panel->GeoToDrawPanel)(end, &p, false))) {
+                
+                if(equal_rel_epsilon_double(end.phi, draw_panel->parent->phi_min)){
+                    end.phi = (draw_panel->parent->phi_min);
+                }
+                if(equal_rel_epsilon_double(end.phi, draw_panel->parent->phi_max)){
+                    end.phi = (draw_panel->parent->phi_max);
+                }
+                
+                check = (draw_panel->GeoToDrawPanel)(end, &p, true);
+                
+                if(check) {
                     //end is a valid point
 
                     ((*v)[j]).push_back(p);
 
-                }else{
-                    //end is not a valid point -> check whether it is at the boundary of rectangle_observer
-                    
                 }
                 //treat the first point as a special one because it m,ay be at the boundary
 

@@ -2532,6 +2532,11 @@ inline void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* 
         }
 
         compute_end(s, String(""));
+        
+        //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
+        if((i==0) || (i==n_points-1)){
+            end.put_back_in(draw_panel);
+        }
 
         if ((draw_panel->GeoToDrawPanel)(end, &temp, false)) {
 
@@ -2649,6 +2654,11 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
                     }
 
                     compute_end(r, String(""));
+                    
+                    //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
+                    if((i==0) || (i==n_points-1)){
+                        end.put_back_in(draw_panel);
+                    }
 
                     check = (draw_panel->GeoToDrawPanel)(end, &temp, true);
 

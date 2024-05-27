@@ -804,6 +804,7 @@ public:
     template<class S> void read_from_stream(String, S*, bool, String);
     bool transport(Position*, Route, String);
     bool transport_to(Route, String);
+    void put_back_in(DrawPanel* draw_panel);
     Position half(void);
     Position antipode_lambda(void);
     string to_string(unsigned int);

@@ -2721,27 +2721,20 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
             //run over all chunks
             
             
-            //treat the first point as a special one because it m,ay be at the boundary
-            compute_end(Length(((s[j]).value) * (1.0 + epsilon_double)), String(""));
-            
-            if(equal_rel_epsilon_double(end.phi, draw_panel->parent->phi_min)){
-                end.phi = (draw_panel->parent->phi_min);
-            }
-            if(equal_rel_epsilon_double(end.phi, draw_panel->parent->phi_max)){
-                end.phi = (draw_panel->parent->phi_max);
-            }
-            
-            if((draw_panel->GeoToDrawPanel)(end, &p, false)) {
-                //end is a valid point
-                ((*v)[j]).push_back(p);
-            }
-            //treat the first point as a special one because it m,ay be at the boundary
+    
 
             //tabulate the Route points of the jth chunk
-            for (i = 1; i < n_points; i++) {
+            for (i = 0; i < n_points; i++) {
 
                 //I slightly increase s[j] and slightly decrease s[j+1] (both by epsilon_double) in order to plot a chunk of the Route *this which is slightly smaller than the chunk [s[j], s[j+1]] and thus avoid  the odd lines that cross the whole plot area in the Mercator projection and that connect two points of the same chunk that are far from each other  on the plot area
                 compute_end(Length(((s[j]).value) * (1.0 + epsilon_double) + (((s[j + 1]).value) * (1.0 - epsilon_double) - ((s[j]).value) * (1.0 + epsilon_double)) * ((double)i) / ((double)(n_points - 1))), String(""));
+                
+                
+                //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
+                
+                if((i==0) || (i==n_points-1)){
+                    end.put_back_in(draw_panel);
+                }
 
                 if (((draw_panel->GeoToDrawPanel)(end, &p, false))) {
                     //end is a valid point
@@ -4377,8 +4370,30 @@ bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
 
     }
 
-
 }
+
+
+//check whether phi and lambda are equal to phi_min ... lambda_max within accuracy epsilon_double and, if they are, set them equal to phi_min ... lambda_max, respectively
+inline void Position::put_back_in(DrawPanel* draw_panel){
+    
+    if(equal_rel_epsilon_double(phi, draw_panel->parent->phi_min)){
+        phi = (draw_panel->parent->phi_min);
+    }
+    
+    if(equal_rel_epsilon_double(phi, draw_panel->parent->phi_max)){
+        phi = (draw_panel->parent->phi_max);
+    }
+    
+    if(equal_rel_epsilon_double(lambda, draw_panel->parent->lambda_min)){
+        lambda = (draw_panel->parent->lambda_min);
+    }
+    
+    if(equal_rel_epsilon_double(lambda, draw_panel->parent->lambda_max)){
+        lambda = (draw_panel->parent->lambda_max);
+    }
+    
+}
+
 
 //return the antipode of *this on the earth
 Position Position::half(void){

@@ -2467,6 +2467,11 @@ inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector<
     for (/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the chart, and thus terminated a connectd component of dummy_route*/v->clear(), end_connected = true, i = 0; i < n_points; i++) {
 
         compute_end(Length((length.value) * ((double)i) / ((double)(n_points - 1))), String(""));
+        
+        //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
+        if((i==0) || (i==n_points-1)){
+            end.put_back_in(draw_panel);
+        }
 
         if ((draw_panel->GeoToDrawPanel)(end, &p, false)) {
 
@@ -2731,7 +2736,6 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
                 
                 
                 //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
-                
                 if((i==0) || (i==n_points-1)){
                     end.put_back_in(draw_panel);
                 }

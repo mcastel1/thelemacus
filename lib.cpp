@@ -2454,7 +2454,7 @@ void Route::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcont
 }
 
 
-void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
+inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
 
     wxPoint p;
     bool end_connected;
@@ -2492,7 +2492,7 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
 
 
 //draws into draw_panel the Route this, by tabulating the Route with n points and connecting them with an spline. The route is drawn with color 'color' and width 'width'. If width = -1, then the Route is drawn with default width
-void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, DrawPanel* draw_panel) {
+inline void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, DrawPanel* draw_panel) {
 
     vector< vector<wxPoint> > p;
     wxPoint temp;
@@ -2564,7 +2564,7 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, Dra
 
 }
 
-void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
+inline void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
 
     int i;
     vector< vector<wxPoint> > v;
@@ -2584,7 +2584,7 @@ void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[ma
 
 
 //draws the Route *this into draw_panel, with any projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
-void Route::Draw(unsigned int n_points, Color foreground_color, Color background_color, int width, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
+inline void Route::Draw(unsigned int n_points, Color foreground_color, Color background_color, int width, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
 
     unsigned int i;
     vector<wxPoint> p;
@@ -2682,7 +2682,7 @@ void Route::Draw(unsigned int n_points, Color foreground_color, Color background
 
 }
 
-void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
+inline void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
 
     int i;
     vector< vector<wxPoint> > v;
@@ -2700,7 +2700,7 @@ void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe
 }
 
 //tabulate the points of Route *this in any projection of draw_panel and writes them into v
-void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
+inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
 
     unsigned int i, j;
     wxPoint p;
@@ -2746,7 +2746,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
 
 
 //compute the values of the Length l for Route *this at which *this crosses draw_panel->circle/rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/ draw_panel->rectangle_observer, and it is thus visible. If success != NULL, it writes true in *success if the values of the length above could be computed succesfully, and false otherwise.
-void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
+inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
     
     vector<Angle> t;
     

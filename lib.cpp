@@ -4410,22 +4410,40 @@ bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
 
 //check whether phi and lambda are equal to phi_min ... lambda_max within accuracy epsilon_double and, if they are, set them equal to phi_min ... lambda_max, respectively
 inline void Position::put_back_in(DrawPanel* draw_panel){
-    
-    if(equal_rel_epsilon_double(phi, draw_panel->parent->phi_min)){
-        phi = (draw_panel->parent->phi_min);
+        
+    switch (position_in_vector(Projection((draw_panel->parent->projection->name->GetValue()).ToStdString()), Projection_types)) {
+            
+        case 0: {
+            //I am using the mercator projection
+            
+            if(equal_rel_epsilon_double(phi, draw_panel->parent->phi_min)){
+                phi = (draw_panel->parent->phi_min);
+            }
+            
+            if(equal_rel_epsilon_double(phi, draw_panel->parent->phi_max)){
+                phi = (draw_panel->parent->phi_max);
+            }
+            
+            if(equal_rel_epsilon_double(lambda, draw_panel->parent->lambda_min)){
+                lambda = (draw_panel->parent->lambda_min);
+            }
+            
+            if(equal_rel_epsilon_double(lambda, draw_panel->parent->lambda_max)){
+                lambda = (draw_panel->parent->lambda_max);
+            }
+            
+            break;
+            
+        }
+            
+        case 1: {
+            //I am using the 3D projection
+            
+        }
+            
     }
     
-    if(equal_rel_epsilon_double(phi, draw_panel->parent->phi_max)){
-        phi = (draw_panel->parent->phi_max);
-    }
     
-    if(equal_rel_epsilon_double(lambda, draw_panel->parent->lambda_min)){
-        lambda = (draw_panel->parent->lambda_min);
-    }
-    
-    if(equal_rel_epsilon_double(lambda, draw_panel->parent->lambda_max)){
-        lambda = (draw_panel->parent->lambda_max);
-    }
     
 }
 

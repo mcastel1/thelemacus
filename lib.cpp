@@ -9906,11 +9906,11 @@ inline void DrawPanel::RenderRoutes(
             }
             
             //render points of Routes for debug
-            //
+            /*
              for(unsigned int l=0; l<points_curves[i][j].size(); l++){
              dc.DrawCircle(points_curves[i][j][l], thickness);
              }
-             //
+             */
             //render points of Routes for debug
             
 

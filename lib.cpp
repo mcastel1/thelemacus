@@ -2728,18 +2728,18 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if (compute_l_ends_ok) {
         
-        
         bool check;
+        vector<wxPoint> w;
+        unsigned int n_points_check_ok;
 
          //run over all chunks of *this which are visible
          //given that s contains the number of intersection points of *this and that each pair of intersection point delimits a chunk, and that v contains the chunks, the size of v is equal to thte size of s minus one.
-        v->resize((s.size()) - 1);
-        for (j = 0; j < (v->size()); j++) {
+        for (j=0; j<(s.size()) - 1; j++) {
             //run over all chunks
  
             
             //tabulate the Route points of the jth chunk
-            for (i = 0; i < n_points; i++) {
+            for (w.clear(), n_points_check_ok=0, i = 0; i < n_points; i++) {
 
                 //I slightly increase s[j] and slightly decrease s[j+1] (both by epsilon_double) in order to plot a chunk of the Route *this which is slightly smaller than the chunk [s[j], s[j+1]] and thus avoid  the odd lines that cross the whole plot area in the Mercator projection and that connect two points of the same chunk that are far from each other  on the plot area
                 compute_end(Length(((s[j]).value) * (1.0 + epsilon_double) + (((s[j + 1]).value) * (1.0 - epsilon_double) - ((s[j]).value) * (1.0 + epsilon_double)) * ((double)i) / ((double)(n_points - 1))), String(""));
@@ -2749,7 +2749,8 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
                 if (check) {
                     //end is a valid point -> convert it to a Position with GeoToDrawPanel
 
-                    ((*v)[j]).push_back(p);
+                    w.push_back(p);
+                    n_points_check_ok++;
 
                 }else{
                     //end is not a valid point
@@ -2761,16 +2762,16 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
                         end.put_back_in(draw_panel);
                         (draw_panel->GeoToDrawPanel)(end, &p, false);
                         
-                        ((*v)[j]).push_back(p);
+                        w.push_back(p);
 
                     }
      
                 }
                 
-               
-
-                
-
+            }
+            
+            if(n_points_check_ok>0){
+                v->push_back(w);
             }
 
         }

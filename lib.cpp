@@ -2759,12 +2759,15 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
                     
                     //treat the first and last point as a special one because it may be close to the boundary of rectangle_observer but out of it-> check if they are and, if they are, put them back into rectangle_observer
                     if((i==0) || (i==n_points-1)){
-                        //I am dealing with the first and last point, and such point is outside rectangle_observer -> put it back in and convert it to a Position with GeoToDrawPanel
+                        //I am dealing with the first and last point, and such point is outside rectangle_observer -> put it back in and, if the Position that has been put_back_in is valid, convert it to a Position with GeoToDrawPanel
                         
                         end.put_back_in(draw_panel);
-                        (draw_panel->GeoToDrawPanel)(end, &p, false);
                         
-                        v_tentative.push_back(p);
+                        if((draw_panel->GeoToDrawPanel)(end, &p, false)){
+                            
+                            v_tentative.push_back(p);
+                            
+                        }
 
                     }
      

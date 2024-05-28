@@ -2746,17 +2746,30 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
                 
                 check = (draw_panel->GeoToDrawPanel)(end, &p, false);
                 
-                //treat the first and last point as a special one because it may be close to the boundary of rectangle_observer but out of it-> check if they are and, if they are, put them back into rectangle_observer
-                if((!check) && ((i==0) || (i==n_points-1))){
-                    end.put_back_in(draw_panel);
-                }
-
                 if (check) {
-                    //end is a valid point
+                    //end is a valid point -> convert it to a Position with GeoToDrawPanel
 
                     ((*v)[j]).push_back(p);
 
+                }else{
+                    //end is not a valid point
+                    
+                    //treat the first and last point as a special one because it may be close to the boundary of rectangle_observer but out of it-> check if they are and, if they are, put them back into rectangle_observer
+                    if((i==0) || (i==n_points-1)){
+                        //I am dealing with the first and last point, and such point is outside rectangle_observer -> put it back in and convert it to a Position with GeoToDrawPanel
+                        
+                        end.put_back_in(draw_panel);
+                        (draw_panel->GeoToDrawPanel)(end, &p, false);
+                        
+                        ((*v)[j]).push_back(p);
+
+                    }
+     
                 }
+                
+               
+
+                
 
             }
 

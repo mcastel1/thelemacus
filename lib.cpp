@@ -2757,9 +2757,8 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
                 }else{
                     //end is not a valid point
                     
-                    //treat the first and last point as a special one because it may be close to the boundary of rectangle_observer but out of it-> check if they are and, if they are, put them back into rectangle_observer
                     if((i==0) || (i==n_points-1)){
-                        //I am dealing with the first and last point, and such point is outside rectangle_observer -> put it back in and, if the Position that has been put_back_in is valid, convert it to a Position with GeoToDrawPanel
+                        //the non-valid point is the first or last point in the Route chunk -> the point may be non valid because it lies on the edge, i.e., because of a rounding error -> put it back in and, if the Position that has been put_back_in is valid, convert it to a Position with GeoToDrawPanel
                         
                         end.put_back_in(draw_panel);
                         
@@ -2769,6 +2768,11 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
                             
                         }
 
+                    }else{
+                        //the non-valid point lies in the middle of the Route chunk -> the reason why the point is non-valid cannot be a rounding error -> do not push the point to v_tentaive and break the for loop over i to terminate drawing the route chunk and switch to the next one
+                        
+                        break;
+                        
                     }
      
                 }

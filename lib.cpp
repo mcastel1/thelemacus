@@ -13184,28 +13184,25 @@ inline bool DrawPanel::ScreenToDrawPanel(const wxPoint& p, wxPoint* q) {
 
 }
 
-//converts the point p on the screen into geographic Position q and it writes into q only if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
+//if the point p (reckoned with respect to the origin of the screen) corresponds to a valid Position, i.e., it is in the plot area, convert p  into a geographic Position and  write the result into *q if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
 inline bool DrawPanel::ScreenToGeo_Mercator(const wxPoint& p, Position* q) {
 
     PositionProjection temp;
-    bool output;
+    bool check;
 
     //updates the position of the DrawPanel *this
     draw_panel_origin = (this->GetScreenPosition());
 
 
-    output = ScreenToMercator(p, &temp);
+    check = ScreenToMercator(p, &temp);
 
-    if (q != NULL) {
-
-//        (q->lambda).set(String(""), k * lambda_mercator(temp.x), String(""));
-//        (q->phi).set(String(""), k * phi_mercator(temp.y), String(""));
+    if (check && (q != NULL)) {
 
         ProjectionToGeo_Mercator(temp, q);
         
     }
 
-    return output;
+    return check;
 
 }
 

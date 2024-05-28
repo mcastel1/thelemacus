@@ -1,81 +1,15 @@
 Data:
 	Sights:
-		Sight #1:
-			body:
-				Type = star
-				Name = spica
-				Right ascension = 201° 17.89998000000082'
-				Declination = 348° 50.32500000000027'
-			sextant altitude = 47° 57.79999999999987'
-			index error = 0° 1.9'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				date = 2021-06-21
-				hour = 21:01:20
-			use of stopwatch = y
-			stopwatch = 00:37:35
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = Sight was taken at BGC
-		Sight #2:
-			body:
-				Type = star
-				Name = hamal
-				Right ascension = 31° 47.5971599999999'
-				Declination = 23° 27.74525999999994'
-			sextant altitude = 13° 3.000000000000043'
-			index error = 0° 1.9'
-			artificial horizon = n
-			height of eye = 2.13 m
-			master-clock date and hour of sight:
-				date = 2022-01-10
-				hour = 12:52:00
-			use of stopwatch = n
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = 2024-01-10 12:52:09 UTC+2
 	Routes:
 		Route #1:
 			type = circle of equal altitude
 			ground position:
-				latitude = 2° 1.999999999999993'
-				longitude = 357° 58.00000000000182'
-				label = 2024-01-11 17:17:38 UTC+2
-			aperture angle = 2° 1.999999999999993'
-			label = route with speed and time
-		Route #2:
-			type = loxodrome
-			start position:
-				latitude = 22° 3.000000000000043'
-				longitude = 356° 56.99999999999932'
-				label = 2024-01-21 17:04:03 UTC+2
-			starting heading = 19° 3.000000000000043'
-			length format = time and speed
-				time = 06:59:45.5436
-				speed = 500 kt
-			label = jlkj
-		Route #3:
-			type = orthodrome
-			start position:
-				latitude = 22° 3.000000000000043'
-				longitude = 356° 56.99999999999932'
-				label = 2024-01-21 17:04:03 UTC+2
-			starting heading = 19° 3.000000000000043'
-			length format = time and speed
-				time = 06:59:45.5436
-				speed = 500 kt
-			label = jlkj
-		Route #4:
-			type = circle of equal altitude
-			ground position:
-				latitude = 336° 56.99999999999932'
-				longitude = 356° 56.99999999999932'
-				label = 2024-01-21 17:04:03 UTC+2
-			aperture angle = 45° 2.999999999999829'
-			label = lkjnb
+				latitude = 23° 33.95630850434188'
+				longitude = 270° 55.52579344135893'
+				label = 
+			aperture angle = 77° 5.53050815804113'
+			label = hamal 2022-01-10 12:52:37 TAI, 2024-01-10 12:52:09 UTC+2
 	Positions:
-		Position #1:
-			latitude = 323° 36.54636500000151'
-			longitude = 315° 55.56999999999789'
-			label = Siamo in biblioteca
 Recent bodies = 12 10 8
 Recent projections = 1 0
 Recent length formats = 1 0

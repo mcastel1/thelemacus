@@ -2728,35 +2728,56 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if (compute_l_ends_ok) {
         
+        bool check;
+        //a vector where I will store the tentative points of each chunk of *this
+        vector<wxPoint> v_tentative;
+        //the number of points of each chunk for which GeoToDrawPanel returns true (without recurring to put_back_in)
+        unsigned int n_points_check_ok;
 
          //run over all chunks of *this which are visible
          //given that s contains the number of intersection points of *this and that each pair of intersection point delimits a chunk, and that v contains the chunks, the size of v is equal to thte size of s minus one.
-        v->resize((s.size()) - 1);
-        for (j = 0; j < (v->size()); j++) {
+        for (j=0; j<(s.size()) - 1; j++) {
             //run over all chunks
+ 
             
-            
-    
-
-            //tabulate the Route points of the jth chunk
-            for (i = 0; i < n_points; i++) {
+            //tabulate the Route points of the jth chunk and store them in v_proposed
+            for (v_tentative.clear(), n_points_check_ok=0, i = 0; i < n_points; i++) {
 
                 //I slightly increase s[j] and slightly decrease s[j+1] (both by epsilon_double) in order to plot a chunk of the Route *this which is slightly smaller than the chunk [s[j], s[j+1]] and thus avoid  the odd lines that cross the whole plot area in the Mercator projection and that connect two points of the same chunk that are far from each other  on the plot area
                 compute_end(Length(((s[j]).value) * (1.0 + epsilon_double) + (((s[j + 1]).value) * (1.0 - epsilon_double) - ((s[j]).value) * (1.0 + epsilon_double)) * ((double)i) / ((double)(n_points - 1))), String(""));
                 
+                check = (draw_panel->GeoToDrawPanel)(end, &p, false);
                 
-                //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
-                if((i==0) || (i==n_points-1)){
-                    end.put_back_in(draw_panel);
+                if (check) {
+                    //end is a valid point -> convert it to a Position with GeoToDrawPanel
+
+                    v_tentative.push_back(p);
+                    n_points_check_ok++;
+
+                }else{
+                    //end is not a valid point
+                    
+                    //treat the first and last point as a special one because it may be close to the boundary of rectangle_observer but out of it-> check if they are and, if they are, put them back into rectangle_observer
+                    if((i==0) || (i==n_points-1)){
+                        //I am dealing with the first and last point, and such point is outside rectangle_observer -> put it back in and convert it to a Position with GeoToDrawPanel
+                        
+                        end.put_back_in(draw_panel);
+                        (draw_panel->GeoToDrawPanel)(end, &p, false);
+                        
+                        v_tentative.push_back(p);
+
+                    }
+     
                 }
-
-                if (((draw_panel->GeoToDrawPanel)(end, &p, false))) {
-                    //end is a valid point
-
-                    ((*v)[j]).push_back(p);
-
-                }
-
+                
+            }
+            
+            //now I decide if v_proposed is a valid chunk (a chunk to be plotted), and thus if I sholud push it back to v or not
+            if(n_points_check_ok>0){
+                //v_tentative containts at least one point for which GeoToDrawPanel evaluated to true (without recurring to put_back_in) -> it is a valid chunk -> I add it to v. On the other hand, if n_points_check_ok == 0, then the only points in v_tentative may be the first and the last, which have been pushed back to v_tentative by put_back_in, and the chunk will be an odd chunk with only two points put into rectangle_observer by put_back_in -> This may lead to odd diagonal lines in the Mercator projection 
+                
+                v->push_back(v_tentative);
+                
             }
 
         }
@@ -9855,9 +9876,16 @@ inline void DrawPanel::RenderRoutes(
             if ((points_curves[i][j]).size() > 1) {
                 //I need to add this consdition to make sure that I am not drawing an empty connected chunk
 
+                
                 dc.DrawSpline((int)((points_curves[i][j]).size()), (points_curves[i][j]).data());
-
             }
+            
+            //render points of Routes for debug
+            for(unsigned int l=0; l<points_curves[i][j].size(); l++){
+                dc.DrawCircle(points_curves[i][j][l], thickness);
+            }
+            //render points of Routes for debug
+            
 
         }
 
@@ -10585,7 +10613,7 @@ inline void DrawPanel::TabulateRoutes(void) {
     reference_positions_route_list_now.resize((parent->parent->data->route_list.size()));
 
     //tabulate the points of routes
-    for (i = 0; i < (parent->parent->data->route_list).size(); i++) {
+    for (i = 0; i < parent->parent->data->route_list.size(); i++) {
 
         //write the points of the curves corresponding to the Routes into points_route_list_now
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if

@@ -9611,8 +9611,9 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 
     Position p;
 
-    DrawPanelToGeo(position, &p);
-    RenderSelectionRectangle(dc, p, position_end_label, end_label, foreground_color, background_color);
+    if(DrawPanelToGeo(position, &p)){
+        RenderSelectionRectangle(dc, p, position_end_label, end_label, foreground_color, background_color);
+    }
 
 }
 

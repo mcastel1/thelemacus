@@ -9855,9 +9855,16 @@ inline void DrawPanel::RenderRoutes(
             if ((points_curves[i][j]).size() > 1) {
                 //I need to add this consdition to make sure that I am not drawing an empty connected chunk
 
+                
                 dc.DrawSpline((int)((points_curves[i][j]).size()), (points_curves[i][j]).data());
-
             }
+            
+            //render points of Routes for debug
+            for(unsigned int l=0; l<points_curves[i][j].size(); l++){
+                dc.DrawCircle(points_curves[i][j][l], thickness);
+            }
+            //render points of Routes for debug
+            
 
         }
 

@@ -1,5 +1,5 @@
 #comment lines, such as this one, will be ignored
-show coastlines = y
+show coastlines = n
 #reasonable values for OSX
 number of points coastline Mercator = 50000
 number of points coastline 3D = 40000
@@ -41,7 +41,7 @@ maximal longitude = 185° 0.01'
 minimal crossing angle between circles of equal altitude = 20° 2.15'
 maximal latitude coastline data = 83° 39.988386000000276'
 minimal latitude coastline data = 281° 16.25533199999836'
-number of points for routes = 20
+number of points for routes = 5
 number of points for minor ticks = 3
 preferred number of intervals for ticks = 6
 use of stopwatch = n

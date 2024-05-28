@@ -9652,11 +9652,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
 
     
-    
-
     //top and bottom horizontal edge of rectangle
-    
-    
     lambda_a = (parent->parent->geo_position_start.lambda);
     lambda_b = geo_position.lambda;
     
@@ -9775,10 +9771,6 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             
             
     }
-    
-
-
-
     
     //render the labels of the selection rectangle
     //wipe out the space occupied by the label

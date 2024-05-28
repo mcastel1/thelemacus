@@ -9611,8 +9611,9 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 
     Position p;
 
-    DrawPanelToGeo(position, &p);
-    RenderSelectionRectangle(dc, p, position_end_label, end_label, foreground_color, background_color);
+    if(DrawPanelToGeo(position, &p)){
+        RenderSelectionRectangle(dc, p, position_end_label, end_label, foreground_color, background_color);
+    }
 
 }
 
@@ -9652,11 +9653,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
 
     
-    
-
     //top and bottom horizontal edge of rectangle
-    
-    
     lambda_a = (parent->parent->geo_position_start.lambda);
     lambda_b = geo_position.lambda;
     
@@ -9775,10 +9772,6 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             
             
     }
-    
-
-
-
     
     //render the labels of the selection rectangle
     //wipe out the space occupied by the label
@@ -13192,32 +13185,29 @@ inline bool DrawPanel::ScreenToDrawPanel(const wxPoint& p, wxPoint* q) {
 
 }
 
-//converts the point p on the screen into geographic Position q and it writes into q only if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
+//if the point p (reckoned with respect to the origin of the screen) corresponds to a valid Position, i.e., it is in the plot area, convert p  into a geographic Position and  write the result into *q if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
 inline bool DrawPanel::ScreenToGeo_Mercator(const wxPoint& p, Position* q) {
 
     PositionProjection temp;
-    bool output;
+    bool check;
 
     //updates the position of the DrawPanel *this
     draw_panel_origin = (this->GetScreenPosition());
 
 
-    output = ScreenToMercator(p, &temp);
+    check = ScreenToMercator(p, &temp);
 
-    if (q != NULL) {
-
-//        (q->lambda).set(String(""), k * lambda_mercator(temp.x), String(""));
-//        (q->phi).set(String(""), k * phi_mercator(temp.y), String(""));
+    if (check && (q != NULL)) {
 
         ProjectionToGeo_Mercator(temp, q);
         
     }
 
-    return output;
+    return check;
 
 }
 
-//converts the point p in the DrawPanel coordinates to the relative geographic position q, see specifics of ScreenToGeo_Mercator and ScreenToGeo_3D
+//convert the point p in the DrawPanel coordinates to the relative geographic position q, see specifics of ScreenToGeo_Mercator and ScreenToGeo_3D
 inline bool DrawPanel::DrawPanelToGeo(const wxPoint& p, Position* q) {
 
     //computes the poisition of the DrawPanel *this which will be needed in the following
@@ -13837,11 +13827,13 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     stringstream s;
     int i, j, l;
     
-    cout << "\nMouse moved";
+    //lines for debug
+    //    cout << "\nMouse moved";
     //    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
     //    cout << "Position of mouse screen = {" << (parent->parent->screen_position_now).x << " , " << (parent->parent->screen_position_now).y << "}\n";
-    cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-draw_panel_origin).x << " , " << ((parent->parent->screen_position_now)-draw_panel_origin).y << "}\n";
-    
+    //    cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-draw_panel_origin).x << " , " << ((parent->parent->screen_position_now)-draw_panel_origin).y << "}\n";
+    //lines for debug
+
 
 #ifdef _WIN32
 

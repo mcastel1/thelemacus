@@ -9640,81 +9640,59 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     (Route(
         RouteType(((Route_types[1]).value)),
         (parent->parent->geo_position_start),
-        Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-        Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+        Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value))) / 2.0),
+        Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value)))
     )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
 
     //left vertical edge of rectangle
     (Route(
            RouteType(((Route_types[1]).value)),
         geo_position,
-        Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-        Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+        Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value))) / 2.0),
+        Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value)))
     )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
 
     
     //top and bottom horizontal edge of rectangle
     lambda_a = (parent->parent->geo_position_start.lambda);
     lambda_b = geo_position.lambda;
+    lambda_a.normalize();
+    lambda_b.normalize();
     
     switch (position_in_vector(Projection((parent->projection->name->GetValue()).ToStdString()), Projection_types)) {
             
         case 0: {
             //I am using Projection_types[0]
             
-            //in order to properly draw the top and bottom edges of selection rectangle, I need to tell apart the following cases, and for each case, set lambda_span (the longitude span of the top and bottom edge), and the azimuth Z
-            if(GSL_SIGN((lambda_a.normalize_pm_pi_ret().value)) == GSL_SIGN(lambda_b.normalize_pm_pi_ret().value)){
-                //lambda_a and lambda_b lie in the same hemisphere
+
+            //the following cases follow the derivation in the note 'Selection rectangle'
+            if((parent->lambda_min) < (parent->lambda_max)){
+                
+                if(
+                   (((lambda_a > 0.0) && (lambda_a < (parent->lambda_min))) && ((lambda_b > 0.0) && (lambda_b < (parent->lambda_min)))) ||
+                   ((lambda_a > (parent->lambda_max)) && (lambda_b > (parent->lambda_max)))
+                   ){
+                       //{lambda_a in A & lambda_b in A} or {lambda_a in B and lambda_b in B}
+                       
+                       lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
+                       Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
+                       
+                   }else{
+                       //{lambda_a in A & lambda_b in B} or {lambda_a in B and lambda_b in A}
+                       
+                       lambda_span.set(2.0*M_PI - fabs((lambda_b.value) - (lambda_a.value)));
+                       Z = Angle(GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
+                       
+                   }
+                
+            }else{
                 
                 lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
-                if(lambda_a < lambda_b){
-                    Z = Angle(-M_PI_2);
-                }else{
-                    Z = Angle(M_PI_2);
-                }
-                        
-            }else{
-                //lambda_a and lambda_b lie in different hemispheres
-
-                if(((lambda_a.normalize_pm_pi_ret().value) >= 0.0) && (lambda_b.normalize_pm_pi_ret().value) <= 0.0){
-                    //lambda_a lies in the poisitive-logitude hemishere (0 < lambda < 180), lambda_b in the nevative-longitude hemisphere (180 < lambda < 360)
-                    
-                    if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
-                
-                        lambda_span.set(fabs((lambda_a.normalize_pm_pi_ret().value) - (lambda_b.normalize_pm_pi_ret().value)));
-                        Z = Angle(M_PI_2);
-                        
-                    }else{
-                   
-                        lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
-                        Z = Angle(-M_PI_2);
-                        
-                    }
-                    
-
-                    
-                }else{
-                    //lambda_a lies in the negative-logitude hemishere (180 < lambda < 360), lambda_b in the positive-longitude hemisphere (0 < lambda < 180)
-                    
-                    if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
-                
-                        lambda_span.set(fabs((lambda_a.normalize_pm_pi_ret().value) - (lambda_b.normalize_pm_pi_ret().value)));
-                        Z = Angle(-M_PI_2);
-                 
-                        
-                    }else{
-                   
-                        lambda_span.set(fabs((lambda_a.value) - (lambda_b.value)));
-                        Z = Angle(M_PI_2);
-                 
-                    }
-                    
-                    
-                    
-                }
+                Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
                 
             }
             
+           
             //now that lambda_span and Z have been set, I draw the Routes corresponding to the top and bottom horizontal edges
             Route(
                   RouteType(((Route_types[0]).value)),

@@ -9656,6 +9656,8 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     //top and bottom horizontal edge of rectangle
     lambda_a = (parent->parent->geo_position_start.lambda);
     lambda_b = geo_position.lambda;
+    lambda_a.normalize();
+    lambda_b.normalize();
     
     switch (position_in_vector(Projection((parent->projection->name->GetValue()).ToStdString()), Projection_types)) {
             
@@ -9679,7 +9681,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                 
                 if(
                    (((lambda_a > 0.0) && (lambda_a < (parent->lambda_min))) && ((lambda_b > 0.0) && (lambda_b < (parent->lambda_min)))) ||
-                   (((lambda_a > 0.0) && (lambda_a < (parent->lambda_max))) && ((lambda_b > 0.0) && (lambda_b < (parent->lambda_max))))
+                   ((lambda_a > (parent->lambda_max)) && (lambda_b > (parent->lambda_max)))
                    ){
                        //{lambda_a in A & lambda_b in A} or {lambda_a in B and lambda_b in B}
                        

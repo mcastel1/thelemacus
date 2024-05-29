@@ -9664,17 +9664,14 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             
             /*
              lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
-             if(lambda_a < lambda_b){
-                 Z = Angle(-M_PI_2);
-             }else{
-                 Z = Angle(M_PI_2);
-             }
+             Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
+             
              
              or
              
-             lambda_span.set(fabs((lambda_a.normalize_pm_pi_ret().value) - (lambda_b.normalize_pm_pi_ret().value)));
-             Z = Angle(M_PI_2);
-             
+             lambda_span.set(2.0*M_PI - fabs((lambda_b.value) - (lambda_a.value)));
+             Z = Angle(GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
+ 
              */
             
             if(GSL_SIGN(parent->lambda_min.normalize_pm_pi_ret().value) == GSL_SIGN(parent->lambda_max.normalize_pm_pi_ret().value)){
@@ -9687,20 +9684,22 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                        (((lambda_a > 0.0) && (lambda_a < (parent->lambda_max))) && ((lambda_b > 0.0) && (lambda_b < (parent->lambda_max))))
                        ){
                            //{lambda_a in A & lambda_b in A} or {lambda_a in B and lambda_b in B}
-                        
-                        
+                           
+                           lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
+                           Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
+                    
                        }else{
                            //{lambda_a in A & lambda_b in B} or {lambda_a in B and lambda_b in A}
-
-                           
-                           
+                         
+                           lambda_span.set(2.0*M_PI - fabs((lambda_b.value) - (lambda_a.value)));
+                           Z = Angle(GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
                            
                        }
                     
-                    
                 }else{
                     
-                    
+                    lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
+                    Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
                     
                 }
                 

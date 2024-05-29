@@ -9677,6 +9677,14 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
              
              */
             
+            if(GSL_SIGN(parent->lambda_min.normalize_pm_pi_ret().value) == GSL_SIGN(parent->lambda_max.normalize_pm_pi_ret().value)){
+                //lambda_min and lambda_max lie in the same hemisphere
+                
+            }else{
+                //lambda_min and lambda_max lie in different hemispheres 
+                
+                
+            }
             
             
             

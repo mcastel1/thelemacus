@@ -9640,16 +9640,16 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     (Route(
         RouteType(((Route_types[1]).value)),
         (parent->parent->geo_position_start),
-        Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-        Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+        Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value))) / 2.0),
+        Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value)))
     )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
 
     //left vertical edge of rectangle
     (Route(
            RouteType(((Route_types[1]).value)),
         geo_position,
-        Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value))) / 2.0),
-        Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - ((((parent->parent->geo_position_start).phi).normalize_pm_pi_ret()).value)))
+        Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value))) / 2.0),
+        Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value)))
     )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
 
     

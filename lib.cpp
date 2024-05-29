@@ -9674,40 +9674,34 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
  
              */
             
-            if(GSL_SIGN(parent->lambda_min.normalize_pm_pi_ret().value) == GSL_SIGN(parent->lambda_max.normalize_pm_pi_ret().value)){
-                //lambda_min and lambda_max lie in the same hemisphere
                 
-                if((parent->lambda_min) < (parent->lambda_max)){
-                    
-                    if(
-                       (((lambda_a > 0.0) && (lambda_a < (parent->lambda_min))) && ((lambda_b > 0.0) && (lambda_b < (parent->lambda_min)))) ||
-                       (((lambda_a > 0.0) && (lambda_a < (parent->lambda_max))) && ((lambda_b > 0.0) && (lambda_b < (parent->lambda_max))))
-                       ){
-                           //{lambda_a in A & lambda_b in A} or {lambda_a in B and lambda_b in B}
-                           
-                           lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
-                           Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
-                    
-                       }else{
-                           //{lambda_a in A & lambda_b in B} or {lambda_a in B and lambda_b in A}
-                         
-                           lambda_span.set(2.0*M_PI - fabs((lambda_b.value) - (lambda_a.value)));
-                           Z = Angle(GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
-                           
-                       }
-                    
-                }else{
-                    
-                    lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
-                    Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
-                    
-                }
+            if((parent->lambda_min) < (parent->lambda_max)){
+                
+                if(
+                   (((lambda_a > 0.0) && (lambda_a < (parent->lambda_min))) && ((lambda_b > 0.0) && (lambda_b < (parent->lambda_min)))) ||
+                   (((lambda_a > 0.0) && (lambda_a < (parent->lambda_max))) && ((lambda_b > 0.0) && (lambda_b < (parent->lambda_max))))
+                   ){
+                       //{lambda_a in A & lambda_b in A} or {lambda_a in B and lambda_b in B}
+                       
+                       lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
+                       Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
+                       
+                   }else{
+                       //{lambda_a in A & lambda_b in B} or {lambda_a in B and lambda_b in A}
+                       
+                       lambda_span.set(2.0*M_PI - fabs((lambda_b.value) - (lambda_a.value)));
+                       Z = Angle(GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
+                       
+                   }
                 
             }else{
-                //lambda_min and lambda_max lie in different hemispheres
                 
+                lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
+                Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
                 
             }
+            
+           
             
             
             

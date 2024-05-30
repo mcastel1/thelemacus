@@ -21384,17 +21384,17 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 
-// if the content of the GUI field *this  matches one of the items in catalog, write true in *check and write the number of the corresponding entry in catalog in *i. If not, write false in *check and catalog.size() in *i
-template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::CheckInCatalog(bool* check, unsigned int * i) {
+// if the content of the GUI field *this  matches one of the items in catalog, write true in *is_present and write the number of the corresponding entry in catalog in *i. If not, write false in *is_present and catalog.size() in *i
+template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::CheckInCatalog(bool* is_present, unsigned int * i) {
     
 
-    for ((*check) = false, (*i) = 0; ((*i)<catalog.size()) && (!(*check)); (*i)++) {
+    for ((*is_present) = false, (*i) = 0; ((*i)<catalog.size()) && (!(*is_present)); (*i)++) {
         if ((name->GetValue()) == catalog[(*i)]) {
-            (*check) = true;
+            (*is_present) = true;
         }
     }
     
-    if((*check)){
+    if((*is_present)){
         (*i)--;
     }else{
         (*i) = ((unsigned int)(catalog.size()));

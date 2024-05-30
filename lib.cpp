@@ -11304,10 +11304,10 @@ inline void DrawPanel::PreRender3D(void) {
     for (first_label = true,
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * K * 60)))),
-        ((q.phi).value) = floor((circle_observer.reference_position.phi.normalize_pm_pi_ret().value - circle_observer.omega.value) / delta_phi) * delta_phi,
+        (q.phi.value) = floor((circle_observer.reference_position.phi.normalize_pm_pi_ret().value - circle_observer.omega.value) / delta_phi) * delta_phi,
         (q.lambda) = lambda_middle;
-        ((q.phi).value) < circle_observer.reference_position.phi.normalize_pm_pi_ret().value + circle_observer.omega.value;
-        ((q.phi).value) += delta_phi
+        (q.phi.value) < (circle_observer.reference_position.phi.normalize_pm_pi_ret().value) + (circle_observer.omega.value);
+        (q.phi.value) += delta_phi
         ) {
 
         DrawLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"));

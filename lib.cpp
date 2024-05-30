@@ -21411,14 +21411,14 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
     if (!(parent->idling)) {
 
         unsigned int i;
-        bool check;
+        bool is_present;
         
-        CheckInCatalog(&check, &i);
+        CheckInCatalog(&is_present, &i);
 
-        if (check || (((name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((name->GetValue()).ToStdString())) == String("")))) {
+        if (is_present || (((name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((name->GetValue()).ToStdString())) == String("")))) {
             //the GUI field  contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
-            if (check) {
+            if (is_present) {
                 //the content of the GUI field matches one of the items in catalog, i.e., it is valid -> I insert it into recent_items, which points to a suitable location (initialized when *this was constructed)
 
                 //insert item #i into data->recent_bodies
@@ -21431,7 +21431,7 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
 
 
             //if check is true (false) -> set ok to true (false)
-            ok = check;
+            ok = is_present;
             //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
             name->SetForegroundColour(wxGetApp().foreground_color);
             name->SetFont(wxGetApp().default_font);

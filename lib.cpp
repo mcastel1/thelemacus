@@ -21406,21 +21406,12 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 //this method is called whenever the user kills the focus on the GUI field in order to check the content of the GUI field and do the necessary operations
 template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Check(E& event) {
 
-//    P* f = (parent);
 
     //I proceed only if the progam is not is indling mode
     if (!(parent->idling)) {
 
         unsigned int i;
         bool check;
-
-        //        //I check whether the conrwnr of the GUI field  matches one of the items in catalog
-        //        for (check = false, i = 0; (i < catalog.size()) && (!check); i++) {
-        //            if ((name->GetValue()) == catalog[i]) {
-        //                check = true;
-        //            }
-        //        }
-        //        i--;
         
         CheckInCatalog(&check, &i);
 
@@ -21431,7 +21422,6 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
                 //the content of the GUI field matches one of the items in catalog, i.e., it is valid -> I insert it into recent_items, which points to a suitable location (initialized when *this was constructed)
 
                 //insert item #i into data->recent_bodies
-//                wxGetApp().list_frame->data->insert_recent_projection(i);
                 wxGetApp().list_frame->data->insert_recent_item(i, recent_items);
 
                 //I update p->name according to the content of recent_itmes
@@ -21481,8 +21471,8 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
     
     event.Skip(true);
 
-
 }
+
 
 //constructor of a ProjectionField object, based on the parent frame frame
 template<class P> ProjectionField<P>::ProjectionField(

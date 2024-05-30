@@ -7784,13 +7784,13 @@ void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 }
 
 //enter a length in meters
-void Length::enter(String name, String unit, [[maybe_unused]] String prefix) {
+void Length::enter(String name_in, String unit_in, [[maybe_unused]] String prefix) {
 
     stringstream temp;
 
     temp.clear();
-    temp << name.value;
-    if (unit == String("nm")) {
+    temp << name_in.value;
+    if (unit_in == String("nm")) {
         temp << " [nm]";
     }
     else {
@@ -7801,14 +7801,14 @@ void Length::enter(String name, String unit, [[maybe_unused]] String prefix) {
 
         enter_double(&value, false, 0.0, 0.0, temp.str(), prefix);
 
-    } while (!check_valid(name, prefix));
+    } while (!check_valid(name_in, prefix));
 
     //if the length has been entered in units of m, convert it to nautical miles
-    if (unit == String("m")) {
+    if (unit_in == String("m")) {
         value /= (1e3 * nm);
     }
 
-    print(name, unit, prefix, cout);
+    print(name_in, unit_in, prefix, cout);
 
 }
 

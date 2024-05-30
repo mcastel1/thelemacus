@@ -7503,8 +7503,6 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
         
         case 2:{
             //*this is a circle of equal altitude
-
-            Angle temp;
                 
             (length.value) = Re * sin((omega.value)) * 0.0;
             compute_end(new_prefix);

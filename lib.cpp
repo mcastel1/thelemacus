@@ -8328,6 +8328,14 @@ void Angle::print(String name, String prefix, ostream& ostr) {
 }
 
 
+//return true is *this is close to 0 or 2 pi within precision epsilon_double, false otherwise
+inline bool Angle::is_zero_epsilon_double(void){
+    
+    return((fabs(value) < epsilon_double) || (fabs(value-2.0*M_PI) < epsilon_double));
+
+}
+
+
 //convert the angle contained in (*this).value to degrees and minutes format, storted in deg and min
 void Angle::to_deg_min(unsigned int* deg, double* min) {
 

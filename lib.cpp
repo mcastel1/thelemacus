@@ -9634,7 +9634,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                                                 wxColour foreground_color,
                                                 wxColour background_color) {
     
-    Angle lambda_a, lambda_b, lambda_span, Z;
+    Angle lambda_a, lambda_b, lambda_ab_span, Z;
 
 
     dc.SetPen(foreground_color);
@@ -9682,20 +9682,20 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                    ){
                        //{lambda_a in A & lambda_b in A} or {lambda_a in B and lambda_b in B}
                        
-                       lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
+                       lambda_ab_span.set(fabs((lambda_b.value) - (lambda_a.value)));
                        Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
                        
                    }else{
                        //{lambda_a in A & lambda_b in B} or {lambda_a in B and lambda_b in A}
                        
-                       lambda_span.set(2.0*M_PI - fabs((lambda_b.value) - (lambda_a.value)));
+                       lambda_ab_span.set(2.0*M_PI - fabs((lambda_b.value) - (lambda_a.value)));
                        Z = Angle(GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
                        
                    }
                 
             }else{
                 
-                lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
+                lambda_ab_span.set(fabs((lambda_b.value) - (lambda_a.value)));
                 Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
                 
             }
@@ -9706,13 +9706,13 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                   RouteType(((Route_types[0]).value)),
                   geo_position,
                   Z+M_PI,
-                  Length(Re * cos(geo_position.phi) * (lambda_span.value))
+                  Length(Re * cos(geo_position.phi) * (lambda_ab_span.value))
                   ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
             Route(
                   RouteType(((Route_types[0]).value)),
                   parent->parent->geo_position_start,
                   Z,
-                  Length(Re * cos(parent->parent->geo_position_start.phi) * (lambda_span.value))
+                  Length(Re * cos(parent->parent->geo_position_start.phi) * (lambda_ab_span.value))
                   ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
             
             break;

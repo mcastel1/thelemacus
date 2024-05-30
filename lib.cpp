@@ -10996,7 +10996,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
 
 
-    for (route.length.set(String(""), Re* ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String("")),
+    for (route.length.set(String(""), Re* ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), String("")),
         (route.reference_position.lambda.value) = (lambda_start.value);
         (route.reference_position.lambda.value) < (lambda_end.value);
         (route.reference_position.lambda.value) += delta_lambda) {

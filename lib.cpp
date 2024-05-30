@@ -10730,8 +10730,8 @@ inline void DrawPanel::PreRenderMercator(void) {
     //here I set up things to plot meridians and parallels in Render_Mercator
 
     //set phi_start/end
-    (phi_start.value) = floor((((parent->phi_min).normalize_pm_pi_ret()).value) / delta_phi) * delta_phi;
-    (phi_end.value) = (((parent->phi_max).normalize_pm_pi_ret()).value);
+    (phi_start.value) = floor((parent->phi_min.normalize_pm_pi_ret().value) / delta_phi) * delta_phi;
+    (phi_end.value) = (parent->phi_max.normalize_pm_pi_ret().value);
 
 
     //compute size of largest label on parallel: run through all labels on parallels and set size_label_horizontal as the size of the largest label on parallel that has ben found
@@ -10996,7 +10996,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
 
 
-    for (route.length.set(String(""), Re* ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String("")),
+    for (route.length.set(String(""), Re* ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), String("")),
         (route.reference_position.lambda.value) = (lambda_start.value);
         (route.reference_position.lambda.value) < (lambda_end.value);
         (route.reference_position.lambda.value) += delta_lambda) {
@@ -11024,7 +11024,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                 //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
             }
 
-            route.length.set(String(""), Re * ((((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value)), String(""));
+            route.length.set(String(""), Re * ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), String(""));
             (route.reference_position.lambda.value) = (lambda_saved.value);
 
         }
@@ -11304,10 +11304,10 @@ inline void DrawPanel::PreRender3D(void) {
     for (first_label = true,
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * K * 60)))),
-        ((q.phi).value) = floor((circle_observer.reference_position.phi.normalize_pm_pi_ret().value - circle_observer.omega.value) / delta_phi) * delta_phi,
+        (q.phi.value) = floor((circle_observer.reference_position.phi.normalize_pm_pi_ret().value - circle_observer.omega.value) / delta_phi) * delta_phi,
         (q.lambda) = lambda_middle;
-        ((q.phi).value) < circle_observer.reference_position.phi.normalize_pm_pi_ret().value + circle_observer.omega.value;
-        ((q.phi).value) += delta_phi
+        (q.phi.value) < (circle_observer.reference_position.phi.normalize_pm_pi_ret().value) + (circle_observer.omega.value);
+        (q.phi.value) += delta_phi
         ) {
 
         DrawLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"));
@@ -12430,14 +12430,11 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 }
                 
                 //compute the distance between the start and end poisition of the proposed andimation and store it in d
-//                target_position.distance((chart_frames[i])->draw_panel->circle_observer.reference_position, &d, String(""), String(""));
-//                
-//                //I do the animaiton only if the start and end position of the animation are large enough, in order to avoid NaNs in the transporting_route
-//                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * Re*(chart_frames[i])->draw_panel->circle_observer.omega.value) {
-                //
+                //                //I do the animaiton only if the start and end position of the animation are large enough, in order to avoid NaNs in the transporting_route
+                //                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * Re*(chart_frames[i])->draw_panel->circle_observer.omega.value) {
                 
                 center.lambda.set(String(""), (((chart_frames[i])->lambda_min + (chart_frames[i])->lambda_max).value)/2.0, String(""));
-                center.phi.set(String(""), ((((chart_frames[i])->phi_min.normalize_pm_pi_ret().value) + ((chart_frames[i])->phi_max.normalize_pm_pi_ret().value)))/2.0, String(""));
+                center.phi.set(String(""), mean_pm_pi((chart_frames[i])->phi_min, (chart_frames[i])->phi_max), String(""));
                 
                 rectangle_observer_0.SizeMercator(&size_rectangle_observer_0);
                 
@@ -19506,7 +19503,7 @@ void ListFrame::RefreshAll(void) {
 void ListFrame::MyRefreshAll(void) {
 
     for (long i = 0; i < (chart_frames.size()); i++) {
-        ((chart_frames[i])->draw_panel)->MyRefresh();
+        (chart_frames[i])->draw_panel->MyRefresh();
     }
 
 }

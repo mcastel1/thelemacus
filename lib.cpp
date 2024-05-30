@@ -1171,12 +1171,12 @@ Length Length::operator / (const double& x) {
 
 
 
-void Speed::print(String name, String unit, String prefix, ostream& ostr) {
+void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) {
 
-    if ((name.value) != "") {
+    if ((name_in.value) != "") {
 
-        ostr << prefix.value << name.value << " = ";
-        if (unit == String("kt")) {
+        ostr << prefix.value << name_in.value << " = ";
+        if (unit_in == String("kt")) {
             //units are kt
 
             ostr << value << " nm\n";
@@ -1184,7 +1184,7 @@ void Speed::print(String name, String unit, String prefix, ostream& ostr) {
         }
         else {
 
-            if (unit == String("km/h")) {
+            if (unit_in == String("km/h")) {
                 //units are km/h
 
                 ostr << value * nm << " km/h\n";
@@ -1192,7 +1192,7 @@ void Speed::print(String name, String unit, String prefix, ostream& ostr) {
             }
             else {
 
-                if (unit == String("m/s")) {
+                if (unit_in == String("m/s")) {
                     //units are m/s
 
                     ostr << value * nm * 1e3 / 3600.0 << " m/s\n";

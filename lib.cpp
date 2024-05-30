@@ -12468,7 +12468,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 //I am using Projection_types[1]
                 
                 //the aperture angle of circle_observer at the end of the animation
-                Angle target_omega;
+                Angle omega_end;
                 
                 
                 if(std::is_same<T, Route>::value){
@@ -12483,7 +12483,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
                        
                        target_position = object->reference_position;
-                       target_omega = object->omega;
+                       omega_end = object->omega;
                        
                        
                    }else{
@@ -12495,7 +12495,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        target_position = object->end;
                        //                    target_position = route.reference_position;
 
-                       target_omega = (object->length.value)/2.0/Re;
+                       omega_end = (object->length.value)/2.0/Re;
                        
                    }
                     
@@ -12511,7 +12511,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                     //the target Position of the animation is *object
                     target_position = (*object);
                     //Positions do not have a size such as Routes -> I move the chart on the Position with the animation by keeping the same omega as in the beginnign of the animation
-                    target_omega = ((chart_frames[i])->draw_panel->circle_observer.omega);
+                    omega_end = ((chart_frames[i])->draw_panel->circle_observer.omega);
                     
                 }
             
@@ -12528,7 +12528,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                                                                                      (chart_frames[i])->draw_panel->circle_observer.reference_position,
                                                                                      target_position
                                                                                      ),
-                                                                               Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (target_omega.value) ) ),
+                                                                               Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (omega_end.value) ) ),
                                                                                f
                                                                                );
                     

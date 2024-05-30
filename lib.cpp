@@ -8423,7 +8423,7 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces) {
 
     output << deg.str().c_str() << (wxGetApp().degree_symbol).value << " " << min.str().c_str() << "'";
 
-    if ((mode != String("")) && (value !=0.0)) {
+    if ((mode != String("")) && !is_zero_epsilon_double()) {
         //mode is not "" and the angle is nonzero -> I print out its 'sign' (N, S, E, W, ...)
 
         if (mode == String("NS")) {
@@ -8465,7 +8465,7 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
 
 
         //I append NS or EW only if the angle is != 0, otherwise it is pointless to add these labels
-        if (value != 0.0) {
+        if (!is_zero_epsilon_double()) {
 
             if (mode == String("NS")) {
                 //in this case, I output the sign of the angle in the North/South format (North = +, South = -)

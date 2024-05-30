@@ -231,6 +231,7 @@ public:
     void set(double);
     void set(String, double, String);
     void print(String, String, ostream&);
+    bool is_zero_epsilon_double(void);
     void to_deg_min(unsigned int*, double*);
     void to_deg_min(unsigned int*, double*, unsigned int);
     void from_sign_deg_min(char, unsigned int, double);
@@ -240,7 +241,7 @@ public:
     string to_string(String, unsigned int, bool);
     string deg_to_string(String, unsigned int);
     string min_to_string(String, unsigned int);
-    
+
     bool operator == (const Angle&) const, operator == (const double&), operator != (const double&), operator !=(const Angle&), operator > (const Angle&), operator > (const double&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&), operator * (const double&);
     Angle& operator +=(const Angle&), &operator += (const double&), &operator -=(const Angle&), &operator -=(const double&);

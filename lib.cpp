@@ -8328,6 +8328,14 @@ void Angle::print(String name, String prefix, ostream& ostr) {
 }
 
 
+//return true is *this is close to 0 or 2 pi within precision epsilon_double, false otherwise
+inline bool Angle::is_zero_epsilon_double(void){
+    
+    return((fabs(value) < epsilon_double) || (fabs(value-2.0*M_PI) < epsilon_double));
+
+}
+
+
 //convert the angle contained in (*this).value to degrees and minutes format, storted in deg and min
 void Angle::to_deg_min(unsigned int* deg, double* min) {
 
@@ -8423,8 +8431,8 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces) {
 
     output << deg.str().c_str() << (wxGetApp().degree_symbol).value << " " << min.str().c_str() << "'";
 
-    if (mode != String("")) {
-        //in this case, I print out the angle in the format >=-180° and <180°
+    if ((mode != String("")) && !is_zero_epsilon_double()) {
+        //mode is not "" and the angle is nonzero -> I print out its 'sign' (N, S, E, W, ...)
 
         if (mode == String("NS")) {
             //in this case, I output the sign of the angle in the North/South format (North = +, South = -)
@@ -8465,7 +8473,7 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
 
 
         //I append NS or EW only if the angle is != 0, otherwise it is pointless to add these labels
-        if (value != 0.0) {
+        if (!is_zero_epsilon_double()) {
 
             if (mode == String("NS")) {
                 //in this case, I output the sign of the angle in the North/South format (North = +, South = -)

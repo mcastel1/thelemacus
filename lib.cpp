@@ -7404,8 +7404,6 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
         
         if((*lambda_min) > (*lambda_max)){
             
-            Angle temp;
-
             temp = (*lambda_min);
             (*lambda_min) = (*lambda_max);
             (*lambda_max) = temp;

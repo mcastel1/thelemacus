@@ -7812,25 +7812,25 @@ void Length::enter(String name_in, String unit_in, [[maybe_unused]] String prefi
 
 }
 
-string Length::to_string(String unit, unsigned int precision) {
+string Length::to_string(String unit_in, unsigned int precision) {
 
     stringstream output;
 
     output.precision(precision);
 
-    if (unit == String("nm")) { output << fixed << value << " nm"; }
-    if (unit == String("m")) { output << fixed << value * 1e3 * nm << " m"; }
+    if (unit_in == String("nm")) { output << fixed << value << " nm"; }
+    if (unit_in == String("m")) { output << fixed << value * 1e3 * nm << " m"; }
 
     return(output.str().c_str());
 
 }
 
-void Length::print(String name, String unit, String prefix, ostream& ostr) {
+void Length::print(String name_in, String unit_in, String prefix, ostream& ostr) {
 
-    if ((name.value) != "") {
+    if ((name_in.value) != "") {
 
-        ostr << prefix.value << name.value << " = ";
-        if (unit == String("nm")) {
+        ostr << prefix.value << name_in.value << " = ";
+        if (unit_in == String("nm")) {
             ostr << value << " nm\n";
         }
         else {

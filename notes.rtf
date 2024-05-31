@@ -121,35 +121,7 @@
 \cf2  - move all stuff which is general enough in the code to MyApp class\cf4 \
 \cf2  - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1\cf4 \
 \
-\cf2  \cf4 \
-\cf2  Message for forum: \
-\
-Hello, \
-I am on OSX and I am using wxWidgets 3.2.4, I have a wxBitmapButton which I created with \
-\
-[code]       \
-        button_delete = new wxBitmapButton(\
-            panel,\
-            wxID_ANY,\
-            Bitmap(wxGetApp().path_file_trash_icon_dark, wxGetApp().size_small_button),\
-            wxDefaultPosition,\
-            wxDefaultSize,\
-            wxBU_EXACTFIT | wxSIMPLE_BORDER\
-        );\
- [/code]\
-\
-the button looks like the image_dark attached. Then I switch from dark to light mode in my OS, I have a method that detects the switch and that runs \
-\
-[code]\
-               button_delete->SetBitmap(Bitmap(wxGetApp().path_file_trash_icon_light, wxGetApp().size_small_button));\
-[/code]\
-\
-The result is image_light. \
-The problem is that the image in image_light is not centered in the button. How may I center it ? \
-\
-Thank you !\
-\cf4 \
-\cf2  \
+\cf2   \
 \cf4 \
 \cf2  ********** THINGS TO FIX ***********\
 	- remove odd hotrizontal lines on WIN32 mercator projection, they occur when you zoom in too fast with the mouse wheel\

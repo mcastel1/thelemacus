@@ -5150,7 +5150,7 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
     string line;
     stringstream new_prefix;
     size_t pos1, pos2;
-    String unit;
+    String unit_temp;
 
     //prepend \t to prefix
     new_prefix << "\t" << prefix.value;
@@ -5185,26 +5185,26 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
         //in this case the units of the length read is nm
         cout << prefix.value << "Unit is in nm\n";
         pos2 = line.find(" nm");
-        unit = String("nm");
+        unit_temp = String("nm");
     }
     if (line.find(" m") != (string::npos)) {
         //in this case the units of the length read is m
         cout << prefix.value << "Unit is in m\n";
         pos2 = line.find(" m");
-        unit = String("m");
+        unit_temp = String("m");
     }
     if (line.find(" ft") != (string::npos)) {
         //in this case the units of the length read is ft
         cout << prefix.value << "Unit is in ft\n";
         pos2 = line.find(" ft");
-        unit = String("ft");
+        unit_temp = String("ft");
     }
 
     value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
-    if (unit == String("m")) {
+    if (unit_temp == String("m")) {
         value /= (1e3 * nm);
     }
-    if (unit == String("ft")) {
+    if (unit_temp == String("ft")) {
         value /= nm_ft;
     }
 

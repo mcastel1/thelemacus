@@ -12315,6 +12315,9 @@ void ChartFrame::Animate(void){
                                                                 Double(1.0),
                                                                       parent->unset_idling
                                                                 );
+
+            //trigger the animation
+            chart_transport_handler->operator()();
             
             
             break;
@@ -12334,16 +12337,16 @@ void ChartFrame::Animate(void){
                                                                 Double(1.0),
                                                                       parent->unset_idling
                                                                 );
+
+            //trigger the animation
+            chart_transport_handler->operator()();
             
             break;
             
         }
             
     }
-    
-    //trigger the animation
-    chart_transport_handler->operator()();
-    
+        
 }
 
 

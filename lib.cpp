@@ -9717,16 +9717,16 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         case 1: {
             //I am using Projection_types[1]
             
-            Angle temp, lambda_span_temp, Z;
+            Angle temp, lambda_span_temp, Z_temp;
             
             temp.value = (normalize_pm_pi_ret(geo_position.lambda).value) - (parent->parent->geo_position_start.lambda.normalize_pm_pi_ret().value);
             
             if(fabs(temp.value) < M_PI){
                 lambda_span_temp.set(fabs(temp.value));
-                Z = Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN(temp.value)) / 2.0);
+                Z_temp = Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN(temp.value)) / 2.0);
             }else{
                 lambda_span_temp.set(2.0*M_PI - fabs(temp.value));
-                Z = Angle(-(M_PI_2 + M_PI * (1.0 + GSL_SIGN(temp.value)) / 2.0));
+                Z_temp = Angle(-(M_PI_2 + M_PI * (1.0 + GSL_SIGN(temp.value)) / 2.0));
             }
 
 
@@ -9735,7 +9735,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             (Route(
                    RouteType(((Route_types[0]).value)),
                    (parent->parent->geo_position_start),
-                   Z,
+                   Z_temp,
                    Length(Re * cos(parent->parent->geo_position_start.phi) * (lambda_span_temp.value))
                    )
              ).DrawOld(wxGetApp().n_points_routes.value, &dc, this, String(""));
@@ -9744,7 +9744,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             (Route(
                    RouteType(((Route_types[0]).value)),
                 geo_position,
-                Z+M_PI,
+                Z_temp+M_PI,
                 Length(Re * cos(geo_position.phi) * (lambda_span_temp.value))
             )).DrawOld(wxGetApp().n_points_routes.value, &dc, this, String(""));
 

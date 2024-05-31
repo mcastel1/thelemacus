@@ -7421,7 +7421,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
     String new_prefix;
     Angle temp;
     Position p_min, p_max;
-    bool check;
+    bool check = false;
 
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));

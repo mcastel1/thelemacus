@@ -28,6 +28,8 @@ Angle max_lat, min_lat;
 #define my_inch (25.4e-6)
 //one nautical mile in feet
 #define nm_ft (nm*1e3*3937.0/1200.0)
+//scale factor is displayed after being rounded up to rounding_int_scale_factor
+#define rounding_int_scale_factor 10000
 //earth radius in nautical miles
 #define Re (60.0*360.0/(2.0*M_PI))
 #define RED     "\033[1;31m"

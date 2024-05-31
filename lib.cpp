@@ -12092,15 +12092,10 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
 //compute the scale factor of *this in the mercator projection  by using the physical size of the screen
 void DrawPanel::ScaleFactor(void){
     
-    double s, u;
+    //scale factor
     
-    //length of the NS edge of the plot area as shown on the screen of the computer, in nm
-    s = ( ((double)(size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * my_inch/nm );
+    /*length of the NS edge of the plot area as measured on the surface of the earth, in  nm*/(((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in nm*/((double)(size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * my_inch/nm );
     
-    //length of the NS edge of the plot area as measured on the surface of the earth, in  nm
-    u = ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)) * K * 60.0;
-    
-    cout << "Scale factor = " << u/s << endl;
     
 }
 

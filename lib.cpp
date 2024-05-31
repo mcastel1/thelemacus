@@ -15008,6 +15008,8 @@ void DrawPanel::OnMouseWheel(wxMouseEvent& event) {
     //        i = ((int)((parent->slider)->GetValue())) - ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
     //
     //    }
+    
+    ScaleFactor();
 
     i = ((int)((parent->slider)->GetValue())) /*I put the minus sign here because a zoom-in scroll with the mouse wheel corresponds to a negative j*/ - j;
 

@@ -2170,6 +2170,7 @@ public:
     template<class E> void OnChooseProjection(E&);
     template<class E> void SetProjection(E&);
     void KeyDown(wxKeyEvent&);
+    void ScaleFactor();
     
 //    DECLARE_EVENT_TABLE()
 };

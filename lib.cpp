@@ -12094,6 +12094,14 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
     
 }
 
+
+//compute the scale factor of *this in the mercator projection  by using the physical size of the screen 
+void DrawPanel::ScaleFactor(void){
+    
+    
+}
+
+
 //moves (makes slide) to the east the chart
 template<class T> void ChartFrame::MoveEast(T& event) {
 

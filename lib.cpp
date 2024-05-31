@@ -10844,6 +10844,8 @@ inline void DrawPanel::PreRenderMercator(void) {
 
     }
 
+    ScaleFactor();
+    
     tick_length = (((wxGetApp().tick_length_over_width_plot_area)).value) * (size_plot_area.GetWidth());
 
     //set p_NW and p_SE
@@ -14996,24 +14998,7 @@ void DrawPanel::OnMouseWheel(wxMouseEvent& event) {
     //    cout << "A = " << (-1 + ((parent->slider)->GetValue())) << "\n";
     //    cout << "B = " << ((double)j)/(event.GetWheelDelta()) << "\n";
     //    cout << "(int)(A*B) = " << ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta()))) << "\n";
-
-    //    if(((j>0) && (((parent->slider)->GetValue())>=1)) || ((j<0) && (((parent->slider)->GetValue())<=((wxGetApp().zoom_factor_max).value)))){
-
-    //        int i;
-
-    //set the new value of slider, i,  according to the rotation of the mouse wheel:
-    //    if(j < 0){
-    //
-    //        i = ((int)((parent->slider)->GetValue())) - ((int)((((wxGetApp().zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
-    //
-    //    }else{
-    //
-    //        i = ((int)((parent->slider)->GetValue())) - ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
-    //
-    //    }
     
-    ScaleFactor();
-
     i = ((int)((parent->slider)->GetValue())) /*I put the minus sign here because a zoom-in scroll with the mouse wheel corresponds to a negative j*/ - j;
 
     //    cout << "Slider value new = " << i << "\n";

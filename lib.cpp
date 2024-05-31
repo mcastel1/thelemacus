@@ -12090,10 +12090,13 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
 //compute the scale factor of *this in the mercator projection  by using the physical size of the screen
 void DrawPanel::ScaleFactor(void){
     
-    double s;
+    double s, u;
     
     //size of the NS edge of the plot area in inches
     s = (size_plot_area.y)/(wxGetApp().display.GetPPI().x);
+    
+    //length of the meridian corresponding to the NS edge of the plot area as measured on the surface of the earth, in nautical miles
+    u = ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)) * K * 60.0;
     
     
 }

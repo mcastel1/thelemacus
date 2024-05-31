@@ -12100,6 +12100,7 @@ void DrawPanel::ScaleFactor(void){
     //length of the NS edge of the plot area as measured on the surface of the earth, in  nm
     u = (((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)) * K * 60.0);
     
+    cout << "Scale factor = " << u/s << endl;
     
 }
 

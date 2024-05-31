@@ -1171,12 +1171,12 @@ Length Length::operator / (const double& x) {
 
 
 
-void Speed::print(String name, String unit, String prefix, ostream& ostr) {
+void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) {
 
-    if ((name.value) != "") {
+    if ((name_in.value) != "") {
 
-        ostr << prefix.value << name.value << " = ";
-        if (unit == String("kt")) {
+        ostr << prefix.value << name_in.value << " = ";
+        if (unit_in == String("kt")) {
             //units are kt
 
             ostr << value << " nm\n";
@@ -1184,7 +1184,7 @@ void Speed::print(String name, String unit, String prefix, ostream& ostr) {
         }
         else {
 
-            if (unit == String("km/h")) {
+            if (unit_in == String("km/h")) {
                 //units are km/h
 
                 ostr << value * nm << " km/h\n";
@@ -1192,7 +1192,7 @@ void Speed::print(String name, String unit, String prefix, ostream& ostr) {
             }
             else {
 
-                if (unit == String("m/s")) {
+                if (unit_in == String("m/s")) {
                     //units are m/s
 
                     ostr << value * nm * 1e3 / 3600.0 << " m/s\n";
@@ -1214,7 +1214,7 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
     string line;
     stringstream new_prefix;
     size_t pos1, pos2;
-    String unit;
+    String unit_temp;
 
     //prepend \t to prefix
     new_prefix << "\t" << prefix.value;
@@ -1249,28 +1249,28 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
         //the units of the speed read is kt
         cout << prefix.value << "Unit is in kt\n";
         pos2 = line.find(" kt");
-        unit = String("kt");
+        unit_temp = String("kt");
     }
     if (line.find(" km/h") != (string::npos)) {
         //the units of the length read is km/h
         cout << prefix.value << "Unit is in km/h\n";
         pos2 = line.find(" km/h");
-        unit = String("km/h");
+        unit_temp = String("km/h");
     }
     if (line.find(" m/s") != (string::npos)) {
         //the units of the length read is m/s
         cout << prefix.value << "Unit is in m/s\n";
         pos2 = line.find(" m/s");
-        unit = String("m/s");
+        unit_temp = String("m/s");
     }
 
     //X [km/h] = X [nm]/nm/[h] = X/nm [kt] = X 1000/3600 [m/s]
 
     value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
-    if (unit == String("km/h")) {
+    if (unit_temp == String("km/h")) {
         value /= nm;
     }
-    if (unit == String("m/s")) {
+    if (unit_temp == String("m/s")) {
         value /= (1e3) * nm / 3600.0;
     }
 
@@ -5150,7 +5150,7 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
     string line;
     stringstream new_prefix;
     size_t pos1, pos2;
-    String unit;
+    String unit_temp;
 
     //prepend \t to prefix
     new_prefix << "\t" << prefix.value;
@@ -5185,26 +5185,26 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
         //in this case the units of the length read is nm
         cout << prefix.value << "Unit is in nm\n";
         pos2 = line.find(" nm");
-        unit = String("nm");
+        unit_temp = String("nm");
     }
     if (line.find(" m") != (string::npos)) {
         //in this case the units of the length read is m
         cout << prefix.value << "Unit is in m\n";
         pos2 = line.find(" m");
-        unit = String("m");
+        unit_temp = String("m");
     }
     if (line.find(" ft") != (string::npos)) {
         //in this case the units of the length read is ft
         cout << prefix.value << "Unit is in ft\n";
         pos2 = line.find(" ft");
-        unit = String("ft");
+        unit_temp = String("ft");
     }
 
     value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
-    if (unit == String("m")) {
+    if (unit_temp == String("m")) {
         value /= (1e3 * nm);
     }
-    if (unit == String("ft")) {
+    if (unit_temp == String("ft")) {
         value /= nm_ft;
     }
 
@@ -7404,8 +7404,6 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
         
         if((*lambda_min) > (*lambda_max)){
             
-            Angle temp;
-
             temp = (*lambda_min);
             (*lambda_min) = (*lambda_max);
             (*lambda_max) = temp;
@@ -7423,7 +7421,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
     String new_prefix;
     Angle temp;
     Position p_min, p_max;
-    bool check;
+    bool check = false;
 
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
@@ -7505,8 +7503,6 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
         
         case 2:{
             //*this is a circle of equal altitude
-
-            Angle temp;
                 
             (length.value) = Re * sin((omega.value)) * 0.0;
             compute_end(new_prefix);
@@ -7788,13 +7784,13 @@ void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 }
 
 //enter a length in meters
-void Length::enter(String name, String unit, [[maybe_unused]] String prefix) {
+void Length::enter(String name_in, String unit_in, [[maybe_unused]] String prefix) {
 
     stringstream temp;
 
     temp.clear();
-    temp << name.value;
-    if (unit == String("nm")) {
+    temp << name_in.value;
+    if (unit_in == String("nm")) {
         temp << " [nm]";
     }
     else {
@@ -7805,36 +7801,36 @@ void Length::enter(String name, String unit, [[maybe_unused]] String prefix) {
 
         enter_double(&value, false, 0.0, 0.0, temp.str(), prefix);
 
-    } while (!check_valid(name, prefix));
+    } while (!check_valid(name_in, prefix));
 
     //if the length has been entered in units of m, convert it to nautical miles
-    if (unit == String("m")) {
+    if (unit_in == String("m")) {
         value /= (1e3 * nm);
     }
 
-    print(name, unit, prefix, cout);
+    print(name_in, unit_in, prefix, cout);
 
 }
 
-string Length::to_string(String unit, unsigned int precision) {
+string Length::to_string(String unit_in, unsigned int precision) {
 
     stringstream output;
 
     output.precision(precision);
 
-    if (unit == String("nm")) { output << fixed << value << " nm"; }
-    if (unit == String("m")) { output << fixed << value * 1e3 * nm << " m"; }
+    if (unit_in == String("nm")) { output << fixed << value << " nm"; }
+    if (unit_in == String("m")) { output << fixed << value * 1e3 * nm << " m"; }
 
     return(output.str().c_str());
 
 }
 
-void Length::print(String name, String unit, String prefix, ostream& ostr) {
+void Length::print(String name_in, String unit_in, String prefix, ostream& ostr) {
 
-    if ((name.value) != "") {
+    if ((name_in.value) != "") {
 
-        ostr << prefix.value << name.value << " = ";
-        if (unit == String("nm")) {
+        ostr << prefix.value << name_in.value << " = ";
+        if (unit_in == String("nm")) {
             ostr << value << " nm\n";
         }
         else {
@@ -9634,7 +9630,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                                                 wxColour foreground_color,
                                                 wxColour background_color) {
     
-    Angle lambda_a, lambda_b, lambda_span, Z;
+    Angle lambda_a, lambda_b, lambda_ab_span, Z;
 
 
     dc.SetPen(foreground_color);
@@ -9682,20 +9678,20 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                    ){
                        //{lambda_a in A & lambda_b in A} or {lambda_a in B and lambda_b in B}
                        
-                       lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
+                       lambda_ab_span.set(fabs((lambda_b.value) - (lambda_a.value)));
                        Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
                        
                    }else{
                        //{lambda_a in A & lambda_b in B} or {lambda_a in B and lambda_b in A}
                        
-                       lambda_span.set(2.0*M_PI - fabs((lambda_b.value) - (lambda_a.value)));
+                       lambda_ab_span.set(2.0*M_PI - fabs((lambda_b.value) - (lambda_a.value)));
                        Z = Angle(GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
                        
                    }
                 
             }else{
                 
-                lambda_span.set(fabs((lambda_b.value) - (lambda_a.value)));
+                lambda_ab_span.set(fabs((lambda_b.value) - (lambda_a.value)));
                 Z = Angle(-GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
                 
             }
@@ -9706,13 +9702,13 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                   RouteType(((Route_types[0]).value)),
                   geo_position,
                   Z+M_PI,
-                  Length(Re * cos(geo_position.phi) * (lambda_span.value))
+                  Length(Re * cos(geo_position.phi) * (lambda_ab_span.value))
                   ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
             Route(
                   RouteType(((Route_types[0]).value)),
                   parent->parent->geo_position_start,
                   Z,
-                  Length(Re * cos(parent->parent->geo_position_start.phi) * (lambda_span.value))
+                  Length(Re * cos(parent->parent->geo_position_start.phi) * (lambda_ab_span.value))
                   ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
             
             break;
@@ -9721,16 +9717,16 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
         case 1: {
             //I am using Projection_types[1]
             
-            Angle temp, lambda_span, Z;
+            Angle temp, lambda_span_temp, Z_temp;
             
             temp.value = (normalize_pm_pi_ret(geo_position.lambda).value) - (parent->parent->geo_position_start.lambda.normalize_pm_pi_ret().value);
             
             if(fabs(temp.value) < M_PI){
-                lambda_span.set(fabs(temp.value));
-                Z = Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN(temp.value)) / 2.0);
+                lambda_span_temp.set(fabs(temp.value));
+                Z_temp = Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN(temp.value)) / 2.0);
             }else{
-                lambda_span.set(2.0*M_PI - fabs(temp.value));
-                Z = Angle(-(M_PI_2 + M_PI * (1.0 + GSL_SIGN(temp.value)) / 2.0));
+                lambda_span_temp.set(2.0*M_PI - fabs(temp.value));
+                Z_temp = Angle(-(M_PI_2 + M_PI * (1.0 + GSL_SIGN(temp.value)) / 2.0));
             }
 
 
@@ -9739,8 +9735,8 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             (Route(
                    RouteType(((Route_types[0]).value)),
                    (parent->parent->geo_position_start),
-                   Z,
-                   Length(Re * cos(parent->parent->geo_position_start.phi) * (lambda_span.value))
+                   Z_temp,
+                   Length(Re * cos(parent->parent->geo_position_start.phi) * (lambda_span_temp.value))
                    )
              ).DrawOld(wxGetApp().n_points_routes.value, &dc, this, String(""));
             
@@ -9748,8 +9744,8 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             (Route(
                    RouteType(((Route_types[0]).value)),
                 geo_position,
-                Z+M_PI,
-                Length(Re * cos(geo_position.phi) * (lambda_span.value))
+                Z_temp+M_PI,
+                Length(Re * cos(geo_position.phi) * (lambda_span_temp.value))
             )).DrawOld(wxGetApp().n_points_routes.value, &dc, this, String(""));
 
             
@@ -12319,6 +12315,9 @@ void ChartFrame::Animate(void){
                                                                 Double(1.0),
                                                                       parent->unset_idling
                                                                 );
+
+            //trigger the animation
+            chart_transport_handler->operator()();
             
             
             break;
@@ -12338,16 +12337,16 @@ void ChartFrame::Animate(void){
                                                                 Double(1.0),
                                                                       parent->unset_idling
                                                                 );
+
+            //trigger the animation
+            chart_transport_handler->operator()();
             
             break;
             
         }
             
     }
-    
-    //trigger the animation
-    chart_transport_handler->operator()();
-    
+        
 }
 
 
@@ -12468,7 +12467,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 //I am using Projection_types[1]
                 
                 //the aperture angle of circle_observer at the end of the animation
-                Angle target_omega;
+                Angle omega_end;
                 
                 
                 if(std::is_same<T, Route>::value){
@@ -12483,7 +12482,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
                        
                        target_position = object->reference_position;
-                       target_omega = object->omega;
+                       omega_end = object->omega;
                        
                        
                    }else{
@@ -12495,7 +12494,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        target_position = object->end;
                        //                    target_position = route.reference_position;
 
-                       target_omega = (object->length.value)/2.0/Re;
+                       omega_end = (object->length.value)/2.0/Re;
                        
                    }
                     
@@ -12511,7 +12510,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                     //the target Position of the animation is *object
                     target_position = (*object);
                     //Positions do not have a size such as Routes -> I move the chart on the Position with the animation by keeping the same omega as in the beginnign of the animation
-                    target_omega = ((chart_frames[i])->draw_panel->circle_observer.omega);
+                    omega_end = ((chart_frames[i])->draw_panel->circle_observer.omega);
                     
                 }
             
@@ -12528,7 +12527,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                                                                                      (chart_frames[i])->draw_panel->circle_observer.reference_position,
                                                                                      target_position
                                                                                      ),
-                                                                               Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (target_omega.value) ) ),
+                                                                               Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (omega_end.value) ) ),
                                                                                f
                                                                                );
                     
@@ -19783,18 +19782,19 @@ template<class E> void ListFrame::OnPressDeletePosition(E& event) {
 //only some Routes are viable to be transporting Routes. These are the Routes that: 1. are not related to any sight, 2. that are not circles of equal altitude 3. do not coincide with the object to transport -> I count how many Routes are available for transport -> If there is at least one, return true, otherwise return false
 bool ListFrame::CheckRoutesForTransport(void) {
     
-    unsigned int i, n_routes_for_transport;
+    unsigned int n_routes_for_transport;
+    int i;
     
-    for (i = 0, n_routes_for_transport=0; i < data->route_list.size(); i++) {
+    for(i = 0, n_routes_for_transport=0; i < data->route_list.size(); i++){
 
-        if (
+        if(
             /*condition that the Route is not relatied to a Sight*/
             ((((data->route_list)[i]).related_sight.value) == -1) &&
             /*condition that the Route is not a circle of equal altitude*/
             (((data->route_list)[i]).type != Route_types[2]) &&
             /*condition that the Route does not coincide with the object to transport*/
             ((transported_object_type != String("route")) || (i_object_to_transport != i))
-            ) {
+            ){
                 
                 n_routes_for_transport++;
     
@@ -21384,17 +21384,17 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 
-// if the content of the GUI field *this  matches one of the items in catalog, write true in *check and write the number of the corresponding entry in catalog in *i. If not, write false in *check and catalog.size() in *i
-template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::CheckInCatalog(bool* check, unsigned int * i) {
+// if the content of the GUI field *this  matches one of the items in catalog, write true in *is_present and write the number of the corresponding entry in catalog in *i. If not, write false in *is_present and catalog.size() in *i
+template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::CheckInCatalog(bool* is_present, unsigned int * i) {
     
 
-    for ((*check) = false, (*i) = 0; ((*i)<catalog.size()) && (!(*check)); (*i)++) {
+    for ((*is_present) = false, (*i) = 0; ((*i)<catalog.size()) && (!(*is_present)); (*i)++) {
         if ((name->GetValue()) == catalog[(*i)]) {
-            (*check) = true;
+            (*is_present) = true;
         }
     }
     
-    if((*check)){
+    if((*is_present)){
         (*i)--;
     }else{
         (*i) = ((unsigned int)(catalog.size()));
@@ -21406,32 +21406,22 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 //this method is called whenever the user kills the focus on the GUI field in order to check the content of the GUI field and do the necessary operations
 template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Check(E& event) {
 
-//    P* f = (parent);
 
     //I proceed only if the progam is not is indling mode
     if (!(parent->idling)) {
 
         unsigned int i;
-        bool check;
-
-        //        //I check whether the conrwnr of the GUI field  matches one of the items in catalog
-        //        for (check = false, i = 0; (i < catalog.size()) && (!check); i++) {
-        //            if ((name->GetValue()) == catalog[i]) {
-        //                check = true;
-        //            }
-        //        }
-        //        i--;
+        bool is_present;
         
-        CheckInCatalog(&check, &i);
+        CheckInCatalog(&is_present, &i);
 
-        if (check || (((name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((name->GetValue()).ToStdString())) == String("")))) {
+        if (is_present || (((name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((name->GetValue()).ToStdString())) == String("")))) {
             //the GUI field  contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
-            if (check) {
+            if (is_present) {
                 //the content of the GUI field matches one of the items in catalog, i.e., it is valid -> I insert it into recent_items, which points to a suitable location (initialized when *this was constructed)
 
                 //insert item #i into data->recent_bodies
-//                wxGetApp().list_frame->data->insert_recent_projection(i);
                 wxGetApp().list_frame->data->insert_recent_item(i, recent_items);
 
                 //I update p->name according to the content of recent_itmes
@@ -21441,7 +21431,7 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
 
 
             //if check is true (false) -> set ok to true (false)
-            ok = check;
+            ok = is_present;
             //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
             name->SetForegroundColour(wxGetApp().foreground_color);
             name->SetFont(wxGetApp().default_font);
@@ -21481,8 +21471,8 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
     
     event.Skip(true);
 
-
 }
+
 
 //constructor of a ProjectionField object, based on the parent frame frame
 template<class P> ProjectionField<P>::ProjectionField(

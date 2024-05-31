@@ -10843,8 +10843,6 @@ inline void DrawPanel::PreRenderMercator(void) {
         );
 
     }
-
-    ScaleFactor();
     
     tick_length = (((wxGetApp().tick_length_over_width_plot_area)).value) * (size_plot_area.GetWidth());
 
@@ -12089,17 +12087,6 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
 }
 
 
-//compute the scale factor of *this in the mercator projection  by using the physical size of the screen
-void DrawPanel::ScaleFactor(void){
-    
-    //scale factor
-    
-    /*length of the NS edge of the plot area as measured on the surface of the earth, in  nm*/(((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in nm*/((double)(size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * my_inch/nm );
-    
-    
-}
-
-
 //moves (makes slide) to the east the chart
 template<class T> void ChartFrame::MoveEast(T& event) {
 
@@ -12791,9 +12778,13 @@ Rotation DrawPanel::rotation_start_end(const wxPoint& start, const wxPoint& end)
 void ChartFrame::UpdateSliderLabel_Mercator(void) {
 
     stringstream s;
+    
+    
+    s.precision(display_precision.value);
 
     s.str("");
-    s << "1:" << round(zoom_factor.value);
+    s << "1:" << round(
+                       /*length of the NS edge of the plot area as measured on the surface of the earth, in  nm*/(((phi_max.normalize_pm_pi_ret().value) - (phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in nm*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * my_inch/nm ) );
     text_slider->SetLabel(s.str().c_str());
 
 }

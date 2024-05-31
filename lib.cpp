@@ -11616,9 +11616,14 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     s.str("");
     s << "1:" << (zoom_factor.value);
     
+    //obtain the screen size: x,y are the sizes in inches
     wxSize display_size;
+    double x, y;
     display_size = wxGetApp().display.GetPPI();
-    
+    x = (wxGetApp().display.GetClientArea().width)/display_size.x;
+    y = (wxGetApp().display.GetClientArea().height)/display_size.x;
+    //obtain the screen size
+
     text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0);
 
     //navigation buttons

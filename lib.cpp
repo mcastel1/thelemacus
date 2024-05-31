@@ -1214,7 +1214,7 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
     string line;
     stringstream new_prefix;
     size_t pos1, pos2;
-    String unit;
+    String unit_temp;
 
     //prepend \t to prefix
     new_prefix << "\t" << prefix.value;
@@ -1249,28 +1249,28 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
         //the units of the speed read is kt
         cout << prefix.value << "Unit is in kt\n";
         pos2 = line.find(" kt");
-        unit = String("kt");
+        unit_temp = String("kt");
     }
     if (line.find(" km/h") != (string::npos)) {
         //the units of the length read is km/h
         cout << prefix.value << "Unit is in km/h\n";
         pos2 = line.find(" km/h");
-        unit = String("km/h");
+        unit_temp = String("km/h");
     }
     if (line.find(" m/s") != (string::npos)) {
         //the units of the length read is m/s
         cout << prefix.value << "Unit is in m/s\n";
         pos2 = line.find(" m/s");
-        unit = String("m/s");
+        unit_temp = String("m/s");
     }
 
     //X [km/h] = X [nm]/nm/[h] = X/nm [kt] = X 1000/3600 [m/s]
 
     value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
-    if (unit == String("km/h")) {
+    if (unit_temp == String("km/h")) {
         value /= nm;
     }
-    if (unit == String("m/s")) {
+    if (unit_temp == String("m/s")) {
         value /= (1e3) * nm / 3600.0;
     }
 

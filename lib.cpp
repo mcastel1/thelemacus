@@ -18352,7 +18352,6 @@ void PositionFrame::KeyDown(wxKeyEvent& event) {
 
 template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, String image_path, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
 
-    wxDisplay display;
     wxRect rectangle;
 
     f_ok = f_ok_in;
@@ -18363,7 +18362,7 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
 
     //image
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-    rectangle = (display.GetClientArea());
+    rectangle = (wxGetApp().display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth()) * 1. / 1000.0);
     rectangle.SetHeight((int)((double)rectangle.GetHeight()) * 1. / 1000.0);
 
@@ -18445,7 +18444,6 @@ template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event) {
 
 template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, bool enable_button_a_in, bool enable_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
 
-    wxDisplay display;
     wxRect rectangle;
     vector<StaticText*> text;
     //the wxString message will be split into multiple Strings which were separated by a '\n' in message, each string will be written in an entry of message_split
@@ -18466,7 +18464,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 
     //image
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
-    rectangle = (display.GetClientArea());
+    rectangle = (wxGetApp().display.GetClientArea());
     rectangle.SetWidth((int)((double)rectangle.GetWidth()) * 1. / 1000.0);
     rectangle.SetHeight((int)((double)rectangle.GetHeight()) * 1. / 1000.0);
 

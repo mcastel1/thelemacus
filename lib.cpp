@@ -12090,13 +12090,10 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
 //compute the scale factor of *this in the mercator projection  by using the physical size of the screen
 void DrawPanel::ScaleFactor(void){
     
-    //obtain the screen size: x,y are the sizes in inches
-    wxSize display_size;
-    double x, y;
-    display_size = wxGetApp().display.GetPPI();
-    x = (wxGetApp().display.GetClientArea().width)/display_size.x;
-    y = (wxGetApp().display.GetClientArea().height)/display_size.x;
-    //obtain the screen size
+    double s;
+    
+    //size of the NS edge of the plot area in inches
+    s = (size_plot_area.y)/(wxGetApp().display.GetPPI().x);
     
     
 }

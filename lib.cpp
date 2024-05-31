@@ -19782,18 +19782,19 @@ template<class E> void ListFrame::OnPressDeletePosition(E& event) {
 //only some Routes are viable to be transporting Routes. These are the Routes that: 1. are not related to any sight, 2. that are not circles of equal altitude 3. do not coincide with the object to transport -> I count how many Routes are available for transport -> If there is at least one, return true, otherwise return false
 bool ListFrame::CheckRoutesForTransport(void) {
     
-    unsigned int i, n_routes_for_transport;
+    unsigned int n_routes_for_transport;
+    int i;
     
-    for (i = 0, n_routes_for_transport=0; i < data->route_list.size(); i++) {
+    for(i = 0, n_routes_for_transport=0; i < data->route_list.size(); i++){
 
-        if (
+        if(
             /*condition that the Route is not relatied to a Sight*/
             ((((data->route_list)[i]).related_sight.value) == -1) &&
             /*condition that the Route is not a circle of equal altitude*/
             (((data->route_list)[i]).type != Route_types[2]) &&
             /*condition that the Route does not coincide with the object to transport*/
             ((transported_object_type != String("route")) || (i_object_to_transport != i))
-            ) {
+            ){
                 
                 n_routes_for_transport++;
     

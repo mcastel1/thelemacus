@@ -12092,10 +12092,10 @@ void DrawPanel::ScaleFactor(void){
     
     double s, u;
     
-    //size of the NS edge of the plot area in inches
-    s = (size_plot_area.y)/(wxGetApp().display.GetPPI().x);
+    //size of the NS edge of the plot area in nm
+    s = (size_plot_area.y)/(wxGetApp().display.GetPPI().x) * my_inch/nm;
     
-    //length of the meridian corresponding to the NS edge of the plot area as measured on the surface of the earth, in nautical miles
+    //length of the meridian corresponding to the NS edge of the plot area as measured on the surface of the earth, in  nm
     u = ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)) * K * 60.0;
     
     

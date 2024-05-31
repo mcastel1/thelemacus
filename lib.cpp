@@ -11615,6 +11615,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     //text field showing the current value of the zoom slider
     s.str("");
     s << "1:" << (zoom_factor.value);
+    
+    wxSize display_size;
+    display_size = wxGetApp().display.GetPPI();
+    
     text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0);
 
     //navigation buttons

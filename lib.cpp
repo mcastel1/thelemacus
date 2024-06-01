@@ -12778,14 +12778,19 @@ Rotation DrawPanel::rotation_start_end(const wxPoint& start, const wxPoint& end)
 void ChartFrame::UpdateSliderLabel_Mercator(void) {
 
     stringstream s;
-    unsigned int scale_factor;
+    unsigned int scale_factor, n_digits_scale_factor, rounding_coefficient_scale_factor;
     
+    //compute the scale factor
     scale_factor = ((unsigned int)(
                    /*length of the NS edge of the plot area as measured on the surface of the earth, in  nm*/(((phi_max.normalize_pm_pi_ret().value) - (phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in nm*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * my_inch/nm ) ));
     
-    scale_factor = round((((double)(scale_factor))/rounding_int_scale_factor)) * rounding_int_scale_factor;
+    //compute the number of digits of the scale factor
+    n_digits_scale_factor = round(log10(scale_factor));
+    //round up the scale factor in such a way that it will display only display_precision.digits
+    rounding_coefficient_scale_factor = gsl_pow_int(10.0, n_digits_scale_factor - display_precision.value);
     
-//    s.precision(display_precision.value);
+    scale_factor = round((((double)(scale_factor))/rounding_coefficient_scale_factor)) * rounding_coefficient_scale_factor;
+    
 
     s.str("");
     s << "1:" << scale_factor;

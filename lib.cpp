@@ -435,9 +435,20 @@ String Int::to_string_spaces(void){
     output = String("");
     
     for(i=0; i<s.str().length(); i++){
-        output.appendto(String(s.str()[i]));
+        
+        if((i > 0) && ((i % 3) == 0)){
+            
+            output.appendto(String(" "));
+            
+        }else{
+            
+            output.appendto(String(s.str()[i]));
+            
+        }
+        
     }
-
+    
+    return output;
     
 }
 

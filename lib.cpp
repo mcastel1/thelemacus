@@ -422,6 +422,15 @@ void Int::my_round(Int precision){
 }
 
 
+//convert *this to String by adding a space every three digits to improve readability and return the result
+String Int::to_string_spaces(void){
+    
+    
+    
+    
+}
+
+
 bool Int::operator == (const Int& i) {
 
     return (value == (i.value));

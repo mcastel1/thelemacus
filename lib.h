@@ -171,6 +171,7 @@ public:
     void set(String, int, String);
     void set(int);
     void my_round(Int precision);
+    String to_string_spaces(void);
     void print(String, String, ostream&);
     
     bool operator == (const Int&), operator != (const Int&), operator == (const int&), operator != (const int&), operator > (const Int&), operator > (const int&);

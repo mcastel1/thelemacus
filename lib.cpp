@@ -425,8 +425,19 @@ void Int::my_round(Int precision){
 //convert *this to String by adding a space every three digits to improve readability and return the result
 String Int::to_string_spaces(void){
     
+    unsigned int i;
+    stringstream s;
+    String output;
     
+    s.str("");
+    s << value;
     
+    output = String("");
+    
+    for(i=0; i<s.str().length(); i++){
+        output.appendto(String(s.str()[i]));
+    }
+
     
 }
 

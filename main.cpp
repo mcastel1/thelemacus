@@ -273,11 +273,11 @@ void MyApp::set_icon_paths(void){
 bool MyApp::OnInit() {
     
 
-    Int I;
-    String S;
-    
-    I.value = 1389025840968;
-    S  = I.to_string_spaces();
+//    Int I;
+//    String S;
+//    
+//    I.value = 1389025840968;
+//    S  = I.to_string_spaces();
     
     
     unsigned int i;

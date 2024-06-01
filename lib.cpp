@@ -396,6 +396,22 @@ void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 }
 
 
+//round up *this in such a way that when it is prnted out, only precision.value signifiant digits are shown 
+void Int::my_round(Int precision){
+    
+    unsigned int n_digits, rounding_coefficient;
+    
+    //compute the number of digits of *this
+    n_digits = round(log10(value)) + 1;
+    
+    //round up *this in such a way that only precision digits will be displayed in *this
+    rounding_coefficient = gsl_pow_int(10.0, n_digits - display_precision.value);
+    
+    value = round((((double)value)/rounding_coefficient)) * rounding_coefficient;
+    
+}
+
+
 bool Int::operator == (const Int& i) {
 
     return (value == (i.value));

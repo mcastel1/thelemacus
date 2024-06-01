@@ -12785,7 +12785,7 @@ void ChartFrame::UpdateSliderLabel_Mercator(void) {
                    /*length of the NS edge of the plot area as measured on the surface of the earth, in  nm*/(((phi_max.normalize_pm_pi_ret().value) - (phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in nm*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * my_inch/nm ) ));
     
     //compute the number of digits of the scale factor
-    n_digits_scale_factor = round(log10(scale_factor));
+    n_digits_scale_factor = round(log10(scale_factor)) + 1;
     //round up the scale factor in such a way that it will display only display_precision.digits
     rounding_coefficient_scale_factor = gsl_pow_int(10.0, n_digits_scale_factor - display_precision.value);
     

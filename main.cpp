@@ -273,16 +273,7 @@ void MyApp::set_icon_paths(void){
 bool MyApp::OnInit() {
     
 
-    /*
-    vector<Angle> t(3);
 
-    t[0].set(.5348609);
-    t[1].set(.1);
-    t[2].set(.1000000000000000001);
-    delete_duplicates(&t, &equal_epsilon_double);
-     
-     */
-    
     
     unsigned int i;
     Int n_chart_frames;

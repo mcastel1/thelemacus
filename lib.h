@@ -81,6 +81,7 @@ class Atmosphere;
 class Answer;
 class Body;
 class String;
+class Int;
 class PositionProjection;
 //template<class P> class CheckProjection;
 template<class P> class CheckArcDegree;
@@ -168,6 +169,8 @@ public:
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
     void set(String, int, String);
+    void set(int);
+    void my_round(Int precision);
     void print(String, String, ostream&);
     
     bool operator == (const Int&), operator != (const Int&), operator == (const int&), operator != (const int&), operator > (const Int&), operator > (const int&);
@@ -2170,6 +2173,7 @@ public:
     template<class E> void OnChooseProjection(E&);
     template<class E> void SetProjection(E&);
     void KeyDown(wxKeyEvent&);
+    void ScaleFactor();
     
 //    DECLARE_EVENT_TABLE()
 };

@@ -283,6 +283,7 @@ bool MyApp::OnInit() {
      
      */
     
+    
     unsigned int i;
     Int n_chart_frames;
     stringstream s;

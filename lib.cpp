@@ -382,7 +382,9 @@ String read_from_file(String name, String filename, String mode, [[maybe_unused]
 
 }
 
-void Int::set(String name, int i, [[maybe_unused]] String prefix) {
+
+//set value equal to i
+inline void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
     String new_prefix;
 
@@ -393,6 +395,30 @@ void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
     if (name != String("")) { print(name, prefix, cout); }
 
+}
+
+
+//same as Int::set(String name, int i, [[maybe_unused]] String prefix) {, but without printing out anything
+inline void Int::set(int i) {
+
+    value = i;
+
+}
+
+
+//round up *this in such a way that when it is prnted out, only precision.value signifiant digits are shown
+void Int::my_round(Int precision){
+    
+    unsigned int n_digits, rounding_coefficient;
+    
+    //compute the number of digits of *this
+    n_digits = round(log10(value)) + 1;
+    
+    //round up *this in such a way that only precision digits will be displayed in *this
+    rounding_coefficient = gsl_pow_int(10.0, n_digits - precision.value);
+    
+    value = round((((double)value)/rounding_coefficient)) * rounding_coefficient;
+    
 }
 
 
@@ -10843,7 +10869,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         );
 
     }
-
+    
     tick_length = (((wxGetApp().tick_length_over_width_plot_area)).value) * (size_plot_area.GetWidth());
 
     //set p_NW and p_SE
@@ -11615,14 +11641,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     //text field showing the current value of the zoom slider
     s.str("");
     s << "1:" << (zoom_factor.value);
-    
-    //obtain the screen size: x,y are the sizes in inches
-    wxSize display_size;
-    double x, y;
-    display_size = wxGetApp().display.GetPPI();
-    x = (wxGetApp().display.GetClientArea().width)/display_size.x;
-    y = (wxGetApp().display.GetClientArea().height)/display_size.x;
-    //obtain the screen size
 
     text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0);
 
@@ -12093,6 +12111,7 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
     event.Skip(true);
     
 }
+
 
 //moves (makes slide) to the east the chart
 template<class T> void ChartFrame::MoveEast(T& event) {
@@ -12785,10 +12804,23 @@ Rotation DrawPanel::rotation_start_end(const wxPoint& start, const wxPoint& end)
 void ChartFrame::UpdateSliderLabel_Mercator(void) {
 
     stringstream s;
+    Int scale_factor;
+    
+    //compute the scale factor
+    scale_factor.set( ((unsigned int)(
+                   /*length of the NS edge of the plot area as measured on the surface of the earth, in  nm*/(((phi_max.normalize_pm_pi_ret().value) - (phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in nm*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * my_inch/nm ) )) );
+    
+    
+    scale_factor.my_round(display_precision);
+    
 
     s.str("");
-    s << "1:" << round(zoom_factor.value);
+    s << "1:" << scale_factor.value;
     text_slider->SetLabel(s.str().c_str());
+    
+    //fir *this in order to account for the sliderlabal which has changed 
+    Fit();
+    
 
 }
 
@@ -14988,22 +15020,7 @@ void DrawPanel::OnMouseWheel(wxMouseEvent& event) {
     //    cout << "A = " << (-1 + ((parent->slider)->GetValue())) << "\n";
     //    cout << "B = " << ((double)j)/(event.GetWheelDelta()) << "\n";
     //    cout << "(int)(A*B) = " << ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta()))) << "\n";
-
-    //    if(((j>0) && (((parent->slider)->GetValue())>=1)) || ((j<0) && (((parent->slider)->GetValue())<=((wxGetApp().zoom_factor_max).value)))){
-
-    //        int i;
-
-    //set the new value of slider, i,  according to the rotation of the mouse wheel:
-    //    if(j < 0){
-    //
-    //        i = ((int)((parent->slider)->GetValue())) - ((int)((((wxGetApp().zoom_factor_max).value) - ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
-    //
-    //    }else{
-    //
-    //        i = ((int)((parent->slider)->GetValue())) - ((int)((-1.0 + ((parent->slider)->GetValue())) * ((double)j)/(event.GetWheelDelta())));
-    //
-    //    }
-
+    
     i = ((int)((parent->slider)->GetValue())) /*I put the minus sign here because a zoom-in scroll with the mouse wheel corresponds to a negative j*/ - j;
 
     //    cout << "Slider value new = " << i << "\n";

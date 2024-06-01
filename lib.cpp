@@ -436,7 +436,7 @@ String Int::to_string_spaces(void){
     
     for(i=0, j=0; j<s.str().length(); i++){
         
-        if((j > 0) && ((jx % 3) == 0)){
+        if((j > 0) && ((j % 3) == 0)){
             
             output.appendto(String(" "));
 //            i--;

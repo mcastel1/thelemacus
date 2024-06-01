@@ -382,7 +382,9 @@ String read_from_file(String name, String filename, String mode, [[maybe_unused]
 
 }
 
-void Int::set(String name, int i, [[maybe_unused]] String prefix) {
+
+//set value equal to i
+inline void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
     String new_prefix;
 
@@ -396,7 +398,15 @@ void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 }
 
 
-//round up *this in such a way that when it is prnted out, only precision.value signifiant digits are shown 
+//same as Int::set(String name, int i, [[maybe_unused]] String prefix) {, but without printing out anything
+inline void Int::set(int i) {
+
+    value = i;
+
+}
+
+
+//round up *this in such a way that when it is prnted out, only precision.value signifiant digits are shown
 void Int::my_round(Int precision){
     
     unsigned int n_digits, rounding_coefficient;
@@ -12794,22 +12804,18 @@ Rotation DrawPanel::rotation_start_end(const wxPoint& start, const wxPoint& end)
 void ChartFrame::UpdateSliderLabel_Mercator(void) {
 
     stringstream s;
-    unsigned int scale_factor, n_digits_scale_factor, rounding_coefficient_scale_factor;
+    Int scale_factor;
     
     //compute the scale factor
-    scale_factor = ((unsigned int)(
-                   /*length of the NS edge of the plot area as measured on the surface of the earth, in  nm*/(((phi_max.normalize_pm_pi_ret().value) - (phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in nm*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * my_inch/nm ) ));
+    scale_factor.set( ((unsigned int)(
+                   /*length of the NS edge of the plot area as measured on the surface of the earth, in  nm*/(((phi_max.normalize_pm_pi_ret().value) - (phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in nm*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * my_inch/nm ) )) );
     
-    //compute the number of digits of the scale factor
-    n_digits_scale_factor = round(log10(scale_factor)) + 1;
-    //round up the scale factor in such a way that it will display only display_precision.digits
-    rounding_coefficient_scale_factor = gsl_pow_int(10.0, n_digits_scale_factor - display_precision.value);
     
-    scale_factor = round((((double)(scale_factor))/rounding_coefficient_scale_factor)) * rounding_coefficient_scale_factor;
+    scale_factor.my_round(display_precision);
     
 
     s.str("");
-    s << "1:" << scale_factor;
+    s << "1:" << scale_factor.value;
     text_slider->SetLabel(s.str().c_str());
     
     //fir *this in order to account for the sliderlabal which has changed 

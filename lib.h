@@ -169,6 +169,7 @@ public:
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
     void set(String, int, String);
+    void set(int);
     void my_round(Int precision);
     void print(String, String, ostream&);
     

@@ -1,3 +1,13 @@
+
+void my_cout(string s ...){
+    
+    
+    
+    
+}
+
+
+
 //round the floating point number x with precision `precision`
 inline double round_with_precision(double x, unsigned int precision)
 {

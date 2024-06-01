@@ -1,12 +1,3 @@
-//#include "wx/wxprec.h"
-////#include "wx/checkbox.h"
-//#include "wx/combobox.h"
-//#include "wx/dc.h"
-//#include "wx/display.h"
-//#include "wx/listctrl.h"
-//#include "wx/slider.h"
-//
-//
 //#ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/app.h"
@@ -28,6 +19,7 @@
 #ifdef _WIN32
 #include <Windows.h>
 #include <regex>
+#include <cstdarg>
 #endif
 
 

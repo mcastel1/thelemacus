@@ -405,7 +405,7 @@ void Int::my_round(Int precision){
     n_digits = round(log10(value)) + 1;
     
     //round up *this in such a way that only precision digits will be displayed in *this
-    rounding_coefficient = gsl_pow_int(10.0, n_digits - display_precision.value);
+    rounding_coefficient = gsl_pow_int(10.0, n_digits - precision.value);
     
     value = round((((double)value)/rounding_coefficient)) * rounding_coefficient;
     

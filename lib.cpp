@@ -439,7 +439,7 @@ String Int::to_string_spaces(void){
         
         output.appendto(String(s.str()[i]));
 
-        if((i > 0) && ((i % 3) == 0)){
+        if(((s.str().length()-1 - i) > 0) && (((s.str().length()-1 - i) % 3) == 0)){
             
             output.appendto(String(" "));
             

@@ -12795,6 +12795,10 @@ void ChartFrame::UpdateSliderLabel_Mercator(void) {
     s.str("");
     s << "1:" << scale_factor;
     text_slider->SetLabel(s.str().c_str());
+    
+    //fir *this in order to account for the sliderlabal which has changed 
+    Fit();
+    
 
 }
 

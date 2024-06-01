@@ -1,8 +1,15 @@
 
 void my_cout(string s ...){
     
+    unsigned int i;
+    va_list args;
     
+    va_start(args, s);
     
+    i = va_arg(args, int);
+
+    va_end(args);
+
     
 }
 

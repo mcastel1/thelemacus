@@ -283,13 +283,6 @@ bool MyApp::OnInit() {
      
      */
     
-    //
-    Int I;
-    I.value = 134435;
-    
-    I.my_round(display_precision);
-    
-    //
     
     unsigned int i;
     Int n_chart_frames;

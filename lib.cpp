@@ -1,12 +1,16 @@
-
-void my_cout(string s ...){
+//example of variadic function: it takes a non-variadic argument n and then an arbitrary number of arguments `...`
+void my_cout(int n, ...){
     
     unsigned int i;
     va_list args;
     
-    va_start(args, s);
+    va_start(args, n);
     
-    i = va_arg(args, int);
+    for(i=0; i<n; ++i){
+        
+        cout << "read argument = " << va_arg(args, int) << endl;
+        
+    }
 
     va_end(args);
 

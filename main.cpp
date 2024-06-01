@@ -272,7 +272,10 @@ void MyApp::set_icon_paths(void){
 
 bool MyApp::OnInit() {
     
-
+    //
+    my_cout(5, 1, 4, 6, 4325, 35);
+    
+    //
 
     
     unsigned int i;

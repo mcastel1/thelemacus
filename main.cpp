@@ -72,13 +72,13 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
     //    return this->wxApp::OnPressCtrlQ();
     UnsetIdling<ListFrame>* unset_idling;
     CloseFrame<ListFrame>* close;
-    ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, void>* print_question;
+    ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>* print_question;
     unset_idling = new UnsetIdling<ListFrame>(list_frame);
     close = new CloseFrame<ListFrame>(list_frame);
     
     //    PrintMessage<ListFrame, Close<ListFrame> >* print_info_message;
     
-    print_question = new ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, void>(list_frame, close, unset_idling, NULL);
+    print_question = new ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(list_frame, close, unset_idling, unset_idling);
     
     print_question->SetAndCall(NULL, String("You pressed CTRL+Q"), String("Do you want to quit the app?"), String("Yes"), String("No"));
     

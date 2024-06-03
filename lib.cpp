@@ -13124,7 +13124,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
             //if the AngleField p has a sign, I check it
 
             for (check = false, i = 0; (i < ((p->signs).GetCount())) && (!check); i++) {
-                if (((p->sign)->GetValue()) == (p->signs)[i]) {
+                if ((p->sign->GetValue()) == (p->signs)[i]) {
                     check = true;
                 }
             }
@@ -13132,7 +13132,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
         }
 
 
-        if (check || ((((p->sign)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->sign)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->sign->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->sign->GetValue()).ToStdString())) == String("")))) {
             //p->sign either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set sign_ok to true (false)
@@ -13142,8 +13142,8 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
                 //there exists a p->sign field
 
                 //the background color is set to white, because in this case there is no erroneous value in sign
-                (p->sign)->SetForegroundColour(wxGetApp().foreground_color);
-                (p->sign)->SetFont(wxGetApp().default_font);
+                p->sign->SetForegroundColour(wxGetApp().foreground_color);
+                p->sign->SetFont(wxGetApp().default_font);
             }
 
         }
@@ -15786,7 +15786,7 @@ void String::set_to_current_time(void) {
 template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operator()(T& event) {
 
     //if the label is empty, I replace it with the local time and date
-    if (((p->value)->GetValue()).IsEmpty()) {
+    if ((p->value->GetValue()).IsEmpty()) {
 
         Time now;
 
@@ -15820,7 +15820,7 @@ ResetListFrame::ResetListFrame(ListFrame* p_in) {
 template <class T> void ResetListFrame::operator()(T& event) {
 
     //clear p->data and allocate a new one
-    (p->data)->~Data();
+    p->data->~Data();
     //the file now has no title and has not been modified
     (p->file_is_untitled) = true;
     (p->file_has_been_modified) = false;
@@ -15828,9 +15828,9 @@ template <class T> void ResetListFrame::operator()(T& event) {
     p->data = new Data(p->catalog, String(""));
 
     //empty all listcontrols
-    (p->listcontrol_sights)->DeleteAllItems();
-    (p->listcontrol_positions)->DeleteAllItems();
-    (p->listcontrol_routes)->DeleteAllItems();
+    p->listcontrol_sights->DeleteAllItems();
+    p->listcontrol_positions->DeleteAllItems();
+    p->listcontrol_routes->DeleteAllItems();
 
     //resize, set an 'untitled' label for the new, empty ListFrame, and update the chartframes
     p->Resize();
@@ -16005,8 +16005,6 @@ template<class P> template<class T> void CheckString<P>::operator()(T& event) {
 
     P* f = (p->parent);
 
-    //    (p->string)->set(String(""), String(((p->value)->GetValue()).ToStdString()), String(""));
-
     f->AllOk();
 
     event.Skip(true);
@@ -16133,15 +16131,15 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T& event)
 
         bool check;
 
-        check = check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360);
+        check = check_unsigned_int((p->deg->GetValue()).ToStdString(), NULL, true, 0, 360);
 
-        if (check || ((((p->deg)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->deg)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->deg->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->deg->GetValue()).ToStdString())) == String("")))) {
 
             //if check is true (false) -> set deg_ok to true (false)
             (p->deg_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->deg)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->deg)->SetFont(wxGetApp().default_font);
+            p->deg->SetForegroundColour(wxGetApp().foreground_color);
+            p->deg->SetFont(wxGetApp().default_font);
 
         }
         else {
@@ -16175,16 +16173,16 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T& event
 
         bool check;
 
-        check = check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
+        check = check_double((p->min->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
 
-        if (check || ((((p->min)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->min)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->min->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->min->GetValue()).ToStdString())) == String("")))) {
             //p->min either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set min_ok to true (false)
             (p->min_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in min
-            (p->min)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->min)->SetFont(wxGetApp().default_font);
+            p->min->SetForegroundColour(wxGetApp().foreground_color);
+            p->min->SetFont(wxGetApp().default_font);
 
         }
         else {
@@ -16220,16 +16218,16 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T& eve
 
         bool check;
 
-        check = check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+        check = check_double((p->value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
 
-        if (check || ((((p->value)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->value)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->value->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->value->GetValue()).ToStdString())) == String("")))) {
             //p->value either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set value_ok to true (false)
             (p->value_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in value
-            (p->value)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->value)->SetFont(wxGetApp().default_font);
+            p->value->SetForegroundColour(wxGetApp().foreground_color);
+            p->value->SetFont(wxGetApp().default_font);
 
         }
         else {
@@ -16345,16 +16343,16 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 
         bool check;
 
-        check = check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+        check = check_double((p->value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
 
-        if (check || ((((p->value)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->value)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->value->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->value->GetValue()).ToStdString())) == String("")))) {
             //p->value either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set value_ok to true (false)
             (p->value_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in value
-            (p->value)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->value)->SetFont(wxGetApp().default_font);
+            p->value->SetForegroundColour(wxGetApp().foreground_color);
+            p->value->SetFont(wxGetApp().default_font);
 
         }
         else {
@@ -20316,16 +20314,16 @@ template<class P> template<class T> void CheckYear<P>::operator()(T& event) {
 
         bool check;
 
-        check = check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0);
+        check = check_unsigned_int((p->year->GetValue()).ToStdString(), NULL, false, 0, 0);
 
-        if (check || ((((p->year)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->year)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->year->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->year->GetValue()).ToStdString())) == String("")))) {
             //p->year either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set year_ok to true (false)
             (p->year_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in year
-            (p->year)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->year)->SetFont(wxGetApp().default_font);
+            p->year->SetForegroundColour(wxGetApp().foreground_color);
+            p->year->SetFont(wxGetApp().default_font);
 
             if (check && (p->month_ok)) {
 
@@ -20333,7 +20331,7 @@ template<class P> template<class T> void CheckYear<P>::operator()(T& event) {
 
             }
 
-            (p->day)->Enable(check && (p->month_ok));
+            p->day->Enable(check && (p->month_ok));
 
 
         }
@@ -20342,7 +20340,7 @@ template<class P> template<class T> void CheckYear<P>::operator()(T& event) {
             f->print_error_message->SetAndCall((p->year), String("Entered value is not valid!"), String("Year must be an unsigned integer"), (wxGetApp().path_file_error_icon));
 
             (p->year_ok) = false;
-            (p->day)->Enable(false);
+            p->day->Enable(false);
 
         }
 
@@ -20363,16 +20361,16 @@ template<class P> template<class T> void CheckMonth<P>::operator()(T& event) {
 
         bool check;
 
-        check = check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12 + 1);
+        check = check_unsigned_int((p->month->GetValue()).ToStdString(), NULL, true, 1, 12 + 1);
 
-        if (check || ((((p->month)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->month)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->month->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->month->GetValue()).ToStdString())) == String("")))) {
             //p->month either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set month_ok to true (false)
             (p->month_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in month
-            (p->month)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->month)->SetFont(wxGetApp().default_font);
+            p->month->SetForegroundColour(wxGetApp().foreground_color);
+            p->month->SetFont(wxGetApp().default_font);
 
             if (check && (p->year_ok)) {
 
@@ -20380,7 +20378,7 @@ template<class P> template<class T> void CheckMonth<P>::operator()(T& event) {
 
             }
 
-            (p->day)->Enable(check && (p->year_ok));
+            p->day->Enable(check && (p->year_ok));
 
         }
         else {
@@ -20388,7 +20386,7 @@ template<class P> template<class T> void CheckMonth<P>::operator()(T& event) {
             f->print_error_message->SetAndCall((p->month), String("Entered value is not valid!"), String("Month must be an unsigned integer >= 1 and <= 12"), (wxGetApp().path_file_error_icon));
 
             (p->month_ok) = false;
-            (p->day)->Enable(false);
+            p->day->Enable(false);
 
         }
 
@@ -20412,27 +20410,27 @@ template<class P> template<class T> void CheckDay<P>::operator()(T& event) {
         //this variable = true if the day field is formatted correctly
         bool check;
 
-        (p->date)->check_leap_year();
+        p->date->check_leap_year();
 
-        if ((p->date)->Y_is_leap_year) {
+        if (p->date->Y_is_leap_year) {
 
-            check = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi((p->month)->GetValue())) - 1] + 1);
+            check = check_unsigned_int((p->day->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi(p->month->GetValue())) - 1] + 1);
 
         }
         else {
 
-            check = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi((p->month)->GetValue())) - 1] + 1);
+            check = check_unsigned_int((p->day->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi(p->month->GetValue())) - 1] + 1);
 
         }
 
 
-        if (check || ((((p->day)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->day)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->day->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->day->GetValue()).ToStdString())) == String("")))) {
 
             //if check is true (false) -> set day_ok to true (false)
             (p->day_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in day
-            (p->day)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->day)->SetFont(wxGetApp().default_font);
+            p->day->SetForegroundColour(wxGetApp().foreground_color);
+            p->day->SetFont(wxGetApp().default_font);
 
 
         }
@@ -20472,14 +20470,14 @@ template<class P> template<class T> void TabulateDays<P>::operator()(T& event) {
         wxString temp;
 
         //save the old value of p->day into temp
-        temp = ((p->day)->GetValue());
+        temp = (p->day->GetValue());
 
         //read the year
-        ((((f->sight)->master_clock_date_and_hour).date).Y) = ((unsigned int)wxAtoi((p->year)->GetValue()));
+        ((((f->sight)->master_clock_date_and_hour).date).Y) = ((unsigned int)wxAtoi(p->year->GetValue()));
         (((f->sight)->master_clock_date_and_hour).date).check_leap_year();
 
         //read the month
-        ((((f->sight)->master_clock_date_and_hour).date).M) = ((unsigned int)wxAtoi((p->month)->GetValue()));
+        ((((f->sight)->master_clock_date_and_hour).date).M) = ((unsigned int)wxAtoi(p->month->GetValue()));
 
         if (((f->sight)->master_clock_date_and_hour).date.Y_is_leap_year) {
             //in this case the year is a leap year: I fill the list of days from days_per_month_leap
@@ -20498,26 +20496,26 @@ template<class P> template<class T> void TabulateDays<P>::operator()(T& event) {
             //
         }
 
-        (p->day)->Set(p->days);
+        p->day->Set(p->days);
 
         if (!(wxAtoi(temp) <= wxAtoi((p->days)[(p->days).GetCount() - 1]))) {
             //if the value in p->day is does not lie between the boundaries of the newly set days list (list of days of the month, then I reset it by setting it to 1
 
-            (p->day)->SetValue(wxString("1"));
+            p->day->SetValue(wxString("1"));
 
         }
         else {
 
-            (p->day)->SetValue(temp);
+            p->day->SetValue(temp);
 
         }
 
-        (p->day)->Enable(true);
+        p->day->Enable(true);
 
     }
     else {
 
-        (p->day)->Enable(false);
+        p->day->Enable(false);
 
     }
 
@@ -20535,18 +20533,19 @@ template<class P, class T>  CheckCheck<P, T>::CheckCheck(CheckField<P, T>* p_in)
 template<class P, class T> template<class R> void CheckCheck<P, T>::operator()(R& event) {
 
     //I enable/disable related_field according to whether checkbox is checked or not, and according to the value of direct_reverse
-    if ((((p->checkbox)->GetValue()) ^ (!(p->direct_reverse)))) {
-        (p->related_field)->Enable(true);
-        //I write into the related_field by setting its variable just_enabled to true: this means that no error message will be prompted when the user sets its focus to the related field GUIs
-        //        ((p->related_field)->just_enabled) = true;
-    }
-    else {
-        (p->related_field)->Enable(false);
+    if (((p->checkbox->GetValue()) ^ (!(p->direct_reverse)))) {
+        
+        p->related_field->Enable(true);
+        
+    }else {
+        
+        p->related_field->Enable(false);
+        
     }
 
-    (*((p->related_field)->check))(event);
+    (*(p->related_field->check))(event);
 
-    (p->parent)->AllOk();
+    p->parent->AllOk();
 
     event.Skip(true);
 

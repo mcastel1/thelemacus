@@ -2377,7 +2377,7 @@ template<class P> class LengthField{
 public:
     
     //the parent frame to which this object is attached
-    P* parent_frame;
+    P* parent;
     //units of measure of the Length
     LengthUnitField<P>* unit;
     wxBoxSizer *sizer_h, *sizer_v;

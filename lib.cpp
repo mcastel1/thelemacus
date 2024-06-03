@@ -16196,7 +16196,7 @@ template<class P> CheckLengthValue<P>::CheckLengthValue(EditableLengthField<P>* 
 //checks the value in the GUI field in EditableLengthField
 template<class P> template <class T> void CheckLengthValue<P>::operator()(T& event) {
 
-    P* f = (p->parent_frame);
+    P* f = (p->parent);
 
     //I proceed only if the progam is not is indling mode
     if (!(f->idling)) {
@@ -16240,7 +16240,7 @@ template<class P> CheckLengthUnit<P>::CheckLengthUnit(EditableLengthField<P>* p_
 //checks the unit in the GUI field in LengthField
 template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& event) {
 
-    P* f = (p->parent_frame);
+    P* f = (p->parent);
 
     //I proceed only if the progam is not is indling mode
     if (!(f->idling)) {
@@ -16248,13 +16248,6 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
         unsigned int i;
         bool check;
 
-        //I check whether the name in the GUI field unit matches one of the unit names in units
-//        for (check = false, i = 0; (i < LengthUnit_types.size()) && (!check); i++) {
-//            if ((p->unit->name->GetValue()) == wxString((LengthUnit_types[i]).value)) {
-//                check = true;
-//            }
-//        }
-//        i--;
         
         p->unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::CheckInCatalog(&check, &i);
 
@@ -22027,7 +22020,7 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 //constructor of a LengthField object, based on the parent frame frame
 template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in){
 
-    parent_frame = ((P*)(panel_of_parent->GetParent()));
+    parent = ((P*)(panel_of_parent->GetParent()));
     length = p;
     unit_value = unit_value_in;
     
@@ -22063,7 +22056,7 @@ template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
     //value_ok is true/false is the text entered is valid/invalid
     unit_ok = success;
     //tries to enable button_reduce
-    parent_frame->AllOk();
+    parent->AllOk();
 
     event.Skip(true);
 
@@ -22088,7 +22081,7 @@ template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_
     //initialize check
     check = new CheckLength<P>(this);
     
-    value = new wxTextCtrl((LengthField<P>::parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    value = new wxTextCtrl((LengthField<P>::parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     //SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
@@ -22098,7 +22091,7 @@ template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_
     //as text is changed in value by the user with the keyboard, call OnEditValue
     value->Bind(wxEVT_KEY_UP, &EditableLengthField::OnEditValue<wxKeyEvent>, this);
     
-    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent_frame->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
+    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     LengthField<P>::unit->name->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
     LengthField<P>::unit->name->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
@@ -22120,25 +22113,15 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     flags.Center();
 
     
-    //initialize check
-//    check = new CheckLength<P>(this);
-    
-    value = new wxTextCtrl((LengthField<P>::parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
-    //SetColor(value);
+    value = new StaticText((LengthField<P>::parent_frame->panel),  "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
-    //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
-    value->SetValue(wxString(""));
-//    value_ok = false;
-//    value->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_value)));
-    //as text is changed in value by the user with the keyboard, call OnEditValue
-    value->Bind(wxEVT_KEY_UP, &StaticLengthField::OnEditValue<wxKeyEvent>, this);
+    value->SetLabel(wxString(""));
     
     LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent_frame->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     LengthField<P>::unit->name->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
     LengthField<P>::unit->name->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
 
-    
     //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
     LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER);
     LengthField<P>::unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
@@ -22411,7 +22394,7 @@ template<class P> template<class E>  void EditableLengthField<P>::OnEditValue(E&
     //value_ok is true/false is the text entered is valid/invalid
     value_ok = success;
     //tries to enable button_reduce
-    LengthField<P>::parent_frame->AllOk();
+    LengthField<P>::parent->AllOk();
 
     event.Skip(true);
 
@@ -22461,7 +22444,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     value->Bind(wxEVT_KEY_UP, &SpeedField::OnEditValue<wxKeyEvent>, this);
 
 
-//    (unit->name) = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+//    (unit->name) = new wxComboBox((parent->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     unit = new SpeedUnitField<P>(parent_frame->panel, &(speed->unit), &(wxGetApp().list_frame->data->recent_speed_units));
     
     //SetColor(unit);

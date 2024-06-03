@@ -21698,7 +21698,7 @@ template<class P> void EditableLengthField<P>::set(void) {
 
     set(*(LengthField<P>::length));
 
-    LengthField<P>::value_ok = true;
+    value_ok = true;
     LengthField<P>::unit_ok = true;
 
 }
@@ -22025,7 +22025,7 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 
 
 //constructor of a LengthField object, based on the parent frame frame
-template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
+template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in){
 
     parent_frame = ((P*)(panel_of_parent->GetParent()));
     length = p;
@@ -22049,6 +22049,33 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(sizer_h, flags);
 
+
+}
+
+
+//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entere   d so far in unit is valid and runs AllOk
+template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
+
+    bool success;
+
+    //I check whether the name in the GUI field unit matches one of the unit names in units
+    find_and_replace_case_insensitive(unit->name, unit->catalog, &success, NULL);
+
+
+    if (success) {
+
+        //because the text in value is valid, I set the background color of unit to white
+        unit->name->SetForegroundColour(wxGetApp().foreground_color);
+        unit->name->SetFont(wxGetApp().default_font);
+
+    }
+
+    //value_ok is true/false is the text entered is valid/invalid
+    unit_ok = success;
+    //tries to enable button_reduce
+    parent_frame->AllOk();
+
+    event.Skip(true);
 
 }
 
@@ -22222,7 +22249,7 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 template<class P> bool EditableLengthField<P>::is_ok(void) {
 
-    return(value_ok && unit_ok);
+    return(value_ok && (LengthField<P>::unit_ok));
 
 }
 
@@ -22320,8 +22347,6 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
-
-
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> template<class E>  void EditableLengthField<P>::OnEditValue(E& event) {
 
@@ -22341,46 +22366,17 @@ template<class P> template<class E>  void EditableLengthField<P>::OnEditValue(E&
     //value_ok is true/false is the text entered is valid/invalid
     value_ok = success;
     //tries to enable button_reduce
-    parent_frame->AllOk();
+    LengthField<P>::parent_frame->AllOk();
 
     event.Skip(true);
 
 }
-
-
-//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entere   d so far in unit is valid and runs AllOk
-template<class P> template<class E>  void EditableLengthField<P>::OnEditUnit(E& event) {
-
-    bool success;
-
-    //I check whether the name in the GUI field unit matches one of the unit names in units
-    find_and_replace_case_insensitive(unit->name, unit->catalog, &success, NULL);
-
-
-    if (success) {
-
-        //because the text in value is valid, I set the background color of unit to white
-        unit->name->SetForegroundColour(wxGetApp().foreground_color);
-        unit->name->SetFont(wxGetApp().default_font);
-
-    }
-
-
-    //value_ok is true/false is the text entered is valid/invalid
-    unit_ok = success;
-    //tries to enable button_reduce
-    parent_frame->AllOk();
-
-    event.Skip(true);
-
-}
-
 
 
 template<class P> template <typename EventTag, typename Method, typename Object> void EditableLengthField<P>::Bind(EventTag tag, Method method, Object object) {
 
     value->Bind(tag, method, object);
-    unit->Bind(tag, method, object);
+    LengthField<P>::unit->Bind(tag, method, object);
 
 }
 
@@ -22790,13 +22786,15 @@ template<class P> void AngleField<P>::Enable(bool is_enabled) {
 
 }
 
+
 //this function enables/disable the EditableLengthField
 template<class P> void EditableLengthField<P>::Enable(bool is_enabled) {
 
     value->Enable(is_enabled);
-    unit->Enable(is_enabled);
+    LengthField<P>::unit->Enable(is_enabled);
 
 }
+
 
 //this function enables/disable the whole ChronoField
 template<class P> void ChronoField<P>::Enable(bool is_enabled) {
@@ -23094,7 +23092,7 @@ template<class P> template<class T> void AngleField<P>::InsertIn(T* host) {
 
 template<class P> template<class T> void EditableLengthField<P>::InsertIn(T* host) {
 
-    host->Add(sizer_v);
+    host->Add(LengthField<P>::sizer_v);
 
 }
 

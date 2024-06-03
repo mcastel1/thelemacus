@@ -12880,7 +12880,7 @@ void ChartFrame::UpdateSliderLabel_3D(void) {
 
     stringstream s;
 
-    s << "1:" << ((unsigned int)((parent->circle_observer_0.omega.value) / (((draw_panel->circle_observer).omega).value)));
+    s << (draw_panel->d.value)*Re << " nm";
 
     text_slider->SetLabel(s.str().c_str());
 

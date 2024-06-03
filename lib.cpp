@@ -19583,9 +19583,11 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
 
     //here set i_object_to_transport to the currently selected Route
 
+    //here I call ShowQuestionFrame with third functor equal to unset_idling and bind_esc_to_button_b = false, because I want the esc key and button_b to do different things: by pressing esc, the operation is aborted, while by pressing button_b the operation keeps going by using a new Route as transporting Route
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>(this, existing_route, new_route, unset_idling);
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, true);
+    
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, false);
 
     OnModifyFile();
 

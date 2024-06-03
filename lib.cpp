@@ -22111,6 +22111,42 @@ template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_
 }
 
 
+//constructor of a StaticLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
+template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
+
+    //these flags will be used in the method InsertIn below, to insert this->unit
+    wxSizerFlags flags;
+
+    flags.Center();
+
+    
+    //initialize check
+//    check = new CheckLength<P>(this);
+    
+    value = new wxTextCtrl((LengthField<P>::parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    //SetColor(value);
+    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
+    //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
+    value->SetValue(wxString(""));
+//    value_ok = false;
+//    value->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_value)));
+    //as text is changed in value by the user with the keyboard, call OnEditValue
+    value->Bind(wxEVT_KEY_UP, &StaticLengthField::OnEditValue<wxKeyEvent>, this);
+    
+    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent_frame->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
+    //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    LengthField<P>::unit->name->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
+    LengthField<P>::unit->name->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
+
+    
+    //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
+    LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER);
+    LengthField<P>::unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
+
+}
+
+
+
 //constructor of a StringField object, based on the parent frame frame
 template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* p) {
 

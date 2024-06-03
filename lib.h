@@ -2424,7 +2424,7 @@ template<class P> class StaticLengthField: public LengthField<P>{
 public:
     
     //the length value
-    wxStaticText *value;
+    StaticText* value;
     
     StaticLengthField(wxPanel*, Length*, String);
 

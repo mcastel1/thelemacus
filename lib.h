@@ -2375,6 +2375,18 @@ template<class P> class LengthField{
     
 public:
     
+    //the parent frame to which this object is attached
+    P* parent_frame;
+    //units of measure of the Length
+    LengthUnitField<P>* unit;
+    wxBoxSizer *sizer_h, *sizer_v;
+    Length* length;
+    //the units of measure of the length in this GUI field
+    String unit_value;
+    //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
+    bool value_ok, unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
+
+    
     LengthField(wxPanel*, Length*, String);
 
     
@@ -2384,18 +2396,9 @@ public:
 template<class P> class EditableLengthField: public LengthField<P>{
     
 public:
-    //the parent frame to which this object is attached
-    P* parent_frame;
+
     //the length value
     wxTextCtrl *value;
-    //units of measure of the Length
-    LengthUnitField<P>* unit;
-    wxBoxSizer *sizer_h, *sizer_v;
-    Length* length;
-    //the units of measure of the length in this GUI field
-    String unit_value;
-    //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
-    bool value_ok, unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     CheckLength<P>* check;
     
     EditableLengthField(wxPanel*, Length*, String);

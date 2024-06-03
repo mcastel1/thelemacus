@@ -1,0 +1,127 @@
+ 
+ notes:
+	- remember that  of Routes do not go through the points of Routes exactly, see https://docs.wxwidgets.org/latest/classwx_d_c.html#ad72d38c75ac6b3f80c1f957dd94089fa 
+	- a common error is that when you need to compute the arithmetic mean of two latitudes phi_1 and phi_2, you should *not* do (phi_1+phi_2)/2 but ((phi_1.normalize_pm_pi_ret().value) + (phi_2.normalize_pm_pi_ret().value))/2
+ - declare progress dialogs on the heap (i.e., not as wxProgressDialog* progress_dialog; progress_dialog = new ...,) but on the stack (i.e., as  wxProgressDialog progress_dialog([constructor arguments])). This is because if you declare them on the heap, the progress dialog will stay forever open and it will prevent the app from closing. On the other hand, if you declare it on the stack , it will be destroyed authomatically once the method that calls it stops running
+ - when I do the animation transprot with show coastlines = y, the animations are much slower than with show coastlines = n, because the charts are heavy for the cpu
+ - be careful when you debug with breakpoints stuff that include timers ! You may stop at a breakpoint, but the timer in the code has started running and is running while you are stopped at the breakpoint
+ - to use a lambda capture with CallAfter: `CallAfter([=] {FillAndRaiseOtherFrame();});`
+ - on APPLE:
+    - replace SetMercatorAndNormalize whenever you can
+    - the cmd (apple) key corresponds to WXK_CONTROL
+     - to setup everything on Mac OS (incomplete):
+            1. Download and install boost_1_83_0
+            2. Download and install gsl (gnu scientifc library)
+            3. Download and install wxWidgets
+            4. Open  /Applications/wxWidgets-XXX/samples/minimal/minimal_cocoa.xcodeproj/
+            * remove minimal.cpp and insert main.cpp, lib.cpp, main.h, lib.h and constants.h in the project.
+            * select both app-static and app-dynamic -> add /usr/local/include/gsl/ /usr/local/include/ /Applications/boost_1_83_0/ $(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include/ $(WXROOT)/include/ to 'User header search path' (you need to split this in multiple lines when you add)
+            * select both app-static and app-dynamic -> add -lgsl -lcblas -lboost_filesystem -lboost_system to 'Other linker flags' (you need to split this in multiple lines when you add)
+            * select both app-static and app-dynamic -> add '/Applications/boost_1_83_0/stage/lib/' to 'Runpath search paths' and to 'Library Search Paths'
+            * select both app-static and app-dynamic -> add '/usr/local/lib' to Library Search Paths
+            * select both app-static and app-dynamic  set 'Always search user paths (deprecated)' to 'Yes'
+            * set Product -> scheme -> dynamic
+            5. Add all necessary paths by adding, say, 'export PATH="/Applications/wxWidgets-3.2.4/build-cocoa-debug:$PATH"' to ~/.zprofile
+            6. To make breakpoints in included files to work in Xcode, create file  ~/.lldbinit and write in it 'settings set target.inline-breakpoint-strategy always'
+            7. To build the app with make_app.sh:
+            * download the libpng library from https://sourceforge.net/projects/libpng/
+     
+ 
+ - on WIN32:
+        - to read sample_sight.nav from an actual file on disk rather than from WIN32 resources
+            * select "Case 2" in 'Fork ...' in lib.cpp -> the .exe file will look for sample_sight.nav in the folder [folder where .exe file is executed]/Contents/Resources/Data/
+            * put the .exe file in sight_reduction_program folder -> the .exe file will find the sample_sight.nav file in sight_reduction_program/Contents/Resources/Data/
+        - to recognize what character key has been pressed, do (event.GetUnicodeKey()) and check if it is equal to, sai, 'A', not 'a'
+        - if you press control key on runtime from within Visual Studio, it will not be detected as WXK_CONTROL, while if you run the exe file from system resources it does.
+        - keep the output directory as $(wxIntRootDir) : if you set it to Z:\ the program will not run
+        - if there is an odd error 'memory leak', this may be because the sample_sight.nav file presents some corrupted charcters (e.g. infinity sign instead of degree sign). To fix it: remplace Contents/Reources/Data/sample_sight.nav with Contents/Resources/Data/sample_sight_saved.nav
+         - error message on WIN32 for intellisense "Severity    Code    Description    Project    File    Line    Suppression State    Details
+         Error (active)    E2924    PCH warning: header stop cannot be in a macro or #if block.  An IntelliSense PCH file was not generated.    base    C:\wxWidgets-3.2.4_debug\include\wx\any.h    25" line of error "// Size of the wxAny value buffer.
+         enum
+         {
+             WX_ANY_VALUE_BUFFER_SIZE = 16
+         };" in any.h
+        - if you allocate 13387 MB of Base Memory, it runs by clicking on the .exe and with coastlines = y
+         - to set up everything on Windows 10/11:
+                 0. With Virtual Box, set up a partition with Windows 10. In the partition, set 2 cores, 13387 MB of base memory, set 'Shared Clipboard' to 'Bidirectional', install 'Guest Additions' and share the folder, say, sight_reduction_program, containing main.cpp, main.h, lib.cpp, lib.h, constants.h etc. Set up 100 GB of disk on the partition, and set it to pre-allocated.
+                 0b. With Parallels Desktop, set up a Windows virtual machine with at least 8GB of memory
+                 1. Install WinZip
+                 2. Istall MinGW : download mingw-get-setup from https://sourceforge.net/projects/mingw/
+                 3. Install Visual Studio: download VisualStudioSetup from https://visualstudio.microsoft.com/downloads/
+                 4. Istall wxWidgets: download wxMSW-3.2.4-Setup.exe from https://wxwidgets.org/downloads/ and install it in, say,  C:\wxWidgets-3.2.4_debug\
+                 5. Open  C:\wxWidgets-3.2.4_debug\build\msw\wx_vc17.sln with Visual studio, set everywhere that the mode is multi-threaded debug (not dll) (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)') and build (you may get an error the first time you build, just build multiple times and the error will disappear)
+                 6. Open   C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln -> set the mode to Multi Threaded Debug everywhere (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)'). Replace all existing files from Source files with main.h main.cpp lib.cpp lib.h constants.h init.txt, replace all existing Resource files with resource_file_winsows.rc. Rigght-click on lib.cpp -> properties -> configuration properties -> general -> Exclude From build -> yes
+                 7. Install gsl: download gnu-gsl-for-windows-master.zip from https://github.com/ahmadyan/gnu-gsl-for-windows/tree/master/build.vc11  -> extract it in C:\gnu-gsl-for-windows-master -> open  C:\gnu-gsl-for-windows-master\build.vc11\gsl.lib.sln with Visual Studio.
+                    * Set everything to Multi-Threaded Debug (select all packages -> right click -> properties -> C/C++ -> CodeGeneration -> Runtime library -> Select 'Multi-threaded Debug (/MTd)' )
+                    * Go to Project -> gslib Properties -> general -> C++ language standard -> set 'ISO C++17 Standard (/std:c++17)'
+                    * Build
+                 8. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> Add C:\gnu-gsl-for-windows-master\lib\x64\Debug\gsl.lib and  C:\gnu-gsl-for-windows-master\lib\x64\Debug\cblas.lib to  -> project  -> minimal properties -> configuration properties -> linker -> input -> additional dependencies
+                 9. Install boost library : download boost_1_83_0.zip (not 84 or later versions!) from https://sourceforge.net/projects/boost/files/boost/1.83.0/boost_1_83_0.zip/download?use_mirror=altushost-swe&use_mirror=altushost-swe&r=https%3A%2F%2Fsourceforge.net%2Fp%2Fboost%2Factivity%2F%3Fpage%3D0%26limit%3D100 -> extract boost_1_83_0.zip to, say,  C:\boost_1_83_0 -> Open command prompt -> cd into  C:\boost_1_83_0 ->  do 'bootstrap' and '>b2 variant=debug link=static runtime-link=static runtime-debugging=on address-model=64 architecture=x86'
+                 10. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to  project -> properties -> configuration properties -> VC++ directories ->  include directories, add 'C:\boost_1_83_0' , 'C:\gnu-gsl-for-windows-master' and 'C:\gnu-gsl-for-windows-master\gsl'
+                 11. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio-> go to   project ->  minimal properties -> Configuration properties -> VC++ directories -> library directories -> add  'C:\boost_1_83_0\stage\lib'
+                 12. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to project -> configuration properties -> general -> C++ language standard  and set ISO C++20 Standard (/std:c++20)
+                 13. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to project -> minimal properties -> configuration properties -> general -> set target name to, say, 'Thelemacus_debug'
+                 14. Update the paths of the resource files in resource_file_windows.rc
+ - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging
+ - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus
+ - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
+ - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR
+ - when a new chartframe is created, call ShowCharts to re-arrange all chartframes.
+ - when a new chartframe is created, position it so it is not hidden by the menu bar on top of the screen
+ - per creare un progetto xcode con wxwidgets 1. decomprimi il tar.gz di wxwidgets 2. in samples/minimal/ modifical minimal_cocoa mettendoci i files C++ e le referenze in system header search path, library search path, le linking flag, etc.
+ - se xcode ti crea nuove copie dei file .cpp e .h quando li aggiungi a un progetto, fai attenzione a deselezioare 'copy items if needed' nel momento in cui li aggiungi al progetto. Non mettere i file in /src/, altrimenti xcode ti crea una copie di quei file nella directory in cui si trova il file .xcodeproj
+ 
+ 
+ 
+ 
+ ********** THINGS TO ADD/IMPROVE ************
+ - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
+ - code method DrawPanel::ProjectionToGeo_3D
+ - add the height of the observer above the earth surface in the 3d projection
+ - move up all code blocks that look alike into a function (marked with `    //MOVE UP TO A SINGLE METHOD`)
+ - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
+ - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
+ - condense id RouteTypeField<P>::set(void)
+ - try  wxDCClipper to quickly delete old image on DrawPanel
+ - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things
+ - all unit fields should have the system              temp << "Available units are: "; message generated in the same way, as in template <class T> void CheckSpeedUnit<P>::operator()
+ - when you enable / disable a field, enable/disable its wxStaticTexts and wxBoxSizers as well
+ - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things 
+ - add instrumental error
+ - add readme file
+ - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
+ - check whether you can speed up Draw3D by tabulating stuff it i < 90  etc
+ - center name of file in top bar of ListFrame
+ - propose to donate to the user
+ - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
+ - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
+ - change     highlight_color = color_selected_item and     highlight_font = default_font;
+ with a better  choice
+ - add + / - button in chartframe to zoom in / out
+ - add lambert projection and 3D sphere with no projection
+ - add separator between recent items and non-recent items in BodyField->name
+ - set up output to a log file
+ - set parents to constructors of all frames that you defined
+ - in Route::draw_3D, code the part for loxodrome curves
+ - move all constants to the init file , such as  the 0.15 in  'position_plot_area_now = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);'
+ - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer
+ - replace use of epsilon_double with more proper methods
+ - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
+ - move all stuff which is general enough in the code to MyApp class
+ - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
+
+  
+
+ ********** THINGS TO FIX ***********
+    - search for all occurrences of QuestionFrame and ShowQuestion and put the right functor in the third argument and the right value of bind_esc_to_button_b
+	- the scale factor is not centered anymore in the mercator projection if one zooms in and then back
+	- remove odd hotrizontal lines on WIN32 mercator projection, they occur when you zoom in too fast with the mouse wheel
+`	- write write put_back_in , put_back)_in_Mercator and put_back_in_3D :
+	- some paralles or meridians in grid in render_mercator congain the same wxPoint iterated many times -> remove them
+    - all icons in light mode must be revised and stored in dark mode
+	- when you switch from light to dark, all icons must be updated
+    - add the possiblity to abort the transport operation 
+ on OSX:
+ on WIN32:
+	- in the mercator projection labels of meridians leave ugly traces when zooming in (horizontal segments)
+

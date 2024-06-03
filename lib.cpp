@@ -19476,16 +19476,13 @@ template<class E> void ListFrame::OnModifySight(E& event) {
 }
 
 void ListFrame::OnTransportSight(wxCommandEvent& event) {
-    
 
     //I am transporting a Route (related to a Sight)
     transported_object_type = String("sight");
 
     ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>(this, existing_route, new_route, unset_idling);
     
-    
     print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, true);
-   
 
     OnModifyFile();
 

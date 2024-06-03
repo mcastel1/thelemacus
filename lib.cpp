@@ -18739,7 +18739,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
 
             if (((control->GetForegroundColour()) != (wxGetApp().error_color))) {
 
-                question_frame = new QuestionFrame<F_YES, F_NO>(f, f_yes, answer_y, f_no, answer_n, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
+                question_frame = new QuestionFrame<F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
                 question_frame->Show(true);
                 question_frame->Raise();
 
@@ -18753,7 +18753,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
         else {
             //this question has not been prompted from a control
 
-            question_frame = new QuestionFrame<F_YES, F_NO>(f, f_yes, answer_y, f_no, answer_n, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
+            question_frame = new QuestionFrame<F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
             question_frame->Show(true);
             question_frame->Raise();
 
@@ -18810,7 +18810,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
-    print_question_message = new ShowQuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> >(this, confirm_transport, unset_idling);
+    print_question_message = new ShowQuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, void>(this, confirm_transport, unset_idling, NULL);
     //create extract_color with zero size, because I will need extract_color only to get colors
     
     //set icon paths to all print_*_message
@@ -19723,7 +19723,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event) {
     //I am transporting a Route (related to a Sight)
     transported_object_type = String("sight");
 
-    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
+    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, void>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, void>(this, existing_route, new_route, NULL);
     
     
     print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, true);
@@ -19759,7 +19759,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event) {
     transported_object_type = String("position");
 
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
-    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
+    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, void>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, void>(this, existing_route, new_route, NULL);
     print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, true);
 
     OnModifyFile();
@@ -19825,7 +19825,7 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
     //here set i_object_to_transport to the currently selected Route
 
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
-    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
+    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, void>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, void>(this, existing_route, new_route, NULL);
     print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, true);
 
     OnModifyFile();
@@ -19839,10 +19839,10 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
 template<class E> void ListFrame::OnPressDeleteSight(E& event) {
 
     //ask the user whether he/she really wants to remove the Sight: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_route. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
-    ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame> >* print_question;
+    ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, void>* print_question;
 
 
-    print_question = new ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame> >(this, ask_remove_related_route, unset_idling);
+    print_question = new ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, void>(this, ask_remove_related_route, unset_idling, NULL);
 
     print_question->SetAndCall(NULL, String(""), String("Do you really want to remove this sight?"), String("Yes"), String("No"));
 
@@ -19857,9 +19857,9 @@ template<class E> void ListFrame::OnPressDeletePosition(E& event) {
 
     //ask the user whether he/she really wants to remove the Position: if the answer is yes, then QuestionFrame calls the functor delete_position. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
 
-    ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame> >* print_question;
+    ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, void>* print_question;
 
-    print_question = new ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame> >(this, delete_position, unset_idling);
+    print_question = new ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, void>(this, delete_position, unset_idling, NULL);
 
     print_question->SetAndCall(NULL, String(""), String("Do you really want to remove this position?"), String("Yes"), String("No"));
 
@@ -19900,7 +19900,7 @@ bool ListFrame::CheckRoutesForTransport(void) {
 template<class E> void ListFrame::OnPressDeleteRoute(E& event) {
 
     //ask the user whether he/she really wants to remove the Route: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_sight. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
-    QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >(NULL,
+    QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, void>* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, void>(NULL,
         ask_remove_related_sight, String("Yes"), unset_idling, String("No"), true, true, true,
         "",
         "Do you really want to remove this route?",
@@ -20187,10 +20187,10 @@ template<class E> void ListFrame::OnPressCtrlW([[maybe_unused]] E& event) {
 
         SaveAndReset<ListFrame>* save_and_reset;
 
-        ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame>* print_question;
+        ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, void>* print_question;
 
         save_and_reset = new SaveAndReset<ListFrame>(this);
-        print_question = new ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame>(this, save_and_reset, reset_list_frame);
+        print_question = new ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, void>(this, save_and_reset, reset_list_frame, NULL);
 
         print_question->SetAndCall(NULL, String("Warning"), String("You pressed Ctrl+W. You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
 

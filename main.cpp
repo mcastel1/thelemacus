@@ -72,13 +72,13 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
     //    return this->wxApp::OnPressCtrlQ();
     UnsetIdling<ListFrame>* unset_idling;
     CloseFrame<ListFrame>* close;
-    ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >* print_question;
+    ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, void>* print_question;
     unset_idling = new UnsetIdling<ListFrame>(list_frame);
     close = new CloseFrame<ListFrame>(list_frame);
     
     //    PrintMessage<ListFrame, Close<ListFrame> >* print_info_message;
     
-    print_question = new ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >(list_frame, close, unset_idling);
+    print_question = new ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, void>(list_frame, close, unset_idling, NULL);
     
     print_question->SetAndCall(NULL, String("You pressed CTRL+Q"), String("Do you want to quit the app?"), String("Yes"), String("No"));
     
@@ -110,13 +110,13 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
 //compute the astronomical position and updated all the GUI fields in set() and re-draws everything
 template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event) {
     
-    ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes>* print_question;
+    ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, void>* print_question;
     AllRoutes* all_routes;
     SomeRoutes* some_routes;
     
     all_routes = new AllRoutes(this);
     some_routes = new SomeRoutes(this);
-    print_question = new ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes>(this, all_routes, some_routes);
+    print_question = new ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, void>(this, all_routes, some_routes, NULL);
     
     selecting_route_for_position = true;
     
@@ -476,7 +476,7 @@ bool MyApp::OnInit() {
         //the user has not pressed cancel while charts were loading -> I proceed and start the app
         
         show_all = new ShowAll(list_frame);
-        disclaimer = new QuestionFrame< ShowAll , CloseApp >(NULL, show_all, String("Yes"), close_app, String("No"), true, true, true,
+        disclaimer = new QuestionFrame< ShowAll , CloseApp, void>(NULL, show_all, String("Yes"), close_app, String("No"), true, true, true,
                                                                           "Welcome to Thelemacus!",
                                                                           //                                                                          "On December 16, 1719, Captain J. Cook perceived the first Australian aborigens from HMS Endeavour, off the coast of Perth.\n He was on a mission commissioned by King John III, designed to discover new commercial routes, and new worlds.\n His voyage had been made possible by the novel, state-of-the art astronomical positioning methods\n based on the marine chronometer built by J. Harrison, which was on board the Endeavour. \nThe reliability of the positioning method allowed the british realm to trace and map the coasts of new, unknonw lands, \nand paved the way to a new way to sail which lasted until the invention of GPS.\n With this application, you will bring back to life astronomical positioning methods, in a way that no other existing application allows for, and entering in a novel historical path. "
                                                                           "This is the state-of-the art application for celestial navigation, I hope you will enjoy it!\nRemember that this software comes with no warranty, use at your own risk!\nDo you want to proceed?\n\nFair winds, following seas ..."

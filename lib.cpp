@@ -18306,7 +18306,7 @@ template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F
 
     //SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    close_frame = new CloseFrame< QuestionFrame<F_A, F_B, void> >(this);
+    close_frame = new CloseFrame< QuestionFrame<F_A, F_B, F_ABORT> >(this);
 
     //image
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
@@ -19490,7 +19490,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event) {
     //I am transporting a Route (related to a Sight)
     transported_object_type = String("sight");
 
-    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, void>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, void>(this, existing_route, new_route, NULL);
+    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>(this, existing_route, new_route, unset_idling);
     
     
     print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, true);

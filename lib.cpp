@@ -12969,29 +12969,29 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
         bool check;
 
         //I check whether the name in the GUI field body matches one of the body names in catalog
-        for (check = false, i = 0; (i < ((p->catalog)->list).size()) && (!check); i++) {
-            if (String(((p->name)->GetValue().ToStdString())) == ((((p->catalog)->list)[i]).name)) {
+        for (check = false, i = 0; (i < (p->catalog->list).size()) && (!check); i++) {
+            if (String((p->name->GetValue().ToStdString())) == (((p->catalog->list)[i]).name)) {
                 check = true;
             }
         }
         i--;
 
-        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->name->GetValue()).ToStdString())) == String("")))) {
             //p->check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             if (check) {
 
-                if ((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))) {
+                if (((p->catalog->list)[i].name == String("sun")) || ((p->catalog->list)[i].name == String("moon"))) {
                     //in this case, the selected body is a body which has a limb -> I enable the limb field
 
-                    ((f->limb)->name)->Enable(true);
+                    f->limb->name->Enable(true);
 
                 }
                 else {
                     //in this case, the selected body is a body which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
 
-                    ((f->limb)->name)->Enable(false);
-                    ((f->limb)->ok) = true;
+                    f->limb->name->Enable(false);
+                    (f->limb->ok) = true;
 
                 }
 
@@ -13006,8 +13006,8 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
             //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
-            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->name)->SetFont(wxGetApp().default_font);
+            p->name->SetForegroundColour(wxGetApp().foreground_color);
+            p->name->SetFont(wxGetApp().default_font);
             Reset(p->name);
 
         }
@@ -13041,34 +13041,24 @@ template<class P> template<class T> void CheckLimb<P>::operator()(T& event) {
     //I proceed only if the progam is not is indling mode
     if (!(f->idling)) {
 
-
         bool check;
 
-
-
-        //        s = String(((p->name)->GetValue().ToStdString()));
-
-
-        //        p->checked_items->Item(0)]
-        //        s = (p->name)[(((p->name)->GetCheckedItems())[0])];
-        //I check whether the name in the GUI field body matches one of the valid limb names
-
+        
         check = ((p->checked_items.GetCount()) == 1);
 
-
-        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && ((p->checked_items.GetCount()) == 0))) {
+        if (check || (((p->name->GetForegroundColour()) != (wxGetApp().error_color)) && ((p->checked_items.GetCount()) == 0))) {
             //p->name either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
-            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->name)->SetFont(wxGetApp().default_font);
+            p->name->SetForegroundColour(wxGetApp().foreground_color);
+            p->name->SetFont(wxGetApp().default_font);
 
         }
         else {
 
-            (f->print_error_message)->SetAndCall(p->name, String("Error"), String("Limb not valid! Limb must be upper, center or lower."), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall(p->name, String("Error"), String("Limb not valid! Limb must be upper, center or lower."), (wxGetApp().path_file_error_icon));
             (p->ok) = false;
 
         }

@@ -16367,12 +16367,12 @@ template<class P> template <class T> void EditableLengthField<P>::get(T& event) 
         value->GetValue().ToDouble(&length_temp);
         
         
-        switch (String((unit->name->GetValue()).ToStdString()).position_in_list(unit->catalog)) {
+        switch (String((LengthField<P>::unit->name->GetValue()).ToStdString()).position_in_list(LengthField<P>::unit->catalog)) {
                 
             case 0: {
                 //unit = "nm"
                 
-                length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
+                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
                 
                 break;
                 
@@ -16382,7 +16382,7 @@ template<class P> template <class T> void EditableLengthField<P>::get(T& event) 
             case 1: {
                 //unit = "m"
                 
-                length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm), String(""));
+                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm), String(""));
                 
                 break;
                 
@@ -16392,7 +16392,7 @@ template<class P> template <class T> void EditableLengthField<P>::get(T& event) 
             case 2: {
                 //unit = "ft"
                 
-                length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_ft, String(""));
+                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_ft, String(""));
                 
                 break;
                 
@@ -21656,13 +21656,13 @@ template <class P> void AngleField<P>::set(void) {
 //set the value in the GUI field *this equal to the value in the non-GUI object *input
 template<class P> void EditableLengthField<P>::set(Length input) {
     
-    switch (/*(unit_value.value)[0]*/ unit_value.position_in_list(LengthUnit_types)) {
+    switch (/*(unit_value.value)[0]*/ LengthField<P>::unit_value.position_in_list(LengthUnit_types)) {
             
         case 0: {
             //unit = String("nm")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
-            unit->name->SetValue(wxString("nm"));
+            LengthField<P>::unit->name->SetValue(wxString("nm"));
             break;
             
         }
@@ -21671,7 +21671,7 @@ template<class P> void EditableLengthField<P>::set(Length input) {
             //unit = String("m")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
-            unit->name->SetValue(wxString("m"));
+            LengthField<P>::unit->name->SetValue(wxString("m"));
             
             break;
             
@@ -21681,7 +21681,7 @@ template<class P> void EditableLengthField<P>::set(Length input) {
             //unit = String("ft")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
-            unit->name->SetValue(wxString("ft"));
+            LengthField<P>::unit->name->SetValue(wxString("ft"));
             
             break;
             
@@ -21696,10 +21696,10 @@ template<class P> void EditableLengthField<P>::set(Length input) {
 //set the value in the GUI object value equal to the value in the non-GUI object length
 template<class P> void EditableLengthField<P>::set(void) {
 
-    set(*length);
+    set(*(LengthField<P>::length));
 
-    value_ok = true;
-    unit_ok = true;
+    LengthField<P>::value_ok = true;
+    LengthField<P>::unit_ok = true;
 
 }
 
@@ -22062,12 +22062,7 @@ template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_
 
 //    (unit->name) = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     unit = new LengthUnitField<P>((parent_frame->panel), &(length->unit), &(wxGetApp().list_frame->data->recent_length_units));
-    //SetColor(unit);
-//    AdjustWidth(unit->name);
-    //I set the value of unit to the unit of measure with with this EditableLengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
-//    unit->name->SetValue(unit_value.value);
-//    unit_ok = true;
-//    unit->name->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_unit)));
+    
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     unit->name->Bind(wxEVT_COMBOBOX, &EditableLengthField::OnEditUnit<wxCommandEvent>, this);
     unit->name->Bind(wxEVT_KEY_UP, &EditableLengthField::OnEditUnit<wxKeyEvent>, this);

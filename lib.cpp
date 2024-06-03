@@ -22022,8 +22022,18 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 
 }
 
+
+
 //constructor of a LengthField object, based on the parent frame frame
-template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) {
+template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
+
+ 
+    
+}
+
+
+//constructor of a EditableLengthField object, based on the parent frame frame
+template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
 
     parent_frame = ((P*)(panel_of_parent->GetParent()));
     length = p;

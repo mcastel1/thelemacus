@@ -2373,7 +2373,10 @@ public:
 
 template<class P> class LengthField{
     
+public:
     
+    LengthField(wxPanel*, Length*, String);
+
     
 };
 

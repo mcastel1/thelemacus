@@ -384,7 +384,7 @@ public:
     wxBoxSizer *sizer_v, *sizer_h, *sizer_buttons;
     wxGridSizer* sizer_grid;
     wxButton* button_a, *button_b;
-    bool enable_button_a, enable_button_b, /*if this is true, then pressing esc will be equivalent to pressing button b, if this is false, pressing esc will be equivalent to abort */bind_esc_to_button_b;
+    bool enable_button_a, enable_button_b, /*if this is true, then pressing esc will be equivalent to pressing button b, if this is false, pressing esc will call *f_abort*/bind_esc_to_button_b;
     StaticBitmap* image;
     //initialize the functor to close thie QuestionFrame when button_a or button_b will be pressed
     CloseFrame<QuestionFrame>* close_frame;
@@ -1947,7 +1947,7 @@ public:
 };
 
 //this functor pops out a question window with title tile, quesiton question, and answers answer_y, answer_n, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this class adaptable. If the user answers yes/no to the question, f_yes/f_no are called
-template<class T, typename FF_YES, typename FF_NO> class PrintQuestion{
+template<class T, typename FF_YES, typename FF_NO> class ShowQuestionFrame{
     
 public:
     
@@ -1957,10 +1957,9 @@ public:
     FF_YES* f_yes;
     FF_NO* f_no;
     QuestionFrame<FF_YES, FF_NO>* question_frame;
-    //these are true/false if the yes/no button are enabled/disabled, respectively
-    bool enable_button_a, enable_button_b;
+    bool /*these are true/false if the yes/no button are enabled/disabled, respectively*/ enable_button_a, enable_button_b, /*if this is true, then pressing esc will be equivalent to pressing button b, if this is false, pressing esc will call *f_abort*/ bind_esc_to_button_b;
     
-    PrintQuestion(T*, FF_YES*, FF_NO*);
+    ShowQuestionFrame(T*, FF_YES*, FF_NO*);
     
     void SetAndCall(wxControl*, String, String, String, String);
     void SetAndCall(wxControl*, String, String, String, String, bool, bool);
@@ -2664,7 +2663,7 @@ public:
     //a functor to let the user select a Route in listcontrol_routes
     SelectRoute* select_route;
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, * print_info_message;
-    PrintQuestion< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> >* print_question_message;
+    ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> >* print_question_message;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;

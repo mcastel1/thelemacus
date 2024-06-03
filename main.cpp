@@ -72,13 +72,13 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
     //    return this->wxApp::OnPressCtrlQ();
     UnsetIdling<ListFrame>* unset_idling;
     CloseFrame<ListFrame>* close;
-    PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >* print_question;
+    ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >* print_question;
     unset_idling = new UnsetIdling<ListFrame>(list_frame);
     close = new CloseFrame<ListFrame>(list_frame);
     
     //    PrintMessage<ListFrame, Close<ListFrame> >* print_info_message;
     
-    print_question = new PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >(list_frame, close, unset_idling);
+    print_question = new ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >(list_frame, close, unset_idling);
     
     print_question->SetAndCall(NULL, String("You pressed CTRL+Q"), String("Do you want to quit the app?"), String("Yes"), String("No"));
     
@@ -110,13 +110,13 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
 //compute the astronomical position and updated all the GUI fields in set() and re-draws everything
 template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event) {
     
-    PrintQuestion<ListFrame, AllRoutes, SomeRoutes>* print_question;
+    ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes>* print_question;
     AllRoutes* all_routes;
     SomeRoutes* some_routes;
     
     all_routes = new AllRoutes(this);
     some_routes = new SomeRoutes(this);
-    print_question = new PrintQuestion<ListFrame, AllRoutes, SomeRoutes>(this, all_routes, some_routes);
+    print_question = new ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes>(this, all_routes, some_routes);
     
     selecting_route_for_position = true;
     

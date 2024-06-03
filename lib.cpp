@@ -15645,14 +15645,14 @@ void AskRemoveRelatedRoute::operator()(wxCommandEvent& event) {
     if ((((((parent->data)->sight_list)[i_sight_to_remove]).related_route).value) != -1) {
         //if the sight which I am about to remove is related to a Route, I ask the user whether he wants to remove the related Route too by showing  question_frame
 
-        ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight >* print_question;
+        ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight, void>* print_question;
 
         ((parent->delete_route_and_related_sight)->i_route_to_remove) = (((((parent->data)->sight_list)[i_sight_to_remove]).related_route).value);
 
         //remove the route from the non-GUI object data
         //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_sight_and_related_sight. If no, it calls the functor delete_sight.
 
-        print_question = new ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight >(parent, parent->delete_route_and_related_sight, parent->delete_sight);
+        print_question = new ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight, void>(parent, parent->delete_route_and_related_sight, parent->delete_sight, NULL);
 
         print_question->SetAndCall(NULL, String(""), String("Do you want to remove the route related to this sight??"), String("Yes"), String("No"));
 
@@ -18670,7 +18670,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> ShowQuestionF
 
 
 //set the wxControl, title and question and answers for the functor *this,  set enable_button_y/n both to true,  and bind_esc_to_button_b to true. Then call the functor operator() with CallAfter
-template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in) {
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in) {
 
     control = control_in;
     title = title_in;
@@ -18689,7 +18689,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
 
 
 //set the wxControl, title and question and answers for the functor *this,  set enable_butoon_y/n to enable_button_y/n_in, and set bind_esc_to_button_b = bind_esc_to_button_b_in.  I call the functor operator() with CallAfter
-template<class T, typename FF_YES, typename FF_NO> void ShowQuestionFrame<T, FF_YES, FF_NO>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in) {
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in) {
 
     control = control_in;
     title = title_in;
@@ -18708,7 +18708,7 @@ template<class T, typename FF_YES, typename FF_NO> void ShowQuestionFrame<T, FF_
 
 
 //if question_frame != NULL, enable or disable question_frame->button_a/b according to the boolean variables enable_button_a/b
-template<class T, typename FF_YES, typename FF_NO> void ShowQuestionFrame<T, FF_YES, FF_NO>::EnableDisableButtons(void) {
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::EnableDisableButtons(void) {
 
     if(question_frame != NULL){
         
@@ -18719,7 +18719,7 @@ template<class T, typename FF_YES, typename FF_NO> void ShowQuestionFrame<T, FF_
     
 }
 
-template<class T, typename FF_YES, typename FF_NO> void ShowQuestionFrame<T, FF_YES, FF_NO>::operator()(void) {
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::operator()(void) {
 
 
     SetIdling<T>* set_idling;
@@ -18739,7 +18739,7 @@ template<class T, typename FF_YES, typename FF_NO> void ShowQuestionFrame<T, FF_
 
             if (((control->GetForegroundColour()) != (wxGetApp().error_color))) {
 
-                question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, answer_y, f_no, answer_n, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
+                question_frame = new QuestionFrame<F_YES, F_NO>(f, f_yes, answer_y, f_no, answer_n, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
                 question_frame->Show(true);
                 question_frame->Raise();
 
@@ -18753,7 +18753,7 @@ template<class T, typename FF_YES, typename FF_NO> void ShowQuestionFrame<T, FF_
         else {
             //this question has not been prompted from a control
 
-            question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, answer_y, f_no, answer_n, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
+            question_frame = new QuestionFrame<F_YES, F_NO>(f, f_yes, answer_y, f_no, answer_n, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
             question_frame->Show(true);
             question_frame->Raise();
 

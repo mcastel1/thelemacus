@@ -476,7 +476,8 @@ bool MyApp::OnInit() {
         //the user has not pressed cancel while charts were loading -> I proceed and start the app
         
         show_all = new ShowAll(list_frame);
-        disclaimer = new QuestionFrame< ShowAll , CloseApp, void>(NULL, show_all, String("Yes"), close_app, String("No"), NULL, true, true, true,
+        //note that in disclaimer I do not bind est button to CloseApp, but to Show all
+        disclaimer = new QuestionFrame<ShowAll , CloseApp, ShowAll>(NULL, show_all, String("Yes"), close_app, String("No"), show_all, true, true, false,
                                                                           "Welcome to Thelemacus!",
                                                                           //                                                                          "On December 16, 1719, Captain J. Cook perceived the first Australian aborigens from HMS Endeavour, off the coast of Perth.\n He was on a mission commissioned by King John III, designed to discover new commercial routes, and new worlds.\n His voyage had been made possible by the novel, state-of-the art astronomical positioning methods\n based on the marine chronometer built by J. Harrison, which was on board the Endeavour. \nThe reliability of the positioning method allowed the british realm to trace and map the coasts of new, unknonw lands, \nand paved the way to a new way to sail which lasted until the invention of GPS.\n With this application, you will bring back to life astronomical positioning methods, in a way that no other existing application allows for, and entering in a novel historical path. "
                                                                           "This is the state-of-the art application for celestial navigation, I hope you will enjoy it!\nRemember that this software comes with no warranty, use at your own risk!\nDo you want to proceed?\n\nFair winds, following seas ..."
@@ -488,7 +489,6 @@ bool MyApp::OnInit() {
                                                                           String(""));
         disclaimer->Show(true);
         disclaimer->Raise();
-        //    list_frame->Show(true);
         
         
         //allocate and show the chart frames

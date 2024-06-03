@@ -18506,7 +18506,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
 
             if (((control->GetForegroundColour()) != (wxGetApp().error_color))) {
 
-                question_frame = new QuestionFrame<F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
+                question_frame = new QuestionFrame<F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, f_abort, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
                 question_frame->Show(true);
                 question_frame->Raise();
 
@@ -18520,7 +18520,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
         else {
             //this question has not been prompted from a control
 
-            question_frame = new QuestionFrame<F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
+            question_frame = new QuestionFrame<F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, f_abort, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
             question_frame->Show(true);
             question_frame->Raise();
 
@@ -19668,7 +19668,7 @@ template<class E> void ListFrame::OnPressDeleteRoute(E& event) {
 
     //ask the user whether he/she really wants to remove the Route: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_sight. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
     QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, void>* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, void>(NULL,
-        ask_remove_related_sight, String("Yes"), unset_idling, String("No"), true, true, true,
+        ask_remove_related_sight, String("Yes"), unset_idling, String("No"), NULL, true, true, true,
         "",
         "Do you really want to remove this route?",
         wxGetApp().path_file_question_icon,

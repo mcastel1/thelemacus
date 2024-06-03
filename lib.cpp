@@ -16187,16 +16187,16 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T& event
 
 }
 
-template<class P> CheckLengthValue<P>::CheckLengthValue(LengthField<P>* p_in) {
+template<class P> CheckLengthValue<P>::CheckLengthValue(EditableLengthField<P>* p_in) {
 
     p = p_in;
 
 }
 
-//checks the value in the GUI field in LengthField
+//checks the value in the GUI field in EditableLengthField
 template<class P> template <class T> void CheckLengthValue<P>::operator()(T& event) {
 
-    P* f = (p->parent_frame);
+    P* f = (p->parent);
 
     //I proceed only if the progam is not is indling mode
     if (!(f->idling)) {
@@ -16231,7 +16231,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T& eve
 
 }
 
-template<class P> CheckLengthUnit<P>::CheckLengthUnit(LengthField<P>* p_in) {
+template<class P> CheckLengthUnit<P>::CheckLengthUnit(EditableLengthField<P>* p_in) {
 
     p = p_in;
 
@@ -16240,7 +16240,7 @@ template<class P> CheckLengthUnit<P>::CheckLengthUnit(LengthField<P>* p_in) {
 //checks the unit in the GUI field in LengthField
 template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& event) {
 
-    P* f = (p->parent_frame);
+    P* f = (p->parent);
 
     //I proceed only if the progam is not is indling mode
     if (!(f->idling)) {
@@ -16248,13 +16248,6 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
         unsigned int i;
         bool check;
 
-        //I check whether the name in the GUI field unit matches one of the unit names in units
-//        for (check = false, i = 0; (i < LengthUnit_types.size()) && (!check); i++) {
-//            if ((p->unit->name->GetValue()) == wxString((LengthUnit_types[i]).value)) {
-//                check = true;
-//            }
-//        }
-//        i--;
         
         p->unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::CheckInCatalog(&check, &i);
 
@@ -16291,7 +16284,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
 
 }
 
-template<class P> CheckLength<P>::CheckLength(LengthField<P>* p_in) {
+template<class P> CheckLength<P>::CheckLength(EditableLengthField<P>* p_in) {
 
     p = p_in;
 
@@ -16358,7 +16351,7 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 
 
 //write the value of the GUI field in LengthField into the non-GUI field length
-template<class P> template <class T> void LengthField<P>::get(T& event) {
+template<class P> template <class T> void EditableLengthField<P>::get(T& event) {
     
     if (is_ok()) {
         
@@ -16367,12 +16360,12 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
         value->GetValue().ToDouble(&length_temp);
         
         
-        switch (String((unit->name->GetValue()).ToStdString()).position_in_list(unit->catalog)) {
+        switch (String((LengthField<P>::unit->name->GetValue()).ToStdString()).position_in_list(LengthField<P>::unit->catalog)) {
                 
             case 0: {
                 //unit = "nm"
                 
-                length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
+                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
                 
                 break;
                 
@@ -16382,7 +16375,7 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
             case 1: {
                 //unit = "m"
                 
-                length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm), String(""));
+                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm), String(""));
                 
                 break;
                 
@@ -16392,7 +16385,7 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
             case 2: {
                 //unit = "ft"
                 
-                length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_ft, String(""));
+                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_ft, String(""));
                 
                 break;
                 
@@ -16757,13 +16750,13 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     //artificial horizon
     StaticText* text_artificial_horizon_check = new StaticText(panel, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0);
-    artificial_horizon_check = new CheckField<SightFrame, LengthField<SightFrame> >(panel, &(sight->artificial_horizon), NULL, false);
+    artificial_horizon_check = new CheckField<SightFrame, EditableLengthField<SightFrame> >(panel, &(sight->artificial_horizon), NULL, false);
 
     //height of eye
     StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0);
-    height_of_eye = new LengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
+    height_of_eye = new EditableLengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
     if (sight_in == NULL) {
-        //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye LengthField with this value, so the user won't have to enter the same value all the time
+        //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye EditableLengthField with this value, so the user won't have to enter the same value all the time
         (sight->height_of_eye).read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String("R"), String(""));
         height_of_eye->set();
 
@@ -16852,8 +16845,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &LimbField<SightFrame>::get<wxCommandEvent>, limb);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, H_s);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, index_error);
-    button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, LengthField<SightFrame> >::get<wxCommandEvent>, artificial_horizon_check);
-    button_reduce->Bind(wxEVT_BUTTON, &LengthField<SightFrame>::get<wxCommandEvent>, height_of_eye);
+    button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, EditableLengthField<SightFrame> >::get<wxCommandEvent>, artificial_horizon_check);
+    button_reduce->Bind(wxEVT_BUTTON, &EditableLengthField<SightFrame>::get<wxCommandEvent>, height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, &DateField<SightFrame>::get<wxCommandEvent>, master_clock_date);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField<SightFrame>::get<wxCommandEvent>, master_clock_chrono);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, ChronoField<SightFrame> >::get<wxCommandEvent>, stopwatch_check);
@@ -17321,7 +17314,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     //the field for Length to set the Route length
     text_length = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
-    length = new LengthField<RouteFrame>(panel, &(route->length), String("nm"));
+    length = new EditableLengthField<RouteFrame>(panel, &(route->length), String("nm"));
 
 
     type->Bind(wxEVT_COMBOBOX, &LengthFormatField<RouteFrame>::OnEdit<wxCommandEvent>, length_format);
@@ -21654,15 +21647,15 @@ template <class P> void AngleField<P>::set(void) {
 
 
 //set the value in the GUI field *this equal to the value in the non-GUI object *input
-template<class P> void LengthField<P>::set(Length input) {
+template<class P> void EditableLengthField<P>::set(Length input) {
     
-    switch (/*(unit_value.value)[0]*/ unit_value.position_in_list(LengthUnit_types)) {
+    switch (/*(unit_value.value)[0]*/ LengthField<P>::unit_value.position_in_list(LengthUnit_types)) {
             
         case 0: {
             //unit = String("nm")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
-            unit->name->SetValue(wxString("nm"));
+            LengthField<P>::unit->name->SetValue(wxString("nm"));
             break;
             
         }
@@ -21671,7 +21664,7 @@ template<class P> void LengthField<P>::set(Length input) {
             //unit = String("m")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
-            unit->name->SetValue(wxString("m"));
+            LengthField<P>::unit->name->SetValue(wxString("m"));
             
             break;
             
@@ -21681,7 +21674,7 @@ template<class P> void LengthField<P>::set(Length input) {
             //unit = String("ft")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
-            unit->name->SetValue(wxString("ft"));
+            LengthField<P>::unit->name->SetValue(wxString("ft"));
             
             break;
             
@@ -21694,12 +21687,12 @@ template<class P> void LengthField<P>::set(Length input) {
 
 
 //set the value in the GUI object value equal to the value in the non-GUI object length
-template<class P> void LengthField<P>::set(void) {
+template<class P> void EditableLengthField<P>::set(void) {
 
-    set(*length);
+    set(*(LengthField<P>::length));
 
     value_ok = true;
-    unit_ok = true;
+    LengthField<P>::unit_ok = true;
 
 }
 
@@ -22022,24 +22015,73 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 
 }
 
-//constructor of a LengthField object, based on the parent frame frame
-template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) {
 
-    parent_frame = ((P*)(panel_of_parent->GetParent()));
+
+//constructor of a LengthField object, based on the parent frame frame
+template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in){
+
+    parent = ((P*)(panel_of_parent->GetParent()));
     length = p;
     unit_value = unit_value_in;
+    
+
+
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+
+
+
+}
+
+
+//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entere   d so far in unit is valid and runs AllOk
+template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
+
+    bool success;
+
+    //I check whether the name in the GUI field unit matches one of the unit names in units
+    find_and_replace_case_insensitive(unit->name, unit->catalog, &success, NULL);
+
+
+    if (success) {
+
+        //because the text in value is valid, I set the background color of unit to white
+        unit->name->SetForegroundColour(wxGetApp().foreground_color);
+        unit->name->SetFont(wxGetApp().default_font);
+
+    }
+
+    //value_ok is true/false is the text entered is valid/invalid
+    unit_ok = success;
+    //tries to enable button_reduce
+    parent->AllOk();
+
+    event.Skip(true);
+
+}
+
+template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
+
+    host->Add(LengthField<P>::sizer_v);
+
+}
+
+
+//constructor of a EditableLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
+template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
+
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
 
-
-    //    ((parent_frame->check_height_of_eye).p) = this;
-
-    //initialize check
-    check = new CheckLength<P>(this);
-
     flags.Center();
 
-    value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    
+    //initialize check
+    check = new CheckLength<P>(this);
+    
+    value = new wxTextCtrl((LengthField<P>::parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     //SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
@@ -22047,32 +22089,45 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     value_ok = false;
     value->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
-    value->Bind(wxEVT_KEY_UP, &LengthField::OnEditValue<wxKeyEvent>, this);
-
-
-//    (unit->name) = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
-    unit = new LengthUnitField<P>((parent_frame->panel), &(length->unit), &(wxGetApp().list_frame->data->recent_length_units));
-    //SetColor(unit);
-//    AdjustWidth(unit->name);
-    //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
-//    unit->name->SetValue(unit_value.value);
-//    unit_ok = true;
-//    unit->name->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_unit)));
+    value->Bind(wxEVT_KEY_UP, &EditableLengthField::OnEditValue<wxKeyEvent>, this);
+    
+    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    unit->name->Bind(wxEVT_COMBOBOX, &LengthField::OnEditUnit<wxCommandEvent>, this);
-    unit->name->Bind(wxEVT_KEY_UP, &LengthField::OnEditUnit<wxKeyEvent>, this);
+    LengthField<P>::unit->name->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
+    LengthField<P>::unit->name->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
 
+    
+    //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
+    LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER);
+    LengthField<P>::unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
 
-    sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    sizer_v = new wxBoxSizer(wxVERTICAL);
-    
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(value, 0, wxALIGN_CENTER);
-    //    sizer_h->Add(unit->name, 0, wxALIGN_CENTER);
-    unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(sizer_h, flags);
-    
-    
 }
+
+
+//constructor of a StaticLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
+template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
+
+    //these flags will be used in the method InsertIn below, to insert this->unit
+    wxSizerFlags flags;
+
+    flags.Center();
+
+    
+    value = new StaticText((LengthField<P>::parent_frame->panel),  "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
+    value->SetLabel(wxString(""));
+    
+    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent_frame->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
+    //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    LengthField<P>::unit->name->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
+    LengthField<P>::unit->name->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
+
+    //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
+    LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER);
+    LengthField<P>::unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
+
+}
+
 
 
 //constructor of a StringField object, based on the parent frame frame
@@ -22220,9 +22275,9 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
-template<class P> bool LengthField<P>::is_ok(void) {
+template<class P> bool EditableLengthField<P>::is_ok(void) {
 
-    return(value_ok && unit_ok);
+    return(value_ok && (LengthField<P>::unit_ok));
 
 }
 
@@ -22320,10 +22375,8 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
-
-
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
-template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event) {
+template<class P> template<class E>  void EditableLengthField<P>::OnEditValue(E& event) {
 
     bool success;
 
@@ -22341,46 +22394,17 @@ template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event) 
     //value_ok is true/false is the text entered is valid/invalid
     value_ok = success;
     //tries to enable button_reduce
-    parent_frame->AllOk();
+    LengthField<P>::parent->AllOk();
 
     event.Skip(true);
 
 }
 
 
-//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entere   d so far in unit is valid and runs AllOk
-template<class P> template<class E>  void LengthField<P>::OnEditUnit(E& event) {
-
-    bool success;
-
-    //I check whether the name in the GUI field unit matches one of the unit names in units
-    find_and_replace_case_insensitive(unit->name, unit->catalog, &success, NULL);
-
-
-    if (success) {
-
-        //because the text in value is valid, I set the background color of unit to white
-        unit->name->SetForegroundColour(wxGetApp().foreground_color);
-        unit->name->SetFont(wxGetApp().default_font);
-
-    }
-
-
-    //value_ok is true/false is the text entered is valid/invalid
-    unit_ok = success;
-    //tries to enable button_reduce
-    parent_frame->AllOk();
-
-    event.Skip(true);
-
-}
-
-
-
-template<class P> template <typename EventTag, typename Method, typename Object> void LengthField<P>::Bind(EventTag tag, Method method, Object object) {
+template<class P> template <typename EventTag, typename Method, typename Object> void EditableLengthField<P>::Bind(EventTag tag, Method method, Object object) {
 
     value->Bind(tag, method, object);
-    unit->Bind(tag, method, object);
+    LengthField<P>::unit->Bind(tag, method, object);
 
 }
 
@@ -22420,7 +22444,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     value->Bind(wxEVT_KEY_UP, &SpeedField::OnEditValue<wxKeyEvent>, this);
 
 
-//    (unit->name) = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+//    (unit->name) = new wxComboBox((parent->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     unit = new SpeedUnitField<P>(parent_frame->panel, &(speed->unit), &(wxGetApp().list_frame->data->recent_speed_units));
     
     //SetColor(unit);
@@ -22790,13 +22814,15 @@ template<class P> void AngleField<P>::Enable(bool is_enabled) {
 
 }
 
-//this function enables/disable the LengthField
-template<class P> void LengthField<P>::Enable(bool is_enabled) {
+
+//this function enables/disable the EditableLengthField
+template<class P> void EditableLengthField<P>::Enable(bool is_enabled) {
 
     value->Enable(is_enabled);
-    unit->Enable(is_enabled);
+    LengthField<P>::unit->Enable(is_enabled);
 
 }
+
 
 //this function enables/disable the whole ChronoField
 template<class P> void ChronoField<P>::Enable(bool is_enabled) {
@@ -23092,18 +23118,12 @@ template<class P> template<class T> void AngleField<P>::InsertIn(T* host) {
 }
 
 
-template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
-
-    host->Add(sizer_v);
-
-}
-
-
 template<class P> template<class T> void DateField<P>::InsertIn(T* host) {
 
     host->Add(sizer_v);
 
 }
+
 
 template<class P> template<class T> void StringField<P>::InsertIn(T* host) {
 

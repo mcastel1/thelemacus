@@ -18610,16 +18610,20 @@ template<typename F_A, typename F_B> template<class E> void QuestionFrame<F_A, F
 
     wxCommandEvent dummy;
 
-    if (((event.GetKeyCode()) == WXK_ESCAPE) && enable_button_a) {
+    if (((event.GetKeyCode()) == WXK_ESCAPE) && enable_button_b) {
         //the user pressed esc
+        
+        if(bind_esc_to_button_b){
+            //esc button is bound to button_b -> trigger *f_b
+            
+            (*f_b)(dummy);
+            
+        }
 
-        (*f_b)(dummy);
 
+    }else {
 
-    }
-    else {
-
-        if ((((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)) && enable_button_b) {
+        if ((((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)) && enable_button_a) {
             //the user pressed return or numpad return
 
             (*f_a)(dummy);
@@ -19714,7 +19718,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event) {
     PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
     
     
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true);
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true);
    
 
     OnModifyFile();

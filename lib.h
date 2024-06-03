@@ -47,7 +47,7 @@ class MyApp;
 template<class F> class CloseFrame;
 template<class F> class ShowFrame;
 class ShowAll;
-template<class F_A, class F_B> class QuestionFrame;
+template<class F_A, class F_B, class F_ABORT> class QuestionFrame;
 class ListFrame;
 class SightFrame;
 class ChartFrame;
@@ -376,7 +376,7 @@ public:
 
 
 //this is a wxFrame designed to ask a  yes/no question to the GUI user. F_A is the type of the functor class which will be called when the button yes is pressed. This type is variables, so it has been 'templated'. Same for F_B. If the user presses enter (esc), f_a  (f_b) are called
-template<typename F_A, typename F_B> class QuestionFrame: public wxFrame{
+template<typename F_A, typename F_B, typename F_ABORT> class QuestionFrame: public wxFrame{
     
 public:
         //the non-GUI object connected to the GUI object MessageFrame
@@ -1947,19 +1947,20 @@ public:
 };
 
 //this functor pops out a question window with title tile, quesiton question, and answers answer_y, answer_n, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this class adaptable. If the user answers yes/no to the question, f_yes/f_no are called
-template<class T, typename FF_YES, typename FF_NO> class ShowQuestionFrame{
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> class ShowQuestionFrame{
     
 public:
     
     T* f;
     wxControl* control;
     String title, message, question, answer_y, answer_n;
-    FF_YES* f_yes;
-    FF_NO* f_no;
-    QuestionFrame<FF_YES, FF_NO>* question_frame;
+    F_YES* f_yes;
+    F_NO* f_no;
+    F_ABORT* f_abort;
+    QuestionFrame<F_YES, F_NO, F_ABORT>* question_frame;
     bool /*these are true/false if the yes/no button are enabled/disabled, respectively*/ enable_button_a, enable_button_b, /*if this is true, then pressing esc will be equivalent to pressing button b, if this is false, pressing esc will call *f_abort*/ bind_esc_to_button_b;
     
-    ShowQuestionFrame(T*, FF_YES*, FF_NO*);
+    ShowQuestionFrame(T*, F_YES*, F_NO*, F_ABORT*);
     
     void SetAndCall(wxControl*, String, String, String, String);
     void SetAndCall(wxControl*, String, String, String, String, bool, bool, bool);
@@ -2663,7 +2664,7 @@ public:
     //a functor to let the user select a Route in listcontrol_routes
     SelectRoute* select_route;
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, * print_info_message;
-    ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> >* print_question_message;
+    ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> , void >* print_question_message;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;

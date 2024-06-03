@@ -15610,9 +15610,9 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event) {
         //                                                                                                              wxDefaultSize,
         //                                                                                                              String(""));
 
-        ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute>* print_question;
+        ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute, void >* print_question;
 
-        print_question = new ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute>(parent, parent->delete_route_and_related_sight, parent->delete_route);
+        print_question = new ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute, void>(parent, parent->delete_route_and_related_sight, parent->delete_route, NULL);
 
         print_question->SetAndCall(NULL, String(""), String("The route that you are about to remove is related to a sight. Do you want to remove the sight related to this route?"), String("Yes"), String("No"));
 
@@ -18519,7 +18519,7 @@ template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event) {
 //}
 
 
-template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
+template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F_ABORT>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
 
     wxRect rectangle;
     vector<StaticText*> text;
@@ -18539,7 +18539,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 
     //SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    close_frame = new CloseFrame< QuestionFrame<F_A, F_B> >(this);
+    close_frame = new CloseFrame< QuestionFrame<F_A, F_B, void> >(this);
 
     //image
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
@@ -18606,7 +18606,7 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 
 
 //if the user presses return/escape, I call f_a / f_b
-template<typename F_A, typename F_B> template<class E> void QuestionFrame<F_A, F_B>::KeyDown(E& event) {
+template<typename F_A, typename F_B, typename F_ABORT> template<class E> void QuestionFrame<F_A, F_B, F_ABORT>::KeyDown(E& event) {
 
     wxCommandEvent dummy;
 
@@ -18659,17 +18659,18 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::SetAndCall(wxCont
 
 }
 
-template<class T, typename FF_YES, typename FF_NO> ShowQuestionFrame<T, FF_YES, FF_NO>::ShowQuestionFrame(T* f_in, FF_YES* f_yes_in, FF_NO* f_no_in) {
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::ShowQuestionFrame(T* f_in, F_YES* f_yes_in, F_NO* f_no_in, F_ABORT* f_abort_in) {
 
     f = f_in;
     f_yes = f_yes_in;
     f_no = f_no_in;
+    f_abort = f_abort_in;
 
 }
 
 
 //set the wxControl, title and question and answers for the functor *this,  set enable_button_y/n both to true,  and bind_esc_to_button_b to true. Then call the functor operator() with CallAfter
-template<class T, typename FF_YES, typename FF_NO> void ShowQuestionFrame<T, FF_YES, FF_NO>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in) {
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in) {
 
     control = control_in;
     title = title_in;

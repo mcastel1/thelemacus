@@ -1,3 +1,24 @@
+//example of variadic function: it takes a non-variadic argument n and then an arbitrary number of arguments `...`
+void my_cout(int n, ...){
+    
+    unsigned int i;
+    va_list args;
+    
+    va_start(args, n);
+    
+    for(i=0; i<n; ++i){
+        
+        cout << "read argument = " << va_arg(args, int) << endl;
+        
+    }
+
+    va_end(args);
+
+    
+}
+
+
+
 //round the floating point number x with precision `precision`
 inline double round_with_precision(double x, unsigned int precision)
 {
@@ -12948,29 +12969,29 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
         bool check;
 
         //I check whether the name in the GUI field body matches one of the body names in catalog
-        for (check = false, i = 0; (i < ((p->catalog)->list).size()) && (!check); i++) {
-            if (String(((p->name)->GetValue().ToStdString())) == ((((p->catalog)->list)[i]).name)) {
+        for (check = false, i = 0; (i < (p->catalog->list).size()) && (!check); i++) {
+            if (String((p->name->GetValue().ToStdString())) == (((p->catalog->list)[i]).name)) {
                 check = true;
             }
         }
         i--;
 
-        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->name->GetValue()).ToStdString())) == String("")))) {
             //p->check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             if (check) {
 
-                if ((((p->catalog)->list)[i].name == String("sun")) || (((p->catalog)->list)[i].name == String("moon"))) {
+                if (((p->catalog->list)[i].name == String("sun")) || ((p->catalog->list)[i].name == String("moon"))) {
                     //in this case, the selected body is a body which has a limb -> I enable the limb field
 
-                    ((f->limb)->name)->Enable(true);
+                    f->limb->name->Enable(true);
 
                 }
                 else {
                     //in this case, the selected body is a body which has no limb -> I disable the limb field and set limb->ok to true (because the limb is unumportant here, so it can be considered to be ok)
 
-                    ((f->limb)->name)->Enable(false);
-                    ((f->limb)->ok) = true;
+                    f->limb->name->Enable(false);
+                    (f->limb->ok) = true;
 
                 }
 
@@ -12985,14 +13006,14 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
             //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
-            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->name)->SetFont(wxGetApp().default_font);
+            p->name->SetForegroundColour(wxGetApp().foreground_color);
+            p->name->SetFont(wxGetApp().default_font);
             Reset(p->name);
 
         }
         else {
 
-            (f->print_error_message)->SetAndCall(p->name, String("Error"), String("Body not found in catalog! Body must be in catalog."), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall(p->name, String("Error"), String("Body not found in catalog! Body must be in catalog."), (wxGetApp().path_file_error_icon));
 
             (p->ok) = false;
 
@@ -13020,34 +13041,24 @@ template<class P> template<class T> void CheckLimb<P>::operator()(T& event) {
     //I proceed only if the progam is not is indling mode
     if (!(f->idling)) {
 
-
         bool check;
 
-
-
-        //        s = String(((p->name)->GetValue().ToStdString()));
-
-
-        //        p->checked_items->Item(0)]
-        //        s = (p->name)[(((p->name)->GetCheckedItems())[0])];
-        //I check whether the name in the GUI field body matches one of the valid limb names
-
+        
         check = ((p->checked_items.GetCount()) == 1);
 
-
-        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && ((p->checked_items.GetCount()) == 0))) {
+        if (check || (((p->name->GetForegroundColour()) != (wxGetApp().error_color)) && ((p->checked_items.GetCount()) == 0))) {
             //p->name either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set ok to true (false)
             (p->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in name
-            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->name)->SetFont(wxGetApp().default_font);
+            p->name->SetForegroundColour(wxGetApp().foreground_color);
+            p->name->SetFont(wxGetApp().default_font);
 
         }
         else {
 
-            (f->print_error_message)->SetAndCall(p->name, String("Error"), String("Limb not valid! Limb must be upper, center or lower."), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall(p->name, String("Error"), String("Limb not valid! Limb must be upper, center or lower."), (wxGetApp().path_file_error_icon));
             (p->ok) = false;
 
         }
@@ -13113,7 +13124,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
             //if the AngleField p has a sign, I check it
 
             for (check = false, i = 0; (i < ((p->signs).GetCount())) && (!check); i++) {
-                if (((p->sign)->GetValue()) == (p->signs)[i]) {
+                if ((p->sign->GetValue()) == (p->signs)[i]) {
                     check = true;
                 }
             }
@@ -13121,7 +13132,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
         }
 
 
-        if (check || ((((p->sign)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->sign)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->sign->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->sign->GetValue()).ToStdString())) == String("")))) {
             //p->sign either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set sign_ok to true (false)
@@ -13131,14 +13142,14 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
                 //there exists a p->sign field
 
                 //the background color is set to white, because in this case there is no erroneous value in sign
-                (p->sign)->SetForegroundColour(wxGetApp().foreground_color);
-                (p->sign)->SetFont(wxGetApp().default_font);
+                p->sign->SetForegroundColour(wxGetApp().foreground_color);
+                p->sign->SetFont(wxGetApp().default_font);
             }
 
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->sign), String("Error"), String("Sign is not valid! Sign must be +-, NS or EW."), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->sign), String("Error"), String("Sign is not valid! Sign must be +-, NS or EW."), (wxGetApp().path_file_error_icon));
             (p->sign_ok) = false;
 
         }
@@ -15568,37 +15579,22 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event) {
     int i_route_to_remove;
 
     //set i_route_to_remove equal to the currently relected Route in listcontrol_routes
-    i_route_to_remove = ((int)((parent->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+    i_route_to_remove = ((int)(parent->listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
 
-    ((parent->delete_route_and_related_sight)->i_route_to_remove) = i_route_to_remove;
-    ((parent->delete_route)->i_route_to_remove) = i_route_to_remove;
+    (parent->delete_route_and_related_sight->i_route_to_remove) = i_route_to_remove;
+    (parent->delete_route->i_route_to_remove) = i_route_to_remove;
 
 
-    if ((((((parent->data)->route_list)[i_route_to_remove]).related_sight).value) != -1) {
-        //if the route which I am about to remove is related to a sight, I ask the user whether he wants to remove the related sight too by showing  question_frame
+    if (((((parent->data->route_list)[i_route_to_remove]).related_sight).value) != -1) {
+        //if the Route which I am about to remove is related to a Sight, I ask the user whether he wants to remove the related Sight too by showing a question_frame
 
-        //remove the route from the non-GUI object data
-        //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_route_and_related_sight. If no, it calls the functor delete_route.
+        ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame> >* print_question;
 
-        //        QuestionFrame<DeleteRoute, DeleteRoute>* question_frame = new QuestionFrame<DeleteRoute, DeleteRoute>(NULL,
-        //                                                                                                              parent->delete_route_and_related_sight, String("Yes"),
-        //                                                                                                              parent->delete_route, String("No"),
-        //                                                                                                              "",
-        //                                                                                                              "Do you want to remove the sight related to this route?",
-        //                                                                                                              wxDefaultPosition,
-        //                                                                                                              wxDefaultSize,
-        //                                                                                                              String(""));
-
-        PrintQuestion<ListFrame, DeleteRoute, DeleteRoute>* print_question;
-
-        print_question = new PrintQuestion<ListFrame, DeleteRoute, DeleteRoute>(parent, parent->delete_route_and_related_sight, parent->delete_route);
+        print_question = new ShowQuestionFrame< ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame> >(parent, parent->delete_route_and_related_sight, parent->delete_route, parent->unset_idling);
 
         print_question->SetAndCall(NULL, String(""), String("The route that you are about to remove is related to a sight. Do you want to remove the sight related to this route?"), String("Yes"), String("No"));
 
-        //        question_frame->Show(true);
-
-    }
-    else {
+    }else{
         //if not, I simply delete teh route
 
         (*(parent->delete_route))(event);
@@ -15624,14 +15620,14 @@ void AskRemoveRelatedRoute::operator()(wxCommandEvent& event) {
     if ((((((parent->data)->sight_list)[i_sight_to_remove]).related_route).value) != -1) {
         //if the sight which I am about to remove is related to a Route, I ask the user whether he wants to remove the related Route too by showing  question_frame
 
-        PrintQuestion<ListFrame, DeleteRoute, DeleteSight >* print_question;
+        ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>* print_question;
 
         ((parent->delete_route_and_related_sight)->i_route_to_remove) = (((((parent->data)->sight_list)[i_sight_to_remove]).related_route).value);
 
         //remove the route from the non-GUI object data
         //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_sight_and_related_sight. If no, it calls the functor delete_sight.
 
-        print_question = new PrintQuestion<ListFrame, DeleteRoute, DeleteSight >(parent, parent->delete_route_and_related_sight, parent->delete_sight);
+        print_question = new ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>(parent, parent->delete_route_and_related_sight, parent->delete_sight, parent->unset_idling);
 
         print_question->SetAndCall(NULL, String(""), String("Do you want to remove the route related to this sight??"), String("Yes"), String("No"));
 
@@ -15775,7 +15771,7 @@ void String::set_to_current_time(void) {
 template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operator()(T& event) {
 
     //if the label is empty, I replace it with the local time and date
-    if (((p->value)->GetValue()).IsEmpty()) {
+    if ((p->value->GetValue()).IsEmpty()) {
 
         Time now;
 
@@ -15798,162 +15794,18 @@ template<class P> CheckBody<P>::CheckBody(BodyField<P>* p_in) {
 }
 
 
-//template<class P> CheckProjection<P>::CheckProjection(ProjectionField<P>* p_in) {
-//
-//    p = p_in;
-//
-//}
-//
-//template<class P> template<class T>void CheckProjection<P>::operator()(T& event) {
-//
-//    P* f = (p->parent);
-//
-//    //I proceed only if the progam is not is indling mode
-//    if (!(f->idling)) {
-//
-//        unsigned int i;
-//        bool check;
-//
-//        //I check whether the name in the GUI field PositionProjection matches one of the PositionProjection names in p->names
-//        for (check = false, i = 0; (i < (p->catalog).size()) && (!check); i++) {
-//            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
-//                check = true;
-//            }
-//        }
-//        i--;
-//
-//        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
-//            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
-//
-//
-//            if (check) {
-//
-//                //insert projection #i into data->recent_bodies
-//                wxGetApp().list_frame->data->insert_recent_projection(i);
-//                //I update p->name according to the content of data->recent_projections file
-//                p->Fill();
-//
-//            }
-//
-//
-//            //if check is true (false) -> set ok to true (false)
-//            (p->ok) = check;
-//            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
-//            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-//            (p->name)->SetFont(wxGetApp().default_font);
-//            Reset(p->name);
-//
-//        }
-//        else {
-//
-//            stringstream temp;
-//
-//            temp.str("");
-//            temp << "PositionProjection must be one of the following: ";
-//            for (i = 0; i < (p->catalog.GetCount()); i++) {
-//                temp << ((p->catalog)[i]).ToStdString() << (i < (p->catalog.GetCount()) - 1 ? ", " : ".");
-//            }
-//
-//
-//            (f->print_error_message)->SetAndCall(p->name, String("PositionProjection not found in list of projections!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
-//
-//            (p->ok) = false;
-//
-//        }
-//
-//        f->AllOk();
-//
-//    }
-//
-//    event.Skip(true);
-//
-//}
-
-
-//template<class P> CheckLengthFormat<P>::CheckLengthFormat(LengthFormatField<P>* p_in) {
-//
-//    p = p_in;
-//
-//}
-
-//template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& event) {
-//
-//    P* f = (p->parent);
-//
-//    //I proceed only if the progam is not is indling mode
-//    if (!(f->idling)) {
-//
-//        unsigned int i;
-//        bool check;
-//
-//        //I check whether the name in the GUI field LengthFormat matches one of the LengthFormat names in p->names
-//        for (check = false, i = 0; (i < (p->catalog).size()) && (!check); i++) {
-//            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
-//                check = true;
-//            }
-//        }
-//        i--;
-//
-//        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
-//            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
-//
-//
-//            if (check) {
-//
-//                //insert projection #i into data->recent_bodies
-//                wxGetApp().list_frame->data->insert_recent_length_format(i);
-//                //I update p->name according to the content of data->recent_projections file
-//                p->Fill();
-//
-//            }
-//
-//
-//            //if check is true (false) -> set ok to true (false)
-//            (p->ok) = check;
-//            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
-//            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-//            (p->name)->SetFont(wxGetApp().default_font);
-//            Reset(p->name);
-//
-//        }
-//        else {
-//
-//            stringstream temp;
-//
-//            temp.str("");
-//            temp << "Length format must be one of the following: ";
-//            for (i = 0; i < ((p->catalog).GetCount()); i++) {
-//                temp << ((p->catalog)[i]).ToStdString() << (i < ((p->catalog).GetCount()) - 1 ? ", " : ".");
-//            }
-//
-//
-//            (f->print_error_message)->SetAndCall(p->name, String("Length format not found in list of length formats!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
-//
-//            (p->ok) = false;
-//
-//        }
-//
-//        f->AllOk();
-//
-//    }
-//
-//    event.Skip(true);
-//
-//}
-
-
-
 ResetListFrame::ResetListFrame(ListFrame* p_in) {
 
     p = p_in;
 
 }
 
+
 //reset *this by destroying this->data, and allocating a new one
 template <class T> void ResetListFrame::operator()(T& event) {
 
     //clear p->data and allocate a new one
-    (p->data)->~Data();
+    p->data->~Data();
     //the file now has no title and has not been modified
     (p->file_is_untitled) = true;
     (p->file_has_been_modified) = false;
@@ -15961,9 +15813,9 @@ template <class T> void ResetListFrame::operator()(T& event) {
     p->data = new Data(p->catalog, String(""));
 
     //empty all listcontrols
-    (p->listcontrol_sights)->DeleteAllItems();
-    (p->listcontrol_positions)->DeleteAllItems();
-    (p->listcontrol_routes)->DeleteAllItems();
+    p->listcontrol_sights->DeleteAllItems();
+    p->listcontrol_positions->DeleteAllItems();
+    p->listcontrol_routes->DeleteAllItems();
 
     //resize, set an 'untitled' label for the new, empty ListFrame, and update the chartframes
     p->Resize();
@@ -16138,8 +15990,6 @@ template<class P> template<class T> void CheckString<P>::operator()(T& event) {
 
     P* f = (p->parent);
 
-    //    (p->string)->set(String(""), String(((p->value)->GetValue()).ToStdString()), String(""));
-
     f->AllOk();
 
     event.Skip(true);
@@ -16266,20 +16116,20 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T& event)
 
         bool check;
 
-        check = check_unsigned_int(((p->deg)->GetValue()).ToStdString(), NULL, true, 0, 360);
+        check = check_unsigned_int((p->deg->GetValue()).ToStdString(), NULL, true, 0, 360);
 
-        if (check || ((((p->deg)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->deg)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->deg->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->deg->GetValue()).ToStdString())) == String("")))) {
 
             //if check is true (false) -> set deg_ok to true (false)
             (p->deg_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->deg)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->deg)->SetFont(wxGetApp().default_font);
+            p->deg->SetForegroundColour(wxGetApp().foreground_color);
+            p->deg->SetFont(wxGetApp().default_font);
 
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->deg), String("Entered value is not valid!"), String("Arcdegrees must be unsigned integer numbers between 0 and 359").append(wxGetApp().degree_symbol), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->deg), String("Entered value is not valid!"), String("Arcdegrees must be unsigned integer numbers between 0 and 359").append(wxGetApp().degree_symbol), (wxGetApp().path_file_error_icon));
 
             (p->deg_ok) = false;
 
@@ -16308,21 +16158,21 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T& event
 
         bool check;
 
-        check = check_double(((p->min)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
+        check = check_double((p->min->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
 
-        if (check || ((((p->min)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->min)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->min->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->min->GetValue()).ToStdString())) == String("")))) {
             //p->min either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set min_ok to true (false)
             (p->min_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in min
-            (p->min)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->min)->SetFont(wxGetApp().default_font);
+            p->min->SetForegroundColour(wxGetApp().foreground_color);
+            p->min->SetFont(wxGetApp().default_font);
 
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->min), String("Entered value is not valid!"), String("Arcminutes must be floating-point numbers >= 0' and < 60'"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->min), String("Entered value is not valid!"), String("Arcminutes must be floating-point numbers >= 0' and < 60'"), (wxGetApp().path_file_error_icon));
 
             (p->min_ok) = false;
 
@@ -16353,21 +16203,21 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T& eve
 
         bool check;
 
-        check = check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+        check = check_double((p->value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
 
-        if (check || ((((p->value)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->value)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->value->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->value->GetValue()).ToStdString())) == String("")))) {
             //p->value either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set value_ok to true (false)
             (p->value_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in value
-            (p->value)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->value)->SetFont(wxGetApp().default_font);
+            p->value->SetForegroundColour(wxGetApp().foreground_color);
+            p->value->SetFont(wxGetApp().default_font);
 
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->value), String("Entered value is not valid!"), String("Lengths must be floating-point numbers >= 0 m"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->value), String("Entered value is not valid!"), String("Lengths must be floating-point numbers >= 0 m"), (wxGetApp().path_file_error_icon));
 
             (p->value_ok) = false;
 
@@ -16427,7 +16277,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
                 temp << (LengthUnit_types[i]).value << ((i < LengthUnit_types.size() - 1) ? ", " : ".");
             }
 
-            (f->print_error_message)->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
 
             (p->unit_ok) = false;
 
@@ -16478,21 +16328,21 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 
         bool check;
 
-        check = check_double(((p->value)->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+        check = check_double((p->value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
 
-        if (check || ((((p->value)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->value)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->value->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->value->GetValue()).ToStdString())) == String("")))) {
             //p->value either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set value_ok to true (false)
             (p->value_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in value
-            (p->value)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->value)->SetFont(wxGetApp().default_font);
+            p->value->SetForegroundColour(wxGetApp().foreground_color);
+            p->value->SetFont(wxGetApp().default_font);
 
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->value), String("Entered value is not valid!"), String("Speeds must be floating-point numbers >= 0 m"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->value), String("Entered value is not valid!"), String("Speeds must be floating-point numbers >= 0 m"), (wxGetApp().path_file_error_icon));
 
             (p->value_ok) = false;
 
@@ -16505,84 +16355,6 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
     event.Skip(true);
 
 }
-
-//template<class P> CheckSpeedUnit<P>::CheckSpeedUnit(SpeedField<P>* p_in) {
-//
-//    p = p_in;
-//
-//}
-//
-////checks the unit in the GUI field in SpeedField
-//template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event) {
-//
-//    P* f = (p->parent_frame);
-//
-//    //I proceed only if the progam is not is indling mode
-//    if (!(f->idling)) {
-//
-//        unsigned int i;
-//        bool check;
-//
-//        //I check whether the name in the GUI field unit matches one of the unit names in (unit->catalog)
-//        for (check = false, i = 0; (i < (p->unit->catalog).size()) && (!check); i++) {
-//            if ((p->unit->name->GetValue()) == (p->unit->catalog)[i]) {
-//                check = true;
-//            }
-//        }
-//        i--;
-//
-//        if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
-//
-//            //if check is true (false) -> set unit_ok to true (false)
-//            (p->unit_ok) = check;
-//            //the background color is set to white, because in this case there is no erroneous value in deg
-//            p->unit->name->SetForegroundColour(wxGetApp().foreground_color);
-//            p->unit->name->SetFont(wxGetApp().default_font);
-//
-//
-//        }
-//        else {
-//
-//            stringstream temp;
-//
-//            temp.str("");
-//            temp << "Available units are: ";
-//            for (i = 0; i < (p->unit->catalog).size(); i++) {
-//                temp << (p->unit->catalog)[i].ToStdString() << ((i < (p->unit->catalog).size() - 1) ? ", " : ".");
-//            }
-//
-//            (f->print_error_message)->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
-//
-//            (p->unit_ok) = false;
-//
-//        }
-//
-//        f->AllOk();
-//
-//    }
-//
-//    event.Skip(true);
-//
-//}
-
-//template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
-//
-//    p = p_in;
-//
-//    check = new CheckSpeedValue<P>(p);
-////    check_speed_unit = new CheckSpeedUnit<P>(p);
-//
-//}
-
-////this functor checks the whole Speed field by calling the check on its value and unit
-//template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
-//
-//    (*check)(event);
-////    (*check_speed_unit)(event);
-//
-//    event.Skip(true);
-//
-//}
 
 
 //write the value of the GUI field in LengthField into the non-GUI field length
@@ -18498,7 +18270,7 @@ template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event) {
 //}
 
 
-template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, bool enable_button_a_in, bool enable_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
+template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F_ABORT>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, F_ABORT* f_abort_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
 
     wxRect rectangle;
     vector<StaticText*> text;
@@ -18510,13 +18282,16 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
     string_a = string_a_in;
     f_b = f_b_in;
     string_b = string_b_in;
+    f_abort = f_abort_in;
     
     enable_button_a = enable_button_a_in;
     enable_button_b = enable_button_b_in;
+    
+    bind_esc_to_button_b = bind_esc_to_button_b_in;
 
     //SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    close_frame = new CloseFrame< QuestionFrame<F_A, F_B> >(this);
+    close_frame = new CloseFrame< QuestionFrame<F_A, F_B, F_ABORT> >(this);
 
     //image
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
@@ -18583,20 +18358,30 @@ template<typename F_A, typename F_B> QuestionFrame<F_A, F_B>::QuestionFrame(wxWi
 
 
 //if the user presses return/escape, I call f_a / f_b
-template<typename F_A, typename F_B> template<class E> void QuestionFrame<F_A, F_B>::KeyDown(E& event) {
+template<typename F_A, typename F_B, typename F_ABORT> template<class E> void QuestionFrame<F_A, F_B, F_ABORT>::KeyDown(E& event) {
 
     wxCommandEvent dummy;
 
-    if (((event.GetKeyCode()) == WXK_ESCAPE) && enable_button_a) {
+    if (((event.GetKeyCode()) == WXK_ESCAPE) && enable_button_b) {
         //the user pressed esc
+        
+        if(bind_esc_to_button_b){
+            //esc button is bound to button_b -> call *f_b
+            
+            (*f_b)(dummy);
+            
+        }else{
+            //esc button is bound to *f_abort -> call *f_abort
 
-        (*f_b)(dummy);
+            
+            (*f_abort)(dummy);
+            
+        }
 
 
-    }
-    else {
+    }else {
 
-        if ((((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)) && enable_button_b) {
+        if ((((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)) && enable_button_a) {
             //the user pressed return or numpad return
 
             (*f_a)(dummy);
@@ -18632,40 +18417,48 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::SetAndCall(wxCont
 
 }
 
-template<class T, typename FF_YES, typename FF_NO> PrintQuestion<T, FF_YES, FF_NO>::PrintQuestion(T* f_in, FF_YES* f_yes_in, FF_NO* f_no_in) {
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::ShowQuestionFrame(T* f_in, F_YES* f_yes_in, F_NO* f_no_in, F_ABORT* f_abort_in) {
 
     f = f_in;
     f_yes = f_yes_in;
     f_no = f_no_in;
+    f_abort = f_abort_in;
 
 }
 
-//set the wxControl, title and question and answers for the functor *this, and sett enable_button_y/n both to true,   I call the functor operator() with CallAfter
-template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES, FF_NO>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in) {
+
+//set the wxControl, title and question and answers for the functor *this,  set enable_button_y/n both to true,  and bind_esc_to_button_b to true. Then call the functor operator() with CallAfter
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in) {
 
     control = control_in;
     title = title_in;
     question = question_in;
     answer_y = answer_y_in;
     answer_n = answer_n_in;
+    
     enable_button_a = true;
     enable_button_b = true;
+    
+    bind_esc_to_button_b = true;
 
     f->CallAfter(*this);
 
 }
 
 
-//set the wxControl, title and question and answers for the functor *this, and set enable_butoon_y/n to enable_button_y/n_in,  I call the functor operator() with CallAfter
-template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES, FF_NO>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in, bool enable_button_y_in, bool enable_button_n_in) {
+//set the wxControl, title and question and answers for the functor *this,  set enable_butoon_y/n to enable_button_y/n_in, and set bind_esc_to_button_b = bind_esc_to_button_b_in.  I call the functor operator() with CallAfter
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in) {
 
     control = control_in;
     title = title_in;
     question = question_in;
     answer_y = answer_y_in;
     answer_n = answer_n_in;
-    enable_button_a = enable_button_y_in;
-    enable_button_b = enable_button_n_in;
+    
+    enable_button_a = enable_button_a_in;
+    enable_button_b = enable_button_b_in;
+    
+    bind_esc_to_button_b = bind_esc_to_button_b_in;
 
     f->CallAfter(*this);
 
@@ -18673,7 +18466,7 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
 
 
 //if question_frame != NULL, enable or disable question_frame->button_a/b according to the boolean variables enable_button_a/b
-template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES, FF_NO>::EnableDisableButtons(void) {
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::EnableDisableButtons(void) {
 
     if(question_frame != NULL){
         
@@ -18684,7 +18477,7 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
     
 }
 
-template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES, FF_NO>::operator()(void) {
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::operator()(void) {
 
 
     SetIdling<T>* set_idling;
@@ -18704,7 +18497,7 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
 
             if (((control->GetForegroundColour()) != (wxGetApp().error_color))) {
 
-                question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, answer_y, f_no, answer_n, enable_button_a, enable_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
+                question_frame = new QuestionFrame<F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, f_abort, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
                 question_frame->Show(true);
                 question_frame->Raise();
 
@@ -18718,7 +18511,7 @@ template<class T, typename FF_YES, typename FF_NO> void PrintQuestion<T, FF_YES,
         else {
             //this question has not been prompted from a control
 
-            question_frame = new QuestionFrame<FF_YES, FF_NO>(f, f_yes, answer_y, f_no, answer_n, enable_button_a, enable_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
+            question_frame = new QuestionFrame<F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, f_abort, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
             question_frame->Show(true);
             question_frame->Raise();
 
@@ -18775,7 +18568,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
-    print_question_message = new PrintQuestion<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> >(this, confirm_transport, unset_idling);
+    print_question_message = new ShowQuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(this, confirm_transport, unset_idling, unset_idling);
     //create extract_color with zero size, because I will need extract_color only to get colors
     
     //set icon paths to all print_*_message
@@ -19683,16 +19476,14 @@ template<class E> void ListFrame::OnModifySight(E& event) {
 }
 
 void ListFrame::OnTransportSight(wxCommandEvent& event) {
-    
 
     //I am transporting a Route (related to a Sight)
     transported_object_type = String("sight");
 
-    PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
+    //here I call ShowQuestionFrame with third functor equal to unset_idling and bind_esc_to_button_b = false, because I want the esc key and button_b to do different things: by pressing esc, the operation is aborted, while by pressing button_b the operation keeps going by using a new Route as transporting Route
+    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>(this, existing_route, new_route, unset_idling);
     
-    
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true);
-   
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, false);
 
     OnModifyFile();
 
@@ -19723,9 +19514,12 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event) {
     // I am transporting a Position
     transported_object_type = String("position");
 
+    //here I call ShowQuestionFrame with third functor equal to unset_idling and bind_esc_to_button_b = false, because I want the esc key and button_b to do different things: by pressing esc, the operation is aborted, while by pressing button_b the operation keeps going by using a new Route as transporting Route
+    
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
-    PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true);
+    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>(this, existing_route, new_route, unset_idling);
+    
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, false);
 
     OnModifyFile();
 
@@ -19789,9 +19583,11 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
 
     //here set i_object_to_transport to the currently selected Route
 
+    //here I call ShowQuestionFrame with third functor equal to unset_idling and bind_esc_to_button_b = false, because I want the esc key and button_b to do different things: by pressing esc, the operation is aborted, while by pressing button_b the operation keeps going by using a new Route as transporting Route
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
-    PrintQuestion<ListFrame, ExistingRoute, NewRoute>* print_question = new PrintQuestion<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true);
+    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>(this, existing_route, new_route, unset_idling);
+    
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, false);
 
     OnModifyFile();
 
@@ -19804,10 +19600,10 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
 template<class E> void ListFrame::OnPressDeleteSight(E& event) {
 
     //ask the user whether he/she really wants to remove the Sight: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_route. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
-    PrintQuestion<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame> >* print_question;
+    ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>* print_question;
 
 
-    print_question = new PrintQuestion<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame> >(this, ask_remove_related_route, unset_idling);
+    print_question = new ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(this, ask_remove_related_route, unset_idling, unset_idling);
 
     print_question->SetAndCall(NULL, String(""), String("Do you really want to remove this sight?"), String("Yes"), String("No"));
 
@@ -19822,9 +19618,9 @@ template<class E> void ListFrame::OnPressDeletePosition(E& event) {
 
     //ask the user whether he/she really wants to remove the Position: if the answer is yes, then QuestionFrame calls the functor delete_position. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
 
-    PrintQuestion<ListFrame, DeletePosition, UnsetIdling<ListFrame> >* print_question;
+    ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>* print_question;
 
-    print_question = new PrintQuestion<ListFrame, DeletePosition, UnsetIdling<ListFrame> >(this, delete_position, unset_idling);
+    print_question = new ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(this, delete_position, unset_idling, unset_idling);
 
     print_question->SetAndCall(NULL, String(""), String("Do you really want to remove this position?"), String("Yes"), String("No"));
 
@@ -19865,8 +19661,8 @@ bool ListFrame::CheckRoutesForTransport(void) {
 template<class E> void ListFrame::OnPressDeleteRoute(E& event) {
 
     //ask the user whether he/she really wants to remove the Route: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_sight. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
-    QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame> >(NULL,
-        ask_remove_related_sight, String("Yes"), unset_idling, String("No"), true, true,
+    QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(NULL,
+        ask_remove_related_sight, String("Yes"), unset_idling, String("No"), unset_idling, true, true, true,
         "",
         "Do you really want to remove this route?",
         wxGetApp().path_file_question_icon,
@@ -20152,10 +19948,10 @@ template<class E> void ListFrame::OnPressCtrlW([[maybe_unused]] E& event) {
 
         SaveAndReset<ListFrame>* save_and_reset;
 
-        PrintQuestion<ListFrame, SaveAndReset<ListFrame>, ResetListFrame>* print_question;
+        ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>* print_question;
 
         save_and_reset = new SaveAndReset<ListFrame>(this);
-        print_question = new PrintQuestion<ListFrame, SaveAndReset<ListFrame>, ResetListFrame>(this, save_and_reset, reset_list_frame);
+        print_question = new ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>(this, save_and_reset, reset_list_frame, reset_list_frame);
 
         print_question->SetAndCall(NULL, String("Warning"), String("You pressed Ctrl+W. You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
 
@@ -20513,16 +20309,16 @@ template<class P> template<class T> void CheckYear<P>::operator()(T& event) {
 
         bool check;
 
-        check = check_unsigned_int(((p->year)->GetValue()).ToStdString(), NULL, false, 0, 0);
+        check = check_unsigned_int((p->year->GetValue()).ToStdString(), NULL, false, 0, 0);
 
-        if (check || ((((p->year)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->year)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->year->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->year->GetValue()).ToStdString())) == String("")))) {
             //p->year either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set year_ok to true (false)
             (p->year_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in year
-            (p->year)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->year)->SetFont(wxGetApp().default_font);
+            p->year->SetForegroundColour(wxGetApp().foreground_color);
+            p->year->SetFont(wxGetApp().default_font);
 
             if (check && (p->month_ok)) {
 
@@ -20530,16 +20326,16 @@ template<class P> template<class T> void CheckYear<P>::operator()(T& event) {
 
             }
 
-            (p->day)->Enable(check && (p->month_ok));
+            p->day->Enable(check && (p->month_ok));
 
 
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->year), String("Entered value is not valid!"), String("Year must be an unsigned integer"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->year), String("Entered value is not valid!"), String("Year must be an unsigned integer"), (wxGetApp().path_file_error_icon));
 
             (p->year_ok) = false;
-            (p->day)->Enable(false);
+            p->day->Enable(false);
 
         }
 
@@ -20560,16 +20356,16 @@ template<class P> template<class T> void CheckMonth<P>::operator()(T& event) {
 
         bool check;
 
-        check = check_unsigned_int(((p->month)->GetValue()).ToStdString(), NULL, true, 1, 12 + 1);
+        check = check_unsigned_int((p->month->GetValue()).ToStdString(), NULL, true, 1, 12 + 1);
 
-        if (check || ((((p->month)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->month)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->month->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->month->GetValue()).ToStdString())) == String("")))) {
             //p->month either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             //if check is true (false) -> set month_ok to true (false)
             (p->month_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in month
-            (p->month)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->month)->SetFont(wxGetApp().default_font);
+            p->month->SetForegroundColour(wxGetApp().foreground_color);
+            p->month->SetFont(wxGetApp().default_font);
 
             if (check && (p->year_ok)) {
 
@@ -20577,15 +20373,15 @@ template<class P> template<class T> void CheckMonth<P>::operator()(T& event) {
 
             }
 
-            (p->day)->Enable(check && (p->year_ok));
+            p->day->Enable(check && (p->year_ok));
 
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->month), String("Entered value is not valid!"), String("Month must be an unsigned integer >= 1 and <= 12"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->month), String("Entered value is not valid!"), String("Month must be an unsigned integer >= 1 and <= 12"), (wxGetApp().path_file_error_icon));
 
             (p->month_ok) = false;
-            (p->day)->Enable(false);
+            p->day->Enable(false);
 
         }
 
@@ -20609,33 +20405,33 @@ template<class P> template<class T> void CheckDay<P>::operator()(T& event) {
         //this variable = true if the day field is formatted correctly
         bool check;
 
-        (p->date)->check_leap_year();
+        p->date->check_leap_year();
 
-        if ((p->date)->Y_is_leap_year) {
+        if (p->date->Y_is_leap_year) {
 
-            check = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi((p->month)->GetValue())) - 1] + 1);
+            check = check_unsigned_int((p->day->GetValue()).ToStdString(), NULL, true, 1, days_per_month_leap[(wxAtoi(p->month->GetValue())) - 1] + 1);
 
         }
         else {
 
-            check = check_unsigned_int(((p->day)->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi((p->month)->GetValue())) - 1] + 1);
+            check = check_unsigned_int((p->day->GetValue()).ToStdString(), NULL, true, 1, days_per_month_common[(wxAtoi(p->month->GetValue())) - 1] + 1);
 
         }
 
 
-        if (check || ((((p->day)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->day)->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->day->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->day->GetValue()).ToStdString())) == String("")))) {
 
             //if check is true (false) -> set day_ok to true (false)
             (p->day_ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in day
-            (p->day)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->day)->SetFont(wxGetApp().default_font);
+            p->day->SetForegroundColour(wxGetApp().foreground_color);
+            p->day->SetFont(wxGetApp().default_font);
 
 
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->day), String("Entered value is not valid!"), String("Day must be an unsigned integer comprised between the days of the relative month"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->day), String("Entered value is not valid!"), String("Day must be an unsigned integer comprised between the days of the relative month"), (wxGetApp().path_file_error_icon));
 
             (p->day_ok) = false;
 
@@ -20669,14 +20465,14 @@ template<class P> template<class T> void TabulateDays<P>::operator()(T& event) {
         wxString temp;
 
         //save the old value of p->day into temp
-        temp = ((p->day)->GetValue());
+        temp = (p->day->GetValue());
 
         //read the year
-        ((((f->sight)->master_clock_date_and_hour).date).Y) = ((unsigned int)wxAtoi((p->year)->GetValue()));
+        ((((f->sight)->master_clock_date_and_hour).date).Y) = ((unsigned int)wxAtoi(p->year->GetValue()));
         (((f->sight)->master_clock_date_and_hour).date).check_leap_year();
 
         //read the month
-        ((((f->sight)->master_clock_date_and_hour).date).M) = ((unsigned int)wxAtoi((p->month)->GetValue()));
+        ((((f->sight)->master_clock_date_and_hour).date).M) = ((unsigned int)wxAtoi(p->month->GetValue()));
 
         if (((f->sight)->master_clock_date_and_hour).date.Y_is_leap_year) {
             //in this case the year is a leap year: I fill the list of days from days_per_month_leap
@@ -20695,26 +20491,26 @@ template<class P> template<class T> void TabulateDays<P>::operator()(T& event) {
             //
         }
 
-        (p->day)->Set(p->days);
+        p->day->Set(p->days);
 
         if (!(wxAtoi(temp) <= wxAtoi((p->days)[(p->days).GetCount() - 1]))) {
             //if the value in p->day is does not lie between the boundaries of the newly set days list (list of days of the month, then I reset it by setting it to 1
 
-            (p->day)->SetValue(wxString("1"));
+            p->day->SetValue(wxString("1"));
 
         }
         else {
 
-            (p->day)->SetValue(temp);
+            p->day->SetValue(temp);
 
         }
 
-        (p->day)->Enable(true);
+        p->day->Enable(true);
 
     }
     else {
 
-        (p->day)->Enable(false);
+        p->day->Enable(false);
 
     }
 
@@ -20732,18 +20528,19 @@ template<class P, class T>  CheckCheck<P, T>::CheckCheck(CheckField<P, T>* p_in)
 template<class P, class T> template<class R> void CheckCheck<P, T>::operator()(R& event) {
 
     //I enable/disable related_field according to whether checkbox is checked or not, and according to the value of direct_reverse
-    if ((((p->checkbox)->GetValue()) ^ (!(p->direct_reverse)))) {
-        (p->related_field)->Enable(true);
-        //I write into the related_field by setting its variable just_enabled to true: this means that no error message will be prompted when the user sets its focus to the related field GUIs
-        //        ((p->related_field)->just_enabled) = true;
-    }
-    else {
-        (p->related_field)->Enable(false);
+    if (((p->checkbox->GetValue()) ^ (!(p->direct_reverse)))) {
+        
+        p->related_field->Enable(true);
+        
+    }else {
+        
+        p->related_field->Enable(false);
+        
     }
 
-    (*((p->related_field)->check))(event);
+    (*(p->related_field->check))(event);
 
-    (p->parent)->AllOk();
+    p->parent->AllOk();
 
     event.Skip(true);
 
@@ -20794,7 +20591,7 @@ template<class P> template<class T> void CheckHour<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->hour), String("Entered value is not valid!"), String("Hours must be unsigned integer numbers >= 0 and < 24"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->hour), String("Entered value is not valid!"), String("Hours must be unsigned integer numbers >= 0 and < 24"), (wxGetApp().path_file_error_icon));
 
             (p->hour_ok) = false;
 
@@ -20836,7 +20633,7 @@ template<class P>  template<class T> void CheckMinute<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->minute), String("Entered value is not valid!"), String("Minutes must be unsigned integer numbers >= 0 and < 60"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->minute), String("Entered value is not valid!"), String("Minutes must be unsigned integer numbers >= 0 and < 60"), (wxGetApp().path_file_error_icon));
 
             (p->minute_ok) = false;
 
@@ -20878,7 +20675,7 @@ template<class P> template<class T> void CheckSecond<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->second), String("Entered value is not valid!"), String("Seconds must be floating-point numbers >= 0.0 and < 60.0"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->second), String("Entered value is not valid!"), String("Seconds must be floating-point numbers >= 0.0 and < 60.0"), (wxGetApp().path_file_error_icon));
 
             (p->second_ok) = false;
 
@@ -20968,26 +20765,6 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
         }
 
         f->OnChooseLengthFormatField();
-
-
-//        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
-//
-//            //if check is true (false) -> set ok to true (false)
-//            (p->ok) = check;
-//            //the background color is set to white, because in this case there is no erroneous value in name
-//            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-//            (p->name)->SetFont(wxGetApp().default_font);
-//
-//        }
-//        else {
-//
-//            (f->print_error_message)->SetAndCall((p->name), String("Route type not found in list!"), String("Route type must be loxodrome, orthodrome, or circle of equal altitude."), (wxGetApp().path_file_error_icon));
-//
-//            (p->ok) = false;
-//
-//        }
-//
-//        f->AllOk();
 
     }
     

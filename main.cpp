@@ -72,13 +72,13 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
     //    return this->wxApp::OnPressCtrlQ();
     UnsetIdling<ListFrame>* unset_idling;
     CloseFrame<ListFrame>* close;
-    PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >* print_question;
+    ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>* print_question;
     unset_idling = new UnsetIdling<ListFrame>(list_frame);
     close = new CloseFrame<ListFrame>(list_frame);
     
     //    PrintMessage<ListFrame, Close<ListFrame> >* print_info_message;
     
-    print_question = new PrintQuestion<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame> >(list_frame, close, unset_idling);
+    print_question = new ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(list_frame, close, unset_idling, unset_idling);
     
     print_question->SetAndCall(NULL, String("You pressed CTRL+Q"), String("Do you want to quit the app?"), String("Yes"), String("No"));
     
@@ -107,27 +107,25 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
     
 }
 
+
 //compute the astronomical position and updated all the GUI fields in set() and re-draws everything
 template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event) {
     
-    PrintQuestion<ListFrame, AllRoutes, SomeRoutes>* print_question;
+    ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>* print_question;
     AllRoutes* all_routes;
     SomeRoutes* some_routes;
     
     all_routes = new AllRoutes(this);
     some_routes = new SomeRoutes(this);
-    print_question = new PrintQuestion<ListFrame, AllRoutes, SomeRoutes>(this, all_routes, some_routes);
+    print_question = new ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>(this, all_routes, some_routes, unset_idling);
     
     selecting_route_for_position = true;
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
     print_question->SetAndCall(NULL, String("You want to determine the astronomical position"), String("With what route do you want to do it?"), String("All routes"), String("Some routes"));
     
-    
-    
-    
-    
 }
+
 
 //shows all ChartFrames and positions them properly on the screen
 template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
@@ -144,15 +142,13 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
         delta_x = (((double)(rectangle_display.GetWidth())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetWidth()))) / 2.0 - 2.0 * ((wxGetApp().border).value)) / ((double)(((list_frame->chart_frames).size()) - 1));
         delta_y = (((double)(rectangle_display.GetHeight())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetHeight()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetHeight()))) / 2.0 - 2.0 * ((wxGetApp().border).value)) / ((double)(((list_frame->chart_frames).size()) - 1));
         
-    }
-    else {
+    }else{
         //if ((list_frame->chart_frames).size() <= 1, it does not make sense to define delta_x, delta_y, and I set
         
         delta_x = 0.0;
         delta_y = 0.0;
         
     }
-    
     
     for (i=0; i<(list_frame->chart_frames.size()); i++) {
         
@@ -272,7 +268,10 @@ void MyApp::set_icon_paths(void){
 
 bool MyApp::OnInit() {
     
-
+    //
+    my_cout(5, 1, 4, 6, 4325, 35);
+    
+    //
 
     
     unsigned int i;
@@ -473,7 +472,8 @@ bool MyApp::OnInit() {
         //the user has not pressed cancel while charts were loading -> I proceed and start the app
         
         show_all = new ShowAll(list_frame);
-        disclaimer = new QuestionFrame< ShowAll , CloseApp >(NULL, show_all, String("Yes"), close_app, String("No"), true, true, 
+        //note that in disclaimer I do not bind est button to CloseApp, but to Show all
+        disclaimer = new QuestionFrame<ShowAll , CloseApp, ShowAll>(NULL, show_all, String("Yes"), close_app, String("No"), show_all, true, true, false,
                                                                           "Welcome to Thelemacus!",
                                                                           //                                                                          "On December 16, 1719, Captain J. Cook perceived the first Australian aborigens from HMS Endeavour, off the coast of Perth.\n He was on a mission commissioned by King John III, designed to discover new commercial routes, and new worlds.\n His voyage had been made possible by the novel, state-of-the art astronomical positioning methods\n based on the marine chronometer built by J. Harrison, which was on board the Endeavour. \nThe reliability of the positioning method allowed the british realm to trace and map the coasts of new, unknonw lands, \nand paved the way to a new way to sail which lasted until the invention of GPS.\n With this application, you will bring back to life astronomical positioning methods, in a way that no other existing application allows for, and entering in a novel historical path. "
                                                                           "This is the state-of-the art application for celestial navigation, I hope you will enjoy it!\nRemember that this software comes with no warranty, use at your own risk!\nDo you want to proceed?\n\nFair winds, following seas ..."
@@ -485,7 +485,6 @@ bool MyApp::OnInit() {
                                                                           String(""));
         disclaimer->Show(true);
         disclaimer->Raise();
-        //    list_frame->Show(true);
         
         
         //allocate and show the chart frames

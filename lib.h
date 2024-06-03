@@ -2390,6 +2390,7 @@ public:
     
     LengthField(wxPanel*, Length*, String);
     template<class E> void OnEditUnit(E&);
+    template<class T> void InsertIn(T*);
 
     
 };
@@ -2410,7 +2411,6 @@ public:
     void set(void);
     template<class T> void get(T&);
     void Enable(bool);
-    template<class T> void InsertIn(T*);
     bool is_ok(void);
     template<class E> void OnEditValue(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
@@ -2422,6 +2422,12 @@ public:
 template<class P> class StaticLengthField: public LengthField<P>{
     
 public:
+    
+    //the length value
+    wxStaticText *value;
+    
+    StaticLengthField(wxPanel*, Length*, String);
+
 
 };
 

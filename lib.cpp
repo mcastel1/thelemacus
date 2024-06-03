@@ -19583,7 +19583,7 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
     //here set i_object_to_transport to the currently selected Route
 
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
-    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, void>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, void>(this, existing_route, new_route, NULL);
+    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>(this, existing_route, new_route, unset_idling);
     print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, true);
 
     OnModifyFile();

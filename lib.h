@@ -2371,6 +2371,7 @@ public:
 };
 
 
+//this class is for a GUI field including a length
 template<class P> class LengthField{
     
 public:
@@ -2393,7 +2394,8 @@ public:
     
 };
 
-//class for graphical object: a field to enter a length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the EditableLengthField object
+
+//an editable GUI field to enter a Length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the EditableLengthField object
 template<class P> class EditableLengthField: public LengthField<P>{
     
 public:
@@ -2415,6 +2417,8 @@ public:
     
 };
 
+
+//a non-editable GUI field to display a Length, composed of a static text and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the EditableLengthField object
 template<class P> class StaticLengthField: public LengthField<P>{
     
 public:

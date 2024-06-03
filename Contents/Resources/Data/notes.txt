@@ -120,7 +120,6 @@
 	- some paralles or meridians in grid in render_mercator congain the same wxPoint iterated many times -> remove them
     - all icons in light mode must be revised and stored in dark mode
 	- when you switch from light to dark, all icons must be updated
-    - add the possiblity to abort the transport operation 
  on OSX:
  on WIN32:
 	- in the mercator projection labels of meridians leave ugly traces when zooming in (horizontal segments)

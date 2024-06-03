@@ -15600,9 +15600,9 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event) {
         //                                                                                                              wxDefaultSize,
         //                                                                                                              String(""));
 
-        ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute, void >* print_question;
+        ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame> >* print_question;
 
-        print_question = new ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute, void>(parent, parent->delete_route_and_related_sight, parent->delete_route, NULL);
+        print_question = new ShowQuestionFrame< ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame> >(parent, parent->delete_route_and_related_sight, parent->delete_route, parent->unset_idling);
 
         print_question->SetAndCall(NULL, String(""), String("The route that you are about to remove is related to a sight. Do you want to remove the sight related to this route?"), String("Yes"), String("No"));
 

@@ -15620,14 +15620,14 @@ void AskRemoveRelatedRoute::operator()(wxCommandEvent& event) {
     if ((((((parent->data)->sight_list)[i_sight_to_remove]).related_route).value) != -1) {
         //if the sight which I am about to remove is related to a Route, I ask the user whether he wants to remove the related Route too by showing  question_frame
 
-        ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight, void>* print_question;
+        ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>* print_question;
 
         ((parent->delete_route_and_related_sight)->i_route_to_remove) = (((((parent->data)->sight_list)[i_sight_to_remove]).related_route).value);
 
         //remove the route from the non-GUI object data
         //ask the user whether he/she wants to remove the related sight as well: if the answer is yes, then QuestionFrame calls the functor delete_sight_and_related_sight. If no, it calls the functor delete_sight.
 
-        print_question = new ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight, void>(parent, parent->delete_route_and_related_sight, parent->delete_sight, NULL);
+        print_question = new ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>(parent, parent->delete_route_and_related_sight, parent->delete_sight, parent->unset_idling);
 
         print_question->SetAndCall(NULL, String(""), String("Do you want to remove the route related to this sight??"), String("Yes"), String("No"));
 

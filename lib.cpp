@@ -19480,7 +19480,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event) {
     //I am transporting a Route (related to a Sight)
     transported_object_type = String("sight");
 
-    //here I call ShowQuestionFrame with third functor equal to unset_idling and bind_esc_to_button_b = false, because I want the esc key and button_b to do different things: by pressing esc, the operation is aborted, while by pressing button_b the operation keeps going by using a new Route as transportin Route
+    //here I call ShowQuestionFrame with third functor equal to unset_idling and bind_esc_to_button_b = false, because I want the esc key and button_b to do different things: by pressing esc, the operation is aborted, while by pressing button_b the operation keeps going by using a new Route as transporting Route
     ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>(this, existing_route, new_route, unset_idling);
     
     print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, false);
@@ -19514,9 +19514,12 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event) {
     // I am transporting a Position
     transported_object_type = String("position");
 
+    //here I call ShowQuestionFrame with third functor equal to unset_idling and bind_esc_to_button_b = false, because I want the esc key and button_b to do different things: by pressing esc, the operation is aborted, while by pressing button_b the operation keeps going by using a new Route as transporting Route
+    
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>(this, existing_route, new_route, unset_idling);
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, true);
+    
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, false);
 
     OnModifyFile();
 

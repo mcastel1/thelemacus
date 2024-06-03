@@ -18568,7 +18568,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
-    print_question_message = new ShowQuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, void>(this, confirm_transport, unset_idling, NULL);
+    print_question_message = new ShowQuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(this, confirm_transport, unset_idling, unset_idling);
     //create extract_color with zero size, because I will need extract_color only to get colors
     
     //set icon paths to all print_*_message
@@ -19517,7 +19517,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event) {
     transported_object_type = String("position");
 
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
-    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, void>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, void>(this, existing_route, new_route, NULL);
+    ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>(this, existing_route, new_route, unset_idling);
     print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, true);
 
     OnModifyFile();

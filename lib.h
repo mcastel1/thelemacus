@@ -2666,7 +2666,7 @@ public:
     //a functor to let the user select a Route in listcontrol_routes
     SelectRoute* select_route;
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, * print_info_message;
-    ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> , void >* print_question_message;
+    ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> , UnsetIdling<ListFrame> >* print_question_message;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;

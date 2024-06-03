@@ -22056,14 +22056,8 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 //constructor of a EditableLengthField object, based on the parent frame frame
 template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
 
-
-
-
-    //    ((parent_frame->check_height_of_eye).p) = this;
-
     //initialize check
     check = new CheckLength<P>(this);
-
 
     value = new wxTextCtrl((LengthField<P>::parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     //SetColor(value);
@@ -22075,10 +22069,9 @@ template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_
     //as text is changed in value by the user with the keyboard, call OnEditValue
     value->Bind(wxEVT_KEY_UP, &EditableLengthField::OnEditValue<wxKeyEvent>, this);
 
+    //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
     LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER);
 
-    
-    
 }
 
 

@@ -22070,7 +22070,7 @@ template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
 }
 
 
-//constructor of a EditableLengthField object, based on the parent frame frame
+//constructor of a EditableLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
 template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
 
     //these flags will be used in the method InsertIn below, to insert this->unit
@@ -22081,7 +22081,7 @@ template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_
     
     //initialize check
     check = new CheckLength<P>(this);
-
+    
     value = new wxTextCtrl((LengthField<P>::parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     //SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));

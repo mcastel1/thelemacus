@@ -19597,10 +19597,10 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
 template<class E> void ListFrame::OnPressDeleteSight(E& event) {
 
     //ask the user whether he/she really wants to remove the Sight: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_route. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
-    ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, void>* print_question;
+    ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>* print_question;
 
 
-    print_question = new ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, void>(this, ask_remove_related_route, unset_idling, NULL);
+    print_question = new ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(this, ask_remove_related_route, unset_idling, unset_idling);
 
     print_question->SetAndCall(NULL, String(""), String("Do you really want to remove this sight?"), String("Yes"), String("No"));
 
@@ -19615,9 +19615,9 @@ template<class E> void ListFrame::OnPressDeletePosition(E& event) {
 
     //ask the user whether he/she really wants to remove the Position: if the answer is yes, then QuestionFrame calls the functor delete_position. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
 
-    ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, void>* print_question;
+    ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>* print_question;
 
-    print_question = new ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, void>(this, delete_position, unset_idling, NULL);
+    print_question = new ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(this, delete_position, unset_idling, unset_idling);
 
     print_question->SetAndCall(NULL, String(""), String("Do you really want to remove this position?"), String("Yes"), String("No"));
 
@@ -19658,8 +19658,8 @@ bool ListFrame::CheckRoutesForTransport(void) {
 template<class E> void ListFrame::OnPressDeleteRoute(E& event) {
 
     //ask the user whether he/she really wants to remove the Route: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_sight. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
-    QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, void>* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, void>(NULL,
-        ask_remove_related_sight, String("Yes"), unset_idling, String("No"), NULL, true, true, true,
+    QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(NULL,
+        ask_remove_related_sight, String("Yes"), unset_idling, String("No"), unset_idling, true, true, true,
         "",
         "Do you really want to remove this route?",
         wxGetApp().path_file_question_icon,
@@ -19945,10 +19945,10 @@ template<class E> void ListFrame::OnPressCtrlW([[maybe_unused]] E& event) {
 
         SaveAndReset<ListFrame>* save_and_reset;
 
-        ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, void>* print_question;
+        ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>* print_question;
 
         save_and_reset = new SaveAndReset<ListFrame>(this);
-        print_question = new ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, void>(this, save_and_reset, reset_list_frame, NULL);
+        print_question = new ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>(this, save_and_reset, reset_list_frame, reset_list_frame);
 
         print_question->SetAndCall(NULL, String("Warning"), String("You pressed Ctrl+W. You are about to close a file that has been modified. Do you want to save changes?"), String("Yes"), String("No"));
 

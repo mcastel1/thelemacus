@@ -2918,6 +2918,8 @@ public:
     DrawPanel *draw_panel;
     ChartPanel* panel;
     StaticText *text_slider;
+    //a static text displaying the height of the observer 
+    StaticLengthField<ChartFrame>* observer_height;
     wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
     wxGridSizer* sizer_buttons;
     wxStaticBitmap* image;

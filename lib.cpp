@@ -11694,6 +11694,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     s << "1:" << (zoom_factor.value);
 
     text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0);
+    observer_height = new StaticLengthField<ChartFrame>(panel, NULL, LengthUnit_types[0]);
 
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
@@ -22113,11 +22114,11 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     flags.Center();
 
     
-    value = new StaticText((LengthField<P>::parent_frame->panel),  "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    value = new StaticText((LengthField<P>::parent->panel),  "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetLabel(wxString(""));
     
-    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent_frame->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
+    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     LengthField<P>::unit->name->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
     LengthField<P>::unit->name->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);

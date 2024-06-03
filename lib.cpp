@@ -15579,13 +15579,13 @@ void AskRemoveRelatedSight::operator()(wxCommandEvent& event) {
     int i_route_to_remove;
 
     //set i_route_to_remove equal to the currently relected Route in listcontrol_routes
-    i_route_to_remove = ((int)((parent->listcontrol_routes)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+    i_route_to_remove = ((int)(parent->listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
 
-    ((parent->delete_route_and_related_sight)->i_route_to_remove) = i_route_to_remove;
-    ((parent->delete_route)->i_route_to_remove) = i_route_to_remove;
+    (parent->delete_route_and_related_sight->i_route_to_remove) = i_route_to_remove;
+    (parent->delete_route->i_route_to_remove) = i_route_to_remove;
 
 
-    if ((((((parent->data)->route_list)[i_route_to_remove]).related_sight).value) != -1) {
+    if (((((parent->data->route_list)[i_route_to_remove]).related_sight).value) != -1) {
         //if the Route which I am about to remove is related to a Sight, I ask the user whether he wants to remove the related Sight too by showing a question_frame
 
         ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame> >* print_question;

@@ -107,27 +107,25 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
     
 }
 
+
 //compute the astronomical position and updated all the GUI fields in set() and re-draws everything
 template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event) {
     
-    ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, void>* print_question;
+    ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>* print_question;
     AllRoutes* all_routes;
     SomeRoutes* some_routes;
     
     all_routes = new AllRoutes(this);
     some_routes = new SomeRoutes(this);
-    print_question = new ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, void>(this, all_routes, some_routes, NULL);
+    print_question = new ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>(this, all_routes, some_routes, unset_idling);
     
     selecting_route_for_position = true;
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
     print_question->SetAndCall(NULL, String("You want to determine the astronomical position"), String("With what route do you want to do it?"), String("All routes"), String("Some routes"));
     
-    
-    
-    
-    
 }
+
 
 //shows all ChartFrames and positions them properly on the screen
 template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
@@ -144,15 +142,13 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
         delta_x = (((double)(rectangle_display.GetWidth())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetWidth()))) / 2.0 - 2.0 * ((wxGetApp().border).value)) / ((double)(((list_frame->chart_frames).size()) - 1));
         delta_y = (((double)(rectangle_display.GetHeight())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetHeight()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetHeight()))) / 2.0 - 2.0 * ((wxGetApp().border).value)) / ((double)(((list_frame->chart_frames).size()) - 1));
         
-    }
-    else {
+    }else{
         //if ((list_frame->chart_frames).size() <= 1, it does not make sense to define delta_x, delta_y, and I set
         
         delta_x = 0.0;
         delta_y = 0.0;
         
     }
-    
     
     for (i=0; i<(list_frame->chart_frames.size()); i++) {
         

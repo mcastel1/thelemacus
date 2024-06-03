@@ -37,7 +37,9 @@ template<class P> class LengthUnitField;
 template<class P> class SpeedUnitField;
 template<class P, class T> class CheckField;
 template<class P> class AngleField;
+template<class P> class LengthField;
 template<class P> class EditableLengthField;
+template<class P> class StaticLengthField;
 template<class P> class SpeedField;
 template<class P> class DateField;
 template<class P> class ChronoField;
@@ -2368,8 +2370,15 @@ public:
     
 };
 
+
+template<class P> class LengthField{
+    
+    
+    
+};
+
 //class for graphical object: a field to enter a length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the EditableLengthField object
-template<class P> class EditableLengthField{
+template<class P> class EditableLengthField: public LengthField<P>{
     
 public:
     //the parent frame to which this object is attached
@@ -2397,6 +2406,12 @@ public:
     template<class E> void OnEditUnit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
+};
+
+template<class P> class StaticLengthField: public LengthField<P>{
+    
+public:
+
 };
 
 

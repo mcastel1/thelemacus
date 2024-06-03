@@ -18381,9 +18381,15 @@ template<typename F_A, typename F_B, typename F_ABORT> template<class E> void Qu
         //the user pressed esc
         
         if(bind_esc_to_button_b){
-            //esc button is bound to button_b -> trigger *f_b
+            //esc button is bound to button_b -> call *f_b
             
             (*f_b)(dummy);
+            
+        }else{
+            //esc button is bound to *f_abort -> call *f_abort
+
+            
+            (*f_abort)(dummy);
             
         }
 

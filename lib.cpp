@@ -22027,19 +22027,36 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 //constructor of a LengthField object, based on the parent frame frame
 template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
 
- 
+    parent_frame = ((P*)(panel_of_parent->GetParent()));
+    length = p;
+    unit_value = unit_value_in;
+    //these flags will be used in the method InsertIn below, to insert this->unit
+    wxSizerFlags flags;
     
+    
+    flags.Center();
+    
+    unit = new LengthUnitField<P>((parent_frame->panel), &(length->unit), &(wxGetApp().list_frame->data->recent_length_units));
+    
+    //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    unit->name->Bind(wxEVT_COMBOBOX, &LengthField::OnEditUnit<wxCommandEvent>, this);
+    unit->name->Bind(wxEVT_KEY_UP, &LengthField::OnEditUnit<wxKeyEvent>, this);
+
+
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(sizer_h, flags);
+
+
 }
 
 
 //constructor of a EditableLengthField object, based on the parent frame frame
 template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
 
-    parent_frame = ((P*)(panel_of_parent->GetParent()));
-    length = p;
-    unit_value = unit_value_in;
-    //these flags will be used in the method InsertIn below, to insert this->unit
-    wxSizerFlags flags;
+
 
 
     //    ((parent_frame->check_height_of_eye).p) = this;
@@ -22047,9 +22064,8 @@ template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_
     //initialize check
     check = new CheckLength<P>(this);
 
-    flags.Center();
 
-    value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    value = new wxTextCtrl((LengthField<P>::parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     //SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
@@ -22059,22 +22075,8 @@ template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_
     //as text is changed in value by the user with the keyboard, call OnEditValue
     value->Bind(wxEVT_KEY_UP, &EditableLengthField::OnEditValue<wxKeyEvent>, this);
 
+    LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER);
 
-//    (unit->name) = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
-    unit = new LengthUnitField<P>((parent_frame->panel), &(length->unit), &(wxGetApp().list_frame->data->recent_length_units));
-    
-    //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    unit->name->Bind(wxEVT_COMBOBOX, &EditableLengthField::OnEditUnit<wxCommandEvent>, this);
-    unit->name->Bind(wxEVT_KEY_UP, &EditableLengthField::OnEditUnit<wxKeyEvent>, this);
-
-
-    sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    sizer_v = new wxBoxSizer(wxVERTICAL);
-    
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(value, 0, wxALIGN_CENTER);
-    //    sizer_h->Add(unit->name, 0, wxALIGN_CENTER);
-    unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(sizer_h, flags);
     
     
 }

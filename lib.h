@@ -2384,7 +2384,7 @@ public:
     //the units of measure of the length in this GUI field
     String unit_value;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
-    bool value_ok, unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
+    bool unit_ok;
 
     
     LengthField(wxPanel*, Length*, String);
@@ -2400,6 +2400,7 @@ public:
     //the length value
     wxTextCtrl *value;
     CheckLength<P>* check;
+    bool value_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     
     EditableLengthField(wxPanel*, Length*, String);
     void set(Length);

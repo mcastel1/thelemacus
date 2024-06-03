@@ -37,7 +37,7 @@ template<class P> class LengthUnitField;
 template<class P> class SpeedUnitField;
 template<class P, class T> class CheckField;
 template<class P> class AngleField;
-template<class P> class LengthField;
+template<class P> class EditableLengthField;
 template<class P> class SpeedField;
 template<class P> class DateField;
 template<class P> class ChronoField;
@@ -1452,9 +1452,9 @@ template<class P> class CheckLengthValue{
     
 public:
     
-    LengthField<P>* p;
+    EditableLengthField<P>* p;
     
-    CheckLengthValue(LengthField<P>*);
+    CheckLengthValue(EditableLengthField<P>*);
     template<class T> void operator()(T&);
     
 };
@@ -1463,9 +1463,9 @@ template<class P> class CheckLengthUnit{
     
 public:
     
-    LengthField<P>* p;
+    EditableLengthField<P>* p;
     
-    CheckLengthUnit(LengthField<P>*);
+    CheckLengthUnit(EditableLengthField<P>*);
     template<class T> void operator()(T&);
     
 };
@@ -1474,12 +1474,12 @@ template<class P> class CheckLength{
     
 public:
     
-    //p is the LengthField which is parent of the CheckLength object: the CheckLength object checks the validity of the entries in LengthField
-    LengthField<P>* p;
+    //p is the EditableLengthField which is parent of the CheckLength object: the CheckLength object checks the validity of the entries in EditableLengthField
+    EditableLengthField<P>* p;
     CheckLengthValue<P>* check_length_value;
     CheckLengthUnit<P>* check_length_unit;
     
-    CheckLength(LengthField<P>*);
+    CheckLength(EditableLengthField<P>*);
     template <class T> void operator()(T&);
     
 };
@@ -2245,7 +2245,7 @@ public:
 };
 
 
-//this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a LengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted
+//this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a EditableLengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted
 template<class P> class LengthFormatField: public MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >{
     
 public:
@@ -2368,8 +2368,8 @@ public:
     
 };
 
-//class for graphical object: a field to enter a length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the LengthField object
-template<class P> class LengthField{
+//class for graphical object: a field to enter a length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the EditableLengthField object
+template<class P> class EditableLengthField{
     
 public:
     //the parent frame to which this object is attached
@@ -2386,7 +2386,7 @@ public:
     bool value_ok, unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     CheckLength<P>* check;
     
-    LengthField(wxPanel*, Length*, String);
+    EditableLengthField(wxPanel*, Length*, String);
     void set(Length);
     void set(void);
     template<class T> void get(T&);
@@ -2400,7 +2400,7 @@ public:
 };
 
 
-//class for graphical object: a field to enter a speed, composed of a box and a dropdown menu to enter the units of measure of the speed. P is the type of the parent which hosts the LengthField object
+//class for graphical object: a field to enter a speed, composed of a box and a dropdown menu to enter the units of measure of the speed. P is the type of the parent which hosts the EditableLengthField object
 template<class P> class SpeedField{
     
 public:
@@ -2756,10 +2756,10 @@ public:
     
     BodyField<SightFrame>* body;
     LimbField<SightFrame>* limb;
-    CheckField<SightFrame, LengthField<SightFrame> >* artificial_horizon_check;
+    CheckField<SightFrame, EditableLengthField<SightFrame> >* artificial_horizon_check;
     CheckField<SightFrame, ChronoField<SightFrame> >* stopwatch_check;
     AngleField<SightFrame>* H_s, *index_error;
-    LengthField<SightFrame>* height_of_eye;
+    EditableLengthField<SightFrame>* height_of_eye;
     DateField<SightFrame>* master_clock_date;
     ChronoField<SightFrame>* master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     StringField<SightFrame> *label;
@@ -2847,7 +2847,7 @@ public:
     //l_format tells whether the length of Route is written simply as a Length, or as a Speed x a Chrono (a time)
     LengthFormatField<RouteFrame>* length_format;
     //if the length of the Route is written directly as a length, this field is used
-    LengthField<RouteFrame> *length;
+    EditableLengthField<RouteFrame> *length;
     //if the lenght of the Route is written in terms of a speed multiplied by a time, the following two fields are used
     ChronoField<RouteFrame> *time;
     SpeedField<RouteFrame> *speed;

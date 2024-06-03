@@ -392,9 +392,11 @@ public:
     F_A* f_a;
     //pointer to the class containing the functor which will be called when the button no is pressed
     F_B* f_b;
+    //pointer to the class containing the functor which will be called to abort
+    F_ABORT* f_abort;
     String string_a, string_b;
     
-    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, bool, bool, bool, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
+    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, F_ABORT*, bool, bool, bool, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
     template<class E> void KeyDown(E&);
     
 };

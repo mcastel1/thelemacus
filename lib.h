@@ -1962,7 +1962,7 @@ public:
     ShowQuestionFrame(T*, FF_YES*, FF_NO*);
     
     void SetAndCall(wxControl*, String, String, String, String);
-    void SetAndCall(wxControl*, String, String, String, String, bool, bool);
+    void SetAndCall(wxControl*, String, String, String, String, bool, bool, bool);
     void EnableDisableButtons(void);
     void operator()(void);
     

@@ -18667,7 +18667,8 @@ template<class T, typename FF_YES, typename FF_NO> ShowQuestionFrame<T, FF_YES, 
 
 }
 
-//set the wxControl, title and question and answers for the functor *this, and sett enable_button_y/n both to true,   I call the functor operator() with CallAfter
+
+//set the wxControl, title and question and answers for the functor *this,  set enable_button_y/n both to true,  and bind_esc_to_button_b to true. Then call the functor operator() with CallAfter
 template<class T, typename FF_YES, typename FF_NO> void ShowQuestionFrame<T, FF_YES, FF_NO>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in) {
 
     control = control_in;
@@ -18675,24 +18676,30 @@ template<class T, typename FF_YES, typename FF_NO> void ShowQuestionFrame<T, FF_
     question = question_in;
     answer_y = answer_y_in;
     answer_n = answer_n_in;
+    
     enable_button_a = true;
     enable_button_b = true;
+    
+    bind_esc_to_button_b = true;
 
     f->CallAfter(*this);
 
 }
 
 
-//set the wxControl, title and question and answers for the functor *this, and set enable_butoon_y/n to enable_button_y/n_in,  I call the functor operator() with CallAfter
-template<class T, typename FF_YES, typename FF_NO> void ShowQuestionFrame<T, FF_YES, FF_NO>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in, bool enable_button_y_in, bool enable_button_n_in) {
+//set the wxControl, title and question and answers for the functor *this,  set enable_butoon_y/n to enable_button_y/n_in, and set bind_esc_to_button_b = bind_esc_to_button_b_in.  I call the functor operator() with CallAfter
+template<class T, typename FF_YES, typename FF_NO> void ShowQuestionFrame<T, FF_YES, FF_NO>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in) {
 
     control = control_in;
     title = title_in;
     question = question_in;
     answer_y = answer_y_in;
     answer_n = answer_n_in;
-    enable_button_a = enable_button_y_in;
-    enable_button_b = enable_button_n_in;
+    
+    enable_button_a = enable_button_a_in;
+    enable_button_b = enable_button_b_in;
+    
+    bind_esc_to_button_b = bind_esc_to_button_b_in;
 
     f->CallAfter(*this);
 
@@ -19718,7 +19725,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event) {
     ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
     
     
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true);
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a sight. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, true);
    
 
     OnModifyFile();
@@ -19752,7 +19759,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event) {
 
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true);
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, true);
 
     OnModifyFile();
 
@@ -19818,7 +19825,7 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
 
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute>(this, existing_route, new_route);
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true);
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With what route do you want to transport?"), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, true);
 
     OnModifyFile();
 

@@ -13013,7 +13013,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall(p->name, String("Error"), String("Body not found in catalog! Body must be in catalog."), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall(p->name, String("Error"), String("Body not found in catalog! Body must be in catalog."), (wxGetApp().path_file_error_icon));
 
             (p->ok) = false;
 
@@ -13149,7 +13149,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->sign), String("Error"), String("Sign is not valid! Sign must be +-, NS or EW."), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->sign), String("Error"), String("Sign is not valid! Sign must be +-, NS or EW."), (wxGetApp().path_file_error_icon));
             (p->sign_ok) = false;
 
         }
@@ -15809,156 +15809,12 @@ template<class P> CheckBody<P>::CheckBody(BodyField<P>* p_in) {
 }
 
 
-//template<class P> CheckProjection<P>::CheckProjection(ProjectionField<P>* p_in) {
-//
-//    p = p_in;
-//
-//}
-//
-//template<class P> template<class T>void CheckProjection<P>::operator()(T& event) {
-//
-//    P* f = (p->parent);
-//
-//    //I proceed only if the progam is not is indling mode
-//    if (!(f->idling)) {
-//
-//        unsigned int i;
-//        bool check;
-//
-//        //I check whether the name in the GUI field PositionProjection matches one of the PositionProjection names in p->names
-//        for (check = false, i = 0; (i < (p->catalog).size()) && (!check); i++) {
-//            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
-//                check = true;
-//            }
-//        }
-//        i--;
-//
-//        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
-//            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
-//
-//
-//            if (check) {
-//
-//                //insert projection #i into data->recent_bodies
-//                wxGetApp().list_frame->data->insert_recent_projection(i);
-//                //I update p->name according to the content of data->recent_projections file
-//                p->Fill();
-//
-//            }
-//
-//
-//            //if check is true (false) -> set ok to true (false)
-//            (p->ok) = check;
-//            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
-//            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-//            (p->name)->SetFont(wxGetApp().default_font);
-//            Reset(p->name);
-//
-//        }
-//        else {
-//
-//            stringstream temp;
-//
-//            temp.str("");
-//            temp << "PositionProjection must be one of the following: ";
-//            for (i = 0; i < (p->catalog.GetCount()); i++) {
-//                temp << ((p->catalog)[i]).ToStdString() << (i < (p->catalog.GetCount()) - 1 ? ", " : ".");
-//            }
-//
-//
-//            (f->print_error_message)->SetAndCall(p->name, String("PositionProjection not found in list of projections!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
-//
-//            (p->ok) = false;
-//
-//        }
-//
-//        f->AllOk();
-//
-//    }
-//
-//    event.Skip(true);
-//
-//}
-
-
-//template<class P> CheckLengthFormat<P>::CheckLengthFormat(LengthFormatField<P>* p_in) {
-//
-//    p = p_in;
-//
-//}
-
-//template<class P> template<class T>void CheckLengthFormat<P>::operator()(T& event) {
-//
-//    P* f = (p->parent);
-//
-//    //I proceed only if the progam is not is indling mode
-//    if (!(f->idling)) {
-//
-//        unsigned int i;
-//        bool check;
-//
-//        //I check whether the name in the GUI field LengthFormat matches one of the LengthFormat names in p->names
-//        for (check = false, i = 0; (i < (p->catalog).size()) && (!check); i++) {
-//            if (((p->name)->GetValue()) == ((p->catalog)[i])) {
-//                check = true;
-//            }
-//        }
-//        i--;
-//
-//        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
-//            //check either contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
-//
-//
-//            if (check) {
-//
-//                //insert projection #i into data->recent_bodies
-//                wxGetApp().list_frame->data->insert_recent_length_format(i);
-//                //I update p->name according to the content of data->recent_projections file
-//                p->Fill();
-//
-//            }
-//
-//
-//            //if check is true (false) -> set ok to true (false)
-//            (p->ok) = check;
-//            //the background color is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in name. I call Reset to reset the font colors of the items in the list to their default values
-//            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-//            (p->name)->SetFont(wxGetApp().default_font);
-//            Reset(p->name);
-//
-//        }
-//        else {
-//
-//            stringstream temp;
-//
-//            temp.str("");
-//            temp << "Length format must be one of the following: ";
-//            for (i = 0; i < ((p->catalog).GetCount()); i++) {
-//                temp << ((p->catalog)[i]).ToStdString() << (i < ((p->catalog).GetCount()) - 1 ? ", " : ".");
-//            }
-//
-//
-//            (f->print_error_message)->SetAndCall(p->name, String("Length format not found in list of length formats!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
-//
-//            (p->ok) = false;
-//
-//        }
-//
-//        f->AllOk();
-//
-//    }
-//
-//    event.Skip(true);
-//
-//}
-
-
-
 ResetListFrame::ResetListFrame(ListFrame* p_in) {
 
     p = p_in;
 
 }
+
 
 //reset *this by destroying this->data, and allocating a new one
 template <class T> void ResetListFrame::operator()(T& event) {
@@ -16290,7 +16146,7 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T& event)
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->deg), String("Entered value is not valid!"), String("Arcdegrees must be unsigned integer numbers between 0 and 359").append(wxGetApp().degree_symbol), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->deg), String("Entered value is not valid!"), String("Arcdegrees must be unsigned integer numbers between 0 and 359").append(wxGetApp().degree_symbol), (wxGetApp().path_file_error_icon));
 
             (p->deg_ok) = false;
 
@@ -16333,7 +16189,7 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T& event
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->min), String("Entered value is not valid!"), String("Arcminutes must be floating-point numbers >= 0' and < 60'"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->min), String("Entered value is not valid!"), String("Arcminutes must be floating-point numbers >= 0' and < 60'"), (wxGetApp().path_file_error_icon));
 
             (p->min_ok) = false;
 
@@ -16378,7 +16234,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T& eve
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->value), String("Entered value is not valid!"), String("Lengths must be floating-point numbers >= 0 m"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->value), String("Entered value is not valid!"), String("Lengths must be floating-point numbers >= 0 m"), (wxGetApp().path_file_error_icon));
 
             (p->value_ok) = false;
 
@@ -16438,7 +16294,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
                 temp << (LengthUnit_types[i]).value << ((i < LengthUnit_types.size() - 1) ? ", " : ".");
             }
 
-            (f->print_error_message)->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
 
             (p->unit_ok) = false;
 
@@ -16503,7 +16359,7 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->value), String("Entered value is not valid!"), String("Speeds must be floating-point numbers >= 0 m"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->value), String("Entered value is not valid!"), String("Speeds must be floating-point numbers >= 0 m"), (wxGetApp().path_file_error_icon));
 
             (p->value_ok) = false;
 
@@ -16516,84 +16372,6 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
     event.Skip(true);
 
 }
-
-//template<class P> CheckSpeedUnit<P>::CheckSpeedUnit(SpeedField<P>* p_in) {
-//
-//    p = p_in;
-//
-//}
-//
-////checks the unit in the GUI field in SpeedField
-//template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event) {
-//
-//    P* f = (p->parent_frame);
-//
-//    //I proceed only if the progam is not is indling mode
-//    if (!(f->idling)) {
-//
-//        unsigned int i;
-//        bool check;
-//
-//        //I check whether the name in the GUI field unit matches one of the unit names in (unit->catalog)
-//        for (check = false, i = 0; (i < (p->unit->catalog).size()) && (!check); i++) {
-//            if ((p->unit->name->GetValue()) == (p->unit->catalog)[i]) {
-//                check = true;
-//            }
-//        }
-//        i--;
-//
-//        if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
-//
-//            //if check is true (false) -> set unit_ok to true (false)
-//            (p->unit_ok) = check;
-//            //the background color is set to white, because in this case there is no erroneous value in deg
-//            p->unit->name->SetForegroundColour(wxGetApp().foreground_color);
-//            p->unit->name->SetFont(wxGetApp().default_font);
-//
-//
-//        }
-//        else {
-//
-//            stringstream temp;
-//
-//            temp.str("");
-//            temp << "Available units are: ";
-//            for (i = 0; i < (p->unit->catalog).size(); i++) {
-//                temp << (p->unit->catalog)[i].ToStdString() << ((i < (p->unit->catalog).size() - 1) ? ", " : ".");
-//            }
-//
-//            (f->print_error_message)->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
-//
-//            (p->unit_ok) = false;
-//
-//        }
-//
-//        f->AllOk();
-//
-//    }
-//
-//    event.Skip(true);
-//
-//}
-
-//template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
-//
-//    p = p_in;
-//
-//    check = new CheckSpeedValue<P>(p);
-////    check_speed_unit = new CheckSpeedUnit<P>(p);
-//
-//}
-
-////this functor checks the whole Speed field by calling the check on its value and unit
-//template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
-//
-//    (*check)(event);
-////    (*check_speed_unit)(event);
-//
-//    event.Skip(true);
-//
-//}
 
 
 //write the value of the GUI field in LengthField into the non-GUI field length
@@ -20561,7 +20339,7 @@ template<class P> template<class T> void CheckYear<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->year), String("Entered value is not valid!"), String("Year must be an unsigned integer"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->year), String("Entered value is not valid!"), String("Year must be an unsigned integer"), (wxGetApp().path_file_error_icon));
 
             (p->year_ok) = false;
             (p->day)->Enable(false);
@@ -20607,7 +20385,7 @@ template<class P> template<class T> void CheckMonth<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->month), String("Entered value is not valid!"), String("Month must be an unsigned integer >= 1 and <= 12"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->month), String("Entered value is not valid!"), String("Month must be an unsigned integer >= 1 and <= 12"), (wxGetApp().path_file_error_icon));
 
             (p->month_ok) = false;
             (p->day)->Enable(false);
@@ -20660,7 +20438,7 @@ template<class P> template<class T> void CheckDay<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->day), String("Entered value is not valid!"), String("Day must be an unsigned integer comprised between the days of the relative month"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->day), String("Entered value is not valid!"), String("Day must be an unsigned integer comprised between the days of the relative month"), (wxGetApp().path_file_error_icon));
 
             (p->day_ok) = false;
 
@@ -20819,7 +20597,7 @@ template<class P> template<class T> void CheckHour<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->hour), String("Entered value is not valid!"), String("Hours must be unsigned integer numbers >= 0 and < 24"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->hour), String("Entered value is not valid!"), String("Hours must be unsigned integer numbers >= 0 and < 24"), (wxGetApp().path_file_error_icon));
 
             (p->hour_ok) = false;
 
@@ -20861,7 +20639,7 @@ template<class P>  template<class T> void CheckMinute<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->minute), String("Entered value is not valid!"), String("Minutes must be unsigned integer numbers >= 0 and < 60"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->minute), String("Entered value is not valid!"), String("Minutes must be unsigned integer numbers >= 0 and < 60"), (wxGetApp().path_file_error_icon));
 
             (p->minute_ok) = false;
 
@@ -20903,7 +20681,7 @@ template<class P> template<class T> void CheckSecond<P>::operator()(T& event) {
         }
         else {
 
-            (f->print_error_message)->SetAndCall((p->second), String("Entered value is not valid!"), String("Seconds must be floating-point numbers >= 0.0 and < 60.0"), (wxGetApp().path_file_error_icon));
+            f->print_error_message->SetAndCall((p->second), String("Entered value is not valid!"), String("Seconds must be floating-point numbers >= 0.0 and < 60.0"), (wxGetApp().path_file_error_icon));
 
             (p->second_ok) = false;
 
@@ -20993,26 +20771,6 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
         }
 
         f->OnChooseLengthFormatField();
-
-
-//        if (check || ((((p->name)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->name)->GetValue()).ToStdString())) == String("")))) {
-//
-//            //if check is true (false) -> set ok to true (false)
-//            (p->ok) = check;
-//            //the background color is set to white, because in this case there is no erroneous value in name
-//            (p->name)->SetForegroundColour(wxGetApp().foreground_color);
-//            (p->name)->SetFont(wxGetApp().default_font);
-//
-//        }
-//        else {
-//
-//            (f->print_error_message)->SetAndCall((p->name), String("Route type not found in list!"), String("Route type must be loxodrome, orthodrome, or circle of equal altitude."), (wxGetApp().path_file_error_icon));
-//
-//            (p->ok) = false;
-//
-//        }
-//
-//        f->AllOk();
 
     }
     

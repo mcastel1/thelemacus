@@ -16778,8 +16778,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0);
     height_of_eye = new DynamicLengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
     //given that I am including height_of_eye in a frame, I want that every time unit is changed, SightFrame::AllOk() is triggered, to check all fields of *this every time unit is changed and potentially enable button_reduce
-    height_of_eye->unit->name->Bind(wxEVT_COMBOBOX, &SightFrame::AllOk<wxCommandEvent>, this);
-    height_of_eye->unit->name->Bind(wxEVT_KEY_UP, &SightFrame::AllOk<wxKeyEvent>, this);
+    height_of_eye->unit->Bind(wxEVT_COMBOBOX, &SightFrame::AllOk<wxCommandEvent>, this);
+    height_of_eye->unit->Bind(wxEVT_KEY_UP, &SightFrame::AllOk<wxKeyEvent>, this);
     
     
     if (sight_in == NULL) {

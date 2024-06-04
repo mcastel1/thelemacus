@@ -2388,11 +2388,9 @@ public:
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool unit_ok;
 
-    
     LengthField(wxPanel*, Length*, String);
     template<class E> void OnEditUnit(E&);
     template<class T> void InsertIn(T*);
-
     
 };
 

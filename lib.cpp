@@ -11694,7 +11694,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     s << "1:" << (zoom_factor.value);
 
     text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0);
-    observer_height = new StaticLengthField<ChartFrame>(panel, NULL, LengthUnit_types[0]);
+    observer_height = new StaticLengthField<ChartFrame>(panel, &(draw_panel->d), LengthUnit_types[0]);
 
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
@@ -11809,6 +11809,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
 
     sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
     sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+    observer_height->LengthField<ChartFrame>::InsertIn(sizer_slider);
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, 0);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
     flags.Center();

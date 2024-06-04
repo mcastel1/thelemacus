@@ -22196,6 +22196,8 @@ template<class P> void StaticLengthField<P>::set(Length input) {
     
     LengthField<P>::unit->set();
     
+    //store the currently set length unit into unit_before
+    unit_before = (LengthField<P>::length->unit);
     
 }
 

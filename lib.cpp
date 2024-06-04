@@ -16777,12 +16777,15 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //height of eye
     StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0);
     height_of_eye = new DynamicLengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
-    //given that I am including height_of_eye in a frame, I want that every time unit is changed, SightFrame::AllOk() is triggered, to check all fields of *this every time unit is changed and potentially enable button_reduce. This the two following lines will have to be omitted in cases where I don't want changes to height_of_eye to trigger SightFrame::AllOk (for example if I included height_of_eye into a frame and height_of_eye was disconnected from all other GUI fields in the frame )
+    
+    //this is how to properly bind the DynamicLengthField height_of_eye when it is inserted into a frame and I want a modification of the DynamicLengthField to trigger AllOk() in the frame. Given that I am including height_of_eye in a frame, I want that every time value or unit is changed, SightFrame::AllOk() is triggered : 1. I first bind OnEditValue and OnEditUnit to height_of_eye->value and height_of_eye->unit 2. every time height_of_eye is changed, OnEditValue and OnEditUnit will be called and set to true/false the value_ok and unit_ok variables 3. AllOk() will be called later, read the value_ok and unit_ok variables, and enable/disable button_reduce  accordingly
     height_of_eye->Bind(wxEVT_COMBOBOX, &SightFrame::AllOk<wxCommandEvent>, this);
     height_of_eye->Bind(wxEVT_KEY_UP, &SightFrame::AllOk<wxKeyEvent>, this);
     
-    height_of_eye->Bind(wxEVT_COMBOBOX, &DynamicLengthField<SightFrame>::OnEditValue<wxCommandEvent>, height_of_eye);
-    height_of_eye->Bind(wxEVT_KEY_UP, &DynamicLengthField<SightFrame>::OnEditValue<wxKeyEvent>, height_of_eye);
+    height_of_eye->value->Bind(wxEVT_COMBOBOX, &DynamicLengthField<SightFrame>::OnEditValue<wxCommandEvent>, height_of_eye);
+    height_of_eye->value->Bind(wxEVT_KEY_UP, &DynamicLengthField<SightFrame>::OnEditValue<wxKeyEvent>, height_of_eye);
+    height_of_eye->unit->Bind(wxEVT_COMBOBOX, &DynamicLengthField<SightFrame>::OnEditUnit<wxCommandEvent>, height_of_eye);
+    height_of_eye->unit->Bind(wxEVT_KEY_UP, &DynamicLengthField<SightFrame>::OnEditUnit<wxKeyEvent>, height_of_eye);
 
     
     
@@ -22138,7 +22141,7 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
     value_ok = false;
     value->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
-    value->Bind(wxEVT_KEY_UP, &DynamicLengthField::OnEditValue<wxKeyEvent>, this);
+//    value->Bind(wxEVT_KEY_UP, &DynamicLengthField::OnEditValue<wxKeyEvent>, this);
     
     LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -23006,40 +23009,12 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
-////this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid and runs AllOk
-//template<class E> void LimbField::OnEdit(E& event){
-//
-//    bool check;
-//
-//    //I check whether the name in the GUI field name matches one of the valid limb names
-//    find_and_replace_case_insensitive(name, limbs, &check, NULL);
-//
-//    //ok is true/false is the text enteres is valid/invalid
-////    (*on_change_selection_in_limb_field)(event);
-////    ok = name->;
-////
-//    if(check){
-//
-//        name->SetForegroundColour(wxGetApp().foreground_color);
-//        name->SetFont(wxGetApp().default_font);
-//
-//        name->SetForegroundColour(wxGetApp().foreground_color);
-//        name->SetFont(wxGetApp().default_font);
-//
-//    }
-//
-//    //tries to enable button_reduce
-//    parent_frame->AllOk();
-//
-//    event.Skip(true);
-//
-//}
-
 template<class P> bool DateField<P>::is_ok(void) {
 
     return(year_ok && month_ok && day_ok);
 
 }
+
 
 //this function is called every time a keyboard button is lifted in this->year: it checks whether the text entered so far in year is valid and runs AllOk
 template<class P> template<class E> void DateField<P>::OnEditYear(E& event) {

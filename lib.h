@@ -2428,6 +2428,7 @@ public:
     StaticText* value;
     
     StaticLengthField(wxPanel*, Length*, String);
+    
     void set(Length);
     void set(void);
 

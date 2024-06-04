@@ -22196,7 +22196,7 @@ template<class P> void StaticLengthField<P>::set(Length input) {
     
     LengthField<P>::unit->set();
     
-    //store the currently set length unit into unit_before
+    //store the currently set length unit into unit_before for the future
     unit_before = (LengthField<P>::length->unit);
     
 }
@@ -22213,8 +22213,17 @@ template<class P> void StaticLengthField<P>::set(void) {
 
 //convert the numerical value stored into value according to the length unit unit 
 template<class P> template<class E>  void StaticLengthField<P>::ConvertUnit(E& event) {
-
-
+    
+    
+    
+    
+    
+    
+    
+    
+    //store the currently set length unit into unit_before for the future
+    unit_before = (LengthField<P>::length->unit);
+    
     event.Skip(true);
 
 }

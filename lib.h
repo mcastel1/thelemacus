@@ -2215,14 +2215,11 @@ public:
     bool is_ok(void);
     void CheckInCatalog(bool*, unsigned int *);
     template<class E> void Check(E&);
-//    void read_recent_projections(void);
     template<class T> void InsertIn(T*);
     template<class T> void InsertIn(T*, wxSizerFlags&);
-//    template<class E> void OnEdit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     void SetToolTip(const String&);
-    
-    
+        
 };
 
 

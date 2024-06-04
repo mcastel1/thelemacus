@@ -16152,13 +16152,13 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T& event
 
 }
 
-template<class P> CheckLengthValue<P>::CheckLengthValue(EditableLengthField<P>* p_in) {
+template<class P> CheckLengthValue<P>::CheckLengthValue(DynamicLengthField<P>* p_in) {
 
     p = p_in;
 
 }
 
-//checks the value in the GUI field in EditableLengthField
+//checks the value in the GUI field in DynamicLengthField
 template<class P> template <class T> void CheckLengthValue<P>::operator()(T& event) {
 
     P* f = (p->parent);
@@ -16196,7 +16196,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T& eve
 
 }
 
-template<class P> CheckLengthUnit<P>::CheckLengthUnit(EditableLengthField<P>* p_in) {
+template<class P> CheckLengthUnit<P>::CheckLengthUnit(DynamicLengthField<P>* p_in) {
 
     p = p_in;
 
@@ -16249,7 +16249,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
 
 }
 
-template<class P> CheckLength<P>::CheckLength(EditableLengthField<P>* p_in) {
+template<class P> CheckLength<P>::CheckLength(DynamicLengthField<P>* p_in) {
 
     p = p_in;
 
@@ -16316,7 +16316,7 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 
 
 //write the value of the GUI field in LengthField into the non-GUI field length
-template<class P> template <class T> void EditableLengthField<P>::get(T& event) {
+template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
     
     if (is_ok()) {
         
@@ -16715,13 +16715,13 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     //artificial horizon
     StaticText* text_artificial_horizon_check = new StaticText(panel, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0);
-    artificial_horizon_check = new CheckField<SightFrame, EditableLengthField<SightFrame> >(panel, &(sight->artificial_horizon), NULL, false);
+    artificial_horizon_check = new CheckField<SightFrame, DynamicLengthField<SightFrame> >(panel, &(sight->artificial_horizon), NULL, false);
 
     //height of eye
     StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0);
-    height_of_eye = new EditableLengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
+    height_of_eye = new DynamicLengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
     if (sight_in == NULL) {
-        //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye EditableLengthField with this value, so the user won't have to enter the same value all the time
+        //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye DynamicLengthField with this value, so the user won't have to enter the same value all the time
         (sight->height_of_eye).read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String("R"), String(""));
         height_of_eye->set();
 
@@ -16810,8 +16810,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &LimbField<SightFrame>::get<wxCommandEvent>, limb);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, H_s);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, index_error);
-    button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, EditableLengthField<SightFrame> >::get<wxCommandEvent>, artificial_horizon_check);
-    button_reduce->Bind(wxEVT_BUTTON, &EditableLengthField<SightFrame>::get<wxCommandEvent>, height_of_eye);
+    button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, DynamicLengthField<SightFrame> >::get<wxCommandEvent>, artificial_horizon_check);
+    button_reduce->Bind(wxEVT_BUTTON, &DynamicLengthField<SightFrame>::get<wxCommandEvent>, height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, &DateField<SightFrame>::get<wxCommandEvent>, master_clock_date);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField<SightFrame>::get<wxCommandEvent>, master_clock_chrono);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, ChronoField<SightFrame> >::get<wxCommandEvent>, stopwatch_check);
@@ -17279,7 +17279,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     //the field for Length to set the Route length
     text_length = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
-    length = new EditableLengthField<RouteFrame>(panel, &(route->length), String("nm"));
+    length = new DynamicLengthField<RouteFrame>(panel, &(route->length), String("nm"));
 
 
     type->Bind(wxEVT_COMBOBOX, &LengthFormatField<RouteFrame>::OnEdit<wxCommandEvent>, length_format);
@@ -21612,7 +21612,7 @@ template <class P> void AngleField<P>::set(void) {
 
 
 //set the value in the GUI field *this equal to the value in the non-GUI object *input
-template<class P> void EditableLengthField<P>::set(Length input) {
+template<class P> void DynamicLengthField<P>::set(Length input) {
     
     switch (/*(unit_value.value)[0]*/ LengthField<P>::unit_value.position_in_list(LengthUnit_types)) {
             
@@ -21652,7 +21652,7 @@ template<class P> void EditableLengthField<P>::set(Length input) {
 
 
 //set the value in the GUI object value equal to the value in the non-GUI object length
-template<class P> void EditableLengthField<P>::set(void) {
+template<class P> void DynamicLengthField<P>::set(void) {
 
     set(*(LengthField<P>::length));
 
@@ -21981,7 +21981,6 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 }
 
 
-
 //constructor of a LengthField object, based on the parent frame frame
 template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in){
 
@@ -21989,14 +21988,11 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     length = p;
     unit_value = unit_value_in;
     
-
-
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-
-
 
 }
 
@@ -22045,7 +22041,7 @@ template<class P> template<class T> void LengthField<P>::InsertIn(T* host, wxSiz
 
 
 //constructor of a EditableLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
-template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
+template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
 
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
@@ -22064,7 +22060,7 @@ template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_
     value_ok = false;
     value->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
-    value->Bind(wxEVT_KEY_UP, &EditableLengthField::OnEditValue<wxKeyEvent>, this);
+    value->Bind(wxEVT_KEY_UP, &DynamicLengthField::OnEditValue<wxKeyEvent>, this);
     
     LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
@@ -22302,7 +22298,7 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
-template<class P> bool EditableLengthField<P>::is_ok(void) {
+template<class P> bool DynamicLengthField<P>::is_ok(void) {
 
     return(value_ok && (LengthField<P>::unit_ok));
 
@@ -22403,7 +22399,7 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
-template<class P> template<class E>  void EditableLengthField<P>::OnEditValue(E& event) {
+template<class P> template<class E>  void DynamicLengthField<P>::OnEditValue(E& event) {
 
     bool success;
 
@@ -22428,7 +22424,7 @@ template<class P> template<class E>  void EditableLengthField<P>::OnEditValue(E&
 }
 
 
-template<class P> template <typename EventTag, typename Method, typename Object> void EditableLengthField<P>::Bind(EventTag tag, Method method, Object object) {
+template<class P> template <typename EventTag, typename Method, typename Object> void DynamicLengthField<P>::Bind(EventTag tag, Method method, Object object) {
 
     value->Bind(tag, method, object);
     LengthField<P>::unit->Bind(tag, method, object);
@@ -22842,8 +22838,8 @@ template<class P> void AngleField<P>::Enable(bool is_enabled) {
 }
 
 
-//this function enables/disable the EditableLengthField
-template<class P> void EditableLengthField<P>::Enable(bool is_enabled) {
+//this function enables/disable the DynamicLengthField
+template<class P> void DynamicLengthField<P>::Enable(bool is_enabled) {
 
     value->Enable(is_enabled);
     LengthField<P>::unit->Enable(is_enabled);

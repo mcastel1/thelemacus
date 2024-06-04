@@ -38,7 +38,7 @@ template<class P> class SpeedUnitField;
 template<class P, class T> class CheckField;
 template<class P> class AngleField;
 template<class P> class LengthField;
-template<class P> class EditableLengthField;
+template<class P> class DynamicLengthField;
 template<class P> class StaticLengthField;
 template<class P> class SpeedField;
 template<class P> class DateField;
@@ -1454,9 +1454,9 @@ template<class P> class CheckLengthValue{
     
 public:
     
-    EditableLengthField<P>* p;
+    DynamicLengthField<P>* p;
     
-    CheckLengthValue(EditableLengthField<P>*);
+    CheckLengthValue(DynamicLengthField<P>*);
     template<class T> void operator()(T&);
     
 };
@@ -1465,9 +1465,9 @@ template<class P> class CheckLengthUnit{
     
 public:
     
-    EditableLengthField<P>* p;
+    DynamicLengthField<P>* p;
     
-    CheckLengthUnit(EditableLengthField<P>*);
+    CheckLengthUnit(DynamicLengthField<P>*);
     template<class T> void operator()(T&);
     
 };
@@ -1476,12 +1476,12 @@ template<class P> class CheckLength{
     
 public:
     
-    //p is the EditableLengthField which is parent of the CheckLength object: the CheckLength object checks the validity of the entries in EditableLengthField
-    EditableLengthField<P>* p;
+    //p is the DynamicLengthField which is parent of the CheckLength object: the CheckLength object checks the validity of the entries in DynamicLengthField
+    DynamicLengthField<P>* p;
     CheckLengthValue<P>* check_length_value;
     CheckLengthUnit<P>* check_length_unit;
     
-    CheckLength(EditableLengthField<P>*);
+    CheckLength(DynamicLengthField<P>*);
     template <class T> void operator()(T&);
     
 };
@@ -2247,7 +2247,7 @@ public:
 };
 
 
-//this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a EditableLengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted
+//this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a DynamicLengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted
 template<class P> class LengthFormatField: public MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >{
     
 public:
@@ -2396,8 +2396,8 @@ public:
 };
 
 
-//an editable GUI field to enter a Length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the EditableLengthField object
-template<class P> class EditableLengthField: public LengthField<P>{
+//an editable GUI field to enter a Length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the DynamicLengthField object
+template<class P> class DynamicLengthField: public LengthField<P>{
     
 public:
 
@@ -2406,7 +2406,7 @@ public:
     CheckLength<P>* check;
     bool value_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     
-    EditableLengthField(wxPanel*, Length*, String);
+    DynamicLengthField(wxPanel*, Length*, String);
     
     void set(Length);
     void set(void);
@@ -2419,7 +2419,7 @@ public:
 };
 
 
-//a non-editable GUI field to display a Length, composed of a static text and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the EditableLengthField object
+//a non-editable GUI field to display a Length, composed of a static text and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the DynamicLengthField object
 template<class P> class StaticLengthField: public LengthField<P>{
     
 public:
@@ -2434,7 +2434,7 @@ public:
 };
 
 
-//class for graphical object: a field to enter a speed, composed of a box and a dropdown menu to enter the units of measure of the speed. P is the type of the parent which hosts the EditableLengthField object
+//class for graphical object: a field to enter a speed, composed of a box and a dropdown menu to enter the units of measure of the speed. P is the type of the parent which hosts the DynamicLengthField object
 template<class P> class SpeedField{
     
 public:
@@ -2790,10 +2790,10 @@ public:
     
     BodyField<SightFrame>* body;
     LimbField<SightFrame>* limb;
-    CheckField<SightFrame, EditableLengthField<SightFrame> >* artificial_horizon_check;
+    CheckField<SightFrame, DynamicLengthField<SightFrame> >* artificial_horizon_check;
     CheckField<SightFrame, ChronoField<SightFrame> >* stopwatch_check;
     AngleField<SightFrame>* H_s, *index_error;
-    EditableLengthField<SightFrame>* height_of_eye;
+    DynamicLengthField<SightFrame>* height_of_eye;
     DateField<SightFrame>* master_clock_date;
     ChronoField<SightFrame>* master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     StringField<SightFrame> *label;
@@ -2881,7 +2881,7 @@ public:
     //l_format tells whether the length of Route is written simply as a Length, or as a Speed x a Chrono (a time)
     LengthFormatField<RouteFrame>* length_format;
     //if the length of the Route is written directly as a length, this field is used
-    EditableLengthField<RouteFrame> *length;
+    DynamicLengthField<RouteFrame> *length;
     //if the lenght of the Route is written in terms of a speed multiplied by a time, the following two fields are used
     ChronoField<RouteFrame> *time;
     SpeedField<RouteFrame> *speed;

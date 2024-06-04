@@ -22138,6 +22138,9 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetLabel(wxString(""));
     
+    //set unit_before to an empty value
+    unit_before.set(String(""));
+    
     LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     LengthField<P>::unit->name->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);

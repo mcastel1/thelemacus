@@ -9511,16 +9511,6 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     parallels_and_meridians_labels_now.resize(0);
     positions_parallels_and_meridians_labels_now.resize(0);
 
-    //    rotation.print(String("initial rotation"), String(""), cout);
-
-    //allocates points_route_list and ts_route_list
-//    points_route_list_now.resize((parent->parent->data->route_list).size());
-//    reference_positions_route_list_now.resize((parent->parent->data->route_list).size());
-//    for (i = 0; i < (parent->parent->data->route_list).size(); i++) {
-//        (points_route_list_now[i]).clear();
-//    }
-//    points_position_list_now.resize((parent->parent->data->route_list).size());
-
 
     idling = false;
     unset_idling = new UnsetIdling<DrawPanel>(this);
@@ -9535,10 +9525,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 #endif
     label_dragged_object_now = String("");
 
-    //    text_position_start->SetBackgroundColour(wxGetApp().background_color);
-    //    text_position_end->SetBackgroundColour(wxGetApp().background_color);
-
-        //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
+    //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
     SetBackgroundColour(wxGetApp().background_color);
     //set the border of the chart area 
     SetWindowStyle(wxSIMPLE_BORDER);
@@ -9563,13 +9550,6 @@ inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     RenderAll(dc);
 
 }
-
-//inline void DrawPanel::PaintNow(void){
-//    
-//    wxClientDC dc(this);
-//    
-//    RenderAll(dc);
-//}
 
 
 //render the mouse position with colors foreground_color and background_color
@@ -9628,11 +9608,6 @@ inline void DrawPanel::RenderBackground(
                                         wxColour background_color,
                                         double thickness
 ) {
-
-    //    dc.SetPen(foreground_color);
-    //    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
-    //    dc.SetTextForeground(foreground_color);
-    //    dc.SetTextBackground(background_color);
 
     if (re_draw) {
 
@@ -11638,7 +11613,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
 
 
-
     this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnPressCtrlW<wxCloseEvent>, this);
 
     mouse_scrolling = false;
@@ -11648,17 +11622,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     wxGetApp().zoom_factor_max.read_from_file_to(String("maximal zoom factor"), (wxGetApp().path_file_init), String("R"), String(""));
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
-    
-    //set the size of coastline_polygons_now and coastline_polygons_before equal to their maximum possible size, so I won't have to resize them at every step
-    //    for(polygon_position_now=0, i=0; i<(parent->coastline_polygons_Position.size()); i++){
-    //        for (j=0; j<((parent->coastline_polygons_Position)[i]).size(); j++) {
-    //            polygon_position_now += ((parent->coastline_polygons_Position)[i][j]).size();
-    //        }
-    //    }
-    //    polygon_position_before = polygon_position_now;
-    //    coastline_polygons_now.resize(polygon_position_now);
-    //    coastline_polygons_before.resize(polygon_position_before);
-    //    polygon_position_before = polygon_position_now = 0;
     
     //coastline_polygons_now/before and polygon_position_now/before are resized to their maximum possible value
     for(i=0, j=0; i<parent->coastline_polygons_Position.size(); i++) {
@@ -11671,10 +11634,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
 
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 
-
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
     draw_panel = new DrawPanel(panel, wxDefaultPosition, wxDefaultSize);
-
 
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_h = new wxBoxSizer(wxHORIZONTAL);

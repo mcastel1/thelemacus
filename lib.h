@@ -2965,6 +2965,7 @@ public:
     template<class T> void OnPressCtrlW(T&);
     void SetIdling(bool);
     void AllOk(void);
+    template<class T> void AllOk(T&);
     void EnableAll(bool);
     
     template<class T> void MoveNorth(T&);

@@ -9511,6 +9511,14 @@ void ChartFrame::AllOk(void) {
 }
 
 
+//same as ChartFrame::AllOk(void), but with an event argument, so this method can be triggered from an event 
+template<class T> void ChartFrame::AllOk(T& event) {
+
+    AllOk();
+
+}
+
+
 //enable all GUI fields (buttons, slider, etc) in *this if enable  = true, and disable them otherwise
 void ChartFrame::EnableAll(bool enable){
     

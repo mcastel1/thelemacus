@@ -728,6 +728,7 @@ public:
     Speed();
     Speed(double);
     Speed(double, const SpeedUnit&);
+    
     void set(String, double, String);
     void print(String, String, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);

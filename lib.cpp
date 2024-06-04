@@ -7842,6 +7842,35 @@ Length::Length(double value_in, const LengthUnit& unit_in) {
 Length::Length(Chrono time, Speed speed) {
 
     set(String(""), (time.get()) * (speed.value), String(""));
+    
+    //consider all possible units in which speed is expressed
+    switch (speed.unit.position_in_list(SpeedUnit_types)) {
+            
+        case 0: {
+            //speed.unit = SpeedUnit_types[0]
+            
+            break;
+            
+        }
+
+        case 1: {
+            //speed.unit = SpeedUnit_types[1]
+
+            
+            break;
+            
+        }
+            
+        case 2: {
+            //speed.unit = SpeedUnit_types[2]
+            
+            break;
+            
+        }
+
+
+    }
+    
 
 }
 

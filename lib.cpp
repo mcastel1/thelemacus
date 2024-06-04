@@ -22152,7 +22152,7 @@ template<class P> void StaticLengthField<P>::set(Length input) {
             //unit = String("nm")
             
             value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
-            LengthField<P>::unit->name->SetValue(wxString("nm"));
+//            LengthField<P>::unit->name->SetValue(wxString("nm"));
             break;
             
         }
@@ -22161,7 +22161,7 @@ template<class P> void StaticLengthField<P>::set(Length input) {
             //unit = String("m")
             
             value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
-            LengthField<P>::unit->name->SetValue(wxString("m"));
+//            LengthField<P>::unit->name->SetValue(wxString("m"));
             
             break;
             
@@ -22171,13 +22171,15 @@ template<class P> void StaticLengthField<P>::set(Length input) {
             //unit = String("ft")
             
             value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
-            LengthField<P>::unit->name->SetValue(wxString("ft"));
+//            LengthField<P>::unit->name->SetValue(wxString("ft"));
             
             break;
             
         }
             
     }
+    
+    LengthField<P>::unit->set();
     
     
 }

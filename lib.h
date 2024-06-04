@@ -702,6 +702,7 @@ public:
     Length(Chrono, Speed);
     
     void set(String, double, String);
+    void set(double);
     void enter(String, String, String);
     void print(String, String, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);

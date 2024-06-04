@@ -22066,8 +22066,11 @@ template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
 
     //value_ok is true/false is the text entered is valid/invalid
     unit_ok = success;
+
+    //THIS MAKES SENSE ONLY IF *this   IS INSERTED INTO A FRAME WHERE I NEED TO CHECK ALL THE GUI FIELDS IN THE FRAME EVERY TIME I EDIT this->unit
     //tries to enable button_reduce
     parent->AllOk();
+    //THIS MAKES SENSE ONLY IF *this   IS INSERTED INTO A FRAME WHERE I NEED TO CHECK ALL THE GUI FIELDS IN THE FRAME EVERY TIME I EDIT this->unit
 
     event.Skip(true);
 

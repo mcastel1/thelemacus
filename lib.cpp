@@ -16781,6 +16781,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     height_of_eye->Bind(wxEVT_COMBOBOX, &SightFrame::AllOk<wxCommandEvent>, this);
     height_of_eye->Bind(wxEVT_KEY_UP, &SightFrame::AllOk<wxKeyEvent>, this);
     
+    height_of_eye->Bind(wxEVT_COMBOBOX, &DynamicLengthField<SightFrame>::OnEditValue<wxCommandEvent>, height_of_eye);
+    height_of_eye->Bind(wxEVT_KEY_UP, &DynamicLengthField<SightFrame>::OnEditValue<wxKeyEvent>, height_of_eye);
+
+    
     
     if (sight_in == NULL) {
         //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye DynamicLengthField with this value, so the user won't have to enter the same value all the time

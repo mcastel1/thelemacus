@@ -2433,6 +2433,7 @@ public:
     
     void set(Length);
     void set(void);
+    void set_value(void);
     template<class E> void ConvertUnit(E&);
 
 };

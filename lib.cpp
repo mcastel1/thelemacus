@@ -22205,7 +22205,7 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
 
 
 
-//set the value in the GUI field *this equal to the value in the non-GUI object *length
+//set the value and the unit of the GUI field *this equal to the value and the unit in the non-GUI object *length
 template<class P> void StaticLengthField<P>::set(Length input) {
     
     switch (LengthField<P>::unit_value.position_in_list(LengthUnit_types)) {
@@ -22248,13 +22248,21 @@ template<class P> void StaticLengthField<P>::set(Length input) {
     
 }
 
-//set the value in the GUI object value equal to the value in the non-GUI object length
+//set the value and the unit in the GUI object value equal to the value and the unit in the non-GUI object length
 template<class P> void StaticLengthField<P>::set(void) {
 
     set(*(LengthField<P>::length));
 
     LengthField<P>::unit_ok = true;
 
+}
+
+
+//set only the value in the GUI object *this equal to the value of the non-GUi object length. The unit of *this is not modified, and the value written into *this is converted to the current unit written in the GUI field *this
+template<class P> void StaticLengthField<P>::set_value(void) {
+    
+    
+    
 }
 
 

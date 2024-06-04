@@ -2433,6 +2433,7 @@ public:
     
     void set(Length);
     void set(void);
+    template<class E> void set(E&);
 
 };
 

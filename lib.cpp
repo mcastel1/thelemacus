@@ -7844,7 +7844,6 @@ Length::Length(Chrono time, Speed speed) {
     //conversion factor
     double c;
     
-    
     //consider all possible units in which speed is expressed
     switch (speed.unit.position_in_list(SpeedUnit_types)) {
             
@@ -7860,6 +7859,7 @@ Length::Length(Chrono time, Speed speed) {
         case 1: {
             //speed.unit = SpeedUnit_types[1]
 
+            c = 1.0/nm;
             
             break;
             
@@ -7867,6 +7867,9 @@ Length::Length(Chrono time, Speed speed) {
             
         case 2: {
             //speed.unit = SpeedUnit_types[2]
+            
+            //[m]/[s] = 1e-3 3600 [km]/[h] = 1e-3 3600 / nm [nm]/[h] = 1e-3 3600 / nm [kt]
+            c = (1e-3)*60.0*60.0/nm;
             
             break;
             
@@ -7876,6 +7879,7 @@ Length::Length(Chrono time, Speed speed) {
     }
     
     set(c * (time.get()) * (speed.value));
+    unit.set(LengthUnit_types[0]);
 
 }
 

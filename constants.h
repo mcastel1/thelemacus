@@ -22,7 +22,7 @@ Angle max_lat, min_lat;
 //one in uint64_t format
 #define one_uint64_t ((uint64_t)1)
 #define accuracy_equal_approx 52
-//one nautical mile in kilometers
+//one nautical mile in kilometers: [nm] = nm * [km] where [nm] and [km] denote the units of nautical miles and kilometers, respectively, and `nm` the constant below.
 #define nm 1.852
 //one inch in kilometers
 #define my_inch (25.4e-6)

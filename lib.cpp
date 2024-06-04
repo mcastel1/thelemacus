@@ -16781,7 +16781,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //this is how to properly bind the DynamicLengthField height_of_eye when it is inserted into a frame and I want a modification of the DynamicLengthField to trigger AllOk() in the frame. Given that I am including height_of_eye in a frame, I want that every time value or unit is changed, SightFrame::AllOk() is triggered : 1. I first bind OnEditValue and OnEditUnit to height_of_eye->value and height_of_eye->unit 2. every time height_of_eye is changed, OnEditValue and OnEditUnit will be called and set to true/false the value_ok and unit_ok variables 3. AllOk() will be called later, read the value_ok and unit_ok variables, and enable/disable button_reduce  accordingly
     height_of_eye->Bind(wxEVT_COMBOBOX, &SightFrame::AllOk<wxCommandEvent>, this);
     height_of_eye->Bind(wxEVT_KEY_UP, &SightFrame::AllOk<wxKeyEvent>, this);
-    
     height_of_eye->value->Bind(wxEVT_COMBOBOX, &DynamicLengthField<SightFrame>::OnEditValue<wxCommandEvent>, height_of_eye);
     height_of_eye->value->Bind(wxEVT_KEY_UP, &DynamicLengthField<SightFrame>::OnEditValue<wxKeyEvent>, height_of_eye);
     height_of_eye->unit->Bind(wxEVT_COMBOBOX, &DynamicLengthField<SightFrame>::OnEditUnit<wxCommandEvent>, height_of_eye);
@@ -17351,6 +17350,15 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     length = new DynamicLengthField<RouteFrame>(panel, &(route->length), String("nm"));
 
 
+    //this is how to properly bind the DynamicLengthField length when it is inserted into a frame and I want a modification of the DynamicLengthField to trigger AllOk() in the frame. Given that I am including length in a frame, I want that every time value or unit is changed, SightFrame::AllOk() is triggered : 1. I first bind OnEditValue and OnEditUnit to length->value and length->unit 2. every time length is changed, OnEditValue and OnEditUnit will be called and set to true/false the value_ok and unit_ok variables 3. AllOk() will be called later, read the value_ok and unit_ok variables, and enable/disable button_reduce  accordingly
+    length->Bind(wxEVT_COMBOBOX, &RouteFrame::AllOk<wxCommandEvent>, this);
+    length->Bind(wxEVT_KEY_UP, &RouteFrame::AllOk<wxKeyEvent>, this);
+    length->value->Bind(wxEVT_COMBOBOX, &DynamicLengthField<RouteFrame>::OnEditValue<wxCommandEvent>, length);
+    length->value->Bind(wxEVT_KEY_UP, &DynamicLengthField<RouteFrame>::OnEditValue<wxKeyEvent>, length);
+    length->unit->Bind(wxEVT_COMBOBOX, &DynamicLengthField<RouteFrame>::OnEditUnit<wxCommandEvent>, length);
+    length->unit->Bind(wxEVT_KEY_UP, &DynamicLengthField<RouteFrame>::OnEditUnit<wxKeyEvent>, length);
+    
+    
     type->Bind(wxEVT_COMBOBOX, &LengthFormatField<RouteFrame>::OnEdit<wxCommandEvent>, length_format);
     type->Bind(wxEVT_KEY_UP, &LengthFormatField<RouteFrame>::OnEdit<wxKeyEvent>, length_format);
 
@@ -17821,6 +17829,13 @@ void RouteFrame::AllOk(void) {
 
 }
 
+
+// same as RouteFrame::AllOk(void)  but with an event as an argument, so this method can be triggered from an event
+template<class E> void RouteFrame::AllOk(E& event) {
+
+    AllOk();
+
+}
 
 
 //if a key is pressed in the keyboard, I call this function

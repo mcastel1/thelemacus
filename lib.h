@@ -2909,6 +2909,7 @@ public:
     void OnPressOk(wxCommandEvent& event);
     bool is_ok(void);
     void AllOk(void);
+    template<class E> void AllOk(E&);
     void KeyDown(wxKeyEvent&);
     template<class E> void Check(E&);
     void Check(void);

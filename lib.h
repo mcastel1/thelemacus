@@ -2215,14 +2215,11 @@ public:
     bool is_ok(void);
     void CheckInCatalog(bool*, unsigned int *);
     template<class E> void Check(E&);
-//    void read_recent_projections(void);
     template<class T> void InsertIn(T*);
     template<class T> void InsertIn(T*, wxSizerFlags&);
-//    template<class E> void OnEdit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     void SetToolTip(const String&);
-    
-    
+        
 };
 
 
@@ -2819,6 +2816,7 @@ public:
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
     void AllOk(void);
+    template<class E> void AllOk(E&);
     //    template<class T> void OnEditTime(T&);
     void TimeIntervalOk(String);
     void KeyDown(wxKeyEvent&);
@@ -2911,6 +2909,7 @@ public:
     void OnPressOk(wxCommandEvent& event);
     bool is_ok(void);
     void AllOk(void);
+    template<class E> void AllOk(E&);
     void KeyDown(wxKeyEvent&);
     template<class E> void Check(E&);
     void Check(void);

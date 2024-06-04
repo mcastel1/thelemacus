@@ -2389,8 +2389,10 @@ public:
     bool unit_ok;
 
     LengthField(wxPanel*, Length*, String);
+    
     template<class E> void OnEditUnit(E&);
     template<class T> void InsertIn(T*);
+    template<class T> void InsertIn(T*, wxSizerFlags&);
     
 };
 
@@ -2426,7 +2428,6 @@ public:
     StaticText* value;
     
     StaticLengthField(wxPanel*, Length*, String);
-
 
 };
 

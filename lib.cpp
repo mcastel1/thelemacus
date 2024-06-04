@@ -22071,6 +22071,12 @@ template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
 }
 
 
+template<class P> template<class T> void LengthField<P>::InsertIn(T* host, wxSizerFlags& flag) {
+
+    host->Add(sizer_v, flag);
+
+}
+
 //constructor of a EditableLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
 template<class P> EditableLengthField<P>::EditableLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
 

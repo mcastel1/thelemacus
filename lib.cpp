@@ -9511,7 +9511,7 @@ void ChartFrame::AllOk(void) {
 }
 
 
-//same as ChartFrame::AllOk(void), but with an event argument, so this method can be triggered from an event 
+//same as ChartFrame::AllOk(void), but with an event argument, so this method can be triggered from an event
 template<class T> void ChartFrame::AllOk(T& event) {
 
     AllOk();
@@ -16777,6 +16777,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //height of eye
     StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0);
     height_of_eye = new DynamicLengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
+    //given that I am including 
+    height_of_eye->unit->name->Bind(wxEVT_KEY_UP, &SightFrame::AllOk<wxKeyEvent>, this);
+    
     if (sight_in == NULL) {
         //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye DynamicLengthField with this value, so the user won't have to enter the same value all the time
         (sight->height_of_eye).read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -22077,7 +22080,7 @@ template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
 
     //THIS MAKES SENSE ONLY IF *this   IS INSERTED INTO A FRAME WHERE I NEED TO CHECK ALL THE GUI FIELDS IN THE FRAME EVERY TIME I EDIT this->unit
     //tries to enable button_reduce
-    parent->AllOk();
+    //    parent->AllOk();
     //THIS MAKES SENSE ONLY IF *this   IS INSERTED INTO A FRAME WHERE I NEED TO CHECK ALL THE GUI FIELDS IN THE FRAME EVERY TIME I EDIT this->unit
 
     event.Skip(true);

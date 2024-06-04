@@ -12670,7 +12670,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
     circle_observer.lambda_min_max(&(parent->lambda_min), &(parent->lambda_max), String(""));
 
     //set
-    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+    d.set(String(""), (-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))))*Re, String(""));
 
     //set phi_min/max
     ((circle_observer.reference_position).phi).normalize_pm_pi();
@@ -12881,7 +12881,7 @@ void ChartFrame::UpdateSliderLabel_3D(void) {
 
     stringstream s;
 
-    s << (draw_panel->d.value)*Re << " nm";
+    s << draw_panel->d.value << " nm";
 
     text_slider->SetLabel(s.str().c_str());
 
@@ -13460,7 +13460,7 @@ inline bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, 
                    );
     
     
-    check = (gsl_vector_get((rp.r), 1) < -1.0 / (1.0 + (d.value)));
+    check = (gsl_vector_get((rp.r), 1) < -1.0 / (1.0 + (d.value)/Re));
 
 
 
@@ -13478,7 +13478,7 @@ inline bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, 
             //            gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, (p.r), 0.0, (rp.r));
             cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation.matrix->data, 3, p.r->data, 1, 0, rp.r->data, 1);
             
-            temp = (d.value) / ((d.value) + 1.0 + gsl_vector_get((rp.r), 1));
+            temp = (d.value) / ((d.value) + Re*(1.0 + gsl_vector_get((rp.r), 1)));
             (q->x) = gsl_vector_get((rp.r), 0) * temp;
             (q->y) = gsl_vector_get((rp.r), 2) * temp;
 

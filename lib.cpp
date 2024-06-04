@@ -20250,6 +20250,14 @@ void SightFrame::AllOk(void) {
 
 }
 
+
+// same as SightFrame::AllOk(void)  but with an event as an argument, so this method can be triggered from an event 
+template<class E> void SightFrame::AllOk(E& event) {
+
+    AllOk();
+
+}
+
 //compute time_interval_ok
 void SightFrame::TimeIntervalOk([[maybe_unused]] String prefix) {
 

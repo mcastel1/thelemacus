@@ -2408,6 +2408,7 @@ public:
     bool value_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     
     EditableLengthField(wxPanel*, Length*, String);
+    
     void set(Length);
     void set(void);
     template<class T> void get(T&);
@@ -2428,6 +2429,8 @@ public:
     StaticText* value;
     
     StaticLengthField(wxPanel*, Length*, String);
+    void set(Length);
+    void set(void);
 
 };
 

@@ -22143,6 +22143,57 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
 
 
 
+//set the value in the GUI field *this equal to the value in the non-GUI object *length
+template<class P> void StaticLengthField<P>::set(Length input) {
+    
+    switch (LengthField<P>::unit_value.position_in_list(LengthUnit_types)) {
+            
+        case 0: {
+            //unit = String("nm")
+            
+            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
+            LengthField<P>::unit->name->SetValue(wxString("nm"));
+            break;
+            
+        }
+            
+        case 1: {
+            //unit = String("m")
+            
+            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
+            LengthField<P>::unit->name->SetValue(wxString("m"));
+            
+            break;
+            
+        }
+            
+        case 2: {
+            //unit = String("ft")
+            
+            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
+            LengthField<P>::unit->name->SetValue(wxString("ft"));
+            
+            break;
+            
+        }
+            
+    }
+    
+    
+}
+
+//set the value in the GUI object value equal to the value in the non-GUI object length
+template<class P> void StaticLengthField<P>::set(void) {
+
+    set(*(LengthField<P>::length));
+
+    LengthField<P>::value_ok = true;
+    LengthField<P>::unit_ok = true;
+
+}
+
+
+
 //constructor of a StringField object, based on the parent frame frame
 template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* p) {
 

@@ -22069,7 +22069,7 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
 
     
     //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
-    LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER);
+    LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
     LengthField<P>::unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
 
 }
@@ -22094,7 +22094,7 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     LengthField<P>::unit->name->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
 
     //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
-    LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER);
+    LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
     LengthField<P>::unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
 
 }
@@ -22441,20 +22441,11 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
 
-    //    ((parent_frame->check_height_of_eye).p) = this;
-
+    
     //initialize check
     check = new CheckSpeedValue<P>(this);
 
     flags.Center();
-
-
-    //tabulate the possible units of measure
-//    units.Clear();
-//    units.Add(wxT("kt"));
-//    units.Add(wxT("km/h"));
-//    units.Add(wxT("m/s"));
-
 
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     //SetColor(value);
@@ -22470,12 +22461,6 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 //    (unit->name) = new wxComboBox((parent->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     unit = new SpeedUnitField<P>(parent_frame->panel, &(speed->unit), &(wxGetApp().list_frame->data->recent_speed_units));
     
-    //SetColor(unit);
-//    AdjustWidth(unit->name);
-    //I set the value of unit to the unit of measure with with this SpeedField was called in its constructor, and set its value to ok because that is a valid unit of measure
-//    unit->name->SetValue(unit_value.value);
-//    unit_ok = true;
-//    unit->name->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_unit)));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     unit->Bind(wxEVT_COMBOBOX, &SpeedField::OnEditUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &SpeedField::OnEditUnit<wxKeyEvent>, this);
@@ -22485,9 +22470,8 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     sizer_v = new wxBoxSizer(wxVERTICAL);
 
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(value, 0, wxALIGN_CENTER);
     
-    //    sizer_h->Add(unit->name, 0, wxALIGN_CENTER);
+    sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
     unit->InsertIn(sizer_h, flags);
     
 }

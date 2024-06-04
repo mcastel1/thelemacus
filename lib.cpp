@@ -22144,7 +22144,7 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     LengthField<P>::unit->name->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
 
     
-    LengthField<P>::unit->name->Bind(wxEVT_COMBOBOX, &StaticLengthField<P>:: template set<wxCommandEvent>, this);
+    LengthField<P>::unit->name->Bind(wxEVT_COMBOBOX, &StaticLengthField<P>:: template ConvertUnit<wxCommandEvent>, this);
 //    LengthField<P>::unit->name->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
     
     //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
@@ -22206,10 +22206,9 @@ template<class P> void StaticLengthField<P>::set(void) {
 }
 
 
-//same as StaticLengthField<P>::set but with an event argument, so this method can be bound to events
-template<class P> template<class E>  void StaticLengthField<P>::set(E& event) {
+//convert the numerical value stored into value according to the length unit unit 
+template<class P> template<class E>  void StaticLengthField<P>::ConvertUnit(E& event) {
 
-    set();
 
     event.Skip(true);
 

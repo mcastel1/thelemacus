@@ -16777,7 +16777,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //height of eye
     StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0);
     height_of_eye = new DynamicLengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
-    //given that I am including height_of_eye in a frame, I want that every time unit is changed, SightFrame::AllOk() is triggered, to check all fields of *this every time unit is changed and potentially enable button_reduce
+    //given that I am including height_of_eye in a frame, I want that every time unit is changed, SightFrame::AllOk() is triggered, to check all fields of *this every time unit is changed and potentially enable button_reduce. This the two following lines will have to be omitted in cases where I don't want changes to height_of_eye to trigger SightFrame::AllOk (for example if I included height_of_eye into a frame and height_of_eye was disconnected from all other GUI fields in the frame )
     height_of_eye->Bind(wxEVT_COMBOBOX, &SightFrame::AllOk<wxCommandEvent>, this);
     height_of_eye->Bind(wxEVT_KEY_UP, &SightFrame::AllOk<wxKeyEvent>, this);
     
@@ -22516,8 +22516,9 @@ template<class P> template<class E>  void DynamicLengthField<P>::OnEditValue(E& 
 
     //value_ok is true/false is the text entered is valid/invalid
     value_ok = success;
+    
     //tries to enable button_reduce
-    LengthField<P>::parent->AllOk();
+//    LengthField<P>::parent->AllOk();
 
     event.Skip(true);
 

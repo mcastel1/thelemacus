@@ -12634,6 +12634,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
 
     //set
     d.set(String(""), (-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))))*Re, String(""));
+    parent->observer_height->set();
 
     //set phi_min/max
     ((circle_observer.reference_position).phi).normalize_pm_pi();
@@ -22150,7 +22151,6 @@ template<class P> void StaticLengthField<P>::set(void) {
 
     set(*(LengthField<P>::length));
 
-    LengthField<P>::value_ok = true;
     LengthField<P>::unit_ok = true;
 
 }

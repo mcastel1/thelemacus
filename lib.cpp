@@ -7838,7 +7838,7 @@ Length::Length(double value_in, const LengthUnit& unit_in) {
 }
 
 
-//constructs the Length *this frome time and speed, by setting it equal to time x speed
+//construct the Length *this frome time and speed, by setting it equal to time x speed and its unit equal to LengthUnit_types[0]. This method takes into account the units in which speed is expressed (which are stored into speed.unit)
 Length::Length(Chrono time, Speed speed) {
 
     set(String(""), (time.get()) * (speed.value), String(""));
@@ -7846,6 +7846,7 @@ Length::Length(Chrono time, Speed speed) {
 }
 
 
+//set the value of *this equal to x (expressed in units LengthUnit_types[0]). The unit is not modified
 void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 
     String new_prefix;
@@ -7855,7 +7856,9 @@ void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 
     value = x;
 
-    if (name != String("")) { print(name, String("nm"), prefix, cout); }
+    if(name != String("")){
+        print(name, String("nm"), prefix, cout);
+    }
     check_valid(name, new_prefix);
 
 }
@@ -21620,7 +21623,7 @@ template<class P> void DynamicLengthField<P>::set(Length input) {
             //unit = String("nm")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
-            LengthField<P>::unit->name->SetValue(wxString("nm"));
+//            LengthField<P>::unit->name->SetValue(wxString("nm"));
             break;
             
         }
@@ -21629,7 +21632,7 @@ template<class P> void DynamicLengthField<P>::set(Length input) {
             //unit = String("m")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
-            LengthField<P>::unit->name->SetValue(wxString("m"));
+//            LengthField<P>::unit->name->SetValue(wxString("m"));
             
             break;
             
@@ -21639,7 +21642,7 @@ template<class P> void DynamicLengthField<P>::set(Length input) {
             //unit = String("ft")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
-            LengthField<P>::unit->name->SetValue(wxString("ft"));
+//            LengthField<P>::unit->name->SetValue(wxString("ft"));
             
             break;
             

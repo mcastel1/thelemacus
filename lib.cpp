@@ -11626,6 +11626,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
 
+    flags.Center();
+
     //when a ChartFrame is created, the chart is not being dragged
     dragging_chart = false;
 
@@ -11809,10 +11811,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
 
     sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
     sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    observer_height->LengthField<ChartFrame>::InsertIn(sizer_slider);
+    observer_height->LengthField<ChartFrame>::InsertIn(sizer_slider, flags);
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, 0);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    flags.Center();
     projection->InsertIn<wxBoxSizer>(sizer_slider, flags);
     sizer_slider->AddStretchSpacer(1);
     sizer_slider->Add(button_show_list, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));

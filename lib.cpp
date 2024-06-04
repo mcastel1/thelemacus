@@ -11814,7 +11814,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     observer_height->LengthField<ChartFrame>::InsertIn(sizer_slider, flags);
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, 0);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    projection->InsertIn<wxBoxSizer>(sizer_slider, flags);
+    projection->InsertIn(sizer_slider, flags);
     sizer_slider->AddStretchSpacer(1);
     sizer_slider->Add(button_show_list, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
 

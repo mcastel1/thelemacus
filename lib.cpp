@@ -7838,15 +7838,54 @@ Length::Length(double value_in, const LengthUnit& unit_in) {
 }
 
 
-//constructs the Length *this frome time and speed, by setting it equal to time x speed
+//construct the Length *this frome time and speed, by setting it equal to time x speed and its unit equal to LengthUnit_types[0]. This method takes into account the units in which speed is expressed (which are stored into speed.unit)
 Length::Length(Chrono time, Speed speed) {
 
-    set(String(""), (time.get()) * (speed.value), String(""));
+    //conversion factor
+    double c;
+    
+    //consider all possible units in which speed is expressed
+    switch (speed.unit.position_in_list(SpeedUnit_types)) {
+            
+        case 0: {
+            //speed.unit = SpeedUnit_types[0]
+            
+            c = 1.0;
+            
+            break;
+            
+        }
+
+        case 1: {
+            //speed.unit = SpeedUnit_types[1]
+
+            c = 1.0/nm;
+            
+            break;
+            
+        }
+            
+        case 2: {
+            //speed.unit = SpeedUnit_types[2]
+            
+            //[m]/[s] = 1e-3 3600 [km]/[h] = 1e-3 3600 / nm [nm]/[h] = 1e-3 3600 / nm [kt]
+            c = (1e-3)*60.0*60.0/nm;
+            
+            break;
+            
+        }
+
+
+    }
+    
+    set(c * (time.get()) * (speed.value));
+    unit.set(LengthUnit_types[0]);
 
 }
 
 
-void Length::set(String name, double x, [[maybe_unused]] String prefix) {
+//set the value of *this equal to x (expressed in units LengthUnit_types[0]). The unit is not modified
+inline void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 
     String new_prefix;
 
@@ -7855,10 +7894,20 @@ void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 
     value = x;
 
-    if (name != String("")) { print(name, String("nm"), prefix, cout); }
+    if(name != String("")){
+        print(name, String("nm"), prefix, cout);
+    }
     check_valid(name, new_prefix);
 
 }
+
+
+//same as Length::set(String name, double x, [[maybe_unused]] String prefix)  but without printing out anything
+inline void Length::set(double x) {
+    
+    value = x;
+}
+
 
 //enter a length in meters
 void Length::enter(String name_in, String unit_in, [[maybe_unused]] String prefix) {
@@ -21620,7 +21669,7 @@ template<class P> void DynamicLengthField<P>::set(Length input) {
             //unit = String("nm")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
-            LengthField<P>::unit->name->SetValue(wxString("nm"));
+//            LengthField<P>::unit->name->SetValue(wxString("nm"));
             break;
             
         }
@@ -21629,7 +21678,7 @@ template<class P> void DynamicLengthField<P>::set(Length input) {
             //unit = String("m")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
-            LengthField<P>::unit->name->SetValue(wxString("m"));
+//            LengthField<P>::unit->name->SetValue(wxString("m"));
             
             break;
             
@@ -21639,7 +21688,7 @@ template<class P> void DynamicLengthField<P>::set(Length input) {
             //unit = String("ft")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
-            LengthField<P>::unit->name->SetValue(wxString("ft"));
+//            LengthField<P>::unit->name->SetValue(wxString("ft"));
             
             break;
             
@@ -21647,7 +21696,8 @@ template<class P> void DynamicLengthField<P>::set(Length input) {
             
     }
     
-    
+//    LengthField<P>::unit->set();
+
 }
 
 

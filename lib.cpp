@@ -12692,7 +12692,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
     //set
     d.set(String(""), (-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))))*Re, String(""));
     //here I set the value of d into observer_height, not the unit of measure, because I want the user to decide the unit of measure by selecting in the wxComboBox in the unit field
-    parent->observer_height->set_value();
+    parent->observer_height->set_value_keep_unit();
 
     //set phi_min/max
     ((circle_observer.reference_position).phi).normalize_pm_pi();
@@ -22256,7 +22256,7 @@ template<class P> void StaticLengthField<P>::set(void) {
 
 
 //set only the value in the GUI object *this equal to the value of the non-GUi object length. The unit of *this is not modified, and the value written into *this is converted to the current unit written in the GUI field *this
-template<class P> void StaticLengthField<P>::set_value(void) {
+template<class P> void StaticLengthField<P>::set_value_keep_unit(void) {
     
     
     

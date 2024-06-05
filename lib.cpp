@@ -22205,7 +22205,8 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
 //set the value and the unit of the GUI field *this equal to the value and the unit in the non-GUI object *length
 template<class P> void StaticLengthField<P>::set(Length input) {
     
-    switch (LengthField<P>::unit_value.position_in_list(LengthUnit_types)) {
+    
+    switch (String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types)) {
             
         case 0: {
             //unit = String("nm")

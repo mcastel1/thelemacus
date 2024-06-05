@@ -2381,7 +2381,6 @@ public:
     LengthUnitField<P>* unit;
     wxBoxSizer *sizer_h, *sizer_v;
     Length* length;
-     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool unit_ok;
 
     LengthField(wxPanel*, Length*);

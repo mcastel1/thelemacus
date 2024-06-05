@@ -21714,7 +21714,6 @@ template<class P> void DynamicLengthField<P>::set_from_value(Length input) {
             //unit = String("nm")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
-//            LengthField<P>::unit->name->SetValue(wxString("nm"));
             break;
             
         }
@@ -21723,7 +21722,6 @@ template<class P> void DynamicLengthField<P>::set_from_value(Length input) {
             //unit = String("m")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
-//            LengthField<P>::unit->name->SetValue(wxString("m"));
             
             break;
             
@@ -21733,7 +21731,6 @@ template<class P> void DynamicLengthField<P>::set_from_value(Length input) {
             //unit = String("ft")
             
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
-//            LengthField<P>::unit->name->SetValue(wxString("ft"));
             
             break;
             
@@ -21741,8 +21738,6 @@ template<class P> void DynamicLengthField<P>::set_from_value(Length input) {
             
     }
     
-//    LengthField<P>::unit->set();
-
 }
 
 

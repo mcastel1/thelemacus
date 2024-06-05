@@ -20203,7 +20203,7 @@ void SightFrame::set(void) {
     H_s->set();
     index_error->set();
 
-    if(!((artificial_horizon_check->checkbox)->GetValue())) {
+    if(!(artificial_horizon_check->checkbox->GetValue())) {
         
         height_of_eye->Enable(true);
         height_of_eye->set();
@@ -20218,12 +20218,12 @@ void SightFrame::set(void) {
     //    temp = (sight->master_clock_date_and_hour);
     //    temp += (sight->TAI_minus_UTC);
 
-    master_clock_date->set((sight->master_clock_date_and_hour).date);
-    master_clock_chrono->set((sight->master_clock_date_and_hour).chrono);
+    master_clock_date->set(sight->master_clock_date_and_hour.date);
+    master_clock_chrono->set(sight->master_clock_date_and_hour.chrono);
 
     stopwatch_check->set();
 
-    if(((stopwatch_check->checkbox)->GetValue())){
+    if((stopwatch_check->checkbox->GetValue())){
         
         stopwatch_reading->Enable(true);
         stopwatch_reading->set(sight->stopwatch);

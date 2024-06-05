@@ -114,7 +114,8 @@
   
 
  ********** THINGS TO FIX ***********
-    - check if you can remote index_error->set(); in SightFrame construtor 
+    - revise Atmosphere class in such a way that h is a proper Length with its proper units, not a double
+    - check if you can remote index_error->set(); in SightFrame construtor
     - rmeove SeedField::unit_value and SpeedFIeld::unit_ok as in LengthField
     - remove LengthField::unit_ok : this boolean variable should be substituted by LengthField::unit->ok
     - rename String("kt") with LengthUnitTypes[... ] and smilarly for other quantities

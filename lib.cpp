@@ -1746,6 +1746,14 @@ void String::set(String input_string) {
 }
 
 
+void String::set(string input_string) {
+
+    value = input_string;
+
+}
+
+
+
 //constructor of a Rotation instance
 Rotation::Rotation(void) {
 
@@ -5256,49 +5264,58 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
     }
 
     pos1 = line.find(" = ");
-    pos2 = line.find(" nm");
-
-    if (line.find(" nm") != (string::npos)) {
-        //the units of the length read is nm
-        
-        cout << prefix.value << "Unit is in nm\n";
-        pos2 = line.find(" nm");
-        unit_temp = String("nm");
-        
-    }
+    pos1 += 3;
+    //from now on pos1 is the starting position of the  numerical value
+    //pos2-1 contains the last character of th enumerical value
+    pos2 = line.find(" ", pos1);
     
-    if (line.find(" m") != (string::npos)) {
-        
-        // the units of the length read is m
-        cout << prefix.value << "Unit is in m\n";
-        pos2 = line.find(" m");
-        unit_temp = String("m");
-        
-    }
+    //thus I store the numerical value in to value ...
+    value = stod(line.substr(pos1, pos2 - pos1).c_str());
     
-    if (line.find(" ft") != (string::npos)) {
-        
-        //the units of the length read is ft
-        cout << prefix.value << "Unit is in ft\n";
-        pos2 = line.find(" ft");
-        unit_temp = String("ft");
-        
-    }
+    // .. and the unit inot unit
+    pos1 = pos2+1;
+    unit.set(line.substr(pos1));
 
-    value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
+//    if (line.find(" nm") != (string::npos)) {
+//        //the units of the length read is nm
+//        
+//        cout << prefix.value << "Unit is in nm\n";
+//        pos2 = line.find(" nm");
+//        unit_temp = String("nm");
+//        
+//    }
+//    
+//    if (line.find(" m") != (string::npos)) {
+//        
+//        // the units of the length read is m
+//        cout << prefix.value << "Unit is in m\n";
+//        pos2 = line.find(" m");
+//        unit_temp = String("m");
+//        
+//    }
+//    
+//    if (line.find(" ft") != (string::npos)) {
+//        
+//        //the units of the length read is ft
+//        cout << prefix.value << "Unit is in ft\n";
+//        pos2 = line.find(" ft");
+//        unit_temp = String("ft");
+//        
+//    }
+
     
     //THE ERROR IS HERE: I READ A value from STREAM IN UNITS OF METERS, AND I DON'T CHANGE THE UNITS IN *this (which may be equal meters) and I write in this->value the value read from file, divided by (1e3 * nm), I.E. THE VALUE IN NAUTICAL MILES -> result: IN *THIS I MAY HAVE UNITS OF METERS AND A VALUE EXPRESSED IN NAUTICAL MILES
-    if (unit_temp == String("m")) {
-        
-        value /= (1e3 * nm);
-        
-    }
-    
-    if (unit_temp == String("ft")) {
-        
-        value /= nm_ft;
-        
-    }
+//    if (unit_temp == String("m")) {
+//        
+//        value /= (1e3 * nm);
+//        
+//    }
+//    
+//    if (unit_temp == String("ft")) {
+//        
+//        value /= nm_ft;
+//        
+//    }
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 

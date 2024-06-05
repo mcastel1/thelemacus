@@ -142,6 +142,7 @@ public:
     void write_to_file(String, FileRW&, String);
     void set(String, String, String);
     void set(String);
+    void set(string);
     void set_to_current_time(void);
     String append(String);
     void appendto(String);

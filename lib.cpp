@@ -7682,6 +7682,7 @@ void Atmosphere::set(void) {
     lambda.resize(n_layers);
     t.resize(n_layers);
 
+    
     h[0] = 0.0;
     h[1] = 11.0 / nm;
     h[2] = 20.0 / nm;

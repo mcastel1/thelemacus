@@ -18142,7 +18142,7 @@ template<class E> void RouteFrame::UpdateLength(E& event) {
 
     if ((time->is_ok()) && (speed->is_ok())) {
 
-        length->set_from_value(Length(*(time->chrono), *(speed->speed)));
+        length->set_from_argument(Length(*(time->chrono), *(speed->speed)));
 
     }
     else {
@@ -21711,7 +21711,7 @@ template <class P> void AngleField<P>::set(void) {
 
 
 //set the value in the GUI field *this equal to the value in the non-GUI object *input
-template<class P> void DynamicLengthField<P>::set_from_value(Length input) {
+template<class P> void DynamicLengthField<P>::set_from_argument(Length input) {
     
 //    String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types);
     
@@ -21751,7 +21751,7 @@ template<class P> void DynamicLengthField<P>::set_from_value(Length input) {
 //set the value in the GUI object value equal to the value in the non-GUI object length
 template<class P> void DynamicLengthField<P>::set(void) {
 
-    set_from_value(*(LengthField<P>::length));
+    set_from_argument(*(LengthField<P>::length));
 
     value_ok = true;
     LengthField<P>::unit_ok = true;

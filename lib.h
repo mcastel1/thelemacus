@@ -2404,7 +2404,7 @@ public:
     
     DynamicLengthField(wxPanel*, Length*/*, String*/);
     
-    void set_from_value(Length);
+    void set_from_argument(Length);
     void set(void);
     template<class T> void get(T&);
     void Enable(bool);

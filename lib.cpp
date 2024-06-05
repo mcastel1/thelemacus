@@ -21708,7 +21708,9 @@ template <class P> void AngleField<P>::set(void) {
 //set the value in the GUI field *this equal to the value in the non-GUI object *input
 template<class P> void DynamicLengthField<P>::set_from_value(Length input) {
     
-    switch (LengthField<P>::unit_value.position_in_list(LengthUnit_types)) {
+//    String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types);
+    
+    switch (String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types)) {
             
         case 0: {
             //unit = String("nm")
@@ -22603,10 +22605,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 
 //set the value in the GUI object value equal to the value in the non-GUI object Speed
 template<class P> void SpeedField<P>::set(void) {
-    
-    
-    //    for (i = 0; (i < (unit->catalog.size())) && ((unit->name->GetValue()) != ((unit->catalog)[i])); i++) {}
-    
+        
     
     switch(String((unit->name->GetValue()).ToStdString()).position_in_list(unit->catalog)) {
             

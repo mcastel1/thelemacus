@@ -7945,34 +7945,7 @@ inline void Length::set(double x) {
 }
 
 
-//enter a length in meters
-void Length::enter(String name_in, String unit_in, [[maybe_unused]] String prefix) {
 
-    stringstream temp;
-
-    temp.clear();
-    temp << name_in.value;
-    if (unit_in == String("nm")) {
-        temp << " [nm]";
-    }
-    else {
-        temp << " [m]";
-    }
-
-    do {
-
-        enter_double(&value, false, 0.0, 0.0, temp.str(), prefix);
-
-    } while (!check_valid(name_in, prefix));
-
-    //if the length has been entered in units of m, convert it to nautical miles
-    if (unit_in == String("m")) {
-        value /= (1e3 * nm);
-    }
-
-    print(name_in, unit_in, prefix, cout);
-
-}
 
 string Length::to_string(String unit_in, unsigned int precision) {
 

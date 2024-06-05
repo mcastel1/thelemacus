@@ -5259,30 +5259,45 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
     pos2 = line.find(" nm");
 
     if (line.find(" nm") != (string::npos)) {
-        //in this case the units of the length read is nm
+        //the units of the length read is nm
+        
         cout << prefix.value << "Unit is in nm\n";
         pos2 = line.find(" nm");
         unit_temp = String("nm");
+        
     }
+    
     if (line.find(" m") != (string::npos)) {
-        //in this case the units of the length read is m
+        
+        // the units of the length read is m
         cout << prefix.value << "Unit is in m\n";
         pos2 = line.find(" m");
         unit_temp = String("m");
+        
     }
+    
     if (line.find(" ft") != (string::npos)) {
-        //in this case the units of the length read is ft
+        
+        //the units of the length read is ft
         cout << prefix.value << "Unit is in ft\n";
         pos2 = line.find(" ft");
         unit_temp = String("ft");
+        
     }
 
     value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
+    
+    //THE ERROR IS HERE: I READ A value from STREAM IN UNITS OF METERS, AND I DON'T CHANGE THE UNITS IN *this (which may be equal meters) and I write in this->value the value read from file, divided by (1e3 * nm), I.E. THE VALUE IN NAUTICAL MILES -> result: IN *THIS I MAY HAVE UNITS OF METERS AND A VALUE EXPRESSED IN NAUTICAL MILES
     if (unit_temp == String("m")) {
+        
         value /= (1e3 * nm);
+        
     }
+    
     if (unit_temp == String("ft")) {
+        
         value /= nm_ft;
+        
     }
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;

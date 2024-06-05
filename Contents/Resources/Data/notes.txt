@@ -114,6 +114,7 @@
   
 
  ********** THINGS TO FIX ***********
+    - rmeove SeedField::unit_value and SpeedFIeld::unit_ok as in LengthField 
     - remove LengthField::unit_ok : this boolean variable should be substituted by LengthField::unit->ok
     - rename String("kt") with LengthUnitTypes[... ] and smilarly for other quantities
      - search for all occurrences of QuestionFrame and ShowQuestion and put the right functor in the third argument and the right value of bind_esc_to_button_b

@@ -2381,12 +2381,10 @@ public:
     LengthUnitField<P>* unit;
     wxBoxSizer *sizer_h, *sizer_v;
     Length* length;
-    //the units of measure of the length in this GUI field
-    String unit_value;
-    //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
+     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool unit_ok;
 
-    LengthField(wxPanel*, Length*, String);
+    LengthField(wxPanel*, Length*);
     
     template<class E> void OnEditUnit(E&);
     template<class T> void InsertIn(T*);
@@ -2405,7 +2403,7 @@ public:
     CheckLength<P>* check;
     bool value_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     
-    DynamicLengthField(wxPanel*, Length*, String);
+    DynamicLengthField(wxPanel*, Length*/*, String*/);
     
     void set(Length);
     void set(void);
@@ -2429,7 +2427,7 @@ public:
     LengthUnit unit_before;
 
     
-    StaticLengthField(wxPanel*, Length*, String);
+    StaticLengthField(wxPanel*, Length*/*, String*/);
     
     void set(Length);
     void set(void);

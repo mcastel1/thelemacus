@@ -11714,7 +11714,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     s << "1:" << (zoom_factor.value);
 
     text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0);
-    observer_height = new StaticLengthField<ChartFrame>(panel, &(draw_panel->d), LengthUnit_types[0]);
+    observer_height = new StaticLengthField<ChartFrame>(panel, &(draw_panel->d)/*, LengthUnit_types[0]*/);
 
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
@@ -16778,7 +16778,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     //height of eye
     StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0);
-    height_of_eye = new DynamicLengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
+    height_of_eye = new DynamicLengthField<SightFrame>(panel, &(sight->height_of_eye)/*, String("m")*/);
     
     //this is how to properly bind the DynamicLengthField height_of_eye when it is inserted into a frame and I want a modification of the DynamicLengthField to trigger AllOk() in the frame. Given that I am including height_of_eye in a frame, I want that every time value or unit is changed, SightFrame::AllOk() is triggered : 1. I first bind OnEditValue and OnEditUnit to height_of_eye->value and height_of_eye->unit 2. every time height_of_eye is changed, OnEditValue and OnEditUnit will be called and set to true/false the value_ok and unit_ok variables 3. AllOk() will be called later, read the value_ok and unit_ok variables, and enable/disable button_reduce  accordingly
     height_of_eye->Bind(wxEVT_COMBOBOX, &SightFrame::AllOk<wxCommandEvent>, this);
@@ -17349,7 +17349,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     //the field for Length to set the Route length
     text_length = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
-    length = new DynamicLengthField<RouteFrame>(panel, &(route->length), String("nm"));
+    length = new DynamicLengthField<RouteFrame>(panel, &(route->length)/*, String("nm")*/);
 
 
     //this is how to properly bind the DynamicLengthField length when it is inserted into a frame and I want a modification of the DynamicLengthField to trigger AllOk() in the frame. Given that I am including length in a frame, I want that every time value or unit is changed, SightFrame::AllOk() is triggered : 1. I first bind OnEditValue and OnEditUnit to length->value and length->unit 2. every time length is changed, OnEditValue and OnEditUnit will be called and set to true/false the value_ok and unit_ok variables 3. AllOk() will be called later, read the value_ok and unit_ok variables, and enable/disable button_reduce  accordingly
@@ -21708,7 +21708,7 @@ template <class P> void AngleField<P>::set(void) {
 //set the value in the GUI field *this equal to the value in the non-GUI object *input
 template<class P> void DynamicLengthField<P>::set(Length input) {
     
-    switch (/*(unit_value.value)[0]*/ LengthField<P>::unit_value.position_in_list(LengthUnit_types)) {
+    switch (LengthField<P>::unit_value.position_in_list(LengthUnit_types)) {
             
         case 0: {
             //unit = String("nm")
@@ -22077,11 +22077,11 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 
 
 //constructor of a LengthField object, based on the parent frame frame
-template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in){
+template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p/*, String unit_value_in*/){
 
     parent = ((P*)(panel_of_parent->GetParent()));
     length = p;
-    unit_value = unit_value_in;
+//    unit_value = unit_value_in;
     
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -22139,7 +22139,7 @@ template<class P> template<class T> void LengthField<P>::InsertIn(T* host, wxSiz
 
 
 //constructor of a EditableLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
-template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
+template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_parent, Length* p/*, String unit_value_in*/) : LengthField<P>( panel_of_parent, p/*, unit_value_in*/) {
 
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
@@ -22174,7 +22174,7 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
 
 
 //constructor of a StaticLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
-template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) : LengthField<P>( panel_of_parent, p, unit_value_in) {
+template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p/*, String unit_value_in*/) : LengthField<P>( panel_of_parent, p/*, unit_value_in*/) {
 
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;

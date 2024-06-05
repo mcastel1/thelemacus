@@ -114,6 +114,7 @@
   
 
  ********** THINGS TO FIX ***********
+    - rename String("kt") with LengthUnitTypes[... ] and smilarly for other quantities 
      - search for all occurrences of QuestionFrame and ShowQuestion and put the right functor in the third argument and the right value of bind_esc_to_button_b
 	- the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 	- remove odd hotrizontal lines on WIN32 mercator projection, they occur when you zoom in too fast with the mouse wheel

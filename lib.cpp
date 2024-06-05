@@ -20180,7 +20180,7 @@ void SightFrame::set(void) {
 
     body->set();
 
-    if (((body->name)->GetValue() == wxString("sun") || (body->name)->GetValue() == wxString("moon"))) {
+    if(((body->name)->GetValue() == wxString("sun") || (body->name)->GetValue() == wxString("moon"))) {
         //if  body is sun or moon, then I write the value in the non-GUI field Limb into the GUI LimbField
 
         limb->Enable(true);
@@ -20195,6 +20195,7 @@ void SightFrame::set(void) {
         limb->checked_items.Clear();
 
         limb->Enable(false);
+        
     }
 
 
@@ -20202,30 +20203,35 @@ void SightFrame::set(void) {
     H_s->set();
     index_error->set();
 
-    if (!((artificial_horizon_check->checkbox)->GetValue())) {
+    if(!((artificial_horizon_check->checkbox)->GetValue())) {
+        
         height_of_eye->Enable(true);
         height_of_eye->set();
-    }
-    else {
+        
+    }else{
+        
         height_of_eye->Enable(false);
+        
     }
 
     //(sight->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
     //    temp = (sight->master_clock_date_and_hour);
     //    temp += (sight->TAI_minus_UTC);
 
-
     master_clock_date->set((sight->master_clock_date_and_hour).date);
     master_clock_chrono->set((sight->master_clock_date_and_hour).chrono);
 
     stopwatch_check->set();
 
-    if (((stopwatch_check->checkbox)->GetValue())) {
+    if(((stopwatch_check->checkbox)->GetValue())){
+        
         stopwatch_reading->Enable(true);
         stopwatch_reading->set(sight->stopwatch);
-    }
-    else {
+        
+    }else{
+        
         stopwatch_reading->Enable(false);
+        
     }
 
     TAI_minus_UTC->set(sight->TAI_minus_UTC);

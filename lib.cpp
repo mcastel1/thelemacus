@@ -20186,8 +20186,7 @@ void SightFrame::set(void) {
         limb->Enable(true);
         limb->set();
 
-    }
-    else {
+    }else {
         //if  body is not sun or moon, then I set the limb GUI field to empty and disable it
 
         long i;

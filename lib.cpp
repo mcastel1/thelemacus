@@ -21710,40 +21710,44 @@ template <class P> void AngleField<P>::set(void) {
 }
 
 
-//set the value in the GUI field *this equal to the value in the non-GUI object *input
+//set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
 template<class P> void DynamicLengthField<P>::set_from_argument(Length input) {
     
 //    String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types);
     
-    switch (String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types)) {
-            
-        case 0: {
-            //unit = String("nm")
-            
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
-            break;
-            
-        }
-            
-        case 1: {
-            //unit = String("m")
-            
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
-            
-            break;
-            
-        }
-            
-        case 2: {
-            //unit = String("ft")
-            
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
-            
-            break;
-            
-        }
-            
-    }
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
+    //HERE SET LengthField<P>::unit equal to the unit of measure of input
+//    LengthField<P>::unit->SetValue(input.unit);
+
+//    switch (String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types)) {
+//            
+//        case 0: {
+//            //unit = String("nm")
+//            
+//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
+//            break;
+//            
+//        }
+//            
+//        case 1: {
+//            //unit = String("m")
+//            
+//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
+//            
+//            break;
+//            
+//        }
+//            
+//        case 2: {
+//            //unit = String("ft")
+//            
+//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
+//            
+//            break;
+//            
+//        }
+//            
+//    }
     
 }
 

@@ -16991,7 +16991,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     if (!check) {
         cout << prefix.value << RED << "Cannot read sight!\n" << RESET;
     }
-    if (sight_in != NULL) { set(); }
+    if (sight_in != NULL) {
+        set();
+    }
 
     //runs checl to write into the `ok` boolean variable of each field, and then AllOk to enable/disable button_reduce according to these `ok` variables
     Check();

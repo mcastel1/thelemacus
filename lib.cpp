@@ -7949,7 +7949,7 @@ inline void Length::set(double x) {
 
 
 
-//convert *this to string by printing it in the unit of measure unit_in
+//convert *this to string by printing it in the unit of measure unit_in, with precision precision
 string Length::to_string(String unit_in, unsigned int precision) {
 
     stringstream output;

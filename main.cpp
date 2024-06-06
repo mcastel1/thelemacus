@@ -373,7 +373,7 @@ bool MyApp::OnInit() {
     
     //
     //test for Length::convert_to
-    Length a(13.3434, LengthUnit_types[2]), b(1.4355, LengthUnit_types[1]);
+    Length a(13.3434, LengthUnit_types[1]), b(1.4355, LengthUnit_types[1]);
     a.print(String("a"), String("\t"), cout);
     b.print(String("b"), String("\t"), cout);
     a+=b;

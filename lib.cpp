@@ -1235,7 +1235,7 @@ inline bool Length::operator < (const Length& r) {
 bool operator < (const Length& l, const Length& s) {
     
     
-    if((l.unit) == (s.unit)){
+    if((l.unit.value) == (s.unit.value)){
         //l and s have the same units -> just compare their values
         
         return(((l.value) < (s.value)));

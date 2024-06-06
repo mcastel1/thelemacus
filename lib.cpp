@@ -8049,9 +8049,78 @@ void Length::print(String name, String prefix, ostream& ostr) {
 
 
 //convert *this to unit of measure unit_in, set unit = unit_in and write the result in *this
-inline void Length::convert(const LengthUnit& unit_in){
+inline void Length::convert(const LengthUnit& output_unit){
+    
+    //the value of this in units of measure LengthUnit_types[0]
+    double value0 = 0.0;
+
+    
+    //1. convert *this to unit LengthUnit_types[0] and write the result in value_in_LengthUnit_types0
+    switch (unit.position_in_list(LengthUnit_types)) {
+            
+        case 0:{
+            //unit = LengthUnit_types[0]
+            
+            value0 = value;
+            
+            break;
+            
+        }
+
+        case 1:{
+            //unit = LengthUnit_types[1]
+            
+            value0 = value * m_to_nm;
+            
+            break;
+            
+        }
+            
+        case 2:{
+            //unit = LengthUnit_types[2]
+            
+            value0 = value * ft_to_nm;
+            
+            break;
+            
+        }
+            
+    }
     
     
+    //2. convert *this to unit output_unit and write the result in *this
+    switch (String(output_unit).position_in_list(LengthUnit_types)) {
+            
+        case 0:{
+            //output_unit = LengthUnit_types[0]
+            
+            value = value0;
+            
+            break;
+            
+        }
+
+        case 1:{
+            //output_unit = LengthUnit_types[1]
+            
+            value = value0 * nm_to_m;
+
+            break;
+            
+        }
+            
+        case 2:{
+            //output_unit = LengthUnit_types[2]
+            
+            value = value0 * nm_to_ft;
+
+            break;
+            
+        }
+            
+    }
+    
+    unit = output_unit;
     
 }
 

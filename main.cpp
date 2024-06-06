@@ -271,9 +271,8 @@ bool MyApp::OnInit() {
     /*
     Length l(13.34643, LengthUnit_types[0]);
     l.print(String("before"), String("*"), cout);
-    l.convert(LengthUnit_types[2]);
+    l.convert_to(LengthUnit_types[1]);
     l.print(String("after"), String("*"), cout);
-    
     */
 
     

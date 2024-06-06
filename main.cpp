@@ -373,25 +373,14 @@ bool MyApp::OnInit() {
     
     //
     //test for Length::convert_to
-    Length a(13.3434, LengthUnit_types[2]), b(1.4355, LengthUnit_types[1]);
+    Length a(13.3434, LengthUnit_types[2]), b(4.05, LengthUnit_types[1]);
+    bool comp;
     a.print(String("a"), String("\t"), cout);
     b.print(String("b"), String("\t"), cout);
-    a+=b;
-    a.print(String("a+b"), String("\t"), cout);
+    comp = a > b;
     //
     
-    //----- test for Data::read_from_file_to - start
-    /*
-     Data* my_data;
-     Catalog* my_catalog;
-     
-     my_catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
-     my_data = new Data(my_catalog, String(""));
-     
-     my_data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String("**"));
-     
-     */
-    //----- test for Data::read_from_file_to - end
+    
     
     //set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen
     size_small_button = dummy_frame->ToDIP(wxSize(

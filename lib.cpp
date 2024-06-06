@@ -1168,7 +1168,7 @@ void Length::operator -= (const Length& length) {
 }
 
 
-//evaluates whether Length (*this) is larger than r
+//evaluates whether Length (*this) is < than r
 inline bool Length::operator > (const Length& r) {
     
     if(unit == r.unit){
@@ -1185,18 +1185,22 @@ inline bool Length::operator > (const Length& r) {
 
 }
 
+
+//evaluates whether Length (*this) is <= r, see Length::operator >
+inline bool Length::operator <= (const Length& r) {
+
+    return(!((*this) > r));
+
+}
+
+
 bool operator < (const Length& l, const Length& s) {
 
     return((l.value) < (s.value));
 
 }
 
-//evaluates whether Length (*this) is <= r
-inline bool Length::operator <= (const Length& r) {
 
-    return(!((*this) > r));
-
-}
 
 //evaluates whether Length (*this) is >= r
 inline bool Length::operator >= (const Length& r) {

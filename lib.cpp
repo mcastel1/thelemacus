@@ -3137,7 +3137,7 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
         listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.value), false)));
         
         set_length_from_time_speed();
-        listcontrol->SetItem(i, j++, wxString(length.to_string(String("nm"), (display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(length.to_string(LengthUnit_types[0], (display_precision.value))));
 
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));
@@ -5284,7 +5284,7 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
 //        
 //        cout << prefix.value << "Unit is in nm\n";
 //        pos2 = line.find(" nm");
-//        unit_temp = String("nm");
+//        unit_temp = LengthUnit_types[0];
 //        
 //    }
 //    
@@ -5293,7 +5293,7 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
 //        // the units of the length read is m
 //        cout << prefix.value << "Unit is in m\n";
 //        pos2 = line.find(" m");
-//        unit_temp = String("m");
+//        unit_temp = LengthUnit_types[1];
 //        
 //    }
 //    
@@ -5302,19 +5302,19 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
 //        //the units of the length read is ft
 //        cout << prefix.value << "Unit is in ft\n";
 //        pos2 = line.find(" ft");
-//        unit_temp = String("ft");
+//        unit_temp = LengthUnit_types[2];
 //        
 //    }
 
     
     //THE ERROR IS HERE: I READ A value from STREAM IN UNITS OF METERS, AND I DON'T CHANGE THE UNITS IN *this (which may be equal meters) and I write in this->value the value read from file, divided by (1e3 * nm), I.E. THE VALUE IN NAUTICAL MILES -> result: IN *THIS I MAY HAVE UNITS OF METERS AND A VALUE EXPRESSED IN NAUTICAL MILES
-//    if (unit_temp == String("m")) {
+//    if (unit_temp == LengthUnit_types[1]) {
 //        
 //        value /= (1e3 * nm);
 //        
 //    }
 //    
-//    if (unit_temp == String("ft")) {
+//    if (unit_temp == LengthUnit_types[2]) {
 //        
 //        value /= nm_ft;
 //        
@@ -5684,7 +5684,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
     //set height of eye column
     if (artificial_horizon.value == 'n') {
 
-        listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string(String("m"), (display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string(LengthUnit_types[1], (display_precision.value))));
 
     }
     else {
@@ -7956,8 +7956,8 @@ string Length::to_string(String unit_in, unsigned int precision) {
 
     output.precision(precision);
 
-    if (unit_in == String("nm")) { output << fixed << value << " nm"; }
-    if (unit_in == String("m")) { output << fixed << value * 1e3 * nm << " m"; }
+    if (unit_in == LengthUnit_types[0]) { output << fixed << value << " nm"; }
+    if (unit_in == LengthUnit_types[1]) { output << fixed << value * 1e3 * nm << " m"; }
 
     return(output.str().c_str());
 
@@ -16786,7 +16786,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     //height of eye
     StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0);
-    height_of_eye = new DynamicLengthField<SightFrame>(panel, &(sight->height_of_eye)/*, String("m")*/);
+    height_of_eye = new DynamicLengthField<SightFrame>(panel, &(sight->height_of_eye)/*, LengthUnit_types[1]*/);
     
     //this is how to properly bind the DynamicLengthField height_of_eye when it is inserted into a frame and I want a modification of the DynamicLengthField to trigger AllOk() in the frame. Given that I am including height_of_eye in a frame, I want that every time value or unit is changed, SightFrame::AllOk() is triggered : 1. I first bind OnEditValue and OnEditUnit to height_of_eye->value and height_of_eye->unit 2. every time height_of_eye is changed, OnEditValue and OnEditUnit will be called and set to true/false the value_ok and unit_ok variables 3. AllOk() will be called later, read the value_ok and unit_ok variables, and enable/disable button_reduce  accordingly
     height_of_eye->Bind(wxEVT_COMBOBOX, &SightFrame::AllOk<wxCommandEvent>, this);
@@ -17359,7 +17359,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     //the field for Length to set the Route length
     text_length = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
-    length = new DynamicLengthField<RouteFrame>(panel, &(route->length)/*, String("nm")*/);
+    length = new DynamicLengthField<RouteFrame>(panel, &(route->length)/*, LengthUnit_types[0]*/);
 
 
     //this is how to properly bind the DynamicLengthField length when it is inserted into a frame and I want a modification of the DynamicLengthField to trigger AllOk() in the frame. Given that I am including length in a frame, I want that every time value or unit is changed, SightFrame::AllOk() is triggered : 1. I first bind OnEditValue and OnEditUnit to length->value and length->unit 2. every time length is changed, OnEditValue and OnEditUnit will be called and set to true/false the value_ok and unit_ok variables 3. AllOk() will be called later, read the value_ok and unit_ok variables, and enable/disable button_reduce  accordingly
@@ -21740,7 +21740,7 @@ template<class P> void DynamicLengthField<P>::set_from_argument(Length input) {
 //    switch (String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types)) {
 //            
 //        case 0: {
-//            //unit = String("nm")
+//            //unit = LengthUnit_types[0]
 //            
 //            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
 //            break;
@@ -21748,7 +21748,7 @@ template<class P> void DynamicLengthField<P>::set_from_argument(Length input) {
 //        }
 //            
 //        case 1: {
-//            //unit = String("m")
+//            //unit = LengthUnit_types[1]
 //            
 //            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
 //            
@@ -21757,7 +21757,7 @@ template<class P> void DynamicLengthField<P>::set_from_argument(Length input) {
 //        }
 //            
 //        case 2: {
-//            //unit = String("ft")
+//            //unit = LengthUnit_types[2]
 //            
 //            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
 //            
@@ -22236,7 +22236,7 @@ template<class P> void StaticLengthField<P>::set(Length input) {
     switch (String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types)) {
             
         case 0: {
-            //unit = String("nm")
+            //unit = LengthUnit_types[0]
             
             value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
             break;
@@ -22244,7 +22244,7 @@ template<class P> void StaticLengthField<P>::set(Length input) {
         }
             
         case 1: {
-            //unit = String("m")
+            //unit = LengthUnit_types[1]
             
             value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
             
@@ -22253,7 +22253,7 @@ template<class P> void StaticLengthField<P>::set(Length input) {
         }
             
         case 2: {
-            //unit = String("ft")
+            //unit = LengthUnit_types[2]
             
             value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
             
@@ -22681,7 +22681,7 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
         value->GetValue().ToDouble(&speed_temp);
 
         if ((unit->name->GetValue().ToStdString()) == "kt") {
-            //unit = String("nm")
+            //unit = LengthUnit_types[0]
             speed->set(String(""), /*the speed is entered in the GUI field is already in nm, thus no need to convert it*/speed_temp, String(""));
 
         }
@@ -22695,7 +22695,7 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
             else {
 
                 if ((unit->name->GetValue().ToStdString()) == "m/s") {
-                    //unit = String("ft")
+                    //unit = LengthUnit_types[2]
 
                     speed->set(String(""), /*the speed is entered in the GUI field in m/s, thus I convert it to kt*/speed_temp / (nm * 1e3) * 3600.0, String(""));
 

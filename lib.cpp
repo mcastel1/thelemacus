@@ -5216,7 +5216,7 @@ void Time::operator -= (const Chrono& chrono_in) {
 }
 
 
-bool Length::check_valid(String name, [[maybe_unused]] String prefix) {
+bool Length::check(String name, [[maybe_unused]] String prefix) {
 
     bool check = true;
 
@@ -7933,7 +7933,7 @@ inline void Length::set(String name, double x, [[maybe_unused]] String prefix) {
     if(name != String("")){
         print(name, prefix, cout);
     }
-    check_valid(name, new_prefix);
+    check(name, new_prefix);
 
 }
 
@@ -8094,7 +8094,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 check &= false;
             }
             else {
-                if ((r.check_valid(String("r"), new_prefix))) {
+                if ((r.check(String("r"), new_prefix))) {
                     r.print(String("r"), new_prefix, cout);
                 }
                 else {

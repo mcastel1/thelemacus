@@ -5216,6 +5216,7 @@ void Time::operator -= (const Chrono& chrono_in) {
 }
 
 
+//return true of both the value and the unit of *this are valid, false otherwise
 bool Length::check(String name, [[maybe_unused]] String prefix) {
 
     bool check = true;
@@ -5225,6 +5226,8 @@ bool Length::check(String name, [[maybe_unused]] String prefix) {
         cout << prefix.value << RED << "Entered value of " << name.value << " is not valid!\n" << RESET;
     }
 
+    check &= (unit.check());
+    
     return check;
 
 }

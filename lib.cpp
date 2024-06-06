@@ -1300,6 +1300,7 @@ Length Length::operator + (const Length& l) {
 }
 
 
+//compute the difference between *this and l and return the result in the units of *this
 Length Length::operator - (const Length& l) {
 
     Length s;
@@ -1312,6 +1313,7 @@ Length Length::operator - (const Length& l) {
 }
 
 
+//compute the product between *this and the double x (which is interpreted as a dimensinless quantity) and return the result as a Length with the same units as *this
 Length Length::operator * (const double& x) {
 
     Length s;
@@ -1323,6 +1325,7 @@ Length Length::operator * (const double& x) {
 }
 
 
+//compute the ratio between *this and the double x (which is interpreted as a dimensinless quantity) and return the result as a Length with the same units as *this
 Length Length::operator / (const double& x) {
 
     Length s;
@@ -1332,7 +1335,6 @@ Length Length::operator / (const double& x) {
     return s;
 
 }
-
 
 
 void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) {

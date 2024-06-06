@@ -7973,7 +7973,7 @@ string Length::to_string(String output_unit, unsigned int precision) {
         case 1:{
             //unit = LengthUnit_types[1]
             
-            value_in_LengthUnit_types0 = value * (1e-3)/nm_to_km ;
+            value_in_LengthUnit_types0 = value/nm_to_m;
             
             break;
             
@@ -8006,7 +8006,7 @@ string Length::to_string(String output_unit, unsigned int precision) {
         case 1:{
             //output_unit = LengthUnit_types[1]
             
-            value_in_LengthUnit_types0 *= nm_to_km * 1e3;
+            value_in_LengthUnit_types0 *= nm_to_m;
 
             break;
             
@@ -16478,7 +16478,7 @@ template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
             case 1: {
                 //unit = "m"
                 
-                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm_to_km), String(""));
+                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / nm_to_m, String(""));
                 
                 break;
                 
@@ -22317,7 +22317,7 @@ template<class P> void StaticLengthField<P>::set(Length input) {
         case 1: {
             //unit = LengthUnit_types[1]
             
-            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm_to_km));
+            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * nm_to_m));
             
             break;
             
@@ -22727,7 +22727,7 @@ template<class P> void SpeedField<P>::set(void) {
         case 2: {
             //unit = SpeedUnit_types[2]
             
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm_to_km * 1e3 / 3600.0));
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm_to_m / 3600.0));
             
             break;
         }
@@ -22768,7 +22768,7 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
                 if ((unit->name->GetValue().ToStdString()) == "m/s") {
                     //unit = LengthUnit_types[2]
 
-                    speed->set(String(""), /*the speed is entered in the GUI field in m/s, thus I convert it to kt*/speed_temp / (nm_to_km * 1e3) * 3600.0, String(""));
+                    speed->set(String(""), /*the speed is entered in the GUI field in m/s, thus I convert it to kt*/speed_temp / nm_to_m * 3600.0, String(""));
 
                 }
 

@@ -76,6 +76,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+ - add inch to units of measure for Lengths
  - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
  - code method DrawPanel::ProjectionToGeo_3D
  - add the height of the observer above the earth surface in the 3d projection
@@ -114,6 +115,7 @@
   
 
  ********** THINGS TO FIX ***********
+    - double check the value of inch_to_km
     - revise Atmosphere class in such a way that h is a proper Length with its proper units, not a double
     - check if you can remote index_error->set(); in SightFrame construtor
     - rmeove SeedField::unit_value and SpeedFIeld::unit_ok as in LengthField

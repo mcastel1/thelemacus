@@ -2548,8 +2548,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             //set the legnth as the length of the shortest great circle joining p_start and p_end
             phi.set(String(""), acos(r_start.dot(r_end)), String(""));
             
-            (length.unit) = LengthUnit_types[0];
-            length.set(String(""), Re*(phi.value), String(""));
+            length.set(Re*(phi.value), LengthUnit_types[0]);
             
             //set the tentative solution for the azimuth angle z: Z may be either z  (solkution 1) or -z (solution 2), I will pick the correct solution later
             z.set(String(""),
@@ -2599,8 +2598,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
     length_format.set((LengthFormat_types[1]));
     
     //the lenght of the circle of equal altitude is set by default
-    (length.unit) = LengthUnit_types[0];
-    length.set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
+    length.set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
 
     related_sight.set(String(""), -1, String(""));
 
@@ -2699,15 +2697,13 @@ inline void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* 
         //handle special cases i=0 and i = n_points-1 to avoind roundoff error
         if ((i > 0) && (i < n_points - 1)) {
 
-            s.set(String(""), (length.value) * ((double)i) / ((double)(n_points - 1)), String(""));
+            s = (length * ((double)i) / ((double)(n_points - 1)));
 
-        }
-        else {
+        }else{
 
             if (i == 0) {
                 s.set(String(""), 0.0, String(""));
-            }
-            else {
+            }else{
                 s = length;
             }
 

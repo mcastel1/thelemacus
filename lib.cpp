@@ -1213,11 +1213,26 @@ inline bool Length::operator < (const Length& r) {
 
 
 bool operator < (const Length& l, const Length& s) {
+    
+    
+    if((l.unit) == (s.unit)){
+        //l and s have the same units -> just compare their values
+        
+        return(((l.value) < (s.value)));
+        
+    }else{
+        //l and s have different units -> convert l to the units of s and compare
+        
+        Length temp;
+        
+        temp = l;
+        temp.convert_to(s.unit);
+        
+        return((temp.value) < (s.value));
 
-    return((l.value) < (s.value));
+    }
 
 }
-
 
 
 //evaluates whether Length (*this) is >= r

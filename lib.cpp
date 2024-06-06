@@ -7991,7 +7991,7 @@ string Length::to_string(String output_unit, unsigned int precision) {
     }
     
     
-    //2. convert *this to unit LengthUnit_types[0] and write the result in value_in_LengthUnit_types0
+    //2. convert *this to unit output_unit and write the result in value_in_LengthUnit_types0
     switch (output_unit.position_in_list(LengthUnit_types)) {
             
         case 0:{

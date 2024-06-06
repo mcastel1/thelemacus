@@ -706,6 +706,7 @@ public:
     
     void set(String, double, String);
     void set(double);
+    void set(double, const LengthUnit&);
     string to_string(const LengthUnit&, unsigned int);
     string to_string(unsigned int);
     void print(String, String, ostream&);

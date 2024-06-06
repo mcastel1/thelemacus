@@ -8049,6 +8049,14 @@ inline void Length::set(double x) {
 }
 
 
+//set the value of *this equal to x and the units equal to unit_in
+inline void Length::set(double value_in, const LengthUnit& unit_in) {
+    
+    value = value_in;
+    unit = unit_in;
+}
+
+
 //convert *this to string with numerical precision precision
 string Length::to_string(unsigned int precision){
     

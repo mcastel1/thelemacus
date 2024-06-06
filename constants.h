@@ -30,6 +30,8 @@ Angle max_lat, min_lat;
 //[ft] = 0.3048 [m]
 //[nm] = nm_to_km [km] = nm_to_km 1000 [m] = nm_to_km 1000 / 0.3048 [ft]
 #define nm_to_ft (nm_to_km * (1e3) / 0.3048)
+//[nm] = nm_to_km [km] = nm_to_km 1000 [m] 
+#define nm_to_m ((1e3)*nm_to_km)
 //earth radius in nautical miles
 #define Re (60.0*360.0/(2.0*M_PI))
 #define RED     "\033[1;31m"

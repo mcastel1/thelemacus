@@ -2257,18 +2257,18 @@ bool Position::distance(Position p, Length* l, String name, [[maybe_unused]] Str
     bool check;
     check = true;
 
+    (l->unit) = LengthUnit_types[0];
     (l->value) = Re * acos(cos((lambda)-(p.lambda)) * cos(phi) * cos(p.phi) + sin(phi) * sin(p.phi));
 
     check &= !isnan(l->value);
 
-    if (check) {
+    if(check){
 
         Angle a;
         a.set(String(""), (l->value) / Re, prefix);
         l->print(name, prefix, cout);
 
-    }
-    else {
+    }else{
 
         cout << prefix.value << RED << "\tI could not compute distance!\n" << RESET;
 
@@ -2287,7 +2287,7 @@ bool Position::is_in(Route route, [[maybe_unused]] String prefix) {
 
         distance(route.reference_position, &d, String(""), prefix);
 
-        return(d <= (Re * ((route.omega).value)));
+        return(d <= (Re * (route.omega.value)));
 
 
     }

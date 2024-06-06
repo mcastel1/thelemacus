@@ -11694,7 +11694,7 @@ inline void DrawPanel::PreRender3D(void) {
 
             }
 
-            route.length.set(String(""), Re * M_PI, String(""));
+            route.length.set(Re * M_PI, LengthUnit_types[0]);
             (route.Z) = Z_saved;
             (route.reference_position.lambda.value) = (lambda_saved.value);
             ((route.reference_position).phi) = phi_saved;
@@ -11716,7 +11716,7 @@ inline void DrawPanel::PreRender3D(void) {
 
         //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
         route.omega.set(String(""), M_PI_2 - fabs(phi.value), String(""));
-        route.length.set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
+        route.length.set(2.0 * M_PI * Re * sin(route.omega), LengthUnit_types[0]);
         route.reference_position.phi.set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
 
         //add the current parallel that is being drawn to parallels
@@ -11730,7 +11730,7 @@ inline void DrawPanel::PreRender3D(void) {
 
             route.type.set(String(((Route_types[1]).value)));
             route.Z.set(String(""), M_PI_2, String(""));
-            route.length.set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
+            route.length.set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer.omega.value)), LengthUnit_types[0]);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for (

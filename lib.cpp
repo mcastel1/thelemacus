@@ -2547,6 +2547,8 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             
             //set the legnth as the length of the shortest great circle joining p_start and p_end
             phi.set(String(""), acos(r_start.dot(r_end)), String(""));
+            
+            (length.unit) = LengthUnit_types[0];
             length.set(String(""), Re*(phi.value), String(""));
             
             //set the tentative solution for the azimuth angle z: Z may be either z  (solkution 1) or -z (solution 2), I will pick the correct solution later
@@ -2595,7 +2597,9 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
     omega = omega_in;
 
     length_format.set((LengthFormat_types[1]));
+    
     //the lenght of the circle of equal altitude is set by default
+    (length.unit) = LengthUnit_types[0];
     length.set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
 
     related_sight.set(String(""), -1, String(""));
@@ -2644,7 +2648,7 @@ inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector<
     //tabulate the Route points
     for (/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the chart, and thus terminated a connectd component of dummy_route*/v->clear(), end_connected = true, i = 0; i < n_points; i++) {
 
-        compute_end(Length((length.value) * ((double)i) / ((double)(n_points - 1))), String(""));
+        compute_end(length*((double)i)/((double)(n_points - 1)), String(""));
         
         //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
         if((i==0) || (i==n_points-1)){
@@ -3408,7 +3412,7 @@ void Route::size_Mercator(PositionProjection* p){
 }
 
 
-//If circle is not a circle of equal altitude, it returns -1 (error code). Otherwise, if the type of *this is not valid, it returns -1. Otherwise, the type of *this is valid-> if a part of *this is included into  circle, it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and write_t = true, it sets t[0] = t[1] = 0.0
+//If circle is not a circle of equal altitude, it returns -1 (error code). Otherwise, if the type of *this is not valid, it returns -1. Otherwise, the type of *this is valid-> if a part of *this is included into  circle, it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and write_t = true, it sets t[0] = t[1] = 0.0. This method requires that Route::length is expressed in units LengthUnit_types[0]
 int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unused]] String prefix) {
 
     String new_prefix;
@@ -3586,7 +3590,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
 }
 
-//If *this is a loxodrome, return -1 because I don't know how to determine whetehr the loxodrome is included in a PositionRectangle. Otherwise, if *this is included into the PositionRectangle rectangle it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it reallocates t and writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this entirely lies within circle and write_t = true, it returns t[0] = t[1] = 0.0
+//If *this is a loxodrome, return -1 because I don't know how to determine whetehr the loxodrome is included in a PositionRectangle. Otherwise, if *this is included into the PositionRectangle rectangle it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it reallocates t and writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this entirely lies within circle and write_t = true, it returns t[0] = t[1] = 0.0.  This method requires that Route::length is expressed in units LengthUnit_types[0]
 int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t, [[maybe_unused]] String prefix) {
 
 
@@ -4040,10 +4044,11 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 
         reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
         omega.read_from_stream<S>(String("omega"), input_stream, false, new_prefix);
+        
+        (length.unit) = LengthUnit_types[0];
         length.set(String("length"), 2.0 * M_PI * Re * sin(omega), new_prefix);
 
-    }
-    else {
+    }else{
 
         reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
 
@@ -4863,7 +4868,7 @@ void Route::set_length_from_input(double t){
 }
 
 
-//write into this->end the Position on the Route at length this->length (which needs to be correclty set before this method is called) along the Route from start
+//write into this->end the Position on the Route at length this->length (which needs to be correclty set before this method is called) along the Route from start.  This method requires that Route::length is expressed in units LengthUnit_types[0]
 void Route::compute_end(String prefix) {
     
     //picks the first (and only) character in string type.value
@@ -4966,7 +4971,7 @@ void Route::compute_end(String prefix) {
 }
 
 
-//This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false
+//This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false.  This method requires that Route::length and d are expressed in units LengthUnit_types[0]
 bool Route::compute_end(Length d, [[maybe_unused]] String prefix) {
     
     set_length_from_time_speed();
@@ -7232,6 +7237,8 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
 
     check &= compute_H_o(new_prefix);
     circle_of_equal_altitude->omega.set(String(""), M_PI_2 - (H_o.value), String(""));
+    
+    circle_of_equal_altitude->length.unit.set(LengthUnit_types[0]);
     circle_of_equal_altitude->length.set(String(""), 2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), new_prefix);
 
     if (!check) {
@@ -7513,8 +7520,9 @@ double Route::lambda_minus_pi(double t, void* route) {
     String new_prefix;
 
     //append \t to prefix
-    new_prefix = ((*r).temp_prefix).append(String("\t"));
+    new_prefix = (r->temp_prefix.append(String("\t")));
 
+    r->length.unit.set(LengthUnit_types[0]);
     (r->length.value) = Re * sin(((*r).omega.value)) * t;
     r->compute_end(new_prefix);
 
@@ -7523,7 +7531,7 @@ double Route::lambda_minus_pi(double t, void* route) {
 }
 
 
-//comppute the extremal (min and max) longitudes taken by the points lying on *this, and write them in *lambda_min and *lambda_max 
+//comppute the extremal (min and max) longitudes taken by the points lying on *this, and write them in *lambda_min and *lambda_max. This method requires that length is expressed in units LengthUnit_types[0]
 void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]] String prefix) {
     
     String new_prefix;

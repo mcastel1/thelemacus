@@ -1299,22 +1299,13 @@ Length Length::operator + (const Length& l) {
 
 }
 
+
 Length Length::operator - (const Length& l) {
 
     Length s;
-
-    if (value >= (l.value)) {
-
-        (s.value) = value - (l.value);
-
-    }
-    else {
-
-        cout << RED << "Length resulting from substraction is negative!\n" << RESET;
-
-        (s.value) = 0.0;
-
-    }
+    
+    s = (*this);
+    s -= l;
 
     return s;
 

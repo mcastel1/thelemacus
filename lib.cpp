@@ -4041,8 +4041,7 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
         reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
         omega.read_from_stream<S>(String("omega"), input_stream, false, new_prefix);
         
-        (length.unit) = LengthUnit_types[0];
-        length.set(String("length"), 2.0 * M_PI * Re * sin(omega), new_prefix);
+        length.set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
 
     }else{
 
@@ -4817,7 +4816,6 @@ void Route::set_length_from_input(double t){
 
             //set the length format, the length unit and the value of the length from t
             length_format.set(String(""), LengthFormat_types[1], String(""));
-            length.unit.set(String(""), LengthUnit_types[0], String(""));
             
             if(fabs(C) > epsilon_double){
                 //I am not in the special case where Z = pi/2 or 3 pi /2 (i.e., C = 0)
@@ -4825,18 +4823,14 @@ void Route::set_length_from_input(double t){
                 double s;
                 
                 s = GSL_SIGN(cos(Z));
-                length.set(
-                           String(""),
-                           s * 2.0*Re/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t ) ) ),
-                           String(""));
+                length.set(s * 2.0*Re/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t ) ) ),
+                           LengthUnit_types[0]);
                 
             }else{
                 //I am in the special case where Z = pi/2 or 3 pi /2 (i.e., C = 0) -> set the length by using the analytical limit C->0 for  expression of the length
                 
-                length.set(
-                           String(""),
-                           2.0*Re*t*eta/(1.0+gsl_pow_2(eta)),
-                           String(""));
+                length.set(2.0*Re*t*eta/(1.0+gsl_pow_2(eta)),
+                           LengthUnit_types[0]);
                 
             }
             
@@ -7234,8 +7228,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
     check &= compute_H_o(new_prefix);
     circle_of_equal_altitude->omega.set(String(""), M_PI_2 - (H_o.value), String(""));
     
-    circle_of_equal_altitude->length.unit.set(LengthUnit_types[0]);
-    circle_of_equal_altitude->length.set(String(""), 2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), new_prefix);
+    circle_of_equal_altitude->length.set(2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), LengthUnit_types[0]);
 
     if (!check) {
 
@@ -7518,8 +7511,7 @@ double Route::lambda_minus_pi(double t, void* route) {
     //append \t to prefix
     new_prefix = (r->temp_prefix.append(String("\t")));
 
-    r->length.unit.set(LengthUnit_types[0]);
-    (r->length.value) = Re * sin(((*r).omega.value)) * t;
+    r->length.set(Re * sin((r->omega.value)) * t, LengthUnit_types[0]);
     r->compute_end(new_prefix);
 
     return(((*r).end.lambda.value) - M_PI);

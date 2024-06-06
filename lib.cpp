@@ -1116,11 +1116,13 @@ void Int::print(String name, String prefix, ostream& ostr) {
 
 }
 
+
 inline bool Length::operator == (const Length& length) {
 
-    return (value == (length.value));
+    return((value == (length.value)) && (unit == (length.unit)));
 
 }
+
 
 inline bool Length::operator != (const Length& length) {
 
@@ -1128,20 +1130,29 @@ inline bool Length::operator != (const Length& length) {
 
 }
 
-Length& Length::operator += (const Length& length) {
 
+//add *this to length and write the result in *this
+void Length::operator += (const Length& length) {
+    
+    //convert *this to the unit of measure of length
+    convert_to(length.unit);
+    //now that *this and length have the same units, I can sum their values
     value += (length.value);
-
-    return (*this);
+    //convert back *this to its original units
+    convert_to(unit);
 
 }
 
-Length& Length::operator -= (const Length& length) {
 
+void Length::operator -= (const Length& length) {
+
+    //convert *this to the unit of measure of length
+    convert_to(length.unit);
+    //now that *this and length have the same units, I can sum their values
     value -= (length.value);
-
-    return (*this);
-
+    //convert back *this to its original units
+    convert_to(unit);
+    
 }
 
 //evaluates whether Length (*this) is larger than r

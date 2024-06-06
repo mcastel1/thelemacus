@@ -717,7 +717,7 @@ public:
     bool check(String, String);
     bool operator > (const Length&), operator >= (const Length&), operator <= (const Length&), operator > (const double&), operator >= (const double&), operator < (const double&), operator == (const Length&), operator != (const Length&);
     Length operator + (const Length&), operator - (const Length&), operator / (const double&), operator * (const double&);
-    Length &operator += (const Length&), &operator -= (const Length&);
+    void operator += (const Length&), operator -= (const Length&);
     
 };
 

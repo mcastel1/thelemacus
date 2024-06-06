@@ -371,13 +371,14 @@ bool MyApp::OnInit() {
     minimal_animation_distance_over_size_of_observer_region.read_from_file_to(String("minimal animation distance over size of observer region"), (wxGetApp().path_file_init), String("R"),  String(""));
 
     
-    /*
-     //test for Length::convert_to
-     Length l(13.34643, LengthUnit_types[0]);
-     l.print(String("before"), String("*"), cout);
-     l.convert_to(LengthUnit_types[1]);
-     l.print(String("after"), String("*"), cout);
-     */
+    //
+    //test for Length::convert_to
+    Length a(13.34643, LengthUnit_types[2]), b(1.43, LengthUnit_types[1]);
+    a.print(String("a"), String("*"), cout);
+    b.print(String("b"), String("*"), cout);
+    a+=b;
+    a.print(String("a+b"), String("*"), cout);
+    //
     
     //----- test for Data::read_from_file_to - start
     /*

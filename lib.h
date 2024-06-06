@@ -674,6 +674,8 @@ public:
     LengthUnit();
     LengthUnit(const String&);
     
+    bool check();
+    
 };
 
 

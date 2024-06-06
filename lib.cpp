@@ -977,7 +977,7 @@ vector<String> String::split(void) {
 }
 
 
-//checks whether *this is equal to an element in: if *this is equal to the i-th element in list, retun i. If *this isn't equal to any element in list, return list.size()
+//check whether *this is equal to an element in: if *this is equal to the i-th element in list, retun i. If *this isn't equal to any element in list, return list.size()
 inline int String::position_in_list(const vector<String>& list){
     
     unsigned int i;
@@ -21523,6 +21523,14 @@ LengthUnit::LengthUnit(void) : String() {}
 
 
 LengthUnit::LengthUnit(const String& input) : String(input.value) {}
+
+
+//return true if *this is one element in LengthUnit_types (i.e. *this is a valid Length unit) and false otherwise)
+inline bool LengthUnit::check(void){
+    
+    return(position_in_list(LengthUnit_types) != (LengthUnit_types.size())) ;
+    
+}
 
 
 SpeedUnit::SpeedUnit(void) : String() {}

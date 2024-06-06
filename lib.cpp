@@ -7953,8 +7953,43 @@ inline void Length::set(double x) {
 string Length::to_string(String unit_in, unsigned int precision) {
 
     stringstream output;
+    //the value of this in units of measure LengthUnit_types[0]
+    double value_in_LengthUnit_types0;
 
     output.precision(precision);
+    
+    
+    switch (unit.position_in_list(LengthUnit_types)) {
+            
+        case 0:{
+            //unit = LengthUnit_types[0]
+            
+            value_in_LengthUnit_types0 = value;
+            
+            break;
+            
+        }
+
+        case 1:{
+            //unit = LengthUnit_types[1]
+            
+            value_in_LengthUnit_types0 = value * (1e-3)/nm ;
+            
+            break;
+            
+        }
+            
+        case 2:{
+            //unit = LengthUnit_types[2]
+            
+            value_in_LengthUnit_types0 = value/nm_ft;
+            
+            break;
+            
+        }
+            
+            
+    }
 
     if (unit_in == LengthUnit_types[0]) { output << fixed << value << " nm"; }
     if (unit_in == LengthUnit_types[1]) { output << fixed << value * 1e3 * nm << " m"; }

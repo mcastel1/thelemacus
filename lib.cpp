@@ -7540,12 +7540,12 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
             t_min.set(String(""), 2.0 * M_PI - acos(-tan(reference_position.phi.value) * tan((omega.value))), new_prefix);
             
             //p_max =  Position on the circle of equal altitude  at t = t_max
-            (length.value) = Re * sin((omega.value)) * (t_max.value);
+            length.set(Re * sin((omega.value)) * (t_max.value), LengthUnit_types[0]);
             compute_end(new_prefix);
             p_max = end;
             
             //p_min =  Position on circle of equal altitude  at t = t_min
-            (length.value) = Re * sin((omega.value)) * (t_min.value);
+            length.set(Re * sin((omega.value)) * (t_min.value), LengthUnit_types[0]);
             compute_end(new_prefix);
             p_min = end;
             

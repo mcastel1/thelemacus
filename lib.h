@@ -715,7 +715,7 @@ public:
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
     bool check(String, String);
-    bool operator > (const Length&), operator >= (const Length&), operator <= (const Length&), operator > (const double&), operator >= (const double&), operator < (const double&), operator == (const Length&), operator != (const Length&);
+    bool operator > (const Length&), operator >= (const Length&), operator <= (const Length&), operator > (const double&), operator >= (const double&), operator < (const Length&), operator < (const double&), operator == (const Length&), operator != (const Length&);
     Length operator + (const Length&), operator - (const Length&), operator / (const double&), operator * (const double&);
     void operator += (const Length&), operator -= (const Length&);
     

@@ -22,16 +22,6 @@ Angle max_lat, min_lat;
 //one in uint64_t format
 #define one_uint64_t ((uint64_t)1)
 #define accuracy_equal_approx 52
-//one nautical mile in kilometers: [nm] = nm_to_km * [km] where [nm] and [km] denote the units of nautical miles and kilometers, respectively, and `nm_to_km` the constant below.
-#define nm_to_km 1.852
-//one inch in kilometers: [inch] = inch_to_km [km]
-#define inch_to_km (25.4e-6)
-//one nautical mile in feet: [nm] = nm_to_ft [ft]
-//[ft] = 0.3048 [m]
-//[nm] = nm_to_km [km] = nm_to_km 1000 [m] = nm_to_km 1000 / 0.3048 [ft]
-#define nm_to_ft (nm_to_km * (1e3) / 0.3048)
-//[nm] = nm_to_km [km] = nm_to_km 1000 [m] 
-#define nm_to_m ((1e3)*nm_to_km)
 //earth radius in nautical miles
 #define Re (60.0*360.0/(2.0*M_PI))
 #define RED     "\033[1;31m"

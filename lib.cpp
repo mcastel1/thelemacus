@@ -5316,7 +5316,7 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
 //    
 //    if (unit_temp == LengthUnit_types[2]) {
 //        
-//        value /= nm_ft;
+//        value /= nm_to_ft;
 //        
 //    }
 
@@ -7982,7 +7982,7 @@ string Length::to_string(String output_unit, unsigned int precision) {
         case 2:{
             //unit = LengthUnit_types[2]
             
-            value_in_LengthUnit_types0 = value/nm_ft;
+            value_in_LengthUnit_types0 = value/nm_to_ft;
             
             break;
             
@@ -8015,7 +8015,7 @@ string Length::to_string(String output_unit, unsigned int precision) {
         case 2:{
             //output_unit = LengthUnit_types[2]
             
-            value_in_LengthUnit_types0 *= nm_ft;
+            value_in_LengthUnit_types0 *= nm_to_ft;
 
             break;
             
@@ -16488,7 +16488,7 @@ template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
             case 2: {
                 //unit = "ft"
                 
-                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_ft, String(""));
+                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_to_ft, String(""));
                 
                 break;
                 
@@ -21830,7 +21830,7 @@ template<class P> void DynamicLengthField<P>::set_from_argument(Length input) {
 //        case 2: {
 //            //unit = LengthUnit_types[2]
 //            
-//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
+//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_to_ft));
 //            
 //            break;
 //            
@@ -22326,7 +22326,7 @@ template<class P> void StaticLengthField<P>::set(Length input) {
         case 2: {
             //unit = LengthUnit_types[2]
             
-            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
+            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_to_ft));
             
             break;
             

@@ -1135,36 +1135,56 @@ inline bool Length::operator != (const Length& length) {
 //add *this to length and write the result in *this. This works no matter what the units of *this and length. After this method is called, the units of *this are the same as before this method had been called
 void Length::operator += (const Length& length) {
     
-    LengthUnit unit_saved;
-    
-    //save the unit of measure of *this into unit_saved
-    unit_saved = unit;
-    
-    //convert *this to the unit of measure of length : this will change unit to length.unit
-    convert_to(length.unit);
-    //now that *this and length have the same units, I can sum their values
-    value += (length.value);
-    //convert back *this to its original units, which had been saved inot unit_saved 
-    convert_to(unit_saved);
+    if(unit == (length.unit)){
+        //*this and length have the same units -> simply sum their values
+        
+        value += (length.value);
+        
+    }else{
+        //*this and length have different units -> a unit conversion is neede
+        
+        LengthUnit unit_saved;
+        
+        //save the unit of measure of *this into unit_saved
+        unit_saved = unit;
+        
+        //convert *this to the unit of measure of length : this will change unit to length.unit
+        convert_to(length.unit);
+        //now that *this and length have the same units, I can sum their values
+        value += (length.value);
+        //convert back *this to its original units, which had been saved inot unit_saved
+        convert_to(unit_saved);
+        
+    }
 
 }
 
 
 //substract *this to length and write the result in *this. This works no matter what the units of *this and length. After this method is called, the units of *this are the same as before this method had been called
 void Length::operator -= (const Length& length) {
+    
+    if(unit == (length.unit)){
+        //*this and length have the same units -> simply sum their values
+        
+        value -= (length.value);
+        
+    }else{
+        //*this and length have different units -> a unit conversion is neede
+        
+        LengthUnit unit_saved;
+        
+        //save the unit of measure of *this into unit_saved
+        unit_saved = unit;
+        
+        //convert *this to the unit of measure of length : this will change unit to length.unit
+        convert_to(length.unit);
+        //now that *this and length have the same units, I can sum their values
+        value -= (length.value);
+        //convert back *this to its original units, which had been saved inot unit_saved
+        convert_to(unit_saved);
+        
+    }
 
-    LengthUnit unit_saved;
-    
-    //save the unit of measure of *this into unit_saved
-    unit_saved = unit;
-    
-    //convert *this to the unit of measure of length : this will change unit to length.unit
-    convert_to(length.unit);
-    //now that *this and length have the same units, I can sum their values
-    value -= (length.value);
-    //convert back *this to its original units, which had been saved inot unit_saved
-    convert_to(unit_saved);
-    
 }
 
 
@@ -1242,21 +1262,24 @@ inline bool Length::operator >= (const Length& r) {
 
 }
 
-//evaluates whether Length (*this) is > than the double r
+
+//evaluates whether Length (*this) is > than the double r (this supposes that r represents a Length in the same units as this->unit)
 inline bool Length::operator > (const double& r) {
 
     return((value > r));
 
 }
 
-//evaluates whether Length (*this) is >= than the double r
+
+//evaluates whether Length (*this) is >= than the double r (this supposes that r represents a Length in the same units as this->unit)
 inline bool Length::operator >= (const double& r) {
 
     return(!((*this) < r));
 
 }
 
-//evaluates whether Length (*this) is smaller than the double r
+
+//evaluates whether Length (*this) is smaller than the double r (this supposes that r represents a Length in the same units as this->unit)
 inline bool Length::operator < (const double& r) {
 
     return((value < r));
@@ -1264,6 +1287,7 @@ inline bool Length::operator < (const double& r) {
 }
 
 
+//compute the sum between *this and l and return the result in the units of *this
 Length Length::operator + (const Length& l) {
 
     Length s;

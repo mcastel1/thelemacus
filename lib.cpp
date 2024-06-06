@@ -7977,15 +7977,24 @@ string Length::to_string(const LengthUnit& output_unit, unsigned int precision) 
 
 //print *this and its unit of measure
 void Length::print(String name, String prefix, ostream& ostr) {
+    
+    unsigned int precision;
+
+    //if I am printing to terminal, I print with display_precision. Otherwise, I print with (data_precision.value)
+    if (ostr.rdbuf() == cout.rdbuf()) {
+        precision = (display_precision.value);
+    }
+    else {
+        precision = (data_precision.value);
+    }
 
     if ((name.value) != "") {
 
-        ostr << prefix.value << name.value << " = " << value << " " << unit.value << endl;
+        ostr << prefix.value << name.value << " = " << to_string(precision) << endl;
   
     }
 
 }
-
 
 
 //convert *this to unit of measure unit_in, set unit = unit_in and write the result in *this

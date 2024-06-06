@@ -1291,8 +1291,9 @@ inline bool Length::operator < (const double& r) {
 Length Length::operator + (const Length& l) {
 
     Length s;
-
-    (s.value) = value + (l.value);
+    
+    s = (*this);
+    s+= l;
 
     return s;
 

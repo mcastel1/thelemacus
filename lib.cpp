@@ -11367,12 +11367,12 @@ inline void DrawPanel::PreRenderMercator(void) {
 
         //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
         (route.reference_position.phi) = phi;
-        route.length.set(String(""),
+        route.length.set(
             Re * cos(phi) * ((
 
                 ((((parent->lambda_min)) < M_PI) && (((parent->lambda_max)) > M_PI)) ? (((parent->lambda_min)) - ((parent->lambda_max)) + 2.0 * M_PI) : (((parent->lambda_min)) - ((parent->lambda_max)))
 
-                ).value), String(""));
+                ).value), LengthUnit_types[0]);
 
         //add the current parallel that is being drawn to parallels
 //        grid_now.push_back(route);
@@ -11384,7 +11384,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         if (gamma_phi != 1) {
             //draw smaller ticks -> set route to a loxodrome pointing towards the E and draw it
 
-            route.length.set(String(""), Re * (wxGetApp().tick_length_over_width_plot_area.value) * lambda_span, String(""));
+            route.length.set(Re * (wxGetApp().tick_length_over_width_plot_area.value) * lambda_span, LengthUnit_types[0]);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for (
@@ -11657,7 +11657,7 @@ inline void DrawPanel::PreRender3D(void) {
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
-    route.length.set(String(""), Re * M_PI, String(""));
+    route.length.set(Re * M_PI, LengthUnit_types[0]);
     route.Z.set(String(""), 0.0, String(""));
     (route.reference_position.phi) = -M_PI_2;
 
@@ -11679,8 +11679,8 @@ inline void DrawPanel::PreRender3D(void) {
             Z_saved = (route.Z);
 
             (route.Z).set(String(""), 0.0, String(""));
-            route.length.set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
-            ((route.reference_position).phi) = phi_middle;
+            route.length.set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer.omega.value)), LengthUnit_types[0]);
+            (route.reference_position.phi) = phi_middle;
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for ((route.reference_position.lambda.value) = (lambda_saved.value);

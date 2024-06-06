@@ -8023,11 +8023,6 @@ string Length::to_string(const LengthUnit& output_unit, unsigned int precision) 
             
     }
     
-    //then convert value_in_LengthUnit_types0 to units unit_in
-
-//    if (unit_in == LengthUnit_types[0]) { output << fixed << value << " nm"; }
-//    if (unit_in == LengthUnit_types[1]) { output << fixed << value * 1e3 * nm << " m"; }
-    
     output << fixed << value_in_LengthUnit_types0 << " " << output_unit.value;
 
     return(output.str().c_str());
@@ -8049,7 +8044,7 @@ void Length::print(String name, String prefix, ostream& ostr) {
 
 
 //convert *this to unit of measure unit_in, set unit = unit_in and write the result in *this
-inline void Length::convert(const LengthUnit& output_unit){
+inline void Length::convert_to(const LengthUnit& output_unit){
     
     //the value of this in units of measure LengthUnit_types[0]
     double value0 = 0.0;

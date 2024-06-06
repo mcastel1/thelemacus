@@ -7960,18 +7960,14 @@ string Length::to_string(String unit_in, unsigned int precision) {
 
 }
 
-void Length::print(String name_in, String unit_in, String prefix, ostream& ostr) {
 
-    if ((name_in.value) != "") {
+//print *this and its unit of measure
+void Length::print(String name, String prefix, ostream& ostr) {
 
-        ostr << prefix.value << name_in.value << " = ";
-        if (unit_in == String("nm")) {
-            ostr << value << " nm\n";
-        }
-        else {
-            ostr << value * nm * 1e3 << " m\n";
-        }
+    if ((name.value) != "") {
 
+        ostr << prefix.value << name.value << " = " << value << " " << unit.value << endl;
+  
     }
 
 }

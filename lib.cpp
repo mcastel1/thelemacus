@@ -1264,7 +1264,7 @@ void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) 
             if (unit_in == SpeedUnit_types[1]) {
                 //units are km/h
 
-                ostr << value * nm << " km/h\n";
+                ostr << value * nm_to_km << " km/h\n";
 
             }
             else {
@@ -1272,7 +1272,7 @@ void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) 
                 if (unit_in == SpeedUnit_types[2]) {
                     //units are m/s
 
-                    ostr << value * nm * 1e3 / 3600.0 << " m/s\n";
+                    ostr << value * nm_to_km * 1e3 / 3600.0 << " m/s\n";
 
                 }
 
@@ -1341,14 +1341,14 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
         unit_temp = SpeedUnit_types[2];
     }
 
-    //X [km/h] = X [nm]/nm/[h] = X/nm [kt] = X 1000/3600 [m/s]
+    //X [km/h] = X [nm]/nm_to_km/[h] = X/nm_to_km [kt] = X 1000/3600 [m/s]
 
     value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
     if (unit_temp == SpeedUnit_types[1]) {
-        value /= nm;
+        value /= nm_to_km;
     }
     if (unit_temp == SpeedUnit_types[2]) {
-        value /= (1e3) * nm / 3600.0;
+        value /= (1e3) * nm_to_km / 3600.0;
     }
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
@@ -5310,7 +5310,7 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
     //THE ERROR IS HERE: I READ A value from STREAM IN UNITS OF METERS, AND I DON'T CHANGE THE UNITS IN *this (which may be equal meters) and I write in this->value the value read from file, divided by (1e3 * nm), I.E. THE VALUE IN NAUTICAL MILES -> result: IN *THIS I MAY HAVE UNITS OF METERS AND A VALUE EXPRESSED IN NAUTICAL MILES
 //    if (unit_temp == LengthUnit_types[1]) {
 //        
-//        value /= (1e3 * nm);
+//        value /= (1e3 * nm_to_km);
 //        
 //    }
 //    
@@ -7673,11 +7673,11 @@ void Atmosphere::set(void) {
 
     n_layers = 7;
     A = 0.7933516713545163;
-    B = 34.16 * nm;
+    B = 34.16 * nm_to_km;
     P_dry_0 = 101325.0;
-    alpha = -6.5 * nm;
-    beta = 2.8 * nm;
-    gamma = -2.8 * nm;
+    alpha = -6.5 * nm_to_km;
+    beta = 2.8 * nm_to_km;
+    gamma = -2.8 * nm_to_km;
     T0 = 288.15;
     earth_radius.value = Re;
 
@@ -7687,21 +7687,21 @@ void Atmosphere::set(void) {
 
     
     h[0] = 0.0;
-    h[1] = 11.0 / nm;
-    h[2] = 20.0 / nm;
-    h[3] = 32.0 / nm;
-    h[4] = 47.0 / nm;
-    h[5] = 51.0 / nm;
-    h[6] = 71.0 / nm;
-    h[7] = 84.8520 / nm;
+    h[1] = 11.0 / nm_to_km;
+    h[2] = 20.0 / nm_to_km;
+    h[3] = 32.0 / nm_to_km;
+    h[4] = 47.0 / nm_to_km;
+    h[5] = 51.0 / nm_to_km;
+    h[6] = 71.0 / nm_to_km;
+    h[7] = 84.8520 / nm_to_km;
 
-    lambda[0] = -6.5 * nm;
-    lambda[1] = 0.0 * nm;
-    lambda[2] = 1.0 * nm;
-    lambda[3] = 2.8 * nm;
-    lambda[4] = 0.0 * nm;
-    lambda[5] = -2.8 * nm;
-    lambda[6] = -2.0 * nm;
+    lambda[0] = -6.5 * nm_to_km;
+    lambda[1] = 0.0 * nm_to_km;
+    lambda[2] = 1.0 * nm_to_km;
+    lambda[3] = 2.8 * nm_to_km;
+    lambda[4] = 0.0 * nm_to_km;
+    lambda[5] = -2.8 * nm_to_km;
+    lambda[6] = -2.0 * nm_to_km;
 
 
     for (i = 0, x = T0, check = true; (i < n_layers) && check; i++) {
@@ -7898,7 +7898,7 @@ Length::Length(Chrono time, Speed speed) {
         case 1: {
             //speed.unit = SpeedUnit_types[1]
 
-            c = 1.0/nm;
+            c = 1.0/nm_to_km;
             
             break;
             
@@ -7907,8 +7907,8 @@ Length::Length(Chrono time, Speed speed) {
         case 2: {
             //speed.unit = SpeedUnit_types[2]
             
-            //[m]/[s] = 1e-3 3600 [km]/[h] = 1e-3 3600 / nm [nm]/[h] = 1e-3 3600 / nm [kt]
-            c = (1e-3)*60.0*60.0/nm;
+            //[m]/[s] = 1e-3 3600 [km]/[h] = 1e-3 3600 / nm_to_km [nm]/[h] = 1e-3 3600 / nm_to_km [kt]
+            c = (1e-3)*60.0*60.0/nm_to_km;
             
             break;
             
@@ -7954,7 +7954,7 @@ string Length::to_string(String output_unit, unsigned int precision) {
 
     stringstream output;
     //the value of this in units of measure LengthUnit_types[0]
-    double value_in_LengthUnit_types0;
+    double value_in_LengthUnit_types0 = 0.0;
 
     output.precision(precision);
     
@@ -7973,7 +7973,7 @@ string Length::to_string(String output_unit, unsigned int precision) {
         case 1:{
             //unit = LengthUnit_types[1]
             
-            value_in_LengthUnit_types0 = value * (1e-3)/nm ;
+            value_in_LengthUnit_types0 = value * (1e-3)/nm_to_km ;
             
             break;
             
@@ -8006,7 +8006,7 @@ string Length::to_string(String output_unit, unsigned int precision) {
         case 1:{
             //output_unit = LengthUnit_types[1]
             
-            value_in_LengthUnit_types0 *= nm * 1e3;
+            value_in_LengthUnit_types0 *= nm_to_km * 1e3;
 
             break;
             
@@ -8121,7 +8121,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 //add minus sign because in JPL convention longitude is positive when it is E
                 GHA_tab[l] *= (-1.0) * k;
                 d_tab[l] *= k;
-                r_tab[l] /= nm;
+                r_tab[l] /= nm_to_km;
 
             }
 
@@ -12961,7 +12961,7 @@ void ChartFrame::UpdateSliderLabel_Mercator(void) {
     
     //compute the scale factor
     scale_factor.set( ((unsigned int)(
-                   /*length of the NS edge of the plot area as measured on the surface of the earth, in  nm*/(((phi_max.normalize_pm_pi_ret().value) - (phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in nm*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * inch_to_km/nm ) )) );
+                   /*length of the NS edge of the plot area as measured on the surface of the earth, in  [nm]*/(((phi_max.normalize_pm_pi_ret().value) - (phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in [nm]*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * inch_to_km/nm_to_km ) )) );
     
     
     scale_factor.my_round(display_precision);
@@ -16478,7 +16478,7 @@ template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
             case 1: {
                 //unit = "m"
                 
-                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm), String(""));
+                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm_to_km), String(""));
                 
                 break;
                 
@@ -21821,7 +21821,7 @@ template<class P> void DynamicLengthField<P>::set_from_argument(Length input) {
 //        case 1: {
 //            //unit = LengthUnit_types[1]
 //            
-//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
+//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm_to_km));
 //            
 //            break;
 //            
@@ -22317,7 +22317,7 @@ template<class P> void StaticLengthField<P>::set(Length input) {
         case 1: {
             //unit = LengthUnit_types[1]
             
-            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
+            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm_to_km));
             
             break;
             
@@ -22719,7 +22719,7 @@ template<class P> void SpeedField<P>::set(void) {
         case 1: {
             //unit = SpeedUnit_types[1]
             
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to km/h*/(speed->value) * nm));
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to km/h*/(speed->value) * nm_to_km));
             
             break;
         }
@@ -22727,7 +22727,7 @@ template<class P> void SpeedField<P>::set(void) {
         case 2: {
             //unit = SpeedUnit_types[2]
             
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm * 1e3 / 3600.0));
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm_to_km * 1e3 / 3600.0));
             
             break;
         }
@@ -22757,10 +22757,10 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
 
         }
         else {
-            //[m]/[s] = [km]/1e3/[h]*3600 = [kt]/nm/1e3*3600
+            //[m]/[s] = [km]/1e3/[h]*3600 = [kt]/nm_to_km/1e3*3600
             if ((unit->name->GetValue().ToStdString()) == "km/h") {
                 //unit = SpeedUnit_types[1]
-                speed->set(String(""), /*the speed is entered in the GUI field in km/h, thus I convert it to kt*/speed_temp / nm, String(""));
+                speed->set(String(""), /*the speed is entered in the GUI field in km/h, thus I convert it to kt*/speed_temp / nm_to_km, String(""));
 
             }
             else {
@@ -22768,7 +22768,7 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
                 if ((unit->name->GetValue().ToStdString()) == "m/s") {
                     //unit = LengthUnit_types[2]
 
-                    speed->set(String(""), /*the speed is entered in the GUI field in m/s, thus I convert it to kt*/speed_temp / (nm * 1e3) * 3600.0, String(""));
+                    speed->set(String(""), /*the speed is entered in the GUI field in m/s, thus I convert it to kt*/speed_temp / (nm_to_km * 1e3) * 3600.0, String(""));
 
                 }
 

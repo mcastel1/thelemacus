@@ -1167,10 +1167,21 @@ void Length::operator -= (const Length& length) {
     
 }
 
+
 //evaluates whether Length (*this) is larger than r
 inline bool Length::operator > (const Length& r) {
+    
+    if(unit == r.unit){
+        //*this and r have the same units -> just compare their values
+        
+        return((value > (r.value)));
+        
+    }else{
+        //*this and r have different units -> convert r to the units of *this and compare
+        
+        return(((this->convert(r.unit)) > (r.value)));
 
-    return((value > (r.value)));
+    }
 
 }
 

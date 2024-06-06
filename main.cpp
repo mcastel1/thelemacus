@@ -268,14 +268,14 @@ void MyApp::set_icon_paths(void){
 
 bool MyApp::OnInit() {
     
-    //
-    Length l(1, LengthUnit_types[0]);
-    
-    l.print(String("test length"), String("*"), cout);
-    cout << "converted l:" << l.to_string(LengthUnit_types[2], 21);
-    
-    
-    //
+//    //
+//    Length l(1, LengthUnit_types[0]);
+//    
+//    l.print(String("test length"), String("*"), cout);
+//    cout << "converted l:" << l.to_string(LengthUnit_types[2], 21);
+//    
+//    
+//    //
 
     
     unsigned int i;

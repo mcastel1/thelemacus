@@ -8074,6 +8074,19 @@ inline void Length::convert_to(const LengthUnit& output_unit){
 }
 
 
+//same as convert_to, but it returns the result
+inline Length Length::convert(const LengthUnit& output_unit){
+    
+    Length result;
+    
+    result = (*this);
+    result.convert_to(output_unit);
+    
+    return result;
+    
+}
+
+
 bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] String prefix) {
 
     FileR file;

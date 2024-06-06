@@ -1131,27 +1131,38 @@ inline bool Length::operator != (const Length& length) {
 }
 
 
-//add *this to length and write the result in *this
+//add *this to length and write the result in *this. This works no matter what the units of *this and length. After this method is called, the units of *this are the same as before this method had been called
 void Length::operator += (const Length& length) {
     
-    //convert *this to the unit of measure of length
+    LengthUnit unit_saved;
+    
+    //save the unit of measure of *this into unit_saved
+    unit_saved = unit;
+    
+    //convert *this to the unit of measure of length : this will change unit to length.unit
     convert_to(length.unit);
     //now that *this and length have the same units, I can sum their values
     value += (length.value);
-    //convert back *this to its original units
-    convert_to(unit);
+    //convert back *this to its original units, which had been saved inot unit_saved 
+    convert_to(unit_saved);
 
 }
 
 
+//substract *this to length and write the result in *this. This works no matter what the units of *this and length. After this method is called, the units of *this are the same as before this method had been called
 void Length::operator -= (const Length& length) {
 
-    //convert *this to the unit of measure of length
+    LengthUnit unit_saved;
+    
+    //save the unit of measure of *this into unit_saved
+    unit_saved = unit;
+    
+    //convert *this to the unit of measure of length : this will change unit to length.unit
     convert_to(length.unit);
     //now that *this and length have the same units, I can sum their values
     value -= (length.value);
-    //convert back *this to its original units
-    convert_to(unit);
+    //convert back *this to its original units, which had been saved inot unit_saved
+    convert_to(unit_saved);
     
 }
 

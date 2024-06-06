@@ -373,11 +373,11 @@ bool MyApp::OnInit() {
     
     //
     //test for Length::convert_to
-    Length a(13.34643, LengthUnit_types[2]), b(1.43, LengthUnit_types[1]);
-    a.print(String("a"), String("*"), cout);
-    b.print(String("b"), String("*"), cout);
+    Length a(13.3434, LengthUnit_types[2]), b(1.4355, LengthUnit_types[1]);
+    a.print(String("a"), String("\t"), cout);
+    b.print(String("b"), String("\t"), cout);
     a+=b;
-    a.print(String("a+b"), String("*"), cout);
+    a.print(String("a+b"), String("\t"), cout);
     //
     
     //----- test for Data::read_from_file_to - start

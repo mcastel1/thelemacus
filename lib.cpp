@@ -1279,6 +1279,14 @@ inline bool Length::operator >= (const double& r) {
 }
 
 
+//evaluates whether Length (*this) is <= than the double r (this supposes that r represents a Length in the same units as this->unit)
+inline bool Length::operator <= (const double& r) {
+
+    return(!((*this) > r));
+
+}
+
+
 //evaluates whether Length (*this) is smaller than the double r (this supposes that r represents a Length in the same units as this->unit)
 inline bool Length::operator < (const double& r) {
 
@@ -2290,8 +2298,7 @@ bool Position::is_in(Route route, [[maybe_unused]] String prefix) {
         return(d <= (Re * (route.omega.value)));
 
 
-    }
-    else {
+    }else{
 
         cout << prefix.value << RED << "route is not a circle of equal altitude: I cannot tell whether the position is into route!\n" << RESET;
 
@@ -2299,10 +2306,7 @@ bool Position::is_in(Route route, [[maybe_unused]] String prefix) {
 
     }
 
-
 }
-
-
 
 
 //creates an element in listcontrol and writes into this element the values of all the fields contained in this

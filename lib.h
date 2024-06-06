@@ -708,6 +708,7 @@ public:
     void set(String, double, String);
     void set(double);
     void print(String, String, ostream&);
+    void convert(const LengthUnit&);
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
     bool check(String, String);

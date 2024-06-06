@@ -8046,6 +8046,16 @@ void Length::print(String name, String prefix, ostream& ostr) {
 
 }
 
+
+
+//convert *this to unit of measure unit_in, set unit = unit_in and write the result in *this
+inline void Length::convert(const LengthUnit& unit_in){
+    
+    
+    
+}
+
+
 bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] String prefix) {
 
     FileR file;

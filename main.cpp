@@ -269,7 +269,11 @@ void MyApp::set_icon_paths(void){
 bool MyApp::OnInit() {
     
     //
-    my_cout(5, 1, 4, 6, 4325, 35);
+    Length l(1, LengthUnit_types[0]);
+    
+    l.print(String("test length"), String("*"), cout);
+    cout << "converted l:" << l.to_string(LengthUnit_types[2], 21);
+    
     
     //
 

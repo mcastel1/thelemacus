@@ -115,6 +115,7 @@
   
 
  ********** THINGS TO FIX ***********
+    - make sure that all the print() methods have the same structure as Length::print()
     - double check the value of inch_to_km
     - revise Atmosphere class in such a way that h is a proper Length with its proper units, not a double
     - check if you can remote index_error->set(); in SightFrame construtor

@@ -1253,7 +1253,7 @@ void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) 
     if ((name_in.value) != "") {
 
         ostr << prefix.value << name_in.value << " = ";
-        if (unit_in == String("kt")) {
+        if (unit_in == SpeedUnit_types[0]) {
             //units are kt
 
             ostr << value << " nm\n";
@@ -1261,7 +1261,7 @@ void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) 
         }
         else {
 
-            if (unit_in == String("km/h")) {
+            if (unit_in == SpeedUnit_types[1]) {
                 //units are km/h
 
                 ostr << value * nm << " km/h\n";
@@ -1269,7 +1269,7 @@ void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) 
             }
             else {
 
-                if (unit_in == String("m/s")) {
+                if (unit_in == SpeedUnit_types[2]) {
                     //units are m/s
 
                     ostr << value * nm * 1e3 / 3600.0 << " m/s\n";
@@ -1326,34 +1326,34 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
         //the units of the speed read is kt
         cout << prefix.value << "Unit is in kt\n";
         pos2 = line.find(" kt");
-        unit_temp = String("kt");
+        unit_temp = SpeedUnit_types[0];
     }
     if (line.find(" km/h") != (string::npos)) {
         //the units of the length read is km/h
         cout << prefix.value << "Unit is in km/h\n";
         pos2 = line.find(" km/h");
-        unit_temp = String("km/h");
+        unit_temp = SpeedUnit_types[1];
     }
     if (line.find(" m/s") != (string::npos)) {
         //the units of the length read is m/s
         cout << prefix.value << "Unit is in m/s\n";
         pos2 = line.find(" m/s");
-        unit_temp = String("m/s");
+        unit_temp = SpeedUnit_types[2];
     }
 
     //X [km/h] = X [nm]/nm/[h] = X/nm [kt] = X 1000/3600 [m/s]
 
     value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
-    if (unit_temp == String("km/h")) {
+    if (unit_temp == SpeedUnit_types[1]) {
         value /= nm;
     }
-    if (unit_temp == String("m/s")) {
+    if (unit_temp == SpeedUnit_types[2]) {
         value /= (1e3) * nm / 3600.0;
     }
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
-    print(name, String("kt"), prefix, cout);
+    print(name, SpeedUnit_types[0], prefix, cout);
 
 }
 
@@ -1398,7 +1398,7 @@ void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
 
     value = x;
 
-    if (name != String("")) { print(name, String("kt"), prefix, cout); }
+    if (name != String("")) { print(name, SpeedUnit_types[0], prefix, cout); }
 
 }
 
@@ -17355,7 +17355,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     time = new ChronoField<RouteFrame>(panel, &(route->time));
     //the field for speed to set the Route length
     text_speed = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
-    speed = new SpeedField<RouteFrame>(panel, &(route->speed), String("kt"));
+    speed = new SpeedField<RouteFrame>(panel, &(route->speed), SpeedUnit_types[0]);
 
     //the field for Length to set the Route length
     text_length = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
@@ -22688,7 +22688,7 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
         else {
             //[m]/[s] = [km]/1e3/[h]*3600 = [kt]/nm/1e3*3600
             if ((unit->name->GetValue().ToStdString()) == "km/h") {
-                //unit = String("km/h")
+                //unit = SpeedUnit_types[1]
                 speed->set(String(""), /*the speed is entered in the GUI field in km/h, thus I convert it to kt*/speed_temp / nm, String(""));
 
             }

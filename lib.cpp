@@ -7950,7 +7950,7 @@ inline void Length::set(double x) {
 
 
 //convert *this to string by printing it in the unit of measure unit_in, with precision precision
-string Length::to_string(String output_unit, unsigned int precision) {
+string Length::to_string(const LengthUnit& output_unit, unsigned int precision) {
 
     stringstream output;
     //the value of this in units of measure LengthUnit_types[0]
@@ -7992,7 +7992,7 @@ string Length::to_string(String output_unit, unsigned int precision) {
     
     
     //2. convert *this to unit output_unit and write the result in value_in_LengthUnit_types0
-    switch (output_unit.position_in_list(LengthUnit_types)) {
+    switch (String(output_unit).position_in_list(LengthUnit_types)) {
             
         case 0:{
             //output_unit = LengthUnit_types[0]

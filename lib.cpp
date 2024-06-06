@@ -7950,7 +7950,7 @@ inline void Length::set(double x) {
 
 
 //convert *this to string by printing it in the unit of measure unit_in, with precision precision
-string Length::to_string(String unit_in, unsigned int precision) {
+string Length::to_string(String output_unit, unsigned int precision) {
 
     stringstream output;
     //the value of this in units of measure LengthUnit_types[0]
@@ -7958,7 +7958,7 @@ string Length::to_string(String unit_in, unsigned int precision) {
 
     output.precision(precision);
     
-    
+    //1. convert *this to unit LengthUnit_types[0] and write the result in value_in_LengthUnit_types0
     switch (unit.position_in_list(LengthUnit_types)) {
             
         case 0:{
@@ -7988,11 +7988,47 @@ string Length::to_string(String unit_in, unsigned int precision) {
             
         }
             
+    }
+    
+    
+    //2. convert *this to unit LengthUnit_types[0] and write the result in value_in_LengthUnit_types0
+    switch (output_unit.position_in_list(LengthUnit_types)) {
+            
+        case 0:{
+            //output_unit = LengthUnit_types[0]
+            
+            value_in_LengthUnit_types0 *= 1.0;
+            
+            break;
+            
+        }
+
+        case 1:{
+            //output_unit = LengthUnit_types[1]
+            
+            value_in_LengthUnit_types0 *= nm * 1e3;
+
+            break;
+            
+        }
+            
+        case 2:{
+            //output_unit = LengthUnit_types[2]
+            
+            value_in_LengthUnit_types0 *= nm_ft;
+
+            break;
+            
+        }
             
     }
+    
+    //then convert value_in_LengthUnit_types0 to units unit_in
 
-    if (unit_in == LengthUnit_types[0]) { output << fixed << value << " nm"; }
-    if (unit_in == LengthUnit_types[1]) { output << fixed << value * 1e3 * nm << " m"; }
+//    if (unit_in == LengthUnit_types[0]) { output << fixed << value << " nm"; }
+//    if (unit_in == LengthUnit_types[1]) { output << fixed << value * 1e3 * nm << " m"; }
+    
+    output << fixed << value_in_LengthUnit_types0 << " " << output_unit.value;
 
     return(output.str().c_str());
 

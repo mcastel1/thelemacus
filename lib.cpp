@@ -2176,7 +2176,7 @@ bool Position::distance(Position p, Length* l, String name, [[maybe_unused]] Str
 
         Angle a;
         a.set(String(""), (l->value) / Re, prefix);
-        l->print(name, String("nm"), prefix, cout);
+        l->print(name, prefix, cout);
 
     }
     else {
@@ -4935,7 +4935,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
         length_format.print(String("length format"), false, new_prefix, ostr);
         if (length_format == (LengthFormat_types[1])) {
 
-            length.print(String("length"), String("nm"), new_new_prefix, ostr);
+            length.print(String("length"), new_new_prefix, ostr);
 
         }else {
 
@@ -5319,7 +5319,7 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
-    print(name, String("nm"), prefix, cout);
+    print(name, prefix, cout);
 
 }
 
@@ -5926,7 +5926,7 @@ void Sight::print(String name, String prefix, ostream& ostr) {
     index_error.print(String("index error"), new_prefix, ostr);
     artificial_horizon.print(String("artificial horizon"), new_prefix, ostr);
     if (artificial_horizon == Answer('n', new_prefix)) {
-        height_of_eye.print(String("height of eye"), String("m"), new_prefix, ostr);
+        height_of_eye.print(String("height of eye"), new_prefix, ostr);
     }
     master_clock_date_and_hour.print(String("master-clock date and hour of sight"), new_prefix, ostr);
     use_stopwatch.print(String("use of stopwatch"), new_prefix, ostr);
@@ -6363,7 +6363,7 @@ int Data::compute_position(String prefix) {
                 }
             }
 
-            r.print(String("minimal distance between crossing points"), String("nm"), prefix, cout);
+            r.print(String("minimal distance between crossing points"), prefix, cout);
             center.print(String("center crossing"), prefix, cout);
 
             //I append center to the list of retained crossings, run through all the pairs of crossings except for center, and select the Position in the pair which is closer to center
@@ -6432,7 +6432,7 @@ int Data::compute_position(String prefix) {
                 (error_circle.label) = String("error on astronomical position");
                 ((error_circle.related_sight).value) = -1;
                 
-                r.print(String("error on astronomical position"), String("nm"), prefix, cout);
+                r.print(String("error on astronomical position"), prefix, cout);
                 route_list.push_back(error_circle);
                 
                 
@@ -7733,7 +7733,7 @@ void Body::print(String name_in, String prefix, ostream& ostr) {
         d.print(String("Declination"), new_prefix, ostr);
     }
     else {
-        radius.print(String("Radius"), String("nm"), new_prefix, ostr);
+        radius.print(String("Radius"), new_prefix, ostr);
     }
 
 }
@@ -7931,7 +7931,7 @@ inline void Length::set(String name, double x, [[maybe_unused]] String prefix) {
     value = x;
 
     if(name != String("")){
-        print(name, String("nm"), prefix, cout);
+        print(name, prefix, cout);
     }
     check_valid(name, new_prefix);
 
@@ -8095,7 +8095,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
             }
             else {
                 if ((r.check_valid(String("r"), new_prefix))) {
-                    r.print(String("r"), String("nm"), new_prefix, cout);
+                    r.print(String("r"), new_prefix, cout);
                 }
                 else {
                     check &= false;

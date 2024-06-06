@@ -7616,7 +7616,7 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
 }
 
 
-//comppute the extremal latitudes taken by the points lying on *this, if the type of *this allows it, and write them in *phi_min/max. If the extremal latitudes could not be computed, an error is printed, false is returned, and phi_min /max are not touched; otherwise the maximal and minimal latitude are stored into *phi_min/max, and true is returned
+//comppute the extremal latitudes taken by the points lying on *this, if the type of *this allows it, and write them in *phi_min/max. If the extremal latitudes could not be computed, an error is printed, false is returned, and phi_min /max are not touched; otherwise the maximal and minimal latitude are stored into *phi_min/max, and true is returned. This method requires length.unit to be equal to LengthUnit_types[0]
 bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String prefix) {
 
     String new_prefix;
@@ -7705,11 +7705,11 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
         case 2:{
             //*this is a circle of equal altitude
                 
-            (length.value) = Re * sin((omega.value)) * 0.0;
+            length.set(Re * sin((omega.value)) * 0.0, LengthUnit_types[0]);
             compute_end(new_prefix);
             p_max = end;
             
-            (length.value) = Re * sin((omega.value)) * M_PI;
+            length.set(Re * sin((omega.value)) * M_PI, LengthUnit_types[0]);
             compute_end(new_prefix);
             p_min = end;
             
@@ -11300,7 +11300,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //draw the first chunk of intermediate ticks on the longitude axis
     if (gamma_lambda != 1) {
 
-        route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
+        route.length.set(Re * (wxGetApp().tick_length_over_width_plot_area.value) * phi_span, LengthUnit_types[0]);
 
         //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
         for ((route.reference_position.lambda.value) = (lambda_start.value) - delta_lambda;
@@ -11318,7 +11318,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
 
 
-    for (route.length.set(String(""), Re* ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), String("")),
+    for (route.length.set(Re* ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), LengthUnit_types[0]),
         (route.reference_position.lambda.value) = (lambda_start.value);
         (route.reference_position.lambda.value) < (lambda_end.value);
         (route.reference_position.lambda.value) += delta_lambda) {
@@ -11333,7 +11333,7 @@ inline void DrawPanel::PreRenderMercator(void) {
             //draw intermediate ticks on the longitude axis
 
             (lambda_saved.value) = (route.reference_position.lambda.value);
-            route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
+            route.length.set(Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, LengthUnit_types[0]);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for ((route.reference_position.lambda.value) = (lambda_saved.value);
@@ -11346,7 +11346,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                 //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
             }
 
-            route.length.set(String(""), Re * ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), String(""));
+            route.length.set(Re * ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), LengthUnit_types[0]);
             (route.reference_position.lambda.value) = (lambda_saved.value);
 
         }

@@ -1117,6 +1117,7 @@ void Int::print(String name, String prefix, ostream& ostr) {
 }
 
 
+//return true if both the value and unit of *this and length coincide, false otherwise
 inline bool Length::operator == (const Length& length) {
 
     return((value == (length.value)) && (unit == (length.unit)));

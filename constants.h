@@ -25,7 +25,7 @@ Angle max_lat, min_lat;
 //one nautical mile in kilometers: [nm] = nm * [km] where [nm] and [km] denote the units of nautical miles and kilometers, respectively, and `nm` the constant below.
 #define nm 1.852
 //one inch in kilometers
-#define my_inch (25.4e-6)
+#define inch_to_km (25.4e-6)
 //one nautical mile in feet: [nm] = nm_to_ft [ft]
 //[ft] = 0.3048 [m]
 //[nm] = nm [km] = nm 1000 [m] = nm 1000 / 0.3048 [ft]

@@ -7948,84 +7948,29 @@ inline void Length::set(double x) {
 }
 
 
-
-//convert *this to string by printing it in the unit of measure unit_in, with precision precision
-string Length::to_string(const LengthUnit& output_unit, unsigned int precision) {
-
+//convert *this to string with numerical precision precision
+string Length::to_string(unsigned int precision){
+    
     stringstream output;
-    //the value of this in units of measure LengthUnit_types[0]
-    double value_in_LengthUnit_types0 = 0.0;
-
+    
     output.precision(precision);
     
-    //1. convert *this to unit LengthUnit_types[0] and write the result in value_in_LengthUnit_types0
-    switch (unit.position_in_list(LengthUnit_types)) {
-            
-        case 0:{
-            //unit = LengthUnit_types[0]
-            
-            value_in_LengthUnit_types0 = value;
-            
-            break;
-            
-        }
-
-        case 1:{
-            //unit = LengthUnit_types[1]
-            
-            value_in_LengthUnit_types0 = value/nm_to_m;
-            
-            break;
-            
-        }
-            
-        case 2:{
-            //unit = LengthUnit_types[2]
-            
-            value_in_LengthUnit_types0 = value/nm_to_ft;
-            
-            break;
-            
-        }
-            
-    }
+    output << fixed << value << " " << unit.value;
     
-    
-    //2. convert *this to unit output_unit and write the result in value_in_LengthUnit_types0
-    switch (String(output_unit).position_in_list(LengthUnit_types)) {
-            
-        case 0:{
-            //output_unit = LengthUnit_types[0]
-            
-            value_in_LengthUnit_types0 *= 1.0;
-            
-            break;
-            
-        }
-
-        case 1:{
-            //output_unit = LengthUnit_types[1]
-            
-            value_in_LengthUnit_types0 *= nm_to_m;
-
-            break;
-            
-        }
-            
-        case 2:{
-            //output_unit = LengthUnit_types[2]
-            
-            value_in_LengthUnit_types0 *= nm_to_ft;
-
-            break;
-            
-        }
-            
-    }
-    
-    output << fixed << value_in_LengthUnit_types0 << " " << output_unit.value;
-
     return(output.str().c_str());
+    
+}
+
+
+//convert *this to string by printing it in the unit of measure unit_in, with numerical precision precision
+string Length::to_string(const LengthUnit& output_unit, unsigned int precision) {
+
+    Length temp;
+    
+    temp = (*this);
+    temp.convert_to(output_unit);
+    
+    return(temp.to_string(precision));
 
 }
 

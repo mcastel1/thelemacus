@@ -707,12 +707,13 @@ public:
     
     void set(String, double, String);
     void set(double);
+    string to_string(const LengthUnit&, unsigned int);
+    string to_string(unsigned int);
     void print(String, String, ostream&);
     void convert_to(const LengthUnit&);
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
     bool check(String, String);
-    string to_string(const LengthUnit&, unsigned int);
     bool operator > (const Length&), operator >= (const Length&), operator <= (const Length&), operator > (const double&), operator >= (const double&), operator < (const double&), operator == (const Length&), operator != (const Length&);
     Length operator + (const Length&), operator - (const Length&), operator / (const double&), operator * (const double&);
     Length &operator += (const Length&), &operator -= (const Length&);

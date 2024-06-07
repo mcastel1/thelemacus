@@ -11735,7 +11735,6 @@ StaticBitmap::StaticBitmap(wxWindow* parent, String path, [[maybe_unused]] wxSiz
 
 ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {
 
-    stringstream s;
     unsigned long long int i, j;
     String new_prefix, default_projection, color;
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
@@ -11801,10 +11800,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
  
 
     //text field showing the current value of the zoom slider
-    s.str("");
-    s << "1:" << (zoom_factor.value);
-
-    text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0);
+    text_slider = new StaticText(panel, wxS(""), wxDefaultPosition, wxDefaultSize, 0);
     observer_height = new StaticLengthField<ChartFrame>(panel, &(draw_panel->d));
 
     //navigation buttons
@@ -12989,14 +12985,10 @@ void ChartFrame::UpdateSliderLabel_Mercator(void) {
 
 }
 
-//updates the text in text_slider by writing in it the ration between circle_observer.omega and circle_observer_0.omega
+//update the text in text_slider in the 3D projection: for the 3D projection the altitude of the observer is written into observer_height, thus text_slider is set to empty
 void ChartFrame::UpdateSliderLabel_3D(void) {
 
-    stringstream s;
-
-    s << draw_panel->d.value << " nm";
-
-    text_slider->SetLabel(s.str().c_str());
+    text_slider->SetLabel("");
 
 }
 
@@ -13937,7 +13929,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
     parent->SetLabel(wxString(s.str().c_str()));
 
 
-    if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if ((parent->projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
         //if in projection "mercator" is selected, then I let the Draw function pointer point to PreRenderMercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
 
         PreRender = (&DrawPanel::PreRenderMercator);
@@ -13955,7 +13947,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
 
     }
 
-    if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
+    if ((parent->projection->name->GetValue()) == wxString(((Projection_types[1]).value))) {
         //if in projection ((Projection_types[1]).value) is selected, then I let the Draw function pointer point to PreRender3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
 
         PreRender = (&DrawPanel::PreRender3D);

@@ -127,7 +127,6 @@
     - revise Atmosphere class in such a way that h is a proper Length with its proper units, not a double
     - check if you can remote index_error->set(); in SightFrame construtor
     - rmeove SeedField::unit_value and SpeedFIeld::unit_ok as in LengthField
-    - remove LengthField::unit_ok : this boolean variable should be substituted by LengthField::unit->ok
     - search for all occurrences of QuestionFrame and ShowQuestion and put the right functor in the third argument and the right value of bind_esc_to_button_b
 	- the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 	- remove odd hotrizontal lines on WIN32 mercator projection, they occur when you zoom in too fast with the mouse wheel

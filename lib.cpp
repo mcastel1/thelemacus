@@ -7510,7 +7510,8 @@ double Sight::dH_refraction(double z, void* sight) {
     Length z_Length, zero_Length;
     
     z_Length.value = z;
-    zero_Length.value = 0.0;
+    
+    zero_Length.set(0.0, LengthUnit_types[0]);
 
     return(-(a->atmosphere.earth_radius.value) * (a->atmosphere.n(zero_Length)) * cos((a->H_a)) * (a->atmosphere.dndz)(z_Length) / (a->atmosphere.n)(z_Length) / sqrt(gsl_pow_2(((a->atmosphere.earth_radius.value) + z) * (a->atmosphere.n)(z_Length)) - gsl_pow_2((a->atmosphere.earth_radius.value) * (a->atmosphere.n)(zero_Length) * cos((a->H_a)))));
 

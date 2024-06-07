@@ -3790,7 +3790,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             }
 
             //obtain the minimum distance across all cases, which may be 2, 3, or 4, and chekwhetehr it is smaller than Re * apertur angle of route
-            if ((*min_element(s.begin(), s.end())) < Re * ((route.omega).value)) {
+            if ((*min_element(s.begin(), s.end())) < Re * (route.omega.value)) {
                 //in this case, *this and route intersect: I compute the values of the parametric angle t which parametrizes *this and at which the distance betweeen (point on *this at t) and (GP of route) is equal to Re*(angular aperture of route)
 
                 Double a, b, square_root, cos_t_p, cos_t_m;
@@ -3884,7 +3884,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
                 reference_position.distance(route.reference_position, &d, String(""), new_prefix);
 
-                if (/*this is the condition that *this and route intersect*/(d > Re * fabs((omega.value) - ((route.omega).value))) && (d < Re * ((omega + (route.omega)).value))) {
+                if (/*this is the condition that *this and route intersect*/(d > Re * fabs((omega.value) - (route.omega.value))) && (d < Re * ((omega + (route.omega)).value))) {
                     //in this case, *this and route intersect
 
                     if (write_t) {

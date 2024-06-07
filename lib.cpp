@@ -22531,7 +22531,7 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 template<class P> bool DynamicLengthField<P>::is_ok(void) {
 
-    return(value_ok && (LengthField<P>::unit_ok));
+    return(value_ok && (LengthField<P>::unit->ok));
 
 }
 

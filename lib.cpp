@@ -7463,7 +7463,7 @@ double Atmosphere::n(Length z) {
         for (i = 0, x = 0.0, check = true; (i < n_layers) && check; i++) {
             if ((z >= h[i]) && (z < h[i + 1])) {
                 if (lambda[i] != 0.0) {
-                    x -= B / lambda[i] * log((t[i] + lambda[i] * ((z.value) - h[i])) / t[i]);
+                    x -= B / lambda[i] * log((t[i] + lambda[i] * ((z - h[i]).convert(LengthUnit_types[0]).value)) / t[i]);
                 }
                 else {
                     x -= B * ((z - h[i]).convert(LengthUnit_types[0]).value) / t[i];
@@ -7472,7 +7472,7 @@ double Atmosphere::n(Length z) {
             }
             else {
                 if (lambda[i] != 0.0) {
-                    x -= B / lambda[i] * log((t[i] + lambda[i] * (h[i + 1] - h[i])) / t[i]);
+                    x -= B / lambda[i] * log((t[i] + lambda[i] * ((h[i + 1] - h[i]).convert(LengthUnit_types[0]).value)) / t[i]);
                 }
                 else {
                     x -= B * (h[i + 1] - h[i]) / t[i];

@@ -7401,7 +7401,7 @@ double Atmosphere::T(Length z) {
 
         for (i = 0, check = true; (i < n_layers) && check; i++) {
             if ((z >= h[i]) && (z < h[i + 1])) {
-                x = t[i] + lambda[i] * (z - h[i]);
+                x = t[i] + lambda[i] * ((z - h[i]).convert(LengthUnit_types[0]).value);
                 check = false;
             }
         }
@@ -7461,12 +7461,12 @@ double Atmosphere::n(Length z) {
         bool check = true;
 
         for (i = 0, x = 0.0, check = true; (i < n_layers) && check; i++) {
-            if (((z.value) >= h[i]) && ((z.value) < h[i + 1])) {
+            if ((z >= h[i]) && (z < h[i + 1])) {
                 if (lambda[i] != 0.0) {
                     x -= B / lambda[i] * log((t[i] + lambda[i] * ((z.value) - h[i])) / t[i]);
                 }
                 else {
-                    x -= B * ((z.value) - h[i]) / t[i];
+                    x -= B * ((z - h[i]).convert(LengthUnit_types[0]).value) / t[i];
                 }
                 check = false;
             }

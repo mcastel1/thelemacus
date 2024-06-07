@@ -7475,7 +7475,7 @@ double Atmosphere::n(Length z) {
                     x -= B / lambda[i] * log((t[i] + lambda[i] * ((h[i + 1] - h[i]).convert(LengthUnit_types[0]).value)) / t[i]);
                 }
                 else {
-                    x -= B * (h[i + 1] - h[i]) / t[i];
+                    x -= B * ((h[i + 1] - h[i]).convert(LengthUnit_types[0]).value) / t[i];
                 }
             }
         }

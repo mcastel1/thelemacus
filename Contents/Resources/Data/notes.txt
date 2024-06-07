@@ -1,6 +1,7 @@
  
  notes:
-	- remember that  of Routes do not go through the points of Routes exactly, see https://docs.wxwidgets.org/latest/classwx_d_c.html#ad72d38c75ac6b3f80c1f957dd94089fa 
+    - if you have a button (or something else ) and in the code you Bind() the button to method A first and to method B later, then when the button is pressed method B will be triggered before method A
+	- remember that  of Routes do not go through the points of Routes exactly, see https://docs.wxwidgets.org/latest/classwx_d_c.html#ad72d38c75ac6b3f80c1f957dd94089fa
 	- a common error is that when you need to compute the arithmetic mean of two latitudes phi_1 and phi_2, you should *not* do (phi_1+phi_2)/2 but ((phi_1.normalize_pm_pi_ret().value) + (phi_2.normalize_pm_pi_ret().value))/2
  - declare progress dialogs on the heap (i.e., not as wxProgressDialog* progress_dialog; progress_dialog = new ...,) but on the stack (i.e., as  wxProgressDialog progress_dialog([constructor arguments])). This is because if you declare them on the heap, the progress dialog will stay forever open and it will prevent the app from closing. On the other hand, if you declare it on the stack , it will be destroyed authomatically once the method that calls it stops running
  - when I do the animation transprot with show coastlines = y, the animations are much slower than with show coastlines = n, because the charts are heavy for the cpu
@@ -75,6 +76,8 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+ - replace all occurences of set(String("") , ..., String("")) with a new set() method that only takes ... as an argument
+ - add inch to units of measure for Lengths
  - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
  - code method DrawPanel::ProjectionToGeo_3D
  - add the height of the observer above the earth surface in the 3d projection
@@ -114,6 +117,17 @@
 
  ********** THINGS TO FIX ***********
     - when you zoom in in the 3d projection there is an error message '[1;31mEntered value of  is not valid!' on the console 
+    - replace     Length zero_Length; zero_Length.value = 0.0; with a Length(0.0)
+    - clean up F.params = &(*this);
+    - remove all (*this).
+    - write function for Angle algebraic averages such as ((((t[0]).value) + ((t[1]).value))) / 2.0) and substitute it everywhere
+    - Angle& Angle::operator += (const Angle& angle) { should not return an Angle but a void -> revise all other similar functions
+    - make sure that all the print() methods have the same structure as Length::print()
+    - double check the value of inch_to_km
+    - revise Atmosphere class in such a way that h is a proper Length with its proper units, not a double
+    - check if you can remote index_error->set(); in SightFrame construtor
+    - rmeove SeedField::unit_value and SpeedFIeld::unit_ok as in LengthField
+    - remove LengthField::unit_ok : this boolean variable should be substituted by LengthField::unit->ok
     - search for all occurrences of QuestionFrame and ShowQuestion and put the right functor in the third argument and the right value of bind_esc_to_button_b
 	- the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 	- remove odd hotrizontal lines on WIN32 mercator projection, they occur when you zoom in too fast with the mouse wheel

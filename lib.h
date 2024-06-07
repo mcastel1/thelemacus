@@ -38,6 +38,8 @@ template<class P> class SpeedUnitField;
 template<class P, class T> class CheckField;
 template<class P> class AngleField;
 template<class P> class LengthField;
+template<class P> class DynamicLengthField;
+template<class P> class StaticLengthField;
 template<class P> class SpeedField;
 template<class P> class DateField;
 template<class P> class ChronoField;
@@ -135,11 +137,11 @@ public:
     String(const char&);
     void print(String, bool, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
-//    template<class S> void read_ints_from_stream(String, S*, bool, vector<int>*);
     void read_from_file_to(String, String, String, String);
     void write_to_file(String, FileRW&, String);
     void set(String, String, String);
     void set(String);
+    void set(string);
     void set_to_current_time(void);
     String append(String);
     void appendto(String);
@@ -156,7 +158,7 @@ public:
     int position_in_list(const vector<String>&);
     int position_in_list(const wxArrayString&);
 
-    bool operator==(const String&), operator!=(const String&);
+    bool operator == (const String&), operator != (const String&);
     
 };
 
@@ -256,6 +258,7 @@ public:
 
 
 
+#include "units.h"
 #include "constants.h"
 
 
@@ -671,6 +674,8 @@ public:
     LengthUnit();
     LengthUnit(const String&);
     
+    bool check();
+    
 };
 
 
@@ -700,15 +705,19 @@ public:
     Length(Chrono, Speed);
     
     void set(String, double, String);
-    void enter(String, String, String);
-    void print(String, String, String, ostream&);
+    void set(double);
+    void set(double, const LengthUnit&);
+    string to_string(const LengthUnit&, unsigned int);
+    string to_string(unsigned int);
+    void print(String, String, ostream&);
+    void convert_to(const LengthUnit&);
+    Length convert(const LengthUnit&);
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
-    bool check_valid(String, String);
-    string to_string(String, unsigned int);
-    bool operator > (const Length&), operator >= (const Length&), operator <= (const Length&), operator > (const double&), operator >= (const double&), operator < (const double&), operator == (const Length&), operator != (const Length&);
-    Length operator + (const Length&), operator - (const Length&), operator / (const double&), operator * (const double&);
-    Length &operator += (const Length&), &operator -= (const Length&);
+    bool check(String, String);
+    bool operator > (const Length&), operator >= (const Length&), operator <= (const Length&), operator > (const double&), operator >= (const double&), operator <= (const double&), operator < (const Length&), operator < (const double&), operator == (const Length&), operator != (const Length&);
+    Length operator + (const Length&), operator - (const Length&),  operator * (const double&), operator / (const double&);
+    void operator += (const Length&), operator -= (const Length&), operator *= (const double&), operator /= (const double&);
     
 };
 
@@ -726,6 +735,7 @@ public:
     Speed();
     Speed(double);
     Speed(double, const SpeedUnit&);
+    
     void set(String, double, String);
     void print(String, String, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
@@ -998,10 +1008,12 @@ public:
 class Atmosphere{
     
 public:
+    
     Length earth_radius;
     unsigned int n_layers;
     double A, B, P_dry_0, alpha, beta, gamma, T0;
-    vector<double> h, lambda, t;
+    vector<Length> /*heights delimiting the level of the US 1976 atmosphere model, see https://en.wikipedia.org/wiki/U.S._Standard_Atmosphere, expressed in units of LengthUnit_types[0] */h;
+    vector<double> /*dT/dz, ecpressed in units of K / nm*/lambda, t;
     void set(void);
     double T(Length), n(Length), dTdz(Length), dndz(Length);
     
@@ -1452,9 +1464,9 @@ template<class P> class CheckLengthValue{
     
 public:
     
-    LengthField<P>* p;
+    DynamicLengthField<P>* p;
     
-    CheckLengthValue(LengthField<P>*);
+    CheckLengthValue(DynamicLengthField<P>*);
     template<class T> void operator()(T&);
     
 };
@@ -1463,9 +1475,9 @@ template<class P> class CheckLengthUnit{
     
 public:
     
-    LengthField<P>* p;
+    DynamicLengthField<P>* p;
     
-    CheckLengthUnit(LengthField<P>*);
+    CheckLengthUnit(DynamicLengthField<P>*);
     template<class T> void operator()(T&);
     
 };
@@ -1474,12 +1486,12 @@ template<class P> class CheckLength{
     
 public:
     
-    //p is the LengthField which is parent of the CheckLength object: the CheckLength object checks the validity of the entries in LengthField
-    LengthField<P>* p;
+    //p is the DynamicLengthField which is parent of the CheckLength object: the CheckLength object checks the validity of the entries in DynamicLengthField
+    DynamicLengthField<P>* p;
     CheckLengthValue<P>* check_length_value;
     CheckLengthUnit<P>* check_length_unit;
     
-    CheckLength(LengthField<P>*);
+    CheckLength(DynamicLengthField<P>*);
     template <class T> void operator()(T&);
     
 };
@@ -2007,8 +2019,9 @@ public:
     //two auxiliary vectors which will be used later
     Cartesian r, /*vector position in the x'y'z' reference frame used for multiple purposes*/rp;
     Rotation /*the orientation of the Earth at the beginning / current time / end of a drag*/rotation_start_drag, rotation_now_drag, rotation_end_drag, /*the rotation representing the current / initial orientation of the earth*/rotation, rotation_0;
-    Double /*distance between the plane of the 2d projection and the eye of the observer for the 3d plot, and its initial value when this is constructedd, d_0*/ d, /*if the mouse hovers over a route and its y coordinate is equal to the y of the route +- (length sceen) * thickness_route_selection_over_length_screen /2, then the relative Route is highlighted in ListFrame*/ thickness_route_selection_over_length_screen;
+    Double /*if the mouse hovers over a route and its y coordinate is equal to the y of the route +- (length sceen) * thickness_route_selection_over_length_screen /2, then the relative Route is highlighted in ListFrame*/ thickness_route_selection_over_length_screen;
     String /*this is used to display on the chart the coordinates of a Position that is being dragged or of the reference_position of a Route that is being dragged at the current step of the drag process (label_dragged_object_now) or at the preceeding step (label_dragged_object_before)*/ label_dragged_object_now, label_dragged_object_before, /*text showing the coordinates of the current mouse position on draw_panel*/ label_position_now, label_position_before;
+    Length /*distance between the plane of the 2d projection and the eye of the observer for the 3d plot*/ d;
 
     bool /*this is true if the mouse is dragging with the left button pressed*/mouse_dragging, idling, /*if re_draw = true (false), then one has to draw the non-highglighteable stuff in DrawPanel (coastlines, paralles, meridians ...  but not Routes nor Positions)*/re_draw, /*this is true if the current mouse position lies in the plot area, false otherwise*/mouse_in_plot_area;
     Position /*the starting Position (ground position) of a Route if the Route is a loxodrome or orthodrome (circle of equal altitude) that I want to drag, at the beginning of the drag process (route_reference_position_drag_start), at the preceeding step of the drag process (route_reference_position_drag_start) and at the current step of the drag process (route_reference_position_drag_now) */route_reference_position_drag_start, route_reference_position_drag_before, route_reference_position_drag_now, /*starting and ending geographic position in a mouse drag process*/  geo_start_drag, geo_end_drag, /*the position on the sphere such that the vector between the center of the sphere and the position equals the direction of the rotation axis relative to a mouse drag*/rotation_axis;
@@ -2067,7 +2080,6 @@ public:
     void PreRenderMercator(void);
     void PreRender3D(void);
     void PaintEvent(wxPaintEvent&);
-//    void PaintNow(void);
     void RenderAll(wxDC&);
     void MyRefresh(void);
     void RefreshWIN32(void);
@@ -2211,14 +2223,11 @@ public:
     bool is_ok(void);
     void CheckInCatalog(bool*, unsigned int *);
     template<class E> void Check(E&);
-//    void read_recent_projections(void);
     template<class T> void InsertIn(T*);
     template<class T> void InsertIn(T*, wxSizerFlags&);
-//    template<class E> void OnEdit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     void SetToolTip(const String&);
-    
-    
+        
 };
 
 
@@ -2245,7 +2254,7 @@ public:
 };
 
 
-//this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a LengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted
+//this class defines a dropdown menu (wxComboBox) that lets the user choose in what format to express lengths, i.e., simply as a DynamicLengthField or as a ChronoField + a SpeedField (l = t * v). P is the type of parent in which *this is inserted
 template<class P> class LengthFormatField: public MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >{
     
 public:
@@ -2368,39 +2377,74 @@ public:
     
 };
 
-//class for graphical object: a field to enter a length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the LengthField object
+
+//this class is for a GUI field including a length
 template<class P> class LengthField{
     
 public:
+    
     //the parent frame to which this object is attached
-    P* parent_frame;
-    //the length value
-    wxTextCtrl *value;
+    P* parent;
     //units of measure of the Length
     LengthUnitField<P>* unit;
     wxBoxSizer *sizer_h, *sizer_v;
     Length* length;
-    //the units of measure of the length in this GUI field
-    String unit_value;
-    //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
-    bool value_ok, unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
-    CheckLength<P>* check;
+    bool unit_ok;
+
+    LengthField(wxPanel*, Length*);
     
-    LengthField(wxPanel*, Length*, String);
-    void set(Length);
+    template<class E> void OnEditUnit(E&);
+    template<class T> void InsertIn(T*);
+    template<class T> void InsertIn(T*, wxSizerFlags&);
+    
+};
+
+
+//an editable GUI field to enter a Length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the DynamicLengthField object
+template<class P> class DynamicLengthField: public LengthField<P>{
+    
+public:
+
+    //the length value
+    wxTextCtrl *value;
+    CheckLength<P>* check;
+    bool value_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
+    
+    DynamicLengthField(wxPanel*, Length*/*, String*/);
+    
+    void set_from_argument(Length);
     void set(void);
     template<class T> void get(T&);
     void Enable(bool);
-    template<class T> void InsertIn(T*);
     bool is_ok(void);
     template<class E> void OnEditValue(E&);
-    template<class E> void OnEditUnit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
 
 
-//class for graphical object: a field to enter a speed, composed of a box and a dropdown menu to enter the units of measure of the speed. P is the type of the parent which hosts the LengthField object
+//a non-editable GUI field to display a Length, composed of a static text and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the DynamicLengthField object
+template<class P> class StaticLengthField: public LengthField<P>{
+    
+public:
+    
+    //the length value
+    StaticText* value;
+    //I store here the unit of measure before *(LengthField<P>::unit) is edited. This will be useful to convert  *value from the previous to the newly edited unit of measure 
+    LengthUnit unit_before;
+
+    
+    StaticLengthField(wxPanel*, Length*/*, String*/);
+    
+    void set(Length);
+    void set(void);
+    void set_value_keep_unit(void);
+    template<class E> void ConvertUnit(E&);
+
+};
+
+
+//class for graphical object: a field to enter a speed, composed of a box and a dropdown menu to enter the units of measure of the speed. P is the type of the parent which hosts the DynamicLengthField object
 template<class P> class SpeedField{
     
 public:
@@ -2756,10 +2800,10 @@ public:
     
     BodyField<SightFrame>* body;
     LimbField<SightFrame>* limb;
-    CheckField<SightFrame, LengthField<SightFrame> >* artificial_horizon_check;
+    CheckField<SightFrame, DynamicLengthField<SightFrame> >* artificial_horizon_check;
     CheckField<SightFrame, ChronoField<SightFrame> >* stopwatch_check;
     AngleField<SightFrame>* H_s, *index_error;
-    LengthField<SightFrame>* height_of_eye;
+    DynamicLengthField<SightFrame>* height_of_eye;
     DateField<SightFrame>* master_clock_date;
     ChronoField<SightFrame>* master_clock_chrono, *stopwatch_reading, *TAI_minus_UTC;
     StringField<SightFrame> *label;
@@ -2778,6 +2822,7 @@ public:
     void OnPressCancel(wxCommandEvent& event);
     void OnPressReduce(wxCommandEvent& event);
     void AllOk(void);
+    template<class E> void AllOk(E&);
     //    template<class T> void OnEditTime(T&);
     void TimeIntervalOk(String);
     void KeyDown(wxKeyEvent&);
@@ -2847,7 +2892,7 @@ public:
     //l_format tells whether the length of Route is written simply as a Length, or as a Speed x a Chrono (a time)
     LengthFormatField<RouteFrame>* length_format;
     //if the length of the Route is written directly as a length, this field is used
-    LengthField<RouteFrame> *length;
+    DynamicLengthField<RouteFrame> *length;
     //if the lenght of the Route is written in terms of a speed multiplied by a time, the following two fields are used
     ChronoField<RouteFrame> *time;
     SpeedField<RouteFrame> *speed;
@@ -2870,6 +2915,7 @@ public:
     void OnPressOk(wxCommandEvent& event);
     bool is_ok(void);
     void AllOk(void);
+    template<class E> void AllOk(E&);
     void KeyDown(wxKeyEvent&);
     template<class E> void Check(E&);
     void Check(void);
@@ -2886,6 +2932,8 @@ public:
     DrawPanel *draw_panel;
     ChartPanel* panel;
     StaticText *text_slider;
+    //a static text displaying the height of the observer 
+    StaticLengthField<ChartFrame>* observer_height;
     wxBoxSizer *sizer_v, *sizer_h, *sizer_slider;
     wxGridSizer* sizer_buttons;
     wxStaticBitmap* image;
@@ -2922,6 +2970,7 @@ public:
     template<class T> void OnPressCtrlW(T&);
     void SetIdling(bool);
     void AllOk(void);
+    template<class T> void AllOk(T&);
     void EnableAll(bool);
     
     template<class T> void MoveNorth(T&);

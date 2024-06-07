@@ -25,13 +25,29 @@ Data:
 			sextant altitude = 13° 3.000000000000043'
 			index error = 0° 1.9'
 			artificial horizon = n
-			height of eye = 2.13 m
+			height of eye = 18.52 m
 			master-clock date and hour of sight:
 				date = 2022-01-10
 				hour = 12:52:00
 			use of stopwatch = n
 			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = 2024-01-10 12:52:09 UTC+2
+		Sight #3:
+			body:
+				Type = star
+				Name = hamal
+				Right ascension = 31° 47.5971599999999'
+				Declination = 23° 27.74525999999994'
+			sextant altitude = 33° 2.999999999999829'
+			index error = 0° 1.9'
+			artificial horizon = n
+			height of eye = 40 m
+			master-clock date and hour of sight:
+				date = 2024-06-05
+				hour = 19:36:34
+			use of stopwatch = n
+			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2024-06-05 19:36:45 UTC+2
 	Routes:
 		Route #1:
 			type = circle of equal altitude
@@ -52,17 +68,17 @@ Data:
 				time = 06:59:45.5436
 				speed = 500 kt
 			label = jlkj
-        Route #3:
-            type = orthodrome
-            start position:
-                latitude = 22° 3.000000000000043'
-                longitude = 356° 56.99999999999932'
-                label = 2024-01-21 17:04:03 UTC+2
-            starting heading = 19° 3.000000000000043'
-            length format = time and speed
-                time = 06:59:45.5436
-                speed = 500 kt
-            label = jlkj
+		Route #3:
+			type = orthodrome
+			start position:
+				latitude = 22° 3.000000000000043'
+				longitude = 356° 56.99999999999932'
+				label = 2024-01-21 17:04:03 UTC+2
+			starting heading = 19° 3.000000000000043'
+			length format = time and speed
+				time = 06:59:45.5436
+				speed = 500 kt
+			label = jlkj
 		Route #4:
 			type = circle of equal altitude
 			ground position:
@@ -76,7 +92,7 @@ Data:
 			latitude = 323° 36.54636500000151'
 			longitude = 315° 55.56999999999789'
 			label = Siamo in biblioteca
-Recent bodies = 12 10 8
+Recent bodies = 10 12 8
 Recent projections = 1 0
 Recent length formats = 1 0
 Recent route types = 1 0 2

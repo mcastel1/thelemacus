@@ -268,10 +268,7 @@ void MyApp::set_icon_paths(void){
 
 bool MyApp::OnInit() {
     
-    //
-    my_cout(5, 1, 4, 6, 4325, 35);
-    
-    //
+
 
     
     unsigned int i;
@@ -373,6 +370,20 @@ bool MyApp::OnInit() {
     chart_transport_zoom_factor_coefficient.read_from_file_to(String("chart transport zoom factor coefficient"), (wxGetApp().path_file_init), String("R"),  String(""));
     minimal_animation_distance_over_size_of_observer_region.read_from_file_to(String("minimal animation distance over size of observer region"), (wxGetApp().path_file_init), String("R"),  String(""));
 
+    
+    /*
+    //test for Length::convert_to
+    Length a, b(1.4355, LengthUnit_types[2]);
+    
+    a.set(1.34253, LengthUnit_types[2]);
+//    a.unit = LengthUnit_types[0];
+//    LengthUnit_types[1].print(String("sss"), false, String("---"), cout);
+    
+    a.print(String("a"), String("\t"), cout);
+    b.print(String("b"), String("\t"), cout);
+    a+=b;
+    a.print(String("a+b"), String("\t"), cout);
+    */
     
     //----- test for Data::read_from_file_to - start
     /*

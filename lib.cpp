@@ -977,7 +977,7 @@ vector<String> String::split(void) {
 }
 
 
-//checks whether *this is equal to an element in: if *this is equal to the i-th element in list, retun i. If *this isn't equal to any element in list, return list.size()
+//check whether *this is equal to an element in: if *this is equal to the i-th element in list, retun i. If *this isn't equal to any element in list, return list.size()
 inline int String::position_in_list(const vector<String>& list){
     
     unsigned int i;
@@ -1116,11 +1116,14 @@ void Int::print(String name, String prefix, ostream& ostr) {
 
 }
 
+
+//return true if both the value and unit of *this and length coincide, false otherwise
 inline bool Length::operator == (const Length& length) {
 
-    return (value == (length.value));
+    return((value == (length.value)) && (unit == (length.unit)));
 
 }
+
 
 inline bool Length::operator != (const Length& length) {
 
@@ -1128,41 +1131,145 @@ inline bool Length::operator != (const Length& length) {
 
 }
 
-Length& Length::operator += (const Length& length) {
 
-    value += (length.value);
-
-    return (*this);
+//add *this to length and write the result in *this. This works no matter what the units of *this and length. After this method is called, the units of *this are the same as before this method had been called
+void Length::operator += (const Length& length) {
+    
+    if(unit == (length.unit)){
+        //*this and length have the same units -> simply sum their values
+        
+        value += (length.value);
+        
+    }else{
+        //*this and length have different units -> a unit conversion is neede
+        
+        LengthUnit unit_saved;
+        
+        //save the unit of measure of *this into unit_saved
+        unit_saved = unit;
+        
+        //convert *this to the unit of measure of length : this will change unit to length.unit
+        convert_to(length.unit);
+        //now that *this and length have the same units, I can sum their values
+        value += (length.value);
+        //convert back *this to its original units, which had been saved inot unit_saved
+        convert_to(unit_saved);
+        
+    }
 
 }
 
-Length& Length::operator -= (const Length& length) {
 
-    value -= (length.value);
-
-    return (*this);
+//substract *this to length and write the result in *this. This works no matter what the units of *this and length. After this method is called, the units of *this are the same as before this method had been called
+void Length::operator -= (const Length& length) {
+    
+    if(unit == (length.unit)){
+        //*this and length have the same units -> simply sum their values
+        
+        value -= (length.value);
+        
+    }else{
+        //*this and length have different units -> a unit conversion is neede
+        
+        LengthUnit unit_saved;
+        
+        //save the unit of measure of *this into unit_saved
+        unit_saved = unit;
+        
+        //convert *this to the unit of measure of length : this will change unit to length.unit
+        convert_to(length.unit);
+        //now that *this and length have the same units, I can sum their values
+        value -= (length.value);
+        //convert back *this to its original units, which had been saved inot unit_saved
+        convert_to(unit_saved);
+        
+    }
 
 }
 
-//evaluates whether Length (*this) is larger than r
+
+//multiply *this by x (which is supposed to be dimensionless) and write the result in *this by keeping the units of *this
+void Length::operator *= (const double& x) {
+    
+    value *= x;
+
+}
+
+
+//divide *this by x (which is supposed to be dimensionless) and write the result in *this by keeping the units of *this
+void Length::operator /= (const double& x) {
+    
+    value /= x;
+
+}
+
+
+//evaluates whether Length (*this) is > than r
 inline bool Length::operator > (const Length& r) {
+    
+    if(unit == r.unit){
+        //*this and r have the same units -> just compare their values
+        
+        return((value > (r.value)));
+        
+    }else{
+        //*this and r have different units -> convert r to the units of *this and compare
+        
+        return(((this->convert(r.unit)) > (r.value)));
 
-    return((value > (r.value)));
+    }
 
 }
 
-bool operator < (const Length& l, const Length& s) {
 
-    return((l.value) < (s.value));
-
-}
-
-//evaluates whether Length (*this) is <= r
+//evaluates whether Length (*this) is <= r, see Length::operator >
 inline bool Length::operator <= (const Length& r) {
 
     return(!((*this) > r));
 
 }
+
+
+//evaluates whether Length (*this) is < than r
+inline bool Length::operator < (const Length& r) {
+    
+    if(unit == r.unit){
+        //*this and r have the same units -> just compare their values
+        
+        return((value < (r.value)));
+        
+    }else{
+        //*this and r have different units -> convert r to the units of *this and compare
+        
+        return(((this->convert(r.unit)) < (r.value)));
+
+    }
+
+}
+
+
+bool operator < (const Length& l, const Length& s) {
+    
+    
+    if((l.unit.value) == (s.unit.value)){
+        //l and s have the same units -> just compare their values
+        
+        return(((l.value) < (s.value)));
+        
+    }else{
+        //l and s have different units -> convert l to the units of s and compare
+        
+        Length temp;
+        
+        temp = l;
+        temp.convert_to(s.unit);
+        
+        return((temp.value) < (s.value));
+
+    }
+
+}
+
 
 //evaluates whether Length (*this) is >= r
 inline bool Length::operator >= (const Length& r) {
@@ -1171,21 +1278,32 @@ inline bool Length::operator >= (const Length& r) {
 
 }
 
-//evaluates whether Length (*this) is > than the double r
+
+//evaluates whether Length (*this) is > than the double r (this supposes that r represents a Length in the same units as this->unit)
 inline bool Length::operator > (const double& r) {
 
     return((value > r));
 
 }
 
-//evaluates whether Length (*this) is >= than the double r
+
+//evaluates whether Length (*this) is >= than the double r (this supposes that r represents a Length in the same units as this->unit)
 inline bool Length::operator >= (const double& r) {
 
     return(!((*this) < r));
 
 }
 
-//evaluates whether Length (*this) is smaller than the double r
+
+//evaluates whether Length (*this) is <= than the double r (this supposes that r represents a Length in the same units as this->unit)
+inline bool Length::operator <= (const double& r) {
+
+    return(!((*this) > r));
+
+}
+
+
+//evaluates whether Length (*this) is smaller than the double r (this supposes that r represents a Length in the same units as this->unit)
 inline bool Length::operator < (const double& r) {
 
     return((value < r));
@@ -1193,38 +1311,33 @@ inline bool Length::operator < (const double& r) {
 }
 
 
+//compute the sum between *this and l and return the result in the units of *this
 Length Length::operator + (const Length& l) {
 
     Length s;
-
-    (s.value) = value + (l.value);
+    
+    s = (*this);
+    s+= l;
 
     return s;
 
 }
 
+
+//compute the difference between *this and l and return the result in the units of *this
 Length Length::operator - (const Length& l) {
 
     Length s;
-
-    if (value >= (l.value)) {
-
-        (s.value) = value - (l.value);
-
-    }
-    else {
-
-        cout << RED << "Length resulting from substraction is negative!\n" << RESET;
-
-        (s.value) = 0.0;
-
-    }
+    
+    s = (*this);
+    s -= l;
 
     return s;
 
 }
 
 
+//compute the product between *this and the double x (which is interpreted as a dimensinless quantity) and return the result as a Length with the same units as *this
 Length Length::operator * (const double& x) {
 
     Length s;
@@ -1236,6 +1349,7 @@ Length Length::operator * (const double& x) {
 }
 
 
+//compute the ratio between *this and the double x (which is interpreted as a dimensinless quantity) and return the result as a Length with the same units as *this
 Length Length::operator / (const double& x) {
 
     Length s;
@@ -1247,13 +1361,12 @@ Length Length::operator / (const double& x) {
 }
 
 
-
 void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) {
 
     if ((name_in.value) != "") {
 
         ostr << prefix.value << name_in.value << " = ";
-        if (unit_in == String("kt")) {
+        if (unit_in == SpeedUnit_types[0]) {
             //units are kt
 
             ostr << value << " nm\n";
@@ -1261,18 +1374,18 @@ void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) 
         }
         else {
 
-            if (unit_in == String("km/h")) {
+            if (unit_in == SpeedUnit_types[1]) {
                 //units are km/h
 
-                ostr << value * nm << " km/h\n";
+                ostr << value * nm_to_km << " km/h\n";
 
             }
             else {
 
-                if (unit_in == String("m/s")) {
+                if (unit_in == SpeedUnit_types[2]) {
                     //units are m/s
 
-                    ostr << value * nm * 1e3 / 3600.0 << " m/s\n";
+                    ostr << value * nm_to_km * 1e3 / 3600.0 << " m/s\n";
 
                 }
 
@@ -1326,34 +1439,34 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
         //the units of the speed read is kt
         cout << prefix.value << "Unit is in kt\n";
         pos2 = line.find(" kt");
-        unit_temp = String("kt");
+        unit_temp = SpeedUnit_types[0];
     }
     if (line.find(" km/h") != (string::npos)) {
         //the units of the length read is km/h
         cout << prefix.value << "Unit is in km/h\n";
         pos2 = line.find(" km/h");
-        unit_temp = String("km/h");
+        unit_temp = SpeedUnit_types[1];
     }
     if (line.find(" m/s") != (string::npos)) {
         //the units of the length read is m/s
         cout << prefix.value << "Unit is in m/s\n";
         pos2 = line.find(" m/s");
-        unit_temp = String("m/s");
+        unit_temp = SpeedUnit_types[2];
     }
 
-    //X [km/h] = X [nm]/nm/[h] = X/nm [kt] = X 1000/3600 [m/s]
+    //X [km/h] = X [nm]/nm_to_km/[h] = X/nm_to_km [kt] = X 1000/3600 [m/s]
 
     value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
-    if (unit_temp == String("km/h")) {
-        value /= nm;
+    if (unit_temp == SpeedUnit_types[1]) {
+        value /= nm_to_km;
     }
-    if (unit_temp == String("m/s")) {
-        value /= (1e3) * nm / 3600.0;
+    if (unit_temp == SpeedUnit_types[2]) {
+        value /= (1e3) * nm_to_km / 3600.0;
     }
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
-    print(name, String("kt"), prefix, cout);
+    print(name, SpeedUnit_types[0], prefix, cout);
 
 }
 
@@ -1398,7 +1511,7 @@ void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
 
     value = x;
 
-    if (name != String("")) { print(name, String("kt"), prefix, cout); }
+    if (name != String("")) { print(name, SpeedUnit_types[0], prefix, cout); }
 
 }
 
@@ -1744,6 +1857,14 @@ void String::set(String input_string) {
     value = (input_string.value);
 
 }
+
+
+void String::set(string input_string) {
+
+    value = input_string;
+
+}
+
 
 
 //constructor of a Rotation instance
@@ -2154,24 +2275,24 @@ Position::Position(Angle lambda_in, Angle phi_in) {
 
 }
 
-//here name is the name of the distance that I am computing; for example 'distance between positions A and B'
+//write the distance between *this and p in *l, and set l.unit to LengthUnit_types[0], here name is the name of the distance that I am computing; for example 'distance between positions A and B'
 bool Position::distance(Position p, Length* l, String name, [[maybe_unused]] String prefix) {
 
     bool check;
     check = true;
 
-    (l->value) = Re * acos(cos((lambda)-(p.lambda)) * cos(phi) * cos(p.phi) + sin(phi) * sin(p.phi));
+    
+    l->set(Re * acos(cos((lambda)-(p.lambda)) * cos(phi) * cos(p.phi) + sin(phi) * sin(p.phi)), LengthUnit_types[0]);
 
     check &= !isnan(l->value);
 
-    if (check) {
+    if(check){
 
         Angle a;
         a.set(String(""), (l->value) / Re, prefix);
-        l->print(name, String("nm"), prefix, cout);
+        l->print(name, prefix, cout);
 
-    }
-    else {
+    }else{
 
         cout << prefix.value << RED << "\tI could not compute distance!\n" << RESET;
 
@@ -2190,11 +2311,10 @@ bool Position::is_in(Route route, [[maybe_unused]] String prefix) {
 
         distance(route.reference_position, &d, String(""), prefix);
 
-        return(d <= (Re * ((route.omega).value)));
+        return(d <= (Re * (route.omega.value)));
 
 
-    }
-    else {
+    }else{
 
         cout << prefix.value << RED << "route is not a circle of equal altitude: I cannot tell whether the position is into route!\n" << RESET;
 
@@ -2202,10 +2322,7 @@ bool Position::is_in(Route route, [[maybe_unused]] String prefix) {
 
     }
 
-
 }
-
-
 
 
 //creates an element in listcontrol and writes into this element the values of all the fields contained in this
@@ -2365,6 +2482,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
     type = type_in;
     
     length = l_in;
+    length.convert_to(LengthUnit_types[0]);
     
     reference_position = reference_position_in;
     Z = Z_in;
@@ -2446,7 +2564,8 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             
             //set the legnth as the length of the shortest great circle joining p_start and p_end
             phi.set(String(""), acos(r_start.dot(r_end)), String(""));
-            length.set(String(""), Re*(phi.value), String(""));
+            
+            length.set(Re*(phi.value), LengthUnit_types[0]);
             
             //set the tentative solution for the azimuth angle z: Z may be either z  (solkution 1) or -z (solution 2), I will pick the correct solution later
             z.set(String(""),
@@ -2494,8 +2613,9 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
     omega = omega_in;
 
     length_format.set((LengthFormat_types[1]));
+    
     //the lenght of the circle of equal altitude is set by default
-    length.set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
+    length.set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
 
     related_sight.set(String(""), -1, String(""));
 
@@ -2543,7 +2663,7 @@ inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector<
     //tabulate the Route points
     for (/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the chart, and thus terminated a connectd component of dummy_route*/v->clear(), end_connected = true, i = 0; i < n_points; i++) {
 
-        compute_end(Length((length.value) * ((double)i) / ((double)(n_points - 1))), String(""));
+        compute_end(length*((double)i)/((double)(n_points - 1)), String(""));
         
         //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
         if((i==0) || (i==n_points-1)){
@@ -2594,15 +2714,13 @@ inline void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* 
         //handle special cases i=0 and i = n_points-1 to avoind roundoff error
         if ((i > 0) && (i < n_points - 1)) {
 
-            s.set(String(""), (length.value) * ((double)i) / ((double)(n_points - 1)), String(""));
+            s = (length * ((double)i) / ((double)(n_points - 1)));
 
-        }
-        else {
+        }else{
 
             if (i == 0) {
-                s.set(String(""), 0.0, String(""));
-            }
-            else {
+                s.set(0.0, LengthUnit_types[0]);
+            }else{
                 s = length;
             }
 
@@ -2723,7 +2841,8 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
                     }
                     else {
                         if (i < n_points - 1) {
-                            r = Length(((s[j]).value) + (((s[j + 1]) - (s[j])).value) * ((double)i) / ((double)(n_points - 1)));
+//                            r = Length(((s[j]).value) + (((s[j + 1]) - (s[j])).value) * ((double)i) / ((double)(n_points - 1)));
+                            r = s[j] + ((s[j + 1] - s[j])*((double)i)/((double)(n_points - 1)));
                         }
                         else {
                             r = s[j + 1];
@@ -2739,13 +2858,12 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
 
                     check = (draw_panel->GeoToDrawPanel)(end, &temp, true);
 
-                    if (check) {
+                    if(check){
                         //temp is a valid point
 
                         p.push_back(temp);
 
-                    }
-                    else {
+                    }else{
                         //temp is not a valid point
 
                         if (!(draw_panel->PutBackIn(temp, &q))) {
@@ -2759,7 +2877,7 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
 
                 }
 
-                if ((p.size()) > 1) {
+                if((p.size()) > 1){
                     dc->DrawSpline((int)(p.size()), p.data());
                 }
 
@@ -2773,6 +2891,7 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
     }
 
 }
+
 
 inline void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
 
@@ -2821,7 +2940,10 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
             for (v_tentative.clear(), n_points_check_ok=0, i = 0; i < n_points; i++) {
 
                 //I slightly increase s[j] and slightly decrease s[j+1] (both by epsilon_double) in order to plot a chunk of the Route *this which is slightly smaller than the chunk [s[j], s[j+1]] and thus avoid  the odd lines that cross the whole plot area in the Mercator projection and that connect two points of the same chunk that are far from each other  on the plot area
-                compute_end(Length(((s[j]).value) * (1.0 + epsilon_double) + (((s[j + 1]).value) * (1.0 - epsilon_double) - ((s[j]).value) * (1.0 + epsilon_double)) * ((double)i) / ((double)(n_points - 1))), String(""));
+                //                compute_end(Length(((s[j]).value) * (1.0 + epsilon_double) + (((s[j + 1]).value) * (1.0 - epsilon_double) - ((s[j]).value) * (1.0 + epsilon_double)) * ((double)i) / ((double)(n_points - 1))), String(""));
+                compute_end(
+                            (s[j] * (1.0 + epsilon_double)) + (((s[j + 1] * (1.0 - epsilon_double)) - ((s[j] * (1.0 + epsilon_double)))) * ((double)i)/((double)(n_points - 1))),
+                            String(""));
                 
                 check = (draw_panel->GeoToDrawPanel)(end, &p, false);
                 
@@ -2923,21 +3045,16 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
             }
             
             
-            if (check == 1) {
+            if(check == 1){
                 //there is a part of *this which is included in circle/rectangle_observer -> some part of *this will lie on the visible part of the earth
                 
                 unsigned int i;
-                
-                //                s->resize(2);
-                //                ((*s)[0]).set(String(""), Re*((t[0]).value), String(""));
-                //                ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
-                
+                                
                 for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
                     
                     ((*s)[i]).set(String(""), ((t[i]).value) * Re, String(""));
                     
                 }
-                
                 
                 t.clear();
                 
@@ -2945,8 +3062,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                     (*success) = true;
                 }
                 
-            }
-            else {
+            }else{
                 //no part of this is included in circle/rectagle observer -> no part of this lies on the visible part of the earth
                 
                 if (success != NULL) {
@@ -2974,11 +3090,10 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                             //*this is fully included into rectangle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
                             
                             s->resize(2);
-                            ((*s)[0]).set(String(""), 0.0, String(""));
-                            ((*s)[1]).set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
+                            ((*s)[0]).set(0.0, LengthUnit_types[0]);
+                            ((*s)[1]).set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
                             
-                        }
-                        else {
+                        }else{
                             
                             unsigned int i;
                             
@@ -2986,7 +3101,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                             
                             for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
                                 
-                                ((*s)[i]).set(String(""), ((t[i]).value) * Re * sin(omega), String(""));
+                                ((*s)[i]).set(((t[i]).value) * Re * sin(omega), LengthUnit_types[0]);
                                 
                             }
                             
@@ -3022,8 +3137,8 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                         if ((t[0] == 0.0) && (t[1] == 0.0)) {
                             //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
                             
-                            ((*s)[0]).set(String(""), 0.0, String(""));
-                            ((*s)[1]).set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
+                            ((*s)[0]).set(0.0, LengthUnit_types[0]);
+                            ((*s)[1]).set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
                             
                         }
                         else {
@@ -3038,25 +3153,24 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                                                ((Angle(((((t[0]).value) + ((t[1]).value))) / 2.0)).value) * (Re * sin(omega))
                                                ),
                                         String(""));
-                            ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
+                            draw_panel->circle_observer.reference_position.distance(end, &l1, String(""), String(""));
                             
                             compute_end(
                                         Length(
                                                ((Angle(((((t[0]).value) + ((t[1]).value))) / 2.0 + M_PI)).value) * (Re * sin(omega))
                                                ),
                                         String(""));
-                            ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
+                            draw_panel->circle_observer.reference_position.distance(end, &l2, String(""), String(""));
                             
                             if (l2 > l1) {
                                 
-                                ((*s)[0]).set(String(""), ((t[0]).value) * (Re * sin(omega)), String(""));
-                                ((*s)[1]).set(String(""), ((t[1]).value) * (Re * sin(omega)), String(""));
+                                ((*s)[0]).set(((t[0]).value) * (Re * sin(omega)), LengthUnit_types[0]);
+                                ((*s)[1]).set(((t[1]).value) * (Re * sin(omega)), LengthUnit_types[0]);
                                 
-                            }
-                            else {
+                            }else{
                                 
-                                ((*s)[0]).set(String(""), ((t[1]).value) * (Re * sin(omega)), String(""));
-                                ((*s)[1]).set(String(""), (2.0 * M_PI + ((t[0]).value)) * (Re * sin(omega)), String(""));
+                                ((*s)[0]).set(((t[1]).value) * (Re * sin(omega)), LengthUnit_types[0]);
+                                ((*s)[1]).set((2.0 * M_PI + ((t[0]).value)) * (Re * sin(omega)), LengthUnit_types[0]);
                                 
                             }
                             
@@ -3090,6 +3204,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
     }
     
 }
+
 
 void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
 
@@ -3129,7 +3244,7 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
         listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.value), false)));
         
         set_length_from_time_speed();
-        listcontrol->SetItem(i, j++, wxString(length.to_string(String("nm"), (display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(length.to_string(LengthUnit_types[0], (display_precision.value))));
 
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));
@@ -3307,7 +3422,7 @@ void Route::size_Mercator(PositionProjection* p){
 }
 
 
-//If circle is not a circle of equal altitude, it returns -1 (error code). Otherwise, if the type of *this is not valid, it returns -1. Otherwise, the type of *this is valid-> if a part of *this is included into  circle, it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and write_t = true, it sets t[0] = t[1] = 0.0
+//If circle is not a circle of equal altitude, it returns -1 (error code). Otherwise, if the type of *this is not valid, it returns -1. Otherwise, the type of *this is valid-> if a part of *this is included into  circle, it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it writes in t the value of the parametric angle of *this at which *this intersects circle and, if *this lies within circle and write_t = true, it sets t[0] = t[1] = 0.0. This method requires that Route::length is expressed in units LengthUnit_types[0]
 int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unused]] String prefix) {
 
     String new_prefix;
@@ -3485,7 +3600,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
 }
 
-//If *this is a loxodrome, return -1 because I don't know how to determine whetehr the loxodrome is included in a PositionRectangle. Otherwise, if *this is included into the PositionRectangle rectangle it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it reallocates t and writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this entirely lies within circle and write_t = true, it returns t[0] = t[1] = 0.0
+//If *this is a loxodrome, return -1 because I don't know how to determine whetehr the loxodrome is included in a PositionRectangle. Otherwise, if *this is included into the PositionRectangle rectangle it returns 1, and 0 otherwise. If 1 is returned and write_t = true, it reallocates t and writes in t the value of the parametric angle of *this at which *this intersects rectangle and, if *this entirely lies within circle and write_t = true, it returns t[0] = t[1] = 0.0.  This method requires that Route::length is expressed in units LengthUnit_types[0]
 int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t, [[maybe_unused]] String prefix) {
 
 
@@ -3691,7 +3806,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             }
 
             //obtain the minimum distance across all cases, which may be 2, 3, or 4, and chekwhetehr it is smaller than Re * apertur angle of route
-            if ((*min_element(s.begin(), s.end())) < Re * ((route.omega).value)) {
+            if ((*min_element(s.begin(), s.end())) < Re * (route.omega.value)) {
                 //in this case, *this and route intersect: I compute the values of the parametric angle t which parametrizes *this and at which the distance betweeen (point on *this at t) and (GP of route) is equal to Re*(angular aperture of route)
 
                 Double a, b, square_root, cos_t_p, cos_t_m;
@@ -3785,7 +3900,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
                 reference_position.distance(route.reference_position, &d, String(""), new_prefix);
 
-                if (/*this is the condition that *this and route intersect*/(d > Re * fabs((omega.value) - ((route.omega).value))) && (d < Re * ((omega + (route.omega)).value))) {
+                if (/*this is the condition that *this and route intersect*/(d > Re * fabs((omega.value) - (route.omega.value))) && (d < Re * ((omega + (route.omega)).value))) {
                     //in this case, *this and route intersect
 
                     if (write_t) {
@@ -3939,10 +4054,10 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 
         reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
         omega.read_from_stream<S>(String("omega"), input_stream, false, new_prefix);
-        length.set(String("length"), 2.0 * M_PI * Re * sin(omega), new_prefix);
+        
+        length.set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
 
-    }
-    else {
+    }else{
 
         reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
 
@@ -4020,11 +4135,11 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
             intersection(route, true, &t, new_prefix);
             route.intersection((*this), true, &u, new_prefix);
 
-            (*this).compute_end(Length(Re * sin((*this).omega.value) * ((t[0]).value)), new_prefix);
+            compute_end(Length(Re * sin(omega.value) * ((t[0]).value)), new_prefix);
             (*p)[0] = end;
             ((*p)[0]).label.set(String(""), String("crossing"), prefix);
 
-            (*this).compute_end(Length(Re * sin((*this).omega.value) * ((t[1]).value)), new_prefix);
+            compute_end(Length(Re * sin(omega.value) * ((t[1]).value)), new_prefix);
             (*p)[1] = end;
             ((*p)[1]).label.set(String(""), String("crossing"), prefix);
 
@@ -4715,7 +4830,6 @@ void Route::set_length_from_input(double t){
 
             //set the length format, the length unit and the value of the length from t
             length_format.set(String(""), LengthFormat_types[1], String(""));
-            length.unit.set(String(""), LengthUnit_types[0], String(""));
             
             if(fabs(C) > epsilon_double){
                 //I am not in the special case where Z = pi/2 or 3 pi /2 (i.e., C = 0)
@@ -4723,18 +4837,14 @@ void Route::set_length_from_input(double t){
                 double s;
                 
                 s = GSL_SIGN(cos(Z));
-                length.set(
-                           String(""),
-                           s * 2.0*Re/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t ) ) ),
-                           String(""));
+                length.set(s * 2.0*Re/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t ) ) ),
+                           LengthUnit_types[0]);
                 
             }else{
                 //I am in the special case where Z = pi/2 or 3 pi /2 (i.e., C = 0) -> set the length by using the analytical limit C->0 for  expression of the length
                 
-                length.set(
-                           String(""),
-                           2.0*Re*t*eta/(1.0+gsl_pow_2(eta)),
-                           String(""));
+                length.set(2.0*Re*t*eta/(1.0+gsl_pow_2(eta)),
+                           LengthUnit_types[0]);
                 
             }
             
@@ -4762,7 +4872,7 @@ void Route::set_length_from_input(double t){
 }
 
 
-//write into this->end the Position on the Route at length this->length (which needs to be correclty set before this method is called) along the Route from start
+//write into this->end the Position on the Route at length this->length (which needs to be correclty set before this method is called) along the Route from start.  This method requires that Route::length is expressed in units LengthUnit_types[0]
 void Route::compute_end(String prefix) {
     
     //picks the first (and only) character in string type.value
@@ -4865,7 +4975,7 @@ void Route::compute_end(String prefix) {
 }
 
 
-//This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false
+//This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false.  This method requires that Route::length and d are expressed in units LengthUnit_types[0]
 bool Route::compute_end(Length d, [[maybe_unused]] String prefix) {
     
     set_length_from_time_speed();
@@ -4927,7 +5037,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
         length_format.print(String("length format"), false, new_prefix, ostr);
         if (length_format == (LengthFormat_types[1])) {
 
-            length.print(String("length"), String("nm"), new_new_prefix, ostr);
+            length.print(String("length"), new_new_prefix, ostr);
 
         }else {
 
@@ -5208,7 +5318,8 @@ void Time::operator -= (const Chrono& chrono_in) {
 }
 
 
-bool Length::check_valid(String name, [[maybe_unused]] String prefix) {
+//return true of both the value and the unit of *this are valid, false otherwise
+bool Length::check(String name, [[maybe_unused]] String prefix) {
 
     bool check = true;
 
@@ -5217,6 +5328,8 @@ bool Length::check_valid(String name, [[maybe_unused]] String prefix) {
         cout << prefix.value << RED << "Entered value of " << name.value << " is not valid!\n" << RESET;
     }
 
+    check &= (unit.check());
+    
     return check;
 
 }
@@ -5256,38 +5369,62 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
     }
 
     pos1 = line.find(" = ");
-    pos2 = line.find(" nm");
+    pos1 += 3;
+    //from now on pos1 is the starting position of the  numerical value
+    //pos2-1 contains the last character of th enumerical value
+    pos2 = line.find(" ", pos1);
+    
+    //thus I store the numerical value in to value ...
+    value = stod(line.substr(pos1, pos2 - pos1).c_str());
+    
+    // .. and the unit inot unit
+    pos1 = pos2+1;
+    unit.set(line.substr(pos1));
 
-    if (line.find(" nm") != (string::npos)) {
-        //in this case the units of the length read is nm
-        cout << prefix.value << "Unit is in nm\n";
-        pos2 = line.find(" nm");
-        unit_temp = String("nm");
-    }
-    if (line.find(" m") != (string::npos)) {
-        //in this case the units of the length read is m
-        cout << prefix.value << "Unit is in m\n";
-        pos2 = line.find(" m");
-        unit_temp = String("m");
-    }
-    if (line.find(" ft") != (string::npos)) {
-        //in this case the units of the length read is ft
-        cout << prefix.value << "Unit is in ft\n";
-        pos2 = line.find(" ft");
-        unit_temp = String("ft");
-    }
+//    if (line.find(" nm") != (string::npos)) {
+//        //the units of the length read is nm
+//        
+//        cout << prefix.value << "Unit is in nm\n";
+//        pos2 = line.find(" nm");
+//        unit_temp = LengthUnit_types[0];
+//        
+//    }
+//    
+//    if (line.find(" m") != (string::npos)) {
+//        
+//        // the units of the length read is m
+//        cout << prefix.value << "Unit is in m\n";
+//        pos2 = line.find(" m");
+//        unit_temp = LengthUnit_types[1];
+//        
+//    }
+//    
+//    if (line.find(" ft") != (string::npos)) {
+//        
+//        //the units of the length read is ft
+//        cout << prefix.value << "Unit is in ft\n";
+//        pos2 = line.find(" ft");
+//        unit_temp = LengthUnit_types[2];
+//        
+//    }
 
-    value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
-    if (unit_temp == String("m")) {
-        value /= (1e3 * nm);
-    }
-    if (unit_temp == String("ft")) {
-        value /= nm_ft;
-    }
+    
+    //THE ERROR IS HERE: I READ A value from STREAM IN UNITS OF METERS, AND I DON'T CHANGE THE UNITS IN *this (which may be equal meters) and I write in this->value the value read from file, divided by (1e3 * nm), I.E. THE VALUE IN NAUTICAL MILES -> result: IN *THIS I MAY HAVE UNITS OF METERS AND A VALUE EXPRESSED IN NAUTICAL MILES
+//    if (unit_temp == LengthUnit_types[1]) {
+//        
+//        value /= (1e3 * nm_to_km);
+//        
+//    }
+//    
+//    if (unit_temp == LengthUnit_types[2]) {
+//        
+//        value /= nm_to_ft;
+//        
+//    }
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
-    print(name, String("nm"), prefix, cout);
+    print(name, prefix, cout);
 
 }
 
@@ -5649,7 +5786,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
     //set height of eye column
     if (artificial_horizon.value == 'n') {
 
-        listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string(String("m"), (display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string(LengthUnit_types[1], (display_precision.value))));
 
     }
     else {
@@ -5894,7 +6031,7 @@ void Sight::print(String name, String prefix, ostream& ostr) {
     index_error.print(String("index error"), new_prefix, ostr);
     artificial_horizon.print(String("artificial horizon"), new_prefix, ostr);
     if (artificial_horizon == Answer('n', new_prefix)) {
-        height_of_eye.print(String("height of eye"), String("m"), new_prefix, ostr);
+        height_of_eye.print(String("height of eye"), new_prefix, ostr);
     }
     master_clock_date_and_hour.print(String("master-clock date and hour of sight"), new_prefix, ostr);
     use_stopwatch.print(String("use of stopwatch"), new_prefix, ostr);
@@ -6313,7 +6450,7 @@ int Data::compute_position(String prefix) {
             //r is the minimal distance between crossing points. To find the minimum, here I set r to it largest possible value, obtained when the two points are at the antipodes. I find the pair of crossing points which is closest to each other, and set Position center to one of the Positions in this pair. center will thus represent the approximate astronomical position. I will then run over all the pairs of crossing points in p, p[i], and pick either p[i][0] or p[i][1]: I will pick the one which is closest to center
 
             cout << prefix.value << "Distances between pairs of crossing positions:\n";
-            r.set(String(""), M_PI * Re, prefix);
+            r.set(M_PI * Re, LengthUnit_types[0]);
 
             for (i = 0; i < q.size(); i++) {
                 for (j = i + 1; j < q.size(); j++) {
@@ -6323,7 +6460,7 @@ int Data::compute_position(String prefix) {
 
                     (q[i]).distance((q[j]), &s, String(dummy.str()), new_prefix);
 
-                    if (r > s) {
+                    if(r > s){
                         r = s;
                         center = (q[i]);
                     }
@@ -6331,7 +6468,7 @@ int Data::compute_position(String prefix) {
                 }
             }
 
-            r.print(String("minimal distance between crossing points"), String("nm"), prefix, cout);
+            r.print(String("minimal distance between crossing points"), prefix, cout);
             center.print(String("center crossing"), prefix, cout);
 
             //I append center to the list of retained crossings, run through all the pairs of crossings except for center, and select the Position in the pair which is closer to center
@@ -6345,12 +6482,11 @@ int Data::compute_position(String prefix) {
                     center.distance(p[i][0], &r, String(""), new_prefix);
                     center.distance(p[i][1], &s, String(""), new_prefix);
 
-                    if (r > s) {
+                    if(r > s){
 
                         q.push_back(p[i][1]);
 
-                    }
-                    else {
+                    }else{
 
                         q.push_back(p[i][0]);
 
@@ -6382,16 +6518,18 @@ int Data::compute_position(String prefix) {
                 //there are >= 2 crossings -> the error on the astronomical position can be computed
                 
                 //compute error on astronomical position
-                (r.value) = 0.0;
+//                (r.value) = 0.0;
+                r.set(0.0, LengthUnit_types[0]);
+                
                 for (i = 0; i < q.size(); i++) {
                     for (j = i + 1; j < q.size(); j++) {
                         
                         (q[i]).distance(q[j], &s, String(""), new_prefix);
-                        r = r + s;
+                        r += s;
                         
                     }
                 }
-                (r.value) /= ((double)((q.size()) * ((q.size()) - 1) / 2));
+                r /= ((double)((q.size()) * ((q.size()) - 1) / 2));
                 
                 //computes the circle of equal altitude which represents the error of the sight
                 (error_circle.type) = RouteType(((Route_types[2]).value));
@@ -6400,7 +6538,7 @@ int Data::compute_position(String prefix) {
                 (error_circle.label) = String("error on astronomical position");
                 ((error_circle.related_sight).value) = -1;
                 
-                r.print(String("error on astronomical position"), String("nm"), prefix, cout);
+                r.print(String("error on astronomical position"), prefix, cout);
                 route_list.push_back(error_circle);
                 
                 
@@ -7104,7 +7242,8 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
 
     check &= compute_H_o(new_prefix);
     circle_of_equal_altitude->omega.set(String(""), M_PI_2 - (H_o.value), String(""));
-    circle_of_equal_altitude->length.set(String(""), 2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), new_prefix);
+    
+    circle_of_equal_altitude->length.set(2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), LengthUnit_types[0]);
 
     if (!check) {
 
@@ -7255,14 +7394,14 @@ double Atmosphere::T(Length z) {
     double x = 0.0;
     //cout << "z = " << (z.value) << "\n";
 
-    if ((z.value) <= h[n_layers]) {
+    if (z <= h[n_layers]) {
 
         unsigned int i;
         bool check = true;
 
         for (i = 0, check = true; (i < n_layers) && check; i++) {
-            if (((z.value) >= h[i]) && ((z.value) < h[i + 1])) {
-                x = t[i] + lambda[i] * ((z.value) - h[i]);
+            if ((z >= h[i]) && (z < h[i + 1])) {
+                x = t[i] + lambda[i] * ((z - h[i]).convert(LengthUnit_types[0]).value);
                 check = false;
             }
         }
@@ -7286,13 +7425,13 @@ double Atmosphere::dTdz(Length z) {
     double x = 0.0;
     //cout << "z = " << (z.value) << "\n";
 
-    if ((z.value) <= h[n_layers]) {
+    if (z <= h[n_layers]) {
 
         unsigned int i;
         bool check = true;
 
         for (i = 0, check = true; (i < n_layers) && check; i++) {
-            if (((z.value) >= h[i]) && ((z.value) < h[i + 1])) {
+            if ((z >= h[i]) && (z < h[i + 1])) {
                 x = lambda[i];
                 check = false;
             }
@@ -7316,27 +7455,27 @@ double Atmosphere::n(Length z) {
 
     double x = 0.0;
 
-    if ((z.value) <= h[n_layers]) {
+    if (z <= h[n_layers]) {
 
         unsigned int i;
         bool check = true;
 
         for (i = 0, x = 0.0, check = true; (i < n_layers) && check; i++) {
-            if (((z.value) >= h[i]) && ((z.value) < h[i + 1])) {
+            if ((z >= h[i]) && (z < h[i + 1])) {
                 if (lambda[i] != 0.0) {
-                    x -= B / lambda[i] * log((t[i] + lambda[i] * ((z.value) - h[i])) / t[i]);
+                    x -= B / lambda[i] * log((t[i] + lambda[i] * ((z - h[i]).convert(LengthUnit_types[0]).value)) / t[i]);
                 }
                 else {
-                    x -= B * ((z.value) - h[i]) / t[i];
+                    x -= B * ((z - h[i]).convert(LengthUnit_types[0]).value) / t[i];
                 }
                 check = false;
             }
             else {
                 if (lambda[i] != 0.0) {
-                    x -= B / lambda[i] * log((t[i] + lambda[i] * (h[i + 1] - h[i])) / t[i]);
+                    x -= B / lambda[i] * log((t[i] + lambda[i] * ((h[i + 1] - h[i]).convert(LengthUnit_types[0]).value)) / t[i]);
                 }
                 else {
-                    x -= B * (h[i + 1] - h[i]) / t[i];
+                    x -= B * ((h[i + 1] - h[i]).convert(LengthUnit_types[0]).value) / t[i];
                 }
             }
         }
@@ -7369,11 +7508,12 @@ double Sight::dH_refraction(double z, void* sight) {
 
     Sight* a = (Sight*)sight;
     Length z_Length, zero_Length;
-    z_Length.value = z;
-    zero_Length.value = 0.0;
+    
+//    z_Length.value = z;
+    z_Length.set(z, LengthUnit_types[0]);
+    zero_Length.set(0.0, LengthUnit_types[0]);
 
-    return(-(((*a).atmosphere).earth_radius.value) * (((*a).atmosphere).n(zero_Length)) * cos(((*a).H_a).value) * (((*a).atmosphere).dndz)(z_Length) / (((*a).atmosphere).n)(z_Length) / sqrt(gsl_pow_2(((((*a).atmosphere).earth_radius.value) + z) * (((*a).atmosphere).n)(z_Length)) - gsl_pow_2((((*a).atmosphere).earth_radius.value) * (((*a).atmosphere).n)(zero_Length) * cos(((*a).H_a).value))));
-
+    return(-(a->atmosphere.earth_radius.value) * (a->atmosphere.n(zero_Length)) * cos((a->H_a)) * (a->atmosphere.dndz)(z_Length) / (a->atmosphere.n)(z_Length) / sqrt(gsl_pow_2(((a->atmosphere.earth_radius.value) + z) * (a->atmosphere.n)(z_Length)) - gsl_pow_2((a->atmosphere.earth_radius.value) * (a->atmosphere.n)(zero_Length) * cos((a->H_a)))));
 
 }
 
@@ -7385,9 +7525,9 @@ double Route::lambda_minus_pi(double t, void* route) {
     String new_prefix;
 
     //append \t to prefix
-    new_prefix = ((*r).temp_prefix).append(String("\t"));
+    new_prefix = (r->temp_prefix.append(String("\t")));
 
-    (r->length.value) = Re * sin(((*r).omega.value)) * t;
+    r->length.set(Re * sin((r->omega.value)) * t, LengthUnit_types[0]);
     r->compute_end(new_prefix);
 
     return(((*r).end.lambda.value) - M_PI);
@@ -7395,7 +7535,7 @@ double Route::lambda_minus_pi(double t, void* route) {
 }
 
 
-//comppute the extremal (min and max) longitudes taken by the points lying on *this, and write them in *lambda_min and *lambda_max 
+//comppute the extremal (min and max) longitudes taken by the points lying on *this, and write them in *lambda_min and *lambda_max. This method requires that length is expressed in units LengthUnit_types[0]
 void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]] String prefix) {
     
     String new_prefix;
@@ -7416,12 +7556,12 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
             t_min.set(String(""), 2.0 * M_PI - acos(-tan(reference_position.phi.value) * tan((omega.value))), new_prefix);
             
             //p_max =  Position on the circle of equal altitude  at t = t_max
-            (length.value) = Re * sin((omega.value)) * (t_max.value);
+            length.set(Re * sin((omega.value)) * (t_max.value), LengthUnit_types[0]);
             compute_end(new_prefix);
             p_max = end;
             
             //p_min =  Position on circle of equal altitude  at t = t_min
-            (length.value) = Re * sin((omega.value)) * (t_min.value);
+            length.set(Re * sin((omega.value)) * (t_min.value), LengthUnit_types[0]);
             compute_end(new_prefix);
             p_min = end;
             
@@ -7492,7 +7632,7 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
 }
 
 
-//comppute the extremal latitudes taken by the points lying on *this, if the type of *this allows it, and write them in *phi_min/max. If the extremal latitudes could not be computed, an error is printed, false is returned, and phi_min /max are not touched; otherwise the maximal and minimal latitude are stored into *phi_min/max, and true is returned
+//comppute the extremal latitudes taken by the points lying on *this, if the type of *this allows it, and write them in *phi_min/max. If the extremal latitudes could not be computed, an error is printed, false is returned, and phi_min /max are not touched; otherwise the maximal and minimal latitude are stored into *phi_min/max, and true is returned. This method requires length.unit to be equal to LengthUnit_types[0]
 bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String prefix) {
 
     String new_prefix;
@@ -7581,11 +7721,11 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
         case 2:{
             //*this is a circle of equal altitude
                 
-            (length.value) = Re * sin((omega.value)) * 0.0;
+            length.set(Re * sin((omega.value)) * 0.0, LengthUnit_types[0]);
             compute_end(new_prefix);
             p_max = end;
             
-            (length.value) = Re * sin((omega.value)) * M_PI;
+            length.set(Re * sin((omega.value)) * M_PI, LengthUnit_types[0]);
             compute_end(new_prefix);
             p_min = end;
             
@@ -7638,11 +7778,11 @@ void Atmosphere::set(void) {
 
     n_layers = 7;
     A = 0.7933516713545163;
-    B = 34.16 * nm;
+    B = 34.16 * nm_to_km;
     P_dry_0 = 101325.0;
-    alpha = -6.5 * nm;
-    beta = 2.8 * nm;
-    gamma = -2.8 * nm;
+    alpha = -6.5 * nm_to_km;
+    beta = 2.8 * nm_to_km;
+    gamma = -2.8 * nm_to_km;
     T0 = 288.15;
     earth_radius.value = Re;
 
@@ -7650,27 +7790,28 @@ void Atmosphere::set(void) {
     lambda.resize(n_layers);
     t.resize(n_layers);
 
+    
     h[0] = 0.0;
-    h[1] = 11.0 / nm;
-    h[2] = 20.0 / nm;
-    h[3] = 32.0 / nm;
-    h[4] = 47.0 / nm;
-    h[5] = 51.0 / nm;
-    h[6] = 71.0 / nm;
-    h[7] = 84.8520 / nm;
+    h[1] = 11.0 * km_to_nm;
+    h[2] = 20.0 * km_to_nm;
+    h[3] = 32.0 * km_to_nm;
+    h[4] = 47.0 * km_to_nm;
+    h[5] = 51.0 * km_to_nm;
+    h[6] = 71.0 * km_to_nm;
+    h[7] = 84.8520 * km_to_nm;
 
-    lambda[0] = -6.5 * nm;
-    lambda[1] = 0.0 * nm;
-    lambda[2] = 1.0 * nm;
-    lambda[3] = 2.8 * nm;
-    lambda[4] = 0.0 * nm;
-    lambda[5] = -2.8 * nm;
-    lambda[6] = -2.0 * nm;
+    lambda[0] = -6.5 * nm_to_km;
+    lambda[1] = 0.0 * nm_to_km;
+    lambda[2] = 1.0 * nm_to_km;
+    lambda[3] = 2.8 * nm_to_km;
+    lambda[4] = 0.0 * nm_to_km;
+    lambda[5] = -2.8 * nm_to_km;
+    lambda[6] = -2.0 * nm_to_km;
 
 
     for (i = 0, x = T0, check = true; (i < n_layers) && check; i++) {
         t[i] = x;
-        x += lambda[i] * (h[i + 1] - h[i]);
+        x += lambda[i] * ((h[i + 1] - h[i]).convert(LengthUnit_types[0]).value);
     }
 
 
@@ -7700,7 +7841,7 @@ void Body::print(String name_in, String prefix, ostream& ostr) {
         d.print(String("Declination"), new_prefix, ostr);
     }
     else {
-        radius.print(String("Radius"), String("nm"), new_prefix, ostr);
+        radius.print(String("Radius"), new_prefix, ostr);
     }
 
 }
@@ -7738,6 +7879,9 @@ bool Body::check(unsigned int* j, Catalog catalog, [[maybe_unused]] String prefi
 
 
 Sight::Sight(void) {
+    
+    //height_of_eye is expressed in meters -> set its unit accordingly
+    height_of_eye.unit.set(LengthUnit_types[1]);
 
     //this is the list of all the possible items that a Sight object can have: some Sight objects may have an item list with fewer elements than all_items. For instance, a star Sight does not have the "limb" element.
     all_items.push_back(String("body"));
@@ -7771,7 +7915,9 @@ void Sight::compute_DH_dip(String prefix) {
     zero_Length.value = 0.0;
 
     DH_dip.set(String("Dip correction"),
-        -acos(atmosphere.n(zero_Length) / atmosphere.n(height_of_eye) * ((atmosphere.earth_radius.value) / ((atmosphere.earth_radius.value) + (height_of_eye.value)))), prefix);
+        -acos(atmosphere.n(zero_Length) / atmosphere.n(height_of_eye) 
+              * ((atmosphere.earth_radius.convert(LengthUnit_types[0]).value) / (((atmosphere.earth_radius) + (height_of_eye)).convert(LengthUnit_types[0]).value) )
+              ), prefix);
 
 }
 
@@ -7795,7 +7941,7 @@ bool Sight::compute_DH_refraction(String prefix) {
 
 
 
-    status = gsl_integration_qags(&F, (atmosphere.h)[(atmosphere.h).size() - 1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
+    status = gsl_integration_qags(&F, atmosphere.h.back().convert(LengthUnit_types[0]).value, ((atmosphere.h)[0]).convert(LengthUnit_types[0]).value, 0.0, epsrel, 1000, w, &result, &error);
     //status = GSL_FAILURE
 
     if (status == GSL_SUCCESS) {
@@ -7838,15 +7984,54 @@ Length::Length(double value_in, const LengthUnit& unit_in) {
 }
 
 
-//constructs the Length *this frome time and speed, by setting it equal to time x speed
+//construct the Length *this frome time and speed, by setting it equal to time x speed and its unit equal to LengthUnit_types[0]. This method takes into account the units in which speed is expressed (which are stored into speed.unit)
 Length::Length(Chrono time, Speed speed) {
 
-    set(String(""), (time.get()) * (speed.value), String(""));
+    //conversion factor
+    double c;
+    
+    //consider all possible units in which speed is expressed
+    switch (speed.unit.position_in_list(SpeedUnit_types)) {
+            
+        case 0: {
+            //speed.unit = SpeedUnit_types[0]
+            
+            c = 1.0;
+            
+            break;
+            
+        }
+
+        case 1: {
+            //speed.unit = SpeedUnit_types[1]
+
+            c = 1.0/nm_to_km;
+            
+            break;
+            
+        }
+            
+        case 2: {
+            //speed.unit = SpeedUnit_types[2]
+            
+            //[m]/[s] = 1e-3 3600 [km]/[h] = 1e-3 3600 / nm_to_km [nm]/[h] = 1e-3 3600 / nm_to_km [kt]
+            c = (1e-3)*60.0*60.0/nm_to_km;
+            
+            break;
+            
+        }
+
+
+    }
+    
+    set(c * (time.get()) * (speed.value));
+    unit.set(LengthUnit_types[0]);
 
 }
 
 
-void Length::set(String name, double x, [[maybe_unused]] String prefix) {
+//set the value of *this equal to x (expressed in units LengthUnit_types[0]). The unit is not modified
+inline void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 
     String new_prefix;
 
@@ -7855,68 +8040,167 @@ void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 
     value = x;
 
-    if (name != String("")) { print(name, String("nm"), prefix, cout); }
-    check_valid(name, new_prefix);
+    if(name != String("")){
+        print(name, prefix, cout);
+    }
+    check(name, new_prefix);
 
 }
 
-//enter a length in meters
-void Length::enter(String name_in, String unit_in, [[maybe_unused]] String prefix) {
 
-    stringstream temp;
+//same as Length::set(String name, double x, [[maybe_unused]] String prefix)  but without printing out anything
+inline void Length::set(double x) {
+    
+    value = x;
+}
 
-    temp.clear();
-    temp << name_in.value;
-    if (unit_in == String("nm")) {
-        temp << " [nm]";
+
+//set the value of *this equal to x and the units equal to unit_in
+inline void Length::set(double value_in, const LengthUnit& unit_in) {
+    
+    value = value_in;
+    unit = unit_in;
+}
+
+
+//convert *this to string with numerical precision precision
+string Length::to_string(unsigned int precision){
+    
+    stringstream output;
+    
+    output.precision(precision);
+    
+    output << fixed << value << " " << unit.value;
+    
+    return(output.str().c_str());
+    
+}
+
+
+//convert *this to string by printing it in the unit of measure unit_in, with numerical precision precision
+string Length::to_string(const LengthUnit& output_unit, unsigned int precision) {
+
+    Length temp;
+    
+    temp = (*this);
+    temp.convert_to(output_unit);
+    
+    return(temp.to_string(precision));
+
+}
+
+
+//print *this and its unit of measure
+void Length::print(String name, String prefix, ostream& ostr) {
+    
+    unsigned int precision;
+
+    //if I am printing to terminal, I print with display_precision. Otherwise, I print with (data_precision.value)
+    if (ostr.rdbuf() == cout.rdbuf()) {
+        precision = (display_precision.value);
     }
     else {
-        temp << " [m]";
+        precision = (data_precision.value);
     }
 
-    do {
+    if ((name.value) != "") {
 
-        enter_double(&value, false, 0.0, 0.0, temp.str(), prefix);
-
-    } while (!check_valid(name_in, prefix));
-
-    //if the length has been entered in units of m, convert it to nautical miles
-    if (unit_in == String("m")) {
-        value /= (1e3 * nm);
+        ostr << prefix.value << name.value << " = " << to_string(precision) << endl;
+  
     }
-
-    print(name_in, unit_in, prefix, cout);
 
 }
 
-string Length::to_string(String unit_in, unsigned int precision) {
 
-    stringstream output;
+//convert *this to unit of measure unit_in, set unit = unit_in and write the result in *this
+inline void Length::convert_to(const LengthUnit& output_unit){
+    
+    //the value of this in units of measure LengthUnit_types[0]
+    double value0 = 0.0;
 
-    output.precision(precision);
-
-    if (unit_in == String("nm")) { output << fixed << value << " nm"; }
-    if (unit_in == String("m")) { output << fixed << value * 1e3 * nm << " m"; }
-
-    return(output.str().c_str());
-
-}
-
-void Length::print(String name_in, String unit_in, String prefix, ostream& ostr) {
-
-    if ((name_in.value) != "") {
-
-        ostr << prefix.value << name_in.value << " = ";
-        if (unit_in == String("nm")) {
-            ostr << value << " nm\n";
-        }
-        else {
-            ostr << value * nm * 1e3 << " m\n";
+    
+    //1. convert *this to unit LengthUnit_types[0] and write the result in value_in_LengthUnit_types0
+    switch (unit.position_in_list(LengthUnit_types)) {
+            
+        case 0:{
+            //unit = LengthUnit_types[0]
+            
+            value0 = value;
+            
+            break;
+            
         }
 
+        case 1:{
+            //unit = LengthUnit_types[1]
+            
+            value0 = value * m_to_nm;
+            
+            break;
+            
+        }
+            
+        case 2:{
+            //unit = LengthUnit_types[2]
+            
+            value0 = value * ft_to_nm;
+            
+            break;
+            
+        }
+            
     }
+    
+    
+    //2. convert *this to unit output_unit and write the result in *this
+    switch (String(output_unit).position_in_list(LengthUnit_types)) {
+            
+        case 0:{
+            //output_unit = LengthUnit_types[0]
+            
+            value = value0;
+            
+            break;
+            
+        }
 
+        case 1:{
+            //output_unit = LengthUnit_types[1]
+            
+            value = value0 * nm_to_m;
+
+            break;
+            
+        }
+            
+        case 2:{
+            //output_unit = LengthUnit_types[2]
+            
+            value = value0 * nm_to_ft;
+
+            break;
+            
+        }
+            
+    }
+    
+    unit = output_unit;
+    
 }
+
+
+//same as convert_to, but it returns the result
+inline Length Length::convert(const LengthUnit& output_unit){
+    
+    Length result;
+    
+    result = (*this);
+    result.convert_to(output_unit);
+    
+    return result;
+    
+}
+
 
 bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] String prefix) {
 
@@ -7993,7 +8277,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 //add minus sign because in JPL convention longitude is positive when it is E
                 GHA_tab[l] *= (-1.0) * k;
                 d_tab[l] *= k;
-                r_tab[l] /= nm;
+                r_tab[l] /= nm_to_km;
 
             }
 
@@ -8040,8 +8324,8 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 check &= false;
             }
             else {
-                if ((r.check_valid(String("r"), new_prefix))) {
-                    r.print(String("r"), String("nm"), new_prefix, cout);
+                if ((r.check(String("r"), new_prefix))) {
+                    r.print(String("r"), new_prefix, cout);
                 }
                 else {
                     check &= false;
@@ -9462,6 +9746,14 @@ void ChartFrame::AllOk(void) {
 }
 
 
+//same as ChartFrame::AllOk(void), but with an event argument, so this method can be triggered from an event
+template<class T> void ChartFrame::AllOk(T& event) {
+
+    AllOk();
+
+}
+
+
 //enable all GUI fields (buttons, slider, etc) in *this if enable  = true, and disable them otherwise
 void ChartFrame::EnableAll(bool enable){
     
@@ -9511,16 +9803,6 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     parallels_and_meridians_labels_now.resize(0);
     positions_parallels_and_meridians_labels_now.resize(0);
 
-    //    rotation.print(String("initial rotation"), String(""), cout);
-
-    //allocates points_route_list and ts_route_list
-//    points_route_list_now.resize((parent->parent->data->route_list).size());
-//    reference_positions_route_list_now.resize((parent->parent->data->route_list).size());
-//    for (i = 0; i < (parent->parent->data->route_list).size(); i++) {
-//        (points_route_list_now[i]).clear();
-//    }
-//    points_position_list_now.resize((parent->parent->data->route_list).size());
-
 
     idling = false;
     unset_idling = new UnsetIdling<DrawPanel>(this);
@@ -9535,10 +9817,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 #endif
     label_dragged_object_now = String("");
 
-    //    text_position_start->SetBackgroundColour(wxGetApp().background_color);
-    //    text_position_end->SetBackgroundColour(wxGetApp().background_color);
-
-        //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
+    //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
     SetBackgroundColour(wxGetApp().background_color);
     //set the border of the chart area 
     SetWindowStyle(wxSIMPLE_BORDER);
@@ -9563,13 +9842,6 @@ inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     RenderAll(dc);
 
 }
-
-//inline void DrawPanel::PaintNow(void){
-//    
-//    wxClientDC dc(this);
-//    
-//    RenderAll(dc);
-//}
 
 
 //render the mouse position with colors foreground_color and background_color
@@ -9628,11 +9900,6 @@ inline void DrawPanel::RenderBackground(
                                         wxColour background_color,
                                         double thickness
 ) {
-
-    //    dc.SetPen(foreground_color);
-    //    dc.SetBrush(wxBrush(*wxTRANSPARENT_BRUSH));
-    //    dc.SetTextForeground(foreground_color);
-    //    dc.SetTextBackground(background_color);
 
     if (re_draw) {
 
@@ -11051,7 +11318,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //draw the first chunk of intermediate ticks on the longitude axis
     if (gamma_lambda != 1) {
 
-        route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
+        route.length.set(Re * (wxGetApp().tick_length_over_width_plot_area.value) * phi_span, LengthUnit_types[0]);
 
         //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
         for ((route.reference_position.lambda.value) = (lambda_start.value) - delta_lambda;
@@ -11069,7 +11336,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
 
 
-    for (route.length.set(String(""), Re* ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), String("")),
+    for (route.length.set(Re* ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), LengthUnit_types[0]),
         (route.reference_position.lambda.value) = (lambda_start.value);
         (route.reference_position.lambda.value) < (lambda_end.value);
         (route.reference_position.lambda.value) += delta_lambda) {
@@ -11084,7 +11351,7 @@ inline void DrawPanel::PreRenderMercator(void) {
             //draw intermediate ticks on the longitude axis
 
             (lambda_saved.value) = (route.reference_position.lambda.value);
-            route.length.set(String(""), Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, String(""));
+            route.length.set(Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, LengthUnit_types[0]);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for ((route.reference_position.lambda.value) = (lambda_saved.value);
@@ -11097,7 +11364,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                 //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
             }
 
-            route.length.set(String(""), Re * ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), String(""));
+            route.length.set(Re * ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), LengthUnit_types[0]);
             (route.reference_position.lambda.value) = (lambda_saved.value);
 
         }
@@ -11118,12 +11385,12 @@ inline void DrawPanel::PreRenderMercator(void) {
 
         //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
         (route.reference_position.phi) = phi;
-        route.length.set(String(""),
+        route.length.set(
             Re * cos(phi) * ((
 
                 ((((parent->lambda_min)) < M_PI) && (((parent->lambda_max)) > M_PI)) ? (((parent->lambda_min)) - ((parent->lambda_max)) + 2.0 * M_PI) : (((parent->lambda_min)) - ((parent->lambda_max)))
 
-                ).value), String(""));
+                ).value), LengthUnit_types[0]);
 
         //add the current parallel that is being drawn to parallels
 //        grid_now.push_back(route);
@@ -11135,7 +11402,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         if (gamma_phi != 1) {
             //draw smaller ticks -> set route to a loxodrome pointing towards the E and draw it
 
-            route.length.set(String(""), Re * (wxGetApp().tick_length_over_width_plot_area.value) * lambda_span, String(""));
+            route.length.set(Re * (wxGetApp().tick_length_over_width_plot_area.value) * lambda_span, LengthUnit_types[0]);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for (
@@ -11408,7 +11675,7 @@ inline void DrawPanel::PreRender3D(void) {
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
-    route.length.set(String(""), Re * M_PI, String(""));
+    route.length.set(Re * M_PI, LengthUnit_types[0]);
     route.Z.set(String(""), 0.0, String(""));
     (route.reference_position.phi) = -M_PI_2;
 
@@ -11430,8 +11697,8 @@ inline void DrawPanel::PreRender3D(void) {
             Z_saved = (route.Z);
 
             (route.Z).set(String(""), 0.0, String(""));
-            route.length.set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
-            ((route.reference_position).phi) = phi_middle;
+            route.length.set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer.omega.value)), LengthUnit_types[0]);
+            (route.reference_position.phi) = phi_middle;
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for ((route.reference_position.lambda.value) = (lambda_saved.value);
@@ -11445,7 +11712,7 @@ inline void DrawPanel::PreRender3D(void) {
 
             }
 
-            route.length.set(String(""), Re * M_PI, String(""));
+            route.length.set(Re * M_PI, LengthUnit_types[0]);
             (route.Z) = Z_saved;
             (route.reference_position.lambda.value) = (lambda_saved.value);
             ((route.reference_position).phi) = phi_saved;
@@ -11467,7 +11734,7 @@ inline void DrawPanel::PreRender3D(void) {
 
         //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
         route.omega.set(String(""), M_PI_2 - fabs(phi.value), String(""));
-        route.length.set(String(""), 2.0 * M_PI * Re * sin(route.omega), String(""));
+        route.length.set(2.0 * M_PI * Re * sin(route.omega), LengthUnit_types[0]);
         route.reference_position.phi.set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
 
         //add the current parallel that is being drawn to parallels
@@ -11481,7 +11748,7 @@ inline void DrawPanel::PreRender3D(void) {
 
             route.type.set(String(((Route_types[1]).value)));
             route.Z.set(String(""), M_PI_2, String(""));
-            route.length.set(String(""), Re * 2.0 * ((((wxGetApp().tick_length_over_aperture_circle_observer)).value) * ((circle_observer.omega).value)), String(""));
+            route.length.set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer.omega.value)), LengthUnit_types[0]);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for (
@@ -11626,6 +11893,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
 
+    flags.Center();
+
     //when a ChartFrame is created, the chart is not being dragged
     dragging_chart = false;
 
@@ -11634,7 +11903,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     lambda_max.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
     phi_min.read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
     phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
-
 
 
     this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnPressCtrlW<wxCloseEvent>, this);
@@ -11647,17 +11915,6 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
     
-    //set the size of coastline_polygons_now and coastline_polygons_before equal to their maximum possible size, so I won't have to resize them at every step
-    //    for(polygon_position_now=0, i=0; i<(parent->coastline_polygons_Position.size()); i++){
-    //        for (j=0; j<((parent->coastline_polygons_Position)[i]).size(); j++) {
-    //            polygon_position_now += ((parent->coastline_polygons_Position)[i][j]).size();
-    //        }
-    //    }
-    //    polygon_position_before = polygon_position_now;
-    //    coastline_polygons_now.resize(polygon_position_now);
-    //    coastline_polygons_before.resize(polygon_position_before);
-    //    polygon_position_before = polygon_position_now = 0;
-    
     //coastline_polygons_now/before and polygon_position_now/before are resized to their maximum possible value
     for(i=0, j=0; i<parent->coastline_polygons_Position.size(); i++) {
         j += (parent->coastline_polygons_Position[i].size());
@@ -11669,10 +11926,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
 
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 
-
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);
     draw_panel = new DrawPanel(panel, wxDefaultPosition, wxDefaultSize);
-
 
     sizer_v = new wxBoxSizer(wxVERTICAL);
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -11694,6 +11949,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     s << "1:" << (zoom_factor.value);
 
     text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0);
+    observer_height = new StaticLengthField<ChartFrame>(panel, &(draw_panel->d)/*, LengthUnit_types[0]*/);
 
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
@@ -11808,10 +12064,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
 
     sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
     sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+    observer_height->LengthField<ChartFrame>::InsertIn(sizer_slider, flags);
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, 0);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    flags.Center();
-    projection->InsertIn<wxBoxSizer>(sizer_slider, flags);
+    projection->InsertIn(sizer_slider, flags);
     sizer_slider->AddStretchSpacer(1);
     sizer_slider->Add(button_show_list, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
 
@@ -12483,7 +12739,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        
                        object->set_length_from_time_speed();
                        
-                       object->compute_end(Length((object->length)/2.0), String(""));
+                       object->compute_end(((object->length)/2.0), String(""));
                        target_position = object->end;
                        
                    }
@@ -12569,7 +12825,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        
                        object->set_length_from_time_speed();
                        
-                       object->compute_end(Length((object->length)/2.0), String(""));
+                       object->compute_end(((object->length)/2.0), String(""));
                        target_position = object->end;
                        //                    target_position = route.reference_position;
 
@@ -12597,7 +12853,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 target_position.distance((chart_frames[i])->draw_panel->circle_observer.reference_position, &d, String(""), String(""));
                 
                 //I do the animaiton only if the start and end position of the animation are large enough, in order to avoid NaNs in the transporting_route
-                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * Re*(chart_frames[i])->draw_panel->circle_observer.omega.value) {
+                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * (Re*(chart_frames[i])->draw_panel->circle_observer.omega.value)) {
                     
                     chart_transport_handlers[i] = new ChartTransportHandler<F>(
                                                                                (chart_frames[i]),
@@ -12669,7 +12925,9 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
     circle_observer.lambda_min_max(&(parent->lambda_min), &(parent->lambda_max), String(""));
 
     //set
-    d.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+    d.set(String(""), (-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))))*Re, String(""));
+    //here I set the value of d into observer_height, not the unit of measure, because I want the user to decide the unit of measure by selecting in the wxComboBox in the unit field
+    parent->observer_height->set_value_keep_unit();
 
     //set phi_min/max
     ((circle_observer.reference_position).phi).normalize_pm_pi();
@@ -12859,7 +13117,7 @@ void ChartFrame::UpdateSliderLabel_Mercator(void) {
     
     //compute the scale factor
     scale_factor.set( ((unsigned int)(
-                   /*length of the NS edge of the plot area as measured on the surface of the earth, in  nm*/(((phi_max.normalize_pm_pi_ret().value) - (phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in nm*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * my_inch/nm ) )) );
+                   /*length of the NS edge of the plot area as measured on the surface of the earth, in  [nm]*/(((phi_max.normalize_pm_pi_ret().value) - (phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in [nm]*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * inch_to_km/nm_to_km ) )) );
     
     
     scale_factor.my_round(display_precision);
@@ -12880,7 +13138,7 @@ void ChartFrame::UpdateSliderLabel_3D(void) {
 
     stringstream s;
 
-    s << "1:" << ((unsigned int)((parent->circle_observer_0.omega.value) / (((draw_panel->circle_observer).omega).value)));
+    s << draw_panel->d.value << " nm";
 
     text_slider->SetLabel(s.str().c_str());
 
@@ -13459,7 +13717,7 @@ inline bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, 
                    );
     
     
-    check = (gsl_vector_get((rp.r), 1) < -1.0 / (1.0 + (d.value)));
+    check = (gsl_vector_get((rp.r), 1) < -1.0 / (1.0 + (d.value)/Re));
 
 
 
@@ -13477,7 +13735,7 @@ inline bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, 
             //            gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, (p.r), 0.0, (rp.r));
             cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation.matrix->data, 3, p.r->data, 1, 0, rp.r->data, 1);
             
-            temp = (d.value) / ((d.value) + 1.0 + gsl_vector_get((rp.r), 1));
+            temp = (d.value) / ((d.value) + Re*(1.0 + gsl_vector_get((rp.r), 1)));
             (q->x) = gsl_vector_get((rp.r), 0) * temp;
             (q->y) = gsl_vector_get((rp.r), 2) * temp;
 
@@ -16187,16 +16445,16 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T& event
 
 }
 
-template<class P> CheckLengthValue<P>::CheckLengthValue(LengthField<P>* p_in) {
+template<class P> CheckLengthValue<P>::CheckLengthValue(DynamicLengthField<P>* p_in) {
 
     p = p_in;
 
 }
 
-//checks the value in the GUI field in LengthField
+//checks the value in the GUI field in DynamicLengthField
 template<class P> template <class T> void CheckLengthValue<P>::operator()(T& event) {
 
-    P* f = (p->parent_frame);
+    P* f = (p->parent);
 
     //I proceed only if the progam is not is indling mode
     if (!(f->idling)) {
@@ -16231,7 +16489,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T& eve
 
 }
 
-template<class P> CheckLengthUnit<P>::CheckLengthUnit(LengthField<P>* p_in) {
+template<class P> CheckLengthUnit<P>::CheckLengthUnit(DynamicLengthField<P>* p_in) {
 
     p = p_in;
 
@@ -16240,7 +16498,7 @@ template<class P> CheckLengthUnit<P>::CheckLengthUnit(LengthField<P>* p_in) {
 //checks the unit in the GUI field in LengthField
 template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& event) {
 
-    P* f = (p->parent_frame);
+    P* f = (p->parent);
 
     //I proceed only if the progam is not is indling mode
     if (!(f->idling)) {
@@ -16248,13 +16506,6 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
         unsigned int i;
         bool check;
 
-        //I check whether the name in the GUI field unit matches one of the unit names in units
-//        for (check = false, i = 0; (i < LengthUnit_types.size()) && (!check); i++) {
-//            if ((p->unit->name->GetValue()) == wxString((LengthUnit_types[i]).value)) {
-//                check = true;
-//            }
-//        }
-//        i--;
         
         p->unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::CheckInCatalog(&check, &i);
 
@@ -16291,7 +16542,8 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
 
 }
 
-template<class P> CheckLength<P>::CheckLength(LengthField<P>* p_in) {
+
+template<class P> CheckLength<P>::CheckLength(DynamicLengthField<P>* p_in) {
 
     p = p_in;
 
@@ -16299,6 +16551,7 @@ template<class P> CheckLength<P>::CheckLength(LengthField<P>* p_in) {
     check_length_unit = new CheckLengthUnit<P>(p);
 
 }
+
 
 //this functor checks the whole Length field by calling the check on its value and unit
 template<class P> template <class T> void CheckLength<P>::operator()(T& event) {
@@ -16309,7 +16562,6 @@ template<class P> template <class T> void CheckLength<P>::operator()(T& event) {
     event.Skip(true);
 
 }
-
 
 
 template<class P> CheckSpeedValue<P>::CheckSpeedValue(SpeedField<P>* p_in) {
@@ -16358,7 +16610,7 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 
 
 //write the value of the GUI field in LengthField into the non-GUI field length
-template<class P> template <class T> void LengthField<P>::get(T& event) {
+template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
     
     if (is_ok()) {
         
@@ -16367,12 +16619,12 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
         value->GetValue().ToDouble(&length_temp);
         
         
-        switch (String((unit->name->GetValue()).ToStdString()).position_in_list(unit->catalog)) {
+        switch (String((LengthField<P>::unit->name->GetValue()).ToStdString()).position_in_list(LengthField<P>::unit->catalog)) {
                 
             case 0: {
                 //unit = "nm"
                 
-                length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
+                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
                 
                 break;
                 
@@ -16382,7 +16634,7 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
             case 1: {
                 //unit = "m"
                 
-                length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / (1e3 * nm), String(""));
+                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / nm_to_m, String(""));
                 
                 break;
                 
@@ -16392,7 +16644,7 @@ template<class P> template <class T> void LengthField<P>::get(T& event) {
             case 2: {
                 //unit = "ft"
                 
-                length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_ft, String(""));
+                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_to_ft, String(""));
                 
                 break;
                 
@@ -16757,14 +17009,25 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     //artificial horizon
     StaticText* text_artificial_horizon_check = new StaticText(panel, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0);
-    artificial_horizon_check = new CheckField<SightFrame, LengthField<SightFrame> >(panel, &(sight->artificial_horizon), NULL, false);
+    artificial_horizon_check = new CheckField<SightFrame, DynamicLengthField<SightFrame> >(panel, &(sight->artificial_horizon), NULL, false);
 
     //height of eye
     StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0);
-    height_of_eye = new LengthField<SightFrame>(panel, &(sight->height_of_eye), String("m"));
+    height_of_eye = new DynamicLengthField<SightFrame>(panel, &(sight->height_of_eye)/*, LengthUnit_types[1]*/);
+    
+    //this is how to properly bind the DynamicLengthField height_of_eye when it is inserted into a frame and I want a modification of the DynamicLengthField to trigger AllOk() in the frame. Given that I am including height_of_eye in a frame, I want that every time value or unit is changed, SightFrame::AllOk() is triggered : 1. I first bind OnEditValue and OnEditUnit to height_of_eye->value and height_of_eye->unit 2. every time height_of_eye is changed, OnEditValue and OnEditUnit will be called and set to true/false the value_ok and unit_ok variables 3. AllOk() will be called later, read the value_ok and unit_ok variables, and enable/disable button_reduce  accordingly
+    height_of_eye->Bind(wxEVT_COMBOBOX, &SightFrame::AllOk<wxCommandEvent>, this);
+    height_of_eye->Bind(wxEVT_KEY_UP, &SightFrame::AllOk<wxKeyEvent>, this);
+    height_of_eye->value->Bind(wxEVT_COMBOBOX, &DynamicLengthField<SightFrame>::OnEditValue<wxCommandEvent>, height_of_eye);
+    height_of_eye->value->Bind(wxEVT_KEY_UP, &DynamicLengthField<SightFrame>::OnEditValue<wxKeyEvent>, height_of_eye);
+    height_of_eye->unit->Bind(wxEVT_COMBOBOX, &DynamicLengthField<SightFrame>::OnEditUnit<wxCommandEvent>, height_of_eye);
+    height_of_eye->unit->Bind(wxEVT_KEY_UP, &DynamicLengthField<SightFrame>::OnEditUnit<wxKeyEvent>, height_of_eye);
+
+    
+    
     if (sight_in == NULL) {
-        //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye LengthField with this value, so the user won't have to enter the same value all the time
-        (sight->height_of_eye).read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String("R"), String(""));
+        //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye DynamicLengthField with this value, so the user won't have to enter the same value all the time
+        sight->height_of_eye.read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String("R"), String(""));
         height_of_eye->set();
 
     }
@@ -16852,8 +17115,8 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &LimbField<SightFrame>::get<wxCommandEvent>, limb);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, H_s);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, index_error);
-    button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, LengthField<SightFrame> >::get<wxCommandEvent>, artificial_horizon_check);
-    button_reduce->Bind(wxEVT_BUTTON, &LengthField<SightFrame>::get<wxCommandEvent>, height_of_eye);
+    button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, DynamicLengthField<SightFrame> >::get<wxCommandEvent>, artificial_horizon_check);
+    button_reduce->Bind(wxEVT_BUTTON, &DynamicLengthField<SightFrame>::get<wxCommandEvent>, height_of_eye);
     button_reduce->Bind(wxEVT_BUTTON, &DateField<SightFrame>::get<wxCommandEvent>, master_clock_date);
     button_reduce->Bind(wxEVT_BUTTON, &ChronoField<SightFrame>::get<wxCommandEvent>, master_clock_chrono);
     button_reduce->Bind(wxEVT_BUTTON, &CheckField<SightFrame, ChronoField<SightFrame> >::get<wxCommandEvent>, stopwatch_check);
@@ -16963,7 +17226,9 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     if (!check) {
         cout << prefix.value << RED << "Cannot read sight!\n" << RESET;
     }
-    if (sight_in != NULL) { set(); }
+    if (sight_in != NULL) {
+        set();
+    }
 
     //runs checl to write into the `ok` boolean variable of each field, and then AllOk to enable/disable button_reduce according to these `ok` variables
     Check();
@@ -17317,13 +17582,22 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     time = new ChronoField<RouteFrame>(panel, &(route->time));
     //the field for speed to set the Route length
     text_speed = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
-    speed = new SpeedField<RouteFrame>(panel, &(route->speed), String("kt"));
+    speed = new SpeedField<RouteFrame>(panel, &(route->speed), SpeedUnit_types[0]);
 
     //the field for Length to set the Route length
     text_length = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
-    length = new LengthField<RouteFrame>(panel, &(route->length), String("nm"));
+    length = new DynamicLengthField<RouteFrame>(panel, &(route->length)/*, LengthUnit_types[0]*/);
 
 
+    //this is how to properly bind the DynamicLengthField length when it is inserted into a frame and I want a modification of the DynamicLengthField to trigger AllOk() in the frame. Given that I am including length in a frame, I want that every time value or unit is changed, SightFrame::AllOk() is triggered : 1. I first bind OnEditValue and OnEditUnit to length->value and length->unit 2. every time length is changed, OnEditValue and OnEditUnit will be called and set to true/false the value_ok and unit_ok variables 3. AllOk() will be called later, read the value_ok and unit_ok variables, and enable/disable button_reduce  accordingly
+    length->Bind(wxEVT_COMBOBOX, &RouteFrame::AllOk<wxCommandEvent>, this);
+    length->Bind(wxEVT_KEY_UP, &RouteFrame::AllOk<wxKeyEvent>, this);
+    length->value->Bind(wxEVT_COMBOBOX, &DynamicLengthField<RouteFrame>::OnEditValue<wxCommandEvent>, length);
+    length->value->Bind(wxEVT_KEY_UP, &DynamicLengthField<RouteFrame>::OnEditValue<wxKeyEvent>, length);
+    length->unit->Bind(wxEVT_COMBOBOX, &DynamicLengthField<RouteFrame>::OnEditUnit<wxCommandEvent>, length);
+    length->unit->Bind(wxEVT_KEY_UP, &DynamicLengthField<RouteFrame>::OnEditUnit<wxKeyEvent>, length);
+    
+    
     type->Bind(wxEVT_COMBOBOX, &LengthFormatField<RouteFrame>::OnEdit<wxCommandEvent>, length_format);
     type->Bind(wxEVT_KEY_UP, &LengthFormatField<RouteFrame>::OnEdit<wxKeyEvent>, length_format);
 
@@ -17795,6 +18069,13 @@ void RouteFrame::AllOk(void) {
 }
 
 
+// same as RouteFrame::AllOk(void)  but with an event as an argument, so this method can be triggered from an event
+template<class E> void RouteFrame::AllOk(E& event) {
+
+    AllOk();
+
+}
+
 
 //if a key is pressed in the keyboard, I call this function
 void RouteFrame::KeyDown(wxKeyEvent& event) {
@@ -18093,7 +18374,7 @@ template<class E> void RouteFrame::UpdateLength(E& event) {
 
     if ((time->is_ok()) && (speed->is_ok())) {
 
-        length->set(Length(*(time->chrono), *(speed->speed)));
+        length->set_from_argument(Length(*(time->chrono), *(speed->speed)));
 
     }
     else {
@@ -20131,14 +20412,13 @@ void SightFrame::set(void) {
 
     body->set();
 
-    if (((body->name)->GetValue() == wxString("sun") || (body->name)->GetValue() == wxString("moon"))) {
+    if(((body->name)->GetValue() == wxString("sun") || (body->name)->GetValue() == wxString("moon"))) {
         //if  body is sun or moon, then I write the value in the non-GUI field Limb into the GUI LimbField
 
         limb->Enable(true);
         limb->set();
 
-    }
-    else {
+    }else {
         //if  body is not sun or moon, then I set the limb GUI field to empty and disable it
 
         long i;
@@ -20147,6 +20427,7 @@ void SightFrame::set(void) {
         limb->checked_items.Clear();
 
         limb->Enable(false);
+        
     }
 
 
@@ -20154,30 +20435,35 @@ void SightFrame::set(void) {
     H_s->set();
     index_error->set();
 
-    if (!((artificial_horizon_check->checkbox)->GetValue())) {
+    if(!(artificial_horizon_check->checkbox->GetValue())) {
+        
         height_of_eye->Enable(true);
         height_of_eye->set();
-    }
-    else {
+        
+    }else{
+        
         height_of_eye->Enable(false);
+        
     }
 
     //(sight->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
     //    temp = (sight->master_clock_date_and_hour);
     //    temp += (sight->TAI_minus_UTC);
 
-
-    master_clock_date->set((sight->master_clock_date_and_hour).date);
-    master_clock_chrono->set((sight->master_clock_date_and_hour).chrono);
+    master_clock_date->set(sight->master_clock_date_and_hour.date);
+    master_clock_chrono->set(sight->master_clock_date_and_hour.chrono);
 
     stopwatch_check->set();
 
-    if (((stopwatch_check->checkbox)->GetValue())) {
+    if((stopwatch_check->checkbox->GetValue())){
+        
         stopwatch_reading->Enable(true);
         stopwatch_reading->set(sight->stopwatch);
-    }
-    else {
+        
+    }else{
+        
         stopwatch_reading->Enable(false);
+        
     }
 
     TAI_minus_UTC->set(sight->TAI_minus_UTC);
@@ -20229,6 +20515,14 @@ bool SightFrame::is_ok(void) {
 void SightFrame::AllOk(void) {
 
     button_reduce->Enable(is_ok());
+
+}
+
+
+// same as SightFrame::AllOk(void)  but with an event as an argument, so this method can be triggered from an event 
+template<class E> void SightFrame::AllOk(E& event) {
+
+    AllOk();
 
 }
 
@@ -21461,6 +21755,14 @@ LengthUnit::LengthUnit(void) : String() {}
 LengthUnit::LengthUnit(const String& input) : String(input.value) {}
 
 
+//return true if *this is one element in LengthUnit_types (i.e. *this is a valid Length unit) and false otherwise)
+inline bool LengthUnit::check(void){
+    
+    return(position_in_list(LengthUnit_types) != (LengthUnit_types.size())) ;
+    
+}
+
+
 SpeedUnit::SpeedUnit(void) : String() {}
 
 
@@ -21653,53 +21955,55 @@ template <class P> void AngleField<P>::set(void) {
 }
 
 
-//set the value in the GUI field *this equal to the value in the non-GUI object *input
-template<class P> void LengthField<P>::set(Length input) {
+//set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
+template<class P> void DynamicLengthField<P>::set_from_argument(Length input) {
     
-    switch (/*(unit_value.value)[0]*/ unit_value.position_in_list(LengthUnit_types)) {
-            
-        case 0: {
-            //unit = String("nm")
-            
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
-            unit->name->SetValue(wxString("nm"));
-            break;
-            
-        }
-            
-        case 1: {
-            //unit = String("m")
-            
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm));
-            unit->name->SetValue(wxString("m"));
-            
-            break;
-            
-        }
-            
-        case 2: {
-            //unit = String("ft")
-            
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_ft));
-            unit->name->SetValue(wxString("ft"));
-            
-            break;
-            
-        }
-            
-    }
+//    String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types);
     
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
+    //HERE SET LengthField<P>::unit equal to the unit of measure of input
+//    LengthField<P>::unit->SetValue(input.unit);
+
+//    switch (String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types)) {
+//            
+//        case 0: {
+//            //unit = LengthUnit_types[0]
+//            
+//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
+//            break;
+//            
+//        }
+//            
+//        case 1: {
+//            //unit = LengthUnit_types[1]
+//            
+//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm_to_km));
+//            
+//            break;
+//            
+//        }
+//            
+//        case 2: {
+//            //unit = LengthUnit_types[2]
+//            
+//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_to_ft));
+//            
+//            break;
+//            
+//        }
+//            
+//    }
     
 }
 
 
 //set the value in the GUI object value equal to the value in the non-GUI object length
-template<class P> void LengthField<P>::set(void) {
+template<class P> void DynamicLengthField<P>::set(void) {
 
-    set(*length);
+    set_from_argument(*(LengthField<P>::length));
 
     value_ok = true;
-    unit_ok = true;
+    LengthField<P>::unit_ok = true;
 
 }
 
@@ -22022,24 +22326,82 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 
 }
 
-//constructor of a LengthField object, based on the parent frame frame
-template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p, String unit_value_in) {
 
-    parent_frame = ((P*)(panel_of_parent->GetParent()));
+//constructor of a LengthField object, based on the parent frame frame
+template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p/*, String unit_value_in*/){
+
+    parent = ((P*)(panel_of_parent->GetParent()));
     length = p;
-    unit_value = unit_value_in;
+//    unit_value = unit_value_in;
+    
+    
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+
+}
+
+
+//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entere   d so far in unit is valid and runs AllOk
+template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
+
+    bool success;
+
+    //I check whether the name in the GUI field unit matches one of the unit names in units
+    find_and_replace_case_insensitive(unit->name, unit->catalog, &success, NULL);
+
+
+    if (success) {
+
+        //because the text in value is valid, I set the background color of unit to white
+        unit->name->SetForegroundColour(wxGetApp().foreground_color);
+        unit->name->SetFont(wxGetApp().default_font);
+
+    }
+
+    //value_ok is true/false is the text entered is valid/invalid
+    unit_ok = success;
+
+    //THIS MAKES SENSE ONLY IF *this   IS INSERTED INTO A FRAME WHERE I NEED TO CHECK ALL THE GUI FIELDS IN THE FRAME EVERY TIME I EDIT this->unit
+    //tries to enable button_reduce
+    //    parent->AllOk();
+    //THIS MAKES SENSE ONLY IF *this   IS INSERTED INTO A FRAME WHERE I NEED TO CHECK ALL THE GUI FIELDS IN THE FRAME EVERY TIME I EDIT this->unit
+
+    event.Skip(true);
+
+}
+
+
+//insert *this in *host
+template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
+
+    host->Add(LengthField<P>::sizer_v);
+
+}
+
+
+//same asLengthField<P>::InsertIn(T* host) but with flags to be provided
+template<class P> template<class T> void LengthField<P>::InsertIn(T* host, wxSizerFlags& flag) {
+
+    host->Add(sizer_v, flag);
+
+}
+
+
+//constructor of a EditableLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
+template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_parent, Length* p/*, String unit_value_in*/) : LengthField<P>( panel_of_parent, p/*, unit_value_in*/) {
+
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
 
-
-    //    ((parent_frame->check_height_of_eye).p) = this;
-
-    //initialize check
-    check = new CheckLength<P>(this);
-
     flags.Center();
 
-    value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    
+    //initialize check
+    check = new CheckLength<P>(this);
+    
+    value = new wxTextCtrl((LengthField<P>::parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     //SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
@@ -22047,31 +22409,127 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     value_ok = false;
     value->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
-    value->Bind(wxEVT_KEY_UP, &LengthField::OnEditValue<wxKeyEvent>, this);
-
-
-//    (unit->name) = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
-    unit = new LengthUnitField<P>((parent_frame->panel), &(length->unit), &(wxGetApp().list_frame->data->recent_length_units));
-    //SetColor(unit);
-//    AdjustWidth(unit->name);
-    //I set the value of unit to the unit of measure with with this LengthField was called in its constructor, and set its value to ok because that is a valid unit of measure
-//    unit->name->SetValue(unit_value.value);
-//    unit_ok = true;
-//    unit->name->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_unit)));
+//    value->Bind(wxEVT_KEY_UP, &DynamicLengthField::OnEditValue<wxKeyEvent>, this);
+    
+    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    unit->name->Bind(wxEVT_COMBOBOX, &LengthField::OnEditUnit<wxCommandEvent>, this);
-    unit->name->Bind(wxEVT_KEY_UP, &LengthField::OnEditUnit<wxKeyEvent>, this);
+//    LengthField<P>::unit->name->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
+//    LengthField<P>::unit->name->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
+
+    
+    //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
+    LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+    LengthField<P>::unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
+
+}
 
 
-    sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    sizer_v = new wxBoxSizer(wxVERTICAL);
+//constructor of a StaticLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
+template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p/*, String unit_value_in*/) : LengthField<P>( panel_of_parent, p/*, unit_value_in*/) {
+
+    //these flags will be used in the method InsertIn below, to insert this->unit
+    wxSizerFlags flags;
+
+    flags.Center();
+
     
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(value, 0, wxALIGN_CENTER);
-    //    sizer_h->Add(unit->name, 0, wxALIGN_CENTER);
-    unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(sizer_h, flags);
+    value = new StaticText((LengthField<P>::parent->panel),  "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
+    value->SetLabel(wxString(""));
+    
+    //set unit_before to an empty value
+    unit_before.set(String(""));
+    
+    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
+    //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    LengthField<P>::unit->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
+    LengthField<P>::unit->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
+
+    LengthField<P>::unit->Bind(wxEVT_COMBOBOX, &StaticLengthField<P>:: template ConvertUnit<wxCommandEvent>, this);
+    LengthField<P>::unit->Bind(wxEVT_KEY_UP, &StaticLengthField<P>::template ConvertUnit<wxKeyEvent>, this);
+    
+    //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
+    LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+    LengthField<P>::unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
+
+}
+
+
+
+//set the value and the unit of the GUI field *this equal to the value and the unit in the non-GUI object *length
+template<class P> void StaticLengthField<P>::set(Length input) {
     
     
+    switch (String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types)) {
+            
+        case 0: {
+            //unit = LengthUnit_types[0]
+            
+            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
+            break;
+            
+        }
+            
+        case 1: {
+            //unit = LengthUnit_types[1]
+            
+            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * nm_to_m));
+            
+            break;
+            
+        }
+            
+        case 2: {
+            //unit = LengthUnit_types[2]
+            
+            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_to_ft));
+            
+            break;
+            
+        }
+            
+    }
+    
+    LengthField<P>::unit->set();
+    
+    //store the currently set length unit into unit_before for the future
+    unit_before = (LengthField<P>::length->unit);
+    
+}
+
+//set the value and the unit in the GUI object value equal to the value and the unit in the non-GUI object length
+template<class P> void StaticLengthField<P>::set(void) {
+
+    set(*(LengthField<P>::length));
+
+    LengthField<P>::unit_ok = true;
+
+}
+
+
+//set only the value in the GUI object *this equal to the value of the non-GUi object length. The unit of *this is not modified, and the value written into *this is converted to the current unit written in the GUI field *this
+template<class P> void StaticLengthField<P>::set_value_keep_unit(void) {
+    
+    
+    
+}
+
+
+//convert the numerical value stored into value according to the length unit unit 
+template<class P> template<class E>  void StaticLengthField<P>::ConvertUnit(E& event) {
+    
+    
+    
+    
+    
+    
+    
+    
+    //store the currently set length unit into unit_before for the future
+    unit_before = (LengthField<P>::length->unit);
+    
+    event.Skip(true);
+
 }
 
 
@@ -22220,9 +22678,9 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
-template<class P> bool LengthField<P>::is_ok(void) {
+template<class P> bool DynamicLengthField<P>::is_ok(void) {
 
-    return(value_ok && unit_ok);
+    return(value_ok && (LengthField<P>::unit_ok));
 
 }
 
@@ -22320,10 +22778,8 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
-
-
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
-template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event) {
+template<class P> template<class E>  void DynamicLengthField<P>::OnEditValue(E& event) {
 
     bool success;
 
@@ -22340,47 +22796,19 @@ template<class P> template<class E>  void LengthField<P>::OnEditValue(E& event) 
 
     //value_ok is true/false is the text entered is valid/invalid
     value_ok = success;
+    
     //tries to enable button_reduce
-    parent_frame->AllOk();
+//    LengthField<P>::parent->AllOk();
 
     event.Skip(true);
 
 }
 
 
-//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entere   d so far in unit is valid and runs AllOk
-template<class P> template<class E>  void LengthField<P>::OnEditUnit(E& event) {
-
-    bool success;
-
-    //I check whether the name in the GUI field unit matches one of the unit names in units
-    find_and_replace_case_insensitive(unit->name, unit->catalog, &success, NULL);
-
-
-    if (success) {
-
-        //because the text in value is valid, I set the background color of unit to white
-        unit->name->SetForegroundColour(wxGetApp().foreground_color);
-        unit->name->SetFont(wxGetApp().default_font);
-
-    }
-
-
-    //value_ok is true/false is the text entered is valid/invalid
-    unit_ok = success;
-    //tries to enable button_reduce
-    parent_frame->AllOk();
-
-    event.Skip(true);
-
-}
-
-
-
-template<class P> template <typename EventTag, typename Method, typename Object> void LengthField<P>::Bind(EventTag tag, Method method, Object object) {
+template<class P> template <typename EventTag, typename Method, typename Object> void DynamicLengthField<P>::Bind(EventTag tag, Method method, Object object) {
 
     value->Bind(tag, method, object);
-    unit->Bind(tag, method, object);
+    LengthField<P>::unit->Bind(tag, method, object);
 
 }
 
@@ -22394,20 +22822,11 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
 
-    //    ((parent_frame->check_height_of_eye).p) = this;
-
+    
     //initialize check
     check = new CheckSpeedValue<P>(this);
 
     flags.Center();
-
-
-    //tabulate the possible units of measure
-//    units.Clear();
-//    units.Add(wxT("kt"));
-//    units.Add(wxT("km/h"));
-//    units.Add(wxT("m/s"));
-
 
     value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     //SetColor(value);
@@ -22420,15 +22839,9 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     value->Bind(wxEVT_KEY_UP, &SpeedField::OnEditValue<wxKeyEvent>, this);
 
 
-//    (unit->name) = new wxComboBox((parent_frame->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+//    (unit->name) = new wxComboBox((parent->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     unit = new SpeedUnitField<P>(parent_frame->panel, &(speed->unit), &(wxGetApp().list_frame->data->recent_speed_units));
     
-    //SetColor(unit);
-//    AdjustWidth(unit->name);
-    //I set the value of unit to the unit of measure with with this SpeedField was called in its constructor, and set its value to ok because that is a valid unit of measure
-//    unit->name->SetValue(unit_value.value);
-//    unit_ok = true;
-//    unit->name->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_unit)));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     unit->Bind(wxEVT_COMBOBOX, &SpeedField::OnEditUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &SpeedField::OnEditUnit<wxKeyEvent>, this);
@@ -22438,9 +22851,8 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
     sizer_v = new wxBoxSizer(wxVERTICAL);
 
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(value, 0, wxALIGN_CENTER);
     
-    //    sizer_h->Add(unit->name, 0, wxALIGN_CENTER);
+    sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
     unit->InsertIn(sizer_h, flags);
     
 }
@@ -22448,10 +22860,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 
 //set the value in the GUI object value equal to the value in the non-GUI object Speed
 template<class P> void SpeedField<P>::set(void) {
-    
-    
-    //    for (i = 0; (i < (unit->catalog.size())) && ((unit->name->GetValue()) != ((unit->catalog)[i])); i++) {}
-    
+        
     
     switch(String((unit->name->GetValue()).ToStdString()).position_in_list(unit->catalog)) {
             
@@ -22466,7 +22875,7 @@ template<class P> void SpeedField<P>::set(void) {
         case 1: {
             //unit = SpeedUnit_types[1]
             
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to km/h*/(speed->value) * nm));
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to km/h*/(speed->value) * nm_to_km));
             
             break;
         }
@@ -22474,7 +22883,7 @@ template<class P> void SpeedField<P>::set(void) {
         case 2: {
             //unit = SpeedUnit_types[2]
             
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm * 1e3 / 3600.0));
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm_to_m / 3600.0));
             
             break;
         }
@@ -22499,23 +22908,23 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
         value->GetValue().ToDouble(&speed_temp);
 
         if ((unit->name->GetValue().ToStdString()) == "kt") {
-            //unit = String("nm")
+            //unit = LengthUnit_types[0]
             speed->set(String(""), /*the speed is entered in the GUI field is already in nm, thus no need to convert it*/speed_temp, String(""));
 
         }
         else {
-            //[m]/[s] = [km]/1e3/[h]*3600 = [kt]/nm/1e3*3600
+            //[m]/[s] = [km]/1e3/[h]*3600 = [kt]/nm_to_km/1e3*3600
             if ((unit->name->GetValue().ToStdString()) == "km/h") {
-                //unit = String("km/h")
-                speed->set(String(""), /*the speed is entered in the GUI field in km/h, thus I convert it to kt*/speed_temp / nm, String(""));
+                //unit = SpeedUnit_types[1]
+                speed->set(String(""), /*the speed is entered in the GUI field in km/h, thus I convert it to kt*/speed_temp / nm_to_km, String(""));
 
             }
             else {
 
                 if ((unit->name->GetValue().ToStdString()) == "m/s") {
-                    //unit = String("ft")
+                    //unit = LengthUnit_types[2]
 
-                    speed->set(String(""), /*the speed is entered in the GUI field in m/s, thus I convert it to kt*/speed_temp / (nm * 1e3) * 3600.0, String(""));
+                    speed->set(String(""), /*the speed is entered in the GUI field in m/s, thus I convert it to kt*/speed_temp / nm_to_m * 3600.0, String(""));
 
                 }
 
@@ -22790,13 +23199,15 @@ template<class P> void AngleField<P>::Enable(bool is_enabled) {
 
 }
 
-//this function enables/disable the LengthField
-template<class P> void LengthField<P>::Enable(bool is_enabled) {
+
+//this function enables/disable the DynamicLengthField
+template<class P> void DynamicLengthField<P>::Enable(bool is_enabled) {
 
     value->Enable(is_enabled);
-    unit->Enable(is_enabled);
+    LengthField<P>::unit->Enable(is_enabled);
 
 }
+
 
 //this function enables/disable the whole ChronoField
 template<class P> void ChronoField<P>::Enable(bool is_enabled) {
@@ -22868,40 +23279,12 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 
-////this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid and runs AllOk
-//template<class E> void LimbField::OnEdit(E& event){
-//
-//    bool check;
-//
-//    //I check whether the name in the GUI field name matches one of the valid limb names
-//    find_and_replace_case_insensitive(name, limbs, &check, NULL);
-//
-//    //ok is true/false is the text enteres is valid/invalid
-////    (*on_change_selection_in_limb_field)(event);
-////    ok = name->;
-////
-//    if(check){
-//
-//        name->SetForegroundColour(wxGetApp().foreground_color);
-//        name->SetFont(wxGetApp().default_font);
-//
-//        name->SetForegroundColour(wxGetApp().foreground_color);
-//        name->SetFont(wxGetApp().default_font);
-//
-//    }
-//
-//    //tries to enable button_reduce
-//    parent_frame->AllOk();
-//
-//    event.Skip(true);
-//
-//}
-
 template<class P> bool DateField<P>::is_ok(void) {
 
     return(year_ok && month_ok && day_ok);
 
 }
+
 
 //this function is called every time a keyboard button is lifted in this->year: it checks whether the text entered so far in year is valid and runs AllOk
 template<class P> template<class E> void DateField<P>::OnEditYear(E& event) {
@@ -23092,18 +23475,12 @@ template<class P> template<class T> void AngleField<P>::InsertIn(T* host) {
 }
 
 
-template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
-
-    host->Add(sizer_v);
-
-}
-
-
 template<class P> template<class T> void DateField<P>::InsertIn(T* host) {
 
     host->Add(sizer_v);
 
 }
+
 
 template<class P> template<class T> void StringField<P>::InsertIn(T* host) {
 

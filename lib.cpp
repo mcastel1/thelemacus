@@ -5786,7 +5786,8 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
     //set height of eye column
     if (artificial_horizon.value == 'n') {
 
-        listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string(LengthUnit_types[1], (display_precision.value))));
+        //write the height_of_eye with its original unit of measure
+        listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string( (display_precision.value))));
 
     }
     else {
@@ -16469,7 +16470,7 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 //write the value and the unit of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
     
-    if (is_ok()) {
+    if(is_ok()){
         
         double x;
         
@@ -16478,48 +16479,6 @@ template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
         
     }
 
-//        LengthUnit((LengthField<P>::unit->name->GetValue()).ToStdString());
-        
-
-        
-//        switch (String((LengthField<P>::unit->name->GetValue()).ToStdString()).position_in_list(LengthField<P>::unit->catalog)) {
-//                
-//            case 0: {
-//                //unit = "nm"
-//                
-//                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
-//                LengthField<P>::length->unit.set(LengthUnit_types[0]);
-//                
-//                break;
-//                
-//            }
-//                
-//                
-//            case 1: {
-//                //unit = "m"
-//                
-//                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / nm_to_m, String(""));
-//                LengthField<P>::length->unit.set(LengthUnit_types[1]);
-//
-//                break;
-//                
-//            }
-//                
-//                
-//            case 2: {
-//                //unit = "ft"
-//                
-//                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_to_ft, String(""));
-//                LengthField<P>::length->unit.set(LengthUnit_types[2]);
-//                
-//                break;
-//                
-//            }
-//                
-//        }
-//        
-//    }
-    
     event.Skip(true);
     
 }

@@ -2259,14 +2259,12 @@ Position::Position(Angle lambda_in, Angle phi_in) {
 
 }
 
-//here name is the name of the distance that I am computing; for example 'distance between positions A and B'
+//write the distance between *this and p in *l, and set l.unit to LengthUnit_types[0], here name is the name of the distance that I am computing; for example 'distance between positions A and B'
 bool Position::distance(Position p, Length* l, String name, [[maybe_unused]] String prefix) {
 
     bool check;
     check = true;
 
-//    (l->unit) = LengthUnit_types[0];
-//    (l->value) = Re * acos(cos((lambda)-(p.lambda)) * cos(phi) * cos(p.phi) + sin(phi) * sin(p.phi));
     
     l->set(Re * acos(cos((lambda)-(p.lambda)) * cos(phi) * cos(p.phi) + sin(phi) * sin(p.phi)), LengthUnit_types[0]);
 
@@ -3139,14 +3137,14 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                                                ((Angle(((((t[0]).value) + ((t[1]).value))) / 2.0)).value) * (Re * sin(omega))
                                                ),
                                         String(""));
-                            ((draw_panel->circle_observer).reference_position).distance(end, &l1, String(""), String(""));
+                            draw_panel->circle_observer.reference_position.distance(end, &l1, String(""), String(""));
                             
                             compute_end(
                                         Length(
                                                ((Angle(((((t[0]).value) + ((t[1]).value))) / 2.0 + M_PI)).value) * (Re * sin(omega))
                                                ),
                                         String(""));
-                            ((draw_panel->circle_observer).reference_position).distance(end, &l2, String(""), String(""));
+                            draw_panel->circle_observer.reference_position.distance(end, &l2, String(""), String(""));
                             
                             if (l2 > l1) {
                                 

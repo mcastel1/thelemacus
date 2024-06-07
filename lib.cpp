@@ -11800,7 +11800,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
  
 
     //text field showing the current value of the zoom slider
-    text_slider = new StaticText(panel, wxS(""), wxDefaultPosition, wxDefaultSize, 0);
+    chart_scale = new StaticText(panel, wxS(""), wxDefaultPosition, wxDefaultSize, 0);
     observer_height = new StaticLengthField<ChartFrame>(panel, &(draw_panel->d));
 
     //navigation buttons
@@ -11915,7 +11915,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     sizer_buttons->Add(empty_text_5, 0, wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
 
     sizer_slider->Add(slider, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    sizer_slider->Add(text_slider, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+    sizer_slider->Add(chart_scale, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
     observer_height->LengthField<ChartFrame>::InsertIn(sizer_slider, flags);
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, 0);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
@@ -12967,7 +12967,7 @@ void ChartFrame::UpdateSliderLabel_Mercator(void) {
     stringstream s;
     Int scale_factor;
     
-    //compute the scale factor
+    //compute the chart_scale factor
     scale_factor.set( ((unsigned int)(
                    /*length of the NS edge of the plot area as measured on the surface of the earth, in  [nm]*/(((phi_max.normalize_pm_pi_ret().value) - (phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in [nm]*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * inch_to_km/nm_to_km ) )) );
     
@@ -12977,7 +12977,7 @@ void ChartFrame::UpdateSliderLabel_Mercator(void) {
 
     s.str("");
     s << "1:" << scale_factor.to_string_spaces().value;
-    text_slider->SetLabel(s.str().c_str());
+    chart_scale->SetLabel(s.str().c_str());
     
     //fir *this in order to account for the sliderlabal which has changed 
     Fit();
@@ -12988,7 +12988,7 @@ void ChartFrame::UpdateSliderLabel_Mercator(void) {
 //update the text in text_slider in the 3D projection: for the 3D projection the altitude of the observer is written into observer_height, thus text_slider is set to empty
 void ChartFrame::UpdateSliderLabel_3D(void) {
 
-    text_slider->SetLabel("");
+    chart_scale->SetLabel("");
 
 }
 
@@ -13944,6 +13944,12 @@ template<class E> void DrawPanel::SetProjection(E& event) {
         Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_Mercator);
         Set_size_chart = (&DrawPanel::Set_size_chart_Mercator);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_Mercator);
+        
+        //in the 3D projection the scale of the chart, shown in text_slider, does not makes sense -> set it to empty
+        parent->observer_height->value->SetLabel(wxS(""));
+        parent->observer_height->unit->name->SetValue(wxS(""));
+        parent->observer_height->unit->name->Enable(false);
+   
 
     }
 
@@ -13964,7 +13970,10 @@ template<class E> void DrawPanel::SetProjection(E& event) {
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
 
         //in the 3D projection the scale of the chart, shown in text_slider, does not makes sense -> set it to empty
-        parent->text_slider->SetLabel(wxS(""));
+        parent->chart_scale->SetLabel(wxS(""));
+        parent->observer_height->unit->name->Enable(true);
+        parent->observer_height->set();
+
         
     }
     
@@ -22255,7 +22264,7 @@ template<class P> void StaticLengthField<P>::set(void) {
 
     set(*(LengthField<P>::length));
 
-    LengthField<P>::unit_ok = true;
+    (LengthField<P>::unit->ok) = true;
 
 }
 

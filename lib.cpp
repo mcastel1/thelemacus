@@ -2265,8 +2265,10 @@ bool Position::distance(Position p, Length* l, String name, [[maybe_unused]] Str
     bool check;
     check = true;
 
-    (l->unit) = LengthUnit_types[0];
-    (l->value) = Re * acos(cos((lambda)-(p.lambda)) * cos(phi) * cos(p.phi) + sin(phi) * sin(p.phi));
+//    (l->unit) = LengthUnit_types[0];
+//    (l->value) = Re * acos(cos((lambda)-(p.lambda)) * cos(phi) * cos(p.phi) + sin(phi) * sin(p.phi));
+    
+    l->set(Re * acos(cos((lambda)-(p.lambda)) * cos(phi) * cos(p.phi) + sin(phi) * sin(p.phi)), LengthUnit_types[0]);
 
     check &= !isnan(l->value);
 
@@ -2466,6 +2468,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
     type = type_in;
     
     length = l_in;
+    length.convert_to(LengthUnit_types[0]);
     
     reference_position = reference_position_in;
     Z = Z_in;

@@ -2705,7 +2705,7 @@ inline void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* 
         }else{
 
             if (i == 0) {
-                s.set(String(""), 0.0, String(""));
+                s.set(0.0, LengthUnit_types[0]);
             }else{
                 s = length;
             }
@@ -2827,7 +2827,8 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
                     }
                     else {
                         if (i < n_points - 1) {
-                            r = Length(((s[j]).value) + (((s[j + 1]) - (s[j])).value) * ((double)i) / ((double)(n_points - 1)));
+//                            r = Length(((s[j]).value) + (((s[j + 1]) - (s[j])).value) * ((double)i) / ((double)(n_points - 1)));
+                            r = s[j] + ((s[j + 1] - s[j])*((double)i)/((double)(n_points - 1)));
                         }
                         else {
                             r = s[j + 1];
@@ -2843,13 +2844,12 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
 
                     check = (draw_panel->GeoToDrawPanel)(end, &temp, true);
 
-                    if (check) {
+                    if(check){
                         //temp is a valid point
 
                         p.push_back(temp);
 
-                    }
-                    else {
+                    }else{
                         //temp is not a valid point
 
                         if (!(draw_panel->PutBackIn(temp, &q))) {
@@ -2863,7 +2863,7 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
 
                 }
 
-                if ((p.size()) > 1) {
+                if((p.size()) > 1){
                     dc->DrawSpline((int)(p.size()), p.data());
                 }
 
@@ -2877,6 +2877,7 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
     }
 
 }
+
 
 inline void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
 

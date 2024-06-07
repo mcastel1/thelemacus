@@ -116,6 +116,7 @@
   
 
  ********** THINGS TO FIX ***********
+    - replace     Length zero_Length; zero_Length.value = 0.0; with a Length(0.0)
     - clean up F.params = &(*this);
     - remove all (*this).
     - write function for Angle algebraic averages such as ((((t[0]).value) + ((t[1]).value))) / 2.0) and substitute it everywhere

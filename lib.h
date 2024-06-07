@@ -2389,7 +2389,7 @@ public:
     LengthUnitField<P>* unit;
     wxBoxSizer *sizer_h, *sizer_v;
     Length* length;
-    bool unit_ok;
+//    bool unit_ok;
 
     LengthField(wxPanel*, Length*);
     

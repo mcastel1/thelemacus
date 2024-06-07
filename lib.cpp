@@ -7394,14 +7394,14 @@ double Atmosphere::T(Length z) {
     double x = 0.0;
     //cout << "z = " << (z.value) << "\n";
 
-    if ((z.value) <= h[n_layers]) {
+    if (z <= h[n_layers]) {
 
         unsigned int i;
         bool check = true;
 
         for (i = 0, check = true; (i < n_layers) && check; i++) {
-            if (((z.value) >= h[i]) && ((z.value) < h[i + 1])) {
-                x = t[i] + lambda[i] * ((z.value) - h[i]);
+            if ((z >= h[i]) && (z < h[i + 1])) {
+                x = t[i] + lambda[i] * (z - h[i]);
                 check = false;
             }
         }
@@ -7425,13 +7425,13 @@ double Atmosphere::dTdz(Length z) {
     double x = 0.0;
     //cout << "z = " << (z.value) << "\n";
 
-    if ((z.value) <= h[n_layers]) {
+    if (z <= h[n_layers]) {
 
         unsigned int i;
         bool check = true;
 
         for (i = 0, check = true; (i < n_layers) && check; i++) {
-            if (((z.value) >= h[i]) && ((z.value) < h[i + 1])) {
+            if ((z >= h[i]) && (z < h[i + 1])) {
                 x = lambda[i];
                 check = false;
             }
@@ -7455,7 +7455,7 @@ double Atmosphere::n(Length z) {
 
     double x = 0.0;
 
-    if ((z.value) <= h[n_layers]) {
+    if (z <= h[n_layers]) {
 
         unsigned int i;
         bool check = true;

@@ -12851,7 +12851,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 target_position.distance((chart_frames[i])->draw_panel->circle_observer.reference_position, &d, String(""), String(""));
                 
                 //I do the animaiton only if the start and end position of the animation are large enough, in order to avoid NaNs in the transporting_route
-                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * Re*(chart_frames[i])->draw_panel->circle_observer.omega.value) {
+                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * (Re*(chart_frames[i])->draw_panel->circle_observer.omega.value)) {
                     
                     chart_transport_handlers[i] = new ChartTransportHandler<F>(
                                                                                (chart_frames[i]),

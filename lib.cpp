@@ -3076,11 +3076,10 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                             //*this is fully included into rectangle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
                             
                             s->resize(2);
-                            ((*s)[0]).set(String(""), 0.0, String(""));
-                            ((*s)[1]).set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
+                            ((*s)[0]).set(0.0, LengthUnit_types[0]);
+                            ((*s)[1]).set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
                             
-                        }
-                        else {
+                        }else{
                             
                             unsigned int i;
                             
@@ -3088,7 +3087,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                             
                             for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
                                 
-                                ((*s)[i]).set(String(""), ((t[i]).value) * Re * sin(omega), String(""));
+                                ((*s)[i]).set(((t[i]).value) * Re * sin(omega), LengthUnit_types[0]);
                                 
                             }
                             
@@ -3124,8 +3123,8 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                         if ((t[0] == 0.0) && (t[1] == 0.0)) {
                             //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
                             
-                            ((*s)[0]).set(String(""), 0.0, String(""));
-                            ((*s)[1]).set(String(""), 2.0 * M_PI * Re * sin(omega), String(""));
+                            ((*s)[0]).set(0.0, LengthUnit_types[0]);
+                            ((*s)[1]).set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
                             
                         }
                         else {

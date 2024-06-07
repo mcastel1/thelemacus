@@ -12737,7 +12737,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        
                        object->set_length_from_time_speed();
                        
-                       object->compute_end(Length((object->length)/2.0), String(""));
+                       object->compute_end(((object->length)/2.0), String(""));
                        target_position = object->end;
                        
                    }
@@ -12823,7 +12823,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        
                        object->set_length_from_time_speed();
                        
-                       object->compute_end(Length((object->length)/2.0), String(""));
+                       object->compute_end(((object->length)/2.0), String(""));
                        target_position = object->end;
                        //                    target_position = route.reference_position;
 

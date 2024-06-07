@@ -4119,11 +4119,11 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
             intersection(route, true, &t, new_prefix);
             route.intersection((*this), true, &u, new_prefix);
 
-            (*this).compute_end(Length(Re * sin((*this).omega.value) * ((t[0]).value)), new_prefix);
+            compute_end(Length(Re * sin(omega.value) * ((t[0]).value)), new_prefix);
             (*p)[0] = end;
             ((*p)[0]).label.set(String(""), String("crossing"), prefix);
 
-            (*this).compute_end(Length(Re * sin((*this).omega.value) * ((t[1]).value)), new_prefix);
+            compute_end(Length(Re * sin(omega.value) * ((t[1]).value)), new_prefix);
             (*p)[1] = end;
             ((*p)[1]).label.set(String(""), String("crossing"), prefix);
 
@@ -6434,7 +6434,7 @@ int Data::compute_position(String prefix) {
             //r is the minimal distance between crossing points. To find the minimum, here I set r to it largest possible value, obtained when the two points are at the antipodes. I find the pair of crossing points which is closest to each other, and set Position center to one of the Positions in this pair. center will thus represent the approximate astronomical position. I will then run over all the pairs of crossing points in p, p[i], and pick either p[i][0] or p[i][1]: I will pick the one which is closest to center
 
             cout << prefix.value << "Distances between pairs of crossing positions:\n";
-            r.set(String(""), M_PI * Re, prefix);
+            r.set(M_PI * Re, LengthUnit_types[0]);
 
             for (i = 0; i < q.size(); i++) {
                 for (j = i + 1; j < q.size(); j++) {
@@ -6444,7 +6444,7 @@ int Data::compute_position(String prefix) {
 
                     (q[i]).distance((q[j]), &s, String(dummy.str()), new_prefix);
 
-                    if (r > s) {
+                    if(r > s){
                         r = s;
                         center = (q[i]);
                     }
@@ -6466,12 +6466,11 @@ int Data::compute_position(String prefix) {
                     center.distance(p[i][0], &r, String(""), new_prefix);
                     center.distance(p[i][1], &s, String(""), new_prefix);
 
-                    if (r > s) {
+                    if(r > s){
 
                         q.push_back(p[i][1]);
 
-                    }
-                    else {
+                    }else{
 
                         q.push_back(p[i][0]);
 
@@ -6503,16 +6502,18 @@ int Data::compute_position(String prefix) {
                 //there are >= 2 crossings -> the error on the astronomical position can be computed
                 
                 //compute error on astronomical position
-                (r.value) = 0.0;
+//                (r.value) = 0.0;
+                r.set(0.0, LengthUnit_types[0]);
+                
                 for (i = 0; i < q.size(); i++) {
                     for (j = i + 1; j < q.size(); j++) {
                         
                         (q[i]).distance(q[j], &s, String(""), new_prefix);
-                        r = r + s;
+                        r += s;
                         
                     }
                 }
-                (r.value) /= ((double)((q.size()) * ((q.size()) - 1) / 2));
+                r /= ((double)((q.size()) * ((q.size()) - 1) / 2));
                 
                 //computes the circle of equal altitude which represents the error of the sight
                 (error_circle.type) = RouteType(((Route_types[2]).value));

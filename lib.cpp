@@ -18231,7 +18231,7 @@ template<class E> void RouteFrame::UpdateLength(E& event) {
 
     if ((time->is_ok()) && (speed->is_ok())) {
 
-        length->set_from_argument(Length(*(time->chrono), *(speed->speed)));
+        length->set(Length(*(time->chrono), *(speed->speed)));
 
     }
     else {
@@ -21822,7 +21822,7 @@ template <class P> void AngleField<P>::set(void) {
 
 
 //set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
-template<class P> void DynamicLengthField<P>::set_from_argument(Length input) {
+template<class P> void DynamicLengthField<P>::set(Length input) {
         
     value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
     LengthField<P>::unit->set(input.unit);

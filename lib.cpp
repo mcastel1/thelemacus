@@ -7792,13 +7792,13 @@ void Atmosphere::set(void) {
 
     
     h[0] = 0.0;
-    h[1] = 11.0 / nm_to_km;
-    h[2] = 20.0 / nm_to_km;
-    h[3] = 32.0 / nm_to_km;
-    h[4] = 47.0 / nm_to_km;
-    h[5] = 51.0 / nm_to_km;
-    h[6] = 71.0 / nm_to_km;
-    h[7] = 84.8520 / nm_to_km;
+    h[1] = 11.0 * km_to_nm;
+    h[2] = 20.0 * km_to_nm;
+    h[3] = 32.0 * km_to_nm;
+    h[4] = 47.0 * km_to_nm;
+    h[5] = 51.0 * km_to_nm;
+    h[6] = 71.0 * km_to_nm;
+    h[7] = 84.8520 * km_to_nm;
 
     lambda[0] = -6.5 * nm_to_km;
     lambda[1] = 0.0 * nm_to_km;

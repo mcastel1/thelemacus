@@ -21816,6 +21816,7 @@ template <class P> void AngleField<P>::set(void) {
 template<class P> void DynamicLengthField<P>::set_from_argument(Length input) {
         
     value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
+    LengthField<P>::unit->set(input.unit);
     
 }
 

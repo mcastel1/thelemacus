@@ -3148,14 +3148,13 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                             
                             if (l2 > l1) {
                                 
-                                ((*s)[0]).set(String(""), ((t[0]).value) * (Re * sin(omega)), String(""));
-                                ((*s)[1]).set(String(""), ((t[1]).value) * (Re * sin(omega)), String(""));
+                                ((*s)[0]).set(((t[0]).value) * (Re * sin(omega)), LengthUnit_types[0]);
+                                ((*s)[1]).set(((t[1]).value) * (Re * sin(omega)), LengthUnit_types[0]);
                                 
-                            }
-                            else {
+                            }else{
                                 
-                                ((*s)[0]).set(String(""), ((t[1]).value) * (Re * sin(omega)), String(""));
-                                ((*s)[1]).set(String(""), (2.0 * M_PI + ((t[0]).value)) * (Re * sin(omega)), String(""));
+                                ((*s)[0]).set(((t[1]).value) * (Re * sin(omega)), LengthUnit_types[0]);
+                                ((*s)[1]).set((2.0 * M_PI + ((t[0]).value)) * (Re * sin(omega)), LengthUnit_types[0]);
                                 
                             }
                             
@@ -3189,6 +3188,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
     }
     
 }
+
 
 void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
 

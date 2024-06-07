@@ -116,7 +116,8 @@
   
 
  ********** THINGS TO FIX ***********
-    - when you zoom in in the 3d projection there is an error message '[1;31mEntered value of  is not valid!' on the console 
+    - if you click on a Route connected to a Sight and press modify you get the message that the Route will be disconnected from the Sight but then in the table it is not disconnected
+    - when you zoom in in the 3d projection there is an error message '[1;31mEntered value of  is not valid!' on the console
     - replace     Length zero_Length; zero_Length.value = 0.0; with a Length(0.0)
     - clean up F.params = &(*this);
     - remove all (*this).

@@ -2926,7 +2926,10 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
             for (v_tentative.clear(), n_points_check_ok=0, i = 0; i < n_points; i++) {
 
                 //I slightly increase s[j] and slightly decrease s[j+1] (both by epsilon_double) in order to plot a chunk of the Route *this which is slightly smaller than the chunk [s[j], s[j+1]] and thus avoid  the odd lines that cross the whole plot area in the Mercator projection and that connect two points of the same chunk that are far from each other  on the plot area
-                compute_end(Length(((s[j]).value) * (1.0 + epsilon_double) + (((s[j + 1]).value) * (1.0 - epsilon_double) - ((s[j]).value) * (1.0 + epsilon_double)) * ((double)i) / ((double)(n_points - 1))), String(""));
+                //                compute_end(Length(((s[j]).value) * (1.0 + epsilon_double) + (((s[j + 1]).value) * (1.0 - epsilon_double) - ((s[j]).value) * (1.0 + epsilon_double)) * ((double)i) / ((double)(n_points - 1))), String(""));
+                compute_end(
+                            (s[j] * (1.0 + epsilon_double)) + (((s[j + 1] * (1.0 - epsilon_double)) - ((s[j] * (1.0 + epsilon_double)))) * ((double)i)/((double)(n_points - 1))),
+                            String(""));
                 
                 check = (draw_panel->GeoToDrawPanel)(end, &p, false);
                 

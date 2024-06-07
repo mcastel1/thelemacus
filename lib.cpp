@@ -1188,6 +1188,22 @@ void Length::operator -= (const Length& length) {
 }
 
 
+//multiply *this by x (which is supposed to be dimensionless) and write the result in *this by keeping the units of *this
+void Length::operator *= (const double& x) {
+    
+    value *= x;
+
+}
+
+
+//divide *this by x (which is supposed to be dimensionless) and write the result in *this by keeping the units of *this
+void Length::operator /= (const double& x) {
+    
+    value /= x;
+
+}
+
+
 //evaluates whether Length (*this) is > than r
 inline bool Length::operator > (const Length& r) {
     

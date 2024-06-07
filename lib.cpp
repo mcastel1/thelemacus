@@ -7915,7 +7915,9 @@ void Sight::compute_DH_dip(String prefix) {
     zero_Length.value = 0.0;
 
     DH_dip.set(String("Dip correction"),
-        -acos(atmosphere.n(zero_Length) / atmosphere.n(height_of_eye) * ((atmosphere.earth_radius.value) / ((atmosphere.earth_radius.value) + (height_of_eye.value)))), prefix);
+        -acos(atmosphere.n(zero_Length) / atmosphere.n(height_of_eye) 
+              * ((atmosphere.earth_radius.convert(LengthUnit_types[0]).value) / (((atmosphere.earth_radius) + (height_of_eye)).convert(LengthUnit_types[0]).value) )
+              ), prefix);
 
 }
 

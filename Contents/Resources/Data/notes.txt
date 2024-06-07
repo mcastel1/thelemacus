@@ -116,7 +116,8 @@
   
 
  ********** THINGS TO FIX ***********
-    - remove all (*this). 
+    - clean up F.params = &(*this);
+    - remove all (*this).
     - write function for Angle algebraic averages such as ((((t[0]).value) + ((t[1]).value))) / 2.0) and substitute it everywhere
     - Angle& Angle::operator += (const Angle& angle) { should not return an Angle but a void -> revise all other similar functions
     - make sure that all the print() methods have the same structure as Length::print()

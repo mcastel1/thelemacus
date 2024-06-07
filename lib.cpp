@@ -4761,8 +4761,6 @@ inline Cartesian Cartesian::cross(const Cartesian& s){
 }
 
 
-
-
 void Cartesian::print(String name, String prefix, ostream& ostr) {
 
     ostr << prefix.value << name.value << ": {" <<
@@ -22233,9 +22231,6 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetLabel(wxString(""));
     
-    //set unit_before to an empty value
-    unit_before.set(String(""));
-    
     LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     LengthField<P>::unit->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
@@ -22251,47 +22246,14 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
 }
 
 
-
-//set the value and the unit of the GUI field *this equal to the value and the unit in the non-GUI object *length
-template<class P> void StaticLengthField<P>::set(Length input) {
+//set the value and the unit of the GUI field *this equal to the value and the unit in the non-GUI object input
+template<class P> void StaticLengthField<P>::set(const Length& l) {
     
-    
-    switch (String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types)) {
-            
-        case 0: {
-            //unit = LengthUnit_types[0]
-            
-            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
-            break;
-            
-        }
-            
-        case 1: {
-            //unit = LengthUnit_types[1]
-            
-            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * nm_to_m));
-            
-            break;
-            
-        }
-            
-        case 2: {
-            //unit = LengthUnit_types[2]
-            
-            value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_to_ft));
-            
-            break;
-            
-        }
-            
-    }
-    
-    LengthField<P>::unit->set();
-    
-    //store the currently set length unit into unit_before for the future
-    unit_before = (LengthField<P>::length->unit);
+    value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, l.value));
+    LengthField<P>::unit->set(l.unit);
     
 }
+
 
 //set the value and the unit in the GUI object value equal to the value and the unit in the non-GUI object length
 template<class P> void StaticLengthField<P>::set(void) {
@@ -22306,7 +22268,11 @@ template<class P> void StaticLengthField<P>::set(void) {
 //convert *length to the unis of measure in the GUI field *this and write the result in *this
 template<class P> void StaticLengthField<P>::set_value_keep_unit(void) {
     
-    set((LengthField<P>::length->convert(LengthUnit(LengthField<P>::unit->name->GetValue().ToStdString()))));
+    Length temp;
+    
+    temp = (LengthField<P>::length->convert(LengthUnit(LengthField<P>::unit->name->GetValue().ToStdString())));
+    
+    set(temp);
 
 }
 
@@ -22314,16 +22280,7 @@ template<class P> void StaticLengthField<P>::set_value_keep_unit(void) {
 //convert the numerical value stored into value according to the length unit unit 
 template<class P> template<class E>  void StaticLengthField<P>::ConvertUnit(E& event) {
     
-    
-    
-    
-    
-    
-    
-    
-    //store the currently set length unit into unit_before for the future
-    unit_before = (LengthField<P>::length->unit);
-    
+  
     event.Skip(true);
 
 }
@@ -22353,7 +22310,6 @@ template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* 
     sizer_h->Add(value, 0, wxALIGN_CENTER);
 
 }
-
 
 
 //checks whether the contents of the GUI fiels in AngleField are valid

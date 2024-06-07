@@ -2431,13 +2431,10 @@ public:
     
     //the length value
     StaticText* value;
-    //I store here the unit of measure before *(LengthField<P>::unit) is edited. This will be useful to convert  *value from the previous to the newly edited unit of measure 
-    LengthUnit unit_before;
-
     
     StaticLengthField(wxPanel*, Length*/*, String*/);
     
-    void set(Length);
+    void set(const Length&);
     void set(void);
     void set_value_keep_unit(void);
     template<class E> void ConvertUnit(E&);

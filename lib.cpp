@@ -16466,50 +16466,59 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 }
 
 
-//write the value of the GUI field in LengthField into the non-GUI field length
+//write the value and the unit of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
     
     if (is_ok()) {
         
-        double length_temp;
+        double x;
         
-        value->GetValue().ToDouble(&length_temp);
-        
-        
-        switch (String((LengthField<P>::unit->name->GetValue()).ToStdString()).position_in_list(LengthField<P>::unit->catalog)) {
-                
-            case 0: {
-                //unit = "nm"
-                
-                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
-                
-                break;
-                
-            }
-                
-                
-            case 1: {
-                //unit = "m"
-                
-                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / nm_to_m, String(""));
-                
-                break;
-                
-            }
-                
-                
-            case 2: {
-                //unit = "ft"
-                
-                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_to_ft, String(""));
-                
-                break;
-                
-            }
-                
-        }
+        value->GetValue().ToDouble(&x);
+        LengthField<P>::length->set(x, LengthUnit((LengthField<P>::unit->name->GetValue()).ToStdString()));
         
     }
+
+//        LengthUnit((LengthField<P>::unit->name->GetValue()).ToStdString());
+        
+
+        
+//        switch (String((LengthField<P>::unit->name->GetValue()).ToStdString()).position_in_list(LengthField<P>::unit->catalog)) {
+//                
+//            case 0: {
+//                //unit = "nm"
+//                
+//                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
+//                LengthField<P>::length->unit.set(LengthUnit_types[0]);
+//                
+//                break;
+//                
+//            }
+//                
+//                
+//            case 1: {
+//                //unit = "m"
+//                
+//                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / nm_to_m, String(""));
+//                LengthField<P>::length->unit.set(LengthUnit_types[1]);
+//
+//                break;
+//                
+//            }
+//                
+//                
+//            case 2: {
+//                //unit = "ft"
+//                
+//                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_to_ft, String(""));
+//                LengthField<P>::length->unit.set(LengthUnit_types[2]);
+//                
+//                break;
+//                
+//            }
+//                
+//        }
+//        
+//    }
     
     event.Skip(true);
     

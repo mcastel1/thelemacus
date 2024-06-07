@@ -3031,21 +3031,16 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
             }
             
             
-            if (check == 1) {
+            if(check == 1){
                 //there is a part of *this which is included in circle/rectangle_observer -> some part of *this will lie on the visible part of the earth
                 
                 unsigned int i;
-                
-                //                s->resize(2);
-                //                ((*s)[0]).set(String(""), Re*((t[0]).value), String(""));
-                //                ((*s)[1]).set(String(""), Re*((t[1]).value), String(""));
-                
+                                
                 for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
                     
                     ((*s)[i]).set(String(""), ((t[i]).value) * Re, String(""));
                     
                 }
-                
                 
                 t.clear();
                 
@@ -3053,8 +3048,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                     (*success) = true;
                 }
                 
-            }
-            else {
+            }else{
                 //no part of this is included in circle/rectagle observer -> no part of this lies on the visible part of the earth
                 
                 if (success != NULL) {

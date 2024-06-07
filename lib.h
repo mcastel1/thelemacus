@@ -1008,6 +1008,7 @@ public:
 class Atmosphere{
     
 public:
+    
     Length earth_radius;
     unsigned int n_layers;
     double A, B, P_dry_0, alpha, beta, gamma, T0;

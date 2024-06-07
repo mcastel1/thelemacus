@@ -7394,14 +7394,14 @@ double Atmosphere::T(Length z) {
     double x = 0.0;
     //cout << "z = " << (z.value) << "\n";
 
-    if ((z.value) <= h[n_layers]) {
+    if (z <= h[n_layers]) {
 
         unsigned int i;
         bool check = true;
 
         for (i = 0, check = true; (i < n_layers) && check; i++) {
-            if (((z.value) >= h[i]) && ((z.value) < h[i + 1])) {
-                x = t[i] + lambda[i] * ((z.value) - h[i]);
+            if ((z >= h[i]) && (z < h[i + 1])) {
+                x = t[i] + lambda[i] * ((z - h[i]).convert(LengthUnit_types[0]).value);
                 check = false;
             }
         }
@@ -7425,13 +7425,13 @@ double Atmosphere::dTdz(Length z) {
     double x = 0.0;
     //cout << "z = " << (z.value) << "\n";
 
-    if ((z.value) <= h[n_layers]) {
+    if (z <= h[n_layers]) {
 
         unsigned int i;
         bool check = true;
 
         for (i = 0, check = true; (i < n_layers) && check; i++) {
-            if (((z.value) >= h[i]) && ((z.value) < h[i + 1])) {
+            if ((z >= h[i]) && (z < h[i + 1])) {
                 x = lambda[i];
                 check = false;
             }
@@ -7455,27 +7455,27 @@ double Atmosphere::n(Length z) {
 
     double x = 0.0;
 
-    if ((z.value) <= h[n_layers]) {
+    if (z <= h[n_layers]) {
 
         unsigned int i;
         bool check = true;
 
         for (i = 0, x = 0.0, check = true; (i < n_layers) && check; i++) {
-            if (((z.value) >= h[i]) && ((z.value) < h[i + 1])) {
+            if ((z >= h[i]) && (z < h[i + 1])) {
                 if (lambda[i] != 0.0) {
-                    x -= B / lambda[i] * log((t[i] + lambda[i] * ((z.value) - h[i])) / t[i]);
+                    x -= B / lambda[i] * log((t[i] + lambda[i] * ((z - h[i]).convert(LengthUnit_types[0]).value)) / t[i]);
                 }
                 else {
-                    x -= B * ((z.value) - h[i]) / t[i];
+                    x -= B * ((z - h[i]).convert(LengthUnit_types[0]).value) / t[i];
                 }
                 check = false;
             }
             else {
                 if (lambda[i] != 0.0) {
-                    x -= B / lambda[i] * log((t[i] + lambda[i] * (h[i + 1] - h[i])) / t[i]);
+                    x -= B / lambda[i] * log((t[i] + lambda[i] * ((h[i + 1] - h[i]).convert(LengthUnit_types[0]).value)) / t[i]);
                 }
                 else {
-                    x -= B * (h[i + 1] - h[i]) / t[i];
+                    x -= B * ((h[i + 1] - h[i]).convert(LengthUnit_types[0]).value) / t[i];
                 }
             }
         }
@@ -7811,7 +7811,7 @@ void Atmosphere::set(void) {
 
     for (i = 0, x = T0, check = true; (i < n_layers) && check; i++) {
         t[i] = x;
-        x += lambda[i] * (h[i + 1] - h[i]);
+        x += lambda[i] * ((h[i + 1] - h[i]).convert(LengthUnit_types[0]).value);
     }
 
 
@@ -7939,7 +7939,7 @@ bool Sight::compute_DH_refraction(String prefix) {
 
 
 
-    status = gsl_integration_qags(&F, (atmosphere.h)[(atmosphere.h).size() - 1], (atmosphere.h)[0], 0.0, epsrel, 1000, w, &result, &error);
+    status = gsl_integration_qags(&F, atmosphere.h.back().convert(LengthUnit_types[0]).value, ((atmosphere.h)[0]).convert(LengthUnit_types[0]).value, 0.0, epsrel, 1000, w, &result, &error);
     //status = GSL_FAILURE
 
     if (status == GSL_SUCCESS) {
@@ -17025,7 +17025,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     if (sight_in == NULL) {
         //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye DynamicLengthField with this value, so the user won't have to enter the same value all the time
-        (sight->height_of_eye).read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String("R"), String(""));
+        sight->height_of_eye.read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String("R"), String(""));
         height_of_eye->set();
 
     }

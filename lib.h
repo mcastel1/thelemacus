@@ -1012,7 +1012,8 @@ public:
     Length earth_radius;
     unsigned int n_layers;
     double A, B, P_dry_0, alpha, beta, gamma, T0;
-    vector<double> /*heights delimiting the level of the US 1976 atmosphere model, see https://en.wikipedia.org/wiki/U.S._Standard_Atmosphere, expressed in nm */h, /*dT/dz, ecpressed in units of K / nm*/lambda, t;
+    vector<Length> /*heights delimiting the level of the US 1976 atmosphere model, see https://en.wikipedia.org/wiki/U.S._Standard_Atmosphere, expressed in units of LengthUnit_types[0] */h;
+    vector<double> /*dT/dz, ecpressed in units of K / nm*/lambda, t;
     void set(void);
     double T(Length), n(Length), dTdz(Length), dndz(Length);
     

@@ -2218,6 +2218,7 @@ public:
     MultipleItemField(wxPanel*, NON_GUI*, const vector<String>&, vector<int>*);
     void Fill(void);
     void set(void);
+    void set(const NON_GUI&);
     template<class E> void Get(E&);
     void Enable(bool);
     bool is_ok(void);

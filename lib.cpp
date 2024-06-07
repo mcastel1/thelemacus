@@ -21353,6 +21353,15 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 
+template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::set(const NON_GUI& input) {
+        
+    MultipleItemField<P, NON_GUI, CHECK>::name->SetValue((input.value));
+
+    MultipleItemField<P, NON_GUI, CHECK>::ok = true;
+
+}
+
+
 //set the value in the non-GUI object 'object' equal to the value in the GUI object name, with no abbreviations used (the value is copied as it is)
  template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Get(E& event) {
         
@@ -21823,8 +21832,9 @@ template<class P> void DynamicLengthField<P>::set_from_argument(Length input) {
 
 //set the value in the GUI object value equal to the value in the non-GUI object length
 template<class P> void DynamicLengthField<P>::set(void) {
-
-    set_from_argument(*(LengthField<P>::length));
+    
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, LengthField<P>::length->value));
+    LengthField<P>::unit->set();
 
     value_ok = true;
     (LengthField<P>::unit->ok) = true;

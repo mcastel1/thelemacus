@@ -13963,6 +13963,9 @@ template<class E> void DrawPanel::SetProjection(E& event) {
         Set_size_chart = (&DrawPanel::Set_size_chart_3D);
         (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
 
+        //in the 3D projection the scale of the chart, shown in text_slider, does not makes sense -> set it to empty
+        parent->text_slider->SetLabel(wxS(""));
+        
     }
     
     event.Skip(true);

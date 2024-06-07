@@ -11807,7 +11807,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     s << "1:" << (zoom_factor.value);
 
     text_slider = new StaticText(panel, wxString(s.str().c_str()), wxDefaultPosition, wxDefaultSize, 0);
-    observer_height = new StaticLengthField<ChartFrame>(panel, &(draw_panel->d)/*, LengthUnit_types[0]*/);
+    observer_height = new StaticLengthField<ChartFrame>(panel, &(draw_panel->d));
 
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
@@ -22303,11 +22303,11 @@ template<class P> void StaticLengthField<P>::set(void) {
 }
 
 
-//set only the value in the GUI object *this equal to the value of the non-GUi object length. The unit of *this is not modified, and the value written into *this is converted to the current unit written in the GUI field *this
+//convert *length to the unis of measure in the GUI field *this and write the result in *this
 template<class P> void StaticLengthField<P>::set_value_keep_unit(void) {
     
-    
-    
+    set((LengthField<P>::length->convert(LengthUnit(LengthField<P>::unit->name->GetValue().ToStdString()))));
+
 }
 
 

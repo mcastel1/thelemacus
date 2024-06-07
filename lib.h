@@ -2218,6 +2218,7 @@ public:
     MultipleItemField(wxPanel*, NON_GUI*, const vector<String>&, vector<int>*);
     void Fill(void);
     void set(void);
+    void set(const NON_GUI&);
     template<class E> void Get(E&);
     void Enable(bool);
     bool is_ok(void);
@@ -2412,7 +2413,7 @@ public:
     
     DynamicLengthField(wxPanel*, Length*/*, String*/);
     
-    void set_from_argument(Length);
+    void set(Length);
     void set(void);
     template<class T> void get(T&);
     void Enable(bool);

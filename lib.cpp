@@ -5786,7 +5786,8 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
     //set height of eye column
     if (artificial_horizon.value == 'n') {
 
-        listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string(LengthUnit_types[1], (display_precision.value))));
+        //write the height_of_eye with its original unit of measure
+        listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string( (display_precision.value))));
 
     }
     else {
@@ -16466,51 +16467,18 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 }
 
 
-//write the value of the GUI field in LengthField into the non-GUI field length
+//write the value and the unit of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
     
-    if (is_ok()) {
+    if(is_ok()){
         
-        double length_temp;
+        double x;
         
-        value->GetValue().ToDouble(&length_temp);
-        
-        
-        switch (String((LengthField<P>::unit->name->GetValue()).ToStdString()).position_in_list(LengthField<P>::unit->catalog)) {
-                
-            case 0: {
-                //unit = "nm"
-                
-                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field is already in nm, thus no need to convert it*/length_temp, String(""));
-                
-                break;
-                
-            }
-                
-                
-            case 1: {
-                //unit = "m"
-                
-                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in meters, thus I convert it to nm here*/length_temp / nm_to_m, String(""));
-                
-                break;
-                
-            }
-                
-                
-            case 2: {
-                //unit = "ft"
-                
-                LengthField<P>::length->set(String(""), /*the length is entered in the GUI field in feet, thus I convert it to nm here*/length_temp / nm_to_ft, String(""));
-                
-                break;
-                
-            }
-                
-        }
+        value->GetValue().ToDouble(&x);
+        LengthField<P>::length->set(x, LengthUnit((LengthField<P>::unit->name->GetValue()).ToStdString()));
         
     }
-    
+
     event.Skip(true);
     
 }
@@ -16839,7 +16807,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //First off, I need to set TAI_minus_UTC, which will be used in the following. If sight_in = NULL,  I read it from from file_init
     if (sight_in == NULL) {
 
-        (sight->TAI_minus_UTC).read_from_file_to(String("TAI - UTC at time of master-clock synchronization with UTC"), (wxGetApp().path_file_init), String("R"), new_prefix);
+        sight->TAI_minus_UTC.read_from_file_to(String("TAI - UTC at time of master-clock synchronization with UTC"), (wxGetApp().path_file_init), String("R"), new_prefix);
 
     }
 
@@ -18231,7 +18199,7 @@ template<class E> void RouteFrame::UpdateLength(E& event) {
 
     if ((time->is_ok()) && (speed->is_ok())) {
 
-        length->set_from_argument(Length(*(time->chrono), *(speed->speed)));
+        length->set(Length(*(time->chrono), *(speed->speed)));
 
     }
     else {
@@ -21353,6 +21321,15 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 
+template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::set(const NON_GUI& input) {
+        
+    MultipleItemField<P, NON_GUI, CHECK>::name->SetValue((input.value));
+
+    MultipleItemField<P, NON_GUI, CHECK>::ok = true;
+
+}
+
+
 //set the value in the non-GUI object 'object' equal to the value in the GUI object name, with no abbreviations used (the value is copied as it is)
  template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Get(E& event) {
         
@@ -21813,51 +21790,19 @@ template <class P> void AngleField<P>::set(void) {
 
 
 //set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
-template<class P> void DynamicLengthField<P>::set_from_argument(Length input) {
-    
-//    String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types);
-    
+template<class P> void DynamicLengthField<P>::set(Length input) {
+        
     value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
-    //HERE SET LengthField<P>::unit equal to the unit of measure of input
-//    LengthField<P>::unit->SetValue(input.unit);
-
-//    switch (String((LengthField<P>::unit->name)->GetValue().ToStdString()).position_in_list(LengthUnit_types)) {
-//            
-//        case 0: {
-//            //unit = LengthUnit_types[0]
-//            
-//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (input.value)));
-//            break;
-//            
-//        }
-//            
-//        case 1: {
-//            //unit = LengthUnit_types[1]
-//            
-//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to meters*/(input.value) * 1e3 * nm_to_km));
-//            
-//            break;
-//            
-//        }
-//            
-//        case 2: {
-//            //unit = LengthUnit_types[2]
-//            
-//            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the lenght from nm to feet*/(input.value) * nm_to_ft));
-//            
-//            break;
-//            
-//        }
-//            
-//    }
+    LengthField<P>::unit->set(input.unit);
     
 }
 
 
 //set the value in the GUI object value equal to the value in the non-GUI object length
 template<class P> void DynamicLengthField<P>::set(void) {
-
-    set_from_argument(*(LengthField<P>::length));
+    
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, LengthField<P>::length->value));
+    LengthField<P>::unit->set();
 
     value_ok = true;
     (LengthField<P>::unit->ok) = true;

@@ -16368,8 +16368,8 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
 
         if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
 
-            //if check is true (false) -> set unit_ok to true (false)
-            (p->unit_ok) = check;
+            //if check is true (false) -> set unit->ok to true (false)
+            (p->unit->ok) = check;
             //the background color is set to white, because in this case there is no erroneous value in deg
             p->unit->name->SetForegroundColour(wxGetApp().foreground_color);
             p->unit->name->SetFont(wxGetApp().default_font);
@@ -16387,7 +16387,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
 
             f->print_error_message->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
 
-            (p->unit_ok) = false;
+            (p->unit->ok) = false;
 
         }
 
@@ -21860,7 +21860,7 @@ template<class P> void DynamicLengthField<P>::set(void) {
     set_from_argument(*(LengthField<P>::length));
 
     value_ok = true;
-    LengthField<P>::unit_ok = true;
+    (LengthField<P>::unit->ok) = true;
 
 }
 
@@ -22200,7 +22200,7 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 }
 
 
-//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entere   d so far in unit is valid and runs AllOk
+//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
 template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
 
     bool success;
@@ -22217,13 +22217,7 @@ template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
 
     }
 
-    //value_ok is true/false is the text entered is valid/invalid
-    unit_ok = success;
-
-    //THIS MAKES SENSE ONLY IF *this   IS INSERTED INTO A FRAME WHERE I NEED TO CHECK ALL THE GUI FIELDS IN THE FRAME EVERY TIME I EDIT this->unit
-    //tries to enable button_reduce
-    //    parent->AllOk();
-    //THIS MAKES SENSE ONLY IF *this   IS INSERTED INTO A FRAME WHERE I NEED TO CHECK ALL THE GUI FIELDS IN THE FRAME EVERY TIME I EDIT this->unit
+    (unit->ok) = success;
 
     event.Skip(true);
 

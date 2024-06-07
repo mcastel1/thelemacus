@@ -7811,7 +7811,7 @@ void Atmosphere::set(void) {
 
     for (i = 0, x = T0, check = true; (i < n_layers) && check; i++) {
         t[i] = x;
-        x += lambda[i] * (h[i + 1] - h[i]);
+        x += lambda[i] * ((h[i + 1] - h[i]).convert(LengthUnit_types[0]).value);
     }
 
 

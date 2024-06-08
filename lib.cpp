@@ -5556,7 +5556,7 @@ template<class S> void Limb::read_from_stream([[maybe_unused]] String name, S* i
 
 
 //read a Body from file, and it returns true if it has not reached the end of file, false otherwise
-template<class S> bool Body::read_from_stream(String name, S* input_stream, [[maybe_unused]] bool read_entire_stream, [[maybe_unused]] String prefix) {
+template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [[maybe_unused]] bool read_entire_stream, [[maybe_unused]] String prefix) {
 
     string line;
     String new_prefix;
@@ -5566,7 +5566,7 @@ template<class S> bool Body::read_from_stream(String name, S* input_stream, [[ma
 
     size_t pos;
 
-    cout << prefix.value << name.value << ":\n";
+    cout << prefix.value << name_in.value << ":\n";
 
     //read first line with no information
     getline((*input_stream), line);

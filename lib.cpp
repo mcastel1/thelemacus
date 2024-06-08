@@ -7784,23 +7784,18 @@ bool Sight::compute_DH_refraction(String prefix) {
     bool check = true;
 
 
-
     F.function = &dH_refraction;
     F.params = this;
 
-
     /* cout << "Value = " << dH_refraction(1.0, &(*this)); */
     /* cin >> result; */
-
-
 
     status = gsl_integration_qags(&F, atmosphere.h.back().convert(LengthUnit_types[0]).value, ((atmosphere.h)[0]).convert(LengthUnit_types[0]).value, 0.0, epsrel, 1000, w, &result, &error);
     //status = GSL_FAILURE
 
     if (status == GSL_SUCCESS) {
         DH_refraction.set(String("refraction correction"), result, prefix);
-    }
-    else {
+    }else{
         check &= false;
         cout << prefix.value << RED << "GSL integration failed!\n" << RESET;
     }

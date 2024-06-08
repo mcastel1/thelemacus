@@ -542,7 +542,7 @@ bool check_double(string s, double* x, bool check_interval, double min, double s
     check = false;
     can_convert_to_double =
     /*check that s is not empty*/ (!s.empty())
-    && /*check that s contains at least one numerical character (i.e. at least one character in chars_unsigned_int)*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))
+    && /*check that s contains at least one numerical character (i.e. at least one character in chars_unsigned_int)*/ ((s.find_first_of(chars_unsigned_int)) != (std::string::npos))
     && /*check that s contains only the allowed characters in chars_double*/ (((s.find_first_not_of(chars_double)) == (std::string::npos)))
     && /*check that '.' occurs zero or one time*/ (count(s.begin(), s.end(), '.') <= 1)
     && /*check that '+' occurs zero or one time*/ (count(s.begin(), s.end(), '+') <= 1)

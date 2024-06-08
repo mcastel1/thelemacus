@@ -5587,8 +5587,8 @@ template<class S> bool Body::read_from_stream(String name, S* input_stream, [[ma
         line.clear();
         getline(*input_stream, line);
         pos = line.find(" = ");
-        ((*this).name) = line.substr(pos + 3, line.size() - (pos + 3));
-        cout << new_prefix.value << "Name = " << ((*this).name).value << "\n";
+        name = line.substr(pos + 3, line.size() - (pos + 3));
+        cout << new_prefix.value << "Name = " << name.value << "\n";
 
 
         if (type == String("star")) {

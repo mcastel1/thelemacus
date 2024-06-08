@@ -10362,8 +10362,8 @@ void DrawPanel::FitAll() {
         - (size_label_vertical + (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))
     );
 
-    (parent->panel)->SetSizerAndFit(parent->sizer_v);
-    (parent->panel)->Fit();
+    parent->panel->SetSizerAndFit(parent->sizer_v);
+    parent->panel->Fit();
     parent->Fit();
 
 }
@@ -11774,13 +11774,13 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
         //if the constructor has been called with an empty projection_in, I use the default projection by reading it from the init file.
 
         default_projection.read_from_file_to(String("default projection"), (wxGetApp().path_file_init), String("R"), String(""));
-        (projection->name)->SetValue(wxString(default_projection.value));
+        projection->name->SetValue(wxString(default_projection.value));
 
     }
     else {
         //if the construtor has been called with projection_in non-empty, I set projection_in equal to projection_in
 
-        (projection->name)->SetValue(wxString(projection_in.value));
+        projection->name->SetValue(wxString(projection_in.value));
 
     }
     projection->value_before_editing = projection->name->GetValue();
@@ -12147,7 +12147,7 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
             //the + key is pressed and control is pressed too -> I zoom in by multiplying the slider value by 2
             
             if (event.ControlDown()) {
-                parent->SetSlider(((parent->slider)->GetValue()) * 2);
+                parent->SetSlider((parent->slider->GetValue()) * 2);
             }
             
             break;
@@ -13997,11 +13997,11 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
             //set the backgorund color of the Route in listcontrol_routes and of its related sight to white
             //when only a fraction of the Routes is Drawn, this will create a problem ---
-            ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
+            (parent->parent->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
             //when only a fraction of the Routes is Drawn, this will create a problem ---
 
             if ((((parent->parent->data->route_list)[i]).related_sight).value != -1) {
-                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((parent->parent->data->route_list)[i]).related_sight).value, wxGetApp().background_color);
+                (parent->parent->listcontrol_sights)->SetItemBackgroundColour((((parent->parent->data->route_list)[i]).related_sight).value, wxGetApp().background_color);
             }
 
             //run over Routes and check whether the mouse is hovering over one of them
@@ -14042,7 +14042,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                         }
 
                         //set highlighted_sight_now and the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                        ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
+                        (parent->parent->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                         if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
 
                             (parent->parent->highlighted_sight_now) = (((parent->parent->data->route_list)[i]).related_sight.value);
@@ -14103,16 +14103,16 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 //the mouse is over a position
 
                 //sets the highlighted position to i, so as to use highlighted_position_now in other functions
-                ((parent->parent)->highlighted_position_now) = i;
+                (parent->parent->highlighted_position_now) = i;
 
-                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
+                (parent->parent->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                 parent->parent->listcontrol_positions->EnsureVisible(i);
 
             }
             else {
                 //no Position is highlighted -> reset the background color in listcontrol positions, and in listcontrol_positions go back to showing the first  item
 
-                ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour(i, wxGetApp().background_color);
+                (parent->parent->listcontrol_positions)->SetItemBackgroundColour(i, wxGetApp().background_color);
                 parent->parent->listcontrol_positions->EnsureVisible(0);
 
             }
@@ -14152,7 +14152,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
     position_start_drag = wxGetMousePosition();
     (this->*ScreenToGeo)(position_start_drag, &geo_start_drag);
 
-    if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if (((parent->projection->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
 
         //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
         x_min_start_drag = x_min;
@@ -14163,7 +14163,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
 
     }
 
-    if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
+    if (((parent->projection->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
 
         //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
         //        gsl_vector_memcpy((rp_start_drag.r), (rp.r));
@@ -14199,7 +14199,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
         if (((parent->parent->highlighted_route_now) == -1) && (((parent->parent)->highlighted_position_now) == -1)) {
             //I am dragging the chart (not a Route nor  a Position)
 
-            if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+            if ((parent->projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
                 //I am using the Mercator projection
 
                 double delta_y;
@@ -20738,7 +20738,7 @@ template<class P> CheckRouteType<P>::CheckRouteType(RouteTypeField<P>* p_in) {
 
 }
 
-//this functor checks the wxComboBox containing the Route type, and if it is equal to loxodrome or orthodrome, it enables only  the length, Z and start fields in RouteFrame (the latter if for_transport = false, becasue I don't need a start position if I am using the Route for transport). If it is equal to circle of equal altitude, it enables only the GP and omege fields.
+//this functor checks the wxComboBox containing the Route type, and if it is equal to loxodrome or orthodrome, it enables length, Z and start_* fields in RouteFrame (the latter if for_transport = false, becasue I don't need a start position if I am using the Route for transport). If it is equal to circle of equal altitude, it enables only the GP and omege fields.
 template<class P> template<class T> void CheckRouteType<P>::operator()(T& event) {
 
     P* f = (p->parent);
@@ -20752,7 +20752,7 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
         unsigned int i;
         bool check;
       
-        //I check whether the name in the GUI field body matches one of the route types  in catalog
+        //I check whether the RouteTypeField *p of the GUI field matches one of the route types in catalog
         p->CheckInCatalog(&check, &i);
 
         if (check) {
@@ -20761,26 +20761,27 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
             //enable/disable the related fields in RouteFrame f
             enable = ((((p->catalog)[i]) == wxString(((Route_types[0]).value))) || (((p->catalog)[i]) == wxString(((Route_types[1]).value))));
 
-            (f->Z)->Enable(enable);
+            f->Z->Enable(enable);
 
-            (f->start_phi)->Enable(!(f->for_transport));
-            (f->start_lambda)->Enable(!(f->for_transport));
+            //for start_phi/lambda to be enabled, not only the Route has to be of tyoe Route_types[0] or Route_types[1], but, in addition, it must not be a Route for transport (if it were, there would be no need to indicate its starting Position to do the transport )
+            f->start_phi->Enable(enable && (!(f->for_transport)));
+            f->start_lambda->Enable(enable && (!(f->for_transport)));
 
-            (f->GP_phi)->Enable(!enable);
-            (f->GP_lambda)->Enable(!enable);
-            (f->omega)->Enable(!enable);
+            f->GP_phi->Enable(!enable);
+            f->GP_lambda->Enable(!enable);
+            f->omega->Enable(!enable);
 
         }else{
             //the Route type is not valid
 
-            (f->Z)->Enable(false);
-            (f->start_phi)->Enable(false);
-            (f->start_lambda)->Enable(false);
+            f->Z->Enable(false);
+            f->start_phi->Enable(false);
+            f->start_lambda->Enable(false);
 
 
-            (f->GP_phi)->Enable(false);
-            (f->GP_lambda)->Enable(false);
-            (f->omega)->Enable(false);
+            f->GP_phi->Enable(false);
+            f->GP_lambda->Enable(false);
+            f->omega->Enable(false);
 
         }
 
@@ -20828,25 +20829,25 @@ template<class P> template<class T> void CheckLengthFormat<P>::operator()(T& eve
             //if the Route type is a loxodrome or orthodrome, enable = true. Otherwise, enable = false
             enable = ((((p->catalog)[i]) == wxString(((Route_types[0]).value))) || (((p->catalog)[i]) == wxString(((Route_types[1]).value))));
 
-            (f->Z)->Enable(enable);
+            f->Z->Enable(enable);
 
-            (f->start_phi)->Enable(!(f->for_transport));
-            (f->start_lambda)->Enable(!(f->for_transport));
+            f->start_phi->Enable(!(f->for_transport));
+            f->start_lambda->Enable(!(f->for_transport));
 
-            (f->GP_phi)->Enable(!enable);
-            (f->GP_lambda)->Enable(!enable);
-            (f->omega)->Enable(!enable);
+            f->GP_phi->Enable(!enable);
+            f->GP_lambda->Enable(!enable);
+            f->omega->Enable(!enable);
 
         }else {
             //the length format is not valid
 
-            (f->Z)->Enable(false);
-            (f->start_phi)->Enable(false);
-            (f->start_lambda)->Enable(false);
+            f->Z->Enable(false);
+            f->start_phi->Enable(false);
+            f->start_lambda->Enable(false);
 
-            (f->GP_phi)->Enable(false);
-            (f->GP_lambda)->Enable(false);
-            (f->omega)->Enable(false);
+            f->GP_phi->Enable(false);
+            f->GP_lambda->Enable(false);
+            f->omega->Enable(false);
 
         }
 
@@ -21073,11 +21074,11 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     if (position_in_listcontrol_sights == -1) {
         //if the constructor of SightFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of sight_list and reduce it
 
-        ((this->parent)->data)->add_sight_and_reduce(sight, String(""));
+        (this->parent->data)->add_sight_and_reduce(sight, String(""));
 
         //add the sight and the related route to the GUI object listconstrol_sights and listcontrol_routes, respectively
         //        sight->add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_sights));
-        //        ((((this->parent)->data)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_routes));
+        //        (((this->parent->data)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_routes));
 
     }
     else {
@@ -21716,9 +21717,9 @@ template<class P> void DateField<P>::set(Date date_in) {
 
     //    Time time_UTC;
     //
-    //    //((parent_frame->sight)->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
-    //    time_UTC = ((parent_frame->sight)->time);
-    //    time_UTC -= ((parent_frame->sight)->TAI_minus_UTC);
+    //    //(parent_frame->sight->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
+    //    time_UTC = (parent_frame->sight->time);
+    //    time_UTC -= (parent_frame->sight->TAI_minus_UTC);
 
     year->SetValue(wxString::Format(wxT("%i"), date_in.Y));
     month->SetValue(wxString::Format(wxT("%i"), date_in.M));
@@ -22687,11 +22688,11 @@ template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {
     //initialize check and its objects
     check = new CheckDate<P>(this);
     //    (check.p) = this;
-    //    ((check->check_year)->p) = this;
-    //    (((check->check_year)->tabulate_days).p) = this;
-    //    ((check->check_month)->p) = this;
-    //    (((check->check_month)->tabulate_days).p) = this;
-    //    ((check->check_day)->p) = this;
+    //    (check->check_year->p) = this;
+    //    ((check->check_year->tabulate_days).p) = this;
+    //    (check->check_month->p) = this;
+    //    ((check->check_month->tabulate_days).p) = this;
+    //    (check->check_day->p) = this;
 
     for (months.Clear(), months.Add(wxT("")), i = 0; i < 12; i++) {
         months.Add(wxString::Format(wxT("%i"), i + 1));

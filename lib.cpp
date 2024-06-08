@@ -20752,7 +20752,7 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
         unsigned int i;
         bool check;
       
-        //I check whether the name in the GUI field body matches one of the route types  in catalog
+        //I check whether the RouteTypeField *p of the GUI field matches one of the route types in catalog
         p->CheckInCatalog(&check, &i);
 
         if (check) {

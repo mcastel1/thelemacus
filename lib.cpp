@@ -21261,7 +21261,9 @@ template<class P, class NON_GUI, class CHECK> MultipleItemField<P, NON_GUI, CHEC
     //    name->Bind(wxEVT_KEY_UP, &MultipleItemField::OnEdit<wxKeyEvent>, this);
     //    name->Bind(wxEVT_KILL_FOCUS, *check);
     name->Bind(wxEVT_KILL_FOCUS, &MultipleItemField<P, NON_GUI, CHECK>::Check<wxFocusEvent>, this);
+    //THIS LINE CAUSES THE ERROR
     name->Bind(wxEVT_COMBOBOX, &MultipleItemField<P, NON_GUI, CHECK>::Check<wxCommandEvent>, this);
+    //THIS LINE CAUSES THE ERROR
 
     
 

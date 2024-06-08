@@ -2248,9 +2248,9 @@ bool Position::operator==(const Position& p) {
 
     check = true;
 
-    check &= (((*this).phi) == (p.phi));
-    check &= (((*this).lambda) == (p.lambda));
-    check &= (((*this).label) == (p.label));
+    check &= (phi == (p.phi));
+    check &= (lambda == (p.lambda));
+    check &= (label == (p.label));
 
     return check;
 
@@ -4123,7 +4123,7 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
 
         theta.set(String("angle between the two GPs"), acos(cos((reference_position.phi)) * cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) + sin((reference_position.phi)) * sin((route.reference_position).phi)), prefix);
 
-        if ((abs(((*this).omega.value) - (route.omega.value)) < (theta.value)) && ((theta.value) < ((*this).omega.value) + (route.omega.value))) {
+        if ((abs((omega.value) - (route.omega.value)) < (theta.value)) && ((theta.value) < (omega.value) + (route.omega.value))) {
             //in this case routes intersect
 
             //t contains the parametric angle of Route (*this) where (*this) crosses route
@@ -4160,7 +4160,7 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
 
                 }
 
-                (*this).compute_end(Length(Re * sin((*this).omega.value) * ((t[0]).value)), prefix);
+                compute_end(Length(Re * sin(omega) * ((t[0]).value)), prefix);
                 end.print(String("position of intersection 1 for Route 1"), prefix, cout);
 
                 route.compute_end(Length(Re * sin(route.omega.value) * ((u[0]).value)), prefix);
@@ -4370,11 +4370,11 @@ bool Time::operator==(const Time& t) {
 
     Time temp;
 
-    (*this).to_MJD();
+    to_MJD();
     temp = t;
     temp.to_MJD();
 
-    return((((*this).MJD) == (temp.MJD)));
+    return((MJD == (temp.MJD)));
 
 }
 
@@ -4393,11 +4393,11 @@ bool Time::operator>(const Time& t) {
 
     Time temp;
 
-    (*this).to_MJD();
+    to_MJD();
     temp = t;
     temp.to_MJD();
 
-    return((((*this).MJD) > (temp.MJD)));
+    return((MJD > (temp.MJD)));
 
 }
 

@@ -135,6 +135,6 @@
 	- when you switch from light to dark, all icons must be updated
  on OSX:
  on WIN32:
-    - body is gone in listcontrol_sights and when I open SightFrame
+    - if I enter '.' in the arcminute part of an AngleField I get an error message
 	- in the mercator projection labels of meridians leave ugly traces when zooming in (horizontal segments)
 

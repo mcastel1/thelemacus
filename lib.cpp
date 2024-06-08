@@ -20763,8 +20763,9 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
 
             f->Z->Enable(enable);
 
-            f->start_phi->Enable(!(f->for_transport));
-            f->start_lambda->Enable(!(f->for_transport));
+            //for start_phi/lambda to be enabled, not only the Route has to be of tyoe Route_types[0] or Route_types[1], but, in addition, it must not be a Route for transport (if it were, there would be no need to indicate its starting Position to do the transport )
+            f->start_phi->Enable(enable && (!(f->for_transport)));
+            f->start_lambda->Enable(enable && (!(f->for_transport)));
 
             f->GP_phi->Enable(!enable);
             f->GP_lambda->Enable(!enable);

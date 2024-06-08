@@ -537,12 +537,19 @@ void enter_int(int* i, bool check_interval, int min, int sup, String name, Strin
 //this function checks whether the double in string s is formatted correctly and, if check_interval = true, it also checks whether the this double lies in [min, sup). If x != NULL and the check is ok, it also writes the value of the double read from s into (*x)
 bool check_double(string s, double* x, bool check_interval, double min, double sup){
     
-    bool check;
+    bool check, can_convert_to_double;
     double y = 0.0;
     
     check = false;
     
-    if(/*here I check that the string s is not empty*/(!s.empty()) && (/*here I check whether the quantity in s contains the allowed chars for double, i.e., it contains only the characters in chars_double*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))) && /*here I count whether the '.' occurs zero or one time*/(count(s.begin(), s.end(), '.') <= 1) && /*here I count whether the '+' occurs zero or one time*/(count(s.begin(), s.end(), '+') <= 1)  && /*here I count whether the '-' occurs zero or one time*/(count(s.begin(), s.end(), '-') <= 1)){
+    
+    can_convert_to_double = /*here I check that the string s is not empty*/(!s.empty()) 
+        && (/*here I check whether the quantity in s contains the allowed chars for double, i.e., it contains only the characters in chars_double*/ ((s.find_first_not_of(chars_double)) == (std::string::npos)))
+        && /*here I count whether the '.' occurs zero or one time*/(count(s.begin(), s.end(), '.') <= 1)
+        && /*here I count whether the '+' occurs zero or one time*/(count(s.begin(), s.end(), '+') <= 1)
+        && /*here I count whether the '-' occurs zero or one time*/(count(s.begin(), s.end(), '-') <= 1);
+    
+    if(can_convert_to_double){
         
         //if the check above passed, then I proceed and write s into y
         y = stod(s);

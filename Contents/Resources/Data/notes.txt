@@ -76,6 +76,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+ - check whether CheckInCatalog can be deleted and replaced with position_in_list or position_in_vector
  - replace all occurences of set(String("") , ..., String("")) with a new set() method that only takes ... as an argument
  - add inch to units of measure for Lengths
  - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors

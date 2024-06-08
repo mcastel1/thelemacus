@@ -233,7 +233,6 @@ public:
     void normalize_pm_pi(void);
     Angle normalize_pm_pi_ret(void);
     Angle span(Angle);
-    void enter(String, String);
     void set(double);
     void set(String, double, String);
     void print(String, String, ostream&);
@@ -537,12 +536,19 @@ void enter_int(int* i, bool check_interval, int min, int sup, String name, Strin
 //this function checks whether the double in string s is formatted correctly and, if check_interval = true, it also checks whether the this double lies in [min, sup). If x != NULL and the check is ok, it also writes the value of the double read from s into (*x)
 bool check_double(string s, double* x, bool check_interval, double min, double sup){
     
-    bool check;
+    bool check, /*it is true if s can be converted to double, false otherwise*/ can_convert_to_double;
     double y = 0.0;
     
     check = false;
+    can_convert_to_double =
+    /*check that s is not empty*/ (!s.empty())
+    && /*check that s contains at least one numerical character (i.e. at least one character in chars_unsigned_int)*/ ((s.find_first_of(chars_unsigned_int)) != (std::string::npos))
+    && /*check that s contains only the allowed characters in chars_double*/ (((s.find_first_not_of(chars_double)) == (std::string::npos)))
+    && /*check that '.' occurs zero or one time*/ (count(s.begin(), s.end(), '.') <= 1)
+    && /*check that '+' occurs zero or one time*/ (count(s.begin(), s.end(), '+') <= 1)
+    && /*check that '-' occurs zero or one time*/ (count(s.begin(), s.end(), '-') <= 1);
     
-    if(/*here I check that the string s is not empty*/(!s.empty()) && (/*here I check whether the quantity in s contains the allowed chars for double, i.e., it contains only the characters in chars_double*/ ((s.find_first_not_of(chars_double)) == (std::string::npos))) && /*here I count whether the '.' occurs zero or one time*/(count(s.begin(), s.end(), '.') <= 1) && /*here I count whether the '+' occurs zero or one time*/(count(s.begin(), s.end(), '+') <= 1)  && /*here I count whether the '-' occurs zero or one time*/(count(s.begin(), s.end(), '-') <= 1)){
+    if(can_convert_to_double){
         
         //if the check above passed, then I proceed and write s into y
         y = stod(s);

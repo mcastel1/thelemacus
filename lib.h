@@ -233,7 +233,6 @@ public:
     void normalize_pm_pi(void);
     Angle normalize_pm_pi_ret(void);
     Angle span(Angle);
-    void enter(String, String);
     void set(double);
     void set(String, double, String);
     void print(String, String, ostream&);

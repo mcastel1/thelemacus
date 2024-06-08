@@ -7786,7 +7786,7 @@ bool Sight::compute_DH_refraction(String prefix) {
 
 
     F.function = &dH_refraction;
-    F.params = &(*this);
+    F.params = this;
 
 
     /* cout << "Value = " << dH_refraction(1.0, &(*this)); */

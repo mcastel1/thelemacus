@@ -17258,7 +17258,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     time = new ChronoField<RouteFrame>(panel, &(route->time));
     //the field for speed to set the Route length
     text_speed = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
-    speed = new SpeedField<RouteFrame>(panel, &(route->speed), SpeedUnit_types[0]);
+    speed = new SpeedField<RouteFrame>(panel, &(route->speed));
 
     //the field for Length to set the Route length
     text_length = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
@@ -22431,11 +22431,10 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 
 //constructor of a SpeedField object, based on the parent frame frame
-template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, String unit_value_in) {
+template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p) {
 
     parent = ((P*)(panel_of_parent->GetParent()));
     speed = p;
-    unit_value = unit_value_in;
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
 

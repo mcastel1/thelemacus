@@ -2460,16 +2460,12 @@ public:
     SpeedUnitField<P>* unit;
     wxBoxSizer *sizer_h, *sizer_v;
     Speed* speed;
-    //an array containing all possible units of measure
-//    wxArrayString units;
-    //the units of measure of the length in this GUI field
-    String unit_value;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool value_ok, unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     CheckSpeedValue<P>* check;
 
     
-    SpeedField(wxPanel*, Speed*, String);
+    SpeedField(wxPanel*, Speed*);
     void set(void);
     template<class T> void get(T&);
     void Enable(bool);

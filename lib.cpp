@@ -4843,7 +4843,7 @@ void Route::set_length_from_input(double t){
             eta = sqrt((1-sin((reference_position.phi)))/(1+sin((reference_position.phi))));
 
             //set the length format, the length unit and the value of the length from t
-            length_format.set(String(""), LengthFormat_types[1], String(""));
+            length_format.set(LengthFormat_types[1]);
             
             if(fabs(C) > epsilon_double){
                 //I am not in the special case where Z = pi/2 or 3 pi /2 (i.e., C = 0)
@@ -6761,7 +6761,7 @@ void Data::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unu
         else {
             //the related route must not be removed: given that its related sight has been deleted, I set its related_sight.value to -1
 
-            (route_list[i_related_route.value]).related_sight.set(String(""), -1, String(""));
+            (route_list[i_related_route.value]).related_sight.set(-1);
 
         }
 
@@ -7063,7 +7063,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
     (circle_of_equal_altitude->label).set(String(""), String(temp.str()), new_prefix);
 
     check &= compute_H_o(new_prefix);
-    circle_of_equal_altitude->omega.set(String(""), M_PI_2 - (H_o.value), String(""));
+    circle_of_equal_altitude->omega.set(M_PI_2 - (H_o.value));
     
     circle_of_equal_altitude->length.set(2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), LengthUnit_types[0]);
 
@@ -7399,8 +7399,8 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
             //in this case, reference_position.lambda vs. t has no minimum nor maximum: lambda_min/max are simly given by
             
             //set lambda_min/max in this order, meaning that *this spans all longitudes, from 0 to 2 pi
-            (*lambda_min).set(String(""), 0.0, String(""));
-            (*lambda_max).set(String(""), 0.0, String(""));
+            (*lambda_min).set(0.0);
+            (*lambda_max).set(0.0);
             
         }
         
@@ -8351,7 +8351,8 @@ Angle Angle::normalize_ret(void) {
 
     Angle temp;
 
-    temp.set(String(""), value - 2.0 * M_PI * floor(value / (2.0 * M_PI)), String(""));
+    temp.set(value - 2.0 * M_PI * floor(value / (2.0 * M_PI)));
+    
     return temp;
 }
 
@@ -8371,12 +8372,12 @@ Angle Angle::span(Angle x) {
 
     if (((*this) < M_PI) && (x > M_PI)) {
 
-        delta.set(String(""), (value + (2.0 * M_PI)) - (x.value), String(""));
+        delta.set((value + (2.0 * M_PI)) - (x.value));
 
     }
     else {
 
-        delta.set(String(""), value - (x.value), String(""));
+        delta.set(value - (x.value));
 
     }
 
@@ -10636,7 +10637,7 @@ inline void DrawPanel::Render_3D(
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
 
     //set q
-    (q.lambda).set(String(""), 0.0, String(""));
+    q.lambda.set(0.0);
     (q.phi) = (circle_observer.omega);
 
     //obtain the coordinates of q in the reference frame x'y'z'
@@ -10645,7 +10646,7 @@ inline void DrawPanel::Render_3D(
     gsl_vector_set((rp.r), 2, sin((q.phi)));
 
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
-    d_temp.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+    d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
     dummy_projection = PositionProjection(0.0, ((d_temp.value) * gsl_vector_get((rp.r), 2)) / ((d_temp.value) + 1.0 + gsl_vector_get((rp.r), 1)));
     //set the wxPen color for the horizon
 //    dc->SetPen(wxPen(wxGetApp().color_horizon, 1));
@@ -11033,7 +11034,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //prerender meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
-    route.Z.set(String(""), 0.0, String(""));
+    route.Z.set(0.0);
     (route.reference_position.phi) = ((parent->phi_min));
 
     //draw the first chunk of intermediate ticks on the longitude axis
@@ -11173,7 +11174,7 @@ inline void DrawPanel::PreRender3D(void) {
 
 
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
-    (parent->zoom_factor).set(String(""), (parent->parent->circle_observer_0.omega.value) / (circle_observer.omega.value), String(""));
+    parent->zoom_factor.set((parent->parent->circle_observer_0.omega.value) / (circle_observer.omega.value));
     (this->*Set_x_y_min_max)();
     (this->*Set_lambda_phi_min_max)();
 
@@ -11254,7 +11255,7 @@ inline void DrawPanel::PreRender3D(void) {
     }
 
     //compute lambda_middle
-    lambda_middle.set(String(""), round((((circle_observer.reference_position).lambda).value) / delta_lambda) * delta_lambda, String(""));
+    lambda_middle.set(round((((circle_observer.reference_position).lambda).value) / delta_lambda) * delta_lambda);
 
 
     //set lambda_start, lambda_end
@@ -11318,7 +11319,7 @@ inline void DrawPanel::PreRender3D(void) {
     (phi_start.value) = floor((((parent->phi_min).normalize_pm_pi_ret()).value) / delta_phi) * delta_phi;
     (phi_end.value) = (((parent->phi_max).normalize_pm_pi_ret()).value);
 
-    phi_middle.set(String(""), round((((circle_observer.reference_position).phi).value) / delta_phi) * delta_phi, String(""));
+    phi_middle.set(round((((circle_observer.reference_position).phi).value) / delta_phi) * delta_phi);
     //if the line above sets phi_middle equal to +/- pi/2. the labels of meridians will all be put at the same location on the screen (the N/S pole), and they would look odd ->
     if ((fabs((phi_middle.value) - M_PI_2) < epsilon_double) || (fabs((phi_middle.value) - (3.0 * M_PI_2)) < epsilon_double)) {
         (phi_middle.value) -= GSL_SIGN((phi_middle.normalize_pm_pi_ret()).value) * delta_phi;
@@ -11397,7 +11398,7 @@ inline void DrawPanel::PreRender3D(void) {
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
     route.length.set(Re * M_PI, LengthUnit_types[0]);
-    route.Z.set(String(""), 0.0, String(""));
+    route.Z.set(0.0);
     (route.reference_position.phi) = -M_PI_2;
 
     for ((route.reference_position.lambda.value) = (lambda_start.value);
@@ -11417,7 +11418,7 @@ inline void DrawPanel::PreRender3D(void) {
             phi_saved = ((route.reference_position).phi);
             Z_saved = (route.Z);
 
-            (route.Z).set(String(""), 0.0, String(""));
+            route.Z.set(0.0);
             route.length.set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer.omega.value)), LengthUnit_types[0]);
             (route.reference_position.phi) = phi_middle;
 
@@ -11454,9 +11455,9 @@ inline void DrawPanel::PreRender3D(void) {
         ) {
 
         //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
-        route.omega.set(String(""), M_PI_2 - fabs(phi.value), String(""));
+        route.omega.set(M_PI_2 - fabs(phi.value));
         route.length.set(2.0 * M_PI * Re * sin(route.omega), LengthUnit_types[0]);
-        route.reference_position.phi.set(String(""), GSL_SIGN(phi.value) * M_PI_2, String(""));
+        route.reference_position.phi.set(GSL_SIGN(phi.value) * M_PI_2);
 
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);
@@ -11629,7 +11630,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
 
     mouse_scrolling = false;
     //set the zoom factor to 1 for the initial configuration of the projection
-    zoom_factor.set(String(""), 1.0, String(""));
+    zoom_factor.set(1.0);
     //read zoom_factor_max from file_init
     wxGetApp().zoom_factor_max.read_from_file_to(String("maximal zoom factor"), (wxGetApp().path_file_init), String("R"), String(""));
     idling = false;
@@ -11660,8 +11661,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
 
     //sets the coefficients for the function which relates the zoom factor to the slider value: read from file (wxGetApp().e_zoom) and set (wxGetApp().a_zoom), (wxGetApp().b_zoom)
     (wxGetApp().e_zoom).read_from_file_to(String("exponent zoom"), (wxGetApp().path_file_init), String("R"), String(""));
-    (wxGetApp().a_zoom).set(String(""), (-1.0 + ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
-    (wxGetApp().b_zoom).set(String(""), (pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value) - ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)), String(""));
+    (wxGetApp().a_zoom).set((-1.0 + ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)));
+    (wxGetApp().b_zoom).set((pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value) - ((wxGetApp().zoom_factor_max).value)) / (-1.0 + pow(((double)(slider->GetMax())), (wxGetApp().e_zoom).value)));
  
 
     //text field showing the current value of the zoom slider
@@ -12282,7 +12283,7 @@ template<class T> void ChartFrame::Reset(T& event) {
         //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
 
         parent->circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
-        zoom_factor.set(String(""), 1.0, String(""));
+        zoom_factor.set(1.0);
         ComputeZoomFactor_3D();
 
         (draw_panel->rotation_0).read_from_file_to(String("rotation 0"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -12484,8 +12485,8 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 //                //I do the animaiton only if the start and end position of the animation are large enough, in order to avoid NaNs in the transporting_route
                 //                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * Re*(chart_frames[i])->draw_panel->circle_observer.omega.value) {
                 
-                center.lambda.set(String(""), (((chart_frames[i])->lambda_min + (chart_frames[i])->lambda_max).value)/2.0, String(""));
-                center.phi.set(String(""), mean_pm_pi((chart_frames[i])->phi_min, (chart_frames[i])->phi_max), String(""));
+                center.lambda.set((((chart_frames[i])->lambda_min + (chart_frames[i])->lambda_max).value)/2.0);
+                center.phi.set(mean_pm_pi((chart_frames[i])->phi_min, (chart_frames[i])->phi_max));
                 
                 rectangle_observer_0.SizeMercator(&size_rectangle_observer_0);
                 
@@ -12610,19 +12611,16 @@ void DrawPanel::SetIdling(bool b) {
 //this function computes lambda_min, ... phi_max from x_min ... y_max for the mercator projection
 void DrawPanel::Set_lambda_phi_min_max_Mercator(void) {
 
-    (parent->lambda_min).set(String(""), k * lambda_mercator(x_min), String(""));
-    (parent->lambda_max).set(String(""), k * lambda_mercator(x_max), String(""));
+    parent->lambda_min.set(k * lambda_mercator(x_min));
+    parent->lambda_max.set(k * lambda_mercator(x_max));
 
-    (parent->phi_min).set(String(""), k * phi_mercator(y_min), String(""));
-    (parent->phi_max).set(String(""), k * phi_mercator(y_max), String(""));
+    parent->phi_min.set(k * phi_mercator(y_min));
+    parent->phi_max.set(k * phi_mercator(y_max));
 
 }
 
 //this function computes lambda_min, ... phi_max (the  min/max latitudes and longitudes which encompass circle_observer) for the 3D projection
 void DrawPanel::Set_lambda_phi_min_max_3D(void) {
-
-    //compute circle_observer
-    //    (circle_observer.omega).set(String(""), atan( sqrt(1.0 - gsl_pow_2(1.0/(1.0+(d.value))))/(1.0/(1.0+(d.value))) ), String(""));
 
     //consider the vector rp = {0,-1,0}, corresponding to the center of the circle of equal altitude above
     gsl_vector_set((rp.r), 0, 0.0);
@@ -12642,7 +12640,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
     circle_observer.lambda_min_max(&(parent->lambda_min), &(parent->lambda_max), String(""));
 
     //set
-    d.set(String(""), (-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))))*Re, String(""));
+    d.set((-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))))*Re);
     //here I set the value of d into observer_height, not the unit of measure, because I want the user to decide the unit of measure by selecting in the wxComboBox in the unit field
     parent->observer_height->set_value_keep_unit();
 
@@ -12663,14 +12661,14 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
             //in this case, circle_observer encircles the N pole
 
             (parent->phi_min) = ((circle_observer.reference_position).phi) - (circle_observer.omega);
-            (parent->phi_max).set(String(""), M_PI_2, String(""));
+            (parent->phi_max).set(M_PI_2);
 
         }
 
         if ((((circle_observer.reference_position).phi).value) - ((circle_observer.omega).value) < -M_PI_2) {
             //in this case, circle_observer encircles the S pole
 
-            (parent->phi_min).set(String(""), 3.0 * M_PI_2, String(""));
+            (parent->phi_min).set(3.0 * M_PI_2);
             (parent->phi_max) = ((circle_observer.reference_position).phi) + (circle_observer.omega);
 
         }
@@ -12762,7 +12760,7 @@ void DrawPanel::Set_x_y_min_max_3D(void) {
     Double d_temp;
 
     //set d
-    d_temp.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+    d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
 
     x_min = -((d_temp.value) / sqrt(gsl_pow_2(((d_temp).value) + 1.0) - 1.0));
     x_max = -x_min;
@@ -12884,7 +12882,7 @@ bool ChartFrame::ComputeZoomFactor_3D(void) {
 
     if (output) {
 
-        ((draw_panel->circle_observer).omega).set(String(""), (parent->circle_observer_0.omega.value) / (zoom_factor.value), String(""));
+        draw_panel->circle_observer.omega.set((parent->circle_observer_0.omega.value) / (zoom_factor.value));
 
     }
 
@@ -13268,7 +13266,7 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
 
             //here I put the sign of (temp.x) in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. For example, for (temp.x)<0, a simple geometrical construction shows that the solution corresponding to the visible side of the sphere is the one with the larger (temp.x) -> I pick the solution with a positive sign in front of the square root through GSL_SIGN((temp.x))
             //set rp
-            d_temp.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+            d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
 
             gsl_vector_set((rp.r), 0, (-(temp.x) * sqrt(arg_sqrt) + (d_temp.value) * ((d_temp.value) + 1.0) * (temp.x)) / (gsl_sf_pow_int((d_temp.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2)));
             gsl_vector_set((rp.r), 2, (-sqrt(arg_sqrt) * (temp.y) + (d_temp.value) * ((d_temp.value) + 1.0) * (temp.y)) / ((gsl_sf_pow_int((d_temp.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2))));
@@ -13293,7 +13291,7 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
 
             Double d_temp;
 
-            d_temp.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+            d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
 
             //from projection, compute the relative point on the x'z' plane, which has y'=0
             gsl_vector_set((rp.r), 0, ((d_temp.value) + 1.0) / (d_temp.value) * (temp.x));
@@ -13343,7 +13341,7 @@ inline bool DrawPanel::ScreenTo3D(const wxPoint& p, PositionProjection* q) {
     Double d_temp;
 
     //set d for the following
-    d_temp.set(String(""), -1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))), String(""));
+    d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
 
     //updates the position of the draw pane this
     draw_panel_origin = (this->GetScreenPosition());
@@ -13629,8 +13627,8 @@ inline bool DrawPanel::ProjectionToDrawPanel_Mercator(PositionProjection& q, wxP
 //convert the Mercator Projection q into the Position p
 inline void  DrawPanel::ProjectionToGeo_Mercator(const PositionProjection& q, Position* p) {
 
-    (p->lambda).set(String(""), k * lambda_mercator(q.x), String(""));
-    (p->phi).set(String(""), k * phi_mercator(q.y), String(""));
+    p->lambda.set(k * lambda_mercator(q.x));
+    p->phi.set(k * phi_mercator(q.y));
   
 }
 

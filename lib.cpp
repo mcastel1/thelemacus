@@ -17796,7 +17796,7 @@ void RouteFrame::AllOk(void) {
 
 
 // same as RouteFrame::AllOk(void)  but with an event as an argument, so this method can be triggered from an event
-template<class E> void RouteFrame::AllOk(E& event) {
+template<class E> void RouteFrame::AllOk([[maybe_unused]] E& event) {
 
     AllOk();
 
@@ -20246,7 +20246,7 @@ void SightFrame::AllOk(void) {
 
 
 // same as SightFrame::AllOk(void)  but with an event as an argument, so this method can be triggered from an event 
-template<class E> void SightFrame::AllOk(E& event) {
+template<class E> void SightFrame::AllOk([[maybe_unused]] E& event) {
 
     AllOk();
 

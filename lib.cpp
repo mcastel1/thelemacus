@@ -9536,7 +9536,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     //set the border of the chart area 
     SetWindowStyle(wxSIMPLE_BORDER);
     
-    this->Bind(wxEVT_PAINT, &DrawPanel::PaintEvent, this);
+    Bind(wxEVT_PAINT, &DrawPanel::PaintEvent, this);
 
 }
 

@@ -249,7 +249,7 @@ public:
 
     bool operator == (const Angle&) const, operator == (const double&), operator != (const double&), operator !=(const Angle&), operator > (const Angle&), operator > (const double&);
     Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&), operator * (const double&);
-    Angle& operator +=(const Angle&), &operator += (const double&), &operator -=(const Angle&), &operator -=(const double&);
+    void operator += (const Angle&), operator += (const double&), operator -= (const Angle&), operator -= (const double&);
     static bool strictly_smaller_normalize_pm_pi_ret(Angle&, Angle&), strictly_larger_normalize_pm_pi_ret(Angle&, Angle&);
 
     

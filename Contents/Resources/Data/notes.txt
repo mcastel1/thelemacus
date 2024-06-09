@@ -136,6 +136,5 @@
 	- when you switch from light to dark, all icons must be updated
  on OSX:
  on WIN32:
-    - if I open a RouteFrame to modify a circle of equal altitude, start position fields are not disabled 
 	- in the mercator projection labels of meridians leave ugly traces when zooming in (horizontal segments)
 

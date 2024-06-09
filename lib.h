@@ -2461,7 +2461,7 @@ public:
     wxBoxSizer *sizer_h, *sizer_v;
     Speed* speed;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
-    bool value_ok, unit_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
+    bool value_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     CheckSpeedValue<P>* check;
 
     

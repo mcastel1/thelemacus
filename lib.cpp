@@ -22509,8 +22509,8 @@ template<class P> void SpeedField<P>::set(void) {
     //    unit->name->SetValue((unit->catalog)[i]);
     
     value_ok = true;
-    unit_ok = true;
-    
+    (unit->ok) = true;
+
 }
 
 
@@ -22597,7 +22597,7 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
     }
 
     //value_ok is true/false is the text entered is valid/invalid
-    unit_ok = success;
+    (unit->ok) = success;
     //tries to enable button_reduce
     parent->AllOk();
 
@@ -22632,9 +22632,10 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 template<class P> bool SpeedField<P>::is_ok(void) {
 
-    return(value_ok && unit_ok);
+    return(value_ok && (unit->ok));
 
 }
+
 
 //constructor of a DateField object, based on the parent frame frame
 template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {

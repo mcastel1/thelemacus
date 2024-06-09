@@ -16375,6 +16375,27 @@ template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event
 }
 
 
+template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
+
+    p = p_in;
+
+    check_speed_value = new CheckSpeedValue<P>(p);
+    check_speed_unit = new CheckSpeedUnit<P>(p);
+
+}
+
+
+//this functor checks the whole Speed field by calling the check on its value and unit
+template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
+
+    (*check_speed_value)(event);
+    (*check_speed_unit)(event);
+
+    event.Skip(true);
+
+}
+
+
 //write the value and the unit of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
     

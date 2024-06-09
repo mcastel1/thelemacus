@@ -22070,11 +22070,10 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 
 
 //constructor of a LengthField object, based on the parent frame frame
-template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p/*, String unit_value_in*/){
+template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p){
 
     parent = ((P*)(panel_of_parent->GetParent()));
     length = p;
-//    unit_value = unit_value_in;
     
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -22126,7 +22125,7 @@ template<class P> template<class T> void LengthField<P>::InsertIn(T* host, wxSiz
 
 
 //constructor of a EditableLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
-template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_parent, Length* p/*, String unit_value_in*/) : LengthField<P>( panel_of_parent, p/*, unit_value_in*/) {
+template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_parent, Length* p) : LengthField<P>( panel_of_parent, p) {
 
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
@@ -22161,7 +22160,7 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
 
 
 //constructor of a StaticLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
-template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p/*, String unit_value_in*/) : LengthField<P>( panel_of_parent, p/*, unit_value_in*/) {
+template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p) : LengthField<P>( panel_of_parent, p) {
 
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;

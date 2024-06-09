@@ -16198,6 +16198,7 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T& eve
 
 }
 
+
 template<class P> CheckLengthUnit<P>::CheckLengthUnit(DynamicLengthField<P>* p_in) {
 
     p = p_in;
@@ -16314,6 +16315,13 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
     }
 
     event.Skip(true);
+
+}
+
+
+template<class P> CheckSpeedUnit<P>::CheckSpeedUnit(SpeedField<P>* p_in) {
+
+    p = p_in;
 
 }
 

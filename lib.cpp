@@ -1571,7 +1571,7 @@ void Color::read_from_file(String name, String filename, String mode, [[maybe_un
 
     //get rid of everything that comes before and at '(' at the beginnign of s
     pos_end = (s.value).find("(");
-    s.set(String(""), String((s.value).substr(pos_end + 1).c_str()), String(""));
+    s.set(s.value.substr(pos_end + 1).c_str());
     //look for the first ','
 
     pos_end = (s.value).find(",");
@@ -1580,14 +1580,14 @@ void Color::read_from_file(String name, String filename, String mode, [[maybe_un
     red = stoi(((s.value).substr(0, pos_end)).c_str());
 
     //get rid of the first ','
-    s.set(String(""), String((s.value).substr(pos_end + 1).c_str()), String(""));
+    s.set(s.value.substr(pos_end + 1).c_str());
 
     pos_end = (s.value).find(",");
 
     green = stoi((s.value).substr(0, pos_end).c_str());
 
     //get rid of the second ','
-    s.set(String(""), String((s.value).substr(pos_end + 1).c_str()), String(""));
+    s.set(s.value.substr(pos_end + 1).c_str());
 
     pos_end = (s.value).find(")");
     //get rid of '('

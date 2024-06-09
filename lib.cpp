@@ -1969,7 +1969,7 @@ Rotation::Rotation(Position p, Position q) {
             ));
 
         //writes the Euler angles from matrix
-        this->set(matrix);
+        set(matrix);
 
     }
     else {
@@ -5378,47 +5378,6 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
     // .. and the unit inot unit
     pos1 = pos2+1;
     unit.set(line.substr(pos1));
-
-//    if (line.find(" nm") != (string::npos)) {
-//        //the units of the length read is nm
-//        
-//        cout << prefix.value << "Unit is in nm\n";
-//        pos2 = line.find(" nm");
-//        unit_temp = LengthUnit_types[0];
-//        
-//    }
-//    
-//    if (line.find(" m") != (string::npos)) {
-//        
-//        // the units of the length read is m
-//        cout << prefix.value << "Unit is in m\n";
-//        pos2 = line.find(" m");
-//        unit_temp = LengthUnit_types[1];
-//        
-//    }
-//    
-//    if (line.find(" ft") != (string::npos)) {
-//        
-//        //the units of the length read is ft
-//        cout << prefix.value << "Unit is in ft\n";
-//        pos2 = line.find(" ft");
-//        unit_temp = LengthUnit_types[2];
-//        
-//    }
-
-    
-    //THE ERROR IS HERE: I READ A value from STREAM IN UNITS OF METERS, AND I DON'T CHANGE THE UNITS IN *this (which may be equal meters) and I write in this->value the value read from file, divided by (1e3 * nm), I.E. THE VALUE IN NAUTICAL MILES -> result: IN *THIS I MAY HAVE UNITS OF METERS AND A VALUE EXPRESSED IN NAUTICAL MILES
-//    if (unit_temp == LengthUnit_types[1]) {
-//        
-//        value /= (1e3 * nm_to_km);
-//        
-//    }
-//    
-//    if (unit_temp == LengthUnit_types[2]) {
-//        
-//        value /= nm_to_ft;
-//        
-//    }
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
@@ -21074,7 +21033,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     if (position_in_listcontrol_sights == -1) {
         //if the constructor of SightFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of sight_list and reduce it
 
-        (this->parent->data)->add_sight_and_reduce(sight, String(""));
+        parent->data->add_sight_and_reduce(sight, String(""));
 
         //add the sight and the related route to the GUI object listconstrol_sights and listcontrol_routes, respectively
         //        sight->add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_sights));

@@ -2453,7 +2453,7 @@ template<class P> class SpeedField{
     
 public:
     //the parent frame to which this object is attached
-    P* parent_frame;
+    P* parent;
     //the speed value
     wxTextCtrl *value;
     //units of measure of the Length

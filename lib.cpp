@@ -16282,7 +16282,7 @@ template<class P> CheckSpeedValue<P>::CheckSpeedValue(SpeedField<P>* p_in) {
 //check the value in the GUI field in SpeedField
 template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& event) {
 
-    P* f = (p->parent_frame);
+    P* f = (p->parent);
 
     //I proceed only if the progam is not is indling mode
     if (!(f->idling)) {
@@ -22433,7 +22433,7 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 //constructor of a SpeedField object, based on the parent frame frame
 template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, String unit_value_in) {
 
-    parent_frame = ((P*)(panel_of_parent->GetParent()));
+    parent = ((P*)(panel_of_parent->GetParent()));
     speed = p;
     unit_value = unit_value_in;
     //these flags will be used in the method InsertIn below, to insert this->unit
@@ -22445,7 +22445,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 
     flags.Center();
 
-    value = new wxTextCtrl((parent_frame->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     //SetColor(value);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Speed object
@@ -22457,7 +22457,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p, 
 
 
 //    (unit->name) = new wxComboBox((parent->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
-    unit = new SpeedUnitField<P>(parent_frame->panel, &(speed->unit), &(wxGetApp().list_frame->data->recent_speed_units));
+    unit = new SpeedUnitField<P>(parent->panel, &(speed->unit), &(wxGetApp().list_frame->data->recent_speed_units));
     
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     unit->Bind(wxEVT_COMBOBOX, &SpeedField::OnEditUnit<wxCommandEvent>, this);
@@ -22573,7 +22573,7 @@ template<class P> template<class E>  void SpeedField<P>::OnEditValue(E& event) {
     //value_ok is true/false is the text entered is valid/invalid
     value_ok = success;
     //tries to enable button_reduce
-    parent_frame->AllOk();
+    parent->AllOk();
 
     event.Skip(true);
 
@@ -22600,7 +22600,7 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
     //value_ok is true/false is the text entered is valid/invalid
     unit_ok = success;
     //tries to enable button_reduce
-    parent_frame->AllOk();
+    parent->AllOk();
 
     event.Skip(true);
 

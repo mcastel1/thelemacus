@@ -1860,7 +1860,7 @@ void String::print(String name, bool print_if_empty, String prefix, ostream& ost
 //set the value of String *this, titled name, to input_string, by printing out everything
 inline void String::set(String name, String input_string, [[maybe_unused]] String prefix) {
 
-    value = (input_string.value);
+    set(input_string);
 
     if (name != String("")) { print(name, true, prefix, cout); }
 
@@ -3068,7 +3068,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                                 
                 for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
                     
-                    ((*s)[i]).set(String(""), ((t[i]).value) * Re, String(""));
+                    ((*s)[i]).set(((t[i]).value) * Re);
                     
                 }
                 
@@ -3838,7 +3838,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
                     prefix);
 
 
-                square_root.set(String(""), sqrt(gsl_sf_pow_int((a.value), 2) + gsl_sf_pow_int((b.value), 2) - gsl_sf_pow_int(cos(route.omega), 2)), String(""));
+                square_root.set(sqrt(gsl_sf_pow_int((a.value), 2) + gsl_sf_pow_int((b.value), 2) - gsl_sf_pow_int(cos(route.omega), 2)));
 
                 //these are the values of cos(t) such that the distance between this->end at t  and route.reference_position equals Re*(route.omega), i.e., it is the value of cos(t) such that end(t) lies on route. There are two of them.
                 cos_t_p.set(String(""), (-((a.value) * cos(route.omega)) + (square_root.value) * fabs((b.value))) / (gsl_sf_pow_int((a.value), 2) + gsl_sf_pow_int((b.value), 2)), prefix);
@@ -3972,8 +3972,8 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
                         else {
                             //the special case where  route.reference_position.phi = +- pi/2
 
-                            t_a.set(String(""), acos(-GSL_SIGN((((route.reference_position).phi).normalize_pm_pi_ret()).value) * (cos(route.omega) * csc(omega) * sec(reference_position.phi)) + cot(omega) * tan(reference_position.phi)), String(""));
-                            t_b.set(String(""), -acos(-GSL_SIGN((((route.reference_position).phi).normalize_pm_pi_ret()).value) * (cos(route.omega) * csc(omega) * sec(reference_position.phi)) + cot(omega) * tan(reference_position.phi)), String(""));
+                            t_a.set(acos(-GSL_SIGN((((route.reference_position).phi).normalize_pm_pi_ret()).value) * (cos(route.omega) * csc(omega) * sec(reference_position.phi)) + cot(omega) * tan(reference_position.phi)));
+                            t_b.set(-acos(-GSL_SIGN((((route.reference_position).phi).normalize_pm_pi_ret()).value) * (cos(route.omega) * csc(omega) * sec(reference_position.phi)) + cot(omega) * tan(reference_position.phi)));
 
 
                         }

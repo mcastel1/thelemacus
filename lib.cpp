@@ -194,6 +194,14 @@ inline double mean_pm_pi(Angle& a, Angle& b){
     
 }
 
+//return the mean between a.value and b.value
+inline double mean_value(Angle& a, Angle& b){
+    
+    return( ((a.value) + (b.value))/2.0 );
+    
+}
+
+
 
 string to_string(const Position& p, unsigned int precision) {
 
@@ -3150,14 +3158,14 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                             //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
                             compute_end(
                                         Length(
-                                               ((Angle(((((t[0]).value) + ((t[1]).value))) / 2.0)).value) * (Re * sin(omega))
+                                               ((Angle(mean_value(t[0], t[1]))).value) * (Re * sin(omega))
                                                ),
                                         String(""));
                             draw_panel->circle_observer.reference_position.distance(end, &l1, String(""), String(""));
                             
                             compute_end(
                                         Length(
-                                               ((Angle(((((t[0]).value) + ((t[1]).value))) / 2.0 + M_PI)).value) * (Re * sin(omega))
+                                               ((Angle(mean_value(t[0], t[1]) + M_PI)).value) * (Re * sin(omega))
                                                ),
                                         String(""));
                             draw_panel->circle_observer.reference_position.distance(end, &l2, String(""), String(""));

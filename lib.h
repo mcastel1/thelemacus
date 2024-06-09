@@ -2392,11 +2392,10 @@ public:
     
     //the parent frame to which this object is attached
     P* parent;
-    //units of measure of the Length
+    //unit of measure of the Length written in *this
     LengthUnitField<P>* unit;
     wxBoxSizer *sizer_h, *sizer_v;
     Length* length;
-//    bool unit_ok;
 
     LengthField(wxPanel*, Length*);
     
@@ -2456,7 +2455,7 @@ public:
     P* parent;
     //the speed value
     wxTextCtrl *value;
-    //units of measure of the Length
+    //unit of measure of the Speed written in *this
     SpeedUnitField<P>* unit;
     wxBoxSizer *sizer_h, *sizer_v;
     Speed* speed;

@@ -16198,13 +16198,15 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T& eve
 
 }
 
+
 template<class P> CheckLengthUnit<P>::CheckLengthUnit(DynamicLengthField<P>* p_in) {
 
     p = p_in;
 
 }
 
-//checks the unit in the GUI field in LengthField
+
+//check the unit in the GUI field in LengthField
 template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& event) {
 
     P* f = (p->parent);
@@ -16216,7 +16218,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
         bool check;
 
         
-        p->unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::CheckInCatalog(&check, &i);
+        p->unit->CheckInCatalog(&check, &i);
 
         if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
 
@@ -16312,6 +16314,81 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
         f->AllOk();
 
     }
+
+    event.Skip(true);
+
+}
+
+
+template<class P> CheckSpeedUnit<P>::CheckSpeedUnit(SpeedField<P>* p_in) {
+
+    p = p_in;
+
+}
+
+
+//check the unit in the GUI field in SpeedField
+template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event) {
+
+    P* f = (p->parent);
+
+    //I proceed only if the progam is not is indling mode
+    if (!(f->idling)) {
+
+        unsigned int i;
+        bool check;
+        
+        p->unit->CheckInCatalog(&check, &i);
+
+        if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
+
+            //if check is true (false) -> set unit->ok to true (false)
+            (p->unit->ok) = check;
+            //the background color is set to white, because in this case there is no erroneous value in unit
+            p->unit->name->SetForegroundColour(wxGetApp().foreground_color);
+            p->unit->name->SetFont(wxGetApp().default_font);
+
+
+        }else {
+
+            stringstream temp;
+
+            temp.str("");
+            temp << "Available units are: ";
+            for (i = 0; i < SpeedUnit_types.size(); i++) {
+                temp << (SpeedUnit_types[i]).value << ((i < SpeedUnit_types.size() - 1) ? ", " : ".");
+            }
+
+            f->print_error_message->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
+
+            (p->unit->ok) = false;
+
+        }
+
+        f->AllOk();
+
+    }
+
+    event.Skip(true);
+
+}
+
+
+template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
+
+    p = p_in;
+
+    check_speed_value = new CheckSpeedValue<P>(p);
+    check_speed_unit = new CheckSpeedUnit<P>(p);
+
+}
+
+
+//this functor checks the whole Speed field by calling the check on its value and unit
+template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
+
+    (*check_speed_value)(event);
+    (*check_speed_unit)(event);
 
     event.Skip(true);
 
@@ -22440,7 +22517,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p) 
 
     
     //initialize check
-    check = new CheckSpeedValue<P>(this);
+    check = new CheckSpeed<P>(this);
 
     flags.Center();
 
@@ -22450,7 +22527,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p) 
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Speed object
     value->SetValue(wxString(""));
     value_ok = false;
-    value->Bind(wxEVT_KILL_FOCUS, (*check));
+    value->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
     value->Bind(wxEVT_KEY_UP, &SpeedField::OnEditValue<wxKeyEvent>, this);
 
@@ -22800,7 +22877,7 @@ template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, 
  
 
 //constructor of a LengthUnitField object, based on the parent frame frame
-template<class P> SpeedUnitField<P>::SpeedUnitField(wxPanel* panel_of_parent, SpeedUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, SpeedUnit, void >(panel_of_parent, object_in, SpeedUnit_types, recent_items_in) {
+template<class P> SpeedUnitField<P>::SpeedUnitField(wxPanel* panel_of_parent, SpeedUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, SpeedUnit, CheckLengthUnit<P> >(panel_of_parent, object_in, SpeedUnit_types, recent_items_in) {
 
 }
 

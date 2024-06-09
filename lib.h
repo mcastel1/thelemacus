@@ -1488,6 +1488,7 @@ public:
     
 };
 
+
 template<class P> class CheckLength{
     
 public:
@@ -1514,30 +1515,32 @@ public:
     
 };
 
-//template<class P> class CheckSpeedUnit{
-//    
-//public:
-//    
-//    SpeedField<P>* p;
-//    
-//    CheckSpeedUnit(SpeedField<P>*);
-//    template<class T> void operator()(T&);
-//    
-//};
 
-//template<class P> class CheckSpeed{
-//    
-//public:
-//    
-//    //p is the SpeedField which is parent of the CheckSpeed object: the CheckSpeed object checks the validity of the entries in SpeedField
-//    SpeedField<P>* p;
-//    CheckSpeedValue<P>* check;
-////    CheckSpeedUnit<P>* check_speed_unit;
-//    
-//    CheckSpeed(SpeedField<P>*);
-//    template <class T> void operator()(T&);
-//    
-//};
+template<class P> class CheckSpeedUnit{
+    
+public:
+    
+    SpeedField<P>* p;
+    
+    CheckSpeedUnit(SpeedField<P>*);
+    template<class T> void operator()(T&);
+    
+};
+
+
+template<class P> class CheckSpeed{
+    
+public:
+    
+    //p is the SpeedField which is parent of the CheckSpeed object: the CheckSpeed object checks the validity of the entries in SpeedField
+    SpeedField<P>* p;
+    CheckSpeedValue<P>* check_speed_value;
+    CheckSpeedUnit<P>* check_speed_unit;
+    
+    CheckSpeed(SpeedField<P>*);
+    template <class T> void operator()(T&);
+    
+};
 
 
 template<class P> class CheckString{
@@ -2461,7 +2464,7 @@ public:
     Speed* speed;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
     bool value_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
-    CheckSpeedValue<P>* check;
+    CheckSpeed<P>* check;
 
     
     SpeedField(wxPanel*, Speed*);
@@ -2594,7 +2597,7 @@ public:
 };
 
 //GUI field to specify the unit of measure of a Speed, which is inserted into a parent panel of type P
-template<class P> class SpeedUnitField: public MultipleItemField<P, SpeedUnit, void >{
+template<class P> class SpeedUnitField: public MultipleItemField<P, SpeedUnit, CheckLengthUnit<P> >{
     
 public:
     

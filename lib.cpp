@@ -7836,7 +7836,7 @@ Length::Length(double value_in, const LengthUnit& unit_in) {
 Length::Length(Chrono time, Speed speed) {
 
     //conversion factor
-    double c;
+    double c = 0.0;
     
     //consider all possible units in which speed is expressed
     switch (speed.unit.position_in_list(SpeedUnit_types)) {

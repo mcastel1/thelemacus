@@ -49,41 +49,7 @@ Data:
 			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = 2024-06-05 19:36:45 UTC+2
 	Routes:
-		Route #1:
-			type = circle of equal altitude
-			ground position:
-				latitude = 2° 1.999999999999993'
-				longitude = 357° 58.00000000000182'
-				label = 2024-01-11 17:17:38 UTC+2
-			aperture angle = 2° 1.999999999999993'
-			label = route with speed and time
-		Route #2:
-			type = loxodrome
-			start position:
-				latitude = 22° 3.000000000000043'
-				longitude = 356° 56.99999999999932'
-				label = 2024-01-21 17:04:03 UTC+2
-			starting heading = 19° 3.000000000000043'
-			length format = time and speed
-				time = 06:59:45.54
-				speed = 269.9796436285097 kt
-			label = 2024-06-09 18:28:12 UTC+2
-		Route #3:
-			type = orthodrome
-			start position:
-				latitude = 22° 3.000000000000043'
-				longitude = 356° 56.99999999999932'
-				label = 2024-01-21 17:04:03 UTC+2
-			starting heading = 19° 3.000000000000043'
-			length format = time and speed
-				time = 06:59:45.5436
-				speed = 500 kt
-			label = jlkj
 	Positions:
-		Position #1:
-			latitude = 323° 36.54636500000151'
-			longitude = 315° 55.56999999999789'
-			label = Siamo in biblioteca
 Recent bodies = 10 12 8
 Recent projections = 1 0
 Recent length formats = 1 0

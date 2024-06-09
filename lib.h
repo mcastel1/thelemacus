@@ -2416,7 +2416,7 @@ public:
     CheckLength<P>* check;
     bool value_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     
-    DynamicLengthField(wxPanel*, Length*/*, String*/);
+    DynamicLengthField(wxPanel*, Length*);
     
     void set(Length);
     void set(void);

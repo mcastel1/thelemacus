@@ -119,7 +119,6 @@
  ********** THINGS TO FIX ***********
     - if you click on a Route connected to a Sight and press modify you get the message that the Route will be disconnected from the Sight but then in the table it is not disconnected
     - when you zoom in in the 3d projection there is an error message '[1;31mEntered value of  is not valid!' on the console
-    - remove all (*this).
     - write function for Angle algebraic averages such as ((((t[0]).value) + ((t[1]).value))) / 2.0) and substitute it everywhere
     - Angle& Angle::operator += (const Angle& angle) { should not return an Angle but a void -> revise all other similar functions
     - make sure that all the print() methods have the same structure as Length::print()

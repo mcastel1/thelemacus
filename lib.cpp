@@ -7740,7 +7740,7 @@ bool Sight::compute_DH_refraction(String prefix) {
     /* cout << "Value = " << dH_refraction(1.0, &(*this)); */
     /* cin >> result; */
 
-    status = gsl_integration_qags(&F, atmosphere.h.back().convert(LengthUnit_types[0]).value, ((atmosphere.h)[0]).convert(LengthUnit_types[0]).value, 0.0, epsrel, 1000, w, &result, &error);
+    status = gsl_integration_qags(&F, atmosphere.h.back().convert(LengthUnit_types[0]).value, atmosphere.h.front().convert(LengthUnit_types[0]).value, 0.0, epsrel, 1000, w, &result, &error);
     //status = GSL_FAILURE
 
     if (status == GSL_SUCCESS) {

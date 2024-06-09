@@ -7852,7 +7852,7 @@ inline void Length::set(String name, double x, [[maybe_unused]] String prefix) {
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
 
-    value = x;
+    set(x);
 
     if(name != String("")){
         print(name, prefix, cout);

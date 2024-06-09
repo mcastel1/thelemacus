@@ -420,7 +420,7 @@ inline void Int::set(String name, int i, [[maybe_unused]] String prefix) {
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
 
-    value = i;
+    set(i);
 
     if (name != String("")) { print(name, prefix, cout); }
 
@@ -1964,7 +1964,7 @@ Rotation::Rotation(Position p, Position q) {
         q.getCartesian(&r_q);
 
         gsl_blas_ddot((r_p.r), (r_q.r), &cos_rotation_angle);
-        rotation_angle.set(String(""), acos(cos_rotation_angle), String(""));
+        rotation_angle.set(acos(cos_rotation_angle));
 
 
         my_cross((r_p.r), (r_q.r), &(omega.r));
@@ -2469,7 +2469,7 @@ bool PositionRectangle::SizeMercator(PositionProjection* p){
 //construct a brand new Route object and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(void) {
 
-    related_sight.set(String(""), -1, String(""));
+    related_sight.set(-1);
     length_format.set((LengthFormat_types[1]));
 
 }
@@ -2486,7 +2486,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Chro
     
     reference_position = reference_position_in;
     Z = Z_in;
-    related_sight.set(String(""), -1, String(""));
+    related_sight.set(-1);
 
 }
 
@@ -2502,7 +2502,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
     
     reference_position = reference_position_in;
     Z = Z_in;
-    related_sight.set(String(""), -1, String(""));
+    related_sight.set(-1);
 
 }
 
@@ -2579,7 +2579,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             
             
             //set the legnth as the length of the shortest great circle joining p_start and p_end
-            phi.set(String(""), acos(r_start.dot(r_end)), String(""));
+            phi.set(acos(r_start.dot(r_end)));
             
             length.set(Re*(phi.value), LengthUnit_types[0]);
             
@@ -2589,20 +2589,20 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
                   String(""));
 
             //consider solution 1, compute end with this solution and store it in end_1
-            Z.set(String(""), z.value, String(""));
+            Z.set(z.value);
             compute_end(String());
             end_1 = end;
             
             //consider solution 2, compute end with this solution and store it in end_2
-            Z.set(String(""), -z.value, String(""));
+            Z.set(-z.value);
             compute_end(String());
             end_2 = end;
             
             //check which one among end_1 and end_2 has a longitude closer to p_end and pick the correct solution accordingly
             if(fabs(end_1.lambda.value - p_end.lambda.value) < fabs(end_2.lambda.value - p_end.lambda.value)){
-                Z.set(String(""), z.value, String(""));
+                Z.set(z.value);
             }else{
-                Z.set(String(""), -z.value, String(""));
+                Z.set(-z.value);
             }
             
 
@@ -2633,7 +2633,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
     //the lenght of the circle of equal altitude is set by default
     length.set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
 
-    related_sight.set(String(""), -1, String(""));
+    related_sight.set(-1);
 
 }
 

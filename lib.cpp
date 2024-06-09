@@ -857,6 +857,13 @@ inline Double::Double(const double &x){
 }
 
 
+void Double::set(double x) {
+
+    value = x;
+
+}
+
+
 void Double::set(String name, double x, [[maybe_unused]] String prefix) {
 
     String new_prefix;
@@ -864,7 +871,7 @@ void Double::set(String name, double x, [[maybe_unused]] String prefix) {
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
 
-    value = x;
+    set(x);
 
     if (name != String("")) { print(name, prefix, cout); }
 
@@ -9364,8 +9371,8 @@ void ListFrame::LoadCoastLineData(String prefix) {
                     phi_temp = stod(temp);
 
 
-                    p_Position.lambda.set(String(""), lambda_temp, String(""));
-                    p_Position.phi.set(String(""), phi_temp, String(""));
+                    p_Position.lambda.set(lambda_temp);
+                    p_Position.phi.set(phi_temp);
                     p_Cartesian = p_Position.getCartesian();
                     p_Mercator.NormalizeAndSetMercator(p_Position);
                     
@@ -11088,7 +11095,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //prerender parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     route.type.set(String(((Route_types[0]).value)));
-    route.Z.set(String(""), M_PI_2, String(""));
+    route.Z.set(M_PI_2);
     (route.reference_position.lambda) = (parent->lambda_min);
 
     //this loop runs over the latitude of the parallel, which we call phi
@@ -11461,7 +11468,7 @@ inline void DrawPanel::PreRender3D(void) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
 
             route.type.set(String(((Route_types[1]).value)));
-            route.Z.set(String(""), M_PI_2, String(""));
+            route.Z.set(M_PI_2);
             route.length.set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer.omega.value)), LengthUnit_types[0]);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -12861,7 +12868,7 @@ bool ChartFrame::ComputeZoomFactor_Mercator(double delta_x) {
     output = ((1.0 <= temp) && (temp <= (wxGetApp().zoom_factor_max.value)));
 
     if (output) {
-        zoom_factor.set(String(""), temp, String(""));
+        zoom_factor.set(temp);
     }
 
     return(output);

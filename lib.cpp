@@ -17567,6 +17567,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
     unsigned int i;
     stringstream s;
+    //this is true if a message to that the modified Route is being disconnected from its related sight has to be prompted, false otherwise
+    bool prompt_disconnection_message;
     
     if (label->value->GetValue().ToStdString() == "") {
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
@@ -17586,6 +17588,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
         //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
+        
+        prompt_disconnection_message = false;
 
     }else {
         //I am modifying an existing Route
@@ -17595,10 +17599,16 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
             //because I am modifying and thus altering the Route, I disconnect it from its related sight
             (parent->i_object_to_disconnect) = (route->related_sight.value);
-//            parent->DisconnectAndPromptMessage(event);
+            parent->Disconnect(event);
             //set i_obeject_to_disconnect to its original value
             (parent->i_object_to_disconnect) = -1;
+            
+            prompt_disconnection_message = true;
 
+        }else{
+            
+            prompt_disconnection_message = false;
+            
         }
 
     }
@@ -17664,7 +17674,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     }
 
     
-    if((position_in_listcontrol_routes != -1) && ((route->related_sight) != -1)){
+    if(prompt_disconnection_message){
         //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
 
         parent->print_info_message->control = NULL;
@@ -17675,7 +17685,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
         
     }else{
-        //I am either entering a new Route or modifying a Route unrelated to a Sight -> in both cases, I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling (intended as 'do nothing special' here) at the end of the animation
+        //I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling (intended as 'do nothing' here) at the end of the animation
         
         //If I am adding a new Route for transport, I do not call any animation, because there is already the transport animation that will be prompted. Otherwise, I call an animation that zooms on the newly added Route
         if (!(parent->transporting_with_new_route)) {

@@ -16218,7 +16218,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
         bool check;
 
         
-        p->unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::CheckInCatalog(&check, &i);
+        p->unit->CheckInCatalog(&check, &i);
 
         if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
 
@@ -16337,9 +16337,8 @@ template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event
 
         unsigned int i;
         bool check;
-
         
-        p->unit->MultipleItemField<P, SpeedUnit, CheckSpeedUnit<P> >::CheckInCatalog(&check, &i);
+        p->unit->CheckInCatalog(&check, &i);
 
         if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
 

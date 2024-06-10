@@ -1516,6 +1516,14 @@ Speed::Speed(double value_in, const SpeedUnit& unit_in) {
 
 }
 
+
+void Speed::set(double x){
+    
+    value = x;
+    
+}
+
+
 //set the value of *this to x, where x is in kt
 void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
 
@@ -1524,8 +1532,8 @@ void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
 
-    value = x;
-
+    set(x);
+    
     if (name != String("")) { print(name, SpeedUnit_types[0], prefix, cout); }
 
 }

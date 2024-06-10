@@ -19741,8 +19741,8 @@ template<class E> void ListFrame::Disconnect(E& event) {
     i_route = (((data->sight_list)[i_object_to_disconnect]).related_route).value;
 
     //disconnect route and sight
-    (((data->sight_list)[i_object_to_disconnect]).related_route).set(String(""), -1, String(""));
-    (((data->route_list)[i_route]).related_sight).set(String(""), -1, String(""));
+    (((data->sight_list)[i_object_to_disconnect]).related_route).set(-1);
+    (((data->route_list)[i_route]).related_sight).set(-1);
 
     //update the related wxListCtrls in ListFrame
     ((data->sight_list)[i_object_to_disconnect]).update_wxListCtrl(i_object_to_disconnect, listcontrol_sights);
@@ -21288,7 +21288,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
         
      
      if (MultipleItemField<P, NON_GUI, CHECK>::ok) {
-              object->set(String(""), String((MultipleItemField<P, NON_GUI, CHECK>::name->GetValue()).ToStdString()), String(""));
+              object->set(String((MultipleItemField<P, NON_GUI, CHECK>::name->GetValue()).ToStdString()));
       }
 
       event.Skip(true);

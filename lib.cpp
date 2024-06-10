@@ -9089,8 +9089,8 @@ void ChartFrame::GetCoastLineData_3D(void) {
 //                    
 //                
 //                    //set s
-//                    u.phi.set(String(""), k * ((double)i), String(""));
-//                    u.lambda.set(String(""), k * ((double)j), String(""));
+//                    u.phi.set(k * ((double)i));
+//                    u.lambda.set(k * ((double)j));
 //                    u.getCartesian(String(""), &s, String(""));
 //                    //compute cos
 //                    gsl_blas_ddot((r.r), (s.r), &cos);
@@ -13735,7 +13735,7 @@ void DrawPanel::SetLabelAndAdjustPosition(const Position& p, wxPoint* position, 
     wxPoint shift;
 
     //set the text of *label
-    label->set(String(""), to_string(p, display_precision.value), String(""));
+    label->set(to_string(p, display_precision.value));
 
     //the default value of the shift
     shift = wxPoint(
@@ -13783,12 +13783,12 @@ template<class E> void DrawPanel::SetProjection(E& event) {
     //extract the part of the title which comes before the name of the projection type
     temp = String((parent->GetLabel()).ToStdString());
     pos = (temp.value).find(" - ");
-    temp.set(String(""), String((temp.value).substr(0, pos).c_str()), String(""));
+    temp.set(temp.value.substr(0, pos).c_str());
 
     //put together temp and the new name of the projection type and write the result into the title of parent
     s.str("");
     s << (temp.value) << " - " << (((parent->projection)->name)->GetValue().ToStdString()) << " projection";
-    temp.set(String(""), s.str(), String(""));
+    temp.set(s.str());
     parent->SetLabel(wxString(s.str().c_str()));
 
 
@@ -14568,7 +14568,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     //compute omega as half of  the largest angular distance between the middle of selection rectangle and its corners
                     circle_observer.reference_position.distance((parent->parent->geo_position_start), &l1, String(""), String(""));
                     circle_observer.reference_position.distance(Position(parent->parent->geo_position_start.lambda, parent->parent->position_end.phi), &l2, String(""), String(""));
-                    circle_observer.omega.set(String(""), ((max(l1, l2).value) / Re)/2.0, String(""));
+                    circle_observer.omega.set(((max(l1, l2).value) / Re)/2.0);
                     
                     
                     //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
@@ -17144,10 +17144,10 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
 
     //if I am adding a brand new position, I name button_ok 'Add'. Otherwise I name it "Modify"
     if (position_in == NULL) {
-        label_button_ok.set(String(""), String("Add"), String(""));
+        label_button_ok.set(String("Add"));
     }
     else {
-        label_button_ok.set(String(""), String("Modify"), String(""));
+        label_button_ok.set(String("Modify"));
     }
 
 
@@ -17289,13 +17289,13 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     if (route_in != NULL) {
         route = route_in;
         position_in_listcontrol_routes = position_in_listcontrol_routes_in;
-        label_button_ok.set(String(""), String("Modify"), String(""));
+        label_button_ok.set(String("Modify"));
     }
     else {
         route = new Route();
         position_in_listcontrol_routes = -1;
-//        label_button_ok.set(String(""), String("Add"), String(""));
-        label_button_ok.set(String(""), String((for_transport ? "Transport" : "Add")), String(""));
+//        label_button_ok.set(String("Add"));
+        label_button_ok.set(String((for_transport ? "Transport" : "Add")));
 
     }
 
@@ -17768,8 +17768,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
 
         parent->print_info_message->control = NULL;
-        parent->print_info_message->title.set(String(""), String("Warning"), String(""));
-        parent->print_info_message->message.set(String(""), String("The route which has been modified was related to a sight! Disconnecting the route from the sight."), String(""));
+        parent->print_info_message->title.set(String("Warning"));
+        parent->print_info_message->message.set(String("The route which has been modified was related to a sight! Disconnecting the route from the sight."));
         
         parent->AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(route, parent->print_info_message);
 
@@ -18680,7 +18680,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 
             //get rid of everything that comes before and at '(' at the beginnign of s
             pos_end = (s.value).find("(");
-            s.set(String(""), String((s.value).substr(pos_end + 1).c_str()), String(""));
+            s.set(s.value.substr(pos_end + 1).c_str());
             //look for the first ','
 
             pos_end = (s.value).find(",");

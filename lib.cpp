@@ -22614,14 +22614,14 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
 
         if ((unit->name->GetValue().ToStdString()) == "kt") {
             //unit = LengthUnit_types[0]
-            speed->set(String(""), /*the speed is entered in the GUI field is already in nm, thus no need to convert it*/speed_temp, String(""));
+            speed->set(/*the speed is entered in the GUI field is already in nm, thus no need to convert it*/speed_temp);
 
         }
         else {
             //[m]/[s] = [km]/1e3/[h]*3600 = [kt]/nm_to_km/1e3*3600
             if ((unit->name->GetValue().ToStdString()) == "km/h") {
                 //unit = SpeedUnit_types[1]
-                speed->set(String(""), /*the speed is entered in the GUI field in km/h, thus I convert it to kt*/speed_temp / nm_to_km, String(""));
+                speed->set(/*the speed is entered in the GUI field in km/h, thus I convert it to kt*/speed_temp / nm_to_km);
 
             }
             else {
@@ -22629,7 +22629,7 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
                 if ((unit->name->GetValue().ToStdString()) == "m/s") {
                     //unit = LengthUnit_types[2]
 
-                    speed->set(String(""), /*the speed is entered in the GUI field in m/s, thus I convert it to kt*/speed_temp / nm_to_m * 3600.0, String(""));
+                    speed->set(/*the speed is entered in the GUI field in m/s, thus I convert it to kt*/speed_temp / nm_to_m * 3600.0);
 
                 }
 

@@ -23705,7 +23705,7 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
             //I am using Projection_types[1]
 
             //compute omega_end from zoom_factor and circle_observer_0.omega
-            omega_end.set(String(""), (chart_frame->parent->circle_observer_0.omega.value) / (zoom_factor.value), String(""));
+            omega_end.set((chart_frame->parent->circle_observer_0.omega.value) / (zoom_factor.value));
 
             break;
             

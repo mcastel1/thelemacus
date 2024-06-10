@@ -18689,14 +18689,14 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             red = stoi(((s.value).substr(0, pos_end)).c_str());
 
             //get rid of the first ','
-            s.set(String(""), String((s.value).substr(pos_end + 1).c_str()), String(""));
+            s.set(s.value.substr(pos_end + 1).c_str());
 
             pos_end = (s.value).find(",");
 
             green = stoi((s.value).substr(0, pos_end).c_str());
 
             //get rid of the second ','
-            s.set(String(""), String((s.value).substr(pos_end + 1).c_str()), String(""));
+            s.set(s.value.substr(pos_end + 1).c_str());
 
             pos_end = (s.value).find(")");
             //get rid of '('

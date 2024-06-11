@@ -14,7 +14,7 @@
 #define min_lat (-78.7290778)
 #define floor_min_lat (floor(min_lat))
 #define floor_max_lat (floor(max_lat))
-#define span_lat ((floor_max_lat-floor_min_lat+1)
+#define span_lat (floor_max_lat-floor_min_lat+1)
 #define outfile_precision 16
 #define path_file_coastline_data_blocked "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/map_conv_blocked.csv"
 #define path_file_n_line "/Users/macbookpro/Documents/navigational_astronomy_large_files/coastlines_2/n_line_map_conv_blocked.txt"

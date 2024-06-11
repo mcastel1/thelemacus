@@ -21764,10 +21764,9 @@ template<class P> void DynamicLengthField<P>::set(Length input) {
 template<class P> void DynamicLengthField<P>::set(void) {
     
     value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, LengthField<P>::length->value));
-    LengthField<P>::unit->set();
-
     value_ok = true;
-    (LengthField<P>::unit->ok) = true;
+    
+    LengthField<P>::unit->set();
 
 }
 

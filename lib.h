@@ -2295,35 +2295,7 @@ public:
 };
 
 
-//P is the type of the frame which hosts *this
-template<class P> class BodyField : public MultipleItemField<P, Body, CheckBody<P>>{
-    
-public:
-    //the parent frame to which this object is attached
-//    SightFrame* parent;
-//    wxArrayString  /*this is equal to a standard list of the available bodies, except that on top of the list are the recently selected bodies*/items;
-    //this points to a Body object, which contains the date written in the GUI field of this
-//    Body* object;
-    Catalog* catalog;
-//    wxBoxSizer *sizer_h, *sizer_v;
-    
-    //this is the wxComboBox with the name of the bodies
-//    wxComboBox* name;
-//    CheckBody<P>* check;
-//    bool ok;
-    
-    BodyField(wxPanel*, Body*, Catalog*, vector<int>*);
-//    void fill_bodies(void);
-//    void read_recent_bodies(void);
-//    void update_recent_bodies(void);
-    void set(void);
-    template<class T> void get(T&);
-//    template<class T> void InsertIn(T*);
-//    bool is_ok(void);
-    template<class E> void OnEdit(E&);
-//    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-    
-};
+#include "bodyfield.h"
 
 
 template<class P> class LimbField{

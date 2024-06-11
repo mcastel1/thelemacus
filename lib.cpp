@@ -1,4 +1,6 @@
+//REMOVE THIS WHEN ALL CLASSES WILL BE MOVED TO FILES
 #include "body_field.cpp"
+//REMOVE THIS WHEN ALL CLASSES WILL BE MOVED TO FILES
 
 
 //example of variadic function: it takes a non-variadic argument n and then an arbitrary number of arguments `...`

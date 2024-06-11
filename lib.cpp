@@ -1524,6 +1524,15 @@ void Speed::set(double x){
 }
 
 
+//set the value of *this equal to x and the units equal to unit_in
+inline void Speed::set(double value_in, const SpeedUnit& unit_in) {
+    
+    value = value_in;
+    unit = unit_in;
+    
+}
+
+
 //set the value of *this to x, where x is in kt
 void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
 
@@ -7882,6 +7891,7 @@ inline void Length::set(double value_in, const LengthUnit& unit_in) {
     
     value = value_in;
     unit = unit_in;
+    
 }
 
 

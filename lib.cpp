@@ -1524,6 +1524,15 @@ void Speed::set(double x){
 }
 
 
+//set the value of *this equal to x and the units equal to unit_in
+inline void Speed::set(double value_in, const SpeedUnit& unit_in) {
+    
+    value = value_in;
+    unit = unit_in;
+    
+}
+
+
 //set the value of *this to x, where x is in kt
 void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
 
@@ -7882,6 +7891,7 @@ inline void Length::set(double value_in, const LengthUnit& unit_in) {
     
     value = value_in;
     unit = unit_in;
+    
 }
 
 
@@ -21764,10 +21774,9 @@ template<class P> void DynamicLengthField<P>::set(Length input) {
 template<class P> void DynamicLengthField<P>::set(void) {
     
     value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, LengthField<P>::length->value));
-    LengthField<P>::unit->set();
-
     value_ok = true;
-    (LengthField<P>::unit->ok) = true;
+    
+    LengthField<P>::unit->set();
 
 }
 
@@ -22572,79 +22581,27 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p) 
 }
 
 
-//set the value in the GUI object value equal to the value in the non-GUI object Speed
+//set the value in the GUI object value equal to the value in the non-GUI object speed
 template<class P> void SpeedField<P>::set(void) {
         
-    
-    switch(String((unit->name->GetValue()).ToStdString()).position_in_list(unit->catalog)) {
-            
-        case 0: {
-            //unit =SpeedUnit_types[0]
-            
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (speed->value)));
-            
-            break;
-        }
-            
-        case 1: {
-            //unit = SpeedUnit_types[1]
-            
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to km/h*/(speed->value) * nm_to_km));
-            
-            break;
-        }
-            
-        case 2: {
-            //unit = SpeedUnit_types[2]
-            
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm_to_m / 3600.0));
-            
-            break;
-        }
-            
-    }
-    
-    //    unit->name->SetValue((unit->catalog)[i]);
-    
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, SpeedField<P>::speed->value));
     value_ok = true;
-    (unit->ok) = true;
-
+    
+    SpeedField<P>::unit->set();
+  
 }
 
 
-//write the value of the GUI field in SpeedField into the non-GUI field length
+//write the value and the unit of the GUI field in SpeedField into the non-GUI field speed
 template<class P> template <class T> void SpeedField<P>::get(T& event) {
 
-    if (is_ok()) {
-
-        double speed_temp;
-
-        value->GetValue().ToDouble(&speed_temp);
-
-        if ((unit->name->GetValue().ToStdString()) == "kt") {
-            //unit = LengthUnit_types[0]
-            speed->set(/*the speed is entered in the GUI field is already in nm, thus no need to convert it*/speed_temp);
-
-        }
-        else {
-            //[m]/[s] = [km]/1e3/[h]*3600 = [kt]/nm_to_km/1e3*3600
-            if ((unit->name->GetValue().ToStdString()) == "km/h") {
-                //unit = SpeedUnit_types[1]
-                speed->set(/*the speed is entered in the GUI field in km/h, thus I convert it to kt*/speed_temp / nm_to_km);
-
-            }
-            else {
-
-                if ((unit->name->GetValue().ToStdString()) == "m/s") {
-                    //unit = LengthUnit_types[2]
-
-                    speed->set(/*the speed is entered in the GUI field in m/s, thus I convert it to kt*/speed_temp / nm_to_m * 3600.0);
-
-                }
-
-            }
-
-        }
+    if(is_ok()){
+        
+        double x;
+        
+        value->GetValue().ToDouble(&x);
+        speed->set(x, SpeedUnit((unit->name->GetValue()).ToStdString()));
+        
     }
 
     event.Skip(true);

@@ -22582,39 +22582,16 @@ template<class P> void SpeedField<P>::set(void) {
 }
 
 
-//write the value of the GUI field in SpeedField into the non-GUI field length
+//write the value and the unit of the GUI field in SpeedField into the non-GUI field speed
 template<class P> template <class T> void SpeedField<P>::get(T& event) {
 
-    if (is_ok()) {
-
-        double speed_temp;
-
-        value->GetValue().ToDouble(&speed_temp);
-
-        if ((unit->name->GetValue().ToStdString()) == "kt") {
-            //unit = LengthUnit_types[0]
-            speed->set(/*the speed is entered in the GUI field is already in nm, thus no need to convert it*/speed_temp);
-
-        }
-        else {
-            //[m]/[s] = [km]/1e3/[h]*3600 = [kt]/nm_to_km/1e3*3600
-            if ((unit->name->GetValue().ToStdString()) == "km/h") {
-                //unit = SpeedUnit_types[1]
-                speed->set(/*the speed is entered in the GUI field in km/h, thus I convert it to kt*/speed_temp / nm_to_km);
-
-            }
-            else {
-
-                if ((unit->name->GetValue().ToStdString()) == "m/s") {
-                    //unit = LengthUnit_types[2]
-
-                    speed->set(/*the speed is entered in the GUI field in m/s, thus I convert it to kt*/speed_temp / nm_to_m * 3600.0);
-
-                }
-
-            }
-
-        }
+    if(is_ok()){
+        
+        double x;
+        
+        value->GetValue().ToDouble(&x);
+        speed->set(x, SpeedUnit((unit->name->GetValue()).ToStdString()));
+        
     }
 
     event.Skip(true);

@@ -1,12 +1,12 @@
 //
-//  projection.h
+//  dummy.h
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#ifndef projection_h
-#define projection_h
+#ifndef dummy_h
+#define dummy_h
 
 
 

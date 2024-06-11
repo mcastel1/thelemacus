@@ -5,6 +5,8 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include "body_field.h"
+
 
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this

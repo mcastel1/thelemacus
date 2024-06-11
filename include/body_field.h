@@ -5,6 +5,9 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#ifndef bodyfield_h
+#define bodyfield_h
+
 //P is the type of the frame which hosts *this
 template<class P> class BodyField : public MultipleItemField<P, Body, CheckBody<P>>{
     
@@ -19,3 +22,5 @@ public:
     
 };
 
+
+#endif

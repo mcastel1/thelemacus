@@ -22571,43 +22571,14 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p) 
 }
 
 
-//set the value in the GUI object value equal to the value in the non-GUI object Speed
+//set the value in the GUI object value equal to the value in the non-GUI object speed
 template<class P> void SpeedField<P>::set(void) {
         
-    
-    switch(String((unit->name->GetValue()).ToStdString()).position_in_list(unit->catalog)) {
-            
-        case 0: {
-            //unit =SpeedUnit_types[0]
-            
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, (speed->value)));
-            
-            break;
-        }
-            
-        case 1: {
-            //unit = SpeedUnit_types[1]
-            
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to km/h*/(speed->value) * nm_to_km));
-            
-            break;
-        }
-            
-        case 2: {
-            //unit = SpeedUnit_types[2]
-            
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, /*I convert the Speed from kt to m/s*/(speed->value) * nm_to_m / 3600.0));
-            
-            break;
-        }
-            
-    }
-    
-    //    unit->name->SetValue((unit->catalog)[i]);
-    
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, SpeedField<P>::speed->value));
     value_ok = true;
-    (unit->ok) = true;
-
+    
+    SpeedField<P>::unit->set();
+  
 }
 
 

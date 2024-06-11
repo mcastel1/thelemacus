@@ -49,6 +49,19 @@ template<class P> LimbField<P>::LimbField(wxPanel* panel_of_parent, Limb* p) {
 }
 
 
+template<class P> bool LimbField<P>::is_ok(void) {
+
+    return(ok);
+
+}
+
+template<class P> template <typename EventTag, typename Method, typename Object> void LimbField<P>::Bind(EventTag tag, Method method, Object object) {
+
+    name->Bind(tag, method, object);
+
+}
+
+
 //writes the value contained in the GUI field into the non-GUI field
 template<class P> template<class T> void LimbField<P>::get(T& event) {
 
@@ -116,5 +129,12 @@ template<class P> void LimbField<P>::set(void) {
 template<class P> void LimbField<P>::Enable(bool is_enabled) {
 
     name->Enable(is_enabled);
+
+}
+
+
+template<class P> template<class T> void LimbField<P>::InsertIn(T* host) {
+
+    host->Add(sizer_v);
 
 }

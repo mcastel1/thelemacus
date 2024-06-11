@@ -22714,20 +22714,6 @@ template<class P> void ChronoField<P>::Enable(bool is_enabled) {
 }
 
 
-
-template<class P> bool LimbField<P>::is_ok(void) {
-
-    return(ok);
-
-}
-
-template<class P> template <typename EventTag, typename Method, typename Object> void LimbField<P>::Bind(EventTag tag, Method method, Object object) {
-
-    name->Bind(tag, method, object);
-
-}
-
-
 template<class P> bool DateField<P>::is_ok(void) {
 
     return(year_ok && month_ok && day_ok);
@@ -22904,11 +22890,6 @@ template<class P> void RouteTypeField<P>::OnEdit(void){
     
 }
 
-template<class P> template<class T> void LimbField<P>::InsertIn(T* host) {
-
-    host->Add(sizer_v);
-
-}
 
 template<class P, class T> template<class R> void CheckField<P, T>::InsertIn(R* host) {
 

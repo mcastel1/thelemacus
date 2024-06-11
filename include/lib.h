@@ -2295,8 +2295,8 @@ public:
 };
 
 
-#include "bodyfield.h"
-#include "limbfield.h"
+#include "body_field.h"
+#include "limb_field.h"
 
 
 //class for graphical object: a field to enter an angle, composed of a box for the sign, a box for the degrees, a degree text symbol, another box for minutes and a minute text symbol

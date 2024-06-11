@@ -1,9 +1,11 @@
 //
-//  limbfield.cpp
+//  limb_field.cpp
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
+
+#include "limb_field.h"
 
 //constructor of a LimbField object, based on the parent frame frame
 template<class P> LimbField<P>::LimbField(wxPanel* panel_of_parent, Limb* p) {

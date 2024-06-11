@@ -8,9 +8,6 @@
 #ifndef limbfield_h
 #define limbfield_h
 
-
-#endif /* limbfield_h */
-
 template<class P> class LimbField{
     
 public:
@@ -38,3 +35,8 @@ public:
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
+
+
+
+#endif /* limbfield_h */
+

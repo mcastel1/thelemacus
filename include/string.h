@@ -16,6 +16,8 @@
 //#endif
 
 
+class FileRW;
+
 using namespace std;
 
 

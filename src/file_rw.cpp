@@ -13,6 +13,10 @@ FileRW::FileRW() {
 
     //allocate value
     value = new fstream;
+    name = new String();
+    folder = new String();
+    extension = new String();
+    
 
     //set the precision of *value
     value->precision((data_precision.value));

@@ -15,7 +15,6 @@
 #include "wx/artprov.h"
 //#endif
 
-class FileRW;
 
 using namespace std;
 

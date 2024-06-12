@@ -174,23 +174,6 @@ public:
 
 
 
-class Double{
-    
-public:
-    double value;
-    
-    Double();
-    Double(const double&);
-    bool equal_approx(Double);
-    template<class S> void read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String, String);
-    void set(double);
-    void set(String, double, String);
-    void print(String, String, ostream&);
-    Double operator + (const Double&);
-    bool operator > (const double&), operator > (const Double&), operator < (const double&), operator < (const Double&);
-    
-};
 
 
 

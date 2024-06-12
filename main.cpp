@@ -17,6 +17,7 @@
 
 #include "main.h"
 #include "generic.h"
+#include "double.h"
 #include "string.h"
 #include "angle.h"
 #include "file.h"

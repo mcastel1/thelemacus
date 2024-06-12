@@ -7,6 +7,8 @@
 #include "gsl_math.h"
 #include "gsl_vector.h"
 
+#include "double.h"
+
 
 
 

@@ -7,7 +7,17 @@
 #include "gsl_math.h"
 #include "gsl_vector.h"
 
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/dll.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/date_time.hpp>
+#include "boost/date_time/local_time/local_time.hpp"
+
+
 #include "double.h"
+#include "file_rw.h"
+
 
 
 

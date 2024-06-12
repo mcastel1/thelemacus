@@ -8,6 +8,8 @@
 #ifndef double_h
 #define double_h
 
+#include "string.h"
+
 class Double{
     
 public:

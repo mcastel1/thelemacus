@@ -21,6 +21,8 @@
 #include "string.h"
 #include "angle.h"
 #include "file.h"
+#include "file_r.h"
+#include "file_rw.h"
 #include "angle_field.h"
 #include "static_text.h"
 #include "body.h"

@@ -13,6 +13,8 @@
 #include "angle.h"
 #include "catalog.h"
 
+class Catalog;
+
 using namespace std;
 
 class Body{

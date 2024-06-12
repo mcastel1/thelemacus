@@ -10,8 +10,8 @@
 
 #include <cstdio>
 
-#include "file.h"
 #include "string.h"
+#include "file.h"
 
 using namespace std;
 

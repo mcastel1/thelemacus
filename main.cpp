@@ -17,6 +17,7 @@
 
 #include "main.h"
 #include "constants.h"
+#include "multiple_item_field.h"
 #include "catalog.h"
 #include "generic.h"
 #include "double.h"

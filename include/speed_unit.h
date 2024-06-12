@@ -8,6 +8,7 @@
 #ifndef speed_unit_h
 #define speed_unit_h
 
+#include "my_string.h"
 
 //a derived class from String, which stores the unit of measuer of Speed ("kt", etc...)
 class SpeedUnit: public String{

@@ -5,9 +5,15 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include <sstream>
+
+#include "generic.h"
 #include "length.h"
 #include "length_unit.h"
 #include "constants.h"
+#include "units.h"
+
+
 
 //default constructor, which sets value to 0.0 by default and the unit to the first entry of LengthUnit_types
 Length::Length() {

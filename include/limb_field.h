@@ -8,6 +8,9 @@
 #ifndef limb_field_h
 #define limb_field_h
 
+#include "limb.h"
+
+
 template<class P> class LimbField{
     
 public:

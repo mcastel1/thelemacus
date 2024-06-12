@@ -6,6 +6,7 @@
 //
 
 #include "double.h"
+#include <cstdint>
 
 
 //void constructor

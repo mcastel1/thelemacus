@@ -27,7 +27,7 @@ FileRW::FileRW() {
 void FileRW::set_name(String path) {
 
     (name->value) = (path.value);
-    name->split_file_path(&folder, &name_without_folder_nor_extension, &extension, String(""));
+    name->split_file_path(&folder, name_without_folder_nor_extension, &extension, String(""));
 
 }
 

@@ -6,6 +6,7 @@
 //
 
 #include "angle.h"
+#include "constants.h"
 
 
 //constructor of Angle, which does not set the value of the angle

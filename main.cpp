@@ -25,6 +25,7 @@
 #include "length.h"
 #include "length_unit.h"
 #include "speed.h"
+#include "speed_unit.h"
 #include "file.h"
 #include "file_r.h"
 #include "file_rw.h"

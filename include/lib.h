@@ -212,15 +212,6 @@ public:
 
 
 
-//a derived class from String, which stores the unit of measuer of Speed ("kt", etc...)
-class SpeedUnit: public String{
-    
-public:
-
-    SpeedUnit();
-    SpeedUnit(const String&);
-    
-};
 
 
 ////a non-GUI object containing a Length

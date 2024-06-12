@@ -58,26 +58,7 @@ void Color::read_from_file(String name, String filename, String mode, [[maybe_un
 
 
 
-//read a string of the form 'name = 3 4 12 34241 12 ' in input_stream and stores 3 in result[0], 4 in result[1], etc ... Search (do no search) the entire stream if search_entire_stream = true (false). Clear *result and re-allocate it
-template<class S> void read_list_from_stream(String name, S* input_stream, bool search_entire_stream, vector<int>* result) {
 
-    size_t pos_a, pos_b;
-    String temp;
-
-    result->clear();
-
-    temp.read_from_stream(name, input_stream, search_entire_stream, String(""));
-    pos_a = 0;
-    do {
-
-        pos_b = temp.value.find(" ", pos_a);
-        result->push_back(stoi(temp.subString(pos_a, pos_b - pos_a).value, NULL, 10));
-
-        pos_a = pos_b + 1;
-
-    } while (pos_b != string::npos);
-
-}
 
 
 
@@ -18737,13 +18718,6 @@ Projection::Projection(void) : String() {}
 
 Projection::Projection(string input) : String(input) {}
 
-
-
-
-SpeedUnit::SpeedUnit(void) : String() {}
-
-
-SpeedUnit::SpeedUnit(const String& input) : String(input.value) {}
 
 
 

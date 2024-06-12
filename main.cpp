@@ -1,12 +1,12 @@
-/*
+
  
  
- - compile on APPLE:
- g++ main.cpp -o main.o `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -I/Applications/boost_1_83_0 -L/Applications/boost_1_83_0/stage/lib/ -lboost_filesystem -lboost_system   -Wall -Wno-c++11-extensions --std=c++17  -O3 -rpath /Applications/boost_1_83_0/stage/lib -I/Users/michele/Documents/sight_reduction_program/include -I/Users/michele/Documents/sight_reduction_program/src
+ //- compile on APPLE:
+ //clear; clear; g++ main.cpp src/*.cpp -o main.o `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -I/Applications/boost_1_83_0 -L/Applications/boost_1_83_0/stage/lib/ -lboost_filesystem -lboost_system   -Wall -Wno-c++11-extensions --std=c++17  -O3 -rpath /Applications/boost_1_83_0/stage/lib -I/Users/michele/Documents/sight_reduction_program/include
  
- To run on WIN32, the resource file is resource_file_windows.rc
+ //To run on WIN32, the resource file is resource_file_windows.rc
  
- */
+ 
 
 
 
@@ -16,10 +16,25 @@
 
 
 #include "main.h"
+#include "catalog.h"
+#include "generic.h"
+#include "double.h"
+#include "string.h"
+#include "chrono.h"
+#include "angle.h"
+#include "length.h"
+#include "length_unit.h"
+#include "speed.h"
+#include "speed_unit.h"
+#include "file.h"
+#include "file_r.h"
+#include "file_rw.h"
 #include "angle_field.h"
+#include "static_text.h"
+#include "body.h"
 #include "body_field.h"
 #include "limb_field.h"
-#include "lib.cpp"
+#include "check_angle.h"
 
 
 

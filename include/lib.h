@@ -25,6 +25,18 @@
 #include "wx/wx.h"
 #endif
 
+//REMOVE AT THE END IF NOT NEEDED
+#include "angle.h"
+#include "body.h"
+#include "static_text.h"
+#include "double.h"
+#include "int.h"
+#include "file.h"
+#include "file_r.h"
+#include "file_rw.h"
+//REMOVE AT THE END IF NOT NEEDED
+
+
 //#include "chartdir.h"
 
 
@@ -127,228 +139,16 @@ public:
     
 };
 
-class String{
-    
-public:
-    string value;
-    
-    String();
-    String(const string&);
-    String(const char&);
-    void print(String, bool, String, ostream&);
-    template<class S> void read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String, String);
-    void write_to_file(String, FileRW&, String);
-    void set(String, String, String);
-    void set(String);
-    void set(string);
-    void set_to_current_time(void);
-    String append(String);
-    void appendto(String);
-    String prepend(String);
-    void replace_to(const char&, const char&);
-    String subString(size_t, size_t);
-    bool split_file_path(String*, String*, String*, String);
-    String filename_without_folder_nor_extension(String);
-    bool is_a_file_path(String);
-    wxSize get_size(wxWindow*);
-    wxSize get_size(wxDC*);
-    unsigned int get_length(void);
-    vector<String> split(void);
-    int position_in_list(const vector<String>&);
-    int position_in_list(const wxArrayString&);
-
-    bool operator == (const String&), operator != (const String&);
-    
-};
-
-
-class Int{
-    
-public:
-    int value;
-    
-    template<class S> void read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String, String);
-    void set(String, int, String);
-    void set(int);
-    void my_round(Int precision);
-    String to_string_spaces(void);
-    void print(String, String, ostream&);
-    
-    bool operator == (const Int&), operator != (const Int&), operator == (const int&), operator != (const int&), operator > (const Int&), operator > (const int&);
-    
-};
-
-class Chrono{
-    
-public:
-    unsigned int h, m;
-    double s;
-    
-    void print(String, String, ostream&);
-    bool set(String, double, String);
-    double get(void);
-    void set_current(void);
-    template<class S> bool read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String, String);
-    string to_string(unsigned int, bool);
-    
-    bool operator==(const Chrono&), operator!=(const Chrono&), operator<(const Chrono&), operator>(const Chrono&);
-    
-};
 
 
 
-class Double{
-    
-public:
-    double value;
-    
-    Double();
-    Double(const double&);
-    bool equal_approx(Double);
-    template<class S> void read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String, String);
-    void set(double);
-    void set(String, double, String);
-    void print(String, String, ostream&);
-    Double operator + (const Double&);
-    bool operator > (const double&), operator > (const Double&), operator < (const double&), operator < (const Double&);
-    
-};
 
-
-class Angle{
-    
-public:
-    
-    double value;
-    
-    Angle();
-    Angle(const double&);
-    Angle(const unsigned int&, const double&);
-    Angle(String, const double&, const String&);
-    void normalize(void);
-    Angle normalize_ret(void);
-    void normalize_pm_pi(void);
-    Angle normalize_pm_pi_ret(void);
-    Angle span(Angle);
-    void set(double);
-    void set(String, double, String);
-    void print(String, String, ostream&);
-    bool is_zero_epsilon_double(void);
-    void to_deg_min(unsigned int*, double*);
-    void to_deg_min(unsigned int*, double*, unsigned int);
-    void from_sign_deg_min(char, unsigned int, double);
-    template<class S> void read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String, String);
-    void to_deg_min_string(stringstream, stringstream);
-    string to_string(String, unsigned int, bool);
-    string deg_to_string(String, unsigned int);
-    string min_to_string(String, unsigned int);
-
-    bool operator == (const Angle&) const, operator == (const double&), operator != (const double&), operator !=(const Angle&), operator > (const Angle&), operator > (const double&);
-    Angle operator + (const Angle&), operator - (const Angle&), operator / (const double&), operator * (const double&);
-    void operator += (const Angle&), operator += (const double&), operator -= (const Angle&), operator -= (const double&);
-    static bool strictly_smaller_normalize_pm_pi_ret(Angle&, Angle&), strictly_larger_normalize_pm_pi_ret(Angle&, Angle&);
-
-    
-};
 
 
 
 #include "units.h"
 #include "constants.h"
 
-
-inline double cot(double x){
-    
-    return 1.0/tan(x);
-    
-}
-
-inline double csc(double x){
-    
-    return 1.0/sin(x);
-    
-}
-
-//returns alpha = arctan(y/x), with alpha lying in the same quadrant as the vector x, y
-inline double atan(double x, double y){
-    
-    if(x != 0.0){
-        
-        if(x > 0.0){
-            
-            return atan(y/x);
-            
-        }else{
-            
-            return(atan(y/x)+M_PI);
-        }
-        
-    }else{
-        
-        if(y > 0.0){
-            
-            return(M_PI/2.0);
-            
-        }else{
-            
-            return(3.0*M_PI/2.0);
-            
-        }
-        
-    }
-    
-}
-
-//the floor of the exponential of x
-inline int floor_exp(double x){
-    
-    return(floor(exp(x)));
-    
-}
-
-//given a wxListCtrl* list_control, if * list_control has at least one item, it finds on what element of *list_control the mouse is currently on and writes the id of this element in i. Otherwise, it writes wxNOT_FOUND in *i
-void MousePositionOnListControl(wxListCtrl* list_control, int* i){
-    
-    if((list_control->GetItemCount()) > 0){
-        //*list_control has a non-zero size -> write in *i the number of the item on which the mouse is hovering
-        
-        wxPoint p;
-        wxRect r;
-        int hit_test_flag;
-        
-        hit_test_flag = wxLIST_HITTEST_ONITEM;
-        
-        p = (list_control->ScreenToClient(wxGetMousePosition()));
-        
-     
-#ifdef __APPLE__
-        //on APPLE operating system I need to correct the Mouse position in the following way
-
-        //obtain the position of the rectangle of the first visible item in *this and store it in r
-        list_control->GetItemRect(list_control->GetTopItem(), r, wxLIST_RECT_BOUNDS);
-
-		//decrease the mouse position with respect to the origin of *this located on the bottom edge of the gray band on the top by r.y on the y axis -> now p is the mouse position with respect to the top-left origin of the white area of *this
-		(p.y) -= r.y;
-#endif
-        
-        //store in i the # of the item on which the mouse is hovering
-        (*i) = ((int)(list_control->HitTest(p, hit_test_flag)));
-        
-        //    cout << "\nMouse is on item # " << (*i);
-        
-    }else{
-        //*list_control has zero size -> write in *t wxNOT_FOUND
-        
-        (*i) = wxNOT_FOUND;
-        
-    }
-    
-}
 
 
 
@@ -405,352 +205,46 @@ public:
 };
 
 
-//this function checks whether the  unsigned int in string s is formatted correctly and, if check_interval = true, it also checks whether the this unsigned int lies in [min, sup). If i != NULL and the check is ok, it also writes the value of the unsigned int read from s into (*i)
-bool check_unsigned_int(string s, unsigned int* i, bool check_interval, unsigned int min, unsigned int sup){
-    
-    bool check;
-    unsigned int j = 0;
-    
-    check = false;
-    
-    if(/*here I check that the string s is not empty*/(!s.empty()) && /*here I check whether the quantity entered in s is an unsigned integer, i.e., it contains only the characters 0123456789*/ ((s.find_first_not_of(chars_unsigned_int)) == (std::string::npos))){
-        
-        j = stoi(s, NULL, 10);
-        
-        if(check_interval){
-            
-            check = ((j >= min) && (j < sup));
-            
-        }else{
-            
-            check = true;
-        }
-        
-    }else{
-        
-        check = false;
-        
-    }
-    
-    if((i != NULL) && check){
-        
-        (*i) = j;
-        
-    }
-    
-    return check;
-    
-}
 
 
 
-//this function checks whether the int in string s is formatted correctly and, if check_interval = true, it also checks whether the this  int lies in [min, sup). If i != NULL and the check is ok, it also writes the value of the unsigned int read from s into (*i)
-bool check_int(string s, int* i, bool check_interval, int min, int sup){
-    
-    bool check;
-    int j = 0;
-    
-    if(/*here I check whether the quantity entered in s is an integer, i.e., it contains only the characters +-0123456789*/ ((s.find_first_not_of(chars_int)) == (std::string::npos))){
-        
-        j = stoi(s, NULL, 10);
-        
-        if(check_interval){
-            
-            check = ((j >= min) && (j < sup));
-            
-        }else{
-            
-            check = true;
-            
-        }
-        
-    }else{
-        
-        check = false;
-        
-    }
-    
-    if((i != NULL) && check){
-        
-        (*i) = j;
-        
-    }
-    
-    return check;
-    
-}
-
-
-//this function asks the user to enter an unsigned int from keyboard and checks whether the entered value is an unsigned int and, if check_interval = true, that the entered value lies in [min, sup)
-void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, unsigned int sup, String name, String prefix){
-    
-    string s;
-    bool check;
-    
-    do{
-        
-        s.clear();
-        
-        cout << prefix.value << "Enter " << name.value << ":";
-        getline(cin >> ws, s);
-        
-        check = check_unsigned_int(s, i, check_interval, min, sup);
-        
-        if(!check){
-            
-            cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
-            
-        }
-        
-    }while(!check);
-    
-}
 
 
 
-//this function asks the user to enter an  int from keyboard and checks whether the entered value is an  int and, if check_interval = true, that the entered value lies in [min, sup)
-void enter_int(int* i, bool check_interval, int min, int sup, String name, String prefix){
-    
-    string s;
-    bool check;
-    
-    do{
-        
-        s.clear();
-        
-        cout << prefix.value << "Enter " << name.value << ":";
-        getline(cin >> ws, s);
-        
-        check = check_int(s, i, check_interval, min, sup);
-        
-        if(!check){
-            
-            cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
-            
-        }
-        
-    }while(!check);
-    
-}
 
 
-//this function checks whether the double in string s is formatted correctly and, if check_interval = true, it also checks whether the this double lies in [min, sup). If x != NULL and the check is ok, it also writes the value of the double read from s into (*x)
-bool check_double(string s, double* x, bool check_interval, double min, double sup){
-    
-    bool check, /*it is true if s can be converted to double, false otherwise*/ can_convert_to_double;
-    double y = 0.0;
-    
-    check = false;
-    can_convert_to_double =
-    /*check that s is not empty*/ (!s.empty())
-    && /*check that s contains at least one numerical character (i.e. at least one character in chars_unsigned_int)*/ ((s.find_first_of(chars_unsigned_int)) != (std::string::npos))
-    && /*check that s contains only the allowed characters in chars_double*/ (((s.find_first_not_of(chars_double)) == (std::string::npos)))
-    && /*check that '.' occurs zero or one time*/ (count(s.begin(), s.end(), '.') <= 1)
-    && /*check that '+' occurs zero or one time*/ (count(s.begin(), s.end(), '+') <= 1)
-    && /*check that '-' occurs zero or one time*/ (count(s.begin(), s.end(), '-') <= 1);
-    
-    if(can_convert_to_double){
-        
-        //if the check above passed, then I proceed and write s into y
-        y = stod(s);
-        
-        if(check_interval){
-            
-            check = ((y >= min) && (y < sup));
-            
-        }else{
-            
-            check = true;
-            
-        }
-        
-    }else{
-        
-        check = false;
-        
-    }
-    
-    //if x == NULL, then this function is meant to be used to check the correct format of s only, not to write its value to x.
-    if((x != NULL) && check){
-        
-        (*x) = y;
-        
-    }
-    
-    return check;
-    
-}
 
+////a non-GUI object containing a Length
+//class Length{
+//    
+//public:
+//    //the value of the Length
+//    double value;
+//    //the unit of measure of the Length
+//    LengthUnit unit;
+//    
+//    Length();
+//    Length(double);
+//    Length(double, const LengthUnit&);
+//    Length(Chrono, Speed);
+//    
+//    void set(String, double, String);
+//    void set(double);
+//    void set(double, const LengthUnit&);
+//    string to_string(const LengthUnit&, unsigned int);
+//    string to_string(unsigned int);
+//    void print(String, String, ostream&);
+//    void convert_to(const LengthUnit&);
+//    Length convert(const LengthUnit&);
+//    template<class S> void read_from_stream(String, S*, bool, String);
+//    void read_from_file_to(String, String, String, String);
+//    bool check(String, String);
+//    bool operator > (const Length&), operator >= (const Length&), operator <= (const Length&), operator > (const double&), operator >= (const double&), operator <= (const double&), operator < (const Length&), operator < (const double&), operator == (const Length&), operator != (const Length&);
+//    Length operator + (const Length&), operator - (const Length&),  operator * (const double&), operator / (const double&);
+//    void operator += (const Length&), operator -= (const Length&), operator *= (const double&), operator /= (const double&);
+//    
+//};
 
-//this function asks the user to enter a double from keyboard and checks whether the entered value contains the allowed chars for double and, if check_interval = true, that the entered value lies in [min, sup)
-void enter_double(double* x, bool check_interval, double min, double sup, String name, String prefix){
-    
-    string s;
-    bool check;
-    
-    do{
-        
-        s.clear();
-        
-        cout << prefix.value << "Enter " << name.value << ":";
-        getline(cin >> ws, s);
-        
-        check = check_double(s, x, check_interval, min, sup);
-        
-        if(!check){
-            
-            cout << prefix.value << RED << "Entered value is not valid!\n" << RESET;
-            
-        }
-        
-    }while(!check);
-    
-}
-
-//a general class for File objects
-class File{
-    
-public:
-    
-    String  /*the name of the file without the folder path (before it) and without the file extension (after it)*/name_without_folder_nor_extension;
-    unsigned int number_of_lines;
-    
-    File();
-    
-};
-
-//a inherited class from File class, for files on disk that can be read and written to
-class FileRW: public File{
-    
-public:
-    
-    //the strean for reading and writing
-    fstream* value;
-    String /*the full path of the file, including the folder, filename and extension*/name, /*the path of the folder where the file is located*/folder, /*the file extension, without the '.'*/extension;
-    
-    
-    
-    FileRW();
-    void set_name(String);
-    bool open(String, String);
-    void close(String);
-    void remove(String);
-    void count_lines(String);
-    bool check_if_exists(String);
-    
-    
-    
-    //    wxDECLARE_EVENT_TABLE();
-    
-};
-
-//an inherited class from File class, for files that can be read only
-class FileR: public File{
-    
-public:
-    
-#ifdef __APPLE__
-    //I am on APPLE operating system: the file will be read from a path in the .app package and read with the ifstream value (read only) -> I include also ame, folder and extension as members of this class
-    ifstream* value;
-    String /*the full path of the file, including the folder, filename and extension*/name, /*the path of the folder where the file is located*/folder, /*the file extension, without the '.'*/extension;
-    
-#endif
-#ifdef _WIN32
-    //I am on WIN32 operating system: the file will be loaded from a resource incoporeated in the .exe file and read with the istringstream value
-    istringstream* value;
-#endif
-    
-    
-    FileR();
-    void set_name(String);
-    bool open(String);
-    void close(String);
-    bool check_if_exists(String);
-    void count_lines(String);
-    //istringstream* create_istringstream(String);
-    
-    //    wxDECLARE_EVENT_TABLE();
-    
-};
-
-//a derived class from String, which stores the unit of measuer of Length ("nm", "m", "ft", ...)
-class LengthUnit: public String{
-    
-public:
-
-    LengthUnit();
-    LengthUnit(const String&);
-    
-    bool check();
-    
-};
-
-
-//a derived class from String, which stores the unit of measuer of Speed ("kt", etc...)
-class SpeedUnit: public String{
-    
-public:
-
-    SpeedUnit();
-    SpeedUnit(const String&);
-    
-};
-
-
-//a non-GUI object containing a Length
-class Length{
-    
-public:
-    //the value of the Length
-    double value;
-    //the unit of measure of the Length
-    LengthUnit unit;
-    
-    Length();
-    Length(double);
-    Length(double, const LengthUnit&);
-    Length(Chrono, Speed);
-    
-    void set(String, double, String);
-    void set(double);
-    void set(double, const LengthUnit&);
-    string to_string(const LengthUnit&, unsigned int);
-    string to_string(unsigned int);
-    void print(String, String, ostream&);
-    void convert_to(const LengthUnit&);
-    Length convert(const LengthUnit&);
-    template<class S> void read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String, String);
-    bool check(String, String);
-    bool operator > (const Length&), operator >= (const Length&), operator <= (const Length&), operator > (const double&), operator >= (const double&), operator <= (const double&), operator < (const Length&), operator < (const double&), operator == (const Length&), operator != (const Length&);
-    Length operator + (const Length&), operator - (const Length&),  operator * (const double&), operator / (const double&);
-    void operator += (const Length&), operator -= (const Length&), operator *= (const double&), operator /= (const double&);
-    
-};
-
-
-class Speed{
-    
-public:
-    
-    //the value of the Speed
-    double value;
-    //the unit of measure of the Speed
-    SpeedUnit unit;
-
-    
-    Speed();
-    Speed(double);
-    Speed(double, const SpeedUnit&);
-    
-    void set(double);
-    void set(double, const SpeedUnit&);
-    void set(String, double, String);
-    void print(String, String, String, ostream&);
-    template<class S> void read_from_stream(String, S*, bool, String);
-    void print(String, String, ostream&);
-    
-};
 
 
 class Answer{
@@ -1029,22 +523,6 @@ public:
 };
 
 
-class Body{
-    
-public:
-    String name, type;
-    Length radius;
-    Angle RA, d;
-//    void enter(String, Catalog, String);
-    bool check(unsigned int*, Catalog, String);
-    void print(String, String, ostream&);
-    template<class S> bool read_from_stream(String, S*, bool, String);
-    
-    bool operator==(const Body&);
-    
-    
-};
-
 
 class Limb{
     
@@ -1096,20 +574,6 @@ public:
     
     void add_to_wxListCtrl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
-    
-};
-
-
-class Catalog{
-    
-public:
-    vector<Body> list;
-    Catalog(String, String);
-    void add(String, String, double);
-    vector<String> get_names(void);
-    void print(String, ostream&);
-    void read_from_file_to(String, String, String, String);
-    template<class S> void read_from_stream(String, S*, bool, String);
     
 };
 
@@ -1348,21 +812,6 @@ public:
     
 };
 
-
-template<class P> class CheckAngle{
-    
-public:
-    
-    //p is the AngleField which is parent of the CheckAngle object: the CheckAngle object checks the validity of the entries in AngleField
-    AngleField<P>* p;
-    CheckSign<P>* check_sign;
-    CheckArcDegree<P>* check_arc_degree;
-    CheckArcMinute<P>* check_arc_minute;
-    
-    CheckAngle(AngleField<P>*);
-    template <class T> void operator()(T&);
-    
-};
 
 
 //this functor does all the necessary tasks to be done at the end of an animated transporty: sets the non-GUI object *object_a  (for example, a Position, Route...) of type NON_GUI equal to *object_b, sets and redraws everything in the parent of type P, ...
@@ -1968,17 +1417,6 @@ public:
     void EnableDisableButtons(void);
     void operator()(void);
     
-    
-};
-
-
-//my own derived class of wxStaticText
-class StaticText : public wxStaticText{
-    
-public:
-    
-    
-    StaticText(wxWindow*, const wxString&, const wxPoint&, const wxSize&, long);
     
 };
 

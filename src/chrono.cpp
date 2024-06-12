@@ -154,3 +154,26 @@ void Chrono::read_from_file_to(String name, String filename, String mode, [[mayb
     read_from_file<Chrono>(this, name, filename, mode, prefix);
 
 }
+
+
+
+//convert *this to a string. If time_zone == true, then I add at the end of the string the time zone compared to UTC written in wxGetApp().time_zone
+string Chrono::to_string(unsigned int precision, bool time_zone) {
+
+    stringstream output;
+
+    output.precision(precision);
+
+    if (h < 10) { output << 0; }
+    output << h << ":";
+    if (m < 10) { output << 0; }
+    output << m << ":";
+    if (s < 10.0) { output << 0; }
+    output << s;
+    if (time_zone) {
+        output << " UTC" << (wxGetApp().time_zone > 0 ? "+" : "-") << fabs(wxGetApp().time_zone.value);
+    }
+
+    return (output.str().c_str());
+
+}

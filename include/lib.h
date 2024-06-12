@@ -29,7 +29,8 @@
 #include "angle.h"
 #include "body.h"
 #include "static_text.h"
-//REMOVE AT THE END IF NOT NEEDED 
+#include "double.h"
+//REMOVE AT THE END IF NOT NEEDED
 
 
 //#include "chartdir.h"

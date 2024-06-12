@@ -1,6 +1,9 @@
 #ifndef length_h
 #define length_h
 
+#include <wx/listctrl.h>
+
+
 #include "gsl_math.h"
 
 

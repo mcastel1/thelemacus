@@ -5,6 +5,8 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include <boost/filesystem.hpp>
+
 #include "file_rw.h"
 #include "constants.h"
 
@@ -27,7 +29,7 @@ FileRW::FileRW() {
 void FileRW::set_name(String path) {
 
     (name->value) = (path.value);
-    name->split_file_path(&folder, name_without_folder_nor_extension, &extension, String(""));
+    name->split_file_path(folder, name_without_folder_nor_extension, extension, String(""));
 
 }
 

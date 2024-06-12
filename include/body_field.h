@@ -8,6 +8,10 @@
 #ifndef body_field_h
 #define body_field_h
 
+using namespace std;
+#include <vector>
+
+
 //P is the type of the frame which hosts *this
 template<class P> class BodyField : public MultipleItemField<P, Body, CheckBody<P>>{
     

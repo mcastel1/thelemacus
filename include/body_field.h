@@ -12,6 +12,7 @@
 #include <vector>
 #include "body.h"
 #include "check_body.h"
+#include "multiple_item_field.h"
 
 using namespace std;
 

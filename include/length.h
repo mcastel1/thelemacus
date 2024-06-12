@@ -11,6 +11,7 @@
 #include "string.h"
 #include "length_unit.h"
 #include "chrono.h"
+#include "speed.h"
 
 //a non-GUI object containing a Length
 class Length{

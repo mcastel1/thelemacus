@@ -8,6 +8,8 @@
 #ifndef speed_h
 #define speed_h
 
+#include "speed_unit.h"
+
 
 class Speed{
     

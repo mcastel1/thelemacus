@@ -9,6 +9,7 @@
 #define int_h
 
 
+#include "string.h"
 
 class Int{
     

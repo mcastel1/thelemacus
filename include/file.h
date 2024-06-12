@@ -11,7 +11,6 @@
 
 #include "string.h"
 
-// Forward declaration so the compiler knows what String is
 class String;
 
 

@@ -6,6 +6,11 @@
 //
 
 #include "string.h"
+#include <sstream>
+#include "generic.h"
+#include <boost/filesystem.hpp>
+
+
 
 //default constructor, which sets value to an empty string by default
 String::String() {

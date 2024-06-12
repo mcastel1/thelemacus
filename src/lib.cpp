@@ -22606,13 +22606,6 @@ OnNewRouteInListControlRoutesForTransport::OnNewRouteInListControlRoutesForTrans
 
 }
 
-//construct a StaticText object from a wxStaticText object, and sets its color
-StaticText::StaticText(wxWindow* parent, const wxString& label, const wxPoint& pos, const wxSize& size, long style) : wxStaticText(parent, wxID_ANY, label, pos, size, style, wxT("")) {
-
-    //SetColor(this);
-
-}
-
 
 template<class S> ListControl<S>::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_buttons_in, const wxPoint& pos, const wxSize& size, long style) : wxListCtrl(parent_in, wxID_ANY, pos, size, style) {
 

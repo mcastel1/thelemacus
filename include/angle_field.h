@@ -16,6 +16,8 @@
 #include "wx/artprov.h"
 #endif
 
+#include "static_text.h"
+
 //class for graphical object: a field to enter an angle, composed of a box for the sign, a box for the degrees, a degree text symbol, another box for minutes and a minute text symbol
 template<class P> class AngleField{
     

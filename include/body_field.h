@@ -10,6 +10,7 @@
 
 using namespace std;
 #include <vector>
+#include "body.h"
 
 
 //P is the type of the frame which hosts *this

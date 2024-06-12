@@ -8,6 +8,8 @@
 #ifndef body_h
 #define body_h
 
+using namespace std;
+
 class Body{
     
 public:

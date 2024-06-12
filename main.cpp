@@ -19,6 +19,7 @@
 #include "angle.h"
 #include "angle_field.h"
 #include "static_text.h"
+#include "body.h"
 #include "body_field.h"
 #include "limb_field.h"
 #include "src/lib.cpp"

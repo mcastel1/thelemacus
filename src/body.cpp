@@ -8,8 +8,6 @@
 #include "body.h"
 
 
-
-
 bool Body::operator==(const Body& body) {
 
     return (name == (body.name));

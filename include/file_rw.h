@@ -14,7 +14,6 @@
 #include "string.h"
 #include "file.h"
 
-class String;
 
 using namespace std;
 

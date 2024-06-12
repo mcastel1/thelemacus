@@ -8,10 +8,11 @@
 #ifndef file_h
 #define file_h
 
-class String;
-
 
 #include "string.h"
+
+// Forward declaration so the compiler knows what String is
+class String;
 
 
 //a general class for File objects
@@ -19,7 +20,7 @@ class File{
     
 public:
     
-    String  /*the name of the file without the folder path (before it) and without the file extension (after it)*/name_without_folder_nor_extension;
+    String  */*the name of the file without the folder path (before it) and without the file extension (after it)*/name_without_folder_nor_extension;
     unsigned int number_of_lines;
     
     File();

@@ -30,6 +30,7 @@
 #include "body.h"
 #include "static_text.h"
 #include "double.h"
+#include "int.h"
 //REMOVE AT THE END IF NOT NEEDED
 
 

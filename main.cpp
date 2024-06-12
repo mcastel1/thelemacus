@@ -16,6 +16,7 @@
 
 
 #include "main.h"
+#include "constants.h"
 #include "catalog.h"
 #include "generic.h"
 #include "double.h"

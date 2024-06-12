@@ -177,3 +177,42 @@ string Chrono::to_string(unsigned int precision, bool time_zone) {
     return (output.str().c_str());
 
 }
+
+
+//return the value of *this expresser in hours
+inline double Chrono::get(void) {
+
+    return(((double)h) + ((double)m) / 60.0 + ((double)s) / (60.0 * 60.0));
+
+}
+
+
+//this function sets (*this) to the current UTC time +- time_zone
+void Chrono::set_current(void) {
+
+    (wxGetApp().local_time) = (boost::posix_time::second_clock::local_time());
+
+    h = ((unsigned int)((wxGetApp().local_time).time_of_day().hours()));
+    m = ((unsigned int)((wxGetApp().local_time).time_of_day().minutes()));
+    s = (wxGetApp().local_time).time_of_day().seconds();
+
+}
+
+
+//print *this to ostr
+void Chrono::print(String name, String prefix, ostream& ostr) {
+
+    unsigned int precision;
+
+    //if I am printing to terminal, I print with display_precision. Otherwise, I print with (data_precision.value)
+    if (ostr.rdbuf() == cout.rdbuf()) {
+        precision = (display_precision.value);
+    }
+    else {
+        precision = (data_precision.value);
+    }
+
+    ostr << prefix.value << (name.value) << " = " << to_string(precision, false) << "\n";
+
+};
+

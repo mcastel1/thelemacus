@@ -9,6 +9,8 @@
 #define angle_h
 
 
+using namespace std;
+
 class Angle{
     
 public:

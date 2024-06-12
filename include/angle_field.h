@@ -5,14 +5,16 @@
 //  Created by Michele on 11/06/2024.
 //
 
+
+
 #ifndef angle_field_h
 #define angle_field_h
 
-//#ifndef WX_PRECOMP
+#ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/app.h"
 #include "wx/artprov.h"
-//#endif
+#endif
 
 //class for graphical object: a field to enter an angle, composed of a box for the sign, a box for the degrees, a degree text symbol, another box for minutes and a minute text symbol
 template<class P> class AngleField{

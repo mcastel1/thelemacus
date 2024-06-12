@@ -10,6 +10,8 @@
 
 #include "file_rw.h"
 
+class FileRW;
+
 using namespace std;
 
 

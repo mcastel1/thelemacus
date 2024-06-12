@@ -236,7 +236,7 @@ void String::write_to_file(String name, FileRW& file, [[maybe_unused]] String pr
 
     //move remove old 'file' and write the content of temp into a new 'file' with the same name
     file.close(prefix);
-    boost::filesystem::remove(file.name.value);
+    boost::filesystem::remove(file.name->value);
     file.open(String("out"), prefix);
     (*(file.value)) << temp.str().c_str();
     file.close(prefix);

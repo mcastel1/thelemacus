@@ -5,8 +5,12 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include <sstream>
+
+
 #include "speed.h"
 #include "constants.h"
+#include "units.h"
 
 
 //constructor of Speed that takes no arguments, and set the unit to the first entry of SpeedUnit_types

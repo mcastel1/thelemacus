@@ -9,6 +9,7 @@
 #define length_h
 
 #include "string.h"
+#include "length_unit.h"
 
 //a non-GUI object containing a Length
 class Length{

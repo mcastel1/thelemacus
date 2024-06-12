@@ -6,6 +6,7 @@
 //
 
 #include "length.h"
+#include "length_unit.h"
 #include "constants.h"
 
 //default constructor, which sets value to 0.0 by default and the unit to the first entry of LengthUnit_types

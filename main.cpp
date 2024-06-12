@@ -20,6 +20,8 @@
 #include "double.h"
 #include "string.h"
 #include "angle.h"
+#include "length.h"
+#include "length_unit.h"
 #include "file.h"
 #include "file_r.h"
 #include "file_rw.h"

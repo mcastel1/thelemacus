@@ -230,18 +230,6 @@ public:
 
 
 
-//a derived class from String, which stores the unit of measuer of Length ("nm", "m", "ft", ...)
-class LengthUnit: public String{
-    
-public:
-
-    LengthUnit();
-    LengthUnit(const String&);
-    
-    bool check();
-    
-};
-
 
 //a derived class from String, which stores the unit of measuer of Speed ("kt", etc...)
 class SpeedUnit: public String{

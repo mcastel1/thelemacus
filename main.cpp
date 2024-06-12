@@ -17,6 +17,7 @@
 
 #include "main.h"
 #include "body_field.h"
+#include "angle_field.h"
 #include "limb_field.h"
 #include "lib.cpp"
 

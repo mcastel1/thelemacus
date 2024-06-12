@@ -9,6 +9,7 @@
 #define angle_h
 
 #include "string.h"
+#include "angle.h"
 
 using namespace std;
 

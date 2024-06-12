@@ -8,7 +8,10 @@
 #ifndef string_h
 #define string_h
 
+#include "file_rw.h"
+
 using namespace std;
+
 
 class String{
     

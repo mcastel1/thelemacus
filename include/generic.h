@@ -1,5 +1,5 @@
-#ifndef length_h
-#define length_h
+#ifndef generic_h
+#define generic_h
 
 #include <wx/listctrl.h>
 

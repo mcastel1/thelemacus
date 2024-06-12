@@ -8,12 +8,12 @@
 #ifndef string_h
 #define string_h
 
-#include "file_rw.h"
 //#ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/app.h"
 #include "wx/artprov.h"
 //#endif
+#include "file_rw.h"
 
 
 class FileRW;

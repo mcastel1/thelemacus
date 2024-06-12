@@ -6,7 +6,7 @@
 //
 
 #include "file_r.h"
-
+#include "constants.h"
 
 
 FileR::FileR() {

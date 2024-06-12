@@ -9,6 +9,7 @@
 #define limb_field_h
 
 #include "limb.h"
+#include "check_limb.h"
 
 
 template<class P> class LimbField{

@@ -8,6 +8,7 @@
 #include "limb_field.h"
 #include "constants.h"
 #include "my_string.h"
+#include "check_limb.h"
 
 
 //constructor of a LimbField object, based on the parent frame frame

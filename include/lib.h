@@ -45,7 +45,6 @@ template<class P> class BodyField;
 template<class P, class NON_GUI, class CHECK> class MultipleItemField;
 template<class P> class ProjectionField;
 template<class P> class LengthFormatField;
-template<class P> class LimbField;
 template<class P> class LengthUnitField;
 template<class P> class SpeedUnitField;
 template<class P, class T> class CheckField;
@@ -742,17 +741,7 @@ public:
 
 
 
-//this checks the value of LimbField
-template<class P> class CheckLimb{
-    
-public:
-    
-    LimbField<P>* p;
-    
-    CheckLimb(LimbField<P>*);
-    template<class T> void operator()(T&);
-    
-};
+
 
 
 template<class P, class T> class CheckCheck{

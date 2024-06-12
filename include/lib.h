@@ -25,6 +25,9 @@
 #include "wx/wx.h"
 #endif
 
+#include "angle.h"
+#include "static_text.h"
+
 //#include "chartdir.h"
 
 

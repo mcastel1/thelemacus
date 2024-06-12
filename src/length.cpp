@@ -718,3 +718,94 @@ inline bool Length::operator < (const Length& r) {
     }
 
 }
+
+
+//evaluates whether Length (*this) is >= r
+inline bool Length::operator >= (const Length& r) {
+
+    return(!((*this) < r));
+
+}
+
+
+//evaluates whether Length (*this) is > than the double r (this supposes that r represents a Length in the same units as this->unit)
+inline bool Length::operator > (const double& r) {
+
+    return((value > r));
+
+}
+
+
+//evaluates whether Length (*this) is >= than the double r (this supposes that r represents a Length in the same units as this->unit)
+inline bool Length::operator >= (const double& r) {
+
+    return(!((*this) < r));
+
+}
+
+
+//evaluates whether Length (*this) is <= than the double r (this supposes that r represents a Length in the same units as this->unit)
+inline bool Length::operator <= (const double& r) {
+
+    return(!((*this) > r));
+
+}
+
+
+//evaluates whether Length (*this) is smaller than the double r (this supposes that r represents a Length in the same units as this->unit)
+inline bool Length::operator < (const double& r) {
+
+    return((value < r));
+
+}
+
+
+//compute the sum between *this and l and return the result in the units of *this
+Length Length::operator + (const Length& l) {
+
+    Length s;
+    
+    s = (*this);
+    s+= l;
+
+    return s;
+
+}
+
+
+//compute the difference between *this and l and return the result in the units of *this
+Length Length::operator - (const Length& l) {
+
+    Length s;
+    
+    s = (*this);
+    s -= l;
+
+    return s;
+
+}
+
+
+//compute the product between *this and the double x (which is interpreted as a dimensinless quantity) and return the result as a Length with the same units as *this
+Length Length::operator * (const double& x) {
+
+    Length s;
+
+    (s.value) = value * x;
+
+    return s;
+
+}
+
+
+//compute the ratio between *this and the double x (which is interpreted as a dimensinless quantity) and return the result as a Length with the same units as *this
+Length Length::operator / (const double& x) {
+
+    Length s;
+
+    (s.value) = value / x;
+
+    return s;
+
+}
+

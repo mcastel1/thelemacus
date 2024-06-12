@@ -716,5 +716,30 @@ void my_cout(int n, ...){
     
 }
 
+
+
+
+bool operator < (const Length& l, const Length& s) {
+    
+    
+    if((l.unit.value) == (s.unit.value)){
+        //l and s have the same units -> just compare their values
+        
+        return(((l.value) < (s.value)));
+        
+    }else{
+        //l and s have different units -> convert l to the units of s and compare
+        
+        Length temp;
+        
+        temp = l;
+        temp.convert_to(s.unit);
+        
+        return((temp.value) < (s.value));
+
+    }
+
+}
+
 #endif
 

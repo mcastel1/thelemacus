@@ -8,6 +8,13 @@
 #ifndef file_rw_h
 #define file_rw_h
 
+#include <cstdio>
+
+#include "file.h"
+#include "string.h"
+
+using namespace std;
+
 
 //a inherited class from File class, for files on disk that can be read and written to
 class FileRW: public File{

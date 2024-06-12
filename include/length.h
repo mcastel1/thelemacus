@@ -8,6 +8,8 @@
 #ifndef length_h
 #define length_h
 
+#include "string.h"
+
 //a non-GUI object containing a Length
 class Length{
     

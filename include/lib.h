@@ -727,18 +727,6 @@ public:
 };
 
 
-//this checks if an element of the BodyField class is valid
-template<class P> class CheckBody{
-    
-public:
-    
-    BodyField<P>* p;
-    
-    CheckBody(BodyField<P>*);
-    template<class T> void operator()(T&);
-    
-    
-};
 
 
 

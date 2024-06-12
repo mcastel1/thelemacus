@@ -11,6 +11,7 @@
 
 #include <vector>
 #include "body.h"
+#include "check_body.h"
 
 using namespace std;
 

@@ -9,6 +9,7 @@
 #define body_h
 
 #include "string.h"
+#include "length.h"
 
 using namespace std;
 

@@ -58,6 +58,7 @@ template<class P> class ChronoField;
 template<class P> class RouteTypeField;
 template<class P> class StringField;
 class MyApp;
+template<class P> class LimbField;
 template<class F> class CloseFrame;
 template<class F> class ShowFrame;
 class ShowAll;

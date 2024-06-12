@@ -20,6 +20,7 @@
 #include "generic.h"
 #include "double.h"
 #include "string.h"
+#include "chrono.h"
 #include "angle.h"
 #include "length.h"
 #include "length_unit.h"

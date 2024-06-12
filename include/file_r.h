@@ -8,6 +8,10 @@
 #ifndef file_r_h
 #define file_r_h
 
+#include <fstream>
+
+using namespace std;
+
 //an inherited class from File class, for files that can be read only
 class FileR: public File{
     

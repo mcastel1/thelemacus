@@ -16,6 +16,7 @@
 
 
 #include "main.h"
+#include "string.h"
 #include "angle.h"
 #include "angle_field.h"
 #include "static_text.h"

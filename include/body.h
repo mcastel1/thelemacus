@@ -8,6 +8,8 @@
 #ifndef body_h
 #define body_h
 
+#include "string.h"
+
 using namespace std;
 
 class Body{

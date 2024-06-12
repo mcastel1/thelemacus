@@ -33,7 +33,7 @@ void FileR::set_name(String input) {
     //I am on APPLE -> input = [full file path] -> I set name, folder, name_without_folder_nor_extension and extension
 
     (name.value) = (input.value);
-    name.split_file_path(&folder, &name_without_folder_nor_extension, &extension, String(""));
+    name.split_file_path(&folder, name_without_folder_nor_extension, &extension, String(""));
 
 #endif
 
@@ -224,6 +224,6 @@ void FileR::count_lines(String prefix) {
     number_of_lines = ((unsigned int)count(istreambuf_iterator<char>((*(temp.value))), istreambuf_iterator<char>(), '\n'));
     temp.close(prefix);
 
-    cout << prefix.value << "Number of lines in file " << (name_without_folder_nor_extension.value) << " = " << number_of_lines << "\n";
+    cout << prefix.value << "Number of lines in file " << (name_without_folder_nor_extension->value) << " = " << number_of_lines << "\n";
 
 }

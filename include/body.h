@@ -8,7 +8,7 @@
 #ifndef body_h
 #define body_h
 
-#include "string.h"
+#include "my_string.h"
 #include "length.h"
 #include "angle.h"
 #include "catalog.h"

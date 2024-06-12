@@ -8,7 +8,7 @@
 #ifndef angle_h
 #define angle_h
 
-#include "string.h"
+#include "my_string.h"
 
 using namespace std;
 

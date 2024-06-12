@@ -18,7 +18,7 @@
 
 #include "static_text.h"
 #include "angle.h"
-#include "string.h"
+#include "my_string.h"
 #include "check_angle.h"
 
 //this pre-declatation of the class CheckAngle is necessary because class CheckAngle and AngleField are intertwined

@@ -19,7 +19,7 @@
 #include "catalog.h"
 #include "generic.h"
 #include "double.h"
-#include "string.h"
+#include "my_string.h"
 #include "chrono.h"
 #include "angle.h"
 #include "length.h"

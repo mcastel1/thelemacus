@@ -9,7 +9,7 @@
 #define file_h
 
 
-#include "string.h"
+#include "my_string.h"
 
 class String;
 

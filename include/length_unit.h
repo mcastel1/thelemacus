@@ -8,8 +8,8 @@
 #ifndef length_unit_h
 #define length_unit_h
 
+#include "my_string.h"
 
-#include "string.h"
 
 //a derived class from String, which stores the unit of measuer of Length ("nm", "m", "ft", ...)
 class LengthUnit: public String{

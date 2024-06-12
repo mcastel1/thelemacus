@@ -8,7 +8,7 @@
 #ifndef speed_h
 #define speed_h
 
-#include "string.h"
+#include "my_string.h"
 #include "speed_unit.h"
 
 

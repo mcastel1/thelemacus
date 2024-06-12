@@ -10,6 +10,8 @@
 
 #include <fstream>
 
+#include "file.h"
+
 using namespace std;
 
 //an inherited class from File class, for files that can be read only

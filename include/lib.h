@@ -543,17 +543,7 @@ void enter_double(double* x, bool check_interval, double min, double sup, String
     
 }
 
-//a general class for File objects
-class File{
-    
-public:
-    
-    String  /*the name of the file without the folder path (before it) and without the file extension (after it)*/name_without_folder_nor_extension;
-    unsigned int number_of_lines;
-    
-    File();
-    
-};
+
 
 //a inherited class from File class, for files on disk that can be read and written to
 class FileRW: public File{

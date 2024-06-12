@@ -4,6 +4,9 @@
 
 
 //example of variadic function: it takes a non-variadic argument n and then an arbitrary number of arguments `...`
+
+using namespace std;
+
 void my_cout(int n, ...){
     
     unsigned int i;
@@ -513,14 +516,6 @@ bool Int::operator > (const int& i) {
 }
 
 
-File::File() {
-
-    //    //allocate value
-    //    value = new fstream;
-    //    
-    //    value->precision((data_precision.value));
-
-}
 
 
 FileRW::FileRW() {

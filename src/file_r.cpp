@@ -224,6 +224,6 @@ void FileR::count_lines(String prefix) {
     number_of_lines = ((unsigned int)count(istreambuf_iterator<char>((*(temp.value))), istreambuf_iterator<char>(), '\n'));
     temp.close(prefix);
 
-    cout << prefix.value << "Number of lines in file " << (name_without_folder_nor_extension.value) << " = " << number_of_lines << "\n";
+    cout << prefix.value << "Number of lines in file " << (name_without_folder_nor_extension->value) << " = " << number_of_lines << "\n";
 
 }

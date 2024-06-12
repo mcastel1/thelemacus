@@ -6,6 +6,7 @@
 //
 
 #include "catalog.h"
+#include "generic.h"
 
 Catalog::Catalog(String filename, [[maybe_unused]] String prefix) {
 

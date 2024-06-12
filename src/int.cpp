@@ -116,3 +116,60 @@ bool Int::operator > (const int& i) {
 
 
 
+//reads an Int from File file, which must be already open, and it search the file from the beginning if search_entire_stream = true, does not search the file from the beginning otherwise. Writes the result in *this
+template<class S> void Int::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool search_entire_stream, [[maybe_unused]] String prefix) {
+
+    string line;
+    size_t pos;
+
+    cout << prefix.value << YELLOW << "Reading " << name.value << " from stream " << input_stream << " ...\n" << RESET;
+
+    if (search_entire_stream) {
+
+        //rewind the file pointer
+        input_stream->clear();                 // clear fail and eof bits
+        input_stream->seekg(0, std::ios::beg); // back to the start!
+
+        do {
+
+            line.clear();
+            getline((*input_stream), line);
+
+        } while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
+
+
+    }
+    else {
+
+        line.clear();
+        getline((*input_stream), line);
+
+    }
+
+
+    pos = line.find(" = ");
+
+    //read the string after ' = ' until the end of line string and store it into value
+    value = stoi(line.substr(pos + 3, line.size() - (pos + 3)).c_str(), NULL);
+
+    cout << prefix.value << YELLOW << "... done.\n" << RESET;
+
+    print(name, prefix, cout);
+
+
+}
+
+//reads from file the content after 'name = ' and writes it into *this.
+//if mode = 'RW' ('R') it reads form a FileRW (FileR)
+void Int::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
+
+    read_from_file<Int>(this, name, filename, mode, prefix);
+
+}
+
+
+void Int::print(String name, String prefix, ostream& ostr) {
+
+    ostr << prefix.value << name.value << " = " << value << "\n";
+
+}

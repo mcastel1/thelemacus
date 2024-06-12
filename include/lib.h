@@ -31,6 +31,9 @@
 #include "static_text.h"
 #include "double.h"
 #include "int.h"
+#include "file.h"
+#include "file_r.h"
+#include "file_rw.h"
 //REMOVE AT THE END IF NOT NEEDED
 
 

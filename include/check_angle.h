@@ -10,6 +10,9 @@
 
 #include "angle_field.h"
 
+//this pre-declatation of the class AngleField is necessary because class CheckAngle and AngleField are intertwined
+template<class P> class AngleField;
+
 
 template<class P> class CheckAngle{
     

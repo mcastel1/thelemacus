@@ -14571,28 +14571,7 @@ template<class P> template<class T> void StringField<P>::get(T& event) {
 
 }
 
-template<class P> CheckAngle<P>::CheckAngle(AngleField<P>* p_in) {
 
-    p = p_in;
-
-    check_sign = new CheckSign<P>(p);
-    check_arc_degree = new CheckArcDegree<P>(p);
-    check_arc_minute = new CheckArcMinute<P>(p);
-
-}
-
-//this functor checks the whole angle field by calling the check on its sign, arcdegree and arcminute parts‰
-template<class P> template <class T> void CheckAngle<P>::operator()(T& event) {
-
-    //    if((p->format) != String("")){
-    (*check_sign)(event);
-    //    }
-    (*check_arc_degree)(event);
-    (*check_arc_minute)(event);
-
-    event.Skip(true);
-
-}
 
 
 template<class NON_GUI, class P> ToDoAtEndOfTransport<NON_GUI, P>::ToDoAtEndOfTransport(NON_GUI* object_a_in, NON_GUI* object_b_in, P* parent_in){

@@ -970,21 +970,6 @@ public:
 };
 
 
-template<class P> class CheckAngle{
-    
-public:
-    
-    //p is the AngleField which is parent of the CheckAngle object: the CheckAngle object checks the validity of the entries in AngleField
-    AngleField<P>* p;
-    CheckSign<P>* check_sign;
-    CheckArcDegree<P>* check_arc_degree;
-    CheckArcMinute<P>* check_arc_minute;
-    
-    CheckAngle(AngleField<P>*);
-    template <class T> void operator()(T&);
-    
-};
-
 
 //this functor does all the necessary tasks to be done at the end of an animated transporty: sets the non-GUI object *object_a  (for example, a Position, Route...) of type NON_GUI equal to *object_b, sets and redraws everything in the parent of type P, ...
 template<class NON_GUI, class P> class ToDoAtEndOfTransport{

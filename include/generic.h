@@ -1,6 +1,9 @@
 #ifndef length_h
 #define length_h
 
+#include "gsl_math.h"
+
+
 
 inline double cot(double x){
     

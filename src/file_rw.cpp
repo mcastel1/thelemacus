@@ -26,8 +26,8 @@ FileRW::FileRW() {
 //set the full path of the file and write it into name
 void FileRW::set_name(String path) {
 
-    (name.value) = (path.value);
-    name.split_file_path(&folder, &name_without_folder_nor_extension, &extension, String(""));
+    (name->value) = (path.value);
+    name->split_file_path(&folder, &name_without_folder_nor_extension, &extension, String(""));
 
 }
 
@@ -35,17 +35,17 @@ void FileRW::set_name(String path) {
 bool FileRW::open(String mode, [[maybe_unused]] String prefix) {
 
     if (mode == String("in")) {
-        value->open(name.value, ios::in);
+        value->open(name->value, ios::in);
     }
     else {
-        value->open(name.value, ios::out);
+        value->open(name->value, ios::out);
     }
 
-    cout << prefix.value << "Opening " << (name.value) << " in mode '" << mode.value << "' ... \n";
+    cout << prefix.value << "Opening " << (name->value) << " in mode '" << mode.value << "' ... \n";
 
     if (!value) {
 
-        cout << prefix.value << RED << "... error opening file " << (name.value) << "!\n" << RESET;
+        cout << prefix.value << RED << "... error opening file " << (name->value) << "!\n" << RESET;
         return false;
 
     }
@@ -61,16 +61,16 @@ bool FileRW::open(String mode, [[maybe_unused]] String prefix) {
 void FileRW::close(String prefix) {
 
     value->close();
-    cout << prefix.value << "File " << (name.value) << " closed.\n";
+    cout << prefix.value << "File " << (name->value) << " closed.\n";
 
 }
 
 //delete file *this from disk
 void FileRW::remove(String prefix) {
 
-    boost::filesystem::remove(name.value);
+    boost::filesystem::remove(name->value);
 
-    cout << prefix.value << "File " << name.value << " removed\n";
+    cout << prefix.value << "File " << name->value << " removed\n";
 
 }
 

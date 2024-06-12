@@ -8,8 +8,7 @@
 #ifndef chrono_h
 #define chrono_h
 
-
-#include "string.h"
+#include "my_string.h"
 
 using namespace std;
 

@@ -7,7 +7,7 @@
 
 #include "limb_field.h"
 #include "constants.h"
-#include "string.h"
+#include "my_string.h"
 
 //constructor of a LimbField object, based on the parent frame frame
 template<class P> LimbField<P>::LimbField(wxPanel* panel_of_parent, Limb* p) {

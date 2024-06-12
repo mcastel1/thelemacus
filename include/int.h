@@ -9,7 +9,7 @@
 #define int_h
 
 
-#include "string.h"
+#include "my_string.h"
 
 class Int{
     

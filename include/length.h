@@ -8,8 +8,7 @@
 #ifndef length_h
 #define length_h
 
-
-#include "string.h"
+#include "my_string.h"
 #include "length_unit.h"
 #include "chrono.h"
 #include "speed.h"

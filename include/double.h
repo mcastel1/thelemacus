@@ -8,7 +8,7 @@
 #ifndef double_h
 #define double_h
 
-#include "string.h"
+#include "my_string.h"
 
 class Double{
     

@@ -5,12 +5,12 @@
 //  Created by Michele on 11/06/2024.
 //
 
-#include "string.h"
 #include <sstream>
-#include "generic.h"
+
 #include <boost/filesystem.hpp>
 
-
+#include "generic.h"
+#include "my_string.h"
 
 //default constructor, which sets value to an empty string by default
 String::String() {

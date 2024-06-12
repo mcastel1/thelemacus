@@ -11,7 +11,8 @@
 #include <cstdio>
 
 #include <fstream>
-#include "string.h"
+
+#include "my_string.h"
 #include "file.h"
 
 //need forward declaratin of class String because class FileRW and String are intertwined.

@@ -524,16 +524,6 @@ public:
 
 
 
-class Limb{
-    
-public:
-    char value;
-    void print(String, String, ostream&);
-    template<class S> void read_from_stream(String, S*, bool, String);
-    
-    bool operator==(const Limb&);
-    
-};
 
 
 class Sight{

@@ -10,6 +10,7 @@
 
 #include <cstdio>
 
+#include <fstream>
 #include "string.h"
 #include "file.h"
 

@@ -16,6 +16,7 @@
 
 
 #include "main.h"
+#include "generic.h"
 #include "string.h"
 #include "angle.h"
 #include "file.h"

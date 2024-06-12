@@ -1,5 +1,5 @@
-#ifndef angle_h
-#define angle_h
+#ifndef constants_h
+#define constants_h
 
 #include "int.h"
 #include "double.h"

@@ -10,6 +10,7 @@
 
 #include "string.h"
 #include "length.h"
+#include "angle.h"
 
 using namespace std;
 

@@ -11,6 +11,7 @@
 #include "string.h"
 #include "length.h"
 #include "angle.h"
+#include "catalog.h"
 
 using namespace std;
 

@@ -6,7 +6,7 @@
 //
 
 #include "chrono.h"
-
+#include "generic.h"
 
 
 bool Chrono::operator==(const Chrono& chrono) {

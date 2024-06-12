@@ -15,6 +15,7 @@
 #include "boost/date_time/local_time/local_time.hpp"
 
 
+#include "constants.h"
 #include "double.h"
 #include "file_rw.h"
 

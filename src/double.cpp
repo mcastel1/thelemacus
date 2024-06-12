@@ -6,6 +6,8 @@
 //
 
 #include "double.h"
+#include "constants.h"
+#include "generic.h"
 #include <cstdint>
 
 

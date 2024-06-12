@@ -8,7 +8,11 @@
 #ifndef file_h
 #define file_h
 
+class String;
+
+
 #include "string.h"
+
 
 //a general class for File objects
 class File{

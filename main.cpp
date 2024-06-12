@@ -25,7 +25,6 @@
 #include "body.h"
 #include "body_field.h"
 #include "limb_field.h"
-//#include "src/lib.cpp"
 #include "check_angle.h"
 
 

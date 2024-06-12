@@ -8,6 +8,8 @@
 #ifndef check_angle_h
 #define check_angle_h
 
+#include "angle_field.h"
+
 
 template<class P> class CheckAngle{
     

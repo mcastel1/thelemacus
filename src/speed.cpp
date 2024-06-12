@@ -6,6 +6,7 @@
 //
 
 #include "speed.h"
+#include "constants.h"
 
 
 //constructor of Speed that takes no arguments, and set the unit to the first entry of SpeedUnit_types

@@ -9,6 +9,10 @@
 #define chrono_h
 
 
+#include "string.h"
+
+using namespace std;
+
 class Chrono{
     
 public:

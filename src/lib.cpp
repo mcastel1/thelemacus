@@ -7,23 +7,7 @@
 
 using namespace std;
 
-void my_cout(int n, ...){
-    
-    unsigned int i;
-    va_list args;
-    
-    va_start(args, n);
-    
-    for(i=0; i<n; ++i){
-        
-        cout << "read argument = " << va_arg(args, int) << endl;
-        
-    }
 
-    va_end(args);
-
-    
-}
 
 
 

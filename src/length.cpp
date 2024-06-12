@@ -7,9 +7,9 @@
 
 #include <sstream>
 
-#include "generic.h"
 #include "length.h"
 #include "length_unit.h"
+#include "generic.h"
 #include "constants.h"
 #include "units.h"
 

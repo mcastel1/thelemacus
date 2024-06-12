@@ -255,29 +255,6 @@ public:
 //};
 
 
-class Speed{
-    
-public:
-    
-    //the value of the Speed
-    double value;
-    //the unit of measure of the Speed
-    SpeedUnit unit;
-
-    
-    Speed();
-    Speed(double);
-    Speed(double, const SpeedUnit&);
-    
-    void set(double);
-    void set(double, const SpeedUnit&);
-    void set(String, double, String);
-    void print(String, String, String, ostream&);
-    template<class S> void read_from_stream(String, S*, bool, String);
-    void print(String, String, ostream&);
-    
-};
-
 
 class Answer{
     

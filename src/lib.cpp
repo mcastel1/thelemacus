@@ -452,18 +452,6 @@ void DeletePosition::operator()(wxCommandEvent& event) {
 }
 
 
-//set *this to the current time
-void String::set_to_current_time(void) {
-
-    Time now;
-
-    now.set_current();
-    //I write in the non-GUI object *this
-
-    set(String("String set to current time"), String(now.to_string(data_precision.value, true)), String(""));
-
-}
-
 
 
 template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operator()(T& event) {

@@ -388,3 +388,16 @@ String String::filename_without_folder_nor_extension([[maybe_unused]] String pre
 
 }
 
+
+
+//set *this to the current time
+void String::set_to_current_time(void) {
+
+    Time now;
+
+    now.set_current();
+    //I write in the non-GUI object *this
+
+    set(String("String set to current time"), String(now.to_string(data_precision.value, true)), String(""));
+
+}

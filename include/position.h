@@ -14,9 +14,11 @@
 #include "angle.h"
 #include "cartesian.h"
 #include "draw_panel.h"
+#include "rotation.h"
 
 class DrawPanel;
 class Cartesian;
+class Rotation;
 
 //a geographic Position
 class Position{

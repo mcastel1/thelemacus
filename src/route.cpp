@@ -6,7 +6,8 @@
 //
 
 #include "route.h"
-
+#include "generic.h"
+#include "constants.h"
 
 
 //construct a brand new Route object and thus sets its related sight to -1, because this Route is not related to any sight yet. length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v

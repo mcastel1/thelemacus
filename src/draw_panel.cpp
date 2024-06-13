@@ -5,6 +5,10 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include "gsl_math.h"
+
+
+#include "wx/wxprec.h"
 #include <wx/dcclient.h>
 
 

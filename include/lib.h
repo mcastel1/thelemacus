@@ -267,30 +267,6 @@ public:
 };
 
 
-//this class denotes a rigid rotation R_z(c).R_x(-b).R_z(a) with Euler angles a, b, c
-class Rotation{
-    
-public:
-    
-    //R[3*i+j] is the element of the j-th column, i-th row of the rotation matrix of this
-    Angle a, b, c;
-    gsl_matrix* matrix;
-    
-    Rotation();
-    Rotation(Angle, Angle, Angle);
-    Rotation(Position, Position);
-    
-    Rotation inverse(void);
-    void set(Angle, Angle, Angle);
-    void set(gsl_matrix*);
-    void set(const Rotation&);
-    void print(String, String, ostream&);
-    template<class S> void read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String, String);
-    
-    Rotation operator *(const Rotation&);
-
-};
 
 //this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
 inline double lambda_mercator(double x){

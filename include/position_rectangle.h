@@ -9,8 +9,10 @@
 #define position_rectangle_h
 
 #include "position.h"
+#include "position_projection.h"
 
 class Position;
+class PositionProjection;
 
 
 //this class defines a 'rectangular' area on the Eearth's surface: it is a rectangle with vertices p_NW, p_SE in the Mercator projection

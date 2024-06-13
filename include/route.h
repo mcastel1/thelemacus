@@ -12,6 +12,8 @@
 #include "position.h"
 #include "draw_panel.h"
 
+class Position;
+
 //if type = l or o, the parameters specifying the route are reference_position (which in this case is the start position of the Route), alpha, l. if type = c, the parameters specifying the route are reference_position (which in this case is the GP of the circle of equal altitude) and omega.
 class Route{
     
@@ -21,7 +23,7 @@ public:
     //the length of the Route is expressed as the length l (if length_format.value == "length"), or as the product of the Speed v and the time t (if length_format.value == "time and speed")
     LengthFormat length_format;
     //if type = l or o -> reference_position = start position, if type = c -> reference_position = ground position
-    Position reference_position, end;
+    Position *reference_position, *end;
     //alpha: the angle that the vector tangent to the route describes with the local meridian at start; omega: the aperture angle of the cone for circles of equal altitude
     Angle /*this is equal to alpha_notes: it is the azimuth of the vector tangent to the Route at reference_position*/Z, /*the aprture angle, valid only if *this is a circle of equal altitude*/omega;
     //the length of the route

@@ -15,12 +15,19 @@ Route::Route(void) {
 
     related_sight.set(-1);
     length_format.set((LengthFormat_types[1]));
+    
+    reference_position = new Position;
+    end = new Position;
 
 }
 
 //constructs a brand new Route. where lengths are written in time * speed than in l. The route type is either ((Route_types[0]).value) or ((Route_types[1]).value) and thus set its related sight to -1, because this Route cannot be related to any sight.
 Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Chrono time_in, Speed speed_in) {
+
+    reference_position = new Position;
+    end = new Position;
     
+
     length_format.set((LengthFormat_types[0]));
     type = type_in;
     
@@ -28,7 +35,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Chro
     speed = speed_in;
     set_length_from_time_speed();
     
-    reference_position = reference_position_in;
+    (*reference_position) = reference_position_in;
     Z = Z_in;
     related_sight.set(-1);
 
@@ -37,6 +44,10 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Chro
 
 //constructs a brand new Route. where lengths are written as a simple length rather than as time * speed. The route type is either ((Route_types[0]).value) or ((Route_types[1]).value) and thus set its related sight to -1, because this Route cannot be related to any sight.
 Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Length l_in) {
+    
+    reference_position = new Position;
+    end = new Position;
+  
 
     length_format.set((LengthFormat_types[1]));
     type = type_in;
@@ -44,7 +55,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
     length = l_in;
     length.convert_to(LengthUnit_types[0]);
     
-    reference_position = reference_position_in;
+    (*reference_position) = reference_position_in;
     Z = Z_in;
     related_sight.set(-1);
 
@@ -54,9 +65,13 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
 //build a Route of type type that connects position_start and position_end
 Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
     
+    reference_position = new Position;
+    end = new Position;
+  
+    
     type = type_in;
     
-    reference_position = p_start;
+    (*reference_position) = p_start;
     (length_format.value) = ((LengthFormat_types[1]).value);
     
     switch (type.position_in_list(Route_types)) {
@@ -168,6 +183,10 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
 //construct a brand new Route object of type ((Route_types[2]).value) and thus sets its related sight to -1, because this Route is not related to any sight yet.  length_format_t_v is set to false: as the Route is created, lengths are written in l rather than in t and v
 Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) {
 
+    reference_position = new Position;
+    end = new Position;
+  
+    
     type = type_in;
     reference_position = reference_position_in;
     omega = omega_in;

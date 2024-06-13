@@ -15,10 +15,12 @@
 #include "cartesian.h"
 #include "draw_panel.h"
 #include "rotation.h"
+#include "route.h"
 
 class DrawPanel;
 class Cartesian;
 class Rotation;
+class Route;
 
 //a geographic Position
 class Position{

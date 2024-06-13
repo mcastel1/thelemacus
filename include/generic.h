@@ -798,3 +798,28 @@ bool operator < (const Angle& x, const double& y) {
 
 }
 
+
+
+//this function adjusts the width of a wxComboBox according to its largest entry
+void AdjustWidth(wxComboBox* control) {
+
+    unsigned int i;
+    int max_width, width, additional;
+
+    //this is the additional width occupied by the sqare with the arrow
+    control->GetTextExtent(wxString("-----"), &additional, NULL);
+
+    for (max_width = 0, i = 0; i < (control->GetCount()); i++) {
+
+        control->GetTextExtent(control->GetString(i), &width, NULL);
+
+        if (width > max_width) {
+            max_width = width;
+        }
+
+    }
+
+    control->SetMinSize(wxSize(max_width + additional, -1));
+
+}
+

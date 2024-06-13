@@ -800,30 +800,6 @@ void Time::set_current(void) {
 }
 
 
-//this function adjusts the width of a wxComboBox according to its largest entry
-void AdjustWidth(wxComboBox* control) {
-
-    unsigned int i;
-    int max_width, width, additional;
-
-    //this is the additional width occupied by the sqare with the arrow
-    control->GetTextExtent(wxString("-----"), &additional, NULL);
-
-    for (max_width = 0, i = 0; i < (control->GetCount()); i++) {
-
-        control->GetTextExtent(control->GetString(i), &width, NULL);
-
-        if (width > max_width) {
-            max_width = width;
-        }
-
-    }
-
-    control->SetMinSize(wxSize(max_width + additional, -1));
-
-}
-
-
 //construct a StaticBitmap object by assignign to it the parent parent, loading it from path path and rescaling it to size
 StaticBitmap::StaticBitmap(wxWindow* parent, String path, [[maybe_unused]] wxSize size) : wxStaticBitmap(parent, wxID_ANY, wxNullBitmap) {
 

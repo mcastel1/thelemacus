@@ -1181,26 +1181,6 @@ public:
 
 
 
-//this class is for a GUI field including a length
-template<class P> class LengthField{
-    
-public:
-    
-    //the parent frame to which this object is attached
-    P* parent;
-    //unit of measure of the Length written in *this
-    LengthUnitField<P>* unit;
-    wxBoxSizer *sizer_h, *sizer_v;
-    Length* length;
-
-    LengthField(wxPanel*, Length*);
-    
-    template<class E> void OnEditUnit(E&);
-    template<class T> void InsertIn(T*);
-    template<class T> void InsertIn(T*, wxSizerFlags&);
-    
-};
-
 
 //an editable GUI field to enter a Length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the DynamicLengthField object
 template<class P> class DynamicLengthField: public LengthField<P>{

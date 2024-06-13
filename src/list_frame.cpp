@@ -517,7 +517,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             file_is_untitled = false;
             menu_file->Enable(wxID_HIGHEST + 7, true);
             set();
-            SetLabel(data_file.name.value);
+            SetLabel(data_file.name->value);
             PreRenderAll();
 
         }
@@ -1366,7 +1366,7 @@ void ListFrame::OnModifyFile(void) {
 void ListFrame::OnSaveFile(void) {
 
     //set back the label of *this to the filename
-    SetLabel(wxString((data_file.name).value));
+    SetLabel(wxString(data_file.name->value));
 
     file_is_untitled = false;
     file_has_been_modified = false;
@@ -1403,7 +1403,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event) {
             //load the data in data into the GUI fields of *this
             set();
             //change the title of *this to the filename
-            SetLabel(wxString((data_file.name).value));
+            SetLabel(wxString(data_file.name->value));
             //resize and draw all charts according to the newly loaded data
             Resize();
             PreRenderAll();

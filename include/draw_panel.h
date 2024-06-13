@@ -9,6 +9,8 @@
 #define draw_panel_h
 
 #include <wx/gdicmn.h>
+#include <wx/mstream.h>
+
 
 
 
@@ -18,6 +20,9 @@
 #include "my_app.h"
 #include "cartesian.h"
 #include "route.h"
+#include "chart_frame.h"
+#include "unset_idling.h"
+#include "rotation.h"
 
 
 class DrawPanel : public wxPanel{

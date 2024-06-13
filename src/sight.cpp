@@ -705,24 +705,24 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 cout << new_prefix.value << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
             }
 
-            if (gsl_spline_eval_e(interpolation_GHA, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((((*circle_of_equal_altitude).reference_position).lambda).value)) != GSL_SUCCESS) {
+            if (gsl_spline_eval_e(interpolation_GHA, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((circle_of_equal_altitude->reference_position->lambda).value)) != GSL_SUCCESS) {
                 check &= false;
             }
             else {
-                (((*circle_of_equal_altitude).reference_position).lambda).normalize();
-                (((*circle_of_equal_altitude).reference_position).lambda).print(String("GHA"), new_prefix, cout);
+                (circle_of_equal_altitude->reference_position->lambda).normalize();
+                (circle_of_equal_altitude->reference_position->lambda).print(String("GHA"), new_prefix, cout);
             }
-            //(((*circle_of_equal_altitude).reference_position).lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
+            //(circle_of_equal_altitude->reference_position->lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
 
-            if (gsl_spline_eval_e(interpolation_d, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((((*circle_of_equal_altitude).reference_position).phi).value)) != GSL_SUCCESS) {
+            if (gsl_spline_eval_e(interpolation_d, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((circle_of_equal_altitude->reference_position->phi).value)) != GSL_SUCCESS) {
                 check &= false;
             }
             else {
-                (((*circle_of_equal_altitude).reference_position).phi).normalize();
-                (((*circle_of_equal_altitude).reference_position).phi).print(String("d"), new_prefix, cout);
+                (circle_of_equal_altitude->reference_position->phi).normalize();
+                (circle_of_equal_altitude->reference_position->phi).print(String("d"), new_prefix, cout);
             }
-            //(((*circle_of_equal_altitude).reference_position).phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
+            //(circle_of_equal_altitude->reference_position->phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
             if (gsl_spline_eval_e(interpolation_r, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &(r.value)) != GSL_SUCCESS) {
                 check &= false;
@@ -796,26 +796,26 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
             if (gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)N) != GSL_SUCCESS) { check &= false; }
 
 
-            if (gsl_spline_eval_e(interpolation_GHA, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((((*circle_of_equal_altitude).reference_position).lambda).value)) != GSL_SUCCESS) {
+            if (gsl_spline_eval_e(interpolation_GHA, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((circle_of_equal_altitude->reference_position->lambda).value)) != GSL_SUCCESS) {
                 check &= false;
             }
             else {
-                (((*circle_of_equal_altitude).reference_position).lambda).normalize();
-                (((*circle_of_equal_altitude).reference_position).lambda).print(String("GHA"), new_prefix, cout);
+                (circle_of_equal_altitude->reference_position->lambda).normalize();
+                (circle_of_equal_altitude->reference_position->lambda).print(String("GHA"), new_prefix, cout);
             }
 
-            if (gsl_spline_eval_e(interpolation_d, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((((*circle_of_equal_altitude).reference_position).phi).value)) != GSL_SUCCESS) {
+            if (gsl_spline_eval_e(interpolation_d, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((circle_of_equal_altitude->reference_position->phi).value)) != GSL_SUCCESS) {
                 check &= false;
             }
             else {
-                (((*circle_of_equal_altitude).reference_position).phi).normalize();
-                (((*circle_of_equal_altitude).reference_position).phi).print(String("d"), new_prefix, cout);
+                (circle_of_equal_altitude->reference_position->phi).normalize();
+                (circle_of_equal_altitude->reference_position->phi).print(String("d"), new_prefix, cout);
             }
 
         }
 
         //set the length of the circle of equal altitude
-        //(*circle_of_equal_altitude).l.set(String("length of circle of equal altitude"), 2.0*M_PI*Re*sin((*circle_of_equal_altitude).omega.value), new_prefix);
+        //circle_of_equal_altitude->l.set(String("length of circle of equal altitude"), 2.0*M_PI*Re*sin(circle_of_equal_altitude->omega.value), new_prefix);
 
     }
     else {

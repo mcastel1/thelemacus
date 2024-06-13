@@ -1563,7 +1563,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
     route.Z.set(0.0);
-    (route.reference_position.phi) = ((parent->phi_min));
+    (route.reference_position->phi) = ((parent->phi_min));
 
     //draw the first chunk of intermediate ticks on the longitude axis
     if (gamma_lambda != 1) {
@@ -1571,9 +1571,9 @@ inline void DrawPanel::PreRenderMercator(void) {
         route.length.set(Re * (wxGetApp().tick_length_over_width_plot_area.value) * phi_span, LengthUnit_types[0]);
 
         //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-        for ((route.reference_position.lambda.value) = (lambda_start.value) - delta_lambda;
-            (route.reference_position.lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
-            (route.reference_position.lambda.value) += delta_lambda_minor) {
+        for ((route.reference_position->lambda.value) = (lambda_start.value) - delta_lambda;
+            (route.reference_position->lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
+            (route.reference_position->lambda.value) += delta_lambda_minor) {
 
             //            ticks_now.push_back(route);
             ticks_now.resize((ticks_now.size()) + 1);
@@ -1587,9 +1587,9 @@ inline void DrawPanel::PreRenderMercator(void) {
 
 
     for (route.length.set(Re* ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), LengthUnit_types[0]),
-        (route.reference_position.lambda.value) = (lambda_start.value);
-        (route.reference_position.lambda.value) < (lambda_end.value);
-        (route.reference_position.lambda.value) += delta_lambda) {
+        (route.reference_position->lambda.value) = (lambda_start.value);
+        (route.reference_position->lambda.value) < (lambda_end.value);
+        (route.reference_position->lambda.value) += delta_lambda) {
 
         //add the current meridian that is being drawn (route) to meridians_now
 //        grid_now.push_back(route);
@@ -1600,13 +1600,13 @@ inline void DrawPanel::PreRenderMercator(void) {
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis
 
-            (lambda_saved.value) = (route.reference_position.lambda.value);
+            (lambda_saved.value) = (route.reference_position->lambda.value);
             route.length.set(Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, LengthUnit_types[0]);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-            for ((route.reference_position.lambda.value) = (lambda_saved.value);
-                (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
-                (route.reference_position.lambda.value) += delta_lambda_minor) {
+            for ((route.reference_position->lambda.value) = (lambda_saved.value);
+                (route.reference_position->lambda.value) - (lambda_saved.value) < delta_lambda;
+                (route.reference_position->lambda.value) += delta_lambda_minor) {
 
                 //                ticks_now.push_back(route);
                 ticks_now.resize((ticks_now.size()) + 1);
@@ -1615,7 +1615,7 @@ inline void DrawPanel::PreRenderMercator(void) {
             }
 
             route.length.set(Re * ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), LengthUnit_types[0]);
-            (route.reference_position.lambda.value) = (lambda_saved.value);
+            (route.reference_position->lambda.value) = (lambda_saved.value);
 
         }
 
@@ -1625,7 +1625,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     route.type.set(String(((Route_types[0]).value)));
     route.Z.set(M_PI_2);
-    (route.reference_position.lambda) = (parent->lambda_min);
+    (route.reference_position->lambda) = (parent->lambda_min);
 
     //this loop runs over the latitude of the parallel, which we call phi
     for ((phi.value) = (phi_start.value);
@@ -1633,8 +1633,8 @@ inline void DrawPanel::PreRenderMercator(void) {
         (phi.value) += delta_phi
         ) {
 
-        //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
-        (route.reference_position.phi) = phi;
+        //route.omega  and route.reference_position->phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
+        (route.reference_position->phi) = phi;
         route.length.set(
             Re * cos(phi) * ((
 
@@ -1656,9 +1656,9 @@ inline void DrawPanel::PreRenderMercator(void) {
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for (
-                (route.reference_position.phi.value) = (phi.value);
-                (route.reference_position.phi.value) - (phi.value) < delta_phi;
-                (route.reference_position.phi.value) += delta_phi_minor
+                (route.reference_position->phi.value) = (phi.value);
+                (route.reference_position->phi.value) - (phi.value) < delta_phi;
+                (route.reference_position->phi.value) += delta_phi_minor
                 ) {
 
                 //                    ticks_now.push_back(route);
@@ -1927,11 +1927,11 @@ inline void DrawPanel::PreRender3D(void) {
     route.type.set(String(((Route_types[1]).value)));
     route.length.set(Re * M_PI, LengthUnit_types[0]);
     route.Z.set(0.0);
-    (route.reference_position.phi) = -M_PI_2;
+    (route.reference_position->phi) = -M_PI_2;
 
-    for ((route.reference_position.lambda.value) = (lambda_start.value);
-        (route.reference_position.lambda.value) < (lambda_end.value);
-        (route.reference_position.lambda.value) += delta_lambda) {
+    for ((route.reference_position->lambda.value) = (lambda_start.value);
+        (route.reference_position->lambda.value) < (lambda_end.value);
+        (route.reference_position->lambda.value) += delta_lambda) {
 
         //add the current meridian that is being drawn (route) to meridians
         //        grid_now.push_back(route);
@@ -1942,18 +1942,18 @@ inline void DrawPanel::PreRender3D(void) {
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
 
-            (lambda_saved.value) = (route.reference_position.lambda.value);
+            (lambda_saved.value) = (route.reference_position->lambda.value);
             phi_saved = ((route.reference_position).phi);
             Z_saved = (route.Z);
 
             route.Z.set(0.0);
             route.length.set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer.omega.value)), LengthUnit_types[0]);
-            (route.reference_position.phi) = phi_middle;
+            (route.reference_position->phi) = phi_middle;
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
-            for ((route.reference_position.lambda.value) = (lambda_saved.value);
-                (route.reference_position.lambda.value) - (lambda_saved.value) < delta_lambda;
-                (route.reference_position.lambda.value) += delta_lambda_minor) {
+            for ((route.reference_position->lambda.value) = (lambda_saved.value);
+                (route.reference_position->lambda.value) - (lambda_saved.value) < delta_lambda;
+                (route.reference_position->lambda.value) += delta_lambda_minor) {
 
                 //                ticks_now.push_back(route);
                 ticks_now.resize((ticks_now.size()) + 1);
@@ -1964,8 +1964,8 @@ inline void DrawPanel::PreRender3D(void) {
 
             route.length.set(Re * M_PI, LengthUnit_types[0]);
             (route.Z) = Z_saved;
-            (route.reference_position.lambda.value) = (lambda_saved.value);
-            ((route.reference_position).phi) = phi_saved;
+            (route.reference_position->lambda.value) = (lambda_saved.value);
+            (route.reference_position->phi) = phi_saved;
 
         }
 
@@ -1982,10 +1982,10 @@ inline void DrawPanel::PreRender3D(void) {
         (phi.value) += delta_phi
         ) {
 
-        //route.omega  and route.reference_position.phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
+        //route.omega  and route.reference_position->phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
         route.omega.set(M_PI_2 - fabs(phi.value));
         route.length.set(2.0 * M_PI * Re * sin(route.omega), LengthUnit_types[0]);
-        route.reference_position.phi.set(GSL_SIGN(phi.value) * M_PI_2);
+        route.reference_position->phi.set(GSL_SIGN(phi.value) * M_PI_2);
 
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);
@@ -2002,9 +2002,9 @@ inline void DrawPanel::PreRender3D(void) {
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for (
-                (route.reference_position.phi.value) = (phi.value);
-                (route.reference_position.phi.value) - (phi.value) < delta_phi;
-                (route.reference_position.phi.value) += delta_phi_minor
+                (route.reference_position->phi.value) = (phi.value);
+                (route.reference_position->phi.value) - (phi.value) < delta_phi;
+                (route.reference_position->phi.value) += delta_phi_minor
                 ) {
 
                 //                    ticks_now.push_back(route);

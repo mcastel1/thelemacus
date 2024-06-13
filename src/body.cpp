@@ -6,6 +6,7 @@
 //
 
 #include "body.h"
+#include "generic.h"
 
 
 bool Body::operator==(const Body& body) {

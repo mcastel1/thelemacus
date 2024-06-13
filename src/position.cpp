@@ -8,6 +8,7 @@
 #include "position.h"
 #include "angle.h"
 #include "generic.h"
+#include "cartesian.h"
 
 Position::Position(void) {
 

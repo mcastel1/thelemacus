@@ -309,23 +309,6 @@ inline double phi_mercator(double y){
 
 
 
-// a three-dimensional cartesian position in the reference frame centered at the earth's origin, with the x-y axes lying on the equator and the x axis aligned with Greenwich meridian
-class Cartesian{
-    
-public:
-    
-    gsl_vector* r;
-    
-    Cartesian();
-    Cartesian(const Position&);
-    double dot(const Cartesian&);
-    Cartesian cross (const Cartesian&);
-    void setPosition(const Position&);
-    void print(String, String, ostream&);
-    void operator = (const Cartesian&);
-    
-};
-
 
 //this class defines a 'rectangular' area on the Eearth's surface: it is a rectangle with vertices p_NW, p_SE in the Mercator projection
 class PositionRectangle{

@@ -12,6 +12,7 @@
 #include "position.h"
 #include "length.h"
 #include "my_app.h"
+#include "cartesian.h"
 
 
 class DrawPanel : public wxPanel{

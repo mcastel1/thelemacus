@@ -10,9 +10,13 @@
 
 #include <wx/listctrl.h>
 
-
 #include "length.h"
 #include "angle.h"
+#include "cartesian.h"
+#include "draw_panel.h"
+
+class DrawPanel;
+
 
 //a geographic Position
 class Position{

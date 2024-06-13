@@ -9,6 +9,8 @@
 #define chart_panel_h
 
 
+#include "chart_frame.h"
+
 class ChartPanel : public wxPanel{
     
 public:

@@ -14,6 +14,9 @@
 #include "sight.h"
 #include "route.h"
 #include "position_projection.h"
+#include "route_frame.h"
+#include "answer.h"
+#include "unset_idling.h"
 
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...

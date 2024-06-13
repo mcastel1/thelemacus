@@ -22,20 +22,6 @@ using namespace std;
 
 
 
-bool operator<(const Angle& x, const Angle& y) {
-
-    return(((x.value) < (y.value)));
-
-}
-
-bool operator<(const Angle& x, const double& y) {
-
-    return(((x.value) < y));
-
-}
-
-
-
 
 
 

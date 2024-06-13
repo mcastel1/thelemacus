@@ -1274,16 +1274,6 @@ public:
 
 
 
-class ChartPanel : public wxPanel{
-    
-public:
-    
-    ChartFrame* parent;
-    
-    ChartPanel(ChartFrame*, const wxPoint&, const wxSize&);
-    
-};
-
 //a hanlder to make a general motion (i.e., drag the chart, transport a Position, ...) with an animation
 template<class F> class MotionHandler{
     

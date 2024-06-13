@@ -2331,13 +2331,6 @@ void AdjustWidth(wxComboBox* control) {
 
 }
 
-ChartPanel::ChartPanel(ChartFrame* parent_in, const wxPoint& position, const wxSize& size) : wxPanel(parent_in, wxID_ANY, position, size, wxTAB_TRAVERSAL, wxT("")) {
-
-    parent = parent_in;
-
-}
-
-
 //constructs a color object by setting no arguments
 Color::Color() : wxColour() {
 

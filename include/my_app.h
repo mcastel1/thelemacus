@@ -8,9 +8,13 @@
 #ifndef my_app_h
 #define my_app_h
 
+#include <boost/date_time.hpp>
+
+
 #include "chrono.h"
 #include "angle.h"
-
+#include "int.h"
+#include "double.h"
 
 class MyApp: public wxApp{
 public:

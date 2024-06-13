@@ -4615,13 +4615,6 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 
 
 
-Projection::Projection(void) : String() {}
-
-
-Projection::Projection(string input) : String(input) {}
-
-
-
 
 
 //sets the value in the GUI object check equal to the value in the non-GUI limb object answer

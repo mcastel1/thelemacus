@@ -198,15 +198,6 @@ public:
 
 
 
-//a derived class from String, which stores the type of a Projection ("Mercator", "3D", ...)
-class Projection: public String{
-    
-public:
-
-    Projection();
-    Projection(string);
-    
-};
 
 
 

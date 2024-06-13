@@ -12,6 +12,7 @@
 #include "my_app.h"
 #include "catalog.h"
 #include "sight.h"
+#include "route.h"
 
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...

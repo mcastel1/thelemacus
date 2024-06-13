@@ -17,6 +17,7 @@
 #include "length.h"
 #include "my_app.h"
 #include "cartesian.h"
+#include "route.h"
 
 
 class DrawPanel : public wxPanel{

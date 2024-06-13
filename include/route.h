@@ -8,6 +8,9 @@
 #ifndef route_h
 #define route_h
 
+#include "constants.h"
+#include "position.h"
+#include "draw_panel.h"
 
 //if type = l or o, the parameters specifying the route are reference_position (which in this case is the start position of the Route), alpha, l. if type = c, the parameters specifying the route are reference_position (which in this case is the GP of the circle of equal altitude) and omega.
 class Route{

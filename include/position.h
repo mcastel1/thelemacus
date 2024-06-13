@@ -8,7 +8,11 @@
 #ifndef position_h
 #define position_h
 
+#include <wx/listctrl.h>
+
+
 #include "length.h"
+#include "angle.h"
 
 //a geographic Position
 class Position{

@@ -6,6 +6,7 @@
 //
 
 #include "check_arc_degree.h"
+#include "my_app.h"
 
 
 

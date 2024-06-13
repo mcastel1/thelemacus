@@ -6,6 +6,7 @@
 //
 
 #include "position.h"
+#include "angle.h"
 
 Position::Position(void) {
 

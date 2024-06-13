@@ -9,6 +9,7 @@
 #include "body.h"
 #include "check_body.h"
 #include "multiple_item_field.h"
+#include "my_app.h"
 
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this

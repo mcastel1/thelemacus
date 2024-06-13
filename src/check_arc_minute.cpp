@@ -6,6 +6,8 @@
 //
 
 #include "check_arc_minute.h"
+#include "my_app.h"
+#include "angle_field.h"
 
 
 

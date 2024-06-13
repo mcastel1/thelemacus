@@ -8,6 +8,10 @@
 #ifndef check_arc_minute_h
 #define check_arc_minute_h
 
+#include "angle_field.h"
+
+template<class P> class AngleField;
+
 template<class P> class CheckArcMinute{
     
 public:

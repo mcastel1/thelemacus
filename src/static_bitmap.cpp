@@ -7,6 +7,10 @@
 
 #include "static_bitmap.h"
 
+#include "bitmap.h"
+#include "file_r.h"
+#include "my_app.h"
+
 
 //construct a StaticBitmap object by assignign to it the parent parent, loading it from path path and rescaling it to size
 StaticBitmap::StaticBitmap(wxWindow* parent, String path, [[maybe_unused]] wxSize size) : wxStaticBitmap(parent, wxID_ANY, wxNullBitmap) {

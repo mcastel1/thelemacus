@@ -8,6 +8,8 @@
 #ifndef static_bitmap_h
 #define static_bitmap_h
 
+#include "my_string.h"
+
 
 //a class for image objects
 class StaticBitmap: public wxStaticBitmap{

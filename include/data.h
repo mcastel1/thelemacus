@@ -9,6 +9,13 @@
 #define data_h
 
 
+#include <iostream>
+
+#include "sight.h"
+#include "position.h"
+#include "route.h"
+
+using namespace std;
 
 class Data{
     

@@ -8,6 +8,10 @@
 #ifndef draw_panel_h
 #define draw_panel_h
 
+#include <wx/gdicmn.h>
+
+
+
 #include "int.h"
 #include "position.h"
 #include "length.h"

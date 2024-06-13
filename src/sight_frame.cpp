@@ -7,6 +7,9 @@
 
 #include "sight_frame.h"
 
+#include "constants.h"
+#include "limb_field.h"
+
 
 
 SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_in_listcontrol_sights_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {

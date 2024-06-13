@@ -11,6 +11,8 @@
 #include "my_app.h"
 #include "list_frame.h"
 #include "sight.h"
+#include "static_text.h"
+#include "angle_field.h"
 
 
 class SightFrame: public wxFrame{

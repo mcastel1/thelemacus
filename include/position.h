@@ -16,7 +16,7 @@
 #include "draw_panel.h"
 
 class DrawPanel;
-
+class Cartesian;
 
 //a geographic Position
 class Position{

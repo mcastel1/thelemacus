@@ -195,35 +195,6 @@ public:
 
 
 
-
-class Time{
-    
-public:
-    Date date;
-    Chrono chrono;
-    //is s used?
-    double s, MJD;
-    void enter(String, String);
-    void print(String, String, ostream&);
-    void set_current(void);
-    template<class S> bool read_from_stream(String, S*, bool, String);
-    
-    void to_MJD(void);
-    void to_TAI(void);
-    
-    string to_string(unsigned int, bool);
-    bool operator==(const Time&), operator!=(const Time&), operator> (const Time&);
-    void operator += (const Chrono&);
-    void operator -= (const Chrono&);
-    
-};
-
-
-
-
-
-
-
 //this class defines a functor to close the app properly
 class CloseApp{
     

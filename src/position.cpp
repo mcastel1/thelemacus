@@ -7,6 +7,7 @@
 
 #include "position.h"
 #include "angle.h"
+#include "generic.h"
 
 Position::Position(void) {
 

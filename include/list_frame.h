@@ -13,6 +13,7 @@
 #include "catalog.h"
 #include "sight.h"
 #include "route.h"
+#include "position_projection.h"
 
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...

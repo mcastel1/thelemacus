@@ -23,6 +23,7 @@
 #include "chart_frame.h"
 #include "unset_idling.h"
 #include "rotation.h"
+#include "position_projection.h"
 
 
 class DrawPanel : public wxPanel{

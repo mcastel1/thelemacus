@@ -424,22 +424,7 @@ public:
 };
 
 
-//this class denotes a point in a generic 2D projection of the sphere
-class PositionProjection{
-    
-public:
-    //the x, y coordinates of the projected point.
-    double x, y;
-    
-    PositionProjection();
-    PositionProjection(const double, const double);
-    void SetMercator(const Position&);
-    bool CheckMercator(DrawPanel*);
-    void NormalizeAndSetMercator(const Position&);
-    PositionProjection operator + (const PositionProjection&), operator - (const PositionProjection&), operator / (const double &), operator / (const Double&), operator * (const double &);
-    void operator += (const PositionProjection&), operator -= (const PositionProjection&), operator *= (const double&), operator /= (const double&);
-        
-};
+
 
 //this class defines a functor to close the app properly
 class CloseApp{

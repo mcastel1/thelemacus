@@ -16,6 +16,7 @@
 #include "draw_panel.h"
 #include "rotation.h"
 #include "route.h"
+#include "my_string.h"
 
 class DrawPanel;
 class Cartesian;

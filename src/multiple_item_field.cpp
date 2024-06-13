@@ -6,6 +6,7 @@
 //
 
 #include "multiple_item_field.h"
+#include "my_string.h"
 
 
 

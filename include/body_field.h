@@ -14,6 +14,8 @@
 #include "check_body.h"
 #include "multiple_item_field.h"
 
+template<class P> class CheckBody;
+
 using namespace std;
 
 //P is the type of the frame which hosts *this

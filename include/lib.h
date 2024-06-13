@@ -301,15 +301,6 @@ public:
     
 };
 
-//a derived class of String, which stores the type of a Length 
-class LengthFormat: public String{
-    
-public:
-
-    LengthFormat();
-    LengthFormat(string);
-    
-};
 
 
 

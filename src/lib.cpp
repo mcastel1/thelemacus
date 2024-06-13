@@ -7760,17 +7760,6 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
 }
 
 
-LengthFormat::LengthFormat(void) : String() {
-
-
-}
-
-
-LengthFormat::LengthFormat(string input) : String(input) {
-
-
-}
-
 
 
 Projection::Projection(void) : String() {}

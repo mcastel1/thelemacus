@@ -16,6 +16,7 @@
 
 
 #include "constants.h"
+#include "position.h"
 #include "double.h"
 #include "length.h"
 #include "file_rw.h"

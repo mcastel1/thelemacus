@@ -11,6 +11,8 @@
 #include "constants.h"
 #include "position.h"
 #include "draw_panel.h"
+#include "route_type.h"
+#include "length_format.h"
 
 class Position;
 

@@ -13,10 +13,10 @@
 #include "gsl_errno.h"
 
 
-#include "sight.h"
 #include "constants.h"
 #include "file_r.h"
 #include "my_app.h"
+#include "sight.h"
 
 
 Sight::Sight(void) {

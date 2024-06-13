@@ -10,6 +10,8 @@
 
 #include "angle_field.h"
 
+template<class P> class AngleField;
+
 
 template<class P> class CheckSign{
     

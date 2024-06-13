@@ -552,39 +552,6 @@ void Time::operator -= (const Chrono& chrono_in) {
 
 
 
-void Answer::enter(String name, [[maybe_unused]] String prefix) {
-
-    bool check;
-    string temp;
-
-    do {
-
-        temp.clear();
-
-        cout << prefix.value << "Enter " << name.value << " [y/n]:";
-
-        getline(cin >> ws, temp);
-
-        if (((temp[0] == 'y') || (temp[0] == 'n')) && (temp.size() == 1)) {
-            value = temp[0];
-            check = true;
-        }
-        else {
-            cout << prefix.value << RED << "Entered value is not valid!\n" << RESET;
-            check = false;
-        }
-    } while (!check);
-
-    print(name, prefix, cout);
-
-}
-
-void Answer::print(String name, String prefix, ostream& ostr) {
-
-    ostr << prefix.value << name.value << " = " << value << "\n";
-
-}
-
 
 double Atmosphere::T(Length z) {
 

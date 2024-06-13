@@ -113,14 +113,6 @@ template<class F> class ChartTransportHandler;
 
 
 
-//a class for image objects
-class StaticBitmap: public wxStaticBitmap{
-    
-public:
-    StaticBitmap(wxWindow*, String, wxSize);
-    
-};
-
 
 
 

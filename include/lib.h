@@ -1156,31 +1156,6 @@ public:
 
 
 
-template<class P> class ProjectionField: public MultipleItemField<P, Projection, void>{
-    
-public:
-    
-//    P* parent;
-//    wxBoxSizer *sizer_h, *sizer_v;
-//    wxArrayString  /*this is equal to a standard list of the available graphical types*/items, /*same as projections, but it is fixed and never wrote to: it is a fixed catalog*/catalog;
-    //this is the wxComboBox with the name of the projections
-//    wxComboBox* name;
-//    vector<int> recent_items;
-//    bool ok;
-//    CheckProjection<P>* check;
-
-    ProjectionField(wxPanel*, vector<int>*);
-//    void Fill(void);
-//    void read_recent_projections(void);
-//    template<class T> void InsertIn(T*, wxSizerFlags&);
-    template<class E> void OnEdit(E&);
-//    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-    
-};
-
-
-
-
 
 //an editable GUI field to enter a Length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the DynamicLengthField object
 template<class P> class DynamicLengthField: public LengthField<P>{

@@ -14,6 +14,7 @@
 #include "route_type.h"
 #include "length_format.h"
 #include "position_projection.h"
+#include "position_rectangle.h"
 
 class Position;
 

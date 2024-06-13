@@ -286,24 +286,6 @@ inline double phi_mercator(double y){
 
 
 
-//this class defines a 'rectangular' area on the Eearth's surface: it is a rectangle with vertices p_NW, p_SE in the Mercator projection
-class PositionRectangle{
-    
-public:
-    
-    //thw two Positions which constitute the vertices of the rectangle: p is the NW vertex, p_SE is the SE vertex
-    Position p_NW, p_SE;
-    
-    PositionRectangle();
-    PositionRectangle(Position, Position, String);
-    bool Contains(Position);
-    bool SizeMercator(PositionProjection*);
-    
-};
-
-
-
-
 
 //a derived class from String, which stores the type of a Projection ("Mercator", "3D", ...)
 class Projection: public String{

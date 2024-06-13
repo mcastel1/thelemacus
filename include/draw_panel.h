@@ -24,7 +24,7 @@
 #include "unset_idling.h"
 #include "rotation.h"
 #include "position_projection.h"
-
+#include "position_rectangle.h"
 
 class DrawPanel : public wxPanel{
     

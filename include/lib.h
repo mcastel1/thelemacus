@@ -1034,25 +1034,6 @@ public:
 
 
 
-
-//a non-editable GUI field to display a Length, composed of a static text and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the DynamicLengthField object
-template<class P> class StaticLengthField: public LengthField<P>{
-    
-public:
-    
-    //the length value
-    StaticText* value;
-    
-    StaticLengthField(wxPanel*, Length*/*, String*/);
-    
-    void set(const Length&);
-    void set(void);
-    void set_value_keep_unit(void);
-    template<class E> void ConvertUnit(E&);
-
-};
-
-
 //class for graphical object: a field to enter a speed, composed of a box and a dropdown menu to enter the units of measure of the speed. P is the type of the parent which hosts the DynamicLengthField object
 template<class P> class SpeedField{
     

@@ -967,20 +967,6 @@ public:
 };
 
 
-//this functor sets idling -> false in parent
-template<class P> class UnsetIdling{
-    
-public:
-    
-    UnsetIdling(P*);
-    
-    //the frame which called this struct
-    P* parent;
-    
-    void operator()(wxCommandEvent&);
-    void operator()(void);
-    
-};
 
 
 //this functor is called when the user has chosen that he/she wants to condfirm transporting an object

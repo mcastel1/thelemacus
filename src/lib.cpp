@@ -4159,11 +4159,6 @@ template<class P> SetIdling<P>::SetIdling(P* parent_in) {
 
 }
 
-template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in) {
-
-    parent = parent_in;
-
-}
 
 
 
@@ -4294,24 +4289,6 @@ void NewRoute::operator()(wxCommandEvent& event) {
     //    f->route_frame->button_ok->Bind(wxEVT_BUTTON, *(f->on_new_route_in_listcontrol_routes_for_transport));
 
     event.Skip(true);
-
-}
-
-
-template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event) {
-
-    (parent->idling) = false;
-
-    event.Skip(true);
-
-}
-
-//this is the same as template<class P> void UnsetIdling<P>::operator()(void){ but without the event argument
-template<class P> void UnsetIdling<P>::operator()(void) {
-
-    wxCommandEvent dummy;
-
-    (*this)(dummy);
 
 }
 

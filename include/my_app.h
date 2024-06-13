@@ -20,6 +20,7 @@
 #include "angle.h"
 #include "int.h"
 #include "double.h"
+#include "list_frame.h"
 
 class MyApp: public wxApp{
 public:

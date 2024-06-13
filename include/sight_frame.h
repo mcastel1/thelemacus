@@ -8,6 +8,7 @@
 #ifndef sight_frame_h
 #define sight_frame_h
 
+#include "list_frame.h"
 
 
 class SightFrame: public wxFrame{

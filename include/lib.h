@@ -1298,19 +1298,6 @@ public:
 };
 
 
-//GUI field to specify the RouteType, which is inserted into a parent panel of type P
-template<class P> class RouteTypeField: public MultipleItemField<P, RouteType, CheckRouteType<P> >{
-    
-public:
-    
-    
-    RouteTypeField(wxPanel*, RouteType*, const vector<String>&, vector<int>*);
-    void set(void);
-    template<class E> void OnEdit(E&);
-    void OnEdit();
-    
-};
-
 
 //GUI field to specify the unit of measure of a Length, which is inserted into a parent panel of type P
 template<class P> class LengthUnitField: public MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >{

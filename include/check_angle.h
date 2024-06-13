@@ -11,6 +11,7 @@
 #include "angle_field.h"
 #include "check_sign.h"
 #include "check_arc_degree.h"
+#include "check_arc_minute.h"
 
 //this pre-declatation of the class AngleField is necessary because class CheckAngle and AngleField are intertwined
 template<class P> class AngleField;

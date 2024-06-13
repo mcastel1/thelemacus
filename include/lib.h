@@ -751,16 +751,6 @@ public:
 
 
 
-template<class P> class CheckArcMinute{
-    
-public:
-    
-    AngleField<P>* p;
-    
-    CheckArcMinute(AngleField<P>*);
-    template <class T> void operator()(T&);
-    
-};
 
 
 

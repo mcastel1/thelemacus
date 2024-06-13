@@ -8,9 +8,12 @@
 #ifndef time_h
 #define time_h
 
+#include <iostream>
 
 
-
+#include "date.h"
+#include "chrono.h"
+#include "my_string.h"
 
 
 class Time{

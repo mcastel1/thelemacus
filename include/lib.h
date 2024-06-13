@@ -746,17 +746,7 @@ public:
 };
 
 
-template<class P> class CheckSign{
-    
-public:
-    
-    AngleField<P>* p;
-    
-    CheckSign(AngleField<P>*);
-    template <class T> void operator()(T&);
-    
-    
-};
+
 
 template<class P> class CheckArcDegree{
     

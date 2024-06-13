@@ -11,6 +11,8 @@
 #include "limb.h"
 #include "check_limb.h"
 
+template <class P> class CheckLimb;
+
 
 template<class P> class LimbField{
     

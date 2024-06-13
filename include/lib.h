@@ -748,16 +748,7 @@ public:
 
 
 
-template<class P> class CheckArcDegree{
-    
-public:
-    
-    AngleField<P>* p;
-    
-    CheckArcDegree(AngleField<P>*);
-    template<class T> void operator()(T&);
-    
-};
+
 
 
 template<class P> class CheckArcMinute{

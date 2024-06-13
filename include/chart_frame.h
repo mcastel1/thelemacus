@@ -8,6 +8,11 @@
 #ifndef chart_frame_h
 #define chart_frame_h
 
+#include "draw_panel.h"
+#include "unset_idling.h"
+#include "chart_panel.h"
+#include "projection_field.h"
+
 
 class ChartFrame: public wxFrame{
     

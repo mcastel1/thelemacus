@@ -6,7 +6,7 @@
 //
 
 #include "check_body.h"
-
+#include "my_app.h"
 
 template<class P> CheckBody<P>::CheckBody(BodyField<P>* p_in) {
 

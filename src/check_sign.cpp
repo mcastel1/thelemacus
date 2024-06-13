@@ -6,7 +6,7 @@
 //
 
 #include "check_sign.h"
-
+#include "my_app.h"
 
 
 template<class P> CheckSign<P>::CheckSign(AngleField<P>* p_in) {

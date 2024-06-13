@@ -6,7 +6,7 @@
 //
 
 #include "check_limb.h"
-
+#include "my_app.h"
 
 
 template<class P> CheckLimb<P>::CheckLimb(LimbField<P>* p_in) {

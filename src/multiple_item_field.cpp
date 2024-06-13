@@ -7,6 +7,7 @@
 
 #include "multiple_item_field.h"
 #include "my_string.h"
+#include "my_app.h"
 
 #include <sstream>
 

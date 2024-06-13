@@ -6,7 +6,7 @@
 //
 
 #include "answer.h"
-
+#include "my_string.h"
 
 
 Answer::Answer(void) {

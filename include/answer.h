@@ -8,6 +8,7 @@
 #ifndef answer_h
 #define answer_h
 
+#include "my_string.h"
 
 class Answer{
     

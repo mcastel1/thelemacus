@@ -63,7 +63,6 @@ public:
 };
 
 wxDECLARE_APP(MyApp);
-wxIMPLEMENT_APP(MyApp);
 
 
 #endif

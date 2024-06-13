@@ -61,3 +61,7 @@ template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event) {
     
 }
 
+
+wxIMPLEMENT_APP(MyApp);
+
+

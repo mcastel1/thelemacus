@@ -10,6 +10,7 @@
 
 #include "my_app.h"
 #include "list_frame.h"
+#include "sight.h"
 
 
 class SightFrame: public wxFrame{

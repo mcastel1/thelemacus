@@ -7,8 +7,7 @@
 
 #include "cartesian.h"
 
-
-
+#include "generic.h"
 
 
 inline Cartesian::Cartesian(void) {

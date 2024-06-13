@@ -16,6 +16,8 @@
 //this pre-declatation of the class AngleField is necessary because class CheckAngle and AngleField are intertwined
 template<class P> class AngleField;
 template<class P> class CheckSign;
+template<class P> class CheckArcDegree;
+template<class P> class CheckArcMinute;
 
 
 template<class P> class CheckAngle{

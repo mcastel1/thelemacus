@@ -21,10 +21,10 @@ public:
     gsl_vector* r;
     
     Cartesian();
-    Cartesian(const Position&);
+    Cartesian(const Position*);
     double dot(const Cartesian&);
     Cartesian cross (const Cartesian&);
-    void setPosition(const Position&);
+    void setPosition(const Position*);
     void print(String, String, ostream&);
     void operator = (const Cartesian&);
     

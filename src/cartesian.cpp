@@ -18,25 +18,25 @@ inline Cartesian::Cartesian(void) {
 
 
 //construct *this setting its coordinates from the coordinates of the geographic Position p
-inline Cartesian::Cartesian(const Position& p) {
+inline Cartesian::Cartesian(const Position* p) {
 
     r = gsl_vector_alloc(3);
 
-    gsl_vector_set(r, 0, cos(p.phi) * cos(p.lambda));
-    gsl_vector_set(r, 1, -cos(p.phi) * sin(p.lambda));
-    gsl_vector_set(r, 2, sin(p.phi));
+    gsl_vector_set(r, 0, cos(p->phi) * cos(p->lambda));
+    gsl_vector_set(r, 1, -cos(p->phi) * sin(p->lambda));
+    gsl_vector_set(r, 2, sin(p->phi));
 
 
 }
 
 
 //set *this from the grographic Position p
-inline void Cartesian::setPosition(const Position& p){
+inline void Cartesian::setPosition(const Position* p){
     
 
-    gsl_vector_set(r, 0, cos(p.phi) * cos(p.lambda));
-    gsl_vector_set(r, 1, -cos(p.phi) * sin(p.lambda));
-    gsl_vector_set(r, 2, sin(p.phi));
+    gsl_vector_set(r, 0, cos(p->phi) * cos(p->lambda));
+    gsl_vector_set(r, 1, -cos(p->phi) * sin(p->lambda));
+    gsl_vector_set(r, 2, sin(p->phi));
     
     
 }

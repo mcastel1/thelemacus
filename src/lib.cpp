@@ -7771,12 +7771,6 @@ LengthFormat::LengthFormat(string input) : String(input) {
 
 }
 
-RouteType::RouteType(void) : String() {}
-
-RouteType::RouteType(const String& input) : String(input.value) {}
-
-RouteType::RouteType(const string& input) : String(input) {}
-
 
 
 Projection::Projection(void) : String() {}

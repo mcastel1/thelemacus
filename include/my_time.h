@@ -5,8 +5,8 @@
 //  Created by Michele on 11/06/2024.
 //
 
-#ifndef time_h
-#define time_h
+#ifndef my_time_h
+#define my_time_h
 
 #include <iostream>
 

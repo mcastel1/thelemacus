@@ -8,6 +8,7 @@
 #ifndef sight_frame_h
 #define sight_frame_h
 
+#include "my_app.h"
 #include "list_frame.h"
 
 

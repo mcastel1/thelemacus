@@ -9,6 +9,7 @@
 #define list_frame_h
 
 #include "position.h"
+#include "my_app.h"
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...
 class ListFrame: public wxFrame{

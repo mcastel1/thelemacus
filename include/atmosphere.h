@@ -8,6 +8,9 @@
 #ifndef atmosphere_h
 #define atmosphere_h
 
+#include <vector>
+
+#include "length.h"
 
 class Atmosphere{
     

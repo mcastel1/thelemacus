@@ -8,6 +8,8 @@
 #ifndef bitmap_h
 #define bitmap_h
 
+#include "my_string.h"
+
 //a class for Bitmap images
 class Bitmap: public wxBitmap{
     

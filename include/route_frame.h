@@ -9,6 +9,15 @@
 #define route_frame_h
 
 
+#include "list_frame.h"
+#include "unset_idling.h"
+#include "angle_field.h"
+#include "dynamic_length_field.h"
+#include "length_format_field.h"
+#include "route.h"
+#include "route_type_field.h"
+
+
 class RouteFrame: public wxFrame{
     
 public:

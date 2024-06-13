@@ -8,11 +8,12 @@
 #ifndef string_h
 #define string_h
 
-//#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#include "wx/app.h"
-#include "wx/artprov.h"
-//#endif
+#include "wx/wxprec.h"
+#include <wx/gdicmn.h>
+#include <wx/window.h>
+
+
+
 #include "file_rw.h"
 
 

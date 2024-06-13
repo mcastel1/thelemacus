@@ -11,6 +11,8 @@
 
 #include "chart_frame.h"
 
+class ChartFrame;
+
 class ChartPanel : public wxPanel{
     
 public:

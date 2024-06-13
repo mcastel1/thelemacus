@@ -8,10 +8,10 @@
 #ifndef catalog_h
 #define catalog_h
 
-class Body;
 
 #include "body.h"
 
+class Body;
 
 class Catalog{
     

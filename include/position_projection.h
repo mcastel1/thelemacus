@@ -11,6 +11,9 @@
 #include "draw_panel.h"
 #include "position.h"
 
+class DrawPanel;
+class Position;
+
 //this class denotes a point in a generic 2D projection of the sphere
 class PositionProjection{
     

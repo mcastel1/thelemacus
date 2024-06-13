@@ -11,8 +11,17 @@
 #include "draw_panel.h"
 #include "unset_idling.h"
 #include "chart_panel.h"
+#include "projection.h"
 #include "projection_field.h"
+#include "list_frame.h"
+#include "static_length_field.h"
+#include "static_text.h"
 
+
+
+class DrawPanel;
+class ListFrame;
+class ChartPanel;
 
 class ChartFrame: public wxFrame{
     

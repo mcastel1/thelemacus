@@ -8,15 +8,19 @@
 #ifndef list_frame_h
 #define list_frame_h
 
-#include "position.h"
-#include "my_app.h"
-#include "catalog.h"
-#include "sight.h"
-#include "route.h"
-#include "position_projection.h"
-#include "route_frame.h"
 #include "answer.h"
+#include "catalog.h"
+#include "chart_frame.h"
+#include "data.h"
+#include "list_control.h"
+#include "my_app.h"
+#include "position.h"
+#include "position_projection.h"
+#include "route.h"
+#include "route_frame.h"
+#include "sight.h"
 #include "unset_idling.h"
+
 
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...

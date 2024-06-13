@@ -22,6 +22,8 @@ class DrawPanel;
 class Cartesian;
 class Rotation;
 class Route;
+class Angle;
+class String;
 
 //a geographic Position
 class Position{

@@ -26,6 +26,9 @@
 #include "position_projection.h"
 #include "position_rectangle.h"
 
+class ChartFrame;
+
+
 class DrawPanel : public wxPanel{
     
 public:

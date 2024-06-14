@@ -1,9 +1,14 @@
 #ifndef constants_h
 #define constants_h
 
+#include <iostream>
+
+
 #include "int.h"
 #include "double.h"
 #include "angle.h"
+
+using namespace std;
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 Int /*this is the low precision used for displaying data*/ display_precision, /*this is the high precision used for storing data and making calculations with it*/ data_precision;

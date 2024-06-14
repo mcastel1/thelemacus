@@ -8,6 +8,9 @@
 #ifndef color_h
 #define color_h
 
+#include <iostream>
+
+using namespace std;
 
 //a class for color objects
 class Color: public wxColour{

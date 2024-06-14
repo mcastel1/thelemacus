@@ -8,6 +8,7 @@
 #ifndef file_r_h
 #define file_r_h
 
+#include <iostream>
 #include <fstream>
 
 #include "file.h"

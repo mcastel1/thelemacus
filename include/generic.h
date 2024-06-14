@@ -1,8 +1,9 @@
 #ifndef generic_h
 #define generic_h
 
-#include <wx/listctrl.h>
+#include <iostream>
 
+#include <wx/listctrl.h>
 
 #include "gsl_math.h"
 #include "gsl_vector.h"
@@ -13,7 +14,6 @@
 //#include <boost/filesystem.hpp>
 //#include <boost/date_time.hpp>
 //#include "boost/date_time/local_time/local_time.hpp"
-//
 
 #include "constants.h"
 #include "position.h"
@@ -22,6 +22,7 @@
 #include "file_rw.h"
 #include "my_app.h"
 
+using namespace std;
 
 
 

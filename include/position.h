@@ -8,6 +8,8 @@
 #ifndef position_h
 #define position_h
 
+#include <iostream>
+
 #include <wx/listctrl.h>
 
 #include "length.h"
@@ -17,6 +19,9 @@
 #include "rotation.h"
 #include "route.h"
 #include "my_string.h"
+
+using namespace std;
+
 
 class DrawPanel;
 class Cartesian;

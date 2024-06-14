@@ -8,7 +8,9 @@
 #ifndef multiple_item_field_h
 #define multiple_item_field_h
 
+#include <iostream>
 #include <vector>
+
 #include "my_string.h"
 
 using namespace std;

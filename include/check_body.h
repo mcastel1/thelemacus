@@ -8,8 +8,11 @@
 #ifndef check_body_h
 #define check_body_h
 
+#include <iostream>
+
 #include "body_field.h"
 
+using namespace std;
 
 template<class P> class BodyField;
 

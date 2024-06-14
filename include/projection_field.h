@@ -8,7 +8,11 @@
 #ifndef projection_field_h
 #define projection_field_h
 
+#include <iostream>
+#include <vector>
 
+
+using namespace std;
 
 
 template<class P> class ProjectionField: public MultipleItemField<P, Projection, void>{

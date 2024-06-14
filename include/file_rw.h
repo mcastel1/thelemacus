@@ -8,12 +8,15 @@
 #ifndef file_rw_h
 #define file_rw_h
 
+#include <iostream>
 #include <cstdio>
 
 #include <fstream>
 
 #include "my_string.h"
 #include "file.h"
+
+using namespace std;
 
 //need forward declaratin of class String because class FileRW and String are intertwined.
 class String;

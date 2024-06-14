@@ -8,6 +8,10 @@
 #ifndef unset_idling_h
 #define unset_idling_h
 
+#include <iostream>
+
+using namespace std;
+
 //this functor sets idling -> false in parent
 template<class P> class UnsetIdling{
     

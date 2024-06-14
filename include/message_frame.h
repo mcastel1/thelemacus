@@ -9,6 +9,12 @@
 #define message_frame_h
 
 
+#include <iostream>
+
+#include "static_bitmap.h"
+
+using namespace std;
+
 
 //this is a wxFrame designed to show a message to the GUI user. FF_OK is the type of the functor class which will be called when the button ok is pressed. This type is variable, so it has been 'templated'
 template<class FF_OK> class MessageFrame: public wxFrame{

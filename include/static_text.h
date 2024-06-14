@@ -8,11 +8,15 @@
 #ifndef static_text_h
 #define static_text_h
 
+#include <iostream>
+
+using namespace std;
+
+
 //my own derived class of wxStaticText
 class StaticText : public wxStaticText{
     
 public:
-    
     
     StaticText(wxWindow*, const wxString&, const wxPoint&, const wxSize&, long);
     

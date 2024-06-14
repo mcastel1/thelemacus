@@ -8,7 +8,12 @@
 #ifndef double_h
 #define double_h
 
+#include <iostream>
+
 #include "my_string.h"
+
+using namespace std;
+
 
 class Double{
     

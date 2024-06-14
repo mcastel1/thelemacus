@@ -8,10 +8,14 @@
 #ifndef check_angle_h
 #define check_angle_h
 
+#include <iostream>
+
 #include "angle_field.h"
 #include "check_sign.h"
 #include "check_arc_degree.h"
 #include "check_arc_minute.h"
+
+using namespace std;
 
 //this pre-declatation of the class AngleField is necessary because class CheckAngle and AngleField are intertwined
 template<class P> class AngleField;

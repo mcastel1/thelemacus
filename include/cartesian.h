@@ -8,10 +8,15 @@
 #ifndef cartesian_h
 #define cartesian_h
 
+#include <iostream>
+
 #include "gsl_vector.h"
 
 #include "position.h"
 #include "my_string.h"
+
+using namespace std;
+
 
 class Position;
 

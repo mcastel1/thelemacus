@@ -8,14 +8,17 @@
 #ifndef body_h
 #define body_h
 
+#include <iostream>
+
 #include "my_string.h"
 #include "length.h"
 #include "angle.h"
 #include "catalog.h"
 
-class Catalog;
-
 using namespace std;
+
+
+class Catalog;
 
 class Body{
     

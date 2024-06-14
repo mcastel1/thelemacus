@@ -8,19 +8,23 @@
 #ifndef sight_h
 #define sight_h
 
+#include <iostream>
+#include <vector>
+
 #include <wx/listctrl.h>
-
-
 
 #include "angle.h"
 #include "answer.h"
 #include "atmosphere.h"
-#include "length.h"
 #include "body.h"
-#include "limb.h"
 #include "int.h"
+#include "length.h"
+#include "limb.h"
 #include "my_time.h"
 #include "route.h"
+
+using namespace std;
+
 
 class Sight{
     

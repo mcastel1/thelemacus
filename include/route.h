@@ -8,16 +8,21 @@
 #ifndef route_h
 #define route_h
 
+#include <iostream>
+
 #include "angle.h"
+#include "color.h"
 #include "constants.h"
-#include "position.h"
 #include "draw_panel.h"
-#include "route_type.h"
 #include "length_format.h"
+#include "my_string.h"
+#include "position.h"
 #include "position_projection.h"
 #include "position_rectangle.h"
-#include "color.h"
-#include "my_string.h"
+#include "route_type.h"
+
+
+using namespace std;
 
 class Position;
 

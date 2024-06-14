@@ -8,6 +8,11 @@
 #ifndef position_frame_h
 #define position_frame_h
 
+#include <iostream>
+
+#include "position.h"
+
+using namespace std;
 
 
 class PositionFrame: public wxFrame{

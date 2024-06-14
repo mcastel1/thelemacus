@@ -8,7 +8,11 @@
 #ifndef check_limb_h
 #define check_limb_h
 
+#include <iostream>
+
 #include "limb_field.h"
+
+using namespace std;
 
 template<class P> class LimbField;
 

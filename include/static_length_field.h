@@ -8,9 +8,13 @@
 #ifndef static_length_field_h
 #define static_length_field_h
 
+#include <iostream>
+
 #include "length.h"
 #include "static_text.h"
 #include "length_field.h"
+
+using namespace std;
 
 
 //a non-editable GUI field to display a Length, composed of a static text and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the DynamicLengthField object

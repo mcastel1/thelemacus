@@ -8,8 +8,12 @@
 #ifndef catalog_h
 #define catalog_h
 
+#include <iostream>
 
 #include "body.h"
+
+using namespace std;
+
 
 class Body;
 

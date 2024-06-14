@@ -8,6 +8,10 @@
 #ifndef length_field_h
 #define length_field_h
 
+#include <iostream>
+
+using namespace std;
+
 
 //this class is for a GUI field including a length
 template<class P> class LengthField{

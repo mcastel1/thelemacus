@@ -10,6 +10,8 @@
 #ifndef angle_field_h
 #define angle_field_h
 
+#include <iostream>
+
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/app.h"
@@ -20,6 +22,9 @@
 #include "angle.h"
 #include "my_string.h"
 #include "check_angle.h"
+
+using namespace std;
+
 
 //this pre-declatation of the class CheckAngle is necessary because class CheckAngle and AngleField are intertwined
 template<class P> class CheckAngle;

@@ -8,18 +8,18 @@
 #ifndef string_h
 #define string_h
 
+#include <iostream>
+
 #include "wx/wxprec.h"
 #include <wx/gdicmn.h>
 #include <wx/window.h>
 
-
-
 #include "file_rw.h"
+
+using namespace std;
 
 
 class FileRW;
-
-using namespace std;
 
 
 class String{

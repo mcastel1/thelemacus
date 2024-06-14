@@ -334,9 +334,9 @@ bool Sight::check_time_interval(String prefix) {
         data_file.count_lines(new_prefix);
 
         //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
-        l_min = (int)(L * ((time.MJD) - MJD_min)) - (int)(N / 2.0);
+        l_min = (int)(L * ((time.MJD) - MJD_min)) - (int)(n_lines_ephemerides / 2.0);
         //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
-        l_max = (int)(L * ((time.MJD) - MJD_min)) + (int)(N / 2.0);
+        l_max = (int)(L * ((time.MJD) - MJD_min)) + (int)(n_lines_ephemerides / 2.0);
 
         //check whether the lines from l_min to l_max, which are used for the data interpolation, are present in the file where data relative to the body are stored
         if ((l_min >= 0) && (l_max < (int)(data_file.number_of_lines))) {
@@ -612,9 +612,9 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
     stringstream filename, line_ins;
     string line, dummy, temp;
     int l, l_min, l_max;
-    double MJD_tab[(unsigned int)N], GHA_tab[(unsigned int)N], d_tab[(unsigned int)N], sum;
+    double MJD_tab[(unsigned int)n_lines_ephemerides], GHA_tab[(unsigned int)n_lines_ephemerides], d_tab[(unsigned int)n_lines_ephemerides], sum;
     gsl_interp_accel* acc = gsl_interp_accel_alloc();
-    gsl_spline* interpolation_GHA = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N)), * interpolation_d = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
+    gsl_spline* interpolation_GHA = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)n_lines_ephemerides)), * interpolation_d = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)n_lines_ephemerides));
     bool check = true;
     String new_prefix;
 
@@ -638,9 +638,9 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
 
 
         //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
-        l_min = (int)(L * ((time.MJD) - MJD_min)) - (int)(N / 2.0);
+        l_min = (int)(L * ((time.MJD) - MJD_min)) - (int)(n_lines_ephemerides / 2.0);
         //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
-        l_max = (int)(L * ((time.MJD) - MJD_min)) + (int)(N / 2.0);
+        l_max = (int)(L * ((time.MJD) - MJD_min)) + (int)(n_lines_ephemerides / 2.0);
 
         /* cout << "\nl_min = " << l_min << "l_max = " << l_max; */
 
@@ -656,8 +656,8 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
 
             //if the body is not a star
 
-            double r_tab[(unsigned int)N];
-            gsl_spline* interpolation_r = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)N));
+            double r_tab[(unsigned int)n_lines_ephemerides];
+            gsl_spline* interpolation_r = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)n_lines_ephemerides));
 
             for (; l < l_max; l++) {
 
@@ -676,7 +676,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
             file.close(new_prefix);
 
             //convert to radians and nm
-            for (l = 0; l < N; l++) {
+            for (l = 0; l < n_lines_ephemerides; l++) {
 
                 //add minus sign because in JPL convention longitude is positive when it is E
                 GHA_tab[l] *= (-1.0) * k;
@@ -686,7 +686,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
             }
 
             //remove discontinuous jumps in GHA to allow for interpolation
-            for (sum = 0.0, l = 0; l < N - 1; l++) {
+            for (sum = 0.0, l = 0; l < n_lines_ephemerides - 1; l++) {
                 //cout << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
                 if (((GHA_tab[l] - sum) > 0.0) && (GHA_tab[l + 1] < 0.0)) {
                     sum += 2.0 * M_PI;
@@ -694,14 +694,14 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 GHA_tab[l + 1] += sum;
             }
 
-            if (gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)N) != GSL_SUCCESS) { check &= false; };
+            if (gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)n_lines_ephemerides) != GSL_SUCCESS) { check &= false; };
 
-            if (gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)N) != GSL_SUCCESS) { check &= false; }
-            if (gsl_spline_init(interpolation_r, MJD_tab, r_tab, (unsigned int)N) != GSL_SUCCESS) { check &= false; }
+            if (gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)n_lines_ephemerides) != GSL_SUCCESS) { check &= false; }
+            if (gsl_spline_init(interpolation_r, MJD_tab, r_tab, (unsigned int)n_lines_ephemerides) != GSL_SUCCESS) { check &= false; }
 
 
             cout << new_prefix.value << "Read values:\n";
-            for (l = 0; l < N; l++) {
+            for (l = 0; l < n_lines_ephemerides; l++) {
                 cout << new_prefix.value << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
             }
 
@@ -779,7 +779,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
 
 
             //remove discontinuous jumps in GHA to allow for interpolation
-            for (sum = 0.0, l = 0; l < N - 1; l++) {
+            for (sum = 0.0, l = 0; l < n_lines_ephemerides - 1; l++) {
                 //cout << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
                 if (((GHA_tab[l] - sum) > M_PI) && (GHA_tab[l + 1] < M_PI)) {
                     sum += 2.0 * M_PI;
@@ -788,12 +788,12 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
             }
 
             cout << new_prefix.value << "Read values:\n";
-            for (l = 0; l < N; l++) {
+            for (l = 0; l < n_lines_ephemerides; l++) {
                 cout << new_prefix.value << MJD_tab[l] << " \t\t" << GHA_tab[l] << "\t\t " << d_tab[l] << "\n";
             }
 
-            if (gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)N) != GSL_SUCCESS) { check &= false; }
-            if (gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)N) != GSL_SUCCESS) { check &= false; }
+            if (gsl_spline_init(interpolation_GHA, MJD_tab, GHA_tab, (unsigned int)n_lines_ephemerides) != GSL_SUCCESS) { check &= false; }
+            if (gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)n_lines_ephemerides) != GSL_SUCCESS) { check &= false; }
 
 
             if (gsl_spline_eval_e(interpolation_GHA, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((circle_of_equal_altitude->reference_position->lambda).value)) != GSL_SUCCESS) {

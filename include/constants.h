@@ -27,7 +27,7 @@ Angle max_lat, min_lat;
 //NASA's webgeocalc datafiles show L lines per day
 #define L 24.0
 //the time window in which interpolation is made has a width of N lines in NASA's webgeocalc files
-#define N 24.0
+#define n_lines_ephemerides 24.0
 #define epsrel (1e-12)
 #define epsilon_double (1e-14)
 #define max_iter (1e3)

@@ -246,7 +246,7 @@ inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector<
         
         //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
         if((i==0) || (i==n_points-1)){
-            end.put_back_in(draw_panel);
+            end->put_back_in(draw_panel);
         }
 
         if ((draw_panel->GeoToDrawPanel)(end, &p, false)) {
@@ -309,7 +309,7 @@ inline void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* 
         
         //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
         if((i==0) || (i==n_points-1)){
-            end.put_back_in(draw_panel);
+            end->put_back_in(draw_panel);
         }
 
         if ((draw_panel->GeoToDrawPanel)(end, &temp, false)) {
@@ -432,7 +432,7 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
                     
                     //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
                     if((i==0) || (i==n_points-1)){
-                        end.put_back_in(draw_panel);
+                        end->put_back_in(draw_panel);
                     }
 
                     check = (draw_panel->GeoToDrawPanel)(end, &temp, true);
@@ -538,7 +538,7 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
                     if((i==0) || (i==n_points-1)){
                         //the non-valid point is the first or last point in the Route chunk -> the point may be non valid because it lies on the edge, i.e., because of a rounding error -> put it back in and, if the Position that has been put_back_in is valid, convert it to a Position with GeoToDrawPanel
                         
-                        end.put_back_in(draw_panel);
+                        end->put_back_in(draw_panel);
                         
                         if((draw_panel->GeoToDrawPanel)(end, &p, false)){
                             

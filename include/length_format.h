@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-#include "string.h"
+#include "my_string.h"
 
 using namespace std;
 

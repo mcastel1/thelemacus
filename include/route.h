@@ -14,6 +14,7 @@
 #include "color.h"
 #include "constants.h"
 #include "draw_panel.h"
+#include "length.h"
 #include "length_format.h"
 #include "my_string.h"
 #include "position.h"

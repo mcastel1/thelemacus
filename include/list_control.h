@@ -12,7 +12,11 @@
 
 #include <vector>
 
-#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+#include <wx/textctrl.h>
+#include <wx/listctrl.h>
 
 
 

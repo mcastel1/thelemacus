@@ -6,6 +6,8 @@
 //
 
 #include "route_type_field.h"
+
+#include "constants.h"
 #include "route_type.h"
 #include "my_string.h"
 

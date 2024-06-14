@@ -7,7 +7,13 @@
 
 #include "projection_field.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
 
+#include "constants.h"
+#include "my_string.h"
+#include "projection.h"
 
 
 //constructor of a ProjectionField object, based on the parent frame frame

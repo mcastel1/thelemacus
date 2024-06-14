@@ -7,7 +7,9 @@
 
 #include "list_control.h"
 
-
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
 
 template<class S> ListControl<S>::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_buttons_in, const wxPoint& pos, const wxSize& size, long style) : wxListCtrl(parent_in, wxID_ANY, pos, size, style) {
 

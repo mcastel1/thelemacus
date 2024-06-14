@@ -11,6 +11,8 @@
 #include <iostream>
 #include <vector>
 
+#include "multiple_item_field.h"
+
 
 using namespace std;
 

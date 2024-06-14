@@ -8,7 +8,9 @@
 #include "my_time.h"
 
 
+#include <sstream>
 
+#include "my_string.h"
 
 
 //evaluates whether Time (*this) is equal to t

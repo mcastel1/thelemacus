@@ -8,7 +8,12 @@
 #ifndef dynamic_length_field_h
 #define dynamic_length_field_h
 
+#include <iostream>
+
 #include "length_field.h"
+
+using namespace std;
+
 
 //an editable GUI field to enter a Length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the DynamicLengthField object
 template<class P> class DynamicLengthField: public LengthField<P>{

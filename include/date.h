@@ -8,6 +8,9 @@
 #ifndef date_h
 #define date_h
 
+#include <iostream>
+
+using namespace std;
 
 class Date{
     

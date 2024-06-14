@@ -8,11 +8,10 @@
 #ifndef draw_panel_h
 #define draw_panel_h
 
+#include <iostream>
+
 #include <wx/gdicmn.h>
 #include <wx/mstream.h>
-
-
-
 
 #include "int.h"
 #include "position.h"
@@ -26,8 +25,10 @@
 #include "position_projection.h"
 #include "position_rectangle.h"
 
-class ChartFrame;
+using namespace std;
 
+
+class ChartFrame;
 
 class DrawPanel : public wxPanel{
     

@@ -10,6 +10,8 @@
 #ifndef angle_field_h
 #define angle_field_h
 
+#include <iostream>
+
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #include "wx/app.h"

@@ -8,7 +8,11 @@
 #ifndef bitmap_h
 #define bitmap_h
 
+#include <iostream>
+
 #include "my_string.h"
+
+using namespace std;
 
 //a class for Bitmap images
 class Bitmap: public wxBitmap{

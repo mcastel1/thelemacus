@@ -8,6 +8,8 @@
 #ifndef chart_frame_h
 #define chart_frame_h
 
+#include <iostream>
+
 #include "draw_panel.h"
 #include "unset_idling.h"
 #include "chart_panel.h"
@@ -17,6 +19,7 @@
 #include "static_length_field.h"
 #include "static_text.h"
 
+using namespace std;
 
 
 class DrawPanel;

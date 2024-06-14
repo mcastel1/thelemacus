@@ -22,6 +22,8 @@
 
 using namespace std;
 
+class ListFrame;
+
 
 class MyApp: public wxApp{
 public:

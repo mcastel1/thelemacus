@@ -7,6 +7,14 @@
 
 #include "date_field.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+#include <wx/textctrl.h>
+
+
+#include "date.h"
+
 
 //constructor of a DateField object, based on the parent frame frame
 template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {

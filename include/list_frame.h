@@ -18,12 +18,34 @@
 #include "my_app.h"
 #include "position.h"
 #include "position_projection.h"
+#include "position_rectangle.h"
+#include "print_message.h"
 #include "route.h"
 #include "route_frame.h"
 #include "sight.h"
+#include "set_idling.h"
 #include "unset_idling.h"
 
 using namespace std;
+
+class AskRemoveRelatedSight;
+class AskRemoveRelatedRoute;
+class Cartesian;
+class Catalog;
+class ChartFrame;
+class Data;
+class DeletePosition;
+class DeleteRoute;
+class DeleteSight;
+class ExistingRoute;
+class NewRoute;
+class OnSelectRouteInListControlRoutesForTransport;
+class OnNewRouteInListControlRoutesForTransport;
+class PositionRectangle;
+class Route;
+class RouteFrame;
+class SelectRoute;
+
 
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...

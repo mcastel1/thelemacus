@@ -751,24 +751,6 @@ public:
 };
 
 
-//this functor pops out a message window with title tile and  message message, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this class adaptable
-template<class T, typename FF_OK> class PrintMessage{
-    
-public:
-    
-    T* f;
-    wxControl* control;
-    String title, message, image_path;
-    FF_OK* f_ok;
-    MessageFrame<FF_OK>* message_frame;
-    
-    PrintMessage(T*, FF_OK*);
-    
-    void SetAndCall(wxControl*, String, String, String);
-    void operator()(void);
-    
-    
-};
 
 //this functor pops out a question window with title tile, quesiton question, and answers answer_y, answer_n, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this class adaptable. If the user answers yes/no to the question, f_yes/f_no are called
 template<class T, typename F_YES, typename F_NO, typename F_ABORT> class ShowQuestionFrame{

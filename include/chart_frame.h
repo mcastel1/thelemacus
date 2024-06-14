@@ -13,6 +13,7 @@
 #include "draw_panel.h"
 #include "unset_idling.h"
 #include "chart_panel.h"
+#include "print_message.h"
 #include "projection.h"
 #include "projection_field.h"
 #include "list_frame.h"
@@ -22,9 +23,11 @@
 using namespace std;
 
 
+class Angle;
 class DrawPanel;
 class ListFrame;
 class ChartPanel;
+template<class P> class StaticLengthField;
 
 class ChartFrame: public wxFrame{
     

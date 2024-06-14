@@ -16,6 +16,8 @@
 
 using namespace std;
 
+class Length;
+
 class Atmosphere{
     
 public:

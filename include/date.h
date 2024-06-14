@@ -12,6 +12,10 @@
 
 using namespace std;
 
+#include "my_string.h"
+
+class String;
+
 class Date{
     
 public:

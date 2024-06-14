@@ -1192,50 +1192,6 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 
 
 
-template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void) {
-    
-    SetIdling<T>* set_idling;
-    UnsetIdling<T>* unset_idling;
-    
-    set_idling = new SetIdling<T>(f);
-    unset_idling = new UnsetIdling<T>(f);
-    
-    //I may be about to prompt a temporary dialog window, thus I set f->idling to true
-    (*set_idling)();
-    
-    if (control != NULL) {
-        
-        if (((control->GetForegroundColour()) != (wxGetApp().error_color))) {
-            
-            message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
-            message_frame->Show(true);
-            message_frame->Raise();
-            
-            // control->SetFocus();
-            control->SetForegroundColour((wxGetApp().error_color));
-            control->SetFont(wxGetApp().error_font);
-            //                Reset(control);
-            
-        }
-
-    }
-    else {
-
-        message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
-        message_frame->Show(true);
-        message_frame->Raise();
-
-    }
-
-
-    //AFTER the dialog window has been closed, I set f->idling to calse
-    f->CallAfter(*unset_idling);
-
-
-}
-
-
-
 
 template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F_ABORT>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, F_ABORT* f_abort_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
 
@@ -1365,24 +1321,7 @@ template<typename F_A, typename F_B, typename F_ABORT> template<class E> void Qu
 }
 
 
-template<class T, typename FF_OK> PrintMessage<T, FF_OK>::PrintMessage(T* f_in, FF_OK* f_ok_in) {
 
-    f = f_in;
-    f_ok = f_ok_in;
-
-}
-
-//set the wxControl, title,  message  and image_path for the functor *this, and I call the functor operator() with CallAfter
-template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::SetAndCall(wxControl* control_in, String title_in, String message_in, String image_path_in) {
-
-    control = control_in;
-    title = title_in;
-    message = message_in;
-    image_path = image_path_in;
-
-    f->CallAfter(*this);
-
-}
 
 template<class T, typename F_YES, typename F_NO, typename F_ABORT> ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::ShowQuestionFrame(T* f_in, F_YES* f_yes_in, F_NO* f_no_in, F_ABORT* f_abort_in) {
 

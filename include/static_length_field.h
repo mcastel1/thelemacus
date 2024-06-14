@@ -16,6 +16,7 @@
 
 using namespace std;
 
+class Length;
 
 //a non-editable GUI field to display a Length, composed of a static text and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the DynamicLengthField object
 template<class P> class StaticLengthField: public LengthField<P>{

@@ -7,6 +7,8 @@
 
 #include "check_route_type.h"
 
+#include "constants.h"
+
 
 template<class P> CheckRouteType<P>::CheckRouteType(RouteTypeField<P>* p_in) {
 

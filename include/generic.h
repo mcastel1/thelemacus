@@ -8,6 +8,8 @@
 #endif
 #include <wx/combobox.h>
 #include <wx/listctrl.h>
+#include <wx/dcclient.h>
+
 
 #include "gsl_math.h"
 #include "gsl_vector.h"
@@ -28,6 +30,7 @@
 
 using namespace std;
 
+class MyApp;
 
 
 

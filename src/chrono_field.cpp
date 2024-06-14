@@ -7,7 +7,11 @@
 
 #include "chrono_field.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
 
+#include "chrono.h"
 
 //constructor of a ChronoField object, based on the parent frame frame
 template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* p) {

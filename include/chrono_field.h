@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include "chrono.h"
+
 using namespace std;
 
 //a GUI field containing a time, which is contained by an object of type P

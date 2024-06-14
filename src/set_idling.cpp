@@ -7,6 +7,10 @@
 
 #include "set_idling.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
 
 template<class P> SetIdling<P>::SetIdling(P* parent_in) {
 

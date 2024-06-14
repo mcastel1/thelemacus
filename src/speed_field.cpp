@@ -8,7 +8,12 @@
 #include "speed_field.h"
 
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+#include <wx/textctrl.h>
 
+#include "constants.h"
 
 
 

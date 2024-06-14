@@ -9,8 +9,11 @@
 #define string_h
 
 #include <iostream>
+#include <vector>
 
-#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
 #include <wx/gdicmn.h>
 #include <wx/window.h>
 

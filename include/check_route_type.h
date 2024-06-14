@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include "route_type_field.h"
+
 using namespace std;
 
 //a functor that checks if a Route type is valid

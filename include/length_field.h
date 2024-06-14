@@ -11,8 +11,11 @@
 #include <iostream>
 
 #include "length.h"
+#include "length_unit_field.h"
 
 using namespace std;
+
+class Length;
 
 
 //this class is for a GUI field including a length

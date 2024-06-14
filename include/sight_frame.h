@@ -10,7 +10,10 @@
 
 #include <iostream>
 
+#include "body_field.h"
+#include "check_field.h"
 #include "my_app.h"
+#include "limb_field.h"
 #include "list_frame.h"
 #include "sight.h"
 #include "static_text.h"
@@ -18,6 +21,11 @@
 
 using namespace std;
 
+
+template<class P> class BodyField;
+template<class P, class T> class CheckField;
+template<class P> class LimbField;
+template<class P> class DateField;
 
 class SightFrame: public wxFrame{
     

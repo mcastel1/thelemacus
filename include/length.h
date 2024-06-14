@@ -18,6 +18,8 @@
 
 using namespace std;
 
+class Speed;
+
 //a non-GUI object containing a Length
 class Length{
     

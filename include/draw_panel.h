@@ -13,22 +13,30 @@
 #include <wx/gdicmn.h>
 #include <wx/mstream.h>
 
+#include "cartesian.h"
+#include "chart_frame.h"
+#include "chart_panel.h"
 #include "int.h"
 #include "position.h"
 #include "length.h"
 #include "my_app.h"
-#include "cartesian.h"
-#include "route.h"
-#include "chart_frame.h"
-#include "unset_idling.h"
-#include "rotation.h"
 #include "position_projection.h"
 #include "position_rectangle.h"
+#include "print_message.h"
+#include "route.h"
+#include "rotation.h"
+#include "unset_idling.h"
+
 
 using namespace std;
 
 
+class Cartesian;
 class ChartFrame;
+class ChartPanel;
+class Position;
+class PositionRectangle;
+class Rotation;
 
 class DrawPanel : public wxPanel{
     

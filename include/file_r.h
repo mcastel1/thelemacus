@@ -13,7 +13,12 @@
 
 #include "file.h"
 
+#include "my_string.h"
+
 using namespace std;
+
+class String;
+
 
 //an inherited class from File class, for files that can be read only
 class FileR: public File{

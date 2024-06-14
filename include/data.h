@@ -17,6 +17,11 @@
 
 using namespace std;
 
+class Catalog;
+class Position;
+class Route;
+
+
 class Data{
     
 public:

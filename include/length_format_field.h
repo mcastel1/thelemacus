@@ -10,6 +10,10 @@
 
 #include <iostream>
 
+#include "check_length_format.h"
+#include "length_format.h"
+#include "multiple_item_field.h"
+
 using namespace std;
 
 

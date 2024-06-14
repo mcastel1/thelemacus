@@ -7,6 +7,9 @@
 
 #include "check_length_format.h"
 
+#include "constants.h"
+#include "length_format_field.h"
+
 
 
 template<class P> CheckLengthFormat<P>::CheckLengthFormat(LengthFormatField<P>* p_in) {

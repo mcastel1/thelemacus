@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include "length_format_field.h"
+
 
 using namespace std;
 

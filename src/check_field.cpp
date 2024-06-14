@@ -7,6 +7,15 @@
 
 #include "check_field.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+#include <wx/checkbox.h>
+
+
+
+#include "answer.h"
+
 
 //constructor of a CheckField object, based on the parent frame frame
 template<class P, class T> CheckField<P, T>::CheckField(wxPanel* panel_of_parent, Answer* p, T* related_field_in, bool direct_reverse_in) {

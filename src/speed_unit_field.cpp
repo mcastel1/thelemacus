@@ -1,0 +1,15 @@
+//
+//  speed_unit_field.cpp
+//  thelemacus
+//
+//  Created by Michele on 11/06/2024.
+//
+
+#include "speed_unit_field.h"
+
+
+
+//constructor of a LengthUnitField object, based on the parent frame frame
+template<class P> SpeedUnitField<P>::SpeedUnitField(wxPanel* panel_of_parent, SpeedUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, SpeedUnit, CheckLengthUnit<P> >(panel_of_parent, object_in, SpeedUnit_types, recent_items_in) {
+
+}

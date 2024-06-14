@@ -8,11 +8,16 @@
 #ifndef rotation_h
 #define rotation_h
 
+#include <iostream>
+
 #include "gsl_blas.h"
 
 #include "angle.h"
 #include "position.h"
 #include "my_string.h"
+
+using namespace std;
+
 
 class Position;
 

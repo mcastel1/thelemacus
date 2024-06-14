@@ -5,8 +5,12 @@
 //  Created by Michele on 11/06/2024.
 //
 
-#include "length_format_field.h"
+#include <wx/event.h>
+#include <wx/panel.h>
 
+#include "length_format.h"
+#include "length_format_field.h"
+#include "multiple_item_field.h"
 
 
 //constructor of a LengthFormatField object, based on the parent frame frame

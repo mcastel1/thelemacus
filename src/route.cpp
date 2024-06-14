@@ -1700,7 +1700,7 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
 
         check = true;
 
-        theta.set(String("angle between the two GPs"), acos(cos((reference_position.phi)) * cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) + sin((reference_position.phi)) * sin((route.reference_position).phi)), prefix);
+        theta.set(String("angle between the two GPs"), acos(cos((reference_position.phi)) * cos(route.reference_position->phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) + sin((reference_position.phi)) * sin(route.reference_position->phi)), prefix);
 
         if ((abs((omega.value) - (route.omega.value)) < (theta.value)) && ((theta.value) < (omega.value) + (route.omega.value))) {
             //in this case routes intersect
@@ -1745,8 +1745,8 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
                 route.compute_end(Length(Re * sin(route.omega.value) * ((u[0]).value)), prefix);
                 (route.end).print(String("position of intersection 1 for Route 2"), prefix, cout);
 
-                (*cos_crossing_angle) = cos((reference_position.phi)) * cos((route.reference_position).phi) * sin(t[0]) * sin(u[0]) + (cos(t[0]) * sin(reference_position.lambda) - cos(reference_position.lambda) * sin((reference_position.phi)) * sin(t[0])) * (cos(u[0]) * sin((route.reference_position).lambda) - cos((route.reference_position).lambda) * sin((route.reference_position).phi) * sin(u[0])) +
-                    (cos(reference_position.lambda) * cos(t[0]) + sin((reference_position.phi)) * sin(reference_position.lambda) * sin(t[0])) * (cos((route.reference_position).lambda) * cos(u[0]) + sin((route.reference_position).phi) * sin((route.reference_position).lambda) * sin(u[0]));
+                (*cos_crossing_angle) = cos((reference_position.phi)) * cos(route.reference_position->phi) * sin(t[0]) * sin(u[0]) + (cos(t[0]) * sin(reference_position.lambda) - cos(reference_position.lambda) * sin((reference_position.phi)) * sin(t[0])) * (cos(u[0]) * sin(route.reference_position->lambda) - cos(route.reference_position->lambda) * sin(route.reference_position->phi) * sin(u[0])) +
+                    (cos(reference_position.lambda) * cos(t[0]) + sin((reference_position.phi)) * sin(reference_position.lambda) * sin(t[0])) * (cos(route.reference_position->lambda) * cos(u[0]) + sin(route.reference_position->phi) * sin(route.reference_position->lambda) * sin(u[0]));
 
                 cout << prefix.value << "cos(angle 1 between tangents) = " << (*cos_crossing_angle) << "\n";
 

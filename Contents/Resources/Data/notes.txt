@@ -116,6 +116,7 @@
   
 
  ********** THINGS TO FIX ***********
+    - replace (*p). with p-> (for all symbols p)
     - replace Re with a constant Length() expressed in [nm]
     - see whether lass T> void CheckSpeedUnit<P>::operator()(T& and same for CheckLengthUnit can be replaced by a universal Check method in the parent class MultipleItemField
     - when you zoom in in the 3d projection there is an error message '[1;31mEntered value of  is not valid!' on the console

@@ -21,6 +21,9 @@
 #include "my_string.h"
 #include "check_angle.h"
 
+using namespace std;
+
+
 //this pre-declatation of the class CheckAngle is necessary because class CheckAngle and AngleField are intertwined
 template<class P> class CheckAngle;
 

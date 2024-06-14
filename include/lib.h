@@ -521,18 +521,6 @@ public:
 };
 
 
-//a functor that checks if a LengthFormat  is valid
-template<class P> class CheckLengthFormat{
-    
-public:
-    
-    //the LengthFormat  field containing the Route type
-    LengthFormatField<P>* p;
-    
-    CheckLengthFormat(LengthFormatField<P>*);
-    template<class T> void operator()(T&);
-    
-};
 
 
 

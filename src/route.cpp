@@ -1088,7 +1088,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
                             compute_end(Length(Re * (((((*t)[0]).value) + (((*t)[1]).value)) / 2.0)), String(""));
 
-                            if (!(end.is_in(circle, String("")))) {
+                            if (!(end->is_in(circle, String("")))) {
                                 //the midpoints on *this between t[0] and t[1] is not comprised into circle
 
                                 //I add 0 and 2*M_PI to the vector t, so I create two chunks of the curve *this which are comprised into circle

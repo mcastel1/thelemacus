@@ -12,6 +12,8 @@
 #endif
 
 #include "constants.h"
+#include "generic.h"
+#include "my_app.h"
 #include "my_string.h"
 #include "projection.h"
 

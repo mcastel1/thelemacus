@@ -10,6 +10,10 @@
 
 #include <iostream>
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
 using namespace std;
 
 //this functor sets idling -> false in parent

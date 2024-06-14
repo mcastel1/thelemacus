@@ -21,6 +21,7 @@
 #include "position_projection.h"
 #include "position_rectangle.h"
 #include "route_type.h"
+#include "speed.h"
 
 
 using namespace std;

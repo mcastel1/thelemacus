@@ -7,6 +7,11 @@
 
 #include "unset_idling.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
+
 template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in) {
 
     parent = parent_in;

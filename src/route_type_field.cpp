@@ -10,6 +10,7 @@
 #include "constants.h"
 #include "route_type.h"
 #include "my_string.h"
+#include "my_app.h"
 
 
 //constructor of a RouteTypeField object, based on the parent frame frame

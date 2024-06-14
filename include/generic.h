@@ -3,6 +3,10 @@
 
 #include <iostream>
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+#include <wx/combobox.h>
 #include <wx/listctrl.h>
 
 #include "gsl_math.h"

@@ -8,8 +8,11 @@
 #ifndef file_h
 #define file_h
 
+#include <iostream>
 
 #include "my_string.h"
+
+using namespace std;
 
 class String;
 

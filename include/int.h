@@ -8,8 +8,12 @@
 #ifndef int_h
 #define int_h
 
+#include <iostream>
 
 #include "my_string.h"
+
+using namespace std;
+
 
 class Int{
     

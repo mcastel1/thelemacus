@@ -8,8 +8,13 @@
 #ifndef limb_field_h
 #define limb_field_h
 
+#include <iostream>
+
 #include "limb.h"
 #include "check_limb.h"
+
+using namespace std;
+
 
 template <class P> class CheckLimb;
 
@@ -41,8 +46,6 @@ public:
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
-
-
 
 #endif /* limbfield_h */
 

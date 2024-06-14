@@ -8,8 +8,13 @@
 #ifndef position_rectangle_h
 #define position_rectangle_h
 
+#include <iostream>
+
 #include "position.h"
 #include "position_projection.h"
+
+using namespace std;
+
 
 class Position;
 class PositionProjection;

@@ -8,6 +8,12 @@
 #ifndef list_control_h
 #define list_control_h
 
+#include <iostream>
+
+#include <vector>
+
+using namespace std;
+
 
 //my own derived class of wxListCtrl, which contains objects of type S
 template<class S> class ListControl : public wxListCtrl{

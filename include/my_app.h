@@ -8,19 +8,20 @@
 #ifndef my_app_h
 #define my_app_h
 
+#include <iostream>
+
 #include <wx/display.h>
 
-
-
 #include <boost/date_time.hpp>
-
-
 
 #include "chrono.h"
 #include "angle.h"
 #include "int.h"
 #include "double.h"
 #include "list_frame.h"
+
+using namespace std;
+
 
 class MyApp: public wxApp{
 public:

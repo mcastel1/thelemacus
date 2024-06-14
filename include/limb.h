@@ -8,7 +8,12 @@
 #ifndef limb_h
 #define limb_h
 
+#include <iostream>
+
 #include "my_string.h"
+
+using namespace std;
+
 
 class Limb{
     

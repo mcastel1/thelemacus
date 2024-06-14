@@ -8,6 +8,8 @@
 #ifndef list_frame_h
 #define list_frame_h
 
+#include <iostream>
+
 #include "answer.h"
 #include "catalog.h"
 #include "chart_frame.h"
@@ -21,6 +23,7 @@
 #include "sight.h"
 #include "unset_idling.h"
 
+using namespace std;
 
 
 //this is a wxFrame designed to contain the list of sights, routes, etc...

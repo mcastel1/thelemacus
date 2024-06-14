@@ -8,10 +8,15 @@
 #ifndef length_h
 #define length_h
 
+#include <iostream>
+
 #include "my_string.h"
 #include "length_unit.h"
 #include "chrono.h"
 #include "speed.h"
+#include "constants.h"
+
+using namespace std;
 
 //a non-GUI object containing a Length
 class Length{

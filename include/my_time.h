@@ -10,10 +10,11 @@
 
 #include <iostream>
 
-
 #include "date.h"
 #include "chrono.h"
 #include "my_string.h"
+
+using namespace std;
 
 
 class Time{

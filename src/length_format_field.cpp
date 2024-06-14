@@ -11,6 +11,7 @@
 #include "length_format.h"
 #include "length_format_field.h"
 #include "multiple_item_field.h"
+#include "my_app.h"
 
 
 //constructor of a LengthFormatField object, based on the parent frame frame

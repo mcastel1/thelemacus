@@ -1355,14 +1355,14 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             vector<Length> s(2);
 
             //case 1: the starting point (or reference_position) of *this
-            reference_position.distance(route.reference_position, s.data(), String(""), prefix);
+            reference_position->distance(route.reference_position, s.data(), String(""), prefix);
 
             //case 2: the end point of *this
             compute_end(prefix);
             end.distance(route.reference_position, (s.data()) + 1, String(""), prefix);
 
             cos_ts.set(String(""),
-                (cos((reference_position.lambda) - ((route.reference_position).lambda)) * cos((reference_position.phi)) * cos(((route.reference_position).phi)) + sin((reference_position.phi)) * sin(((route.reference_position).phi))) / sqrt(gsl_sf_pow_int(cos(((route.reference_position).phi)) * sin(Z) * sin((reference_position.lambda) - ((route.reference_position).lambda)) - cos(Z) * cos((reference_position.lambda) - ((route.reference_position).lambda)) * cos(((route.reference_position).phi)) * sin((reference_position.phi)) + cos(Z) * cos((reference_position.phi)) * sin(((route.reference_position).phi)), 2) + gsl_sf_pow_int(cos((reference_position.lambda) - ((route.reference_position).lambda)) * cos((reference_position.phi)) * cos(((route.reference_position).phi)) + sin((reference_position.phi)) * sin(((route.reference_position).phi)), 2)),
+                (cos((reference_position->lambda) - (route.reference_position->lambda)) * cos((reference_position->phi)) * cos(((route.reference_position).phi)) + sin((reference_position->phi)) * sin(((route.reference_position).phi))) / sqrt(gsl_sf_pow_int(cos(((route.reference_position).phi)) * sin(Z) * sin((reference_position->lambda) - ((route.reference_position).lambda)) - cos(Z) * cos((reference_position->lambda) - ((route.reference_position).lambda)) * cos(((route.reference_position).phi)) * sin((reference_position->phi)) + cos(Z) * cos((reference_position->phi)) * sin(((route.reference_position).phi)), 2) + gsl_sf_pow_int(cos((reference_position->lambda) - ((route.reference_position).lambda)) * cos((reference_position->phi)) * cos(((route.reference_position).phi)) + sin((reference_position->phi)) * sin(((route.reference_position).phi)), 2)),
                 prefix
             );
 
@@ -1393,11 +1393,11 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
 
                 a.set(String(""),
-                    -(cos((reference_position.lambda) - ((route.reference_position).lambda)) * cos((reference_position.phi)) * cos(((route.reference_position).phi))) - sin((reference_position.phi)) * sin(((route.reference_position).phi)),
+                    -(cos((reference_position->lambda) - ((route.reference_position).lambda)) * cos((reference_position->phi)) * cos(((route.reference_position).phi))) - sin((reference_position->phi)) * sin(((route.reference_position).phi)),
                     prefix);
 
                 b.set(String(""),
-                    -(cos(((route.reference_position).phi)) * sin(Z) * sin((reference_position.lambda) - ((route.reference_position).lambda))) + cos(Z) * cos((reference_position.lambda) - ((route.reference_position).lambda)) * cos(((route.reference_position).phi)) * sin((reference_position.phi)) - cos(Z) * cos((reference_position.phi)) * sin(((route.reference_position).phi)),
+                    -(cos(((route.reference_position).phi)) * sin(Z) * sin((reference_position->lambda) - ((route.reference_position).lambda))) + cos(Z) * cos((reference_position->lambda) - ((route.reference_position).lambda)) * cos(((route.reference_position).phi)) * sin((reference_position->phi)) - cos(Z) * cos((reference_position->phi)) * sin(((route.reference_position).phi)),
                     prefix);
 
 
@@ -1477,7 +1477,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             if (type == (Route_types[2])) {
                 //*this is a circle of equal altitude -> I check check whetehr *this and route intersect
 
-                reference_position.distance(route.reference_position, &d, String(""), new_prefix);
+                reference_position->distance(route.reference_position, &d, String(""), new_prefix);
 
                 if (/*this is the condition that *this and route intersect*/(d > Re * fabs((omega.value) - (route.omega.value))) && (d < Re * ((omega + (route.omega)).value))) {
                     //in this case, *this and route intersect
@@ -1486,8 +1486,8 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
                         t->resize(2);
 
-                        if (((route.reference_position.phi) != M_PI_2) && ((route.reference_position.phi) != 3.0 * M_PI_2)) {
-                            //theg general case where route.reference_position.phi != +-pi/2
+                        if (((route.reference_position->phi) != M_PI_2) && ((route.reference_position->phi) != 3.0 * M_PI_2)) {
+                            //theg general case where route.reference_position->phi != +-pi/2
 
                             t_a.value = atan((8 * cos((route.reference_position).phi) * ((cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * sin(((reference_position).phi)) - cos(((reference_position).phi)) * sin((route.reference_position).phi)) * (cos(((reference_position).phi)) * cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * cot(omega) - cos(route.omega) * csc(omega) + cot(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi)) +
                                 abs(sin((reference_position.lambda) - (route.reference_position.lambda))) * cos((route.reference_position).phi) * sqrt(-(gsl_sf_pow_int(cos(route.omega), 2) * gsl_sf_pow_int(csc(omega), 2)) + gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position).lambda), 2) * gsl_sf_pow_int(cos((route.reference_position).lambda), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) +

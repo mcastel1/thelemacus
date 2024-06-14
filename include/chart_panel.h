@@ -8,8 +8,12 @@
 #ifndef chart_panel_h
 #define chart_panel_h
 
+#include <iostream>
 
 #include "chart_frame.h"
+
+using namespace std;
+
 
 class ChartFrame;
 

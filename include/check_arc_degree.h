@@ -8,7 +8,11 @@
 #ifndef check_arc_degree_h
 #define check_arc_degree_h
 
+#include <iostream>
+
 #include "angle_field.h"
+
+using namespace std;
 
 template<class P> class AngleField;
 

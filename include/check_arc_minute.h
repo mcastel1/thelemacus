@@ -8,7 +8,12 @@
 #ifndef check_arc_minute_h
 #define check_arc_minute_h
 
+#include <iostream>
+
 #include "angle_field.h"
+
+using namespace std;
+
 
 template<class P> class AngleField;
 

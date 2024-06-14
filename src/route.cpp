@@ -1371,7 +1371,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             if (compute_end(d, prefix)) {
 
                 s.resize(s.size() + 1);
-                end.distance(route.reference_position, &(s.back()), String(""), prefix);
+                end->distance(route.reference_position, &(s.back()), String(""), prefix);
 
             }
 
@@ -1380,7 +1380,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             if (compute_end(d, prefix)) {
 
                 s.resize(s.size() + 1);
-                end.distance(route.reference_position, &(s.back()), String(""), prefix);
+                end->distance(route.reference_position, &(s.back()), String(""), prefix);
 
             }
 

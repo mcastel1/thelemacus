@@ -8,11 +8,15 @@
 #ifndef sight_frame_h
 #define sight_frame_h
 
+#include <iostream>
+
 #include "my_app.h"
 #include "list_frame.h"
 #include "sight.h"
 #include "static_text.h"
 #include "angle_field.h"
+
+using namespace std;
 
 
 class SightFrame: public wxFrame{

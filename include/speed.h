@@ -8,9 +8,13 @@
 #ifndef speed_h
 #define speed_h
 
+#include <iostream>
+
 #include "my_string.h"
 #include "speed_unit.h"
+#include "generic.h"
 
+using namespace std;
 
 
 class Speed{

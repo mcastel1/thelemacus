@@ -5,8 +5,13 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include <iostream>
+
 #include "answer.h"
 #include "my_string.h"
+#include "generic.h"
+
+using namespace std;
 
 
 Answer::Answer(void) {

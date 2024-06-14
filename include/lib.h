@@ -657,19 +657,7 @@ public:
 };
 
 
-//this functor sets idling -> true in parent
-template<class P> class SetIdling{
-    
-public:
-    
-    //the frame which called this struct
-    P* parent;
-    
-    SetIdling(P*);
-    void operator()(wxCommandEvent&);
-    void operator()(void);
-    
-};
+
 
 
 

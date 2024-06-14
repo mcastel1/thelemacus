@@ -60,11 +60,7 @@ SomeRoutes::SomeRoutes(ListFrame* f_in) {
 }
 
 
-template<class P> SetIdling<P>::SetIdling(P* parent_in) {
 
-    parent = parent_in;
-
-}
 
 
 
@@ -255,22 +251,9 @@ template<class P> void ConfirmTransport<P>::operator()(void) {
 }
 
 
-template<class P> void SetIdling<P>::operator()(wxCommandEvent& event) {
 
-    (parent->idling) = true;
 
-    event.Skip(true);
 
-}
-
-//this is the same as template<class P> void SetIdling<P>::operator()(wxCommandEvent& event){ but without the event argument
-template<class P> void SetIdling<P>::operator()(void) {
-
-    wxCommandEvent dummy;
-
-    (*this)(dummy);
-
-}
 
 
 void AskRemoveRelatedSight::operator()(wxCommandEvent& event) {

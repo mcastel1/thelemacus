@@ -1359,7 +1359,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
             //case 2: the end point of *this
             compute_end(prefix);
-            end.distance(route.reference_position, (s.data()) + 1, String(""), prefix);
+            end->distance(route.reference_position, (s.data()) + 1, String(""), prefix);
 
             cos_ts.set(String(""),
                 (cos((reference_position->lambda) - (route.reference_position->lambda)) * cos((reference_position->phi)) * cos(((route.reference_position).phi)) + sin((reference_position->phi)) * sin(((route.reference_position).phi))) / sqrt(gsl_sf_pow_int(cos(((route.reference_position).phi)) * sin(Z) * sin((reference_position->lambda) - ((route.reference_position).lambda)) - cos(Z) * cos((reference_position->lambda) - ((route.reference_position).lambda)) * cos(((route.reference_position).phi)) * sin((reference_position->phi)) + cos(Z) * cos((reference_position->phi)) * sin(((route.reference_position).phi)), 2) + gsl_sf_pow_int(cos((reference_position->lambda) - ((route.reference_position).lambda)) * cos((reference_position->phi)) * cos(((route.reference_position).phi)) + sin((reference_position->phi)) * sin(((route.reference_position).phi)), 2)),

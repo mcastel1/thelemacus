@@ -26,6 +26,8 @@
 using namespace std;
 
 
+class String;
+
 //this pre-declatation of the class CheckAngle is necessary because class CheckAngle and AngleField are intertwined
 template<class P> class CheckAngle;
 

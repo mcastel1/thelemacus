@@ -21,7 +21,6 @@ using namespace std;
 //need forward declaratin of class String because class FileRW and String are intertwined.
 class String;
 
-using namespace std;
 
 //a inherited class from File class, for files on disk that can be read and written to
 class FileRW: public File{

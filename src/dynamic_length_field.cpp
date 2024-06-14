@@ -7,6 +7,14 @@
 
 #include "dynamic_length_field.h"
 
+#include <wx/panel.h>
+#include <wx/sizer.h>
+#include <wx/string.h>
+#include <wx/textctrl.h>
+
+
+#include "constants.h"
+#include "length.h"
 
 
 

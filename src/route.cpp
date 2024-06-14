@@ -889,32 +889,32 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
         t_1.set(String(""),
 
 
-            atan((cos((reference_position.lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position.phi) - cos(reference_position.phi) * sin(q.phi)) /
-                sqrt(gsl_pow_int(cos((reference_position.lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position.phi), 2) +
-                    gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position.lambda) - (q.lambda)), 2) -
-                    2 * cos(reference_position.phi) * cos((reference_position.lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position.phi) * sin(q.phi) +
-                    gsl_pow_int(cos(reference_position.phi), 2) * gsl_pow_int(sin(q.phi), 2)),
-                (cos(q.phi) * sin((reference_position.lambda) - (q.lambda))) /
-                sqrt(gsl_pow_int(cos((reference_position.lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position.phi), 2) +
-                    gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position.lambda) - (q.lambda)), 2) -
-                    2 * cos(reference_position.phi) * cos((reference_position.lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position.phi) * sin(q.phi) +
-                    gsl_pow_int(cos(reference_position.phi), 2) * gsl_pow_int(sin(q.phi), 2)))
+            atan((cos((reference_position->lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position->phi) - cos(reference_position->phi) * sin(q.phi)) /
+                sqrt(gsl_pow_int(cos((reference_position->lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position->phi), 2) +
+                    gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position->lambda) - (q.lambda)), 2) -
+                    2 * cos(reference_position->phi) * cos((reference_position->lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position->phi) * sin(q.phi) +
+                    gsl_pow_int(cos(reference_position->phi), 2) * gsl_pow_int(sin(q.phi), 2)),
+                (cos(q.phi) * sin((reference_position->lambda) - (q.lambda))) /
+                sqrt(gsl_pow_int(cos((reference_position->lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position->phi), 2) +
+                    gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position->lambda) - (q.lambda)), 2) -
+                    2 * cos(reference_position->phi) * cos((reference_position->lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position->phi) * sin(q.phi) +
+                    gsl_pow_int(cos(reference_position->phi), 2) * gsl_pow_int(sin(q.phi), 2)))
 
             , new_prefix);
 
 
         t_2.set(String(""),
 
-            atan((-(cos((reference_position.lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position.phi)) + cos(reference_position.phi) * sin(q.phi)) /
-                sqrt(gsl_pow_int(cos((reference_position.lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position.phi), 2) +
-                    gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position.lambda) - (q.lambda)), 2) -
-                    2 * cos(reference_position.phi) * cos((reference_position.lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position.phi) * sin(q.phi) +
-                    gsl_pow_int(cos(reference_position.phi), 2) * gsl_pow_int(sin(q.phi), 2)),
-                -((cos(q.phi) * sin((reference_position.lambda) - (q.lambda))) /
-                    sqrt(gsl_pow_int(cos((reference_position.lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position.phi), 2) +
-                        gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position.lambda) - (q.lambda)), 2) -
-                        2 * cos(reference_position.phi) * cos((reference_position.lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position.phi) * sin(q.phi) +
-                        gsl_pow_int(cos(reference_position.phi), 2) * gsl_pow_int(sin(q.phi), 2))))
+            atan((-(cos((reference_position->lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position->phi)) + cos(reference_position->phi) * sin(q.phi)) /
+                sqrt(gsl_pow_int(cos((reference_position->lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position->phi), 2) +
+                    gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position->lambda) - (q.lambda)), 2) -
+                    2 * cos(reference_position->phi) * cos((reference_position->lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position->phi) * sin(q.phi) +
+                    gsl_pow_int(cos(reference_position->phi), 2) * gsl_pow_int(sin(q.phi), 2)),
+                -((cos(q.phi) * sin((reference_position->lambda) - (q.lambda))) /
+                    sqrt(gsl_pow_int(cos((reference_position->lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position->phi), 2) +
+                        gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position->lambda) - (q.lambda)), 2) -
+                        2 * cos(reference_position->phi) * cos((reference_position->lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position->phi) * sin(q.phi) +
+                        gsl_pow_int(cos(reference_position->phi), 2) * gsl_pow_int(sin(q.phi), 2))))
 
             , new_prefix);
 

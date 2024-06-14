@@ -1,3 +1,11 @@
+#ifndef units_h
+#define units_h
+
+#include <iostream>
+
+using namespace std;
+
+
 /*
  the following constants are unit-coversion constants: given a unit of measure [a] and a unit of measure [b], the constant a_to_b is defined by
  
@@ -24,3 +32,4 @@
 #define inch_to_km (25.4e-6)
 #define km_to_inch (1.0/inch_to_km)
 
+#endif

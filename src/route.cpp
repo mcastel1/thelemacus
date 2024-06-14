@@ -1029,7 +1029,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
                 if (intersection(circle, true, t, new_prefix) == 0) {
                     //*this and circle do not intersect: check whether *this is fully included into circle
 
-                    if (reference_position.is_in(circle, prefix)) {
+                    if (reference_position->is_in(circle, prefix)) {
                         //reference_position is included into the circle of circle, thus *this is included into circle
 
                         if (write_t) {
@@ -1063,7 +1063,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
                         case 1: {
                             //there is one intersection point
 
-                            if (reference_position.is_in(circle, prefix)) {
+                            if (reference_position->is_in(circle, prefix)) {
                                 //this->reference position is included into the circle of circle -> the part of *this comprised into circle is the one with 0 <= t <= (*t)[0]
 
                                 t->insert(t->begin(), Angle(String(""), 0.0, new_prefix));
@@ -1121,7 +1121,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
                     Length d;
 
-                    reference_position.distance(circle.reference_position, &d, String(""), new_prefix);
+                    reference_position->distance(circle.reference_position, &d, String(""), new_prefix);
 
                     if (d < (Re * ((omega + (circle.omega)).value))) {
                         //the circles have a common area

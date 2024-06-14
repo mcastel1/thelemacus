@@ -2298,11 +2298,7 @@ template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {
 
 }
 
-//constructor of a LengthUnitField object, based on the parent frame frame
-template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, LengthUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >(panel_of_parent, object_in, LengthUnit_types, recent_items_in) {
 
-}
- 
 
 //constructor of a LengthUnitField object, based on the parent frame frame
 template<class P> SpeedUnitField<P>::SpeedUnitField(wxPanel* panel_of_parent, SpeedUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, SpeedUnit, CheckLengthUnit<P> >(panel_of_parent, object_in, SpeedUnit_types, recent_items_in) {

@@ -12,6 +12,7 @@
 
 #include <wx/colour.h>
 
+#include "my_string.h"
 
 using namespace std;
 

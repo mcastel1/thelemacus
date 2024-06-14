@@ -6,7 +6,8 @@
 //
 
 #include "color.h"
-
+#include "constants.h"
+#include "generic.h"
 
 
 //constructs a color object by setting no arguments

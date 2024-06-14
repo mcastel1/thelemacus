@@ -10,6 +10,9 @@
 
 #include <iostream>
 
+#include <wx/colour.h>
+
+
 using namespace std;
 
 //a class for color objects

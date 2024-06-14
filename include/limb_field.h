@@ -10,6 +10,10 @@
 
 #include <iostream>
 
+#include <wx/checklst.h>
+#include <wx/sizer.h>
+
+
 #include "limb.h"
 #include "check_limb.h"
 

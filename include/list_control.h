@@ -12,6 +12,10 @@
 
 #include <vector>
 
+#include "wx/wxprec.h"
+
+
+
 using namespace std;
 
 

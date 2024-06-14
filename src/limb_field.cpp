@@ -5,6 +5,11 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include <wx/checklst.h>
+#include <wx/panel.h>
+#include <wx/sizer.h>
+
+
 #include "limb_field.h"
 #include "constants.h"
 #include "my_string.h"

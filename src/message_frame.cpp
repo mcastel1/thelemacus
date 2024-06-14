@@ -7,7 +7,7 @@
 
 #include "message_frame.h"
 
-
+#include "wx/wxprec.h"
 
 
 

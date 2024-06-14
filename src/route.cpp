@@ -812,14 +812,14 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));
 
-        listcontrol->SetItem(i, j++, wxString(reference_position.to_string((display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(reference_position->to_string((display_precision.value))));
         listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), (display_precision.value), true)));
 
     }
     else {
         //in this case the type of this is 'loxodrome' or 'orthodrome': the last two fields are empty, and I fill in only the first three fields
 
-        listcontrol->SetItem(i, j++, wxString(reference_position.to_string((display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(reference_position->to_string((display_precision.value))));
         listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.value), false)));
         
         set_length_from_time_speed();

@@ -507,18 +507,6 @@ public:
 };
 
 
-//a functor that checks if a Route type is valid
-template<class P> class CheckRouteType{
-    
-public:
-    
-    //the RouteType  field containing the Route type
-    RouteTypeField<P>* p;
-    
-    CheckRouteType(RouteTypeField<P>*);
-    template<class T> void operator()(T&);
-    
-};
 
 
 

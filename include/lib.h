@@ -825,34 +825,6 @@ public:
 
 
 
-//class for graphical object: a field to enter a speed, composed of a box and a dropdown menu to enter the units of measure of the speed. P is the type of the parent which hosts the DynamicLengthField object
-template<class P> class SpeedField{
-    
-public:
-    //the parent frame to which this object is attached
-    P* parent;
-    //the speed value
-    wxTextCtrl *value;
-    //unit of measure of the Speed written in *this
-    SpeedUnitField<P>* unit;
-    wxBoxSizer *sizer_h, *sizer_v;
-    Speed* speed;
-    //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
-    bool value_ok, /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
-    CheckSpeed<P>* check;
-
-    
-    SpeedField(wxPanel*, Speed*);
-    void set(void);
-    template<class T> void get(T&);
-    void Enable(bool);
-    template<class T> void InsertIn(T*);
-    bool is_ok(void);
-    template<class E> void OnEditValue(E&);
-    template<class E> void OnEditUnit(E&);
-    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-    
-};
 
 
 //class for graphical object: a field to enter a String, composed of a box. P is the type of the object in which this StringField will be inserted

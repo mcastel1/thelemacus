@@ -1943,7 +1943,7 @@ inline void DrawPanel::PreRender3D(void) {
             //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
 
             (lambda_saved.value) = (route.reference_position->lambda.value);
-            phi_saved = ((route.reference_position).phi);
+            phi_saved = (route.reference_position->phi);
             Z_saved = (route.Z);
 
             route.Z.set(0.0);
@@ -1974,7 +1974,7 @@ inline void DrawPanel::PreRender3D(void) {
     //draw parallels
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     route.type.set((Route_types[2]));
-    ((route.reference_position).lambda) = lambda_middle;
+    (route.reference_position->lambda) = lambda_middle;
 
     //this loop runs over the latitude of the parallel, which we call phi
     for ((phi.value) = (phi_start.value);

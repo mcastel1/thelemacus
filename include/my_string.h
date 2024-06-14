@@ -5,8 +5,8 @@
 //  Created by Michele on 11/06/2024.
 //
 
-#ifndef string_h
-#define string_h
+#ifndef my_string_h
+#define my_string_h
 
 #include <iostream>
 #include <vector>

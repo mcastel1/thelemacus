@@ -2183,7 +2183,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             
             //inlude in phi the latitude of the starting point of *this
             compute_end(Length(0.0), String(""));
-            phi.push_back(end.phi.normalize_pm_pi_ret());
+            phi.push_back(end->phi.normalize_pm_pi_ret());
             
             
             //there are two potential stationary points for the latitude vs t: include in phi the first one, if it lies on *this
@@ -2192,7 +2192,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
                 //                t.push_back(Angle(ts));
                 
                 compute_end(Length(Re*ts), String(""));
-                phi.push_back(end.phi.normalize_pm_pi_ret());
+                phi.push_back(end->phi.normalize_pm_pi_ret());
                 
             }
             
@@ -2202,13 +2202,13 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
                 //                t.push_back(Angle(ts+M_PI));
                 
                 compute_end(Length(Re*(ts+M_PI)), String(""));
-                phi.push_back(end.phi.normalize_pm_pi_ret());
+                phi.push_back(end->phi.normalize_pm_pi_ret());
                     
             }
             
             //*include in *phi the latitude of the endpoint of *this
             compute_end(String(""));
-            phi.push_back(end.phi.normalize_pm_pi_ret());
+            phi.push_back(end->phi.normalize_pm_pi_ret());
             
             
             //write the min/max element into *phi_min/max, respectively

@@ -16,6 +16,7 @@
 
 using namespace std;
 
+template<class P> class CheckChrono;
 class Color;
 class StaticText;
 

@@ -40,7 +40,7 @@ public:
     P* parent;
     wxArrayString signs, degrees;
     //the format of the AngleField: String("") for angles  between 0 and 2*pi, String("+-") for angles with a sign between 0 and pi, String("NS") for latitudes between -pi/2 and pi/2, and String("EW") for longitudes between -pi and pi
-    String format;
+    String * format;
     //degrees and minutes boxes
     wxComboBox*sign, * deg;
     wxTextCtrl *min;

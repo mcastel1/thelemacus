@@ -246,7 +246,7 @@ inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector<
         
         //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
         if((i==0) || (i==n_points-1)){
-            end.put_back_in(draw_panel);
+            end->put_back_in(draw_panel);
         }
 
         if ((draw_panel->GeoToDrawPanel)(end, &p, false)) {
@@ -309,7 +309,7 @@ inline void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* 
         
         //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
         if((i==0) || (i==n_points-1)){
-            end.put_back_in(draw_panel);
+            end->put_back_in(draw_panel);
         }
 
         if ((draw_panel->GeoToDrawPanel)(end, &temp, false)) {
@@ -432,7 +432,7 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
                     
                     //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
                     if((i==0) || (i==n_points-1)){
-                        end.put_back_in(draw_panel);
+                        end->put_back_in(draw_panel);
                     }
 
                     check = (draw_panel->GeoToDrawPanel)(end, &temp, true);
@@ -538,7 +538,7 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
                     if((i==0) || (i==n_points-1)){
                         //the non-valid point is the first or last point in the Route chunk -> the point may be non valid because it lies on the edge, i.e., because of a rounding error -> put it back in and, if the Position that has been put_back_in is valid, convert it to a Position with GeoToDrawPanel
                         
-                        end.put_back_in(draw_panel);
+                        end->put_back_in(draw_panel);
                         
                         if((draw_panel->GeoToDrawPanel)(end, &p, false)){
                             
@@ -812,14 +812,14 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));
 
-        listcontrol->SetItem(i, j++, wxString(reference_position.to_string((display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(reference_position->to_string((display_precision.value))));
         listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), (display_precision.value), true)));
 
     }
     else {
         //in this case the type of this is 'loxodrome' or 'orthodrome': the last two fields are empty, and I fill in only the first three fields
 
-        listcontrol->SetItem(i, j++, wxString(reference_position.to_string((display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(reference_position->to_string((display_precision.value))));
         listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.value), false)));
         
         set_length_from_time_speed();
@@ -889,32 +889,32 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
         t_1.set(String(""),
 
 
-            atan((cos((reference_position.lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position.phi) - cos(reference_position.phi) * sin(q.phi)) /
-                sqrt(gsl_pow_int(cos((reference_position.lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position.phi), 2) +
-                    gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position.lambda) - (q.lambda)), 2) -
-                    2 * cos(reference_position.phi) * cos((reference_position.lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position.phi) * sin(q.phi) +
-                    gsl_pow_int(cos(reference_position.phi), 2) * gsl_pow_int(sin(q.phi), 2)),
-                (cos(q.phi) * sin((reference_position.lambda) - (q.lambda))) /
-                sqrt(gsl_pow_int(cos((reference_position.lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position.phi), 2) +
-                    gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position.lambda) - (q.lambda)), 2) -
-                    2 * cos(reference_position.phi) * cos((reference_position.lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position.phi) * sin(q.phi) +
-                    gsl_pow_int(cos(reference_position.phi), 2) * gsl_pow_int(sin(q.phi), 2)))
+            atan((cos((reference_position->lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position->phi) - cos(reference_position->phi) * sin(q.phi)) /
+                sqrt(gsl_pow_int(cos((reference_position->lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position->phi), 2) +
+                    gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position->lambda) - (q.lambda)), 2) -
+                    2 * cos(reference_position->phi) * cos((reference_position->lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position->phi) * sin(q.phi) +
+                    gsl_pow_int(cos(reference_position->phi), 2) * gsl_pow_int(sin(q.phi), 2)),
+                (cos(q.phi) * sin((reference_position->lambda) - (q.lambda))) /
+                sqrt(gsl_pow_int(cos((reference_position->lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position->phi), 2) +
+                    gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position->lambda) - (q.lambda)), 2) -
+                    2 * cos(reference_position->phi) * cos((reference_position->lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position->phi) * sin(q.phi) +
+                    gsl_pow_int(cos(reference_position->phi), 2) * gsl_pow_int(sin(q.phi), 2)))
 
             , new_prefix);
 
 
         t_2.set(String(""),
 
-            atan((-(cos((reference_position.lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position.phi)) + cos(reference_position.phi) * sin(q.phi)) /
-                sqrt(gsl_pow_int(cos((reference_position.lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position.phi), 2) +
-                    gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position.lambda) - (q.lambda)), 2) -
-                    2 * cos(reference_position.phi) * cos((reference_position.lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position.phi) * sin(q.phi) +
-                    gsl_pow_int(cos(reference_position.phi), 2) * gsl_pow_int(sin(q.phi), 2)),
-                -((cos(q.phi) * sin((reference_position.lambda) - (q.lambda))) /
-                    sqrt(gsl_pow_int(cos((reference_position.lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position.phi), 2) +
-                        gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position.lambda) - (q.lambda)), 2) -
-                        2 * cos(reference_position.phi) * cos((reference_position.lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position.phi) * sin(q.phi) +
-                        gsl_pow_int(cos(reference_position.phi), 2) * gsl_pow_int(sin(q.phi), 2))))
+            atan((-(cos((reference_position->lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position->phi)) + cos(reference_position->phi) * sin(q.phi)) /
+                sqrt(gsl_pow_int(cos((reference_position->lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position->phi), 2) +
+                    gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position->lambda) - (q.lambda)), 2) -
+                    2 * cos(reference_position->phi) * cos((reference_position->lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position->phi) * sin(q.phi) +
+                    gsl_pow_int(cos(reference_position->phi), 2) * gsl_pow_int(sin(q.phi), 2)),
+                -((cos(q.phi) * sin((reference_position->lambda) - (q.lambda))) /
+                    sqrt(gsl_pow_int(cos((reference_position->lambda) - (q.lambda)), 2) * gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin(reference_position->phi), 2) +
+                        gsl_pow_int(cos(q.phi), 2) * gsl_pow_int(sin((reference_position->lambda) - (q.lambda)), 2) -
+                        2 * cos(reference_position->phi) * cos((reference_position->lambda) - (q.lambda)) * cos(q.phi) * sin(reference_position->phi) * sin(q.phi) +
+                        gsl_pow_int(cos(reference_position->phi), 2) * gsl_pow_int(sin(q.phi), 2))))
 
             , new_prefix);
 
@@ -1029,7 +1029,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
                 if (intersection(circle, true, t, new_prefix) == 0) {
                     //*this and circle do not intersect: check whether *this is fully included into circle
 
-                    if (reference_position.is_in(circle, prefix)) {
+                    if (reference_position->is_in(circle, prefix)) {
                         //reference_position is included into the circle of circle, thus *this is included into circle
 
                         if (write_t) {
@@ -1063,7 +1063,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
                         case 1: {
                             //there is one intersection point
 
-                            if (reference_position.is_in(circle, prefix)) {
+                            if (reference_position->is_in(circle, prefix)) {
                                 //this->reference position is included into the circle of circle -> the part of *this comprised into circle is the one with 0 <= t <= (*t)[0]
 
                                 t->insert(t->begin(), Angle(String(""), 0.0, new_prefix));
@@ -1088,7 +1088,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
                             compute_end(Length(Re * (((((*t)[0]).value) + (((*t)[1]).value)) / 2.0)), String(""));
 
-                            if (!(end.is_in(circle, String("")))) {
+                            if (!(end->is_in(circle, String("")))) {
                                 //the midpoints on *this between t[0] and t[1] is not comprised into circle
 
                                 //I add 0 and 2*M_PI to the vector t, so I create two chunks of the curve *this which are comprised into circle
@@ -1121,7 +1121,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
                     Length d;
 
-                    reference_position.distance(circle.reference_position, &d, String(""), new_prefix);
+                    reference_position->distance(circle.reference_position, &d, String(""), new_prefix);
 
                     if (d < (Re * ((omega + (circle.omega)).value))) {
                         //the circles have a common area
@@ -1355,14 +1355,14 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             vector<Length> s(2);
 
             //case 1: the starting point (or reference_position) of *this
-            reference_position.distance(route.reference_position, s.data(), String(""), prefix);
+            reference_position->distance(route.reference_position, s.data(), String(""), prefix);
 
             //case 2: the end point of *this
             compute_end(prefix);
-            end.distance(route.reference_position, (s.data()) + 1, String(""), prefix);
+            end->distance(route.reference_position, (s.data()) + 1, String(""), prefix);
 
             cos_ts.set(String(""),
-                (cos((reference_position.lambda) - ((route.reference_position).lambda)) * cos((reference_position.phi)) * cos(((route.reference_position).phi)) + sin((reference_position.phi)) * sin(((route.reference_position).phi))) / sqrt(gsl_sf_pow_int(cos(((route.reference_position).phi)) * sin(Z) * sin((reference_position.lambda) - ((route.reference_position).lambda)) - cos(Z) * cos((reference_position.lambda) - ((route.reference_position).lambda)) * cos(((route.reference_position).phi)) * sin((reference_position.phi)) + cos(Z) * cos((reference_position.phi)) * sin(((route.reference_position).phi)), 2) + gsl_sf_pow_int(cos((reference_position.lambda) - ((route.reference_position).lambda)) * cos((reference_position.phi)) * cos(((route.reference_position).phi)) + sin((reference_position.phi)) * sin(((route.reference_position).phi)), 2)),
+                (cos((reference_position->lambda) - (route.reference_position->lambda)) * cos((reference_position->phi)) * cos((route.reference_position->phi)) + sin((reference_position->phi)) * sin((route.reference_position->phi))) / sqrt(gsl_sf_pow_int(cos((route.reference_position->phi)) * sin(Z) * sin((reference_position->lambda) - (route.reference_position->lambda)) - cos(Z) * cos((reference_position->lambda) - (route.reference_position->lambda)) * cos((route.reference_position->phi)) * sin((reference_position->phi)) + cos(Z) * cos((reference_position->phi)) * sin((route.reference_position->phi)), 2) + gsl_sf_pow_int(cos((reference_position->lambda) - (route.reference_position->lambda)) * cos((reference_position->phi)) * cos((route.reference_position->phi)) + sin((reference_position->phi)) * sin((route.reference_position->phi)), 2)),
                 prefix
             );
 
@@ -1371,7 +1371,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             if (compute_end(d, prefix)) {
 
                 s.resize(s.size() + 1);
-                end.distance(route.reference_position, &(s.back()), String(""), prefix);
+                end->distance(route.reference_position, &(s.back()), String(""), prefix);
 
             }
 
@@ -1380,7 +1380,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             if (compute_end(d, prefix)) {
 
                 s.resize(s.size() + 1);
-                end.distance(route.reference_position, &(s.back()), String(""), prefix);
+                end->distance(route.reference_position, &(s.back()), String(""), prefix);
 
             }
 
@@ -1393,11 +1393,11 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
 
                 a.set(String(""),
-                    -(cos((reference_position.lambda) - ((route.reference_position).lambda)) * cos((reference_position.phi)) * cos(((route.reference_position).phi))) - sin((reference_position.phi)) * sin(((route.reference_position).phi)),
+                    -(cos((reference_position->lambda) - (route.reference_position->lambda)) * cos((reference_position->phi)) * cos((route.reference_position->phi))) - sin((reference_position->phi)) * sin((route.reference_position->phi)),
                     prefix);
 
                 b.set(String(""),
-                    -(cos(((route.reference_position).phi)) * sin(Z) * sin((reference_position.lambda) - ((route.reference_position).lambda))) + cos(Z) * cos((reference_position.lambda) - ((route.reference_position).lambda)) * cos(((route.reference_position).phi)) * sin((reference_position.phi)) - cos(Z) * cos((reference_position.phi)) * sin(((route.reference_position).phi)),
+                    -(cos((route.reference_position->phi)) * sin(Z) * sin((reference_position->lambda) - (route.reference_position->lambda))) + cos(Z) * cos((reference_position->lambda) - (route.reference_position->lambda)) * cos((route.reference_position->phi)) * sin((reference_position->phi)) - cos(Z) * cos((reference_position->phi)) * sin((route.reference_position->phi)),
                     prefix);
 
 
@@ -1477,7 +1477,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             if (type == (Route_types[2])) {
                 //*this is a circle of equal altitude -> I check check whetehr *this and route intersect
 
-                reference_position.distance(route.reference_position, &d, String(""), new_prefix);
+                reference_position->distance(route.reference_position, &d, String(""), new_prefix);
 
                 if (/*this is the condition that *this and route intersect*/(d > Re * fabs((omega.value) - (route.omega.value))) && (d < Re * ((omega + (route.omega)).value))) {
                     //in this case, *this and route intersect
@@ -1486,57 +1486,57 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
                         t->resize(2);
 
-                        if (((route.reference_position.phi) != M_PI_2) && ((route.reference_position.phi) != 3.0 * M_PI_2)) {
-                            //theg general case where route.reference_position.phi != +-pi/2
+                        if (((route.reference_position->phi) != M_PI_2) && ((route.reference_position->phi) != 3.0 * M_PI_2)) {
+                            //theg general case where route.reference_position->phi != +-pi/2
 
-                            t_a.value = atan((8 * cos((route.reference_position).phi) * ((cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * sin(((reference_position).phi)) - cos(((reference_position).phi)) * sin((route.reference_position).phi)) * (cos(((reference_position).phi)) * cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * cot(omega) - cos(route.omega) * csc(omega) + cot(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi)) +
-                                abs(sin((reference_position.lambda) - (route.reference_position.lambda))) * cos((route.reference_position).phi) * sqrt(-(gsl_sf_pow_int(cos(route.omega), 2) * gsl_sf_pow_int(csc(omega), 2)) + gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position).lambda), 2) * gsl_sf_pow_int(cos((route.reference_position).lambda), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) +
-                                    2 * cos(route.omega) * cot(omega) * csc(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi) - gsl_sf_pow_int(cot(omega), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) * gsl_sf_pow_int(sin((route.reference_position).phi), 2) +
-                                    2 * cos(((reference_position).phi)) * cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * csc(omega) * (cos(route.omega) * cot(omega) - csc(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi)) +
-                                    gsl_sf_pow_int(cos(((reference_position).phi)), 2) * (-(gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position.lambda.value) - (route.reference_position.lambda.value)), 2) * gsl_sf_pow_int(cot(omega), 2)) + gsl_sf_pow_int(sin((route.reference_position).phi), 2)) +
-                                    gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((route.reference_position).lambda), 2) * gsl_sf_pow_int(sin((reference_position).lambda), 2) - 2 * gsl_sf_pow_int(cos((route.reference_position).phi), 2) * cos((reference_position).lambda) * cos((route.reference_position).lambda) * sin((reference_position).lambda) * sin((route.reference_position).lambda) +
-                                    2 * gsl_sf_pow_int(cos((route.reference_position).phi), 2) * cos((reference_position).lambda) * cos((route.reference_position).lambda) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) * sin((reference_position).lambda) * sin((route.reference_position).lambda) + gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position).lambda), 2) * gsl_sf_pow_int(sin((route.reference_position).lambda), 2) +
-                                    gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) * gsl_sf_pow_int(sin((reference_position).lambda), 2) * gsl_sf_pow_int(sin((route.reference_position).lambda), 2)))) /
-                                (gsl_sf_pow_int(cos((route.reference_position).phi), 2) * (-6 + 2 * cos(2 * (reference_position.phi.value)) + 2 * cos(2 * (reference_position.lambda.value) - 2 * (route.reference_position.lambda.value)) + cos(2 * ((reference_position.phi.value) + (reference_position.lambda.value) - (route.reference_position.lambda.value))) + cos(2 * ((reference_position.phi.value) - (reference_position.lambda.value) + (route.reference_position.lambda.value)))) - 8 * gsl_sf_pow_int(cos(((reference_position).phi)), 2) * gsl_sf_pow_int(sin((route.reference_position).phi), 2) +
-                                    4 * cos((reference_position.lambda) - (route.reference_position.lambda)) * sin(2 * (reference_position.phi.value)) * sin(2 * (route.reference_position.phi.value))), (8 * gsl_sf_pow_int(cos((route.reference_position).phi), 2) * (cos(((reference_position).phi)) * cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * cot(omega) - cos(route.omega) * csc(omega) + cot(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi)) *
-                                        sin((reference_position.lambda) - (route.reference_position.lambda)) - 8 * abs(sin((reference_position.lambda.value) - (route.reference_position.lambda.value))) * cos((route.reference_position).phi) * csc((reference_position.lambda.value) - (route.reference_position.lambda.value)) * (cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * sin(((reference_position).phi)) - cos(((reference_position).phi)) * sin((route.reference_position).phi)) *
-                                        sqrt(-(gsl_sf_pow_int(cos(route.omega), 2) * gsl_sf_pow_int(csc(omega), 2)) + gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position).lambda), 2) * gsl_sf_pow_int(cos((route.reference_position).lambda), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) + 2 * cos(route.omega) * cot(omega) * csc(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi) -
-                                            gsl_sf_pow_int(cot(omega), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) * gsl_sf_pow_int(sin((route.reference_position).phi), 2) + 2 * cos(((reference_position).phi)) * cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * csc(omega) * (cos(route.omega) * cot(omega) - csc(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi)) +
-                                            gsl_sf_pow_int(cos(((reference_position).phi)), 2) * (-(gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position.lambda.value) - (route.reference_position.lambda.value)), 2) * gsl_sf_pow_int(cot(omega), 2)) + gsl_sf_pow_int(sin((route.reference_position).phi), 2)) + gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((route.reference_position).lambda), 2) * gsl_sf_pow_int(sin((reference_position).lambda), 2) -
-                                            2 * gsl_sf_pow_int(cos((route.reference_position).phi), 2) * cos((reference_position).lambda) * cos((route.reference_position).lambda) * sin((reference_position).lambda) * sin((route.reference_position).lambda) + 2 * gsl_sf_pow_int(cos((route.reference_position).phi), 2) * cos((reference_position).lambda) * cos((route.reference_position).lambda) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) * sin((reference_position).lambda) * sin((route.reference_position).lambda) +
-                                            gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position).lambda), 2) * gsl_sf_pow_int(sin((route.reference_position).lambda), 2) + gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) * gsl_sf_pow_int(sin((reference_position).lambda), 2) * gsl_sf_pow_int(sin((route.reference_position).lambda), 2))) /
-                                (gsl_sf_pow_int(cos((route.reference_position).phi), 2) * (-6 + 2 * cos(2 * (reference_position.phi.value)) + 2 * cos(2 * (reference_position.lambda.value) - 2 * (route.reference_position.lambda.value)) + cos(2 * ((reference_position.phi.value) + (reference_position.lambda.value) - (route.reference_position.lambda.value))) + cos(2 * ((reference_position.phi.value) - (reference_position.lambda.value) + (route.reference_position.lambda.value)))) - 8 * gsl_sf_pow_int(cos(((reference_position).phi)), 2) * gsl_sf_pow_int(sin((route.reference_position).phi), 2) +
-                                    4 * cos((reference_position.lambda) - (route.reference_position.lambda)) * sin(2 * (reference_position.phi.value)) * sin(2 * (route.reference_position.phi.value))));
+                            t_a.value = atan((8 * cos(route.reference_position->phi) * ((cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) * sin((reference_position->phi)) - cos((reference_position->phi)) * sin(route.reference_position->phi)) * (cos((reference_position->phi)) * cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) * cot(omega) - cos(route.omega) * csc(omega) + cot(omega) * sin((reference_position->phi)) * sin(route.reference_position->phi)) +
+                                abs(sin((reference_position->lambda) - (route.reference_position->lambda))) * cos(route.reference_position->phi) * sqrt(-(gsl_sf_pow_int(cos(route.omega), 2) * gsl_sf_pow_int(csc(omega), 2)) + gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos(reference_position->lambda), 2) * gsl_sf_pow_int(cos(route.reference_position->lambda), 2) * gsl_sf_pow_int(sin((reference_position->phi)), 2) +
+                                    2 * cos(route.omega) * cot(omega) * csc(omega) * sin((reference_position->phi)) * sin(route.reference_position->phi) - gsl_sf_pow_int(cot(omega), 2) * gsl_sf_pow_int(sin((reference_position->phi)), 2) * gsl_sf_pow_int(sin(route.reference_position->phi), 2) +
+                                    2 * cos((reference_position->phi)) * cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) * csc(omega) * (cos(route.omega) * cot(omega) - csc(omega) * sin((reference_position->phi)) * sin(route.reference_position->phi)) +
+                                    gsl_sf_pow_int(cos((reference_position->phi)), 2) * (-(gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos((reference_position->lambda.value) - (route.reference_position->lambda.value)), 2) * gsl_sf_pow_int(cot(omega), 2)) + gsl_sf_pow_int(sin(route.reference_position->phi), 2)) +
+                                    gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos(route.reference_position->lambda), 2) * gsl_sf_pow_int(sin(reference_position->lambda), 2) - 2 * gsl_sf_pow_int(cos(route.reference_position->phi), 2) * cos(reference_position->lambda) * cos(route.reference_position->lambda) * sin(reference_position->lambda) * sin(route.reference_position->lambda) +
+                                    2 * gsl_sf_pow_int(cos(route.reference_position->phi), 2) * cos(reference_position->lambda) * cos(route.reference_position->lambda) * gsl_sf_pow_int(sin((reference_position->phi)), 2) * sin(reference_position->lambda) * sin(route.reference_position->lambda) + gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos(reference_position->lambda), 2) * gsl_sf_pow_int(sin(route.reference_position->lambda), 2) +
+                                    gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(sin((reference_position->phi)), 2) * gsl_sf_pow_int(sin(reference_position->lambda), 2) * gsl_sf_pow_int(sin(route.reference_position->lambda), 2)))) /
+                                (gsl_sf_pow_int(cos(route.reference_position->phi), 2) * (-6 + 2 * cos(2 * (reference_position->phi.value)) + 2 * cos(2 * (reference_position->lambda.value) - 2 * (route.reference_position->lambda.value)) + cos(2 * ((reference_position->phi.value) + (reference_position->lambda.value) - (route.reference_position->lambda.value))) + cos(2 * ((reference_position->phi.value) - (reference_position->lambda.value) + (route.reference_position->lambda.value)))) - 8 * gsl_sf_pow_int(cos((reference_position->phi)), 2) * gsl_sf_pow_int(sin(route.reference_position->phi), 2) +
+                                    4 * cos((reference_position->lambda) - (route.reference_position->lambda)) * sin(2 * (reference_position->phi.value)) * sin(2 * (route.reference_position->phi.value))), (8 * gsl_sf_pow_int(cos(route.reference_position->phi), 2) * (cos((reference_position->phi)) * cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) * cot(omega) - cos(route.omega) * csc(omega) + cot(omega) * sin((reference_position->phi)) * sin(route.reference_position->phi)) *
+                                        sin((reference_position->lambda) - (route.reference_position->lambda)) - 8 * abs(sin((reference_position->lambda.value) - (route.reference_position->lambda.value))) * cos(route.reference_position->phi) * csc((reference_position->lambda.value) - (route.reference_position->lambda.value)) * (cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) * sin((reference_position->phi)) - cos((reference_position->phi)) * sin(route.reference_position->phi)) *
+                                        sqrt(-(gsl_sf_pow_int(cos(route.omega), 2) * gsl_sf_pow_int(csc(omega), 2)) + gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos(reference_position->lambda), 2) * gsl_sf_pow_int(cos(route.reference_position->lambda), 2) * gsl_sf_pow_int(sin((reference_position->phi)), 2) + 2 * cos(route.omega) * cot(omega) * csc(omega) * sin((reference_position->phi)) * sin(route.reference_position->phi) -
+                                            gsl_sf_pow_int(cot(omega), 2) * gsl_sf_pow_int(sin((reference_position->phi)), 2) * gsl_sf_pow_int(sin(route.reference_position->phi), 2) + 2 * cos((reference_position->phi)) * cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) * csc(omega) * (cos(route.omega) * cot(omega) - csc(omega) * sin((reference_position->phi)) * sin(route.reference_position->phi)) +
+                                            gsl_sf_pow_int(cos((reference_position->phi)), 2) * (-(gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos((reference_position->lambda.value) - (route.reference_position->lambda.value)), 2) * gsl_sf_pow_int(cot(omega), 2)) + gsl_sf_pow_int(sin(route.reference_position->phi), 2)) + gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos(route.reference_position->lambda), 2) * gsl_sf_pow_int(sin(reference_position->lambda), 2) -
+                                            2 * gsl_sf_pow_int(cos(route.reference_position->phi), 2) * cos(reference_position->lambda) * cos(route.reference_position->lambda) * sin(reference_position->lambda) * sin(route.reference_position->lambda) + 2 * gsl_sf_pow_int(cos(route.reference_position->phi), 2) * cos(reference_position->lambda) * cos(route.reference_position->lambda) * gsl_sf_pow_int(sin((reference_position->phi)), 2) * sin(reference_position->lambda) * sin(route.reference_position->lambda) +
+                                            gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos(reference_position->lambda), 2) * gsl_sf_pow_int(sin(route.reference_position->lambda), 2) + gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(sin((reference_position->phi)), 2) * gsl_sf_pow_int(sin(reference_position->lambda), 2) * gsl_sf_pow_int(sin(route.reference_position->lambda), 2))) /
+                                (gsl_sf_pow_int(cos(route.reference_position->phi), 2) * (-6 + 2 * cos(2 * (reference_position->phi.value)) + 2 * cos(2 * (reference_position->lambda.value) - 2 * (route.reference_position->lambda.value)) + cos(2 * ((reference_position->phi.value) + (reference_position->lambda.value) - (route.reference_position->lambda.value))) + cos(2 * ((reference_position->phi.value) - (reference_position->lambda.value) + (route.reference_position->lambda.value)))) - 8 * gsl_sf_pow_int(cos((reference_position->phi)), 2) * gsl_sf_pow_int(sin(route.reference_position->phi), 2) +
+                                    4 * cos((reference_position->lambda) - (route.reference_position->lambda)) * sin(2 * (reference_position->phi.value)) * sin(2 * (route.reference_position->phi.value))));
 
 
-                            t_b.value = atan((-8 * cos((route.reference_position).phi) * ((-(cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * sin(((reference_position).phi))) + cos(((reference_position).phi)) * sin((route.reference_position).phi)) * (cos(((reference_position).phi)) * cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * cot(omega) - cos(route.omega) * csc(omega) + cot(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi)) +
-                                abs(sin((reference_position.lambda) - (route.reference_position.lambda))) * cos((route.reference_position).phi) * sqrt(-(gsl_sf_pow_int(cos(route.omega), 2) * gsl_sf_pow_int(csc(omega), 2)) + gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position).lambda), 2) * gsl_sf_pow_int(cos((route.reference_position).lambda), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) +
-                                    2 * cos(route.omega) * cot(omega) * csc(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi) - gsl_sf_pow_int(cot(omega), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) * gsl_sf_pow_int(sin((route.reference_position).phi), 2) +
-                                    2 * cos(((reference_position).phi)) * cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * csc(omega) * (cos(route.omega) * cot(omega) - csc(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi)) +
-                                    gsl_sf_pow_int(cos(((reference_position).phi)), 2) * (-(gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position.lambda.value) - (route.reference_position.lambda.value)), 2) * gsl_sf_pow_int(cot(omega), 2)) + gsl_sf_pow_int(sin((route.reference_position).phi), 2)) +
-                                    gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((route.reference_position).lambda), 2) * gsl_sf_pow_int(sin((reference_position).lambda), 2) - 2 * gsl_sf_pow_int(cos((route.reference_position).phi), 2) * cos((reference_position).lambda) * cos((route.reference_position).lambda) * sin((reference_position).lambda) * sin((route.reference_position).lambda) +
-                                    2 * gsl_sf_pow_int(cos((route.reference_position).phi), 2) * cos((reference_position).lambda) * cos((route.reference_position).lambda) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) * sin((reference_position).lambda) * sin((route.reference_position).lambda) + gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position).lambda), 2) * gsl_sf_pow_int(sin((route.reference_position).lambda), 2) +
-                                    gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) * gsl_sf_pow_int(sin((reference_position).lambda), 2) * gsl_sf_pow_int(sin((route.reference_position).lambda), 2)))) /
-                                (gsl_sf_pow_int(cos((route.reference_position).phi), 2) * (-6 + 2 * cos(2 * (reference_position.phi.value)) + 2 * cos(2 * (reference_position.lambda.value) - 2 * (route.reference_position.lambda.value)) + cos(2 * ((reference_position.phi.value) + (reference_position.lambda.value) - (route.reference_position.lambda.value))) + cos(2 * ((reference_position.phi.value) - (reference_position.lambda.value) + (route.reference_position.lambda.value)))) - 8 * gsl_sf_pow_int(cos(((reference_position).phi)), 2) * gsl_sf_pow_int(sin((route.reference_position).phi), 2) +
-                                    4 * cos((reference_position.lambda) - (route.reference_position.lambda)) * sin(2 * (reference_position.phi.value)) * sin(2 * (route.reference_position.phi.value))), (8 * cos((route.reference_position).phi) * sin((reference_position.lambda) - (route.reference_position.lambda)) *
-                                        (cos((route.reference_position).phi) * (cos(((reference_position).phi)) * cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * cot(omega) - cos(route.omega) * csc(omega) + cot(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi)) +
-                                            abs(sin((reference_position.lambda) - (route.reference_position.lambda))) * gsl_sf_pow_int(csc((reference_position.lambda.value) - (route.reference_position.lambda.value)), 2) * (cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * sin(((reference_position).phi)) - cos(((reference_position).phi)) * sin((route.reference_position).phi)) *
-                                            sqrt(-(gsl_sf_pow_int(cos(route.omega), 2) * gsl_sf_pow_int(csc(omega), 2)) + gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position).lambda), 2) * gsl_sf_pow_int(cos((route.reference_position).lambda), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) +
-                                                2 * cos(route.omega) * cot(omega) * csc(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi) - gsl_sf_pow_int(cot(omega), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) * gsl_sf_pow_int(sin((route.reference_position).phi), 2) +
-                                                2 * cos(((reference_position).phi)) * cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) * csc(omega) * (cos(route.omega) * cot(omega) - csc(omega) * sin(((reference_position).phi)) * sin((route.reference_position).phi)) +
-                                                gsl_sf_pow_int(cos(((reference_position).phi)), 2) * (-(gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position.lambda.value) - (route.reference_position.lambda.value)), 2) * gsl_sf_pow_int(cot(omega), 2)) + gsl_sf_pow_int(sin((route.reference_position).phi), 2)) +
-                                                gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((route.reference_position).lambda), 2) * gsl_sf_pow_int(sin((reference_position).lambda), 2) - 2 * gsl_sf_pow_int(cos((route.reference_position).phi), 2) * cos((reference_position).lambda) * cos((route.reference_position).lambda) * sin((reference_position).lambda) * sin((route.reference_position).lambda) +
-                                                2 * gsl_sf_pow_int(cos((route.reference_position).phi), 2) * cos((reference_position).lambda) * cos((route.reference_position).lambda) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) * sin((reference_position).lambda) * sin((route.reference_position).lambda) + gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(cos((reference_position).lambda), 2) * gsl_sf_pow_int(sin((route.reference_position).lambda), 2) +
-                                                gsl_sf_pow_int(cos((route.reference_position).phi), 2) * gsl_sf_pow_int(sin(((reference_position).phi)), 2) * gsl_sf_pow_int(sin((reference_position).lambda), 2) * gsl_sf_pow_int(sin((route.reference_position).lambda), 2)))) /
-                                (gsl_sf_pow_int(cos((route.reference_position).phi), 2) * (-6 + 2 * cos(2 * (reference_position.phi.value)) + 2 * cos(2 * (reference_position.lambda.value) - 2 * (route.reference_position.lambda.value)) + cos(2 * ((reference_position.phi.value) + (reference_position.lambda.value) - (route.reference_position.lambda.value))) + cos(2 * ((reference_position.phi.value) - (reference_position.lambda.value) + (route.reference_position.lambda.value)))) - 8 * gsl_sf_pow_int(cos(((reference_position).phi)), 2) * gsl_sf_pow_int(sin((route.reference_position).phi), 2) +
-                                    4 * cos((reference_position.lambda) - (route.reference_position.lambda)) * sin(2 * (reference_position.phi.value)) * sin(2 * (route.reference_position.phi.value))));
+                            t_b.value = atan((-8 * cos(route.reference_position->phi) * ((-(cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) * sin((reference_position->phi))) + cos((reference_position->phi)) * sin(route.reference_position->phi)) * (cos((reference_position->phi)) * cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) * cot(omega) - cos(route.omega) * csc(omega) + cot(omega) * sin((reference_position->phi)) * sin(route.reference_position->phi)) +
+                                abs(sin((reference_position->lambda) - (route.reference_position->lambda))) * cos(route.reference_position->phi) * sqrt(-(gsl_sf_pow_int(cos(route.omega), 2) * gsl_sf_pow_int(csc(omega), 2)) + gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos(reference_position->lambda), 2) * gsl_sf_pow_int(cos(route.reference_position->lambda), 2) * gsl_sf_pow_int(sin((reference_position->phi)), 2) +
+                                    2 * cos(route.omega) * cot(omega) * csc(omega) * sin((reference_position->phi)) * sin(route.reference_position->phi) - gsl_sf_pow_int(cot(omega), 2) * gsl_sf_pow_int(sin((reference_position->phi)), 2) * gsl_sf_pow_int(sin(route.reference_position->phi), 2) +
+                                    2 * cos((reference_position->phi)) * cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) * csc(omega) * (cos(route.omega) * cot(omega) - csc(omega) * sin((reference_position->phi)) * sin(route.reference_position->phi)) +
+                                    gsl_sf_pow_int(cos((reference_position->phi)), 2) * (-(gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos((reference_position->lambda.value) - (route.reference_position->lambda.value)), 2) * gsl_sf_pow_int(cot(omega), 2)) + gsl_sf_pow_int(sin(route.reference_position->phi), 2)) +
+                                    gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos(route.reference_position->lambda), 2) * gsl_sf_pow_int(sin(reference_position->lambda), 2) - 2 * gsl_sf_pow_int(cos(route.reference_position->phi), 2) * cos(reference_position->lambda) * cos(route.reference_position->lambda) * sin(reference_position->lambda) * sin(route.reference_position->lambda) +
+                                    2 * gsl_sf_pow_int(cos(route.reference_position->phi), 2) * cos(reference_position->lambda) * cos(route.reference_position->lambda) * gsl_sf_pow_int(sin((reference_position->phi)), 2) * sin(reference_position->lambda) * sin(route.reference_position->lambda) + gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos(reference_position->lambda), 2) * gsl_sf_pow_int(sin(route.reference_position->lambda), 2) +
+                                    gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(sin((reference_position->phi)), 2) * gsl_sf_pow_int(sin(reference_position->lambda), 2) * gsl_sf_pow_int(sin(route.reference_position->lambda), 2)))) /
+                                (gsl_sf_pow_int(cos(route.reference_position->phi), 2) * (-6 + 2 * cos(2 * (reference_position->phi.value)) + 2 * cos(2 * (reference_position->lambda.value) - 2 * (route.reference_position->lambda.value)) + cos(2 * ((reference_position->phi.value) + (reference_position->lambda.value) - (route.reference_position->lambda.value))) + cos(2 * ((reference_position->phi.value) - (reference_position->lambda.value) + (route.reference_position->lambda.value)))) - 8 * gsl_sf_pow_int(cos((reference_position->phi)), 2) * gsl_sf_pow_int(sin(route.reference_position->phi), 2) +
+                                    4 * cos((reference_position->lambda) - (route.reference_position->lambda)) * sin(2 * (reference_position->phi.value)) * sin(2 * (route.reference_position->phi.value))), (8 * cos(route.reference_position->phi) * sin((reference_position->lambda) - (route.reference_position->lambda)) *
+                                        (cos(route.reference_position->phi) * (cos((reference_position->phi)) * cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) * cot(omega) - cos(route.omega) * csc(omega) + cot(omega) * sin((reference_position->phi)) * sin(route.reference_position->phi)) +
+                                            abs(sin((reference_position->lambda) - (route.reference_position->lambda))) * gsl_sf_pow_int(csc((reference_position->lambda.value) - (route.reference_position->lambda.value)), 2) * (cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) * sin((reference_position->phi)) - cos((reference_position->phi)) * sin(route.reference_position->phi)) *
+                                            sqrt(-(gsl_sf_pow_int(cos(route.omega), 2) * gsl_sf_pow_int(csc(omega), 2)) + gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos(reference_position->lambda), 2) * gsl_sf_pow_int(cos(route.reference_position->lambda), 2) * gsl_sf_pow_int(sin((reference_position->phi)), 2) +
+                                                2 * cos(route.omega) * cot(omega) * csc(omega) * sin((reference_position->phi)) * sin(route.reference_position->phi) - gsl_sf_pow_int(cot(omega), 2) * gsl_sf_pow_int(sin((reference_position->phi)), 2) * gsl_sf_pow_int(sin(route.reference_position->phi), 2) +
+                                                2 * cos((reference_position->phi)) * cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) * csc(omega) * (cos(route.omega) * cot(omega) - csc(omega) * sin((reference_position->phi)) * sin(route.reference_position->phi)) +
+                                                gsl_sf_pow_int(cos((reference_position->phi)), 2) * (-(gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos((reference_position->lambda.value) - (route.reference_position->lambda.value)), 2) * gsl_sf_pow_int(cot(omega), 2)) + gsl_sf_pow_int(sin(route.reference_position->phi), 2)) +
+                                                gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos(route.reference_position->lambda), 2) * gsl_sf_pow_int(sin(reference_position->lambda), 2) - 2 * gsl_sf_pow_int(cos(route.reference_position->phi), 2) * cos(reference_position->lambda) * cos(route.reference_position->lambda) * sin(reference_position->lambda) * sin(route.reference_position->lambda) +
+                                                2 * gsl_sf_pow_int(cos(route.reference_position->phi), 2) * cos(reference_position->lambda) * cos(route.reference_position->lambda) * gsl_sf_pow_int(sin((reference_position->phi)), 2) * sin(reference_position->lambda) * sin(route.reference_position->lambda) + gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(cos(reference_position->lambda), 2) * gsl_sf_pow_int(sin(route.reference_position->lambda), 2) +
+                                                gsl_sf_pow_int(cos(route.reference_position->phi), 2) * gsl_sf_pow_int(sin((reference_position->phi)), 2) * gsl_sf_pow_int(sin(reference_position->lambda), 2) * gsl_sf_pow_int(sin(route.reference_position->lambda), 2)))) /
+                                (gsl_sf_pow_int(cos(route.reference_position->phi), 2) * (-6 + 2 * cos(2 * (reference_position->phi.value)) + 2 * cos(2 * (reference_position->lambda.value) - 2 * (route.reference_position->lambda.value)) + cos(2 * ((reference_position->phi.value) + (reference_position->lambda.value) - (route.reference_position->lambda.value))) + cos(2 * ((reference_position->phi.value) - (reference_position->lambda.value) + (route.reference_position->lambda.value)))) - 8 * gsl_sf_pow_int(cos((reference_position->phi)), 2) * gsl_sf_pow_int(sin(route.reference_position->phi), 2) +
+                                    4 * cos((reference_position->lambda) - (route.reference_position->lambda)) * sin(2 * (reference_position->phi.value)) * sin(2 * (route.reference_position->phi.value))));
 
                         }
                         else {
-                            //the special case where  route.reference_position.phi = +- pi/2
+                            //the special case where  route.reference_position->phi = +- pi/2
 
-                            t_a.set(acos(-GSL_SIGN((((route.reference_position).phi).normalize_pm_pi_ret()).value) * (cos(route.omega) * csc(omega) * sec(reference_position.phi)) + cot(omega) * tan(reference_position.phi)));
-                            t_b.set(-acos(-GSL_SIGN((((route.reference_position).phi).normalize_pm_pi_ret()).value) * (cos(route.omega) * csc(omega) * sec(reference_position.phi)) + cot(omega) * tan(reference_position.phi)));
+                            t_a.set(acos(-GSL_SIGN(((route.reference_position->phi).normalize_pm_pi_ret()).value) * (cos(route.omega) * csc(omega) * sec(reference_position->phi)) + cot(omega) * tan(reference_position->phi)));
+                            t_b.set(-acos(-GSL_SIGN(((route.reference_position->phi).normalize_pm_pi_ret()).value) * (cos(route.omega) * csc(omega) * sec(reference_position->phi)) + cot(omega) * tan(reference_position->phi)));
 
 
                         }
@@ -1631,14 +1631,14 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 
     if (type == Route_types[2]) {
 
-        reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
+        reference_position->read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
         omega.read_from_stream<S>(String("omega"), input_stream, false, new_prefix);
         
         length.set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
 
     }else{
 
-        reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
+        reference_position->read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
 
         Z.read_from_stream<S>(String("starting heading"), input_stream, false, new_prefix);
 
@@ -1700,7 +1700,7 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
 
         check = true;
 
-        theta.set(String("angle between the two GPs"), acos(cos((reference_position.phi)) * cos((route.reference_position).phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) + sin((reference_position.phi)) * sin((route.reference_position).phi)), prefix);
+        theta.set(String("angle between the two GPs"), acos(cos((reference_position->phi)) * cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) + sin((reference_position->phi)) * sin(route.reference_position->phi)), prefix);
 
         if ((abs((omega.value) - (route.omega.value)) < (theta.value)) && ((theta.value) < (omega.value) + (route.omega.value))) {
             //in this case routes intersect
@@ -1740,13 +1740,13 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
                 }
 
                 compute_end(Length(Re * sin(omega) * ((t[0]).value)), prefix);
-                end.print(String("position of intersection 1 for Route 1"), prefix, cout);
+                end->print(String("position of intersection 1 for Route 1"), prefix, cout);
 
                 route.compute_end(Length(Re * sin(route.omega.value) * ((u[0]).value)), prefix);
-                (route.end).print(String("position of intersection 1 for Route 2"), prefix, cout);
+                route.end->print(String("position of intersection 1 for Route 2"), prefix, cout);
 
-                (*cos_crossing_angle) = cos((reference_position.phi)) * cos((route.reference_position).phi) * sin(t[0]) * sin(u[0]) + (cos(t[0]) * sin(reference_position.lambda) - cos(reference_position.lambda) * sin((reference_position.phi)) * sin(t[0])) * (cos(u[0]) * sin((route.reference_position).lambda) - cos((route.reference_position).lambda) * sin((route.reference_position).phi) * sin(u[0])) +
-                    (cos(reference_position.lambda) * cos(t[0]) + sin((reference_position.phi)) * sin(reference_position.lambda) * sin(t[0])) * (cos((route.reference_position).lambda) * cos(u[0]) + sin((route.reference_position).phi) * sin((route.reference_position).lambda) * sin(u[0]));
+                (*cos_crossing_angle) = cos((reference_position->phi)) * cos(route.reference_position->phi) * sin(t[0]) * sin(u[0]) + (cos(t[0]) * sin(reference_position->lambda) - cos(reference_position->lambda) * sin((reference_position->phi)) * sin(t[0])) * (cos(u[0]) * sin(route.reference_position->lambda) - cos(route.reference_position->lambda) * sin(route.reference_position->phi) * sin(u[0])) +
+                    (cos(reference_position->lambda) * cos(t[0]) + sin((reference_position->phi)) * sin(reference_position->lambda) * sin(t[0])) * (cos(route.reference_position->lambda) * cos(u[0]) + sin(route.reference_position->phi) * sin(route.reference_position->lambda) * sin(u[0]));
 
                 cout << prefix.value << "cos(angle 1 between tangents) = " << (*cos_crossing_angle) << "\n";
 
@@ -1798,7 +1798,7 @@ void Route::set_length_from_input(double t){
             double C, eta;
         
             C = gsl_pow_2(cos(Z));
-            eta = sqrt((1-sin((reference_position.phi)))/(1+sin((reference_position.phi))));
+            eta = sqrt((1-sin((reference_position->phi)))/(1+sin((reference_position->phi))));
 
             //set the length format, the length unit and the value of the length from t
             length_format.set(LengthFormat_types[1]);
@@ -1860,7 +1860,7 @@ void Route::compute_end(String prefix) {
             Angle t;
             
             
-            eta = sqrt((1.0 - sin(reference_position.phi.value)) / (1.0 + sin(reference_position.phi.value)));
+            eta = sqrt((1.0 - sin(reference_position->phi.value)) / (1.0 + sin(reference_position->phi.value)));
             
             //tau = +-_{notes}
             if (((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < 2.0 * M_PI))) { tau = +1; }
@@ -1879,7 +1879,7 @@ void Route::compute_end(String prefix) {
                 //this is the general expression of t vs l for Z != pi/2
                 
                 (t.value) = -tau * sqrt((1.0 - C) / C)
-                * log(1.0 / eta * tan(-tau * sqrt(C) * (length.value) / (2.0 * Re) + atan(sqrt((1.0 - sin(reference_position.phi.value)) / (1.0 + sin(reference_position.phi.value))))));
+                * log(1.0 / eta * tan(-tau * sqrt(C) * (length.value) / (2.0 * Re) + atan(sqrt((1.0 - sin(reference_position->phi.value)) / (1.0 + sin(reference_position->phi.value))))));
                 
             }
             else {
@@ -1891,9 +1891,9 @@ void Route::compute_end(String prefix) {
             
             /* t.print("t", prefix, cout); */
             
-            (end.phi).set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position.phi.value)))), prefix);
+            end->phi.set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position->phi.value)))), prefix);
             
-            (end.lambda).set(String(""), (reference_position.lambda.value) + sigma * (t.value), prefix);
+            end->lambda.set(String(""), (reference_position->lambda.value) + sigma * (t.value), prefix);
             
             break;
             
@@ -1907,11 +1907,11 @@ void Route::compute_end(String prefix) {
      
             t.set(String(""), (length.value) / Re, prefix);
             
-            (end.phi).set(String(""), asin(cos(Z) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);
-            (end.lambda).set(String(""),
-                             -atan(cos(t) * cos(reference_position.lambda) * cos(reference_position.phi) + sin(t) * (sin(Z) * sin(reference_position.lambda) - cos(Z) * cos(reference_position.lambda) * sin(reference_position.phi))
+            end->phi.set(String(""), asin(cos(Z) * cos(reference_position->phi) * sin(t) + cos(t) * sin(reference_position->phi)), prefix);
+            end->lambda.set(String(""),
+                             -atan(cos(t) * cos(reference_position->lambda) * cos(reference_position->phi) + sin(t) * (sin(Z) * sin(reference_position->lambda) - cos(Z) * cos(reference_position->lambda) * sin(reference_position->phi))
                                    ,
-                                   (cos(reference_position.lambda) * sin(t) * sin(Z) + sin(reference_position.lambda) * (-cos(t) * cos(reference_position.phi) + cos(Z) * sin(t) * sin(reference_position.phi)))),
+                                   (cos(reference_position->lambda) * sin(t) * sin(Z) + sin(reference_position->lambda) * (-cos(t) * cos(reference_position->phi) + cos(Z) * sin(t) * sin(reference_position->phi)))),
                              prefix);
             
             break;
@@ -1929,11 +1929,11 @@ void Route::compute_end(String prefix) {
             t.set(String(""), (length.value) / (Re * sin(omega)), prefix);
             
             
-            (end.phi).set(String(""), M_PI_2 - acos(cos((omega.value)) * sin(reference_position.phi) - cos(reference_position.phi) * cos((t.value)) * sin((omega.value))), prefix);
+            end->phi.set(String(""), M_PI_2 - acos(cos((omega.value)) * sin(reference_position->phi) - cos(reference_position->phi) * cos((t.value)) * sin((omega.value))), prefix);
             
-            (end.lambda).set(String(""), -(atan((-sin(reference_position.lambda) * (cos(reference_position.phi) * cos((omega.value)) + cos((t.value)) * sin(reference_position.phi) * sin((omega.value))) + cos(reference_position.lambda) * sin((omega.value)) * sin((t.value))) / (cos(reference_position.phi) * cos(reference_position.lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position.lambda) * cos((t.value)) * sin(reference_position.phi) + sin(reference_position.lambda) * sin((t.value)))))), prefix);
-            if (cos(reference_position.phi) * cos(reference_position.lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position.lambda) * cos((t.value)) * sin(reference_position.phi) + sin(reference_position.lambda) * sin((t.value))) <= 0.0) {
-                (end.lambda) -= M_PI;
+            end->lambda.set(String(""), -(atan((-sin(reference_position->lambda) * (cos(reference_position->phi) * cos((omega.value)) + cos((t.value)) * sin(reference_position->phi) * sin((omega.value))) + cos(reference_position->lambda) * sin((omega.value)) * sin((t.value))) / (cos(reference_position->phi) * cos(reference_position->lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position->lambda) * cos((t.value)) * sin(reference_position->phi) + sin(reference_position->lambda) * sin((t.value)))))), prefix);
+            if (cos(reference_position->phi) * cos(reference_position->lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position->lambda) * cos((t.value)) * sin(reference_position->phi) + sin(reference_position->lambda) * sin((t.value))) <= 0.0) {
+                (end->lambda) -= M_PI;
             }
             
             break;
@@ -1942,7 +1942,7 @@ void Route::compute_end(String prefix) {
             
     }
     
-    (end.label.value) = "";
+    (end->label.value) = "";
     
 }
 
@@ -1992,7 +1992,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
 
     if ((type == (Route_types[0])) || (type == (Route_types[1]))) {
 
-        reference_position.print(String("start position"), new_prefix, ostr);
+        reference_position->print(String("start position"), new_prefix, ostr);
         Z.print(String("starting heading"), new_prefix, ostr);
 
         length_format.print(String("length format"), false, new_prefix, ostr);
@@ -2010,7 +2010,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
     }
     else {
 
-        reference_position.print(String("ground position"), new_prefix, ostr);
+        reference_position->print(String("ground position"), new_prefix, ostr);
         omega.print(String("aperture angle"), new_prefix, ostr);
 
     }
@@ -2042,7 +2042,7 @@ double Route::lambda_minus_pi(double t, void* route) {
     r->length.set(Re * sin((r->omega.value)) * t, LengthUnit_types[0]);
     r->compute_end(new_prefix);
 
-    return(((*r).end.lambda.value) - M_PI);
+    return(((*r).end->lambda.value) - M_PI);
 
 }
 
@@ -2060,12 +2060,12 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
     if (type == (Route_types[2])) {
         //*this is a circle of equal altitude
         
-        if (abs(-tan(reference_position.phi.value) * tan((omega.value))) < 1.0) {
-            //im this case ( abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0) there exists a value of t = t_{max} (t_{min}) such that reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and write reference_position.lambda_{t = t_{min}} and reference_position.lambda_{t = t_{max}}] in lambda_min, lambda_max
+        if (abs(-tan(reference_position->phi.value) * tan((omega.value))) < 1.0) {
+            //im this case ( abs(-tan(reference_position->phi.value)*tan((omega.value))) < 1.0) there exists a value of t = t_{max} (t_{min}) such that reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and write reference_position.lambda_{t = t_{min}} and reference_position.lambda_{t = t_{max}}] in lambda_min, lambda_max
             
             //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
-            t_max.set(String(""), acos(-tan(reference_position.phi.value) * tan((omega.value))), new_prefix);
-            t_min.set(String(""), 2.0 * M_PI - acos(-tan(reference_position.phi.value) * tan((omega.value))), new_prefix);
+            t_max.set(String(""), acos(-tan(reference_position->phi.value) * tan((omega.value))), new_prefix);
+            t_min.set(String(""), 2.0 * M_PI - acos(-tan(reference_position->phi.value) * tan((omega.value))), new_prefix);
             
             //p_max =  Position on the circle of equal altitude  at t = t_max
             length.set(Re * sin((omega.value)) * (t_max.value), LengthUnit_types[0]);
@@ -2106,7 +2106,7 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
         //eventually swap lambda_min/max in such a way that lambda_min lies on the left and lambda_max lies on the right as seen from the observer's position looking at the earth's center
         if ((((*lambda_min).value) < M_PI) && (((*lambda_max).value) > M_PI)) {
             
-            if (!(((reference_position.lambda) < (*lambda_min)) || ((reference_position.lambda) > (*lambda_max)))) {
+            if (!(((reference_position->lambda) < (*lambda_min)) || ((reference_position->lambda) > (*lambda_max)))) {
                 
                 temp = (*lambda_min);
                 (*lambda_min) = (*lambda_max);
@@ -2126,10 +2126,10 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
     }else {
         //*this is a loxodrome or an orthodrome: in this case, the longitude along the Route *this is either a constantly increasing or a constantly decreasing function of the parameteric coordiante t -> set the minimal / maximal longitudes as the longitudes of the start and end point of this (or vice-versa)
         
-        (*lambda_min) = (reference_position.lambda);
+        (*lambda_min) = (reference_position->lambda);
         
         compute_end(String(""));
-        (*lambda_max) = (end.lambda);
+        (*lambda_max) = (end->lambda);
         
         if((*lambda_min) > (*lambda_max)){
             
@@ -2179,11 +2179,11 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             
             phi.clear();
             
-            ts = atan(sin(reference_position.phi), cos(Z)*cos(reference_position.phi));
+            ts = atan(sin(reference_position->phi), cos(Z)*cos(reference_position->phi));
             
             //inlude in phi the latitude of the starting point of *this
             compute_end(Length(0.0), String(""));
-            phi.push_back(end.phi.normalize_pm_pi_ret());
+            phi.push_back(end->phi.normalize_pm_pi_ret());
             
             
             //there are two potential stationary points for the latitude vs t: include in phi the first one, if it lies on *this
@@ -2192,7 +2192,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
                 //                t.push_back(Angle(ts));
                 
                 compute_end(Length(Re*ts), String(""));
-                phi.push_back(end.phi.normalize_pm_pi_ret());
+                phi.push_back(end->phi.normalize_pm_pi_ret());
                 
             }
             
@@ -2202,13 +2202,13 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
                 //                t.push_back(Angle(ts+M_PI));
                 
                 compute_end(Length(Re*(ts+M_PI)), String(""));
-                phi.push_back(end.phi.normalize_pm_pi_ret());
+                phi.push_back(end->phi.normalize_pm_pi_ret());
                     
             }
             
             //*include in *phi the latitude of the endpoint of *this
             compute_end(String(""));
-            phi.push_back(end.phi.normalize_pm_pi_ret());
+            phi.push_back(end->phi.normalize_pm_pi_ret());
             
             
             //write the min/max element into *phi_min/max, respectively

@@ -1907,8 +1907,8 @@ void Route::compute_end(String prefix) {
      
             t.set(String(""), (length.value) / Re, prefix);
             
-            (end->phi).set(String(""), asin(cos(Z) * cos(reference_position->phi) * sin(t) + cos(t) * sin(reference_position->phi)), prefix);
-            (end->lambda).set(String(""),
+            end->phi.set(String(""), asin(cos(Z) * cos(reference_position->phi) * sin(t) + cos(t) * sin(reference_position->phi)), prefix);
+            end->lambda.set(String(""),
                              -atan(cos(t) * cos(reference_position->lambda) * cos(reference_position->phi) + sin(t) * (sin(Z) * sin(reference_position->lambda) - cos(Z) * cos(reference_position->lambda) * sin(reference_position->phi))
                                    ,
                                    (cos(reference_position->lambda) * sin(t) * sin(Z) + sin(reference_position->lambda) * (-cos(t) * cos(reference_position->phi) + cos(Z) * sin(t) * sin(reference_position->phi)))),

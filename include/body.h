@@ -18,8 +18,10 @@
 using namespace std;
 
 
+class Angle;
 class Catalog;
 class Length;
+class String;
 
 class Body{
     

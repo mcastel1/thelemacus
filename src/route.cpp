@@ -2042,7 +2042,7 @@ double Route::lambda_minus_pi(double t, void* route) {
     r->length.set(Re * sin((r->omega.value)) * t, LengthUnit_types[0]);
     r->compute_end(new_prefix);
 
-    return(((*r).end.lambda.value) - M_PI);
+    return(((*r).end->lambda.value) - M_PI);
 
 }
 

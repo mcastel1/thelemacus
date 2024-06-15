@@ -12,6 +12,8 @@
 #endif
 
 #include "chrono.h"
+#include "static_text.h"
+
 
 //constructor of a ChronoField object, based on the parent frame frame
 template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* p) {

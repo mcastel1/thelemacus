@@ -597,10 +597,10 @@ template<class T> void ChartFrame::Reset(T& event) {
     if ((projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
 
         //read lambda_min, ...., phi_max from file_init
-        lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        lambda_max.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        phi_min.read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
+        lambda_min->read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
+        lambda_max->read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
+        phi_min->read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
+        phi_max->read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
         draw_panel->Set_x_y_min_max_Mercator();
         ComputeZoomFactor_Mercator(draw_panel->x_span());
 

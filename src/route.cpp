@@ -1631,14 +1631,14 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 
     if (type == Route_types[2]) {
 
-        reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
+        reference_position->read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
         omega.read_from_stream<S>(String("omega"), input_stream, false, new_prefix);
         
         length.set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
 
     }else{
 
-        reference_position.read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
+        reference_position->read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
 
         Z.read_from_stream<S>(String("starting heading"), input_stream, false, new_prefix);
 

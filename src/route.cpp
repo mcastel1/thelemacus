@@ -1992,7 +1992,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
 
     if ((type == (Route_types[0])) || (type == (Route_types[1]))) {
 
-        reference_position.print(String("start position"), new_prefix, ostr);
+        reference_position->print(String("start position"), new_prefix, ostr);
         Z.print(String("starting heading"), new_prefix, ostr);
 
         length_format.print(String("length format"), false, new_prefix, ostr);

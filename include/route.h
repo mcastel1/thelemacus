@@ -29,7 +29,7 @@ using namespace std;
 class Position;
 class PositionRectangle;
 class Speed;
-
+class String;
 
 //if type = l or o, the parameters specifying the route are reference_position (which in this case is the start position of the Route), alpha, l. if type = c, the parameters specifying the route are reference_position (which in this case is the GP of the circle of equal altitude) and omega.
 class Route{

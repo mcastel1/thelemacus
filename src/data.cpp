@@ -345,7 +345,7 @@ int Data::compute_position(String prefix) {
                 
                 //computes the circle of equal altitude which represents the error of the sight
                 (error_circle.type) = RouteType(((Route_types[2]).value));
-                (error_circle.reference_position) = center;
+                (*(error_circle.reference_position)) = center;
                 (error_circle.omega.value) = (r.value) / Re;
                 (error_circle.label) = String("error on astronomical position");
                 ((error_circle.related_sight).value) = -1;

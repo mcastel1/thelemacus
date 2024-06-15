@@ -81,7 +81,7 @@ void Catalog::add(String type, String name, double radius) {
 
     body.type = type;
     body.name = name;
-    body.radius.value = radius;
+    body.radius->value = radius;
 
     list.push_back(body);
 

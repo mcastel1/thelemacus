@@ -18,16 +18,20 @@
 using namespace std;
 
 
+class Angle;
 class Catalog;
 class Length;
+class String;
 
 class Body{
     
 public:
 
-    String name, type;
-    Length radius;
-    Angle RA, d;
+    String *name, *type;
+    Length *radius;
+    Angle *RA, *d;
+    
+    Body();
 
     bool check(unsigned int*, Catalog, String);
     void print(String, String, ostream&);

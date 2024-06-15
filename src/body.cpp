@@ -9,6 +9,16 @@
 #include "generic.h"
 
 
+Body::Body(void){
+    
+    name = new String;
+    type = new String;
+    radius = new Length;
+    RA = new Angle;
+    d = new Angle;
+    
+}
+
 bool Body::operator==(const Body& body) {
 
     return (name == (body.name));
@@ -40,7 +50,7 @@ template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [
         getline(*input_stream, line);
         pos = line.find(" = ");
         type = line.substr(pos + 3, line.size() - (pos + 3));
-        cout << new_prefix.value << "Type = " << type.value << "\n";
+        cout << new_prefix.value << "Type = " << type->value << "\n";
 
 
         //read name
@@ -48,15 +58,15 @@ template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [
         getline(*input_stream, line);
         pos = line.find(" = ");
         name = line.substr(pos + 3, line.size() - (pos + 3));
-        cout << new_prefix.value << "Name = " << name.value << "\n";
+        cout << new_prefix.value << "Name = " << name->value << "\n";
 
 
         if (type == String("star")) {
-            RA.read_from_stream<S>(String("right ascension"), input_stream, false, new_prefix);
-            d.read_from_stream<S>(String("declination"), input_stream, false, new_prefix);
+            RA->read_from_stream<S>(String("right ascension"), input_stream, false, new_prefix);
+            d->read_from_stream<S>(String("declination"), input_stream, false, new_prefix);
         }
         else {
-            radius.read_from_stream<S>(String("radius"), input_stream, false, new_prefix);
+            radius->read_from_stream<S>(String("radius"), input_stream, false, new_prefix);
         }
 
         return true;
@@ -81,15 +91,15 @@ void Body::print(String name_in, String prefix, ostream& ostr) {
 
     ostr << prefix.value << name_in.value << ":\n";
 
-    ostr << new_prefix.value << "Type = " << type.value << "\n";
-    ostr << new_prefix.value << "Name = " << name.value << "\n";
+    ostr << new_prefix.value << "Type = " << type->value << "\n";
+    ostr << new_prefix.value << "Name = " << name->value << "\n";
 
     if (type == String("star")) {
-        RA.print(String("Right ascension"), new_prefix, ostr);
-        d.print(String("Declination"), new_prefix, ostr);
+        RA->print(String("Right ascension"), new_prefix, ostr);
+        d->print(String("Declination"), new_prefix, ostr);
     }
     else {
-        radius.print(String("Radius"), new_prefix, ostr);
+        radius->print(String("Radius"), new_prefix, ostr);
     }
 
 }

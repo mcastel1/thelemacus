@@ -8,6 +8,8 @@
 #include "chart_frame.h"
 
 #include "bitmap.h"
+#include "constants.h"
+
 
 
 ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {
@@ -749,7 +751,7 @@ void ChartFrame::UpdateSliderLabel_Mercator(void) {
     
     //compute the chart_scale factor
     scale_factor.set( ((unsigned int)(
-                   /*length of the NS edge of the plot area as measured on the surface of the earth, in  [nm]*/(((phi_max.normalize_pm_pi_ret().value) - (phi_min.normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in [nm]*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * inch_to_km/nm_to_km ) )) );
+                   /*length of the NS edge of the plot area as measured on the surface of the earth, in  [nm]*/(((phi_max->normalize_pm_pi_ret().value) - (phi_min->normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in [nm]*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * inch_to_km/nm_to_km ) )) );
     
     
     scale_factor.my_round(display_precision);

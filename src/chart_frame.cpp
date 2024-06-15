@@ -31,10 +31,10 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     dragging_chart = false;
 
     //read lambda_min, ...., phi_max from file_init
-    lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
-    lambda_max.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
-    phi_min.read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
-    phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
+    lambda_min->read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
+    lambda_max->read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
+    phi_min->read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
+    phi_max->read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
 
 
     this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnPressCtrlW<wxCloseEvent>, this);

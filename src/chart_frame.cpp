@@ -687,8 +687,8 @@ void ChartFrame::Animate(void){
             PositionProjection q_NE, q_SW, q_center;
             Position p;
             
-            q_NE.NormalizeAndSetMercator(Position(lambda_max, phi_max));
-            q_SW.NormalizeAndSetMercator(Position(lambda_min, phi_min));
+            q_NE.NormalizeAndSetMercator(Position((*lambda_max), (*phi_max)));
+            q_SW.NormalizeAndSetMercator(Position((*lambda_min), (*phi_min)));
             q_center = (q_NE + q_SW)/2;
             
             (draw_panel->*(draw_panel->ProjectionToGeo))(q_center, &p);

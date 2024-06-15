@@ -10,6 +10,7 @@
 
 
 #include <iostream>
+#include <sstream>
 
 #include "sight.h"
 #include "position.h"

@@ -1891,9 +1891,9 @@ void Route::compute_end(String prefix) {
             
             /* t.print("t", prefix, cout); */
             
-            (end.phi).set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position->phi.value)))), prefix);
+            end->phi.set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position->phi.value)))), prefix);
             
-            (end.lambda).set(String(""), (reference_position->lambda.value) + sigma * (t.value), prefix);
+            end->lambda.set(String(""), (reference_position->lambda.value) + sigma * (t.value), prefix);
             
             break;
             
@@ -1907,8 +1907,8 @@ void Route::compute_end(String prefix) {
      
             t.set(String(""), (length.value) / Re, prefix);
             
-            (end.phi).set(String(""), asin(cos(Z) * cos(reference_position->phi) * sin(t) + cos(t) * sin(reference_position->phi)), prefix);
-            (end.lambda).set(String(""),
+            (end->phi).set(String(""), asin(cos(Z) * cos(reference_position->phi) * sin(t) + cos(t) * sin(reference_position->phi)), prefix);
+            (end->lambda).set(String(""),
                              -atan(cos(t) * cos(reference_position->lambda) * cos(reference_position->phi) + sin(t) * (sin(Z) * sin(reference_position->lambda) - cos(Z) * cos(reference_position->lambda) * sin(reference_position->phi))
                                    ,
                                    (cos(reference_position->lambda) * sin(t) * sin(Z) + sin(reference_position->lambda) * (-cos(t) * cos(reference_position->phi) + cos(Z) * sin(t) * sin(reference_position->phi)))),
@@ -1929,11 +1929,11 @@ void Route::compute_end(String prefix) {
             t.set(String(""), (length.value) / (Re * sin(omega)), prefix);
             
             
-            (end.phi).set(String(""), M_PI_2 - acos(cos((omega.value)) * sin(reference_position->phi) - cos(reference_position->phi) * cos((t.value)) * sin((omega.value))), prefix);
+            (end->phi).set(String(""), M_PI_2 - acos(cos((omega.value)) * sin(reference_position->phi) - cos(reference_position->phi) * cos((t.value)) * sin((omega.value))), prefix);
             
-            (end.lambda).set(String(""), -(atan((-sin(reference_position->lambda) * (cos(reference_position->phi) * cos((omega.value)) + cos((t.value)) * sin(reference_position->phi) * sin((omega.value))) + cos(reference_position->lambda) * sin((omega.value)) * sin((t.value))) / (cos(reference_position->phi) * cos(reference_position->lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position->lambda) * cos((t.value)) * sin(reference_position->phi) + sin(reference_position->lambda) * sin((t.value)))))), prefix);
+            (end->lambda).set(String(""), -(atan((-sin(reference_position->lambda) * (cos(reference_position->phi) * cos((omega.value)) + cos((t.value)) * sin(reference_position->phi) * sin((omega.value))) + cos(reference_position->lambda) * sin((omega.value)) * sin((t.value))) / (cos(reference_position->phi) * cos(reference_position->lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position->lambda) * cos((t.value)) * sin(reference_position->phi) + sin(reference_position->lambda) * sin((t.value)))))), prefix);
             if (cos(reference_position->phi) * cos(reference_position->lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position->lambda) * cos((t.value)) * sin(reference_position->phi) + sin(reference_position->lambda) * sin((t.value))) <= 0.0) {
-                (end.lambda) -= M_PI;
+                (end->lambda) -= M_PI;
             }
             
             break;
@@ -1942,7 +1942,7 @@ void Route::compute_end(String prefix) {
             
     }
     
-    (end.label.value) = "";
+    (end->label.value) = "";
     
 }
 

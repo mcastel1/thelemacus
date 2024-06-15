@@ -2106,7 +2106,7 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
         //eventually swap lambda_min/max in such a way that lambda_min lies on the left and lambda_max lies on the right as seen from the observer's position looking at the earth's center
         if ((((*lambda_min).value) < M_PI) && (((*lambda_max).value) > M_PI)) {
             
-            if (!(((reference_position.lambda) < (*lambda_min)) || ((reference_position.lambda) > (*lambda_max)))) {
+            if (!(((reference_position->lambda) < (*lambda_min)) || ((reference_position->lambda) > (*lambda_max)))) {
                 
                 temp = (*lambda_min);
                 (*lambda_min) = (*lambda_max);
@@ -2126,7 +2126,7 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
     }else {
         //*this is a loxodrome or an orthodrome: in this case, the longitude along the Route *this is either a constantly increasing or a constantly decreasing function of the parameteric coordiante t -> set the minimal / maximal longitudes as the longitudes of the start and end point of this (or vice-versa)
         
-        (*lambda_min) = (reference_position.lambda);
+        (*lambda_min) = (reference_position->lambda);
         
         compute_end(String(""));
         (*lambda_max) = (end.lambda);

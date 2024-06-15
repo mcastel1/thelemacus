@@ -12,10 +12,13 @@
 
 #include "chrono.h"
 #include "color.h"
+#include "static_text.h"
 
 using namespace std;
 
 class Color;
+class StaticText;
+
 
 
 //a GUI field containing a time, which is contained by an object of type P

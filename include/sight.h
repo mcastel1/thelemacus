@@ -25,6 +25,8 @@
 
 using namespace std;
 
+class Atmosphere;
+
 
 class Sight{
     

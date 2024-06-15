@@ -48,7 +48,7 @@ template<class P> template<class T> void BodyField<P>::get(T& event) {
 
         //I find the position of the content of the GUI field in the list of  the body names in catalog
         for (success = false, i = 0; (i < (catalog->list).size()) && (!success); i++) {
-            if (String(MultipleItemField<P, Body, CheckBody<P> >::name->GetValue().ToStdString()) == (((catalog->list)[i]).name)) {
+            if (String(MultipleItemField<P, Body, CheckBody<P> >::name->GetValue().ToStdString()) == (*(((catalog->list)[i]).name))) {
                 success = true;
             }
         }

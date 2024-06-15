@@ -12,6 +12,8 @@
 
 #include "length_format_field.h"
 
+template<class P> class LengthFormatField;
+
 
 using namespace std;
 

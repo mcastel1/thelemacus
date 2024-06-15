@@ -26,15 +26,20 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     new_prefix = prefix.append(String("\t"));
 
     flags.Center();
+    
+    lambda_min = new Angle;
+    lambda_max = new Angle;
+    phi_min = new Angle;
+    phi_max = new Angle;
 
     //when a ChartFrame is created, the chart is not being dragged
     dragging_chart = false;
 
     //read lambda_min, ...., phi_max from file_init
-    lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
-    lambda_max.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
-    phi_min.read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
-    phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
+    lambda_min->read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
+    lambda_max->read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
+    phi_min->read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
+    phi_max->read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), new_prefix);
 
 
     this->Bind(wxEVT_CLOSE_WINDOW, &ChartFrame::OnPressCtrlW<wxCloseEvent>, this);
@@ -419,8 +424,8 @@ template<class T> void ChartFrame::MoveWest(T& event) {
         delta = ((wxGetApp().relative_displacement).value) * (draw_panel->x_span());
 
         //update lambda_min, lambda_max according to the drag.
-        (lambda_min.value) += delta;
-        (lambda_max.value) += delta;
+        (lambda_min->value) += delta;
+        (lambda_max->value) += delta;
 
         lambda_min.normalize();
         lambda_max.normalize();
@@ -485,11 +490,11 @@ template<class T> void ChartFrame::MoveEast(T& event) {
         delta = ((wxGetApp().relative_displacement).value) * (draw_panel->x_span());
 
         //update lambda_min, lambda_max according to the drag.
-        (lambda_min.value) -= delta;
-        (lambda_max.value) -= delta;
+        (lambda_min->value) -= delta;
+        (lambda_max->value) -= delta;
 
-        lambda_min.normalize();
-        lambda_max.normalize();
+        lambda_min->normalize();
+        lambda_max->normalize();
 
         (draw_panel->*(draw_panel->Set_x_y_min_max))();
 
@@ -597,10 +602,10 @@ template<class T> void ChartFrame::Reset(T& event) {
     if ((projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
 
         //read lambda_min, ...., phi_max from file_init
-        lambda_min.read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        lambda_max.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        phi_min.read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        phi_max.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
+        lambda_min->read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
+        lambda_max->read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
+        phi_min->read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
+        phi_max->read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
         draw_panel->Set_x_y_min_max_Mercator();
         ComputeZoomFactor_Mercator(draw_panel->x_span());
 

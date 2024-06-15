@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+#include "angle.h"
 #include "draw_panel.h"
 #include "unset_idling.h"
 #include "chart_panel.h"
@@ -47,7 +48,7 @@ public:
     wxButton* button_up, *button_down, *button_left, *button_right;
     ProjectionField<ChartFrame>* projection;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
-    /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle phi_min, phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/lambda_min, lambda_max;
+    /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle *phi_min, *phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/*lambda_min, *lambda_max;
     //a vector of the points of the coastlines in DrawPanel coordinates: these are points of polygons concatenated in the linear arrays coastline_polygons_now/ before. The i-th polygon is stored n coastline_polygons_now/before[polygon_position_now/before[i]], coastline_polygons_now[polygon_position_now/before[i]+1], ..., coastline_polygons_now[polygon_position_now/before[i+1]-1]
     vector<wxPoint> coastline_polygons_now, coastline_polygons_before;
     vector<unsigned long long int> polygon_position_now, polygon_position_before;

@@ -37,15 +37,13 @@
 #include "gsl_integration.h"
 #include "gsl_roots.h"
 #include "gsl_sf_psi.h"
-// #include "gsl_complex.h"
-// #include "gsl_complex_math.h"
 
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/replace.hpp>
-#include <boost/dll.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/date_time.hpp>
-#include "boost/date_time/local_time/local_time.hpp"
+//#include <boost/algorithm/string.hpp>
+//#include <boost/algorithm/string/replace.hpp>
+//#include <boost/dll.hpp>
+//#include <boost/filesystem.hpp>
+//#include <boost/date_time.hpp>
+//#include "boost/date_time/local_time/local_time.hpp"
 
 
 using namespace std;

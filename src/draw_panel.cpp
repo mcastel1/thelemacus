@@ -1290,7 +1290,7 @@ inline void DrawPanel::PreRenderMercator(void) {
 
     //here I compute multiple quantities relative to the y axis: this computation is done here, at the very beginning of PreRenderMercator, because these quantitites will be needed immediatly to compute size_label_horizontal
     //set phi_start, phi_end and delta_phi
-    phi_span = (((parent->phi_max).normalize_pm_pi_ret()).value) - (((parent->phi_min).normalize_pm_pi_ret()).value);
+    phi_span = (((parent->phi_max)->normalize_pm_pi_ret()).value) - (((parent->phi_min)->normalize_pm_pi_ret()).value);
 
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if (phi_span > k) {

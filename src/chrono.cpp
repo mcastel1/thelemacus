@@ -5,6 +5,8 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include <sstream>
+
 #include "chrono.h"
 #include "generic.h"
 #include "my_app.h"

@@ -7,6 +7,8 @@
 
 #include "data.h"
 
+#include <sstream>
+
 
 
 // this function plots the Routes of type (Route_types[2]) in route_list in kml forma. WARNING: THIS FUNCTION USES THE SYSTEM() COMMAND AND THUS IT IS NOT PORTABLE ACROSS PLATFORMS. Also, this functions used file_kml, which has been removed from the code, and it should be revised.
@@ -343,7 +345,7 @@ int Data::compute_position(String prefix) {
                 
                 //computes the circle of equal altitude which represents the error of the sight
                 (error_circle.type) = RouteType(((Route_types[2]).value));
-                (error_circle.reference_position) = center;
+                (*(error_circle.reference_position)) = center;
                 (error_circle.omega.value) = (r.value) / Re;
                 (error_circle.label) = String("error on astronomical position");
                 ((error_circle.related_sight).value) = -1;

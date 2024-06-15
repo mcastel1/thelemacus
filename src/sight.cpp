@@ -619,8 +619,8 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
 
     cout << prefix.value << "Fetching ephemerides' data ...\n";
 
-    if ((body.type.value) != "star") {
-        filename << (wxGetApp().data_directory).value << body.name.value << ".txt";
+    if ((body.type->value) != "star") {
+        filename << (wxGetApp().data_directory).value << body.name->value << ".txt";
     }
     else {
         filename << (wxGetApp().data_directory).value << "j2000_to_itrf93.txt";
@@ -647,7 +647,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
         }
 
 
-        if ((body.type.value) != "star") {
+        if ((body.type->value) != "star") {
             //in this case I am getting the coordinate of a body with a non-zero size
 
             //if the body is not a star
@@ -757,10 +757,10 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 phi2 *= k;
                 phi3 *= k;
 
-                d_tab[l - l_min] = asin(cos(phi2) * sin((body.d.value)) - cos((body.d.value)) * cos(phi1) * sin((body.RA.value)) * sin(phi2) + cos((body.RA.value)) * cos((body.d.value)) * sin(phi1) * sin(phi2));
+                d_tab[l - l_min] = asin(cos(phi2) * sin((body.d->value)) - cos((body.d->value)) * cos(phi1) * sin((body.RA.value)) * sin(phi2) + cos((body.RA.value)) * cos((body.d->value)) * sin(phi1) * sin(phi2));
 
-                GHA_tab[l - l_min] = atan((-cos(phi3) * sin((body.d.value)) * sin(phi2) - cos((body.RA.value)) * cos((body.d.value)) * (-cos(phi2) * cos(phi3) * sin(phi1) - cos(phi1) * sin(phi3)) - cos((body.d.value)) * sin((body.RA.value)) * (cos(phi1) * cos(phi2) * cos(phi3) - sin(phi1) * sin(phi3))) / (sin((body.d.value)) * sin(phi2) * sin(phi3) + cos((body.d.value)) * sin((body.RA.value)) * (cos(phi3) * sin(phi1) + cos(phi1) * cos(phi2) * sin(phi3)) + cos((body.RA.value)) * cos((body.d.value)) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))));
-                if ((sin((body.d.value)) * sin(phi2) * sin(phi3) + cos((body.d.value)) * sin((body.RA.value)) * (cos(phi3) * sin(phi1) + cos(phi1) * cos(phi2) * sin(phi3)) + cos((body.RA.value)) * cos((body.d.value)) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))) < 0.0) {
+                GHA_tab[l - l_min] = atan((-cos(phi3) * sin((body.d->value)) * sin(phi2) - cos((body.RA.value)) * cos((body.d->value)) * (-cos(phi2) * cos(phi3) * sin(phi1) - cos(phi1) * sin(phi3)) - cos((body.d->value)) * sin((body.RA.value)) * (cos(phi1) * cos(phi2) * cos(phi3) - sin(phi1) * sin(phi3))) / (sin((body.d->value)) * sin(phi2) * sin(phi3) + cos((body.d->value)) * sin((body.RA.value)) * (cos(phi3) * sin(phi1) + cos(phi1) * cos(phi2) * sin(phi3)) + cos((body.RA.value)) * cos((body.d->value)) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))));
+                if ((sin((body.d->value)) * sin(phi2) * sin(phi3) + cos((body.d->value)) * sin((body.RA.value)) * (cos(phi3) * sin(phi1) + cos(phi1) * cos(phi2) * sin(phi3)) + cos((body.RA.value)) * cos((body.d->value)) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))) < 0.0) {
                     GHA_tab[l - l_min] += M_PI;
                 }
                 GHA_tab[l - l_min] = GHA_tab[l - l_min] - 2.0 * M_PI * floor(GHA_tab[l - l_min] / (2.0 * M_PI));

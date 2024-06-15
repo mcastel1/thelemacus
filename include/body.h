@@ -27,9 +27,9 @@ class Body{
     
 public:
 
-    String name, type;
-    Length radius;
-    Angle RA, d;
+    String *name, *type;
+    Length *radius;
+    Angle *RA, *d;
 
     bool check(unsigned int*, Catalog, String);
     void print(String, String, ostream&);

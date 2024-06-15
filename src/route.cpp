@@ -2010,7 +2010,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
     }
     else {
 
-        reference_position.print(String("ground position"), new_prefix, ostr);
+        reference_position->print(String("ground position"), new_prefix, ostr);
         omega.print(String("aperture angle"), new_prefix, ostr);
 
     }

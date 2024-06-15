@@ -1907,11 +1907,11 @@ void Route::compute_end(String prefix) {
      
             t.set(String(""), (length.value) / Re, prefix);
             
-            (end.phi).set(String(""), asin(cos(Z) * cos(reference_position.phi) * sin(t) + cos(t) * sin(reference_position.phi)), prefix);
+            (end.phi).set(String(""), asin(cos(Z) * cos(reference_position->phi) * sin(t) + cos(t) * sin(reference_position->phi)), prefix);
             (end.lambda).set(String(""),
-                             -atan(cos(t) * cos(reference_position.lambda) * cos(reference_position.phi) + sin(t) * (sin(Z) * sin(reference_position.lambda) - cos(Z) * cos(reference_position.lambda) * sin(reference_position.phi))
+                             -atan(cos(t) * cos(reference_position->lambda) * cos(reference_position->phi) + sin(t) * (sin(Z) * sin(reference_position->lambda) - cos(Z) * cos(reference_position->lambda) * sin(reference_position->phi))
                                    ,
-                                   (cos(reference_position.lambda) * sin(t) * sin(Z) + sin(reference_position.lambda) * (-cos(t) * cos(reference_position.phi) + cos(Z) * sin(t) * sin(reference_position.phi)))),
+                                   (cos(reference_position->lambda) * sin(t) * sin(Z) + sin(reference_position->lambda) * (-cos(t) * cos(reference_position->phi) + cos(Z) * sin(t) * sin(reference_position->phi)))),
                              prefix);
             
             break;
@@ -1929,10 +1929,10 @@ void Route::compute_end(String prefix) {
             t.set(String(""), (length.value) / (Re * sin(omega)), prefix);
             
             
-            (end.phi).set(String(""), M_PI_2 - acos(cos((omega.value)) * sin(reference_position.phi) - cos(reference_position.phi) * cos((t.value)) * sin((omega.value))), prefix);
+            (end.phi).set(String(""), M_PI_2 - acos(cos((omega.value)) * sin(reference_position->phi) - cos(reference_position->phi) * cos((t.value)) * sin((omega.value))), prefix);
             
-            (end.lambda).set(String(""), -(atan((-sin(reference_position.lambda) * (cos(reference_position.phi) * cos((omega.value)) + cos((t.value)) * sin(reference_position.phi) * sin((omega.value))) + cos(reference_position.lambda) * sin((omega.value)) * sin((t.value))) / (cos(reference_position.phi) * cos(reference_position.lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position.lambda) * cos((t.value)) * sin(reference_position.phi) + sin(reference_position.lambda) * sin((t.value)))))), prefix);
-            if (cos(reference_position.phi) * cos(reference_position.lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position.lambda) * cos((t.value)) * sin(reference_position.phi) + sin(reference_position.lambda) * sin((t.value))) <= 0.0) {
+            (end.lambda).set(String(""), -(atan((-sin(reference_position->lambda) * (cos(reference_position->phi) * cos((omega.value)) + cos((t.value)) * sin(reference_position->phi) * sin((omega.value))) + cos(reference_position->lambda) * sin((omega.value)) * sin((t.value))) / (cos(reference_position->phi) * cos(reference_position->lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position->lambda) * cos((t.value)) * sin(reference_position->phi) + sin(reference_position->lambda) * sin((t.value)))))), prefix);
+            if (cos(reference_position->phi) * cos(reference_position->lambda) * cos((omega.value)) + sin((omega.value)) * (cos(reference_position->lambda) * cos((t.value)) * sin(reference_position->phi) + sin(reference_position->lambda) * sin((t.value))) <= 0.0) {
                 (end.lambda) -= M_PI;
             }
             

@@ -26,6 +26,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     new_prefix = prefix.append(String("\t"));
 
     flags.Center();
+    
+    lambda_min = new Angle;
+    lambda_max = new Angle;
+    phi_min = new Angle;
+    phi_max = new Angle;
 
     //when a ChartFrame is created, the chart is not being dragged
     dragging_chart = false;

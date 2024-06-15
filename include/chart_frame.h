@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+#include "angle.h"
 #include "draw_panel.h"
 #include "unset_idling.h"
 #include "chart_panel.h"

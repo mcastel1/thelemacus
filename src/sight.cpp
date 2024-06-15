@@ -104,7 +104,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
     listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (int)(i + 1)));
 
     //set body column
-    listcontrol->SetItem(i, j++, wxString(body.name.value));
+    listcontrol->SetItem(i, j++, wxString(body.name->value));
 
     //set limb column
     if ((body.name == String("sun")) || (body.name == String("moon"))) {
@@ -239,7 +239,7 @@ template<class S> bool Sight::read_from_stream([[maybe_unused]] String name, S* 
     additional_items = 0;
 
     body.read_from_stream<S>(String("body"), input_stream, false, new_prefix);
-    if (body.type.value != "star") {
+    if (body.type->value != "star") {
         items.insert(items.begin() + 1 + (additional_items++), all_items[1]);
         limb.read_from_stream<S>(String("limb"), input_stream, false, new_prefix);
     }
@@ -306,7 +306,7 @@ bool Sight::check_time_interval(String prefix) {
     //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
     temp.clear();
     if ((body.type) != String("star")) {
-        temp << (wxGetApp().data_directory).value << (body.name.value) << ".txt";
+        temp << (wxGetApp().data_directory).value << (body.name->value) << ".txt";
     }
     else {
         temp << (wxGetApp().data_directory).value << "j2000_to_itrf93.txt";
@@ -371,7 +371,7 @@ void Sight::print(String name, String prefix, ostream& ostr) {
     ostr << prefix.value << name.value << ":\n";
 
     body.print(String("body"), new_prefix, ostr);
-    if (body.type.value != "star") {
+    if (body.type->value != "star") {
         limb.print(String("limb"), new_prefix, ostr);
     }
     H_s.print(String("sextant altitude"), new_prefix, ostr);
@@ -410,7 +410,7 @@ double Sight::rhs_DH_parallax_and_limb(double h, void* sight) {
 
     Sight* a = (Sight*)sight;
 
-    return(-(((*a).H_i).value) + h + asin((((*a).body).radius.value) / sqrt(gsl_pow_2((((*a).r).value)) + gsl_pow_2((((*a).atmosphere).earth_radius->value)) - 2.0 * (((*a).r).value) * (((*a).atmosphere).earth_radius->value) * sin(h))) - atan(((((*a).atmosphere).earth_radius->value) * cos(h)) / ((((*a).r).value) - (((*a).atmosphere).earth_radius->value) * sin(h))));
+    return(-(((*a).H_i).value) + h + asin((((*a).body).radius->value) / sqrt(gsl_pow_2((((*a).r).value)) + gsl_pow_2((((*a).atmosphere).earth_radius->value)) - 2.0 * (((*a).r).value) * (((*a).atmosphere).earth_radius->value) * sin(h))) - atan(((((*a).atmosphere).earth_radius->value) * cos(h)) / ((((*a).r).value) - (((*a).atmosphere).earth_radius->value) * sin(h))));
 
 }
 
@@ -448,7 +448,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
     check &= get_coordinates(circle_of_equal_altitude, new_prefix);
 
     //link the circle of equal altitude (*circle_of_equal_altitude) to sight (*this)
-    temp << body.name.value << " " << time.to_string(display_precision.value, false) << " TAI, " << label.value;
+    temp << body.name->value << " " << time.to_string(display_precision.value, false) << " TAI, " << label.value;
     (circle_of_equal_altitude->label).set(String(""), String(temp.str()), new_prefix);
 
     check &= compute_H_o(new_prefix);
@@ -526,7 +526,7 @@ void Sight::compute_DH_parallax_and_limb(String prefix) {
     H_i = H_a + DH_refraction;
     H_i.print(String("intermediate altitude"), prefix, cout);
 
-    if (body.type.value != "star") {
+    if (body.type->value != "star") {
 
         switch ((limb.value)) {
 
@@ -577,7 +577,7 @@ void Sight::compute_DH_parallax_and_limb(String prefix) {
         case 'l':
         {
             //    H_o.value = (H_i.value) + asin(((atmosphere.earth_radius->value)*cos(H_i)+(body.radius.value))/(r.value));
-            DH_parallax_and_limb.value = asin(((atmosphere.earth_radius->value) * cos(H_i) + (body.radius.value)) / (r.value));
+            DH_parallax_and_limb.value = asin(((atmosphere.earth_radius->value) * cos(H_i) + (body.radius->value)) / (r.value));
             break;
         }
         case 'c':

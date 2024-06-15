@@ -1700,7 +1700,7 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
 
         check = true;
 
-        theta.set(String("angle between the two GPs"), acos(cos((reference_position->phi)) * cos(route.reference_position->phi) * cos((reference_position.lambda.value) - (route.reference_position.lambda.value)) + sin((reference_position->phi)) * sin(route.reference_position->phi)), prefix);
+        theta.set(String("angle between the two GPs"), acos(cos((reference_position->phi)) * cos(route.reference_position->phi) * cos((reference_position->lambda.value) - (route.reference_position->lambda.value)) + sin((reference_position->phi)) * sin(route.reference_position->phi)), prefix);
 
         if ((abs((omega.value) - (route.omega.value)) < (theta.value)) && ((theta.value) < (omega.value) + (route.omega.value))) {
             //in this case routes intersect

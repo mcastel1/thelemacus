@@ -5,6 +5,8 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include <sstream>
+
 #include "catalog.h"
 #include "generic.h"
 
@@ -46,7 +48,7 @@ vector<String> Catalog::get_names(void){
     vector<String> output;
     
     for(i=0, output.clear(); i<list.size(); i++){
-        output.push_back((list[i]).name);
+        output.push_back((*((list[i]).name)));
     }
     
     return output;

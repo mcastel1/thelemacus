@@ -49,7 +49,7 @@ template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [
         line.clear();
         getline(*input_stream, line);
         pos = line.find(" = ");
-        type = line.substr(pos + 3, line.size() - (pos + 3));
+        (*type) = line.substr(pos + 3, line.size() - (pos + 3));
         cout << new_prefix.value << "Type = " << type->value << "\n";
 
 
@@ -57,11 +57,11 @@ template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [
         line.clear();
         getline(*input_stream, line);
         pos = line.find(" = ");
-        name = line.substr(pos + 3, line.size() - (pos + 3));
+        (*name) = line.substr(pos + 3, line.size() - (pos + 3));
         cout << new_prefix.value << "Name = " << name->value << "\n";
 
 
-        if (type == String("star")) {
+        if ((*type) == String("star")) {
             RA->read_from_stream<S>(String("right ascension"), input_stream, false, new_prefix);
             d->read_from_stream<S>(String("declination"), input_stream, false, new_prefix);
         }

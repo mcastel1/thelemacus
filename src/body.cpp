@@ -66,7 +66,7 @@ template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [
             d->read_from_stream<S>(String("declination"), input_stream, false, new_prefix);
         }
         else {
-            radius.read_from_stream<S>(String("radius"), input_stream, false, new_prefix);
+            radius->read_from_stream<S>(String("radius"), input_stream, false, new_prefix);
         }
 
         return true;
@@ -91,15 +91,15 @@ void Body::print(String name_in, String prefix, ostream& ostr) {
 
     ostr << prefix.value << name_in.value << ":\n";
 
-    ostr << new_prefix.value << "Type = " << type.value << "\n";
-    ostr << new_prefix.value << "Name = " << name.value << "\n";
+    ostr << new_prefix.value << "Type = " << type->value << "\n";
+    ostr << new_prefix.value << "Name = " << name->value << "\n";
 
     if (type == String("star")) {
-        RA.print(String("Right ascension"), new_prefix, ostr);
-        d.print(String("Declination"), new_prefix, ostr);
+        RA->print(String("Right ascension"), new_prefix, ostr);
+        d->print(String("Declination"), new_prefix, ostr);
     }
     else {
-        radius.print(String("Radius"), new_prefix, ostr);
+        radius->print(String("Radius"), new_prefix, ostr);
     }
 
 }

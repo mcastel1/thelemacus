@@ -1860,7 +1860,7 @@ void Route::compute_end(String prefix) {
             Angle t;
             
             
-            eta = sqrt((1.0 - sin(reference_position.phi.value)) / (1.0 + sin(reference_position.phi.value)));
+            eta = sqrt((1.0 - sin(reference_position->phi.value)) / (1.0 + sin(reference_position->phi.value)));
             
             //tau = +-_{notes}
             if (((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < 2.0 * M_PI))) { tau = +1; }
@@ -1879,7 +1879,7 @@ void Route::compute_end(String prefix) {
                 //this is the general expression of t vs l for Z != pi/2
                 
                 (t.value) = -tau * sqrt((1.0 - C) / C)
-                * log(1.0 / eta * tan(-tau * sqrt(C) * (length.value) / (2.0 * Re) + atan(sqrt((1.0 - sin(reference_position.phi.value)) / (1.0 + sin(reference_position.phi.value))))));
+                * log(1.0 / eta * tan(-tau * sqrt(C) * (length.value) / (2.0 * Re) + atan(sqrt((1.0 - sin(reference_position->phi.value)) / (1.0 + sin(reference_position->phi.value))))));
                 
             }
             else {
@@ -1891,9 +1891,9 @@ void Route::compute_end(String prefix) {
             
             /* t.print("t", prefix, cout); */
             
-            (end.phi).set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position.phi.value)))), prefix);
+            (end.phi).set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position->phi.value)))), prefix);
             
-            (end.lambda).set(String(""), (reference_position.lambda.value) + sigma * (t.value), prefix);
+            (end.lambda).set(String(""), (reference_position->lambda.value) + sigma * (t.value), prefix);
             
             break;
             
@@ -2060,12 +2060,12 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
     if (type == (Route_types[2])) {
         //*this is a circle of equal altitude
         
-        if (abs(-tan(reference_position.phi.value) * tan((omega.value))) < 1.0) {
-            //im this case ( abs(-tan(reference_position.phi.value)*tan((omega.value))) < 1.0) there exists a value of t = t_{max} (t_{min}) such that reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and write reference_position.lambda_{t = t_{min}} and reference_position.lambda_{t = t_{max}}] in lambda_min, lambda_max
+        if (abs(-tan(reference_position->phi.value) * tan((omega.value))) < 1.0) {
+            //im this case ( abs(-tan(reference_position->phi.value)*tan((omega.value))) < 1.0) there exists a value of t = t_{max} (t_{min}) such that reference_position.lambda vs. t has a maximum (minimum). In this case, I proceed and compute this maximum and minimum, and write reference_position.lambda_{t = t_{min}} and reference_position.lambda_{t = t_{max}}] in lambda_min, lambda_max
             
             //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
-            t_max.set(String(""), acos(-tan(reference_position.phi.value) * tan((omega.value))), new_prefix);
-            t_min.set(String(""), 2.0 * M_PI - acos(-tan(reference_position.phi.value) * tan((omega.value))), new_prefix);
+            t_max.set(String(""), acos(-tan(reference_position->phi.value) * tan((omega.value))), new_prefix);
+            t_min.set(String(""), 2.0 * M_PI - acos(-tan(reference_position->phi.value) * tan((omega.value))), new_prefix);
             
             //p_max =  Position on the circle of equal altitude  at t = t_max
             length.set(Re * sin((omega.value)) * (t_max.value), LengthUnit_types[0]);

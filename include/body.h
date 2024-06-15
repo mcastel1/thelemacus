@@ -30,6 +30,8 @@ public:
     String *name, *type;
     Length *radius;
     Angle *RA, *d;
+    
+    Body();
 
     bool check(unsigned int*, Catalog, String);
     void print(String, String, ostream&);

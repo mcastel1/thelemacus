@@ -9,6 +9,16 @@
 #include "generic.h"
 
 
+Body::Body(void){
+    
+    name = new String;
+    type = new String;
+    radius = new Length;
+    RA = new Angle;
+    d = new Angle;
+    
+}
+
 bool Body::operator==(const Body& body) {
 
     return (name == (body.name));

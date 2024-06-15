@@ -1740,7 +1740,7 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
                 }
 
                 compute_end(Length(Re * sin(omega) * ((t[0]).value)), prefix);
-                end.print(String("position of intersection 1 for Route 1"), prefix, cout);
+                end->print(String("position of intersection 1 for Route 1"), prefix, cout);
 
                 route.compute_end(Length(Re * sin(route.omega.value) * ((u[0]).value)), prefix);
                 (route.end).print(String("position of intersection 1 for Route 2"), prefix, cout);

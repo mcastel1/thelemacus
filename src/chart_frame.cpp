@@ -485,11 +485,11 @@ template<class T> void ChartFrame::MoveEast(T& event) {
         delta = ((wxGetApp().relative_displacement).value) * (draw_panel->x_span());
 
         //update lambda_min, lambda_max according to the drag.
-        (lambda_min.value) -= delta;
-        (lambda_max.value) -= delta;
+        (lambda_min->value) -= delta;
+        (lambda_max->value) -= delta;
 
-        lambda_min.normalize();
-        lambda_max.normalize();
+        lambda_min->normalize();
+        lambda_max->normalize();
 
         (draw_panel->*(draw_panel->Set_x_y_min_max))();
 

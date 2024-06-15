@@ -1798,7 +1798,7 @@ void Route::set_length_from_input(double t){
             double C, eta;
         
             C = gsl_pow_2(cos(Z));
-            eta = sqrt((1-sin((reference_position.phi)))/(1+sin((reference_position.phi))));
+            eta = sqrt((1-sin((reference_position->phi)))/(1+sin((reference_position->phi))));
 
             //set the length format, the length unit and the value of the length from t
             length_format.set(LengthFormat_types[1]);

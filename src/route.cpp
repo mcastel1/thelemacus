@@ -2179,7 +2179,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             
             phi.clear();
             
-            ts = atan(sin(reference_position.phi), cos(Z)*cos(reference_position.phi));
+            ts = atan(sin(reference_position->phi), cos(Z)*cos(reference_position->phi));
             
             //inlude in phi the latitude of the starting point of *this
             compute_end(Length(0.0), String(""));

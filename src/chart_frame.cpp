@@ -1065,8 +1065,8 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 
     //set i_min/max, j_min/max
-    i_min = floor(K * (phi_min.normalize_pm_pi_ret().value));
-    i_max = ceil(K * (phi_max.normalize_pm_pi_ret().value));
+    i_min = floor(K * (phi_min->normalize_pm_pi_ret().value));
+    i_max = ceil(K * (phi_max->normalize_pm_pi_ret().value));
 
     if ((lambda_min == 0.0) && (lambda_max == 0.0)) {
         //in this case,Set_lambda_phi_min_max found out that circle_observer spans all longitudes, thus I set

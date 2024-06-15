@@ -11,8 +11,13 @@
     #include "wx/wx.h"
 #endif
 
+#include "color.h"
+#include "constants.h"
 #include "chrono.h"
+#include "generic.h"
+#include "my_app.h"
 #include "static_text.h"
+
 
 
 //constructor of a ChronoField object, based on the parent frame frame

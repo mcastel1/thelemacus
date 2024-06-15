@@ -30,6 +30,8 @@ public:
     void set(void);
     double T(Length), n(Length), dTdz(Length), dndz(Length);
     
+    Atmosphere();
+    
 };
 
 

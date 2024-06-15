@@ -12,6 +12,11 @@
 #include "constants.h"
 #include "units.h"
 
+Atmosphere::Atmosphere(void){
+    
+    earth_radius = new Length;
+    
+}
 
 double Atmosphere::T(Length z) {
 

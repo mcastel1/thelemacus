@@ -2129,7 +2129,7 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
         (*lambda_min) = (reference_position->lambda);
         
         compute_end(String(""));
-        (*lambda_max) = (end.lambda);
+        (*lambda_max) = (end->lambda);
         
         if((*lambda_min) > (*lambda_max)){
             

@@ -1470,7 +1470,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     else {
         //the 'normal' situation where the chart does not encompass the Greenwich antimeridian
 
-        lambda_span = ((parent->lambda_min).value) - ((parent->lambda_max).value);
+        lambda_span = (parent->lambda_min->value) - (parent->lambda_max->value);
 
     }
 

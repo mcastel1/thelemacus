@@ -26,6 +26,7 @@ template<class P> class BodyField;
 template<class P, class T> class CheckField;
 template<class P> class LimbField;
 template<class P> class DateField;
+template<class P> class StringField;
 
 class SightFrame: public wxFrame{
     

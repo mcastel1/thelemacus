@@ -1228,7 +1228,7 @@ inline void DrawPanel::TabulateRoutes(void) {
         }
 
         //write the reference Positions into reference_positions_route_list_now
-        if (GeoToDrawPanel(((parent->parent->data->route_list)[i]).reference_position, &p, false)) {
+        if (GeoToDrawPanel((*(((parent->parent->data->route_list)[i]).reference_position)), &p, false)) {
             //the reference position falls in the plot area -> write it into reference_positions_route_list_now
             reference_positions_route_list_now[i] = p;
         }

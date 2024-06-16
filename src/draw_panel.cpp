@@ -1500,24 +1500,24 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
 
 
-    if (((parent->lambda_min) < M_PI) && ((parent->lambda_max) > M_PI)) {
+    if (((*(parent->lambda_min)) < M_PI) && ((*(parent->lambda_max)) > M_PI)) {
 
-        (lambda_start.value) = ceil(((parent->lambda_max).value) / delta_lambda) * delta_lambda;
-        (lambda_end.value) = ((parent->lambda_min).value) + (2.0 * M_PI);
+        (lambda_start.value) = ceil(((*(parent->lambda_max)).value) / delta_lambda) * delta_lambda;
+        (lambda_end.value) = ((*(parent->lambda_min)).value) + (2.0 * M_PI);
 
     }
     else {
 
-        if ((parent->lambda_min) > (parent->lambda_max)) {
+        if ((*(parent->lambda_min)) > (*(parent->lambda_max))) {
 
-            (lambda_start.value) = ceil(((parent->lambda_max).value) / delta_lambda) * delta_lambda;
-            (lambda_end.value) = ((parent->lambda_min).value);
+            (lambda_start.value) = ceil(((*(parent->lambda_max)).value) / delta_lambda) * delta_lambda;
+            (lambda_end.value) = ((*(parent->lambda_min)).value);
 
         }
         else {
 
-            (lambda_start.value) = ceil(((parent->lambda_max).value) / delta_lambda) * delta_lambda;
-            (lambda_end.value) = ((parent->lambda_min).value) + 2.0 * M_PI;
+            (lambda_start.value) = ceil(((*(parent->lambda_max)).value) / delta_lambda) * delta_lambda;
+            (lambda_end.value) = ((*(parent->lambda_min)).value) + 2.0 * M_PI;
 
         }
 
@@ -1536,7 +1536,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * K * 60)))),
         ((q.phi).value) = (phi_start.value),
-        (q.lambda) = (parent->lambda_min) - epsilon_double;
+        (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
         ((q.phi).value) < (phi_end.value);
         ((q.phi).value) += delta_phi
         ) {
@@ -1628,7 +1628,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //set route equal to a parallel of latitude phi, i.e., a circle of equal altitude
     route.type.set(String(((Route_types[0]).value)));
     route.Z.set(M_PI_2);
-    (route.reference_position->lambda) = (parent->lambda_min);
+    (route.reference_position->lambda) = (*(parent->lambda_min));
 
     //this loop runs over the latitude of the parallel, which we call phi
     for ((phi.value) = (phi_start.value);
@@ -1641,7 +1641,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         route.length.set(
             Re * cos(phi) * ((
 
-                ((((parent->lambda_min)) < M_PI) && (((parent->lambda_max)) > M_PI)) ? (((parent->lambda_min)) - ((parent->lambda_max)) + 2.0 * M_PI) : (((parent->lambda_min)) - ((parent->lambda_max)))
+                ((((*(parent->lambda_min))) < M_PI) && (((*(parent->lambda_max))) > M_PI)) ? (((*(parent->lambda_min))) - ((*(parent->lambda_max))) + 2.0 * M_PI) : (((*(parent->lambda_min))) - ((*(parent->lambda_max))))
 
                 ).value), LengthUnit_types[0]);
 
@@ -1735,7 +1735,7 @@ inline void DrawPanel::PreRender3D(void) {
     //here I set up things to plot paralles and meridians in Render_3D
 
     //set lambda_span
-    if (((parent->lambda_min) == 0.0) && ((parent->lambda_max) == 0.0)) {
+    if (((*(parent->lambda_min)) == 0.0) && ((*(parent->lambda_max)) == 0.0)) {
         //in this case circle_observer spans all longitudes
 
         //because in this case lambda_min/max span the whole angle 2 pi and cannot define a range for lambda_span, I set
@@ -1745,14 +1745,14 @@ inline void DrawPanel::PreRender3D(void) {
     else {
         //in this case, there are two finite longitudes which encircle circle_observer
 
-        if (((parent->lambda_min) < M_PI) && ((parent->lambda_max) > M_PI)) {
+        if (((*(parent->lambda_min)) < M_PI) && ((*(parent->lambda_max)) > M_PI)) {
 
-            lambda_span = ((parent->lambda_min).value) - ((parent->lambda_max).value) + 2.0 * M_PI;
+            lambda_span = ((*(parent->lambda_min)).value) - ((*(parent->lambda_max)).value) + 2.0 * M_PI;
 
         }
         else {
 
-            lambda_span = ((parent->lambda_min).value) - ((parent->lambda_max).value);
+            lambda_span = ((*(parent->lambda_min)).value) - ((*(parent->lambda_max)).value);
 
         }
 
@@ -1790,7 +1790,7 @@ inline void DrawPanel::PreRender3D(void) {
 
 
     //set lambda_start, lambda_end
-    if (((parent->lambda_min) == 0.0) && ((parent->lambda_max) == 0.0)) {
+    if (((*(parent->lambda_min)) == 0.0) && ((*(parent->lambda_max)) == 0.0)) {
         //in this case circle_observer spans all longitudes
 
         (lambda_start.value) = 0.0;
@@ -1800,16 +1800,16 @@ inline void DrawPanel::PreRender3D(void) {
     else {
         //in this case, there are two finite longitudes which encircle circle_observer
 
-        if (((parent->lambda_min) < M_PI) && ((parent->lambda_max) > M_PI)) {
+        if (((*(parent->lambda_min)) < M_PI) && ((*(parent->lambda_max)) > M_PI)) {
 
-            (lambda_start.value) = floor(((parent->lambda_max).value) / delta_lambda) * delta_lambda;
-            (lambda_end.value) = ((parent->lambda_min).value) + (2.0 * M_PI);
+            (lambda_start.value) = floor(((*(parent->lambda_max)).value) / delta_lambda) * delta_lambda;
+            (lambda_end.value) = ((*(parent->lambda_min)).value) + (2.0 * M_PI);
 
         }
         else {
 
-            (lambda_start.value) = floor(((parent->lambda_max).value) / delta_lambda) * delta_lambda;
-            (lambda_end.value) = ((parent->lambda_min).value);
+            (lambda_start.value) = floor(((*(parent->lambda_max)).value) / delta_lambda) * delta_lambda;
+            (lambda_end.value) = ((*(parent->lambda_min)).value);
 
         }
 
@@ -1865,7 +1865,7 @@ inline void DrawPanel::PreRender3D(void) {
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * K * 60)))),
         ((q.phi).value) = (phi_start.value),
-        (q.lambda) = (parent->lambda_min) - epsilon_double;
+        (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
         ((q.phi).value) < (phi_end.value);
         ((q.phi).value) += delta_phi
         ) {

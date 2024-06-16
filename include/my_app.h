@@ -27,6 +27,7 @@ using namespace std;
 
 class CloseApp;
 class ListFrame;
+template<class F_A, class F_B, class F_ABORT> class QuestionFrame;
 class ShowAll;
 
 

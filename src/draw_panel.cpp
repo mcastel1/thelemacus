@@ -3815,7 +3815,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     
                     if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
                         
-                        route_reference_position_drag_start = (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position);
+                        route_reference_position_drag_start = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
                         
                         if (((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value) != -1) {
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
@@ -3829,7 +3829,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     }
                     else {
                         
-                        route_reference_position_drag_start = (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position);
+                        route_reference_position_drag_start = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
                         
                     }
                     

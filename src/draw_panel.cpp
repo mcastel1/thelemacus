@@ -267,11 +267,11 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             
 
             //the following cases follow the derivation in the note 'Selection rectangle'
-            if((parent->lambda_min) < (parent->lambda_max)){
+            if((*(parent->lambda_min)) < (*(parent->lambda_max))){
                 
                 if(
-                   (((lambda_a > 0.0) && (lambda_a < (parent->lambda_min))) && ((lambda_b > 0.0) && (lambda_b < (parent->lambda_min)))) ||
-                   ((lambda_a > (parent->lambda_max)) && (lambda_b > (parent->lambda_max)))
+                   (((lambda_a > 0.0) && (lambda_a < (*(parent->lambda_min)))) && ((lambda_b > 0.0) && (lambda_b < (*(parent->lambda_min))))) ||
+                   ((lambda_a > (*(parent->lambda_max))) && (lambda_b > (*(parent->lambda_max))))
                    ){
                        //{lambda_a in A & lambda_b in A} or {lambda_a in B and lambda_b in B}
                        
@@ -1333,7 +1333,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * K * 60)))),
         ((q.phi).value) = (phi_start.value),
-        (q.lambda) = (parent->lambda_min) - epsilon_double;
+        (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
         ((q.phi).value) < (phi_end.value);
         ((q.phi).value) += delta_phi
         ) {
@@ -1461,10 +1461,10 @@ inline void DrawPanel::PreRenderMercator(void) {
 
 
     //set lambda_span
-    if ((((parent->lambda_min) < M_PI) && ((parent->lambda_max) > M_PI)) || ((parent->lambda_min) < (parent->lambda_max))) {
+    if ((((*(parent->lambda_min)) < M_PI) && ((*(parent->lambda_max)) > M_PI)) || ((*(parent->lambda_min)) < (*(parent->lambda_max)))) {
         //the 'anomalous' situation where the chart encompasses the Greenwich antimeridian
 
-        lambda_span = ((parent->lambda_min).value) - ((parent->lambda_max).value) + 2.0 * M_PI;
+        lambda_span = (parent->lambda_min->value) - (parent->lambda_max->value) + 2.0 * M_PI;
 
     }
     else {

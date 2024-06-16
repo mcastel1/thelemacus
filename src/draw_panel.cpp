@@ -1541,7 +1541,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         ((q.phi).value) += delta_phi
         ) {
 
-        DrawLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"));
+        DrawLabel(q, (*(parent->phi_min)), (*(parent->phi_max)), label_precision, String("NS"));
 
     }
 

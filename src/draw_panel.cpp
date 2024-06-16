@@ -11,6 +11,8 @@
 #include "wx/wx.h"
 #endif
 #include <wx/dcclient.h>
+#include <wx/dcgraph.h>
+
 
 
 #include "draw_panel.h"

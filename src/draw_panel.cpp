@@ -1014,7 +1014,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
         else {
             //in this case, (angle_label.value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
 
-            //                if(ceil((K*((parent->phi_max).value)))  - floor((K*((parent->phi_min).value))) != 1){
+            //                if(ceil((K*((*(parent->phi_max)).value)))  - floor((K*((*(parent->phi_min)).value))) != 1){
             if (ceil((K * ((max.normalize_pm_pi_ret()).value))) - floor((K * ((min.normalize_pm_pi_ret()).value))) != 1) {
                 //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
 
@@ -1550,7 +1550,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
         (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_lambda * K * 60)))),
         ((q.lambda).value) = (lambda_start.value),
-        (q.phi) = (parent->phi_min) + epsilon_double;
+        (q.phi) = (*(parent->phi_min)) + epsilon_double;
         ((q.lambda).value) < (lambda_end.value);
         ((q.lambda).value) += delta_lambda
         ) {
@@ -1566,7 +1566,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
     route.Z.set(0.0);
-    (route.reference_position->phi) = ((parent->phi_min));
+    (route.reference_position->phi) = (*(parent->phi_min));
 
     //draw the first chunk of intermediate ticks on the longitude axis
     if (gamma_lambda != 1) {
@@ -1847,8 +1847,8 @@ inline void DrawPanel::PreRender3D(void) {
     }
 
     //set phi_start/end and phi_middle
-    (phi_start.value) = floor((((parent->phi_min).normalize_pm_pi_ret()).value) / delta_phi) * delta_phi;
-    (phi_end.value) = (((parent->phi_max).normalize_pm_pi_ret()).value);
+    (phi_start.value) = floor((((*(parent->phi_min)).normalize_pm_pi_ret()).value) / delta_phi) * delta_phi;
+    (phi_end.value) = (((*(parent->phi_max)).normalize_pm_pi_ret()).value);
 
     phi_middle.set(round((((circle_observer.reference_position).phi).value) / delta_phi) * delta_phi);
     //if the line above sets phi_middle equal to +/- pi/2. the labels of meridians will all be put at the same location on the screen (the N/S pole), and they would look odd ->

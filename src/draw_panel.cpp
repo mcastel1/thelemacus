@@ -1014,7 +1014,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
         else {
             //in this case, (angle_label.value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
 
-            //                if(ceil((K*((*(parent->phi_max)).value)))  - floor((K*((*(parent->phi_min)).value))) != 1){
+            //                if(ceil((K*((*(*(parent->phi_max))).value)))  - floor((K*((*(*(parent->phi_min))).value))) != 1){
             if (ceil((K * ((max.normalize_pm_pi_ret()).value))) - floor((K * ((min.normalize_pm_pi_ret()).value))) != 1) {
                 //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
 
@@ -1293,7 +1293,7 @@ inline void DrawPanel::PreRenderMercator(void) {
 
     //here I compute multiple quantities relative to the y axis: this computation is done here, at the very beginning of PreRenderMercator, because these quantitites will be needed immediatly to compute size_label_horizontal
     //set phi_start, phi_end and delta_phi
-    phi_span = (((parent->phi_max)->normalize_pm_pi_ret()).value) - (((parent->phi_min)->normalize_pm_pi_ret()).value);
+    phi_span = (((*(parent->phi_max))->normalize_pm_pi_ret()).value) - (((*(parent->phi_min))->normalize_pm_pi_ret()).value);
 
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if (phi_span > k) {

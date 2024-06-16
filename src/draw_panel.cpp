@@ -3813,14 +3813,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 if ((parent->parent->highlighted_route_now) != -1) {
                     //set route_reference_position_drag_now to the start Position (if the route is a loxodrome / orthodrome) or to the ground Position (if the route is a circle of equal altitutde)
                     
-                    if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
+                    if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
                         
-                        route_reference_position_drag_start = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position);
+                        route_reference_position_drag_start = (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position);
                         
-                        if ((((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value) != -1) {
+                        if (((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value) != -1) {
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
                             
-                            (parent->parent->i_object_to_disconnect) = (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value);
+                            (parent->parent->i_object_to_disconnect) = ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value);
                             
                             parent->parent->DisconnectAndPromptMessage(event);
                             
@@ -3829,7 +3829,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     }
                     else {
                         
-                        route_reference_position_drag_start = ((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position);
+                        route_reference_position_drag_start = (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position);
                         
                     }
                     
@@ -3979,7 +3979,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             GeoToDrawPanel(route_reference_position_drag_start, &p, false);
                             
                             //this command is the same for all types of Routes
-                            DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
+                            DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
                             
                         }
                         
@@ -3994,15 +3994,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //                    (this->*GeoToDrawPanel)(route_reference_position_drag_now, &p);
                             
-                            if (((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
+                            if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
                                 
-                                //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route)]).reference_position));
-                                route_reference_position_drag_start.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                                //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((parent->parent->data->route_list)[(parent->parent->highlighted_route)]).reference_position));
+                                route_reference_position_drag_start.rotate(String(""), rotation_now_drag, &(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
                                 
                             }
                             else {
                                 
-                                route_reference_position_drag_start.rotate(String(""), rotation_now_drag, &((((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                                route_reference_position_drag_start.rotate(String(""), rotation_now_drag, &(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
                                 
                             }
                             
@@ -4012,7 +4012,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         
                         //update the data of the Route under consideration in listcontrol_routes
-                        (((parent->parent->data)->route_list)[(parent->parent->highlighted_route_now)]).update_wxListCtrl((parent->parent->highlighted_route_now), parent->parent->listcontrol_routes);
+                        ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).update_wxListCtrl((parent->parent->highlighted_route_now), parent->parent->listcontrol_routes);
                         
                         
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {

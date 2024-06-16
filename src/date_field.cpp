@@ -15,6 +15,11 @@
 
 #include "date.h"
 
+#include "color.h"
+#include "generic.h"
+#include "static_text.h"
+#include "my_app.h"
+
 
 //constructor of a DateField object, based on the parent frame frame
 template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {

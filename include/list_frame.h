@@ -38,6 +38,7 @@ class DeletePosition;
 class DeleteRoute;
 class DeleteSight;
 class ExistingRoute;
+template<class P> ListControl;
 class NewRoute;
 class OnSelectRouteInListControlRoutesForTransport;
 class OnNewRouteInListControlRoutesForTransport;

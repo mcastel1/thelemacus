@@ -355,16 +355,7 @@ public:
     
 };
 
-template<class P> class CheckLengthValue{
-    
-public:
-    
-    DynamicLengthField<P>* p;
-    
-    CheckLengthValue(DynamicLengthField<P>*);
-    template<class T> void operator()(T&);
-    
-};
+
 
 template<class P> class CheckLengthUnit{
     

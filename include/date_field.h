@@ -12,6 +12,10 @@
 
 using namespace std;
 
+#include "color.h"
+#include "date.h"
+#include "static_text.h"
+
 
 template<class P> class DateField{
     

@@ -26,6 +26,9 @@ using namespace std;
 
 template<class P> class DynamicLengthField;
 class ListFrame;
+template<class P> class SpeedField;
+template<class P> class StringField;
+
 
 
 class RouteFrame: public wxFrame{

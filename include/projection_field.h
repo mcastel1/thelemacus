@@ -16,6 +16,8 @@
 
 using namespace std;
 
+class Projection;
+
 
 template<class P> class ProjectionField: public MultipleItemField<P, Projection, void>{
     

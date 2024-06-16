@@ -2166,8 +2166,8 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
         ((((circle_observer.reference_position).phi).value) - ((circle_observer.omega).value) > -M_PI_2)) {
         //in this case, circle_observer does not encircle the N/S pole
 
-        (parent->phi_min) = ((circle_observer.reference_position).phi) - (circle_observer.omega);
-        (parent->phi_max) = ((circle_observer.reference_position).phi) + (circle_observer.omega);
+        (*(parent->phi_min)) = ((circle_observer.reference_position).phi) - (circle_observer.omega);
+        (*(parent->phi_max)) = ((circle_observer.reference_position).phi) + (circle_observer.omega);
 
     }
     else {
@@ -2175,16 +2175,16 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
         if ((((circle_observer.reference_position).phi).value) + ((circle_observer.omega).value) > M_PI_2) {
             //in this case, circle_observer encircles the N pole
 
-            (parent->phi_min) = ((circle_observer.reference_position).phi) - (circle_observer.omega);
-            (parent->phi_max).set(M_PI_2);
+            (*(parent->phi_min)) = ((circle_observer.reference_position).phi) - (circle_observer.omega);
+            (*(parent->phi_max)).set(M_PI_2);
 
         }
 
         if ((((circle_observer.reference_position).phi).value) - ((circle_observer.omega).value) < -M_PI_2) {
             //in this case, circle_observer encircles the S pole
 
-            (parent->phi_min).set(3.0 * M_PI_2);
-            (parent->phi_max) = ((circle_observer.reference_position).phi) + (circle_observer.omega);
+            (*(parent->phi_min)).set(3.0 * M_PI_2);
+            (*(parent->phi_max)) = ((circle_observer.reference_position).phi) + (circle_observer.omega);
 
         }
 
@@ -3687,11 +3687,11 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         
                         
                         if ((parent->parent->geo_position_start.phi) > ((parent->parent->position_end).phi)) {
-                            (parent->phi_max) = (((parent->parent)->geo_position_start).phi);
-                            (parent->phi_min) = (((parent->parent)->position_end).phi);
+                            (*(parent->phi_max)) = (((parent->parent)->geo_position_start).phi);
+                            (*(parent->phi_min)) = (((parent->parent)->position_end).phi);
                         }else {
-                            (parent->phi_min) = (((parent->parent)->geo_position_start).phi);
-                            (parent->phi_max) = (((parent->parent)->position_end).phi);
+                            (*(parent->phi_min)) = (((parent->parent)->geo_position_start).phi);
+                            (*(parent->phi_max)) = (((parent->parent)->position_end).phi);
                         }
                         //I normalize lambda_min, ..., phi_max for future use.
                         parent->lambda_min.normalize();

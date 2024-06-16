@@ -49,6 +49,8 @@ class PositionRectangle;
 class Route;
 class RouteFrame;
 class SelectRoute;
+template<class T, typename F_YES, typename F_NO, typename F_ABORT> class ShowQuestionFrame;
+class Sight;
 
 
 

@@ -2205,12 +2205,12 @@ void DrawPanel::Set_x_y_min_max_Mercator(void) {
     //    (this->*GeoToProjection)(Position(parent->lambda_min, parent->phi_min), &p_min, true);
     //    (this->*GeoToProjection)(Position(parent->lambda_max, parent->phi_max), &p_max, true);
     
-    temp = Position(parent->lambda_min, parent->phi_min);
+    temp = Position((*(parent->lambda_min)), (*(parent->phi_min)));
     //    (p_min.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
     //    (p_min.y) = log(1.0 / cos((temp.phi)) + tan((temp.phi)));
     p_min.NormalizeAndSetMercator(temp);
     
-    temp = Position(parent->lambda_max, parent->phi_max);
+    temp = Position((*(parent->lambda_max)), (*(parent->phi_max)));
     //    (p_max.x) = -(((temp.lambda).normalize_pm_pi_ret()).value);
     //    (p_max.y) = log(1.0 / cos((temp.phi)) + tan((temp.phi)));
     p_max.NormalizeAndSetMercator(temp);

@@ -10,7 +10,6 @@
 #include "constants.h"
 
 
-
 //this method  is executed reguarly over time, to check whether to switch between light and dark mode
 void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     

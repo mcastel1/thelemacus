@@ -40,6 +40,7 @@ class DeleteSight;
 class ExistingRoute;
 template<class P> ListControl;
 class NewRoute;
+template<class P> OnChangeSelectionInListControl;
 class OnSelectRouteInListControlRoutesForTransport;
 class OnNewRouteInListControlRoutesForTransport;
 class PositionRectangle;

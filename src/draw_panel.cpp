@@ -1323,8 +1323,8 @@ inline void DrawPanel::PreRenderMercator(void) {
     //here I set up things to plot meridians and parallels in Render_Mercator
 
     //set phi_start/end
-    (phi_start.value) = floor((parent->phi_min.normalize_pm_pi_ret().value) / delta_phi) * delta_phi;
-    (phi_end.value) = (parent->phi_max.normalize_pm_pi_ret().value);
+    (phi_start.value) = floor((parent->phi_min->normalize_pm_pi_ret().value) / delta_phi) * delta_phi;
+    (phi_end.value) = (parent->phi_max->normalize_pm_pi_ret().value);
 
 
     //compute size of largest label on parallel: run through all labels on parallels and set size_label_horizontal as the size of the largest label on parallel that has ben found

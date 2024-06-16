@@ -12,6 +12,13 @@
 
 using namespace std;
 
+#include "speed.h"
+
+template<class P> class CheckSpeed;
+class Speed;
+template<class P> class SpeedUnitField;
+
+
 //class for graphical object: a field to enter a speed, composed of a box and a dropdown menu to enter the units of measure of the speed. P is the type of the parent which hosts the DynamicLengthField object
 template<class P> class SpeedField{
     

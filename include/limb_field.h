@@ -21,6 +21,7 @@ using namespace std;
 
 
 template <class P> class CheckLimb;
+template <class P> class OnChangeSelectionInLimbField;
 
 
 template<class P> class LimbField{

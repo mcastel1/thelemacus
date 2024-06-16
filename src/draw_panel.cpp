@@ -3451,7 +3451,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 if ((parent->parent->highlighted_route_now) != -1) {
                     //I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
 
-                    (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position) = route_reference_position_drag_start;
+                    (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position)) = route_reference_position_drag_start;
 
                     TabulateRoutes();
                     Refresh();
@@ -3654,7 +3654,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             if(((lambda_a.normalize_pm_pi_ret().value) >= 0.0) && (lambda_b.normalize_pm_pi_ret().value) <= 0.0){
                                 //lambda_a lies in the poisitive-logitude hemishere (0 < lambda < 180), lambda_b in the nevative-longitude hemisphere (180 < lambda < 360)
                                 
-                                if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
+                                if((parent->lambda_min->normalize_pm_pi_ret().value) > (parent->lambda_max->normalize_pm_pi_ret().value)){
                                     
                                     (*(parent->lambda_min)) = lambda_a;
                                     (*(parent->lambda_max)) = lambda_b;

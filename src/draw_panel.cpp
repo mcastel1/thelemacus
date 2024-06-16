@@ -1617,7 +1617,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                 //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
             }
 
-            route.length.set(Re * ((parent->phi_max.normalize_pm_pi_ret().value) - (parent->phi_min.normalize_pm_pi_ret().value)), LengthUnit_types[0]);
+            route.length.set(Re * ((parent->phi_max->normalize_pm_pi_ret().value) - (parent->phi_min->normalize_pm_pi_ret().value)), LengthUnit_types[0]);
             (route.reference_position->lambda.value) = (lambda_saved.value);
 
         }

@@ -16,6 +16,8 @@ using namespace std;
 #include "date.h"
 #include "static_text.h"
 
+template<class P> class CheckDate;
+
 
 template<class P> class DateField{
     

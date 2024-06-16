@@ -15,6 +15,9 @@
 using namespace std;
 
 
+template<class P> class StringField;
+
+
 class PositionFrame: public wxFrame{
     
 public:

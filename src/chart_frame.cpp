@@ -1068,7 +1068,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
     i_min = floor(K * (phi_min->normalize_pm_pi_ret().value));
     i_max = ceil(K * (phi_max->normalize_pm_pi_ret().value));
 
-    if ((lambda_min == 0.0) && (lambda_max == 0.0)) {
+    if (((*lambda_min) == 0.0) && ((*lambda_max) == 0.0)) {
         //in this case,Set_lambda_phi_min_max found out that circle_observer spans all longitudes, thus I set
 
         j_min = 0;
@@ -1078,16 +1078,16 @@ void ChartFrame::GetCoastLineData_3D(void) {
     else {
         //in this case, Set_lambda_phi_min_max found out that there are two finite longitudes which encircle circle_observer, thus I set
 
-        if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
+        if (((*lambda_min) < M_PI) && ((*lambda_max) > M_PI)) {
 
-            j_min = floor(K * (lambda_max.value));
-            j_max = 360 + ceil(K * (lambda_min.value));
+            j_min = floor(K * ((*lambda_max).value));
+            j_max = 360 + ceil(K * ((*lambda_min).value));
 
         }
         else {
 
-            j_min = floor(K * (lambda_max.value));
-            j_max = ceil(K * (lambda_min.value));
+            j_min = floor(K * ((*lambda_max).value));
+            j_max = ceil(K * ((*lambda_min).value));
 
         }
 

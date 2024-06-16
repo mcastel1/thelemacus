@@ -1904,7 +1904,7 @@ inline void DrawPanel::PreRender3D(void) {
         (q.phi.value) += delta_phi
         ) {
 
-        DrawLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"));
+        DrawLabel(q, (*(parent->phi_min)), (*(parent->phi_max)), label_precision, String("NS"));
 
     }
 
@@ -1918,7 +1918,7 @@ inline void DrawPanel::PreRender3D(void) {
         ((q.lambda).value) += delta_lambda
         ) {
 
-        DrawLabel(q, parent->lambda_max, parent->lambda_min, label_precision, String("EW"));
+        DrawLabel(q, (*(parent->lambda_max)), (*(parent->lambda_min)), label_precision, String("EW"));
 
     }
 

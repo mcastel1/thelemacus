@@ -267,18 +267,6 @@ public:
 
 
 
-template<class P, class T> class CheckCheck{
-    
-public:
-    
-    CheckField<P,T>* p;
-    
-    CheckCheck(CheckField<P,T>*);
-    //this functor checks whether a GUI Check field is filled correctly and writes its value into the relative non-GUI field
-    template<class R> void operator()(R&);
-    
-};
-
 
 
 

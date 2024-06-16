@@ -1338,7 +1338,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         ((q.phi).value) += delta_phi
         ) {
 
-        WriteLabel(q, parent->phi_min, parent->phi_max, label_precision, String("NS"), &dummy_label);
+        WriteLabel(q, (*(parent->phi_min)), (*(parent->phi_max)), label_precision, String("NS"), &dummy_label);
 
         if ((GetTextExtent(dummy_label).GetWidth()) > ((int)size_label_horizontal)) {
             size_label_horizontal = (GetTextExtent(dummy_label).GetWidth());

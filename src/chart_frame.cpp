@@ -1309,21 +1309,21 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //
     if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
 
-        j_min = floor(K * (lambda_max.value));
-        j_max = ceil(K * ((lambda_min.value) + 2.0*M_PI));
+        j_min = floor(K * (lambda_max->value));
+        j_max = ceil(K * ((lambda_min->value) + 2.0*M_PI));
 
     }else {
 
         if (lambda_min > lambda_max) {
 
-            j_min = floor(K * (lambda_max.value));
-            j_max = ceil(K * (lambda_min.value));
+            j_min = floor(K * (lambda_max->value));
+            j_max = ceil(K * (lambda_min->value));
 
         }
         else {
 
-            j_min = floor(K * (lambda_max.value));
-            j_max = ceil(K * ((lambda_min.value) + 2.0*M_PI));
+            j_min = floor(K * (lambda_max->value));
+            j_max = ceil(K * ((lambda_min->value) + 2.0*M_PI));
 
         }
 
@@ -1339,7 +1339,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         unsigned long long int n_added_polygons, l, p, m, every;
         bool new_polygon;
         
-//        ( ((phi_max.normalize_pm_pi_ret() - phi_min.normalize_pm_pi_ret()).value)*((lambda_max.normalize_pm_pi_ret() - lambda_min.normalize_pm_pi_ret()).value) ) / ( (ceil_max_lat - floor_min_lat)*2*M_PI );
+//        ( ((phi_max.normalize_pm_pi_ret() - phi_min.normalize_pm_pi_ret()).value)*((lambda_max->normalize_pm_pi_ret() - lambda_min->normalize_pm_pi_ret()).value) ) / ( (ceil_max_lat - floor_min_lat)*2*M_PI );
         
         /*
          the number of points plotted is [number of coastline data points in lambda_min ... phi_max] / every = n_points_plot_coastline_Mercator ->

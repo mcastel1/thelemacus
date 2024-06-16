@@ -12,7 +12,9 @@
 
 using namespace std;
 
+template<class P> class CheckLengthUnit;
 class SpeedUnit;
+
 
 //GUI field to specify the unit of measure of a Speed, which is inserted into a parent panel of type P
 template<class P> class SpeedUnitField: public MultipleItemField<P, SpeedUnit, CheckLengthUnit<P> >{

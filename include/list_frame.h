@@ -33,6 +33,7 @@ class AskRemoveRelatedRoute;
 class Cartesian;
 class Catalog;
 class ChartFrame;
+template <class P> class CloseFrame;
 template <class P> class ConfirmTransport;
 class Data;
 class DeletePosition;

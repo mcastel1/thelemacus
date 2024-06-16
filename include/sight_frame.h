@@ -10,14 +10,14 @@
 
 #include <iostream>
 
+#include "angle_field.h"
 #include "body_field.h"
 #include "check_field.h"
-#include "my_app.h"
 #include "limb_field.h"
 #include "list_frame.h"
+#include "my_app.h"
 #include "sight.h"
 #include "static_text.h"
-#include "angle_field.h"
 
 using namespace std;
 

@@ -3695,10 +3695,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             (*(parent->phi_max)) = (((parent->parent)->position_end).phi);
                         }
                         //I normalize lambda_min, ..., phi_max for future use.
-                        parent->lambda_min.normalize();
-                        parent->lambda_max.normalize();
-                        parent->phi_min.normalize();
-                        parent->phi_max.normalize();
+                        parent->lambda_min->normalize();
+                        parent->lambda_max->normalize();
+                        parent->phi_min->normalize();
+                        parent->phi_max->normalize();
                         
                         parent->parent->geo_position_start.phi.normalize();
                         parent->parent->geo_position_start.lambda.normalize();

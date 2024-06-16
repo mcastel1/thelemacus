@@ -736,30 +736,6 @@ public:
 
 
 
-//class for graphical object: a field to enter a String, composed of a box. P is the type of the object in which this StringField will be inserted
-template<class P> class StringField{
-    
-public:
-    //the parent where this StringField object will be inserted
-    P* parent;
-    //label box
-    wxTextCtrl *value;
-    wxBoxSizer *sizer_h, *sizer_v;
-    //non-GUI object related to this
-    String* string;
-    CheckString<P>* check;
-    SetStringFieldToCurrentTime<P> set_to_current_time;
-    
-    StringField(wxPanel*, String*);
-    void set(void);
-    template<class T> void get(T&);
-    template<class T> void InsertIn(T*);
-    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-    
-};
-
-
-
 
 
 

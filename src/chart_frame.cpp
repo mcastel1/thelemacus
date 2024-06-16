@@ -971,7 +971,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
         PositionProjection p_min, p_max;
 
-        //update x_min, ..., y_max according to the zoom (scroll) and lambda_min, ..., phi_max
+        //update x_min, ..., y_max according to the zoom (scroll) and *lambda_min, ..., *phi_max
         (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - (((double)(((draw_panel->size_chart).GetWidth()) * (draw_panel->x_span_0))) / ((double)(((zoom_factor.value) * (draw_panel->width_chart_0))))) / 2.0;
         (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + (((double)(((draw_panel->size_chart).GetWidth()) * (draw_panel->x_span_0))) / ((double)(((zoom_factor.value) * (draw_panel->width_chart_0))))) / 2.0;
         (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - (((double)(((draw_panel->size_chart).GetHeight()) * (draw_panel->x_span()))) / ((double)((draw_panel->size_chart).GetWidth()))) / 2.0;
@@ -992,7 +992,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
         }
         else {
-            //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set lambda_min, ..., phi_max accordingly.
+            //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set *lambda_min, ..., *phi_max accordingly.
 
             //uncomment this if you want to print an error message
             //print_error_message->SetAndCall(NULL, String("Error"), String("You moved the slider: Chart outside  boundaries! The chart must lie within the boundaries."));
@@ -1295,7 +1295,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 }
 
 
-//this function efficiently reads coastline data stored in data_x in the interval of latitudes (*lambda_min), (*lambda_max), phi_min, phi_max, and writes this data x and y, writing n_points points at the most. This data is stored into parent->coastline_polygons_now
+//this function efficiently reads coastline data stored in data_x in the interval of latitudes (*lambda_min), (*lambda_max), (*phi_min), (*phi_max), and writes this data x and y, writing n_points points at the most. This data is stored into parent->coastline_polygons_now
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
     int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
@@ -1347,8 +1347,8 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
          ( (x) * [total number of coastline data points] / n_points_plot_coastline_Mercator
          */
         
-//        p_SW.SetMercator(Position(Angle(0.0), phi_min));
-//        p_NE.SetMercator(Position(Angle(0.0), phi_max));
+//        p_SW.SetMercator(Position(Angle(0.0), (*phi_min)));
+//        p_NE.SetMercator(Position(Angle(0.0), (*phi_max)));
 //        p_SW0.SetMercator(Position(Angle(0.0), Angle(k*floor_min_lat)));
 //        p_NE0.SetMercator(Position(Angle(0.0), Angle(k*ceil_max_lat)));
         

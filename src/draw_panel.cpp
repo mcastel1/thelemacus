@@ -1549,10 +1549,10 @@ inline void DrawPanel::PreRenderMercator(void) {
     for (first_label = true,
         //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
         (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_lambda * K * 60)))),
-        ((q.lambda).value) = (lambda_start.value),
+        (q.lambda.value) = (lambda_start.value),
         (q.phi) = (*(parent->phi_min)) + epsilon_double;
-        ((q.lambda).value) < (lambda_end.value);
-        ((q.lambda).value) += delta_lambda
+        (q.lambda.value) < (lambda_end.value);
+        (q.lambda.value) += delta_lambda
         ) {
 
         DrawLabel(q, parent->lambda_max, parent->lambda_min, label_precision, String("EW"));

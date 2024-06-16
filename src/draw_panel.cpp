@@ -3979,7 +3979,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             GeoToDrawPanel(route_reference_position_drag_start, &p, false);
                             
                             //this command is the same for all types of Routes
-                            DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
+                            DrawPanelToGeo(p + (position_now_drag - position_start_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
                             
                         }
                         

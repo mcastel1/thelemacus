@@ -45,7 +45,7 @@ template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [
         //*input_stream has not reached the end of file
 
 
-        //read type
+        //read (*type)
         line.clear();
         getline(*input_stream, line);
         pos = line.find(" = ");
@@ -94,7 +94,7 @@ void Body::print(String name_in, String prefix, ostream& ostr) {
     ostr << new_prefix.value << "Type = " << type->value << "\n";
     ostr << new_prefix.value << "Name = " << name->value << "\n";
 
-    if (type == String("star")) {
+    if ((*type) == String("star")) {
         RA->print(String("Right ascension"), new_prefix, ostr);
         d->print(String("Declination"), new_prefix, ostr);
     }

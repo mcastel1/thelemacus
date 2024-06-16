@@ -24,7 +24,9 @@
 
 using namespace std;
 
+class CloseApp;
 class ListFrame;
+class ShowAll;
 
 
 class MyApp: public wxApp{

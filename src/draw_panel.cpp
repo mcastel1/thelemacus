@@ -2152,7 +2152,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
 
 
     //set lambda_min/max from circle_observer
-    circle_observer.lambda_min_max(&(parent->lambda_min), &(parent->lambda_max), String(""));
+    circle_observer.lambda_min_max((parent->lambda_min), (parent->lambda_max), String(""));
 
     //set
     d.set((-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))))*Re);
@@ -3637,13 +3637,13 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             
                             if(lambda_b > lambda_a){
                                 
-                                (parent->lambda_min) = lambda_b;
-                                (parent->lambda_max) = lambda_a;
+                                (*(parent->lambda_min)) = lambda_b;
+                                (*(parent->lambda_max)) = lambda_a;
                                 
                             }else{
                                 
-                                (parent->lambda_min) = lambda_a;
-                                (parent->lambda_max) = lambda_b;
+                                (*(parent->lambda_min)) = lambda_a;
+                                (*(parent->lambda_max)) = lambda_b;
                                 
                             }
                             
@@ -3655,13 +3655,13 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                                 
                                 if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
                                     
-                                    (parent->lambda_min) = lambda_a;
-                                    (parent->lambda_max) = lambda_b;
+                                    (*(parent->lambda_min)) = lambda_a;
+                                    (*(parent->lambda_max)) = lambda_b;
                                     
                                 }else{
                                     
-                                    (parent->lambda_min) = lambda_b;
-                                    (parent->lambda_max) = lambda_a;
+                                    (*(parent->lambda_min)) = lambda_b;
+                                    (*(parent->lambda_max)) = lambda_a;
                                     
                                 }
                                 
@@ -3670,13 +3670,13 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                                 
                                 if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
                                     
-                                    (parent->lambda_min) = lambda_b;
-                                    (parent->lambda_max) = lambda_a;
+                                    (*(parent->lambda_min)) = lambda_b;
+                                    (*(parent->lambda_max)) = lambda_a;
                                     
                                 }else{
                                     
-                                    (parent->lambda_min) = lambda_a;
-                                    (parent->lambda_max) = lambda_b;
+                                    (*(parent->lambda_min)) = lambda_a;
+                                    (*(parent->lambda_max)) = lambda_b;
                                     
                                 }
                                 

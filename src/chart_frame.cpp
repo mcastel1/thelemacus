@@ -1295,7 +1295,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 }
 
 
-//this function efficiently reads coastline data stored in data_x in the interval of latitudes lambda_min, lambda_max, phi_min, phi_max, and writes this data x and y, writing n_points points at the most. This data is stored into parent->coastline_polygons_now
+//this function efficiently reads coastline data stored in data_x in the interval of latitudes (*lambda_min), (*lambda_max), phi_min, phi_max, and writes this data x and y, writing n_points points at the most. This data is stored into parent->coastline_polygons_now
 void ChartFrame::GetCoastLineData_Mercator(void) {
 
     int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
@@ -1307,14 +1307,14 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //    phi_max->normalize_pm_pi();
 //
 //
-    if ((lambda_min < M_PI) && (lambda_max > M_PI)) {
+    if (((*lambda_min) < M_PI) && ((*lambda_max) > M_PI)) {
 
         j_min = floor(K * (lambda_max->value));
         j_max = ceil(K * ((lambda_min->value) + 2.0*M_PI));
 
     }else {
 
-        if (lambda_min > lambda_max) {
+        if ((*lambda_min) > (*lambda_max)) {
 
             j_min = floor(K * (lambda_max->value));
             j_max = ceil(K * (lambda_min->value));
@@ -1356,7 +1356,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         //        double t;
         //        unsigned long long int n_points_in_chart;
         
-        //        if((lambda_min < M_PI) && (lambda_max > M_PI)){p_NE.x += 2.0 * M_PI;}
+        //        if(((*lambda_min) < M_PI) && ((*lambda_max) > M_PI)){p_NE.x += 2.0 * M_PI;}
         
         //        t = ( ( (draw_panel->x_span()) * (p_NE.y - p_SW.y) ) / ( (draw_panel->x_span_0) *(p_NE0.y - p_SW0.y) ) );
         

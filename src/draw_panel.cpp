@@ -3669,7 +3669,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             }else{
                                 //lambda_a lies in the negative-logitude hemishere (180 < lambda < 360), lambda_b in the positive-longitude hemisphere (0 < lambda < 180)
                                 
-                                if((parent->lambda_min.normalize_pm_pi_ret().value) > (parent->lambda_max.normalize_pm_pi_ret().value)){
+                                if((parent->lambda_min->normalize_pm_pi_ret().value) > (parent->lambda_max->normalize_pm_pi_ret().value)){
                                     
                                     (*(parent->lambda_min)) = lambda_b;
                                     (*(parent->lambda_max)) = lambda_a;

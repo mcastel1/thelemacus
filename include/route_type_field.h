@@ -16,6 +16,8 @@
 
 using namespace std;
 
+template<class P> class CheckRouteType;
+
 
 //GUI field to specify the RouteType, which is inserted into a parent panel of type P
 template<class P> class RouteTypeField: public MultipleItemField<P, RouteType, CheckRouteType<P> >{

@@ -1354,7 +1354,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     (this->*Set_x_y_min_max)();
 
     //set rectangle_obseerver
-    rectangle_observer = PositionRectangle(Position(parent->lambda_min, parent->phi_max), Position(parent->lambda_max, parent->phi_min), String(""));
+    rectangle_observer = PositionRectangle(Position((*(parent->lambda_min)), (*(parent->phi_max))), Position((*(parent->lambda_max)), (*(parent->phi_min))), String(""));
 
     /*set the aspect ratio between height and width equal to the ratio between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
 

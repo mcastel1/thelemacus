@@ -360,21 +360,6 @@ public:
 
 
 
-template<class P> class CheckLength{
-    
-public:
-    
-    //p is the DynamicLengthField which is parent of the CheckLength object: the CheckLength object checks the validity of the entries in DynamicLengthField
-    DynamicLengthField<P>* p;
-    CheckLengthValue<P>* check_length_value;
-    CheckLengthUnit<P>* check_length_unit;
-    
-    CheckLength(DynamicLengthField<P>*);
-    template <class T> void operator()(T&);
-    
-};
-
-
 template<class P> class CheckSpeedValue{
     
 public:

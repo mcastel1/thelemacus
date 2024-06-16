@@ -12,6 +12,10 @@
 
 using namespace std;
 
+#include "length_unit.h"
+
+class LengthUnit;
+
 //GUI field to specify the unit of measure of a Length, which is inserted into a parent panel of type P
 template<class P> class LengthUnitField: public MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >{
     

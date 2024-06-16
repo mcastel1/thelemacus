@@ -2127,11 +2127,11 @@ void DrawPanel::SetIdling(bool b) {
 //this function computes lambda_min, ... phi_max from x_min ... y_max for the mercator projection
 void DrawPanel::Set_lambda_phi_min_max_Mercator(void) {
 
-    parent->lambda_min.set(k * lambda_mercator(x_min));
-    parent->lambda_max.set(k * lambda_mercator(x_max));
+    parent->lambda_min->set(k * lambda_mercator(x_min));
+    parent->lambda_max->set(k * lambda_mercator(x_max));
 
-    parent->phi_min.set(k * phi_mercator(y_min));
-    parent->phi_max.set(k * phi_mercator(y_max));
+    parent->phi_min->set(k * phi_mercator(y_min));
+    parent->phi_max->set(k * phi_mercator(y_max));
 
 }
 

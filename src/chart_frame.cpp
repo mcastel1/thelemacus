@@ -10,6 +10,7 @@
 #include "bitmap.h"
 #include "constants.h"
 
+template<class P> class ChartTransportHandler;
 
 
 ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {

@@ -1555,7 +1555,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         (q.lambda.value) += delta_lambda
         ) {
 
-        DrawLabel(q, parent->lambda_max, parent->lambda_min, label_precision, String("EW"));
+        DrawLabel(q, (*(parent->lambda_max)), (*(parent->lambda_min)), label_precision, String("EW"));
 
     }
 

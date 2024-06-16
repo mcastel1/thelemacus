@@ -429,8 +429,8 @@ template<class T> void ChartFrame::MoveWest(T& event) {
         (lambda_min->value) += delta;
         (lambda_max->value) += delta;
 
-        lambda_min.normalize();
-        lambda_max.normalize();
+        lambda_min->normalize();
+        lambda_max->normalize();
 
         (draw_panel->*(draw_panel->Set_x_y_min_max))();
 

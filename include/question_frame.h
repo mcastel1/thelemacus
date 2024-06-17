@@ -14,11 +14,13 @@
     #include "wx/wx.h"
 #endif
 
+
 #include "my_string.h"
 
 using namespace std;
 
 
+template<class P> class CloseFrame;
 class StaticBitmap;
 class String;
 

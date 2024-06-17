@@ -458,21 +458,6 @@ template<class F> SaveAndReset<F>::SaveAndReset(F* frame_in) {
 
 
 
-template<class F> ShowFrame<F>::ShowFrame(F* frame_in) {
-
-    frame = frame_in;
-
-}
-
-//show a frame of type F
-template<class F> template <class T> void ShowFrame<F>::operator()(T& event) {
-
-    frame->Show(true);
-
-    event.Skip(true);
-
-
-}
 
 ShowAll::ShowAll(ListFrame* frame_in) {
 

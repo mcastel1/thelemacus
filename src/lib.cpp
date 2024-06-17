@@ -459,20 +459,6 @@ template<class F> SaveAndReset<F>::SaveAndReset(F* frame_in) {
 
 
 
-template<class F> DestroyFrame<F>::DestroyFrame(F* frame_in) {
-
-    frame = frame_in;
-
-}
-
-//destroys a frame of type F
-template<class F> void DestroyFrame<F>::operator()(void) {
-
-    //destroys frame
-    frame->Destroy();
-
-}
-
 
 
 //saves the data in frame->data to file frame->file ,and closes frame

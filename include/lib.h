@@ -747,22 +747,6 @@ public:
 
 
 
-//this class is to define the functor template<class T> void operator()(T&), which is called when the user selects a route with which he wants to transport a sight
-class OnSelectRouteInListControlRoutesForTransport{
-    
-public:
-    
-    //parent frame
-    ListFrame* parent;
-    //    UnsetIdling<ListFrame>* unset_idling;
-    
-    //constructor, which sets the parent frame
-    OnSelectRouteInListControlRoutesForTransport(ListFrame*);
-    
-    template<class T> void operator()(T&);
-    
-    
-};
 
 //this class is to define the functor template<class T> void operator()(T&), which is called when the user crates a new route with which he wants to transport a sight
 class OnNewRouteInListControlRoutesForTransport{

@@ -455,20 +455,6 @@ template<class F> SaveAndReset<F>::SaveAndReset(F* frame_in) {
 }
 
 
-CloseApp::CloseApp(MyApp* app_in){
-    
-    app = app_in;
-    
-}
-
-
-template <class T> void CloseApp::operator()([[maybe_unused]] T& event) {
-    
-    app->list_frame->Close();
-    app->disclaimer->Close();
-    
-}
-
 
 
 

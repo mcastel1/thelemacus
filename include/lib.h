@@ -141,18 +141,6 @@ template<class F> class ChartTransportHandler;
 
 
 
-//this class defines a functor to close the app properly
-class CloseApp{
-    
-public:
-    
-    MyApp* app;
-    
-    CloseApp(MyApp*);
-    template<class T>void operator()(T&);
-    
-};
-
 //class which defines a functor which closes a frame with arbitrary type F
 template<class F> class CloseFrame{
     

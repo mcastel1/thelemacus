@@ -139,17 +139,7 @@ template<class F> class ChartTransportHandler;
 
 
 
-template<class F> class SaveAndReset{
-    
-public:
-    
-    //the frame to be closed
-    F* frame;
-    SaveAndReset(F*);
-    
-    template<class T> void operator()(T&);
-    
-};
+
 
 
 

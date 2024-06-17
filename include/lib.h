@@ -141,17 +141,6 @@ template<class F> class ChartTransportHandler;
 
 
 
-//class which defines a functor which shows ListFrame and all ChartFrames
-class ShowAll{
-    
-public:
-    
-    ListFrame* frame;
-    ShowAll(ListFrame*);
-    
-    template<class T> void operator()(T&);
-    
-};
 
 
 //class which defines a functor which destroys a frame with arbitrary type F

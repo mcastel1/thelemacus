@@ -8,7 +8,7 @@
 #ifndef on_change_selection_in_list_control_h
 #define on_change_selection_in_list_control_h
 
-
+#include "list_control.h"
 #include "my_string.h"
 
 

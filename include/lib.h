@@ -748,23 +748,6 @@ public:
 
 
 
-//this class is to define the functor template<class T> void operator()(T&), which is called when the user crates a new route with which he wants to transport a sight
-class OnNewRouteInListControlRoutesForTransport{
-    
-public:
-    
-    //parent frame
-    ListFrame* parent;
-    
-    //constructor, which sets the parent frame
-    OnNewRouteInListControlRoutesForTransport(ListFrame*);
-    template<class T> void operator()(T&);
-    
-};
-
-
-
-
 //a hanlder to make a general motion (i.e., drag the chart, transport a Position, ...) with an animation
 template<class F> class MotionHandler{
     

@@ -832,75 +832,6 @@ template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
 
 
 
-//if a new item listcontrol_routes is created, I transport the sight/position under consideration with such Route
-template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& event) {
-    
-    //the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
-    (parent->i_transporting_route) = ((parent->listcontrol_routes)->GetItemCount()) - 1;
-    //do the tasks tha need to be done at the end of the transport
-    ToDoAtEndOfTransport<Route, ListFrame>* to_do_at_end_of_transport;
-
-    to_do_at_end_of_transport = new ToDoAtEndOfTransport<Route, ListFrame>(
-                                                                  NULL,
-                                                                  NULL,
-                                                                  parent
-                                                                  );
-
-
-    if (((parent->transported_object_type) == String("sight")) || ((parent->transported_object_type) == String("route"))) {
-        //I am transporting a Sight or the Route related to it: allocate transport_handler with template NON_GUI = Route
-        
-        GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> >* transport_handler;
-
-        
-        if ((parent->transported_object_type) == String("sight")) {
-            
-            
-            //the id of the Route that will be transported
-            (parent->i_object_to_transport) = (((((parent->data)->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
-            
-            
-        }
-        
-        
-        transport_handler = new GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> >(
-                                                                                                                 parent,
-                                                                                                                 &((parent->data->route_list)[(parent->i_object_to_transport)]),
-                                                                                                                 (parent->transported_object_type),
-                                                                                                                 ((parent->data->route_list)[(parent->i_transporting_route)]),
-                                                                                                                 to_do_at_end_of_transport
-                                                                                                                 );
-        
-        //start the transport
-        (*transport_handler)();
-        
-    }
-    
-    if ((parent->transported_object_type) == String("position")) {
-        //I am transporting a Position: allocate transport_handler with template NON_GUI = Position
-        
-        GraphicalFeatureTransportHandler<Position, ToDoAtEndOfTransport<Route, ListFrame> >* transport_handler;
-        
-        
-        //the id of the Route or Position that will be transported
-        (parent->i_object_to_transport) = ((int)(parent->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
-        
-        transport_handler = new GraphicalFeatureTransportHandler<Position, ToDoAtEndOfTransport<Route, ListFrame> >(parent,
-                                                                                                                    &((parent->data->position_list)[(parent->i_object_to_transport)]),
-                                                                                                                    (parent->transported_object_type),
-                                                                                                                    ((parent->data->route_list)[(parent->i_transporting_route)]),
-                                                                                                                    to_do_at_end_of_transport
-                                                                                                                    );
-        
-        //start the transport
-        (*transport_handler)();
-    }
-    
-    event.Skip(true);
-    
-}
-
-
 
 
 template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F_ABORT>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, F_ABORT* f_abort_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
@@ -1725,15 +1656,6 @@ template<class P> template<class T> void LengthField<P>::InsertIn(T* host, wxSiz
 
 
 
-
-
-
-
-OnNewRouteInListControlRoutesForTransport::OnNewRouteInListControlRoutesForTransport(ListFrame* f_in) {
-
-    parent = f_in;
-
-}
 
 
 

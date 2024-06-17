@@ -141,20 +141,6 @@ template<class F> class ChartTransportHandler;
 
 
 
-//class which defines a functor which closes a frame with arbitrary type F
-template<class F> class CloseFrame{
-    
-public:
-    
-    //the frame to be closed
-    F* frame;
-    CloseFrame(F*);
-    
-    template<class T> void operator()(T&);
-    
-};
-
-
 //class which defines a functor which shows a frame with arbitrary type F
 template<class F> class ShowFrame{
     

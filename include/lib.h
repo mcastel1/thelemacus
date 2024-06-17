@@ -645,22 +645,6 @@ public:
     
 };
 
-//this class defines the functor () used to remove a Position from the non-GUI object data
-class DeletePosition{
-    
-public:
-    
-    DeletePosition(ListFrame*);
-    
-    //the frame which called this struct
-    ListFrame* f;
-    //the id of the Position to be removed
-    long i_position_to_remove;
-    
-    
-    void operator()(wxCommandEvent&);
-    
-};
 
 
 

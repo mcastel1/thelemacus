@@ -14,9 +14,12 @@
     #include "wx/wx.h"
 #endif
 
+#include "my_string.h"
 
 using namespace std;
 
+
+class String;
 template<class F_A, class F_B, class F_ABORT> class QuestionFrame;
 
 

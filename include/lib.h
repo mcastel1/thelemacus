@@ -139,23 +139,6 @@ template<class F> class ChartTransportHandler;
 
 
 
-
-
-
-
-class ResetListFrame{
-    
-public:
-    
-    //the frame to be reset
-    ListFrame* p;
-    ResetListFrame(ListFrame*);
-    
-    template<class E> void operator()(E&);
-    
-};
-
-
 template<class F> class SaveAndReset{
     
 public:

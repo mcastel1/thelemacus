@@ -439,22 +439,6 @@ public:
 
 
 
-
-
-//if an item is selected/deselected in caller, enable/disable the disableable buttons in caller
-template<class S> class OnChangeSelectionInListControl{
-    
-public:
-    
-    ListControl<S>* caller;
-    //the type of listcontrol: "sight" if caller = listcontrol_sights, "position" if caller = listcontrol_positions, "route" if caller = listcontrol_routes
-    String type;
-    
-    OnChangeSelectionInListControl(ListControl<S>*, String);
-    template<class T> void operator()(T&);
-    
-};
-
 //if an item is selected/deselected in caller, call operator() to make sure that only one item is selected at a time
 template<class P> class OnChangeSelectionInLimbField{
     

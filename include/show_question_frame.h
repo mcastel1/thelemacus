@@ -10,7 +10,14 @@
 
 #include <iostream>
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
+
 using namespace std;
+
+template<class F_A, class F_B, class F_ABORT> class QuestionFrame;
 
 
 //this functor pops out a question window with title tile, quesiton question, and answers answer_y, answer_n, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this class adaptable. If the user answers yes/no to the question, f_yes/f_no are called

@@ -339,19 +339,7 @@ public:
 };
 
 
-//this functor allows the user to select a Route in *parent frame
-class SelectRoute{
-    
-public:
-    
-    SelectRoute(ListFrame*);
-    
-    //the ListFrame which called this struct
-    ListFrame* parent;
-    
-    void operator()(wxCommandEvent&);
-    
-};
+
 
 
 //this class defines the functor () used to ...

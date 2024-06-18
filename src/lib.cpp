@@ -673,14 +673,6 @@ template<class P> template<class T>void OnChangeSelectionInLimbField<P>::operato
 
 
 
-//same asLengthField<P>::InsertIn(T* host) but with flags to be provided
-template<class P> template<class T> void LengthField<P>::InsertIn(T* host, wxSizerFlags& flag) {
-
-    host->Add(sizer_v, flag);
-
-}
-
-
 
 
 

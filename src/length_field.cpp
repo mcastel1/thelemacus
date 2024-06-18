@@ -68,3 +68,12 @@ template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
     host->Add(LengthField<P>::sizer_v);
 
 }
+
+
+
+//same asLengthField<P>::InsertIn(T* host) but with flags to be provided
+template<class P> template<class T> void LengthField<P>::InsertIn(T* host, wxSizerFlags& flag) {
+
+    host->Add(sizer_v, flag);
+
+}

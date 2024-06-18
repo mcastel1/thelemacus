@@ -7,6 +7,9 @@
 
 #include "sight_frame.h"
 
+#include "check_check.h"
+#include "check_date.h"
+#include "check_length.h"
 #include "constants.h"
 #include "date_field.h"
 #include "limb_field.h"

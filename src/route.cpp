@@ -524,7 +524,7 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
                             (s[j] * (1.0 + epsilon_double)) + (((s[j + 1] * (1.0 - epsilon_double)) - ((s[j] * (1.0 + epsilon_double)))) * ((double)i)/((double)(n_points - 1))),
                             String(""));
                 
-                check = (draw_panel->GeoToDrawPanel)(end, &p, false);
+                check = (draw_panel->GeoToDrawPanel)((*end), &p, false);
                 
                 if (check) {
                     //end is a valid point -> convert it to a Position with GeoToDrawPanel
@@ -540,7 +540,7 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
                         
                         end->put_back_in(draw_panel);
                         
-                        if((draw_panel->GeoToDrawPanel)(end, &p, false)){
+                        if((draw_panel->GeoToDrawPanel)((*end), &p, false)){
                             
                             v_tentative.push_back(p);
                             
@@ -1279,7 +1279,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
                 compute_end(Length(Re * sin(omega) * (((u[i]).value) + ((u[i + 1]).value)) / 2.0), String(""));
             }
 
-            if (rectangle.Contains(end)) {
+            if (rectangle.Contains((*end))) {
                 //if rectangle contains the midpoint, then the chunk of *this with u[i] < t < u[1+1] is included in rectangle -> I return 1
 
                 output = 1;

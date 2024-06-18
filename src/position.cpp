@@ -207,19 +207,19 @@ inline void Position::put_back_in(DrawPanel* draw_panel){
         case 0: {
             //I am using the mercator projection
             
-            if(equal_rel_epsilon_double(phi, draw_panel->parent->phi_min)){
+            if(equal_rel_epsilon_double(phi, (*(draw_panel->parent->phi_min)))){
                 phi = (*(draw_panel->parent->phi_min));
             }
             
-            if(equal_rel_epsilon_double(phi, draw_panel->parent->phi_max)){
+            if(equal_rel_epsilon_double(phi, (*(draw_panel->parent->phi_max)))){
                 phi = (*(draw_panel->parent->phi_max));
             }
             
-            if(equal_rel_epsilon_double(lambda, draw_panel->parent->lambda_min)){
+            if(equal_rel_epsilon_double(lambda, (*(draw_panel->parent->lambda_min)))){
                 lambda = (*(draw_panel->parent->lambda_min));
             }
             
-            if(equal_rel_epsilon_double(lambda, draw_panel->parent->lambda_max)){
+            if(equal_rel_epsilon_double(lambda, (*(draw_panel->parent->lambda_max)))){
                 lambda = (*(draw_panel->parent->lambda_max));
             }
             

@@ -133,21 +133,6 @@ template<class F> class ChartTransportHandler;
 
 
 
-//this functor pops up a QuestionFrame and asks the user whether he wants to remove the a Sight related to a Route
-class AskRemoveRelatedSight{
-    
-public:
-    
-    AskRemoveRelatedSight(ListFrame*);
-    
-    //the frame which called this struct
-    ListFrame* parent;
-    
-    void operator()(wxCommandEvent&);
-    
-};
-
-
 
 
 

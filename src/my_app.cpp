@@ -11,6 +11,8 @@
 #include "close_frame.h"
 #include "constants.h"
 #include "list_frame.h"
+#include "question_frame.h"
+#include "show_all.h"
 #include "show_question_frame.h"
 
 

@@ -17,6 +17,7 @@
 #include "delete_route.h"
 #include "delete_sight.h"
 #include "file_r.h"
+#include "generic.h"
 #include "on_change_selection_in_list_control.h"
 #include "on_new_route_in_list_control_for_transport.h"
 #include "on_select_route_in_list_control_for_transport.h"
@@ -1824,7 +1825,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 //                //I do the animaiton only if the start and end position of the animation are large enough, in order to avoid NaNs in the transporting_route
                 //                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * Re*(chart_frames[i])->draw_panel->circle_observer.omega.value) {
                 
-                center.lambda.set((((chart_frames[i])->lambda_min + (chart_frames[i])->lambda_max).value)/2.0);
+                center.lambda.set((((*((chart_frames[i])->lambda_min)) + (*((chart_frames[i])->lambda_max))).value)/2.0);
                 center.phi.set(mean_pm_pi((chart_frames[i])->phi_min, (chart_frames[i])->phi_max));
                 
                 rectangle_observer_0.SizeMercator(&size_rectangle_observer_0);

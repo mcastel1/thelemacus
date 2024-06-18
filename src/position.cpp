@@ -80,7 +80,7 @@ bool Position::is_in(Route route, [[maybe_unused]] String prefix) {
 
         Length d;
 
-        distance(route.reference_position, &d, String(""), prefix);
+        distance((*(route.reference_position)), &d, String(""), prefix);
 
         return(d <= (Re * (route.omega.value)));
 

@@ -241,3 +241,22 @@ template<class P> template <class T> void DateField<P>::get(T& event) {
     event.Skip(true);
 
 }
+
+//sets the value in the GUI objects year, month and day equal to the value in the non-GUI limb object date_in
+template<class P> void DateField<P>::set(Date date_in) {
+
+    //    Time time_UTC;
+    //
+    //    //(parent_frame->sight->time) is in TAI time scale. I substact to it TAI-UTC and obtain time in UTC scale, which is the one that I want to display in the GUI field
+    //    time_UTC = (parent_frame->sight->time);
+    //    time_UTC -= (parent_frame->sight->TAI_minus_UTC);
+
+    year->SetValue(wxString::Format(wxT("%i"), date_in.Y));
+    month->SetValue(wxString::Format(wxT("%i"), date_in.M));
+    day->SetValue(wxString::Format(wxT("%i"), date_in.D));
+
+    year_ok = true;
+    month_ok = true;
+    day_ok = true;
+
+}

@@ -249,7 +249,7 @@ inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector<
             end->put_back_in(draw_panel);
         }
 
-        if ((draw_panel->GeoToDrawPanel)(end, &p, false)) {
+        if ((draw_panel->GeoToDrawPanel)((*end), &p, false)) {
 
             if (end_connected) {
 

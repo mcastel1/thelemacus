@@ -26,6 +26,7 @@
 using namespace std;
 
 class Atmosphere;
+class Route;
 
 
 class Sight{

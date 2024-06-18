@@ -156,16 +156,6 @@ template<class F> class ChartTransportHandler;
 
 
 
-template<class P> class CheckDay{
-    
-public:
-    
-    DateField<P>* p;
-    
-    CheckDay(DateField<P>*);
-    template<class T> void operator()(T&);
-    
-};
 
 
 template<class P> class CheckDate{

@@ -2073,12 +2073,12 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
             //p_max =  Position on the circle of equal altitude  at t = t_max
             length.set(Re * sin((omega.value)) * (t_max.value), LengthUnit_types[0]);
             compute_end(new_prefix);
-            p_max = end;
+            p_max = (*end);
             
             //p_min =  Position on circle of equal altitude  at t = t_min
             length.set(Re * sin((omega.value)) * (t_min.value), LengthUnit_types[0]);
             compute_end(new_prefix);
-            p_min = end;
+            p_min = (*end);
             
             //set lambda_min/max in this order, which is eventually rectified at the end of this function
             (*lambda_min) = (p_min.lambda);

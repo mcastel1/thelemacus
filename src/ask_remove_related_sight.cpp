@@ -7,6 +7,12 @@
 
 #include "ask_remove_related_sight.h"
 
+#include <wx/listctrl.h>
+
+#include "delete_route.h"
+#include "show_question_frame.h"
+
+
 
 
 AskRemoveRelatedSight::AskRemoveRelatedSight(ListFrame* parent_in) {

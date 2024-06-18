@@ -2238,11 +2238,11 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
                 
             length.set(Re * sin((omega.value)) * 0.0, LengthUnit_types[0]);
             compute_end(new_prefix);
-            p_max = end;
+            p_max = (*end);
             
             length.set(Re * sin((omega.value)) * M_PI, LengthUnit_types[0]);
             compute_end(new_prefix);
-            p_min = end;
+            p_min = (*end);
             
             //set lambda_min/max in this order, which is eventually rectified at the end of this function
             (*phi_min) = (p_min.phi);

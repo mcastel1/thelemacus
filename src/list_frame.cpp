@@ -1826,7 +1826,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 //                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * Re*(chart_frames[i])->draw_panel->circle_observer.omega.value) {
                 
                 center.lambda.set((((*((chart_frames[i])->lambda_min)) + (*((chart_frames[i])->lambda_max))).value)/2.0);
-                center.phi.set(mean_pm_pi((chart_frames[i])->phi_min, (chart_frames[i])->phi_max));
+                center.phi.set(mean_pm_pi((*((chart_frames[i])->phi_min)), (*((chart_frames[i])->phi_max))));
                 
                 rectangle_observer_0.SizeMercator(&size_rectangle_observer_0);
                 

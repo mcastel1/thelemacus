@@ -5,7 +5,10 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include "check_length.h"
 #include "check_route_type.h"
+#include "check_speed.h"
+#include "check_string.h"
 #include "on_change_selection_in_list_control.h"
 #include "on_new_route_in_list_control_for_transport.h"
 #include "route_frame.h"

@@ -181,17 +181,6 @@ public:
 
 
 
-//if an item is selected/deselected in caller, call operator() to make sure that only one item is selected at a time
-template<class P> class OnChangeSelectionInLimbField{
-    
-public:
-    
-    LimbField<P>* caller;
-    
-    OnChangeSelectionInLimbField(LimbField<P>*);
-    template<class T> void operator()(T&);
-    
-};
 
 
 class SetStringToCurrentTime{

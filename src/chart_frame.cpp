@@ -8,8 +8,10 @@
 #include "chart_frame.h"
 
 #include "bitmap.h"
+#include "chart_transport_handler.h"
 #include "constants.h"
 #include "units.h"
+#include "unset_idling.h"
 
 template<class P> class ChartTransportHandler;
 

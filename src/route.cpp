@@ -134,7 +134,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             p_start.getCartesian(&r_start);
             p_end.getCartesian(&r_end);
             
-            reference_position = p_start;
+            (*reference_position) = p_start;
             
             
             //set the legnth as the length of the shortest great circle joining p_start and p_end
@@ -150,12 +150,12 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             //consider solution 1, compute end with this solution and store it in end_1
             Z.set(z.value);
             compute_end(String());
-            end_1 = end;
+            end_1 = (*end);
             
             //consider solution 2, compute end with this solution and store it in end_2
             Z.set(-z.value);
             compute_end(String());
-            end_2 = end;
+            end_2 = (*end);
             
             //check which one among end_1 and end_2 has a longitude closer to p_end and pick the correct solution accordingly
             if(fabs(end_1.lambda.value - p_end.lambda.value) < fabs(end_2.lambda.value - p_end.lambda.value)){

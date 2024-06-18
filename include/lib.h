@@ -116,16 +116,16 @@ template<class F> class ChartTransportHandler;
 
 
 
-class SetStringToCurrentTime{
-    
-public:
-    
-    String* p;
-    
-    SetStringToCurrentTime(String*);
-    template<class T> void operator()(T&);
-    
-};
+//class SetStringToCurrentTime{
+//    
+//public:
+//    
+//    String* p;
+//    
+//    SetStringToCurrentTime(String*);
+//    template<class T> void operator()(T&);
+//    
+//};
 
 
 

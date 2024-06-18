@@ -977,8 +977,8 @@ void Route::size_Mercator(PositionProjection* p){
         //*this is a loxodrome -> for loxodromes, latitude and longitude are either constantly increasing or decreasing along the Route -> I compute the points of maximal and minimal latitude / longitude from the extremal Positions on *this
         
         compute_end(String(""));
-        p->NormalizeAndSetMercator(end);
-        q.NormalizeAndSetMercator(reference_position);
+        p->NormalizeAndSetMercator((*end));
+        q.NormalizeAndSetMercator((*reference_position));
  
         
     }else{

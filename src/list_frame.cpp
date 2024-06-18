@@ -11,11 +11,15 @@
 
 
 #include "bitmap.h"
+#include "chart_transport_handler.h"
 #include "close_frame.h"
 #include "delete_position.h"
+#include "delete_sight.h"
 #include "file_r.h"
+#include "on_change_selection_in_list_control.h"
 #include "position_frame.h"
 #include "question_frame.h"
+#include "reset_list_frame.h"
 #include "show_question_frame.h"
 #include "sight_frame.h"
 

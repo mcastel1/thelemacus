@@ -128,18 +128,6 @@ public:
 };
 
 
-//this class defines a functor () used to select some specific Routes to compute the astronomical position
-class SomeRoutes{
-    
-public:
-    
-    //the frame which called this struct
-    ListFrame* f;
-    
-    SomeRoutes(ListFrame*);
-    void operator()(wxCommandEvent&);
-    
-};
 
 
 //this functor is called when the user has chosen that he/she wants to condfirm transporting an object

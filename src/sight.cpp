@@ -11,6 +11,7 @@
 #include "gsl_roots.h"
 #include "gsl_integration.h"
 #include "gsl_errno.h"
+#include "gsl_spline.h"
 
 
 #include "constants.h"

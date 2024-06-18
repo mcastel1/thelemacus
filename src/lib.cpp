@@ -436,28 +436,6 @@ template<class P> template<class T> void CheckString<P>::operator()(T& event) {
 
 
 
-template<class P> CheckDate<P>::CheckDate(DateField<P>* p_in) {
-
-    p = p_in;
-
-    check_year = new CheckYear<P>(p);
-    check_month = new CheckMonth<P>(p);
-    check_day = new CheckDay<P>(p);
-
-}
-
-//this functor checks the whole date field by calling the check on its year, month and day parts
-template<class P> template <class T> void CheckDate<P>::operator()(T& event) {
-
-    (*check_year)(event);
-    (*check_month)(event);
-    (*check_day)(event);
-
-    event.Skip(true);
-
-}
-
-
 
 
 

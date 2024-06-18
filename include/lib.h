@@ -158,21 +158,6 @@ template<class F> class ChartTransportHandler;
 
 
 
-template<class P> class CheckDate{
-    
-public:
-    
-    //the parent DateField
-    DateField<P>* p;
-    CheckYear<P>* check_year;
-    CheckMonth<P>* check_month;
-    CheckDay<P>* check_day;
-    
-    //constructor, which sets the parent
-    CheckDate(DateField<P>*);
-    template <class T> void operator()(T&);
-    
-};
 
 
 

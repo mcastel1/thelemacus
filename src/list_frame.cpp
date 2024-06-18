@@ -21,8 +21,10 @@
 #include "question_frame.h"
 #include "reset_list_frame.h"
 #include "save_and_reset.h"
+#include "select_route.h"
 #include "show_question_frame.h"
 #include "sight_frame.h"
+#include "unset_idling.h"
 
 
 ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& message, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size) {

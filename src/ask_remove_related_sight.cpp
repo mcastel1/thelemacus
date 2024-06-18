@@ -9,7 +9,11 @@
 
 
 
+AskRemoveRelatedSight::AskRemoveRelatedSight(ListFrame* parent_in) {
 
+    parent = parent_in;
+
+}
 
 
 void AskRemoveRelatedSight::operator()(wxCommandEvent& event) {

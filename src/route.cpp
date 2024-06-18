@@ -1480,7 +1480,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             if (type == (Route_types[2])) {
                 //*this is a circle of equal altitude -> I check check whetehr *this and route intersect
 
-                reference_position->distance(route.reference_position, &d, String(""), new_prefix);
+                reference_position->distance((*(route.reference_position)), &d, String(""), new_prefix);
 
                 if (/*this is the condition that *this and route intersect*/(d > Re * fabs((omega.value) - (route.omega.value))) && (d < Re * ((omega + (route.omega)).value))) {
                     //in this case, *this and route intersect

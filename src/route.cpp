@@ -435,7 +435,7 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
                         end->put_back_in(draw_panel);
                     }
 
-                    check = (draw_panel->GeoToDrawPanel)(end, &temp, true);
+                    check = (draw_panel->GeoToDrawPanel)((*end), &temp, true);
 
                     if(check){
                         //temp is a valid point

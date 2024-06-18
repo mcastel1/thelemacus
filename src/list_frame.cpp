@@ -7,6 +7,9 @@
 
 #include "list_frame.h"
 
+#include <wx/progdlg.h>
+
+
 #include "bitmap.h"
 #include "close_frame.h"
 #include "delete_position.h"

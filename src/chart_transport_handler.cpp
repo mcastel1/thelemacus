@@ -7,7 +7,8 @@
 
 #include "chart_transport_handler.h"
 
-
+#include "chart_frame.h"
+#include "double.h"
 
 //constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with proposed zoom factor proposed _zoom_factor at end fo the transport.  This is a `proposed` zoom factor because, if such proposed zoom factor is < 1 or > zoom_factor_max, the actual zoom factor will be set to 1 and zoom_factor_max, respectively. Othersize, the actual zoom_factor will be equal to proposed_zoom_factor.
 template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& proposed_zoom_factor, F* f_in) : MotionHandler<F>(chart_in->parent, transporting_route_in, f_in){
@@ -128,8 +129,8 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     
     
                     //write in p_NW and p_SE the two corner points of the projection and write in projection_size the size (in x,y) of the relative rectangle
-                    q_A.NormalizeAndSetMercator(Position(Angle(0.0), chart_frame->phi_max));
-                    q_B.NormalizeAndSetMercator(Position(Angle(0.0), chart_frame->phi_min));
+                    q_A.NormalizeAndSetMercator(Position(Angle(0.0), (*(chart_frame->phi_max))));
+                    q_B.NormalizeAndSetMercator(Position(Angle(0.0), (*(chart_frame->phi_min))));
                     projection_size.x = chart_frame->draw_panel->x_span();
                     projection_size.y = (q_A.y) - (q_B.y);
                     projection_size_start = projection_size;

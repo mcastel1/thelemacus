@@ -164,16 +164,7 @@ template<class F> class ChartTransportHandler;
 
 
 
-template<class P> class CheckSpeedValue{
-    
-public:
-    
-    SpeedField<P>* p;
-    
-    CheckSpeedValue(SpeedField<P>*);
-    template<class T> void operator()(T&);
-    
-};
+
 
 
 template<class P> class CheckSpeedUnit{

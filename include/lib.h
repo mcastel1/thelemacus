@@ -125,308 +125,48 @@ template<class F> class ChartTransportHandler;
 
 
 
-//this is a wxFrame designed to ask a  yes/no question to the GUI user. F_A is the type of the functor class which will be called when the button yes is pressed. This type is variables, so it has been 'templated'. Same for F_B. If the user presses enter (esc), f_a  (f_b) are called
-template<typename F_A, typename F_B, typename F_ABORT> class QuestionFrame: public wxFrame{
-    
-public:
-        //the non-GUI object connected to the GUI object MessageFrame
-    wxPanel *panel;
-    wxBoxSizer *sizer_v, *sizer_h, *sizer_buttons;
-    wxGridSizer* sizer_grid;
-    wxButton* button_a, *button_b;
-    bool enable_button_a, enable_button_b, /*if this is true, then pressing esc will be equivalent to pressing button b, if this is false, pressing esc will call *f_abort*/bind_esc_to_button_b;
-    StaticBitmap* image;
-    //initialize the functor to close thie QuestionFrame when button_a or button_b will be pressed
-    CloseFrame<QuestionFrame>* close_frame;
-    //pointer to the class containing the functor which will be called when the button yes is pressed
-    F_A* f_a;
-    //pointer to the class containing the functor which will be called when the button no is pressed
-    F_B* f_b;
-    //pointer to the class containing the functor which will be called to abort
-    F_ABORT* f_abort;
-    String string_a, string_b;
-    
-    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, F_ABORT*, bool, bool, bool, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
-    template<class E> void KeyDown(E&);
-    
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
-//this class defines a functor to close the app properly
-class CloseApp{
-    
-public:
-    
-    MyApp* app;
-    
-    CloseApp(MyApp*);
-    template<class T>void operator()(T&);
-    
-};
-
-//class which defines a functor which closes a frame with arbitrary type F
-template<class F> class CloseFrame{
-    
-public:
-    
-    //the frame to be closed
-    F* frame;
-    CloseFrame(F*);
-    
-    template<class T> void operator()(T&);
-    
-};
 
 
-//class which defines a functor which shows a frame with arbitrary type F
-template<class F> class ShowFrame{
-    
-public:
-    
-    //the frame to be closed
-    F* frame;
-    ShowFrame(F*);
-    
-    template<class T> void operator()(T&);
-    
-};
 
 
-//class which defines a functor which shows ListFrame and all ChartFrames
-class ShowAll{
-    
-public:
-    
-    ListFrame* frame;
-    ShowAll(ListFrame*);
-    
-    template<class T> void operator()(T&);
-    
-};
 
 
-//class which defines a functor which destroys a frame with arbitrary type F
-template<class F> class DestroyFrame{
-    
-public:
-    
-    //the frame to be destroyd
-    F* frame;
-    DestroyFrame(F*);
-    
-    void operator()(void);
-    
-};
 
 
-class ResetListFrame{
-    
-public:
-    
-    //the frame to be reset
-    ListFrame* p;
-    ResetListFrame(ListFrame*);
-    
-    template<class E> void operator()(E&);
-    
-};
-
-
-template<class F> class SaveAndReset{
-    
-public:
-    
-    //the frame to be closed
-    F* frame;
-    SaveAndReset(F*);
-    
-    template<class T> void operator()(T&);
-    
-};
-
-
-
-
-
-
-
-
-template<class P, class T> class CheckCheck{
-    
-public:
-    
-    CheckField<P,T>* p;
-    
-    CheckCheck(CheckField<P,T>*);
-    //this functor checks whether a GUI Check field is filled correctly and writes its value into the relative non-GUI field
-    template<class R> void operator()(R&);
-    
-};
-
-
-
-
-
-
-
-
-
-
-//this functor does all the necessary tasks to be done at the end of an animated transporty: sets the non-GUI object *object_a  (for example, a Position, Route...) of type NON_GUI equal to *object_b, sets and redraws everything in the parent of type P, ...
-template<class NON_GUI, class P> class ToDoAtEndOfTransport{
-    
-public:
-    NON_GUI *object_a, *object_b;
-    P* parent;
-
-    ToDoAtEndOfTransport(NON_GUI*, NON_GUI*, P*);
-    
-    void operator()(void);
-    
-};
-
-
-template<class P> class TabulateDays{
-    
-public:
-    
-    DateField<P>* p;
-    
-    TabulateDays(DateField<P>*);
-    template<class T> void operator()(T&);
-    
-};
-
-
-template<class P> class CheckYear{
-    
-public:
-    
-    DateField<P>* p;
-    TabulateDays<P>* tabulate_days;
-    
-    CheckYear(DateField<P>*);
-    template<class T> void operator()(T&);
-    
-};
-
-template<class P> class CheckMonth{
-    
-public:
-    
-    
-    DateField<P>* p;
-    TabulateDays<P>* tabulate_days;
-    
-    CheckMonth(DateField<P>*);
-    template<class T> void operator()(T&);
-    
-};
-
-template<class P> class CheckDay{
-    
-public:
-    
-    DateField<P>* p;
-    
-    CheckDay(DateField<P>*);
-    template<class T> void operator()(T&);
-    
-};
-
-
-template<class P> class CheckDate{
-    
-public:
-    
-    //the parent DateField
-    DateField<P>* p;
-    CheckYear<P>* check_year;
-    CheckMonth<P>* check_month;
-    CheckDay<P>* check_day;
-    
-    //constructor, which sets the parent
-    CheckDate(DateField<P>*);
-    template <class T> void operator()(T&);
-    
-};
-
-template<class P> class CheckLengthValue{
-    
-public:
-    
-    DynamicLengthField<P>* p;
-    
-    CheckLengthValue(DynamicLengthField<P>*);
-    template<class T> void operator()(T&);
-    
-};
-
-template<class P> class CheckLengthUnit{
-    
-public:
-    
-    DynamicLengthField<P>* p;
-    
-    CheckLengthUnit(DynamicLengthField<P>*);
-    template<class T> void operator()(T&);
-    
-};
-
-
-template<class P> class CheckLength{
-    
-public:
-    
-    //p is the DynamicLengthField which is parent of the CheckLength object: the CheckLength object checks the validity of the entries in DynamicLengthField
-    DynamicLengthField<P>* p;
-    CheckLengthValue<P>* check_length_value;
-    CheckLengthUnit<P>* check_length_unit;
-    
-    CheckLength(DynamicLengthField<P>*);
-    template <class T> void operator()(T&);
-    
-};
-
-
-template<class P> class CheckSpeedValue{
-    
-public:
-    
-    SpeedField<P>* p;
-    
-    CheckSpeedValue(SpeedField<P>*);
-    template<class T> void operator()(T&);
-    
-};
-
-
-template<class P> class CheckSpeedUnit{
-    
-public:
-    
-    SpeedField<P>* p;
-    
-    CheckSpeedUnit(SpeedField<P>*);
-    template<class T> void operator()(T&);
-    
-};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 template<class P> class CheckSpeed{
@@ -510,22 +250,6 @@ public:
 
 
 
-
-
-
-//if an item is selected/deselected in caller, enable/disable the disableable buttons in caller
-template<class S> class OnChangeSelectionInListControl{
-    
-public:
-    
-    ListControl<S>* caller;
-    //the type of listcontrol: "sight" if caller = listcontrol_sights, "position" if caller = listcontrol_positions, "route" if caller = listcontrol_routes
-    String type;
-    
-    OnChangeSelectionInListControl(ListControl<S>*, String);
-    template<class T> void operator()(T&);
-    
-};
 
 //if an item is selected/deselected in caller, call operator() to make sure that only one item is selected at a time
 template<class P> class OnChangeSelectionInLimbField{
@@ -733,75 +457,6 @@ public:
     
 };
 
-//this class defines the functor () used to remove a Position from the non-GUI object data
-class DeletePosition{
-    
-public:
-    
-    DeletePosition(ListFrame*);
-    
-    //the frame which called this struct
-    ListFrame* f;
-    //the id of the Position to be removed
-    long i_position_to_remove;
-    
-    
-    void operator()(wxCommandEvent&);
-    
-};
-
-
-
-//this functor pops out a question window with title tile, quesiton question, and answers answer_y, answer_n, resulting from the wxControl control. The type of the frame from which the error message is printed is T, and it is variable so as to make this class adaptable. If the user answers yes/no to the question, f_yes/f_no are called
-template<class T, typename F_YES, typename F_NO, typename F_ABORT> class ShowQuestionFrame{
-    
-public:
-    
-    T* f;
-    wxControl* control;
-    String title, message, question, answer_y, answer_n;
-    F_YES* f_yes;
-    F_NO* f_no;
-    F_ABORT* f_abort;
-    QuestionFrame<F_YES, F_NO, F_ABORT>* question_frame;
-    bool /*these are true/false if the yes/no button are enabled/disabled, respectively*/ enable_button_a, enable_button_b, /*if this is true, then pressing esc will be equivalent to pressing button b, if this is false, pressing esc will call *f_abort*/ bind_esc_to_button_b;
-    
-    ShowQuestionFrame(T*, F_YES*, F_NO*, F_ABORT*);
-    
-    void SetAndCall(wxControl*, String, String, String, String);
-    void SetAndCall(wxControl*, String, String, String, String, bool, bool, bool);
-    void EnableDisableButtons(void);
-    void operator()(void);
-    
-    
-};
-
-
-
-
-
-
-//class for graphical object: a field to enter a String, composed of a box. P is the type of the object in which this StringField will be inserted
-template<class P> class StringField{
-    
-public:
-    //the parent where this StringField object will be inserted
-    P* parent;
-    //label box
-    wxTextCtrl *value;
-    wxBoxSizer *sizer_h, *sizer_v;
-    //non-GUI object related to this
-    String* string;
-    CheckString<P>* check;
-    SetStringFieldToCurrentTime<P> set_to_current_time;
-    
-    StringField(wxPanel*, String*);
-    void set(void);
-    template<class T> void get(T&);
-    template<class T> void InsertIn(T*);
-    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-    
-};
 
 
 
@@ -816,36 +471,7 @@ public:
 
 
 
-//this class is to define the functor template<class T> void operator()(T&), which is called when the user selects a route with which he wants to transport a sight
-class OnSelectRouteInListControlRoutesForTransport{
-    
-public:
-    
-    //parent frame
-    ListFrame* parent;
-    //    UnsetIdling<ListFrame>* unset_idling;
-    
-    //constructor, which sets the parent frame
-    OnSelectRouteInListControlRoutesForTransport(ListFrame*);
-    
-    template<class T> void operator()(T&);
-    
-    
-};
 
-//this class is to define the functor template<class T> void operator()(T&), which is called when the user crates a new route with which he wants to transport a sight
-class OnNewRouteInListControlRoutesForTransport{
-    
-public:
-    
-    //parent frame
-    ListFrame* parent;
-    
-    //constructor, which sets the parent frame
-    OnNewRouteInListControlRoutesForTransport(ListFrame*);
-    template<class T> void operator()(T&);
-    
-};
 
 
 

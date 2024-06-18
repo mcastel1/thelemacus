@@ -678,19 +678,3 @@ template<class P> template<class T>void OnChangeSelectionInLimbField<P>::operato
 
 
 
-
-
-template<class F> MotionHandler<F>::MotionHandler(ListFrame* parent_in, const Route& transporting_route_in, F* f_in){
-    
-
-    timer = new wxTimer();
-
-    parent = parent_in;
-    transporting_route = transporting_route_in;
-    f = f_in;
-
-    t = 0;
-//    timer->Bind(wxEVT_TIMER, &GraphicalObjectTransportHandler::OnTimer, this);
-
-}
-

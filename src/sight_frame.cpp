@@ -8,7 +8,9 @@
 #include "sight_frame.h"
 
 #include "constants.h"
+#include "date_field.h"
 #include "limb_field.h"
+#include "string_field.h"
 
 
 

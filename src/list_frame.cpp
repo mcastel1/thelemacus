@@ -8,6 +8,8 @@
 #include "list_frame.h"
 
 #include "bitmap.h"
+#include "close_frame.h"
+#include "delete_position.h"
 
 
 ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& message, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(NULL, wxID_ANY, title, pos, size) {

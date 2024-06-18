@@ -9,6 +9,9 @@
 
 #include <wx/listctrl.h>
 
+#include "delete_route.h"
+#include "delete_sight.h"
+
 
 
 AskRemoveRelatedRoute::AskRemoveRelatedRoute(ListFrame* parent_in) {

@@ -127,17 +127,7 @@ template<class F> class ChartTransportHandler;
 
 
 
-template<class P> class CheckMinute{
-    
-public:
-    
-    ChronoField<P>* p;
-    
-    CheckMinute(ChronoField<P>*);
-    template<class T> void operator()(T&);
-    
-    
-};
+
 
 template<class P> class CheckSecond{
     

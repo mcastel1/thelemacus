@@ -142,18 +142,7 @@ public:
 
 
 
-//this class defines a functor () used to create a new Route
-class NewRoute{
-    
-public:
-    
-    //the frame which called this struct
-    ListFrame* f;
-    
-    NewRoute(ListFrame*);
-    void operator()(wxCommandEvent&);
-    
-};
+
 
 
 

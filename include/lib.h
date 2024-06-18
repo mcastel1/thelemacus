@@ -1,47 +1,46 @@
-#include "wx/wxprec.h"
-#include "wx/checkbox.h"
-#include "wx/combobox.h"
-#include "wx/dc.h"
-#include "wx/display.h"
-#include "wx/listctrl.h"
-#include "wx/slider.h"
-#include "wx/mstream.h"
-#include "wx/timer.h"
-#include "wx/datetime.h"
-#include "wx/settings.h"
-#include "wx/kbdstate.h"
-#include "wx/wfstream.h"
-#include "wx/graphics.h"
-#include "wx/dcgraph.h"
-#include "wx/progdlg.h"
-#include <wx/tooltip.h>
+//#include "wx/wxprec.h"
+//#include "wx/checkbox.h"
+//#include "wx/combobox.h"
+//#include "wx/dc.h"
+//#include "wx/display.h"
+//#include "wx/listctrl.h"
+//#include "wx/slider.h"
+//#include "wx/mstream.h"
+//#include "wx/timer.h"
+//#include "wx/datetime.h"
+//#include "wx/settings.h"
+//#include "wx/kbdstate.h"
+//#include "wx/wfstream.h"
+//#include "wx/graphics.h"
+//#include "wx/dcgraph.h"
+//#include "wx/progdlg.h"
+//#include <wx/tooltip.h>
 
 
 
 
 
 
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
+//#ifndef WX_PRECOMP
+//#include "wx/wx.h"
+//#endif
 
 //REMOVE AT THE END IF NOT NEEDED
-#include "angle.h"
-#include "body.h"
-#include "static_text.h"
-#include "double.h"
-#include "int.h"
-#include "file.h"
-#include "file_r.h"
-#include "file_rw.h"
-#include "limb.h"
-#include "position.h"
+//#include "angle.h"
+//#include "body.h"
+//#include "static_text.h"
+//#include "double.h"
+//#include "int.h"
+//#include "file.h"
+//#include "file_r.h"
+//#include "file_rw.h"
+//#include "limb.h"
+//#include "position.h"
 //REMOVE AT THE END IF NOT NEEDED
 
 
-//#include "chartdir.h"
 
-
+/*
 template<class P> class BodyField;
 template<class P, class NON_GUI, class CHECK> class MultipleItemField;
 template<class P> class ProjectionField;
@@ -99,7 +98,6 @@ class Body;
 class String;
 class Int;
 class PositionProjection;
-//template<class P> class CheckProjection;
 template<class P> class CheckArcDegree;
 template<class P> class CheckArcMinute;
 template<class P> class CheckLengthFormat;
@@ -108,11 +106,11 @@ template<typename FF_OK> class MessageFrame;
 
 template<class F> class MotionHandler;
 template<class F> class ChartTransportHandler;
+*/
 
 
-
-#include "units.h"
-#include "constants.h"
+//#include "units.h"
+//#include "constants.h"
 
 
 

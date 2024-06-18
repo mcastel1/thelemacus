@@ -1,12 +1,12 @@
 //REMOVE THIS WHEN ALL CLASSES WILL BE MOVED TO FILES
-#include "list_frame.h"
-#include "answer.h"
+//#include "list_frame.h"
+//#include "answer.h"
 //REMOVE THIS WHEN ALL CLASSES WILL BE MOVED TO FILES
 
 
 //example of variadic function: it takes a non-variadic argument n and then an arbitrary number of arguments `...`
 
-using namespace std;
+//using namespace std;
 
 
 

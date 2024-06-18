@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 
+#include "multiple_item_field.h"
 #include "route_type.h"
 #include "my_string.h"
 

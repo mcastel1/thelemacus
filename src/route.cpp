@@ -188,7 +188,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
   
     
     type = type_in;
-    reference_position = reference_position_in;
+    (*reference_position) = reference_position_in;
     omega = omega_in;
 
     length_format.set((LengthFormat_types[1]));

@@ -15,6 +15,8 @@
 #endif
 
 
+#include "list_frame.h"
+
 using namespace std;
 
 class ListFrame;

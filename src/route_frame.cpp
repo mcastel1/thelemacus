@@ -6,6 +6,7 @@
 //
 
 #include "route_frame.h"
+#include "speed_unit_field.h"
 
 
 //create a new RouteFrame. If for_transport = true/false, it enables the fields related to the start position of the Route and disables the circle of equal altitude type

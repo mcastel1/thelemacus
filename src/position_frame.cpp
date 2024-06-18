@@ -5,7 +5,9 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include "on_change_selection_in_list_control.h"
 #include "position_frame.h"
+#include "string_field.h"
 
 
 

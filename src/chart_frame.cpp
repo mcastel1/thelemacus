@@ -9,6 +9,7 @@
 
 #include "bitmap.h"
 #include "constants.h"
+#include "units.h"
 
 template<class P> class ChartTransportHandler;
 

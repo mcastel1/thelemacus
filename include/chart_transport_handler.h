@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include "motion_handler.h"
+
 using namespace std;
 
 class Angle;

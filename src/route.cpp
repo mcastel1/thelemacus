@@ -312,7 +312,7 @@ inline void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* 
             end->put_back_in(draw_panel);
         }
 
-        if ((draw_panel->GeoToDrawPanel)(end, &temp, false)) {
+        if ((draw_panel->GeoToDrawPanel)((*end), &temp, false)) {
 
             if (end_connected) {
 

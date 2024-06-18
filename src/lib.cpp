@@ -24,11 +24,7 @@ NewRoute::NewRoute(ListFrame* f_in) {
 
 }
 
-AllRoutes::AllRoutes(ListFrame* f_in) {
 
-    f = f_in;
-
-}
 
 
 SomeRoutes::SomeRoutes(ListFrame* f_in) {
@@ -80,25 +76,6 @@ void ExistingRoute::operator()(wxCommandEvent& event) {
 
     //print an info message
     (f->print_question_message)->SetAndCall(NULL, String(""), String("You are about to transport with an existing route. Select the Route and press enter.\nDo you want to continue?"), String("Yes"), String("No, I want to cancel"));
-
-    event.Skip(true);
-
-}
-
-void AllRoutes::operator()(wxCommandEvent& event) {
-
-    unsigned int j;
-
-    //there need to be at list two routes of type ((Route_types[2]).value) to compute crossings. Here I include all routes of type ((Route_types[2]).value) whhich are related to a Sight into crossing_route_list by writing their index into crossing_route_list
-    for (((f->data)->crossing_route_list).clear(), j = 0; j < ((f->data)->route_list).size(); j++) {
-
-        if ((((((f->data)->route_list))[j]).type.value) == ((Route_types[2]).value)) {
-            ((f->data)->crossing_route_list).push_back(((((f->data)->route_list))[j]));
-        }
-
-    }
-
-    f->OnComputePosition();
 
     event.Skip(true);
 

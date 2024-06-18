@@ -14,12 +14,6 @@ using namespace std;
 
 
 
-NewRoute::NewRoute(ListFrame* f_in) {
-
-    f = f_in;
-
-}
-
 
 
 

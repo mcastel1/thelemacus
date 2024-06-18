@@ -8,6 +8,12 @@
 #include "new_route.h"
 
 
+NewRoute::NewRoute(ListFrame* f_in) {
+
+    f = f_in;
+
+}
+
 
 
 void NewRoute::operator()(wxCommandEvent& event) {

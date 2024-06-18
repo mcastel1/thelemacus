@@ -8,7 +8,11 @@
 #include "ask_remove_related_route.h"
 
 
+AskRemoveRelatedRoute::AskRemoveRelatedRoute(ListFrame* parent_in) {
 
+    parent = parent_in;
+
+}
 
 
 

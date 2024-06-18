@@ -16,8 +16,9 @@
 
 using namespace std;
 
-
 class ListFrame;
+
+
 
 //this functor pops up a QuestionFrame and asks the user whether he wants to remove the a Sight related to a Route
 class AskRemoveRelatedSight{

@@ -18,6 +18,7 @@
 #include "file_r.h"
 #include "my_app.h"
 #include "sight.h"
+#include "units.h"
 
 
 Sight::Sight(void) {

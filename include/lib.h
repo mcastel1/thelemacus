@@ -161,20 +161,7 @@ public:
 };
 
 
-template<class P> class CheckChrono{
-    
-public:
-    
-    //the parent field of the CheckChrono object
-    ChronoField<P>* p;
-    CheckHour<P>* check_hour;
-    CheckMinute<P>* check_minute;
-    CheckSecond<P>* check_second;
-    
-    CheckChrono(ChronoField<P>*);
-    template<class T> void operator()(T&);
-    
-};
+
 
 
 

@@ -205,17 +205,6 @@ public:
     
 };
 
-template<class P> class SetStringFieldToCurrentTime{
-    
-public:
-    
-    StringField<P>* p;
-    
-    template<class T> void operator()(T&);
-    
-    
-};
-
 
 
 //this class defines a functor () used to modify an existing Route

@@ -271,24 +271,6 @@ template<class P> void FunctionOnPressOk<P>::operator()(wxCommandEvent& event) {
 }
 
 
-template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operator()(T& event) {
-
-    //if the label is empty, I replace it with the local time and date
-    if ((p->value->GetValue()).IsEmpty()) {
-
-        Time now;
-
-        now.set_current();
-        //I write in the non-GUI object (p->string)
-        (*(p->string)) = String(now.to_string(data_precision.value, true));
-
-        p->set();
-
-    }
-
-    event.Skip(true);
-
-}
 
 
 

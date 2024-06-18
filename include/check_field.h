@@ -18,6 +18,8 @@
 
 using namespace std;
 
+template<class P, class T> class CheckCheck;
+
 
 //this is a GUI field contaning a binary checkbox, which is either checked or unchecked
 template<class P, class T> class CheckField{

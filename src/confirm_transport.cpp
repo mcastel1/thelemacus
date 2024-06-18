@@ -17,6 +17,16 @@ template<class P> ConfirmTransport<P>::ConfirmTransport(P* parent_in) {
 
 }
 
+//this is the same as template<class P> void ConfirmTransport<P>::operator()(void){ but without the event argument)
+template<class P> void ConfirmTransport<P>::operator()(void) {
+
+    wxCommandEvent dummy;
+
+    (*this)(dummy);
+
+}
+
+
 
 //I call this method when the user has decided to confirm that he/she wants to make the transport of an object
 template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {

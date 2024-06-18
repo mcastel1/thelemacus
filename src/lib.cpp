@@ -35,14 +35,6 @@ using namespace std;
 
 
 
-//this is the same as template<class P> void ConfirmTransport<P>::operator()(void){ but without the event argument)
-template<class P> void ConfirmTransport<P>::operator()(void) {
-
-    wxCommandEvent dummy;
-
-    (*this)(dummy);
-
-}
 
 
 

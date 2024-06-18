@@ -11,6 +11,7 @@
 
 #include "delete_route.h"
 #include "delete_sight.h"
+#include "show_question_frame.h"
 
 
 

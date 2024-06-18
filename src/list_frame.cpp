@@ -20,6 +20,7 @@
 #include "position_frame.h"
 #include "question_frame.h"
 #include "reset_list_frame.h"
+#include "save_and_reset.h"
 #include "show_question_frame.h"
 #include "sight_frame.h"
 

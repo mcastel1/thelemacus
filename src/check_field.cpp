@@ -12,6 +12,7 @@
 #endif
 #include <wx/checkbox.h>
 
+#include "check_check.h"
 
 
 #include "answer.h"

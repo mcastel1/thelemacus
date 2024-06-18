@@ -425,7 +425,7 @@ template<class E> void SightFrame::update_recent_items(E& event) {
 
     //I check whether the name in the GUI field body matches one of the body names in catalog, and store its id in i
     for (check = false, i = 0; (i < (body->catalog->list).size()) && (!check); i++) {
-        if (String((body->name->GetValue().ToStdString())) == (((body->catalog->list)[i]).name)) {
+        if (String((body->name->GetValue().ToStdString())) == (*(((body->catalog->list)[i]).name))) {
             check = true;
         }
     }

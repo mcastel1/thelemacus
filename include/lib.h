@@ -124,16 +124,6 @@ template<class F> class ChartTransportHandler;
 
 
 
-template<class P> class CheckString{
-    
-public:
-    
-    StringField<P>* p;
-    
-    CheckString(StringField<P>*);
-    template<class T> void operator()(T&);
-    
-};
 
 template<class P> class CheckHour{
     

@@ -7,16 +7,23 @@
 
 #include "check_string.h"
 
-template<class P> class StringField;
 
 
-template<class P> class CheckString{
-    
-public:
-    
-    StringField<P>* p;
-    
-    CheckString(StringField<P>*);
-    template<class T> void operator()(T&);
-    
-};
+
+
+template<class P> CheckString<P>::CheckString(StringField<P>* p_in) {
+
+    p = p_in;
+
+}
+
+//this functor does nothing, delete it in the future
+template<class P> template<class T> void CheckString<P>::operator()(T& event) {
+
+    P* f = (p->parent);
+
+    f->AllOk();
+
+    event.Skip(true);
+
+}

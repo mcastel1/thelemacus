@@ -216,22 +216,7 @@ public:
     
 };
 
-//this class defines the functor () used to remove a sight from the non-GUI object data
-class DeleteSight{
-    
-public:
-    
-    //the frame which called this struct
-    ListFrame* f;
-    //the id of the sight to be removed
-    long i_sight_to_remove;
-    //this is equal to 'y' if the route related to the removed sight has to be removed too, and 'n' otherwise
-    Answer remove_related_route;
-    
-    DeleteSight(ListFrame*, Answer);
-    void operator()(wxCommandEvent&);
-    
-};
+
 
 //this class defines a functor () used to modify an existing Route
 class ExistingRoute{

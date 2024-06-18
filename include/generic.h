@@ -776,7 +776,7 @@ template<class S> void read_list_from_stream(String name, S* input_stream, bool 
 
 }
 
-#endif
+
 
 
 
@@ -833,3 +833,5 @@ void AdjustWidth(wxComboBox* control) {
 
 }
 
+
+#endif

@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include "multiple_item_field.h"
+
 using namespace std;
 
 template<class P> class CheckLengthUnit;

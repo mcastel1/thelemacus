@@ -183,18 +183,6 @@ public:
 
 
 
-//this class defines a functor () used to modify an existing Route
-class ExistingRoute{
-    
-public:
-    
-    //the frame which called this struct
-    ListFrame* f;
-    
-    ExistingRoute(ListFrame*);
-    void operator()(wxCommandEvent&);
-    
-};
 
 
 //this class defines a functor () used to create a new Route

@@ -116,17 +116,6 @@ template<class F> class ChartTransportHandler;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 class SetStringToCurrentTime{
     
 public:
@@ -137,13 +126,6 @@ public:
     template<class T> void operator()(T&);
     
 };
-
-
-
-
-
-
-
 
 
 //this class defines a functor () used to select some specific Routes to compute the astronomical position
@@ -158,11 +140,6 @@ public:
     void operator()(wxCommandEvent&);
     
 };
-
-
-
-
-
 
 
 //this functor is called when the user has chosen that he/she wants to condfirm transporting an object

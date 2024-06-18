@@ -10,6 +10,7 @@
 #include "bitmap.h"
 #include "close_frame.h"
 #include "delete_position.h"
+#include "position_frame.h"
 #include "show_question_frame.h"
 #include "sight_frame.h"
 

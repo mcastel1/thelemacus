@@ -17,6 +17,7 @@
 #include <wx/textctrl.h>
 
 #include "my_string.h"
+#include "set_string_field_to_current_time.h"
 
 using namespace std;
 

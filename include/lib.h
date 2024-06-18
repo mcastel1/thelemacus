@@ -130,20 +130,6 @@ public:
 
 
 
-//this functor is called when the user has chosen that he/she wants to condfirm transporting an object
-template<class P> class ConfirmTransport{
-    
-public:
-    
-    ConfirmTransport(P*);
-    
-    //the frame which called this struct
-    P* parent;
-    
-    void operator()(wxCommandEvent&);
-    void operator()(void);
-    
-};
 
 
 

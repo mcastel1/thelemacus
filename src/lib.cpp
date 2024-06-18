@@ -442,31 +442,6 @@ template<class P> template<class T> void CheckString<P>::operator()(T& event) {
 
 
 
-template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
-
-    p = p_in;
-
-    check_speed_value = new CheckSpeedValue<P>(p);
-    check_speed_unit = new CheckSpeedUnit<P>(p);
-
-}
-
-
-//this functor checks the whole Speed field by calling the check on its value and unit
-template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
-
-    (*check_speed_value)(event);
-    (*check_speed_unit)(event);
-
-    event.Skip(true);
-
-}
-
-
-
-
-
-
 
 
 

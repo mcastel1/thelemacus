@@ -6,6 +6,9 @@
 //
 
 #include "route.h"
+
+#include "gsl_sf_pow_int.h"
+
 #include "generic.h"
 #include "constants.h"
 

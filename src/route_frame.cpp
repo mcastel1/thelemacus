@@ -151,18 +151,18 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     //start position
     //start_phi
     StaticText* text_start_phi = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0);
-    start_phi = new AngleField<RouteFrame>(panel, &((route->reference_position).phi), String("NS"));
+    start_phi = new AngleField<RouteFrame>(panel, &(route->reference_position->phi), String("NS"));
     //start_lambda
     StaticText* text_start_lambda = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0);
-    start_lambda = new AngleField<RouteFrame>(panel, &((route->reference_position).lambda), String("EW"));
+    start_lambda = new AngleField<RouteFrame>(panel, &(route->reference_position->lambda), String("EW"));
 
     //GP (ground position)
     //GP_phi
     StaticText* text_GP_phi = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0);
-    GP_phi = new AngleField<RouteFrame>(panel, &((route->reference_position).phi), String("NS"));
+    GP_phi = new AngleField<RouteFrame>(panel, &(route->reference_position->phi), String("NS"));
     //GP_lambda
     StaticText* text_GP_lambda = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0);
-    GP_lambda = new AngleField<RouteFrame>(panel, &((route->reference_position).lambda), String("EW"));
+    GP_lambda = new AngleField<RouteFrame>(panel, &(route->reference_position->lambda), String("EW"));
 
     //omega
     StaticText* text_omega = new StaticText(panel, wxT("Omega"), wxDefaultPosition, wxDefaultSize, 0);

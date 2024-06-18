@@ -6,6 +6,7 @@
 //
 
 #include "bitmap.h"
+#include "generic.h"
 
 
 

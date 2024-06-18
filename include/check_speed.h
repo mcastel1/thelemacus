@@ -15,26 +15,23 @@ using namespace std;
 
 
 
-template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
+template<class P> class SpeedField;
+template<class P> class CheckSpeedValue;
+template<class P> class CheckSpeedUnit;
 
-    p = p_in;
-
-    check_speed_value = new CheckSpeedValue<P>(p);
-    check_speed_unit = new CheckSpeedUnit<P>(p);
-
-}
-
-
-//this functor checks the whole Speed field by calling the check on its value and unit
-template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
-
-    (*check_speed_value)(event);
-    (*check_speed_unit)(event);
-
-    event.Skip(true);
-
-}
-
+template<class P> class CheckSpeed{
+    
+public:
+    
+    //p is the SpeedField which is parent of the CheckSpeed object: the CheckSpeed object checks the validity of the entries in SpeedField
+    SpeedField<P>* p;
+    CheckSpeedValue<P>* check_speed_value;
+    CheckSpeedUnit<P>* check_speed_unit;
+    
+    CheckSpeed(SpeedField<P>*);
+    template <class T> void operator()(T&);
+    
+};
 
 
 

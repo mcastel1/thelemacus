@@ -8,7 +8,8 @@
 #include "check_day.h"
 
 
-
+#include "generic.h"
+#include "sight_frame.h"
 
 
 

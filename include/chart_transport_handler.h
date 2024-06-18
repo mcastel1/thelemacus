@@ -12,6 +12,12 @@
 
 using namespace std;
 
+class Angle;
+class ChartFrame;
+class Double;
+class Position;
+class PositionProjection;
+
 
 //a hanlder to move the chart of a given ChartFrame with an animation
 template<class F> class ChartTransportHandler: public MotionHandler<F>{

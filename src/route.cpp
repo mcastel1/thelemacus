@@ -1121,7 +1121,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
                     Length d;
 
-                    reference_position->distance(circle.reference_position, &d, String(""), new_prefix);
+                    reference_position->distance((*(circle.reference_position)), &d, String(""), new_prefix);
 
                     if (d < (Re * ((omega + (circle.omega)).value))) {
                         //the circles have a common area

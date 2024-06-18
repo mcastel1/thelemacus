@@ -1718,17 +1718,17 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
             route.intersection((*this), true, &u, new_prefix);
 
             compute_end(Length(Re * sin(omega.value) * ((t[0]).value)), new_prefix);
-            (*p)[0] = end;
+            (*p)[0] = (*end);
             ((*p)[0]).label.set(String(""), String("crossing"), prefix);
 
             compute_end(Length(Re * sin(omega.value) * ((t[1]).value)), new_prefix);
-            (*p)[1] = end;
+            (*p)[1] = (*end);
             ((*p)[1]).label.set(String(""), String("crossing"), prefix);
 
             route.compute_end(Length(Re * sin(route.omega.value) * ((u[0]).value)), prefix);
 
-            check &= ((*p)[0]).distance(route.end, &r, String(""), prefix);
-            check &= ((*p)[1]).distance(route.end, &s, String(""), prefix);
+            check &= ((*p)[0]).distance((*(route.end)), &r, String(""), prefix);
+            check &= ((*p)[1]).distance((*(route.end)), &s, String(""), prefix);
 
             if (check) {
 

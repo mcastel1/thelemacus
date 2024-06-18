@@ -7,6 +7,10 @@
 
 #include "chart_transport_handler.h"
 
+
+#include "gsl_sf_psi.h"
+
+
 #include "chart_frame.h"
 #include "double.h"
 

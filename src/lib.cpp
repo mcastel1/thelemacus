@@ -272,50 +272,6 @@ template<class P> void FunctionOnPressOk<P>::operator()(wxCommandEvent& event) {
 
 
 
-template<class P> CheckSecond<P>::CheckSecond(ChronoField<P>* p_in) {
-
-    p = p_in;
-
-}
-
-template<class P> template<class T> void CheckSecond<P>::operator()(T& event) {
-
-    P* f = (p->parent_frame);
-
-    //I proceed only if the progam is not is indling mode
-    if (!(f->idling)) {
-
-        bool check;
-
-        check = check_double(((p->second)->GetValue()).ToStdString(), NULL, true, 0.0, 60.0);
-
-        if (check || ((((p->second)->GetForegroundColour()) != (wxGetApp().error_color)) && (String((((p->second)->GetValue()).ToStdString())) == String("")))) {
-
-            //if check is true (false) -> set second_ok to true (false)
-            (p->second_ok) = check;
-            //the background color is set to white, because in this case there is no erroneous value in deg
-            (p->second)->SetForegroundColour(wxGetApp().foreground_color);
-            (p->second)->SetFont(wxGetApp().default_font);
-
-        }
-        else {
-
-            f->print_error_message->SetAndCall((p->second), String("Entered value is not valid!"), String("Seconds must be floating-point numbers >= 0.0 and < 60.0"), (wxGetApp().path_file_error_icon));
-
-            (p->second_ok) = false;
-
-        }
-
-        f->AllOk();
-
-    }
-
-    event.Skip(true);
-
-}
-
-
-
 
 
 

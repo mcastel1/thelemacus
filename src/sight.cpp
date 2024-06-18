@@ -305,7 +305,7 @@ bool Sight::check_time_interval(String prefix) {
 
     //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
     temp.clear();
-    if ((body.type) != String("star")) {
+    if ((*(body.type)) != String("star")) {
         temp << (wxGetApp().data_directory).value << (body.name->value) << ".txt";
     }
     else {

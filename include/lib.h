@@ -215,19 +215,6 @@ public:
 
 
 
-//this class defines the functor () used to ...
-template<class P> class FunctionOnPressOk{
-    
-public:
-    
-    FunctionOnPressOk(P*);
-    
-    //the frame which called this struct
-    P* parent;
-    
-    void operator()(wxCommandEvent&);
-    
-};
 
 
 

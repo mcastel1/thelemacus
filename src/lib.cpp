@@ -52,11 +52,7 @@ AskRemoveRelatedRoute::AskRemoveRelatedRoute(ListFrame* parent_in) {
 
 
 
-template<class P> FunctionOnPressOk<P>::FunctionOnPressOk(P* parent_in) {
 
-    parent = parent_in;
-
-}
 
 
 
@@ -226,14 +222,6 @@ void AskRemoveRelatedRoute::operator()(wxCommandEvent& event) {
 
 
 
-
-template<class P> void FunctionOnPressOk<P>::operator()(wxCommandEvent& event) {
-
-    //do something
-
-    event.Skip(true);
-
-}
 
 
 

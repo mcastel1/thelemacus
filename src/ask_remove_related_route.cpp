@@ -7,6 +7,9 @@
 
 #include "ask_remove_related_route.h"
 
+#include <wx/listctrl.h>
+
+
 
 AskRemoveRelatedRoute::AskRemoveRelatedRoute(ListFrame* parent_in) {
 

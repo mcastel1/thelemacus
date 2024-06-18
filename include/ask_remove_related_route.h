@@ -14,6 +14,8 @@
     #include "wx/wx.h"
 #endif
 
+#include "list_frame.h"
+
 using namespace std;
 
 class ListFrame;

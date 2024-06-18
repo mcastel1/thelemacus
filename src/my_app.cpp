@@ -7,6 +7,7 @@
 
 #include "my_app.h"
 
+#include "close_frame.h"
 #include "constants.h"
 
 

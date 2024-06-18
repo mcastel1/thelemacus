@@ -6,6 +6,7 @@
 //
 
 #include "gsl_math.h"
+#include "gsl_sf_pow_int.h"
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"

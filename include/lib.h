@@ -155,18 +155,6 @@ template<class F> class ChartTransportHandler;
 
 
 
-template<class P> class CheckMonth{
-    
-public:
-    
-    
-    DateField<P>* p;
-    TabulateDays<P>* tabulate_days;
-    
-    CheckMonth(DateField<P>*);
-    template<class T> void operator()(T&);
-    
-};
 
 template<class P> class CheckDay{
     

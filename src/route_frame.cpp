@@ -5,6 +5,8 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include "on_change_selection_in_list_control.h"
+#include "on_new_route_in_list_control_for_transport.h"
 #include "route_frame.h"
 #include "speed_unit_field.h"
 #include "string_field.h"
@@ -402,7 +404,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         if ((parent->transported_object_type) == String("position")) {
 
             //store the starting position in geo_position_start
-            ((parent->data->route_list)[(parent->i_transporting_route)]).reference_position = (parent->data->position_list)[(parent->i_object_to_transport)];
+            (*(((parent->data->route_list)[(parent->i_transporting_route)]).reference_position)) = (parent->data->position_list)[(parent->i_object_to_transport)];
 
         }
         else {

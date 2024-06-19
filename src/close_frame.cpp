@@ -7,7 +7,7 @@
 
 #include "close_frame.h"
 
-
+#include "destroy_frame.h"
 
 
 template<class F> CloseFrame<F>::CloseFrame(F* frame_in) {

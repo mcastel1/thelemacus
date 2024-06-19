@@ -7,7 +7,7 @@
 
 #include "on_change_selection_in_list_control.h"
 
-
+#include "generic.h"
 
 
 template<class S> OnChangeSelectionInListControl<S>::OnChangeSelectionInListControl(ListControl<S>* caller_in, String type_in) {

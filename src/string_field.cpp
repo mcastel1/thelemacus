@@ -7,6 +7,7 @@
 
 #include "string_field.h"
 
+#include "constants.h"
 
 
 //constructor of a StringField object, based on the parent frame frame

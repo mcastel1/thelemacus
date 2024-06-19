@@ -3340,7 +3340,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
 
         //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
         //        gsl_vector_memcpy((rp_start_drag.r), (rp.r));
-        rotation_start_drag.set(rotation);
+        rotation_start_drag->set(rotation);
         //        geo_start_drag.print(String("position start drag"), String(""), cout);
         //        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
 

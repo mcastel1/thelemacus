@@ -7,6 +7,9 @@
 
 #include "check_month.h"
 
+#include "my_app.h"
+#include "sight_frame.h"
+
 
 template<class P> CheckMonth<P>::CheckMonth(DateField<P>* p_in) {
 

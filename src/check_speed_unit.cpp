@@ -7,7 +7,7 @@
 
 #include "check_speed_unit.h"
 
-
+#include "my_app.h"
 
 template<class P> CheckSpeedUnit<P>::CheckSpeedUnit(SpeedField<P>* p_in) {
 

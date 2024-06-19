@@ -7,7 +7,8 @@
 
 #include "check_second.h"
 
-
+#include "my_app.h"
+#include "my_string.h"
 
 
 template<class P> CheckSecond<P>::CheckSecond(ChronoField<P>* p_in) {

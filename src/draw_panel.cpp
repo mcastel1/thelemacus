@@ -1184,13 +1184,13 @@ inline void DrawPanel::Render_3D(
     (q.phi) = (circle_observer.omega);
 
     //obtain the coordinates of q in the reference frame x'y'z'
-    gsl_vector_set((rp.r), 0, 0.0);
-    gsl_vector_set((rp.r), 1, -cos(q.phi));
-    gsl_vector_set((rp.r), 2, sin((q.phi)));
+    gsl_vector_set((rp->r), 0, 0.0);
+    gsl_vector_set((rp->r), 1, -cos(q.phi));
+    gsl_vector_set((rp->r), 2, sin((q.phi)));
 
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
     d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
-    dummy_projection = PositionProjection(0.0, ((d_temp.value) * gsl_vector_get((rp.r), 2)) / ((d_temp.value) + 1.0 + gsl_vector_get((rp.r), 1)));
+    dummy_projection = PositionProjection(0.0, ((d_temp.value) * gsl_vector_get((rp->r), 2)) / ((d_temp.value) + 1.0 + gsl_vector_get((rp->r), 1)));
     //set the wxPen color for the horizon
 //    dc->SetPen(wxPen(wxGetApp().color_horizon, 1));
     dc->SetPen(wxPen(foreground_color, thickness));

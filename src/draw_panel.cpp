@@ -35,6 +35,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     rotation = new Rotation; 
     rotation_0 = new Rotation;
     
+    
     mouse_dragging = false;
     re_draw = true;
     mouse_in_plot_area = false;

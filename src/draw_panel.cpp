@@ -1188,7 +1188,7 @@ inline void DrawPanel::Render_3D(
 
     //set q
     q.lambda.set(0.0);
-    (q.phi) = (circle_observer.omega);
+    (q.phi) = (circle_observer->omega);
 
     //obtain the coordinates of q in the reference frame x'y'z'
     gsl_vector_set((rp->r), 0, 0.0);
@@ -1196,7 +1196,7 @@ inline void DrawPanel::Render_3D(
     gsl_vector_set((rp->r), 2, sin((q.phi)));
 
     //project rp into the 3D projection and obtain temp: temp.y is the radius of the horizon circle
-    d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
+    d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer->omega))));
     dummy_projection = PositionProjection(0.0, ((d_temp.value) * gsl_vector_get((rp->r), 2)) / ((d_temp.value) + 1.0 + gsl_vector_get((rp->r), 1)));
     //set the wxPen color for the horizon
 //    dc->SetPen(wxPen(wxGetApp().color_horizon, 1));
@@ -1724,7 +1724,7 @@ inline void DrawPanel::PreRender3D(void) {
 
 
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
-    parent->zoom_factor.set((parent->parent->circle_observer_0.omega.value) / (circle_observer.omega.value));
+    parent->zoom_factor.set((parent->parent->circle_observer_0.omega.value) / (circle_observer->omega.value));
     (this->*Set_x_y_min_max)();
     (this->*Set_lambda_phi_min_max)();
 
@@ -1758,7 +1758,7 @@ inline void DrawPanel::PreRender3D(void) {
         //in this case circle_observer spans all longitudes
 
         //because in this case lambda_min/max span the whole angle 2 pi and cannot define a range for lambda_span, I set
-        lambda_span = 2.0 * ((circle_observer.omega).value);
+        lambda_span = 2.0 * ((circle_observer->omega).value);
 
     }
     else {
@@ -1805,7 +1805,7 @@ inline void DrawPanel::PreRender3D(void) {
     }
 
     //compute lambda_middle
-    lambda_middle.set(round((((circle_observer.reference_position).lambda).value) / delta_lambda) * delta_lambda);
+    lambda_middle.set(round((circle_observer->reference_position->lambda.value) / delta_lambda) * delta_lambda);
 
 
     //set lambda_start, lambda_end
@@ -1838,7 +1838,7 @@ inline void DrawPanel::PreRender3D(void) {
 
 
     //set phi_start, phi_end and delta_phi
-    phi_span = 2.0 * ((circle_observer.omega).value);
+    phi_span = 2.0 * (circle_observer->omega.value);
 
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
     if (phi_span > k) {
@@ -1869,7 +1869,7 @@ inline void DrawPanel::PreRender3D(void) {
     (phi_start.value) = floor((((*(parent->phi_min)).normalize_pm_pi_ret()).value) / delta_phi) * delta_phi;
     (phi_end.value) = (((*(parent->phi_max)).normalize_pm_pi_ret()).value);
 
-    phi_middle.set(round((((circle_observer.reference_position).phi).value) / delta_phi) * delta_phi);
+    phi_middle.set(round((circle_observer->reference_position->phi.value) / delta_phi) * delta_phi);
     //if the line above sets phi_middle equal to +/- pi/2. the labels of meridians will all be put at the same location on the screen (the N/S pole), and they would look odd ->
     if ((fabs((phi_middle.value) - M_PI_2) < epsilon_double) || (fabs((phi_middle.value) - (3.0 * M_PI_2)) < epsilon_double)) {
         (phi_middle.value) -= GSL_SIGN((phi_middle.normalize_pm_pi_ret()).value) * delta_phi;
@@ -1916,9 +1916,9 @@ inline void DrawPanel::PreRender3D(void) {
     for (first_label = true,
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * K * 60)))),
-        (q.phi.value) = floor((circle_observer.reference_position.phi.normalize_pm_pi_ret().value - circle_observer.omega.value) / delta_phi) * delta_phi,
+         (q.phi.value) = floor((circle_observer->reference_position->phi.normalize_pm_pi_ret().value - circle_observer->omega.value) / delta_phi) * delta_phi,
         (q.lambda) = lambda_middle;
-        (q.phi.value) < (circle_observer.reference_position.phi.normalize_pm_pi_ret().value) + (circle_observer.omega.value);
+         (q.phi.value) < (circle_observer->reference_position->phi.normalize_pm_pi_ret().value) + (circle_observer->omega.value);
         (q.phi.value) += delta_phi
         ) {
 
@@ -1969,7 +1969,7 @@ inline void DrawPanel::PreRender3D(void) {
             Z_saved = (route.Z);
 
             route.Z.set(0.0);
-            route.length.set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer.omega.value)), LengthUnit_types[0]);
+            route.length.set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer->omega.value)), LengthUnit_types[0]);
             (route.reference_position->phi) = phi_middle;
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -2020,7 +2020,7 @@ inline void DrawPanel::PreRender3D(void) {
 
             route.type.set(String(((Route_types[1]).value)));
             route.Z.set(M_PI_2);
-            route.length.set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer.omega.value)), LengthUnit_types[0]);
+            route.length.set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer->omega.value)), LengthUnit_types[0]);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for (
@@ -2167,49 +2167,49 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
 
 
     //obtain the  geographic position of the center of the circle of equal altitude above
-    circle_observer.reference_position.setCartesian(String(""), r, String(""));
+    circle_observer->reference_position->setCartesian(String(""), (*r), String(""));
 
 
     //set lambda_min/max from circle_observer
-    circle_observer.lambda_min_max((parent->lambda_min), (parent->lambda_max), String(""));
+    circle_observer->lambda_min_max((parent->lambda_min), (parent->lambda_max), String(""));
 
     //set
-    d->set((-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))))*Re);
+    d->set((-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer->omega))))*Re);
     //here I set the value of d into observer_height, not the unit of measure, because I want the user to decide the unit of measure by selecting in the wxComboBox in the unit field
     parent->observer_height->set_value_keep_unit();
 
     //set phi_min/max
-    ((circle_observer.reference_position).phi).normalize_pm_pi();
+    circle_observer->reference_position->phi.normalize_pm_pi();
 
-    if (((((circle_observer.reference_position).phi).value) + ((circle_observer.omega).value) < M_PI_2) &&
-        ((((circle_observer.reference_position).phi).value) - ((circle_observer.omega).value) > -M_PI_2)) {
+    if ((((circle_observer->reference_position->phi).value) + ((circle_observer->omega).value) < M_PI_2) &&
+        (((circle_observer->reference_position->phi).value) - ((circle_observer->omega).value) > -M_PI_2)) {
         //in this case, circle_observer does not encircle the N/S pole
 
-        (*(parent->phi_min)) = ((circle_observer.reference_position).phi) - (circle_observer.omega);
-        (*(parent->phi_max)) = ((circle_observer.reference_position).phi) + (circle_observer.omega);
+        (*(parent->phi_min)) = (circle_observer->reference_position->phi) - (circle_observer->omega);
+        (*(parent->phi_max)) = (circle_observer->reference_position->phi) + (circle_observer->omega);
 
     }
     else {
 
-        if ((((circle_observer.reference_position).phi).value) + ((circle_observer.omega).value) > M_PI_2) {
+        if (((circle_observer->reference_position->phi).value) + ((circle_observer->omega).value) > M_PI_2) {
             //in this case, circle_observer encircles the N pole
 
-            (*(parent->phi_min)) = ((circle_observer.reference_position).phi) - (circle_observer.omega);
+            (*(parent->phi_min)) = (circle_observer->reference_position->phi) - (circle_observer->omega);
             (*(parent->phi_max)).set(M_PI_2);
 
         }
 
-        if ((((circle_observer.reference_position).phi).value) - ((circle_observer.omega).value) < -M_PI_2) {
+        if (((circle_observer->reference_position->phi).value) - ((circle_observer->omega).value) < -M_PI_2) {
             //in this case, circle_observer encircles the S pole
 
             (*(parent->phi_min)).set(3.0 * M_PI_2);
-            (*(parent->phi_max)) = ((circle_observer.reference_position).phi) + (circle_observer.omega);
+            (*(parent->phi_max)) = (circle_observer->reference_position->phi) + (circle_observer->omega);
 
         }
 
     }
 
-    ((circle_observer.reference_position).phi).normalize();
+    (circle_observer->reference_position->phi).normalize();
 
 }
 
@@ -2492,7 +2492,7 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
 
             //here I put the sign of (temp.x) in front of the square root, in order to pick the correct solutio among the two possible solutios for xp, yp. The correct solution is the one yielding the values of xp, yp on the visible side of the sphere. For example, for (temp.x)<0, a simple geometrical construction shows that the solution corresponding to the visible side of the sphere is the one with the larger (temp.x) -> I pick the solution with a positive sign in front of the square root through GSL_SIGN((temp.x))
             //set rp
-            d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
+            d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer->omega))));
 
             gsl_vector_set((rp->r), 0, (-(temp.x) * sqrt(arg_sqrt) + (d_temp.value) * ((d_temp.value) + 1.0) * (temp.x)) / (gsl_sf_pow_int((d_temp.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2)));
             gsl_vector_set((rp->r), 2, (-sqrt(arg_sqrt) * (temp.y) + (d_temp.value) * ((d_temp.value) + 1.0) * (temp.y)) / ((gsl_sf_pow_int((d_temp.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2))));

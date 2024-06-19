@@ -449,7 +449,7 @@ template<class T> void ChartFrame::MoveWest(T& event) {
         Angle /*the angular displacement of the operation MoveNorth*/delta;
 
         //I set delta as a fraction of circle_obsrever.omega
-        delta = ((draw_panel->circle_observer).omega) * ((wxGetApp().relative_displacement).value);
+        delta = (draw_panel->circle_observer->omega) * (wxGetApp().relative_displacement.value);
 
         //since I am moving north, I increase the b Euler ancgle of rotation
         (draw_panel->rotation->a) -= delta;
@@ -515,7 +515,7 @@ template<class T> void ChartFrame::MoveEast(T& event) {
         Angle /*the angular displacement of the operation MoveNorth*/delta;
 
         //I set delta as a fraction of circle_obsrever.omega
-        delta = ((draw_panel->circle_observer).omega) * ((wxGetApp().relative_displacement).value);
+        delta = ((draw_panel->circle_observer)->omega) * ((wxGetApp().relative_displacement).value);
 
         //since I am moving north, I increase the b Euler ancgle of rotation
         (draw_panel->rotation->a) += delta;
@@ -725,8 +725,8 @@ void ChartFrame::Animate(void){
                                                                 this,
                                                                 Route(
                                                                       Route_types[1],
-                                                                      draw_panel->circle_observer.reference_position.half(),
-                                                                      draw_panel->circle_observer.reference_position
+                                                                      draw_panel->circle_observer->reference_position->half(),
+                                                                      draw_panel->circle_observer->reference_position
                                                                       ),
                                                                 Double(1.0),
                                                                       parent->unset_idling
@@ -805,7 +805,7 @@ bool ChartFrame::ComputeZoomFactor_3D(void) {
 
     if (output) {
 
-        draw_panel->circle_observer.omega.set((parent->circle_observer_0.omega.value) / (zoom_factor.value));
+        draw_panel->circle_observer->omega.set((parent->circle_observer_0.omega.value) / (zoom_factor.value));
 
     }
 
@@ -1010,7 +1010,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
     if ((projection->name->GetValue()) == wxString(((Projection_types[1]).value))) {
 
-        (draw_panel->circle_observer.omega) = ((parent->circle_observer_0.omega) / (zoom_factor.value));
+        (draw_panel->circle_observer->omega) = ((parent->circle_observer_0.omega) / (zoom_factor.value));
 
         (draw_panel->*(draw_panel->PreRender))();
         draw_panel->MyRefresh();
@@ -1136,7 +1136,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
         //        if(every==0){every = 1;}
         
         //this is a computationally efficient way of estimating every: the number of coastline points falling within circle_observer is estimated as (parent->n_all_coastline_points)*(draw_panel->circle_observer.omega.value))/M_PI), and every is set accordingly in such a way that, for every circle_observer, the number of plotting points is n_points_plot_coastline_3D
-        every = ((unsigned long long int)(((parent->n_all_coastline_points)*(draw_panel->circle_observer.omega.value))/M_PI) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
+        every = ((unsigned long long int)(((parent->n_all_coastline_points)*(draw_panel->circle_observer->omega.value))/M_PI) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
         if(every==0){every = 1;}
         
         

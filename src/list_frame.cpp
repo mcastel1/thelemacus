@@ -1925,7 +1925,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                                                                                (chart_frames[i]),
                                                                                Route(
                                                                                      Route_types[1],
-                                                                                     (chart_frames[i])->draw_panel->circle_observer.reference_position,
+                                                                                     (*((chart_frames[i])->draw_panel->circle_observer->reference_position)),
                                                                                      target_position
                                                                                      ),
                                                                                Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (omega_end.value) ) ),

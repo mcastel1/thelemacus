@@ -7,6 +7,7 @@
 
 #include "body.h"
 #include "generic.h"
+#include "my_string.h"
 
 
 Body::Body(void){

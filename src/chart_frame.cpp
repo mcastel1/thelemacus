@@ -627,8 +627,8 @@ template<class T> void ChartFrame::Reset(T& event) {
         zoom_factor.set(1.0);
         ComputeZoomFactor_3D();
 
-        (draw_panel->rotation_0).read_from_file_to(String("rotation 0"), (wxGetApp().path_file_init), String("R"), String(""));
-        draw_panel->rotation.set(draw_panel->rotation_0);
+        draw_panel->rotation_0->read_from_file_to(String("rotation 0"), (wxGetApp().path_file_init), String("R"), String(""));
+        draw_panel->rotation->set((*(draw_panel->rotation_0)));
         draw_panel->Set_x_y_min_max_3D();
         (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
 

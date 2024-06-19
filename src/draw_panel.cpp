@@ -50,7 +50,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     circle_observer.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), prefix);
     thickness_route_selection_over_length_screen.read_from_file_to(String("thickness route selection over length screen"), (wxGetApp().path_file_init), String("R"), prefix);
 
-    rotation.set(Rotation(
+    rotation->set(Rotation(
                           Angle(String("Euler angle alpha"), -M_PI_2, String("")),
                           Angle(String("Euler angle beta"), 0.0, String("")),
                           Angle(String("Euler angle gamma"), 0.0, String(""))
@@ -2151,7 +2151,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
 
     //convert rp -> r through rotation^{-1}
 //        gsl_blas_dgemv(CblasTrans, 1.0, (rotation).matrix, (rp.r), 0.0, (r.r));
-    cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation.matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
+    cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation->matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
 
 
     //obtain the  geographic position of the center of the circle of equal altitude above
@@ -2488,7 +2488,7 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
 
             //r = (rotation.matrix)^T . rp
             //            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
-            cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation.matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
+            cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation->matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
 
 
             q->setCartesian(String(""), r, String(""));
@@ -2514,7 +2514,7 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
 
             //r = (rotation.matrix)^T . rp
             //            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
-            cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation.matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
+            cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation->matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
 
             q->setCartesian(String(""), r, String(""));
 
@@ -2638,7 +2638,7 @@ inline bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, 
                     gsl_matrix_get(rotation.matrix, 1, 1) * gsl_vector_get((p.r), 1) +
                     gsl_matrix_get(rotation.matrix, 1, 2) * gsl_vector_get((p.r), 2)
                     */
-                   cblas_ddot(3, (rotation.matrix->data)+3, 1, p.r->data, 1)
+                   cblas_ddot(3, (rotation->matrix->data)+3, 1, p.r->data, 1)
                    );
     
     
@@ -2658,7 +2658,7 @@ inline bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, 
 
             //rotate r by rotation, and write the result in rp!
             //            gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, (p.r), 0.0, (rp.r));
-            cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation.matrix->data, 3, p.r->data, 1, 0, rp.r->data, 1);
+            cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation->matrix->data, 3, p.r->data, 1, 0, rp.r->data, 1);
             
             temp = (d.value) / ((d.value) + Re*(1.0 + gsl_vector_get((rp.r), 1)));
             (q->x) = gsl_vector_get((rp.r), 0) * temp;
@@ -3411,7 +3411,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
 
 //                gsl_vector_memcpy((rp_end_drag.r), (rp.r));
-                rotation_end_drag.set(rotation);
+                rotation_end_drag->set((*rotation));
 //                geo_end_drag.print(String("position end drag"), String(""), cout);
 //                rotation_end_drag.print(String("rotation end drag"), String(""), cout);
 
@@ -3759,7 +3759,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     
                     //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
                     //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
-                    rotation.set((rotation * Rotation(circle_observer.reference_position, reference_position_old)));
+                    rotation->set((rotation * Rotation(circle_observer.reference_position, reference_position_old)));
                     
                     (this->*PreRender)();
                     parent->parent->RefreshAll();
@@ -3923,7 +3923,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //I am using the 3d projection
                         
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                        rotation.set(rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag);
+                        rotation->set(rotation_start_end(position_start_drag, position_now_drag) * (*rotation_start_drag));
 #ifdef __APPLE__
                         
                         //re-render the chart
@@ -3993,10 +3993,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
                             
                             //compose rotation with the rotation resulting from the drag and then apply it to route_reference_position_drag_now: route_reference_position_drag_now -> rotation^{-1}.(rotation due to drag).rotation.route_reference_position_drag_now. In this way, when Render() will plot the position route_reference_position_drag_now, it will apply to route_reference_position_drag_now the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.route_reference_position_drag_now = (rotation due to drag).rotation.route_reference_position_drag_now, which is the desired result (i.e. route_reference_position_drag_now rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
-                            rotation_now_drag.set(
-                            (rotation.inverse()) *
-                            rotation_start_end(position_start_drag, position_now_drag) *
-                            rotation);
+                            rotation_now_drag->set(
+                                                   (rotation->inverse()) *
+                                                   rotation_start_end(position_start_drag, position_now_drag) *
+                                                   (*rotation));
                             
                             //                    (this->*GeoToDrawPanel)(route_reference_position_drag_now, &p);
                             

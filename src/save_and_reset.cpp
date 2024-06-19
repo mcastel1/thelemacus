@@ -8,6 +8,7 @@
 #include "save_and_reset.h"
 
 #include "my_string.h"
+#include "reset_list_frame.h"
 
 
 template<class F> SaveAndReset<F>::SaveAndReset(F* frame_in) {

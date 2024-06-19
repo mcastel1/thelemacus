@@ -49,6 +49,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     route_reference_position_drag_before = new Position;
     route_reference_position_drag_now = new Position;
     geo_start_drag = new Position;
+    geo_end_drag = new Position;
     
     
     
@@ -3387,7 +3388,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 
         position_end_drag = wxGetMousePosition();
-        (this->*ScreenToGeo)(position_start_drag, &geo_end_drag);
+        (this->*ScreenToGeo)(position_start_drag, geo_end_drag);
 
 
 

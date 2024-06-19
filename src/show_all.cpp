@@ -7,7 +7,7 @@
 
 #include "show_all.h"
 
-
+#include "show_frame.h"
 
 
 ShowAll::ShowAll(ListFrame* frame_in) {

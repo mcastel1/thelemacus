@@ -1666,7 +1666,7 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
         }
         else {
 
-            length.read_from_stream<S>(String("length"), input_stream, false, new_prefix);
+            length->read_from_stream<S>(String("length"), input_stream, false, new_prefix);
 
         }
 

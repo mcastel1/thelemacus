@@ -10,6 +10,7 @@
 #include "bitmap.h"
 #include "chart_transport_handler.h"
 #include "constants.h"
+#include "static_length_field.h"
 #include "units.h"
 #include "unset_idling.h"
 
@@ -89,7 +90,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
 
     //text field showing the current value of the zoom slider
     chart_scale = new StaticText(panel, wxS(""), wxDefaultPosition, wxDefaultSize, 0);
-    observer_height = new StaticLengthField<ChartFrame>(panel, &(draw_panel->d));
+    observer_height = new StaticLengthField<ChartFrame>(panel, (draw_panel->d));
 
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);
@@ -726,7 +727,7 @@ void ChartFrame::Animate(void){
                                                                 Route(
                                                                       Route_types[1],
                                                                       draw_panel->circle_observer->reference_position->half(),
-                                                                      draw_panel->circle_observer->reference_position
+                                                                      (*(draw_panel->circle_observer->reference_position))
                                                                       ),
                                                                 Double(1.0),
                                                                       parent->unset_idling

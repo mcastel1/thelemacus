@@ -7,7 +7,7 @@
 
 #include "save_and_reset.h"
 
-
+#include "my_string.h"
 
 
 template<class F> SaveAndReset<F>::SaveAndReset(F* frame_in) {

@@ -3771,7 +3771,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     
                     //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
                     //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
-                    rotation->set((rotation * Rotation(circle_observer.reference_position, reference_position_old)));
+                    rotation->set(((*rotation) * Rotation((*(circle_observer->reference_position)), reference_position_old)));
                     
                     (this->*PreRender)();
                     parent->parent->RefreshAll();
@@ -4015,12 +4015,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
                                 
                                 //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((parent->parent->data->route_list)[(parent->parent->highlighted_route)]).reference_position));
-                                route_reference_position_drag_start.rotate(String(""), rotation_now_drag, (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                                route_reference_position_drag_start.rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
                                 
                             }
                             else {
                                 
-                                route_reference_position_drag_start.rotate(String(""), rotation_now_drag, (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                                route_reference_position_drag_start.rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
                                 
                             }
                             

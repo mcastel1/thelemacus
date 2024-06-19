@@ -76,14 +76,14 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                     //store the starting reference position in geo_position_start
-                    (MotionHandler<F>::start) = (((Route*)transported_object)->reference_position);
+                    (MotionHandler<F>::start) = (*(((Route*)transported_object)->reference_position));
                     //highlight the Position that is being transported
                     (MotionHandler<F>::parent)->highlighted_route_now = address_position_in_vector<Route>(((Route*)transported_object), (MotionHandler<F>::parent)->data->route_list);
      
 
                 }
                 
-                (MotionHandler<F>::start) = (((Route*)transported_object)->reference_position);
+                (MotionHandler<F>::start) = (*(((Route*)transported_object)->reference_position));
 
 
             }
@@ -120,7 +120,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
-                    (((Route*)transported_object)->reference_position) = (MotionHandler<F>::start);
+                    (*(((Route*)transported_object)->reference_position)) = (MotionHandler<F>::start);
                     ((Route*)transported_object)->reference_position->transport_to((MotionHandler<F>::transporting_route_temp), String(""));
 
                 }
@@ -169,7 +169,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 (MotionHandler<F>::parent)->highlighted_route_now = -1;
 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-                (((Route*)transported_object)->reference_position) = (MotionHandler<F>::start);
+                (*(((Route*)transported_object)->reference_position)) = (MotionHandler<F>::start);
                 ((Route*)transported_object)->reference_position->transport_to((MotionHandler<F>::transporting_route), String(""));
 
 

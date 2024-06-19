@@ -707,13 +707,13 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 check &= false;
             }
             else {
-                (circle_of_equal_altitude->reference_position->lambda).normalize();
-                (circle_of_equal_altitude->reference_position->lambda).print(String("GHA"), new_prefix, cout);
+                circle_of_equal_altitude->reference_position->lambda.normalize();
+                circle_of_equal_altitude->reference_position->lambda.print(String("GHA"), new_prefix, cout);
             }
             //(circle_of_equal_altitude->reference_position->lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
 
-            if (gsl_spline_eval_e(interpolation_d, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((circle_of_equal_altitude->reference_position->phi).value)) != GSL_SUCCESS) {
+            if (gsl_spline_eval_e(interpolation_d, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &(circle_of_equal_altitude->reference_position->phi.value)) != GSL_SUCCESS) {
                 check &= false;
             }
             else {

@@ -417,7 +417,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
 
                 //store the starting reference position in geo_position_start
-                ((parent->data->route_list)[(parent->i_transporting_route)]).reference_position = (((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position);
+                (*((parent->data->route_list)[(parent->i_transporting_route)]).reference_position) = (*(((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position));
 
             }
 

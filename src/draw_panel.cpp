@@ -2496,7 +2496,7 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
             cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation->matrix->data, 3, rp->r->data, 1, 0, r->r->data, 1);
 
 
-            q->setCartesian(String(""), r, String(""));
+            q->setCartesian(String(""), (*r), String(""));
 
         }
 
@@ -2513,15 +2513,15 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
             d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
 
             //from projection, compute the relative point on the x'z' plane, which has y'=0
-            gsl_vector_set((rp.r), 0, ((d_temp.value) + 1.0) / (d_temp.value) * (temp.x));
-            gsl_vector_set((rp.r), 2, ((d_temp.value) + 1.0) / (d_temp.value) * (temp.y));
-            gsl_vector_set((rp.r), 1, 0.0);
+            gsl_vector_set((rp->r), 0, ((d_temp.value) + 1.0) / (d_temp.value) * (temp.x));
+            gsl_vector_set((rp->r), 2, ((d_temp.value) + 1.0) / (d_temp.value) * (temp.y));
+            gsl_vector_set((rp->r), 1, 0.0);
 
             //r = (rotation.matrix)^T . rp
             //            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
-            cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation->matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
+            cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation->matrix->data, 3, rp->r->data, 1, 0, r->r->data, 1);
 
-            q->setCartesian(String(""), r, String(""));
+            q->setCartesian(String(""), (*r), String(""));
 
         }
 

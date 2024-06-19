@@ -7,12 +7,17 @@
 
 #include "list_frame.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+#include <wx/wfstream.h>
 #include <wx/progdlg.h>
 
 
 #include "bitmap.h"
 #include "chart_transport_handler.h"
 #include "close_frame.h"
+#include "confirm_transport.h"
 #include "delete_position.h"
 #include "delete_route.h"
 #include "delete_sight.h"

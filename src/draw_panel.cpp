@@ -2663,11 +2663,11 @@ inline bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, 
 
             //rotate r by rotation, and write the result in rp!
             //            gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, (p.r), 0.0, (rp.r));
-            cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation->matrix->data, 3, p.r->data, 1, 0, rp.r->data, 1);
+            cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation->matrix->data, 3, p.r->data, 1, 0, rp->r->data, 1);
             
-            temp = (d.value) / ((d.value) + Re*(1.0 + gsl_vector_get((rp.r), 1)));
-            (q->x) = gsl_vector_get((rp.r), 0) * temp;
-            (q->y) = gsl_vector_get((rp.r), 2) * temp;
+            temp = (d.value) / ((d.value) + Re*(1.0 + gsl_vector_get((rp->r), 1)));
+            (q->x) = gsl_vector_get((rp->r), 0) * temp;
+            (q->y) = gsl_vector_get((rp->r), 2) * temp;
 
         }
 

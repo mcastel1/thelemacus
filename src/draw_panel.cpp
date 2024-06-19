@@ -268,22 +268,22 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     //right vertical edge of rectangle
     (Route(
         RouteType(((Route_types[1]).value)),
-        (parent->parent->geo_position_start),
-        Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value))) / 2.0),
-        Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value)))
+        (*(parent->parent->geo_position_start)),
+           Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
+           Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
     )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
 
     //left vertical edge of rectangle
     (Route(
            RouteType(((Route_types[1]).value)),
         geo_position,
-        Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value))) / 2.0),
-        Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start.phi.normalize_pm_pi_ret().value)))
+           Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
+           Length(Re * fabs((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
     )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
 
     
     //top and bottom horizontal edge of rectangle
-    lambda_a = (parent->parent->geo_position_start.lambda);
+    lambda_a = (parent->parent->geo_position_start->lambda);
     lambda_b = geo_position.lambda;
     lambda_a.normalize();
     lambda_b.normalize();
@@ -331,9 +331,9 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                   ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
             Route(
                   RouteType(((Route_types[0]).value)),
-                  parent->parent->geo_position_start,
+                  (*(parent->parent->geo_position_start)),
                   Z,
-                  Length(Re * cos(parent->parent->geo_position_start.phi) * (lambda_ab_span.value))
+                  Length(Re * cos(parent->parent->geo_position_start->phi) * (lambda_ab_span.value))
                   ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
             
             break;
@@ -344,7 +344,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             
             Angle temp, lambda_span_temp, Z_temp;
             
-            temp.value = (normalize_pm_pi_ret(geo_position.lambda).value) - (parent->parent->geo_position_start.lambda.normalize_pm_pi_ret().value);
+            temp.value = (normalize_pm_pi_ret(geo_position.lambda).value) - (parent->parent->geo_position_start->lambda.normalize_pm_pi_ret().value);
             
             if(fabs(temp.value) < M_PI){
                 lambda_span_temp.set(fabs(temp.value));
@@ -359,9 +359,9 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             //bottom horizontal edge of rectangle
             (Route(
                    RouteType(((Route_types[0]).value)),
-                   (parent->parent->geo_position_start),
+                   (*(parent->parent->geo_position_start)),
                    Z_temp,
-                   Length(Re * cos(parent->parent->geo_position_start.phi) * (lambda_span_temp.value))
+                   Length(Re * cos(parent->parent->geo_position_start->phi) * (lambda_span_temp.value))
                    )
              ).DrawOld(wxGetApp().n_points_routes.value, &dc, this, String(""));
             
@@ -3591,17 +3591,15 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             parent->parent->chart_frames[i]->button_reset->Enable(false);
         }
         
-        (parent->parent->geo_position_start) = (parent->parent->geo_position_now);
-        //        GetMouseGeoPosition(&(parent->parent->geo_position_start));
-        //        drawpanel_position_start = (parent->parent->screen_position_now);
+        (*(parent->parent->geo_position_start)) = (parent->parent->geo_position_now);
         
         //store the position at the beginning of the selection process, to compute the zoom factor
-        //run over all ChartFrames : if in the i-th ChartFrame geo_position_start falls within the plot area -> set label and position of the start position of selection_rectangle in that ChartFrame
+        //run over all ChartFrames : if in the i-th ChartFrame *geo_position_start falls within the plot area -> set label and position of the start position of selection_rectangle in that ChartFrame
         for (i = 0, check = false; i < (parent->parent->chart_frames).size(); i++) {
             
             if (
-                (((parent->parent->chart_frames)[i])->draw_panel->*(((parent->parent->chart_frames)[i])->draw_panel->GeoToProjection))((parent->parent->geo_position_start), &(((parent->parent->chart_frames)[i])->draw_panel->projection_start), false)) {
-                    //geo_position_start is valid in the i-th DrawPanel -> start the selection rectangle in the i-th DrawPanel
+                (((parent->parent->chart_frames)[i])->draw_panel->*(((parent->parent->chart_frames)[i])->draw_panel->GeoToProjection))((*(parent->parent->geo_position_start)), ((parent->parent->chart_frames)[i])->draw_panel->projection_start, false)) {
+                    //*geo_position_start is valid in the i-th DrawPanel -> start the selection rectangle in the i-th DrawPanel
                     
                     ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                          (parent->parent->geo_position_now),
@@ -3618,7 +3616,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         
         
         if (!check) {
-            //geo_position_start is invalid in all DrawPanels -> delete the selection rectangle by setting selection_rectangle to false
+            //*geo_position_start is invalid in all DrawPanels -> delete the selection rectangle by setting selection_rectangle to false
             
             (parent->parent->selection_rectangle) = false;
             
@@ -3642,12 +3640,12 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             
             
             //convert all the angles to the format between -pi and pi, so I can sort them numerically
-            parent->parent->geo_position_start.phi.normalize_pm_pi();
-            parent->parent->geo_position_start.lambda.normalize_pm_pi();
+            parent->parent->geo_position_start->phi.normalize_pm_pi();
+            parent->parent->geo_position_start->lambda.normalize_pm_pi();
             parent->parent->position_end.phi.normalize_pm_pi();
             parent->parent->position_end.lambda.normalize_pm_pi();
             
-            lambda_a = (parent->parent->geo_position_start.lambda);
+            lambda_a = (parent->parent->geo_position_start->lambda);
             lambda_b = (parent->parent->position_end.lambda);
             
             switch (position_in_vector(Projection((parent->projection->name->GetValue().ToStdString())), Projection_types)) {
@@ -3714,11 +3712,11 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         
                         
                         
-                        if ((parent->parent->geo_position_start.phi) > ((parent->parent->position_end).phi)) {
-                            (*(parent->phi_max)) = (((parent->parent)->geo_position_start).phi);
+                        if ((parent->parent->geo_position_start->phi) > ((parent->parent->position_end).phi)) {
+                            (*(parent->phi_max)) = (((parent->parent)->geo_position_start)->phi);
                             (*(parent->phi_min)) = (((parent->parent)->position_end).phi);
                         }else {
-                            (*(parent->phi_min)) = (((parent->parent)->geo_position_start).phi);
+                            (*(parent->phi_min)) = (((parent->parent)->geo_position_start)->phi);
                             (*(parent->phi_max)) = (((parent->parent)->position_end).phi);
                         }
                         //I normalize lambda_min, ..., phi_max for future use.
@@ -3727,8 +3725,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         parent->phi_min->normalize();
                         parent->phi_max->normalize();
                         
-                        parent->parent->geo_position_start.phi.normalize();
-                        parent->parent->geo_position_start.lambda.normalize();
+                        parent->parent->geo_position_start->phi.normalize();
+                        parent->parent->geo_position_start->lambda.normalize();
                         parent->parent->position_end.phi.normalize();
                         parent->parent->position_end.lambda.normalize();
                         
@@ -3769,12 +3767,12 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     circle_observer->reference_position->lambda.set((lambda_a.normalize_ret().value + lambda_b.normalize_ret().value)/2.0);
     
                     //normalize the two latitudes between -pi and pi and then compute the algebraic mean -> this is the correct value of the two latitudes
-                    circle_observer->reference_position->phi.set(mean_pm_pi(parent->parent->geo_position_start.phi, parent->parent->position_end.phi));
+                    circle_observer->reference_position->phi.set(mean_pm_pi(parent->parent->geo_position_start->phi, parent->parent->position_end.phi));
                     
                     
                     //compute omega as half of  the largest angular distance between the middle of selection rectangle and its corners
-                    circle_observer->reference_position->distance((parent->parent->geo_position_start), &l1, String(""), String(""));
-                    circle_observer->reference_position->distance(Position(parent->parent->geo_position_start.lambda, parent->parent->position_end.phi), &l2, String(""), String(""));
+                    circle_observer->reference_position->distance((*(parent->parent->geo_position_start)), &l1, String(""), String(""));
+                    circle_observer->reference_position->distance(Position(parent->parent->geo_position_start->lambda, parent->parent->position_end.phi), &l2, String(""), String(""));
                     circle_observer->omega.set(((max(l1, l2).value) / Re)/2.0);
                     
                     

@@ -66,7 +66,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
             if (type_of_transported_object == String("position")) {
 
-                //store the starting position in geo_position_start
+                //store the starting position in *geo_position_start
                 (MotionHandler<F>::start) = (*((Position*)transported_object));
                 //highlight the Position that is being transported
                 (MotionHandler<F>::parent)->highlighted_position_now = address_position_in_vector<Position>(((Position*)transported_object), (MotionHandler<F>::parent)->data->position_list);
@@ -75,7 +75,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
-                    //store the starting reference position in geo_position_start
+                    //store the starting reference position in *geo_position_start
                     (MotionHandler<F>::start) = (*(((Route*)transported_object)->reference_position));
                     //highlight the Position that is being transported
                     (MotionHandler<F>::parent)->highlighted_route_now = address_position_in_vector<Route>(((Route*)transported_object), (MotionHandler<F>::parent)->data->route_list);

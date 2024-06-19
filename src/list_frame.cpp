@@ -52,6 +52,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
     size_t pos_end;
     
+    geo_position_start = new Position;
     rectangle_observer_0 = new PositionRectangle;
 
     //the file has not been modified yet -> I set

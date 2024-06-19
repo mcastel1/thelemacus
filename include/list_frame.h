@@ -111,7 +111,7 @@ public:
     unsigned long long int n_all_coastline_points;
     //this vector containts the ids (as written in coastline_polygons_Position/Cartesian) of the polygons which have at least one point falling into *rectangle_observer (Mercator projection) or circle_observer (3D projection), and it is updated every time *rectangle_observer changes
     vector<unsigned long long int> coastline_polygons_area_observer;
-    Position /*these are the geographic Positions where the right mouse button is clicked at the beginning, the current and preceeding Position during mouse movement, and the mouse Position and at the end of the drawing process for the selection rectangle*/geo_position_start, geo_position_before, geo_position_now, position_end;
+    Position /*these are the geographic Positions where the right mouse button is clicked at the beginning, the current and preceeding Position during mouse movement, and the mouse Position and at the end of the drawing process for the selection rectangle*/ *geo_position_start, geo_position_before, geo_position_now, position_end;
     PositionRectangle /*same DrawPanel::*rectangle_observer, but for the initial configutaiton of ChartFrame*/ *rectangle_observer_0;
     String transported_object_type, /*the labels that will be drawn on position_start_label_selection_rectangle and position_end_label_selection_rectangle_now, respectively. end_label_selection_rectangle_now is the label of the end point of selection rectangle now, while end_label_selection_rectangle_before is the label of the end point of selection rectangle at the preceeding mouse position*/start_label_selection_rectangle, end_label_selection_rectangle_now, end_label_selection_rectangle_before;
     

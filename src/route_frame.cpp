@@ -408,7 +408,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //set the reference position of the transporting Route to the initial position of the object that has been transported: in thiw way, the transporting Route will look nice on the chart
         if ((parent->transported_object_type) == String("position")) {
 
-            //store the starting position in geo_position_start
+            //store the starting position in *geo_position_start
             (*(((parent->data->route_list)[(parent->i_transporting_route)]).reference_position)) = (parent->data->position_list)[(parent->i_object_to_transport)];
 
         }
@@ -416,7 +416,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
             if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
 
-                //store the starting reference position in geo_position_start
+                //store the starting reference position in *geo_position_start
                 (*((parent->data->route_list)[(parent->i_transporting_route)]).reference_position) = (*(((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position));
 
             }

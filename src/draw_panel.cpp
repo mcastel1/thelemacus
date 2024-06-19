@@ -29,6 +29,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
     prefix = String("");
 
+    circle_observer = new Route;
+    
     d = new Length;
     
     projection_start = new PositionProjection;

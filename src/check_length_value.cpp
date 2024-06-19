@@ -7,7 +7,8 @@
 
 #include "check_length_value.h"
 
-
+#include "my_app.h"
+#include "my_string.h"
 
 template<class P> CheckLengthValue<P>::CheckLengthValue(DynamicLengthField<P>* p_in) {
 

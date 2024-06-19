@@ -4086,7 +4086,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             (rotation->inverse()) *
                             rotation_start_end(position_start_drag, position_now_drag) *
                             (*rotation);
-                            geo_start_drag.rotate(String(""), rotation_now_drag, &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]), String(""));
+                            geo_start_drag.rotate(String(""), (*rotation_now_drag), &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]), String(""));
                             
                         }
                         

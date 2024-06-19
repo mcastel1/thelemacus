@@ -2488,12 +2488,12 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
             d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
 
             gsl_vector_set((rp->r), 0, (-(temp.x) * sqrt(arg_sqrt) + (d_temp.value) * ((d_temp.value) + 1.0) * (temp.x)) / (gsl_sf_pow_int((d_temp.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2)));
-            gsl_vector_set((rp.r), 2, (-sqrt(arg_sqrt) * (temp.y) + (d_temp.value) * ((d_temp.value) + 1.0) * (temp.y)) / ((gsl_sf_pow_int((d_temp.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2))));
-            gsl_vector_set((rp.r), 1, -sqrt(1.0 - (gsl_pow_2(gsl_vector_get((rp.r), 0)) + gsl_pow_2(gsl_vector_get((rp.r), 2)))));
+            gsl_vector_set((rp->r), 2, (-sqrt(arg_sqrt) * (temp.y) + (d_temp.value) * ((d_temp.value) + 1.0) * (temp.y)) / ((gsl_sf_pow_int((d_temp.value), 2) + gsl_sf_pow_int((temp.x), 2) + gsl_sf_pow_int((temp.y), 2))));
+            gsl_vector_set((rp->r), 1, -sqrt(1.0 - (gsl_pow_2(gsl_vector_get((rp->r), 0)) + gsl_pow_2(gsl_vector_get((rp->r), 2)))));
 
             //r = (rotation.matrix)^T . rp
             //            gsl_blas_dgemv(CblasTrans, 1.0, rotation.matrix, (rp.r), 0.0, (r.r));
-            cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation->matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
+            cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation->matrix->data, 3, rp->r->data, 1, 0, r->r->data, 1);
 
 
             q->setCartesian(String(""), r, String(""));

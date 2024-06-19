@@ -7,6 +7,7 @@
 
 #include "check_minute.h"
 
+#include "my_app.h"
 
 
 template<class P> CheckMinute<P>::CheckMinute(ChronoField<P>* p_in) {

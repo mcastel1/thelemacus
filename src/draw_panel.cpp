@@ -29,11 +29,16 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
     prefix = String("");
 
+    r = new Cartesian;
+    rp = new Cartesian;
+    
     rotation_start_drag = new Rotation;
     rotation_now_drag = new Rotation;
     rotation_end_drag = new Rotation;
     rotation = new Rotation; 
     rotation_0 = new Rotation;
+    
+    
     
     
     mouse_dragging = false;

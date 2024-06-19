@@ -8,6 +8,7 @@
 #include "check_speed_value.h"
 
 
+#include "my_app.h"
 
 
 

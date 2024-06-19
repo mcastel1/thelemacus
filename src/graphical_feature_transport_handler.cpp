@@ -7,6 +7,8 @@
 
 #include "graphical_feature_transport_handler.h"
 
+#include "my_app.h"
+
 
 
 //constructor of GraphicalFeatureTransportHandler: f_in is the functor to be provided if something is supposed to be executed at the end of the transport (e.g., do another transport, show a MessageFrame, etc...). If nothing is supposed to be executed, set f_in = NULL

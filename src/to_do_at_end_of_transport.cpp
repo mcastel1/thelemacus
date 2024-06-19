@@ -8,6 +8,7 @@
 #include "to_do_at_end_of_transport.h"
 
 
+#include "my_app.h"
 
 
 template<class NON_GUI, class P> ToDoAtEndOfTransport<NON_GUI, P>::ToDoAtEndOfTransport(NON_GUI* object_a_in, NON_GUI* object_b_in, P* parent_in){

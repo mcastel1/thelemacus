@@ -60,7 +60,7 @@ public:
     //the euler angles which specify the orientation of the earth for the 3d representation
     //two auxiliary vectors which will be used later
     Cartesian r, /*vector position in the x'y'z' reference frame used for multiple purposes*/rp;
-    Rotation /*the orientation of the Earth at the beginning / current time / end of a drag*/*rotation_start_drag, rotation_now_drag, rotation_end_drag, /*the rotation representing the current / initial orientation of the earth*/rotation, rotation_0;
+    Rotation /*the orientation of the Earth at the beginning / current time / end of a drag*/*rotation_start_drag, *rotation_now_drag, *rotation_end_drag, /*the rotation representing the current / initial orientation of the earth*/*rotation, *rotation_0;
     Double /*if the mouse hovers over a route and its y coordinate is equal to the y of the route +- (length sceen) * thickness_route_selection_over_length_screen /2, then the relative Route is highlighted in ListFrame*/ thickness_route_selection_over_length_screen;
     String /*this is used to display on the chart the coordinates of a Position that is being dragged or of the reference_position of a Route that is being dragged at the current step of the drag process (label_dragged_object_now) or at the preceeding step (label_dragged_object_before)*/ label_dragged_object_now, label_dragged_object_before, /*text showing the coordinates of the current mouse position on draw_panel*/ label_position_now, label_position_before;
     Length /*distance between the plane of the 2d projection and the eye of the observer for the 3d plot*/ d;

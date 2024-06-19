@@ -1733,7 +1733,7 @@ inline void DrawPanel::PreRender3D(void) {
 
 
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
-    parent->zoom_factor.set((parent->parent->circle_observer_0.omega.value) / (circle_observer->omega.value));
+    parent->zoom_factor.set((parent->parent->circle_observer_0->omega.value) / (circle_observer->omega.value));
     (this->*Set_x_y_min_max)();
     (this->*Set_lambda_phi_min_max)();
 

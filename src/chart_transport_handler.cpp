@@ -51,8 +51,8 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
         case 1:{
             //I am using Projection_types[1]
 
-            //compute omega_end from zoom_factor and circle_observer_0.omega
-            omega_end.set((chart_frame->parent->circle_observer_0.omega.value) / (zoom_factor.value));
+            //compute omega_end from zoom_factor and circle_observer_0->omega
+            omega_end.set((chart_frame->parent->circle_observer_0->omega.value) / (zoom_factor.value));
 
             break;
             

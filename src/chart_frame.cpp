@@ -623,7 +623,7 @@ template<class T> void ChartFrame::Reset(T& event) {
     if ((projection->name->GetValue()) == wxString(((Projection_types[1]).value))) {
         //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
 
-        parent->circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
+        parent->circle_observer_0->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
         zoom_factor.set(1.0);
         ComputeZoomFactor_3D();
 
@@ -805,7 +805,7 @@ bool ChartFrame::ComputeZoomFactor_3D(void) {
 
     if (output) {
 
-        draw_panel->circle_observer->omega.set((parent->circle_observer_0.omega.value) / (zoom_factor.value));
+        draw_panel->circle_observer->omega.set((parent->circle_observer_0->omega.value) / (zoom_factor.value));
 
     }
 
@@ -1010,7 +1010,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
     if ((projection->name->GetValue()) == wxString(((Projection_types[1]).value))) {
 
-        (draw_panel->circle_observer->omega) = ((parent->circle_observer_0.omega) / (zoom_factor.value));
+        (draw_panel->circle_observer->omega) = ((parent->circle_observer_0->omega) / (zoom_factor.value));
 
         (draw_panel->*(draw_panel->PreRender))();
         draw_panel->MyRefresh();
@@ -1175,109 +1175,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
         }
         polygon_position_now.back() = l;
 
-        
-        
-//        every = ((unsigned long long int)(((double)(parent->n_all_coastline_points)) * (  draw_panel->circle_observer.omega.value ) / ( draw_panel->circle_observer_0.omega.value ) ) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
-//        if(every==0){every = 1;}
-        
-        
-        
 
-//        for(p=0, i=0, l=0; i<parent->coastline_polygons_Cartesian.size(); i++) {
-//            //run through polygons
-//
-//            polygon_position_now[i] = 0;
-//            for(j=p; j<(parent->coastline_polygons_Cartesian[i]).size(); j+=every){
-//                //run through points in a polygon
-//
-//
-//                if((draw_panel->CartesianToDrawPanel)((parent->coastline_polygons_Cartesian)[i][j], &q, false)) {
-//
-//                    coastline_polygons_now[l++] = q;
-//                    polygon_position_now[i]++;
-//
-//                }
-//
-//
-//            }
-//
-//            p = j - ((parent->coastline_polygons_Cartesian[i]).size());
-//
-//        }
-        
-        //set r
-//        draw_panel->circle_observer.reference_position.getCartesian(String(""), &r, String(""));
-        
-//        //
-//        for (n=0, i = i_min; i < i_max; i++) {
-//            for (j = j_min; j < j_max; j++) {
-//
-//
-//                if ((draw_panel->AdjustLatitudeLongitude3D(i, j, &i_adjusted, &j_adjusted))) {
-//
-//                    n += (parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360].size();
-//
-//                }
-//
-//
-//            }
-//
-//        }
-        
-//        every = (unsigned long long int)(((double)n) / ((double)(parent->data->n_points_plot_coastline_3D.value)));
-//        n_points_per_cell = ((unsigned long long int)((double)n)/((double)n_cells));
-//
-//        for (polygon_position_now=0, p=0, i = i_min; i < i_max; i++) {
-//            for (j = j_min; j < j_max; j++) {
-//
-//                if ((draw_panel->AdjustLatitudeLongitude3D(i, j, &i_adjusted, &j_adjusted))) {
-//
-//
-////                    //n =  how many datapoints are in data_x[i][j] and in data_y[i][j]
-////                    n = ((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
-//
-//
-//                    //set s
-//                    u.phi.set(k * ((double)i));
-//                    u.lambda.set(k * ((double)j));
-//                    u.getCartesian(String(""), &s, String(""));
-//                    //compute cos
-//                    gsl_blas_ddot((r.r), (s.r), &cos);
-//                    if (cos == 0.0) { cos = 1.0; }
-//
-//
-//                    //I plot every 'every_ij' data points. I include the factor 1/cos in such a way that the farther the point (i,j) from circle_observer.reference_position, the less data points I plot, because plotting more would be pointless. In this way, points (i,j) which are close to circle_observer.reference_position (which are nearly parallel to the plane of the screen and thus well visible) are plotted with a lot of points, and the other way around
-////                    every = (unsigned long)(((double)n) / ((double)(((parent->data)->n_points_plot_coastline_3D).value)) * ((double)n_points_grid) / cos);
-////                    if (every == 0) { every = 1; }
-//                    every_ij =
-//                    ceil(((double)every)/cos * ((double)((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size())/
-//                    (((double)n)/((double)n_cells)));
-//                    if(every_ij == 0){
-//                        every_ij = 1;
-//                    }
-//
-//
-//
-//                    //run over data_x)[i - floor_min_lat][j % 360] by picking one point every every points
-//                    for (l = min(p, ((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size() - n_points_per_cell); l < ((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size(); l += every_ij) {
-//
-//                        if((draw_panel->CartesianToDrawPanel)((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360][l], &q, false)) {
-//
-//                            coastline_polygons_now[polygon_position_now++] = q;
-//
-//                        }
-//
-//                    }
-//
-//                    p = l - ((parent->coastline_polygons_Cartesian)[i_adjusted - floor_min_lat][j_adjusted % 360]).size();
-//
-//
-//                }
-//
-//
-//            }
-//
-//        }
         
     }
 

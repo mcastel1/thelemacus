@@ -57,6 +57,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     geo_position_now = new Position;
     position_end = new Position;
     rectangle_observer_0 = new PositionRectangle;
+    
+    circle_observer_0 = new Route;
 
     //the file has not been modified yet -> I set
     file_has_been_modified = false;
@@ -103,7 +105,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     load_sample_sight.read_from_file_to(String("load sample sight"), (wxGetApp().path_file_init), String("R"), String(""));
     
     //set circle_observer_0.omega
-    circle_observer_0.omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
+    circle_observer_0->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
     
     //set rectangle_obseerver
     //read lambda_min, ...., phi_max from file_init
@@ -1934,7 +1936,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                                                                                      (*((chart_frames[i])->draw_panel->circle_observer->reference_position)),
                                                                                      target_position
                                                                                      ),
-                                                                               Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0.omega.value) / (omega_end.value) ) ),
+                                                                               Double( ((wxGetApp().chart_transport_zoom_factor_coefficient.value) *  (circle_observer_0->omega.value) / (omega_end.value) ) ),
                                                                                f
                                                                                );
                     

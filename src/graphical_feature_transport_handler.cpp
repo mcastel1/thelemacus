@@ -7,6 +7,8 @@
 
 #include "graphical_feature_transport_handler.h"
 
+#include <gsl_sf_psi.h>
+
 #include "motion_handler.h"
 #include "my_app.h"
 

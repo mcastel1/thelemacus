@@ -13,6 +13,7 @@
 #include <wx/listctrl.h>
 
 #include "constants.h"
+#include "list_frame.h"
 #include "my_string.h"
 
 

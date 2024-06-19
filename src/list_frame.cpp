@@ -51,6 +51,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     Angle lambda_min_temp, lambda_max_temp, phi_min_temp, phi_max_temp;
     //pos_open denotes the positions, in the string s composed of the color '(i,j,k)', of '(', pos_comma_1 of the first ',', pos_comma_2 of the second ',', and pos_close of ')'.
     size_t pos_end;
+    
+    rectangle_observer_0 = new PositionRectangle;
 
     //the file has not been modified yet -> I set
     file_has_been_modified = false;
@@ -105,7 +107,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     lambda_max_temp.read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
     phi_min_temp.read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
     phi_max_temp.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
-    rectangle_observer_0 = PositionRectangle(Position(lambda_min_temp, phi_max_temp), Position(lambda_max_temp, phi_min_temp), String(""));
+    (*rectangle_observer_0) = PositionRectangle(Position(lambda_min_temp, phi_max_temp), Position(lambda_max_temp, phi_min_temp), String(""));
 
 
 
@@ -1836,7 +1838,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 center.lambda.set((((*((chart_frames[i])->lambda_min)) + (*((chart_frames[i])->lambda_max))).value)/2.0);
                 center.phi.set(mean_pm_pi((*((chart_frames[i])->phi_min)), (*((chart_frames[i])->phi_max))));
                 
-                rectangle_observer_0.SizeMercator(&size_rectangle_observer_0);
+                rectangle_observer_0->SizeMercator(&size_rectangle_observer_0);
                 
                 zoom_factor.value = (wxGetApp().chart_transport_zoom_factor_coefficient.value) * min((size_rectangle_observer_0.x)/(target_size.x), (size_rectangle_observer_0.y)/(target_size.y));
                 

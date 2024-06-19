@@ -443,7 +443,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     //render selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
-        RenderSelectionRectangle(dc, parent->parent->geo_position_now, position_end_label_selection_rectangle_now, parent->parent->end_label_selection_rectangle_now, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderSelectionRectangle(dc, (*(parent->parent->geo_position_now)), position_end_label_selection_rectangle_now, parent->parent->end_label_selection_rectangle_now, wxGetApp().foreground_color, wxGetApp().background_color);
     }
     
     if ((parent->parent->dragging_object)) {
@@ -791,7 +791,7 @@ inline void DrawPanel::RefreshWIN32(void) {
 
         //re-draw the current selection rectangle
         RenderSelectionRectangle(dc,
-            parent->parent->geo_position_now,
+            (*(parent->parent->geo_position_now)),
             position_end_label_selection_rectangle_now,
             parent->parent->end_label_selection_rectangle_now,
             wxGetApp().foreground_color,
@@ -3119,7 +3119,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
     //store the former _now positions into the _before positions
     (parent->parent->screen_position_before) = (parent->parent->screen_position_now);
-    (*(parent->parent->geo_position_before)) = (parent->parent->geo_position_now);
+    (*(parent->parent->geo_position_before)) = (*(parent->parent->geo_position_now));
     label_position_before = label_position_now;
 
 #endif
@@ -3127,11 +3127,11 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     //update the instantaneous screen and geographic position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
     (parent->parent->mouse_moving) = true;
     (parent->parent->screen_position_now) = wxGetMousePosition();
-    mouse_in_plot_area = (this->*ScreenToGeo)((parent->parent->screen_position_now), &((parent->parent->geo_position_now)));
+    mouse_in_plot_area = (this->*ScreenToGeo)((parent->parent->screen_position_now), (parent->parent->geo_position_now));
     if (mouse_in_plot_area && (!parent->parent->selection_rectangle)) {
         //the mouse has a screen position corresponding to a geographic position and no selection rectangle is being drawn -> I show the instantaneous mouse coordinates : I write them into label_position_now, otherwise label_position_now is left empty,
 
-        label_position_now = String((parent->parent->geo_position_now.to_string(display_precision.value)));
+        label_position_now = String((parent->parent->geo_position_now->to_string(display_precision.value)));
 
     }
     else {
@@ -3150,7 +3150,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
             //write the label and position of the selection rectangle for each DrawPanel into end_label_selection_rectangle_now and position_end_label_selection_rectangle_now, respectively
             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                (parent->parent->geo_position_now),
+                (*(parent->parent->geo_position_now)),
                 &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now),
                 &(parent->parent->end_label_selection_rectangle_now)
             );

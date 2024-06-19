@@ -54,6 +54,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     
     geo_position_start = new Position;
     geo_position_before = new Position;
+    geo_position_now = new Position;
     rectangle_observer_0 = new PositionRectangle;
 
     //the file has not been modified yet -> I set

@@ -7,6 +7,7 @@
 
 #include "delete_position.h"
 
+#include "on_change_selection_in_list_control.h"
 
 
 DeletePosition::DeletePosition(ListFrame* f_in) {

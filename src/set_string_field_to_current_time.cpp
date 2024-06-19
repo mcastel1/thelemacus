@@ -7,7 +7,8 @@
 
 #include "set_string_field_to_current_time.h"
 
-
+#include "constants.h"
+#include "my_time.h"
 
 template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operator()(T& event) {
 

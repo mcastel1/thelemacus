@@ -59,6 +59,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     rectangle_observer_0 = new PositionRectangle;
     
     circle_observer_0 = new Route;
+    transporting_route_saved = new Route;
 
     //the file has not been modified yet -> I set
     file_has_been_modified = false;

@@ -12,7 +12,7 @@
 
 using namespace std;
 
-template<class P> class CheckField;
+template<class P, class T> class CheckField;
 template<class P> class DateField;
 
 

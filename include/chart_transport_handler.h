@@ -10,7 +10,10 @@
 
 #include <iostream>
 
+#include "angle.h"
+#include "double.h"
 #include "motion_handler.h"
+#include "position_projection.h"
 
 using namespace std;
 

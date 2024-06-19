@@ -7,6 +7,11 @@
 
 #include "confirm_transport.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endi
+#include <wx/listctrl.h>
+
 #include "constants.h"
 #include "my_string.h"
 

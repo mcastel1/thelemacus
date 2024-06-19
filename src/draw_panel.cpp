@@ -2611,7 +2611,7 @@ inline bool DrawPanel::GeoTo3D(const Position& p, PositionProjection* q, bool wr
     gsl_vector_set((r.r), 2, sin((p.phi)));
     */
 //    p.getCartesian(String(""), &r, String(""));
-    r.setPosition(&p);
+    r->setPosition(&p);
 
     return CartesianTo3D(r, q, write);
    
@@ -2637,7 +2637,7 @@ inline bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, 
 
     bool check, out;
     
-    gsl_vector_set((rp.r), 1,
+    gsl_vector_set((rp->r), 1,
                    /*
                     gsl_matrix_get(rotation.matrix, 1, 0) * gsl_vector_get((p.r), 0) +
                     gsl_matrix_get(rotation.matrix, 1, 1) * gsl_vector_get((p.r), 1) +
@@ -2647,7 +2647,7 @@ inline bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, 
                    );
     
     
-    check = (gsl_vector_get((rp.r), 1) < -1.0 / (1.0 + (d.value)/Re));
+    check = (gsl_vector_get((rp->r), 1) < -1.0 / (1.0 + (d.value)/Re));
 
 
 

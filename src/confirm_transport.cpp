@@ -9,7 +9,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
-#endi
+#endif
 #include <wx/listctrl.h>
 
 #include "constants.h"

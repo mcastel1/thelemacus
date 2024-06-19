@@ -711,7 +711,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                 case 1: {
                     //I am using the Projection_types[1] projection
                     
-                    if (inclusion(draw_panel->circle_observer, true, &t, String("")) == 1) {
+                    if (inclusion((*(draw_panel->circle_observer)), true, &t, String("")) == 1) {
                         //there is a part of *this which is included in circle_observer -> some part of *this will lie on the visible part of the earth
                         
                         s->resize(2);

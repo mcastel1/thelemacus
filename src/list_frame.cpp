@@ -1882,7 +1882,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                    if(object->type == Route_types[2]){
                        //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
                        
-                       target_position = object->reference_position;
+                       target_position = (*(object->reference_position));
                        omega_end = object->omega;
                        
                        
@@ -1892,7 +1892,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        object->set_length_from_time_speed();
                        
                        object->compute_end(((object->length)/2.0), String(""));
-                       target_position = object->end;
+                       target_position = (*(object->end));
                        //                    target_position = route.reference_position;
 
                        omega_end = (object->length.value)/2.0/Re;

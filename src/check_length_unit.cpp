@@ -7,7 +7,7 @@
 
 #include "check_length_unit.h"
 
-
+#include "my_app.h"
 
 
 template<class P> CheckLengthUnit<P>::CheckLengthUnit(DynamicLengthField<P>* p_in) {

@@ -39,7 +39,7 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
             
             PositionProjection temp;
             
-            //compute projection_size_end from zoom_factor and rectangle_observer_0
+            //compute projection_size_end from zoom_factor and *rectangle_observer_0
             chart_frame->parent->rectangle_observer_0.SizeMercator(&temp);
             projection_size_end = temp / zoom_factor;
 

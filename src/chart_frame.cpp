@@ -1107,7 +1107,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
         bool new_polygon;
         
         
-        //go through coastline_polygons_map and fetch the polygons that fall within rectangle_observer and store their ids into coastline_polygons_area_observer
+        //go through coastline_polygons_map and fetch the polygons that fall within *rectangle_observer and store their ids into coastline_polygons_area_observer
         for(parent->coastline_polygons_area_observer.clear(), i=i_min-floor_min_lat; i<i_max-floor_min_lat; i++) {
             for(j=j_min; j<j_max; j++) {
                 
@@ -1119,21 +1119,6 @@ void ChartFrame::GetCoastLineData_3D(void) {
         }
         //the procedure above may lead to duplicates into coastline_polygons_area_observer -> delete them
         delete_duplicates(&(parent->coastline_polygons_area_observer));
-        
-        
-        //count the total number of points included in the polygons of coastline_polygons_area_observer and store them in m
-        //set every in such a way that the total number of plotted points is n_points_plot_coastline_3D, no matter what the size of rectangle_observer
-        //        for(m=0, i=0; i<parent->coastline_polygons_area_observer.size(); i++) {
-        //            for(j=0; j<(parent->coastline_polygons_Cartesian)[(parent->coastline_polygons_area_observer)[i]].size(); j++){
-        //
-        //                if(((draw_panel->*(draw_panel->CartesianToProjection))((parent->coastline_polygons_Cartesian)[(parent->coastline_polygons_area_observer)[i]][j], NULL, false))){
-        //                    m++;
-        //                }
-        //
-        //            }
-        //        }
-        //        every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_3D.value))));
-        //        if(every==0){every = 1;}
         
         //this is a computationally efficient way of estimating every: the number of coastline points falling within circle_observer is estimated as (parent->n_all_coastline_points)*(draw_panel->circle_observer.omega.value))/M_PI), and every is set accordingly in such a way that, for every circle_observer, the number of plotting points is n_points_plot_coastline_3D
         every = ((unsigned long long int)(((parent->n_all_coastline_points)*(draw_panel->circle_observer->omega.value))/M_PI) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
@@ -1369,7 +1354,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
   
         
         
-        //go through coastline_polygons_map and fetch the polygons that fall within rectangle_observer and store their ids into coastline_polygons_area_observer
+        //go through coastline_polygons_map and fetch the polygons that fall within *rectangle_observer and store their ids into coastline_polygons_area_observer
         for(parent->coastline_polygons_area_observer.clear(), i=i_min-floor_min_lat; i<i_max-floor_min_lat; i++) {
             for(j=j_min; j<j_max; j++) {
                 
@@ -1383,7 +1368,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         delete_duplicates(&(parent->coastline_polygons_area_observer));
         
         //count the total number of points included in the polygons of coastline_polygons_area_observer and store them in m
-        //set every in such a way that the total number of plotted points is n_points_plot_coastline_Mercator, no matter what the size of rectangle_observer
+        //set every in such a way that the total number of plotted points is n_points_plot_coastline_Mercator, no matter what the size of *rectangle_observer
         for(m=0, i=0; i<parent->coastline_polygons_area_observer.size(); i++) {
             for(j=0; j<(parent->coastline_polygons_Mercator)[(parent->coastline_polygons_area_observer)[i]].size(); j++){
                 

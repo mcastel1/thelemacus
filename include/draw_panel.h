@@ -71,7 +71,7 @@ public:
     PositionProjection /*the values of (x, y) at the beginning/end of the selection process with a rectangle*/*projection_start, *projection_end;
     Route /*this is a circle of equal altitude which is the intersection between the earth's surface and the visibility cone of the observer, whose vertex is at the observer. circle_oberserver.omega is the aperture angle at the center of the earth which specifies the part of the earth surface visible by the observer. circle_observer.rerefence_position is the ground position of the observer: the intersection between the line between the center of the earth and the observer, and the surface of the earth. These exist for the 3D projection only*/*circle_observer;
     
-    PositionRectangle /* the rectangle x_min ... y_max in the Mercator projection*/rectangle_observer;
+    PositionRectangle /* the rectangle x_min ... y_max in the Mercator projection*/*rectangle_observer;
     wxBitmap m_bgbuffer;
     
     wxSizer* sizer_h, *sizer_v;

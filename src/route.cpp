@@ -247,7 +247,7 @@ inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector<
 
         compute_end(length*((double)i)/((double)(n_points - 1)), String(""));
         
-        //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
+        //treat the first and last point as a special one because it may be at the boundary of *rectangle_observer-> check if they are and, if they are, put them back into *rectangle_observer
         if((i==0) || (i==n_points-1)){
             end->put_back_in(draw_panel);
         }
@@ -310,7 +310,7 @@ inline void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* 
 
         compute_end(s, String(""));
         
-        //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
+        //treat the first and last point as a special one because it may be at the boundary of *rectangle_observer-> check if they are and, if they are, put them back into *rectangle_observer
         if((i==0) || (i==n_points-1)){
             end->put_back_in(draw_panel);
         }
@@ -433,7 +433,7 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
 
                     compute_end(r, String(""));
                     
-                    //treat the first and last point as a special one because it may be at the boundary of rectangle_observer-> check if they are and, if they are, put them back into rectangle_observer
+                    //treat the first and last point as a special one because it may be at the boundary of *rectangle_observer-> check if they are and, if they are, put them back into *rectangle_observer
                     if((i==0) || (i==n_points-1)){
                         end->put_back_in(draw_panel);
                     }
@@ -562,7 +562,7 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
             
             //now I decide if v_proposed is a valid chunk (a chunk to be plotted), and thus if I sholud push it back to v or not
             if(n_points_check_ok>0){
-                //v_tentative containts at least one point for which GeoToDrawPanel evaluated to true (without recurring to put_back_in) -> it is a valid chunk -> I add it to v. On the other hand, if n_points_check_ok == 0, then the only points in v_tentative may be the first and the last, which have been pushed back to v_tentative by put_back_in, and the chunk will be an odd chunk with only two points put into rectangle_observer by put_back_in -> This may lead to odd diagonal lines in the Mercator projection
+                //v_tentative containts at least one point for which GeoToDrawPanel evaluated to true (without recurring to put_back_in) -> it is a valid chunk -> I add it to v. On the other hand, if n_points_check_ok == 0, then the only points in v_tentative may be the first and the last, which have been pushed back to v_tentative by put_back_in, and the chunk will be an odd chunk with only two points put into *rectangle_observer by put_back_in -> This may lead to odd diagonal lines in the Mercator projection
                 
                 v->push_back(v_tentative);
                 
@@ -579,7 +579,7 @@ inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< ve
 }
 
 
-//compute the values of the Length l for Route *this at which *this crosses draw_panel->circle/rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/ draw_panel->rectangle_observer, and it is thus visible. If success != NULL, it writes true in *success if the values of the length above could be computed succesfully, and false otherwise.
+//compute the values of the Length l for Route *this at which *this crosses draw_panel->*circle/*rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/ draw_panel->*rectangle_observer, and it is thus visible. If success != NULL, it writes true in *success if the values of the length above could be computed succesfully, and false otherwise.
 inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
     
     vector<Angle> t;
@@ -609,7 +609,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                 case 0: {
                     //I am using Projection_types[0]
                     
-                    check = inclusion(draw_panel->rectangle_observer, true, &t, String(""));
+                    check = inclusion((*(draw_panel->rectangle_observer)), true, &t, String(""));
                     
                     break;
                     
@@ -618,7 +618,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                 case 1: {
                     //I am using Projection_types[1]
                     
-                    check = inclusion(draw_panel->circle_observer, true, &t, String(""));
+                    check = inclusion((*(draw_panel->circle_observer)), true, &t, String(""));
                     
                     break;
                     
@@ -628,7 +628,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
             
             
             if(check == 1){
-                //there is a part of *this which is included in circle/rectangle_observer -> some part of *this will lie on the visible part of the earth
+                //there is a part of *this which is included in *circle/*rectangle_observer -> some part of *this will lie on the visible part of the earth
                 
                 unsigned int i;
                                 
@@ -665,11 +665,11 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                 case 0: {
                     //I am using the Projection_types[0] projection
                     
-                    if (inclusion(draw_panel->rectangle_observer, true, &t, String("")) == 1) {
-                        //*this is included in rectangle_observer
+                    if (inclusion((*(draw_panel->rectangle_observer)), true, &t, String("")) == 1) {
+                        //*this is included in *rectangle_observer
                         
                         if ((t[0] == 0.0) && (t[1] == 0.0)) {
-                            //*this is fully included into rectangle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
+                            //*this is fully included into *rectangle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
                             
                             s->resize(2);
                             ((*s)[0]).set(0.0, LengthUnit_types[0]);
@@ -679,7 +679,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                             
                             unsigned int i;
                             
-                            //*this is partially included into rectangle_observer and it interscets rectangle_observer-> I write in s the values of the parametric length of *this at which these intersections occur
+                            //*this is partially included into *rectangle_observer and it interscets *rectangle_observer-> I write in s the values of the parametric length of *this at which these intersections occur
                             
                             for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
                                 
@@ -695,7 +695,7 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                         
                     }
                     else {
-                        //*this is not included in rectangle_observer
+                        //*this is not included in *rectangle_observer
                         
                         if (success != NULL) {
                             (*success) = false;

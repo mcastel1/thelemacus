@@ -7,6 +7,7 @@
 
 #include "show_question_frame.h"
 
+#include "my_app.h"
 #include "set_idling.h"
 #include "unset_idling.h"
 

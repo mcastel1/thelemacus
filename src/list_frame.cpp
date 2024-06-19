@@ -13,7 +13,8 @@
 #include <wx/wfstream.h>
 #include <wx/progdlg.h>
 
-
+#include "ask_remove_related_route.h"
+#include "ask_remove_related_sight.h"
 #include "bitmap.h"
 #include "chart_transport_handler.h"
 #include "close_frame.h"

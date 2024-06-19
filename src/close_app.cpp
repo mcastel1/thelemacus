@@ -6,7 +6,7 @@
 //
 
 #include "close_app.h"
-
+#include "question_frame.h"
 
 
 CloseApp::CloseApp(MyApp* app_in){

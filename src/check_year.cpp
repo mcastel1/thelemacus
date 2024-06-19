@@ -8,6 +8,7 @@
 #include "check_year.h"
 
 #include "my_app.h"
+#include "sight_frame.h"
 
 
 template<class P> CheckYear<P>::CheckYear(DateField<P>* p_in) {

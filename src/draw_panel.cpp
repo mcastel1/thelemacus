@@ -29,6 +29,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
     prefix = String("");
 
+    d = new Length;
+    
     r = new Cartesian;
     rp = new Cartesian;
     

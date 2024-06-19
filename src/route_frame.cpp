@@ -705,7 +705,7 @@ template<class T> void RouteFrame::get(T& event) {
             (route->length_format) = LengthFormat(((LengthFormat_types[0]).value));
             time->get(event);
             speed->get(event);
-            (route->length) = Length(route->time, route->speed);
+            (route->length) = Length(route->time, (*(route->speed)));
 
         }else {
             //in the GUI field, lenght are expressed simply as a Length -> get l and set in the non-GUI field to false

@@ -21,6 +21,7 @@ Route::Route(void) {
     
     reference_position = new Position;
     end = new Position;
+    speed = new Speed;
 
 }
 
@@ -29,13 +30,14 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Chro
 
     reference_position = new Position;
     end = new Position;
-    
+    speed = new Speed;
+
 
     length_format.set((LengthFormat_types[0]));
     type = type_in;
     
     time = time_in;
-    speed = speed_in;
+    (*speed) = speed_in;
     set_length_from_time_speed();
     
     (*reference_position) = reference_position_in;
@@ -50,7 +52,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
     
     reference_position = new Position;
     end = new Position;
-  
+    speed = new Speed;
 
     length_format.set((LengthFormat_types[1]));
     type = type_in;
@@ -70,7 +72,8 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
     
     reference_position = new Position;
     end = new Position;
-  
+    speed = new Speed;
+
     
     type = type_in;
     
@@ -188,7 +191,8 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
 
     reference_position = new Position;
     end = new Position;
-  
+    speed = new Speed;
+
     
     type = type_in;
     (*reference_position) = reference_position_in;
@@ -1651,7 +1655,7 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
             //read time and speed, and set l accordingly
 
             time.read_from_stream(String("time"), input_stream, false, new_prefix);
-            speed.read_from_stream(String("speed"), input_stream, false, new_prefix);
+            speed->read_from_stream(String("speed"), input_stream, false, new_prefix);
             set_length_from_time_speed();
 
         }
@@ -1783,7 +1787,7 @@ void Route::set_length_from_time_speed(void){
     
     if(length_format == LengthFormat_types[0]){
         
-        length = Length(time, speed);
+        length = Length(time, (*speed));
         
     }
     
@@ -2005,7 +2009,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
         }else {
 
             time.print(String("time"), new_new_prefix, ostr);
-            speed.print(String("speed"), new_new_prefix, ostr);
+            speed->print(String("speed"), new_new_prefix, ostr);
 
         }
 

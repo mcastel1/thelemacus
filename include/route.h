@@ -48,7 +48,7 @@ public:
     //the length of the route
   
     Length length;
-    Speed speed;
+    Speed *speed;
     Chrono time;
     //this is the position in sight_list of the sight linked to route. If there is no sight linked to route, then related_sight = -1.
     Int related_sight;

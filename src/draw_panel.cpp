@@ -2150,9 +2150,9 @@ void DrawPanel::Set_lambda_phi_min_max_Mercator(void) {
 void DrawPanel::Set_lambda_phi_min_max_3D(void) {
 
     //consider the vector rp = {0,-1,0}, corresponding to the center of the circle of equal altitude above
-    gsl_vector_set((rp.r), 0, 0.0);
-    gsl_vector_set((rp.r), 1, -1.0);
-    gsl_vector_set((rp.r), 2, 0.0);
+    gsl_vector_set((rp->r), 0, 0.0);
+    gsl_vector_set((rp->r), 1, -1.0);
+    gsl_vector_set((rp->r), 2, 0.0);
 
     //convert rp -> r through rotation^{-1}
 //        gsl_blas_dgemv(CblasTrans, 1.0, (rotation).matrix, (rp.r), 0.0, (r.r));

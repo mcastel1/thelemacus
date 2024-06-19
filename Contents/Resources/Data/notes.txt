@@ -115,7 +115,8 @@
      - move all stuff which is general enough in the code to MyApp class
      - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
 
-  
+  #POTENTIAL SOURCES OF ERRORS AFTER CLASS RESTRUCTURING
+  - a Position a and a Position b are converted into Position* a and Position*b by the restructuring -> a = b sets the adress of a equal to that of b -> disaster
 
  ********** THINGS TO FIX ***********
     - bool PositionRectangle::Contains(Position p)  should accept a Position& or Position* rather than a position to be faster -> change all similar methods in other classes to speed up charts 

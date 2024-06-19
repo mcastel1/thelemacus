@@ -1895,7 +1895,6 @@ void Route::compute_end(String prefix) {
             /* t.print("t", prefix, cout); */
             
             end->phi.set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position->phi.value)))), prefix);
-            
             end->lambda.set(String(""), (reference_position->lambda.value) + sigma * (t.value), prefix);
             
             break;

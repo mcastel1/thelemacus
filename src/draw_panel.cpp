@@ -2156,7 +2156,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
 
     //convert rp -> r through rotation^{-1}
 //        gsl_blas_dgemv(CblasTrans, 1.0, (rotation).matrix, (rp.r), 0.0, (r.r));
-    cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation->matrix->data, 3, rp.r->data, 1, 0, r.r->data, 1);
+    cblas_dgemv(CblasRowMajor, CblasTrans, 3, 3, 1, rotation->matrix->data, 3, rp->r->data, 1, 0, r->r->data, 1);
 
 
     //obtain the  geographic position of the center of the circle of equal altitude above

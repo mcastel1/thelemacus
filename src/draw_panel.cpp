@@ -2294,7 +2294,7 @@ void DrawPanel::Set_x_y_min_max_3D(void) {
     Double d_temp;
 
     //set d
-    d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
+    d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer->omega))));
 
     x_min = -((d_temp.value) / sqrt(gsl_pow_2(((d_temp).value) + 1.0) - 1.0));
     x_max = -x_min;
@@ -2517,7 +2517,7 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
 
             Double d_temp;
 
-            d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
+            d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer->omega))));
 
             //from projection, compute the relative point on the x'z' plane, which has y'=0
             gsl_vector_set((rp->r), 0, ((d_temp.value) + 1.0) / (d_temp.value) * (temp.x));
@@ -2567,7 +2567,7 @@ inline bool DrawPanel::ScreenTo3D(const wxPoint& p, PositionProjection* q) {
     Double d_temp;
 
     //set d for the following
-    d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))));
+    d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer->omega))));
 
     //updates the position of the draw pane this
     draw_panel_origin = (this->GetScreenPosition());
@@ -3754,19 +3754,19 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     Position reference_position_old;
                     
                     //store the current ground position of circle_observer into reference_position_old
-                    reference_position_old = (circle_observer.reference_position);
+                    reference_position_old = (*(circle_observer->reference_position));
                     
                     //normalize lambda_a/b and then compute the algebric mean -> this is the correct value of the longitude of circle_observer
-                    circle_observer.reference_position.lambda.set((lambda_a.normalize_ret().value + lambda_b.normalize_ret().value)/2.0);
+                    circle_observer->reference_position->lambda.set((lambda_a.normalize_ret().value + lambda_b.normalize_ret().value)/2.0);
     
                     //normalize the two latitudes between -pi and pi and then compute the algebraic mean -> this is the correct value of the two latitudes
-                    circle_observer.reference_position.phi.set(mean_pm_pi(parent->parent->geo_position_start.phi, parent->parent->position_end.phi));
+                    circle_observer->reference_position->phi.set(mean_pm_pi(parent->parent->geo_position_start.phi, parent->parent->position_end.phi));
                     
                     
                     //compute omega as half of  the largest angular distance between the middle of selection rectangle and its corners
-                    circle_observer.reference_position.distance((parent->parent->geo_position_start), &l1, String(""), String(""));
-                    circle_observer.reference_position.distance(Position(parent->parent->geo_position_start.lambda, parent->parent->position_end.phi), &l2, String(""), String(""));
-                    circle_observer.omega.set(((max(l1, l2).value) / Re)/2.0);
+                    circle_observer->reference_position->distance((parent->parent->geo_position_start), &l1, String(""), String(""));
+                    circle_observer->reference_position->distance(Position(parent->parent->geo_position_start.lambda, parent->parent->position_end.phi), &l2, String(""), String(""));
+                    circle_observer->omega.set(((max(l1, l2).value) / Re)/2.0);
                     
                     
                     //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one

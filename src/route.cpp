@@ -735,14 +735,14 @@ inline void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* d
                                                ((Angle(mean_value(t[0], t[1]))).value) * (Re * sin(omega))
                                                ),
                                         String(""));
-                            draw_panel->circle_observer.reference_position.distance(end, &l1, String(""), String(""));
+                            draw_panel->circle_observer->reference_position->distance((*end), &l1, String(""), String(""));
                             
                             compute_end(
                                         Length(
                                                ((Angle(mean_value(t[0], t[1]) + M_PI)).value) * (Re * sin(omega))
                                                ),
                                         String(""));
-                            draw_panel->circle_observer.reference_position.distance(end, &l2, String(""), String(""));
+                            draw_panel->circle_observer->reference_position->distance((*end), &l2, String(""), String(""));
                             
                             if (l2 > l1) {
                                 

@@ -14,6 +14,7 @@
     #include "wx/wx.h"
 #endif
 
+#include "motion_handler.h"
 #include "my_string.h"
 
 using namespace std;

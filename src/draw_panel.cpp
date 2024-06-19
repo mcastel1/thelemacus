@@ -50,6 +50,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     route_reference_position_drag_now = new Position;
     geo_start_drag = new Position;
     geo_end_drag = new Position;
+    rotation_axis = new Position;
     
     
     

@@ -7,6 +7,9 @@
 
 #include "some_routes.h"
 
+#include "list_frame.h"
+#include "my_string.h"
+
 
 SomeRoutes::SomeRoutes(ListFrame* f_in) {
 

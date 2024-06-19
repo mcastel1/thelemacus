@@ -3644,7 +3644,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 case 0: {
                     //I am using the Mercator projection
                     
-                    if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end.x) - (projection_start.x))))) {
+                    if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end->x) - (projection_star->.x))))) {
                         //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
                         
                         

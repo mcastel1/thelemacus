@@ -518,9 +518,9 @@ template<class T> void ChartFrame::MoveEast(T& event) {
         delta = ((draw_panel->circle_observer).omega) * ((wxGetApp().relative_displacement).value);
 
         //since I am moving north, I increase the b Euler ancgle of rotation
-        (draw_panel->rotation.a) += delta;
+        (draw_panel->rotation->a) += delta;
         //I update rotation->matrix
-        draw_panel->rotation.set(draw_panel->rotation.a, draw_panel->rotation.b, draw_panel->rotation.c);
+        draw_panel->rotation->set(draw_panel->rotation->a, draw_panel->rotation->b, draw_panel->rotation->c);
 
 
 

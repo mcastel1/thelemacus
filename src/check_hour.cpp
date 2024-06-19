@@ -7,7 +7,8 @@
 
 #include "check_hour.h"
 
-
+#include "my_app.h"
+#include "my_string.h"
 
 template<class P> CheckHour<P>::CheckHour(ChronoField<P>* p_in) {
 

@@ -3635,7 +3635,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         unsigned int i;
         
         //store the position at the end of the selection process, to compute the zoom factor later
-        if ((this->*ScreenToProjection)(drawpanel_position_end, &projection_end)) {
+        if ((this->*ScreenToProjection)(drawpanel_position_end, projection_end)) {
             //drawpanel_position_end is valid
             
             Angle lambda_a, lambda_b;
@@ -3655,7 +3655,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 case 0: {
                     //I am using the Mercator projection
                     
-                    if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end->x) - (projection_star->.x))))) {
+                    if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end->x) - (projection_start->x))))) {
                         //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
                         
                         

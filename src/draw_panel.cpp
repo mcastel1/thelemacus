@@ -31,6 +31,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
     d = new Length;
     
+    projection_start = new PositionProjection;
+    projection_end = new PositionProjection;
+    
     r = new Cartesian;
     rp = new Cartesian;
     

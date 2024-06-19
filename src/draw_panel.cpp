@@ -2354,11 +2354,11 @@ Rotation DrawPanel::rotation_start_end(const wxPoint& start, const wxPoint& end)
 
     //call ScreenToGeo_3D to generate rp, and then convert rp into spherical coordinates by writing it into p_start
     ScreenToGeo_3D(start, &temp);
-    p_start.setCartesian(String(""), rp, String(""));
+    p_start.setCartesian(String(""), (*rp), String(""));
 
     //call ScreenToGeo_3D to generate rp, and then convert rp into spherical coordinates by writing it into p_end
     ScreenToGeo_3D(end, &temp);
-    p_end.setCartesian(String(""), rp, String(""));
+    p_end.setCartesian(String(""), (*rp), String(""));
 
     //construct a Rotation between p_start and p_end by calling the overloaded constructor of the Rotation class
     return(Rotation(p_start, p_end));

@@ -8,6 +8,7 @@
 #include "sight_frame.h"
 
 #include "check_check.h"
+#include "check_chrono.h"
 #include "check_date.h"
 #include "check_length.h"
 #include "check_string.h"

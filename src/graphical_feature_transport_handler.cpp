@@ -7,6 +7,7 @@
 
 #include "graphical_feature_transport_handler.h"
 
+#include "motion_handler.h"
 #include "my_app.h"
 
 

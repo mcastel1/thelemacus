@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include "answer.h"
+
 using namespace std;
 
 class Answer;

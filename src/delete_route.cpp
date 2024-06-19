@@ -10,6 +10,7 @@
 #include "answer.h"
 #include "list_frame.h"
 #include "my_string.h"
+#include "on_change_selection_in_list_control.h"
 
 
 //constructor of the struct, which initializes the Answer remove_related_sight. If remove_related_sight.value = 'y', then DeleteRoute::operator() will delete both the route and the related sight. If remove_related_sight.value = 'n', then it will remove the route only.

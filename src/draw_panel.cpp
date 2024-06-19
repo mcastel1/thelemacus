@@ -4159,7 +4159,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         (parent->dragging_chart) = true;
                         
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                        rotation.set(rotation_start_end(position_start_drag, position_now_drag) * rotation_start_drag);
+                        rotation->set(rotation_start_end(position_start_drag, position_now_drag) * (*rotation_start_drag));
                         
                         
                         

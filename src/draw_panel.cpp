@@ -4082,10 +4082,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
                             
                             //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
-                            rotation_now_drag =
-                            (rotation.inverse()) *
+                            (*rotation_now_drag) =
+                            (rotation->inverse()) *
                             rotation_start_end(position_start_drag, position_now_drag) *
-                            rotation;
+                            (*rotation);
                             geo_start_drag.rotate(String(""), rotation_now_drag, &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]), String(""));
                             
                         }

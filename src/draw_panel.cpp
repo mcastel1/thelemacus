@@ -2169,7 +2169,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
     circle_observer.lambda_min_max((parent->lambda_min), (parent->lambda_max), String(""));
 
     //set
-    d.set((-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))))*Re);
+    d->set((-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer.omega))))*Re);
     //here I set the value of d into observer_height, not the unit of measure, because I want the user to decide the unit of measure by selecting in the wxComboBox in the unit field
     parent->observer_height->set_value_keep_unit();
 

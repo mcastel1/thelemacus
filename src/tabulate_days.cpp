@@ -7,7 +7,8 @@
 
 #include "tabulate_days.h"
 
-
+#include "constants.h"
+#include "sight_frame.h"
 
 
 template<class P> TabulateDays<P>::TabulateDays(DateField<P>* p_in) {

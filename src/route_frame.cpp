@@ -5,6 +5,7 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include "check_chrono.h"
 #include "check_length.h"
 #include "check_route_type.h"
 #include "check_speed.h"

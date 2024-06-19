@@ -29,8 +29,12 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 
     prefix = String("");
 
-    //client_dc = new wxClientDC(this);
-
+    rotation_start_drag = new Rotation;
+    rotation_now_drag = new Rotation;
+    rotation_end_drag = new Rotation;
+    rotation = new Rotation; 
+    rotation_0 = new Rotation;
+    
     mouse_dragging = false;
     re_draw = true;
     mouse_in_plot_area = false;

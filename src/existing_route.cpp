@@ -7,6 +7,10 @@
 
 #include "existing_route.h"
 
+#include "list_frame.h"
+#include "my_string.h"
+#include "show_question_frame.h"
+
 
 ExistingRoute::ExistingRoute(ListFrame* f_in) {
 

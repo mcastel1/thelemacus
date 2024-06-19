@@ -21,6 +21,7 @@ Route::Route(void) {
     
     reference_position = new Position;
     end = new Position;
+    length = new Length;
     speed = new Speed;
 
 }
@@ -30,6 +31,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Chro
 
     reference_position = new Position;
     end = new Position;
+    length = new Length;
     speed = new Speed;
 
 
@@ -52,13 +54,14 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle Z_in, Leng
     
     reference_position = new Position;
     end = new Position;
+    length = new Length;
     speed = new Speed;
 
     length_format.set((LengthFormat_types[1]));
     type = type_in;
     
-    length = l_in;
-    length.convert_to(LengthUnit_types[0]);
+    (*length) = l_in;
+    length->convert_to(LengthUnit_types[0]);
     
     (*reference_position) = reference_position_in;
     Z = Z_in;
@@ -72,6 +75,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
     
     reference_position = new Position;
     end = new Position;
+    length = new Length;
     speed = new Speed;
 
     
@@ -146,7 +150,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             //set the legnth as the length of the shortest great circle joining p_start and p_end
             phi.set(acos(r_start.dot(r_end)));
             
-            length.set(Re*(phi.value), LengthUnit_types[0]);
+            length->set(Re*(phi.value), LengthUnit_types[0]);
             
             //set the tentative solution for the azimuth angle z: Z may be either z  (solkution 1) or -z (solution 2), I will pick the correct solution later
             z.set(String(""),
@@ -191,6 +195,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
 
     reference_position = new Position;
     end = new Position;
+    length = new Length;
     speed = new Speed;
 
     
@@ -201,7 +206,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
     length_format.set((LengthFormat_types[1]));
     
     //the lenght of the circle of equal altitude is set by default
-    length.set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
+    length->set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
 
     related_sight.set(-1);
 
@@ -249,7 +254,7 @@ inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector<
     //tabulate the Route points
     for (/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the chart, and thus terminated a connectd component of dummy_route*/v->clear(), end_connected = true, i = 0; i < n_points; i++) {
 
-        compute_end(length*((double)i)/((double)(n_points - 1)), String(""));
+        compute_end((*length)*((double)i)/((double)(n_points - 1)), String(""));
         
         //treat the first and last point as a special one because it may be at the boundary of *rectangle_observer-> check if they are and, if they are, put them back into *rectangle_observer
         if((i==0) || (i==n_points-1)){
@@ -300,14 +305,14 @@ inline void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* 
         //handle special cases i=0 and i = n_points-1 to avoind roundoff error
         if ((i > 0) && (i < n_points - 1)) {
 
-            s = (length * ((double)i) / ((double)(n_points - 1)));
+            s = ((*length) * ((double)i) / ((double)(n_points - 1)));
 
         }else{
 
             if (i == 0) {
                 s.set(0.0, LengthUnit_types[0]);
             }else{
-                s = length;
+                s = (*length);
             }
 
         }
@@ -830,7 +835,7 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
         listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.value), false)));
         
         set_length_from_time_speed();
-        listcontrol->SetItem(i, j++, wxString(length.to_string(LengthUnit_types[0], (display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(length->to_string(LengthUnit_types[0], (display_precision.value))));
 
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));
@@ -1045,7 +1050,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
                             t->resize(2);
                             ((*t)[0]).set(String(""), 0.0, new_prefix);
-                            ((*t)[1]).set(String(""), (length.value) / Re, new_prefix);
+                            ((*t)[1]).set(String(""), (length->value) / Re, new_prefix);
 
                         }
 
@@ -1080,7 +1085,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
                                 //this->reference position is not included into the circle of circle -> this->end must be included into the circle of circle -> the part of *this comprised into circle is the one with  (*t)[0] <= t <= (l.value)/Re
 
                                 set_length_from_time_speed();
-                                t->push_back(Angle(String(""), (length.value) / Re, new_prefix));
+                                t->push_back(Angle(String(""), (length->value) / Re, new_prefix));
 
                             }
 
@@ -1262,7 +1267,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
         //push back into u the angle which corresponds to the endpoint of Route *this
         if (type == (Route_types[1])) {
             set_length_from_time_speed();
-            u.push_back(Angle((length.value) / Re));
+            u.push_back(Angle((length->value) / Re));
         }
 
         //push back into u the angle which corresponds to the endpoint of Route *this
@@ -1641,7 +1646,7 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
         reference_position->read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
         omega.read_from_stream<S>(String("omega"), input_stream, false, new_prefix);
         
-        length.set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
+        length->set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
 
     }else{
 
@@ -1787,7 +1792,7 @@ void Route::set_length_from_time_speed(void){
     
     if(length_format == LengthFormat_types[0]){
         
-        length = Length(time, (*speed));
+        (*length) = Length(time, (*speed));
         
     }
     
@@ -1816,13 +1821,13 @@ void Route::set_length_from_input(double t){
                 double s;
                 
                 s = GSL_SIGN(cos(Z));
-                length.set(s * 2.0*Re/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t ) ) ),
+                length->set(s * 2.0*Re/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t ) ) ),
                            LengthUnit_types[0]);
                 
             }else{
                 //I am in the special case where Z = pi/2 or 3 pi /2 (i.e., C = 0) -> set the length by using the analytical limit C->0 for  expression of the length
                 
-                length.set(2.0*Re*t*eta/(1.0+gsl_pow_2(eta)),
+                length->set(2.0*Re*t*eta/(1.0+gsl_pow_2(eta)),
                            LengthUnit_types[0]);
                 
             }
@@ -1886,13 +1891,13 @@ void Route::compute_end(String prefix) {
                 //this is the general expression of t vs l for Z != pi/2
                 
                 (t.value) = -tau * sqrt((1.0 - C) / C)
-                * log(1.0 / eta * tan(-tau * sqrt(C) * (length.value) / (2.0 * Re) + atan(sqrt((1.0 - sin(reference_position->phi.value)) / (1.0 + sin(reference_position->phi.value))))));
+                * log(1.0 / eta * tan(-tau * sqrt(C) * (length->value) / (2.0 * Re) + atan(sqrt((1.0 - sin(reference_position->phi.value)) / (1.0 + sin(reference_position->phi.value))))));
                 
             }
             else {
                 //this is the limit of the expression above in the case Z -> pi/2
                 
-                (t.value) = (length.value) * (1.0 + gsl_pow_2(eta)) / (2.0 * Re * eta);
+                (t.value) = (length->value) * (1.0 + gsl_pow_2(eta)) / (2.0 * Re * eta);
                 
             }
             
@@ -1911,7 +1916,7 @@ void Route::compute_end(String prefix) {
             Angle t;
             
      
-            t.set(String(""), (length.value) / Re, prefix);
+            t.set(String(""), (length->value) / Re, prefix);
             
             end->phi.set(String(""), asin(cos(Z) * cos(reference_position->phi) * sin(t) + cos(t) * sin(reference_position->phi)), prefix);
             end->lambda.set(String(""),
@@ -1932,7 +1937,7 @@ void Route::compute_end(String prefix) {
             
             //compute the length of *this from time and speed, if the length is stored in *this as a time * speed
             set_length_from_time_speed();
-            t.set(String(""), (length.value) / (Re * sin(omega)), prefix);
+            t.set(String(""), (length->value) / (Re * sin(omega)), prefix);
             
             
             end->phi.set(String(""), M_PI_2 - acos(cos((omega.value)) * sin(reference_position->phi) - cos(reference_position->phi) * cos((t.value)) * sin((omega.value))), prefix);
@@ -1962,10 +1967,10 @@ bool Route::compute_end(Length d, [[maybe_unused]] String prefix) {
 
         Length l_saved;
 
-        l_saved = length;
-        length = d;
+        l_saved = (*length);
+        (*length) = d;
         compute_end(prefix);
-        length = l_saved;
+        (*length) = l_saved;
 
         return true;
 
@@ -2004,7 +2009,7 @@ void Route::print(String name, String prefix, ostream& ostr) {
         length_format.print(String("length format"), false, new_prefix, ostr);
         if (length_format == (LengthFormat_types[1])) {
 
-            length.print(String("length"), new_new_prefix, ostr);
+            length->print(String("length"), new_new_prefix, ostr);
 
         }else {
 
@@ -2045,7 +2050,7 @@ double Route::lambda_minus_pi(double t, void* route) {
     //append \t to prefix
     new_prefix = (r->temp_prefix.append(String("\t")));
 
-    r->length.set(Re * sin((r->omega.value)) * t, LengthUnit_types[0]);
+    r->length->set(Re * sin((r->omega.value)) * t, LengthUnit_types[0]);
     r->compute_end(new_prefix);
 
     return(((*r).end->lambda.value) - M_PI);
@@ -2074,12 +2079,12 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
             t_min.set(String(""), 2.0 * M_PI - acos(-tan(reference_position->phi.value) * tan((omega.value))), new_prefix);
             
             //p_max =  Position on the circle of equal altitude  at t = t_max
-            length.set(Re * sin((omega.value)) * (t_max.value), LengthUnit_types[0]);
+            length->set(Re * sin((omega.value)) * (t_max.value), LengthUnit_types[0]);
             compute_end(new_prefix);
             p_max = (*end);
             
             //p_min =  Position on circle of equal altitude  at t = t_min
-            length.set(Re * sin((omega.value)) * (t_min.value), LengthUnit_types[0]);
+            length->set(Re * sin((omega.value)) * (t_min.value), LengthUnit_types[0]);
             compute_end(new_prefix);
             p_min = (*end);
             
@@ -2193,7 +2198,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             
             
             //there are two potential stationary points for the latitude vs t: include in phi the first one, if it lies on *this
-            if((0.0 <= Re*ts) && (length >= Re*ts)){
+            if((0.0 <= Re*ts) && ((*length) >= Re*ts)){
                 
                 //                t.push_back(Angle(ts));
                 
@@ -2203,7 +2208,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             }
             
             //there are two potential stationary points for the latitude vs t: include in phi the second one, if it lies on *this
-            if((0.0 <= Re*(ts+M_PI)) && (length >= Re*(ts+M_PI))){
+            if((0.0 <= Re*(ts+M_PI)) && ((*length) >= Re*(ts+M_PI))){
                 
                 //                t.push_back(Angle(ts+M_PI));
                 
@@ -2239,11 +2244,11 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
         case 2:{
             //*this is a circle of equal altitude
                 
-            length.set(Re * sin((omega.value)) * 0.0, LengthUnit_types[0]);
+            length->set(Re * sin((omega.value)) * 0.0, LengthUnit_types[0]);
             compute_end(new_prefix);
             p_max = (*end);
             
-            length.set(Re * sin((omega.value)) * M_PI, LengthUnit_types[0]);
+            length->set(Re * sin((omega.value)) * M_PI, LengthUnit_types[0]);
             compute_end(new_prefix);
             p_min = (*end);
             

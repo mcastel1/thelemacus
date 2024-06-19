@@ -456,7 +456,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
     check &= compute_H_o(new_prefix);
     circle_of_equal_altitude->omega.set(M_PI_2 - (H_o.value));
     
-    circle_of_equal_altitude->length.set(2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), LengthUnit_types[0]);
+    circle_of_equal_altitude->length->set(2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), LengthUnit_types[0]);
 
     if (!check) {
 

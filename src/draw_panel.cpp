@@ -700,7 +700,7 @@ inline void DrawPanel::RefreshWIN32(void) {
 
         //wipe out the preceeding selection rectangle
         RenderSelectionRectangle(dc,
-            (parent->parent->geo_position_before),
+            (*(parent->parent->geo_position_before)),
             position_end_label_selection_rectangle_before,
             parent->parent->end_label_selection_rectangle_before,
             wxGetApp().background_color,
@@ -3119,7 +3119,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
     //store the former _now positions into the _before positions
     (parent->parent->screen_position_before) = (parent->parent->screen_position_now);
-    (parent->parent->geo_position_before) = (parent->parent->geo_position_now);
+    (*(parent->parent->geo_position_before)) = (parent->parent->geo_position_now);
     label_position_before = label_position_now;
 
 #endif

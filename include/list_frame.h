@@ -65,7 +65,7 @@ public:
     //this is a pointer to a Catalog object which will be used by data
     Catalog *catalog;
     vector<Route> /*when I transport by using an existing Route, I will store the list of Routes which can be used for transport here*/route_list_for_transport, /*when I transport by using an existing Route, I will save data->list_routes temporarily here and recover it from here after the transport */route_list_saved;
-    Route transporting_route_saved;
+    Route /*the same as draw_panel->circle_observer, but at the initial configuration of the chart*/circle_observer_0, transporting_route_saved;
     wxMenuBar *menu_bar;
     wxMenu *menu_app, *menu_file, *menu_chart, *menu_new_chart, *menu_item_mercator, *menu_item_3d;
     ListControl<Sight> *listcontrol_sights;
@@ -112,8 +112,6 @@ public:
     //this vector containts the ids (as written in coastline_polygons_Position/Cartesian) of the polygons which have at least one point falling into *rectangle_observer (Mercator projection) or circle_observer (3D projection), and it is updated every time *rectangle_observer changes
     vector<unsigned long long int> coastline_polygons_area_observer;
     Position /*these are the geographic Positions where the right mouse button is clicked at the beginning, the current and preceeding Position during mouse movement, and the mouse Position and at the end of the drawing process for the selection rectangle*/geo_position_start, geo_position_before, geo_position_now, position_end;
-    //the object which is being transported : a "sight" or a "position"
-    Route /*the same as draw_panel->circle_observer, but at the initial configuration of the chart*/circle_observer_0;
     PositionRectangle /*same DrawPanel::*rectangle_observer, but for the initial configutaiton of ChartFrame*/rectangle_observer_0;
     String transported_object_type, /*the labels that will be drawn on position_start_label_selection_rectangle and position_end_label_selection_rectangle_now, respectively. end_label_selection_rectangle_now is the label of the end point of selection rectangle now, while end_label_selection_rectangle_before is the label of the end point of selection rectangle at the preceeding mouse position*/start_label_selection_rectangle, end_label_selection_rectangle_now, end_label_selection_rectangle_before;
     

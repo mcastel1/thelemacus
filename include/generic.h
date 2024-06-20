@@ -32,8 +32,7 @@
 
 using namespace std;
 
-class MyApp;
-
+inline double round_with_precision(double, unsigned int);
 
 
 #endif

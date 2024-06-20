@@ -119,6 +119,7 @@
   - a Position a and a Position b are converted into Position* a and Position*b by the restructuring -> a = b sets the adress of a equal to that of b -> disaster
 
  ********** THINGS TO FIX ***********
+    - Body types such as if((*type) == String("star")) should be listed in constants.h
     - move deg_to_rad and rad_to_deg to units.h
     - remove DrawPanel::rotation_axis, it is not used
     - bool PositionRectangle::Contains(Position p)  should accept a Position& or Position* rather than a position to be faster -> change all similar methods in other classes to speed up charts

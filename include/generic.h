@@ -61,8 +61,8 @@ template<class T> unsigned int address_position_in_vector(T*, const vector<T>&);
 template<class T> void delete_duplicates(vector<T>*);
 template<class T> bool equal_rel_epsilon_double(const T&, const T&);
 template<class T> void delete_duplicates(vector<T>*, bool (*)(const T&, const T&));
-
-
+wxSize get_size(const String&, wxWindow*);
+wxSize get_size(const String&, wxDC*);
 
 inline double round_with_precision(double, unsigned int);
 

@@ -14,15 +14,6 @@
 #include "gsl_math.h"
 #include "gsl_vector.h"
 
-//I COMMENTED THESE OUT BECAUSE THEY YIELD CONFLICTING DECLARATIONS -> UNCOMMENT THESE AT THE END WHEN YOU WILL BE ABLE TO RENAME CLASS MEMBERS (AND THUS AVOID CONFLICTS WITH BOOST) MORE EASILY BECAUSE THERE WILL BE LESS COMPILATION ERRORS
-//#include <boost/algorithm/string.hpp>
-//#include <boost/algorithm/string/replace.hpp>
-//#include <boost/dll.hpp>
-//#include <boost/filesystem.hpp>
-//#include <boost/date_time.hpp>
-//#include "boost/date_time/local_time/local_time.hpp"
-//I COMMENTED THESE OUT BECAUSE THEY YIELD CONFLICTING DECLARATIONS -> UNCOMMENT THESE AT THE END WHEN YOU WILL BE ABLE TO RENAME CLASS MEMBERS (AND THUS AVOID CONFLICTS WITH BOOST) MORE EASILY BECAUSE THERE WILL BE LESS COMPILATION ERRORS
-
 #include "angle.h"
 #include "constants.h"
 #include "position.h"

@@ -37,7 +37,7 @@ public:
     Chrono TAI_minus_UTC, stopwatch;
     Angle index_error, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
     Length r, height_of_eye;
-    Atmosphere atmosphere;
+    Atmosphere *atmosphere;
     Body body;
     Limb limb;
     // use_stopwatch = 'n' -> time is in format "UTC" time. use_stopwatch  = 'y' -> master clock UTC time + stopwatch reading

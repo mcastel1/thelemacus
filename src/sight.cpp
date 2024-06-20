@@ -83,7 +83,7 @@ bool Sight::compute_DH_refraction(String prefix) {
     /* cout << "Value = " << dH_refraction(1.0, &(*this)); */
     /* cin >> result; */
 
-    status = gsl_integration_qags(&F, atmosphere->h.back().convert(LengthUnit_types[0]).value, atmosphere->h.front().convert(LengthUnit_types[0]).value, 0.0, epsrel, 1000, w, &result, &error);
+    status = gsl_integration_qags(&F, atmosphere->h.back().convert(LengthUnit_types[0]).value, atmosphere->h.front().convert(LengthUnit_types[0]).value, 0.0, epsilon_real, 1000, w, &result, &error);
     //status = GSL_FAILURE
 
     if (status == GSL_SUCCESS) {
@@ -567,7 +567,7 @@ void Sight::compute_DH_parallax_and_limb(String prefix) {
                 x = gsl_root_fsolver_root(s);
                 x_lo = gsl_root_fsolver_x_lower(s);
                 x_hi = gsl_root_fsolver_x_upper(s);
-                status = gsl_root_test_interval(x_lo, x_hi, 0.0, epsrel);
+                status = gsl_root_test_interval(x_lo, x_hi, 0.0, epsilon_real);
                 if (status == GSL_SUCCESS) {
                     cout << new_prefix.value << "Converged.\n";
                 }

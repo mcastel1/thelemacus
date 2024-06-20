@@ -13,6 +13,7 @@
 #include <wx/wfstream.h>
 #include <wx/progdlg.h>
 
+#include "all_routes.h"
 #include "ask_remove_related_route.h"
 #include "ask_remove_related_sight.h"
 #include "bitmap.h"
@@ -36,6 +37,7 @@
 #include "select_route.h"
 #include "show_question_frame.h"
 #include "sight_frame.h"
+#include "some_routes.h"
 #include "unset_idling.h"
 
 

@@ -40,6 +40,7 @@ void MousePositionOnListControl(wxListCtrl*, int*);
 template<class C> void read_from_file(C*, String, String, [[maybe_unused]] String, [[maybe_unused]] String);
 bool check_unsigned_int(string, unsigned int*, bool, unsigned int, unsigned int);
 bool check_int(string, int*, bool, int, int);
+void enter_unsigned_int(unsigned int*, bool, unsigned int, unsigned int, String, String)
 inline double round_with_precision(double, unsigned int);
 
 

@@ -32,6 +32,8 @@
 
 using namespace std;
 
+inline double cot(double);
+inline double csc(double);
 inline double round_with_precision(double, unsigned int);
 
 

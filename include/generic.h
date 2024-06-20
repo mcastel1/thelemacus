@@ -71,6 +71,7 @@ inline bool my_cross(const gsl_vector*, const gsl_vector*, gsl_vector**);
 inline void find_and_replace_case_insensitive(wxComboBox*, wxArrayString, bool*, unsigned int*);
 template<class T> void SetColor(T*);
 template <class T> void Reset(T*);
+wxImage RescaleProportionally(wxImage, const wxSize);
 
 inline double round_with_precision(double, unsigned int);
 

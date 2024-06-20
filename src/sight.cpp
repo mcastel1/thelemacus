@@ -25,6 +25,7 @@ Sight::Sight(void) {
     
     
     atmosphere = new Atmosphere;
+    body = new Body;
     height_of_eye = new Length;
     r = new Length;
     

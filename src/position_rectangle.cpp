@@ -11,7 +11,9 @@
 
 
 PositionRectangle::PositionRectangle(void) {
-
+    
+    p_NW = new Position;
+    p_SE = new Position;
 
 }
 
@@ -19,8 +21,11 @@ PositionRectangle::PositionRectangle(void) {
 //constructor which constructs p_NW and p_SE from p_NW_in and p_SE_in. For this to work, p_NW_in must lie at the NW of p_SE_in
 PositionRectangle::PositionRectangle(Position p_NW_in, Position p_SE_in, [[maybe_unused]] String prefix) {
 
-    p_NW = p_NW_in;
-    p_SE = p_SE_in;
+    p_NW = new Position;
+    p_SE = new Position;
+    
+    (*p_NW) = p_NW_in;
+    (*p_SE) = p_SE_in;
 
 }
 

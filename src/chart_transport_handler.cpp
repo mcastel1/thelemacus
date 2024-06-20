@@ -140,8 +140,8 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     projection_size_start = projection_size;
                     
                     
-                    q_A.NormalizeAndSetMercator(Position(Angle(0.0), chart_frame->parent->rectangle_observer_0->p_NW.phi));
-                    q_B.NormalizeAndSetMercator(Position(Angle(0.0), chart_frame->parent->rectangle_observer_0->p_SE.phi));
+                    q_A.NormalizeAndSetMercator(Position(Angle(0.0), chart_frame->parent->rectangle_observer_0->p_NW->phi));
+                    q_B.NormalizeAndSetMercator(Position(Angle(0.0), chart_frame->parent->rectangle_observer_0->p_SE->phi));
                     (projection_size_end.x) = chart_frame->draw_panel->x_span_0;
                     projection_size_end.y = (q_A.y) - (q_B.y);
                     projection_size_end /= (zoom_factor.value);

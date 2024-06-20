@@ -26,7 +26,7 @@ class PositionRectangle{
 public:
     
     //thw two Positions which constitute the vertices of the rectangle: p is the NW vertex, p_SE is the SE vertex
-    Position p_NW, p_SE;
+    Position *p_NW, *p_SE;
     
     PositionRectangle();
     PositionRectangle(Position, Position, String);

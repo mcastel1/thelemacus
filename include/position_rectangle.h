@@ -30,6 +30,7 @@ public:
     
     PositionRectangle();
     PositionRectangle(Position, Position, String);
+    
     bool Contains(Position);
     bool SizeMercator(PositionProjection*);
     

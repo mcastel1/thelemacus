@@ -83,7 +83,7 @@ bool Sight::compute_DH_refraction(String prefix) {
     /* cout << "Value = " << dH_refraction(1.0, &(*this)); */
     /* cin >> result; */
 
-    status = gsl_integration_qags(&F, atmosphere->h.back().convert(LengthUnit_types[0]).value, atmosphere->h.front().convert(LengthUnit_types[0]).value, 0.0, epsrel, 1000, w, &result, &error);
+    status = gsl_integration_qags(&F, atmosphere->h.back().convert(LengthUnit_types[0]).value, atmosphere->h.front().convert(LengthUnit_types[0]).value, 0.0, epsilon_real, 1000, w, &result, &error);
     //status = GSL_FAILURE
 
     if (status == GSL_SUCCESS) {
@@ -342,9 +342,9 @@ bool Sight::check_time_interval(String prefix) {
         data_file.count_lines(new_prefix);
 
         //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
-        l_min = (int)(L * ((time.MJD) - MJD_min)) - (int)(n_lines_ephemerides / 2.0);
+        l_min = (int)(n_lines_per_day_ephemerides * ((time.MJD) - MJD_min)) - (int)(n_lines_ephemerides / 2.0);
         //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
-        l_max = (int)(L * ((time.MJD) - MJD_min)) + (int)(n_lines_ephemerides / 2.0);
+        l_max = (int)(n_lines_per_day_ephemerides * ((time.MJD) - MJD_min)) + (int)(n_lines_ephemerides / 2.0);
 
         //check whether the lines from l_min to l_max, which are used for the data interpolation, are present in the file where data relative to the body are stored
         if ((l_min >= 0) && (l_max < (int)(data_file.number_of_lines))) {
@@ -567,7 +567,7 @@ void Sight::compute_DH_parallax_and_limb(String prefix) {
                 x = gsl_root_fsolver_root(s);
                 x_lo = gsl_root_fsolver_x_lower(s);
                 x_hi = gsl_root_fsolver_x_upper(s);
-                status = gsl_root_test_interval(x_lo, x_hi, 0.0, epsrel);
+                status = gsl_root_test_interval(x_lo, x_hi, 0.0, epsilon_real);
                 if (status == GSL_SUCCESS) {
                     cout << new_prefix.value << "Converged.\n";
                 }
@@ -642,9 +642,9 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
 
 
         //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
-        l_min = (int)(L * ((time.MJD) - MJD_min)) - (int)(n_lines_ephemerides / 2.0);
+        l_min = (int)(n_lines_per_day_ephemerides * ((time.MJD) - MJD_min)) - (int)(n_lines_ephemerides / 2.0);
         //l_max is the ID of the line in NASA's webgeocalc data files at wihch the interpolation ends
-        l_max = (int)(L * ((time.MJD) - MJD_min)) + (int)(n_lines_ephemerides / 2.0);
+        l_max = (int)(n_lines_per_day_ephemerides * ((time.MJD) - MJD_min)) + (int)(n_lines_ephemerides / 2.0);
 
         /* cout << "\nl_min = " << l_min << "l_max = " << l_max; */
 
@@ -673,7 +673,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 cout << new_prefix.value << line << "\n";
                 line_ins >> dummy >> dummy >> dummy >> GHA_tab[l - l_min] >> d_tab[l - l_min] >> r_tab[l - l_min] >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy >> dummy;
 
-                MJD_tab[l - l_min] = ((double)(l - l_min)) / L;
+                MJD_tab[l - l_min] = ((double)(l - l_min)) / n_lines_per_day_ephemerides;
 
             }
 
@@ -709,7 +709,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 cout << new_prefix.value << MJD_tab[l] << " " << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
             }
 
-            if (gsl_spline_eval_e(interpolation_GHA, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((circle_of_equal_altitude->reference_position->lambda).value)) != GSL_SUCCESS) {
+            if (gsl_spline_eval_e(interpolation_GHA, (time.MJD) - MJD_min - ((double)l_min) / n_lines_per_day_ephemerides, acc, &((circle_of_equal_altitude->reference_position->lambda).value)) != GSL_SUCCESS) {
                 check &= false;
             }
             else {
@@ -719,7 +719,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
             //(circle_of_equal_altitude->reference_position->lambda).set("GHA", gsl_spline_eval(interpolation_GHA, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
 
-            if (gsl_spline_eval_e(interpolation_d, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &(circle_of_equal_altitude->reference_position->phi.value)) != GSL_SUCCESS) {
+            if (gsl_spline_eval_e(interpolation_d, (time.MJD) - MJD_min - ((double)l_min) / n_lines_per_day_ephemerides, acc, &(circle_of_equal_altitude->reference_position->phi.value)) != GSL_SUCCESS) {
                 check &= false;
             }
             else {
@@ -728,7 +728,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
             }
             //(circle_of_equal_altitude->reference_position->phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
-            if (gsl_spline_eval_e(interpolation_r, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &(r->value)) != GSL_SUCCESS) {
+            if (gsl_spline_eval_e(interpolation_r, (time.MJD) - MJD_min - ((double)l_min) / n_lines_per_day_ephemerides, acc, &(r->value)) != GSL_SUCCESS) {
                 check &= false;
             }
             else {
@@ -774,7 +774,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 GHA_tab[l - l_min] = GHA_tab[l - l_min] - 2.0 * M_PI * floor(GHA_tab[l - l_min] / (2.0 * M_PI));
 
 
-                MJD_tab[l - l_min] = ((double)(l - l_min)) / L;
+                MJD_tab[l - l_min] = ((double)(l - l_min)) / n_lines_per_day_ephemerides;
 
             }
 
@@ -800,7 +800,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
             if (gsl_spline_init(interpolation_d, MJD_tab, d_tab, (unsigned int)n_lines_ephemerides) != GSL_SUCCESS) { check &= false; }
 
 
-            if (gsl_spline_eval_e(interpolation_GHA, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((circle_of_equal_altitude->reference_position->lambda).value)) != GSL_SUCCESS) {
+            if (gsl_spline_eval_e(interpolation_GHA, (time.MJD) - MJD_min - ((double)l_min) / n_lines_per_day_ephemerides, acc, &((circle_of_equal_altitude->reference_position->lambda).value)) != GSL_SUCCESS) {
                 check &= false;
             }
             else {
@@ -808,7 +808,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 (circle_of_equal_altitude->reference_position->lambda).print(String("GHA"), new_prefix, cout);
             }
 
-            if (gsl_spline_eval_e(interpolation_d, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &((circle_of_equal_altitude->reference_position->phi).value)) != GSL_SUCCESS) {
+            if (gsl_spline_eval_e(interpolation_d, (time.MJD) - MJD_min - ((double)l_min) / n_lines_per_day_ephemerides, acc, &((circle_of_equal_altitude->reference_position->phi).value)) != GSL_SUCCESS) {
                 check &= false;
             }
             else {

@@ -313,8 +313,8 @@ bool Sight::check_time_interval(String prefix) {
 
     //data_file is the file where that data relative to body are stored: I count the number of lines in this file and store them in data_file.number_of_lines
     temp.clear();
-    if ((*(body.type)) != String("star")) {
-        temp << (wxGetApp().data_directory).value << (body.name->value) << ".txt";
+    if ((*(body->type)) != String("star")) {
+        temp << (wxGetApp().data_directory).value << (body->name->value) << ".txt";
     }
     else {
         temp << (wxGetApp().data_directory).value << "j2000_to_itrf93.txt";
@@ -378,8 +378,8 @@ void Sight::print(String name, String prefix, ostream& ostr) {
 
     ostr << prefix.value << name.value << ":\n";
 
-    body.print(String("body"), new_prefix, ostr);
-    if (body.type->value != "star") {
+    body->print(String("body"), new_prefix, ostr);
+    if (body->type->value != "star") {
         limb.print(String("limb"), new_prefix, ostr);
     }
     H_s.print(String("sextant altitude"), new_prefix, ostr);
@@ -418,7 +418,7 @@ double Sight::rhs_DH_parallax_and_limb(double h, void* sight) {
 
     Sight* a = (Sight*)sight;
 
-    return(-(((*a).H_i).value) + h + asin((((*a).body).radius->value) / sqrt(gsl_pow_2((((*a).r)->value)) + gsl_pow_2((((*a).atmosphere)->earth_radius->value)) - 2.0 * (((*a).r)->value) * (((*a).atmosphere)->earth_radius->value) * sin(h))) - atan(((((*a).atmosphere)->earth_radius->value) * cos(h)) / ((((*a).r)->value) - (((*a).atmosphere)->earth_radius->value) * sin(h))));
+    return(-(((*a).H_i).value) + h + asin((((*a).body)->radius->value) / sqrt(gsl_pow_2((((*a).r)->value)) + gsl_pow_2((((*a).atmosphere)->earth_radius->value)) - 2.0 * (((*a).r)->value) * (((*a).atmosphere)->earth_radius->value) * sin(h))) - atan(((((*a).atmosphere)->earth_radius->value) * cos(h)) / ((((*a).r)->value) - (((*a).atmosphere)->earth_radius->value) * sin(h))));
 
 }
 
@@ -456,7 +456,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
     check &= get_coordinates(circle_of_equal_altitude, new_prefix);
 
     //link the circle of equal altitude (*circle_of_equal_altitude) to sight (*this)
-    temp << body.name->value << " " << time.to_string(display_precision.value, false) << " TAI, " << label.value;
+    temp << body->name->value << " " << time.to_string(display_precision.value, false) << " TAI, " << label.value;
     (circle_of_equal_altitude->label).set(String(""), String(temp.str()), new_prefix);
 
     check &= compute_H_o(new_prefix);
@@ -534,7 +534,7 @@ void Sight::compute_DH_parallax_and_limb(String prefix) {
     H_i = H_a + DH_refraction;
     H_i.print(String("intermediate altitude"), prefix, cout);
 
-    if (body.type->value != "star") {
+    if (body->type->value != "star") {
 
         switch ((limb.value)) {
 
@@ -585,7 +585,7 @@ void Sight::compute_DH_parallax_and_limb(String prefix) {
         case 'l':
         {
             //    H_o.value = (H_i.value) + asin(((atmosphere.earth_radius->value)*cos(H_i)+(body.radius.value))/(r.value));
-            DH_parallax_and_limb.value = asin(((atmosphere->earth_radius->value) * cos(H_i) + (body.radius->value)) / (r->value));
+            DH_parallax_and_limb.value = asin(((atmosphere->earth_radius->value) * cos(H_i) + (body->radius->value)) / (r->value));
             break;
         }
         case 'c':
@@ -627,8 +627,8 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
 
     cout << prefix.value << "Fetching ephemerides' data ...\n";
 
-    if ((body.type->value) != "star") {
-        filename << (wxGetApp().data_directory).value << body.name->value << ".txt";
+    if ((body->type->value) != "star") {
+        filename << (wxGetApp().data_directory).value << body->name->value << ".txt";
     }
     else {
         filename << (wxGetApp().data_directory).value << "j2000_to_itrf93.txt";
@@ -655,7 +655,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
         }
 
 
-        if ((body.type->value) != "star") {
+        if ((body->type->value) != "star") {
             //in this case I am getting the coordinate of a body with a non-zero size
 
             //if the body is not a star
@@ -765,7 +765,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 phi2 *= k;
                 phi3 *= k;
 
-                d_tab[l - l_min] = asin(cos(phi2) * sin((body.d->value)) - cos((body.d->value)) * cos(phi1) * sin((body.RA->value)) * sin(phi2) + cos((body.RA->value)) * cos((body.d->value)) * sin(phi1) * sin(phi2));
+                d_tab[l - l_min] = asin(cos(phi2) * sin((body->d->value)) - cos((body->d->value)) * cos(phi1) * sin((body->RA->value)) * sin(phi2) + cos((body->RA->value)) * cos((body->d->value)) * sin(phi1) * sin(phi2));
 
                 GHA_tab[l - l_min] = atan((-cos(phi3) * sin((body.d->value)) * sin(phi2) - cos((body.RA->value)) * cos((body.d->value)) * (-cos(phi2) * cos(phi3) * sin(phi1) - cos(phi1) * sin(phi3)) - cos((body.d->value)) * sin((body.RA->value)) * (cos(phi1) * cos(phi2) * cos(phi3) - sin(phi1) * sin(phi3))) / (sin((body.d->value)) * sin(phi2) * sin(phi3) + cos((body.d->value)) * sin((body.RA->value)) * (cos(phi3) * sin(phi1) + cos(phi1) * cos(phi2) * sin(phi3)) + cos((body.RA->value)) * cos((body.d->value)) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))));
                 if ((sin((body.d->value)) * sin(phi2) * sin(phi3) + cos((body.d->value)) * sin((body.RA->value)) * (cos(phi3) * sin(phi1) + cos(phi1) * cos(phi2) * sin(phi3)) + cos((body.RA->value)) * cos((body.d->value)) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))) < 0.0) {

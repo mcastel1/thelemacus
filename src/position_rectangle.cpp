@@ -35,10 +35,10 @@ bool PositionRectangle::Contains(Position p) {
 
     bool check_lambda;
 
-    if ((p_NW.lambda) > (p_SE.lambda)) {
+    if ((p_NW->lambda) > (p_SE->lambda)) {
         //'normal' configuration where *this does not encompass the anti-greenwich meridian
 
-        check_lambda = (((p.lambda) < (p_NW.lambda)) && ((p.lambda) > (p_SE.lambda)));
+        check_lambda = (((p.lambda) < (p_NW->lambda)) && ((p.lambda) > (p_SE->lambda)));
 
     }
     else {

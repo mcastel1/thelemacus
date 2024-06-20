@@ -119,6 +119,7 @@
   - a Position a and a Position b are converted into Position* a and Position*b by the restructuring -> a = b sets the adress of a equal to that of b -> disaster
 
  ********** THINGS TO FIX ***********
+    - move deg_to_rad and rad_to_deg to units.h
     - remove DrawPanel::rotation_axis, it is not used
     - bool PositionRectangle::Contains(Position p)  should accept a Position& or Position* rather than a position to be faster -> change all similar methods in other classes to speed up charts
     - error '/Applications/boost_1_83_0/boost/type_traits/is_array.hpp:27:35 Expected ',' or '>' in template-parameter-list is because the symbol 'N' in constants.h is also used by boost library -> use  a different symbol

@@ -48,8 +48,6 @@
 
 using namespace std;
 
-#include "lib.h"
-#include "int.h"
 
 
 

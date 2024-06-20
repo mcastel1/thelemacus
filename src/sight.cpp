@@ -28,7 +28,7 @@ Sight::Sight(void) {
     height_of_eye = new Length;
     
     //height_of_eye is expressed in meters -> set its unit accordingly
-    height_of_eye.unit.set(LengthUnit_types[1]);
+    height_of_eye->unit.set(LengthUnit_types[1]);
 
     //this is the list of all the possible items that a Sight object can have: some Sight objects may have an item list with fewer elements than all_items. For instance, a star Sight does not have the "limb" element.
     all_items.push_back(String("body"));
@@ -59,7 +59,7 @@ Sight::Sight(void) {
 void Sight::compute_DH_dip(String prefix) {
 
     DH_dip.set(String("Dip correction"),
-               -acos(atmosphere->n(Length(0.0)) / atmosphere->n(height_of_eye)
+               -acos(atmosphere->n(Length(0.0)) / atmosphere->n((*height_of_eye))
                      * ((atmosphere->earth_radius->convert(LengthUnit_types[0]).value) / (((*(atmosphere->earth_radius)) + height_of_eye).convert(LengthUnit_types[0]).value) )
               ), prefix);
 

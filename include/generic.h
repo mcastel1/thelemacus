@@ -55,7 +55,12 @@ void enter_unsigned_int(unsigned int*, bool, unsigned int, unsigned int, String,
 bool check_double(string, double*, bool, double, double);
 void enter_double(double*, bool, double, double, String, String);
 inline double round_with_precision(double, unsigned int);
-
+template<class T> unsigned int position_in_vector(T, const vector<T>&);
+template<class A, class B> vector<B> convert_vector(const vector<A>&);
+template<class T> unsigned int address_position_in_vector(T*, const vector<T>&);
+template<class T> void delete_duplicates(vector<T>*);
+template<class T> bool equal_rel_epsilon_double(const T&, const T&);
+template<class T> void delete_duplicates(vector<T>*, bool (*)(const T&, const T&));
 
 
 

@@ -7,6 +7,11 @@
 
 #include "my_app.h"
 
+#include <boost/dll.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/date_time.hpp>
+
+
 #include "close_app.h"
 #include "close_frame.h"
 #include "constants.h"
@@ -14,6 +19,8 @@
 #include "question_frame.h"
 #include "show_all.h"
 #include "show_question_frame.h"
+
+
 
 
 //this method  is executed reguarly over time, to check whether to switch between light and dark mode

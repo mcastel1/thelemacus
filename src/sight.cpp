@@ -683,8 +683,8 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
             for (l = 0; l < n_lines_ephemerides; l++) {
 
                 //add minus sign because in JPL convention longitude is positive when it is E
-                GHA_tab[l] *= (-1.0) * k;
-                d_tab[l] *= k;
+                GHA_tab[l] *= (-1.0) * deg_to_rad;
+                d_tab[l] *= deg_to_rad;
                 r_tab[l] /= nm_to_km;
 
             }
@@ -761,9 +761,9 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 cout << new_prefix.value << line << "\n";
                 line_ins >> dummy >> dummy >> dummy >> phi3 >> phi2 >> phi1;
 
-                phi1 *= k;
-                phi2 *= k;
-                phi3 *= k;
+                phi1 *= deg_to_rad;
+                phi2 *= deg_to_rad;
+                phi3 *= deg_to_rad;
 
                 d_tab[l - l_min] = asin(cos(phi2) * sin((body->d->value)) - cos((body->d->value)) * cos(phi1) * sin((body->RA->value)) * sin(phi2) + cos((body->RA->value)) * cos((body->d->value)) * sin(phi1) * sin(phi2));
 

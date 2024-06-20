@@ -1700,9 +1700,9 @@ void ListFrame::LoadCoastLineData(String prefix) {
                     coastline_polygons_Mercator.back().push_back(p_Mercator);
 
 
-                    if ((floor(K * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat) >=0 ) && (floor(K * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat) < coastline_polygons_map.size())) {
+                    if ((floor(rad_to_deg * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat) >=0 ) && (floor(rad_to_deg * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat) < coastline_polygons_map.size())) {
                         // polygon #i contains the point p_Position that falls within lat/long K*(p_Position.phi.normalize_pm_pi_ret().value) , floor(K*(p_Position.lambda.value)) -> I add i to coastline_polygons_map[floor(K*(p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat)][floor(K*(p_Position.lambda.value))]
-                        coastline_polygons_map[floor(K * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat)][floor(K * (p_Position.lambda.value))].push_back(i);
+                        coastline_polygons_map[floor(rad_to_deg * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat)][floor(rad_to_deg * (p_Position.lambda.value))].push_back(i);
                         n_all_coastline_points++;
 
                     }

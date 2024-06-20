@@ -28,7 +28,7 @@ Angle::Angle(const double& x) {
 //constructor of Angle, which sets the value of the angle to deg° min'
 Angle::Angle(const unsigned int& deg, const double& min) {
 
-    value = k * (((double)deg) + min / 60.0);
+    value = deg_to_rad * (((double)deg) + min / 60.0);
     normalize();
 
 }
@@ -114,7 +114,7 @@ template<class S> void Angle::read_from_stream(String name, S* input_stream, boo
     pos2 = line.find("° ");
     pos3 = line.find("'");
 
-    value = k * (stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str()) + stod(line.substr(pos2 + 2, pos3 - (pos2 + 2))) / 60.0);
+    value = deg_to_rad * (stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str()) + stod(line.substr(pos2 + 2, pos3 - (pos2 + 2))) / 60.0);
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
@@ -283,7 +283,7 @@ inline Angle Angle::normalize_pm_pi_ret(void) {
 void Angle::print(String name, String prefix, ostream& ostr) {
 
     normalize();
-    ostr << prefix.value << name.value << " = " << floor(K * value - 360.0 * floor(K * value / 360.0)) << (wxGetApp().degree_symbol.value) << " " << (K * value - 360.0 * floor(K * value / 360.0) - floor(K * value - 360.0 * floor(K * value / 360.0))) * 60.0 << "'\n";
+    ostr << prefix.value << name.value << " = " << floor(rad_to_deg * value - 360.0 * floor(rad_to_deg * value / 360.0)) << (wxGetApp().degree_symbol.value) << " " << (rad_to_deg * value - 360.0 * floor(rad_to_deg * value / 360.0) - floor(rad_to_deg * value - 360.0 * floor(rad_to_deg * value / 360.0))) * 60.0 << "'\n";
 
 }
 
@@ -300,8 +300,8 @@ inline bool Angle::is_zero_epsilon_double(void){
 void Angle::to_deg_min(unsigned int* deg, double* min) {
 
     normalize();
-    (*deg) = (unsigned int)floor(K * value - 360.0 * floor(K * value / 360.0));
-    (*min) = (K * value - 360.0 * floor(K * value / 360.0) - floor(K * value - 360.0 * floor(K * value / 360.0))) * 60.0;
+    (*deg) = (unsigned int)floor(rad_to_deg * value - 360.0 * floor(rad_to_deg * value / 360.0));
+    (*min) = (rad_to_deg * value - 360.0 * floor(rad_to_deg * value / 360.0) - floor(rad_to_deg * value - 360.0 * floor(rad_to_deg * value / 360.0))) * 60.0;
 
 }
 
@@ -322,7 +322,7 @@ void Angle::to_deg_min(unsigned int* deg, double* min, unsigned int precision) {
 //convert the angle stored in degrees and minutes format in deg an min in to (*this).vaule
 void Angle::from_sign_deg_min(char sign, unsigned int deg, double min) {
 
-    value = k * (((double)deg) + min / 60.0);
+    value = deg_to_rad * (((double)deg) + min / 60.0);
     if (sign == '-') { value *= -1.0; }
 
     normalize();
@@ -352,7 +352,7 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces) {
 
     //write the arcdegree part of the Angle into deg
     deg.str("");
-    i = floor(K * value_temp);
+    i = floor(rad_to_deg * value_temp);
     if (add_spaces) {
         if (i < 10) {
             deg << "  ";
@@ -369,7 +369,7 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces) {
     min.str("");
     
     //round up to the precision `precision`
-    x = round_with_precision((K * value_temp - floor(K * value_temp)) * 60.0, precision);
+    x = round_with_precision((rad_to_deg * value_temp - floor(rad_to_deg * value_temp)) * 60.0, precision);
     //if, after the round up, x is equal to 60.0 (exactly), I set x to 0.0 and increase the defrees by one: in this way, I will never have weird angle vlaues such as 1 degree 60.0'
     if(x == 60.0){
         x = 0.0;
@@ -425,7 +425,7 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
 
     if (mode == String("")) {
         //in this case, I print out the angle in the format >=0° and <360°
-        output << round(K * value) << wxGetApp().degree_symbol.value;
+        output << round(rad_to_deg * value) << wxGetApp().degree_symbol.value;
 
     }
     else {
@@ -442,12 +442,12 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
 
                     if (value < M_PI_2) {
 
-                        output << round(fabs(K * value)) << wxGetApp().degree_symbol.value << " N";
+                        output << round(fabs(rad_to_deg * value)) << wxGetApp().degree_symbol.value << " N";
 
                     }
                     else {
 
-                        output << round(fabs(K * (M_PI - value))) << wxGetApp().degree_symbol.value << " N";
+                        output << round(fabs(rad_to_deg * (M_PI - value))) << wxGetApp().degree_symbol.value << " N";
 
                     }
 
@@ -456,12 +456,12 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
 
                     if (value < 3.0 * M_PI_2) {
 
-                        output << round(fabs(K * (-M_PI + value))) << wxGetApp().degree_symbol.value << " S";
+                        output << round(fabs(rad_to_deg * (-M_PI + value))) << wxGetApp().degree_symbol.value << " S";
 
                     }
                     else {
 
-                        output << round(fabs(K * (2.0 * M_PI - value))) << wxGetApp().degree_symbol.value << " S";
+                        output << round(fabs(rad_to_deg * (2.0 * M_PI - value))) << wxGetApp().degree_symbol.value << " S";
 
                     }
 
@@ -472,7 +472,7 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
                 //in this case, I output the sign of the angle in the East/West format (West = +, East = -)
 
                 if (value > M_PI) { value -= 2.0 * M_PI; }
-                output << round(fabs(K * value)) << wxGetApp().degree_symbol.value;
+                output << round(fabs(rad_to_deg * value)) << wxGetApp().degree_symbol.value;
 
                 if (value > 0.0) { output << " W"; }
                 else { output << " E"; }
@@ -506,7 +506,7 @@ string Angle::min_to_string(String mode, unsigned int precision) {
         if (value > M_PI) { value -= 2.0 * M_PI; }
     }
 
-    output << (fabs(K * value) - floor(fabs(K * value))) * 60.0 << "'";
+    output << (fabs(rad_to_deg * value) - floor(fabs(rad_to_deg * value))) * 60.0 << "'";
 
     return (output.str().c_str());
 

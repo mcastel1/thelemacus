@@ -16,10 +16,10 @@ Double /*the ratio between the width (height) of the plot area and the width (he
 //maximal and minimal latitude of the points in file path_file_coastlines
 Angle max_lat, min_lat;
 
-#define k (2.0*M_PI/360.0)
-#define K (1.0/k)
+#define deg_to_rad (2.0*M_PI/360.0)
+#define rad_to_deg (1.0/deg_to_rad)
 //one arcminute in units of radians
-#define arcmin_radians (k/60.0)
+#define arcmin_radians (deg_to_rad/60.0)
 //one tenth of arcminute in units of radians
 #define tenth_arcmin_radians (arcmin_radians/10.0)
 //MJD_min corresponds to Jan 1 2016 00-00-26.00 TAI, i.e., Jan 1 2016 00-00-00.00 UTC
@@ -58,10 +58,10 @@ Angle max_lat, min_lat;
 #define LengthUnit_types (vector<String> {String("nm"), String("m"), String("ft")})
 #define SpeedUnit_types (vector<String> {String("kt"), String("km/h"), String("m/s")})
 #define ListControl_types (vector<String> {String("sight"), String("position"), String("route")})
-#define floor_min_lat (floor(K*((min_lat.normalize_pm_pi_ret()).value)))
-#define floor_max_lat (floor(K*((max_lat.normalize_pm_pi_ret()).value)))
-#define ceil_min_lat (ceil(K*((min_lat.normalize_pm_pi_ret()).value)))
-#define ceil_max_lat (ceil(K*((max_lat.normalize_pm_pi_ret()).value)))
+#define floor_min_lat (floor(rad_to_deg*((min_lat.normalize_pm_pi_ret()).value)))
+#define floor_max_lat (floor(rad_to_deg*((max_lat.normalize_pm_pi_ret()).value)))
+#define ceil_min_lat (ceil(rad_to_deg*((min_lat.normalize_pm_pi_ret()).value)))
+#define ceil_max_lat (ceil(rad_to_deg*((max_lat.normalize_pm_pi_ret()).value)))
 //latitude span
 #define outfile_precision 16
 //#define wxDEBUG_LEVEL 0

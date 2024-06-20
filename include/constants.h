@@ -58,10 +58,10 @@ double rad_to_deg = (1.0/deg_to_rad);
 #define LengthUnit_types (vector<String> {String("nm"), String("m"), String("ft")})
 #define SpeedUnit_types (vector<String> {String("kt"), String("km/h"), String("m/s")})
 #define ListControl_types (vector<String> {String("sight"), String("position"), String("route")})
-#define floor_min_lat (floor(K*((min_lat.normalize_pm_pi_ret()).value)))
-#define floor_max_lat (floor(K*((max_lat.normalize_pm_pi_ret()).value)))
-#define ceil_min_lat (ceil(K*((min_lat.normalize_pm_pi_ret()).value)))
-#define ceil_max_lat (ceil(K*((max_lat.normalize_pm_pi_ret()).value)))
+#define floor_min_lat (floor(rad_to_deg*((min_lat.normalize_pm_pi_ret()).value)))
+#define floor_max_lat (floor(rad_to_deg*((max_lat.normalize_pm_pi_ret()).value)))
+#define ceil_min_lat (ceil(rad_to_deg*((min_lat.normalize_pm_pi_ret()).value)))
+#define ceil_max_lat (ceil(rad_to_deg*((max_lat.normalize_pm_pi_ret()).value)))
 //latitude span
 #define outfile_precision 16
 //#define wxDEBUG_LEVEL 0

@@ -264,30 +264,6 @@ void enter_unsigned_int(unsigned int* i, bool check_interval, unsigned int min, 
 
 
 
-//this function asks the user to enter an  int from keyboard and checks whether the entered value is an  int and, if check_interval = true, that the entered value lies in [min, sup)
-void enter_int(int* i, bool check_interval, int min, int sup, String name, String prefix){
-    
-    string s;
-    bool check;
-    
-    do{
-        
-        s.clear();
-        
-        cout << prefix.value << "Enter " << name.value << ":";
-        getline(cin >> ws, s);
-        
-        check = check_int(s, i, check_interval, min, sup);
-        
-        if(!check){
-            
-            cout << prefix.value << RED << "\tEntered value is not valid!\n" << RESET;
-            
-        }
-        
-    }while(!check);
-    
-}
 
 
 //this function checks whether the double in string s is formatted correctly and, if check_interval = true, it also checks whether the this double lies in [min, sup). If x != NULL and the check is ok, it also writes the value of the double read from s into (*x)

@@ -34,7 +34,7 @@ public:
 
     wxTimer* timer;
     //the position during the transport process at 'time' t
-    Position start;
+    Position *start;
     //transporting_route is the Route used to do the transport. At each step of the transport, transporting_route_temp is set to be a part of the full Route (transporting_route) used to do the transport
     Route transporting_route, transporting_route_temp;
 

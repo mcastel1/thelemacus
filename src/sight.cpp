@@ -246,8 +246,8 @@ template<class S> bool Sight::read_from_stream([[maybe_unused]] String name, S* 
 
     additional_items = 0;
 
-    body.read_from_stream<S>(String("body"), input_stream, false, new_prefix);
-    if (body.type->value != "star") {
+    body->read_from_stream<S>(String("body"), input_stream, false, new_prefix);
+    if (body->type->value != "star") {
         items.insert(items.begin() + 1 + (additional_items++), all_items[1]);
         limb.read_from_stream<S>(String("limb"), input_stream, false, new_prefix);
     }

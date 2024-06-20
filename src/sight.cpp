@@ -112,10 +112,10 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
     listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (int)(i + 1)));
 
     //set body column
-    listcontrol->SetItem(i, j++, wxString(body.name->value));
+    listcontrol->SetItem(i, j++, wxString(body->name->value));
 
     //set limb column
-    if (((*(body.name)) == String("sun")) || ((*(body.name)) == String("moon"))) {
+    if (((*(body->name)) == String("sun")) || ((*(body->name)) == String("moon"))) {
 
         if (wxString(limb.value) == 'u') { listcontrol->SetItem(i, j++, wxString((Limb_types[0].value))); }
         if (wxString(limb.value) == 'l') { listcontrol->SetItem(i, j++, wxString((Limb_types[2].value))); }

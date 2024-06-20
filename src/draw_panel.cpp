@@ -2629,7 +2629,7 @@ inline bool DrawPanel::GeoTo3D(const Position& p, PositionProjection* q, bool wr
 //    p.getCartesian(String(""), &r, String(""));
     r->setPosition(&p);
 
-    return CartesianTo3D(r, q, write);
+    return CartesianTo3D((*r), q, write);
    
 }
 

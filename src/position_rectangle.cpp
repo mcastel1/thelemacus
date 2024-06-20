@@ -49,8 +49,8 @@ bool PositionRectangle::Contains(Position p) {
     }
 
     return(check_lambda &&
-        (((p.phi).normalize_pm_pi_ret() < ((p_NW.phi).normalize_pm_pi_ret())) &&
-            ((p.phi).normalize_pm_pi_ret() > ((p_SE.phi).normalize_pm_pi_ret()))));
+           (((p.phi).normalize_pm_pi_ret() < ((p_NW->phi).normalize_pm_pi_ret())) &&
+            ((p.phi).normalize_pm_pi_ret() > ((p_SE->phi).normalize_pm_pi_ret()))));
 
 }
 

@@ -1957,3 +1957,22 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
     
     
 }
+
+
+//compute the astronomical position and updated all the GUI fields in set() and re-draws everything
+template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event) {
+    
+    ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>* print_question;
+    AllRoutes* all_routes;
+    SomeRoutes* some_routes;
+    
+    all_routes = new AllRoutes(this);
+    some_routes = new SomeRoutes(this);
+    print_question = new ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>(this, all_routes, some_routes, unset_idling);
+    
+    selecting_route_for_position = true;
+    
+    //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
+    print_question->SetAndCall(NULL, String("You want to determine the astronomical position"), String("With what route do you want to do it?"), String("All routes"), String("Some routes"));
+    
+}

@@ -18,6 +18,7 @@
 
 #include "draw_panel.h"
 #include "constants.h"
+#include "generic.h"
 #include "length_unit_field.h"
 #include "route_type.h"
 

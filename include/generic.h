@@ -23,6 +23,7 @@
 //#include "boost/date_time/local_time/local_time.hpp"
 //I COMMENTED THESE OUT BECAUSE THEY YIELD CONFLICTING DECLARATIONS -> UNCOMMENT THESE AT THE END WHEN YOU WILL BE ABLE TO RENAME CLASS MEMBERS (AND THUS AVOID CONFLICTS WITH BOOST) MORE EASILY BECAUSE THERE WILL BE LESS COMPILATION ERRORS
 
+#include "angle.h"
 #include "constants.h"
 #include "position.h"
 #include "double.h"
@@ -33,8 +34,17 @@
 
 using namespace std;
 
+
 inline double cot(double);
 inline double csc(double);
+inline double sin(const Angle&);
+inline double asin(const Double&);
+inline double cos(const Angle&);
+inline double tan(const Angle&);
+inline double csc(const Angle&);
+inline double sec(const Angle&);
+inline double cot(const Angle&);
+inline double acos(const Double&);
 inline double atan(double, double);
 inline int floor_exp(double);
 void MousePositionOnListControl(wxListCtrl*, int*);
@@ -44,6 +54,7 @@ bool check_int(string, int*, bool, int, int);
 void enter_unsigned_int(unsigned int*, bool, unsigned int, unsigned int, String, String);
 bool check_double(string, double*, bool, double, double);
 void enter_double(double*, bool, double, double, String, String);
+inline double round_with_precision(double, unsigned int);
 
 
 

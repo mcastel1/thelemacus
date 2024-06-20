@@ -95,11 +95,11 @@ void Body::print(String name_in, String prefix, ostream& ostr) {
     ostr << new_prefix.value << "Type = " << type->value << "\n";
     ostr << new_prefix.value << "Name = " << name->value << "\n";
 
-    if ((*type) == String("star")) {
+//    if ((*type) == String("star")) {
+    if((*type) == String("star")){
         RA->print(String("Right ascension"), new_prefix, ostr);
         d->print(String("Declination"), new_prefix, ostr);
-    }
-    else {
+    }else{
         radius->print(String("Radius"), new_prefix, ostr);
     }
 

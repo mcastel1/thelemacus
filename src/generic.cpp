@@ -733,14 +733,14 @@ template<class S> void read_list_from_stream(String name, S* input_stream, bool 
 //this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
 inline double lambda_mercator(double x){
     
-    return (-x*K - 360.0*floor((x-(-M_PI))/(2.0*M_PI)));
+    return (-x*rad_to_deg - 360.0*floor((x-(-M_PI))/(2.0*M_PI)));
     
 }
 
 //this function returns the latitude value (expressed in degrees) of the inverse spherical Mercator projection from the rectangular y value
 inline double phi_mercator(double y){
     
-    return(K*atan(sinh(y)));
+    return(rad_to_deg*atan(sinh(y)));
     
 }
 

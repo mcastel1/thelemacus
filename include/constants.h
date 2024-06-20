@@ -16,10 +16,8 @@ Double /*the ratio between the width (height) of the plot area and the width (he
 //maximal and minimal latitude of the points in file path_file_coastlines
 Angle max_lat, min_lat;
 
-//#define k (2.0*M_PI/360.0)
 double deg_to_rad = 2.0*M_PI/360.0;
-//#define K (1.0/k)
-double K = (1.0/deg_to_rad);
+double rad_to_deg = (1.0/deg_to_rad);
 //one arcminute in units of radians
 #define arcmin_radians (deg_to_rad/60.0)
 //one tenth of arcminute in units of radians

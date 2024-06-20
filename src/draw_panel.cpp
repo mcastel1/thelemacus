@@ -1024,7 +1024,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
     }
 
 
-    if (/*If this condition is true, then angle_label.value*K is an integer multiple of one degree*/fabs(K * (angle_label.value) - round(K * (angle_label.value))) < epsilon_double) {
+    if (/*If this condition is true, then angle_label.value*K is an integer multiple of one degree*/fabs(rad_to_deg * (angle_label.value) - round(rad_to_deg * (angle_label.value))) < epsilon_double) {
         //in this case, (angle_label.value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
 
         s << angle_label.deg_to_string(mode, (precision.value));
@@ -1033,7 +1033,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
     else {
 
         //in this case, delta  is not an integer multiple of a degree. However, (angle_label.value) may still be or not be a multiple integer of a degree
-        if (deg_to_rad * fabs(K * (angle_label.value) - ((double)round(K * (angle_label.value)))) < delta / 2.0) {
+        if (deg_to_rad * fabs(rad_to_deg * (angle_label.value) - ((double)round(rad_to_deg * (angle_label.value)))) < delta / 2.0) {
             //in this case, (angle_label.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
 
             s << angle_label.deg_to_string(mode, (precision.value));
@@ -1043,7 +1043,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
             //in this case, (angle_label.value) deos not coincide with an integer mulitple of a degree: I print out its arcminute part only
 
             //                if(ceil((K*((*(*(parent->phi_max))).value)))  - floor((K*((*(*(parent->phi_min))).value))) != 1){
-            if (ceil((K * ((max.normalize_pm_pi_ret()).value))) - floor((K * ((min.normalize_pm_pi_ret()).value))) != 1) {
+            if (ceil((rad_to_deg * ((max.normalize_pm_pi_ret()).value))) - floor((rad_to_deg * ((min.normalize_pm_pi_ret()).value))) != 1) {
                 //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
 
                 s << angle_label.min_to_string(mode, (precision.value));
@@ -1359,7 +1359,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     for (size_label_horizontal = 0,
         first_label = true,
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-        (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * K * 60)))),
+        (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
         ((q.phi).value) = (phi_start.value),
         (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
         ((q.phi).value) < (phi_end.value);
@@ -1562,7 +1562,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //compute labels on parallels
     for (first_label = true,
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-        (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * K * 60)))),
+        (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
         ((q.phi).value) = (phi_start.value),
         (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
         ((q.phi).value) < (phi_end.value);
@@ -1576,7 +1576,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //compute labels on meridians
     for (first_label = true,
         //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-        (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_lambda * K * 60)))),
+        (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))),
         (q.lambda.value) = (lambda_start.value),
         (q.phi) = (*(parent->phi_min)) + epsilon_double;
         (q.lambda.value) < (lambda_end.value);
@@ -1891,7 +1891,7 @@ inline void DrawPanel::PreRender3D(void) {
     for (size_label_horizontal = 0,
         first_label = true,
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-        (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * K * 60)))),
+        (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
         ((q.phi).value) = (phi_start.value),
         (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
         ((q.phi).value) < (phi_end.value);
@@ -1924,7 +1924,7 @@ inline void DrawPanel::PreRender3D(void) {
     //compute labels on parallels
     for (first_label = true,
         //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-        (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * K * 60)))),
+        (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
          (q.phi.value) = floor((circle_observer->reference_position->phi.normalize_pm_pi_ret().value - circle_observer->omega.value) / delta_phi) * delta_phi,
         (q.lambda) = lambda_middle;
          (q.phi.value) < (circle_observer->reference_position->phi.normalize_pm_pi_ret().value) + (circle_observer->omega.value);
@@ -1938,7 +1938,7 @@ inline void DrawPanel::PreRender3D(void) {
     //compute labels on meridians
     for (first_label = true,
         //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-        (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_lambda * K * 60)))),
+        (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))),
         ((q.lambda).value) = (lambda_start.value),
         (q.phi) = phi_middle;
         ((q.lambda).value) < (lambda_end.value);

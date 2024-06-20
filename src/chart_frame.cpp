@@ -756,7 +756,7 @@ void ChartFrame::UpdateSliderLabel_Mercator(void) {
     
     //compute the chart_scale factor
     scale_factor.set( ((unsigned int)(
-                   /*length of the NS edge of the plot area as measured on the surface of the earth, in  [nm]*/(((phi_max->normalize_pm_pi_ret().value) - (phi_min->normalize_pm_pi_ret().value)) * K * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in [nm]*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * inch_to_km/nm_to_km ) )) );
+                   /*length of the NS edge of the plot area as measured on the surface of the earth, in  [nm]*/(((phi_max->normalize_pm_pi_ret().value) - (phi_min->normalize_pm_pi_ret().value)) * rad_to_deg * 60.0) / ( /*length of the NS edge of the plot area as shown on the screen of the computer, in [nm]*/((double)(draw_panel->size_plot_area.y))/((double)(wxGetApp().display.GetPPI().x)) * inch_to_km/nm_to_km ) )) );
     
     
     scale_factor.my_round(display_precision);
@@ -1070,8 +1070,8 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 
     //set i_min/max, j_min/max
-    i_min = floor(K * (phi_min->normalize_pm_pi_ret().value));
-    i_max = ceil(K * (phi_max->normalize_pm_pi_ret().value));
+    i_min = floor(rad_to_deg * (phi_min->normalize_pm_pi_ret().value));
+    i_max = ceil(rad_to_deg * (phi_max->normalize_pm_pi_ret().value));
 
     if (((*lambda_min) == 0.0) && ((*lambda_max) == 0.0)) {
         //in this case,Set_lambda_phi_min_max found out that circle_observer spans all longitudes, thus I set
@@ -1085,14 +1085,14 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
         if (((*lambda_min) < M_PI) && ((*lambda_max) > M_PI)) {
 
-            j_min = floor(K * ((*lambda_max).value));
-            j_max = 360 + ceil(K * ((*lambda_min).value));
+            j_min = floor(rad_to_deg * ((*lambda_max).value));
+            j_max = 360 + ceil(rad_to_deg * ((*lambda_min).value));
 
         }
         else {
 
-            j_min = floor(K * ((*lambda_max).value));
-            j_max = ceil(K * ((*lambda_min).value));
+            j_min = floor(rad_to_deg * ((*lambda_max).value));
+            j_max = ceil(rad_to_deg * ((*lambda_min).value));
 
         }
 
@@ -1197,28 +1197,28 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //
     if (((*lambda_min) < M_PI) && ((*lambda_max) > M_PI)) {
 
-        j_min = floor(K * (lambda_max->value));
-        j_max = ceil(K * ((lambda_min->value) + 2.0*M_PI));
+        j_min = floor(rad_to_deg * (lambda_max->value));
+        j_max = ceil(rad_to_deg * ((lambda_min->value) + 2.0*M_PI));
 
     }else {
 
         if ((*lambda_min) > (*lambda_max)) {
 
-            j_min = floor(K * (lambda_max->value));
-            j_max = ceil(K * (lambda_min->value));
+            j_min = floor(rad_to_deg * (lambda_max->value));
+            j_max = ceil(rad_to_deg * (lambda_min->value));
 
         }
         else {
 
-            j_min = floor(K * (lambda_max->value));
-            j_max = ceil(K * ((lambda_min->value) + 2.0*M_PI));
+            j_min = floor(rad_to_deg * (lambda_max->value));
+            j_max = ceil(rad_to_deg * ((lambda_min->value) + 2.0*M_PI));
 
         }
 
     }
 
-    i_min = floor(K * (phi_min->normalize_pm_pi_ret().value));
-    i_max = floor(K * (phi_max->normalize_pm_pi_ret().value));
+    i_min = floor(rad_to_deg * (phi_min->normalize_pm_pi_ret().value));
+    i_max = floor(rad_to_deg * (phi_max->normalize_pm_pi_ret().value));
 
 
     if ((parent->show_coastlines) == Answer('y', String(""))) {

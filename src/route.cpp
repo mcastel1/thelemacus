@@ -1963,7 +1963,7 @@ bool Route::compute_end(Length d, [[maybe_unused]] String prefix) {
     
     set_length_from_time_speed();
 
-    if ((type == (Route_types[2])) || (d <= length)) {
+    if ((type == (Route_types[2])) || (d <= (*length))) {
 
         Length l_saved;
 

@@ -14,6 +14,8 @@
     #include "wx/wx.h"
 #endif
 
+#include "route.h"
+
 
 using namespace std;
 

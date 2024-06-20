@@ -63,8 +63,8 @@ bool PositionRectangle::SizeMercator(PositionProjection* p){
         Position p_NE, p_SW;
         PositionProjection q_A, q_B;
 
-        p_NE = Position(p_SE.lambda, p_NW.phi);
-        p_SW = Position(p_NW.lambda, p_SE.phi);
+        p_NE = Position(p_SE->lambda, p_NW->phi);
+        p_SW = Position(p_NW->lambda, p_SE->phi);
         q_A.NormalizeAndSetMercator(p_NE);
         q_B.NormalizeAndSetMercator(p_SW);
         

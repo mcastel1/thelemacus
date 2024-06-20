@@ -125,7 +125,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     
     if (sight_in == NULL) {
         //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye DynamicLengthField with this value, so the user won't have to enter the same value all the time
-        sight->height_of_eye.read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String("R"), String(""));
+        sight->height_of_eye->read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String("R"), String(""));
         height_of_eye->set();
 
     }

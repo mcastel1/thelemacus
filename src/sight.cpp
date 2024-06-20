@@ -139,7 +139,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
     if (artificial_horizon.value == 'n') {
 
         //write the height_of_eye with its original unit of measure
-        listcontrol->SetItem(i, j++, wxString(height_of_eye.to_string( (display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(height_of_eye->to_string( (display_precision.value))));
 
     }
     else {
@@ -384,7 +384,7 @@ void Sight::print(String name, String prefix, ostream& ostr) {
     index_error.print(String("index error"), new_prefix, ostr);
     artificial_horizon.print(String("artificial horizon"), new_prefix, ostr);
     if (artificial_horizon == Answer('n', new_prefix)) {
-        height_of_eye.print(String("height of eye"), new_prefix, ostr);
+        height_of_eye->print(String("height of eye"), new_prefix, ostr);
     }
     master_clock_date_and_hour.print(String("master-clock date and hour of sight"), new_prefix, ostr);
     use_stopwatch.print(String("use of stopwatch"), new_prefix, ostr);

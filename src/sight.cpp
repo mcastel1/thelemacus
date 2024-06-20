@@ -26,6 +26,7 @@ Sight::Sight(void) {
     
     atmosphere = new Atmosphere;
     height_of_eye = new Length;
+    r = new Length;
     
     //height_of_eye is expressed in meters -> set its unit accordingly
     height_of_eye->unit.set(LengthUnit_types[1]);
@@ -254,7 +255,7 @@ template<class S> bool Sight::read_from_stream([[maybe_unused]] String name, S* 
     artificial_horizon.read_from_stream<S>(String("artificial horizon"), input_stream, false, new_prefix);
     if (artificial_horizon == Answer('n', new_prefix)) {
         items.insert(items.begin() + 3 + (additional_items++), String("height of eye"));
-        height_of_eye.read_from_stream<S>(String("height of eye"), input_stream, false, new_prefix);
+        height_of_eye->read_from_stream<S>(String("height of eye"), input_stream, false, new_prefix);
     }
 
     check &= master_clock_date_and_hour.read_from_stream<S>(String("master-clock date and hour of sight"), input_stream, false, new_prefix);
@@ -416,7 +417,7 @@ double Sight::rhs_DH_parallax_and_limb(double h, void* sight) {
 
     Sight* a = (Sight*)sight;
 
-    return(-(((*a).H_i).value) + h + asin((((*a).body).radius->value) / sqrt(gsl_pow_2((((*a).r).value)) + gsl_pow_2((((*a).atmosphere)->earth_radius->value)) - 2.0 * (((*a).r).value) * (((*a).atmosphere)->earth_radius->value) * sin(h))) - atan(((((*a).atmosphere)->earth_radius->value) * cos(h)) / ((((*a).r).value) - (((*a).atmosphere)->earth_radius->value) * sin(h))));
+    return(-(((*a).H_i).value) + h + asin((((*a).body).radius->value) / sqrt(gsl_pow_2((((*a).r)->value)) + gsl_pow_2((((*a).atmosphere)->earth_radius->value)) - 2.0 * (((*a).r)->value) * (((*a).atmosphere)->earth_radius->value) * sin(h))) - atan(((((*a).atmosphere)->earth_radius->value) * cos(h)) / ((((*a).r)->value) - (((*a).atmosphere)->earth_radius->value) * sin(h))));
 
 }
 
@@ -583,13 +584,13 @@ void Sight::compute_DH_parallax_and_limb(String prefix) {
         case 'l':
         {
             //    H_o.value = (H_i.value) + asin(((atmosphere.earth_radius->value)*cos(H_i)+(body.radius.value))/(r.value));
-            DH_parallax_and_limb.value = asin(((atmosphere->earth_radius->value) * cos(H_i) + (body.radius->value)) / (r.value));
+            DH_parallax_and_limb.value = asin(((atmosphere->earth_radius->value) * cos(H_i) + (body.radius->value)) / (r->value));
             break;
         }
         case 'c':
         {
             //H_o.value = (H_i.value) + asin((atmosphere.earth_radius->value)*cos(H_i)/(r.value));
-            DH_parallax_and_limb.value = asin((atmosphere->earth_radius->value) * cos(H_i) / (r.value));
+            DH_parallax_and_limb.value = asin((atmosphere->earth_radius->value) * cos(H_i) / (r->value));
             break;
         }
         }
@@ -726,12 +727,12 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
             }
             //(circle_of_equal_altitude->reference_position->phi).set("d", gsl_spline_eval(interpolation_d, (time.MJD)-MJD_min-((double)l_min)/L, acc), new_prefix);
 
-            if (gsl_spline_eval_e(interpolation_r, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &(r.value)) != GSL_SUCCESS) {
+            if (gsl_spline_eval_e(interpolation_r, (time.MJD) - MJD_min - ((double)l_min) / L, acc, &(r->value)) != GSL_SUCCESS) {
                 check &= false;
             }
             else {
-                if ((r.check(String("r"), new_prefix))) {
-                    r.print(String("r"), new_prefix, cout);
+                if ((r->check(String("r"), new_prefix))) {
+                    r->print(String("r"), new_prefix, cout);
                 }
                 else {
                     check &= false;

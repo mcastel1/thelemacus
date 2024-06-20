@@ -514,13 +514,13 @@ inline double mean_pm_pi(Angle& a, Angle& b){
     
 }
 
+
 //return the mean between a.value and b.value
 inline double mean_value(Angle& a, Angle& b){
     
     return( ((a.value) + (b.value))/2.0 );
     
 }
-
 
 
 string to_string(const Position& p, unsigned int precision) {

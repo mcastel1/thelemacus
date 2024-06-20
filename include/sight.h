@@ -36,7 +36,7 @@ public:
     //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
     Chrono TAI_minus_UTC, stopwatch;
     Angle index_error, H_s, H_a, H_o, H_i, DH_refraction, DH_dip, DH_parallax_and_limb;
-    Length r, height_of_eye;
+    Length r, *height_of_eye;
     Atmosphere *atmosphere;
     Body body;
     Limb limb;

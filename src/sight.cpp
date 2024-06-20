@@ -25,6 +25,7 @@ Sight::Sight(void) {
     
     
     atmosphere = new Atmosphere;
+    height_of_eye = new Length;
     
     //height_of_eye is expressed in meters -> set its unit accordingly
     height_of_eye.unit.set(LengthUnit_types[1]);

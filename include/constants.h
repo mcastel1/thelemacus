@@ -25,7 +25,8 @@ Angle max_lat, min_lat;
 //MJD_min corresponds to Jan 1 2016 00-00-26.00 TAI, i.e., Jan 1 2016 00-00-00.00 UTC
 #define MJD_min 57388.00041666666666666664
 //NASA's webgeocalc datafiles show L lines per day
-#define L 24.0
+//#define L 24.0
+#define n_lines_per_day_ephemerides 24.0
 //the time window in which interpolation is made has a width of N lines in NASA's webgeocalc files
 #define n_lines_ephemerides 24.0
 #define epsrel (1e-12)

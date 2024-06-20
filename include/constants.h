@@ -17,7 +17,7 @@ Double /*the ratio between the width (height) of the plot area and the width (he
 Angle max_lat, min_lat;
 
 //#define k (2.0*M_PI/360.0)
-double k = 2.0*M_PI/360.0;
+double deg_to_rad = 2.0*M_PI/360.0;
 #define K (1.0/k)
 //one arcminute in units of radians
 #define arcmin_radians (k/60.0)

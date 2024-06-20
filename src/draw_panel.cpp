@@ -1033,7 +1033,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
     else {
 
         //in this case, delta  is not an integer multiple of a degree. However, (angle_label.value) may still be or not be a multiple integer of a degree
-        if (k * fabs(K * (angle_label.value) - ((double)round(K * (angle_label.value)))) < delta / 2.0) {
+        if (deg_to_rad * fabs(K * (angle_label.value) - ((double)round(K * (angle_label.value)))) < delta / 2.0) {
             //in this case, (angle_label.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
 
             s << angle_label.deg_to_string(mode, (precision.value));
@@ -1324,7 +1324,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     phi_span = (parent->phi_max->normalize_pm_pi_ret().value) - (parent->phi_min->normalize_pm_pi_ret().value);
 
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
-    if (phi_span > k) {
+    if (phi_span > deg_to_rad) {
         //in this case, phi_span is larger than one degree
         gamma_phi = 1;
         delta_phi_minor = -1.0;
@@ -1342,10 +1342,10 @@ inline void DrawPanel::PreRenderMercator(void) {
         }
     }
 
-    delta_phi = k / ((double)gamma_phi);
+    delta_phi = deg_to_rad / ((double)gamma_phi);
     while (((wxGetApp().n_intervals_ticks_preferred).value) * delta_phi < phi_span) {
-        if (delta_phi == k / ((double)gamma_phi)) { delta_phi += k * 4.0 / ((double)gamma_phi); }
-        else { delta_phi += k * 5.0 / ((double)gamma_phi); }
+        if (delta_phi == deg_to_rad / ((double)gamma_phi)) { delta_phi += deg_to_rad * 4.0 / ((double)gamma_phi); }
+        else { delta_phi += deg_to_rad * 5.0 / ((double)gamma_phi); }
     }
 
     //here I set up things to plot meridians and parallels in Render_Mercator
@@ -1503,7 +1503,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
 
     //gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
-    if (lambda_span > k) {
+    if (lambda_span > deg_to_rad) {
         //in this case, lambda_span is larger than one degree
         gamma_lambda = 1;
         delta_lambda_minor = -1.0;
@@ -1521,10 +1521,10 @@ inline void DrawPanel::PreRenderMercator(void) {
         }
     }
 
-    delta_lambda = k / ((double)gamma_lambda);
+    delta_lambda = deg_to_rad / ((double)gamma_lambda);
     while (n_intervals_ticks * delta_lambda < lambda_span) {
-        if (delta_lambda == k / ((double)gamma_lambda)) { delta_lambda += k * 4.0 / ((double)gamma_lambda); }
-        else { delta_lambda += k * 5.0 / ((double)gamma_lambda); }
+        if (delta_lambda == deg_to_rad / ((double)gamma_lambda)) { delta_lambda += deg_to_rad * 4.0 / ((double)gamma_lambda); }
+        else { delta_lambda += deg_to_rad * 5.0 / ((double)gamma_lambda); }
     }
 
 
@@ -1788,7 +1788,7 @@ inline void DrawPanel::PreRender3D(void) {
 
 
     //gamma_lambda is the compression factor which allows from switching from increments in degrees to increments in arcminutes
-    if (lambda_span > k) {
+    if (lambda_span > deg_to_rad) {
         //in this case, lambda_span is larger than one degree
         gamma_lambda = 1;
         delta_lambda_minor = -1.0;
@@ -1807,10 +1807,10 @@ inline void DrawPanel::PreRender3D(void) {
     }
 
     //compute delta_lambda
-    delta_lambda = k / ((double)gamma_lambda);
+    delta_lambda = deg_to_rad / ((double)gamma_lambda);
     while (n_intervals_ticks * delta_lambda < lambda_span) {
-        if (delta_lambda == k / ((double)gamma_lambda)) { delta_lambda += k * 4.0 / ((double)gamma_lambda); }
-        else { delta_lambda += k * 5.0 / ((double)gamma_lambda); }
+        if (delta_lambda == deg_to_rad / ((double)gamma_lambda)) { delta_lambda += deg_to_rad * 4.0 / ((double)gamma_lambda); }
+        else { delta_lambda += deg_to_rad * 5.0 / ((double)gamma_lambda); }
     }
 
     //compute lambda_middle
@@ -1850,7 +1850,7 @@ inline void DrawPanel::PreRender3D(void) {
     phi_span = 2.0 * (circle_observer->omega.value);
 
     //gamma_phi is the compression factor which allows from switching from increments in degrees to increments in arcminutes
-    if (phi_span > k) {
+    if (phi_span > deg_to_rad) {
         //in this case, phi_span is larger than one degree
         gamma_phi = 1;
         delta_phi_minor = -1.0;
@@ -1868,10 +1868,10 @@ inline void DrawPanel::PreRender3D(void) {
         }
     }
 
-    delta_phi = k / ((double)gamma_phi);
+    delta_phi = deg_to_rad / ((double)gamma_phi);
     while (((wxGetApp().n_intervals_ticks_preferred).value) * delta_phi < phi_span) {
-        if (delta_phi == k / ((double)gamma_phi)) { delta_phi += k * 4.0 / ((double)gamma_phi); }
-        else { delta_phi += k * 5.0 / ((double)gamma_phi); }
+        if (delta_phi == deg_to_rad / ((double)gamma_phi)) { delta_phi += deg_to_rad * 4.0 / ((double)gamma_phi); }
+        else { delta_phi += deg_to_rad * 5.0 / ((double)gamma_phi); }
     }
 
     //set phi_start/end and phi_middle
@@ -2154,11 +2154,11 @@ void DrawPanel::SetIdling(bool b) {
 //this function computes lambda_min, ... phi_max from x_min ... y_max for the mercator projection
 void DrawPanel::Set_lambda_phi_min_max_Mercator(void) {
 
-    parent->lambda_min->set(k * lambda_mercator(x_min));
-    parent->lambda_max->set(k * lambda_mercator(x_max));
+    parent->lambda_min->set(deg_to_rad * lambda_mercator(x_min));
+    parent->lambda_max->set(deg_to_rad * lambda_mercator(x_max));
 
-    parent->phi_min->set(k * phi_mercator(y_min));
-    parent->phi_max->set(k * phi_mercator(y_max));
+    parent->phi_min->set(deg_to_rad * phi_mercator(y_min));
+    parent->phi_max->set(deg_to_rad * phi_mercator(y_max));
 
 }
 
@@ -2862,8 +2862,8 @@ inline bool DrawPanel::ProjectionToDrawPanel_Mercator(PositionProjection& q, wxP
 //convert the Mercator Projection q into the Position p
 inline void  DrawPanel::ProjectionToGeo_Mercator(const PositionProjection& q, Position* p) {
 
-    p->lambda.set(k * lambda_mercator(q.x));
-    p->phi.set(k * phi_mercator(q.y));
+    p->lambda.set(deg_to_rad * lambda_mercator(q.x));
+    p->phi.set(deg_to_rad * phi_mercator(q.y));
   
 }
 
@@ -3406,8 +3406,8 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
                 delta_y = ((double)((position_end_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
 
-                (this->*GeoToProjection)(Position(Angle(0.0), Angle(k * floor_max_lat)), &p_floor_max, true);
-                (this->*GeoToProjection)(Position(Angle(0.0), Angle(k * ceil_min_lat)), &p_ceil_min, true);
+                (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
+                (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
 
 
                 if ((!((y_max + delta_y < (p_floor_max.y)) && (y_min + delta_y > (p_ceil_min.y))))) {
@@ -3883,8 +3883,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         PositionProjection p_ceil_min, p_floor_max;
                         
-                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(k * floor_max_lat)), &p_floor_max, true);
-                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(k * ceil_min_lat)), &p_ceil_min, true);
+                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
+                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
                         
                         
                         if ((y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_max_start_drag) < (p_floor_max.y)) && (y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min_start_drag) > (p_ceil_min.y))) {

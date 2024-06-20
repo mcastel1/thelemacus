@@ -28,7 +28,7 @@ Angle::Angle(const double& x) {
 //constructor of Angle, which sets the value of the angle to deg° min'
 Angle::Angle(const unsigned int& deg, const double& min) {
 
-    value = k * (((double)deg) + min / 60.0);
+    value = deg_to_rad * (((double)deg) + min / 60.0);
     normalize();
 
 }
@@ -114,7 +114,7 @@ template<class S> void Angle::read_from_stream(String name, S* input_stream, boo
     pos2 = line.find("° ");
     pos3 = line.find("'");
 
-    value = k * (stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str()) + stod(line.substr(pos2 + 2, pos3 - (pos2 + 2))) / 60.0);
+    value = deg_to_rad * (stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str()) + stod(line.substr(pos2 + 2, pos3 - (pos2 + 2))) / 60.0);
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
@@ -322,7 +322,7 @@ void Angle::to_deg_min(unsigned int* deg, double* min, unsigned int precision) {
 //convert the angle stored in degrees and minutes format in deg an min in to (*this).vaule
 void Angle::from_sign_deg_min(char sign, unsigned int deg, double min) {
 
-    value = k * (((double)deg) + min / 60.0);
+    value = deg_to_rad * (((double)deg) + min / 60.0);
     if (sign == '-') { value *= -1.0; }
 
     normalize();

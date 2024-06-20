@@ -286,8 +286,8 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
         //I set delta as a fraction of y_max - y_min
         delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max) - (draw_panel->y_min));
 
-        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k * floor_max_lat)), &p_floor_max, true);
-        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k * ceil_min_lat)), &p_ceil_min, true);
+        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
+        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
 
 
         if (((draw_panel->y_max) + delta < (p_floor_max.y)) && ((draw_panel->y_min) + delta > (p_ceil_min.y))) {
@@ -360,8 +360,8 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
         //I set delta as a fraction of y_max - y_min
         delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max) - (draw_panel->y_min));
 
-        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k * floor_max_lat)), &p_floor_max, true);
-        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(k * ceil_min_lat)), &p_ceil_min, true);
+        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
+        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
 
 
         if (((draw_panel->y_max) - delta < (p_floor_max.y)) && ((draw_panel->y_min) - delta > (p_ceil_min.y))) {

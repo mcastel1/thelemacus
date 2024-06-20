@@ -1213,21 +1213,21 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
         int output;
 
 
-        lambda_span = (rectangle.p_NW->lambda).span(rectangle.p_SE->lambda);
-        phi_span = (rectangle.p_NW->phi).span(rectangle.p_SE->phi);
+        lambda_span = rectangle.p_NW->lambda.span(rectangle.p_SE->lambda);
+        phi_span = rectangle.p_NW->phi.span(rectangle.p_SE->phi);
 
         //the parallel of latitude going through the North side of rectangle
         side_N = Route(
             RouteType(Route_types[2]),
-            Position(Angle(0.0), Angle(GSL_SIGN(((rectangle.p_NW->phi).normalize_pm_pi_ret()).value) * M_PI_2)),
-            Angle(M_PI_2 - fabs((((rectangle.p_NW->phi).normalize_pm_pi_ret()).value)))
+            Position(Angle(0.0), Angle(GSL_SIGN((rectangle.p_NW->phi.normalize_pm_pi_ret()).value) * M_PI_2)),
+            Angle(M_PI_2 - fabs(((rectangle.p_NW->phi.normalize_pm_pi_ret()).value)))
         );
 
         //the parallel of latitude going through the S side of rectangle
         side_S = Route(
             RouteType(Route_types[2]),
-            Position(Angle(0.0), Angle(GSL_SIGN(((rectangle.p_SE->phi).normalize_pm_pi_ret()).value) * M_PI_2)),
-            Angle(M_PI_2 - fabs((((rectangle.p_SE->phi).normalize_pm_pi_ret()).value)))
+            Position(Angle(0.0), Angle(GSL_SIGN((rectangle.p_SE->phi.normalize_pm_pi_ret()).value) * M_PI_2)),
+            Angle(M_PI_2 - fabs(((rectangle.p_SE->phi.normalize_pm_pi_ret()).value)))
         );
 
         //the meridian going through the W side of rectangle

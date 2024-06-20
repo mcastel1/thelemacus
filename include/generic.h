@@ -34,6 +34,10 @@ using namespace std;
 
 inline double cot(double);
 inline double csc(double);
+inline double atan(double, double);
+inline int floor_exp(double);
+void MousePositionOnListControl(wxListCtrl*, int*);
+template<class C> void read_from_file(C*, String, String, [[maybe_unused]] String, [[maybe_unused]] String)
 inline double round_with_precision(double, unsigned int);
 
 

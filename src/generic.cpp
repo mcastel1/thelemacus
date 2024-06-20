@@ -751,12 +751,12 @@ bool operator < (const Angle& x, const Angle& y) {
 
 }
 
+
 bool operator < (const Angle& x, const double& y) {
 
     return(((x.value) < y));
 
 }
-
 
 
 //this function adjusts the width of a wxComboBox according to its largest entry

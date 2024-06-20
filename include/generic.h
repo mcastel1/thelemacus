@@ -72,8 +72,14 @@ inline void find_and_replace_case_insensitive(wxComboBox*, wxArrayString, bool*,
 template<class T> void SetColor(T*);
 template <class T> void Reset(T*);
 wxImage RescaleProportionally(wxImage, const wxSize);
-
-inline double round_with_precision(double, unsigned int);
-
+String read_from_file(String, String, String, [[maybe_unused]] String);
+void my_cout(int, ...);
+bool operator < (const Length&, const Length&);
+template<class S> void read_list_from_stream(String, S*, bool, vector<int>*);
+inline double lambda_mercator(double);
+inline double phi_mercator(double);
+bool operator < (const Angle&, const Angle&);
+bool operator < (const Angle&, const double&);
+void AdjustWidth(wxComboBox*);
 
 #endif

@@ -161,7 +161,20 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 
 }
 
+// explicit instantiations
+template void read_from_file<Angle>(Angle*, String, String, String, String);
+template void read_from_file<Answer>(Answer*, String, String, String, String);
+template void read_from_file<Catalog>(Catalog*, String, String, String, String);
+template void read_from_file<Chrono>(Chrono*, String, String, String, String);
+template void read_from_file<Double>(Double*, String, String, String, String);
+template void read_from_file<Data>(Data*, String, String, String, String);
 template void read_from_file<Int>(Int*, String, String, String, String);
+template void read_from_file<Length>(Length*, String, String, String, String);
+template void read_from_file<Position>(Position*, String, String, String, String);
+template void read_from_file<Rotation>(Rotation*, String, String, String, String);
+template void read_from_file<Route>(Route*, String, String, String, String);
+template void read_from_file<String>(String*, String, String, String, String);
+
 
 
 //this function checks whether the  unsigned int in string s is formatted correctly and, if check_interval = true, it also checks whether the this unsigned int lies in [min, sup). If i != NULL and the check is ok, it also writes the value of the unsigned int read from s into (*i)

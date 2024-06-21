@@ -394,6 +394,10 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 }
 
+// explicit instantiations
+template void AngleField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
+
+
 
 //this function enables/disable all the fields in AngleField
 template<class P> void AngleField<P>::Enable(bool is_enabled) {

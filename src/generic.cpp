@@ -354,6 +354,9 @@ template<class T> void delete_duplicates(vector<T>* v){
     
 }
 
+// explicit instantiations
+template void delete_duplicates<unsigned long long>(vector<unsigned long long>*);
+
 
 //return true(false) if the relative difference between a and b is smaller, in absolute value, than epsilon_double. If the relative difference cannot be compute because it would imply dividing by zero, return a.value == b.value
 template<class T> bool equal_rel_epsilon_double(const T& a, const T& b){

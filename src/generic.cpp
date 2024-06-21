@@ -319,6 +319,10 @@ template<class T> unsigned int position_in_vector(T x, const vector<T>& v){
     
 }
 
+//explicit instantiation
+template unsigned int position_in_vector<Projection>(Projection, const vector<Projection>&);
+
+
 
 //convert element by element a vector whose entries are of type A into a vector whose entries are of type B and return the latter. This make sense if A can be re-casted into B
 template<class A, class B> vector<B> convert_vector(const vector<A>& x){

@@ -73,4 +73,12 @@ bool operator < (const Angle&, const Angle&);
 bool operator < (const Angle&, const double&);
 void AdjustWidth(wxComboBox*);
 
+
+
+inline double cos(const Angle& x) {
+
+    return cos(x.value);
+
+}
+
 #endif

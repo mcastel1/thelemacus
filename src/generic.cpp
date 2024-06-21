@@ -373,11 +373,6 @@ inline double asin(const Double& x) {
 
 }
 
-inline double cos(const Angle& x) {
-
-    return cos(x.value);
-
-}
 
 inline double tan(const Angle& x) {
 

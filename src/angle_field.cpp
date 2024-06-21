@@ -416,6 +416,9 @@ template<class P> template<class T> void AngleField<P>::InsertIn(T* host) {
     host->Add(sizer_v);
 
 }
+// explicit instantiations
+template void AngleField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+
 
 
 // explicit instantiations

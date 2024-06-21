@@ -228,6 +228,7 @@ template<class P> template <class T> void AngleField<P>::get(T& event) {
 }
 
 // explicit instantiations
+template void AngleField<PositionFrame>::get<wxCommandEvent>(wxCommandEvent&);
 template void AngleField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
 template void AngleField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
@@ -399,6 +400,7 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 // explicit instantiations
+template void AngleField<PositionFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (PositionFrame::*)(wxKeyEvent&), PositionFrame*>(wxEventTypeTag<wxKeyEvent>, void (PositionFrame::*)(wxKeyEvent&), PositionFrame*);
 template void AngleField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 template void AngleField<SightFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
 
@@ -422,6 +424,7 @@ template<class P> template<class T> void AngleField<P>::InsertIn(T* host) {
 
 }
 // explicit instantiations
+template void AngleField<PositionFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 template void AngleField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 template void AngleField<SightFrame>::InsertIn<wxBoxSizer>(wxBoxSizer*);
 template void  AngleField<SightFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);

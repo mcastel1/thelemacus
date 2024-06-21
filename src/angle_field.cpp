@@ -224,6 +224,10 @@ template<class P> template <class T> void AngleField<P>::get(T& event) {
 
 }
 
+// explicit instantiations
+template void AngleField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
+
+
 
 //sets the value in the GUI objects deg and min equal to the value in the non-GUI Angle object angle
 template <class P> void AngleField<P>::set(void) {
@@ -408,3 +412,7 @@ template<class P> template<class T> void AngleField<P>::InsertIn(T* host) {
     host->Add(sizer_v);
 
 }
+
+
+// explicit instantiations
+template class AngleField<RouteFrame>;

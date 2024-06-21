@@ -15,6 +15,8 @@
 #include "constants.h"
 #include "generic.h"
 #include "my_string.h"
+#include "route_frame.h"
+#include "position_frame.h"
 #include "sight_frame.h"
 
 
@@ -424,4 +426,6 @@ template void AngleField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*
 
 
 // explicit instantiations
+template class AngleField<PositionFrame>;
 template class AngleField<RouteFrame>;
+template class AngleField<SightFrame>;

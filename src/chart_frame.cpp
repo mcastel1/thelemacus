@@ -266,6 +266,10 @@ template<class T> void ChartFrame::OnPressCtrlW(T& event) {
 
 }
 
+//explicit instantiations
+template void ChartFrame::OnPressCtrlW<wxCommandEvent>(wxCommandEvent&);
+
+
 //moves (makes slide) to the north the chart
 template<class T> void ChartFrame::MoveNorth(T& event) {
 
@@ -341,6 +345,11 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
 
 }
 
+//explicit instantiations
+template void ChartFrame::MoveNorth<wxKeyEvent>(wxKeyEvent&);
+
+
+
 //moves (makes slide) to the south the chart
 //moves (makes slide) up the chart
 template<class T> void ChartFrame::MoveSouth(T& event) {
@@ -413,6 +422,11 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
 
 }
 
+//explicit instantiations
+template void ChartFrame::MoveSouth<wxKeyEvent>(wxKeyEvent&);
+
+
+
 //moves (makes slide) to the west the chart
 template<class T> void ChartFrame::MoveWest(T& event) {
 
@@ -477,6 +491,10 @@ template<class T> void ChartFrame::MoveWest(T& event) {
     event.Skip(true);
 
 }
+
+//explicit instantiations
+template void ChartFrame::MoveWest<wxKeyEvent>(wxKeyEvent&);
+
 
 
 
@@ -544,6 +562,13 @@ template<class T> void ChartFrame::MoveEast(T& event) {
     event.Skip(true);
 
 }
+
+//explicit instantiations
+template void ChartFrame::MoveEast<wxKeyEvent>(wxKeyEvent&);
+
+
+
+
 
 //this method is called when a key is pressed
 template<class T> void ChartFrame::KeyDown(T& event) {

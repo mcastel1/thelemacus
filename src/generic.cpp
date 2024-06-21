@@ -377,6 +377,10 @@ template<class T> bool equal_rel_epsilon_double(const T& a, const T& b){
     
 }
 
+//explicit instantiation
+template bool equal_rel_epsilon_double<Angle>(const Angle&, const Angle&);
+
+
 /*
  delete duplicates from vector *v, by removing entries in *v which are equal according to the comparator. A pointer to the comparator needs to be supplied as second argument. For example, if I define a comparator such as
  

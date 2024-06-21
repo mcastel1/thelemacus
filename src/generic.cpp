@@ -391,6 +391,10 @@ template<class T> void delete_duplicates(vector<T>* v, bool (*comparator)(const 
     
 }
 
+// explicit instantiations
+template  void delete_duplicates<Angle>(vector<Angle>*, bool (*)(const Angle&, const Angle&));
+
+
 
 //return the size of *this if shown in the wxWindow (e.g. a wxtextctr, a wxliscontrol, etc...). This is equivalent to the method String::get_size(const String&, wxWindow*)
 wxSize get_size(const String& s, wxWindow* p) {

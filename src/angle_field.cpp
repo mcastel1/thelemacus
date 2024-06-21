@@ -15,6 +15,7 @@
 #include "constants.h"
 #include "generic.h"
 #include "my_string.h"
+#include "sight_frame.h"
 
 
 
@@ -226,6 +227,7 @@ template<class P> template <class T> void AngleField<P>::get(T& event) {
 
 // explicit instantiations
 template void AngleField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void AngleField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 

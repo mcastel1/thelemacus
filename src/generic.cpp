@@ -161,6 +161,9 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 
 }
 
+template void read_from_file<Int>(Int*, String, String, String, String);
+
+
 //this function checks whether the  unsigned int in string s is formatted correctly and, if check_interval = true, it also checks whether the this unsigned int lies in [min, sup). If i != NULL and the check is ok, it also writes the value of the unsigned int read from s into (*i)
 bool check_unsigned_int(string s, unsigned int* i, bool check_interval, unsigned int min, unsigned int sup){
     

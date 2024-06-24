@@ -20,6 +20,9 @@ template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
 
 }
 
+//explicit instantiations
+template class CheckSpeed<RouteFrame>;
+
 
 //this functor checks the whole Speed field by calling the check on its value and unit
 template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {

@@ -177,6 +177,9 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 }
 
+//explicit instantiations
+template void SpeedField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
+
 
 template<class P> bool SpeedField<P>::is_ok(void) {
 

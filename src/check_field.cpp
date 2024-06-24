@@ -67,7 +67,7 @@ template<class P, class T> template<class S> void CheckField<P, T>::get(S& event
 
 //explicit instantiation
 template void CheckField<SightFrame, ChronoField<SightFrame>>::get<wxCommandEvent>(wxCommandEvent&);
-
+template void CheckField<SightFrame, DynamicLengthField<SightFrame>>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 //sets the value in the GUI object check equal to the value in the non-GUI limb object answer
@@ -83,9 +83,9 @@ template<class P, class T> void CheckField<P, T>::set(void) {
 
 }
 
-
 //explicit instantiation
 template void CheckField<SightFrame, ChronoField<SightFrame>>::set();
+template void CheckField<SightFrame, DynamicLengthField<SightFrame>>::set();
 
 
 template<class P, class T> template <typename EventTag, typename Method, typename Object> void CheckField<P, T>::Bind(EventTag tag, Method method, Object object) {
@@ -105,4 +105,5 @@ template<class P, class T> template<class R> void CheckField<P, T>::InsertIn(R* 
 }
 
 //explicit instantiation
-template  void CheckField<SightFrame, ChronoField<SightFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void CheckField<SightFrame, ChronoField<SightFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void CheckField<SightFrame, DynamicLengthField<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);

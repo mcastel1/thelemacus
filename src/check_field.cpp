@@ -16,6 +16,8 @@
 
 
 #include "answer.h"
+#include "chrono_field.h"
+#include "sight_frame.h"
 
 
 //constructor of a CheckField object, based on the parent frame frame
@@ -89,3 +91,7 @@ template<class P, class T> template<class R> void CheckField<P, T>::InsertIn(R* 
     host->Add(sizer_v);
 
 }
+
+
+//explicit instantiation
+template void CheckField<SightFrame, ChronoField<SightFrame>>::get<wxCommandEvent>(wxCommandEvent&);

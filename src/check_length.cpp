@@ -7,6 +7,9 @@
 
 #include "check_length.h"
 
+#include "check_length_value.h"
+#include "check_length_unit.h"
+#include "route_frame.h"
 
 
 template<class P> CheckLength<P>::CheckLength(DynamicLengthField<P>* p_in) {
@@ -28,3 +31,6 @@ template<class P> template <class T> void CheckLength<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+//explicit instantiations
+template void CheckLength<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

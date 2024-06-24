@@ -7,7 +7,9 @@
 
 #include "check_angle.h"
 
+#include "position_frame.h"
 #include "route_frame.h"
+#include "sight_frame.h"
 
 
 template<class P> CheckAngle<P>::CheckAngle(AngleField<P>* p_in) {
@@ -21,7 +23,9 @@ template<class P> CheckAngle<P>::CheckAngle(AngleField<P>* p_in) {
 }
 
 //explicit instantiation
+template class CheckAngle<PositionFrame>;
 template class CheckAngle<RouteFrame>;
+template class CheckAngle<SightFrame>;
 
 
 //this functor checks the whole angle field by calling the check on its sign, arcdegree and arcminute parts‰
@@ -39,3 +43,4 @@ template<class P> template <class T> void CheckAngle<P>::operator()(T& event) {
 
 //explicit instantiation
 template void CheckAngle<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckAngle<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

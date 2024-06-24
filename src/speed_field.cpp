@@ -71,6 +71,9 @@ template<class P> void SpeedField<P>::set(void) {
   
 }
 
+//explicit instantiations
+template void SpeedField<RouteFrame>::set();
+
 
 //write the value and the unit of the GUI field in SpeedField into the non-GUI field speed
 template<class P> template <class T> void SpeedField<P>::get(T& event) {
@@ -87,6 +90,9 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
     event.Skip(true);
 
 }
+
+//explicit instantiations
+template void SpeedField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
@@ -112,6 +118,9 @@ template<class P> template<class E>  void SpeedField<P>::OnEditValue(E& event) {
     event.Skip(true);
 
 }
+
+//explicit instantiations
+template void SpeedField<RouteFrame>::OnEditValue<wxKeyEvent>(wxKeyEvent&);
 
 
 //this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
@@ -142,6 +151,7 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
 
 //explicit instantiations
 template void SpeedField<RouteFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+template void SpeedField<RouteFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
 
 
 //enable/disable the SpeedField

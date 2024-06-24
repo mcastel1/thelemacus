@@ -8,6 +8,7 @@
 #include "check_check.h"
 
 #include "check_chrono.h"
+#include "check_length.h"
 #include "chrono_field.h"
 #include "sight_frame.h"
 
@@ -43,3 +44,4 @@ template<class P, class T> template<class R> void CheckCheck<P, T>::operator()(R
 
 //explicit instantiation
 template void CheckCheck<SightFrame, ChronoField<SightFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckCheck<SightFrame, DynamicLengthField<SightFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);

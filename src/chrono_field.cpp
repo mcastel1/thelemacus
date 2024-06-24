@@ -108,6 +108,9 @@ template<class P> template <class T> void ChronoField<P>::get(T& event) {
 
 }
 
+template void ChronoField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
+
+
 //set the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object *chrono
 template<class P> void ChronoField<P>::set(void) {
 
@@ -170,6 +173,10 @@ template<class P> template<class E> void ChronoField<P>::OnEditHour(E& event) {
 
 }
 
+template void ChronoField<RouteFrame>::OnEditHour<wxKeyEvent>(wxKeyEvent&);
+template void ChronoField<RouteFrame>::OnEditHour<wxCommandEvent>(wxCommandEvent&);
+
+
 //this function is called every time a keyboard button is lifted in this->minute: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> template<class E> void ChronoField<P>::OnEditMinute(E& event) {
 
@@ -194,6 +201,10 @@ template<class P> template<class E> void ChronoField<P>::OnEditMinute(E& event) 
     event.Skip(true);
 
 }
+
+template void ChronoField<RouteFrame>::OnEditMinute<wxKeyEvent>(wxKeyEvent&);
+template void ChronoField<RouteFrame>::OnEditMinute<wxCommandEvent>(wxCommandEvent&);
+
 
 //this function is called every time a keyboard button is lifted in this->second: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> template<class E> void ChronoField<P>::OnEditSecond(E& event) {
@@ -220,6 +231,8 @@ template<class P> template<class E> void ChronoField<P>::OnEditSecond(E& event) 
 
 }
 
+template void ChronoField<RouteFrame>::OnEditSecond<wxKeyEvent>(wxKeyEvent&);
+
 
 
 template<class P> template <typename EventTag, typename Method, typename Object> void ChronoField<P>::Bind(EventTag tag, Method method, Object object) {
@@ -230,6 +243,8 @@ template<class P> template <typename EventTag, typename Method, typename Object>
     second->Bind(tag, method, object);
 
 }
+
+template  void ChronoField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 
 
 

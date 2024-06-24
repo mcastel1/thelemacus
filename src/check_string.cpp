@@ -7,8 +7,9 @@
 
 #include "check_string.h"
 
-
-
+#include "route_frame.h"
+#include "sight_frame.h"
+#include "string_field.h"
 
 
 template<class P> CheckString<P>::CheckString(StringField<P>* p_in) {
@@ -27,3 +28,6 @@ template<class P> template<class T> void CheckString<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template void CheckString<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckString<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

@@ -13,6 +13,8 @@
 #endif
 #include <wx/textctrl.h>
 
+#include "check_speed.h"
+#include "check_speed_value.h"
 #include "constants.h"
 #include "speed_unit_field.h"
 
@@ -59,6 +61,9 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p) 
     unit->InsertIn(sizer_h, flags);
     
 }
+
+//explicit instantiations
+template class SpeedField<RouteFrame>;
 
 
 //set the value in the GUI object value equal to the value in the non-GUI object speed
@@ -162,12 +167,18 @@ template<class P> void SpeedField<P>::Enable(bool is_enabled) {
 
 }
 
+//explicit instantiations
+template void SpeedField<RouteFrame>::Enable(bool);
+
 
 template<class P> template<class T> void SpeedField<P>::InsertIn(T* host) {
 
     host->Add(sizer_v);
 
 }
+
+//explicit instantiations
+template void SpeedField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
 template<class P> template <typename EventTag, typename Method, typename Object> void SpeedField<P>::Bind(EventTag tag, Method method, Object object) {

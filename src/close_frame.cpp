@@ -8,6 +8,7 @@
 #include "close_frame.h"
 
 #include "destroy_frame.h"
+#include "list_frame.h"
 
 
 template<class F> CloseFrame<F>::CloseFrame(F* frame_in) {
@@ -15,6 +16,10 @@ template<class F> CloseFrame<F>::CloseFrame(F* frame_in) {
     frame = frame_in;
 
 }
+
+//explicit instantiations
+template class CloseFrame<ListFrame>;
+
 
 //closes a frame of type F
 template<class F> template <class T> void CloseFrame<F>::operator()([[maybe_unused]] T& event) {
@@ -28,5 +33,7 @@ template<class F> template <class T> void CloseFrame<F>::operator()([[maybe_unus
 
     event.Skip(true);
 
-
 }
+
+//explicit instantiations
+template void CloseFrame<ListFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

@@ -11,6 +11,7 @@
 #include "check_minute.h"
 #include "check_second.h"
 #include "route_frame.h"
+#include "sight_frame.h"
 
 template<class P> CheckChrono<P>::CheckChrono(ChronoField<P>* p_in) {
 
@@ -36,4 +37,5 @@ template<class P> template <class T> void CheckChrono<P>::operator()(T& event) {
 }
 
 //explicit instantiations
-template  void CheckChrono<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckChrono<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckChrono<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

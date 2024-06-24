@@ -102,4 +102,5 @@ template<class P, class T> template<class R> void CheckField<P, T>::InsertIn(R* 
 
 }
 
-
+//explicit instantiation
+template  void CheckField<SightFrame, ChronoField<SightFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);

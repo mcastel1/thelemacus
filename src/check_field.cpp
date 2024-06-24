@@ -95,6 +95,10 @@ template<class P, class T> template <typename EventTag, typename Method, typenam
 }
 
 //explicit instantiation
+template void CheckField<SightFrame, DynamicLengthField<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+
+
+//explicit instantiation
 template void CheckField<SightFrame, ChronoField<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
 
 
@@ -106,4 +110,4 @@ template<class P, class T> template<class R> void CheckField<P, T>::InsertIn(R* 
 
 //explicit instantiation
 template void CheckField<SightFrame, ChronoField<SightFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
-template void CheckField<SightFrame, DynamicLengthField<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+

@@ -20,6 +20,11 @@ template<class P, class T>  CheckCheck<P, T>::CheckCheck(CheckField<P, T>* p_in)
 
 }
 
+//explicit instantiation
+template class CheckCheck<SightFrame, ChronoField<SightFrame>>;
+
+
+
 //this function reads the value in the GUI box checkbox, and enables/disables the related_field accordingly
 template<class P, class T> template<class R> void CheckCheck<P, T>::operator()(R& event) {
 

@@ -7,6 +7,9 @@
 
 #include "check_speed.h"
 
+#include "check_speed_value.h"
+#include "check_speed_unit.h"
+#include "route_frame.h"
 
 template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
 
@@ -28,4 +31,5 @@ template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
 
 }
 
-
+//explicit instantitation
+template void CheckSpeed<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

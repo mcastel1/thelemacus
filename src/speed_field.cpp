@@ -14,7 +14,7 @@
 #include <wx/textctrl.h>
 
 #include "constants.h"
-
+#include "speed_unit_field.h"
 
 
 //constructor of a SpeedField object, based on the parent frame frame
@@ -139,6 +139,9 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
     event.Skip(true);
 
 }
+
+//explicit instantiations
+template void SpeedField<RouteFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
 
 
 //enable/disable the SpeedField

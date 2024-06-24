@@ -47,7 +47,8 @@ template<class P, class T> CheckField<P, T>::CheckField(wxPanel* panel_of_parent
 
 
 //explicit instantiation
-template class  CheckField<SightFrame, ChronoField<SightFrame>>;
+template class CheckField<SightFrame, ChronoField<SightFrame>>;
+template class CheckField<SightFrame, DynamicLengthField<SightFrame>>;
 
 
 //this function writes into the non-GUI field answer the value entered in the GUI box

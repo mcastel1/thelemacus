@@ -36,6 +36,7 @@ template<class S> void ListControl<S>::SetColumns(vector<wxString> headers) {
 
 template void ListControl<Route>::SetColumns(std::__1::vector<wxString, std::__1::allocator<wxString>>);
 template void ListControl<Sight>::SetColumns(std::__1::vector<wxString, std::__1::allocator<wxString>>);
+template void ListControl<Position>::SetColumns(std::__1::vector<wxString, std::__1::allocator<wxString>>);
 
 
 //push back a column to ListControl and store the header size into header_size
@@ -146,7 +147,7 @@ template<class S> void ListControl<S>::Resize(vector<S> list) {
 }
 
 template void ListControl<Route>::Resize(std::__1::vector<Route, std::__1::allocator<Route>>);
-template ListControl<Sight>::Resize(std::__1::vector<Sight, std::__1::allocator<Sight>>);
+template void ListControl<Sight>::Resize(std::__1::vector<Sight, std::__1::allocator<Sight>>);
 
 
 //get the selected items from *this, clears and reallocate selected_items, and writes them in selected_items

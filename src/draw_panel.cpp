@@ -3106,6 +3106,9 @@ template<class E> void DrawPanel::SetProjection(E& event) {
 
 }
 
+template void DrawPanel::SetProjection<wxCommandEvent>(wxCommandEvent&);
+
+
 
 //this method is called when the used has chosen Projection -> set all quantities according to the chosen Projection and call Reset to re-render everything
 template<class E> void DrawPanel::OnChooseProjection(E& event) {
@@ -3117,6 +3120,8 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
     event.Skip(true);
 
 }
+
+template void DrawPanel::OnChooseProjection<wxCommandEvent>(wxCommandEvent&);
 
 
 //This function obtains the geographical Position p of the mouse hovering on the map of the world. It returns true if the mouse is in the plot area, false otherwise

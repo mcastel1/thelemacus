@@ -250,6 +250,9 @@ template<class P> template <class T> void DateField<P>::get(T& event) {
 
 }
 
+template  void DateField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
+
+
 //sets the value in the GUI objects year, month and day equal to the value in the non-GUI limb object date_in
 template<class P> void DateField<P>::set(Date date_in) {
 
@@ -268,3 +271,5 @@ template<class P> void DateField<P>::set(Date date_in) {
     day_ok = true;
 
 }
+
+template void DateField<SightFrame>::set(Date);

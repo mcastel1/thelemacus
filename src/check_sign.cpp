@@ -6,7 +6,9 @@
 //
 
 #include "check_sign.h"
+
 #include "my_app.h"
+#include "position_frame.h"
 
 
 template<class P> CheckSign<P>::CheckSign(AngleField<P>* p_in) {
@@ -75,5 +77,4 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
 
 }
 
-
-
+template void CheckSign<PositionFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

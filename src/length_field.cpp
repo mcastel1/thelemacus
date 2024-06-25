@@ -65,6 +65,7 @@ template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
 template  void LengthField<RouteFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
 template void LengthField<RouteFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
 template void LengthField<SightFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+template void LengthField<SightFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
 
 
 //insert *this in *host

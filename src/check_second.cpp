@@ -62,3 +62,4 @@ template<class P> template<class T> void CheckSecond<P>::operator()(T& event) {
 template void CheckSecond<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckSecond<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckSecond<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckSecond<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

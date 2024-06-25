@@ -126,6 +126,7 @@ template<class P> void ChronoField<P>::set(void) {
 }
 
 template void ChronoField<RouteFrame>::set();
+template void ChronoField<SightFrame>::set(Chrono);
 
 
 //set the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono_in
@@ -159,6 +160,7 @@ template<class P> bool ChronoField<P>::is_ok(void) {
 }
 
 template bool ChronoField<RouteFrame>::is_ok();
+template bool ChronoField<SightFrame>::is_ok();
 
 
 //this function is called every time a keyboard button is lifted in this->hour: it checks whether the text entered so far in value is valid and runs AllOk

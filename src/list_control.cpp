@@ -68,6 +68,7 @@ template<class S> void ListControl<S>::DeselectAll(void) {
 
 }
 
+template void ListControl<Position>::DeselectAll();
 template void ListControl<Route>::DeselectAll();
 template void ListControl<Sight>::DeselectAll();
 
@@ -102,6 +103,7 @@ template<class S> void ListControl<S>::set(vector<S> v, bool keep_selected_items
 
 template void ListControl<Route>::set(std::__1::vector<Route, std::__1::allocator<Route>>, bool);
 template void ListControl<Sight>::set(std::__1::vector<Sight, std::__1::allocator<Sight>>, bool);
+template void ListControl<Position>::set(std::__1::vector<Position, std::__1::allocator<Position>>, bool);
 
 
 //if check = true/false it enables/disables all disableable buttons in *this
@@ -148,6 +150,7 @@ template<class S> void ListControl<S>::Resize(vector<S> list) {
 
 template void ListControl<Route>::Resize(std::__1::vector<Route, std::__1::allocator<Route>>);
 template void ListControl<Sight>::Resize(std::__1::vector<Sight, std::__1::allocator<Sight>>);
+template void ListControl<Position>::Resize(std::__1::vector<Position, std::__1::allocator<Position>>);
 
 
 //get the selected items from *this, clears and reallocate selected_items, and writes them in selected_items

@@ -20,6 +20,7 @@ template<class P> CheckSecond<P>::CheckSecond(ChronoField<P>* p_in) {
 }
 
 template class CheckSecond<RouteFrame>;
+template class CheckSecond<SightFrame>;
 
 
 template<class P> template<class T> void CheckSecond<P>::operator()(T& event) {

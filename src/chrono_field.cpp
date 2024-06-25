@@ -12,6 +12,9 @@
 #endif
 
 #include "check_chrono.h"
+#include "check_hour.h"
+#include "check_minute.h"
+#include "check_second.h"
 #include "color.h"
 #include "constants.h"
 #include "chrono.h"

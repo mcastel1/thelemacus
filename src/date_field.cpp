@@ -15,10 +15,16 @@
 
 #include "date.h"
 
+#include "check_date.h"
+#include "check_day.h"
+#include "check_month.h"
+#include "check_year.h"
 #include "color.h"
 #include "generic.h"
-#include "static_text.h"
 #include "my_app.h"
+#include "sight_frame.h"
+#include "static_text.h"
+#include "tabulate_days.h"
 
 
 //constructor of a DateField object, based on the parent frame frame
@@ -81,10 +87,7 @@ template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {
     day->Bind(wxEVT_COMBOBOX, &DateField::OnEditDay<wxCommandEvent>, this);
     day->Bind(wxEVT_KEY_UP, &DateField::OnEditDay<wxKeyEvent>, this);
 
-
-
-
-
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
 
@@ -97,7 +100,7 @@ template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {
 
 }
 
-
+template class DateField<SightFrame>;
 
 
 

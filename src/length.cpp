@@ -91,7 +91,8 @@ Length::Length(Chrono time, Speed speed) {
 
 
 //set the value of *this equal to x (expressed in units LengthUnit_types[0]). The unit is not modified
-inline void Length::set(String name, double x, [[maybe_unused]] String prefix) {
+//inline 
+void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 
     String new_prefix;
 
@@ -174,7 +175,8 @@ void Length::print(String name, String prefix, ostream& ostr) {
 
 
 //convert *this to unit of measure unit_in, set unit = unit_in and write the result in *this
-inline void Length::convert_to(const LengthUnit& output_unit){
+//inline 
+void Length::convert_to(const LengthUnit& output_unit){
     
     //the value of this in units of measure LengthUnit_types[0]
     double value0 = 0.0;

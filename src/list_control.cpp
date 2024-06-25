@@ -146,6 +146,7 @@ template<class S> void ListControl<S>::Resize(vector<S> list) {
 }
 
 template void ListControl<Route>::Resize(std::__1::vector<Route, std::__1::allocator<Route>>);
+template ListControl<Sight>::Resize(std::__1::vector<Sight, std::__1::allocator<Sight>>);
 
 
 //get the selected items from *this, clears and reallocate selected_items, and writes them in selected_items

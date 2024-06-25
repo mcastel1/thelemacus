@@ -12,10 +12,12 @@
 
 
 //void constructor
-inline Double::Double(void){}
+//inline 
+Double::Double(void){}
 
 //constructor that sets value to  x
-inline Double::Double(const double &x){
+//inline 
+Double::Double(const double &x){
     
     value = x;
     

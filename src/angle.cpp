@@ -43,25 +43,29 @@ Angle::Angle(String name, const double& x, [[maybe_unused]] const String& prefix
 
 }
 
-inline bool Angle::operator == (const Angle& x) const{
+//inline 
+bool Angle::operator == (const Angle& x) const{
 
     return((value == (x.value)));
 
 }
 
-inline bool Angle::operator!=(const Angle& x) {
+//inline 
+bool Angle::operator!=(const Angle& x) {
 
     return(!((*this) == x));
 
 }
 
-inline bool Angle::operator==(const double& x) {
+//inline 
+bool Angle::operator==(const double& x) {
 
     return((value == x));
 
 }
 
-inline bool Angle::operator!=(const double& x) {
+//inline 
+bool Angle::operator!=(const double& x) {
 
     return((value != x));
 
@@ -207,7 +211,8 @@ Angle Angle::operator/ (const double& x) {
 
 
 //set the value of *this equal to x and normalize *this
-inline void Angle::set(double x){
+//inline 
+void Angle::set(double x){
     
     value = x;
     normalize();
@@ -215,7 +220,8 @@ inline void Angle::set(double x){
 }
 
 //call Angle::set(x) and print name with prefix
-inline void Angle::set(String name, double x, [[maybe_unused]] String prefix) {
+//inline 
+void Angle::set(String name, double x, [[maybe_unused]] String prefix) {
 
     set(x);
     if(name != String("")) { print(name, prefix, cout); }
@@ -267,7 +273,8 @@ Angle Angle::span(Angle x) {
 }
 
 //puts the angle in the interval [-pi, pi), it does not alter *this and returns the result
-inline Angle Angle::normalize_pm_pi_ret(void) {
+//inline 
+Angle Angle::normalize_pm_pi_ret(void) {
 
     Angle temp;
 
@@ -289,7 +296,8 @@ void Angle::print(String name, String prefix, ostream& ostr) {
 
 
 //return true is *this is close to 0 or 2 pi within precision epsilon_double, false otherwise
-inline bool Angle::is_zero_epsilon_double(void){
+//inline 
+bool Angle::is_zero_epsilon_double(void){
     
     return((fabs(value) < epsilon_double) || (fabs(value-2.0*M_PI) < epsilon_double));
 
@@ -514,14 +522,16 @@ string Angle::min_to_string(String mode, unsigned int precision) {
 
 
 //returns true if a.normalize_pm_pi_ret().value < b.normalize_pm_pi_ret().value and false otherwise
-inline bool Angle::strictly_smaller_normalize_pm_pi_ret(Angle& a, Angle& b){
+//inline 
+bool Angle::strictly_smaller_normalize_pm_pi_ret(Angle& a, Angle& b){
     
     return((a.normalize_pm_pi_ret().value) < (b.normalize_pm_pi_ret().value));
     
 }
 
 //returns true if a.normalize_pm_pi_ret().value > b.normalize_pm_pi_ret().value and false otherwise
-inline bool Angle::strictly_larger_normalize_pm_pi_ret(Angle& a, Angle& b){
+//inline 
+bool Angle::strictly_larger_normalize_pm_pi_ret(Angle& a, Angle& b){
     
     return((a.normalize_pm_pi_ret().value) > (b.normalize_pm_pi_ret().value));
     

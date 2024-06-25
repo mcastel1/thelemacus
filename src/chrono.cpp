@@ -186,7 +186,8 @@ string Chrono::to_string(unsigned int precision, bool time_zone) {
 
 
 //return the value of *this expresser in hours
-inline double Chrono::get(void) {
+//inline 
+double Chrono::get(void) {
 
     return(((double)h) + ((double)m) / 60.0 + ((double)s) / (60.0 * 60.0));
 

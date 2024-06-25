@@ -11,6 +11,8 @@
     #include "wx/wx.h"
 #endif
 
+#include "route.h"
+
 template<class S> ListControl<S>::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_buttons_in, const wxPoint& pos, const wxSize& size, long style) : wxListCtrl(parent_in, wxID_ANY, pos, size, style) {
 
     disableable_buttons = disableable_buttons_in;
@@ -31,6 +33,9 @@ template<class S> void ListControl<S>::SetColumns(vector<wxString> headers) {
     header_width.erase(header_width.begin());
 
 }
+
+template void ListControl<Route>::SetColumns(std::__1::vector<wxString, std::__1::allocator<wxString>>);
+
 
 //push back a column to ListControl and store the header size into header_size
 template<class S> void ListControl<S>::PushBackColumn(wxString name) {

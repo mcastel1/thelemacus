@@ -163,7 +163,8 @@ void Speed::set(double x){
 
 
 //set the value of *this equal to x and the units equal to unit_in
-inline void Speed::set(double value_in, const SpeedUnit& unit_in) {
+//inline 
+void Speed::set(double value_in, const SpeedUnit& unit_in) {
     
     value = value_in;
     unit = unit_in;

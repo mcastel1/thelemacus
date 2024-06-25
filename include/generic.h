@@ -75,27 +75,31 @@ void AdjustWidth(wxComboBox*);
 
 
 
-inline double cos(const Angle& x) {
+//inline 
+double cos(const Angle& x) {
 
     return cos(x.value);
 
 }
 
 
-inline double cot(double x){
+//inline 
+double cot(double x){
     
     return 1.0/tan(x);
     
 }
 
-inline double csc(double x){
+//inline 
+double csc(double x){
     
     return 1.0/sin(x);
     
 }
 
 //returns alpha = arctan(y/x), with alpha lying in the same quadrant as the vector x, y
-inline double atan(double x, double y){
+//inline 
+double atan(double x, double y){
     
     if(x != 0.0){
         
@@ -125,7 +129,8 @@ inline double atan(double x, double y){
 }
 
 //the floor of the exponential of x
-inline int floor_exp(double x){
+//inline 
+int floor_exp(double x){
     
     return(floor(exp(x)));
     
@@ -138,44 +143,51 @@ inline double round_with_precision(double x, unsigned int precision)
     return round(x * gsl_pow_int(10.0, precision)) / gsl_pow_int(10.0, precision);
 }
 
-inline double sin(const Angle& x) {
+//inline 
+double sin(const Angle& x) {
 
     return sin(x.value);
 
 }
 
-inline double asin(const Double& x) {
+//inline 
+double asin(const Double& x) {
 
     return asin(x.value);
 
 }
 
 
-inline double tan(const Angle& x) {
+//inline 
+double tan(const Angle& x) {
 
     return tan(x.value);
 
 }
 
-inline double csc(const Angle& x) {
+//inline 
+double csc(const Angle& x) {
 
     return csc(x.value);
 
 }
 
-inline double sec(const Angle& x) {
+//inline 
+double sec(const Angle& x) {
 
     return (1.0 / cos(x));
 
 }
 
-inline double cot(const Angle& x) {
+//inline 
+double cot(const Angle& x) {
 
     return cot(x.value);
 
 }
 
-inline double acos(const Double& x) {
+//inline 
+double acos(const Double& x) {
 
     return acos(x.value);
 
@@ -183,7 +195,8 @@ inline double acos(const Double& x) {
 
 
 //put the angle x in the interval [-pi, pi), it does not alter *this and returns the result. This is equivalent to Angle::normalize_pm_pi_ret
-inline Angle normalize_pm_pi_ret(const Angle& x){
+//inline 
+Angle normalize_pm_pi_ret(const Angle& x){
         
     Angle temp;
 
@@ -195,7 +208,8 @@ inline Angle normalize_pm_pi_ret(const Angle& x){
 
 
 //normalize a and b between -pi and pi, and return  the algebraic mean between a.value and b.value
-inline double mean_pm_pi(Angle& a, Angle& b){
+//inline 
+double mean_pm_pi(Angle& a, Angle& b){
     
     return(((a.normalize_pm_pi_ret().value) + (b.normalize_pm_pi_ret().value))/2.0);
     
@@ -203,7 +217,8 @@ inline double mean_pm_pi(Angle& a, Angle& b){
 
 
 //return the mean between a.value and b.value
-inline double mean_value(Angle& a, Angle& b){
+//inline 
+double mean_value(Angle& a, Angle& b){
     
     return( ((a.value) + (b.value))/2.0 );
     
@@ -212,7 +227,8 @@ inline double mean_value(Angle& a, Angle& b){
 
 
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.
-inline bool my_cross(const gsl_vector* a, const gsl_vector* b, gsl_vector** r) {
+//inline 
+bool my_cross(const gsl_vector* a, const gsl_vector* b, gsl_vector** r) {
 
     if (((a->size) == 3) && ((b->size) == 3)) {
 
@@ -245,7 +261,8 @@ inline bool my_cross(const gsl_vector* a, const gsl_vector* b, gsl_vector** r) {
 
 
 //checks whether s is present into wxArrayString, and writes true/false into check if its present/absent. If i!=NULL: if it is present, it writes the position of s in v in *i, if it is not present, i is not touched
-inline void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString v, bool* check, unsigned int* i) {
+//inline 
+void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString v, bool* check, unsigned int* i) {
 
     unsigned int j;
 
@@ -267,14 +284,16 @@ inline void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString
 
 
 //this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
-inline double lambda_mercator(double x){
+//inline 
+double lambda_mercator(double x){
     
     return (-x*rad_to_deg - 360.0*floor((x-(-M_PI))/(2.0*M_PI)));
     
 }
 
 //this function returns the latitude value (expressed in degrees) of the inverse spherical Mercator projection from the rectangular y value
-inline double phi_mercator(double y){
+//inline 
+double phi_mercator(double y){
     
     return(rad_to_deg*atan(sinh(y)));
     

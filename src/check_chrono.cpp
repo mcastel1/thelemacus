@@ -13,6 +13,7 @@
 #include "route_frame.h"
 #include "sight_frame.h"
 
+
 template<class P> CheckChrono<P>::CheckChrono(ChronoField<P>* p_in) {
 
     p = p_in;
@@ -24,6 +25,7 @@ template<class P> CheckChrono<P>::CheckChrono(ChronoField<P>* p_in) {
 }
 
 template class CheckChrono<RouteFrame>;
+template class CheckChrono<SightFrame>;
 
 
 

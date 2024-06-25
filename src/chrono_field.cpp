@@ -16,6 +16,7 @@
 #include "chrono.h"
 #include "generic.h"
 #include "my_app.h"
+#include "route_frame.h"
 #include "static_text.h"
 
 
@@ -87,7 +88,7 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 
 }
 
-
+template class ChronoField<RouteFrame>;
 
 //this function writes into the non-GUI fields in chrono the value written into the respective GUI fields hour, minute and second
 template<class P> template <class T> void ChronoField<P>::get(T& event) {
@@ -118,6 +119,9 @@ template<class P> void ChronoField<P>::set(void) {
 
 }
 
+template void ChronoField<RouteFrame>::set();
+
+
 //set the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono_in
 template<class P> void ChronoField<P>::set(Chrono chrono_in) {
 
@@ -147,6 +151,9 @@ template<class P> bool ChronoField<P>::is_ok(void) {
     return(hour_ok && minute_ok && second_ok);
 
 }
+
+template bool ChronoField<RouteFrame>::is_ok();
+
 
 //this function is called every time a keyboard button is lifted in this->hour: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> template<class E> void ChronoField<P>::OnEditHour(E& event) {
@@ -245,7 +252,7 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 template  void ChronoField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
-
+template void ChronoField<RouteFrame>::Bind<wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*>(wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*);
 
 
 //this function enables/disable the whole ChronoField
@@ -257,8 +264,13 @@ template<class P> void ChronoField<P>::Enable(bool is_enabled) {
 
 }
 
+template void ChronoField<RouteFrame>::Enable(bool);
+
+
 template<class P> template<class T> void ChronoField<P>::InsertIn(T* host) {
 
     host->Add(sizer_v);
 
 }
+
+template void ChronoField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);

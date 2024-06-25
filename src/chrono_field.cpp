@@ -11,12 +11,14 @@
     #include "wx/wx.h"
 #endif
 
+#include "check_chrono.h"
 #include "color.h"
 #include "constants.h"
 #include "chrono.h"
 #include "generic.h"
 #include "my_app.h"
 #include "route_frame.h"
+#include "sight_frame.h"
 #include "static_text.h"
 
 
@@ -110,6 +112,7 @@ template<class P> template <class T> void ChronoField<P>::get(T& event) {
 }
 
 template void ChronoField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void ChronoField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 //set the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object *chrono

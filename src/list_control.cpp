@@ -11,7 +11,10 @@
     #include "wx/wx.h"
 #endif
 
+#include "position.h"
 #include "route.h"
+#include "sight.h"
+
 
 template<class S> ListControl<S>::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_buttons_in, const wxPoint& pos, const wxSize& size, long style) : wxListCtrl(parent_in, wxID_ANY, pos, size, style) {
 
@@ -19,6 +22,9 @@ template<class S> ListControl<S>::ListControl(wxWindow* parent_in, vector<wxButt
     header_width.resize(0);
 
 }
+
+template class ListControl<Position>;
+
 
 //set all columns of *this: add a first dummy column, which is not correctly sized on WIN32 (I don't know why) -> add the real columns -> remove the dummy column. The  size of column i that fits the header is stored in header_width[i]
 template<class S> void ListControl<S>::SetColumns(vector<wxString> headers) {

@@ -23,6 +23,8 @@ template<class P> CheckChrono<P>::CheckChrono(ChronoField<P>* p_in) {
 
 }
 
+template class CheckChrono<RouteFrame>;
+
 
 
 //this function writes into sight.stopwatch the value written into the respective GUI box

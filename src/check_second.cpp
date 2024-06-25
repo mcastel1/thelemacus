@@ -19,6 +19,9 @@ template<class P> CheckSecond<P>::CheckSecond(ChronoField<P>* p_in) {
 
 }
 
+template class CheckSecond<RouteFrame>;
+
+
 template<class P> template<class T> void CheckSecond<P>::operator()(T& event) {
 
     P* f = (p->parent_frame);
@@ -57,3 +60,4 @@ template<class P> template<class T> void CheckSecond<P>::operator()(T& event) {
 
 template void CheckSecond<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckSecond<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckSecond<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

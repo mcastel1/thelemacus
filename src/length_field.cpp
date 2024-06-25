@@ -76,6 +76,7 @@ template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
 }
 
 template void LengthField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template  void LengthField<SightFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
 //same asLengthField<P>::InsertIn(T* host) but with flags to be provided

@@ -11,6 +11,8 @@
     #include "wx/wx.h"
 #endif
 
+#include "list_frame.h"
+
 
 template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in) {
 
@@ -36,3 +38,4 @@ template<class P> void UnsetIdling<P>::operator()(void) {
 
 }
 
+template void UnsetIdling<ListFrame>::operator()();

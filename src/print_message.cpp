@@ -37,6 +37,9 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::SetAndCall(wxCont
 
 }
 
+template void PrintMessage<ListFrame, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String);
+
+
 template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void) {
     
     SetIdling<T>* set_idling;

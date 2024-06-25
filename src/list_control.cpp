@@ -35,6 +35,7 @@ template<class S> void ListControl<S>::SetColumns(vector<wxString> headers) {
 }
 
 template void ListControl<Route>::SetColumns(std::__1::vector<wxString, std::__1::allocator<wxString>>);
+template void ListControl<Sight>::SetColumns(std::__1::vector<wxString, std::__1::allocator<wxString>>);
 
 
 //push back a column to ListControl and store the header size into header_size
@@ -67,6 +68,7 @@ template<class S> void ListControl<S>::DeselectAll(void) {
 }
 
 template void ListControl<Route>::DeselectAll();
+template void ListControl<Sight>::DeselectAll();
 
 
 //clears *this and sets all its items equal to the items in the non-GUI vector v. If keep_selected_items = true, I re-select the items in *this that were selected before ListControl::set was called (if they are compatible with the new size of *this)
@@ -98,6 +100,7 @@ template<class S> void ListControl<S>::set(vector<S> v, bool keep_selected_items
 }
 
 template void ListControl<Route>::set(std::__1::vector<Route, std::__1::allocator<Route>>, bool);
+template void ListControl<Sight>::set(std::__1::vector<Sight, std::__1::allocator<Sight>>, bool);
 
 
 //if check = true/false it enables/disables all disableable buttons in *this

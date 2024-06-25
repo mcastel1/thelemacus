@@ -285,4 +285,6 @@ template<class P> template<class T> void ChronoField<P>::InsertIn(T* host) {
 
 }
 
+template void ChronoField<SightFrame>::InsertIn<wxBoxSizer>(wxBoxSizer*);
 template void ChronoField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void ChronoField<SightFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);

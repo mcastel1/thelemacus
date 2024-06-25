@@ -104,14 +104,14 @@ template class DateField<SightFrame>;
 
 
 
-
-
-
 template<class P> bool DateField<P>::is_ok(void) {
 
     return(year_ok && month_ok && day_ok);
 
 }
+
+template bool DateField<SightFrame>::is_ok();
+
 
 
 //this function is called every time a keyboard button is lifted in this->year: it checks whether the text entered so far in year is valid and runs AllOk
@@ -212,6 +212,8 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 }
 
+template void DateField<SightFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+
 
 //set color as the background color in all fields of *this
 template<class P> void DateField<P>::SetBackgroundColor(Color color) {
@@ -229,6 +231,9 @@ template<class P> template<class T> void DateField<P>::InsertIn(T* host) {
     host->Add(sizer_v);
 
 }
+
+template void DateField<SightFrame>::InsertIn<wxBoxSizer>(wxBoxSizer*);
+
 
 //this functor writes the values written inthe whole GUI date field (year, month and day) in the respective non-GUI object date->D, date->M, date->D
 template<class P> template <class T> void DateField<P>::get(T& event) {

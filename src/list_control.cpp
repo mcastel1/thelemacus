@@ -66,6 +66,9 @@ template<class S> void ListControl<S>::DeselectAll(void) {
 
 }
 
+template ListControl<Route>::DeselectAll();
+
+
 //clears *this and sets all its items equal to the items in the non-GUI vector v. If keep_selected_items = true, I re-select the items in *this that were selected before ListControl::set was called (if they are compatible with the new size of *this)
 template<class S> void ListControl<S>::set(vector<S> v, bool keep_selected_items) {
 
@@ -93,6 +96,8 @@ template<class S> void ListControl<S>::set(vector<S> v, bool keep_selected_items
     }
 
 }
+
+template void ListControl<Route>::set(std::__1::vector<Route, std::__1::allocator<Route>>, bool);
 
 
 //if check = true/false it enables/disables all disableable buttons in *this
@@ -136,6 +141,8 @@ template<class S> void ListControl<S>::Resize(vector<S> list) {
     dummy_frame->Destroy();
 
 }
+
+template void ListControl<Route>::Resize(std::__1::vector<Route, std::__1::allocator<Route>>);
 
 
 //get the selected items from *this, clears and reallocate selected_items, and writes them in selected_items

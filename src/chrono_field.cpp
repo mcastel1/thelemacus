@@ -273,6 +273,9 @@ template<class P> void ChronoField<P>::Enable(bool is_enabled) {
 
 }
 
+template void ChronoField<SightFrame>::Enable(bool);
+
+
 template void ChronoField<RouteFrame>::Enable(bool);
 
 

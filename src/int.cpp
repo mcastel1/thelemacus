@@ -13,7 +13,8 @@
 
 
 //set value equal to i
-inline void Int::set(String name, int i, [[maybe_unused]] String prefix) {
+//inline 
+void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
     String new_prefix;
 
@@ -28,7 +29,8 @@ inline void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
 
 //same as Int::set(String name, int i, [[maybe_unused]] String prefix) {, but without printing out anything
-inline void Int::set(int i) {
+//inline 
+void Int::set(int i) {
 
     value = i;
 

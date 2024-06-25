@@ -110,14 +110,16 @@ void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 
 
 //same as Length::set(String name, double x, [[maybe_unused]] String prefix)  but without printing out anything
-inline void Length::set(double x) {
+//inline 
+void Length::set(double x) {
     
     value = x;
 }
 
 
 //set the value of *this equal to x and the units equal to unit_in
-inline void Length::set(double value_in, const LengthUnit& unit_in) {
+//inline 
+void Length::set(double value_in, const LengthUnit& unit_in) {
     
     value = value_in;
     unit = unit_in;
@@ -253,7 +255,8 @@ void Length::convert_to(const LengthUnit& output_unit){
 
 
 //same as convert_to, but it returns the result
-inline Length Length::convert(const LengthUnit& output_unit){
+//inline 
+Length Length::convert(const LengthUnit& output_unit){
     
     Length result;
     
@@ -417,7 +420,8 @@ void Length::operator /= (const double& x) {
 
 
 //evaluates whether Length (*this) is > than r
-inline bool Length::operator > (const Length& r) {
+//inline 
+bool Length::operator > (const Length& r) {
     
     if(unit == r.unit){
         //*this and r have the same units -> just compare their values
@@ -435,7 +439,8 @@ inline bool Length::operator > (const Length& r) {
 
 
 //evaluates whether Length (*this) is <= r, see Length::operator >
-inline bool Length::operator <= (const Length& r) {
+//inline 
+bool Length::operator <= (const Length& r) {
 
     return(!((*this) > r));
 
@@ -443,7 +448,8 @@ inline bool Length::operator <= (const Length& r) {
 
 
 //evaluates whether Length (*this) is < than r
-inline bool Length::operator < (const Length& r) {
+//inline 
+bool Length::operator < (const Length& r) {
     
     if(unit == r.unit){
         //*this and r have the same units -> just compare their values
@@ -460,7 +466,8 @@ inline bool Length::operator < (const Length& r) {
 }
 
 //evaluates whether Length (*this) is >= r
-inline bool Length::operator >= (const Length& r) {
+//inline 
+bool Length::operator >= (const Length& r) {
 
     return(!((*this) < r));
 
@@ -468,7 +475,8 @@ inline bool Length::operator >= (const Length& r) {
 
 
 //evaluates whether Length (*this) is > than the double r (this supposes that r represents a Length in the same units as this->unit)
-inline bool Length::operator > (const double& r) {
+//inline 
+bool Length::operator > (const double& r) {
 
     return((value > r));
 
@@ -476,7 +484,8 @@ inline bool Length::operator > (const double& r) {
 
 
 //evaluates whether Length (*this) is >= than the double r (this supposes that r represents a Length in the same units as this->unit)
-inline bool Length::operator >= (const double& r) {
+//inline 
+bool Length::operator >= (const double& r) {
 
     return(!((*this) < r));
 
@@ -484,7 +493,8 @@ inline bool Length::operator >= (const double& r) {
 
 
 //evaluates whether Length (*this) is <= than the double r (this supposes that r represents a Length in the same units as this->unit)
-inline bool Length::operator <= (const double& r) {
+//inline 
+bool Length::operator <= (const double& r) {
 
     return(!((*this) > r));
 
@@ -492,7 +502,8 @@ inline bool Length::operator <= (const double& r) {
 
 
 //evaluates whether Length (*this) is smaller than the double r (this supposes that r represents a Length in the same units as this->unit)
-inline bool Length::operator < (const double& r) {
+//inline 
+bool Length::operator < (const double& r) {
 
     return((value < r));
 
@@ -551,14 +562,16 @@ Length Length::operator / (const double& x) {
 
 
 //return true if both the value and unit of *this and length coincide, false otherwise
-inline bool Length::operator == (const Length& length) {
+//inline 
+bool Length::operator == (const Length& length) {
 
     return((value == (length.value)) && (unit == (length.unit)));
 
 }
 
 
-inline bool Length::operator != (const Length& length) {
+//inline 
+bool Length::operator != (const Length& length) {
 
     return (!((*this) == length));
 

@@ -242,7 +242,8 @@ void Route::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcont
 }
 
 
-inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
+//inline 
+void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
 
     wxPoint p;
     bool end_connected;
@@ -285,7 +286,8 @@ inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector<
 
 
 //draws into draw_panel the Route this, by tabulating the Route with n points and connecting them with an spline. The route is drawn with color 'color' and width 'width'. If width = -1, then the Route is drawn with default width
-inline void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, DrawPanel* draw_panel) {
+//inline 
+void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, DrawPanel* draw_panel) {
 
     vector< vector<wxPoint> > p;
     wxPoint temp;
@@ -360,7 +362,8 @@ inline void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* 
 
 }
 
-inline void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
+//inline 
+void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
 
     int i;
     vector< vector<wxPoint> > v;
@@ -380,7 +383,8 @@ inline void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_pane
 
 
 //draws the Route *this into draw_panel, with any projection. n_points, color and width is the number of points, the line color and the width of the line used to draw *this, respectively
-inline void Route::Draw(unsigned int n_points, Color foreground_color, Color background_color, int width, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
+//inline 
+void Route::Draw(unsigned int n_points, Color foreground_color, Color background_color, int width, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
 
     unsigned int i;
     vector<wxPoint> p;
@@ -484,7 +488,8 @@ inline void Route::Draw(unsigned int n_points, Color foreground_color, Color bac
 }
 
 
-inline void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
+//inline 
+void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
 
     int i;
     vector< vector<wxPoint> > v;
@@ -502,7 +507,8 @@ inline void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, 
 }
 
 //tabulate the points of Route *this in any projection of draw_panel and writes them into v
-inline void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
+//inline 
+void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
 
     unsigned int i, j;
     wxPoint p;

@@ -10,10 +10,12 @@
 #include <wx/sizer.h>
 
 
-#include "limb_field.h"
-#include "constants.h"
-#include "my_string.h"
 #include "check_limb.h"
+#include "constants.h"
+#include "limb_field.h"
+#include "my_string.h"
+#include "on_change_selection_in_limb_field.h"
+#include "sight_frame.h"
 
 
 //constructor of a LimbField object, based on the parent frame frame
@@ -58,6 +60,8 @@ template<class P> LimbField<P>::LimbField(wxPanel* panel_of_parent, Limb* p) {
     sizer_h->Add(name, 0, wxALIGN_CENTER);
 
 }
+
+template class LimbField<SightFrame>;
 
 
 template<class P> bool LimbField<P>::is_ok(void) {

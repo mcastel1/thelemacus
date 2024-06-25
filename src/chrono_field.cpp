@@ -94,6 +94,8 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 }
 
 template class ChronoField<RouteFrame>;
+template class ChronoField<SightFrame>;
+
 
 //this function writes into the non-GUI fields in chrono the value written into the respective GUI fields hour, minute and second
 template<class P> template <class T> void ChronoField<P>::get(T& event) {

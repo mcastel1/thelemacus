@@ -8,6 +8,7 @@
 #include "dynamic_length_field.h"
 #include "length.h"
 #include "length_field.h"
+#include "sight_frame.h"
 
 
 
@@ -61,6 +62,10 @@ template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
 
 }
 
+template  void LengthField<RouteFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+template void LengthField<RouteFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
+template void LengthField<SightFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+
 
 //insert *this in *host
 template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
@@ -69,6 +74,7 @@ template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
 
 }
 
+template void LengthField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
 //same asLengthField<P>::InsertIn(T* host) but with flags to be provided
@@ -77,3 +83,5 @@ template<class P> template<class T> void LengthField<P>::InsertIn(T* host, wxSiz
     host->Add(sizer_v, flag);
 
 }
+
+template void LengthField<ChartFrame>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);

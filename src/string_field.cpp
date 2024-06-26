@@ -51,7 +51,7 @@ template <class P> template <typename EventTag, typename Method, typename Object
 
 }
 
-
+template void StringField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 
 
 //I write in the non-GUI object string the value entered in the GUI object value

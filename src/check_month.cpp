@@ -20,6 +20,8 @@ template<class P> CheckMonth<P>::CheckMonth(DateField<P>* p_in) {
 
 }
 
+template class CheckMonth<SightFrame>;
+
 
 
 template<class P> template<class T> void CheckMonth<P>::operator()(T& event) {

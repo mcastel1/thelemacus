@@ -8,6 +8,7 @@
 #include "string_field.h"
 
 #include "constants.h"
+#include "route_frame.h"
 
 
 //constructor of a StringField object, based on the parent frame frame
@@ -34,18 +35,6 @@ template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* 
     sizer_h->Add(value, 0, wxALIGN_CENTER);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 template<class P> template<class T> void StringField<P>::InsertIn(T* host) {
@@ -75,6 +64,8 @@ template<class P> template<class T> void StringField<P>::get(T& event) {
 
 }
 
+template void StringField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
+
 
 //sets the value in the GUI object value equal to the value in the non-GUI String object string
 template<class P> void StringField<P>::set(void) {
@@ -83,3 +74,4 @@ template<class P> void StringField<P>::set(void) {
 
 }
 
+template void StringField<RouteFrame>::set();

@@ -10,6 +10,7 @@
 #include "check_string.h"
 #include "constants.h"
 #include "route_frame.h"
+#include "sight_frame.h"
 
 
 //constructor of a StringField object, based on the parent frame frame
@@ -71,6 +72,7 @@ template<class P> template<class T> void StringField<P>::get(T& event) {
 }
 
 template void StringField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void StringField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 //sets the value in the GUI object value equal to the value in the non-GUI String object string

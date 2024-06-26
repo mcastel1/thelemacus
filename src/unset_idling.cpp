@@ -13,6 +13,7 @@
 
 #include "chart_frame.h"
 #include "list_frame.h"
+#include "sight_frame.h"
 
 
 template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in) {
@@ -22,6 +23,7 @@ template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in) {
 }
 
 template class UnsetIdling<ChartFrame>;
+template class UnsetIdling<SightFrame>;
 
 
 template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event) {

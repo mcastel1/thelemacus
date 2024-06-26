@@ -11,6 +11,7 @@
     #include "wx/wx.h"
 #endif
 
+#include "chart_frame.h"
 #include "list_frame.h"
 
 
@@ -19,6 +20,8 @@ template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in) {
     parent = parent_in;
 
 }
+
+template class UnsetIdling<ChartFrame>;
 
 
 template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event) {

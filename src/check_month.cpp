@@ -72,3 +72,4 @@ template<class P> template<class T> void CheckMonth<P>::operator()(T& event) {
 }
 
 template void CheckMonth<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckMonth<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

@@ -37,3 +37,5 @@ template<class F> template <class T> void CloseFrame<F>::operator()([[maybe_unus
 
 //explicit instantiations
 template void CloseFrame<ListFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CloseFrame<MessageFrame<UnsetIdling<ListFrame>>>::operator()<wxKeyEvent>(wxKeyEvent&);
+template void CloseFrame<MessageFrame<UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);

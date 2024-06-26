@@ -14,6 +14,7 @@
 #include "message_frame.h"
 #include "my_app.h"
 #include "my_string.h"
+#include "position_frame.h"
 #include "set_idling.h"
 #include "sight_frame.h"
 #include "unset_idling.h"
@@ -46,6 +47,9 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::SetAndCall(wxCont
 }
 
 template void PrintMessage<ListFrame, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String);
+template void PrintMessage<RouteFrame, UnsetIdling<RouteFrame>>::SetAndCall(wxControl*, String, String, String);
+template void PrintMessage<SightFrame, UnsetIdling<SightFrame>>::SetAndCall(wxControl*, String, String, String);
+template void PrintMessage<PositionFrame, UnsetIdling<PositionFrame>>::SetAndCall(wxControl*, String, String, String);
 
 
 template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void) {

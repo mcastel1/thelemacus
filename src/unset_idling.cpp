@@ -12,6 +12,7 @@
 #endif
 
 #include "chart_frame.h"
+#include "draw_panel.h"
 #include "list_frame.h"
 #include "position_frame.h"
 #include "route_frame.h"
@@ -28,6 +29,7 @@ template class UnsetIdling<ChartFrame>;
 template class UnsetIdling<RouteFrame>;
 template class UnsetIdling<SightFrame>;
 template class UnsetIdling<PositionFrame>;
+template class UnsetIdling<DrawPanel>;
 
 
 template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event) {

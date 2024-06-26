@@ -8,6 +8,7 @@
 #include "show_question_frame.h"
 
 #include "my_app.h"
+#include "question_frame.h"
 #include "set_idling.h"
 #include "unset_idling.h"
 
@@ -61,6 +62,9 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
     f->CallAfter(*this);
 
 }
+
+template void ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String, bool, bool, bool);
+
 
 
 //if question_frame != NULL, enable or disable question_frame->button_a/b according to the boolean variables enable_button_a/b

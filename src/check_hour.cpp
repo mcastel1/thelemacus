@@ -9,6 +9,7 @@
 
 #include "my_app.h"
 #include "my_string.h"
+#include "sight_frame.h"
 
 template<class P> CheckHour<P>::CheckHour(ChronoField<P>* p_in) {
 
@@ -52,3 +53,5 @@ template<class P> template<class T> void CheckHour<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template  void CheckHour<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

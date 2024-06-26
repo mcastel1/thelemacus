@@ -17,6 +17,9 @@ template<class P> CheckLimb<P>::CheckLimb(LimbField<P>* p_in) {
 
 }
 
+template class CheckLimb<SightFrame>;
+
+
 template<class P> template<class T> void CheckLimb<P>::operator()(T& event) {
 
     P* f = (p->parent_frame);

@@ -30,7 +30,7 @@ template class UnsetIdling<RouteFrame>;
 template class UnsetIdling<SightFrame>;
 template class UnsetIdling<PositionFrame>;
 template class UnsetIdling<DrawPanel>;
-
+template class UnsetIdling<ListFrame>;
 
 template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event) {
 

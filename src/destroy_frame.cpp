@@ -7,12 +7,17 @@
 
 #include "destroy_frame.h"
 
+#include "list_frame.h"
+
 
 template<class F> DestroyFrame<F>::DestroyFrame(F* frame_in) {
 
     frame = frame_in;
 
 }
+
+template class DestroyFrame<ListFrame>;
+
 
 //destroys a frame of type F
 template<class F> void DestroyFrame<F>::operator()(void) {
@@ -22,3 +27,4 @@ template<class F> void DestroyFrame<F>::operator()(void) {
 
 }
 
+template void DestroyFrame<ListFrame>::operator()();

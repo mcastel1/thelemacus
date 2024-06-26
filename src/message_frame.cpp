@@ -11,7 +11,9 @@
     #include "wx/wx.h"
 #endif
 
+#include "close_frame.h"
 #include "constants.h"
+#include "list_frame.h"
 #include "my_app.h"
 #include "static_text.h"
 
@@ -79,6 +81,9 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     CentreOnScreen();
 
 }
+
+template class MessageFrame<UnsetIdling<ListFrame>>;
+
 
 //if a key is pressed in the keyboard, I call this function
 template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event) {

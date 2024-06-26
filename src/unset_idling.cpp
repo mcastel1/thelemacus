@@ -48,3 +48,5 @@ template<class P> void UnsetIdling<P>::operator()(void) {
 }
 
 template void UnsetIdling<ListFrame>::operator()();
+template void UnsetIdling<RouteFrame>::operator()();
+tempalte void UnsetIdling<SightFrame>::operator()();

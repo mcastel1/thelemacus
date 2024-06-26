@@ -63,6 +63,8 @@ template <class P> template <typename EventTag, typename Method, typename Object
 
 template void StringField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 template void StringField<SightFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+template void StringField<PositionFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (PositionFrame::*)(wxKeyEvent&), PositionFrame*>(wxEventTypeTag<wxKeyEvent>, void (PositionFrame::*)(wxKeyEvent&), PositionFrame*);
+template void StringField<PositionFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
 //I write in the non-GUI object string the value entered in the GUI object value
@@ -89,3 +91,4 @@ template<class P> void StringField<P>::set(void) {
 
 template void StringField<RouteFrame>::set();
 template void StringField<SightFrame>::set();
+template void StringField<PositionFrame>::set();

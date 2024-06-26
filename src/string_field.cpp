@@ -77,6 +77,7 @@ template<class P> template<class T> void StringField<P>::get(T& event) {
 
 template void StringField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
 template void StringField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void StringField<PositionFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 //sets the value in the GUI object value equal to the value in the non-GUI String object string

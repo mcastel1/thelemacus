@@ -38,3 +38,5 @@ template<class P> template<class T> void CheckString<P>::operator()(T& event) {
 template void CheckString<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckString<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckString<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template  void CheckString<PositionFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckString<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

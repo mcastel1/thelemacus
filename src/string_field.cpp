@@ -9,6 +9,7 @@
 
 #include "check_string.h"
 #include "constants.h"
+#include "position_frame.h"
 #include "route_frame.h"
 #include "sight_frame.h"
 
@@ -39,6 +40,8 @@ template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* 
 }
 
 template class StringField<RouteFrame>;
+template class StringField<SightFrame>;
+template class StringField<PositionFrame>;
 
 
 template<class P> template<class T> void StringField<P>::InsertIn(T* host) {
@@ -48,7 +51,7 @@ template<class P> template<class T> void StringField<P>::InsertIn(T* host) {
 }
 
 template void StringField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
-
+template void StringField<SightFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 //bind this -> value to method
 template <class P> template <typename EventTag, typename Method, typename Object> void StringField<P>::Bind(EventTag tag, Method method, Object object) {

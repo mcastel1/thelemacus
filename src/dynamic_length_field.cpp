@@ -79,7 +79,7 @@ template<class P> void DynamicLengthField<P>::set(void) {
 
 }
 
-
+template void DynamicLengthField<RouteFrame>::set();
 
 
 

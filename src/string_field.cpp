@@ -7,6 +7,7 @@
 
 #include "string_field.h"
 
+#include "check_string.h"
 #include "constants.h"
 #include "route_frame.h"
 
@@ -36,12 +37,17 @@ template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* 
 
 }
 
+template class StringField<RouteFrame>;
+
 
 template<class P> template<class T> void StringField<P>::InsertIn(T* host) {
 
     host->Add(sizer_v);
 
 }
+
+template void StringField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+
 
 //bind this -> value to method
 template <class P> template <typename EventTag, typename Method, typename Object> void StringField<P>::Bind(EventTag tag, Method method, Object object) {

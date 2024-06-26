@@ -17,6 +17,10 @@ template<class P> CheckHour<P>::CheckHour(ChronoField<P>* p_in) {
 
 }
 
+template class CheckHour<RouteFrame>;
+template class CheckHour<SightFrame>;
+
+
 template<class P> template<class T> void CheckHour<P>::operator()(T& event) {
 
     P* f = (p->parent_frame);
@@ -54,4 +58,7 @@ template<class P> template<class T> void CheckHour<P>::operator()(T& event) {
 
 }
 
-template  void CheckHour<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckHour<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckHour<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckHour<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckHour<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

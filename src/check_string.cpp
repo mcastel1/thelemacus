@@ -7,6 +7,7 @@
 
 #include "check_string.h"
 
+#include "position_frame.h"
 #include "route_frame.h"
 #include "sight_frame.h"
 #include "string_field.h"
@@ -18,7 +19,9 @@ template<class P> CheckString<P>::CheckString(StringField<P>* p_in) {
 
 }
 
+template class CheckString<PositionFrame>;
 template class CheckString<RouteFrame>;
+template class CheckString<SightFrame>;
 
 
 //this functor does nothing, delete it in the future

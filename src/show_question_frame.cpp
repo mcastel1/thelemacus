@@ -47,6 +47,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
 }
 
 template void ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
+template void ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
 
 
 //set the wxControl, title and question and answers for the functor *this,  set enable_butoon_y/n to enable_button_y/n_in, and set bind_esc_to_button_b = bind_esc_to_button_b_in.  I call the functor operator() with CallAfter

@@ -80,6 +80,7 @@ template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (SpeedField<RouteFrame>::*)(wxKeyEvent&), SpeedField<RouteFrame>*>(wxEventTypeTag<wxKeyEvent>, void (SpeedField<RouteFrame>::*)(wxKeyEvent&), SpeedField<RouteFrame>*);
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (SpeedField<RouteFrame>::*)(wxCommandEvent&), SpeedField<RouteFrame>*>(wxEventTypeTag<wxCommandEvent>, void (SpeedField<RouteFrame>::*)(wxCommandEvent&), SpeedField<RouteFrame>*);
+template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*>(wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*);
 
 
 //set a tooltip with text text to *this
@@ -319,3 +320,4 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 template void MultipleItemField<ChartFrame, Projection, void>::Enable(bool);
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::Enable(bool);
 template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::Enable(bool);
+template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>::Enable(bool);

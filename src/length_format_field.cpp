@@ -28,6 +28,8 @@ template<class P> LengthFormatField<P>::LengthFormatField(wxPanel* panel_of_pare
 
 }
 
+template class LengthFormatField<RouteFrame>;
+
 
 //this function is called every time the user modifies the text in this->name: it checks whether the text entered so far in name is valid, if name is valid, it calls OnChooseLengthFormat to select the projection written in name
 template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) {

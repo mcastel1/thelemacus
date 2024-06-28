@@ -78,7 +78,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 
 }
 
-
+template void MultipleItemField<ChartFrame, Projection, void>::SetToolTip(String const&);
 
 
 template<class P, class NON_GUI, class CHECK> template<class T> void MultipleItemField<P, NON_GUI, CHECK>::InsertIn(T* host) {

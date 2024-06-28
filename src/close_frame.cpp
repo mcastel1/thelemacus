@@ -48,3 +48,5 @@ template void CloseFrame<MessageFrame<UnsetIdling<RouteFrame>>>::operator()<wxKe
 template void CloseFrame<MessageFrame<UnsetIdling<RouteFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<MessageFrame<UnsetIdling<SightFrame>>>::operator()<wxKeyEvent>(wxKeyEvent&);
 template void CloseFrame<MessageFrame<UnsetIdling<SightFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CloseFrame<MessageFrame<UnsetIdling<PositionFrame>>>::operator()<wxKeyEvent>(wxKeyEvent&);
+template void CloseFrame<MessageFrame<UnsetIdling<PositionFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);

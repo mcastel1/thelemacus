@@ -59,3 +59,4 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
 }
 
 template void CheckSpeedValue<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckSpeedValue<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

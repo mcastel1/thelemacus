@@ -165,7 +165,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
 
                     
                     chart_frame->draw_panel->rotation_start_drag->set((*(chart_frame->draw_panel->rotation)));
-                    (*(chart_frame->draw_panel->circle_observer->reference_position)) = (MotionHandler<F>::start);
+                    (*(chart_frame->draw_panel->circle_observer->reference_position)) = (*(MotionHandler<F>::start));
                     omega_start = chart_frame->draw_panel->circle_observer->omega;
                     
                     break;

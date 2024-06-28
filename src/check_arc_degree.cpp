@@ -63,3 +63,5 @@ template<class P> template<class T> void CheckArcDegree<P>::operator()(T& event)
 template void CheckArcDegree<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
 template void CheckArcDegree<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckArcDegree<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckArcDegree<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckArcDegree<PositionFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

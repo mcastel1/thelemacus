@@ -90,6 +90,9 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
     
 }
 
+template void ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>::operator()();
+
+
 //this method iterates the animation
 template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     

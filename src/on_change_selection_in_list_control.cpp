@@ -94,3 +94,4 @@ template<class S> template<class T>void OnChangeSelectionInListControl<S>::opera
     
 }
 
+template void OnChangeSelectionInListControl<Route>::operator()<wxCommandEvent>(wxCommandEvent&);

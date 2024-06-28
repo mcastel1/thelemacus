@@ -24,6 +24,9 @@ template<class P> ConfirmTransport<P>::ConfirmTransport(P* parent_in) {
 
 }
 
+template class ConfirmTransport<ListFrame>;
+
+
 //this is the same as template<class P> void ConfirmTransport<P>::operator()(void){ but without the event argument)
 template<class P> void ConfirmTransport<P>::operator()(void) {
 

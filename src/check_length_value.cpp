@@ -9,6 +9,7 @@
 
 #include "my_app.h"
 #include "my_string.h"
+#include "sight_frame.h"
 
 template<class P> CheckLengthValue<P>::CheckLengthValue(DynamicLengthField<P>* p_in) {
 
@@ -55,3 +56,4 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T& eve
 }
 
 template void CheckLengthValue<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckLengthValue<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

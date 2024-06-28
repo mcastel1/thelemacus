@@ -87,3 +87,4 @@ template<class P> template<class T> void TabulateDays<P>::operator()(T& event) {
 
 template void TabulateDays<SightFrame>::operator()<wxKeyEvent>(wxKeyEvent&);
 template void TabulateDays<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void TabulateDays<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

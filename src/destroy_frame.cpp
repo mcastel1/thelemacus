@@ -8,6 +8,8 @@
 #include "destroy_frame.h"
 
 #include "list_frame.h"
+#include "route_frame.h"
+#include "sight_frame.h"
 
 
 template<class F> DestroyFrame<F>::DestroyFrame(F* frame_in) {
@@ -18,6 +20,8 @@ template<class F> DestroyFrame<F>::DestroyFrame(F* frame_in) {
 
 template class DestroyFrame<ListFrame>;
 template class DestroyFrame<MessageFrame<UnsetIdling<ListFrame>>>;
+template class DestroyFrame<MessageFrame<UnsetIdling<RouteFrame>>>;
+template class DestroyFrame<MessageFrame<UnsetIdling<SightFrame>>>;
 
 
 //destroys a frame of type F
@@ -29,4 +33,5 @@ template<class F> void DestroyFrame<F>::operator()(void) {
 }
 
 template void DestroyFrame<ListFrame>::operator()();
-template void  DestroyFrame<MessageFrame<UnsetIdling<ListFrame>>>::operator()();
+template void DestroyFrame<MessageFrame<UnsetIdling<ListFrame>>>::operator()();
+template void DestroyFrame<MessageFrame<UnsetIdling<RouteFrame>>>::operator()();

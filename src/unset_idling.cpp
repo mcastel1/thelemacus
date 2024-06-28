@@ -53,3 +53,4 @@ template void UnsetIdling<ListFrame>::operator()();
 template void UnsetIdling<PositionFrame>::operator()();
 template void UnsetIdling<RouteFrame>::operator()();
 template void UnsetIdling<SightFrame>::operator()();
+template void UnsetIdling<DrawPanel>::operator()();

@@ -9,6 +9,7 @@
 
 #include "list_frame.h"
 #include "position_frame.h"
+#include "question_frame.h"
 #include "route_frame.h"
 #include "sight_frame.h"
 
@@ -42,3 +43,4 @@ template void DestroyFrame<MessageFrame<UnsetIdling<RouteFrame>>>::operator()();
 template void DestroyFrame<MessageFrame<UnsetIdling<SightFrame>>>::operator()();
 template void DestroyFrame<MessageFrame<UnsetIdling<PositionFrame>>>::operator()();
 template void DestroyFrame<MessageFrame<UnsetIdling<DrawPanel>>>::operator()();
+template void DestroyFrame<QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>>::operator()();

@@ -61,6 +61,8 @@ template<class P> void RouteTypeField<P>::set(void) {
     
 }
 
+template void RouteTypeField<RouteFrame>::set();
+
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
 template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
@@ -116,11 +118,13 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
 
 }
 
+
 template<class P> void RouteTypeField<P>::OnEdit(void){
     
     wxCommandEvent dummy;
     
     OnEdit(dummy);
     
-    
 }
+
+template void RouteTypeField<RouteFrame>::OnEdit();

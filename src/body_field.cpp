@@ -35,7 +35,7 @@ template class BodyField<SightFrame>;
 //sets the value in the GUI object name equal to the value in the non-GUI Body object body
 template<class P> void BodyField<P>::set(void) {
 
-    MultipleItemField<P, Body, CheckBody<P> >::name->SetValue(MultipleItemField<P, Body, CheckBody<P> >::object->name.value);
+    MultipleItemField<P, Body, CheckBody<P> >::name->SetValue(MultipleItemField<P, Body, CheckBody<P> >::object->name->value);
     MultipleItemField<P, Body, CheckBody<P> >::ok = true;
 
 }

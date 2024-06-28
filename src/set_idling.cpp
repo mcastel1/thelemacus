@@ -27,7 +27,7 @@ template class SetIdling<ListFrame>;
 template class SetIdling<PositionFrame>;
 template class SetIdling<RouteFrame>;
 template class SetIdling<SightFrame>;
-
+template class SetIdling<DrawPanel>;
 
 
 template<class P> void SetIdling<P>::operator()(wxCommandEvent& event) {
@@ -48,3 +48,7 @@ template<class P> void SetIdling<P>::operator()(void) {
 }
 
 template void SetIdling<ListFrame>::operator()();
+template void SetIdling<DrawPanel>::operator()();
+template void SetIdling<PositionFrame>::operator()();
+template void SetIdling<SightFrame>::operator()();
+template void SetIdling<RouteFrame>::operator()();

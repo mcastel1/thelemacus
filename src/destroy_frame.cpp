@@ -17,6 +17,7 @@ template<class F> DestroyFrame<F>::DestroyFrame(F* frame_in) {
 }
 
 template class DestroyFrame<ListFrame>;
+template class DestroyFrame<MessageFrame<UnsetIdling<ListFrame>>>;
 
 
 //destroys a frame of type F

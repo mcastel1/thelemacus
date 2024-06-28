@@ -75,3 +75,4 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
 
 }
 
+tempalte void CheckRouteType<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

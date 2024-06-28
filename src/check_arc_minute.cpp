@@ -66,3 +66,4 @@ template void CheckArcMinute<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&
 template void CheckArcMinute<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckArcMinute<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
 template void CheckArcMinute<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckArcMinute<PositionFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

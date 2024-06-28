@@ -26,6 +26,8 @@ template class CloseFrame<MessageFrame<UnsetIdling<RouteFrame>>>;
 template class CloseFrame<MessageFrame<UnsetIdling<SightFrame>>>;
 template class CloseFrame<MessageFrame<UnsetIdling<PositionFrame>>>;
 template class CloseFrame<MessageFrame<UnsetIdling<DrawPanel>>>;
+template class CloseFrame<QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>>;
+
 
 //closes a frame of type F
 template<class F> template <class T> void CloseFrame<F>::operator()([[maybe_unused]] T& event) {
@@ -51,3 +53,4 @@ template void CloseFrame<MessageFrame<UnsetIdling<SightFrame>>>::operator()<wxKe
 template void CloseFrame<MessageFrame<UnsetIdling<SightFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<MessageFrame<UnsetIdling<PositionFrame>>>::operator()<wxKeyEvent>(wxKeyEvent&);
 template void CloseFrame<MessageFrame<UnsetIdling<PositionFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CloseFrame<MessageFrame<UnsetIdling<DrawPanel>>>::operator()<wxKeyEvent>(wxKeyEvent&);

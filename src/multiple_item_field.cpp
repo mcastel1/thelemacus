@@ -68,6 +68,8 @@ template<class P, class NON_GUI, class CHECK> template <typename EventTag, typen
 
 }
 
+template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (LengthField<RouteFrame>::*)(wxCommandEvent&), DynamicLengthField<RouteFrame>*>(wxEventTypeTag<wxCommandEvent>, void (LengthField<RouteFrame>::*)(wxCommandEvent&), DynamicLengthField<RouteFrame>*);
+
 
 //set a tooltip with text text to *this
 template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::SetToolTip(const String& text) {

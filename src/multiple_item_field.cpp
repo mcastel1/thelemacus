@@ -95,6 +95,8 @@ template<class P, class NON_GUI, class CHECK> template<class T> void MultipleIte
 
 }
 
+template void MultipleItemField<ChartFrame, Projection, void>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
+
 
 //set the value in the GUI object name equal to the value in the non-GUI NON_GUI object 'object'
 template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::set(void) {

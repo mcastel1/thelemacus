@@ -17,6 +17,9 @@ template<class P> CheckArcMinute<P>::CheckArcMinute(AngleField<P>* p_in) {
 
 }
 
+template class CheckArcMinute<RouteFrame>;
+
+
 template<class P> template <class T> void CheckArcMinute<P>::operator()(T& event) {
 
     P* f = (p->parent);
@@ -54,3 +57,5 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T& event
     event.Skip(true);
 
 }
+
+template void CheckArcMinute<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

@@ -52,6 +52,7 @@ template void PrintMessage<RouteFrame, UnsetIdling<RouteFrame>>::SetAndCall(wxCo
 template void PrintMessage<SightFrame, UnsetIdling<SightFrame>>::SetAndCall(wxControl*, String, String, String);
 template void PrintMessage<PositionFrame, UnsetIdling<PositionFrame>>::SetAndCall(wxControl*, String, String, String);
 template void PrintMessage<DrawPanel, UnsetIdling<DrawPanel>>::SetAndCall(wxControl*, String, String, String);
+template void PrintMessage<ChartFrame, UnsetIdling<ChartFrame>>::SetAndCall(wxControl*, String, String, String);
 
 
 template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void) {

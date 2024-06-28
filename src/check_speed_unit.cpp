@@ -15,6 +15,9 @@ template<class P> CheckSpeedUnit<P>::CheckSpeedUnit(SpeedField<P>* p_in) {
 
 }
 
+template class CheckSpeedUnit<RouteFrame>;
+
+
 
 //check the unit in the GUI field in SpeedField
 template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event) {

@@ -7,8 +7,13 @@
 
 #include "question_frame.h"
 
+#include "close_app.h"
+#include "close_frame.h"
+#include "delete_position.h"
+#include "existing_route.h"
 #include "my_app.h"
 #include "new_route.h"
+#include "show_all.h"
 
 
 
@@ -98,6 +103,7 @@ template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F
 
 template class QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
 template class QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ShowAll, CloseApp, ShowAll>;
 
 
 //if the user presses return/escape, I call f_a / f_b

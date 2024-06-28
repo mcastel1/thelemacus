@@ -237,7 +237,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     (MotionHandler<F>::transporting_route_temp).compute_end(String(""));
                     
                     //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
-                    chart_frame->draw_panel->rotation->set(((*(chart_frame->draw_panel->rotation_start_drag)) * Rotation((MotionHandler<F>::transporting_route_temp).end, (MotionHandler<F>::start))));
+                    chart_frame->draw_panel->rotation->set(((*(chart_frame->draw_panel->rotation_start_drag)) * Rotation((*((MotionHandler<F>::transporting_route_temp).end)), (*(MotionHandler<F>::start)))));
                     
                     (*(chart_frame->draw_panel->circle_observer->reference_position)) = (*((MotionHandler<F>::transporting_route_temp).end));
 

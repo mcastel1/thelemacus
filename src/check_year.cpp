@@ -21,6 +21,8 @@ template<class P> CheckYear<P>::CheckYear(DateField<P>* p_in) {
 
 }
 
+template class CheckYear<SightFrame>;
+
 
 template<class P> template<class T> void CheckYear<P>::operator()(T& event) {
 

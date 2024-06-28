@@ -85,3 +85,6 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template void CheckBody<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckBody<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

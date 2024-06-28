@@ -58,3 +58,4 @@ template<class P> template<class T> void CheckLimb<P>::operator()(T& event) {
 }
 
 template void CheckLimb<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckLimb<SightFrame>::operator()<wxKeyEvent>(wxKeyEvent&);

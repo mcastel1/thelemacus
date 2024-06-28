@@ -41,7 +41,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 
             if (check) {
 
-                if (((p->catalog->list)[i].name == String("sun")) || ((p->catalog->list)[i].name == String("moon"))) {
+                if (((*((p->catalog->list)[i].name)) == String("sun")) || ((*((p->catalog->list)[i].name)) == String("moon"))) {
                     //in this case, the selected body is a body which has a limb -> I enable the limb field
 
                     f->limb->name->Enable(true);

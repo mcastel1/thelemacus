@@ -70,6 +70,7 @@ template<class P, class NON_GUI, class CHECK> template <typename EventTag, typen
 
 template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (LengthField<RouteFrame>::*)(wxCommandEvent&), DynamicLengthField<RouteFrame>*>(wxEventTypeTag<wxCommandEvent>, void (LengthField<RouteFrame>::*)(wxCommandEvent&), DynamicLengthField<RouteFrame>*);
 template void MultipleItemField<ChartFrame, Projection, void>::Bind<wxEventTypeTag<wxKeyEvent>, void (ChartFrame::*)(wxKeyEvent&), ChartFrame*>(wxEventTypeTag<wxKeyEvent>, void (ChartFrame::*)(wxKeyEvent&), ChartFrame*);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (LengthField<RouteFrame>::*)(wxKeyEvent&), DynamicLengthField<RouteFrame>*>(wxEventTypeTag<wxKeyEvent>, void (LengthField<RouteFrame>::*)(wxKeyEvent&), DynamicLengthField<RouteFrame>*);
 
 
 //set a tooltip with text text to *this

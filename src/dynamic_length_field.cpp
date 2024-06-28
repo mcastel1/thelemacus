@@ -125,6 +125,8 @@ template<class P> void DynamicLengthField<P>::Enable(bool is_enabled) {
 
 }
 
+template void DynamicLengthField<RouteFrame>::Enable(bool);
+
 
 template<class P> template <typename EventTag, typename Method, typename Object> void DynamicLengthField<P>::Bind(EventTag tag, Method method, Object object) {
 

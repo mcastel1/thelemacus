@@ -32,6 +32,7 @@ template class PrintMessage<RouteFrame, UnsetIdling<RouteFrame>>;
 template class PrintMessage<SightFrame, UnsetIdling<SightFrame>>;
 template class PrintMessage<DrawPanel, UnsetIdling<DrawPanel>>;
 template class PrintMessage<ListFrame, UnsetIdling<ListFrame>>;
+template class PrintMessage<PositionFrame, UnsetIdling<PositionFrame>>;
 
 
 //set the wxControl, title,  message  and image_path for the functor *this, and I call the functor operator() with CallAfter

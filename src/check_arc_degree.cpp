@@ -7,6 +7,8 @@
 
 #include "check_arc_degree.h"
 #include "my_app.h"
+#include "position_frame.h"
+#include "sight_frame.h"
 
 
 
@@ -15,6 +17,10 @@ template<class P> CheckArcDegree<P>::CheckArcDegree(AngleField<P>* p_in) {
     p = p_in;
 
 }
+
+template class CheckArcDegree<RouteFrame>;
+template class CheckArcDegree<SightFrame>;
+template class CheckArcDegree<PositionFrame>;
 
 
 template<class P> template<class T> void CheckArcDegree<P>::operator()(T& event) {

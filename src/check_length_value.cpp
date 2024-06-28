@@ -53,3 +53,5 @@ template<class P> template <class T> void CheckLengthValue<P>::operator()(T& eve
     event.Skip(true);
 
 }
+
+template void CheckLengthValue<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

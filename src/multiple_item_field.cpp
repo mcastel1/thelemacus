@@ -90,6 +90,7 @@ template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFra
 template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*>(wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*);
 template void MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (LengthField<SightFrame>::*)(wxKeyEvent&), DynamicLengthField<SightFrame>*>(wxEventTypeTag<wxKeyEvent>, void (LengthField<SightFrame>::*)(wxKeyEvent&), DynamicLengthField<SightFrame>*);
 template void MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (LengthField<SightFrame>::*)(wxCommandEvent&), DynamicLengthField<SightFrame>*>(wxEventTypeTag<wxCommandEvent>, void (LengthField<SightFrame>::*)(wxCommandEvent&), DynamicLengthField<SightFrame>*);
+template void MultipleItemField<SightFrame, Body, CheckBody<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
 
 
 //set a tooltip with text text to *this
@@ -110,6 +111,7 @@ template<class P, class NON_GUI, class CHECK> template<class T> void MultipleIte
 
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::InsertIn<wxBoxSizer>(wxBoxSizer*);
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void MultipleItemField<SightFrame, Body, CheckBody<SightFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
 template<class P, class NON_GUI, class CHECK> template<class T> void MultipleItemField<P, NON_GUI, CHECK>::InsertIn(T* host, wxSizerFlags& flag) {

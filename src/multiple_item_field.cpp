@@ -8,6 +8,8 @@
 #include "multiple_item_field.h"
 #include "my_string.h"
 #include "my_app.h"
+#include "route_frame.h"
+#include "sight_frame.h"
 
 #include <sstream>
 
@@ -63,6 +65,8 @@ template class MultipleItemField<ChartFrame, Projection, void>;
 template class MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>;
 template class MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>;
 template class MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>;
+template class MultipleItemField<SightFrame, Body, CheckBody<SightFrame>>;
+
 
 
 template<class P, class NON_GUI, class CHECK> template <typename EventTag, typename Method, typename Object> void MultipleItemField<P, NON_GUI, CHECK>::Bind(EventTag tag, Method method, Object object) {

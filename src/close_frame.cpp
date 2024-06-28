@@ -31,6 +31,7 @@ template class CloseFrame<QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<Lis
 template class CloseFrame<QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 template class CloseFrame<QuestionFrame<ShowAll, CloseApp, ShowAll>>;
 template class CloseFrame<QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
+template class CloseFrame<MessageFrame<UnsetIdling<ChartFrame>>>;
 
 
 //closes a frame of type F
@@ -63,3 +64,4 @@ template void CloseFrame<QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, U
 template void CloseFrame<MessageFrame<UnsetIdling<DrawPanel>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<QuestionFrame<ShowAll, CloseApp, ShowAll>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CloseFrame<MessageFrame<UnsetIdling<ChartFrame>>>::operator()<wxKeyEvent>(wxKeyEvent&);

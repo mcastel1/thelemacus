@@ -8,6 +8,7 @@
 #include "check_route_type.h"
 
 #include "constants.h"
+#include "route_frame.h"
 
 
 template<class P> CheckRouteType<P>::CheckRouteType(RouteTypeField<P>* p_in) {
@@ -75,4 +76,4 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
 
 }
 
-tempalte void CheckRouteType<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckRouteType<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

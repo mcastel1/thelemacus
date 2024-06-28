@@ -57,3 +57,4 @@ template void CloseFrame<MessageFrame<UnsetIdling<PositionFrame>>>::operator()<w
 template void CloseFrame<MessageFrame<UnsetIdling<PositionFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<MessageFrame<UnsetIdling<DrawPanel>>>::operator()<wxKeyEvent>(wxKeyEvent&);
 template void CloseFrame<QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CloseFrame<QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);

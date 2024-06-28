@@ -339,6 +339,7 @@ template<class A, class B> vector<B> convert_vector(const vector<A>& x){
 
 template std::__1::vector<String, std::__1::allocator<String>> convert_vector<Projection, String>(std::__1::vector<Projection, std::__1::allocator<Projection>> const&);
 
+
 //find the  position in v of element with memory address x and return the position. If no element is found, return v.size(). Note that this function is different from position_in_vector
 template<class T> unsigned int address_position_in_vector(T* x, const vector<T>& v){
     

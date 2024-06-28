@@ -6,9 +6,11 @@
 //
 
 #include "check_arc_minute.h"
-#include "my_app.h"
-#include "angle_field.h"
 
+#include "angle_field.h"
+#include "my_app.h"
+#include "position_frame.h"
+#include "sight_frame.h"
 
 
 template<class P> CheckArcMinute<P>::CheckArcMinute(AngleField<P>* p_in) {

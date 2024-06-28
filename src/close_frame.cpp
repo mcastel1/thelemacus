@@ -20,6 +20,7 @@ template<class F> CloseFrame<F>::CloseFrame(F* frame_in) {
 //explicit instantiations
 template class CloseFrame<ListFrame>;
 template class CloseFrame<MessageFrame<UnsetIdling<ListFrame>>>;
+template class CloseFrame<MessageFrame<UnsetIdling<RouteFrame>>>;
 
 //closes a frame of type F
 template<class F> template <class T> void CloseFrame<F>::operator()([[maybe_unused]] T& event) {
@@ -39,3 +40,5 @@ template<class F> template <class T> void CloseFrame<F>::operator()([[maybe_unus
 template void CloseFrame<ListFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<MessageFrame<UnsetIdling<ListFrame>>>::operator()<wxKeyEvent>(wxKeyEvent&);
 template void CloseFrame<MessageFrame<UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CloseFrame<MessageFrame<UnsetIdling<RouteFrame>>>::operator()<wxKeyEvent>(wxKeyEvent&);
+template void CloseFrame<MessageFrame<UnsetIdling<RouteFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);

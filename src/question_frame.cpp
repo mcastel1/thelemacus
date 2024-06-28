@@ -145,3 +145,5 @@ template<typename F_A, typename F_B, typename F_ABORT> template<class E> void Qu
     event.Skip(true);
 
 }
+
+template void QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::KeyDown<wxKeyEvent>(wxKeyEvent&);

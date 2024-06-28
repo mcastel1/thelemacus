@@ -9,6 +9,7 @@
 
 #include "destroy_frame.h"
 #include "list_frame.h"
+#include "sight_frame.h"
 
 
 template<class F> CloseFrame<F>::CloseFrame(F* frame_in) {
@@ -21,6 +22,7 @@ template<class F> CloseFrame<F>::CloseFrame(F* frame_in) {
 template class CloseFrame<ListFrame>;
 template class CloseFrame<MessageFrame<UnsetIdling<ListFrame>>>;
 template class CloseFrame<MessageFrame<UnsetIdling<RouteFrame>>>;
+template class CloseFrame<MessageFrame<UnsetIdling<SightFrame>>>;
 
 //closes a frame of type F
 template<class F> template <class T> void CloseFrame<F>::operator()([[maybe_unused]] T& event) {
@@ -42,3 +44,4 @@ template void CloseFrame<MessageFrame<UnsetIdling<ListFrame>>>::operator()<wxKey
 template void CloseFrame<MessageFrame<UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<MessageFrame<UnsetIdling<RouteFrame>>>::operator()<wxKeyEvent>(wxKeyEvent&);
 template void CloseFrame<MessageFrame<UnsetIdling<RouteFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CloseFrame<MessageFrame<UnsetIdling<SightFrame>>>::operator()<wxKeyEvent>(wxKeyEvent&);

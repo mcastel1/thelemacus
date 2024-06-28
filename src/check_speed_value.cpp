@@ -57,3 +57,5 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
     event.Skip(true);
 
 }
+
+template void CheckSpeedValue<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

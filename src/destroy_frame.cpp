@@ -28,6 +28,7 @@ template class DestroyFrame<MessageFrame<UnsetIdling<PositionFrame>>>;
 template class DestroyFrame<MessageFrame<UnsetIdling<DrawPanel>>>;
 template class DestroyFrame<QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
+template class DestroyFrame<QuestionFrame<ShowAll, CloseApp, ShowAll>>;
 
 
 //destroys a frame of type F

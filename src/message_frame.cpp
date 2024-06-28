@@ -89,6 +89,7 @@ template class MessageFrame<UnsetIdling<RouteFrame>>;
 template class MessageFrame<UnsetIdling<SightFrame>>;
 template class MessageFrame<UnsetIdling<PositionFrame>>;
 template class MessageFrame<UnsetIdling<DrawPanel>>;
+template class MessageFrame<UnsetIdling<ChartFrame>>;
 
 
 //if a key is pressed in the keyboard, I call this function

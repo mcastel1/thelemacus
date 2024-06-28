@@ -62,15 +62,12 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
             
     }
     
-    
-
-    
-    
     (MotionHandler<F>::timer)->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);
 
 }
 
 template class ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
+template class ChartTransportHandler<UnsetIdling<ListFrame>>;
 
 
 //prompt the movement of the center of the chart from position a to position b

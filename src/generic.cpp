@@ -468,6 +468,10 @@ template <class T> void Reset(T* control) {
 
 }
 
+template void Reset<wxComboBox>(wxComboBox*);
+
+
+
 //rescales *image to fit into size, by including the border given by length_border_over_length_screen, and by keeping its proprtions, and writes the result into *image
 wxImage RescaleProportionally(wxImage image, const wxSize size) {
 

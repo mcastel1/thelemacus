@@ -29,6 +29,7 @@ template class CloseFrame<MessageFrame<UnsetIdling<PositionFrame>>>;
 template class CloseFrame<MessageFrame<UnsetIdling<DrawPanel>>>;
 template class CloseFrame<QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>>;
 template class CloseFrame<QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
+template class CloseFrame<QuestionFrame<ShowAll, CloseApp, ShowAll>>;
 
 
 //closes a frame of type F

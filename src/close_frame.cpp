@@ -60,3 +60,4 @@ template void CloseFrame<MessageFrame<UnsetIdling<DrawPanel>>>::operator()<wxKey
 template void CloseFrame<QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<MessageFrame<UnsetIdling<DrawPanel>>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CloseFrame<QuestionFrame<ShowAll, CloseApp, ShowAll>>::operator()<wxCommandEvent>(wxCommandEvent&);

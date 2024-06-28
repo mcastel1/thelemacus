@@ -220,11 +220,11 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(q_center - projection_size/2.0, &p_SW);
 
                     //set lambda / phi min/max according to p_NE and p_SW
-                    (chart_frame->lambda_max) = (p_NE.lambda);
-                    (chart_frame->phi_max) = (p_NE.phi);
+                    (*(chart_frame->lambda_max)) = (p_NE.lambda);
+                    (*(chart_frame->phi_max)) = (p_NE.phi);
 
-                    (chart_frame->lambda_min) = p_SW.lambda;
-                    (chart_frame->phi_min) = p_SW.phi;
+                    (*(chart_frame->lambda_min)) = p_SW.lambda;
+                    (*(chart_frame->phi_min)) = p_SW.phi;
           
                     
                     break;

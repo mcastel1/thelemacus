@@ -87,6 +87,8 @@ template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFram
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (SpeedField<RouteFrame>::*)(wxCommandEvent&), SpeedField<RouteFrame>*>(wxEventTypeTag<wxCommandEvent>, void (SpeedField<RouteFrame>::*)(wxCommandEvent&), SpeedField<RouteFrame>*);
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*>(wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*);
 template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*>(wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*);
+template void MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (LengthField<SightFrame>::*)(wxKeyEvent&), DynamicLengthField<SightFrame>*>(wxEventTypeTag<wxKeyEvent>, void (LengthField<SightFrame>::*)(wxKeyEvent&), DynamicLengthField<SightFrame>*);
 
 
 //set a tooltip with text text to *this
@@ -179,6 +181,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::CheckInCatalog(bool*, unsigned int*);
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::CheckInCatalog(bool*, unsigned int*);
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>::CheckInCatalog(bool*, unsigned int*);
+template void MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>::CheckInCatalog(bool*, unsigned int*);
 
 
 //this method is called whenever the user kills the focus on the GUI field in order to check the content of the GUI field and do the necessary operations

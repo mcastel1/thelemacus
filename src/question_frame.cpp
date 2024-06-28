@@ -8,6 +8,7 @@
 #include "question_frame.h"
 
 #include "my_app.h"
+#include "new_route.h"
 
 
 
@@ -95,6 +96,7 @@ template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F
 
 }
 
+template class QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
 
 
 

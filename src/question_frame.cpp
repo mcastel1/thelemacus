@@ -97,7 +97,7 @@ template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F
 }
 
 template class QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
-
+template class QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 
 
 //if the user presses return/escape, I call f_a / f_b

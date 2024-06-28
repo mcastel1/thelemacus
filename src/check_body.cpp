@@ -30,7 +30,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 
         //I check whether the name in the GUI field body matches one of the body names in catalog
         for (check = false, i = 0; (i < (p->catalog->list).size()) && (!check); i++) {
-            if (String((p->name->GetValue().ToStdString())) == (((p->catalog->list)[i]).name)) {
+            if (String((p->name->GetValue().ToStdString())) == (*(((p->catalog->list)[i]).name))) {
                 check = true;
             }
         }

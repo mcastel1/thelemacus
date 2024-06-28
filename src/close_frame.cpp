@@ -10,6 +10,7 @@
 #include "destroy_frame.h"
 #include "list_frame.h"
 #include "position_frame.h"
+#include "question_frame.h"
 #include "sight_frame.h"
 
 

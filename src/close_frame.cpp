@@ -25,6 +25,7 @@ template class CloseFrame<MessageFrame<UnsetIdling<ListFrame>>>;
 template class CloseFrame<MessageFrame<UnsetIdling<RouteFrame>>>;
 template class CloseFrame<MessageFrame<UnsetIdling<SightFrame>>>;
 template class CloseFrame<MessageFrame<UnsetIdling<PositionFrame>>>;
+template class CloseFrame<MessageFrame<UnsetIdling<DrawPanel>>>;
 
 //closes a frame of type F
 template<class F> template <class T> void CloseFrame<F>::operator()([[maybe_unused]] T& event) {

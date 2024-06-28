@@ -25,3 +25,4 @@ template<class F> MotionHandler<F>::MotionHandler(ListFrame* parent_in, const Ro
 }
 
 template class MotionHandler<UnsetIdling<ListFrame>>;
+template class MotionHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;

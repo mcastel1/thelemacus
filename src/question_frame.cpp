@@ -7,6 +7,7 @@
 
 #include "question_frame.h"
 
+#include "ask_remove_related_sight.h"
 #include "close_app.h"
 #include "close_frame.h"
 #include "delete_position.h"

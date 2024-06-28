@@ -55,4 +55,4 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
 }
 
 template void LengthFormatField<RouteFrame>::OnEdit<wxKeyEvent>(wxKeyEvent&);
-
+template void LengthFormatField<RouteFrame>::OnEdit<wxCommandEvent>(wxCommandEvent&);

@@ -286,5 +286,8 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 
 }
 
+template void MultipleItemField<ChartFrame, Projection, void>::Enable(bool);
+
+
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::Enable(bool);
 

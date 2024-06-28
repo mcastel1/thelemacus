@@ -113,6 +113,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::set();
+template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::set();
 
 
 template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::set(const NON_GUI& input) {

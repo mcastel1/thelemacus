@@ -285,6 +285,8 @@ template<class P, class NON_GUI, class CHECK> bool MultipleItemField<P, NON_GUI,
 
 }
 
+template bool MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::is_ok();
+
 
 //this function enables/disable the LengthFormatField
 template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::Enable(bool is_enabled) {

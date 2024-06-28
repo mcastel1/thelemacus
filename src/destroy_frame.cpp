@@ -41,3 +41,4 @@ template void DestroyFrame<MessageFrame<UnsetIdling<RouteFrame>>>::operator()();
 template void DestroyFrame<MessageFrame<UnsetIdling<SightFrame>>>::operator()();
 template void DestroyFrame<MessageFrame<UnsetIdling<PositionFrame>>>::operator()();
 template void DestroyFrame<MessageFrame<UnsetIdling<DrawPanel>>>::operator()();
+template void DestroyFrame<QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>>;

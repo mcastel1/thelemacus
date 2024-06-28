@@ -136,6 +136,8 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 
 }
 
+template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::Get<wxCommandEvent>(wxCommandEvent&);
+
 
 // if the content of the GUI field *this  matches one of the items in catalog, write true in *is_present and write the number of the corresponding entry in catalog in *i. If not, write false in *is_present and catalog.size() in *i
 template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::CheckInCatalog(bool* is_present, unsigned int * i) {
@@ -156,6 +158,8 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::CheckInCatalog(bool*, unsigned int*);
+template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::CheckInCatalog(bool*, unsigned int*);
+
 
 //this method is called whenever the user kills the focus on the GUI field in order to check the content of the GUI field and do the necessary operations
 template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Check(E& event) {

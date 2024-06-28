@@ -12,7 +12,7 @@
 
 template<class F> MotionHandler<F>::MotionHandler(ListFrame* parent_in, const Route& transporting_route_in, F* f_in){
     
-
+    start = new Position;
     timer = new wxTimer();
 
     parent = parent_in;

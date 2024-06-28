@@ -318,6 +318,8 @@ template<class S> void Position::read_from_stream([[maybe_unused]] String name, 
 
 }
 
+template void Position::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
 
 
 //set the polar coordinates lambda, phi of (*this) from the Cartesian position r

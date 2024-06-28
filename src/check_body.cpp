@@ -15,6 +15,7 @@ template<class P> CheckBody<P>::CheckBody(BodyField<P>* p_in) {
 
 }
 
+template class CheckBody<SightFrame>;
 
 
 template<class P> template<class T>void CheckBody<P>::operator()(T& event) {

@@ -24,6 +24,7 @@ template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, Ro
 
 }
 
+template class RouteTypeField<RouteFrame>;
 
 
 //sets the value in the GUI object equal to the value in the non-GUI  object string

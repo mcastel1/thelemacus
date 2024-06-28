@@ -813,6 +813,8 @@ template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {
     
 }
 
+template void RouteFrame::OnChooseLengthFormatField<wxKeyEvent>(wxKeyEvent&);
+
 
 //when time or speed are edited in RouteFrame, thie method updates the length GUI field by writing in it time x speed
 template<class E> void RouteFrame::UpdateLength(E& event) {

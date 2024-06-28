@@ -15,6 +15,8 @@
 #include "constants.h"
 #include "list_frame.h"
 #include "my_app.h"
+#include "position_frame.h"
+#include "sight_frame.h"
 #include "static_text.h"
 
 template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, String image_path, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
@@ -83,6 +85,9 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
 }
 
 template class MessageFrame<UnsetIdling<ListFrame>>;
+template class MessageFrame<UnsetIdling<RouteFrame>>;
+template class MessageFrame<UnsetIdling<SightFrame>>;
+template class MessageFrame<UnsetIdling<PositionFrame>>;
 
 
 //if a key is pressed in the keyboard, I call this function

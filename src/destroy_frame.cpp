@@ -29,3 +29,4 @@ template<class F> void DestroyFrame<F>::operator()(void) {
 }
 
 template void DestroyFrame<ListFrame>::operator()();
+template void  DestroyFrame<MessageFrame<UnsetIdling<ListFrame>>>::operator()();

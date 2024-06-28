@@ -18,6 +18,9 @@ template<class P> CheckRouteType<P>::CheckRouteType(RouteTypeField<P>* p_in) {
 
 }
 
+template class CheckRouteType<RouteFrame>;
+
+
 //this functor checks the wxComboBox containing the Route type, and if it is equal to loxodrome or orthodrome, it enables length, Z and start_* fields in RouteFrame (the latter if for_transport = false, becasue I don't need a start position if I am using the Route for transport). If it is equal to circle of equal altitude, it enables only the GP and omege fields.
 template<class P> template<class T> void CheckRouteType<P>::operator()(T& event) {
 

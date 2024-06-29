@@ -11,6 +11,8 @@
 #include "position_frame.h"
 #include "question_frame.h"
 #include "route_frame.h"
+#include "reset_list_frame.h"
+#include "save_and_reset.h"
 #include "sight_frame.h"
 
 
@@ -33,6 +35,7 @@ template class DestroyFrame<QuestionFrame<AskRemoveRelatedSight, UnsetIdling<Lis
 template class DestroyFrame<MessageFrame<UnsetIdling<ChartFrame>>>;
 template class DestroyFrame<QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>;
+template class DestroyFrame<QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>;
 
 
 

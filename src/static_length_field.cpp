@@ -36,6 +36,8 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
 
 }
 
+template class StaticLengthField<ChartFrame>;
+
 
 //set the value and the unit of the GUI field *this equal to the value and the unit in the non-GUI object input
 template<class P> void StaticLengthField<P>::set(const Length& l) {
@@ -55,6 +57,8 @@ template<class P> void StaticLengthField<P>::set(void) {
 
 }
 
+template void StaticLengthField<ChartFrame>::set();
+
 
 //convert *length to the unis of measure in the GUI field *this and write the result in *this
 template<class P> void StaticLengthField<P>::set_value_keep_unit(void) {
@@ -66,6 +70,8 @@ template<class P> void StaticLengthField<P>::set_value_keep_unit(void) {
     set(temp);
 
 }
+
+template void StaticLengthField<ChartFrame>::set_value_keep_unit();
 
 
 //convert the numerical value stored into value according to the length unit unit

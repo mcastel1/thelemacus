@@ -71,4 +71,5 @@ template<class P> template<class T> void CheckYear<P>::operator()(T& event) {
 
 }
 
-template  void CheckYear<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckYear<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckYear<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

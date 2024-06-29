@@ -9,11 +9,9 @@
 
 #include "my_app.h"
 #include "question_frame.h"
+#include "save_and_reset.h"
 #include "set_idling.h"
 #include "unset_idling.h"
-
-
-
 
 
 template<class T, typename F_YES, typename F_NO, typename F_ABORT> ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::ShowQuestionFrame(T* f_in, F_YES* f_yes_in, F_NO* f_no_in, F_ABORT* f_abort_in) {
@@ -51,6 +49,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
 template void ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
 template void ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
 template void ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
+template void ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>::SetAndCall(wxControl*, String, String, String, String);
 
 
 //set the wxControl, title and question and answers for the functor *this,  set enable_butoon_y/n to enable_button_y/n_in, and set bind_esc_to_button_b = bind_esc_to_button_b_in.  I call the functor operator() with CallAfter

@@ -7,12 +7,14 @@
 
 #include "close_frame.h"
 
+#include "all_routes.h"
 #include "destroy_frame.h"
 #include "list_frame.h"
 #include "position_frame.h"
 #include "question_frame.h"
 #include "reset_list_frame.h"
 #include "save_and_reset.h"
+#include "some_routes.h"
 #include "sight_frame.h"
 
 
@@ -38,6 +40,8 @@ template class CloseFrame<QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<Li
 template class CloseFrame<QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>;
 template class CloseFrame<QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>;
 template class CloseFrame<QuestionFrame<ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
+template class CloseFrame<QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
+template class CloseFrame<QuestionFrame<AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>>;
 
 
 //closes a frame of type F

@@ -29,15 +29,6 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 template class LengthField<ChartFrame>;
 
 
-//set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
-template<class P> void DynamicLengthField<P>::set(Length input) {
-        
-    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
-    LengthField<P>::unit->set(input.unit);
-    
-}
-
-
 //this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
 template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
 

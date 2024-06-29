@@ -148,3 +148,11 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 template void DynamicLengthField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 template void DynamicLengthField<RouteFrame>::Bind<wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*>(wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*);
+
+//set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
+template<class P> void DynamicLengthField<P>::set(Length input) {
+        
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
+    LengthField<P>::unit->set(input.unit);
+    
+}

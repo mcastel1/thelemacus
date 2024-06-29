@@ -110,6 +110,7 @@ template class QuestionFrame<ShowAll, CloseApp, ShowAll>;
 template class QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>;
 template class QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>;
+template class QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>;
 
 
 //if the user presses return/escape, I call f_a / f_b

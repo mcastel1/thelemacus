@@ -69,3 +69,4 @@ template void CloseFrame<QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFr
 template void CloseFrame<MessageFrame<UnsetIdling<ChartFrame>>>::operator()<wxKeyEvent>(wxKeyEvent&);
 template void CloseFrame<MessageFrame<UnsetIdling<ChartFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CloseFrame<QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);

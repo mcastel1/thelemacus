@@ -40,6 +40,8 @@ template<class S> void Catalog::read_from_stream([[maybe_unused]] String name, S
 
 }
 
+template void Catalog::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
 
 //return a vector containing the names of the Bodies in *this
 vector<String> Catalog::get_names(void){

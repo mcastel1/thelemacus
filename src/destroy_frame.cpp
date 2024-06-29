@@ -60,3 +60,4 @@ template void DestroyFrame<QuestionFrame<AskRemoveRelatedSight, UnsetIdling<List
 template void DestroyFrame<MessageFrame<UnsetIdling<ChartFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>::operator()();
+template void DestroyFrame<QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>::operator()();

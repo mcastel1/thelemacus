@@ -13,8 +13,11 @@
 #include <wx/textctrl.h>
 
 
+#include "check_length.h"
+#include "check_length_value.h"
 #include "constants.h"
 #include "length.h"
+#include "sight_frame.h"
 
 
 
@@ -51,6 +54,9 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
     LengthField<P>::unit->MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >::template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
 
 }
+
+template class DynamicLengthField<SightFrame>;
+
 
 //write the value and the unit of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
@@ -130,6 +136,7 @@ template<class P> void DynamicLengthField<P>::Enable(bool is_enabled) {
 }
 
 template void DynamicLengthField<RouteFrame>::Enable(bool);
+template void DynamicLengthField<SightFrame>::Enable(bool);
 
 
 template<class P> template <typename EventTag, typename Method, typename Object> void DynamicLengthField<P>::Bind(EventTag tag, Method method, Object object) {

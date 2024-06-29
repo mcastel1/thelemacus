@@ -164,6 +164,9 @@ template<class S> void Int::read_from_stream([[maybe_unused]] String name, S* in
 
 }
 
+template void Int::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
+
 //reads from file the content after 'name = ' and writes it into *this.
 //if mode = 'RW' ('R') it reads form a FileRW (FileR)
 void Int::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {

@@ -336,6 +336,9 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
 
 }
 
+template void Length::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
+
 //reads from file the content after 'name = ' and writes it into this.
 void Length::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
 

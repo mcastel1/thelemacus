@@ -9,6 +9,7 @@
 
 #include "my_app.h"
 #include "question_frame.h"
+#include "reset_list_frame.h"
 #include "save_and_reset.h"
 #include "set_idling.h"
 #include "unset_idling.h"

@@ -70,3 +70,5 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event) 
     event.Skip(true);
 
 }
+
+template void SaveAndReset<ListFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

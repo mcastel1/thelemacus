@@ -68,6 +68,8 @@ template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
     
 }
 
+template void DynamicLengthField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
+
 
 //set the value in the GUI object value equal to the value in the non-GUI object length
 template<class P> void DynamicLengthField<P>::set(void) {
@@ -116,6 +118,8 @@ template<class P> template<class E>  void DynamicLengthField<P>::OnEditValue(E& 
 
 }
 
+template void DynamicLengthField<RouteFrame>::OnEditValue<wxKeyEvent>(wxKeyEvent&);
+template void DynamicLengthField<RouteFrame>::OnEditValue<wxCommandEvent>(wxCommandEvent&);
 
 //this function enables/disable the DynamicLengthField
 template<class P> void DynamicLengthField<P>::Enable(bool is_enabled) {

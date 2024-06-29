@@ -10,6 +10,7 @@
 #include "ask_remove_related_sight.h"
 #include "close_app.h"
 #include "close_frame.h"
+#include "confirm_transport.h"
 #include "delete_position.h"
 #include "delete_route.h"
 #include "delete_sight.h"

@@ -11,6 +11,7 @@
 #include "list_frame.h"
 #include "position_frame.h"
 #include "question_frame.h"
+#include "save_and_reset.h"
 #include "sight_frame.h"
 
 
@@ -34,6 +35,7 @@ template class CloseFrame<QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListF
 template class CloseFrame<MessageFrame<UnsetIdling<ChartFrame>>>;
 template class CloseFrame<QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>>;
 template class CloseFrame<QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>;
+template class CloseFrame<QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>;
 
 
 //closes a frame of type F

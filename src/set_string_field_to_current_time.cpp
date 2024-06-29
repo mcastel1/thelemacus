@@ -28,3 +28,7 @@ template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operat
     event.Skip(true);
 
 }
+
+template void SetStringFieldToCurrentTime<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void SetStringFieldToCurrentTime<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void SetStringFieldToCurrentTime<PositionFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

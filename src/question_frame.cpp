@@ -11,6 +11,8 @@
 #include "close_app.h"
 #include "close_frame.h"
 #include "delete_position.h"
+#include "delete_route.h"
+#include "delete_sight.h"
 #include "existing_route.h"
 #include "my_app.h"
 #include "new_route.h"
@@ -106,6 +108,7 @@ template class QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
 template class QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ShowAll, CloseApp, ShowAll>;
 template class QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>;
 
 
 //if the user presses return/escape, I call f_a / f_b

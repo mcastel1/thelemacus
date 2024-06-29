@@ -7,6 +7,8 @@
 
 #include "question_frame.h"
 
+#include "all_routes.h"
+#include "ask_remove_related_route.h"
 #include "ask_remove_related_sight.h"
 #include "close_app.h"
 #include "close_frame.h"
@@ -20,6 +22,7 @@
 #include "reset_list_frame.h"
 #include "save_and_reset.h"
 #include "show_all.h"
+#include "some_routes.h"
 
 
 

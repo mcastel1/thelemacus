@@ -9,6 +9,11 @@
 
 #include "constants.h"
 #include "my_time.h"
+#include "position_frame.h"
+#include "route_frame.h"
+#include "sight_frame.h"
+#include "string_field.h"
+
 
 template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operator()(T& event) {
 

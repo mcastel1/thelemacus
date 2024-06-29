@@ -76,3 +76,4 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
 
 }
 
+template void ConfirmTransport<ListFrame>::operator()(wxCommandEvent&);

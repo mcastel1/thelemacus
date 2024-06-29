@@ -12,6 +12,7 @@
     #include "wx/wx.h"
 #endif
 
+#include "chart_frame.h"
 #include "constants.h"
 
 
@@ -20,3 +21,5 @@ template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, 
 
 }
  
+
+template class LengthUnitField<ChartFrame>;

@@ -17,6 +17,9 @@ template<class S> OnChangeSelectionInListControl<S>::OnChangeSelectionInListCont
 
 }
 
+template class OnChangeSelectionInListControl<Route>;
+template class OnChangeSelectionInListControl<Sight>;
+template class OnChangeSelectionInListControl<Position>;
 
 //check whether there are some selected items in ListControl *caller, and enables/disables disableable_buttons accordingly
 template<class S> template<class T>void OnChangeSelectionInListControl<S>::operator()(T& event) {
@@ -97,3 +100,6 @@ template<class S> template<class T>void OnChangeSelectionInListControl<S>::opera
 template void OnChangeSelectionInListControl<Route>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void OnChangeSelectionInListControl<Position>::operator()<wxListEvent>(wxListEvent&);
 template void OnChangeSelectionInListControl<Position>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void OnChangeSelectionInListControl<Route>::operator()<wxListEvent>(wxListEvent&);
+template void OnChangeSelectionInListControl<Sight>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void OnChangeSelectionInListControl<Sight>::operator()<wxListEvent>(wxListEvent&);

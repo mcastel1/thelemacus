@@ -33,6 +33,7 @@ template class CloseFrame<QuestionFrame<ShowAll, CloseApp, ShowAll>>;
 template class CloseFrame<QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 template class CloseFrame<MessageFrame<UnsetIdling<ChartFrame>>>;
 template class CloseFrame<QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>>;
+template class CloseFrame<QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>;
 
 
 //closes a frame of type F

@@ -56,6 +56,7 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
 }
 
 template class DynamicLengthField<SightFrame>;
+template class DynamicLengthField<RouteFrame>;
 
 
 //write the value and the unit of the GUI field in LengthField into the non-GUI field length
@@ -75,6 +76,7 @@ template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
 }
 
 template void DynamicLengthField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void DynamicLengthField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 //set the value in the GUI object value equal to the value in the non-GUI object length
@@ -88,7 +90,7 @@ template<class P> void DynamicLengthField<P>::set(void) {
 }
 
 template void DynamicLengthField<RouteFrame>::set();
-
+template void DynamicLengthField<SightFrame>::set();
 
 
 template<class P> bool DynamicLengthField<P>::is_ok(void) {
@@ -96,6 +98,8 @@ template<class P> bool DynamicLengthField<P>::is_ok(void) {
     return(value_ok && (LengthField<P>::unit->ok));
 
 }
+
+template bool DynamicLengthField<SightFrame>::is_ok();
 
 
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
@@ -126,6 +130,9 @@ template<class P> template<class E>  void DynamicLengthField<P>::OnEditValue(E& 
 
 template void DynamicLengthField<RouteFrame>::OnEditValue<wxKeyEvent>(wxKeyEvent&);
 template void DynamicLengthField<RouteFrame>::OnEditValue<wxCommandEvent>(wxCommandEvent&);
+template void DynamicLengthField<SightFrame>::OnEditValue<wxKeyEvent>(wxKeyEvent&);
+template void DynamicLengthField<SightFrame>::OnEditValue<wxCommandEvent>(wxCommandEvent&);
+
 
 //this function enables/disable the DynamicLengthField
 template<class P> void DynamicLengthField<P>::Enable(bool is_enabled) {
@@ -148,6 +155,9 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 template void DynamicLengthField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 template void DynamicLengthField<RouteFrame>::Bind<wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*>(wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*);
+template void DynamicLengthField<SightFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+template void DynamicLengthField<SightFrame>::Bind<wxEventTypeTag<wxCommandEvent>, void (SightFrame::*)(wxCommandEvent&), SightFrame*>(wxEventTypeTag<wxCommandEvent>, void (SightFrame::*)(wxCommandEvent&), SightFrame*);
+
 
 //set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
 template<class P> void DynamicLengthField<P>::set(Length input) {

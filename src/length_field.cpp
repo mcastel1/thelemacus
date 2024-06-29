@@ -12,18 +12,6 @@
 
 
 
-
-//set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
-template<class P> void DynamicLengthField<P>::set(Length input) {
-        
-    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
-    LengthField<P>::unit->set(input.unit);
-    
-}
-
-
-
-
 //constructor of a LengthField object, based on the parent frame frame
 template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* p){
 
@@ -36,6 +24,17 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
 
+}
+
+template class LengthField<ChartFrame>;
+
+
+//set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
+template<class P> void DynamicLengthField<P>::set(Length input) {
+        
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
+    LengthField<P>::unit->set(input.unit);
+    
 }
 
 
@@ -62,10 +61,12 @@ template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
 
 }
 
-template  void LengthField<RouteFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+template void LengthField<RouteFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
 template void LengthField<RouteFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
 template void LengthField<SightFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
 template void LengthField<SightFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
+template void LengthField<ChartFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+template void LengthField<ChartFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
 
 
 //insert *this in *host

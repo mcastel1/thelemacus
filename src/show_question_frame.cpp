@@ -7,11 +7,13 @@
 
 #include "show_question_frame.h"
 
+#include "all_routes.h"
 #include "my_app.h"
 #include "question_frame.h"
 #include "reset_list_frame.h"
 #include "save_and_reset.h"
 #include "set_idling.h"
+#include "some_routes.h"
 #include "unset_idling.h"
 
 
@@ -30,6 +32,8 @@ template class ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdlin
 template class ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>;
 template class ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class ShowQuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class  ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>;
 
 
 //set the wxControl, title and question and answers for the functor *this,  set enable_button_y/n both to true,  and bind_esc_to_button_b to true. Then call the functor operator() with CallAfter

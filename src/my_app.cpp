@@ -110,6 +110,9 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
     
 }
 
+template void MyApp::OnPressCtrlQ<wxCommandEvent>(wxCommandEvent&);
+template void MyApp::OnPressCtrlQ<wxKeyEvent>(wxKeyEvent&);
+
 
 //shows all ChartFrames and positions them properly on the screen
 template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {

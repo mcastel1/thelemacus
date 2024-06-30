@@ -7,6 +7,7 @@
 
 #include "destroy_frame.h"
 
+#include "all_routes.h"
 #include "list_frame.h"
 #include "position_frame.h"
 #include "question_frame.h"
@@ -14,6 +15,7 @@
 #include "reset_list_frame.h"
 #include "save_and_reset.h"
 #include "sight_frame.h"
+#include "some_routes.h"
 
 
 template<class F> DestroyFrame<F>::DestroyFrame(F* frame_in) {
@@ -38,6 +40,7 @@ template class DestroyFrame<QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<
 template class DestroyFrame<QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>;
 template class DestroyFrame<QuestionFrame<ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
+template class DestroyFrame<QuestionFrame<AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>>;
 
 
 //destroys a frame of type F

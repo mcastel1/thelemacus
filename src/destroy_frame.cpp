@@ -37,6 +37,7 @@ template class DestroyFrame<QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<
 template class DestroyFrame<QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>;
 template class DestroyFrame<QuestionFrame<ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
+template class DestroyFrame<QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 
 
 //destroys a frame of type F
@@ -62,3 +63,4 @@ template void DestroyFrame<QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<L
 template void DestroyFrame<QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>::operator()();
 template void DestroyFrame<QuestionFrame<ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
+template void DestroyFrame<QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();

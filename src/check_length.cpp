@@ -22,6 +22,9 @@ template<class P> CheckLength<P>::CheckLength(DynamicLengthField<P>* p_in) {
 
 }
 
+template class CheckLength<RouteFrame>;
+template class  CheckLength<SightFrame>;
+
 
 //this functor checks the whole Length field by calling the check on its value and unit
 template<class P> template <class T> void CheckLength<P>::operator()(T& event) {

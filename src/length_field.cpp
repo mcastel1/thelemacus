@@ -27,6 +27,8 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 }
 
 template class LengthField<ChartFrame>;
+template class LengthField<RouteFrame>;
+template class LengthField<SightFrame>;
 
 
 //this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk

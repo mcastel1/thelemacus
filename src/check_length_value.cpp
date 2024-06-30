@@ -17,6 +17,10 @@ template<class P> CheckLengthValue<P>::CheckLengthValue(DynamicLengthField<P>* p
 
 }
 
+template class CheckLengthValue<RouteFrame>;
+template class CheckLengthValue<SightFrame>;
+
+
 //checks the value in the GUI field in DynamicLengthField
 template<class P> template <class T> void CheckLengthValue<P>::operator()(T& event) {
 

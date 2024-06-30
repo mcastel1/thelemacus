@@ -14,6 +14,7 @@
 
 #include "chart_frame.h"
 #include "constants.h"
+#include "sight_frame.h"
 
 
 //constructor of a LengthUnitField object, based on the parent frame frame

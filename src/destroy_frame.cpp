@@ -67,3 +67,4 @@ template void DestroyFrame<QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<L
 template void DestroyFrame<QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>::operator()();
 template void DestroyFrame<QuestionFrame<ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
+template void DestroyFrame<QuestionFrame<AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>>::operator()();

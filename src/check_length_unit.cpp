@@ -17,6 +17,9 @@ template<class P> CheckLengthUnit<P>::CheckLengthUnit(DynamicLengthField<P>* p_i
 
 }
 
+template class CheckLengthUnit<RouteFrame>;
+template class CheckLengthUnit<SightFrame>;
+
 
 //check the unit in the GUI field in LengthField
 template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& event) {

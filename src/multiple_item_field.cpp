@@ -346,3 +346,4 @@ template void MultipleItemField<ChartFrame, Projection, void>::Enable(bool);
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::Enable(bool);
 template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::Enable(bool);
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>::Enable(bool);
+template void MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>::Enable(bool);

@@ -166,3 +166,5 @@ template<class P> void DynamicLengthField<P>::set(Length input) {
     LengthField<P>::unit->set(input.unit);
     
 }
+
+template void DynamicLengthField<RouteFrame>::set(Length);

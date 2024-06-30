@@ -95,6 +95,8 @@ template void MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFra
 template void MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (StaticLengthField<ChartFrame>::*)(wxKeyEvent&), StaticLengthField<ChartFrame>*>(wxEventTypeTag<wxKeyEvent>, void (StaticLengthField<ChartFrame>::*)(wxKeyEvent&), StaticLengthField<ChartFrame>*);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (LengthField<ChartFrame>::*)(wxCommandEvent&), StaticLengthField<ChartFrame>*>(wxEventTypeTag<wxCommandEvent>, void (LengthField<ChartFrame>::*)(wxCommandEvent&), StaticLengthField<ChartFrame>*);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (StaticLengthField<ChartFrame>::*)(wxCommandEvent&), StaticLengthField<ChartFrame>*>(wxEventTypeTag<wxCommandEvent>, void (StaticLengthField<ChartFrame>::*)(wxCommandEvent&), StaticLengthField<ChartFrame>*);
+template void MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+template void MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (SightFrame::*)(wxCommandEvent&), SightFrame*>(wxEventTypeTag<wxCommandEvent>, void (SightFrame::*)(wxCommandEvent&), SightFrame*);
 
 
 //set a tooltip with text text to *this

@@ -66,7 +66,7 @@ template class MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<Rou
 template class MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>;
 template class MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>;
 template class MultipleItemField<SightFrame, Body, CheckBody<SightFrame>>;
-
+template class MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFrame>>;
 
 
 template<class P, class NON_GUI, class CHECK> template <typename EventTag, typename Method, typename Object> void MultipleItemField<P, NON_GUI, CHECK>::Bind(EventTag tag, Method method, Object object) {
@@ -127,6 +127,7 @@ template<class P, class NON_GUI, class CHECK> template<class T> void MultipleIte
 template void MultipleItemField<ChartFrame, Projection, void>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFrame>>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 
 
 //set the value in the GUI object name equal to the value in the non-GUI NON_GUI object 'object'
@@ -142,6 +143,7 @@ template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFra
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::set();
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::set();
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>::set();
+template void MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>::set();
 
 
 template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::set(const NON_GUI& input) {

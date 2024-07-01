@@ -252,6 +252,8 @@ template<class S> bool Time::read_from_stream(String name, S* input_stream, [[ma
 
 }
 
+template bool Time::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
 void Time::operator += (const Chrono& chrono_in) {
 
     Chrono temp;

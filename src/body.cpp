@@ -82,6 +82,8 @@ template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [
 
 }
 
+template bool Body::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
 
 void Body::print(String name_in, String prefix, ostream& ostr) {
 

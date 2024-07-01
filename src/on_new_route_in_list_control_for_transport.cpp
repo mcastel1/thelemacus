@@ -87,3 +87,5 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     event.Skip(true);
     
 }
+
+template void OnNewRouteInListControlRoutesForTransport::operator()<wxCommandEvent>(wxCommandEvent&);

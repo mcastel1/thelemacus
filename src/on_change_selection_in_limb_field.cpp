@@ -15,6 +15,8 @@ template<class P> OnChangeSelectionInLimbField<P>::OnChangeSelectionInLimbField(
 
 }
 
+template class OnChangeSelectionInLimbField<SightFrame>;
+
 //when an item is selected/deselcted in *caller, make sure that only one item stays selected in *calller
 template<class P> template<class T>void OnChangeSelectionInLimbField<P>::operator()(T& event) {
 
@@ -88,3 +90,4 @@ template<class P> template<class T>void OnChangeSelectionInLimbField<P>::operato
 
 }
 
+template void OnChangeSelectionInLimbField<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

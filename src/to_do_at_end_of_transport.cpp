@@ -19,6 +19,8 @@ template<class NON_GUI, class P> ToDoAtEndOfTransport<NON_GUI, P>::ToDoAtEndOfTr
 
 }
 
+template class ToDoAtEndOfTransport<Route, ListFrame>;
+
 
 //set *object_a equal to *object_b if object_a != NULL, and to the other tasks to be done at the end of a transport
 template<class NON_GUI, class P> void ToDoAtEndOfTransport<NON_GUI, P>::operator()(void){

@@ -7,6 +7,7 @@
 
 #include "show_frame.h"
 
+#include "list_frame.h"
 
 
 template<class F> ShowFrame<F>::ShowFrame(F* frame_in) {
@@ -15,7 +16,7 @@ template<class F> ShowFrame<F>::ShowFrame(F* frame_in) {
 
 }
 
-template ShowFrame<ListFrame>;
+template class ShowFrame<ListFrame>;
 
 
 //show a frame of type F

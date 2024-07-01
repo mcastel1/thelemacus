@@ -8,6 +8,7 @@
 #include "on_change_selection_in_limb_field.h"
 
 #include "my_app.h"
+#include "sight_frame.h"
 
 template<class P> OnChangeSelectionInLimbField<P>::OnChangeSelectionInLimbField(LimbField<P>* caller_in) {
 

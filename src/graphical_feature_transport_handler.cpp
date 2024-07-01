@@ -11,6 +11,8 @@
 
 #include "motion_handler.h"
 #include "my_app.h"
+#include "on_change_selection_in_list_control.h"
+#include "on_select_route_in_list_control_for_transport.h"
 #include "to_do_at_end_of_transport.h"
 
 
@@ -150,7 +152,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         if (type_of_transported_object == String("position")) {
             
             //do the whole transport rather than combining many little transports, to avoid rounding errors
-            (*((Position*)transported_object)) = (MotionHandler<F>::start);
+            (*((Position*)transported_object)) = (*(MotionHandler<F>::start));
             //un-highlight the Position that is being transported
             (MotionHandler<F>::parent)->highlighted_position_now = -1;
             ((Position*)transported_object)->transport_to((MotionHandler<F>::transporting_route), String(""));
@@ -177,7 +179,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 (MotionHandler<F>::parent)->highlighted_route_now = -1;
 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-                (*(((Route*)transported_object)->reference_position)) = (MotionHandler<F>::start);
+                (*(((Route*)transported_object)->reference_position)) = (*(MotionHandler<F>::start));
                 ((Route*)transported_object)->reference_position->transport_to((MotionHandler<F>::transporting_route), String(""));
 
 

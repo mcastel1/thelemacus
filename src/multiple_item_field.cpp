@@ -132,6 +132,7 @@ template void MultipleItemField<ChartFrame, Projection, void>::InsertIn<wxBoxSiz
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFrame>>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
+template void MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 
 
 //set the value in the GUI object name equal to the value in the non-GUI NON_GUI object 'object'

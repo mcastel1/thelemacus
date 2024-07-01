@@ -351,6 +351,8 @@ template<class T> unsigned int address_position_in_vector(T* x, const vector<T>&
     
 }
 
+template unsigned int address_position_in_vector<Route>(Route*, std::__1::vector<Route, std::__1::allocator<Route>> const&);
+template unsigned int address_position_in_vector<Position>(Position*, std::__1::vector<Position, std::__1::allocator<Position>> const&);
 
 
 //delete duplicates from vector *v by removing entries in *v which are equal

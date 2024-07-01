@@ -7,6 +7,8 @@
 
 #include "motion_handler.h"
 
+#include "to_do_at_end_of_transport.h"
+#include "graphical_feature_transport_handler.h"
 
 
 
@@ -26,3 +28,7 @@ template<class F> MotionHandler<F>::MotionHandler(ListFrame* parent_in, const Ro
 
 template class MotionHandler<UnsetIdling<ListFrame>>;
 template class MotionHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
+template class MotionHandler<ToDoAtEndOfTransport<Route, ListFrame>>;
+template class MotionHandler<GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>;
+template class MotionHandler<GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>;
+template class MotionHandler<GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>;

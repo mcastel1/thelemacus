@@ -107,13 +107,13 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         
         if((MotionHandler<F>::t) > 0){
             //the transport animation is in progress -> do the next chunk
-
-            (MotionHandler<F>::transporting_route_temp).length.set(
-                String(""),
-                ((MotionHandler<F>::transporting_route).length.value) *
-                (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
-                ,
-                String(""));
+            
+            (MotionHandler<F>::transporting_route_temp).length->set(
+                                                                    String(""),
+                                                                    ((MotionHandler<F>::transporting_route).length->value) *
+                                                                    (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
+                                                                    ,
+                                                                    String(""));
 
 
             if (type_of_transported_object == String("position")) {

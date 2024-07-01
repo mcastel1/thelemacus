@@ -11,6 +11,7 @@
 
 #include "motion_handler.h"
 #include "my_app.h"
+#include "to_do_at_end_of_transport.h"
 
 
 
@@ -26,6 +27,13 @@ template<class NON_GUI, class F> GraphicalFeatureTransportHandler<NON_GUI, F>::G
     (MotionHandler<F>::timer)->Bind(wxEVT_TIMER, &GraphicalFeatureTransportHandler::OnTimer, this);
 
 }
+
+template class GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>;
+template class GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>;
+template class GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>;
+template class GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>;
+template class GraphicalFeatureTransportHandler<Position, ToDoAtEndOfTransport<Route, ListFrame>>;
+template class GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>;
 
 
 //this method triggers the animation
@@ -67,7 +75,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             if (type_of_transported_object == String("position")) {
 
                 //store the starting position in *geo_position_start
-                (MotionHandler<F>::start) = (*((Position*)transported_object));
+                (*(MotionHandler<F>::start)) = (*((Position*)transported_object));
                 //highlight the Position that is being transported
                 (MotionHandler<F>::parent)->highlighted_position_now = address_position_in_vector<Position>(((Position*)transported_object), (MotionHandler<F>::parent)->data->position_list);
                 

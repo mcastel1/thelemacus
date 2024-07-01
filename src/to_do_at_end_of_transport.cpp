@@ -44,3 +44,5 @@ template<class NON_GUI, class P> void ToDoAtEndOfTransport<NON_GUI, P>::operator
     parent->PreRenderAll();
 
 }
+
+template void ToDoAtEndOfTransport<Route, ListFrame>::operator()();

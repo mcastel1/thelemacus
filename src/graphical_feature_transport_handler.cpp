@@ -49,6 +49,9 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
     
 }
 
+template void GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>::operator()();
+
+
 //this method iterates the animation
 template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 

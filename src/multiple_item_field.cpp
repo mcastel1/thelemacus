@@ -160,6 +160,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 template void MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFrame>>::set(LengthUnit const&);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::set(LengthUnit const&);
 
 
 //set the value in the non-GUI object 'object' equal to the value in the GUI object name, with no abbreviations used (the value is copied as it is)

@@ -120,6 +120,7 @@ template class QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListF
 template class QuestionFrame<ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class QuestionFrame<AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>;
+template class QuestionFrame<CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 
 
 //if the user presses return/escape, I call f_a / f_b

@@ -17,6 +17,8 @@ template<class F> SaveAndReset<F>::SaveAndReset(F* frame_in) {
 
 }
 
+template class SaveAndReset<ListFrame>;
+
 
 //saves the data in frame->data to file frame->file ,and closes frame
 template<class F> template <class T> void SaveAndReset<F>::operator()(T& event) {
@@ -68,3 +70,5 @@ template<class F> template <class T> void SaveAndReset<F>::operator()(T& event) 
     event.Skip(true);
 
 }
+
+template void SaveAndReset<ListFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

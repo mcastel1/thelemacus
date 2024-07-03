@@ -153,6 +153,9 @@ template<class S> bool Chrono::read_from_stream([[maybe_unused]] String name, S*
 
 }
 
+template bool Chrono::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
+
 //reads from file the content after 'name = ' and writes it into *this.
 //if mode = 'RW' ('R') it reads form a FileRW (FileR)
 void Chrono::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
@@ -186,7 +189,8 @@ string Chrono::to_string(unsigned int precision, bool time_zone) {
 
 
 //return the value of *this expresser in hours
-inline double Chrono::get(void) {
+//inline 
+double Chrono::get(void) {
 
     return(((double)h) + ((double)m) / 60.0 + ((double)s) / (60.0 * 60.0));
 

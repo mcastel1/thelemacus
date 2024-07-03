@@ -15,7 +15,7 @@
 #include "constants.h"
 #include "list_frame.h"
 #include "my_string.h"
-
+#include "on_select_route_in_list_control_for_transport.h"
 
 
 template<class P> ConfirmTransport<P>::ConfirmTransport(P* parent_in) {
@@ -23,6 +23,9 @@ template<class P> ConfirmTransport<P>::ConfirmTransport(P* parent_in) {
     parent = parent_in;
 
 }
+
+template class ConfirmTransport<ListFrame>;
+
 
 //this is the same as template<class P> void ConfirmTransport<P>::operator()(void){ but without the event argument)
 template<class P> void ConfirmTransport<P>::operator()(void) {
@@ -73,3 +76,4 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
 
 }
 
+template void ConfirmTransport<ListFrame>::operator()(wxCommandEvent&);

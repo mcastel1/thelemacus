@@ -9,6 +9,11 @@
 
 #include "constants.h"
 #include "my_time.h"
+#include "position_frame.h"
+#include "route_frame.h"
+#include "sight_frame.h"
+#include "string_field.h"
+
 
 template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operator()(T& event) {
 
@@ -28,3 +33,7 @@ template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operat
     event.Skip(true);
 
 }
+
+template void SetStringFieldToCurrentTime<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void SetStringFieldToCurrentTime<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void SetStringFieldToCurrentTime<PositionFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

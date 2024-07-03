@@ -15,6 +15,7 @@ template<class P> CheckBody<P>::CheckBody(BodyField<P>* p_in) {
 
 }
 
+template class CheckBody<SightFrame>;
 
 
 template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
@@ -29,7 +30,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 
         //I check whether the name in the GUI field body matches one of the body names in catalog
         for (check = false, i = 0; (i < (p->catalog->list).size()) && (!check); i++) {
-            if (String((p->name->GetValue().ToStdString())) == (((p->catalog->list)[i]).name)) {
+            if (String((p->name->GetValue().ToStdString())) == (*(((p->catalog->list)[i]).name))) {
                 check = true;
             }
         }
@@ -40,7 +41,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 
             if (check) {
 
-                if (((p->catalog->list)[i].name == String("sun")) || ((p->catalog->list)[i].name == String("moon"))) {
+                if (((*((p->catalog->list)[i].name)) == String("sun")) || ((*((p->catalog->list)[i].name)) == String("moon"))) {
                     //in this case, the selected body is a body which has a limb -> I enable the limb field
 
                     f->limb->name->Enable(true);
@@ -85,3 +86,6 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template void CheckBody<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckBody<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

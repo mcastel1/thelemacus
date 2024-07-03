@@ -11,11 +11,17 @@
     #include "wx/wx.h"
 #endif
 
+#include "check_chrono.h"
+#include "check_hour.h"
+#include "check_minute.h"
+#include "check_second.h"
 #include "color.h"
 #include "constants.h"
 #include "chrono.h"
 #include "generic.h"
 #include "my_app.h"
+#include "route_frame.h"
+#include "sight_frame.h"
 #include "static_text.h"
 
 
@@ -87,6 +93,8 @@ template<class P> ChronoField<P>::ChronoField(wxPanel* panel_of_parent, Chrono* 
 
 }
 
+template class ChronoField<RouteFrame>;
+template class ChronoField<SightFrame>;
 
 
 //this function writes into the non-GUI fields in chrono the value written into the respective GUI fields hour, minute and second
@@ -108,12 +116,20 @@ template<class P> template <class T> void ChronoField<P>::get(T& event) {
 
 }
 
+template void ChronoField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void ChronoField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
+
+
 //set the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object *chrono
 template<class P> void ChronoField<P>::set(void) {
 
     set(*chrono);
 
 }
+
+template void ChronoField<RouteFrame>::set();
+template void ChronoField<SightFrame>::set(Chrono);
+
 
 //set the value in the GUI objects hour, minute and second equal to the value in the non-GUI Chrono object chrono_in
 template<class P> void ChronoField<P>::set(Chrono chrono_in) {
@@ -145,6 +161,10 @@ template<class P> bool ChronoField<P>::is_ok(void) {
 
 }
 
+template bool ChronoField<RouteFrame>::is_ok();
+template bool ChronoField<SightFrame>::is_ok();
+
+
 //this function is called every time a keyboard button is lifted in this->hour: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> template<class E> void ChronoField<P>::OnEditHour(E& event) {
 
@@ -169,6 +189,10 @@ template<class P> template<class E> void ChronoField<P>::OnEditHour(E& event) {
     event.Skip(true);
 
 }
+
+template void ChronoField<RouteFrame>::OnEditHour<wxKeyEvent>(wxKeyEvent&);
+template void ChronoField<RouteFrame>::OnEditHour<wxCommandEvent>(wxCommandEvent&);
+
 
 //this function is called every time a keyboard button is lifted in this->minute: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> template<class E> void ChronoField<P>::OnEditMinute(E& event) {
@@ -195,6 +219,10 @@ template<class P> template<class E> void ChronoField<P>::OnEditMinute(E& event) 
 
 }
 
+template void ChronoField<RouteFrame>::OnEditMinute<wxKeyEvent>(wxKeyEvent&);
+template void ChronoField<RouteFrame>::OnEditMinute<wxCommandEvent>(wxCommandEvent&);
+
+
 //this function is called every time a keyboard button is lifted in this->second: it checks whether the text entered so far in value is valid and runs AllOk
 template<class P> template<class E> void ChronoField<P>::OnEditSecond(E& event) {
 
@@ -220,6 +248,8 @@ template<class P> template<class E> void ChronoField<P>::OnEditSecond(E& event) 
 
 }
 
+template void ChronoField<RouteFrame>::OnEditSecond<wxKeyEvent>(wxKeyEvent&);
+
 
 
 template<class P> template <typename EventTag, typename Method, typename Object> void ChronoField<P>::Bind(EventTag tag, Method method, Object object) {
@@ -231,6 +261,9 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 }
 
+template  void ChronoField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
+template void ChronoField<RouteFrame>::Bind<wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*>(wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*);
+template void ChronoField<SightFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
 
 
 //this function enables/disable the whole ChronoField
@@ -242,8 +275,18 @@ template<class P> void ChronoField<P>::Enable(bool is_enabled) {
 
 }
 
+template void ChronoField<SightFrame>::Enable(bool);
+
+
+template void ChronoField<RouteFrame>::Enable(bool);
+
+
 template<class P> template<class T> void ChronoField<P>::InsertIn(T* host) {
 
     host->Add(sizer_v);
 
 }
+
+template void ChronoField<SightFrame>::InsertIn<wxBoxSizer>(wxBoxSizer*);
+template void ChronoField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void ChronoField<SightFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);

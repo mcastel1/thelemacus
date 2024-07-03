@@ -12,7 +12,9 @@
     #include "wx/wx.h"
 #endif
 
+#include "chart_frame.h"
 #include "constants.h"
+#include "sight_frame.h"
 
 
 //constructor of a LengthUnitField object, based on the parent frame frame
@@ -20,3 +22,7 @@ template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, 
 
 }
  
+
+template class LengthUnitField<ChartFrame>;
+template class LengthUnitField<RouteFrame>;
+template class LengthUnitField<SightFrame>;

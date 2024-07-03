@@ -7,8 +7,10 @@
 
 #include "check_month.h"
 
+#include "date_field.h"
 #include "my_app.h"
 #include "sight_frame.h"
+#include "tabulate_days.h"
 
 
 template<class P> CheckMonth<P>::CheckMonth(DateField<P>* p_in) {
@@ -17,6 +19,8 @@ template<class P> CheckMonth<P>::CheckMonth(DateField<P>* p_in) {
     tabulate_days = new TabulateDays<P>(p);
 
 }
+
+template class CheckMonth<SightFrame>;
 
 
 
@@ -66,3 +70,6 @@ template<class P> template<class T> void CheckMonth<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template void CheckMonth<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckMonth<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

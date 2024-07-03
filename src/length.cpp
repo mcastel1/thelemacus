@@ -5,14 +5,16 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include "length.h"
+
 #include <sstream>
 
-#include "length.h"
-#include "length_unit.h"
-#include "generic.h"
 #include "constants.h"
-#include "units.h"
+#include "generic.h"
+#include "length_unit.h"
 #include "limb.h"
+#include "my_string.h"
+#include "units.h"
 
 
 
@@ -89,7 +91,8 @@ Length::Length(Chrono time, Speed speed) {
 
 
 //set the value of *this equal to x (expressed in units LengthUnit_types[0]). The unit is not modified
-inline void Length::set(String name, double x, [[maybe_unused]] String prefix) {
+//inline 
+void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 
     String new_prefix;
 
@@ -107,14 +110,16 @@ inline void Length::set(String name, double x, [[maybe_unused]] String prefix) {
 
 
 //same as Length::set(String name, double x, [[maybe_unused]] String prefix)  but without printing out anything
-inline void Length::set(double x) {
+//inline 
+void Length::set(double x) {
     
     value = x;
 }
 
 
 //set the value of *this equal to x and the units equal to unit_in
-inline void Length::set(double value_in, const LengthUnit& unit_in) {
+//inline 
+void Length::set(double value_in, const LengthUnit& unit_in) {
     
     value = value_in;
     unit = unit_in;
@@ -172,7 +177,8 @@ void Length::print(String name, String prefix, ostream& ostr) {
 
 
 //convert *this to unit of measure unit_in, set unit = unit_in and write the result in *this
-inline void Length::convert_to(const LengthUnit& output_unit){
+//inline 
+void Length::convert_to(const LengthUnit& output_unit){
     
     //the value of this in units of measure LengthUnit_types[0]
     double value0 = 0.0;
@@ -249,7 +255,8 @@ inline void Length::convert_to(const LengthUnit& output_unit){
 
 
 //same as convert_to, but it returns the result
-inline Length Length::convert(const LengthUnit& output_unit){
+//inline 
+Length Length::convert(const LengthUnit& output_unit){
     
     Length result;
     
@@ -328,6 +335,9 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
     print(name, prefix, cout);
 
 }
+
+template void Length::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
 
 //reads from file the content after 'name = ' and writes it into this.
 void Length::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
@@ -413,7 +423,8 @@ void Length::operator /= (const double& x) {
 
 
 //evaluates whether Length (*this) is > than r
-inline bool Length::operator > (const Length& r) {
+//inline 
+bool Length::operator > (const Length& r) {
     
     if(unit == r.unit){
         //*this and r have the same units -> just compare their values
@@ -431,7 +442,8 @@ inline bool Length::operator > (const Length& r) {
 
 
 //evaluates whether Length (*this) is <= r, see Length::operator >
-inline bool Length::operator <= (const Length& r) {
+//inline 
+bool Length::operator <= (const Length& r) {
 
     return(!((*this) > r));
 
@@ -439,7 +451,8 @@ inline bool Length::operator <= (const Length& r) {
 
 
 //evaluates whether Length (*this) is < than r
-inline bool Length::operator < (const Length& r) {
+//inline 
+bool Length::operator < (const Length& r) {
     
     if(unit == r.unit){
         //*this and r have the same units -> just compare their values
@@ -456,7 +469,8 @@ inline bool Length::operator < (const Length& r) {
 }
 
 //evaluates whether Length (*this) is >= r
-inline bool Length::operator >= (const Length& r) {
+//inline 
+bool Length::operator >= (const Length& r) {
 
     return(!((*this) < r));
 
@@ -464,7 +478,8 @@ inline bool Length::operator >= (const Length& r) {
 
 
 //evaluates whether Length (*this) is > than the double r (this supposes that r represents a Length in the same units as this->unit)
-inline bool Length::operator > (const double& r) {
+//inline 
+bool Length::operator > (const double& r) {
 
     return((value > r));
 
@@ -472,7 +487,8 @@ inline bool Length::operator > (const double& r) {
 
 
 //evaluates whether Length (*this) is >= than the double r (this supposes that r represents a Length in the same units as this->unit)
-inline bool Length::operator >= (const double& r) {
+//inline 
+bool Length::operator >= (const double& r) {
 
     return(!((*this) < r));
 
@@ -480,7 +496,8 @@ inline bool Length::operator >= (const double& r) {
 
 
 //evaluates whether Length (*this) is <= than the double r (this supposes that r represents a Length in the same units as this->unit)
-inline bool Length::operator <= (const double& r) {
+//inline 
+bool Length::operator <= (const double& r) {
 
     return(!((*this) > r));
 
@@ -488,7 +505,8 @@ inline bool Length::operator <= (const double& r) {
 
 
 //evaluates whether Length (*this) is smaller than the double r (this supposes that r represents a Length in the same units as this->unit)
-inline bool Length::operator < (const double& r) {
+//inline 
+bool Length::operator < (const double& r) {
 
     return((value < r));
 
@@ -547,14 +565,16 @@ Length Length::operator / (const double& x) {
 
 
 //return true if both the value and unit of *this and length coincide, false otherwise
-inline bool Length::operator == (const Length& length) {
+//inline 
+bool Length::operator == (const Length& length) {
 
     return((value == (length.value)) && (unit == (length.unit)));
 
 }
 
 
-inline bool Length::operator != (const Length& length) {
+//inline 
+bool Length::operator != (const Length& length) {
 
     return (!((*this) == length));
 

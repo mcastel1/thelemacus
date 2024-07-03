@@ -154,3 +154,5 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
     event.Skip(true);
     
 }
+
+template void OnSelectRouteInListControlRoutesForTransport::operator()<wxListEvent>(wxListEvent&);

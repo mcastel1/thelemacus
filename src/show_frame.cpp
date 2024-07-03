@@ -7,6 +7,7 @@
 
 #include "show_frame.h"
 
+#include "list_frame.h"
 
 
 template<class F> ShowFrame<F>::ShowFrame(F* frame_in) {
@@ -14,6 +15,8 @@ template<class F> ShowFrame<F>::ShowFrame(F* frame_in) {
     frame = frame_in;
 
 }
+
+template class ShowFrame<ListFrame>;
 
 
 //show a frame of type F
@@ -23,5 +26,6 @@ template<class F> template <class T> void ShowFrame<F>::operator()(T& event) {
 
     event.Skip(true);
 
-
 }
+
+template void ShowFrame<ListFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

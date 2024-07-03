@@ -7,12 +7,14 @@
 
 #include "show_question_frame.h"
 
+#include "all_routes.h"
 #include "my_app.h"
+#include "question_frame.h"
+#include "reset_list_frame.h"
+#include "save_and_reset.h"
 #include "set_idling.h"
+#include "some_routes.h"
 #include "unset_idling.h"
-
-
-
 
 
 template<class T, typename F_YES, typename F_NO, typename F_ABORT> ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::ShowQuestionFrame(T* f_in, F_YES* f_yes_in, F_NO* f_no_in, F_ABORT* f_abort_in) {
@@ -23,6 +25,16 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> ShowQuestionF
     f_abort = f_abort_in;
 
 }
+
+template class ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
+template class ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>;
+template class ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>;
+template class ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>;
+template class ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class ShowQuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>;
+template class ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 
 
 //set the wxControl, title and question and answers for the functor *this,  set enable_button_y/n both to true,  and bind_esc_to_button_b to true. Then call the functor operator() with CallAfter
@@ -43,6 +55,15 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
 
 }
 
+template void ShowQuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
+template void ShowQuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
+template void ShowQuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
+template void ShowQuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>::SetAndCall(wxControl*, String, String, String, String);
+template void ShowQuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
+template void ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
+template void ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
+template void ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
+
 
 //set the wxControl, title and question and answers for the functor *this,  set enable_butoon_y/n to enable_button_y/n_in, and set bind_esc_to_button_b = bind_esc_to_button_b_in.  I call the functor operator() with CallAfter
 template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::SetAndCall(wxControl* control_in, String title_in, String question_in, String answer_y_in, String answer_n_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in) {
@@ -61,6 +82,9 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
     f->CallAfter(*this);
 
 }
+
+template void ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String, bool, bool, bool);
+
 
 
 //if question_frame != NULL, enable or disable question_frame->button_a/b according to the boolean variables enable_button_a/b

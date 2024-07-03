@@ -7,8 +7,11 @@
 
 #include "check_year.h"
 
+#include "date_field.h"
 #include "my_app.h"
 #include "sight_frame.h"
+#include "tabulate_days.h"
+
 
 
 template<class P> CheckYear<P>::CheckYear(DateField<P>* p_in) {
@@ -18,6 +21,7 @@ template<class P> CheckYear<P>::CheckYear(DateField<P>* p_in) {
 
 }
 
+template class CheckYear<SightFrame>;
 
 
 template<class P> template<class T> void CheckYear<P>::operator()(T& event) {
@@ -66,3 +70,6 @@ template<class P> template<class T> void CheckYear<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template void CheckYear<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckYear<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

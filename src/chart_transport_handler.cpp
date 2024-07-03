@@ -14,6 +14,7 @@
 #include "chart_frame.h"
 #include "double.h"
 
+
 //constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with proposed zoom factor proposed _zoom_factor at end fo the transport.  This is a `proposed` zoom factor because, if such proposed zoom factor is < 1 or > zoom_factor_max, the actual zoom factor will be set to 1 and zoom_factor_max, respectively. Othersize, the actual zoom_factor will be equal to proposed_zoom_factor.
 template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* chart_in, const Route& transporting_route_in, const Double& proposed_zoom_factor, F* f_in) : MotionHandler<F>(chart_in->parent, transporting_route_in, f_in){
     
@@ -61,13 +62,12 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
             
     }
     
-    
-
-    
-    
     (MotionHandler<F>::timer)->Bind(wxEVT_TIMER, &ChartTransportHandler::OnTimer, this);
 
 }
+
+template class ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
+template class ChartTransportHandler<UnsetIdling<ListFrame>>;
 
 
 //prompt the movement of the center of the chart from position a to position b
@@ -86,6 +86,10 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
     
     
 }
+
+template void ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>::operator()();
+template void ChartTransportHandler<UnsetIdling<ListFrame>>::operator()();
+
 
 //this method iterates the animation
 template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
@@ -158,11 +162,11 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
      
                     
                     //the Position where I start the animation (start) may not coincide with circle_observer.reference_position (for example, I may want to start the animaiton from the antipode of circle_observer.reference_position to show a nice turn of the earth during the animaiton): thus, to start the animation, I need to first set rotation to the rotation that brings circle_observer.reference_position to be centered on start -> to do this, I do
-                    chart_frame->draw_panel->rotation->set(((*(chart_frame->draw_panel->rotation)) * Rotation((MotionHandler<F>::start), chart_frame->draw_panel->circle_observer->reference_position)));
+                    chart_frame->draw_panel->rotation->set(((*(chart_frame->draw_panel->rotation)) * Rotation((*(MotionHandler<F>::start)), (*(chart_frame->draw_panel->circle_observer->reference_position)))));
 
                     
                     chart_frame->draw_panel->rotation_start_drag->set((*(chart_frame->draw_panel->rotation)));
-                    (*(chart_frame->draw_panel->circle_observer->reference_position)) = (MotionHandler<F>::start);
+                    (*(chart_frame->draw_panel->circle_observer->reference_position)) = (*(MotionHandler<F>::start));
                     omega_start = chart_frame->draw_panel->circle_observer->omega;
                     
                     break;
@@ -187,9 +191,9 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
         if((MotionHandler<F>::t) > 0){
             //the transport animation is in progress -> do the next chunk
 
-            (MotionHandler<F>::transporting_route_temp).length.set(
+            (MotionHandler<F>::transporting_route_temp).length->set(
                 String(""),
-                ((MotionHandler<F>::transporting_route).length.value) *
+                                                                    ((MotionHandler<F>::transporting_route).length->value) *
                                                (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)))))
                                                ,
                                                String(""));
@@ -203,7 +207,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     PositionProjection q_center;
                     
                     //transport the starting point of the animation, start, according to transporting_route_temp, and store the result in p_center -> this yields the updated center of the chart
-                    (MotionHandler<F>::start).transport(&p_center, (MotionHandler<F>::transporting_route_temp), String(""));
+                    (MotionHandler<F>::start)->transport(&p_center, (MotionHandler<F>::transporting_route_temp), String(""));
                     //transform p_center into a PositionProjection
                     (chart_frame->draw_panel->*(chart_frame->draw_panel->GeoToProjection))(p_center, &q_center, true);
                     
@@ -217,11 +221,11 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(q_center - projection_size/2.0, &p_SW);
 
                     //set lambda / phi min/max according to p_NE and p_SW
-                    (chart_frame->lambda_max) = (p_NE.lambda);
-                    (chart_frame->phi_max) = (p_NE.phi);
+                    (*(chart_frame->lambda_max)) = (p_NE.lambda);
+                    (*(chart_frame->phi_max)) = (p_NE.phi);
 
-                    (chart_frame->lambda_min) = p_SW.lambda;
-                    (chart_frame->phi_min) = p_SW.phi;
+                    (*(chart_frame->lambda_min)) = p_SW.lambda;
+                    (*(chart_frame->phi_min)) = p_SW.phi;
           
                     
                     break;
@@ -234,7 +238,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     (MotionHandler<F>::transporting_route_temp).compute_end(String(""));
                     
                     //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
-                    chart_frame->draw_panel->rotation->set(((*(chart_frame->draw_panel->rotation_start_drag)) * Rotation((MotionHandler<F>::transporting_route_temp).end, (MotionHandler<F>::start))));
+                    chart_frame->draw_panel->rotation->set(((*(chart_frame->draw_panel->rotation_start_drag)) * Rotation((*((MotionHandler<F>::transporting_route_temp).end)), (*(MotionHandler<F>::start)))));
                     
                     (*(chart_frame->draw_panel->circle_observer->reference_position)) = (*((MotionHandler<F>::transporting_route_temp).end));
 

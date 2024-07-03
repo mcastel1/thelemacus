@@ -8,12 +8,15 @@
 #include "on_change_selection_in_limb_field.h"
 
 #include "my_app.h"
+#include "sight_frame.h"
 
 template<class P> OnChangeSelectionInLimbField<P>::OnChangeSelectionInLimbField(LimbField<P>* caller_in) {
 
     caller = caller_in;
 
 }
+
+template class OnChangeSelectionInLimbField<SightFrame>;
 
 //when an item is selected/deselcted in *caller, make sure that only one item stays selected in *calller
 template<class P> template<class T>void OnChangeSelectionInLimbField<P>::operator()(T& event) {
@@ -88,3 +91,4 @@ template<class P> template<class T>void OnChangeSelectionInLimbField<P>::operato
 
 }
 
+template void OnChangeSelectionInLimbField<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

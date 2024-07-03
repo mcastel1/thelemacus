@@ -9,6 +9,7 @@
 
 #include "constants.h"
 #include "length_format_field.h"
+#include "route_frame.h"
 
 
 
@@ -17,6 +18,8 @@ template<class P> CheckLengthFormat<P>::CheckLengthFormat(LengthFormatField<P>* 
     p = p_in;
 
 }
+
+template class CheckLengthFormat<RouteFrame>;
 
 
 
@@ -77,3 +80,5 @@ template<class P> template<class T> void CheckLengthFormat<P>::operator()(T& eve
     event.Skip(true);
 
 }
+
+template void CheckLengthFormat<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

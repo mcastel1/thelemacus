@@ -11,10 +11,10 @@
 using namespace std;
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
-Int /*this is the low precision used for displaying data*/ display_precision, /*this is the high precision used for storing data and making calculations with it*/ data_precision;
-Double /*the ratio between the width (height) of the plot area and the width (height) of the chart*/length_plot_area_over_length_chart, length_chart_over_length_chart_frame, /*this is the ratio between (the length of the borders drawn around the widgets) and (the length of the screen)*/length_border_over_length_screen;
+extern Int /*this is the low precision used for displaying data*/ display_precision, /*this is the high precision used for storing data and making calculations with it*/ data_precision;
+extern Double /*the ratio between the width (height) of the plot area and the width (height) of the chart*/length_plot_area_over_length_chart, length_chart_over_length_chart_frame, /*this is the ratio between (the length of the borders drawn around the widgets) and (the length of the screen)*/length_border_over_length_screen;
 //maximal and minimal latitude of the points in file path_file_coastlines
-Angle max_lat, min_lat;
+extern Angle max_lat, min_lat;
 
 #define deg_to_rad (2.0*M_PI/360.0)
 #define rad_to_deg (1.0/deg_to_rad)
@@ -82,15 +82,19 @@ Angle max_lat, min_lat;
 //this number equals 11111111 in binary, and thus it will be used to pin out some parts of hexadecimal numbers 
 #define hexadecimal_mask 0x0000ff
 
-static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-vector<unsigned int> days_per_month_leap(days_per_month_leap_temp, days_per_month_leap_temp + sizeof(days_per_month_leap_temp)/sizeof(days_per_month_leap_temp[0]));
+//static const int days_per_month_leap_temp[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+extern vector<unsigned int> days_per_month_leap;
 
-static const int days_per_month_common_temp[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-vector<unsigned int> days_per_month_common(days_per_month_common_temp, days_per_month_common_temp + sizeof(days_per_month_common_temp)/sizeof(days_per_month_common_temp[0]));
+//static const int days_per_month_common_temp[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+//vector<unsigned int> days_per_month_common(days_per_month_common_temp, days_per_month_common_temp + sizeof(days_per_month_common_temp)/sizeof(days_per_month_common_temp[0]));
+
+extern vector<unsigned int> days_per_month_common;
 
 
 //these are the color codes in kml file format for a few populat colors (red, etc...);
-string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
-string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};
+extern vector<string> kml_colors;
+extern vector<string> hex_colors;
+
+
 
 #endif

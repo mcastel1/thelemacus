@@ -32,3 +32,5 @@ template <class T> void ShowAll::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template void ShowAll::operator()<wxCommandEvent>(wxCommandEvent&);

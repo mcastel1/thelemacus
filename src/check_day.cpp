@@ -8,6 +8,7 @@
 #include "check_day.h"
 
 
+#include "date_field.h"
 #include "generic.h"
 #include "sight_frame.h"
 
@@ -18,6 +19,8 @@ template<class P> CheckDay<P>::CheckDay(DateField<P>* p_in) {
     p = p_in;
 
 }
+
+template class CheckDay<SightFrame>;
 
 
 template<class P> template<class T> void CheckDay<P>::operator()(T& event) {
@@ -69,3 +72,6 @@ template<class P> template<class T> void CheckDay<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template void CheckDay<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckDay<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

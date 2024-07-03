@@ -7,6 +7,11 @@
 
 #include "check_chrono.h"
 
+#include "check_hour.h"
+#include "check_minute.h"
+#include "check_second.h"
+#include "route_frame.h"
+#include "sight_frame.h"
 
 
 template<class P> CheckChrono<P>::CheckChrono(ChronoField<P>* p_in) {
@@ -19,6 +24,11 @@ template<class P> CheckChrono<P>::CheckChrono(ChronoField<P>* p_in) {
 
 }
 
+template class CheckChrono<RouteFrame>;
+template class CheckChrono<SightFrame>;
+
+
+
 //this function writes into sight.stopwatch the value written into the respective GUI box
 template<class P> template <class T> void CheckChrono<P>::operator()(T& event) {
 
@@ -29,3 +39,7 @@ template<class P> template <class T> void CheckChrono<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+//explicit instantiations
+template void CheckChrono<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckChrono<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

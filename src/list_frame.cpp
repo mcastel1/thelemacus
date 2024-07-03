@@ -1236,6 +1236,8 @@ template<class E> void ListFrame::Disconnect(E& event) {
 
 }
 
+template void ListFrame::Disconnect<wxTimerEvent>(wxTimerEvent&);
+
 
 //disconnects sight i_sight from its related Route and prompt a message frame to inform the user
 template<class E> void ListFrame::DisconnectAndPromptMessage(E& event) {
@@ -1249,6 +1251,8 @@ template<class E> void ListFrame::DisconnectAndPromptMessage(E& event) {
     event.Skip(true);
 
 }
+
+template  void ListFrame::DisconnectAndPromptMessage<wxMouseEvent>(wxMouseEvent&);
 
 
 //when the mouse hovers over a given element of listcontrol_routes, sets highlighted_route_now equal to the id of that route, and the same for the relaetd sight in listcontrol_sights.
@@ -1491,6 +1495,10 @@ template<class E> void ListFrame::OnPressCtrlW([[maybe_unused]] E& event) {
 
 }
 
+template void ListFrame::OnPressCtrlW<wxKeyEvent>(wxKeyEvent&);
+
+
+
 //write content of data into file
 template<class E> void ListFrame::OnPressCtrlS(E& event) {
 
@@ -1503,6 +1511,8 @@ template<class E> void ListFrame::OnPressCtrlS(E& event) {
     event.Skip(true);
 
 }
+
+template void ListFrame::OnPressCtrlS<wxKeyEvent>(wxKeyEvent&);
 
 
 //write content of data into a named file
@@ -1535,6 +1545,8 @@ template<class E> void ListFrame::OnPressCtrlShiftS(E& event) {
     event.Skip(true);
 
 }
+
+template void ListFrame::OnPressCtrlShiftS<wxKeyEvent>(wxKeyEvent&);
 
 
 
@@ -1959,6 +1971,8 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
     
     
 }
+
+template void ListFrame::AnimateToObject<Position, UnsetIdling<ListFrame>>(Position*, UnsetIdling<ListFrame>*);
 
 
 //compute the astronomical position and updated all the GUI fields in set() and re-draws everything

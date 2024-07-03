@@ -10,7 +10,8 @@
 #include "generic.h"
 
 
-inline Cartesian::Cartesian(void) {
+//inline 
+Cartesian::Cartesian(void) {
 
     r = gsl_vector_alloc(3);
 
@@ -18,7 +19,8 @@ inline Cartesian::Cartesian(void) {
 
 
 //construct *this setting its coordinates from the coordinates of the geographic Position p
-inline Cartesian::Cartesian(const Position* p) {
+//inline 
+Cartesian::Cartesian(const Position* p) {
 
     r = gsl_vector_alloc(3);
 
@@ -31,7 +33,8 @@ inline Cartesian::Cartesian(const Position* p) {
 
 
 //set *this from the grographic Position p
-inline void Cartesian::setPosition(const Position* p){
+//inline 
+void Cartesian::setPosition(const Position* p){
     
 
     gsl_vector_set(r, 0, cos(p->phi) * cos(p->lambda));
@@ -43,7 +46,8 @@ inline void Cartesian::setPosition(const Position* p){
 
 
 //return the dot product between *this and s
-inline double Cartesian::dot(const Cartesian& s){
+//inline 
+double Cartesian::dot(const Cartesian& s){
     
     double result;
     
@@ -55,7 +59,8 @@ inline double Cartesian::dot(const Cartesian& s){
 
 
 //return the cross product between the vector of this and that of s
-inline Cartesian Cartesian::cross(const Cartesian& s){
+//inline 
+Cartesian Cartesian::cross(const Cartesian& s){
     
     Cartesian result;
     

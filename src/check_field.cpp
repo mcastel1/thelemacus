@@ -16,6 +16,8 @@
 
 
 #include "answer.h"
+#include "chrono_field.h"
+#include "sight_frame.h"
 
 
 //constructor of a CheckField object, based on the parent frame frame
@@ -44,6 +46,9 @@ template<class P, class T> CheckField<P, T>::CheckField(wxPanel* panel_of_parent
 }
 
 
+//explicit instantiation
+template class CheckField<SightFrame, ChronoField<SightFrame>>;
+template class CheckField<SightFrame, DynamicLengthField<SightFrame>>;
 
 
 //this function writes into the non-GUI field answer the value entered in the GUI box
@@ -61,6 +66,9 @@ template<class P, class T> template<class S> void CheckField<P, T>::get(S& event
 
 }
 
+//explicit instantiation
+template void CheckField<SightFrame, ChronoField<SightFrame>>::get<wxCommandEvent>(wxCommandEvent&);
+template void CheckField<SightFrame, DynamicLengthField<SightFrame>>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 //sets the value in the GUI object check equal to the value in the non-GUI limb object answer
@@ -76,12 +84,23 @@ template<class P, class T> void CheckField<P, T>::set(void) {
 
 }
 
+//explicit instantiation
+template void CheckField<SightFrame, ChronoField<SightFrame>>::set();
+template void CheckField<SightFrame, DynamicLengthField<SightFrame>>::set();
+
+
 template<class P, class T> template <typename EventTag, typename Method, typename Object> void CheckField<P, T>::Bind(EventTag tag, Method method, Object object) {
 
     checkbox->Bind(tag, method, object);
 
 }
 
+//explicit instantiation
+template void CheckField<SightFrame, DynamicLengthField<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+
+
+//explicit instantiation
+template void CheckField<SightFrame, ChronoField<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
 
 
 template<class P, class T> template<class R> void CheckField<P, T>::InsertIn(R* host) {
@@ -89,3 +108,8 @@ template<class P, class T> template<class R> void CheckField<P, T>::InsertIn(R* 
     host->Add(sizer_v);
 
 }
+
+//explicit instantiation
+template void CheckField<SightFrame, ChronoField<SightFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void CheckField<SightFrame, DynamicLengthField<SightFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+

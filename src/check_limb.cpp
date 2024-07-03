@@ -6,7 +6,9 @@
 //
 
 #include "check_limb.h"
+#include "list_frame.h"
 #include "my_app.h"
+#include "sight_frame.h"
 
 
 template<class P> CheckLimb<P>::CheckLimb(LimbField<P>* p_in) {
@@ -14,6 +16,9 @@ template<class P> CheckLimb<P>::CheckLimb(LimbField<P>* p_in) {
     p = p_in;
 
 }
+
+template class CheckLimb<SightFrame>;
+
 
 template<class P> template<class T> void CheckLimb<P>::operator()(T& event) {
 
@@ -51,3 +56,6 @@ template<class P> template<class T> void CheckLimb<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template void CheckLimb<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckLimb<SightFrame>::operator()<wxKeyEvent>(wxKeyEvent&);

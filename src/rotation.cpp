@@ -54,7 +54,8 @@ void Rotation::set(gsl_matrix* m) {
 
 
 //set the content of *this eqaul to the content of r by copying the content of r into the memory of *this : the memory adresses of *this and r will be left unchanged
-inline void Rotation::set(const Rotation& r){
+//inline 
+void Rotation::set(const Rotation& r){
     
     a = (r.a);
     b = (r.b);
@@ -243,6 +244,9 @@ template<class S> void Rotation::read_from_stream(String name, S* input_stream, 
     set(alpha, beta, gamma);
 
 }
+
+template void Rotation::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
 
 //reads from file the content after 'name = ' and writes it into *this.
 //if mode = 'RW' ('R') it reads form a FileRW (FileR)

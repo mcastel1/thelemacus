@@ -7,7 +7,22 @@
 
 #include "question_frame.h"
 
+#include "all_routes.h"
+#include "ask_remove_related_route.h"
+#include "ask_remove_related_sight.h"
+#include "close_app.h"
+#include "close_frame.h"
+#include "confirm_transport.h"
+#include "delete_position.h"
+#include "delete_route.h"
+#include "delete_sight.h"
+#include "existing_route.h"
 #include "my_app.h"
+#include "new_route.h"
+#include "reset_list_frame.h"
+#include "save_and_reset.h"
+#include "show_all.h"
+#include "some_routes.h"
 
 
 
@@ -95,7 +110,17 @@ template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F
 
 }
 
-
+template class QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
+template class QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ShowAll, CloseApp, ShowAll>;
+template class QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>;
+template class QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>;
+template class QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>;
+template class QuestionFrame<ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>;
+template class QuestionFrame<CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 
 
 //if the user presses return/escape, I call f_a / f_b
@@ -137,3 +162,5 @@ template<typename F_A, typename F_B, typename F_ABORT> template<class E> void Qu
     event.Skip(true);
 
 }
+
+template void QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::KeyDown<wxKeyEvent>(wxKeyEvent&);

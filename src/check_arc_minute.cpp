@@ -6,9 +6,11 @@
 //
 
 #include "check_arc_minute.h"
-#include "my_app.h"
-#include "angle_field.h"
 
+#include "angle_field.h"
+#include "my_app.h"
+#include "position_frame.h"
+#include "sight_frame.h"
 
 
 template<class P> CheckArcMinute<P>::CheckArcMinute(AngleField<P>* p_in) {
@@ -16,6 +18,11 @@ template<class P> CheckArcMinute<P>::CheckArcMinute(AngleField<P>* p_in) {
     p = p_in;
 
 }
+
+template class CheckArcMinute<RouteFrame>;
+template class CheckArcMinute<SightFrame>;
+template class CheckArcMinute<PositionFrame>;
+
 
 template<class P> template <class T> void CheckArcMinute<P>::operator()(T& event) {
 
@@ -54,3 +61,9 @@ template<class P> template <class T> void CheckArcMinute<P>::operator()(T& event
     event.Skip(true);
 
 }
+
+template void CheckArcMinute<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckArcMinute<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckArcMinute<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckArcMinute<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckArcMinute<PositionFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

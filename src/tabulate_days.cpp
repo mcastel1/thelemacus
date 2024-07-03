@@ -8,6 +8,7 @@
 #include "tabulate_days.h"
 
 #include "constants.h"
+#include "date_field.h"
 #include "sight_frame.h"
 
 
@@ -16,6 +17,8 @@ template<class P> TabulateDays<P>::TabulateDays(DateField<P>* p_in) {
     p = p_in;
 
 }
+
+template class TabulateDays<SightFrame>;
 
 
 
@@ -81,3 +84,7 @@ template<class P> template<class T> void TabulateDays<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template void TabulateDays<SightFrame>::operator()<wxKeyEvent>(wxKeyEvent&);
+template void TabulateDays<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void TabulateDays<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

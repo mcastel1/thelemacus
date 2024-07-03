@@ -147,6 +147,8 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
 
 }
 
+template void Speed::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
 
 void Speed::print(String name, String prefix, ostream& ostr) {
 
@@ -163,7 +165,8 @@ void Speed::set(double x){
 
 
 //set the value of *this equal to x and the units equal to unit_in
-inline void Speed::set(double value_in, const SpeedUnit& unit_in) {
+//inline 
+void Speed::set(double value_in, const SpeedUnit& unit_in) {
     
     value = value_in;
     unit = unit_in;

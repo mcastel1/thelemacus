@@ -7,6 +7,12 @@
 
 #include "check_check.h"
 
+#include "check_chrono.h"
+#include "check_length.h"
+#include "chrono_field.h"
+#include "dynamic_length_field.h"
+#include "sight_frame.h"
+
 
 
 template<class P, class T>  CheckCheck<P, T>::CheckCheck(CheckField<P, T>* p_in) {
@@ -14,6 +20,12 @@ template<class P, class T>  CheckCheck<P, T>::CheckCheck(CheckField<P, T>* p_in)
     p = p_in;
 
 }
+
+//explicit instantiation
+template class CheckCheck<SightFrame, ChronoField<SightFrame>>;
+template class CheckCheck<SightFrame, DynamicLengthField<SightFrame>>;
+
+
 
 //this function reads the value in the GUI box checkbox, and enables/disables the related_field accordingly
 template<class P, class T> template<class R> void CheckCheck<P, T>::operator()(R& event) {
@@ -37,3 +49,6 @@ template<class P, class T> template<class R> void CheckCheck<P, T>::operator()(R
 
 }
 
+//explicit instantiation
+template void CheckCheck<SightFrame, ChronoField<SightFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckCheck<SightFrame, DynamicLengthField<SightFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);

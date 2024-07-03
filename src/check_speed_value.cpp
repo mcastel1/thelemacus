@@ -11,12 +11,14 @@
 #include "my_app.h"
 
 
-
 template<class P> CheckSpeedValue<P>::CheckSpeedValue(SpeedField<P>* p_in) {
 
     p = p_in;
 
 }
+
+template class CheckSpeedValue<RouteFrame>;
+
 
 //check the value in the GUI field in SpeedField
 template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& event) {
@@ -55,3 +57,6 @@ template<class P> template <class T> void CheckSpeedValue<P>::operator()(T& even
     event.Skip(true);
 
 }
+
+template void CheckSpeedValue<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckSpeedValue<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

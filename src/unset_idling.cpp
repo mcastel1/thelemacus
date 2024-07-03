@@ -11,6 +11,13 @@
     #include "wx/wx.h"
 #endif
 
+#include "chart_frame.h"
+#include "draw_panel.h"
+#include "list_frame.h"
+#include "position_frame.h"
+#include "route_frame.h"
+#include "sight_frame.h"
+
 
 template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in) {
 
@@ -18,6 +25,12 @@ template<class P> UnsetIdling<P>::UnsetIdling(P* parent_in) {
 
 }
 
+template class UnsetIdling<ChartFrame>;
+template class UnsetIdling<RouteFrame>;
+template class UnsetIdling<SightFrame>;
+template class UnsetIdling<PositionFrame>;
+template class UnsetIdling<DrawPanel>;
+template class UnsetIdling<ListFrame>;
 
 template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event) {
 
@@ -36,3 +49,9 @@ template<class P> void UnsetIdling<P>::operator()(void) {
 
 }
 
+template void UnsetIdling<ListFrame>::operator()();
+template void UnsetIdling<PositionFrame>::operator()();
+template void UnsetIdling<RouteFrame>::operator()();
+template void UnsetIdling<SightFrame>::operator()();
+template void UnsetIdling<DrawPanel>::operator()();
+template void UnsetIdling<ChartFrame>::operator()();

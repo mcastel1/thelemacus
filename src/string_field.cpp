@@ -7,7 +7,11 @@
 
 #include "string_field.h"
 
+#include "check_string.h"
 #include "constants.h"
+#include "position_frame.h"
+#include "route_frame.h"
+#include "sight_frame.h"
 
 
 //constructor of a StringField object, based on the parent frame frame
@@ -35,17 +39,9 @@ template<class P> StringField<P>::StringField(wxPanel* panel_of_parent, String* 
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
+template class StringField<RouteFrame>;
+template class StringField<SightFrame>;
+template class StringField<PositionFrame>;
 
 
 template<class P> template<class T> void StringField<P>::InsertIn(T* host) {
@@ -53,6 +49,9 @@ template<class P> template<class T> void StringField<P>::InsertIn(T* host) {
     host->Add(sizer_v);
 
 }
+
+template void StringField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void StringField<SightFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 //bind this -> value to method
 template <class P> template <typename EventTag, typename Method, typename Object> void StringField<P>::Bind(EventTag tag, Method method, Object object) {
@@ -62,7 +61,10 @@ template <class P> template <typename EventTag, typename Method, typename Object
 
 }
 
-
+template void StringField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
+template void StringField<SightFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+template void StringField<PositionFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (PositionFrame::*)(wxKeyEvent&), PositionFrame*>(wxEventTypeTag<wxKeyEvent>, void (PositionFrame::*)(wxKeyEvent&), PositionFrame*);
+template void StringField<PositionFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
 //I write in the non-GUI object string the value entered in the GUI object value
@@ -75,6 +77,10 @@ template<class P> template<class T> void StringField<P>::get(T& event) {
 
 }
 
+template void StringField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void StringField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void StringField<PositionFrame>::get<wxCommandEvent>(wxCommandEvent&);
+
 
 //sets the value in the GUI object value equal to the value in the non-GUI String object string
 template<class P> void StringField<P>::set(void) {
@@ -83,3 +89,6 @@ template<class P> void StringField<P>::set(void) {
 
 }
 
+template void StringField<RouteFrame>::set();
+template void StringField<SightFrame>::set();
+template void StringField<PositionFrame>::set();

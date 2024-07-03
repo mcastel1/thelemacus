@@ -7,6 +7,10 @@
 
 #include "check_date.h"
 
+#include "check_day.h"
+#include "check_month.h"
+#include "check_year.h"
+#include "sight_frame.h"
 
 
 
@@ -20,6 +24,7 @@ template<class P> CheckDate<P>::CheckDate(DateField<P>* p_in) {
 
 }
 
+template class CheckDate<SightFrame>;
 
 
 //this functor checks the whole date field by calling the check on its year, month and day parts
@@ -32,3 +37,5 @@ template<class P> template <class T> void CheckDate<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template void CheckDate<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

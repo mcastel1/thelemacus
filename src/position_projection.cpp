@@ -22,7 +22,8 @@ PositionProjection::PositionProjection(const double x_in, const double y_in) {
 
 }
 
-inline PositionProjection PositionProjection::operator + (const PositionProjection& q) {
+//inline 
+PositionProjection PositionProjection::operator + (const PositionProjection& q) {
 
     PositionProjection p;
 
@@ -33,7 +34,8 @@ inline PositionProjection PositionProjection::operator + (const PositionProjecti
 
 }
 
-inline PositionProjection PositionProjection::operator - (const PositionProjection& q) {
+//inline 
+PositionProjection PositionProjection::operator - (const PositionProjection& q) {
 
     PositionProjection p;
 
@@ -45,7 +47,8 @@ inline PositionProjection PositionProjection::operator - (const PositionProjecti
 }
 
 //divide both members of *this by the number x and return the resulting  PositionProjection
-inline PositionProjection PositionProjection::operator / (const double& q) {
+//inline 
+PositionProjection PositionProjection::operator / (const double& q) {
 
     PositionProjection p;
 
@@ -57,14 +60,16 @@ inline PositionProjection PositionProjection::operator / (const double& q) {
 }
 
 
-inline PositionProjection PositionProjection::operator / (const Double& q){
+//inline 
+PositionProjection PositionProjection::operator / (const Double& q){
     
     return ((*this)/(q.value));
     
 }
 
 //multiply both members of *this by the number x and return the resulting  PositionProjection
-inline PositionProjection PositionProjection::operator * (const double& q) {
+//inline 
+PositionProjection PositionProjection::operator * (const double& q) {
 
     PositionProjection p;
 
@@ -76,28 +81,32 @@ inline PositionProjection PositionProjection::operator * (const double& q) {
 }
 
 
-inline void PositionProjection::operator += (const PositionProjection& q) {
+//inline 
+void PositionProjection::operator += (const PositionProjection& q) {
 
     (*this) = (*this) + q;
     
 }
 
 
-inline void PositionProjection::operator -= (const PositionProjection& q) {
+//inline 
+void PositionProjection::operator -= (const PositionProjection& q) {
 
     (*this) = (*this) - q;
     
 }
 
 
-inline void PositionProjection::operator *= (const double& a) {
+//inline 
+void PositionProjection::operator *= (const double& a) {
 
     (*this) = (*this) * a;
     
 }
 
 
-inline void PositionProjection::operator /= (const double& a) {
+//inline 
+void PositionProjection::operator /= (const double& a) {
 
     (*this) = (*this) / a;
     
@@ -105,7 +114,8 @@ inline void PositionProjection::operator /= (const double& a) {
 
 
 //return true if *this is falls wihtin the plot area of *draw_panel in the Mercator projection, and false otherwise
-inline bool PositionProjection::CheckMercator(DrawPanel* draw_panel){
+//inline 
+bool PositionProjection::CheckMercator(DrawPanel* draw_panel){
     
     bool output;
     
@@ -130,7 +140,8 @@ inline bool PositionProjection::CheckMercator(DrawPanel* draw_panel){
 
 
 //normalize p.lambda, then set x and y equal to the Mercator projections of the Position p
-inline void PositionProjection::SetMercator(const Position& p){
+//inline 
+void PositionProjection::SetMercator(const Position& p){
     
     x = -(p.lambda.value);
     y = log(1.0 / cos((p.phi)) + tan((p.phi)));
@@ -139,7 +150,8 @@ inline void PositionProjection::SetMercator(const Position& p){
 
 
 //normalize p.lambda, then set x and y equal to the Mercator projections of the Position p
-inline void PositionProjection::NormalizeAndSetMercator(const Position& p){
+//inline 
+void PositionProjection::NormalizeAndSetMercator(const Position& p){
     
     Position temp;
     

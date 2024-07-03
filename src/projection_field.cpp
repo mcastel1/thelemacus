@@ -65,3 +65,5 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
     event.Skip(true);
 
 }
+
+template class ProjectionField<ChartFrame>;

@@ -9,54 +9,6 @@
 
 
 
-inline double cot(double x){
-    
-    return 1.0/tan(x);
-    
-}
-
-inline double csc(double x){
-    
-    return 1.0/sin(x);
-    
-}
-
-//returns alpha = arctan(y/x), with alpha lying in the same quadrant as the vector x, y
-inline double atan(double x, double y){
-    
-    if(x != 0.0){
-        
-        if(x > 0.0){
-            
-            return atan(y/x);
-            
-        }else{
-            
-            return(atan(y/x)+M_PI);
-        }
-        
-    }else{
-        
-        if(y > 0.0){
-            
-            return(M_PI/2.0);
-            
-        }else{
-            
-            return(3.0*M_PI/2.0);
-            
-        }
-        
-    }
-    
-}
-
-//the floor of the exponential of x
-inline int floor_exp(double x){
-    
-    return(floor(exp(x)));
-    
-}
 
 //given a wxListCtrl* list_control, if * list_control has at least one item, it finds on what element of *list_control the mouse is currently on and writes the id of this element in i. Otherwise, it writes wxNOT_FOUND in *i
 void MousePositionOnListControl(wxListCtrl* list_control, int* i){
@@ -160,6 +112,22 @@ template<class C> void read_from_file(C* object, String name, String filename, [
 #endif
 
 }
+
+// explicit instantiations
+template void read_from_file<Angle>(Angle*, String, String, String, String);
+template void read_from_file<Answer>(Answer*, String, String, String, String);
+template void read_from_file<Catalog>(Catalog*, String, String, String, String);
+template void read_from_file<Chrono>(Chrono*, String, String, String, String);
+template void read_from_file<Double>(Double*, String, String, String, String);
+template void read_from_file<Data>(Data*, String, String, String, String);
+template void read_from_file<Int>(Int*, String, String, String, String);
+template void read_from_file<Length>(Length*, String, String, String, String);
+template void read_from_file<Position>(Position*, String, String, String, String);
+template void read_from_file<Rotation>(Rotation*, String, String, String, String);
+template void read_from_file<Route>(Route*, String, String, String, String);
+template void read_from_file<String>(String*, String, String, String, String);
+
+
 
 //this function checks whether the  unsigned int in string s is formatted correctly and, if check_interval = true, it also checks whether the this unsigned int lies in [min, sup). If i != NULL and the check is ok, it also writes the value of the unsigned int read from s into (*i)
 bool check_unsigned_int(string s, unsigned int* i, bool check_interval, unsigned int min, unsigned int sup){
@@ -339,59 +307,6 @@ void enter_double(double* x, bool check_interval, double min, double sup, String
     
 }
 
-//round the floating point number x with precision `precision`
-inline double round_with_precision(double x, unsigned int precision)
-{
-    return round(x * gsl_pow_int(10.0, precision)) / gsl_pow_int(10.0, precision);
-}
-
-inline double sin(const Angle& x) {
-
-    return sin(x.value);
-
-}
-
-inline double asin(const Double& x) {
-
-    return asin(x.value);
-
-}
-
-inline double cos(const Angle& x) {
-
-    return cos(x.value);
-
-}
-
-inline double tan(const Angle& x) {
-
-    return tan(x.value);
-
-}
-
-inline double csc(const Angle& x) {
-
-    return csc(x.value);
-
-}
-
-inline double sec(const Angle& x) {
-
-    return (1.0 / cos(x));
-
-}
-
-inline double cot(const Angle& x) {
-
-    return cot(x.value);
-
-}
-
-inline double acos(const Double& x) {
-
-    return acos(x.value);
-
-}
 
 //find the  position in v of element with value x and return the position. If no element is found, return v.size(). Note that this function is different from address_position_in_vector
 template<class T> unsigned int position_in_vector(T x, const vector<T>& v){
@@ -403,6 +318,10 @@ template<class T> unsigned int position_in_vector(T x, const vector<T>& v){
     return i;
     
 }
+
+//explicit instantiation
+template unsigned int position_in_vector<Projection>(Projection, const vector<Projection>&);
+
 
 
 //convert element by element a vector whose entries are of type A into a vector whose entries are of type B and return the latter. This make sense if A can be re-casted into B
@@ -418,6 +337,9 @@ template<class A, class B> vector<B> convert_vector(const vector<A>& x){
     
 }
 
+template std::__1::vector<String, std::__1::allocator<String>> convert_vector<Projection, String>(std::__1::vector<Projection, std::__1::allocator<Projection>> const&);
+
+
 //find the  position in v of element with memory address x and return the position. If no element is found, return v.size(). Note that this function is different from position_in_vector
 template<class T> unsigned int address_position_in_vector(T* x, const vector<T>& v){
     
@@ -429,6 +351,8 @@ template<class T> unsigned int address_position_in_vector(T* x, const vector<T>&
     
 }
 
+template unsigned int address_position_in_vector<Route>(Route*, std::__1::vector<Route, std::__1::allocator<Route>> const&);
+template unsigned int address_position_in_vector<Position>(Position*, std::__1::vector<Position, std::__1::allocator<Position>> const&);
 
 
 //delete duplicates from vector *v by removing entries in *v which are equal
@@ -438,6 +362,9 @@ template<class T> void delete_duplicates(vector<T>* v){
     v->erase(unique(v->begin(), v->end()), v->end());
     
 }
+
+// explicit instantiations
+template void delete_duplicates<unsigned long long>(vector<unsigned long long>*);
 
 
 //return true(false) if the relative difference between a and b is smaller, in absolute value, than epsilon_double. If the relative difference cannot be compute because it would imply dividing by zero, return a.value == b.value
@@ -454,6 +381,10 @@ template<class T> bool equal_rel_epsilon_double(const T& a, const T& b){
     }
     
 }
+
+//explicit instantiation
+template bool equal_rel_epsilon_double<Angle>(const Angle&, const Angle&);
+
 
 /*
  delete duplicates from vector *v, by removing entries in *v which are equal according to the comparator. A pointer to the comparator needs to be supplied as second argument. For example, if I define a comparator such as
@@ -476,6 +407,10 @@ template<class T> void delete_duplicates(vector<T>* v, bool (*comparator)(const 
     
 }
 
+// explicit instantiations
+template  void delete_duplicates<Angle>(vector<Angle>*, bool (*)(const Angle&, const Angle&));
+
+
 
 //return the size of *this if shown in the wxWindow (e.g. a wxtextctr, a wxliscontrol, etc...). This is equivalent to the method String::get_size(const String&, wxWindow*)
 wxSize get_size(const String& s, wxWindow* p) {
@@ -495,32 +430,6 @@ wxSize get_size(const String& s, wxDC* dc) {
 }
 
 
-//put the angle x in the interval [-pi, pi), it does not alter *this and returns the result. This is equivalent to Angle::normalize_pm_pi_ret
-inline Angle normalize_pm_pi_ret(const Angle& x){
-        
-    Angle temp;
-
-    temp = x;
-
-    return(temp.normalize_pm_pi_ret());
-
-}
-
-
-//normalize a and b between -pi and pi, and return  the algebraic mean between a.value and b.value
-inline double mean_pm_pi(Angle& a, Angle& b){
-    
-    return(((a.normalize_pm_pi_ret().value) + (b.normalize_pm_pi_ret().value))/2.0);
-    
-}
-
-
-//return the mean between a.value and b.value
-inline double mean_value(Angle& a, Angle& b){
-    
-    return( ((a.value) + (b.value))/2.0 );
-    
-}
 
 
 string to_string(const Position& p, unsigned int precision) {
@@ -535,60 +444,6 @@ string to_string(const Position& p, unsigned int precision) {
 
 
 
-
-//compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.
-inline bool my_cross(const gsl_vector* a, const gsl_vector* b, gsl_vector** r) {
-
-    if (((a->size) == 3) && ((b->size) == 3)) {
-
-        if (((*r) != NULL) && (((*r)->size) != 0)) {
-
-            gsl_vector_free(*r);
-
-        }
-
-        (*r) = gsl_vector_alloc(3);
-
-
-
-        gsl_vector_set(*r, 0, gsl_vector_get(a, 1) * gsl_vector_get(b, 2) - gsl_vector_get(a, 2) * gsl_vector_get(b, 1));
-        gsl_vector_set(*r, 1, gsl_vector_get(a, 2) * gsl_vector_get(b, 0) - gsl_vector_get(a, 0) * gsl_vector_get(b, 2));
-        gsl_vector_set(*r, 2, gsl_vector_get(a, 0) * gsl_vector_get(b, 1) - gsl_vector_get(a, 1) * gsl_vector_get(b, 0));
-
-
-        return true;
-
-    }
-    else {
-
-        return false;
-
-    }
-
-
-}
-
-
-//checks whether s is present into wxArrayString, and writes true/false into check if its present/absent. If i!=NULL: if it is present, it writes the position of s in v in *i, if it is not present, i is not touched
-inline void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString v, bool* check, unsigned int* i) {
-
-    unsigned int j;
-
-    for ((*check) = false, j = 0; (j < v.size()) && (!(*check)); j++) {
-
-        if ((bool)(boost::iequals((control->GetValue()).ToStdString(), (v[j]).ToStdString()))) {
-
-            (*check) = true;
-            //I write in control the proper text value (i.e. with the correct upper/lower case, as taken from the list v)
-            control->SetValue(v[j]);
-
-        }
-
-    }
-
-    if (i != NULL) { (*i) = j - 1; }
-
-}
 
 //sets fore/background colors to a generic object of type T
 template<class T> void SetColor(T* object) {
@@ -614,6 +469,10 @@ template <class T> void Reset(T* control) {
     control->SetValue(value);
 
 }
+
+template void Reset<wxComboBox>(wxComboBox*);
+
+
 
 //rescales *image to fit into size, by including the border given by length_border_over_length_screen, and by keeping its proprtions, and writes the result into *image
 wxImage RescaleProportionally(wxImage image, const wxSize size) {
@@ -725,24 +584,7 @@ template<class S> void read_list_from_stream(String name, S* input_stream, bool 
 
 }
 
-
-
-
-
-
-//this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
-inline double lambda_mercator(double x){
-    
-    return (-x*rad_to_deg - 360.0*floor((x-(-M_PI))/(2.0*M_PI)));
-    
-}
-
-//this function returns the latitude value (expressed in degrees) of the inverse spherical Mercator projection from the rectangular y value
-inline double phi_mercator(double y){
-    
-    return(rad_to_deg*atan(sinh(y)));
-    
-}
+template void read_list_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, std::__1::vector<int, std::__1::allocator<int>>*);
 
 
 bool operator < (const Angle& x, const Angle& y) {
@@ -780,4 +622,232 @@ void AdjustWidth(wxComboBox* control) {
 
     control->SetMinSize(wxSize(max_width + additional, -1));
 
+}
+
+
+
+//inline
+double cos(const Angle& x) {
+
+    return cos(x.value);
+
+}
+
+
+//inline
+double cot(double x){
+    
+    return 1.0/tan(x);
+    
+}
+
+//inline
+double csc(double x){
+    
+    return 1.0/sin(x);
+    
+}
+
+//returns alpha = arctan(y/x), with alpha lying in the same quadrant as the vector x, y
+//inline
+double atan(double x, double y){
+    
+    if(x != 0.0){
+        
+        if(x > 0.0){
+            
+            return atan(y/x);
+            
+        }else{
+            
+            return(atan(y/x)+M_PI);
+        }
+        
+    }else{
+        
+        if(y > 0.0){
+            
+            return(M_PI/2.0);
+            
+        }else{
+            
+            return(3.0*M_PI/2.0);
+            
+        }
+        
+    }
+    
+}
+
+//the floor of the exponential of x
+//inline
+int floor_exp(double x){
+    
+    return(floor(exp(x)));
+    
+}
+
+
+//round the floating point number x with precision `precision`
+double round_with_precision(double x, unsigned int precision){
+    
+    return round(x * gsl_pow_int(10.0, precision)) / gsl_pow_int(10.0, precision);
+    
+}
+
+
+//inline
+double sin(const Angle& x) {
+
+    return sin(x.value);
+
+}
+
+//inline
+double asin(const Double& x) {
+
+    return asin(x.value);
+
+}
+
+
+//inline
+double tan(const Angle& x) {
+
+    return tan(x.value);
+
+}
+
+//inline
+double csc(const Angle& x) {
+
+    return csc(x.value);
+
+}
+
+//inline
+double sec(const Angle& x) {
+
+    return (1.0 / cos(x));
+
+}
+
+//inline
+double cot(const Angle& x) {
+
+    return cot(x.value);
+
+}
+
+//inline
+double acos(const Double& x) {
+
+    return acos(x.value);
+
+}
+
+
+//put the angle x in the interval [-pi, pi), it does not alter *this and returns the result. This is equivalent to Angle::normalize_pm_pi_ret
+//inline
+Angle normalize_pm_pi_ret(const Angle& x){
+        
+    Angle temp;
+
+    temp = x;
+
+    return(temp.normalize_pm_pi_ret());
+
+}
+
+
+//normalize a and b between -pi and pi, and return  the algebraic mean between a.value and b.value
+//inline
+double mean_pm_pi(Angle& a, Angle& b){
+    
+    return(((a.normalize_pm_pi_ret().value) + (b.normalize_pm_pi_ret().value))/2.0);
+    
+}
+
+
+//return the mean between a.value and b.value
+//inline
+double mean_value(Angle& a, Angle& b){
+    
+    return( ((a.value) + (b.value))/2.0 );
+    
+}
+
+
+
+//compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.
+//inline
+bool my_cross(const gsl_vector* a, const gsl_vector* b, gsl_vector** r) {
+
+    if (((a->size) == 3) && ((b->size) == 3)) {
+
+        if (((*r) != NULL) && (((*r)->size) != 0)) {
+
+            gsl_vector_free(*r);
+
+        }
+
+        (*r) = gsl_vector_alloc(3);
+
+
+
+        gsl_vector_set(*r, 0, gsl_vector_get(a, 1) * gsl_vector_get(b, 2) - gsl_vector_get(a, 2) * gsl_vector_get(b, 1));
+        gsl_vector_set(*r, 1, gsl_vector_get(a, 2) * gsl_vector_get(b, 0) - gsl_vector_get(a, 0) * gsl_vector_get(b, 2));
+        gsl_vector_set(*r, 2, gsl_vector_get(a, 0) * gsl_vector_get(b, 1) - gsl_vector_get(a, 1) * gsl_vector_get(b, 0));
+
+
+        return true;
+
+    }
+    else {
+
+        return false;
+
+    }
+
+
+}
+
+
+//checks whether s is present into wxArrayString, and writes true/false into check if its present/absent. If i!=NULL: if it is present, it writes the position of s in v in *i, if it is not present, i is not touched
+//inline
+void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString v, bool* check, unsigned int* i) {
+
+    unsigned int j;
+
+    for ((*check) = false, j = 0; (j < v.size()) && (!(*check)); j++) {
+
+        if ((bool)(boost::iequals((control->GetValue()).ToStdString(), (v[j]).ToStdString()))) {
+
+            (*check) = true;
+            //I write in control the proper text value (i.e. with the correct upper/lower case, as taken from the list v)
+            control->SetValue(v[j]);
+
+        }
+
+    }
+
+    if (i != NULL) { (*i) = j - 1; }
+
+}
+
+
+//this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
+//inline
+double lambda_mercator(double x){
+    
+    return (-x*rad_to_deg - 360.0*floor((x-(-M_PI))/(2.0*M_PI)));
+    
+}
+
+//this function returns the latitude value (expressed in degrees) of the inverse spherical Mercator projection from the rectangular y value
+//inline
+double phi_mercator(double y){
+    
+    return(rad_to_deg*atan(sinh(y)));
+    
 }

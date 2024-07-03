@@ -14,7 +14,9 @@
 #include "message_frame.h"
 #include "my_app.h"
 #include "my_string.h"
+#include "position_frame.h"
 #include "set_idling.h"
+#include "sight_frame.h"
 #include "unset_idling.h"
 
 
@@ -24,6 +26,14 @@ template<class T, typename FF_OK> PrintMessage<T, FF_OK>::PrintMessage(T* f_in, 
     f_ok = f_ok_in;
 
 }
+
+template class PrintMessage<ChartFrame, UnsetIdling<ChartFrame>>;
+template class PrintMessage<RouteFrame, UnsetIdling<RouteFrame>>;
+template class PrintMessage<SightFrame, UnsetIdling<SightFrame>>;
+template class PrintMessage<DrawPanel, UnsetIdling<DrawPanel>>;
+template class PrintMessage<ListFrame, UnsetIdling<ListFrame>>;
+template class PrintMessage<PositionFrame, UnsetIdling<PositionFrame>>;
+
 
 //set the wxControl, title,  message  and image_path for the functor *this, and I call the functor operator() with CallAfter
 template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::SetAndCall(wxControl* control_in, String title_in, String message_in, String image_path_in) {
@@ -36,6 +46,14 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::SetAndCall(wxCont
     f->CallAfter(*this);
 
 }
+
+template void PrintMessage<ListFrame, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String);
+template void PrintMessage<RouteFrame, UnsetIdling<RouteFrame>>::SetAndCall(wxControl*, String, String, String);
+template void PrintMessage<SightFrame, UnsetIdling<SightFrame>>::SetAndCall(wxControl*, String, String, String);
+template void PrintMessage<PositionFrame, UnsetIdling<PositionFrame>>::SetAndCall(wxControl*, String, String, String);
+template void PrintMessage<DrawPanel, UnsetIdling<DrawPanel>>::SetAndCall(wxControl*, String, String, String);
+template void PrintMessage<ChartFrame, UnsetIdling<ChartFrame>>::SetAndCall(wxControl*, String, String, String);
+
 
 template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void) {
     

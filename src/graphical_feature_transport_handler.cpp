@@ -11,6 +11,9 @@
 
 #include "motion_handler.h"
 #include "my_app.h"
+#include "on_change_selection_in_list_control.h"
+#include "on_select_route_in_list_control_for_transport.h"
+#include "to_do_at_end_of_transport.h"
 
 
 
@@ -27,6 +30,13 @@ template<class NON_GUI, class F> GraphicalFeatureTransportHandler<NON_GUI, F>::G
 
 }
 
+template class GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>;
+template class GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>;
+template class GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>;
+template class GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>;
+template class GraphicalFeatureTransportHandler<Position, ToDoAtEndOfTransport<Route, ListFrame>>;
+template class GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>;
+
 
 //this method triggers the animation
 template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, F>::operator()(void) {
@@ -38,6 +48,11 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         wxTIMER_CONTINUOUS);
     
 }
+
+template void GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>::operator()();
+template void GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>::operator()();
+template void GraphicalFeatureTransportHandler<Position, ToDoAtEndOfTransport<Route, ListFrame>>::operator()();
+
 
 //this method iterates the animation
 template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
@@ -67,7 +82,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             if (type_of_transported_object == String("position")) {
 
                 //store the starting position in *geo_position_start
-                (MotionHandler<F>::start) = (*((Position*)transported_object));
+                (*(MotionHandler<F>::start)) = (*((Position*)transported_object));
                 //highlight the Position that is being transported
                 (MotionHandler<F>::parent)->highlighted_position_now = address_position_in_vector<Position>(((Position*)transported_object), (MotionHandler<F>::parent)->data->position_list);
                 
@@ -76,14 +91,14 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                     //store the starting reference position in *geo_position_start
-                    (MotionHandler<F>::start) = (*(((Route*)transported_object)->reference_position));
+                    (*(MotionHandler<F>::start)) = (*(((Route*)transported_object)->reference_position));
                     //highlight the Position that is being transported
                     (MotionHandler<F>::parent)->highlighted_route_now = address_position_in_vector<Route>(((Route*)transported_object), (MotionHandler<F>::parent)->data->route_list);
      
 
                 }
                 
-                (MotionHandler<F>::start) = (*(((Route*)transported_object)->reference_position));
+                (*(MotionHandler<F>::start)) = (*(((Route*)transported_object)->reference_position));
 
 
             }
@@ -99,18 +114,18 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         
         if((MotionHandler<F>::t) > 0){
             //the transport animation is in progress -> do the next chunk
-
-            (MotionHandler<F>::transporting_route_temp).length.set(
-                String(""),
-                ((MotionHandler<F>::transporting_route).length.value) *
-                (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
-                ,
-                String(""));
+            
+            (MotionHandler<F>::transporting_route_temp).length->set(
+                                                                    String(""),
+                                                                    ((MotionHandler<F>::transporting_route).length->value) *
+                                                                    (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
+                                                                    ,
+                                                                    String(""));
 
 
             if (type_of_transported_object == String("position")) {
 
-                (*((Position*)transported_object)) = (MotionHandler<F>::start);
+                (*((Position*)transported_object)) = (*(MotionHandler<F>::start));
                 ((Position*)transported_object)->transport_to((MotionHandler<F>::transporting_route_temp), String(""));
 
                 (MotionHandler<F>::parent)->TabulatePositionsAll();
@@ -120,7 +135,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
-                    (*(((Route*)transported_object)->reference_position)) = (MotionHandler<F>::start);
+                    (*(((Route*)transported_object)->reference_position)) = (*(MotionHandler<F>::start));
                     ((Route*)transported_object)->reference_position->transport_to((MotionHandler<F>::transporting_route_temp), String(""));
 
                 }
@@ -142,7 +157,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         if (type_of_transported_object == String("position")) {
             
             //do the whole transport rather than combining many little transports, to avoid rounding errors
-            (*((Position*)transported_object)) = (MotionHandler<F>::start);
+            (*((Position*)transported_object)) = (*(MotionHandler<F>::start));
             //un-highlight the Position that is being transported
             (MotionHandler<F>::parent)->highlighted_position_now = -1;
             ((Position*)transported_object)->transport_to((MotionHandler<F>::transporting_route), String(""));
@@ -169,7 +184,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 (MotionHandler<F>::parent)->highlighted_route_now = -1;
 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-                (*(((Route*)transported_object)->reference_position)) = (MotionHandler<F>::start);
+                (*(((Route*)transported_object)->reference_position)) = (*(MotionHandler<F>::start));
                 ((Route*)transported_object)->reference_position->transport_to((MotionHandler<F>::transporting_route), String(""));
 
 

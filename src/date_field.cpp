@@ -15,10 +15,16 @@
 
 #include "date.h"
 
+#include "check_date.h"
+#include "check_day.h"
+#include "check_month.h"
+#include "check_year.h"
 #include "color.h"
 #include "generic.h"
-#include "static_text.h"
 #include "my_app.h"
+#include "sight_frame.h"
+#include "static_text.h"
+#include "tabulate_days.h"
 
 
 //constructor of a DateField object, based on the parent frame frame
@@ -81,10 +87,7 @@ template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {
     day->Bind(wxEVT_COMBOBOX, &DateField::OnEditDay<wxCommandEvent>, this);
     day->Bind(wxEVT_KEY_UP, &DateField::OnEditDay<wxKeyEvent>, this);
 
-
-
-
-
+    
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
 
@@ -97,10 +100,7 @@ template<class P> DateField<P>::DateField(wxPanel* panel_of_parent, Date* p) {
 
 }
 
-
-
-
-
+template class DateField<SightFrame>;
 
 
 
@@ -109,6 +109,9 @@ template<class P> bool DateField<P>::is_ok(void) {
     return(year_ok && month_ok && day_ok);
 
 }
+
+template bool DateField<SightFrame>::is_ok();
+
 
 
 //this function is called every time a keyboard button is lifted in this->year: it checks whether the text entered so far in year is valid and runs AllOk
@@ -209,6 +212,8 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 }
 
+template void DateField<SightFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+
 
 //set color as the background color in all fields of *this
 template<class P> void DateField<P>::SetBackgroundColor(Color color) {
@@ -227,6 +232,9 @@ template<class P> template<class T> void DateField<P>::InsertIn(T* host) {
 
 }
 
+template void DateField<SightFrame>::InsertIn<wxBoxSizer>(wxBoxSizer*);
+
+
 //this functor writes the values written inthe whole GUI date field (year, month and day) in the respective non-GUI object date->D, date->M, date->D
 template<class P> template <class T> void DateField<P>::get(T& event) {
 
@@ -241,6 +249,9 @@ template<class P> template <class T> void DateField<P>::get(T& event) {
     event.Skip(true);
 
 }
+
+template  void DateField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
+
 
 //sets the value in the GUI objects year, month and day equal to the value in the non-GUI limb object date_in
 template<class P> void DateField<P>::set(Date date_in) {
@@ -260,3 +271,5 @@ template<class P> void DateField<P>::set(Date date_in) {
     day_ok = true;
 
 }
+
+template void DateField<SightFrame>::set(Date);

@@ -87,11 +87,7 @@ template<class S> bool Date::read_from_stream(String name, S* input_stream, bool
 
 }
 
-
-
-
-
-
+template bool Date::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
 
 
 

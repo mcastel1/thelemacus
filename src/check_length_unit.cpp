@@ -8,6 +8,7 @@
 #include "check_length_unit.h"
 
 #include "my_app.h"
+#include "sight_frame.h"
 
 
 template<class P> CheckLengthUnit<P>::CheckLengthUnit(DynamicLengthField<P>* p_in) {
@@ -15,6 +16,9 @@ template<class P> CheckLengthUnit<P>::CheckLengthUnit(DynamicLengthField<P>* p_i
     p = p_in;
 
 }
+
+template class CheckLengthUnit<RouteFrame>;
+template class CheckLengthUnit<SightFrame>;
 
 
 //check the unit in the GUI field in LengthField
@@ -63,3 +67,6 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
     event.Skip(true);
 
 }
+
+template void CheckLengthUnit<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckLengthUnit<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

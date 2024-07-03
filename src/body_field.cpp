@@ -10,6 +10,7 @@
 #include "check_body.h"
 #include "multiple_item_field.h"
 #include "my_app.h"
+#include "sight_frame.h"
 
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
@@ -28,14 +29,19 @@ template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Cat
 
 }
 
+template class BodyField<SightFrame>;
+
 
 //sets the value in the GUI object name equal to the value in the non-GUI Body object body
 template<class P> void BodyField<P>::set(void) {
 
-    MultipleItemField<P, Body, CheckBody<P> >::name->SetValue(MultipleItemField<P, Body, CheckBody<P> >::object->name.value);
+    MultipleItemField<P, Body, CheckBody<P> >::name->SetValue(MultipleItemField<P, Body, CheckBody<P> >::object->name->value);
     MultipleItemField<P, Body, CheckBody<P> >::ok = true;
 
 }
+
+template void BodyField<SightFrame>::set();
+
 
 //sets the value in the non-GUI object body equal to the value in the GUI  object name
 template<class P> template<class T> void BodyField<P>::get(T& event) {
@@ -62,6 +68,8 @@ template<class P> template<class T> void BodyField<P>::get(T& event) {
     event.Skip(true);
 
 }
+
+template void BodyField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk

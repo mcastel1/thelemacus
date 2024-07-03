@@ -10,10 +10,12 @@
 #include <wx/sizer.h>
 
 
-#include "limb_field.h"
-#include "constants.h"
-#include "my_string.h"
 #include "check_limb.h"
+#include "constants.h"
+#include "limb_field.h"
+#include "my_string.h"
+#include "on_change_selection_in_limb_field.h"
+#include "sight_frame.h"
 
 
 //constructor of a LimbField object, based on the parent frame frame
@@ -59,6 +61,8 @@ template<class P> LimbField<P>::LimbField(wxPanel* panel_of_parent, Limb* p) {
 
 }
 
+template class LimbField<SightFrame>;
+
 
 template<class P> bool LimbField<P>::is_ok(void) {
 
@@ -66,11 +70,16 @@ template<class P> bool LimbField<P>::is_ok(void) {
 
 }
 
+template bool LimbField<SightFrame>::is_ok();
+
+
 template<class P> template <typename EventTag, typename Method, typename Object> void LimbField<P>::Bind(EventTag tag, Method method, Object object) {
 
     name->Bind(tag, method, object);
 
 }
+
+template void LimbField<SightFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
 
 
 //writes the value contained in the GUI field into the non-GUI field
@@ -96,6 +105,9 @@ template<class P> template<class T> void LimbField<P>::get(T& event) {
     event.Skip(true);
 
 }
+
+template void LimbField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
+
 
 
 //sets the value in the GUI object name equal to the value in the non-GUI limb object limb
@@ -136,6 +148,10 @@ template<class P> void LimbField<P>::set(void) {
 
 }
 
+template void LimbField<SightFrame>::set();
+
+
+
 //this function enables/disable the LimbField
 template<class P> void LimbField<P>::Enable(bool is_enabled) {
 
@@ -143,9 +159,13 @@ template<class P> void LimbField<P>::Enable(bool is_enabled) {
 
 }
 
+template void LimbField<SightFrame>::Enable(bool);
+
 
 template<class P> template<class T> void LimbField<P>::InsertIn(T* host) {
 
     host->Add(sizer_v);
 
 }
+
+template void LimbField<SightFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);

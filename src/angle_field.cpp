@@ -15,6 +15,9 @@
 #include "constants.h"
 #include "generic.h"
 #include "my_string.h"
+#include "route_frame.h"
+#include "position_frame.h"
+#include "sight_frame.h"
 
 
 
@@ -224,6 +227,12 @@ template<class P> template <class T> void AngleField<P>::get(T& event) {
 
 }
 
+// explicit instantiations
+template void AngleField<PositionFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void AngleField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void AngleField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
+
+
 
 //sets the value in the GUI objects deg and min equal to the value in the non-GUI Angle object angle
 template <class P> void AngleField<P>::set(void) {
@@ -390,6 +399,12 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 
 }
 
+// explicit instantiations
+template void AngleField<PositionFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (PositionFrame::*)(wxKeyEvent&), PositionFrame*>(wxEventTypeTag<wxKeyEvent>, void (PositionFrame::*)(wxKeyEvent&), PositionFrame*);
+template void AngleField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
+template void AngleField<SightFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+
+
 
 //this function enables/disable all the fields in AngleField
 template<class P> void AngleField<P>::Enable(bool is_enabled) {
@@ -408,3 +423,14 @@ template<class P> template<class T> void AngleField<P>::InsertIn(T* host) {
     host->Add(sizer_v);
 
 }
+// explicit instantiations
+template void AngleField<PositionFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void AngleField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void AngleField<SightFrame>::InsertIn<wxBoxSizer>(wxBoxSizer*);
+template void  AngleField<SightFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+
+
+// explicit instantiations
+template class AngleField<PositionFrame>;
+template class AngleField<RouteFrame>;
+template class AngleField<SightFrame>;

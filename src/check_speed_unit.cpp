@@ -8,12 +8,17 @@
 #include "check_speed_unit.h"
 
 #include "my_app.h"
+#include "speed_unit_field.h"
+
 
 template<class P> CheckSpeedUnit<P>::CheckSpeedUnit(SpeedField<P>* p_in) {
 
     p = p_in;
 
 }
+
+template class CheckSpeedUnit<RouteFrame>;
+
 
 
 //check the unit in the GUI field in SpeedField
@@ -61,3 +66,5 @@ template<class P> template <class T> void CheckSpeedUnit<P>::operator()(T& event
     event.Skip(true);
 
 }
+
+template void CheckSpeedUnit<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

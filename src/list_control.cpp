@@ -11,12 +11,20 @@
     #include "wx/wx.h"
 #endif
 
+#include "position.h"
+#include "route.h"
+#include "sight.h"
+
+
 template<class S> ListControl<S>::ListControl(wxWindow* parent_in, vector<wxButton*> disableable_buttons_in, const wxPoint& pos, const wxSize& size, long style) : wxListCtrl(parent_in, wxID_ANY, pos, size, style) {
 
     disableable_buttons = disableable_buttons_in;
     header_width.resize(0);
 
 }
+
+template class ListControl<Position>;
+
 
 //set all columns of *this: add a first dummy column, which is not correctly sized on WIN32 (I don't know why) -> add the real columns -> remove the dummy column. The  size of column i that fits the header is stored in header_width[i]
 template<class S> void ListControl<S>::SetColumns(vector<wxString> headers) {
@@ -31,6 +39,11 @@ template<class S> void ListControl<S>::SetColumns(vector<wxString> headers) {
     header_width.erase(header_width.begin());
 
 }
+
+template void ListControl<Route>::SetColumns(std::__1::vector<wxString, std::__1::allocator<wxString>>);
+template void ListControl<Sight>::SetColumns(std::__1::vector<wxString, std::__1::allocator<wxString>>);
+template void ListControl<Position>::SetColumns(std::__1::vector<wxString, std::__1::allocator<wxString>>);
+
 
 //push back a column to ListControl and store the header size into header_size
 template<class S> void ListControl<S>::PushBackColumn(wxString name) {
@@ -61,6 +74,11 @@ template<class S> void ListControl<S>::DeselectAll(void) {
 
 }
 
+template void ListControl<Position>::DeselectAll();
+template void ListControl<Route>::DeselectAll();
+template void ListControl<Sight>::DeselectAll();
+
+
 //clears *this and sets all its items equal to the items in the non-GUI vector v. If keep_selected_items = true, I re-select the items in *this that were selected before ListControl::set was called (if they are compatible with the new size of *this)
 template<class S> void ListControl<S>::set(vector<S> v, bool keep_selected_items) {
 
@@ -88,6 +106,10 @@ template<class S> void ListControl<S>::set(vector<S> v, bool keep_selected_items
     }
 
 }
+
+template void ListControl<Route>::set(std::__1::vector<Route, std::__1::allocator<Route>>, bool);
+template void ListControl<Sight>::set(std::__1::vector<Sight, std::__1::allocator<Sight>>, bool);
+template void ListControl<Position>::set(std::__1::vector<Position, std::__1::allocator<Position>>, bool);
 
 
 //if check = true/false it enables/disables all disableable buttons in *this
@@ -131,6 +153,10 @@ template<class S> void ListControl<S>::Resize(vector<S> list) {
     dummy_frame->Destroy();
 
 }
+
+template void ListControl<Route>::Resize(std::__1::vector<Route, std::__1::allocator<Route>>);
+template void ListControl<Sight>::Resize(std::__1::vector<Sight, std::__1::allocator<Sight>>);
+template void ListControl<Position>::Resize(std::__1::vector<Position, std::__1::allocator<Position>>);
 
 
 //get the selected items from *this, clears and reallocate selected_items, and writes them in selected_items

@@ -22,3 +22,5 @@ template <class T> void CloseApp::operator()([[maybe_unused]] T& event) {
     app->disclaimer->Close();
     
 }
+
+template void CloseApp::operator()<wxCommandEvent>(wxCommandEvent&);

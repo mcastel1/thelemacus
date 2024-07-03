@@ -98,7 +98,8 @@ vector<String> String::split(void) {
 
 
 //check whether *this is equal to an element in: if *this is equal to the i-th element in list, retun i. If *this isn't equal to any element in list, return list.size()
-inline int String::position_in_list(const vector<String>& list){
+//inline 
+int String::position_in_list(const vector<String>& list){
     
     unsigned int i;
     
@@ -114,7 +115,8 @@ inline int String::position_in_list(const vector<String>& list){
 
 
 //checks whether *this is equal to an element in: if *this is equal to the i-th element in list, retun i. If *this isn't equal to any element in list, return list.size()
-inline int String::position_in_list(const wxArrayString& list){
+//inline 
+int String::position_in_list(const wxArrayString& list){
     
     unsigned int i;
     
@@ -178,6 +180,9 @@ template<class S> void String::read_from_stream(String name, S* input_stream, bo
     print(name, true, prefix, cout);
 
 }
+
+template void String::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
 
 //read from file the content after 'name = ' and writes it into *this.
 //if mode = 'RW' ('R') it reads form a FileRW (FileR)
@@ -258,7 +263,8 @@ void String::print(String name, bool print_if_empty, String prefix, ostream& ost
 }
 
 //set the value of String *this, titled name, to input_string, by printing out everything
-inline void String::set(String name, String input_string, [[maybe_unused]] String prefix) {
+//inline 
+void String::set(String name, String input_string, [[maybe_unused]] String prefix) {
 
     set(input_string);
 
@@ -268,7 +274,8 @@ inline void String::set(String name, String input_string, [[maybe_unused]] Strin
 
 
 //set the value of String *this to input_string, without printing out anything
-inline void String::set(String input_string) {
+//inline 
+void String::set(String input_string) {
 
     value = (input_string.value);
 

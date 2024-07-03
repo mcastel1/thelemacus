@@ -110,6 +110,9 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
     
 }
 
+template void MyApp::OnPressCtrlQ<wxCommandEvent>(wxCommandEvent&);
+template void MyApp::OnPressCtrlQ<wxKeyEvent>(wxKeyEvent&);
+
 
 //shows all ChartFrames and positions them properly on the screen
 template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
@@ -159,6 +162,10 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
         
 }
 
+template void MyApp::ShowCharts<wxCloseEvent>(wxCloseEvent&);
+template void MyApp::ShowCharts<wxMouseEvent>(wxMouseEvent&);
+template void MyApp::ShowCharts<wxTimerEvent>(wxTimerEvent&);
+
 
 //same as template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) { but with no event argument
 void MyApp::ShowCharts(void){
@@ -171,7 +178,8 @@ void MyApp::ShowCharts(void){
 
 
 //make a nice animation to present all charts, by dragging them to the desired point from a point on the antipodes
-inline void MyApp::AnimateCharts(void){
+//inline 
+void MyApp::AnimateCharts(void){
 
     for(unsigned int i=0; i<(list_frame->chart_frames.size()); i++){
         ((list_frame->chart_frames)[i])->Animate();

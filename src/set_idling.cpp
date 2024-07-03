@@ -11,12 +11,25 @@
     #include "wx/wx.h"
 #endif
 
+#include "list_frame.h"
+#include "position_frame.h"
+#include "route_frame.h"
+#include "sight_frame.h"
+
 
 template<class P> SetIdling<P>::SetIdling(P* parent_in) {
 
     parent = parent_in;
 
 }
+
+template class SetIdling<ListFrame>;
+template class SetIdling<PositionFrame>;
+template class SetIdling<RouteFrame>;
+template class SetIdling<SightFrame>;
+template class SetIdling<DrawPanel>;
+template class SetIdling<ChartFrame>;
+
 
 template<class P> void SetIdling<P>::operator()(wxCommandEvent& event) {
 
@@ -34,3 +47,10 @@ template<class P> void SetIdling<P>::operator()(void) {
     (*this)(dummy);
 
 }
+
+template void SetIdling<ListFrame>::operator()();
+template void SetIdling<DrawPanel>::operator()();
+template void SetIdling<PositionFrame>::operator()();
+template void SetIdling<SightFrame>::operator()();
+template void SetIdling<RouteFrame>::operator()();
+template void SetIdling<ChartFrame>::operator()();

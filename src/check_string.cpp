@@ -7,8 +7,10 @@
 
 #include "check_string.h"
 
-
-
+#include "position_frame.h"
+#include "route_frame.h"
+#include "sight_frame.h"
+#include "string_field.h"
 
 
 template<class P> CheckString<P>::CheckString(StringField<P>* p_in) {
@@ -16,6 +18,11 @@ template<class P> CheckString<P>::CheckString(StringField<P>* p_in) {
     p = p_in;
 
 }
+
+template class CheckString<PositionFrame>;
+template class CheckString<RouteFrame>;
+template class CheckString<SightFrame>;
+
 
 //this functor does nothing, delete it in the future
 template<class P> template<class T> void CheckString<P>::operator()(T& event) {
@@ -27,3 +34,9 @@ template<class P> template<class T> void CheckString<P>::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template void CheckString<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckString<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckString<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template  void CheckString<PositionFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckString<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

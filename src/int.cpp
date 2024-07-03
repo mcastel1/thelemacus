@@ -13,7 +13,8 @@
 
 
 //set value equal to i
-inline void Int::set(String name, int i, [[maybe_unused]] String prefix) {
+//inline 
+void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
     String new_prefix;
 
@@ -28,7 +29,8 @@ inline void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
 
 //same as Int::set(String name, int i, [[maybe_unused]] String prefix) {, but without printing out anything
-inline void Int::set(int i) {
+//inline 
+void Int::set(int i) {
 
     value = i;
 
@@ -161,6 +163,9 @@ template<class S> void Int::read_from_stream([[maybe_unused]] String name, S* in
 
 
 }
+
+template void Int::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
 
 //reads from file the content after 'name = ' and writes it into *this.
 //if mode = 'RW' ('R') it reads form a FileRW (FileR)

@@ -200,7 +200,8 @@ bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
 
 
 //check whether phi and lambda are equal to phi_min ... lambda_max within accuracy epsilon_double and, if they are, set them equal to phi_min ... lambda_max, respectively
-inline void Position::put_back_in(DrawPanel* draw_panel){
+//inline 
+void Position::put_back_in(DrawPanel* draw_panel){
         
     switch (position_in_vector(Projection((draw_panel->parent->projection->name->GetValue()).ToStdString()), Projection_types)) {
             
@@ -316,6 +317,8 @@ template<class S> void Position::read_from_stream([[maybe_unused]] String name, 
     }
 
 }
+
+template void Position::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
 
 
 

@@ -12,10 +12,12 @@
 
 
 //void constructor
-inline Double::Double(void){}
+//inline 
+Double::Double(void){}
 
 //constructor that sets value to  x
-inline Double::Double(const double &x){
+//inline 
+Double::Double(const double &x){
     
     value = x;
     
@@ -101,6 +103,9 @@ template<class S> void Double::read_from_stream(String name, S* input_stream, bo
 
 }
 
+template void Double::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+
+
 
 //reads from file the content after 'name = ' and writes it into this. This function opens a new file, sets its name to filename and opens it
 void Double::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
@@ -109,11 +114,6 @@ void Double::read_from_file_to(String name, String filename, String mode, [[mayb
 
 
 }
-
-
-
-
-
 
 
 

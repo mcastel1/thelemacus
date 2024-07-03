@@ -41,3 +41,5 @@ template <class T> void ResetListFrame::operator()(T& event) {
     event.Skip(true);
 
 }
+
+template void ResetListFrame::operator()<wxCommandEvent>(wxCommandEvent&);

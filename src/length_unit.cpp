@@ -15,7 +15,8 @@ LengthUnit::LengthUnit(const String& input) : String(input.value) {}
 
 
 //return true if *this is one element in LengthUnit_types (i.e. *this is a valid Length unit) and false otherwise)
-inline bool LengthUnit::check(void){
+//inline 
+bool LengthUnit::check(void){
     
     return(position_in_list(LengthUnit_types) != (LengthUnit_types.size())) ;
     

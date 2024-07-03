@@ -8,18 +8,7 @@
 #include "dynamic_length_field.h"
 #include "length.h"
 #include "length_field.h"
-
-
-
-
-//set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
-template<class P> void DynamicLengthField<P>::set(Length input) {
-        
-    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
-    LengthField<P>::unit->set(input.unit);
-    
-}
-
+#include "sight_frame.h"
 
 
 
@@ -36,6 +25,10 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
 
 }
+
+template class LengthField<ChartFrame>;
+template class LengthField<RouteFrame>;
+template class LengthField<SightFrame>;
 
 
 //this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
@@ -61,6 +54,13 @@ template<class P> template<class E> void LengthField<P>::OnEditUnit(E& event) {
 
 }
 
+template void LengthField<RouteFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+template void LengthField<RouteFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
+template void LengthField<SightFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+template void LengthField<SightFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
+template void LengthField<ChartFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+template void LengthField<ChartFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
+
 
 //insert *this in *host
 template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
@@ -69,6 +69,8 @@ template<class P> template<class T> void LengthField<P>::InsertIn(T* host) {
 
 }
 
+template void LengthField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template  void LengthField<SightFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
 //same asLengthField<P>::InsertIn(T* host) but with flags to be provided
@@ -77,3 +79,5 @@ template<class P> template<class T> void LengthField<P>::InsertIn(T* host, wxSiz
     host->Add(sizer_v, flag);
 
 }
+
+template void LengthField<ChartFrame>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);

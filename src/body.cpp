@@ -90,8 +90,8 @@ void Body::set(const Body& input){
         
     radius->set((*(input.radius)));
     
-    RA->set(input.RA);
-    d->set(input.d);
+    RA->set((*(input.RA)));
+    d->set((*(input.d)));
     
 }
 

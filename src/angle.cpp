@@ -232,6 +232,15 @@ void Angle::set(String name, double x, [[maybe_unused]] String prefix) {
 
 }
 
+
+//set the value of *this equal to that of input
+void Angle::set(const Angle& input){
+    
+    value = (input.value);
+    
+}
+
+
 void Angle::normalize(void) {
 
     value = value - 2.0 * M_PI * floor(value / (2.0 * M_PI));

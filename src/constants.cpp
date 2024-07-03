@@ -15,3 +15,6 @@ vector<string> hex_colors = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399F
 
 vector<unsigned int> days_per_month_leap = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 vector<unsigned int> days_per_month_common = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+Int display_precision, data_precision;
+Double length_plot_area_over_length_chart, length_chart_over_length_chart_frame, length_border_over_length_screen;

@@ -82,6 +82,13 @@ template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [
 
 }
 
+//set the *content* (not the memory adresses) of *this equal to the content of input
+void Body::set(const Body& input){
+    
+    
+}
+
+
 template bool Body::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
 
 

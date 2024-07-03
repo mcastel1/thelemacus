@@ -35,7 +35,9 @@ template<class S> void Catalog::read_from_stream([[maybe_unused]] String name, S
 
         //if the next line in the file has not reached the end of file, I set *(file.value) to its old position and keep reading the file
         //THE ERROR IS HERE: all entried of list contain the same memory adresses within the Body class, which are the adresses of `body` declared in `Body body` above
-        list.push_back(body);
+//        list.push_back(body);
+        list.resize(list.size()+1);
+        list.back().set(body);
 
     }
 

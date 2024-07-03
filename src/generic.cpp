@@ -623,3 +623,11 @@ void AdjustWidth(wxComboBox* control) {
     control->SetMinSize(wxSize(max_width + additional, -1));
 
 }
+
+//this function returns the latitude value (expressed in degrees) of the inverse spherical Mercator projection from the rectangular y value
+//inline
+double phi_mercator(double y){
+    
+    return(rad_to_deg*atan(sinh(y)));
+    
+}

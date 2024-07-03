@@ -291,13 +291,7 @@ double lambda_mercator(double x){
     
 }
 
-//this function returns the latitude value (expressed in degrees) of the inverse spherical Mercator projection from the rectangular y value
-//inline 
-double phi_mercator(double y){
-    
-    return(rad_to_deg*atan(sinh(y)));
-    
-}
+
 
 #endif
 

@@ -85,9 +85,9 @@ template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [
 //set the *content* (not the memory adresses) of *this equal to the content of input
 void Body::set(const Body& input){
     
-    (name->value) = (input.name->value);
-    (type->value) = (input.type->value);
-    
+    name->set(*(input.name));
+    type->set(*(input.type));
+        
     radius = (input.radius);
     
     (RA->value) = (input.RA->value);

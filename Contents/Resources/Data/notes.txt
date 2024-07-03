@@ -116,9 +116,10 @@
      - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
 
   #POTENTIAL SOURCES OF ERRORS AFTER CLASS RESTRUCTURING
-  - a Position a and a Position b are converted into Position* a and Position*b by the restructuring -> a = b sets the adress of a equal to that of b -> disaster
+  - a Position a and a Position b are converted into Position* a and Position*b by the restructuring -> a = b sets the adress of a equal to that of b -> disaster (you were right about this!)
 
  ********** THINGS TO FIX ***********
+    - in void Body::set(const Body& input) insert proper set methods of RA, d, and all members of Body::set
     - Body types such as if((*type) == String("star")) should be listed in constants.h
     - move deg_to_rad and rad_to_deg to units.h
     - remove DrawPanel::rotation_axis, it is not used

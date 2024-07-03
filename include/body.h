@@ -36,6 +36,7 @@ public:
     bool check(unsigned int*, Catalog, String);
     void print(String, String, ostream&);
     template<class S> bool read_from_stream(String, S*, bool, String);
+    void set(const Body&);
     
     bool operator == (const Body&);
     

@@ -302,6 +302,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
     }
 
     //then, I fill the items vector with the remaining items
+    //THE ERROR APPEARS HERE - the size of items is not increased by this loop
     for (i=0; i < items_temp.GetCount(); i++) {
 
         for (is_present = false, j = 0; (j < MultipleItemField<P, NON_GUI, CHECK>::items.GetCount()) && (!is_present); j++) {
@@ -317,6 +318,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
         }
 
     }
+    //THE ERROR APPEARS HERE - the size of items is not increased by this loop
 
     MultipleItemField<P, NON_GUI, CHECK>::name->Set(MultipleItemField<P, NON_GUI, CHECK>::items);
     //because name->Set(projections clears the value of name, I set the value of name back to name_temp

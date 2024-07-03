@@ -18,3 +18,4 @@ vector<unsigned int> days_per_month_common = {31, 28, 31, 30, 31, 30, 31, 31, 30
 
 Int display_precision, data_precision;
 Double length_plot_area_over_length_chart, length_chart_over_length_chart_frame, length_border_over_length_screen;
+Angle max_lat, min_lat;

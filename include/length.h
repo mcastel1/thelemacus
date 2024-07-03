@@ -37,6 +37,7 @@ public:
     void set(String, double, String);
     void set(double);
     void set(double, const LengthUnit&);
+    void set(const Length&);
     string to_string(const LengthUnit&, unsigned int);
     string to_string(unsigned int);
     void print(String, String, ostream&);

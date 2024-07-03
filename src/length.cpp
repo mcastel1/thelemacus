@@ -127,6 +127,15 @@ void Length::set(double value_in, const LengthUnit& unit_in) {
 }
 
 
+//set the content (value and unit) of *this equal to that of l
+void Length::set(const Length& l){
+    
+    value = (l.value);
+    unit.set(l.unit);
+    
+}
+
+
 //convert *this to string with numerical precision precision
 string Length::to_string(unsigned int precision){
     

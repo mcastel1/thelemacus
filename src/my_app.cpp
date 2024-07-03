@@ -164,6 +164,7 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
 
 template void MyApp::ShowCharts<wxCloseEvent>(wxCloseEvent&);
 template void MyApp::ShowCharts<wxMouseEvent>(wxMouseEvent&);
+template void MyApp::ShowCharts<wxTimerEvent>(wxTimerEvent&);
 
 
 //same as template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) { but with no event argument

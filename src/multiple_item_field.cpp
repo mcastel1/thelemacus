@@ -295,7 +295,9 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
     //I first add to the items vector the recently selected items written in (MultipleItemField<P, NON_GUI>::recent_items)
     for (MultipleItemField<P, NON_GUI, CHECK>::items.Clear(), i = 0; i < (MultipleItemField<P, NON_GUI, CHECK>::recent_items->size()); i++) {
 
+        //THE ERROR APPEARS HERE FOR i=1 because (*(MultipleItemField<P, NON_GUI, CHECK>::recent_items))[i] and items_temp has size 3
         MultipleItemField<P, NON_GUI, CHECK>::items.Add(items_temp[(*(MultipleItemField<P, NON_GUI, CHECK>::recent_items))[i]]);
+        //THE ERROR APPEARS HERE FOR i=1 because (*(MultipleItemField<P, NON_GUI, CHECK>::recent_items))[i] and items_temp has size 3
 
     }
 

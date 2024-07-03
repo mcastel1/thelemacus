@@ -90,7 +90,9 @@ vector<unsigned int> days_per_month_common(days_per_month_common_temp, days_per_
 
 
 //these are the color codes in kml file format for a few populat colors (red, etc...);
-string kml_colors[] = {"ff0000ff", "ffff0000", "ff336699", "ff00ff00", "ff0080ff", "ffff00ff"};
+extern vector<string> kml_colors;
+
+
 string hex_colors[] = {"#000000", "#0000FF", "#00FF00", "#663300", "#3399FF", "#0000CC"};
 
 #endif

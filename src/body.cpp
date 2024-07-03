@@ -88,7 +88,6 @@ void Body::set(const Body& input){
     name->set((*(input.name)));
     type->set((*(input.type)));
         
-//    radius = (input.radius);
     radius->set((*(input.radius)));
     
     (RA->value) = (input.RA->value);

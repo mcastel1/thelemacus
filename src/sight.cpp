@@ -52,7 +52,7 @@ Sight::Sight(void) {
 
     //initiazlie the limb to a 'n/a' value
     limb.value = 'n';
-    atmosphere->set();
+    atmosphere->initialize();
     (related_route.value) = -1;
 
 }

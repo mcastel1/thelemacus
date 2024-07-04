@@ -78,6 +78,16 @@ bool Answer::set(String name, char c, [[maybe_unused]] String prefix) {
     return check;
 
 }
+
+
+void Answer::set(const Answer& x){
+    
+    value = (x.value);
+    
+}
+
+
+
 //reads *this from file whose path is filename, by looking through the entire file
 void Answer::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
 

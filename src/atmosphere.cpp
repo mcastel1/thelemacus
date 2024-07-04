@@ -18,6 +18,25 @@ Atmosphere::Atmosphere(void){
     
 }
 
+//set the content of *this (not the memory adresses) equal to the content of x
+void Atmosphere::set(const Atmosphere& x){
+    
+    earth_radius->set((*(x.earth_radius)));
+    n_layers = (x.n_layers);
+    A = (x.A);
+    B = (x.B);
+    P_dry_0 = (x.P_dry_0);
+    alpha = (x.alpha);
+    beta = (x.beta);
+    gamma = (x.gamma);
+    T0 = (x.T0);
+    h = (x.h);
+    lambda = (x.lambda);
+    t = (x.t);
+
+}
+
+
 double Atmosphere::T(Length z) {
 
     double x = 0.0;
@@ -134,7 +153,7 @@ double Atmosphere::dndz(Length z) {
 
 
 
-void Atmosphere::set(void) {
+void Atmosphere::initialize(void) {
 
     unsigned int i;
     double x;

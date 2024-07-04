@@ -29,6 +29,7 @@ public:
     vector<double> /*dT/dz, ecpressed in units of K / nm*/lambda, t;
     
     Atmosphere();
+    void set(const Atmosphere&);
     void initialize(void);
     double T(Length), n(Length), dTdz(Length), dndz(Length);
     

@@ -69,8 +69,7 @@ bool Answer::set(String name, char c, [[maybe_unused]] String prefix) {
 
         }
 
-    }
-    else {
+    }else{
 
         cout << prefix.value << RED << "Value of answer is not valid!\n" << RESET;
 

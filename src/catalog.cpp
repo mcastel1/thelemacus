@@ -97,7 +97,7 @@ void Catalog::add(String type, String name, double radius) {
 
 void Catalog::set(const Catalog& x){
     
-    my_vector_memcpy<Body>(list, x.list);    
+    my_vector_memcpy<Body>(&list, (x.list));
     
 }
 

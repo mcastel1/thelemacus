@@ -781,6 +781,12 @@ double mean_value(Angle& a, Angle& b){
 }
 
 
+template<class T> void my_push_back(vector<T>* v){
+    
+    
+    
+}
+
 
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.
 //inline

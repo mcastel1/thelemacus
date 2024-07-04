@@ -57,6 +57,7 @@ wxSize get_size(const String&, wxDC*);
 Angle normalize_pm_pi_ret(const Angle&);
 double mean_pm_pi(Angle&, Angle&);
 double mean_value(Angle&, Angle&);
+template<class T> void my_push_back(vector<T>*);
 string to_string(const Position&, unsigned int);
 bool my_cross(const gsl_vector*, const gsl_vector*, gsl_vector**);
 void find_and_replace_case_insensitive(wxComboBox*, wxArrayString, bool*, unsigned int*);

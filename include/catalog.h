@@ -20,8 +20,12 @@ class Body;
 class Catalog{
     
 public:
+    
     vector<Body> list;
+    
     Catalog(String, String);
+    
+    void set(const Catalog&);
     void add(String, String, double);
     vector<String> get_names(void);
     void print(String, ostream&);

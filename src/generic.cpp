@@ -788,6 +788,22 @@ template<class T> void my_push_back(vector<T>* v, const T& x){
 template void my_push_back<Body>(std::__1::vector<Body, std::__1::allocator<Body>>*, Body const&);
 
 
+//copy the *content* (not the memory adresses) of source into dest. This methods calls the set() method of class T, which needs to be defined.
+template<class T> void my_vector_memcpy(vector<T> dest, const vector<T> source){
+    
+    dest.resize(source.size());
+    
+    for(unsigned int i=0; i<(dest.size()); i++){
+        
+        (dest[i]).set(source[i]);
+        
+    }
+    
+}
+
+template void my_vector_memcpy<Body>(std::__1::vector<Body, std::__1::allocator<Body>>, std::__1::vector<Body, std::__1::allocator<Body>>);
+
+
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.
 //inline
 bool my_cross(const gsl_vector* a, const gsl_vector* b, gsl_vector** r) {

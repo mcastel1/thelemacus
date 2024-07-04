@@ -94,6 +94,7 @@ void Catalog::add(String type, String name, double radius) {
 
 }
 
+
 //set the content of *this (not the memory addresses) equal to the content of x
 void Catalog::set(const Catalog& x){
     

@@ -780,10 +780,11 @@ double mean_value(Angle& a, Angle& b){
     
 }
 
-
-template<class T> void my_push_back(vector<T>* v){
+//push back the *content* (not the memory adresses) of x into v. This methods calls the set() method of class T, which needs to be defined
+template<class T> void my_push_back(vector<T>* v, const T& x){
     
-    
+    v->resize((v->size())+1);
+    v->back->set(x);
     
 }
 

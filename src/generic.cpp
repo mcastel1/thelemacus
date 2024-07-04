@@ -784,9 +784,11 @@ double mean_value(Angle& a, Angle& b){
 template<class T> void my_push_back(vector<T>* v, const T& x){
     
     v->resize((v->size())+1);
-    v->back->set(x);
+    v->back().set(x);
     
 }
+
+template void my_push_back<Body>(std::__1::vector<Body, std::__1::allocator<Body>>*, Body const&);
 
 
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.

@@ -22,7 +22,6 @@ public:
     
     Answer();
     Answer(char, String);
-    void enter(String, String);
     bool set(String, char, String);
     //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
     void print(String, String, ostream&);
@@ -31,11 +30,6 @@ public:
     bool operator==(const Answer&), operator !=(const Answer&);
     
 };
-
-
-
-
-
 
 
 #endif

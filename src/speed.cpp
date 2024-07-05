@@ -157,6 +157,14 @@ void Speed::print(String name, String prefix, ostream& ostr) {
 }
 
 
+//set the content (not the memory adresses) of *this equal to the content of x
+void Speed::set(const Speed& x){
+    
+    value = (x.value);
+    unit.set(x.unit);
+    
+}
+
 void Speed::set(double x){
     
     value = x;

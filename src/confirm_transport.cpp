@@ -55,7 +55,9 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
             (((parent->transported_object_type) != String("route")) || ((parent->i_object_to_transport) != i))
             ) {
 
-            parent->route_list_for_transport.push_back((parent->data->route_list)[i]);
+                //            parent->route_list_for_transport.push_back((parent->data->route_list)[i]);
+                my_push_back(&(parent->route_list_for_transport), ((parent->data->route_list)[i]));
+                
             parent->map.push_back(i);
 
         }

@@ -57,6 +57,46 @@ Sight::Sight(void) {
 
 }
 
+
+//set the content (not the memory adresses) of *this equal to the content of x
+void Sight::set(const Sight& x){
+    
+    master_clock_date_and_hour.set(x.master_clock_date_and_hour);
+    time.set(x.time);
+    TAI_minus_UTC.set(x.TAI_minus_UTC);
+    stopwatch.set(x.stopwatch);
+    
+    index_error.set(x.index_error);
+    H_s.set(x.H_s);
+    H_a.set(x.H_a);
+    H_o.set(x.H_o);
+    H_i.set(x.H_i);
+    DH_refraction.set(x.DH_refraction);
+    DH_dip.set(x.DH_dip);
+    DH_parallax_and_limb.set(x.DH_parallax_and_limb);
+    
+    r->set((*(x.r)));
+    height_of_eye->set((*(x.height_of_eye)));
+    
+    atmosphere->set((*(x.atmosphere)));
+    
+    body->set((*(x.body)));
+    
+    limb.set(x.limb);
+    
+    artificial_horizon.set(x.artificial_horizon);
+    use_stopwatch.set(x.use_stopwatch);
+    
+    label.set(x.label);
+    
+    related_route.set(x.related_route);
+
+    my_vector_memcpy(&items, x.items);
+    my_vector_memcpy(&all_items, x.all_items);
+    
+}
+
+
 //this function simplifies the atmosphere between z=0 and z=eight of eye as a single layer, where within this layer the index of refracion is independent of z. Refine this in the future.
 void Sight::compute_DH_dip(String prefix) {
 

@@ -789,6 +789,7 @@ template void my_push_back<Body>(std::__1::vector<Body, std::__1::allocator<Body
 template void my_push_back<Route>(std::__1::vector<Route, std::__1::allocator<Route>>*, Route const&);
 template void my_push_back<String>(std::__1::vector<String, std::__1::allocator<String>>*, String const&);
 template void my_push_back<Sight>(std::__1::vector<Sight, std::__1::allocator<Sight>>*, Sight const&);
+template void my_push_back<Position>(std::__1::vector<Position, std::__1::allocator<Position>>*, Position const&);
 
 
 //copy the *content* (not the memory adresses) of source into dest. This methods calls the set() method of class T, which needs to be defined.
@@ -805,6 +806,8 @@ template<class T> void my_vector_memcpy(vector<T>* dest, const vector<T> source)
 }
 
 template void my_vector_memcpy<Body>(std::__1::vector<Body, std::__1::allocator<Body>>*, std::__1::vector<Body, std::__1::allocator<Body>>);
+template void my_vector_memcpy<String>(std::__1::vector<String, std::__1::allocator<String>>*, std::__1::vector<String, std::__1::allocator<String>>);
+template void my_vector_memcpy<unsigned int>(std::__1::vector<unsigned int, std::__1::allocator<unsigned int>>*, std::__1::vector<unsigned int, std::__1::allocator<unsigned int>>);
 
 
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.

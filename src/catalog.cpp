@@ -50,7 +50,9 @@ vector<String> Catalog::get_names(void){
     vector<String> output;
     
     for(i=0, output.clear(); i<list.size(); i++){
-        output.push_back((*((list[i]).name)));
+        //        output.push_back((*((list[i]).name)));
+        my_push_back(&output, (*((list[i]).name)));
+        
     }
     
     return output;

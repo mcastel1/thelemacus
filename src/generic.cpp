@@ -786,7 +786,7 @@ template<class T> void my_push_back(vector<T>* v, const T& x){
 }
 
 template void my_push_back<Body>(std::__1::vector<Body, std::__1::allocator<Body>>*, Body const&);
-
+template void my_push_back<Route>(std::__1::vector<Route, std::__1::allocator<Route>>*, Route const&);
 
 //copy the *content* (not the memory adresses) of source into dest. This methods calls the set() method of class T, which needs to be defined.
 template<class T> void my_vector_memcpy(vector<T>* dest, const vector<T> source){

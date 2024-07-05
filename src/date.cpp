@@ -123,7 +123,18 @@ void Date::check_leap_year(void) {
 
 }
 
-
+//set the content (not the memory adresses) of *this equal to the content of x
+void Date::set(const Date& x){
+    
+    Y = (x.Y);
+    M = (x.M);
+    D = (x.D);
+    
+    Y_is_leap_year = (x.Y_is_leap_year);
+    
+    my_vector_memcpy(&days_per_month, (x.days_per_month));
+    
+}
 
 
 void Date::print(String name, String prefix, ostream& ostr) {

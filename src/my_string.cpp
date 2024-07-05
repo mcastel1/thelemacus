@@ -288,6 +288,7 @@ void String::set(string input_string) {
 
 }
 
+
 //append s to *this and returns the result
 String String::append(String s) {
 

@@ -41,6 +41,8 @@ public:
     
     Position();
     Position(Angle, Angle);
+    
+    void set(const Position&);
     void setCartesian(String, const Cartesian, String);
     void getCartesian(Cartesian*);
     Cartesian getCartesian(void);

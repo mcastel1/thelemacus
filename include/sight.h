@@ -33,6 +33,7 @@ class Route;
 class Sight{
     
 public:
+    
     Time master_clock_date_and_hour, /*this is the time of the observation, in the TAI time scale*/time;
     //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
     Chrono TAI_minus_UTC, stopwatch;

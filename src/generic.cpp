@@ -807,7 +807,6 @@ template<class T> void my_vector_memcpy(vector<T>* dest, const vector<T> source)
 
 template void my_vector_memcpy<Body>(std::__1::vector<Body, std::__1::allocator<Body>>*, std::__1::vector<Body, std::__1::allocator<Body>>);
 template void my_vector_memcpy<String>(std::__1::vector<String, std::__1::allocator<String>>*, std::__1::vector<String, std::__1::allocator<String>>);
-template void my_vector_memcpy<unsigned int>(std::__1::vector<unsigned int, std::__1::allocator<unsigned int>>*, std::__1::vector<unsigned int, std::__1::allocator<unsigned int>>);
 
 
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.

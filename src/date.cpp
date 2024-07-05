@@ -132,7 +132,7 @@ void Date::set(const Date& x){
     
     Y_is_leap_year = (x.Y_is_leap_year);
     
-    my_vector_memcpy(&days_per_month, (x.days_per_month));
+    days_per_month = (x.days_per_month);
     
 }
 

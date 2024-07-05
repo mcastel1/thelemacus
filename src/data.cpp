@@ -235,8 +235,8 @@ int Data::compute_position(String prefix) {
 
                         p[l] = q_temp;
 
-                        q.push_back(q_temp[0]);
-                        q.push_back(q_temp[1]);
+                        my_push_back(&q, q_temp[0]);
+                        my_push_back(&q, q_temp[1]);
 
                         l++;
 
@@ -285,7 +285,7 @@ int Data::compute_position(String prefix) {
 
             //I append center to the list of retained crossings, run through all the pairs of crossings except for center, and select the Position in the pair which is closer to center
             q.clear();
-            q.push_back(center);
+            my_push_back(&q, center);
 
             for (i = 0; i < p.size(); i++) {
 
@@ -296,11 +296,11 @@ int Data::compute_position(String prefix) {
 
                     if(r > s){
 
-                        q.push_back(p[i][1]);
+                        my_push_back(&q, p[i][1]);
 
                     }else{
 
-                        q.push_back(p[i][0]);
+                        my_push_back(&q, p[i][0]);
 
                     }
 
@@ -323,7 +323,7 @@ int Data::compute_position(String prefix) {
             center.label.set(String(""), String("astronomical position"), prefix);
             center.print(String("astronomical position"), prefix, cout);
 
-            position_list.push_back(center);
+            my_push_back(&position_list, center);
 
             
             if(q.size() > 1){
@@ -351,7 +351,7 @@ int Data::compute_position(String prefix) {
                 ((error_circle.related_sight).value) = -1;
                 
                 r.print(String("error on astronomical position"), prefix, cout);
-                route_list.push_back(error_circle);
+                my_push_back(&route_list, error_circle);
                 
                 
                 if (l == (crossing_route_list.size()) * ((crossing_route_list.size()) - 1) / 2) {
@@ -522,7 +522,7 @@ bool Data::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix)
     route_list.resize(route_list.size() + 1);
     (((*sight_in).related_route).value) = ((int)(route_list.size())) - 1;
     //push back sight_in into sight_list
-    sight_list.push_back(*sight_in);
+    my_push_back(&sight_list, *sight_in);
     (((route_list[route_list.size() - 1]).related_sight).value) = ((int)(sight_list.size())) - 1;
 
     //I commented this out because now the sight is enetered through the GUI
@@ -554,7 +554,7 @@ void Data::add_route(Route* route_in, [[maybe_unused]] String prefix) {
 
     //    route.enter(String("new route"), prefix);
 
-    route_list.push_back(*route_in);
+    my_push_back(&route_list, *route_in);
     cout << prefix.value << "Route added as position #" << route_list.size() << ".\n";
 
 
@@ -753,10 +753,10 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
             if (check) {
                 sight.print(String("New sight"), new_prefix, cout);
 
-                sight_list.push_back(sight);
+                my_push_back(&sight_list, sight);
                 cout << new_prefix.value << "Sight added as sight #" << sight_list.size() << ".\n";
 
-                route_list.push_back(route);
+                my_push_back(&route_list, route);
                 cout << new_prefix.value << "Route added as route #" << route_list.size() << ".\n";
 
                 //I link the sight to the route, and the route to the sight

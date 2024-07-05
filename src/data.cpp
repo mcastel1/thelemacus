@@ -793,7 +793,7 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
 
         route.print(String("New route"), new_prefix, cout);
 
-        route_list.push_back(route);
+        my_push_back(&route_list, route);
         cout << new_prefix.value << "Route added as route #" << route_list.size() << ".\n";
 
         line.clear();
@@ -823,7 +823,7 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
 
         position.print(String("New position"), new_prefix, cout);
 
-        position_list.push_back(position);
+        my_push_back(&position_list, position);
         cout << new_prefix.value << "Position added as position #" << position_list.size() << ".\n";
 
         line.clear();

@@ -143,24 +143,24 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
 
     //    file_init.set_name((wxGetApp().path_file_init));
 
-    choices.push_back(String("Add a sight"));
-    choices.push_back(String("Modify a sight"));
-    choices.push_back(String("Delete a sight"));
-    choices.push_back(String("Add a position"));
-    choices.push_back(String("Modify a position"));
-    choices.push_back(String("Transport a position"));
-    choices.push_back(String("Delete a position"));
-    choices.push_back(String("Add a route"));
-    choices.push_back(String("Transport a route"));
-    choices.push_back(String("Compute route crossings"));
-    choices.push_back(String("Delete a route"));
-    choices.push_back(String("Replot"));
-    choices.push_back(String("Full zoom out"));
-    choices.push_back(String("Clear"));
-    choices.push_back(String("Line of position on paper chart"));
-    choices.push_back(String("Save to file"));
-    choices.push_back(String("Read from file"));
-    choices.push_back(String("Exit"));
+    my_push_back(&choices, String("Add a sight"));
+    my_push_back(&choices, String("Modify a sight"));
+    my_push_back(&choices, String("Delete a sight"));
+    my_push_back(&choices, String("Add a position"));
+    my_push_back(&choices, String("Modify a position"));
+    my_push_back(&choices, String("Transport a position"));
+    my_push_back(&choices, String("Delete a position"));
+    my_push_back(&choices, String("Add a route"));
+    my_push_back(&choices, String("Transport a route"));
+    my_push_back(&choices, String("Compute route crossings"));
+    my_push_back(&choices, String("Delete a route"));
+    my_push_back(&choices, String("Replot"));
+    my_push_back(&choices, String("Full zoom out"));
+    my_push_back(&choices, String("Clear"));
+    my_push_back(&choices, String("Line of position on paper chart"));
+    my_push_back(&choices, String("Save to file"));
+    my_push_back(&choices, String("Read from file"));
+    my_push_back(&choices, String("Exit"));
 
 
     //read paramters from init file

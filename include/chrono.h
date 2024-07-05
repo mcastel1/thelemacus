@@ -17,11 +17,13 @@ using namespace std;
 class Chrono{
     
 public:
+    
     unsigned int h, m;
     double s;
     
     void print(String, String, ostream&);
     bool set(String, double, String);
+    void set(const Chrono&);
     double get(void);
     void set_current(void);
     template<class S> bool read_from_stream(String, S*, bool, String);
@@ -31,7 +33,5 @@ public:
     bool operator==(const Chrono&), operator!=(const Chrono&), operator<(const Chrono&), operator>(const Chrono&);
     
 };
-
-
 
 #endif

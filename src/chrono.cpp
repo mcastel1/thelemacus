@@ -80,6 +80,15 @@ bool Chrono::set(String name, double x, [[maybe_unused]] String prefix) {
 }
 
 
+//set the content (not the memory adresses) of *this equal to the content of x
+void Chrono::set(const Chrono& x){
+    
+    h = (x.h);
+    m = (x.m);
+    s = (x.s);
+    
+}
+
 
 template<class S> bool Chrono::read_from_stream([[maybe_unused]] String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
 

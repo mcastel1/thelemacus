@@ -89,7 +89,8 @@ void Catalog::add(String type, String name, double radius) {
     (*(body.name)) = name;
     body.radius->value = radius;
 
-    list.push_back(body);
+    //    list.push_back(body);
+    my_push_back(&list, body);
 
     cout << "Added body to catalog:\n";
     body.print(String("body"), String("\t"), cout);

@@ -119,6 +119,7 @@
   - a Position a and a Position b are converted into Position* a and Position*b by the restructuring -> a = b sets the adress of a equal to that of b -> disaster (you were right about this!)
 
  ********** THINGS TO FIX ***********
+    - void String::set(String input_string) { should take a const String& as argument 
     - go through all the push_backs in the app and replace them with a proper set() method to FIX the numerous errors setting the memory adress rather than the content
     - in void Body::set(const Body& input) insert proper set methods of RA, d, and all members of Body::set
     - Body types such as if((*type) == String("star")) should be listed in constants.h

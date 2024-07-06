@@ -2235,7 +2235,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
                 //                t.push_back(Angle(ts));
                 
                 compute_end(Length(Re*ts), String(""));
-                phi.push_back(end->phi.normalize_pm_pi_ret());
+                my_push_back(&phi, end->phi.normalize_pm_pi_ret());
                 
             }
             

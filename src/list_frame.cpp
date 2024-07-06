@@ -1592,7 +1592,9 @@ template<class E> void ListFrame::KeyDown(E& event) {
             do {
 
                 previous_item = (listcontrol_routes->GetNextItem(previous_item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
-                if (previous_item != -1) { (data->crossing_route_list).push_back(crossing_route_list_temp[previous_item]); }
+                if(previous_item != -1){
+                    data->crossing_route_list.push_back(crossing_route_list_temp[previous_item]);
+                }
 
             } while (previous_item != -1);
 

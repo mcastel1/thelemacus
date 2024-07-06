@@ -1274,7 +1274,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
         //push back into u the angle which corresponds to the endpoint of Route *this
         if (type == (Route_types[1])) {
             set_length_from_time_speed();
-            u.push_back(Angle((length->value) / Re));
+            my_push_back(&u, Angle((length->value) / Re));
         }
 
         //push back into u the angle which corresponds to the endpoint of Route *this

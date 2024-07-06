@@ -2249,7 +2249,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             
             //*include in *phi the latitude of the endpoint of *this
             compute_end(String(""));
-            phi.push_back(end->phi.normalize_pm_pi_ret());
+            my_push_back(&phi, end->phi.normalize_pm_pi_ret());
             
             
             //write the min/max element into *phi_min/max, respectively

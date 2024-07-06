@@ -87,7 +87,7 @@ vector<String> String::split(void) {
     do {
 
         pos2 = value.find("\n", pos1);
-        result.push_back((this->subString(pos1, pos2 - pos1)));
+        my_push_back(&result, (this->subString(pos1, pos2 - pos1)));
         pos1 = pos2 + 1;
 
     } while (pos2 != ((string::npos)));

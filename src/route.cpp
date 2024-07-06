@@ -2226,7 +2226,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             
             //inlude in phi the latitude of the starting point of *this
             compute_end(Length(0.0), String(""));
-            phi.push_back(end->phi.normalize_pm_pi_ret());
+            my_push_back(&phi, end->phi.normalize_pm_pi_ret());
             
             
             //there are two potential stationary points for the latitude vs t: include in phi the first one, if it lies on *this

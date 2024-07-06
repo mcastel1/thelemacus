@@ -1111,8 +1111,8 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
                                 //the midpoints on *this between t[0] and t[1] is not comprised into circle
 
                                 //I add 0 and 2*M_PI to the vector t, so I create two chunks of the curve *this which are comprised into circle
-                                t->push_back(Angle(0.0));
-                                t->push_back(Angle(2.0 * M_PI));
+                                my_push_back(t, Angle(0.0));
+                                my_push_back(t, Angle(2.0 * M_PI));
                                 //                                    (t->back()).value = 2.0*M_PI;
 
                                 sort(t->begin(), t->end());

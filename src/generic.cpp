@@ -791,6 +791,7 @@ template void my_push_back<String>(std::__1::vector<String, std::__1::allocator<
 template void my_push_back<Sight>(std::__1::vector<Sight, std::__1::allocator<Sight>>*, Sight const&);
 template void my_push_back<Position>(std::__1::vector<Position, std::__1::allocator<Position>>*, Position const&);
 template void my_push_back<PositionProjection>(std::__1::vector<PositionProjection, std::__1::allocator<PositionProjection>>*, PositionProjection const&);
+template void my_push_back<Angle>(std::__1::vector<Angle, std::__1::allocator<Angle>>*, Angle const&);
 
 
 //copy the *content* (not the memory adresses) of source into dest. This methods calls the set() method of class T, which needs to be defined.

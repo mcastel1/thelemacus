@@ -90,7 +90,7 @@ vector<String> String::split(void) {
         my_push_back(&result, (this->subString(pos1, pos2 - pos1)));
         pos1 = pos2 + 1;
 
-    } while (pos2 != ((string::npos)));
+    }while(pos2 != ((string::npos)));
 
     return result;
 

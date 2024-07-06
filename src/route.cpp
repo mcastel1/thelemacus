@@ -1279,7 +1279,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
 
         //push back into u the angle which corresponds to the endpoint of Route *this
         if (type == (Route_types[2])) {
-            u.push_back(Angle(2.0 * M_PI));
+            my_push_back(&u, Angle(2.0 * M_PI));
             (u.back()).value = 2.0 * M_PI;
         }
 

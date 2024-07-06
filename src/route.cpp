@@ -2243,7 +2243,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             if((0.0 <= Re*(ts+M_PI)) && ((*length) >= Re*(ts+M_PI))){
                                 
                 compute_end(Length(Re*(ts+M_PI)), String(""));
-                phi.push_back(end->phi.normalize_pm_pi_ret());
+                my_push_back(&phi, end->phi.normalize_pm_pi_ret());
                     
             }
             

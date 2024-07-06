@@ -1323,7 +1323,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
         if (write_t) {
 
             //I push back into t the last value of u, wich corresponds to the endpoint of *this  and which has not been pushed back by the loop above
-            t->push_back(u.back());
+            my_push_back(t, u.back());
             
   
             if ((type == (Route_types[2])) && is_fully_included && (t->size() == 2)) {

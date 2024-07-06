@@ -139,6 +139,15 @@ bool PositionProjection::CheckMercator(DrawPanel* draw_panel){
 }
 
 
+//set the content (not the memory adress) of *this equal to the content of p
+void PositionProjection::set(const PositionProjection& p){
+    
+    x = (p.x);
+    y = (p.y);
+    
+}
+
+
 //normalize p.lambda, then set x and y equal to the Mercator projections of the Position p
 //inline 
 void PositionProjection::SetMercator(const Position& p){

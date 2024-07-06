@@ -224,9 +224,9 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
 
     position->print(String("position entered via GUI"), String(""), cout);
 
-    //if the constructor of PositionFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of position_list
+    //if the constructor of PositionFrame has been called with sight_in = NULL, then I push back the newly allocated Sight to the end of position_list
     if (position_in_listcontrol_positions == -1) {
-        (((this->parent)->data)->position_list).push_back(*position);
+        my_push_back(&(this->parent->data->position_list), *position);
     }
 
     (parent->listcontrol_positions)->set((parent->data)->position_list, false);

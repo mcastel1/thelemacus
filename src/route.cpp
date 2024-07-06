@@ -1092,7 +1092,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
                                 //this->reference position is not included into the circle of circle -> this->end must be included into the circle of circle -> the part of *this comprised into circle is the one with  (*t)[0] <= t <= (l.value)/Re
 
                                 set_length_from_time_speed();
-                                t->push_back(Angle(String(""), (length->value) / Re, new_prefix));
+                                my_push_back(t, Angle(String(""), (length->value) / Re, new_prefix));
 
                             }
 

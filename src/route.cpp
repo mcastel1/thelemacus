@@ -1306,8 +1306,8 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
                 //If write_t == true, write into t the value of the intersections which delimit the chunk of *this which is included in rectangle
                 if (write_t) {
 
-                    t->push_back(u[i]);
-                    t->push_back(u[i + 1]);
+                    my_push_back(t, u[i]);
+                    my_push_back(t, u[i + 1]);
 
                 }
 

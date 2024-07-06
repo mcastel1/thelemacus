@@ -1268,7 +1268,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
         intersection(side_W, true, &temp, String(""));
         u.insert(u.end(), temp.begin(), temp.end());
 
-        u.push_back(Angle(0.0));
+        my_push_back(&u, Angle(0.0));
 
 
         //push back into u the angle which corresponds to the endpoint of Route *this

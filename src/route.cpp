@@ -2241,9 +2241,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             
             //there are two potential stationary points for the latitude vs t: include in phi the second one, if it lies on *this
             if((0.0 <= Re*(ts+M_PI)) && ((*length) >= Re*(ts+M_PI))){
-                
-                //                t.push_back(Angle(ts+M_PI));
-                
+                                
                 compute_end(Length(Re*(ts+M_PI)), String(""));
                 phi.push_back(end->phi.normalize_pm_pi_ret());
                     

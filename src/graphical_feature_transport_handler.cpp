@@ -139,12 +139,13 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
                 (MotionHandler<F>::parent)->TabulatePositionsAll();
                 
-            }
-            else {
+            }else{
 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
-                    (*(((Route*)transported_object)->reference_position)) = (*(MotionHandler<F>::start));
+                    //                    (*(((Route*)transported_object)->reference_position)) = (*(MotionHandler<F>::start));
+                    ((Route*)transported_object)->reference_position->set((*(MotionHandler<F>::start)));
+                    
                     ((Route*)transported_object)->reference_position->transport_to((MotionHandler<F>::transporting_route_temp), String(""));
 
                 }

@@ -185,8 +185,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                                                                );
 
 
-        }
-        else {
+        }else{
 
             if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 

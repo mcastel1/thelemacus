@@ -109,7 +109,8 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
             }
 
-            ((MotionHandler<F>::transporting_route_temp).reference_position) = (MotionHandler<F>::start);
+            //            ((MotionHandler<F>::transporting_route_temp).reference_position) = (MotionHandler<F>::start);
+            (MotionHandler<F>::transporting_route_temp).reference_position->set((*(MotionHandler<F>::start)));
 
             //I brind all ChartFrames to front to show the animation
             wxGetApp().ShowCharts(event);

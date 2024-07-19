@@ -43,31 +43,32 @@ void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) 
     if ((name_in.value) != "") {
 
         ostr << prefix.value << name_in.value << " = ";
-        if (unit_in == SpeedUnit_types[0]) {
-            //units are kt
+        
+        switch (position_in_vector(unit_in, SpeedUnit_types)) {
+                
+            case 0: {
+                //units are kt
 
-            ostr << value << " kt\n";
-
-        }
-        else {
-
-            if (unit_in == SpeedUnit_types[1]) {
+                ostr << value << " kt\n";
+                
+                break;
+                
+            }
+                
+            case 1: {
                 //units are km/h
 
                 ostr << value * nm_to_km << " km/h\n";
-
+                
             }
-            else {
+                
+            case 2: {
+                //units are m/s
 
-                if (unit_in == SpeedUnit_types[2]) {
-                    //units are m/s
-
-                    ostr << value * nm_to_km * 1e3 / 3600.0 << " m/s\n";
-
-                }
-
+                ostr << value * nm_to_km * 1e3 / 3600.0 << " m/s\n";
+                
             }
-
+              
         }
 
     }

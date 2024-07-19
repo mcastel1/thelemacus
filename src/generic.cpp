@@ -321,6 +321,7 @@ template<class T> unsigned int position_in_vector(T x, const vector<T>& v){
 
 //explicit instantiation
 template unsigned int position_in_vector<Projection>(Projection, const vector<Projection>&);
+template unsigned int position_in_vector<String>(String, std::__1::vector<String, std::__1::allocator<String>> const&);
 
 
 

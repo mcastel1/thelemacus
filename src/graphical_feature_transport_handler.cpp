@@ -66,7 +66,8 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
             (*((MotionHandler<F>::parent)->set_idling))();
 
-            (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
+//            (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
+            (MotionHandler<F>::transporting_route_temp).set((MotionHandler<F>::transporting_route));
             
             //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
             for (unsigned int i = 0; i < ((MotionHandler<F>::parent)->chart_frames.size()); i++) {

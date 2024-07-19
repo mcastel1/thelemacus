@@ -132,7 +132,9 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
             if (type_of_transported_object == String("position")) {
 
-                (*((Position*)transported_object)) = (*(MotionHandler<F>::start));
+                //                (*((Position*)transported_object)) = (*(MotionHandler<F>::start));
+                ((Position*)transported_object)->set((*(MotionHandler<F>::start)));
+                
                 ((Position*)transported_object)->transport_to((MotionHandler<F>::transporting_route_temp), String(""));
 
                 (MotionHandler<F>::parent)->TabulatePositionsAll();

@@ -196,13 +196,13 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
         
         if((MotionHandler<F>::t) > 0){
             //the transport animation is in progress -> do the next chunk
-
+            
             (MotionHandler<F>::transporting_route_temp).length->set(
-                String(""),
+                                                                    String(""),
                                                                     ((MotionHandler<F>::transporting_route).length->value) *
-                                               (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)))))
-                                               ,
-                                               String(""));
+                                                                    (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)))))
+                                                                    ,
+                                                                    String(""));
             
             
             switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {

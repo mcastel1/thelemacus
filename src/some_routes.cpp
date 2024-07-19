@@ -26,10 +26,13 @@ void SomeRoutes::operator()(wxCommandEvent& event) {
     f->print_info_message->SetAndCall(NULL, String(""), String("Select the routes that you want to use to compute the astronomical position and press enter when done"), (wxGetApp().path_file_info_icon));
 
     //Given that a sight must be transported only with a Route that does not come from a Sight and a Route that is not a circle of equal altitude (it would not make sense), I store in route_list_for_transport the Routes in route_list which are not related to any sight and that are not circles of equal altitude, show route_list_for_transport in listcontrol_routes, and let the user select one item in route_list_for_transport to transport the Sight
-    for ((f->crossing_route_list_temp.clear()), i = 0; i < (f->data->route_list).size(); i++) {
+    for ((f->crossing_route_list_temp.clear()), i = 0; i < (f->data->route_list.size()); i++) {
 
-        if ((((f->data)->route_list)[i]).type == (Route_types[2])) {
-            f->crossing_route_list_temp.push_back(((f->data->route_list)[i]));
+        if (((f->data->route_list)[i]).type == (Route_types[2])) {
+            
+            //            f->crossing_route_list_temp.push_back(((f->data->route_list)[i]));
+            my_push_back(&(f->crossing_route_list_temp), ((f->data->route_list)[i]));
+            
         }
 
     }

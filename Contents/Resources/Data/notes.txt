@@ -121,7 +121,6 @@
  ********** THINGS TO FIX ***********
     - remove Time::s if it is not used 
     - void String::set(String input_string) { should take a const String& as argument
-    - go through all the push_backs in the app and replace them with a proper set() method to FIX the numerous errors setting the memory adress rather than the content
     - in void Body::set(const Body& input) insert proper set methods of RA, d, and all members of Body::set
     - Body types such as if((*type) == String("star")) should be listed in constants.h
     - move deg_to_rad and rad_to_deg to units.h

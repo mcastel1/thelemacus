@@ -66,7 +66,8 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
             (*((MotionHandler<F>::parent)->set_idling))();
 
-            (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
+//            (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
+            (MotionHandler<F>::transporting_route_temp).set((MotionHandler<F>::transporting_route));
             
             //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
             for (unsigned int i = 0; i < ((MotionHandler<F>::parent)->chart_frames.size()); i++) {
@@ -82,7 +83,10 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             if (type_of_transported_object == String("position")) {
 
                 //store the starting position in *geo_position_start
-                (*(MotionHandler<F>::start)) = (*((Position*)transported_object));
+                //                (*(MotionHandler<F>::start)) = (*((Position*)transported_object));
+                (MotionHandler<F>::start)->set((*((Position*)transported_object)));
+                
+                
                 //highlight the Position that is being transported
                 (MotionHandler<F>::parent)->highlighted_position_now = address_position_in_vector<Position>(((Position*)transported_object), (MotionHandler<F>::parent)->data->position_list);
                 
@@ -91,19 +95,22 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
                     //store the starting reference position in *geo_position_start
-                    (*(MotionHandler<F>::start)) = (*(((Route*)transported_object)->reference_position));
+                    //                    (*(MotionHandler<F>::start)) = (*(((Route*)transported_object)->reference_position));
+                    (MotionHandler<F>::start)->set((*(((Route*)transported_object)->reference_position)));
+                    
+                    
                     //highlight the Position that is being transported
                     (MotionHandler<F>::parent)->highlighted_route_now = address_position_in_vector<Route>(((Route*)transported_object), (MotionHandler<F>::parent)->data->route_list);
-     
 
                 }
                 
-                (*(MotionHandler<F>::start)) = (*(((Route*)transported_object)->reference_position));
-
+                //                (*(MotionHandler<F>::start)) = (*(((Route*)transported_object)->reference_position));
+                (MotionHandler<F>::start)->set((*(((Route*)transported_object)->reference_position)));
 
             }
 
-            ((MotionHandler<F>::transporting_route_temp).reference_position) = (MotionHandler<F>::start);
+            //            ((MotionHandler<F>::transporting_route_temp).reference_position) = (MotionHandler<F>::start);
+            (MotionHandler<F>::transporting_route_temp).reference_position->set((*(MotionHandler<F>::start)));
 
             //I brind all ChartFrames to front to show the animation
             wxGetApp().ShowCharts(event);
@@ -125,17 +132,20 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
             if (type_of_transported_object == String("position")) {
 
-                (*((Position*)transported_object)) = (*(MotionHandler<F>::start));
+                //                (*((Position*)transported_object)) = (*(MotionHandler<F>::start));
+                ((Position*)transported_object)->set((*(MotionHandler<F>::start)));
+                
                 ((Position*)transported_object)->transport_to((MotionHandler<F>::transporting_route_temp), String(""));
 
                 (MotionHandler<F>::parent)->TabulatePositionsAll();
                 
-            }
-            else {
+            }else{
 
                 if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
-                    (*(((Route*)transported_object)->reference_position)) = (*(MotionHandler<F>::start));
+                    //                    (*(((Route*)transported_object)->reference_position)) = (*(MotionHandler<F>::start));
+                    ((Route*)transported_object)->reference_position->set((*(MotionHandler<F>::start)));
+                    
                     ((Route*)transported_object)->reference_position->transport_to((MotionHandler<F>::transporting_route_temp), String(""));
 
                 }
@@ -157,7 +167,9 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         if (type_of_transported_object == String("position")) {
             
             //do the whole transport rather than combining many little transports, to avoid rounding errors
-            (*((Position*)transported_object)) = (*(MotionHandler<F>::start));
+            //            (*((Position*)transported_object)) = (*(MotionHandler<F>::start));
+            ((Position*)transported_object)->set((*(MotionHandler<F>::start)));
+            
             //un-highlight the Position that is being transported
             (MotionHandler<F>::parent)->highlighted_position_now = -1;
             ((Position*)transported_object)->transport_to((MotionHandler<F>::transporting_route), String(""));
@@ -173,8 +185,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                                                                );
 
 
-        }
-        else {
+        }else{
 
             if ((type_of_transported_object == String("sight")) || type_of_transported_object == String("route")) {
 
@@ -184,7 +195,8 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 (MotionHandler<F>::parent)->highlighted_route_now = -1;
 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
-                (*(((Route*)transported_object)->reference_position)) = (*(MotionHandler<F>::start));
+                //                (*(((Route*)transported_object)->reference_position)) = (*(MotionHandler<F>::start));
+                ((Route*)transported_object)->reference_position->set((*(MotionHandler<F>::start)));
                 ((Route*)transported_object)->reference_position->transport_to((MotionHandler<F>::transporting_route), String(""));
 
 

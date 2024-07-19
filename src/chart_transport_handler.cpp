@@ -106,9 +106,12 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             (chart_frame->dragging_chart) = true;
             chart_frame->EnableAll(false);
 
-            (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
+            //            (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
+            (MotionHandler<F>::transporting_route_temp).set((MotionHandler<F>::transporting_route));
             
-            (MotionHandler<F>::start) = (MotionHandler<F>::transporting_route).reference_position;
+            
+            //            (MotionHandler<F>::start) = ((MotionHandler<F>::transporting_route).reference_position);
+            (MotionHandler<F>::start)->set((*((MotionHandler<F>::transporting_route).reference_position)));
             
   
             //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
@@ -141,7 +144,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     q_B.NormalizeAndSetMercator(Position(Angle(0.0), (*(chart_frame->phi_min))));
                     projection_size.x = chart_frame->draw_panel->x_span();
                     projection_size.y = (q_A.y) - (q_B.y);
-                    projection_size_start = projection_size;
+                    projection_size_start.set(projection_size);
                     
                     
                     q_A.NormalizeAndSetMercator(Position(Angle(0.0), chart_frame->parent->rectangle_observer_0->p_NW->phi));
@@ -166,8 +169,11 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
 
                     
                     chart_frame->draw_panel->rotation_start_drag->set((*(chart_frame->draw_panel->rotation)));
-                    (*(chart_frame->draw_panel->circle_observer->reference_position)) = (*(MotionHandler<F>::start));
-                    omega_start = chart_frame->draw_panel->circle_observer->omega;
+//                    (*(chart_frame->draw_panel->circle_observer->reference_position)) = (*(MotionHandler<F>::start));
+                    chart_frame->draw_panel->circle_observer->reference_position->set((*(MotionHandler<F>::start)));
+                    
+//                    omega_start = chart_frame->draw_panel->circle_observer->omega;
+                    omega_start.set(chart_frame->draw_panel->circle_observer->omega);
                     
                     break;
                     
@@ -190,13 +196,13 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
         
         if((MotionHandler<F>::t) > 0){
             //the transport animation is in progress -> do the next chunk
-
+            
             (MotionHandler<F>::transporting_route_temp).length->set(
-                String(""),
+                                                                    String(""),
                                                                     ((MotionHandler<F>::transporting_route).length->value) *
-                                               (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)))))
-                                               ,
-                                               String(""));
+                                                                    (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)))))
+                                                                    ,
+                                                                    String(""));
             
             
             switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
@@ -240,7 +246,8 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
                     chart_frame->draw_panel->rotation->set(((*(chart_frame->draw_panel->rotation_start_drag)) * Rotation((*((MotionHandler<F>::transporting_route_temp).end)), (*(MotionHandler<F>::start)))));
                     
-                    (*(chart_frame->draw_panel->circle_observer->reference_position)) = (*((MotionHandler<F>::transporting_route_temp).end));
+                    //                    (*(chart_frame->draw_panel->circle_observer->reference_position)) = (*((MotionHandler<F>::transporting_route_temp).end));
+                    chart_frame->draw_panel->circle_observer->reference_position->set((*((MotionHandler<F>::transporting_route_temp).end)));
 
                     chart_frame->draw_panel->circle_observer->omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
                     
@@ -285,8 +292,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();
             chart_frame->draw_panel->MyRefresh();
             chart_frame->UpdateSlider();
-//            chart_frame->draw_panel->PaintNow();
-            //
+            //            chart_frame->draw_panel->PaintNow();
 
             //            cout << "\t\t t= " << t << "\n";
             
@@ -297,7 +303,6 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
     }else {
         //the transport  is over
 
-        
         switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
                 
             case 0: {

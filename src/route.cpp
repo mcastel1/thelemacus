@@ -1708,6 +1708,7 @@ void Route::set(const Route& x){
     reference_position->set((*(x.reference_position)));
     end->set((*(x.end)));
     
+    Z.set(x.Z);
     omega.set(x.omega);
     
     length->set((*(x.length)));

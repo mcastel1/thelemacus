@@ -113,7 +113,8 @@
   
 
  ********** THINGS TO FIX ***********
-	- the scale factor is not centered anymore in the mercator projection if one zooms in and then back 
+    - in Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) add a switch case to tell apart the different cases for the units of measure 
+	- the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 	- remove odd hotrizontal lines on WIN32 mercator projection, they occur when you zoom in too fast with the mouse wheel
 `	- write write put_back_in , put_back)_in_Mercator and put_back_in_3D :
 	- some paralles or meridians in grid in render_mercator congain the same wxPoint iterated many times -> remove them

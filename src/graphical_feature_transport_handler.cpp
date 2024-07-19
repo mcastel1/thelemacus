@@ -101,7 +101,6 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                     
                     //highlight the Position that is being transported
                     (MotionHandler<F>::parent)->highlighted_route_now = address_position_in_vector<Route>(((Route*)transported_object), (MotionHandler<F>::parent)->data->route_list);
-     
 
                 }
                 

@@ -106,9 +106,12 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             (chart_frame->dragging_chart) = true;
             chart_frame->EnableAll(false);
 
-            (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
+            //            (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
+            (MotionHandler<F>::transporting_route_temp).set((MotionHandler<F>::transporting_route));
             
-            (MotionHandler<F>::start) = (MotionHandler<F>::transporting_route).reference_position;
+            
+            //            (MotionHandler<F>::start) = ((MotionHandler<F>::transporting_route).reference_position);
+            (MotionHandler<F>::start)->set((*((MotionHandler<F>::transporting_route).reference_position)));
             
   
             //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements

@@ -167,7 +167,9 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         if (type_of_transported_object == String("position")) {
             
             //do the whole transport rather than combining many little transports, to avoid rounding errors
-            (*((Position*)transported_object)) = (*(MotionHandler<F>::start));
+            //            (*((Position*)transported_object)) = (*(MotionHandler<F>::start));
+            ((Position*)transported_object)->set((*(MotionHandler<F>::start)));
+            
             //un-highlight the Position that is being transported
             (MotionHandler<F>::parent)->highlighted_position_now = -1;
             ((Position*)transported_object)->transport_to((MotionHandler<F>::transporting_route), String(""));

@@ -22,6 +22,7 @@ public:
     DateField<P>* p;
     
     TabulateDays(DateField<P>*);
+    
     template<class T> void operator()(T&);
     
 };

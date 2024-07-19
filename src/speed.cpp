@@ -46,7 +46,7 @@ void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) 
         if (unit_in == SpeedUnit_types[0]) {
             //units are kt
 
-            ostr << value << " nm\n";
+            ostr << value << " kt\n";
 
         }
         else {

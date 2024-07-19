@@ -104,8 +104,8 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
                 }
                 
-                (*(MotionHandler<F>::start)) = (*(((Route*)transported_object)->reference_position));
-
+                //                (*(MotionHandler<F>::start)) = (*(((Route*)transported_object)->reference_position));
+                (MotionHandler<F>::start)->set((*(((Route*)transported_object)->reference_position)));
 
             }
 

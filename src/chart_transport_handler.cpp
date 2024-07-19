@@ -144,7 +144,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     q_B.NormalizeAndSetMercator(Position(Angle(0.0), (*(chart_frame->phi_min))));
                     projection_size.x = chart_frame->draw_panel->x_span();
                     projection_size.y = (q_A.y) - (q_B.y);
-                    projection_size_start = projection_size;
+                    projection_size_start.set(projection_size);
                     
                     
                     q_A.NormalizeAndSetMercator(Position(Angle(0.0), chart_frame->parent->rectangle_observer_0->p_NW->phi));

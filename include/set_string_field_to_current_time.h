@@ -23,7 +23,6 @@ public:
     
     template<class T> void operator()(T&);
     
-    
 };
 
 

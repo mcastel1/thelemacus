@@ -18,10 +18,12 @@ using namespace std;
 class Int{
     
 public:
+    
     int value;
     
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);
+    void set(const Int&);
     void set(String, int, String);
     void set(int);
     void my_round(Int precision);

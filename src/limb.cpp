@@ -8,6 +8,13 @@
 #include "limb.h"
 
 
+//set the content (not the memory adress) of *this equal to the content of x
+void Limb::set(const Limb& x){
+    
+    value = (x.value);
+    
+}
+
 
 template<class S> void Limb::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool search_entire_stream, [[maybe_unused]] String prefix) {
 

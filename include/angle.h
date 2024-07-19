@@ -31,6 +31,7 @@ public:
     Angle span(Angle);
     void set(double);
     void set(String, double, String);
+    void set(const Angle&);
     void print(String, String, ostream&);
     bool is_zero_epsilon_double(void);
     void to_deg_min(unsigned int*, double*);

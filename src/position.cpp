@@ -321,6 +321,16 @@ template<class S> void Position::read_from_stream([[maybe_unused]] String name, 
 template void Position::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
 
 
+//set the content (not the memory adresses) of *this equal to the content of x
+void Position::set(const Position& x){
+    
+    phi.set(x.phi);
+    lambda.set(x.lambda);
+    
+    label.set(x.label);
+    
+}
+
 
 //set the polar coordinates lambda, phi of (*this) from the Cartesian position r
 void Position::setCartesian(String name, const Cartesian r, [[maybe_unused]] String prefix) {

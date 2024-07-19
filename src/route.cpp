@@ -1092,7 +1092,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
                                 //this->reference position is not included into the circle of circle -> this->end must be included into the circle of circle -> the part of *this comprised into circle is the one with  (*t)[0] <= t <= (l.value)/Re
 
                                 set_length_from_time_speed();
-                                t->push_back(Angle(String(""), (length->value) / Re, new_prefix));
+                                my_push_back(t, Angle(String(""), (length->value) / Re, new_prefix));
 
                             }
 
@@ -1111,8 +1111,8 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
                                 //the midpoints on *this between t[0] and t[1] is not comprised into circle
 
                                 //I add 0 and 2*M_PI to the vector t, so I create two chunks of the curve *this which are comprised into circle
-                                t->push_back(Angle(0.0));
-                                t->push_back(Angle(2.0 * M_PI));
+                                my_push_back(t, Angle(0.0));
+                                my_push_back(t, Angle(2.0 * M_PI));
                                 //                                    (t->back()).value = 2.0*M_PI;
 
                                 sort(t->begin(), t->end());
@@ -1268,18 +1268,18 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
         intersection(side_W, true, &temp, String(""));
         u.insert(u.end(), temp.begin(), temp.end());
 
-        u.push_back(Angle(0.0));
+        my_push_back(&u, Angle(0.0));
 
 
         //push back into u the angle which corresponds to the endpoint of Route *this
         if (type == (Route_types[1])) {
             set_length_from_time_speed();
-            u.push_back(Angle((length->value) / Re));
+            my_push_back(&u, Angle((length->value) / Re));
         }
 
         //push back into u the angle which corresponds to the endpoint of Route *this
         if (type == (Route_types[2])) {
-            u.push_back(Angle(2.0 * M_PI));
+            my_push_back(&u, Angle(2.0 * M_PI));
             (u.back()).value = 2.0 * M_PI;
         }
 
@@ -1306,8 +1306,8 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
                 //If write_t == true, write into t the value of the intersections which delimit the chunk of *this which is included in rectangle
                 if (write_t) {
 
-                    t->push_back(u[i]);
-                    t->push_back(u[i + 1]);
+                    my_push_back(t, u[i]);
+                    my_push_back(t, u[i + 1]);
 
                 }
 
@@ -1323,7 +1323,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
         if (write_t) {
 
             //I push back into t the last value of u, wich corresponds to the endpoint of *this  and which has not been pushed back by the loop above
-            t->push_back(u.back());
+            my_push_back(t, u.back());
             
   
             if ((type == (Route_types[2])) && is_fully_included && (t->size() == 2)) {
@@ -1696,6 +1696,28 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 
 template void Route::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
 
+
+//set the content (not the memory adresses of *this) equal to the content of x
+void Route::set(const Route& x){
+    
+    type.set(x.type);
+    label.set(x.label);
+    temp_prefix.set(x.temp_prefix);
+    length_format.set(x.length_format);
+    
+    reference_position->set((*(x.reference_position)));
+    end->set((*(x.end)));
+    
+    omega.set(x.omega);
+    
+    length->set((*(x.length)));
+    speed->set((*(x.speed)));
+    
+    time.set(x.time);
+    
+    related_sight.set(x.related_sight);
+    
+}
 
 
 //this function computes the crossings between Route (*this) and Route route: it writes the two crossing points in p, and the cosing of the crossing angle in cos_crossing_angle. If the intersection cannot be computed it returns -1 (error code), othwerwise it returns 1 (0) if the Routes intersect (do not interesect).
@@ -2204,7 +2226,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             
             //inlude in phi the latitude of the starting point of *this
             compute_end(Length(0.0), String(""));
-            phi.push_back(end->phi.normalize_pm_pi_ret());
+            my_push_back(&phi, end->phi.normalize_pm_pi_ret());
             
             
             //there are two potential stationary points for the latitude vs t: include in phi the first one, if it lies on *this
@@ -2213,23 +2235,21 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
                 //                t.push_back(Angle(ts));
                 
                 compute_end(Length(Re*ts), String(""));
-                phi.push_back(end->phi.normalize_pm_pi_ret());
+                my_push_back(&phi, end->phi.normalize_pm_pi_ret());
                 
             }
             
             //there are two potential stationary points for the latitude vs t: include in phi the second one, if it lies on *this
             if((0.0 <= Re*(ts+M_PI)) && ((*length) >= Re*(ts+M_PI))){
-                
-                //                t.push_back(Angle(ts+M_PI));
-                
+                                
                 compute_end(Length(Re*(ts+M_PI)), String(""));
-                phi.push_back(end->phi.normalize_pm_pi_ret());
+                my_push_back(&phi, end->phi.normalize_pm_pi_ret());
                     
             }
             
             //*include in *phi the latitude of the endpoint of *this
             compute_end(String(""));
-            phi.push_back(end->phi.normalize_pm_pi_ret());
+            my_push_back(&phi, end->phi.normalize_pm_pi_ret());
             
             
             //write the min/max element into *phi_min/max, respectively

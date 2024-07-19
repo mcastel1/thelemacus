@@ -34,11 +34,8 @@ template<class S> void Catalog::read_from_stream([[maybe_unused]] String name, S
     while ((body.read_from_stream<S>(String("read body"), input_stream, false, prefix)) == true) {
 
         //if the next line in the file has not reached the end of file, I set *(file.value) to its old position and keep reading the file
-        //THE ERROR IS HERE: all entried of list contain the same memory adresses within the Body class, which are the adresses of `body` declared in `Body body` above
-//        list.push_back(body);
-        list.resize(list.size()+1);
-        list.back().set(body);
-
+        my_push_back(&list, body);
+        
     }
 
 }
@@ -53,7 +50,9 @@ vector<String> Catalog::get_names(void){
     vector<String> output;
     
     for(i=0, output.clear(); i<list.size(); i++){
-        output.push_back((*((list[i]).name)));
+        //        output.push_back((*((list[i]).name)));
+        my_push_back(&output, (*((list[i]).name)));
+        
     }
     
     return output;
@@ -90,11 +89,19 @@ void Catalog::add(String type, String name, double radius) {
     (*(body.name)) = name;
     body.radius->value = radius;
 
-    list.push_back(body);
+    //    list.push_back(body);
+    my_push_back(&list, body);
 
     cout << "Added body to catalog:\n";
     body.print(String("body"), String("\t"), cout);
 
 }
 
+
+//set the content of *this (not the memory addresses) equal to the content of x
+void Catalog::set(const Catalog& x){
+    
+    my_vector_memcpy<Body>(&list, (x.list));
+    
+}
 

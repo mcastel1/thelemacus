@@ -24,7 +24,9 @@ void AllRoutes::operator()(wxCommandEvent& event) {
     for ((f->data->crossing_route_list).clear(), j = 0; j < (f->data->route_list).size(); j++) {
 
         if (((((f->data->route_list))[j]).type.value) == ((Route_types[2]).value)) {
-            (f->data->crossing_route_list).push_back((((f->data->route_list))[j]));
+//            f->data->crossing_route_list.push_back(((f->data->route_list)[j]));
+            my_push_back(&(f->data->crossing_route_list), ((f->data->route_list)[j]));
+            
         }
 
     }

@@ -20,11 +20,12 @@ using namespace std;
 class Time{
     
 public:
+    
     Date date;
     Chrono chrono;
-    //is s used?
-    double s, MJD;
-    void enter(String, String);
+    double MJD;
+    
+    void set(const Time&);
     void print(String, String, ostream&);
     void set_current(void);
     template<class S> bool read_from_stream(String, S*, bool, String);

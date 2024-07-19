@@ -31,6 +31,13 @@ Cartesian::Cartesian(const Position* p) {
 
 }
 
+//set the content (not the memory addresses of *this) equal to the content of x
+void Cartesian::set(const Cartesian& x){
+    
+    gsl_vector_memcpy(r, (x.r));
+    
+}
+
 
 //set *this from the grographic Position p
 //inline 

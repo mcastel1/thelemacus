@@ -31,6 +31,7 @@ public:
     Speed(double);
     Speed(double, const SpeedUnit&);
     
+    void set(const Speed&);
     void set(double);
     void set(double, const SpeedUnit&);
     void set(String, double, String);

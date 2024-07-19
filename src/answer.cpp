@@ -69,8 +69,7 @@ bool Answer::set(String name, char c, [[maybe_unused]] String prefix) {
 
         }
 
-    }
-    else {
+    }else{
 
         cout << prefix.value << RED << "Value of answer is not valid!\n" << RESET;
 
@@ -79,6 +78,16 @@ bool Answer::set(String name, char c, [[maybe_unused]] String prefix) {
     return check;
 
 }
+
+
+void Answer::set(const Answer& x){
+    
+    value = (x.value);
+    
+}
+
+
+
 //reads *this from file whose path is filename, by looking through the entire file
 void Answer::read_from_file_to(String name, String filename, String mode, [[maybe_unused]] String prefix) {
 
@@ -133,34 +142,6 @@ template<class S> void Answer::read_from_stream(String name, S* input_stream, bo
 
 template void Answer::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
 
-
-
-void Answer::enter(String name, [[maybe_unused]] String prefix) {
-
-    bool check;
-    string temp;
-
-    do {
-
-        temp.clear();
-
-        cout << prefix.value << "Enter " << name.value << " [y/n]:";
-
-        getline(cin >> ws, temp);
-
-        if (((temp[0] == 'y') || (temp[0] == 'n')) && (temp.size() == 1)) {
-            value = temp[0];
-            check = true;
-        }
-        else {
-            cout << prefix.value << RED << "Entered value is not valid!\n" << RESET;
-            check = false;
-        }
-    } while (!check);
-
-    print(name, prefix, cout);
-
-}
 
 void Answer::print(String name, String prefix, ostream& ostr) {
 

@@ -30,6 +30,7 @@ public:
     
     Cartesian();
     Cartesian(const Position*);
+    void set(const Cartesian&);
     double dot(const Cartesian&);
     Cartesian cross (const Cartesian&);
     void setPosition(const Position*);

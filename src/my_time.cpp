@@ -61,7 +61,14 @@ string Time::to_string(unsigned int precision, bool time_zone) {
 
 }
 
-
+//set the content (not the memory adresses) of *this equal to the content of x
+void Time::set(const Time& x){
+    
+    date.set(x.date);
+    chrono.set(x.chrono);
+    MJD = (x.MJD);
+    
+}
 
 
 void Time::print(String name, String prefix, ostream& ostr) {

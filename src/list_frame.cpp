@@ -1592,7 +1592,9 @@ template<class E> void ListFrame::KeyDown(E& event) {
             do {
 
                 previous_item = (listcontrol_routes->GetNextItem(previous_item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
-                if (previous_item != -1) { (data->crossing_route_list).push_back(crossing_route_list_temp[previous_item]); }
+                if(previous_item != -1){
+                    my_push_back(&(data->crossing_route_list), crossing_route_list_temp[previous_item]);
+                }
 
             } while (previous_item != -1);
 
@@ -1702,7 +1704,7 @@ void ListFrame::LoadCoastLineData(String prefix) {
                     
                     
                     //push back the position into coastline_polygons_Position
-                    coastline_polygons_Position.back().push_back(p_Position);
+                    my_push_back(&(coastline_polygons_Position.back()), p_Position);
                     //                  BE CAREFUL ABOUT THIS  BUG THAT MAY ARISE AGAIN IN THE FUTURE
                     //push back the position into coastline_polygons_Cartesian: this is the correct way to push back an element into coastline_polygons_Cartesian: if you use coastline_polygons_Cartesian[i][j].push_back(r_temp), the *memory address of coastline_polygons_Cartesian[i][j].back().r will be set equal to the memory adress of r_temp -> by iterating through the loop, all the entries of coastline_polygons_Cartesian[i][j].r will point to the same adress and thus contain the same value!!
                     //                  BE CAREFUL ABOUT THIS  BUG THAT MAY ARISE AGAIN IN THE FUTURE
@@ -1711,7 +1713,7 @@ void ListFrame::LoadCoastLineData(String prefix) {
                     coastline_polygons_Cartesian[i].back() = Cartesian();
                     coastline_polygons_Cartesian[i].back() = p_Cartesian;
                     
-                    coastline_polygons_Mercator.back().push_back(p_Mercator);
+                    my_push_back(&(coastline_polygons_Mercator.back()), p_Mercator);
 
 
                     if ((floor(rad_to_deg * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat) >=0 ) && (floor(rad_to_deg * (p_Position.phi.normalize_pm_pi_ret().value) - floor_min_lat) < coastline_polygons_map.size())) {

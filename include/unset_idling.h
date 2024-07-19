@@ -20,11 +20,11 @@ using namespace std;
 template<class P> class UnsetIdling{
     
 public:
-    
-    UnsetIdling(P*);
-    
+        
     //the frame which called this struct
     P* parent;
+    
+    UnsetIdling(P*);
     
     void operator()(wxCommandEvent&);
     void operator()(void);

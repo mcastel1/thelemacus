@@ -26,6 +26,7 @@ public:
     P* parent;
     
     SetIdling(P*);
+    
     void operator()(wxCommandEvent&);
     void operator()(void);
     

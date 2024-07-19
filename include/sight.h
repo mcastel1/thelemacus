@@ -33,6 +33,7 @@ class Route;
 class Sight{
     
 public:
+    
     Time master_clock_date_and_hour, /*this is the time of the observation, in the TAI time scale*/time;
     //stopwatch is the reading [hh:mm:ss.s] on the stopwatch
     Chrono TAI_minus_UTC, stopwatch;
@@ -50,8 +51,9 @@ public:
     //all_items is a list of all the possible items which are part of a Sight object (master_clock_date_and_hour, body, ...). items is the list of items specific to a given Sight object: items may not include all the elements of all_items
     vector<String> items, all_items;
     
-    
     Sight();
+    
+    void set(const Sight&);
     static double dH_refraction(double, void*), rhs_DH_parallax_and_limb(double, void*);
     bool get_coordinates(Route*, String);
     void compute_DH_dip(String);

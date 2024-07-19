@@ -37,6 +37,7 @@ class String;
 class Route{
     
 public:
+    
     RouteType type;
     String label, temp_prefix;
     //the length of the Route is expressed as the length l (if length_format.value == "length"), or as the product of the Speed v and the time t (if length_format.value == "time and speed")
@@ -53,16 +54,18 @@ public:
     //this is the position in sight_list of the sight linked to route. If there is no sight linked to route, then related_sight = -1.
     Int related_sight;
     //a list of points containing the geo coordinates of points on the Route this
-    Position* points;
+    //    Position* points;
     
     Route(void);
     Route(RouteType, Position, Angle, Length);
     Route(RouteType, Position, Angle, Chrono, Speed);
     Route(const RouteType&, Position, Position);
     Route(RouteType, Position, Angle);
+    
     void print(String, String, ostream&);
     void read_from_file_to(String, String, String, String);
     template<class S> void read_from_stream(String, S*, bool, String);
+    void set(const Route&);
     void set_length_from_time_speed(void);
     void set_length_from_input(double);
     void compute_end(String);

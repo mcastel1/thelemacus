@@ -62,10 +62,7 @@ template<class C> void read_from_file(C* object, String name, String filename, [
     file.set_name(filename);
     file.open(String("in"), prefix);
 
-    //THE ERROR APPEARS HERE: read_from_stream is not called
     object->template read_from_stream<fstream>(name, file.value, true, prefix);
-    //THE ERROR APPEARS HERE: read_from_stream is not called
-
 
     file.close(prefix);
 
@@ -780,6 +777,38 @@ double mean_value(Angle& a, Angle& b){
     
 }
 
+//push back the *content* (not the memory adresses) of x into v. This methods calls the set() method of class T, which needs to be defined. This method requires v to be allocated (but *v may have size 0)
+template<class T> void my_push_back(vector<T>* v, const T& x){
+    
+    v->resize((v->size())+1);
+    v->back().set(x);
+    
+}
+
+template void my_push_back<Body>(std::__1::vector<Body, std::__1::allocator<Body>>*, Body const&);
+template void my_push_back<Route>(std::__1::vector<Route, std::__1::allocator<Route>>*, Route const&);
+template void my_push_back<String>(std::__1::vector<String, std::__1::allocator<String>>*, String const&);
+template void my_push_back<Sight>(std::__1::vector<Sight, std::__1::allocator<Sight>>*, Sight const&);
+template void my_push_back<Position>(std::__1::vector<Position, std::__1::allocator<Position>>*, Position const&);
+template void my_push_back<PositionProjection>(std::__1::vector<PositionProjection, std::__1::allocator<PositionProjection>>*, PositionProjection const&);
+template void my_push_back<Angle>(std::__1::vector<Angle, std::__1::allocator<Angle>>*, Angle const&);
+
+
+//copy the *content* (not the memory adresses) of source into dest. This methods calls the set() method of class T, which needs to be defined.
+template<class T> void my_vector_memcpy(vector<T>* dest, const vector<T> source){
+    
+    dest->resize(source.size());
+    
+    for(unsigned int i=0; i<(dest->size()); i++){
+        
+        ((*dest)[i]).set(source[i]);
+        
+    }
+    
+}
+
+template void my_vector_memcpy<Body>(std::__1::vector<Body, std::__1::allocator<Body>>*, std::__1::vector<Body, std::__1::allocator<Body>>);
+template void my_vector_memcpy<String>(std::__1::vector<String, std::__1::allocator<String>>*, std::__1::vector<String, std::__1::allocator<String>>);
 
 
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.

@@ -18,12 +18,13 @@ using namespace std;
 class Answer{
     
 public:
+    
     char value;
     
     Answer();
     Answer(char, String);
-    void enter(String, String);
     bool set(String, char, String);
+    void set(const Answer&);
     //the print function takes an arbitrary ostream for output, which can be equal to cout if we want to print otuput to terminal, or to a file ofstream if we want to print the output to a file
     void print(String, String, ostream&);
     template<class S> void read_from_stream(String, S*, bool, String);
@@ -31,11 +32,6 @@ public:
     bool operator==(const Answer&), operator !=(const Answer&);
     
 };
-
-
-
-
-
 
 
 #endif

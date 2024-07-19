@@ -28,6 +28,14 @@ void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 }
 
 
+//set the content (not the memory adresses) of *this equal to the content of x
+void Int::set(const Int& x){
+    
+    value = (x.value);
+    
+}
+
+
 //same as Int::set(String name, int i, [[maybe_unused]] String prefix) {, but without printing out anything
 //inline 
 void Int::set(int i) {

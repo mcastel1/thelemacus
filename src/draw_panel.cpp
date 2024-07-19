@@ -1631,7 +1631,6 @@ void DrawPanel::PreRenderMercator(void) {
         (route.reference_position->lambda.value) += delta_lambda) {
 
         //add the current meridian that is being drawn (route) to meridians_now
-//        grid_now.push_back(route);
         grid_now.resize((grid_now.size()) + 1);
         route.Draw((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
         //             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));

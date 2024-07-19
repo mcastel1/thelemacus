@@ -37,6 +37,7 @@ class String;
 class Route{
     
 public:
+    
     RouteType type;
     String label, temp_prefix;
     //the length of the Route is expressed as the length l (if length_format.value == "length"), or as the product of the Speed v and the time t (if length_format.value == "time and speed")
@@ -60,6 +61,7 @@ public:
     Route(RouteType, Position, Angle, Chrono, Speed);
     Route(const RouteType&, Position, Position);
     Route(RouteType, Position, Angle);
+    
     void print(String, String, ostream&);
     void read_from_file_to(String, String, String, String);
     template<class S> void read_from_stream(String, S*, bool, String);

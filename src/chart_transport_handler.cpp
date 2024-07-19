@@ -292,8 +292,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();
             chart_frame->draw_panel->MyRefresh();
             chart_frame->UpdateSlider();
-//            chart_frame->draw_panel->PaintNow();
-            //
+            //            chart_frame->draw_panel->PaintNow();
 
             //            cout << "\t\t t= " << t << "\n";
             
@@ -304,7 +303,6 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
     }else {
         //the transport  is over
 
-        
         switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
                 
             case 0: {

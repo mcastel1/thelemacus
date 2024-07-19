@@ -197,7 +197,6 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
                 //                (*(((Route*)transported_object)->reference_position)) = (*(MotionHandler<F>::start));
                 ((Route*)transported_object)->reference_position->set((*(MotionHandler<F>::start)));
-                
                 ((Route*)transported_object)->reference_position->transport_to((MotionHandler<F>::transporting_route), String(""));
 
 

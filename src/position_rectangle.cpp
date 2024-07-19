@@ -29,6 +29,15 @@ PositionRectangle::PositionRectangle(Position p_NW_in, Position p_SE_in, [[maybe
 
 }
 
+//set the content (not the memory adress) of *this equal to the content of x
+void PositionRectangle::set(const PositionRectangle& x){
+    
+    p_NW->set((*(x.p_NW)));
+    p_SE->set((*(x.p_SE)));
+    
+}
+
+
 
 //returns true/false if p is containted in *this
 bool PositionRectangle::Contains(Position p) {

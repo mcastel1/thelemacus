@@ -864,25 +864,35 @@ void Data::print_recent_items(const vector<int>& recent_items, String name, Stri
 }
 
 
-//insert the item 'item_id' into the vector of items *recent_items.  This method is used for GUI fields of the format MultipleItemField
+//insert the item 'item_id' into the vector of items *recent_items.  This method is used for GUI fields of the format MultipleItemField. This method does not require recent_items->size() to be > 0
 void Data::insert_recent_item(unsigned int item_id, vector<int>* recent_items) {
-
-    vector<int>::iterator position;
-
-    position = find(recent_items->begin(), recent_items->end(), item_id);
-
-    if (position == recent_items->end()) {
-        //in this case, the selected item is not in the recent list: I write it in the recent list and in file_recent
-
-        (*recent_items)[recent_items->size() - 1] = item_id;
-        rotate(recent_items->begin(), recent_items->end() - 1, recent_items->end());
-
-    }
-    else {
-        //the selected item is  in the recent list: I move the element in position to the first place in recent_items
-
-        iter_swap(recent_items->begin(), position);
-
+    
+    if((recent_items->size()) > 0){
+        //*recent_items is non-empty
+        
+        vector<int>::iterator position;
+        
+        position = find(recent_items->begin(), recent_items->end(), item_id);
+        
+        if (position == recent_items->end()) {
+            //in this case, the selected item is not in *recent_items: I write it in *recent_items
+            
+            (*recent_items)[recent_items->size() - 1] = item_id;
+            rotate(recent_items->begin(), recent_items->end() - 1, recent_items->end());
+            
+        }
+        else {
+            //the selected item is in *recent_itmes: I move the element in position to the first place in *recent_items
+            
+            iter_swap(recent_items->begin(), position);
+            
+        }
+        
+    }else{
+        //*recent_items is empty -> I push back item into *recent_items
+        
+        recent_items->push_back(item_id);
+        
     }
 
 }

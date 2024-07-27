@@ -109,10 +109,12 @@
  - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
  - move all stuff which is general enough in the code to MyApp class
  - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
-
+- the altitude over the horizon should be set to the last value entered
+- the utc time in sightframe is set to the local time of the pc, not to the utc time (it should be the second one)
   
 
  ********** THINGS TO FIX ***********
+ 
     - replace Re with a constant Length() expressed in [nm]
     - see whether lass T> void CheckSpeedUnit<P>::operator()(T& and same for CheckLengthUnit can be replaced by a universal Check method in the parent class MultipleItemField
     - when you zoom in in the 3d projection there is an error message '[1;31mEntered value of  is not valid!' on the console

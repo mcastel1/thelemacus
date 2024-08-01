@@ -398,7 +398,7 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces) {
     }
     
     if (add_spaces) {
-        //sets the fixed precision min, so all angles that are printed out have the same number of decimal points
+        //set the fixed precision min, so all angles that are printed out have the same number of decimal points
         min << fixed;
         if (x < 10.0) {
             min << " ";

@@ -39,6 +39,7 @@ public:
     CheckDate<P>* check;
     
     DateField(wxPanel*, Date*);
+    
     void set(Date);
     void SetBackgroundColor(Color);
     template<class T> void get(T&);

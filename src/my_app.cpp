@@ -12,6 +12,7 @@
 #include <boost/date_time.hpp>
 
 
+#include "catalog.h"
 #include "close_app.h"
 #include "close_frame.h"
 #include "constants.h"
@@ -469,6 +470,7 @@ bool MyApp::OnInit() {
 
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
         
+    catalog = new Catalog(path_file_catalog, String(""));
     list_frame = new ListFrame("Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
 
     if(!(list_frame->abort)){

@@ -141,32 +141,6 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
     plot_command.precision((data_precision.value));
     command.precision((data_precision.value));
 
-    //    file_init.set_name((wxGetApp().path_file_init));
-
-    my_push_back(&choices, String("Add a sight"));
-    my_push_back(&choices, String("Modify a sight"));
-    my_push_back(&choices, String("Delete a sight"));
-    my_push_back(&choices, String("Add a position"));
-    my_push_back(&choices, String("Modify a position"));
-    my_push_back(&choices, String("Transport a position"));
-    my_push_back(&choices, String("Delete a position"));
-    my_push_back(&choices, String("Add a route"));
-    my_push_back(&choices, String("Transport a route"));
-    my_push_back(&choices, String("Compute route crossings"));
-    my_push_back(&choices, String("Delete a route"));
-    my_push_back(&choices, String("Replot"));
-    my_push_back(&choices, String("Full zoom out"));
-    my_push_back(&choices, String("Clear"));
-    my_push_back(&choices, String("Line of position on paper chart"));
-    my_push_back(&choices, String("Save to file"));
-    my_push_back(&choices, String("Read from file"));
-    my_push_back(&choices, String("Exit"));
-
-
-    //read paramters from init file
-
-//    file_init.open(String("in"), prefix);
-
     //read number of intervals for ticks from file_init
     wxGetApp().n_intervals_ticks_preferred.read_from_file_to(String("preferred number of intervals for ticks"), wxGetApp().path_file_init, String("R"), new_prefix);
 

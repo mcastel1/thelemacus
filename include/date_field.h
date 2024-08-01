@@ -22,6 +22,7 @@ template<class P> class CheckDate;
 template<class P> class DateField{
     
 public:
+    
     //the parent frame to which this object is attached
     P* parent_frame;
     wxArrayString days, months;

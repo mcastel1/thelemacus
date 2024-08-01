@@ -75,43 +75,44 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
- - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
- - code method DrawPanel::ProjectionToGeo_3D
- - add the height of the observer above the earth surface in the 3d projection
- - move up all code blocks that look alike into a function (marked with `    //MOVE UP TO A SINGLE METHOD`)
- - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
- - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
- - condense id RouteTypeField<P>::set(void)
- - try  wxDCClipper to quickly delete old image on DrawPanel
- - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things
- - all unit fields should have the system              temp << "Available units are: "; message generated in the same way, as in template <class T> void CheckSpeedUnit<P>::operator()
- - when you enable / disable a field, enable/disable its wxStaticTexts and wxBoxSizers as well
- - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things 
- - add instrumental error
- - add readme file
- - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
- - check whether you can speed up Draw3D by tabulating stuff it i < 90  etc
- - center name of file in top bar of ListFrame
- - propose to donate to the user
- - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
- - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
- - change     highlight_color = color_selected_item and     highlight_font = default_font;
- with a better  choice
- - add + / - button in chartframe to zoom in / out
- - add lambert projection and 3D sphere with no projection
- - add separator between recent items and non-recent items in BodyField->name
- - set up output to a log file
- - set parents to constructors of all frames that you defined
- - in Route::draw_3D, code the part for loxodrome curves
- - move all constants to the init file , such as  the 0.15 in  'position_plot_area_now = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);'
- - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer
- - replace use of epsilon_double with more proper methods
- - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
- - move all stuff which is general enough in the code to MyApp class
- - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
-- the altitude over the horizon should be set to the last value entered
-- the utc time in sightframe is set to the local time of the pc, not to the utc time (it should be the second one)
-  
+     - add the possibility to add a poisition witch which to compare the distance when entering a sight
+     - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
+     - code method DrawPanel::ProjectionToGeo_3D
+     - add the height of the observer above the earth surface in the 3d projection
+     - move up all code blocks that look alike into a function (marked with `    //MOVE UP TO A SINGLE METHOD`)
+     - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
+     - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
+     - condense id RouteTypeField<P>::set(void)
+     - try  wxDCClipper to quickly delete old image on DrawPanel
+     - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things
+     - all unit fields should have the system              temp << "Available units are: "; message generated in the same way, as in template <class T> void CheckSpeedUnit<P>::operator()
+     - when you enable / disable a field, enable/disable its wxStaticTexts and wxBoxSizers as well
+     - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things 
+     - add instrumental error
+     - add readme file
+     - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
+     - check whether you can speed up Draw3D by tabulating stuff it i < 90  etc
+     - center name of file in top bar of ListFrame
+     - propose to donate to the user
+     - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
+     - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
+     - change     highlight_color = color_selected_item and     highlight_font = default_font;
+     with a better  choice
+     - add + / - button in chartframe to zoom in / out
+     - add lambert projection and 3D sphere with no projection
+     - add separator between recent items and non-recent items in BodyField->name
+     - set up output to a log file
+     - set parents to constructors of all frames that you defined
+     - in Route::draw_3D, code the part for loxodrome curves
+     - move all constants to the init file , such as  the 0.15 in  'position_plot_area_now = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);'
+     - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer
+     - replace use of epsilon_double with more proper methods
+     - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
+     - move all stuff which is general enough in the code to MyApp class
+     - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
+    - the altitude over the horizon should be set to the last value entered
+    - the utc time in sightframe is set to the local time of the pc, not to the utc time (it should be the second one)
+      
 
  ********** THINGS TO FIX ***********
     - replace Re with a constant Length() expressed in [nm]

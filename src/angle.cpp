@@ -39,7 +39,7 @@ Angle::Angle(String name, const double& x, [[maybe_unused]] const String& prefix
 
     value = x;
     normalize();
-    if (name != String("")) { print(name, prefix, cout); }
+    print(name, prefix, cout);
 
 }
 
@@ -228,7 +228,7 @@ void Angle::set(double x){
 void Angle::set(String name, double x, [[maybe_unused]] String prefix) {
 
     set(x);
-    if(name != String("")) { print(name, prefix, cout); }
+   print(name, prefix, cout);
 
 }
 
@@ -301,9 +301,26 @@ Angle Angle::normalize_pm_pi_ret(void) {
 
 
 void Angle::print(String name, String prefix, ostream& ostr) {
+    
+    unsigned int precision;
 
     normalize();
-    ostr << prefix.value << name.value << " = " << floor(rad_to_deg * value - 360.0 * floor(rad_to_deg * value / 360.0)) << (wxGetApp().degree_symbol.value) << " " << (rad_to_deg * value - 360.0 * floor(rad_to_deg * value / 360.0) - floor(rad_to_deg * value - 360.0 * floor(rad_to_deg * value / 360.0))) * 60.0 << "'\n";
+    
+    //if I am printing to terminal, I print with display_precision. Otherwise, I print with (data_precision.value)
+    if (ostr.rdbuf() == cout.rdbuf()) {
+        precision = (display_precision.value);
+    }else{
+        precision = (data_precision.value);
+    }
+    
+    if ((name.value) != "") {
+                
+        ostr << prefix.value << name.value << " = " << to_string(String(""), precision, false) << endl;
+
+        
+    }
+    
+//    ostr << prefix.value << name.value << " = " << floor(rad_to_deg * value - 360.0 * floor(rad_to_deg * value / 360.0)) << (wxGetApp().degree_symbol.value) << " " << (rad_to_deg * value - 360.0 * floor(rad_to_deg * value / 360.0) - floor(rad_to_deg * value - 360.0 * floor(rad_to_deg * value / 360.0))) * 60.0 << "'\n";
 
 }
 

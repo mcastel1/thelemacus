@@ -4,8 +4,8 @@ Data:
 			body:
 				Type = star
 				Name = spica
-				Right ascension = 201° 17.89998000000082'
-				Declination = 348° 50.32500000000027'
+				Right ascension = 201° 17.8999800000013'
+				Declination = 348° 50.32500000000149'
 			sextant altitude = 47° 57.79999999999987'
 			index error = 0° 1.9'
 			artificial horizon = y
@@ -19,13 +19,13 @@ Data:
 		Sight #2:
 			body:
 				Type = star
-				Name = hamal
-				Right ascension = 31° 47.5971599999999'
-				Declination = 23° 27.74525999999994'
-			sextant altitude = 13° 3.000000000000043'
+				Name = vega
+				Right ascension = 279° 13.92612000000005'
+				Declination = 38° 46.93896000000015'
+			sextant altitude = 13° 3.000000000000054'
 			index error = 0° 1.9'
 			artificial horizon = n
-			height of eye = 18.52 m
+			height of eye = 18.5199999999999996 m
 			master-clock date and hour of sight:
 				date = 2022-01-10
 				hour = 12:52:00
@@ -36,12 +36,12 @@ Data:
 			body:
 				Type = star
 				Name = hamal
-				Right ascension = 31° 47.5971599999999'
-				Declination = 23° 27.74525999999994'
-			sextant altitude = 33° 2.999999999999829'
+				Right ascension = 31° 47.59715999999988'
+				Declination = 23° 27.74525999999999'
+			sextant altitude = 33° 2.999999999999932'
 			index error = 0° 1.9'
 			artificial horizon = n
-			height of eye = 40 m
+			height of eye = 40.0000000000000000 m
 			master-clock date and hour of sight:
 				date = 2024-06-05
 				hour = 19:36:34
@@ -52,18 +52,18 @@ Data:
 		Route #1:
 			type = circle of equal altitude
 			ground position:
-				latitude = 2° 1.999999999999993'
-				longitude = 357° 58.00000000000182'
+				latitude = 2° 1.999999999999989'
+				longitude = 357° 58.00000000000343'
 				label = 2024-01-11 17:17:38 UTC+2
-			aperture angle = 2° 1.999999999999993'
+			aperture angle = 2° 1.999999999999989'
 			label = route with speed and time
 		Route #2:
 			type = loxodrome
 			start position:
-				latitude = 22° 3.000000000000043'
-				longitude = 356° 56.99999999999932'
+				latitude = 22° 3.000000000000147'
+				longitude = 356° 56.99999999999908'
 				label = 2024-01-21 17:04:03 UTC+2
-			starting heading = 19° 3.000000000000043'
+			starting heading = 19° 3.000000000000084'
 			length format = time and speed
 				time = 06:59:45.5436
 				speed = 500 kt
@@ -71,10 +71,10 @@ Data:
 		Route #3:
 			type = orthodrome
 			start position:
-				latitude = 22° 3.000000000000043'
-				longitude = 356° 56.99999999999932'
+				latitude = 22° 3.000000000000147'
+				longitude = 356° 56.99999999999908'
 				label = 2024-01-21 17:04:03 UTC+2
-			starting heading = 19° 3.000000000000043'
+			starting heading = 19° 3.000000000000084'
 			length format = time and speed
 				time = 06:59:45.5436
 				speed = 500 kt
@@ -82,17 +82,17 @@ Data:
 		Route #4:
 			type = circle of equal altitude
 			ground position:
-				latitude = 336° 56.99999999999932'
-				longitude = 356° 56.99999999999932'
+				latitude = 336° 57.00000000000044'
+				longitude = 356° 56.99999999999908'
 				label = 2024-01-21 17:04:03 UTC+2
-			aperture angle = 45° 2.999999999999829'
+			aperture angle = 45° 2.999999999999802'
 			label = lkjnb
 	Positions:
 		Position #1:
-			latitude = 323° 36.54636500000151'
-			longitude = 315° 55.56999999999789'
+			latitude = 323° 36.54636500000291'
+			longitude = 315° 55.56999999999896'
 			label = Siamo in biblioteca
-Recent bodies = 10 12 8
+Recent bodies = 3 10 12
 Recent projections = 1 0
 Recent length formats = 1 0
 Recent route types = 1 0 2

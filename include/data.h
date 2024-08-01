@@ -26,7 +26,9 @@ class Route;
 class Data{
     
 public:
+    
     Catalog* catalog;
+    vector<unsigned long long int> number_of_lines;
     //    FileR file_init;
     int job_id;
     stringstream command, plot_command;
@@ -38,8 +40,9 @@ public:
     //the recent bodies, projections, ... selected by the user are stored here
     vector<int> recent_bodies, recent_projections, recent_length_formats, recent_route_types, recent_route_for_transport_types, recent_length_units, recent_speed_units;
 
+
     Data(Catalog*, String);
-    //~Data();
+    
     bool add_sight_and_reduce(Sight*, String);
     void add_route(Route*, String);
     void remove_sight(unsigned int, Answer, String);

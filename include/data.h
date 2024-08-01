@@ -28,8 +28,6 @@ class Data{
 public:
     
     Catalog* catalog;
-    vector<unsigned long long int> number_of_lines;
-    //    FileR file_init;
     int job_id;
     stringstream command, plot_command;
     vector<Sight> sight_list;

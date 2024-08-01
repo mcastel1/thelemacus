@@ -40,7 +40,6 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     (*unset_idling)();
 
     print_error_message = new PrintMessage<SightFrame, UnsetIdling<SightFrame> >(this, unset_idling);
-    catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
     
 
     //if this SightFrame has been constructed with sight_in = NULL, then I allocate a new Sight object with the pointer this->sight and set position_in_listcontrol_sights to a 'NULL' value (position_in_listcontrol_sights = -1). Otherwise, the pointer sight_in points to a valid Sight object -> I let this->sight point to sight_in, and set position_in_listcontrol_sights to position_in_listcontrol_sights_in.
@@ -86,7 +85,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
 
     StaticText* text_combo_body = new StaticText(panel, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0);
-    body = new BodyField<SightFrame>(panel, (sight->body), catalog, &(wxGetApp().list_frame->data->recent_bodies));
+    body = new BodyField<SightFrame>(panel, (sight->body), wxGetApp().catalog, &(wxGetApp().list_frame->data->recent_bodies));
 
     StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0);
     limb = new LimbField<SightFrame>(panel, &(sight->limb));

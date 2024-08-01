@@ -62,8 +62,6 @@ public:
     Data /*pointer to the non-GUI object Data which is related to the GUI object this*/*data;
     //point to the child frame of this
     vector<ChartFrame*> chart_frames;
-    //this is a pointer to a Catalog object which will be used by data
-    Catalog *catalog;
     vector<Route> /*when I transport by using an existing Route, I will store the list of Routes which can be used for transport here*/route_list_for_transport, /*when I transport by using an existing Route, I will save data->list_routes temporarily here and recover it from here after the transport */route_list_saved;
     Route /*the same as draw_panel->circle_observer, but at the initial configuration of the chart*/*circle_observer_0, *transporting_route_saved;
     wxMenuBar *menu_bar;

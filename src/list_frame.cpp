@@ -100,7 +100,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_error_message->image_path = wxGetApp().path_file_error_icon;
 
 
-    data = new Data(catalog, String(""));
+    data = new Data(wxGetApp().catalog, String(""));
 
     //read show_coastlines from file_init
     show_coastlines.read_from_file_to(String("show coastlines"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -235,7 +235,6 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         existing_route = new ExistingRoute(this);
         new_route = new NewRoute(this);
 
-        catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
 
         panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
 

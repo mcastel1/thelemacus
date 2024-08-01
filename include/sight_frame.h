@@ -33,7 +33,6 @@ class SightFrame: public wxFrame{
 public:
     
     ListFrame* parent;
-    Catalog* catalog;
     Sight* sight;
     //this long represents the position in the list (this->GetParent())->listcontrol_sights of sight. If list_position = -1, then sight is not in that list
     long position_in_listcontrol_sights;

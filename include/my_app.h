@@ -15,6 +15,7 @@
 #include <boost/date_time.hpp>
 
 
+#include "catalog.h"
 #include "chrono.h"
 #include "color.h"
 #include "angle.h"
@@ -24,6 +25,7 @@
 
 using namespace std;
 
+class Catalog;
 class CloseApp;
 class ListFrame;
 template<class F_A, class F_B, class F_ABORT> class QuestionFrame;
@@ -34,7 +36,8 @@ class MyApp: public wxApp{
 public:
 
     ListFrame *list_frame;
-    
+    //this is a pointer to a Catalog object which will be used by data
+    Catalog *catalog;    
     //this rectangle contains the size of the display on which the *this is run
     wxRect rectangle_display;
     //the size of small and large buttons of the app

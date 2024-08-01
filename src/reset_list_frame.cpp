@@ -26,7 +26,7 @@ template <class T> void ResetListFrame::operator()(T& event) {
     (p->file_is_untitled) = true;
     (p->file_has_been_modified) = false;
 
-    p->data = new Data(p->catalog, String(""));
+    p->data = new Data(wxGetApp().catalog, String(""));
 
     //empty all listcontrols
     p->listcontrol_sights->DeleteAllItems();

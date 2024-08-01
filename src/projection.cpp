@@ -13,5 +13,3 @@ Projection::Projection(void) : String() {}
 
 
 Projection::Projection(string input) : String(input) {}
-
-

@@ -410,7 +410,7 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces) {
 
 
 
-    output << deg.str().c_str() << (wxGetApp().degree_symbol).value << " " << min.str().c_str() << "'";
+    output << deg.str().c_str() << (wxGetApp().degree_symbol.value) << " " << min.str().c_str() << "'";
 
     if ((mode != String("")) && !is_zero_epsilon_double()) {
         //mode is not "" and the angle is nonzero -> I print out its 'sign' (N, S, E, W, ...)

@@ -375,10 +375,9 @@ bool Sight::check_time_interval(String prefix) {
     
     
     
-    
  
     //find the position of body->name in wxGetApp().list_frame->catalog and store the result in i
-    for(i=0; (i<(wxGetApp().catalog->list.size())) && ((body->name) != (((wxGetApp().catalog->list)[i]).name)); i++){}
+    for(i=0; (i<(wxGetApp().catalog->list.size())) && ((*(body->name)) != (*(((wxGetApp().catalog->list)[i]).name))); i++){}
 
     
 

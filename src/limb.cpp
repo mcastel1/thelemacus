@@ -53,9 +53,13 @@ template<class S> void Limb::read_from_stream([[maybe_unused]] String name, S* i
 template void Limb::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
 
 
-void Limb::print(String name, String prefix, ostream& ostr) {
-
-    ostr << prefix.value << name.value << " = " << value << "\n";
+void Limb::print(String name, String prefix, ostream& ostr){
+    
+    if ((name.value) != "") {
+        
+        ostr << prefix.value << name.value << " = " << value << "\n";
+        
+    }
 
 }
 

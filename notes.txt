@@ -114,29 +114,6 @@
   
 
  ********** THINGS TO FIX ***********
-   - remove
-   
-        my_push_back(&choices, String("Add a sight"));
-        my_push_back(&choices, String("Modify a sight"));
-        my_push_back(&choices, String("Delete a sight"));
-        my_push_back(&choices, String("Add a position"));
-        my_push_back(&choices, String("Modify a position"));
-        my_push_back(&choices, String("Transport a position"));
-        my_push_back(&choices, String("Delete a position"));
-        my_push_back(&choices, String("Add a route"));
-        my_push_back(&choices, String("Transport a route"));
-        my_push_back(&choices, String("Compute route crossings"));
-        my_push_back(&choices, String("Delete a route"));
-        my_push_back(&choices, String("Replot"));
-        my_push_back(&choices, String("Full zoom out"));
-        my_push_back(&choices, String("Clear"));
-        my_push_back(&choices, String("Line of position on paper chart"));
-        my_push_back(&choices, String("Save to file"));
-        my_push_back(&choices, String("Read from file"));
-        my_push_back(&choices, String("Exit"));
-        
-    in Data::Data
-        
     - replace Re with a constant Length() expressed in [nm]
     - see whether lass T> void CheckSpeedUnit<P>::operator()(T& and same for CheckLengthUnit can be replaced by a universal Check method in the parent class MultipleItemField
     - make sure that all the print() methods have the same structure as Length::print()

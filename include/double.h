@@ -18,6 +18,7 @@ using namespace std;
 class Double{
     
 public:
+    
     double value;
     
     Double();
@@ -27,6 +28,7 @@ public:
     void read_from_file_to(String, String, String, String);
     void set(double);
     void set(String, double, String);
+    string to_string(unsigned int);
     void print(String, String, ostream&);
     Double operator + (const Double&);
     bool operator > (const double&), operator > (const Double&), operator < (const double&), operator < (const Double&);

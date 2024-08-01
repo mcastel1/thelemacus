@@ -23,7 +23,7 @@ void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
     set(i);
 
-    if (name != String("")) { print(name, prefix, cout); }
+    print(name, prefix, cout);
 
 }
 
@@ -185,7 +185,11 @@ void Int::read_from_file_to(String name, String filename, String mode, [[maybe_u
 
 
 void Int::print(String name, String prefix, ostream& ostr) {
-
-    ostr << prefix.value << name.value << " = " << value << "\n";
+    
+    if ((name.value) != "") {
+        
+        ostr << prefix.value << name.value << " = " << value << endl;
+        
+    }
 
 }

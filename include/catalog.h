@@ -23,7 +23,7 @@ public:
     
     vector<Body> list;
     //number_of_lines[i] is the number of lines in the ephemerides file relative to Bosy list[i]
-    vector<unsigned long long int> number_of_lines;
+    vector<unsigned long long int> number_of_lines_bodies;
     
     Catalog(String, String);
     

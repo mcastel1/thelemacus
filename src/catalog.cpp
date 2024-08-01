@@ -9,6 +9,8 @@
 
 #include "catalog.h"
 #include "generic.h"
+#include "file_r.h"
+
 
 Catalog::Catalog(String filename, [[maybe_unused]] String prefix) {
 
@@ -29,12 +31,47 @@ void Catalog::read_from_file_to([[maybe_unused]] String name, String filename, S
 template<class S> void Catalog::read_from_stream([[maybe_unused]] String name, S* input_stream, [[maybe_unused]] bool search_entire_stream, [[maybe_unused]] String prefix) {
 
     Body body;
+    stringstream temp;
+    String new_prefix;
+    FileR body_file;
+    
+    //append \t to prefix
+    new_prefix = prefix.append(String("\t"));
+
 
     //check whether the next line in the file has reached the end of file
     while ((body.read_from_stream<S>(String("read body"), input_stream, false, prefix)) == true) {
 
         //if the next line in the file has not reached the end of file, I set *(file.value) to its old position and keep reading the file
         my_push_back(&list, body);
+        
+        
+        //count the number of lines in file relative to body and push it back into number_of_lines
+        temp.clear();
+        temp.str("");
+        
+        if ((*(body.type)) != String("star")) {
+            
+            temp << (wxGetApp().data_directory.value) << (body.name->value) << ".txt";
+            
+        }else{
+            
+            temp << (wxGetApp().data_directory.value) << "j2000_to_itrf93.txt";
+            
+        }
+        
+        body_file.set_name(temp.str());
+        if(body_file.check_if_exists(new_prefix)){
+            
+            body_file.count_lines(new_prefix);
+            number_of_lines_bodies.push_back(body_file.number_of_lines);
+            
+        }else{
+            
+            number_of_lines_bodies.push_back(0);
+            
+        }
+
         
     }
 

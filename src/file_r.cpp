@@ -42,12 +42,12 @@ void FileR::set_name(String input) {
 
     if (input.is_a_file_path(String(""))) {
 
-        input.split_file_path(NULL, &name_without_folder_nor_extension, NULL, String(""));
+        input.split_file_path(NULL, name_without_folder_nor_extension, NULL, String(""));
 
     }
     else {
 
-        (name_without_folder_nor_extension.value) = (input.value);
+        (name_without_folder_nor_extension->value) = (input.value);
 
     }
 

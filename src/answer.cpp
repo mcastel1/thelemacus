@@ -140,7 +140,7 @@ template<class S> void Answer::read_from_stream(String name, S* input_stream, bo
 
 }
 
-template void Answer::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+template void Answer::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
 
 
 void Answer::print(String name, String prefix, ostream& ostr) {

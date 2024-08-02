@@ -306,7 +306,7 @@ template<class S> void Position::read_from_stream([[maybe_unused]] String name, 
 
 }
 
-template void Position::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+template void Position::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
 
 
 //set the content (not the memory adresses) of *this equal to the content of x

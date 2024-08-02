@@ -321,7 +321,7 @@ template<class T> unsigned int position_in_vector(T x, const vector<T>& v){
 
 //explicit instantiation
 template unsigned int position_in_vector<Projection>(Projection, const vector<Projection>&);
-template unsigned int position_in_vector<String>(String, std::__1::vector<String, std::__1::allocator<String>> const&);
+template unsigned int position_in_vector<String>(String, vector<String, allocator<String>> const&);
 
 
 
@@ -338,7 +338,7 @@ template<class A, class B> vector<B> convert_vector(const vector<A>& x){
     
 }
 
-template std::__1::vector<String, std::__1::allocator<String>> convert_vector<Projection, String>(std::__1::vector<Projection, std::__1::allocator<Projection>> const&);
+template vector<String, allocator<String>> convert_vector<Projection, String>(vector<Projection, allocator<Projection>> const&);
 
 
 //find the  position in v of element with memory address x and return the position. If no element is found, return v.size(). Note that this function is different from position_in_vector
@@ -352,8 +352,8 @@ template<class T> unsigned int address_position_in_vector(T* x, const vector<T>&
     
 }
 
-template unsigned int address_position_in_vector<Route>(Route*, std::__1::vector<Route, std::__1::allocator<Route>> const&);
-template unsigned int address_position_in_vector<Position>(Position*, std::__1::vector<Position, std::__1::allocator<Position>> const&);
+template unsigned int address_position_in_vector<Route>(Route*, vector<Route, allocator<Route>> const&);
+template unsigned int address_position_in_vector<Position>(Position*, vector<Position, allocator<Position>> const&);
 
 
 //delete duplicates from vector *v by removing entries in *v which are equal
@@ -585,7 +585,7 @@ template<class S> void read_list_from_stream(String name, S* input_stream, bool 
 
 }
 
-template void read_list_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, std::__1::vector<int, std::__1::allocator<int>>*);
+template void read_list_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, vector<int, allocator<int>>*);
 
 
 bool operator < (const Angle& x, const Angle& y) {
@@ -786,13 +786,13 @@ template<class T> void my_push_back(vector<T>* v, const T& x){
     
 }
 
-template void my_push_back<Body>(std::__1::vector<Body, std::__1::allocator<Body>>*, Body const&);
-template void my_push_back<Route>(std::__1::vector<Route, std::__1::allocator<Route>>*, Route const&);
-template void my_push_back<String>(std::__1::vector<String, std::__1::allocator<String>>*, String const&);
-template void my_push_back<Sight>(std::__1::vector<Sight, std::__1::allocator<Sight>>*, Sight const&);
-template void my_push_back<Position>(std::__1::vector<Position, std::__1::allocator<Position>>*, Position const&);
-template void my_push_back<PositionProjection>(std::__1::vector<PositionProjection, std::__1::allocator<PositionProjection>>*, PositionProjection const&);
-template void my_push_back<Angle>(std::__1::vector<Angle, std::__1::allocator<Angle>>*, Angle const&);
+template void my_push_back<Body>(vector<Body, allocator<Body>>*, Body const&);
+template void my_push_back<Route>(vector<Route, allocator<Route>>*, Route const&);
+template void my_push_back<String>(vector<String, allocator<String>>*, String const&);
+template void my_push_back<Sight>(vector<Sight, allocator<Sight>>*, Sight const&);
+template void my_push_back<Position>(vector<Position, allocator<Position>>*, Position const&);
+template void my_push_back<PositionProjection>(vector<PositionProjection, allocator<PositionProjection>>*, PositionProjection const&);
+template void my_push_back<Angle>(vector<Angle, allocator<Angle>>*, Angle const&);
 
 
 //copy the *content* (not the memory adresses) of source into dest. This methods calls the set() method of class T, which needs to be defined.
@@ -808,8 +808,8 @@ template<class T> void my_vector_memcpy(vector<T>* dest, const vector<T> source)
     
 }
 
-template void my_vector_memcpy<Body>(std::__1::vector<Body, std::__1::allocator<Body>>*, std::__1::vector<Body, std::__1::allocator<Body>>);
-template void my_vector_memcpy<String>(std::__1::vector<String, std::__1::allocator<String>>*, std::__1::vector<String, std::__1::allocator<String>>);
+template void my_vector_memcpy<Body>(vector<Body, allocator<Body>>*, vector<Body, allocator<Body>>);
+template void my_vector_memcpy<String>(vector<String, allocator<String>>*, vector<String, allocator<String>>);
 
 
 //compute the cross product between the three-dimensional vectors a and b, and write the result into c, which is cleared and re-allocated. It returs true if the size of both a and b is 3, and false otherwise. If false is returned, r is not touched.

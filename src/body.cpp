@@ -96,7 +96,7 @@ void Body::set(const Body& input){
 }
 
 
-template bool Body::read_from_stream<std::__1::basic_fstream<char, std::__1::char_traits<char>>>(String, std::__1::basic_fstream<char, std::__1::char_traits<char>>*, bool, String);
+template bool Body::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
 
 
 void Body::print(String name_in, String prefix, ostream& ostr) {

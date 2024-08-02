@@ -403,40 +403,35 @@ void Sight::print(String name, String prefix, ostream& ostr) {
 
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-
-    ostr << prefix.value << name.value << ":\n";
-
-    body->print(String("body"), new_prefix, ostr);
-    if (body->type->value != "star") {
-        limb.print(String("limb"), new_prefix, ostr);
+    
+    if ((name.value) != "") {
+        
+        ostr << prefix.value << name.value << ":\n";
+        
+        body->print(String("body"), new_prefix, ostr);
+        if (body->type->value != "star") {
+            limb.print(String("limb"), new_prefix, ostr);
+        }
+        H_s.print(String("sextant altitude"), new_prefix, ostr);
+        index_error.print(String("index error"), new_prefix, ostr);
+        artificial_horizon.print(String("artificial horizon"), new_prefix, ostr);
+        if (artificial_horizon == Answer('n', new_prefix)) {
+            height_of_eye->print(String("height of eye"), new_prefix, ostr);
+        }
+        master_clock_date_and_hour.print(String("master-clock date and hour of sight"), new_prefix, ostr);
+        use_stopwatch.print(String("use of stopwatch"), new_prefix, ostr);
+        if (use_stopwatch == Answer('y', new_prefix)) {
+            stopwatch.print(String("stopwatch"), new_prefix, ostr);
+        }
+        TAI_minus_UTC.print(String("TAI - UTC at time of master-clock synchronization with UTC"), new_prefix, ostr);
+        
+        label.print(String("label"), true, new_prefix, ostr);
+        
+        if (((related_route.value) != -1) && (&ostr == &cout)) {
+            ostr << new_prefix.value << "# of related route = " << (related_route.value) + 1 << "\n";
+        }
+        
     }
-    H_s.print(String("sextant altitude"), new_prefix, ostr);
-    index_error.print(String("index error"), new_prefix, ostr);
-    artificial_horizon.print(String("artificial horizon"), new_prefix, ostr);
-    if (artificial_horizon == Answer('n', new_prefix)) {
-        height_of_eye->print(String("height of eye"), new_prefix, ostr);
-    }
-    master_clock_date_and_hour.print(String("master-clock date and hour of sight"), new_prefix, ostr);
-    use_stopwatch.print(String("use of stopwatch"), new_prefix, ostr);
-    if (use_stopwatch == Answer('y', new_prefix)) {
-        stopwatch.print(String("stopwatch"), new_prefix, ostr);
-    }
-    TAI_minus_UTC.print(String("TAI - UTC at time of master-clock synchronization with UTC"), new_prefix, ostr);
-
-    label.print(String("label"), true, new_prefix, ostr);
-
-    if (((related_route.value) != -1) && (&ostr == &cout)) {
-        ostr << new_prefix.value << "# of related route = " << (related_route.value) + 1 << "\n";
-    }
-
-    /*
-     cout << RED << "items:\n";
-     for(unsigned int i=0; i<items.size(); i++){
-     cout << new_prefix.value << items[i].value << "\n";
-
-     }
-     cout << RESET << "\n";
-     */
 
 }
 

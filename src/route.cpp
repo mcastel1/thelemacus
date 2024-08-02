@@ -2029,43 +2029,47 @@ void Route::print(String name, String prefix, ostream& ostr) {
     //append \t to prefix and \t\t to new_new_prefix
     new_prefix = prefix.append(String("\t"));
     new_new_prefix = new_prefix.append(String("\t"));
-
-    ostr << prefix.value << name.value << ":\n";
-
-    type.print(String("type"), true, new_prefix, ostr);
-
-    if ((type == (Route_types[0])) || (type == (Route_types[1]))) {
-
-        reference_position->print(String("start position"), new_prefix, ostr);
-        Z.print(String("starting heading"), new_prefix, ostr);
-
-        length_format.print(String("length format"), false, new_prefix, ostr);
-        if (length_format == (LengthFormat_types[1])) {
-
-            length->print(String("length"), new_new_prefix, ostr);
-
-        }else {
-
-            time.print(String("time"), new_new_prefix, ostr);
-            speed->print(String("speed"), new_new_prefix, ostr);
-
+    
+    if ((name.value) != "") {
+        
+        ostr << prefix.value << name.value << ":\n";
+        
+        type.print(String("type"), true, new_prefix, ostr);
+        
+        if ((type == (Route_types[0])) || (type == (Route_types[1]))) {
+            
+            reference_position->print(String("start position"), new_prefix, ostr);
+            Z.print(String("starting heading"), new_prefix, ostr);
+            
+            length_format.print(String("length format"), false, new_prefix, ostr);
+            if (length_format == (LengthFormat_types[1])) {
+                
+                length->print(String("length"), new_new_prefix, ostr);
+                
+            }else {
+                
+                time.print(String("time"), new_new_prefix, ostr);
+                speed->print(String("speed"), new_new_prefix, ostr);
+                
+            }
+            
         }
-
-    }
-    else {
-
-        reference_position->print(String("ground position"), new_prefix, ostr);
-        omega.print(String("aperture angle"), new_prefix, ostr);
-
-    }
-
-    label.print(String("label"), true, new_prefix, ostr);
-
-
-    if ((related_sight.value) != -1) {
-
-        cout << new_prefix.value << "Related sight # = " << (related_sight.value) + 1 << "\n";
-
+        else {
+            
+            reference_position->print(String("ground position"), new_prefix, ostr);
+            omega.print(String("aperture angle"), new_prefix, ostr);
+            
+        }
+        
+        label.print(String("label"), true, new_prefix, ostr);
+        
+        
+        if ((related_sight.value) != -1) {
+            
+            cout << new_prefix.value << "Related sight # = " << (related_sight.value) + 1 << "\n";
+            
+        }
+        
     }
 
 }

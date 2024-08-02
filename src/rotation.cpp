@@ -180,27 +180,30 @@ void Rotation::print(String name, String prefix, ostream& ostr) {
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
 
-
-    ostr << prefix.value << name.value << "\n" << prefix.value << "Euler angles : \n";
-
-
-    a.print(String("a"), new_prefix, ostr);
-    b.print(String("b"), new_prefix, ostr);
-    c.print(String("c"), new_prefix, ostr);
-
-
-    ostr << prefix.value << "matrix : \n";
-
-    for (i = 0; i < 3; i++) {
-
-        for (ostr << new_prefix.value, j = 0; j < 3; j++) {
-
-            ostr << gsl_matrix_get(matrix, i, j) << "\t";
-
+    if ((name.value) != "") {
+        
+        ostr << prefix.value << name.value << "\n" << prefix.value << "Euler angles : \n";
+        
+        
+        a.print(String("a"), new_prefix, ostr);
+        b.print(String("b"), new_prefix, ostr);
+        c.print(String("c"), new_prefix, ostr);
+        
+        
+        ostr << prefix.value << "matrix : \n";
+        
+        for (i = 0; i < 3; i++) {
+            
+            for (ostr << new_prefix.value, j = 0; j < 3; j++) {
+                
+                ostr << gsl_matrix_get(matrix, i, j) << "\t";
+                
+            }
+            
+            ostr << "\n";
+            
         }
-
-        ostr << "\n";
-
+        
     }
 
 }

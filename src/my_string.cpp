@@ -251,16 +251,21 @@ void String::write_to_file(String name, FileRW& file, [[maybe_unused]] String pr
 }
 
 
-//Tries to print the string name to ostr. If print_if_empty the string is printed even if it is empty, while if print_if_empty = false the string is not printed if empty
+//attempt to print the string name to ostr. If print_if_empty the string is printed even if it is empty, while if print_if_empty = false the string is not printed if empty
 void String::print(String name, bool print_if_empty, String prefix, ostream& ostr) {
 
-    if (((*this) != String("")) || print_if_empty) {
-
-        ostr << prefix.value << name.value << " = " << value << "\n";
-
+    if (name != String("")) {
+        
+        if (((*this) != String("")) || print_if_empty) {
+            
+            ostr << prefix.value << name.value << " = " << value << "\n";
+            
+        }
+        
     }
 
 }
+
 
 //set the value of String *this, titled name, to input_string, by printing out everything
 //inline 
@@ -268,7 +273,7 @@ void String::set(String name, String input_string, [[maybe_unused]] String prefi
 
     set(input_string);
 
-    if (name != String("")) { print(name, true, prefix, cout); }
+    print(name, true, prefix, cout);
 
 }
 

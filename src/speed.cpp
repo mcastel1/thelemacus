@@ -38,44 +38,6 @@ Speed::Speed(double value_in, const SpeedUnit& unit_in) {
 }
 
 
-void Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) {
-
-    if ((name_in.value) != "") {
-
-        ostr << prefix.value << name_in.value << " = ";
-        
-        switch (position_in_vector(unit_in, SpeedUnit_types)) {
-                
-            case 0: {
-                //units are kt
-
-                ostr << value << " kt\n";
-                
-                break;
-                
-            }
-                
-            case 1: {
-                //units are km/h
-
-                ostr << value * nm_to_km << " km/h\n";
-                
-            }
-                
-            case 2: {
-                //units are m/s
-
-                ostr << value * nm_to_km * 1e3 / 3600.0 << " m/s\n";
-                
-            }
-              
-        }
-
-    }
-
-}
-
-
 //reads from file the content after 'name = ' and writes it into this. This function requires file to be correctly set and open
 template<class S> void Speed::read_from_stream(String name, S* input_stream, bool search_entire_stream, [[maybe_unused]] String prefix) {
 
@@ -102,8 +64,7 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
 
         } while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
-    }
-    else {
+    }else{
 
         line.clear();
         getline(*input_stream, line);
@@ -144,7 +105,7 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
-    print(name, SpeedUnit_types[0], prefix, cout);
+    print(name, prefix, cout);
 
 }
 
@@ -152,8 +113,12 @@ template void Speed::read_from_stream<std::__1::basic_fstream<char, std::__1::ch
 
 
 void Speed::print(String name, String prefix, ostream& ostr) {
-
-    ostr << prefix.value << name.value << " = " << value << " kt\n";
+    
+    if (name != String("")){
+        
+        ostr << prefix.value << name.value << " = " << value << " kt\n";
+    
+    }
 
 }
 
@@ -193,6 +158,6 @@ void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
 
     set(x);
     
-    if (name != String("")) { print(name, SpeedUnit_types[0], prefix, cout); }
+    print(name, prefix, cout); 
 
 }

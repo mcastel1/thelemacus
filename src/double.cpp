@@ -40,7 +40,7 @@ void Double::set(String name, double x, [[maybe_unused]] String prefix) {
 
     set(x);
 
-    if (name != String("")) { print(name, prefix, cout); }
+    print(name, prefix, cout);
 
 }
 
@@ -116,12 +116,39 @@ void Double::read_from_file_to(String name, String filename, String mode, [[mayb
 }
 
 
+//convert *this to string with numerical precision precision
+string Double::to_string(unsigned int precision){
+    
+    stringstream output;
+    
+    output.precision(precision);
+    
+    output << fixed << value;
+    
+    return(output.str().c_str());
+    
+}
+
 
 void Double::print(String name, String prefix, ostream& ostr) {
+    
+    unsigned int precision;
 
-    ostr << prefix.value << name.value << " = " << value << "\n";
+    //if I am printing to terminal, I print with display_precision. Otherwise, I print with (data_precision.value)
+    if (ostr.rdbuf() == cout.rdbuf()) {
+        precision = (display_precision.value);
+    }else{
+        precision = (data_precision.value);
+    }
+    
+    if ((name.value) != "") {
+        
+        ostr << prefix.value << name.value << " = " << to_string(precision) << endl;
+
+    }
 
 }
+
 
 Double Double::operator + (const Double& x) {
 

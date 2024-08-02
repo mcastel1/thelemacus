@@ -494,7 +494,7 @@ bool Data::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix)
     //I link the sight to the route, and the route to the sight
     //create a new route in the respective list
     route_list.resize(route_list.size() + 1);
-    (((*sight_in).related_route).value) = ((int)(route_list.size())) - 1;
+    (sight_in->related_route.value) = ((int)(route_list.size())) - 1;
     //push back sight_in into sight_list
     my_push_back(&sight_list, *sight_in);
     (((route_list[route_list.size() - 1]).related_sight).value) = ((int)(sight_list.size())) - 1;
@@ -505,7 +505,7 @@ bool Data::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix)
 
     //I link the sight to the route, and the route to the sight
     ((sight_list[sight_list.size() - 1]).related_route.value) = ((int)route_list.size()) - 1;
-    ((*sight_in).related_route.value) = ((int)route_list.size()) - 1;
+    (sight_in->related_route.value) = ((int)route_list.size()) - 1;
     (((route_list[route_list.size() - 1]).related_sight).value) = ((int)sight_list.size()) - 1;
 
 

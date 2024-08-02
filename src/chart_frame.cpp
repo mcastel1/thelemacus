@@ -1110,14 +1110,14 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
         if (((*lambda_min) < M_PI) && ((*lambda_max) > M_PI)) {
 
-            j_min = floor(rad_to_deg * ((*lambda_max).value));
-            j_max = 360 + ceil(rad_to_deg * ((*lambda_min).value));
+            j_min = floor(rad_to_deg * (lambda_max->value));
+            j_max = 360 + ceil(rad_to_deg * (lambda_min->value));
 
         }
         else {
 
-            j_min = floor(rad_to_deg * ((*lambda_max).value));
-            j_max = ceil(rad_to_deg * ((*lambda_min).value));
+            j_min = floor(rad_to_deg * (lambda_max->value));
+            j_max = ceil(rad_to_deg * (lambda_min->value));
 
         }
 

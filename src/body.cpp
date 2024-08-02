@@ -42,7 +42,7 @@ template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [
     //read first line with no information
     getline((*input_stream), line);
 
-    if (!(*input_stream).eof()) {
+    if (!(input_stream->eof())) {
         //*input_stream has not reached the end of file
 
 

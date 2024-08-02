@@ -8,6 +8,9 @@
 #include "generic.h"
 
 
+#ifdef _WIN32
+#include "file_r.h"
+#endif
 
 
 //given a wxListCtrl* list_control, if * list_control has at least one item, it finds on what element of *list_control the mouse is currently on and writes the id of this element in i. Otherwise, it writes wxNOT_FOUND in *i

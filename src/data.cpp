@@ -829,10 +829,21 @@ void Data::print_recent_items(const vector<int>& recent_items, String name, Stri
     stringstream temp;
 
 
-    for (temp.str(""), i = 0; i < (recent_items.size()) - 1; i++) {
-        temp << recent_items[i] << " ";
+    if(recent_items.size() != 0){
+        //recent_items is non-empty -> write into temp its content
+        
+        for (temp.str(""), i = 0; i < (recent_items.size()) - 1; i++) {
+            temp << recent_items[i] << " ";
+        }
+        temp << recent_items.back();
+        
+    }else{
+        //recent_items is empty -> write into temp the 0-th element only
+        
+        temp << 0;
+        
     }
-    temp << recent_items.back();
+    
     String(temp.str().c_str()).print(String("Recent ").append(name), false, prefix, ostr);
 
 }

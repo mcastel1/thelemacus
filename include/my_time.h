@@ -27,7 +27,7 @@ public:
     
     void set(const Time&);
     void print(String, String, ostream&);
-    void set_current(void);
+    void set_current_utc(void);
     template<class S> bool read_from_stream(String, S*, bool, String);
     
     void to_MJD(void);

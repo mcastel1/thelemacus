@@ -145,13 +145,13 @@ void Date::print(String name, String prefix, ostream& ostr) {
 
 
 //this function sets (*this) to the current UTC date
-void Date::set_current(void) {
+void Date::set_current_utc(void) {
 
-    (wxGetApp().local_time) = (boost::posix_time::second_clock::local_time());
+    (wxGetApp().utc_time) = (boost::posix_time::second_clock::universal_time());
 
-    Y = (wxGetApp().local_time).date().year();
-    M = (wxGetApp().local_time).date().month().as_number();
-    D = (wxGetApp().local_time).date().day();
+    Y = (wxGetApp().utc_time).date().year();
+    M = (wxGetApp().utc_time).date().month().as_number();
+    D = (wxGetApp().utc_time).date().day();
 
 }
 

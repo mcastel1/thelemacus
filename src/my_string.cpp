@@ -408,7 +408,7 @@ void String::set_to_current_time(void) {
 
     Time now;
 
-    now.set_current();
+    now.set_current_utc();
     //I write in the non-GUI object *this
 
     set(String("String set to current time"), String(now.to_string(data_precision.value, true)), String(""));

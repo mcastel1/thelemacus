@@ -29,7 +29,7 @@ public:
     template<class S> bool read_from_stream(String, S*, bool, String);
     string to_string(void);
     void check_leap_year(void);
-    void set_current(void);
+    void set_current_utc(void);
     
 };
 

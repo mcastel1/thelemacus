@@ -250,7 +250,7 @@ template<class T> void ChartFrame::OnPressCtrlW(T& event) {
 
     Destroy();  // you may also do:  event.Skip();
 
-    (parent->chart_frames).erase(i);
+    parent->chart_frames.erase(i);
     for (j = 0; j < (parent->chart_frames).size(); j++) {
 
         s.str("");

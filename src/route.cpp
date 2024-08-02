@@ -965,7 +965,7 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
 
     if (check) {
 
-        (*p).print(String("Closest point"), prefix, cout);
+        p->print(String("Closest point"), prefix, cout);
 
     }
     else {
@@ -2090,7 +2090,7 @@ double Route::lambda_minus_pi(double t, void* route) {
     r->length->set(Re * sin((r->omega.value)) * t, LengthUnit_types[0]);
     r->compute_end(new_prefix);
 
-    return(((*r).end->lambda.value) - M_PI);
+    return((r->end->lambda.value) - M_PI);
 
 }
 
@@ -2137,8 +2137,8 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
             //in this case, reference_position.lambda vs. t has no minimum nor maximum: lambda_min/max are simly given by
             
             //set lambda_min/max in this order, meaning that *this spans all longitudes, from 0 to 2 pi
-            (*lambda_min).set(0.0);
-            (*lambda_max).set(0.0);
+            lambda_min->set(0.0);
+            lambda_max->set(0.0);
             
         }
         
@@ -2152,7 +2152,7 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
         }
         
         //eventually swap lambda_min/max in such a way that lambda_min lies on the left and lambda_max lies on the right as seen from the observer's position looking at the earth's center
-        if ((((*lambda_min).value) < M_PI) && (((*lambda_max).value) > M_PI)) {
+        if (((lambda_min->value) < M_PI) && ((lambda_max->value) > M_PI)) {
             
             if (!(((reference_position->lambda) < (*lambda_min)) || ((reference_position->lambda) > (*lambda_max)))) {
                 

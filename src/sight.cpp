@@ -441,7 +441,7 @@ double Sight::rhs_DH_parallax_and_limb(double h, void* sight) {
 
     Sight* a = (Sight*)sight;
 
-    return(-(((*a).H_i).value) + h + asin((((*a).body)->radius->value) / sqrt(gsl_pow_2((((*a).r)->value)) + gsl_pow_2((((*a).atmosphere)->earth_radius->value)) - 2.0 * (((*a).r)->value) * (((*a).atmosphere)->earth_radius->value) * sin(h))) - atan(((((*a).atmosphere)->earth_radius->value) * cos(h)) / ((((*a).r)->value) - (((*a).atmosphere)->earth_radius->value) * sin(h))));
+    return(-((a->H_i).value) + h + asin(((a->body)->radius->value) / sqrt(gsl_pow_2(((a->r)->value)) + gsl_pow_2(((a->atmosphere)->earth_radius->value)) - 2.0 * ((a->r)->value) * ((a->atmosphere)->earth_radius->value) * sin(h))) - atan((((a->atmosphere)->earth_radius->value) * cos(h)) / (((a->r)->value) - ((a->atmosphere)->earth_radius->value) * sin(h))));
 
 }
 

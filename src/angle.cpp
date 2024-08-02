@@ -265,7 +265,7 @@ void Angle::normalize_pm_pi(void) {
 
 }
 
-//returns the angular span between *this and x, where it must be (*this).value < x.value, by taking into account the periodicity of *this and x with respect to 2 pi
+//returns the angular span between *this and x, where it must be (this->value) < x.value, by taking into account the periodicity of *this and x with respect to 2 pi
 Angle Angle::span(Angle x) {
 
     Angle delta;
@@ -334,7 +334,7 @@ bool Angle::is_zero_epsilon_double(void){
 }
 
 
-//convert the angle contained in (*this).value to degrees and minutes format, storted in deg and min
+//convert the angle contained in (this->value) to degrees and minutes format, storted in deg and min
 void Angle::to_deg_min(unsigned int* deg, double* min) {
 
     normalize();
@@ -344,7 +344,7 @@ void Angle::to_deg_min(unsigned int* deg, double* min) {
 }
 
 
-//convert the angle contained in (*this).value to degrees and minutes format, storted in deg and min,  round up the minutes part with precision `precision`, and re-format deg and min in order to avoid results of the form *deg = 23, *min = 60.0
+//convert the angle contained in (this->value) to degrees and minutes format, storted in deg and min,  round up the minutes part with precision `precision`, and re-format deg and min in order to avoid results of the form *deg = 23, *min = 60.0
 void Angle::to_deg_min(unsigned int* deg, double* min, unsigned int precision) {
 
     to_deg_min(deg, min);
@@ -357,7 +357,7 @@ void Angle::to_deg_min(unsigned int* deg, double* min, unsigned int precision) {
 }
 
 
-//convert the angle stored in degrees and minutes format in deg an min in to (*this).vaule
+//convert the angle stored in degrees and minutes format in deg an min in to (this->vaule)
 void Angle::from_sign_deg_min(char sign, unsigned int deg, double min) {
 
     value = deg_to_rad * (((double)deg) + min / 60.0);

@@ -117,7 +117,7 @@
  ********** THINGS TO FIX ***********
     - replace Re with a constant Length() expressed in [nm]
     - see whether lass T> void CheckSpeedUnit<P>::operator()(T& and same for CheckLengthUnit can be replaced by a universal Check method in the parent class MultipleItemField
-    - check if you can remote index_error->set(); in SightFrame construtor
+    - check if you can remove index_error->set(); in SightFrame construtor
     - search for all occurrences of QuestionFrame and ShowQuestion and put the right functor in the third argument and the right value of bind_esc_to_button_b 
     - replace cos(phi.value) with cos(phi)
     - in Speed::print(String name_in, String unit_in, String prefix, ostream& ostr) add a switch case to tell apart the different cases for the units of measure

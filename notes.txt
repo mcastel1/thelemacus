@@ -93,7 +93,6 @@
      - implement the read-from-file structure used for Data also for the other composite objects such as Body etc
      - check whether you can speed up Draw3D by tabulating stuff it i < 90  etc
      - center name of file in top bar of ListFrame
-     - propose to donate to the user
      - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
      - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
      - change     highlight_color = color_selected_item and     highlight_font = default_font;

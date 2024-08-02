@@ -788,10 +788,10 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 phi2 *= deg_to_rad;
                 phi3 *= deg_to_rad;
 
-                d_tab[l - l_min] = asin(cos(phi2) * sin((body->d->value)) - cos((body->d->value)) * cos(phi1) * sin((body->RA->value)) * sin(phi2) + cos((body->RA->value)) * cos((body->d->value)) * sin(phi1) * sin(phi2));
+                d_tab[l - l_min] = asin(cos(phi2) * sin((*(body->d))) - cos((*(body->d))) * cos(phi1) * sin((body->RA->value)) * sin(phi2) + cos((body->RA->value)) * cos((*(body->d))) * sin(phi1) * sin(phi2));
 
-                GHA_tab[l - l_min] = atan((-cos(phi3) * sin((body->d->value)) * sin(phi2) - cos((body->RA->value)) * cos((body->d->value)) * (-cos(phi2) * cos(phi3) * sin(phi1) - cos(phi1) * sin(phi3)) - cos((body->d->value)) * sin((body->RA->value)) * (cos(phi1) * cos(phi2) * cos(phi3) - sin(phi1) * sin(phi3))) / (sin((body->d->value)) * sin(phi2) * sin(phi3) + cos((body->d->value)) * sin((body->RA->value)) * (cos(phi3) * sin(phi1) + cos(phi1) * cos(phi2) * sin(phi3)) + cos((body->RA->value)) * cos((body->d->value)) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))));
-                if ((sin((body->d->value)) * sin(phi2) * sin(phi3) + cos((body->d->value)) * sin((body->RA->value)) * (cos(phi3) * sin(phi1) + cos(phi1) * cos(phi2) * sin(phi3)) + cos((body->RA->value)) * cos((body->d->value)) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))) < 0.0) {
+                GHA_tab[l - l_min] = atan((-cos(phi3) * sin((*(body->d))) * sin(phi2) - cos((body->RA->value)) * cos((*(body->d))) * (-cos(phi2) * cos(phi3) * sin(phi1) - cos(phi1) * sin(phi3)) - cos((*(body->d))) * sin((body->RA->value)) * (cos(phi1) * cos(phi2) * cos(phi3) - sin(phi1) * sin(phi3))) / (sin((*(body->d))) * sin(phi2) * sin(phi3) + cos((*(body->d))) * sin((body->RA->value)) * (cos(phi3) * sin(phi1) + cos(phi1) * cos(phi2) * sin(phi3)) + cos((body->RA->value)) * cos((*(body->d))) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))));
+                if ((sin((*(body->d))) * sin(phi2) * sin(phi3) + cos((*(body->d))) * sin((body->RA->value)) * (cos(phi3) * sin(phi1) + cos(phi1) * cos(phi2) * sin(phi3)) + cos((body->RA->value)) * cos((*(body->d))) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))) < 0.0) {
                     GHA_tab[l - l_min] += M_PI;
                 }
                 GHA_tab[l - l_min] = GHA_tab[l - l_min] - 2.0 * M_PI * floor(GHA_tab[l - l_min] / (2.0 * M_PI));

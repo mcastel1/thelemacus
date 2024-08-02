@@ -133,10 +133,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //master-clock date
     //sets  sight.master_clock_date_and_hour.date and sight.time.date to the current UTC date if this constructor has been called with sight_in = NULL
     if (sight_in == NULL) {
-        (sight->master_clock_date_and_hour).date.set_current();
-        (sight->master_clock_date_and_hour).chrono.set_current();
-        (sight->time).date.set_current();
-        (sight->time).chrono.set_current();
+        sight->master_clock_date_and_hour.date.set_current_utc();
+        sight->master_clock_date_and_hour.chrono.set_current_utc();
+        sight->time.date.set_current_utc();
+        sight->time.chrono.set_current_utc();
     }
     StaticText* text_date = new StaticText(panel, wxT("Master-clock UTC date and hour of sight"), wxDefaultPosition, wxDefaultSize, 0);
     master_clock_date = new DateField<SightFrame>(panel, &(sight->master_clock_date_and_hour.date));

@@ -430,26 +430,6 @@ bool MyApp::OnInit() {
     standard_thickness.set(String("standard thickness"), max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1), String(""));
     large_thickness.set(String("large thickness"), max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1), String(""));
     
-    
-    //read the time, and set the background color to either the day or night background color, which are read from file
-    //    time_zone.read_from_file(String("time zone"), (wxGetApp().path_file_init), String(""));
-    //    dawn.read_from_file(String("dawn"), (wxGetApp().path_file_init), String(""));
-    //    dusk.read_from_file(String("dusk"), (wxGetApp().path_file_init), String(""));
-    //    current_time.set_current(time_zone, String(""));
-    
-    
-    //    if((current_time < dawn) || (current_time > dusk)){
-    //        //we are at night -> set background color to night mode
-    //
-    //        foreground_color.read_from_file(String("night foreground color"), (wxGetApp().path_file_init), String(""));
-    //
-    //    }else{
-    //        //we are at day -> set background color ot day mode
-    //
-    //        foreground_color.read_from_file(String("day foreground color"), (wxGetApp().path_file_init), String(""));
-    //
-    //    }
-    
     timer->Bind(wxEVT_TIMER, &MyApp::OnTimer, this);
     
     

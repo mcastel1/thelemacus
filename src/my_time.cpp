@@ -298,9 +298,9 @@ void Time::operator -= (const Chrono& chrono_in) {
 
 
 //this function sets (*this) to the current UTC date and time
-void Time::set_current(void) {
+void Time::set_current_utc(void) {
 
-    date.set_current();
-    chrono.set_current();
+    date.set_current_utc();
+    chrono.set_current_utc();
 
 }

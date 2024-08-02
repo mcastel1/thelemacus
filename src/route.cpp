@@ -850,23 +850,7 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
 
     }
 
-    //update label column
-    //    if(label != String("")){
-    //        //the label in *this is not empty -> I write it int listcontrol
-
     listcontrol->SetItem(i, j++, wxString(label.value));
-
-    //    }else{
-    //        //the label in *this is empty -> I write as label in listcontrol the current date and time
-    //
-    //        Time now;
-    //
-    //        now.set_current(String(""));
-    //
-    //        label.set(String("Label replacing empty label"), now.to_string(display_precision.value), String(""));
-    //        listcontrol->SetItem(i, j++, wxString(now.to_string(display_precision.value)));
-    //
-    //    }
 
 
     if ((related_sight.value) == -1) {

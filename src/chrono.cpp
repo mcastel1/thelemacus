@@ -207,13 +207,13 @@ double Chrono::get(void) {
 
 
 //this function sets (*this) to the current UTC time +- time_zone
-void Chrono::set_current(void) {
+void Chrono::set_current_utc(void) {
 
-    (wxGetApp().local_time) = (boost::posix_time::second_clock::local_time());
+    (wxGetApp().utc_time) = (boost::posix_time::second_clock::universal_time());
 
-    h = ((unsigned int)((wxGetApp().local_time).time_of_day().hours()));
-    m = ((unsigned int)((wxGetApp().local_time).time_of_day().minutes()));
-    s = (wxGetApp().local_time).time_of_day().seconds();
+    h = ((unsigned int)((wxGetApp().utc_time).time_of_day().hours()));
+    m = ((unsigned int)((wxGetApp().utc_time).time_of_day().minutes()));
+    s = (wxGetApp().utc_time).time_of_day().seconds();
 
 }
 

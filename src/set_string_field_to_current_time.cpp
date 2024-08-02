@@ -22,7 +22,7 @@ template<class P> template <class T> void SetStringFieldToCurrentTime<P>::operat
 
         Time now;
 
-        now.set_current();
+        now.set_current_utc();
         //I write in the non-GUI object (p->string)
         (*(p->string)) = String(now.to_string(data_precision.value, true));
 

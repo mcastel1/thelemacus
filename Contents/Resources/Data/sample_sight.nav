@@ -65,9 +65,9 @@ Data:
 				label = 2024-01-21 17:04:03 UTC+2
 			starting heading = 19° 3.000000000000084'
 			length format = time and speed
-				time = 06:59:45.5436
-				speed = 500 kt
-			label = jlkj
+				time = 06:59:45.54
+				speed = 510 kt
+			label = 2024-08-02 12:54:35 UTC+2
 		Route #3:
 			type = orthodrome
 			start position:
@@ -95,7 +95,7 @@ Data:
 Recent bodies = 3 10 12
 Recent projections = 1 0
 Recent length formats = 1 0
-Recent route types = 1 0 2
+Recent route types = 0 1 2
 Recent route for transport types = 1 0
 Recent length units = 0 1
 Recent speed units = 0 1

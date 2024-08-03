@@ -95,7 +95,7 @@ bool FileR::open([[maybe_unused]] String prefix) {
     LPCWSTR resource_id;
     wstring temp;
 
-    temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
+    temp = wstring((name_without_folder_nor_extension->value).begin(), (name_without_folder_nor_extension->value).end());
 
     //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
     resource_id = (temp.c_str());

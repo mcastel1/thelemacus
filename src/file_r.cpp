@@ -120,7 +120,7 @@ bool FileR::open([[maybe_unused]] String prefix) {
     else {
         //the resource has not been found
 
-        cout << prefix.value << RED << "Error opening resource " << (name_without_folder_nor_extension.value) << "!\n" << RESET;
+        cout << prefix.value << RED << "Error opening resource " << (name_without_folder_nor_extension->value) << "!\n" << RESET;
 
         return false;
 

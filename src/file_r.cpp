@@ -217,7 +217,7 @@ void FileR::count_lines(String prefix) {
 
 #ifdef  _WIN32
     //I am on WIN32 operating system -> FileR is a resource -> I set the resource id of temp equal to that of *this
-    temp.set_name(name_without_folder_nor_extension);
+    temp.set_name((*name_without_folder_nor_extension));
 #endif
 
     temp.open(prefix);

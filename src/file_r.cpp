@@ -9,6 +9,10 @@
 #include "constants.h"
 
 
+#ifdef _WIN32
+#include <sstream>      // std::istringstream
+#endif
+
 FileR::FileR() {
 
 #ifdef __APPLE__

@@ -1,11 +1,11 @@
 //
-//  bodyfield.cpp
+//  body_name_field.cpp
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#include "body_field.h"
+#include "body_name_field.h"
 #include "body.h"
 #include "check_body.h"
 #include "multiple_item_field.h"

@@ -1,12 +1,12 @@
 //
-//  bodyfield.h
+//  body_name_field.h
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#ifndef body_field_h
-#define body_field_h
+#ifndef body_name_field_h
+#define body_name_field_h
 
 #include <iostream>
 

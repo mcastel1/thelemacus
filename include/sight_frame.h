@@ -11,7 +11,7 @@
 #include <iostream>
 
 #include "angle_field.h"
-#include "body_field.h"
+#include "body_name_field.h"
 #include "check_field.h"
 #include "limb_field.h"
 #include "list_frame.h"

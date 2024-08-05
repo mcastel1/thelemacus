@@ -1,12 +1,12 @@
 //
-//  check_body.h
+//  check_body_name.h
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#ifndef check_body_h
-#define check_body_h
+#ifndef check_body_name_h
+#define check_body_name_h
 
 #include <iostream>
 

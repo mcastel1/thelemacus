@@ -8,7 +8,7 @@
 #include "body_name_field.h"
 
 #include "body.h"
-#include "check_body.h"
+#include "check_body_name.h"
 #include "multiple_item_field.h"
 #include "my_app.h"
 #include "sight_frame.h"

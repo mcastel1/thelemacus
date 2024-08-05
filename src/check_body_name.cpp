@@ -1,11 +1,11 @@
 //
-//  check_body.cpp
+//  check_body_name.cpp
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#include "check_body.h"
+#include "check_body_name.h"
 #include "sight_frame.h"
 #include "my_app.h"
 

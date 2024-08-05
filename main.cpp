@@ -27,7 +27,7 @@
 #include "check_angle.h"
 #include "check_arc_degree.h"
 #include "check_arc_minute.h"
-#include "check_body.h"
+#include "check_body_name.h"
 #include "check_limb.h"
 #include "check_sign.h"
 #include "chrono.h"

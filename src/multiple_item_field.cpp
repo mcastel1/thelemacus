@@ -65,7 +65,7 @@ template class MultipleItemField<ChartFrame, Projection, void>;
 template class MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>;
 template class MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>;
 template class MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>;
-template class MultipleItemField<SightFrame, Body, CheckBodyName<SightFrame>>;
+template class MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame>>;
 template class MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFrame>>;
 template class MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>;
 template class MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>;
@@ -119,7 +119,7 @@ template<class P, class NON_GUI, class CHECK> template<class T> void MultipleIte
 
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::InsertIn<wxBoxSizer>(wxBoxSizer*);
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
-template void MultipleItemField<SightFrame, Body, CheckBodyName<SightFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame> >::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
 template<class P, class NON_GUI, class CHECK> template<class T> void MultipleItemField<P, NON_GUI, CHECK>::InsertIn(T* host, wxSizerFlags& flag) {

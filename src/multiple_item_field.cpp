@@ -327,6 +327,9 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 
 }
 
+template void MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame> >::Fill();
+
+
 //return true(false) is *this is ok (not ok), i.e., if this->ok = true(false)
 template<class P, class NON_GUI, class CHECK> bool MultipleItemField<P, NON_GUI, CHECK>::is_ok(void) {
 

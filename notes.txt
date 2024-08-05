@@ -75,6 +75,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+     - add human error in sight frame to account for a systematic human error in estimating the moment when the body touches the horizon
      - add the possibility to add a poisition witch which to compare the distance when entering a sight
      - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
      - code method DrawPanel::ProjectionToGeo_3D

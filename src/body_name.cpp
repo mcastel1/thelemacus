@@ -17,7 +17,7 @@ BodyName::BodyName(const String& input) : String(input.value) {}
 //return true if *this is one element in BodyName_types (i.e. *this is a valid Body name) and false otherwise)
 bool BodyName::check(void){
     
-    return(position_in_list(BodyName_types) != (BodyName_types.size())) ;
+//    return(position_in_list(BodyName_types) != (BodyName_types.size())) ;
     
 }
 

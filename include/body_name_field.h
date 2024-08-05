@@ -17,11 +17,11 @@
 
 using namespace std;
 
-template<class P> class CheckBody;
+template<class P> class CheckBodyName;
 
 
 //P is the type of the frame which hosts *this
-template<class P> class BodyNameField : public MultipleItemField<P, Body, CheckBody<P>>{
+template<class P> class BodyNameField : public MultipleItemField<P, Body, CheckBodyName<P>>{
     
 public:
     

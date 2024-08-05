@@ -18,13 +18,13 @@ template<class P> class BodyNameField;
 
 
 //this checks if an element of the BodyNameField class is valid
-template<class P> class CheckBody{
+template<class P> class CheckBodyName{
     
 public:
     
     BodyNameField<P>* p;
     
-    CheckBody(BodyNameField<P>*);
+    CheckBodyName(BodyNameField<P>*);
     template<class T> void operator()(T&);
     
     

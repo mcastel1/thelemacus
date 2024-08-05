@@ -24,10 +24,8 @@ template<class P> class CheckBody;
 template<class P> class BodyField : public MultipleItemField<P, Body, CheckBody<P>>{
     
 public:
-
-    Catalog* catalog;
     
-    BodyField(wxPanel*, Body*, Catalog*, vector<int>*);
+    BodyField(wxPanel*, Body*, vector<int>*);
     void set(void);
     template<class T> void get(T&);
     template<class E> void OnEdit(E&);

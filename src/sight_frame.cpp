@@ -85,7 +85,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
 
     StaticText* text_combo_body = new StaticText(panel, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0);
-    body = new BodyField<SightFrame>(panel, (sight->body), wxGetApp().catalog, &(wxGetApp().list_frame->data->recent_bodies));
+    body = new BodyField<SightFrame>(panel, (sight->body), &(wxGetApp().list_frame->data->recent_bodies));
 
     StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0);
     limb = new LimbField<SightFrame>(panel, &(sight->limb));
@@ -425,8 +425,8 @@ template<class E> void SightFrame::update_recent_items(E& event) {
     bool check;
 
     //I check whether the name in the GUI field body matches one of the body names in catalog, and store its id in i
-    for (check = false, i = 0; (i < (body->catalog->list).size()) && (!check); i++) {
-        if (String((body->name->GetValue().ToStdString())) == (*(((body->catalog->list)[i]).name))) {
+    for (check = false, i = 0; (i < (wxGetApp().catalog->list).size()) && (!check); i++) {
+        if (String((body->name->GetValue().ToStdString())) == (*(((wxGetApp().catalog->list)[i]).name))) {
             check = true;
         }
     }

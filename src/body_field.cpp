@@ -14,10 +14,7 @@
 
 
 //constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
-template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, Catalog* c, vector<int>* recent_items_in) : MultipleItemField<P, Body, CheckBody<P> >(panel_of_parent, p, c->get_names(), recent_items_in){
-
-    catalog = c;
-
+template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, vector<int>* recent_items_in) : MultipleItemField<P, Body, CheckBody<P> >(panel_of_parent, p, wxGetApp().catalog->get_names(), recent_items_in){
  
     MultipleItemField<P, Body, CheckBody<P> >::check = new CheckBody<P>(this);
 
@@ -53,15 +50,15 @@ template<class P> template<class T> void BodyField<P>::get(T& event) {
         //If the GUI field's content is ok...
 
         //I find the position of the content of the GUI field in the list of  the body names in catalog
-        for (success = false, i = 0; (i < (catalog->list).size()) && (!success); i++) {
-            if (String(MultipleItemField<P, Body, CheckBody<P> >::name->GetValue().ToStdString()) == (*(((catalog->list)[i]).name))) {
+        for (success = false, i = 0; (i < (wxGetApp().catalog->list.size())) && (!success); i++) {
+            if (String(MultipleItemField<P, Body, CheckBody<P> >::name->GetValue().ToStdString()) == (*(((wxGetApp().catalog->list)[i]).name))) {
                 success = true;
             }
         }
         i--;
 
         //I set the value of the non-GUI object body to the value obtained from the GUI object.
-        (*(MultipleItemField<P, Body, CheckBody<P> >::object)) = (catalog->list)[i];
+        (*(MultipleItemField<P, Body, CheckBody<P> >::object)) = (wxGetApp().catalog->list)[i];
 
     }
 

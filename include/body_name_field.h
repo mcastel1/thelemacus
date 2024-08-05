@@ -11,7 +11,7 @@
 #include <iostream>
 
 #include <vector>
-#include "body.h"
+#include "body_name.h"
 #include "check_body_name.h"
 #include "multiple_item_field.h"
 
@@ -21,11 +21,11 @@ template<class P> class CheckBodyName;
 
 
 //P is the type of the frame which hosts *this
-template<class P> class BodyNameField : public MultipleItemField<P, Body, CheckBodyName<P>>{
+template<class P> class BodyNameField : public MultipleItemField<P, BodyName, CheckBodyName<P>>{
     
 public:
     
-    BodyNameField(wxPanel*, Body*, vector<int>*);
+    BodyNameField(wxPanel*, BodyName*, vector<int>*);
     void set(void);
     template<class T> void get(T&);
     template<class E> void OnEdit(E&);

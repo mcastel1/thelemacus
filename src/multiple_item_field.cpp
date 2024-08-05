@@ -339,7 +339,7 @@ template<class P, class NON_GUI, class CHECK> bool MultipleItemField<P, NON_GUI,
 
 template bool MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::is_ok();
 template bool MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::is_ok();
-template bool MultipleItemField<SightFrame, Body, CheckBodyName<SightFrame>>::is_ok();
+template bool MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame> >::is_ok();
 
 
 //this function enables/disable the LengthFormatField

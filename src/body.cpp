@@ -12,7 +12,7 @@
 
 Body::Body(void){
     
-    name = new String;
+    name = new BodyName;
     type = new String;
     radius = new Length;
     RA = new Angle;
@@ -58,7 +58,8 @@ template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [
         line.clear();
         getline(*input_stream, line);
         pos = line.find(" = ");
-        (*name) = line.substr(pos + 3, line.size() - (pos + 3));
+        
+        name->set(line.substr(pos + 3, line.size() - (pos + 3)));
         cout << new_prefix.value << "Name = " << name->value << "\n";
 
 

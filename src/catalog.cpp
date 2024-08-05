@@ -97,15 +97,13 @@ unsigned int Catalog::position_in_list(const BodyName& x){
 
 
 //return a vector containing the names of the Bodies in *this
-vector<String> Catalog::get_names(void){
+vector<String> Catalog::get_body_names(void){
     
     unsigned int i;
     vector<String> output;
     
     for(i=0, output.clear(); i<list.size(); i++){
-        //        output.push_back((*((list[i]).name)));
-        my_push_back(&output, (*((list[i]).name)));
-        
+        my_push_back(&output, String(((list[i]).name->value)));        
     }
     
     return output;

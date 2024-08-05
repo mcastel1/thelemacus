@@ -1,24 +1,24 @@
 //
-//  check_body.cpp
+//  check_body_name.cpp
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#include "check_body.h"
+#include "check_body_name.h"
 #include "sight_frame.h"
 #include "my_app.h"
 
-template<class P> CheckBody<P>::CheckBody(BodyField<P>* p_in) {
+template<class P> CheckBodyName<P>::CheckBodyName(BodyNameField<P>* p_in) {
 
     p = p_in;
 
 }
 
-template class CheckBody<SightFrame>;
+template class CheckBodyName<SightFrame>;
 
 
-template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
+template<class P> template<class T>void CheckBodyName<P>::operator()(T& event) {
 
     SightFrame* f = (p->parent);
 
@@ -87,5 +87,5 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 
 }
 
-template void CheckBody<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
-template void CheckBody<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckBodyName<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckBodyName<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

@@ -15,7 +15,7 @@
 
 
 //constructor of a BodyNameField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
-template<class P> BodyNameField<P>::BodyNameField(wxPanel* panel_of_parent, BodyName* p, vector<int>* recent_items_in) : MultipleItemField<P, BodyName, CheckBodyName<P> >(panel_of_parent, p, wxGetApp().catalog->get_names(), recent_items_in){
+template<class P> BodyNameField<P>::BodyNameField(wxPanel* panel_of_parent, BodyName* p, vector<int>* recent_items_in) : MultipleItemField<P, BodyName, CheckBodyName<P> >(panel_of_parent, p, wxGetApp().catalog->get_body_names(), recent_items_in){
  
     MultipleItemField<P, BodyName, CheckBodyName<P> >::check = new CheckBodyName<P>(this);
 

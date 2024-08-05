@@ -12,7 +12,7 @@
 
 Body::Body(void){
     
-    name = new String;
+    name = new BodyName;
     type = new String;
     radius = new Length;
     RA = new Angle;

@@ -80,6 +80,22 @@ template<class S> void Catalog::read_from_stream([[maybe_unused]] String name, S
 template void Catalog::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
 
 
+//return the position in this->list of BodyName x. If x is not found in this->list, it returns this->list.size()
+unsigned int Catalog::position_in_list(const BodyName& x){
+    
+    unsigned int i;
+    
+    for(i=0; i<list.size(); i++){
+        if((x.value) == ((list[i]).name->value)){
+            break;
+        }
+    }
+    
+    return i;
+    
+}
+
+
 //return a vector containing the names of the Bodies in *this
 vector<String> Catalog::get_names(void){
     

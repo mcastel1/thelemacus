@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include "body.h"
+#include "body_name.h"
 
 using namespace std;
 
@@ -33,6 +34,7 @@ public:
     void print(String, ostream&);
     void read_from_file_to(String, String, String, String);
     template<class S> void read_from_stream(String, S*, bool, String);
+    unsigned int position_in_list(const BodyName&);
     
 };
 

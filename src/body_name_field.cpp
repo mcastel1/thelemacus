@@ -30,7 +30,7 @@ template<class P> BodyNameField<P>::BodyNameField(wxPanel* panel_of_parent, Body
 template class BodyNameField<SightFrame>;
 
 
-//sets the value in the GUI object name equal to the value in the non-GUI Body object body
+//sets the value in the GUI object name equal to the value in the non-GUI Body object body_name
 template<class P> void BodyNameField<P>::set(void) {
 
     MultipleItemField<P, BodyName, CheckBodyName<P> >::name->SetValue(MultipleItemField<P, BodyName, CheckBodyName<P> >::object->name->value);

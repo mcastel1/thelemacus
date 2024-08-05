@@ -59,7 +59,7 @@ template<class P> template<class T> void BodyNameField<P>::get(T& event) {
         i--;
 
         //I set the value of the non-GUI object body to the value obtained from the GUI object.
-        (*(MultipleItemField<P, BodyName, CheckBodyName<P> >::object)) = (wxGetApp().catalog->list)[i];
+        (*(MultipleItemField<P, BodyName, CheckBodyName<P> >::object)) = (*(((wxGetApp().catalog->list)[i]).name));
 
     }
 

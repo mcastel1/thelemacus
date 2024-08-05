@@ -7,6 +7,7 @@
 
 #include "sight_frame.h"
 
+#include "body_name.h"
 #include "check_check.h"
 #include "check_chrono.h"
 #include "check_date.h"
@@ -85,7 +86,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
 
     StaticText* text_combo_body = new StaticText(panel, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0);
-    body = new BodyNameField<SightFrame>(panel, (sight->body), &(wxGetApp().list_frame->data->recent_bodies));
+    body = new BodyNameField<SightFrame>(panel, (sight->body->name), &(wxGetApp().list_frame->data->recent_bodies));
 
     StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0);
     limb = new LimbField<SightFrame>(panel, &(sight->limb));

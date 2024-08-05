@@ -65,7 +65,7 @@ template class MultipleItemField<ChartFrame, Projection, void>;
 template class MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>;
 template class MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>;
 template class MultipleItemField<RouteFrame, SpeedUnit, CheckLengthUnit<RouteFrame>>;
-template class MultipleItemField<SightFrame, Body, CheckBody<SightFrame>>;
+template class MultipleItemField<SightFrame, Body, CheckBodyName<SightFrame>>;
 template class MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFrame>>;
 template class MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>;
 template class MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>;
@@ -92,7 +92,7 @@ template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFra
 template void MultipleItemField<RouteFrame, LengthUnit, CheckLengthUnit<RouteFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*>(wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*);
 template void MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (LengthField<SightFrame>::*)(wxKeyEvent&), DynamicLengthField<SightFrame>*>(wxEventTypeTag<wxKeyEvent>, void (LengthField<SightFrame>::*)(wxKeyEvent&), DynamicLengthField<SightFrame>*);
 template void MultipleItemField<SightFrame, LengthUnit, CheckLengthUnit<SightFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (LengthField<SightFrame>::*)(wxCommandEvent&), DynamicLengthField<SightFrame>*>(wxEventTypeTag<wxCommandEvent>, void (LengthField<SightFrame>::*)(wxCommandEvent&), DynamicLengthField<SightFrame>*);
-template void MultipleItemField<SightFrame, Body, CheckBody<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+template void MultipleItemField<SightFrame, Body, CheckBodyName<SightFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (LengthField<ChartFrame>::*)(wxKeyEvent&), StaticLengthField<ChartFrame>*>(wxEventTypeTag<wxKeyEvent>, void (LengthField<ChartFrame>::*)(wxKeyEvent&), StaticLengthField<ChartFrame>*);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (StaticLengthField<ChartFrame>::*)(wxKeyEvent&), StaticLengthField<ChartFrame>*>(wxEventTypeTag<wxKeyEvent>, void (StaticLengthField<ChartFrame>::*)(wxKeyEvent&), StaticLengthField<ChartFrame>*);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckLengthUnit<ChartFrame>>::Bind<wxEventTypeTag<wxCommandEvent>, void (LengthField<ChartFrame>::*)(wxCommandEvent&), StaticLengthField<ChartFrame>*>(wxEventTypeTag<wxCommandEvent>, void (LengthField<ChartFrame>::*)(wxCommandEvent&), StaticLengthField<ChartFrame>*);
@@ -119,7 +119,7 @@ template<class P, class NON_GUI, class CHECK> template<class T> void MultipleIte
 
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::InsertIn<wxBoxSizer>(wxBoxSizer*);
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
-template void MultipleItemField<SightFrame, Body, CheckBody<SightFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void MultipleItemField<SightFrame, Body, CheckBodyName<SightFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
 template<class P, class NON_GUI, class CHECK> template<class T> void MultipleItemField<P, NON_GUI, CHECK>::InsertIn(T* host, wxSizerFlags& flag) {
@@ -336,7 +336,7 @@ template<class P, class NON_GUI, class CHECK> bool MultipleItemField<P, NON_GUI,
 
 template bool MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::is_ok();
 template bool MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::is_ok();
-template bool MultipleItemField<SightFrame, Body, CheckBody<SightFrame>>::is_ok();
+template bool MultipleItemField<SightFrame, Body, CheckBodyName<SightFrame>>::is_ok();
 
 
 //this function enables/disable the LengthFormatField

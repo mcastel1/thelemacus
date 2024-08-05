@@ -7,6 +7,8 @@
 
 #include "body_name.h"
 
+#include "my_app.h"
+
 
 BodyName::BodyName(void) : String() {}
 
@@ -14,10 +16,10 @@ BodyName::BodyName(void) : String() {}
 BodyName::BodyName(const String& input) : String(input.value) {}
 
 
-//return true if *this is one element in BodyName_types (i.e. *this is a valid Body name) and false otherwise)
+//return true if *this is one element in wxGetApp().catalog->list (i.e. *this is a valid Body name) and false otherwise
 bool BodyName::check(void){
     
-//    return(position_in_list(BodyName_types) != (BodyName_types.size())) ;
-    
+    return((wxGetApp().catalog->position_in_list((*this))) != (wxGetApp().catalog->list.size()));
+        
 }
 

@@ -14,17 +14,17 @@
 
 using namespace std;
 
-template<class P> class BodyField;
+template<class P> class BodyNameField;
 
 
-//this checks if an element of the BodyField class is valid
+//this checks if an element of the BodyNameField class is valid
 template<class P> class CheckBody{
     
 public:
     
-    BodyField<P>* p;
+    BodyNameField<P>* p;
     
-    CheckBody(BodyField<P>*);
+    CheckBody(BodyNameField<P>*);
     template<class T> void operator()(T&);
     
     

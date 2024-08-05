@@ -9,7 +9,7 @@
 #include "sight_frame.h"
 #include "my_app.h"
 
-template<class P> CheckBody<P>::CheckBody(BodyField<P>* p_in) {
+template<class P> CheckBody<P>::CheckBody(BodyNameField<P>* p_in) {
 
     p = p_in;
 

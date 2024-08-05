@@ -21,11 +21,11 @@ template<class P> class CheckBody;
 
 
 //P is the type of the frame which hosts *this
-template<class P> class BodyField : public MultipleItemField<P, Body, CheckBody<P>>{
+template<class P> class BodyNameField : public MultipleItemField<P, Body, CheckBody<P>>{
     
 public:
     
-    BodyField(wxPanel*, Body*, vector<int>*);
+    BodyNameField(wxPanel*, Body*, vector<int>*);
     void set(void);
     template<class T> void get(T&);
     template<class E> void OnEdit(E&);

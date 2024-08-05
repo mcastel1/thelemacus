@@ -22,7 +22,7 @@
 using namespace std;
 
 
-template<class P> class BodyField;
+template<class P> class BodyNameField;
 template<class P, class T> class CheckField;
 template<class P> class LimbField;
 template<class P> class DateField;
@@ -49,7 +49,7 @@ public:
     UnsetIdling<SightFrame>* unset_idling;
     PrintMessage<SightFrame, UnsetIdling<SightFrame> >* print_error_message;
     
-    BodyField<SightFrame>* body;
+    BodyNameField<SightFrame>* body;
     LimbField<SightFrame>* limb;
     CheckField<SightFrame, DynamicLengthField<SightFrame> >* artificial_horizon_check;
     CheckField<SightFrame, ChronoField<SightFrame> >* stopwatch_check;

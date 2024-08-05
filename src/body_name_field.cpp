@@ -13,35 +13,35 @@
 #include "sight_frame.h"
 
 
-//constructor of a BodyField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
-template<class P> BodyField<P>::BodyField(wxPanel* panel_of_parent, Body* p, vector<int>* recent_items_in) : MultipleItemField<P, Body, CheckBody<P> >(panel_of_parent, p, wxGetApp().catalog->get_names(), recent_items_in){
+//constructor of a BodyNameField object, based on panel_of_parent, which is the panel of the frame (of type P) which hosts *this
+template<class P> BodyNameField<P>::BodyNameField(wxPanel* panel_of_parent, Body* p, vector<int>* recent_items_in) : MultipleItemField<P, Body, CheckBody<P> >(panel_of_parent, p, wxGetApp().catalog->get_names(), recent_items_in){
  
     MultipleItemField<P, Body, CheckBody<P> >::check = new CheckBody<P>(this);
 
     MultipleItemField<P, Body, CheckBody<P> >::name->Bind(wxEVT_KILL_FOCUS, *(MultipleItemField<P, Body, CheckBody<P> >::check));
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    MultipleItemField<P, Body, CheckBody<P> >::name->Bind(wxEVT_COMBOBOX, &BodyField::OnEdit<wxCommandEvent>, this);
-    MultipleItemField<P, Body, CheckBody<P> >::name->Bind(wxEVT_KEY_UP, &BodyField::OnEdit<wxKeyEvent>, this);
+    MultipleItemField<P, Body, CheckBody<P> >::name->Bind(wxEVT_COMBOBOX, &BodyNameField::OnEdit<wxCommandEvent>, this);
+    MultipleItemField<P, Body, CheckBody<P> >::name->Bind(wxEVT_KEY_UP, &BodyNameField::OnEdit<wxKeyEvent>, this);
 
 
 }
 
-template class BodyField<SightFrame>;
+template class BodyNameField<SightFrame>;
 
 
 //sets the value in the GUI object name equal to the value in the non-GUI Body object body
-template<class P> void BodyField<P>::set(void) {
+template<class P> void BodyNameField<P>::set(void) {
 
     MultipleItemField<P, Body, CheckBody<P> >::name->SetValue(MultipleItemField<P, Body, CheckBody<P> >::object->name->value);
     MultipleItemField<P, Body, CheckBody<P> >::ok = true;
 
 }
 
-template void BodyField<SightFrame>::set();
+template void BodyNameField<SightFrame>::set();
 
 
 //sets the value in the non-GUI object body equal to the value in the GUI  object name
-template<class P> template<class T> void BodyField<P>::get(T& event) {
+template<class P> template<class T> void BodyNameField<P>::get(T& event) {
 
     unsigned int i;
     bool success;
@@ -66,11 +66,11 @@ template<class P> template<class T> void BodyField<P>::get(T& event) {
 
 }
 
-template void BodyField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void BodyNameField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
-template<class P> template<class E> void BodyField<P>::OnEdit(E& event) {
+template<class P> template<class E> void BodyNameField<P>::OnEdit(E& event) {
 
     unsigned int i;
     bool success;

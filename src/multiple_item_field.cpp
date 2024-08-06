@@ -213,7 +213,7 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
         
         CheckInCatalog(&is_present, &i);
 
-        if (is_present || (((name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((name->GetValue()).ToStdString())) == String("")))) {
+        if (is_present || (((name->GetForegroundColour()) != (wxGetApp().error_color)) && (String((name->GetValue().ToStdString())) == String("")))) {
             //the GUI field  contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             if (is_present) {

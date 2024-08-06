@@ -7,7 +7,7 @@
 
 #include "position_rectangle.h"
 
-
+#include "generic.h"
 
 
 PositionRectangle::PositionRectangle(void) {

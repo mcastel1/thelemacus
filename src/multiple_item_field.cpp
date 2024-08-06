@@ -66,7 +66,7 @@ template<class P, class NON_GUI, class CHECK> MultipleItemField<P, NON_GUI, CHEC
 template class MultipleItemField<ChartFrame, Projection, void>;
 template class MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>;
 template class MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>;
-template class MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedUnitField<RouteFrame>>>;
+template class MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >;
 template class MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame>>;
 template class MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, LengthUnitField<ChartFrame>>>;
 template class MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthUnitField<RouteFrame>>>;

@@ -1,5 +1,5 @@
 #comment lines, such as this one, will be ignored
-show coastlines = y
+show coastlines = n
 #reasonable values for OSX
 number of points coastline Mercator = 50000
 number of points coastline 3D = 40000

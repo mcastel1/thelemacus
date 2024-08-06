@@ -52,7 +52,7 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
     
     //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
     LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    LengthField<P>::unit->MultipleItemField<P, LengthUnit, CheckUnit<P> >::template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
+    LengthField<P>::unit->MultipleItemField<P, LengthUnit, CheckUnit<P, LengthUnitField<P> > >::template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
 
 }
 

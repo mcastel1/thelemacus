@@ -103,7 +103,7 @@ void Sight::compute_DH_dip(String prefix) {
 
     DH_dip.set(String("Dip correction"),
                -acos(atmosphere->n(Length(0.0)) / atmosphere->n((*height_of_eye))
-                     * ((atmosphere->earth_radius->convert(LengthUnit_types[0]).value) / (((*(atmosphere->earth_radius)) + (*height_of_eye)).convert(LengthUnit_types[0]).value) )
+                     * ((wxGetApp().Re.convert(LengthUnit_types[0]).value) / (((wxGetApp().Re) + (*height_of_eye)).convert(LengthUnit_types[0]).value) )
               ), prefix);
 
 }
@@ -597,13 +597,13 @@ void Sight::compute_DH_parallax_and_limb(String prefix) {
         case 'l':
         {
             //    H_o.value = (H_i.value) + asin(((atmosphere.earth_radius->value)*cos(H_i)+(body.radius.value))/(r.value));
-            DH_parallax_and_limb.value = asin(((atmosphere->earth_radius->value) * cos(H_i) + (body->radius->value)) / (r->value));
+            DH_parallax_and_limb.value = asin(((wxGetApp().Re.value) * cos(H_i) + (body->radius->value)) / (r->value));
             break;
         }
         case 'c':
         {
             //H_o.value = (H_i.value) + asin((atmosphere.earth_radius->value)*cos(H_i)/(r.value));
-            DH_parallax_and_limb.value = asin((atmosphere->earth_radius->value) * cos(H_i) / (r->value));
+            DH_parallax_and_limb.value = asin((wxGetApp().Re.value) * cos(H_i) / (r->value));
             break;
         }
         }

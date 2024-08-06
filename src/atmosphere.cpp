@@ -14,16 +14,11 @@
 #include "my_app.h"
 #include "units.h"
 
-Atmosphere::Atmosphere(void){
-    
-    earth_radius = new Length;
-    
-}
+Atmosphere::Atmosphere(void){}
 
 //set the content of *this (not the memory adresses) equal to the content of x
 void Atmosphere::set(const Atmosphere& x){
     
-    earth_radius->set((*(x.earth_radius)));
     n_layers = (x.n_layers);
     A = (x.A);
     B = (x.B);
@@ -171,7 +166,6 @@ void Atmosphere::initialize(void) {
     beta = 2.8 * nm_to_km;
     gamma = -2.8 * nm_to_km;
     T0 = 288.15;
-    earth_radius->set((wxGetApp().Re));
 
     h.resize(n_layers + 1);
     lambda.resize(n_layers);

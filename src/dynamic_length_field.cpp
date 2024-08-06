@@ -163,7 +163,7 @@ template void DynamicLengthField<SightFrame>::Bind<wxEventTypeTag<wxCommandEvent
 template<class P> void DynamicLengthField<P>::set(Length input) {
         
     value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
-    LengthField<P>::unit->set(input.unit);
+    LengthField<P>::unit->set((*(input.unit)));
     
 }
 

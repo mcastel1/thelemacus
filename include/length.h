@@ -27,7 +27,7 @@ public:
     //the value of the Length
     double value;
     //the unit of measure of the Length
-    LengthUnit unit;
+    LengthUnit* unit;
     
     Length();
     Length(double);

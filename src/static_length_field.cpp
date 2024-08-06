@@ -43,7 +43,7 @@ template class StaticLengthField<ChartFrame>;
 template<class P> void StaticLengthField<P>::set(const Length& l) {
     
     value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, l.value));
-    LengthField<P>::unit->set(l.unit);
+    LengthField<P>::unit->set((*(l.unit)));
     
 }
 

@@ -22,7 +22,7 @@
 Length::Length() {
 
     value = 0.0;
-    unit = LengthUnit(LengthUnit_types[0]);
+    unit = new LengthUnit(LengthUnit_types[0]);
 
 }
 
@@ -30,7 +30,7 @@ Length::Length() {
 Length::Length(double x) {
 
     value = x;
-    unit = LengthUnit(LengthUnit_types[0]);
+    unit = new LengthUnit(LengthUnit_types[0]);
 
 }
 
@@ -38,8 +38,10 @@ Length::Length(double x) {
 //constructor which sets value to x  and the unit to unit_in
 Length::Length(double value_in, const LengthUnit& unit_in) {
 
+    unit = new LengthUnit;
+
     value = value_in;
-    unit = unit_in;
+    unit->set(unit_in);
 
 }
 
@@ -49,6 +51,8 @@ Length::Length(Chrono time, Speed speed) {
 
     //conversion factor
     double c = 0.0;
+
+    unit = new LengthUnit;
     
     //consider all possible units in which speed is expressed
     switch (speed.unit.position_in_list(SpeedUnit_types)) {
@@ -81,11 +85,10 @@ Length::Length(Chrono time, Speed speed) {
             
         }
 
-
     }
     
     set(c * (time.get()) * (speed.value));
-    unit.set(LengthUnit_types[0]);
+    unit->set(LengthUnit_types[0]);
 
 }
 
@@ -122,7 +125,7 @@ void Length::set(double x) {
 void Length::set(double value_in, const LengthUnit& unit_in) {
     
     value = value_in;
-    unit = unit_in;
+    unit->set(unit_in);
     
 }
 
@@ -131,7 +134,7 @@ void Length::set(double value_in, const LengthUnit& unit_in) {
 void Length::set(const Length& l){
     
     value = (l.value);
-    unit.set(l.unit);
+    unit->set((*(l.unit)));
     
 }
 
@@ -143,7 +146,7 @@ string Length::to_string(unsigned int precision){
     
     output.precision(precision);
     
-    output << fixed << value << " " << unit.value;
+    output << fixed << value << " " << unit->value;
     
     return(output.str().c_str());
     
@@ -194,7 +197,7 @@ void Length::convert_to(const LengthUnit& output_unit){
 
     
     //1. convert *this to unit LengthUnit_types[0] and write the result in value_in_LengthUnit_types0
-    switch (unit.position_in_list(LengthUnit_types)) {
+    switch (unit->position_in_list(LengthUnit_types)) {
             
         case 0:{
             //unit = LengthUnit_types[0]
@@ -258,7 +261,7 @@ void Length::convert_to(const LengthUnit& output_unit){
             
     }
     
-    unit = output_unit;
+    unit->set(output_unit);
     
 }
 
@@ -286,7 +289,7 @@ bool Length::check(String name, [[maybe_unused]] String prefix) {
         cout << prefix.value << RED << "Entered value of " << name.value << " is not valid!\n" << RESET;
     }
 
-    check &= (unit.check());
+    check &= (unit->check());
     
     return check;
 
@@ -337,7 +340,7 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
     
     // .. and the unit inot unit
     pos1 = pos2+1;
-    unit.set(line.substr(pos1));
+    unit->set(line.substr(pos1));
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
@@ -362,7 +365,7 @@ void Length::read_from_file_to(String name, String filename, String mode, [[mayb
 //add *this to length and write the result in *this. This works no matter what the units of *this and length. After this method is called, the units of *this are the same as before this method had been called
 void Length::operator += (const Length& length) {
     
-    if(unit == (length.unit)){
+    if((*unit) == (*(length.unit))){
         //*this and length have the same units -> simply sum their values
         
         value += (length.value);
@@ -373,10 +376,10 @@ void Length::operator += (const Length& length) {
         LengthUnit unit_saved;
         
         //save the unit of measure of *this into unit_saved
-        unit_saved = unit;
+        unit_saved = (*unit);
         
         //convert *this to the unit of measure of length : this will change unit to length.unit
-        convert_to(length.unit);
+        convert_to((*(length.unit)));
         //now that *this and length have the same units, I can sum their values
         value += (length.value);
         //convert back *this to its original units, which had been saved inot unit_saved
@@ -390,7 +393,7 @@ void Length::operator += (const Length& length) {
 //substract *this to length and write the result in *this. This works no matter what the units of *this and length. After this method is called, the units of *this are the same as before this method had been called
 void Length::operator -= (const Length& length) {
     
-    if(unit == (length.unit)){
+    if((*unit) == (*(length.unit))){
         //*this and length have the same units -> simply sum their values
         
         value -= (length.value);
@@ -401,10 +404,10 @@ void Length::operator -= (const Length& length) {
         LengthUnit unit_saved;
         
         //save the unit of measure of *this into unit_saved
-        unit_saved = unit;
+        unit_saved = (*unit);
         
         //convert *this to the unit of measure of length : this will change unit to length.unit
-        convert_to(length.unit);
+        convert_to((*(length.unit)));
         //now that *this and length have the same units, I can sum their values
         value -= (length.value);
         //convert back *this to its original units, which had been saved inot unit_saved
@@ -435,7 +438,7 @@ void Length::operator /= (const double& x) {
 //inline 
 bool Length::operator > (const Length& r) {
     
-    if(unit == r.unit){
+    if((*unit) == (*(r.unit))){
         //*this and r have the same units -> just compare their values
         
         return((value > (r.value)));
@@ -443,7 +446,7 @@ bool Length::operator > (const Length& r) {
     }else{
         //*this and r have different units -> convert r to the units of *this and compare
         
-        return(((this->convert(r.unit)) > (r.value)));
+        return(((this->convert((*(r.unit)))) > (r.value)));
 
     }
 
@@ -463,7 +466,7 @@ bool Length::operator <= (const Length& r) {
 //inline 
 bool Length::operator < (const Length& r) {
     
-    if(unit == r.unit){
+    if((*unit) == (*(r.unit))){
         //*this and r have the same units -> just compare their values
         
         return((value < (r.value)));
@@ -471,7 +474,7 @@ bool Length::operator < (const Length& r) {
     }else{
         //*this and r have different units -> convert r to the units of *this and compare
         
-        return(((this->convert(r.unit)) < (r.value)));
+        return(((this->convert((*(r.unit)))) < (r.value)));
 
     }
 
@@ -577,7 +580,7 @@ Length Length::operator / (const double& x) {
 //inline 
 bool Length::operator == (const Length& length) {
 
-    return((value == (length.value)) && (unit == (length.unit)));
+    return((value == (length.value)) && ((*unit) == (*(length.unit))));
 
 }
 

@@ -8,6 +8,7 @@
 #include "check_year.h"
 
 #include "date_field.h"
+#include "generic.h"
 #include "my_app.h"
 #include "sight_frame.h"
 #include "tabulate_days.h"

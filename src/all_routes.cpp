@@ -7,6 +7,8 @@
 
 #include "all_routes.h"
 
+#include "generic.h"
+
 
 AllRoutes::AllRoutes(ListFrame* f_in) {
 

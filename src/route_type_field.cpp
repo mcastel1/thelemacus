@@ -9,6 +9,7 @@
 
 #include "check_route_type.h"
 #include "constants.h"
+#include "generic.h"
 #include "route_type.h"
 #include "my_string.h"
 #include "my_app.h"

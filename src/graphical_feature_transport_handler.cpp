@@ -9,6 +9,7 @@
 
 #include <gsl_sf_psi.h>
 
+#include "generic.h"
 #include "motion_handler.h"
 #include "my_app.h"
 #include "on_change_selection_in_list_control.h"

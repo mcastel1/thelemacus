@@ -7,7 +7,7 @@
 
 #include "static_length_field.h"
 
-
+#include "chart_frame.h"
 
 //constructor of a StaticLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
 template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p) : LengthField<P>( panel_of_parent, p) {
@@ -22,7 +22,7 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetLabel(wxString(""));
     
-    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), &(LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
+    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), (LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     LengthField<P>::unit->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
     LengthField<P>::unit->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
@@ -43,7 +43,7 @@ template class StaticLengthField<ChartFrame>;
 template<class P> void StaticLengthField<P>::set(const Length& l) {
     
     value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, l.value));
-    LengthField<P>::unit->set(l.unit);
+    LengthField<P>::unit->set((*(l.unit)));
     
 }
 

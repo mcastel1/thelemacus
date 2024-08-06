@@ -7,6 +7,7 @@
 
 #include "check_arc_degree.h"
 
+#include "generic.h"
 #include "my_app.h"
 #include "position_frame.h"
 #include "sight_frame.h"

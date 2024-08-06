@@ -21,6 +21,7 @@ using namespace std;
 class Catalog;
 class Position;
 class Route;
+class Sight;
 
 
 class Data{

@@ -53,14 +53,14 @@ bool Position::distance(Position p, Length* l, String name, [[maybe_unused]] Str
     check = true;
 
     
-    l->set(Re * acos(cos((lambda)-(p.lambda)) * cos(phi) * cos(p.phi) + sin(phi) * sin(p.phi)), LengthUnit_types[0]);
+    l->set((wxGetApp().Re.value) * acos(cos((lambda)-(p.lambda)) * cos(phi) * cos(p.phi) + sin(phi) * sin(p.phi)), LengthUnit_types[0]);
 
     check &= !isnan(l->value);
 
     if(check){
 
         Angle a;
-        a.set(String(""), (l->value) / Re, prefix);
+        a.set(String(""), (l->value) / (wxGetApp().Re.value), prefix);
         l->print(name, prefix, cout);
 
     }else{
@@ -82,7 +82,7 @@ bool Position::is_in(Route route, [[maybe_unused]] String prefix) {
 
         distance((*(route.reference_position)), &d, String(""), prefix);
 
-        return(d <= (Re * (route.omega.value)));
+        return(d <= ((wxGetApp().Re.value) * (route.omega.value)));
 
 
     }else{

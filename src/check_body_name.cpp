@@ -6,8 +6,10 @@
 //
 
 #include "check_body_name.h"
+#include "generic.h"
 #include "sight_frame.h"
 #include "my_app.h"
+
 
 template<class P> CheckBodyName<P>::CheckBodyName(BodyNameField<P>* p_in) {
 

@@ -5,8 +5,9 @@
 //  Created by Michele on 11/06/2024.
 //
 
-#include <sstream>
+#include "sight.h"
 
+#include <sstream>
 
 #include "gsl_roots.h"
 #include "gsl_integration.h"
@@ -16,8 +17,8 @@
 
 #include "constants.h"
 #include "file_r.h"
+#include "generic.h"
 #include "my_app.h"
-#include "sight.h"
 #include "units.h"
 
 
@@ -30,7 +31,7 @@ Sight::Sight(void) {
     r = new Length;
     
     //height_of_eye is expressed in meters -> set its unit accordingly
-    height_of_eye->unit.set(LengthUnit_types[1]);
+    height_of_eye->unit->set(LengthUnit_types[1]);
 
     //this is the list of all the possible items that a Sight object can have: some Sight objects may have an item list with fewer elements than all_items. For instance, a star Sight does not have the "limb" element.
     all_items.push_back(String("body"));
@@ -473,7 +474,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
     check &= compute_H_o(new_prefix);
     circle_of_equal_altitude->omega.set(M_PI_2 - (H_o.value));
     
-    circle_of_equal_altitude->length->set(2.0 * M_PI * Re * sin(circle_of_equal_altitude->omega), LengthUnit_types[0]);
+    circle_of_equal_altitude->length->set(2.0 * M_PI * (wxGetApp().Re.value) * sin(circle_of_equal_altitude->omega), LengthUnit_types[0]);
 
     if (!check) {
 

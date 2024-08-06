@@ -150,7 +150,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             //set the legnth as the length of the shortest great circle joining p_start and p_end
             phi.set(acos(r_start.dot(r_end)));
             
-            length->set(Re*(phi.value), LengthUnit_types[0]);
+            length->set((wxGetApp().Re.value)*(phi.value), LengthUnit_types[0]);
             
             //set the tentative solution for the azimuth angle z: Z may be either z  (solkution 1) or -z (solution 2), I will pick the correct solution later
             z.set(String(""),
@@ -206,7 +206,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
     length_format.set((LengthFormat_types[1]));
     
     //the lenght of the circle of equal altitude is set by default
-    length->set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
+    length->set(2.0 * M_PI * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
 
     related_sight.set(-1);
 
@@ -650,7 +650,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                                 
                 for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
                     
-                    ((*s)[i]).set(((t[i]).value) * Re);
+                    ((*s)[i]).set(((t[i]).value) * (wxGetApp().Re.value));
                     
                 }
                 
@@ -689,7 +689,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                             
                             s->resize(2);
                             ((*s)[0]).set(0.0, LengthUnit_types[0]);
-                            ((*s)[1]).set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
+                            ((*s)[1]).set(2.0 * M_PI * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
                             
                         }else{
                             
@@ -699,7 +699,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                             
                             for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
                                 
-                                ((*s)[i]).set(((t[i]).value) * Re * sin(omega), LengthUnit_types[0]);
+                                ((*s)[i]).set(((t[i]).value) * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
                                 
                             }
                             
@@ -736,7 +736,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                             //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
                             
                             ((*s)[0]).set(0.0, LengthUnit_types[0]);
-                            ((*s)[1]).set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
+                            ((*s)[1]).set(2.0 * M_PI * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
                             
                         }
                         else {
@@ -748,27 +748,27 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                             //note that here doing the average as ((((t[0]).value)+((t[1]).value)))/2.0 and doing it as ((t[0]+t[1]).value)/2.0
                             compute_end(
                                         Length(
-                                               ((Angle(mean_value(t[0], t[1]))).value) * (Re * sin(omega))
+                                               ((Angle(mean_value(t[0], t[1]))).value) * ((wxGetApp().Re.value) * sin(omega))
                                                ),
                                         String(""));
                             draw_panel->circle_observer->reference_position->distance((*end), &l1, String(""), String(""));
                             
                             compute_end(
                                         Length(
-                                               ((Angle(mean_value(t[0], t[1]) + M_PI)).value) * (Re * sin(omega))
+                                               ((Angle(mean_value(t[0], t[1]) + M_PI)).value) * ((wxGetApp().Re.value) * sin(omega))
                                                ),
                                         String(""));
                             draw_panel->circle_observer->reference_position->distance((*end), &l2, String(""), String(""));
                             
                             if (l2 > l1) {
                                 
-                                ((*s)[0]).set(((t[0]).value) * (Re * sin(omega)), LengthUnit_types[0]);
-                                ((*s)[1]).set(((t[1]).value) * (Re * sin(omega)), LengthUnit_types[0]);
+                                ((*s)[0]).set(((t[0]).value) * ((wxGetApp().Re.value) * sin(omega)), LengthUnit_types[0]);
+                                ((*s)[1]).set(((t[1]).value) * ((wxGetApp().Re.value) * sin(omega)), LengthUnit_types[0]);
                                 
                             }else{
                                 
-                                ((*s)[0]).set(((t[1]).value) * (Re * sin(omega)), LengthUnit_types[0]);
-                                ((*s)[1]).set((2.0 * M_PI + ((t[0]).value)) * (Re * sin(omega)), LengthUnit_types[0]);
+                                ((*s)[0]).set(((t[1]).value) * ((wxGetApp().Re.value) * sin(omega)), LengthUnit_types[0]);
+                                ((*s)[1]).set((2.0 * M_PI + ((t[0]).value)) * ((wxGetApp().Re.value) * sin(omega)), LengthUnit_types[0]);
                                 
                             }
                             
@@ -922,11 +922,11 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
             , new_prefix);
 
         //determine which one between the point on (*this) at t_1 and the one at t_2 is the one with minimum distance with respect to q, and store this point into (*p)
-        compute_end(Length((t_1.value) * Re * sin(omega)), new_prefix);
+        compute_end(Length((t_1.value) * (wxGetApp().Re.value) * sin(omega)), new_prefix);
         p_1 = (*end);
         q.distance(p_1, &s_1, String("Distance with respect to p_1"), new_prefix);
 
-        compute_end(Length((t_2.value) * Re * sin(omega)), new_prefix);
+        compute_end(Length((t_2.value) * (wxGetApp().Re.value) * sin(omega)), new_prefix);
         p_2 = (*end);
         q.distance(p_2, &s_2, String("Distance with respect to p_2"), new_prefix);
 
@@ -1041,7 +1041,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
                             t->resize(2);
                             ((*t)[0]).set(String(""), 0.0, new_prefix);
-                            ((*t)[1]).set(String(""), (length->value) / Re, new_prefix);
+                            ((*t)[1]).set(String(""), (length->value) / (wxGetApp().Re.value), new_prefix);
 
                         }
 
@@ -1073,10 +1073,10 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
                             }
                             else {
-                                //this->reference position is not included into the circle of circle -> this->end must be included into the circle of circle -> the part of *this comprised into circle is the one with  (*t)[0] <= t <= (l.value)/Re
+                                //this->reference position is not included into the circle of circle -> this->end must be included into the circle of circle -> the part of *this comprised into circle is the one with  (*t)[0] <= t <= (l.value)/(wxGetApp().Re.value)
 
                                 set_length_from_time_speed();
-                                my_push_back(t, Angle(String(""), (length->value) / Re, new_prefix));
+                                my_push_back(t, Angle(String(""), (length->value) / (wxGetApp().Re.value), new_prefix));
 
                             }
 
@@ -1089,7 +1089,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
                             sort(t->begin(), t->end());
 
-                            compute_end(Length(Re * (((((*t)[0]).value) + (((*t)[1]).value)) / 2.0)), String(""));
+                            compute_end(Length((wxGetApp().Re.value) * (((((*t)[0]).value) + (((*t)[1]).value)) / 2.0)), String(""));
 
                             if (!(end->is_in(circle, String("")))) {
                                 //the midpoints on *this between t[0] and t[1] is not comprised into circle
@@ -1126,7 +1126,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
                     reference_position->distance((*(circle.reference_position)), &d, String(""), new_prefix);
 
-                    if (d < (Re * ((omega + (circle.omega)).value))) {
+                    if (d < ((wxGetApp().Re.value) * ((omega + (circle.omega)).value))) {
                         //the circles have a common area
 
                         if (write_t) {
@@ -1258,7 +1258,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
         //push back into u the angle which corresponds to the endpoint of Route *this
         if (type == (Route_types[1])) {
             set_length_from_time_speed();
-            my_push_back(&u, Angle((length->value) / Re));
+            my_push_back(&u, Angle((length->value) / (wxGetApp().Re.value)));
         }
 
         //push back into u the angle which corresponds to the endpoint of Route *this
@@ -1276,10 +1276,10 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
 
             //compute the midpoint between two subsequesnt intersections, and write it into this->end. I use u[(i+1) % (u.size())] in such a way that, when i = u.size() -1, this equals u[0], because the last chunk that I want to consider is the one between the last and the first intersection
             if (type == (Route_types[1])) {
-                compute_end(Length(Re * (((u[i]).value) + ((u[i + 1]).value)) / 2.0), String(""));
+                compute_end(Length((wxGetApp().Re.value) * (((u[i]).value) + ((u[i + 1]).value)) / 2.0), String(""));
             }
             if (type == (Route_types[2])) {
-                compute_end(Length(Re * sin(omega) * (((u[i]).value) + ((u[i + 1]).value)) / 2.0), String(""));
+                compute_end(Length((wxGetApp().Re.value) * sin(omega) * (((u[i]).value) + ((u[i + 1]).value)) / 2.0), String(""));
             }
 
             if (rectangle.Contains((*end))) {
@@ -1370,7 +1370,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             );
 
             //case 3:  extremum n. 1 in the middle of *this
-            d.set(String(""), Re * acos(cos_ts.value), prefix);
+            d.set(String(""), (wxGetApp().Re.value) * acos(cos_ts.value), prefix);
             if (compute_end(d, prefix)) {
 
                 s.resize(s.size() + 1);
@@ -1379,7 +1379,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
             }
 
             //case 4: extremum n. 2 in the middle of *this
-            d.set(String(""), Re * (M_PI - acos(cos_ts.value)), prefix);
+            d.set(String(""), (wxGetApp().Re.value) * (M_PI - acos(cos_ts.value)), prefix);
             if (compute_end(d, prefix)) {
 
                 s.resize(s.size() + 1);
@@ -1387,9 +1387,9 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
             }
 
-            //obtain the minimum distance across all cases, which may be 2, 3, or 4, and chekwhetehr it is smaller than Re * apertur angle of route
-            if ((*min_element(s.begin(), s.end())) < Re * (route.omega.value)) {
-                //in this case, *this and route intersect: I compute the values of the parametric angle t which parametrizes *this and at which the distance betweeen (point on *this at t) and (GP of route) is equal to Re*(angular aperture of route)
+            //obtain the minimum distance across all cases, which may be 2, 3, or 4, and chekwhetehr it is smaller than (wxGetApp().Re.value) * apertur angle of route
+            if ((*min_element(s.begin(), s.end())) < (wxGetApp().Re.value) * (route.omega.value)) {
+                //in this case, *this and route intersect: I compute the values of the parametric angle t which parametrizes *this and at which the distance betweeen (point on *this at t) and (GP of route) is equal to (wxGetApp().Re.value)*(angular aperture of route)
 
                 Double a, b, square_root, cos_t_p, cos_t_m;
                 int output;
@@ -1406,7 +1406,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
                 square_root.set(sqrt(gsl_sf_pow_int((a.value), 2) + gsl_sf_pow_int((b.value), 2) - gsl_sf_pow_int(cos(route.omega), 2)));
 
-                //these are the values of cos(t) such that the distance between this->end at t  and route.reference_position equals Re*(route.omega), i.e., it is the value of cos(t) such that end(t) lies on route. There are two of them.
+                //these are the values of cos(t) such that the distance between this->end at t  and route.reference_position equals (wxGetApp().Re.value)*(route.omega), i.e., it is the value of cos(t) such that end(t) lies on route. There are two of them.
                 cos_t_p.set(String(""), (-((a.value) * cos(route.omega)) + (square_root.value) * fabs((b.value))) / (gsl_sf_pow_int((a.value), 2) + gsl_sf_pow_int((b.value), 2)), prefix);
                 cos_t_m.set(String(""), (-((a.value) * cos(route.omega)) - (square_root.value) * fabs((b.value))) / (gsl_sf_pow_int((a.value), 2) + gsl_sf_pow_int((b.value), 2)), prefix);
 
@@ -1416,7 +1416,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
                 //clear up t because I will write in i in what follows
                 if (write_t) { t->clear(); }
 
-                if ((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value) * (cos_t_p.value) + cos(route.omega)) / (b.value) > 0.0) && compute_end(Length(Re * acos(cos_t_p)), prefix)) {
+                if ((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value) * (cos_t_p.value) + cos(route.omega)) / (b.value) > 0.0) && compute_end(Length((wxGetApp().Re.value) * acos(cos_t_p)), prefix)) {
 
                     if (write_t) {
                         t->resize((t->size()) + 1);
@@ -1426,7 +1426,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
                     //if I find a viable instersection point, I set output to 1
                     output = 1;
 
-                    if (compute_end(Length(Re * (2.0 * M_PI - acos(cos_t_p))), prefix)) {
+                    if (compute_end(Length((wxGetApp().Re.value) * (2.0 * M_PI - acos(cos_t_p))), prefix)) {
 
                         if (write_t) {
                             t->resize((t->size()) + 1);
@@ -1440,7 +1440,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
                 }
 
-                if ((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value) * (cos_t_m.value) + cos(route.omega)) / (b.value) > 0.0) && compute_end(Length(Re * acos(cos_t_m)), prefix)) {
+                if ((/*when I solve the equations a cos t + b * sqrt(1-(cos t)^2)  = - cos(route.omega), I manipulate the euqation and then square both sides, thus introducing spurious solutions. This condition allows me to check which one among the spurious solutions is valid. */-((a.value) * (cos_t_m.value) + cos(route.omega)) / (b.value) > 0.0) && compute_end(Length((wxGetApp().Re.value) * acos(cos_t_m)), prefix)) {
 
                     if (write_t) {
                         t->resize((t->size()) + 1);
@@ -1450,7 +1450,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
                     //if I find a viable instersection point, I set output to 1
                     output = 1;
 
-                    if (compute_end(Length(Re * (2.0 * M_PI - acos(cos_t_m))), prefix)) {
+                    if (compute_end(Length((wxGetApp().Re.value) * (2.0 * M_PI - acos(cos_t_m))), prefix)) {
 
                         if (write_t) {
                             t->resize((t->size()) + 1);
@@ -1482,7 +1482,7 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
 
                 reference_position->distance((*(route.reference_position)), &d, String(""), new_prefix);
 
-                if (/*this is the condition that *this and route intersect*/(d > Re * fabs((omega.value) - (route.omega.value))) && (d < Re * ((omega + (route.omega)).value))) {
+                if (/*this is the condition that *this and route intersect*/(d > (wxGetApp().Re.value) * fabs((omega.value) - (route.omega.value))) && (d < (wxGetApp().Re.value) * ((omega + (route.omega)).value))) {
                     //in this case, *this and route intersect
 
                     if (write_t) {
@@ -1637,7 +1637,7 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
         reference_position->read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
         omega.read_from_stream<S>(String("omega"), input_stream, false, new_prefix);
         
-        length->set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
+        length->set(2.0 * M_PI * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
 
     }else{
 
@@ -1743,15 +1743,15 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
             intersection(route, true, &t, new_prefix);
             route.intersection((*this), true, &u, new_prefix);
 
-            compute_end(Length(Re * sin(omega.value) * ((t[0]).value)), new_prefix);
+            compute_end(Length((wxGetApp().Re.value) * sin(omega.value) * ((t[0]).value)), new_prefix);
             (*p)[0] = (*end);
             ((*p)[0]).label.set(String(""), String("crossing"), prefix);
 
-            compute_end(Length(Re * sin(omega.value) * ((t[1]).value)), new_prefix);
+            compute_end(Length((wxGetApp().Re.value) * sin(omega.value) * ((t[1]).value)), new_prefix);
             (*p)[1] = (*end);
             ((*p)[1]).label.set(String(""), String("crossing"), prefix);
 
-            route.compute_end(Length(Re * sin(route.omega.value) * ((u[0]).value)), prefix);
+            route.compute_end(Length((wxGetApp().Re.value) * sin(route.omega.value) * ((u[0]).value)), prefix);
 
             check &= ((*p)[0]).distance((*(route.end)), &r, String(""), prefix);
             check &= ((*p)[1]).distance((*(route.end)), &s, String(""), prefix);
@@ -1768,10 +1768,10 @@ int Route::crossing(Route route, vector<Position>* p, double* cos_crossing_angle
 
                 }
 
-                compute_end(Length(Re * sin(omega) * ((t[0]).value)), prefix);
+                compute_end(Length((wxGetApp().Re.value) * sin(omega) * ((t[0]).value)), prefix);
                 end->print(String("position of intersection 1 for Route 1"), prefix, cout);
 
-                route.compute_end(Length(Re * sin(route.omega.value) * ((u[0]).value)), prefix);
+                route.compute_end(Length((wxGetApp().Re.value) * sin(route.omega.value) * ((u[0]).value)), prefix);
                 route.end->print(String("position of intersection 1 for Route 2"), prefix, cout);
 
                 (*cos_crossing_angle) = cos((reference_position->phi)) * cos(route.reference_position->phi) * sin(t[0]) * sin(u[0]) + (cos(t[0]) * sin(reference_position->lambda) - cos(reference_position->lambda) * sin((reference_position->phi)) * sin(t[0])) * (cos(u[0]) * sin(route.reference_position->lambda) - cos(route.reference_position->lambda) * sin(route.reference_position->phi) * sin(u[0])) +
@@ -1838,13 +1838,13 @@ void Route::set_length_from_input(double t){
                 double s;
                 
                 s = GSL_SIGN(cos(Z));
-                length->set(s * 2.0*Re/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t ) ) ),
+                length->set(s * 2.0*(wxGetApp().Re.value)/sqrt(C) *( atan(eta) - atan( eta * exp(- s * sqrt(C/(1.0-C)) * t ) ) ),
                            LengthUnit_types[0]);
                 
             }else{
                 //I am in the special case where Z = pi/2 or 3 pi /2 (i.e., C = 0) -> set the length by using the analytical limit C->0 for  expression of the length
                 
-                length->set(2.0*Re*t*eta/(1.0+gsl_pow_2(eta)),
+                length->set(2.0*(wxGetApp().Re.value)*t*eta/(1.0+gsl_pow_2(eta)),
                            LengthUnit_types[0]);
                 
             }
@@ -1908,13 +1908,13 @@ void Route::compute_end(String prefix) {
                 //this is the general expression of t vs l for Z != pi/2
                 
                 (t.value) = -tau * sqrt((1.0 - C) / C)
-                * log(1.0 / eta * tan(-tau * sqrt(C) * (length->value) / (2.0 * Re) + atan(sqrt((1.0 - sin(reference_position->phi.value)) / (1.0 + sin(reference_position->phi.value))))));
+                * log(1.0 / eta * tan(-tau * sqrt(C) * (length->value) / (2.0 * (wxGetApp().Re.value)) + atan(sqrt((1.0 - sin(reference_position->phi.value)) / (1.0 + sin(reference_position->phi.value))))));
                 
             }
             else {
                 //this is the limit of the expression above in the case Z -> pi/2
                 
-                (t.value) = (length->value) * (1.0 + gsl_pow_2(eta)) / (2.0 * Re * eta);
+                (t.value) = (length->value) * (1.0 + gsl_pow_2(eta)) / (2.0 * (wxGetApp().Re.value) * eta);
                 
             }
             
@@ -1933,7 +1933,7 @@ void Route::compute_end(String prefix) {
             Angle t;
             
      
-            t.set(String(""), (length->value) / Re, prefix);
+            t.set(String(""), (length->value) / (wxGetApp().Re.value), prefix);
             
             end->phi.set(String(""), asin(cos(Z) * cos(reference_position->phi) * sin(t) + cos(t) * sin(reference_position->phi)), prefix);
             end->lambda.set(String(""),
@@ -1954,7 +1954,7 @@ void Route::compute_end(String prefix) {
             
             //compute the length of *this from time and speed, if the length is stored in *this as a time * speed
             set_length_from_time_speed();
-            t.set(String(""), (length->value) / (Re * sin(omega)), prefix);
+            t.set(String(""), (length->value) / ((wxGetApp().Re.value) * sin(omega)), prefix);
             
             
             end->phi.set(String(""), M_PI_2 - acos(cos((omega.value)) * sin(reference_position->phi) - cos(reference_position->phi) * cos((t.value)) * sin((omega.value))), prefix);
@@ -2071,7 +2071,7 @@ double Route::lambda_minus_pi(double t, void* route) {
     //append \t to prefix
     new_prefix = (r->temp_prefix.append(String("\t")));
 
-    r->length->set(Re * sin((r->omega.value)) * t, LengthUnit_types[0]);
+    r->length->set((wxGetApp().Re.value) * sin((r->omega.value)) * t, LengthUnit_types[0]);
     r->compute_end(new_prefix);
 
     return((r->end->lambda.value) - M_PI);
@@ -2100,12 +2100,12 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
             t_min.set(String(""), 2.0 * M_PI - acos(-tan(reference_position->phi.value) * tan((omega.value))), new_prefix);
             
             //p_max =  Position on the circle of equal altitude  at t = t_max
-            length->set(Re * sin((omega.value)) * (t_max.value), LengthUnit_types[0]);
+            length->set((wxGetApp().Re.value) * sin((omega.value)) * (t_max.value), LengthUnit_types[0]);
             compute_end(new_prefix);
             p_max = (*end);
             
             //p_min =  Position on circle of equal altitude  at t = t_min
-            length->set(Re * sin((omega.value)) * (t_min.value), LengthUnit_types[0]);
+            length->set((wxGetApp().Re.value) * sin((omega.value)) * (t_min.value), LengthUnit_types[0]);
             compute_end(new_prefix);
             p_min = (*end);
             
@@ -2219,19 +2219,19 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
             
             
             //there are two potential stationary points for the latitude vs t: include in phi the first one, if it lies on *this
-            if((0.0 <= Re*ts) && ((*length) >= Re*ts)){
+            if((0.0 <= (wxGetApp().Re.value)*ts) && ((*length) >= (wxGetApp().Re.value)*ts)){
                 
                 //                t.push_back(Angle(ts));
                 
-                compute_end(Length(Re*ts), String(""));
+                compute_end(Length((wxGetApp().Re.value)*ts), String(""));
                 my_push_back(&phi, end->phi.normalize_pm_pi_ret());
                 
             }
             
             //there are two potential stationary points for the latitude vs t: include in phi the second one, if it lies on *this
-            if((0.0 <= Re*(ts+M_PI)) && ((*length) >= Re*(ts+M_PI))){
+            if((0.0 <= (wxGetApp().Re.value)*(ts+M_PI)) && ((*length) >= (wxGetApp().Re.value)*(ts+M_PI))){
                                 
-                compute_end(Length(Re*(ts+M_PI)), String(""));
+                compute_end(Length((wxGetApp().Re.value)*(ts+M_PI)), String(""));
                 my_push_back(&phi, end->phi.normalize_pm_pi_ret());
                     
             }
@@ -2263,11 +2263,11 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
         case 2:{
             //*this is a circle of equal altitude
                 
-            length->set(Re * sin((omega.value)) * 0.0, LengthUnit_types[0]);
+            length->set((wxGetApp().Re.value) * sin((omega.value)) * 0.0, LengthUnit_types[0]);
             compute_end(new_prefix);
             p_max = (*end);
             
-            length->set(Re * sin((omega.value)) * M_PI, LengthUnit_types[0]);
+            length->set((wxGetApp().Re.value) * sin((omega.value)) * M_PI, LengthUnit_types[0]);
             compute_end(new_prefix);
             p_min = (*end);
             

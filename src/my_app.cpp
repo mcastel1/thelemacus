@@ -16,6 +16,7 @@
 #include "close_app.h"
 #include "close_frame.h"
 #include "constants.h"
+#include "generic.h"
 #include "list_frame.h"
 #include "question_frame.h"
 #include "show_all.h"
@@ -260,10 +261,7 @@ void MyApp::set_icon_paths(void){
 }
 
 bool MyApp::OnInit() {
-    
-
-
-    
+        
     unsigned int i;
     Int n_chart_frames;
     stringstream s;
@@ -336,6 +334,9 @@ bool MyApp::OnInit() {
     //read the file names and prenend to the file name the respective directory where the file is located -> obtain the file path
     //files in code directory
     
+    Re.set(Re_temp, LengthUnit_types[0]);
+
+    
     //files in data directory
     //    path_file_recent = data_directory.append(read_from_file(String("name file recent"), (wxGetApp().path_file_init), String("R"), String("")));
     path_file_catalog = data_directory.append(read_from_file(String("name file catalog"), (wxGetApp().path_file_init), String("R"), String("")));
@@ -352,6 +353,7 @@ bool MyApp::OnInit() {
     time_check_light_dark.read_from_file_to(String("time check light dark"), (wxGetApp().path_file_init), String("R"), String(""));
     animation_time.read_from_file_to(String("animation time"), (wxGetApp().path_file_init), String("R"), String(""));
     time_zone.read_from_file_to(String("time zone"), (wxGetApp().path_file_init), String("R"), String(""));
+    
     
     max_lat.read_from_file_to(String("maximal latitude coastline data"), (wxGetApp().path_file_init), String("R"), String(""));
     min_lat.read_from_file_to(String("minimal latitude coastline data"), (wxGetApp().path_file_init), String("R"), String(""));

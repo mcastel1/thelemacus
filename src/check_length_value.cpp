@@ -7,9 +7,11 @@
 
 #include "check_length_value.h"
 
+#include "generic.h"
 #include "my_app.h"
 #include "my_string.h"
 #include "sight_frame.h"
+
 
 template<class P> CheckLengthValue<P>::CheckLengthValue(DynamicLengthField<P>* p_in) {
 

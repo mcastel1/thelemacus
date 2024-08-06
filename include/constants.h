@@ -10,6 +10,9 @@
 
 using namespace std;
 
+//class Length;
+
+
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 extern Int /*this is the low precision used for displaying data*/ display_precision, /*this is the high precision used for storing data and making calculations with it*/ data_precision;
 extern Double /*the ratio between the width (height) of the plot area and the width (height) of the chart*/length_plot_area_over_length_chart, length_chart_over_length_chart_frame, /*this is the ratio between (the length of the borders drawn around the widgets) and (the length of the screen)*/length_border_over_length_screen;
@@ -35,8 +38,8 @@ extern Angle max_lat, min_lat;
 //one in uint64_t format
 #define one_uint64_t ((uint64_t)1)
 #define accuracy_equal_approx 52
-//earth radius in nautical miles
-#define Re (60.0*360.0/(2.0*M_PI))
+//earth radius in nautical miles: this is a temporary value of the radius of the Earth which will be written into the Length Re by MyApp::OnInit
+#define Re_temp (60.0*360.0/(2.0*M_PI))
 #define RED     "\033[1;31m"
 #define YELLOW     "\033[1;33m"
 #define CYAN "\033[1;36m"

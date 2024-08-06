@@ -7,7 +7,7 @@
 
 #include "check_speed_value.h"
 
-
+#include "generic.h"
 #include "my_app.h"
 
 

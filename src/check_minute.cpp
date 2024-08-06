@@ -7,6 +7,7 @@
 
 #include "check_minute.h"
 
+#include "generic.h"
 #include "my_app.h"
 #include "route_frame.h"
 #include "sight_frame.h"

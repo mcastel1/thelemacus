@@ -8,6 +8,7 @@
 #include <wx/event.h>
 #include <wx/panel.h>
 
+#include "generic.h"
 #include "length_format.h"
 #include "length_format_field.h"
 #include "multiple_item_field.h"

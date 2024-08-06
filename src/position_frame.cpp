@@ -5,11 +5,11 @@
 //  Created by Michele on 11/06/2024.
 //
 
-#include "on_change_selection_in_list_control.h"
 #include "position_frame.h"
+
+#include "generic.h"
+#include "on_change_selection_in_list_control.h"
 #include "string_field.h"
-
-
 
 
 PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, long position_in_listcontrol_positions_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {

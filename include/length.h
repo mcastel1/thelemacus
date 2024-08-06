@@ -11,14 +11,17 @@
 #include <iostream>
 
 #include "chrono.h"
-#include "constants.h"
+//#include "constants.h"
 #include "length_unit.h"
 #include "my_string.h"
 #include "speed.h"
 
 using namespace std;
 
+class Chrono;
+class LengthUnit;
 class Speed;
+class String;
 
 //a non-GUI object containing a Length
 class Length{
@@ -27,7 +30,7 @@ public:
     //the value of the Length
     double value;
     //the unit of measure of the Length
-    LengthUnit unit;
+    LengthUnit* unit;
     
     Length();
     Length(double);

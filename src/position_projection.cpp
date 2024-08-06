@@ -8,6 +8,7 @@
 #include "position_projection.h"
 
 
+#include "generic.h"
 
 //default constructor
 PositionProjection::PositionProjection(void) {

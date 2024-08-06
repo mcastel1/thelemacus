@@ -8,6 +8,7 @@
 #include "check_arc_minute.h"
 
 #include "angle_field.h"
+#include "generic.h"
 #include "my_app.h"
 #include "position_frame.h"
 #include "sight_frame.h"

@@ -38,6 +38,8 @@ Length::Length(double x) {
 //constructor which sets value to x  and the unit to unit_in
 Length::Length(double value_in, const LengthUnit& unit_in) {
 
+    unit = new LengthUnit;
+
     value = value_in;
     unit->set(unit_in);
 
@@ -49,6 +51,8 @@ Length::Length(Chrono time, Speed speed) {
 
     //conversion factor
     double c = 0.0;
+
+    unit = new LengthUnit;
     
     //consider all possible units in which speed is expressed
     switch (speed.unit.position_in_list(SpeedUnit_types)) {

@@ -6,6 +6,8 @@
 //
 
 #include "multiple_item_field.h"
+
+#include "generic.h"
 #include "my_string.h"
 #include "my_app.h"
 #include "route_frame.h"

@@ -16,6 +16,7 @@
 #include "close_app.h"
 #include "close_frame.h"
 #include "constants.h"
+#include "generic.h"
 #include "list_frame.h"
 #include "question_frame.h"
 #include "show_all.h"

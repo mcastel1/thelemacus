@@ -149,7 +149,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthUnitField<RouteFrame>>>::set();
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::set();
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::set();
-template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedUnitField<RouteFrame>>>::set();
+template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::set();
 template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnitField<SightFrame>>>::set();
 
 

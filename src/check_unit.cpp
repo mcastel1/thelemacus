@@ -11,18 +11,18 @@
 #include "sight_frame.h"
 
 
-template<class P> CheckLengthUnit<P>::CheckLengthUnit(DynamicLengthField<P>* p_in) {
+template<class P> CheckUnit<P>::CheckUnit(DynamicLengthField<P>* p_in) {
 
     p = p_in;
 
 }
 
-template class CheckLengthUnit<RouteFrame>;
-template class CheckLengthUnit<SightFrame>;
+template class CheckUnit<RouteFrame>;
+template class CheckUnit<SightFrame>;
 
 
 //check the unit in the GUI field in LengthField
-template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& event) {
+template<class P> template <class T> void CheckUnit<P>::operator()(T& event) {
 
     P* f = (p->parent);
 
@@ -68,5 +68,5 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
 
 }
 
-template void CheckLengthUnit<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
-template void CheckLengthUnit<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckUnit<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckUnit<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

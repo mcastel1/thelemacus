@@ -18,7 +18,7 @@ template<class P> CheckLength<P>::CheckLength(DynamicLengthField<P>* p_in) {
     p = p_in;
 
     check_length_value = new CheckLengthValue<P>(p);
-    check_length_unit = new CheckLengthUnit<P>(p);
+    check_length_unit = new CheckUnit<P>(p);
 
 }
 

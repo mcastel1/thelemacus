@@ -16,13 +16,13 @@ template<class P> class DynamicLengthField;
 
 
 
-template<class P> class CheckLengthUnit{
+template<class P> class CheckUnit{
     
 public:
     
     DynamicLengthField<P>* p;
     
-    CheckLengthUnit(DynamicLengthField<P>*);
+    CheckUnit(DynamicLengthField<P>*);
     template<class T> void operator()(T&);
     
 };

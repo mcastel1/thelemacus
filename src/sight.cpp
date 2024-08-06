@@ -103,7 +103,7 @@ void Sight::compute_DH_dip(String prefix) {
 
     DH_dip.set(String("Dip correction"),
                -acos(atmosphere->n(Length(0.0)) / atmosphere->n((*height_of_eye))
-                     * ((atmosphere->earth_radius->convert(LengthUnit_types[0]).value) / (((*(atmosphere->earth_radius)) + (*height_of_eye)).convert(LengthUnit_types[0]).value) )
+                     * ((wxGetApp().Re.convert(LengthUnit_types[0]).value) / (((wxGetApp().Re) + (*height_of_eye)).convert(LengthUnit_types[0]).value) )
               ), prefix);
 
 }
@@ -430,7 +430,7 @@ double Sight::rhs_DH_parallax_and_limb(double h, void* sight) {
 
     Sight* a = (Sight*)sight;
 
-    return(-((a->H_i).value) + h + asin(((a->body)->radius->value) / sqrt(gsl_pow_2(((a->r)->value)) + gsl_pow_2(((a->atmosphere)->earth_radius->value)) - 2.0 * ((a->r)->value) * ((a->atmosphere)->earth_radius->value) * sin(h))) - atan((((a->atmosphere)->earth_radius->value) * cos(h)) / (((a->r)->value) - ((a->atmosphere)->earth_radius->value) * sin(h))));
+    return(-((a->H_i).value) + h + asin(((a->body)->radius->value) / sqrt(gsl_pow_2(((a->r)->value)) + gsl_pow_2((wxGetApp().Re.value)) - 2.0 * ((a->r)->value) * (wxGetApp().Re.value) * sin(h))) - atan(((wxGetApp().Re.value) * cos(h)) / (((a->r)->value) - (wxGetApp().Re.value) * sin(h))));
 
 }
 
@@ -444,7 +444,7 @@ double Sight::dH_refraction(double z, void* sight) {
     z_Length.set(z, LengthUnit_types[0]);
     zero_Length.set(0.0, LengthUnit_types[0]);
 
-    return(-(a->atmosphere->earth_radius->value) * (a->atmosphere->n(zero_Length)) * cos((a->H_a)) * (a->atmosphere->dndz)(z_Length) / (a->atmosphere->n)(z_Length) / sqrt(gsl_pow_2(((a->atmosphere->earth_radius->value) + z) * (a->atmosphere->n)(z_Length)) - gsl_pow_2((a->atmosphere->earth_radius->value) * (a->atmosphere->n)(zero_Length) * cos((a->H_a)))));
+    return(-(wxGetApp().Re.value) * (a->atmosphere->n(zero_Length)) * cos((a->H_a)) * (a->atmosphere->dndz)(z_Length) / (a->atmosphere->n)(z_Length) / sqrt(gsl_pow_2(((wxGetApp().Re.value) + z) * (a->atmosphere->n)(z_Length)) - gsl_pow_2((wxGetApp().Re.value) * (a->atmosphere->n)(zero_Length) * cos((a->H_a)))));
 
 }
 
@@ -597,13 +597,13 @@ void Sight::compute_DH_parallax_and_limb(String prefix) {
         case 'l':
         {
             //    H_o.value = (H_i.value) + asin(((atmosphere.earth_radius->value)*cos(H_i)+(body.radius.value))/(r.value));
-            DH_parallax_and_limb.value = asin(((atmosphere->earth_radius->value) * cos(H_i) + (body->radius->value)) / (r->value));
+            DH_parallax_and_limb.value = asin(((wxGetApp().Re.value) * cos(H_i) + (body->radius->value)) / (r->value));
             break;
         }
         case 'c':
         {
             //H_o.value = (H_i.value) + asin((atmosphere.earth_radius->value)*cos(H_i)/(r.value));
-            DH_parallax_and_limb.value = asin((atmosphere->earth_radius->value) * cos(H_i) / (r->value));
+            DH_parallax_and_limb.value = asin((wxGetApp().Re.value) * cos(H_i) / (r->value));
             break;
         }
         }

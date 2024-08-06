@@ -2,76 +2,86 @@ Data:
 	Sights:
 		Sight #1:
 			body:
-				Type = star
-				Name = spica
-				Right ascension = 201° 17.8999800000013'
-				Declination = 348° 50.32500000000149'
-			sextant altitude = 47° 57.79999999999987'
-			index error = 0° 1.9'
+				Type = moon
+				Name = moon
+				Radius = 938.12099999999998090061126276851 nm
+			limb = u
+			sextant altitude = 47° 57.799999999999869260136620141566'
+			index error = 0° 1.8999999999999996891375531049562'
 			artificial horizon = y
 			master-clock date and hour of sight:
-				date = 2021-06-21
-				hour = 21:01:20
+				date of master-clock date and hour of sight = 2021-06-21
+				hour of master-clock date and hour of sight = 21:01:20
 			use of stopwatch = y
-			stopwatch = 00:37:35
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			hour of stopwatch = 00:37:35
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = Sight was taken at BGC
 		Sight #2:
 			body:
-				Type = star
-				Name = vega
-				Right ascension = 279° 13.92612000000005'
-				Declination = 38° 46.93896000000015'
-			sextant altitude = 13° 3.000000000000054'
-			index error = 0° 1.9'
-			artificial horizon = n
-			height of eye = 18.5199999999999996 m
+				Type = moon
+				Name = moon
+				Radius = 938.12099999999998090061126276851 nm
+			limb = u
+			sextant altitude = 47° 13.500000000000085265128291212022'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
 			master-clock date and hour of sight:
-				date = 2022-01-10
-				hour = 12:52:00
-			use of stopwatch = n
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = 2024-01-10 12:52:09 UTC+2
-	Routes:
-		Route #1:
-			type = circle of equal altitude
-			ground position:
-				latitude = 2° 1.999999999999989'
-				longitude = 357° 58.00000000000343'
-				label = 2024-01-11 17:17:38 UTC+2
-			aperture angle = 2° 1.999999999999989'
-			label = route with speed and time
-		Route #2:
-			type = loxodrome
-			start position:
-				latitude = 22° 3.000000000000147'
-				longitude = 356° 56.99999999999908'
-				label = 2024-01-21 17:04:03 UTC+2
-			starting heading = 19° 3.000000000000084'
-			length format = time and speed
-				time = 06:59:45.54
-				speed = 510 kt
-			label = 2024-08-02 12:54:35 UTC+2
-		Route #3:
-			type = orthodrome
-			start position:
-				latitude = 22° 3.000000000000147'
-				longitude = 356° 56.99999999999908'
-				label = 2024-01-21 17:04:03 UTC+2
-			starting heading = 19° 3.000000000000084'
-			length format = time and speed
-				time = 06:59:45.5436
-				speed = 500 kt
-			label = jlkj
+				date of master-clock date and hour of sight = 2021-06-21
+				hour of master-clock date and hour of sight = 21:01:20
+			use of stopwatch = y
+			hour of stopwatch = 00:48:08.9900000000000002131628207280301
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at BGC
+		Sight #3:
+			body:
+				Type = star
+				Name = arcturus
+				Right ascension = 213° 54.79890000000068539520725607872'
+				Declination = 19° 10.694899999999947226569929625839'
+			sextant altitude = 67° 13.399999999999749888957012444735'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-07-06
+				hour of master-clock date and hour of sight = 22:48:40
+			use of stopwatch = y
+			hour of stopwatch = 00:19:36.819000000000002614797267597169
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at BGC
+		Sight #4:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375648 nm
+			limb = l
+			sextant altitude = 53° 16.800000000000068212102632969618'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-07-08
+				hour of master-clock date and hour of sight = 06:56:00
+			use of stopwatch = y
+			hour of stopwatch = 00:01:46.826000000000000511590769747272
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at MP
+    Routes:
 	Positions:
 		Position #1:
-			latitude = 323° 36.54636500000291'
-			longitude = 315° 55.56999999999896'
-			label = Siamo in biblioteca
-Recent bodies = 3 10 12
+			latitude = 48° 51.179385474737415506751858629286'
+			longitude = 357° 35.178159790311838150955736637115'
+			label = Centre Sportif Maryse Hilsz (MH)
+		Position #2:
+			latitude = 48° 51.327167000000031293893698602915'
+			longitude = 357° 35.565500000000156433088704943657'
+			label = Baby Gym Campo (BGC)
+		Position #3:
+			latitude = 48° 51.309166999999860081516089849174'
+			longitude = 357° 35.41566699999748379923403263092'
+			label = My Place (MP)
+Recent bodies = 12 10 8
 Recent projections = 1 0
 Recent length formats = 1 0
-Recent route types = 0 1 2
+Recent route types = 1 0 2
 Recent route for transport types = 1 0
 Recent length units = 0 1
 Recent speed units = 0 1

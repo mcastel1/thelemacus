@@ -1,12 +1,12 @@
 //
-//  check_length_unit.h
+//  check_unit.h
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#ifndef check_length_unit_h
-#define check_length_unit_h
+#ifndef check_unit_h
+#define check_unit_h
 
 #include <iostream>
 

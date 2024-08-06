@@ -198,7 +198,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
     
 }
 
-
+template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::CheckInCatalog(bool*, unsigned int*);
 
 
 //this method is called whenever the user kills the focus on the GUI field in order to check the content of the GUI field and do the necessary operations

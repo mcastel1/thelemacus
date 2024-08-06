@@ -8,8 +8,10 @@
 
 
 #include "atmosphere.h"
-#include "length.h"
+
 #include "constants.h"
+#include "length.h"
+#include "my_app.h"
 #include "units.h"
 
 Atmosphere::Atmosphere(void){
@@ -169,7 +171,7 @@ void Atmosphere::initialize(void) {
     beta = 2.8 * nm_to_km;
     gamma = -2.8 * nm_to_km;
     T0 = 288.15;
-    earth_radius->set(Re);
+    earth_radius->set((wxGetApp().Re));
 
     h.resize(n_layers + 1);
     lambda.resize(n_layers);

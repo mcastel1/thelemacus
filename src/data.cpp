@@ -55,7 +55,7 @@ void Data::print_to_kml(String prefix) {
 
                 //I consider a Length equal to a temporary value of the length of the route, which spans between 0 and 2.0*M_PI*(Re*sin(((route_list[i]).omega.value))) across the for loop over j
                 //I compute the coordinate of the endpoint of route_list[i] for the ((route_list[i]).l) above
-                (route_list[i]).compute_end(Length(2.0 * M_PI * ((Re.value) * sin(((route_list[i]).omega.value))) * ((double)j) / ((double)(wxGetApp().n_points_routes.value - 1))), new_prefix);
+                (route_list[i]).compute_end(Length(2.0 * M_PI * ((wxGetApp().Re.value) * sin(((route_list[i]).omega.value))) * ((double)j) / ((double)(wxGetApp().n_points_routes.value - 1))), new_prefix);
 
                 //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude, and in the third altitude (I am not interested in altitude, thus is set it to 0); The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90.
 
@@ -237,7 +237,7 @@ int Data::compute_position(String prefix) {
             //r is the minimal distance between crossing points. To find the minimum, here I set r to it largest possible value, obtained when the two points are at the antipodes. I find the pair of crossing points which is closest to each other, and set Position center to one of the Positions in this pair. center will thus represent the approximate astronomical position. I will then run over all the pairs of crossing points in p, p[i], and pick either p[i][0] or p[i][1]: I will pick the one which is closest to center
 
             cout << prefix.value << "Distances between pairs of crossing positions:\n";
-            r.set(M_PI * (Re.value), LengthUnit_types[0]);
+            r.set(M_PI * (wxGetApp().Re.value), LengthUnit_types[0]);
 
             for (i = 0; i < q.size(); i++) {
                 for (j = i + 1; j < q.size(); j++) {
@@ -321,7 +321,7 @@ int Data::compute_position(String prefix) {
                 //computes the circle of equal altitude which represents the error of the sight
                 (error_circle.type) = RouteType(((Route_types[2]).value));
                 (*(error_circle.reference_position)) = center;
-                (error_circle.omega.value) = (r.value) / (Re.value);
+                (error_circle.omega.value) = (r.value) / (wxGetApp().Re.value);
                 (error_circle.label) = String("error on astronomical position");
                 ((error_circle.related_sight).value) = -1;
                 

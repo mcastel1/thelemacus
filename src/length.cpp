@@ -39,7 +39,7 @@ Length::Length(double x) {
 Length::Length(double value_in, const LengthUnit& unit_in) {
 
     value = value_in;
-    unit->set((*unit_in));
+    unit->set(unit_in);
 
 }
 
@@ -122,7 +122,7 @@ void Length::set(double x) {
 void Length::set(double value_in, const LengthUnit& unit_in) {
     
     value = value_in;
-    unit->set((*unit_in));
+    unit->set(unit_in);
     
 }
 

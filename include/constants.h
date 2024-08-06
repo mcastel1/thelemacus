@@ -19,7 +19,7 @@ extern Int /*this is the low precision used for displaying data*/ display_precis
 extern Double /*the ratio between the width (height) of the plot area and the width (height) of the chart*/length_plot_area_over_length_chart, length_chart_over_length_chart_frame, /*this is the ratio between (the length of the borders drawn around the widgets) and (the length of the screen)*/length_border_over_length_screen;
 //maximal and minimal latitude of the points in file path_file_coastlines
 extern Angle max_lat, min_lat;
-//extern Length michele(1);
+extern Length Re;
 
 #define deg_to_rad (2.0*M_PI/360.0)
 #define rad_to_deg (1.0/deg_to_rad)
@@ -40,8 +40,8 @@ extern Angle max_lat, min_lat;
 //one in uint64_t format
 #define one_uint64_t ((uint64_t)1)
 #define accuracy_equal_approx 52
-//earth radius in nautical miles
-#define Re (60.0*360.0/(2.0*M_PI))
+//earth radius in nautical miles: this is a temporary value of the radius of the Earth which will be written into the Length Re by MyApp::OnInit
+#define Re_temp (60.0*360.0/(2.0*M_PI))
 #define RED     "\033[1;31m"
 #define YELLOW     "\033[1;33m"
 #define CYAN "\033[1;36m"

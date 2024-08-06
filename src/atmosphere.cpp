@@ -169,7 +169,7 @@ void Atmosphere::initialize(void) {
     beta = 2.8 * nm_to_km;
     gamma = -2.8 * nm_to_km;
     T0 = 288.15;
-    earth_radius->value = Re;
+    earth_radius->set(Re);
 
     h.resize(n_layers + 1);
     lambda.resize(n_layers);

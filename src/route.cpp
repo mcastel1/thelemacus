@@ -150,7 +150,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
             //set the legnth as the length of the shortest great circle joining p_start and p_end
             phi.set(acos(r_start.dot(r_end)));
             
-            length->set(Re*(phi.value), LengthUnit_types[0]);
+            length->set((Re.value)*(phi.value), LengthUnit_types[0]);
             
             //set the tentative solution for the azimuth angle z: Z may be either z  (solkution 1) or -z (solution 2), I will pick the correct solution later
             z.set(String(""),

@@ -1607,7 +1607,7 @@ void DrawPanel::PreRenderMercator(void) {
     //draw the first chunk of intermediate ticks on the longitude axis
     if (gamma_lambda != 1) {
 
-        route.length->set(Re * (wxGetApp().tick_length_over_width_plot_area.value) * phi_span, LengthUnit_types[0]);
+        route.length->set((Re.value) * (wxGetApp().tick_length_over_width_plot_area.value) * phi_span, LengthUnit_types[0]);
 
         //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
         for ((route.reference_position->lambda.value) = (lambda_start.value) - delta_lambda;
@@ -1624,7 +1624,7 @@ void DrawPanel::PreRenderMercator(void) {
     }
 
 
-    for (route.length->set(Re* ((parent->phi_max->normalize_pm_pi_ret().value) - (parent->phi_min->normalize_pm_pi_ret().value)), LengthUnit_types[0]),
+    for (route.length->set((Re.value)* ((parent->phi_max->normalize_pm_pi_ret().value) - (parent->phi_min->normalize_pm_pi_ret().value)), LengthUnit_types[0]),
         (route.reference_position->lambda.value) = (lambda_start.value);
         (route.reference_position->lambda.value) < (lambda_end.value);
         (route.reference_position->lambda.value) += delta_lambda) {
@@ -1638,7 +1638,7 @@ void DrawPanel::PreRenderMercator(void) {
             //draw intermediate ticks on the longitude axis
 
             (lambda_saved.value) = (route.reference_position->lambda.value);
-            route.length->set(Re * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, LengthUnit_types[0]);
+            route.length->set((Re.value) * (((wxGetApp().tick_length_over_width_plot_area)).value) * phi_span, LengthUnit_types[0]);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for ((route.reference_position->lambda.value) = (lambda_saved.value);
@@ -1650,7 +1650,7 @@ void DrawPanel::PreRenderMercator(void) {
                 //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
             }
 
-            route.length->set(Re * ((parent->phi_max->normalize_pm_pi_ret().value) - (parent->phi_min->normalize_pm_pi_ret().value)), LengthUnit_types[0]);
+            route.length->set((Re.value) * ((parent->phi_max->normalize_pm_pi_ret().value) - (parent->phi_min->normalize_pm_pi_ret().value)), LengthUnit_types[0]);
             (route.reference_position->lambda.value) = (lambda_saved.value);
 
         }
@@ -1672,7 +1672,7 @@ void DrawPanel::PreRenderMercator(void) {
         //route.omega  and route.reference_position->phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
         (route.reference_position->phi) = phi;
         route.length->set(
-            Re * cos(phi) * ((
+            (Re.value) * cos(phi) * ((
 
                 ((((*(parent->lambda_min))) < M_PI) && (((*(parent->lambda_max))) > M_PI)) ? (((*(parent->lambda_min))) - ((*(parent->lambda_max))) + 2.0 * M_PI) : (((*(parent->lambda_min))) - ((*(parent->lambda_max))))
 
@@ -1688,7 +1688,7 @@ void DrawPanel::PreRenderMercator(void) {
         if (gamma_phi != 1) {
             //draw smaller ticks -> set route to a loxodrome pointing towards the E and draw it
 
-            route.length->set(Re * (wxGetApp().tick_length_over_width_plot_area.value) * lambda_span, LengthUnit_types[0]);
+            route.length->set((Re.value) * (wxGetApp().tick_length_over_width_plot_area.value) * lambda_span, LengthUnit_types[0]);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for (
@@ -1962,7 +1962,7 @@ void DrawPanel::PreRender3D(void) {
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
-    route.length->set(Re * M_PI, LengthUnit_types[0]);
+    route.length->set((Re.value) * M_PI, LengthUnit_types[0]);
     route.Z.set(0.0);
     (route.reference_position->phi) = -M_PI_2;
 
@@ -1984,7 +1984,7 @@ void DrawPanel::PreRender3D(void) {
             Z_saved = (route.Z);
 
             route.Z.set(0.0);
-            route.length->set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer->omega.value)), LengthUnit_types[0]);
+            route.length->set((Re.value) * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer->omega.value)), LengthUnit_types[0]);
             (route.reference_position->phi) = phi_middle;
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
@@ -1999,7 +1999,7 @@ void DrawPanel::PreRender3D(void) {
 
             }
 
-            route.length->set(Re * M_PI, LengthUnit_types[0]);
+            route.length->set((Re.value) * M_PI, LengthUnit_types[0]);
             (route.Z) = Z_saved;
             (route.reference_position->lambda.value) = (lambda_saved.value);
             (route.reference_position->phi) = phi_saved;
@@ -2021,7 +2021,7 @@ void DrawPanel::PreRender3D(void) {
 
         //route.omega  and route.reference_position->phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
         route.omega.set(M_PI_2 - fabs(phi.value));
-        route.length->set(2.0 * M_PI * Re * sin(route.omega), LengthUnit_types[0]);
+        route.length->set(2.0 * M_PI * (Re.value) * sin(route.omega), LengthUnit_types[0]);
         route.reference_position->phi.set(GSL_SIGN(phi.value) * M_PI_2);
 
         //add the current parallel that is being drawn to parallels
@@ -2035,7 +2035,7 @@ void DrawPanel::PreRender3D(void) {
 
             route.type.set(String(((Route_types[1]).value)));
             route.Z.set(M_PI_2);
-            route.length->set(Re * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer->omega.value)), LengthUnit_types[0]);
+            route.length->set((Re.value) * 2.0 * ((wxGetApp().tick_length_over_aperture_circle_observer.value) * (circle_observer->omega.value)), LengthUnit_types[0]);
 
             //set custom-made minor xticks every tenths (i/10.0) of arcminute (60.0)
             for (
@@ -2189,7 +2189,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
     circle_observer->lambda_min_max((parent->lambda_min), (parent->lambda_max), String(""));
 
     //set
-    d->set((-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer->omega))))*Re);
+    d->set((-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer->omega))))*(Re.value));
     //here I set the value of d into observer_height, not the unit of measure, because I want the user to decide the unit of measure by selecting in the wxComboBox in the unit field
     parent->observer_height->set_value_keep_unit();
 
@@ -2679,7 +2679,7 @@ bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, bool wr
                    );
     
     
-    check = (gsl_vector_get((rp->r), 1) < -1.0 / (1.0 + (d->value)/Re));
+    check = (gsl_vector_get((rp->r), 1) < -1.0 / (1.0 + (d->value)/(Re.value)));
 
 
 
@@ -2697,7 +2697,7 @@ bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, bool wr
             //            gsl_blas_dgemv(CblasNoTrans, 1.0, rotation.matrix, (p.r), 0.0, (rp.r));
             cblas_dgemv(CblasRowMajor, CblasNoTrans, 3, 3, 1, rotation->matrix->data, 3, p.r->data, 1, 0, rp->r->data, 1);
             
-            temp = (d->value) / ((d->value) + Re*(1.0 + gsl_vector_get((rp->r), 1)));
+            temp = (d->value) / ((d->value) + (Re.value)*(1.0 + gsl_vector_get((rp->r), 1)));
             (q->x) = gsl_vector_get((rp->r), 0) * temp;
             (q->y) = gsl_vector_get((rp->r), 2) * temp;
 

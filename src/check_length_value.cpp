@@ -7,6 +7,7 @@
 
 #include "check_length_value.h"
 
+#include "generic.h"
 #include "my_app.h"
 #include "my_string.h"
 #include "sight_frame.h"

@@ -18,7 +18,10 @@
 
 using namespace std;
 
+class Chrono;
+class LengthUnit;
 class Speed;
+class String;
 
 //a non-GUI object containing a Length
 class Length{

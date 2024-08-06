@@ -7,8 +7,12 @@
 #include "angle.h"
 #include "double.h"
 #include "int.h"
+#include "length.h"
 
 using namespace std;
+
+class Length;
+
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
 extern Int /*this is the low precision used for displaying data*/ display_precision, /*this is the high precision used for storing data and making calculations with it*/ data_precision;

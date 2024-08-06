@@ -10,6 +10,7 @@
 #include "bitmap.h"
 #include "chart_transport_handler.h"
 #include "constants.h"
+#include "generic.h"
 #include "static_length_field.h"
 #include "units.h"
 #include "unset_idling.h"

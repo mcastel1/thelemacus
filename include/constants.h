@@ -11,7 +11,7 @@
 
 using namespace std;
 
-class Length;
+//class Length;
 
 
 //lengths are in nm, time is in hours, temperature in Kelvin, Pressure in Pascal
@@ -19,6 +19,7 @@ extern Int /*this is the low precision used for displaying data*/ display_precis
 extern Double /*the ratio between the width (height) of the plot area and the width (height) of the chart*/length_plot_area_over_length_chart, length_chart_over_length_chart_frame, /*this is the ratio between (the length of the borders drawn around the widgets) and (the length of the screen)*/length_border_over_length_screen;
 //maximal and minimal latitude of the points in file path_file_coastlines
 extern Angle max_lat, min_lat;
+extern Length michele(1);
 
 #define deg_to_rad (2.0*M_PI/360.0)
 #define rad_to_deg (1.0/deg_to_rad)

@@ -16,6 +16,7 @@
 #include "check_length.h"
 #include "check_length_value.h"
 #include "constants.h"
+#include "generic.h"
 #include "length.h"
 #include "sight_frame.h"
 

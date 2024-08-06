@@ -206,7 +206,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
     length_format.set((LengthFormat_types[1]));
     
     //the lenght of the circle of equal altitude is set by default
-    length->set(2.0 * M_PI * Re * sin(omega), LengthUnit_types[0]);
+    length->set(2.0 * M_PI * (Re.value) * sin(omega), LengthUnit_types[0]);
 
     related_sight.set(-1);
 
@@ -650,7 +650,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                                 
                 for (s->resize(t.size()), i = 0; i < (t.size()); i++) {
                     
-                    ((*s)[i]).set(((t[i]).value) * Re);
+                    ((*s)[i]).set(((t[i]).value) * (Re.value));
                     
                 }
                 

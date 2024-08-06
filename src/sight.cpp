@@ -5,8 +5,9 @@
 //  Created by Michele on 11/06/2024.
 //
 
-#include <sstream>
+#include "sight.h"
 
+#include <sstream>
 
 #include "gsl_roots.h"
 #include "gsl_integration.h"
@@ -16,8 +17,8 @@
 
 #include "constants.h"
 #include "file_r.h"
+#include "generic.h"
 #include "my_app.h"
-#include "sight.h"
 #include "units.h"
 
 

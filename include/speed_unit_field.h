@@ -11,15 +11,16 @@
 #include <iostream>
 
 #include "multiple_item_field.h"
+#include "speed_field.h"
 
 using namespace std;
 
-template<class P> class CheckUnit;
+template<class P, class GUI> class CheckUnit;
 class SpeedUnit;
 
 
 //GUI field to specify the unit of measure of a Speed, which is inserted into a parent panel of type P
-template<class P> class SpeedUnitField: public MultipleItemField<P, SpeedUnit, CheckUnit<P> >{
+template<class P> class SpeedUnitField: public MultipleItemField<P, SpeedUnit, CheckUnit<P, SpeedField<P>> >{
     
 public:
     

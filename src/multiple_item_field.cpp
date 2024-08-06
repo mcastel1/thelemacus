@@ -66,11 +66,11 @@ template<class P, class NON_GUI, class CHECK> MultipleItemField<P, NON_GUI, CHEC
 template class MultipleItemField<ChartFrame, Projection, void>;
 template class MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>;
 template class MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>;
-template class MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame>>;
+template class MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedUnitField<RouteFrame>>>;
 template class MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame>>;
-template class MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame>>;
-template class MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame>>;
-template class MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame>>;
+template class MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, LengthUnitField<ChartFrame>>>;
+template class MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthUnitField<RouteFrame>>>;
+template class MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnitField<SightFrame>>>;
 
 
 template<class P, class NON_GUI, class CHECK> template <typename EventTag, typename Method, typename Object> void MultipleItemField<P, NON_GUI, CHECK>::Bind(EventTag tag, Method method, Object object) {

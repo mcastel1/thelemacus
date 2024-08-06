@@ -555,7 +555,7 @@ void RouteFrame::KeyDown(wxKeyEvent& event) {
 
 }
 
-//run check on all the GUI fields that are members of SightFrame and write true/false in their ok variables
+//run check on all the GUI fields that are members of RouteFrame and write true/false in their ok variables
 template<class E> void RouteFrame::Check(E& event) {
 
     (*(type->check))(event);

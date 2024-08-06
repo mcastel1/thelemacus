@@ -350,6 +350,5 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 
 template void MultipleItemField<ChartFrame, Projection, void>::Enable(bool);
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::Enable(bool);
-template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthUnitField<RouteFrame>>>::Enable(bool);
-template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedUnitField<RouteFrame>>>::Enable(bool);
-template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnitField<SightFrame>>>::Enable(bool);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthUnitField<RouteFrame> > >::Enable(bool);
+template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::Enable(bool);

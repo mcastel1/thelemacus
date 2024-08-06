@@ -9,6 +9,10 @@
 #include "constants.h"
 
 
+#ifdef _WIN32
+#include <sstream>      // std::istringstream
+#endif
+
 FileR::FileR() {
 
 #ifdef __APPLE__
@@ -26,11 +30,11 @@ FileR::FileR() {
 }
 
 //set the name of *this from input. On Win32: if input is a file path, it gets from it the [file name without folder nor extension] and write it
-// into name_without_folder_nor_extension, while if input is not a  file path, it writes it directly into name_without_folder_nor_extension
+// into *name_without_folder_nor_extension, while if input is not a  file path, it writes it directly into *name_without_folder_nor_extension
 void FileR::set_name(String input) {
 
 #ifdef __APPLE__
-    //I am on APPLE -> input = [full file path] -> I set name, folder, name_without_folder_nor_extension and extension
+    //I am on APPLE -> input = [full file path] -> I set name, folder, *name_without_folder_nor_extension and extension
 
     (name.value) = (input.value);
     name.split_file_path(&folder, name_without_folder_nor_extension, &extension, String(""));
@@ -38,16 +42,16 @@ void FileR::set_name(String input) {
 #endif
 
 #ifdef _WIN32
-    //I am on WIN32->input = [file name without folder nor extenion] -> I set name_without_folder_nor_extension from input
+    //I am on WIN32->input = [file name without folder nor extenion] -> I set *name_without_folder_nor_extension from input
 
     if (input.is_a_file_path(String(""))) {
 
-        input.split_file_path(NULL, &name_without_folder_nor_extension, NULL, String(""));
+        input.split_file_path(NULL, name_without_folder_nor_extension, NULL, String(""));
 
     }
     else {
 
-        (name_without_folder_nor_extension.value) = (input.value);
+        (name_without_folder_nor_extension->value) = (input.value);
 
     }
 
@@ -91,9 +95,9 @@ bool FileR::open([[maybe_unused]] String prefix) {
     LPCWSTR resource_id;
     wstring temp;
 
-    temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
+    temp = wstring((name_without_folder_nor_extension->value).begin(), (name_without_folder_nor_extension->value).end());
 
-    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
+    //the resource id in WIN32 resource file is equal to *name_without_folder_nor_extension
     resource_id = (temp.c_str());
 
     hModule = GetModuleHandle(NULL);
@@ -116,7 +120,7 @@ bool FileR::open([[maybe_unused]] String prefix) {
     else {
         //the resource has not been found
 
-        cout << prefix.value << RED << "Error opening resource " << (name_without_folder_nor_extension.value) << "!\n" << RESET;
+        cout << prefix.value << RED << "Error opening resource " << (name_without_folder_nor_extension->value) << "!\n" << RESET;
 
         return false;
 
@@ -178,8 +182,8 @@ bool FileR::check_if_exists(String prefix) {
     wstring temp;
 
 
-    temp = wstring((name_without_folder_nor_extension.value).begin(), (name_without_folder_nor_extension.value).end());
-    //the resource id in WIN32 resource file is equal to name_without_folder_nor_extension
+    temp = wstring((name_without_folder_nor_extension->value).begin(), (name_without_folder_nor_extension->value).end());
+    //the resource id in WIN32 resource file is equal to *name_without_folder_nor_extension
     resource_id = (temp.c_str());
 
     hModule = GetModuleHandle(NULL);
@@ -187,13 +191,13 @@ bool FileR::check_if_exists(String prefix) {
 
     if (hResource != NULL) {
 
-        cout << prefix.value << "FileR " << (name_without_folder_nor_extension.value) << " exists.\n";
+        cout << prefix.value << "FileR " << (name_without_folder_nor_extension->value) << " exists.\n";
         output = true;
 
     }
     else {
 
-        cout << prefix.value << RED << "FileR " << (name_without_folder_nor_extension.value) << " does not exist!\n" << RESET;
+        cout << prefix.value << RED << "FileR " << (name_without_folder_nor_extension->value) << " does not exist!\n" << RESET;
         output = false;
 
     }
@@ -217,7 +221,7 @@ void FileR::count_lines(String prefix) {
 
 #ifdef  _WIN32
     //I am on WIN32 operating system -> FileR is a resource -> I set the resource id of temp equal to that of *this
-    temp.set_name(name_without_folder_nor_extension);
+    temp.set_name((*name_without_folder_nor_extension));
 #endif
 
     temp.open(prefix);

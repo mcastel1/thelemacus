@@ -40,9 +40,9 @@ template<class S> void ListControl<S>::SetColumns(vector<wxString> headers) {
 
 }
 
-template void ListControl<Route>::SetColumns(std::__1::vector<wxString, std::__1::allocator<wxString>>);
-template void ListControl<Sight>::SetColumns(std::__1::vector<wxString, std::__1::allocator<wxString>>);
-template void ListControl<Position>::SetColumns(std::__1::vector<wxString, std::__1::allocator<wxString>>);
+template void ListControl<Route>::SetColumns(vector<wxString, allocator<wxString>>);
+template void ListControl<Sight>::SetColumns(vector<wxString, allocator<wxString>>);
+template void ListControl<Position>::SetColumns(vector<wxString, allocator<wxString>>);
 
 
 //push back a column to ListControl and store the header size into header_size
@@ -107,9 +107,9 @@ template<class S> void ListControl<S>::set(vector<S> v, bool keep_selected_items
 
 }
 
-template void ListControl<Route>::set(std::__1::vector<Route, std::__1::allocator<Route>>, bool);
-template void ListControl<Sight>::set(std::__1::vector<Sight, std::__1::allocator<Sight>>, bool);
-template void ListControl<Position>::set(std::__1::vector<Position, std::__1::allocator<Position>>, bool);
+template void ListControl<Route>::set(vector<Route, allocator<Route>>, bool);
+template void ListControl<Sight>::set(vector<Sight, allocator<Sight>>, bool);
+template void ListControl<Position>::set(vector<Position, allocator<Position>>, bool);
 
 
 //if check = true/false it enables/disables all disableable buttons in *this
@@ -154,9 +154,9 @@ template<class S> void ListControl<S>::Resize(vector<S> list) {
 
 }
 
-template void ListControl<Route>::Resize(std::__1::vector<Route, std::__1::allocator<Route>>);
-template void ListControl<Sight>::Resize(std::__1::vector<Sight, std::__1::allocator<Sight>>);
-template void ListControl<Position>::Resize(std::__1::vector<Position, std::__1::allocator<Position>>);
+template void ListControl<Route>::Resize(vector<Route, allocator<Route>>);
+template void ListControl<Sight>::Resize(vector<Sight, allocator<Sight>>);
+template void ListControl<Position>::Resize(vector<Position, allocator<Position>>);
 
 
 //get the selected items from *this, clears and reallocate selected_items, and writes them in selected_items

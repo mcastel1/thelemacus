@@ -10,10 +10,11 @@
 
 #include <iostream>
 
-#include "my_string.h"
-#include "length.h"
 #include "angle.h"
+#include "body_name.h"
 #include "catalog.h"
+#include "length.h"
+#include "my_string.h"
 
 using namespace std;
 
@@ -27,7 +28,8 @@ class Body{
     
 public:
 
-    String *name, *type;
+    BodyName* name;
+    String *type;
     Length *radius;
     Angle *RA, *d;
     

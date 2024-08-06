@@ -32,22 +32,6 @@ Data:
 			use of stopwatch = n
 			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = 2024-01-10 12:52:09 UTC+2
-		Sight #3:
-			body:
-				Type = star
-				Name = hamal
-				Right ascension = 31° 47.59715999999988'
-				Declination = 23° 27.74525999999999'
-			sextant altitude = 33° 2.999999999999932'
-			index error = 0° 1.9'
-			artificial horizon = n
-			height of eye = 40.0000000000000000 m
-			master-clock date and hour of sight:
-				date = 2024-06-05
-				hour = 19:36:34
-			use of stopwatch = n
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = 2024-06-05 19:36:45 UTC+2
 	Routes:
 		Route #1:
 			type = circle of equal altitude
@@ -79,14 +63,6 @@ Data:
 				time = 06:59:45.5436
 				speed = 500 kt
 			label = jlkj
-		Route #4:
-			type = circle of equal altitude
-			ground position:
-				latitude = 336° 57.00000000000044'
-				longitude = 356° 56.99999999999908'
-				label = 2024-01-21 17:04:03 UTC+2
-			aperture angle = 45° 2.999999999999802'
-			label = lkjnb
 	Positions:
 		Position #1:
 			latitude = 323° 36.54636500000291'

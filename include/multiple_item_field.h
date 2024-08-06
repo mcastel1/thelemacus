@@ -16,13 +16,13 @@
 using namespace std;
 
 
-//this class is the parent of all classes for GUI fields which include a list of multiple items to  be selected (such as ProjectionField, LengthFormatField, ...). All members and methods which are common to these children classes are written in this parent class. P is the type of the frame that hosts *this. NON_GUI is the type of the non-GUI field related to *this: For example, if I create a  class BodyField derived from MultipleItemField, then NON_GUI = Body; if I create a derived class LengthFormatField derived from MultipleItemField, NON_GUI = LengthFormat, etc. If there is no non-GUI object associated with *this, I set NON_GUI = void and call the constructor of MultipleItemField with second argument equal to NULL. CHECK is the type of the functor that will be used to check whetehr *this is valid: for example, for a BodyField CHECK = CheckBody<P>. If the check functor is not defined -> CHECK = void
+//this class is the parent of all classes for GUI fields which include a list of multiple items to  be selected (such as ProjectionField, LengthFormatField, ...). All members and methods which are common to these children classes are written in this parent class. P is the type of the frame that hosts *this. NON_GUI is the type of the non-GUI field related to *this: For example, if I create a  class BodyNameField derived from MultipleItemField, then NON_GUI = Body; if I create a derived class LengthFormatField derived from MultipleItemField, NON_GUI = LengthFormat, etc. If there is no non-GUI object associated with *this, I set NON_GUI = void and call the constructor of MultipleItemField with second argument equal to NULL. CHECK is the type of the functor that will be used to check whetehr *this is valid: for example, for a BodyNameField CHECK = CheckBodyName<P>. If the check functor is not defined -> CHECK = void
 template<class P, class NON_GUI, class CHECK> class MultipleItemField{
     
 public:
     
     P* parent;
-    //the non-GUI object related to *this: for example, if I create a  class BodyField derived from MultipleItemField, then *object will be a Body object
+    //the non-GUI object related to *this: for example, if I create a  class BodyNameField derived from MultipleItemField, then *object will be a Body object
     NON_GUI* object;
     //a pointer to the functor that will be used to check whether *this is valid
     CHECK* check;

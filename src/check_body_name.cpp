@@ -1,24 +1,24 @@
 //
-//  check_body.cpp
+//  check_body_name.cpp
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#include "check_body.h"
+#include "check_body_name.h"
 #include "sight_frame.h"
 #include "my_app.h"
 
-template<class P> CheckBody<P>::CheckBody(BodyField<P>* p_in) {
+template<class P> CheckBodyName<P>::CheckBodyName(BodyNameField<P>* p_in) {
 
     p = p_in;
 
 }
 
-template class CheckBody<SightFrame>;
+template class CheckBodyName<SightFrame>;
 
 
-template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
+template<class P> template<class T>void CheckBodyName<P>::operator()(T& event) {
 
     SightFrame* f = (p->parent);
 
@@ -29,8 +29,8 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
         bool check;
 
         //I check whether the name in the GUI field body matches one of the body names in catalog
-        for (check = false, i = 0; (i < (p->catalog->list).size()) && (!check); i++) {
-            if (String((p->name->GetValue().ToStdString())) == (*(((p->catalog->list)[i]).name))) {
+        for (check = false, i = 0; (i < (wxGetApp().catalog->list.size())) && (!check); i++) {
+            if (String((p->name->GetValue().ToStdString())) == (*(((wxGetApp().catalog->list)[i]).name))) {
                 check = true;
             }
         }
@@ -41,7 +41,7 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 
             if (check) {
 
-                if (((*((p->catalog->list)[i].name)) == String("sun")) || ((*((p->catalog->list)[i].name)) == String("moon"))) {
+                if (((*((wxGetApp().catalog->list)[i].name)) == String("sun")) || ((*((wxGetApp().catalog->list)[i].name)) == String("moon"))) {
                     //in this case, the selected body is a body which has a limb -> I enable the limb field
 
                     f->limb->name->Enable(true);
@@ -87,5 +87,5 @@ template<class P> template<class T>void CheckBody<P>::operator()(T& event) {
 
 }
 
-template void CheckBody<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
-template void CheckBody<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckBodyName<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckBodyName<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

@@ -38,7 +38,7 @@ StaticBitmap::StaticBitmap(wxWindow* parent, String path, [[maybe_unused]] wxSiz
 
     wxBitmap temp;
 
-    temp = wxBitmap(wxString(file.name_without_folder_nor_extension.value), wxBITMAP_TYPE_PNG_RESOURCE);
+    temp = wxBitmap(wxString(file.name_without_folder_nor_extension->value), wxBITMAP_TYPE_PNG_RESOURCE);
     temp = wxBitmap(temp.ConvertToImage().Scale(size.GetWidth(), size.GetHeight()));
     SetBitmap(temp);
 

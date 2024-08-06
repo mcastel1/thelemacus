@@ -26,6 +26,7 @@
 
 using namespace std;
 
+class DrawPanel;
 class Length;
 class Position;
 class PositionRectangle;

@@ -6,6 +6,7 @@
 //
 
 #include "dynamic_length_field.h"
+#include "generic.h"
 #include "length.h"
 #include "length_field.h"
 #include "sight_frame.h"

@@ -13,6 +13,7 @@
 #include <wx/listctrl.h>
 
 #include "constants.h"
+#include "generic.h"
 #include "list_frame.h"
 #include "my_string.h"
 #include "on_select_route_in_list_control_for_transport.h"

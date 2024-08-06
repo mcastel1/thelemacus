@@ -3802,7 +3802,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                     //compute omega as half of  the largest angular distance between the middle of selection rectangle and its corners
                     circle_observer->reference_position->distance((*(parent->parent->geo_position_start)), &l1, String(""), String(""));
                     circle_observer->reference_position->distance(Position(parent->parent->geo_position_start->lambda, parent->parent->position_end->phi), &l2, String(""), String(""));
-                    circle_observer->omega.set(((max(l1, l2).value) / Re)/2.0);
+                    circle_observer->omega.set(((max(l1, l2).value) / (Re.value))/2.0);
                     
                     
                     //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one

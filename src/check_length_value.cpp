@@ -12,6 +12,7 @@
 #include "my_string.h"
 #include "sight_frame.h"
 
+
 template<class P> CheckLengthValue<P>::CheckLengthValue(DynamicLengthField<P>* p_in) {
 
     p = p_in;

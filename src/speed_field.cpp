@@ -16,6 +16,7 @@
 #include "check_speed.h"
 #include "check_speed_value.h"
 #include "constants.h"
+#include "generic.h"
 #include "speed_unit_field.h"
 #include "my_app.h"
 

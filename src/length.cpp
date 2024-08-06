@@ -85,7 +85,6 @@ Length::Length(Chrono time, Speed speed) {
             
         }
 
-
     }
     
     set(c * (time.get()) * (speed.value));

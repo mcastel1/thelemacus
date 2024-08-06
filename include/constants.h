@@ -4,9 +4,9 @@
 #include <iostream>
 
 
-#include "int.h"
-#include "double.h"
 #include "angle.h"
+#include "double.h"
+#include "int.h"
 
 using namespace std;
 

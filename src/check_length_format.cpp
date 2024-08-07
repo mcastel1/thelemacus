@@ -42,6 +42,8 @@ template<class P> template<class T> void CheckLengthFormat<P>::operator()(T& eve
 
         if (check) {
             //the length format is valid
+            
+            //SUBSTITUTE ENABLEDISABLEROUTETYPEFIELDS HERE
 
             //enable/disable the related fields in RouteFrame f
             //if the Route type is a loxodrome or orthodrome, enable = true. Otherwise, enable = false

@@ -625,13 +625,15 @@ void RouteFrame::set(void) {
 
     //USE ENABLE METHOD HERE
     
+    EnableDisableFields();
+    
     if ((route->type.value) == wxString(((Route_types[2]).value))) {
         //I disable the GUI fields which do not define a circle of equal altitude and set the others
 
-        Z->Enable(false);
+//        Z->Enable(false);
 
-        start_phi->Enable(false);
-        start_lambda->Enable(false);
+//        start_phi->Enable(false);
+//        start_lambda->Enable(false);
 
         GP_phi->set();
         GP_lambda->set();
@@ -647,12 +649,12 @@ void RouteFrame::set(void) {
 
         start_phi->set();
         start_lambda->set();
-        start_phi->Enable(!for_transport);
-        start_lambda->Enable(!for_transport);
+//        start_phi->Enable(!for_transport);
+//        start_lambda->Enable(!for_transport);
 
-        GP_phi->Enable(false);
-        GP_lambda->Enable(false);
-        omega->Enable(false);
+//        GP_phi->Enable(false);
+//        GP_lambda->Enable(false);
+//        omega->Enable(false);
 
     }
 
@@ -768,8 +770,17 @@ template<class E> void RouteFrame::EnableDisableFields(E& event) {
 }
 
 template void RouteFrame::EnableDisableFields<wxFocusEvent>(wxFocusEvent&);
-template void  RouteFrame::EnableDisableFields<wxCommandEvent>(wxCommandEvent&);
+template void RouteFrame::EnableDisableFields<wxCommandEvent>(wxCommandEvent&);
 
+
+//same as RouteFrame::EnableDisableFields(E& event) but with no event argument
+void RouteFrame::EnableDisableFields(void){
+    
+    wxCommandEvent dummy;
+    
+    EnableDisableFields(dummy);
+    
+}
 
 //enable/disable the GUI fields in *this accoridng to the choice in type->name (the sleected type of Route)
 template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {

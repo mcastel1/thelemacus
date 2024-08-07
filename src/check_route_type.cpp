@@ -40,6 +40,8 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
 
         if (check) {
             //the Route type is valid
+            
+            //CREATE ENABLE METHOD FROM HERE
 
             //enable/disable the related fields in RouteFrame f
             enable = ((((p->catalog)[i]) == wxString(((Route_types[0]).value))) || (((p->catalog)[i]) == wxString(((Route_types[1]).value))));

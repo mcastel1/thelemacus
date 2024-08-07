@@ -871,6 +871,7 @@ template<class E> void RouteFrame::EnableDisableLengthFormatFields(E& event) {
 }
 
 template void RouteFrame::EnableDisableLengthFormatFields<wxKeyEvent>(wxKeyEvent&);
+template void RouteFrame::EnableDisableLengthFormatFields<wxFocusEvent>(wxFocusEvent&);
 
 
 //when time or speed are edited in RouteFrame, thie method updates the length GUI field by writing in it time x speed

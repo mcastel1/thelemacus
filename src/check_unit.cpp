@@ -11,9 +11,10 @@
 #include "sight_frame.h"
 
 
-template<class P, class GUI> CheckUnit<P, GUI>::CheckUnit(GUI* p_in) {
+template<class P, class GUI> CheckUnit<P, GUI>::CheckUnit(GUI* p_in, const vector<String>& unit_types_in) {
 
     p = p_in;
+    unit_types = unit_types_in;
 
 }
 
@@ -50,8 +51,8 @@ template<class P, class GUI> template <class T> void CheckUnit<P, GUI>::operator
 
             temp.str("");
             temp << "Available units are: ";
-            for (i = 0; i < LengthUnit_types.size(); i++) {
-                temp << (LengthUnit_types[i]).value << ((i < LengthUnit_types.size() - 1) ? ", " : ".");
+            for (i = 0; i < unit_types.size(); i++) {
+                temp << (unit_types[i]).value << ((i < unit_types.size() - 1) ? ", " : ".");
             }
 
             f->print_error_message->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));

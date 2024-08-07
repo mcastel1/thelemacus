@@ -35,7 +35,7 @@ template<class P, class GUI> template <class T> void CheckUnit<P, GUI>::operator
         
         p->unit->CheckInCatalog(&check, &i);
 
-        if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String((p->unit->name->GetValue().ToStdString())) == String("")))) {
 
             //if check is true (false) -> set unit->ok to true (false)
             (p->unit->ok) = check;

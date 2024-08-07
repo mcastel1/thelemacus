@@ -767,6 +767,9 @@ template<class E> void RouteFrame::EnableDisableFields(E& event) {
     
 }
 
+template void RouteFrame::EnableDisableFields<wxFocusEvent>(wxFocusEvent&);
+template void  RouteFrame::EnableDisableFields<wxCommandEvent>(wxCommandEvent&);
+
 
 //enable/disable the GUI fields in *this accoridng to the choice in type->name (the sleected type of Route)
 template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {

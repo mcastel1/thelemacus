@@ -516,7 +516,6 @@ void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe
 }
 
 //tabulate the points of Route *this in any projection of draw_panel and writes them into v
-//inline 
 void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
 
     unsigned int i, j;

@@ -76,6 +76,8 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
 
     //I check whether the name in the GUI field  matches one of the entries  of catalog
     find_and_replace_case_insensitive(MultipleItemField<P, RouteType, CheckRouteType<P> >::name, MultipleItemField<P, RouteType, CheckRouteType<P> >::catalog, &success, &i);
+    
+    //SUBSTITUTE ENABLEDISABLEROUTETYPEFIELDS HERE
 
     if (success) {
         //the text entered in name is valid

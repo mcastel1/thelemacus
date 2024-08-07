@@ -249,7 +249,9 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
     bool end_connected;
     unsigned int i;
 
-    
+    //convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+    length->convert_to(LengthUnit_types[0]);
+
     set_length_from_time_speed();
 
     //tabulate the Route points
@@ -298,6 +300,9 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, Dra
     //sets color and width of memory_dc to the ones supported as arguments of PreRender
     dc->SetPen(wxPen(color, width));
     dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
+
+    //convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+    length->convert_to(LengthUnit_types[0]);
 
     set_length_from_time_speed();
 
@@ -390,6 +395,10 @@ void Route::Draw(unsigned int n_points, Color foreground_color, Color background
     vector<wxPoint> p;
     wxPoint temp, q;
     vector<Length> s;
+    
+    //convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+    length->convert_to(LengthUnit_types[0]);
+
 
     //sets color and width of memory_dc to the ones supported as arguments of PreRender
     dc->SetPen(wxPen(foreground_color, width));

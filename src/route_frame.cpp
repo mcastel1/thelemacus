@@ -297,7 +297,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
         length_format->MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame> >::set();
 
         //call this to enable/disable the GUI fields in according to the choice of RouteType
-        type->OnEdit();
+        EnableDisableRouteTypeFields();
         //call this to enable/disable the GUI fields according ot the choice of LengthFormat
         EnableDisableLengthFormatFields();
 

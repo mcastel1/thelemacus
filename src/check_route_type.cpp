@@ -32,7 +32,7 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
     if (!(f->idling)) {
         //I proceed only if the progam is not is indling mode
         
-        f->EnableDisableFields(event);
+        f->EnableDisableRouteTypeFields(event);
 
 //        unsigned int i;
 //        bool check;

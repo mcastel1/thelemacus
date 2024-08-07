@@ -69,7 +69,7 @@ template<class P> template<class T> void CheckLengthFormat<P>::operator()(T& eve
 
         }
 
-        f->OnChooseLengthFormatField();
+        f->EnableDisableLengthFormatFields();
         
     }
     

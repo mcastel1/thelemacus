@@ -112,7 +112,7 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
     MultipleItemField<P, RouteType, CheckRouteType<P> >::ok = success;
 
     //try to enable time, speed and length
-    MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->OnChooseLengthFormatField(event);
+    MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->EnableDisableLengthFormatFields(event);
 
     //try to enable button_reduce
     MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->AllOk();

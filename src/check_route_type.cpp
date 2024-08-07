@@ -72,7 +72,7 @@ template<class P> template<class T> void CheckRouteType<P>::operator()(T& event)
 //
 //        }
 
-        f->OnChooseLengthFormatField();
+        f->EnableDisableLengthFormatFields();
 
     }
     

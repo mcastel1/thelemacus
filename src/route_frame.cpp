@@ -780,7 +780,7 @@ void RouteFrame::EnableDisableFields(void){
     
 }
 
-//enable/disable the GUI fields in *this accoridng to the choice in type->name (the sleected type of Route)
+//enable/disable the GUI fields in *this related to the Length format accoridng to the choice in type->name (the selected type of Route)
 template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {
     
     if ((type->is_ok())) {

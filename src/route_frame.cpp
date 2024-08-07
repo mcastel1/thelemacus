@@ -623,6 +623,8 @@ void RouteFrame::set(void) {
     type->set();
     length_format->set();
 
+    //USE ENABLE METHOD HERE
+    
     if ((route->type.value) == wxString(((Route_types[2]).value))) {
         //I disable the GUI fields which do not define a circle of equal altitude and set the others
 

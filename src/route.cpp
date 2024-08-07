@@ -842,7 +842,7 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
         listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.value), false)));
         
         set_length_from_time_speed();
-        listcontrol->SetItem(i, j++, wxString(length->to_string(LengthUnit_types[0], (display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(length->to_string((display_precision.value))));
 
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));

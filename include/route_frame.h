@@ -67,6 +67,7 @@ public:
     void set(void);
     template<class T> void get(T&);
     template<class E> void OnChooseLengthFormatField(E&);
+    template<class E> void EnableDisableFields(E&);
     template<class E> void UpdateLength(E&);
     void OnChooseLengthFormatField();
     void OnPressCancel(wxCommandEvent& event);

@@ -725,6 +725,49 @@ template<class T> void RouteFrame::get(T& event) {
 }
 
 
+//enable/disable the fields in *this according to the Route type
+template<class E> void RouteFrame::EnableDisableFields(E& event) {
+    
+    
+    unsigned int i;
+    bool check, enable;
+  
+    //I check whether the RouteTypeField *p of the GUI field matches one of the route types in catalog
+    type->CheckInCatalog(&check, &i);
+
+    if (check) {
+        //the Route type is valid
+        
+        //enable/disable the related fields in RouteFrame f
+        enable = ((((type->catalog)[i]) == wxString(((Route_types[0]).value))) || (((type->catalog)[i]) == wxString(((Route_types[1]).value))));
+
+        Z->Enable(enable);
+
+        //for start_phi/lambda to be enabled, not only the Route has to be of tyoe Route_types[0] or Route_types[1], but, in addition, it must not be a Route for transport (if it were, there would be no need to indicate its starting Position to do the transport )
+        start_phi->Enable(enable && (!(for_transport)));
+        start_lambda->Enable(enable && (!(for_transport)));
+
+        GP_phi->Enable(!enable);
+        GP_lambda->Enable(!enable);
+        omega->Enable(!enable);
+
+    }else{
+        //the Route type is not valid
+
+        Z->Enable(false);
+        start_phi->Enable(false);
+        start_lambda->Enable(false);
+
+
+        GP_phi->Enable(false);
+        GP_lambda->Enable(false);
+        omega->Enable(false);
+
+    }
+    
+}
+
+
 //enable/disable the GUI fields in *this accoridng to the choice in type->name (the sleected type of Route)
 template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {
     

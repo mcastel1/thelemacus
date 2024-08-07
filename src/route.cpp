@@ -515,6 +515,9 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     Angle lambda_a, lambda_b;
     vector<Length> s;
     bool compute_l_ends_ok;
+    
+    //convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+    length->convert_to(LengthUnit_types[0]);
 
     compute_l_ends(&s, &compute_l_ends_ok, draw_panel, prefix);
  

@@ -68,7 +68,7 @@ public:
     template<class T> void get(T&);
     template<class E> void EnableDisableLengthFormatFields(E&);
     template<class E> void EnableDisableRouteTypeFields(E&);
-    void EnableDisableFields(void);
+    void EnableDisableRouteTypeFields(void);
     template<class E> void UpdateLength(E&);
     void EnableDisableLengthFormatFields(void);
     void OnPressCancel(wxCommandEvent& event);

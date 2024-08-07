@@ -623,7 +623,7 @@ void RouteFrame::set(void) {
     type->set();
     length_format->set();
     
-    EnableDisableFields();
+    EnableDisableRouteTypeFields();
     
     if ((route->type.value) == wxString(((Route_types[2]).value))) {
         //I disable the GUI fields which do not define a circle of equal altitude and set the others
@@ -772,7 +772,7 @@ template void RouteFrame::EnableDisableRouteTypeFields<wxCommandEvent>(wxCommand
 
 
 //same as RouteFrame::EnableDisableRouteTypeFields(E& event) but with no event argument
-void RouteFrame::EnableDisableFields(void){
+void RouteFrame::EnableDisableRouteTypeFields(void){
     
     wxCommandEvent dummy;
     

@@ -758,7 +758,6 @@ template<class E> void RouteFrame::EnableDisableRouteTypeFields(E& event) {
         start_phi->Enable(false);
         start_lambda->Enable(false);
 
-
         GP_phi->Enable(false);
         GP_lambda->Enable(false);
         omega->Enable(false);
@@ -769,6 +768,7 @@ template<class E> void RouteFrame::EnableDisableRouteTypeFields(E& event) {
 
 template void RouteFrame::EnableDisableRouteTypeFields<wxFocusEvent>(wxFocusEvent&);
 template void RouteFrame::EnableDisableRouteTypeFields<wxCommandEvent>(wxCommandEvent&);
+template void RouteFrame::EnableDisableRouteTypeFields<wxKeyEvent>(wxKeyEvent&);
 
 
 //same as RouteFrame::EnableDisableRouteTypeFields(E& event) but with no event argument

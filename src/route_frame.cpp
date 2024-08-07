@@ -622,8 +622,6 @@ void RouteFrame::set(void) {
 
     type->set();
     length_format->set();
-
-    //USE ENABLE METHOD HERE
     
     EnableDisableFields();
     

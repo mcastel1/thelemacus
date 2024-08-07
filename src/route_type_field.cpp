@@ -111,7 +111,7 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
     //ok is true/false is the text entered is valid/invalid
     MultipleItemField<P, RouteType, CheckRouteType<P> >::ok = success;
 
-    //try to enable time, speed and length
+    //try to enable fields related to Length format
     MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->EnableDisableLengthFormatFields(event);
 
     //try to enable button_reduce

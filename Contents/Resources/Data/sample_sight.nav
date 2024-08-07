@@ -1,11 +1,21 @@
 Data:
 	Sights:
-    Routes:
+	Routes:
+		Route #1:
+			type = orthodrome
+			start position:
+				latitude = 4° 3.999999999999986'
+				longitude = 355° 56.00000000000023'
+				label = 
+			starting heading = 239° 3.235938700001952'
+			length format = length
+				length = 3000.0000000000000000 m
+			label = a
 	Positions:
 Recent bodies = 12 10 8
 Recent projections = 1 0
 Recent length formats = 1 0
 Recent route types = 1 0 2
 Recent route for transport types = 1 0
-Recent length units = 0 1
+Recent length units = 1 0
 Recent speed units = 0 1

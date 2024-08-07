@@ -1827,10 +1827,27 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                    }else{
                        //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
                        
-                       object->set_length_from_time_speed();
+                       Length length_saved;
                        
+                       if((object->length_format) == LengthFormat_types[0]){
+                           //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
+                           
+                           object->set_length_from_time_speed();
+
+                       }else{
+                           //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+
+                           length_saved.set((*(object->length)));
+                           object->length->convert_to(LengthUnit_types[0]);
+
+                       }
+
+                                
                        object->compute_end(((*(object->length))/2.0), String(""));
                        target_position = (*(object->end));
+                       
+                       //write back length_saved into *length
+                       object->length->set(length_saved);
                        
                    }
                     

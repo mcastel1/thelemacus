@@ -294,7 +294,7 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
 
     }
     
-    //write back length_saved into length
+    //write back length_saved into *length
     length->set(length_saved);
 
 }
@@ -1032,10 +1032,23 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
 void Route::size_Mercator(PositionProjection* p){
     
     PositionProjection q;
+    Length length_saved;
     
 
-    //if the length of *this is expresed as time x speed, compute length from time and speed, otherwise the length of *this is already written in then and there is nothing to do
-    set_length_from_time_speed();
+    if(length_format == LengthFormat_types[0]){
+        //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
+        
+        set_length_from_time_speed();
+
+    }else{
+        //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+
+        length_saved.set((*length));
+        length->convert_to(LengthUnit_types[0]);
+
+    }
+    
+    
     
     //in what follows, I store the two points representing the corners of the rectangle ennclosing *this in the Mercator projection in *p and q
     
@@ -1066,6 +1079,9 @@ void Route::size_Mercator(PositionProjection* p){
     (*p) -= q;
     (p->x) = fabs(p->x);
     (p->y) = fabs(p->y);
+    
+    //write back length_saved into *length
+    length->set(length_saved);
     
 }
 

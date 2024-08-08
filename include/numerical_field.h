@@ -34,6 +34,7 @@ public:
 
     NumericalField(wxPanel*, NON_GUI*, vector<NON_GUI>*);
 
+    void Fill(void);
     template<class E> void Check(E&);
 
 };

@@ -60,3 +60,11 @@ template<class P, class NON_GUI, class CHECK> template<class E> void NumericalFi
     event.Skip(true);
 
 }
+
+
+//update the value of the GUI  in NumericalField according to NuericalField<P, NON_GUI>::recent_value in such a way that the recent value appears in the GUI field
+template<class P, class NON_GUI, class CHECK> void NumericalField<P, NON_GUI, CHECK>::Fill(void) {
+   
+    
+
+}

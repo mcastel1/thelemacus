@@ -28,6 +28,7 @@ public:
     CHECK* check;
     //this points to an external vector<NON_GUI> where the recent values of *this are stored
     vector<NON_GUI>* recent_values;
+    double value_before_editing;
     bool ok, /*this is true if *this is being edited, false otherwise*/ editing;
     wxBoxSizer *sizer_h, *sizer_v;
 

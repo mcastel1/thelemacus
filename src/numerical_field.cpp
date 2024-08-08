@@ -46,3 +46,17 @@ template<class P, class NON_GUI, class CHECK> NumericalField<P, NON_GUI, CHECK>:
 
 }
 
+
+template<class P, class NON_GUI, class CHECK> template<class E> void NumericalField<P, NON_GUI, CHECK>::Check(E& event) {
+
+
+    //I proceed only if the progam is not is indling mode
+    if (!(parent->idling)) {
+
+
+
+    }
+    
+    event.Skip(true);
+
+}

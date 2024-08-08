@@ -29,6 +29,7 @@ public:
     //this points to an external vector<NON_GUI> where the recent values of *this are stored
     vector<NON_GUI>* recent_values;
     bool ok, /*this is true if *this is being edited, false otherwise*/ editing;
+    wxBoxSizer *sizer_h, *sizer_v;
 
     NumericalField(wxPanel*, NON_GUI*, vector<NON_GUI>*);
 

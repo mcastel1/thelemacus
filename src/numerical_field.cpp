@@ -43,7 +43,7 @@ template<class P, class NON_GUI, class CHECK> NumericalField<P, NON_GUI, CHECK>:
     sizer_v = new wxBoxSizer(wxVERTICAL);
 
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(name, 0, wxALIGN_CENTER);
+    sizer_h->Add(value, 0, wxALIGN_CENTER);
 
 }
 

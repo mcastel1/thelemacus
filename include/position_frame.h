@@ -21,7 +21,6 @@ template<class P> class StringField;
 class PositionFrame: public wxFrame{
     
 public:
-    PositionFrame(ListFrame*, Position*, long, const wxString&, const wxPoint&, const wxSize&, String);
     
     ListFrame* parent;
     Position* position;
@@ -45,6 +44,7 @@ public:
     wxButton* /*button_ok denotes a button which triggers either an 'Add' command, when one is adding a new position, or a 'Modify' command, when one is modifying a position whih already exists*/button_ok, *button_cancel;
     wxMenuBar *menuBar;
     
+    PositionFrame(ListFrame*, Position*, long, const wxString&, const wxPoint&, const wxSize&, String);
     void set(void);
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);

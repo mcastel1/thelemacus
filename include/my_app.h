@@ -58,7 +58,7 @@ public:
 
     wxTimer* timer;
     //the disclaimer window shown at the beginning of the app
-    QuestionFrame< ShowAll, CloseApp, ShowAll >* disclaimer;
+    QuestionFrame<ShowAll, CloseApp, CloseApp>* disclaimer;
     //type of the Boost library which contains the local time, intended as the time of the machine where the app is running
     boost::posix_time::ptime utc_time;
     wxSystemSettings* settings;

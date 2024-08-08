@@ -112,7 +112,7 @@ template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F
 
 template class QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
 template class QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<ShowAll, CloseApp, ShowAll>;
+template class QuestionFrame<ShowAll, CloseApp, CloseApp>;
 template class QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>;
 template class QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>;

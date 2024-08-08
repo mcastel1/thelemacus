@@ -24,6 +24,9 @@ public:
     NON_GUI* object;
     //a pointer to the functor that will be used to check whether *this is valid
     CHECK* check;
+    //this points to an external vector<NON_GUI> where the recent values of *this are stored
+    vector<NON_GUI>* recent_values;
+    bool ok, /*this is true if *this is being edited, false otherwise*/ editing;
 
     NumericalField(wxPanel*, NON_GUI*, vector<NON_GUI>*);
 

@@ -8,7 +8,6 @@
 #include "check_speed.h"
 
 #include "check_speed_value.h"
-#include "check_unit.h"
 #include "route_frame.h"
 
 template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
@@ -16,7 +15,7 @@ template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
     p = p_in;
 
     check_speed_value = new CheckSpeedValue<P>(p);
-    check_speed_unit = new CheckSpeedUnit<P>(p);
+    check_speed_unit = new CheckUnit<P, SpeedField<P>>(p, SpeedUnit_types);
 
 }
 

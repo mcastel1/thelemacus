@@ -20,6 +20,7 @@ template<class P, class GUI> CheckUnit<P, GUI>::CheckUnit(GUI* p_in, const vecto
 
 template class CheckUnit<RouteFrame, DynamicLengthField<RouteFrame>>;
 template class CheckUnit<SightFrame, DynamicLengthField<SightFrame>>;
+template class CheckUnit<RouteFrame, SpeedField<RouteFrame>>;
 
 
 //check the unit in the GUI field in LengthField
@@ -71,3 +72,4 @@ template<class P, class GUI> template <class T> void CheckUnit<P, GUI>::operator
 
 template void CheckUnit<RouteFrame, DynamicLengthField<RouteFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckUnit<SightFrame, DynamicLengthField<SightFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckUnit<RouteFrame, SpeedField<RouteFrame> >::operator()<wxCommandEvent>(wxCommandEvent&);

@@ -17,6 +17,7 @@ using namespace std;
 
 template<class P, class GUI> class CheckUnit;
 class SpeedUnit;
+template<class P> class SpeedField;
 
 
 //GUI field to specify the unit of measure of a Speed, which is inserted into a parent panel of type P

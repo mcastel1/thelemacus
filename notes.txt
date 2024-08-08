@@ -113,13 +113,14 @@
      - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
      - move all stuff which is general enough in the code to MyApp class
      - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
-     - the altitude over the horizon should be set to the last value entered      
+     - the altitude over the horizon should be set to the last value entered
+     - some paralles or meridians in grid in render_mercator contain the same wxPoint iterated many times -> remove them
+
 
  ********** THINGS TO FIX ***********
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 	- remove odd hotrizontal lines on WIN32 mercator projection, they occur when you zoom in too fast with the mouse wheel
 `	- write write put_back_in , put_back)_in_Mercator and put_back_in_3D :
-	- some paralles or meridians in grid in render_mercator congain the same wxPoint iterated many times -> remove them
     - all icons in light mode must be revised and stored in dark mode
 	- when you switch from light to dark, all icons must be updated
  on OSX:

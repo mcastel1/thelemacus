@@ -36,6 +36,8 @@ public:
 
     void FillInRecentValue(void);
     template<class E> void Check(E&);
+    template<class T> void InsertIn(T*);
+    template<class T> void InsertIn(T*, wxSizerFlags&);
 
 };
 

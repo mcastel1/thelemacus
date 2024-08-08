@@ -67,3 +67,18 @@ template<class P, class NON_GUI, class CHECK> void NumericalField<P, NON_GUI, CH
     
 
 }
+
+
+template<class P, class NON_GUI, class CHECK> template<class T> void NumericalField<P, NON_GUI, CHECK>::InsertIn(T* host) {
+
+    host->Add(sizer_v);
+
+}
+
+
+
+template<class P, class NON_GUI, class CHECK> template<class T> void NumericalField<P, NON_GUI, CHECK>::InsertIn(T* host, wxSizerFlags& flag) {
+
+    host->Add(sizer_v, flag);
+
+}

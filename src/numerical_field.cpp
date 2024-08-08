@@ -13,7 +13,6 @@ using namespace std;
 
 template<class P, class NON_GUI, class CHECK> NumericalField<P, NON_GUI, CHECK>::NumericalField(wxPanel* panel_of_parent, NON_GUI* object_in, vector<NON_GUI>* recent_values_in){
     
-    unsigned int i;
 
     //set the non-GUI object
     object = object_in;
@@ -31,7 +30,7 @@ template<class P, class NON_GUI, class CHECK> NumericalField<P, NON_GUI, CHECK>:
     value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     value->SetValue(wxString(""));
 
-    Fill();
+    FillInRecentValue();
     //I just filled name with  a valid value, thus I store it in value_before_editing in order to start off with a valid value in value_before_editing
     value_before_editing = value->GetValue();
     AdjustWidth(value);
@@ -63,7 +62,7 @@ template<class P, class NON_GUI, class CHECK> template<class E> void NumericalFi
 
 
 //update the value of the GUI  in NumericalField according to NuericalField<P, NON_GUI>::recent_value in such a way that the recent value appears in the GUI field
-template<class P, class NON_GUI, class CHECK> void NumericalField<P, NON_GUI, CHECK>::Fill(void) {
+template<class P, class NON_GUI, class CHECK> void NumericalField<P, NON_GUI, CHECK>::FillInRecentValue(void) {
    
     
 

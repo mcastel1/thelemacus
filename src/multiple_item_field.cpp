@@ -42,7 +42,7 @@ template<class P, class NON_GUI, class CHECK> MultipleItemField<P, NON_GUI, CHEC
 
     name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     //SetColor(name);
-    Fill();
+    FillInRecentItems();
     name->SetValue(items[0]);
     //I just filled name with  a valid value, thus I store it in value_before_editing in order to start off with a valid value in value_before_editing
     value_before_editing = name->GetValue();
@@ -223,7 +223,7 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
                 wxGetApp().list_frame->data->insert_recent_item(i, recent_items);
 
                 //I update p->name according to the content of recent_itmes
-                Fill();
+                FillInRecentItems();
 
             }
 
@@ -277,7 +277,7 @@ template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame
 
 
 //update the GUI dropdown menu of MultipleItemField according to MultipleItemField<P, NON_GUI>::recent_items in such a way that the recent items appear on top
-template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::Fill(void) {
+template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::FillInRecentItems(void) {
 
     unsigned int i, j;
     wxArrayString items_temp;
@@ -326,7 +326,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 
 }
 
-template void MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame> >::Fill();
+template void MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame> >::FillInRecentItems();
 
 
 //return true(false) is *this is ok (not ok), i.e., if this->ok = true(false)

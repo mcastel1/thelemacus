@@ -248,9 +248,21 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
     wxPoint p;
     bool end_connected;
     unsigned int i;
-
+    Length length_saved;
     
-    set_length_from_time_speed();
+    if(length_format == LengthFormat_types[0]){
+        //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
+        
+        set_length_from_time_speed();
+
+    }else{
+        //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+
+        length_saved.set((*length));
+        length->convert_to(LengthUnit_types[0]);
+
+    }
+
 
     //tabulate the Route points
     for (/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the chart, and thus terminated a connectd component of dummy_route*/v->clear(), end_connected = true, i = 0; i < n_points; i++) {
@@ -281,6 +293,9 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
         }
 
     }
+    
+    //write back length_saved into *length
+    length->set(length_saved);
 
 }
 
@@ -293,13 +308,25 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, Dra
     wxPoint temp;
     bool end_connected;
     unsigned int i;
-    Length s;
+    Length s, length_saved;
 
     //sets color and width of memory_dc to the ones supported as arguments of PreRender
     dc->SetPen(wxPen(color, width));
     dc->SetBrush(wxBrush(wxGetApp().background_color, wxBRUSHSTYLE_TRANSPARENT));
+    
+    if(length_format == LengthFormat_types[0]){
+        //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
+        
+        set_length_from_time_speed();
 
-    set_length_from_time_speed();
+    }else{
+        //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+
+        length_saved.set((*length));
+        length->convert_to(LengthUnit_types[0]);
+
+    }
+    
 
     //tabulate the Route points
     for (/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the sphere, and thus terminated a connectd component of dummy_route*/end_connected = true, i = 0; i < n_points; i++) {
@@ -360,6 +387,9 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, Dra
     //put back original parameters of memory_dc
     dc->SetPen(wxPen(wxGetApp().foreground_color, 1));
 
+    //write back length_saved into length
+    length->set(length_saved);
+
 }
 
 //inline 
@@ -390,6 +420,21 @@ void Route::Draw(unsigned int n_points, Color foreground_color, Color background
     vector<wxPoint> p;
     wxPoint temp, q;
     vector<Length> s;
+    Length length_saved;
+    
+    
+    if(length_format == LengthFormat_types[0]){
+        //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
+        
+        set_length_from_time_speed();
+
+    }else{
+        //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+
+        length_saved.set((*length));
+        length->convert_to(LengthUnit_types[0]);
+
+    }
 
     //sets color and width of memory_dc to the ones supported as arguments of PreRender
     dc->SetPen(wxPen(foreground_color, width));
@@ -484,6 +529,9 @@ void Route::Draw(unsigned int n_points, Color foreground_color, Color background
         }
 
     }
+    
+    //write back length_saved into length
+    length->set(length_saved);
 
 }
 
@@ -507,7 +555,6 @@ void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe
 }
 
 //tabulate the points of Route *this in any projection of draw_panel and writes them into v
-//inline 
 void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
 
     unsigned int i, j;
@@ -515,6 +562,22 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     Angle lambda_a, lambda_b;
     vector<Length> s;
     bool compute_l_ends_ok;
+    Length length_saved;
+
+    
+    
+    if(length_format == LengthFormat_types[0]){
+        //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
+        
+        set_length_from_time_speed();
+
+    }else{
+        //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+
+        length_saved.set((*length));
+        length->convert_to(LengthUnit_types[0]);
+
+    }
 
     compute_l_ends(&s, &compute_l_ends_ok, draw_panel, prefix);
  
@@ -590,6 +653,9 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
         //        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
 
     }
+    
+    //write back length_saved into length
+    length->set(length_saved);
 
 }
 
@@ -842,7 +908,7 @@ void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
         listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.value), false)));
         
         set_length_from_time_speed();
-        listcontrol->SetItem(i, j++, wxString(length->to_string(LengthUnit_types[0], (display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(length->to_string((display_precision.value))));
 
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));
@@ -966,10 +1032,23 @@ bool Route::closest_point_to(Position* p, Angle* tau, Position q, [[maybe_unused
 void Route::size_Mercator(PositionProjection* p){
     
     PositionProjection q;
+    Length length_saved;
     
 
-    //if the length of *this is expresed as time x speed, compute length from time and speed, otherwise the length of *this is already written in then and there is nothing to do
-    set_length_from_time_speed();
+    if(length_format == LengthFormat_types[0]){
+        //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
+        
+        set_length_from_time_speed();
+
+    }else{
+        //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+
+        length_saved.set((*length));
+        length->convert_to(LengthUnit_types[0]);
+
+    }
+    
+    
     
     //in what follows, I store the two points representing the corners of the rectangle ennclosing *this in the Mercator projection in *p and q
     
@@ -1000,6 +1079,9 @@ void Route::size_Mercator(PositionProjection* p){
     (*p) -= q;
     (p->x) = fabs(p->x);
     (p->y) = fabs(p->y);
+    
+    //write back length_saved into *length
+    length->set(length_saved);
     
 }
 

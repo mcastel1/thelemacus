@@ -71,49 +71,49 @@ template void RouteTypeField<RouteFrame>::set();
 template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
 
     unsigned int i;
-    bool success, enable;
-
+    bool success;
 
     //I check whether the name in the GUI field  matches one of the entries  of catalog
     find_and_replace_case_insensitive(MultipleItemField<P, RouteType, CheckRouteType<P> >::name, MultipleItemField<P, RouteType, CheckRouteType<P> >::catalog, &success, &i);
-
+    
     if (success) {
         //the text entered in name is valid
 
         //enable/disable the related fields in RouteFrame f
-        enable = ((((MultipleItemField<P, RouteType, CheckRouteType<P> >::catalog)[i]) == wxString(((Route_types[0]).value))) || (((MultipleItemField<P, RouteType, CheckRouteType<P> >::catalog)[i]) == wxString(((Route_types[1]).value))));
-
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->Z->Enable(enable);
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_phi->Enable(enable && (!(MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->for_transport)));
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_lambda->Enable(enable && (!(MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->for_transport)));
-
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->GP_phi->Enable(!enable);
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->GP_lambda->Enable(!enable);
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->omega->Enable(!enable);
+//        enable = ((((MultipleItemField<P, RouteType, CheckRouteType<P> >::catalog)[i]) == wxString(((Route_types[0]).value))) || (((MultipleItemField<P, RouteType, CheckRouteType<P> >::catalog)[i]) == wxString(((Route_types[1]).value))));
+//
+//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->Z->Enable(enable);
+//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_phi->Enable(enable && (!(MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->for_transport)));
+//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_lambda->Enable(enable && (!(MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->for_transport)));
+//
+//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->GP_phi->Enable(!enable);
+//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->GP_lambda->Enable(!enable);
+//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->omega->Enable(!enable);
 
         //because the text in name is valid, I set the background color of name to white
         MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetForegroundColour(wxGetApp().foreground_color);
         MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetFont(wxGetApp().default_font);
 
     }
-    else {
+//    else{
 
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->Z->Enable(false);
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_phi->Enable(false);
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_lambda->Enable(false);
+//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->Z->Enable(false);
+//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_phi->Enable(false);
+//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_lambda->Enable(false);
 
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->GP_phi->Enable(false);
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->GP_lambda->Enable(false);
-        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->omega->Enable(false);
+//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->GP_phi->Enable(false);
+//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->GP_lambda->Enable(false);
+//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->omega->Enable(false);
 
-    }
+//    }
 
     //ok is true/false is the text entered is valid/invalid
     MultipleItemField<P, RouteType, CheckRouteType<P> >::ok = success;
-
-    //try to enable time, speed and length
-    MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->OnChooseLengthFormatField(event);
-
+    
+    //try to enable fields related to Route type
+    MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->EnableDisableRouteTypeFields(event);
+    //try to enable fields related to Length format
+    MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->EnableDisableLengthFormatFields(event);
     //try to enable button_reduce
     MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->AllOk();
 

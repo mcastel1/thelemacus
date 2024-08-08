@@ -79,7 +79,7 @@ template void ListControl<Route>::DeselectAll();
 template void ListControl<Sight>::DeselectAll();
 
 
-//clears *this and sets all its items equal to the items in the non-GUI vector v. If keep_selected_items = true, I re-select the items in *this that were selected before ListControl::set was called (if they are compatible with the new size of *this)
+//clear *this and set all its items equal to the items in the non-GUI vector v. If keep_selected_items = true, I re-select the items in *this that were selected before ListControl::set was called (if they are compatible with the new size of *this)
 template<class S> void ListControl<S>::set(vector<S> v, bool keep_selected_items) {
 
     unsigned int i;

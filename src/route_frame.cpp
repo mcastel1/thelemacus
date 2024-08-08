@@ -297,9 +297,9 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
         length_format->MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame> >::set();
 
         //call this to enable/disable the GUI fields in according to the choice of RouteType
-        type->OnEdit();
+        EnableDisableRouteTypeFields();
         //call this to enable/disable the GUI fields according ot the choice of LengthFormat
-        OnChooseLengthFormatField();
+        EnableDisableLengthFormatFields();
 
     }
     else {
@@ -385,9 +385,11 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     }
 
     //call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
-    parent->listcontrol_sights->set((parent->data)->sight_list, true);
-    parent->listcontrol_positions->set((parent->data)->position_list, true);
-    parent->listcontrol_routes->set((parent->data)->route_list, false);
+    parent->listcontrol_sights->set((parent->data->sight_list), true);
+    parent->listcontrol_positions->set((parent->data->position_list), true);
+    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
+    parent->listcontrol_routes->set((parent->data->route_list), false);
+    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
 
     //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
     (*(parent->on_change_selection_in_listcontrol_sights))(event);
@@ -555,7 +557,7 @@ void RouteFrame::KeyDown(wxKeyEvent& event) {
 
 }
 
-//run check on all the GUI fields that are members of SightFrame and write true/false in their ok variables
+//run check on all the GUI fields that are members of RouteFrame and write true/false in their ok variables
 template<class E> void RouteFrame::Check(E& event) {
 
     (*(type->check))(event);
@@ -622,14 +624,16 @@ void RouteFrame::set(void) {
 
     type->set();
     length_format->set();
-
+    
+    EnableDisableRouteTypeFields();
+    
     if ((route->type.value) == wxString(((Route_types[2]).value))) {
         //I disable the GUI fields which do not define a circle of equal altitude and set the others
 
-        Z->Enable(false);
+//        Z->Enable(false);
 
-        start_phi->Enable(false);
-        start_lambda->Enable(false);
+//        start_phi->Enable(false);
+//        start_lambda->Enable(false);
 
         GP_phi->set();
         GP_lambda->set();
@@ -645,17 +649,17 @@ void RouteFrame::set(void) {
 
         start_phi->set();
         start_lambda->set();
-        start_phi->Enable(!for_transport);
-        start_lambda->Enable(!for_transport);
+//        start_phi->Enable(!for_transport);
+//        start_lambda->Enable(!for_transport);
 
-        GP_phi->Enable(false);
-        GP_lambda->Enable(false);
-        omega->Enable(false);
+//        GP_phi->Enable(false);
+//        GP_lambda->Enable(false);
+//        omega->Enable(false);
 
     }
 
     //enable the length or the time and speed fields
-    OnChooseLengthFormatField();
+    EnableDisableLengthFormatFields();
 
     if ((route->length_format) == (LengthFormat_types[1])) {
         //the Route length is simply expressed as a length rather than as a time and speed -> set length field
@@ -723,8 +727,63 @@ template<class T> void RouteFrame::get(T& event) {
 }
 
 
-//enable/disable the GUI fields in *this accoridng to the choice in type->name (the sleected type of Route)
-template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {
+//enable/disable the fields in *this according to the Route type
+template<class E> void RouteFrame::EnableDisableRouteTypeFields(E& event) {
+    
+    
+    unsigned int i;
+    bool check, enable;
+  
+    //I check whether the RouteTypeField *p of the GUI field matches one of the route types in catalog
+    type->CheckInCatalog(&check, &i);
+
+    if (check) {
+        //the Route type is valid
+        
+        //enable/disable the related fields in RouteFrame f
+        enable = ((((type->catalog)[i]) == wxString(((Route_types[0]).value))) || (((type->catalog)[i]) == wxString(((Route_types[1]).value))));
+
+        Z->Enable(enable);
+
+        //for start_phi/lambda to be enabled, not only the Route has to be of tyoe Route_types[0] or Route_types[1], but, in addition, it must not be a Route for transport (if it were, there would be no need to indicate its starting Position to do the transport )
+        start_phi->Enable(enable && (!(for_transport)));
+        start_lambda->Enable(enable && (!(for_transport)));
+
+        GP_phi->Enable(!enable);
+        GP_lambda->Enable(!enable);
+        omega->Enable(!enable);
+
+    }else{
+        //the Route type is not valid
+
+        Z->Enable(false);
+        start_phi->Enable(false);
+        start_lambda->Enable(false);
+
+        GP_phi->Enable(false);
+        GP_lambda->Enable(false);
+        omega->Enable(false);
+
+    }
+    
+}
+
+template void RouteFrame::EnableDisableRouteTypeFields<wxFocusEvent>(wxFocusEvent&);
+template void RouteFrame::EnableDisableRouteTypeFields<wxCommandEvent>(wxCommandEvent&);
+template void RouteFrame::EnableDisableRouteTypeFields<wxKeyEvent>(wxKeyEvent&);
+
+
+//same as RouteFrame::EnableDisableRouteTypeFields(E& event) but with no event argument
+void RouteFrame::EnableDisableRouteTypeFields(void){
+    
+    wxCommandEvent dummy;
+    
+    EnableDisableRouteTypeFields(dummy);
+    
+}
+
+//enable/disable the GUI fields in *this related to the Length format accoridng to the choice in type->name (the selected type of Route)
+template<class E> void RouteFrame::EnableDisableLengthFormatFields(E& event) {
     
     if ((type->is_ok())) {
         //type is valid
@@ -813,7 +872,8 @@ template<class E> void RouteFrame::OnChooseLengthFormatField(E& event) {
     
 }
 
-template void RouteFrame::OnChooseLengthFormatField<wxKeyEvent>(wxKeyEvent&);
+template void RouteFrame::EnableDisableLengthFormatFields<wxKeyEvent>(wxKeyEvent&);
+template void RouteFrame::EnableDisableLengthFormatFields<wxFocusEvent>(wxFocusEvent&);
 
 
 //when time or speed are edited in RouteFrame, thie method updates the length GUI field by writing in it time x speed
@@ -836,10 +896,10 @@ template<class E> void RouteFrame::UpdateLength(E& event) {
 }
 
 //same as RouteFrame::OnChooseLengthFormat(E& event), but it does not accept any argument
-void RouteFrame::OnChooseLengthFormatField(void) {
+void RouteFrame::EnableDisableLengthFormatFields(void) {
 
     wxCommandEvent dummy;
 
-    OnChooseLengthFormatField(dummy);
+    EnableDisableLengthFormatFields(dummy);
 
 }

@@ -49,7 +49,7 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
         MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::name->SetForegroundColour(wxGetApp().foreground_color);
         MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::name->SetFont(wxGetApp().default_font);
         //choses the length format entered in name button_reduce
-        MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::parent->OnChooseLengthFormatField(event);
+        MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::parent->EnableDisableLengthFormatFields(event);
 
     }
 

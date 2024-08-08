@@ -18,7 +18,7 @@
 
 
 //constructor of a LengthUnitField object, based on the parent frame frame
-template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, LengthUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, LengthUnit, CheckLengthUnit<P> >(panel_of_parent, object_in, LengthUnit_types, recent_items_in) {
+template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, LengthUnit* object_in, vector<int>* recent_items_in) : MultipleItemField<P, LengthUnit, CheckUnit<P, LengthUnitField<P>> >(panel_of_parent, object_in, LengthUnit_types, recent_items_in) {
 
 }
  

@@ -1,28 +1,30 @@
 //
-//  check_length_unit.cpp
+//  check_unit.cpp
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#include "check_length_unit.h"
+#include "check_unit.h"
 
 #include "my_app.h"
 #include "sight_frame.h"
 
 
-template<class P> CheckLengthUnit<P>::CheckLengthUnit(DynamicLengthField<P>* p_in) {
+template<class P, class GUI> CheckUnit<P, GUI>::CheckUnit(GUI* p_in, const vector<String>& unit_types_in) {
 
     p = p_in;
+    unit_types = unit_types_in;
 
 }
 
-template class CheckLengthUnit<RouteFrame>;
-template class CheckLengthUnit<SightFrame>;
+template class CheckUnit<RouteFrame, DynamicLengthField<RouteFrame>>;
+template class CheckUnit<SightFrame, DynamicLengthField<SightFrame>>;
+template class CheckUnit<RouteFrame, SpeedField<RouteFrame>>;
 
 
 //check the unit in the GUI field in LengthField
-template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& event) {
+template<class P, class GUI> template <class T> void CheckUnit<P, GUI>::operator()(T& event) {
 
     P* f = (p->parent);
 
@@ -35,7 +37,7 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
         
         p->unit->CheckInCatalog(&check, &i);
 
-        if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String(((p->unit->name->GetValue()).ToStdString())) == String("")))) {
+        if (check || (((p->unit->name->GetForegroundColour()) != (wxGetApp().error_color)) && (String((p->unit->name->GetValue().ToStdString())) == String("")))) {
 
             //if check is true (false) -> set unit->ok to true (false)
             (p->unit->ok) = check;
@@ -50,8 +52,8 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
 
             temp.str("");
             temp << "Available units are: ";
-            for (i = 0; i < LengthUnit_types.size(); i++) {
-                temp << (LengthUnit_types[i]).value << ((i < LengthUnit_types.size() - 1) ? ", " : ".");
+            for (i = 0; i < unit_types.size(); i++) {
+                temp << (unit_types[i]).value << ((i < unit_types.size() - 1) ? ", " : ".");
             }
 
             f->print_error_message->SetAndCall((p->unit->name), String("Unit not found in list!"), String(temp.str().c_str()), (wxGetApp().path_file_error_icon));
@@ -68,5 +70,6 @@ template<class P> template <class T> void CheckLengthUnit<P>::operator()(T& even
 
 }
 
-template void CheckLengthUnit<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
-template void CheckLengthUnit<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckUnit<RouteFrame, DynamicLengthField<RouteFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckUnit<SightFrame, DynamicLengthField<SightFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckUnit<RouteFrame, SpeedField<RouteFrame> >::operator()<wxCommandEvent>(wxCommandEvent&);

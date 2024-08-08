@@ -13,6 +13,7 @@
 using namespace std;
 
 #include "speed.h"
+#include "speed_unit_field.h"
 
 template<class P> class CheckSpeed;
 class Speed;

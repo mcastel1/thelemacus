@@ -9,12 +9,11 @@
 #define numerical_field_h
 
 #include <iostream>
-#include <vector>
-
 
 using namespace std;
 
 
+//a GUI field used to store a numerical value (e.g. a Length, a Speed, etc)
 template<class P, class NON_GUI, class CHECK> class NumericalField{
 
 public:

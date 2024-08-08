@@ -28,21 +28,17 @@ template<class P, class NON_GUI, class CHECK> NumericalField<P, NON_GUI, CHECK>:
     recent_values = recent_values_in;
 
 
-    name = new wxComboBox(parent->panel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, items, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    value->SetValue(wxString(""));
+
     //SetColor(name);
     Fill();
-    name->SetValue(items[0]);
     //I just filled name with  a valid value, thus I store it in value_before_editing in order to start off with a valid value in value_before_editing
-    value_before_editing = name->GetValue();
-    AdjustWidth(name);
-    //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call Check to check whether what has been entered in name is valid
-    //    name->Bind(wxEVT_COMBOBOX, &NumericalField::OnEdit<wxCommandEvent>, this);
-    //    name->Bind(wxEVT_KEY_UP, &NumericalField::OnEdit<wxKeyEvent>, this);
-    //    name->Bind(wxEVT_KILL_FOCUS, *check);
+    value_before_editing = value->GetValue();
+    AdjustWidth(value);
+  
     name->Bind(wxEVT_KILL_FOCUS, &NumericalField<P, NON_GUI, CHECK>::Check<wxFocusEvent>, this);
-    //THIS LINE CAUSES AN ERROR
-    //    name->Bind(wxEVT_COMBOBOX, &NumericalField<P, NON_GUI, CHECK>::Check<wxCommandEvent>, this);
-
+  
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
 

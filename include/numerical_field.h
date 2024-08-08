@@ -22,6 +22,8 @@ public:
     P* parent;
     //the non-GUI object related to *this: for example, if I create a  class LengthField derived from Numerical, then *object will be a Length object
     NON_GUI* object;
+    //the value
+    wxTextCtrl *value;
     //a pointer to the functor that will be used to check whether *this is valid
     CHECK* check;
     //this points to an external vector<NON_GUI> where the recent values of *this are stored

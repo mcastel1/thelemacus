@@ -271,7 +271,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         button_transport_sight = new wxBitmapButton(
             panel,
             wxID_ANY,
-            Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
+            Bitmap(wxGetApp().path_file_transport_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
             wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -313,7 +313,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         button_transport_position = new wxBitmapButton(
             panel,
             wxID_ANY,
-            Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
+            Bitmap(wxGetApp().path_file_transport_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
             wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -326,7 +326,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         button_transport_route = new wxBitmapButton(
             panel,
             wxID_ANY,
-            Bitmap(wxGetApp().path_file_arrow_icon, wxGetApp().size_small_button),
+            Bitmap(wxGetApp().path_file_transport_icon, wxGetApp().size_small_button),
             wxDefaultPosition,
             wxDefaultSize,
             wxBU_EXACTFIT | wxSIMPLE_BORDER

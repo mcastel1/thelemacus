@@ -16,7 +16,7 @@
 // and alphabetically (!), so put this icon first and give it a name
 // starting with "a"
 app_icon ICON "Z:/Contents/Resources/Images/Light/app_icon.ico"
-arrow_icon RCDATA "Z:/Contents/Resources/Images/Light/arrow_icon.png"
+transport_icon RCDATA "Z:/Contents/Resources/Images/Light/transport_icon.png"
 disconnect_icon RCDATA "Z:/Contents/Resources/Images/Light/disconnect_icon.png"
 error_icon RCDATA "Z:/Contents/Resources/Images/Light/error_icon.png"
 list_icon RCDATA "Z:/Contents/Resources/Images/Light/list_icon.png"

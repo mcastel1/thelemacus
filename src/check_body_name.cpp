@@ -61,7 +61,7 @@ template<class P> template<class T>void CheckBodyName<P>::operator()(T& event) {
 //                wxGetApp().list_frame->data->insert_recent_body(i);
                 wxGetApp().list_frame->data->insert_recent_item(i, &(wxGetApp().list_frame->data->recent_bodies));
                 //I update p->name according to the content of data->recent_bodies file
-                p->Fill();
+                p->FillInRecentItems();
 
             }
 

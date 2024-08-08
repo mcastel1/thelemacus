@@ -11,7 +11,7 @@
 
 using namespace std;
 
-template<class P, class NON_GUI, class CHECK> NumericalField<P, NON_GUI, CHECK>::NumericalField(wxPanel* panel_of_parent, NON_GUI* object_in, vector<NON_GUI>* recent_values_in){
+template<class P, class NON_GUI, class CHECK> NumericalField<P, NON_GUI, CHECK>::NumericalField(wxPanel* panel_of_parent, NON_GUI* object_in, NON_GUI* recent_value_in){
     
 
     //set the non-GUI object
@@ -24,7 +24,7 @@ template<class P, class NON_GUI, class CHECK> NumericalField<P, NON_GUI, CHECK>:
 
     //set parent
     parent = ((P*)(panel_of_parent->GetParent()));
-    recent_values = recent_values_in;
+    recent_value = recent_value_in;
 
 
     value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);

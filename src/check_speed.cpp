@@ -8,7 +8,7 @@
 #include "check_speed.h"
 
 #include "check_speed_value.h"
-#include "check_speed_unit.h"
+#include "check_unit.h"
 #include "route_frame.h"
 
 template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {

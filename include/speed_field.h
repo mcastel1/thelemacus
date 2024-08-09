@@ -12,6 +12,8 @@
 
 using namespace std;
 
+#include "check_unit.h"
+#include "numerical_field.h"
 #include "speed.h"
 #include "speed_unit_field.h"
 
@@ -21,7 +23,7 @@ template<class P> class SpeedUnitField;
 
 
 //class for graphical object: a field to enter a speed, composed of a box and a dropdown menu to enter the units of measure of the speed. P is the type of the parent which hosts the DynamicLengthField object
-template<class P> class SpeedField{
+template<class P> class SpeedField: public NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>>>{
     
 public:
     //the parent frame to which this object is attached

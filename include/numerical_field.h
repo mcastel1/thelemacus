@@ -13,8 +13,8 @@
 using namespace std;
 
 
-//a GUI field used to store a numerical value (e.g. a Length, a Speed, etc)
-template<class P, class NON_GUI, class CHECK> class NumericalField{
+//a GUI field used to store a numerical value (e.g. a Length, a Speed, etc). Here NON_GUI is the type of the NON_GUI field related to *this, e.g. Speed, and NON_GUI_VALUE is the type of the unit of the NON_GUI field, e.g. SpeedUnit
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK> class NumericalField{
 
 public:
 

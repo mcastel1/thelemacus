@@ -11,7 +11,7 @@
 
 using namespace std;
 
-template<class P, class NON_GUI, class CHECK> NumericalField<P, NON_GUI, CHECK>::NumericalField(wxPanel* panel_of_parent, NON_GUI* object_in, NON_GUI* recent_value_in){
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK> NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK>::NumericalField(wxPanel* panel_of_parent, NON_GUI* object_in, NON_GUI* recent_value_in){
     
 
     //set the non-GUI object
@@ -35,7 +35,7 @@ template<class P, class NON_GUI, class CHECK> NumericalField<P, NON_GUI, CHECK>:
     value_before_editing = value->GetValue();
     AdjustWidth(value);
   
-    value->Bind(wxEVT_KILL_FOCUS, &NumericalField<P, NON_GUI, CHECK>::Check<wxFocusEvent>, this);
+    value->Bind(wxEVT_KILL_FOCUS, &NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK>::Check<wxFocusEvent>, this);
   
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
@@ -46,7 +46,7 @@ template<class P, class NON_GUI, class CHECK> NumericalField<P, NON_GUI, CHECK>:
 }
 
 
-template<class P, class NON_GUI, class CHECK> template<class E> void NumericalField<P, NON_GUI, CHECK>::Check(E& event) {
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK> template<class E> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK>::Check(E& event) {
 
 
     //I proceed only if the progam is not is indling mode
@@ -62,14 +62,14 @@ template<class P, class NON_GUI, class CHECK> template<class E> void NumericalFi
 
 
 //update the value of the GUI  in NumericalField according to NuericalField<P, NON_GUI>::recent_value in such a way that the recent value appears in the GUI field
-template<class P, class NON_GUI, class CHECK> void NumericalField<P, NON_GUI, CHECK>::FillInRecentValue(void) {
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK>::FillInRecentValue(void) {
    
     
 
 }
 
 
-template<class P, class NON_GUI, class CHECK> template<class T> void NumericalField<P, NON_GUI, CHECK>::InsertIn(T* host) {
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK> template<class T> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK>::InsertIn(T* host) {
 
     host->Add(sizer_v);
 
@@ -77,7 +77,7 @@ template<class P, class NON_GUI, class CHECK> template<class T> void NumericalFi
 
 
 
-template<class P, class NON_GUI, class CHECK> template<class T> void NumericalField<P, NON_GUI, CHECK>::InsertIn(T* host, wxSizerFlags& flag) {
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK> template<class T> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK>::InsertIn(T* host, wxSizerFlags& flag) {
 
     host->Add(sizer_v, flag);
 

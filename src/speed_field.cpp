@@ -65,7 +65,6 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* p) 
 }
 
 //explicit instantiations
-template class SpeedField<RouteFrame>;
 
 
 //set the value in the GUI object value equal to the value in the non-GUI object speed
@@ -79,7 +78,6 @@ template<class P> void SpeedField<P>::set(void) {
 }
 
 //explicit instantiations
-template void SpeedField<RouteFrame>::set();
 
 
 //write the value and the unit of the GUI field in SpeedField into the non-GUI field speed
@@ -99,7 +97,6 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
 }
 
 //explicit instantiations
-template void SpeedField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
@@ -127,7 +124,6 @@ template<class P> template<class E>  void SpeedField<P>::OnEditValue(E& event) {
 }
 
 //explicit instantiations
-template void SpeedField<RouteFrame>::OnEditValue<wxKeyEvent>(wxKeyEvent&);
 
 
 //this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
@@ -157,8 +153,6 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
 }
 
 //explicit instantiations
-template void SpeedField<RouteFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
-template void SpeedField<RouteFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
 
 
 //enable/disable the SpeedField
@@ -170,7 +164,6 @@ template<class P> void SpeedField<P>::Enable(bool is_enabled) {
 }
 
 //explicit instantiations
-template void SpeedField<RouteFrame>::Enable(bool);
 
 
 template<class P> template<class T> void SpeedField<P>::InsertIn(T* host) {
@@ -180,7 +173,6 @@ template<class P> template<class T> void SpeedField<P>::InsertIn(T* host) {
 }
 
 //explicit instantiations
-template void SpeedField<RouteFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
 template<class P> template <typename EventTag, typename Method, typename Object> void SpeedField<P>::Bind(EventTag tag, Method method, Object object) {
@@ -191,7 +183,6 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 //explicit instantiations
-template void SpeedField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 
 
 template<class P> bool SpeedField<P>::is_ok(void) {

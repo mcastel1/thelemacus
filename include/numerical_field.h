@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include "multiple_item_field.h"
+
 using namespace std;
 
 
@@ -22,8 +24,10 @@ public:
     P* parent;
     //the non-GUI object related to *this: for example, if I create a  class LengthField derived from Numerical, then *object will be a Length object
     NON_GUI* object;
-    //the value
+    //the GUI field for the value of *this
     wxTextCtrl *value;
+    //the GUI field for the unit of measure of *this
+    MultipleItemField<P, NON_GUI_UNIT, CHECK_UNIT>* unit;
     //a pointer to the functor that will be used to check whether *this is valid
     CHECK* check;
     //this points to an external vector<NON_GUI> where the recent values of *this are stored

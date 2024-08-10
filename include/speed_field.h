@@ -43,7 +43,7 @@ public:
     SpeedField(wxPanel*, Speed*, Speed*);
     void set(void);
     template<class T> void get(T&);
-    void Enable(bool);
+//    void Enable(bool);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     template<class E> void OnEditValue(E&);

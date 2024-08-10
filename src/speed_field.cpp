@@ -156,12 +156,12 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
 
 
 //enable/disable the SpeedField
-template<class P> void SpeedField<P>::Enable(bool is_enabled) {
-
-    value->Enable(is_enabled);
-    unit->Enable(is_enabled);
-
-}
+//template<class P> void SpeedField<P>::Enable(bool is_enabled) {
+//
+//    value->Enable(is_enabled);
+//    unit->Enable(is_enabled);
+//
+//}
 
 //explicit instantiations
 

@@ -14,9 +14,10 @@
 #endif
 #include <wx/textctrl.h>
 
+#include "check_speed.h"
+#include "constants.h"
 #include "generic.h"
 #include "my_app.h"
-#include "constants.h"
 
 #include <sstream>
 
@@ -58,7 +59,6 @@ template class NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFram
 
 
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template<class E> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::Check(E& event) {
-
 
     //I proceed only if the progam is not is indling mode
     if (!(parent->idling)) {
@@ -104,7 +104,6 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
                 value->GetValue().ToDouble(&(object_before_editing.value));
                 object_before_editing.unit.set(String(unit->name->GetValue().ToStdString()));
  
-
             }
 
         }else{
@@ -119,8 +118,9 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
         if (!ok) {
             //the entered value is not valid: I set the value back to the value before the editing process had started
-            value->SetValue(object_before_editing.value);
-            unit->name->SetValue(object_before_editing.unit.value);
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, object_before_editing.value));
+
+            unit->name->SetValue(wxString(object_before_editing.unit.value));
             ok = true;
 
             value->SetForegroundColour(wxGetApp().foreground_color);
@@ -130,10 +130,8 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
             
             Reset(unit->name);
         }
+        
         parent->AllOk();
-        
-        
-        
 
     }
     

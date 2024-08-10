@@ -10,8 +10,8 @@ Data:
 			starting heading = 239° 3.240000000001828'
 			length format = time and speed
 				time = 01:01:01
-				speed = 22.0000000000000000 kt
-			label = 
+				speed = 2.0000000000000000 kt
+			label = 2024-08-10 19:53:07 UTC+2
 	Positions:
 Recent bodies = 12 10 8
 Recent projections = 1 0
@@ -20,4 +20,4 @@ Recent route types = 1 0 2
 Recent route for transport types = 1 0
 Recent length units = 1 0
 Recent speed units = 0 1
-Recent speed value = 23.1200000000000010 kt
+Recent speed value = 2.0000000000000000 kt

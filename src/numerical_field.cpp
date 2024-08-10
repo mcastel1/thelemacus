@@ -35,13 +35,13 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
     //set parent
     parent = ((P*)(panel_of_parent->GetParent()));
-    recent_value = recent_value_in;
+    recent_object = recent_value_in;
 
     value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     value->SetValue(wxString(""));
 
     //I just filled name with  a valid value, thus I store it in value_before_editing in order to start off with a valid value in value_before_editing
-    value->GetValue().ToDouble(&(value_before_editing.value));
+    value->GetValue().ToDouble(&(object_before_editing.value));
     //    AdjustWidth(value);
   
     value->Bind(wxEVT_KILL_FOCUS, &NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::Check<wxFocusEvent>, this);
@@ -63,11 +63,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
     //I proceed only if the progam is not is indling mode
     if (!(parent->idling)) {
 
-
-
         (*check)(event);
-
-        
 
         if (is_ok() ||
             (
@@ -82,9 +78,10 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
             if (is_ok()) {
                 //the content of the GUI field is valid  -> I insert it into recent_value, which points to a suitable location (initialized when *this was constructed)
 
-                //write the value writtn in *object into *recent_value
-                recent_value->set((*object));
-
+                //write the value written in *this into *recent_object
+                value->GetValue().ToDouble(&(recent_object->value));
+                recent_object->unit.set(String(unit->name->GetValue().ToStdString()));
+                
                 //I update p->name according to the content of recent_itmes
                 FillInRecentValue();
 
@@ -103,7 +100,11 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
             
             //if the value written in name is correct, I store it in value_before_editing
             if(ok){
-                NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::value_before_editing = (name->GetValue());
+ 
+                value->GetValue().ToDouble(&(object_before_editing.value));
+                object_before_editing.unit.set(String(unit->name->GetValue().ToStdString()));
+ 
+
             }
 
         }else{
@@ -118,11 +119,12 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
         if (!ok) {
             //the entered value is not valid: I set the value back to the value before the editing process had started
-            name->SetValue(value_before_editing);
+            value->SetValue(object_before_editing.value);
+            unit->name->SetValue(object_before_editing.unit.value);
             ok = true;
 
             value->SetForegroundColour(wxGetApp().foreground_color);
-            valu->SetFont(wxGetApp().default_font);
+            value->SetFont(wxGetApp().default_font);
             unit->name->SetForegroundColour(wxGetApp().foreground_color);
             unit->name->SetFont(wxGetApp().default_font);
             
@@ -144,7 +146,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::FillInRecentValue(void) {
    
     //write *recent_value into the NON_GUI field *object
-    object->set((*recent_value));
+    object->set((*recent_object));
     
     //write the value in *object into the GUI field *this
     set();

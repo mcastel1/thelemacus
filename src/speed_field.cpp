@@ -31,11 +31,10 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
     
     //unit is allocated here and not in NumericalField constructor because it needs the argument SpeedUnit_types, which is specifit to SpeedField
     NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit =
-    new MultipleItemField<P, SpeedUnit, CheckUnit<P, SpeedField<P>>>(
+    new SpeedUnitField<P>(
                                                                      NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::parent->panel,
-                                                                     NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::object->unit,
-                                                                     SpeedUnit_types,
-                                                                     recent_units_in);
+                                                                     &(NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::object->unit),
+                                                recent_units_in);
     
     //allocate check
     NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::check = new CheckSpeed<P>(this);

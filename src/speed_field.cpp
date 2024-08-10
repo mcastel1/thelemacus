@@ -84,7 +84,7 @@ template class SpeedField<RouteFrame>;
 template<class P> void SpeedField<P>::set(void) {
         
     NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, SpeedField<P>::object->value));
-    value_ok = true;
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value_ok = true;
     
     SpeedField<P>::unit->set();
   
@@ -130,7 +130,7 @@ template<class P> template<class E>  void SpeedField<P>::OnEditValue(E& event) {
     }
 
     //value_ok is true/false is the text entered is valid/invalid
-    value_ok = success;
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value_ok = success;
     //tries to enable button_reduce
     NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::parent->AllOk();
 

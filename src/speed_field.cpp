@@ -70,7 +70,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
 //set the value in the GUI object value equal to the value in the non-GUI object speed
 template<class P> void SpeedField<P>::set(void) {
         
-    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, SpeedField<P>::speed->value));
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, SpeedField<P>::speed->value));
     value_ok = true;
     
     SpeedField<P>::unit->set();
@@ -87,8 +87,8 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
         
         double x;
         
-        value->GetValue().ToDouble(&x);
-        speed->set(x, SpeedUnit((unit->name->GetValue()).ToStdString()));
+        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->GetValue().ToDouble(&x);
+        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::object->set(x, SpeedUnit((unit->name->GetValue()).ToStdString()));
         
     }
 
@@ -104,20 +104,20 @@ template<class P> template<class E>  void SpeedField<P>::OnEditValue(E& event) {
 
     bool success;
 
-    success = check_double((value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
+    success = check_double((NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
 
     if (success) {
 
         //because the text in value is valid, I set the background color of value to white
-        value->SetForegroundColour(wxGetApp().foreground_color);
-        value->SetFont(wxGetApp().default_font);
+        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->SetForegroundColour(wxGetApp().foreground_color);
+        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->SetFont(wxGetApp().default_font);
 
     }
 
     //value_ok is true/false is the text entered is valid/invalid
     value_ok = success;
     //tries to enable button_reduce
-    parent->AllOk();
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::parent->AllOk();
 
     event.Skip(true);
 
@@ -146,7 +146,7 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
     //value_ok is true/false is the text entered is valid/invalid
     (unit->ok) = success;
     //tries to enable button_reduce
-    parent->AllOk();
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::parent->AllOk();
 
     event.Skip(true);
 
@@ -177,7 +177,7 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
 
 template<class P> template <typename EventTag, typename Method, typename Object> void SpeedField<P>::Bind(EventTag tag, Method method, Object object) {
 
-    value->Bind(tag, method, object);
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->Bind(tag, method, object);
     unit->Bind(tag, method, object);
 
 }

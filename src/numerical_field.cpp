@@ -7,6 +7,9 @@
 
 #include "numerical_field.h"
 
+#include "my_app.h"
+#include "constants.h"
+
 #include <sstream>
 
 using namespace std;

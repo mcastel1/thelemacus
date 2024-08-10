@@ -39,8 +39,10 @@ public:
 
     NumericalField(wxPanel*, NON_GUI*, NON_GUI*, vector<int>*);
 
+    void set(void);
     void FillInRecentValue(void);
     void Enable(bool);
+    bool is_ok(void);
     template<class E> void Check(E&);
     template<class T> void InsertIn(T*);
     template<class T> void InsertIn(T*, wxSizerFlags&);

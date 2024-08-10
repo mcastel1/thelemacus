@@ -219,7 +219,7 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
             if (is_present) {
                 //the content of the GUI field matches one of the items in catalog, i.e., it is valid -> I insert it into recent_items, which points to a suitable location (initialized when *this was constructed)
 
-                //insert item #i into data->recent_bodies
+                //insert item #i into recent_items
                 wxGetApp().list_frame->data->insert_recent_item(i, recent_items);
 
                 //I update p->name according to the content of recent_itmes

@@ -118,6 +118,8 @@
 
 
  ********** THINGS TO FIX ***********
+    - move all remaining fields of SpeedField to the parent class
+    - code template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Check(E& event)
     - see whether ok and value_ok in SpeedField are doubles of the same thing and one can be get rid of 
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 	- remove odd hotrizontal lines on WIN32 mercator projection, they occur when you zoom in too fast with the mouse wheel

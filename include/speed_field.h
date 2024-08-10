@@ -43,11 +43,11 @@ public:
 
     
     SpeedField(wxPanel*, Speed*, Speed*, vector<int>*);
-    void set(void);
+//    void set(void);
     template<class T> void get(T&);
 //    void Enable(bool);
 //    template<class T> void InsertIn(T*);
-    bool is_ok(void);
+//    bool is_ok(void);
     template<class E> void OnEditValue(E&);
     template<class E> void OnEditUnit(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);

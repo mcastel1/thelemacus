@@ -39,7 +39,6 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
     value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     value->SetValue(wxString(""));
 
-    FillInRecentValue();
     //I just filled name with  a valid value, thus I store it in value_before_editing in order to start off with a valid value in value_before_editing
     value->GetValue().ToDouble(&(value_before_editing.value));
     //    AdjustWidth(value);
@@ -72,12 +71,21 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 }
 
 
-//update the value of the GUI  in NumericalField according to NuericalField<P, NON_GUI>::recent_value in such a way that the recent value appears in the GUI field
+//update the value of the GUI (both the value and the unit)  in NumericalField according to recent_value and to the recent units in such a way that the recent value appears in the GUI field
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::FillInRecentValue(void) {
    
+    //write *recent_value into the NON_GUI field *object
+    object->set((*recent_value));
     
-
+    //write the value in *object into the GUI field *this
+    set();
+    
+//    unit->FillInRecentItems();
+    
 }
+
+template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::FillInRecentValue();
+
 
 
 //update the value of the GUI  in NumericalField according to NuericalField<P, NON_GUI>::recent_value in such a way that the recent value appears in the GUI field
@@ -103,5 +111,25 @@ template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template<class T> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::InsertIn(T* host, wxSizerFlags& flag) {
 
     host->Add(sizer_v, flag);
+
+}
+
+
+//set the value in the GUI object value equal to the value in the non-GUI object speed
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::set(void) {
+        
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, object->value));
+    value_ok = true;
+    
+    unit->MultipleItemField<P, NON_GUI_UNIT, CHECK_UNIT>::set();
+  
+}
+
+template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::set();
+
+
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::is_ok(void) {
+
+    return(value_ok && (unit->ok));
 
 }

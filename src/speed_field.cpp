@@ -45,6 +45,9 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
     //allocate check
     NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::check = new CheckSpeed<P>(this);
 
+    //this method has to be here and not in the parent class because otherwise it would call non-allocated objects
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::FillInRecentValue();
+
 //    flags.Center();
 
 //    value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
@@ -81,18 +84,6 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
 template class SpeedField<RouteFrame>;
 
 
-//set the value in the GUI object value equal to the value in the non-GUI object speed
-template<class P> void SpeedField<P>::set(void) {
-        
-    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, SpeedField<P>::object->value));
-    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value_ok = true;
-    
-    SpeedField<P>::unit->set();
-  
-}
-
-//explicit instantiations
-template void SpeedField<RouteFrame>::set();
 
 
 //write the value and the unit of the GUI field in SpeedField into the non-GUI field speed
@@ -204,9 +195,5 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 template void SpeedField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 
 
-template<class P> bool SpeedField<P>::is_ok(void) {
 
-    return((NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value_ok) && (NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->ok));
-
-}
 

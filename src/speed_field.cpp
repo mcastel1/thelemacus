@@ -24,8 +24,8 @@
 //constructor of a SpeedField object, based on the parent frame frame
 template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* object_in, Speed* recent_value_in) : NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >(panel_of_parent, object_in, recent_value_in){
 
-    parent = ((P*)(panel_of_parent->GetParent()));
-    speed = p;
+//    parent = ((P*)(panel_of_parent->GetParent()));
+//    speed = p;
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
 

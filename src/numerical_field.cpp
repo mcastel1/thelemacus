@@ -30,6 +30,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
     editing = false;
     //to be conservative, I set
     ok = false;
+    value_ok = false;
 
     //set parent
     parent = ((P*)(panel_of_parent->GetParent()));

@@ -31,11 +31,11 @@ public:
     //the speed value
 //    wxTextCtrl *value;
     //unit of measure of the Speed written in *this
-    SpeedUnitField<P>* unit;
+//    SpeedUnitField<P>* unit;
 //    wxBoxSizer *sizer_h, *sizer_v;
 //    Speed* speed;
     //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
-    bool value_ok;
+//    bool value_ok;
 //    bool /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
 //    CheckSpeed<P>* check;
 

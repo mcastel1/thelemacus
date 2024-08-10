@@ -44,7 +44,7 @@ public:
     void set(void);
     template<class T> void get(T&);
 //    void Enable(bool);
-    template<class T> void InsertIn(T*);
+//    template<class T> void InsertIn(T*);
     bool is_ok(void);
     template<class E> void OnEditValue(E&);
     template<class E> void OnEditUnit(E&);

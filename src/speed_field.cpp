@@ -166,11 +166,11 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
 //explicit instantiations
 
 
-template<class P> template<class T> void SpeedField<P>::InsertIn(T* host) {
-
-    host->Add(sizer_v);
-
-}
+//template<class P> template<class T> void SpeedField<P>::InsertIn(T* host) {
+//
+//    host->Add(sizer_v);
+//
+//}
 
 //explicit instantiations
 

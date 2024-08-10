@@ -44,8 +44,9 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
     sizer_v = new wxBoxSizer(wxVERTICAL);
 
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
-    sizer_h->Add(value, 0, wxALIGN_CENTER);
-
+    sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+    unit->InsertIn(sizer_h, flags);
+    
 }
 
 

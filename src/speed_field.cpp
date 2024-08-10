@@ -54,13 +54,13 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
     unit->Bind(wxEVT_KEY_UP, &SpeedField::OnEditUnit<wxKeyEvent>, this);
 
 
-    sizer_h = new wxBoxSizer(wxHORIZONTAL);
-    sizer_v = new wxBoxSizer(wxVERTICAL);
+//    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+//    sizer_v = new wxBoxSizer(wxVERTICAL);
 
-    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+//    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     
-    sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    unit->InsertIn(sizer_h, flags);
+//    sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+//    unit->InsertIn(sizer_h, flags);
     
 }
 

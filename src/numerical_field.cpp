@@ -37,6 +37,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
 
     value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    unit = new MultipleItemField<P, NON_GUI_UNIT, CHECK_UNIT>((parent->panel), object->unit, , recent_units_in);
    
     
     value->SetValue(wxString(""));

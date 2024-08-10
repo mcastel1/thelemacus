@@ -35,6 +35,9 @@ public:
     void set(double);
     void set(double, const SpeedUnit&);
     void set(String, double, String);
+    string to_string(const SpeedUnit&, unsigned int);
+    string to_string(unsigned int);
+    void convert_to(const SpeedUnit&);
     template<class S> void read_from_stream(String, S*, bool, String);
     void print(String, String, ostream&);
     

@@ -32,4 +32,11 @@ using namespace std;
 #define inch_to_km (25.4e-6)
 #define km_to_inch (1.0/inch_to_km)
 
+#define kt_to_kmh (nm_to_km)
+#define kmh_to_kt (1.0/kt_to_kmh)
+
+#define kt_to_ms (nm_to_m/3600.0)
+#define ms_to_kt (1.0/kt_to_ms)
+
+
 #endif

@@ -114,10 +114,20 @@ template void Speed::read_from_stream<basic_fstream<char, char_traits<char>>>(St
 
 void Speed::print(String name, String prefix, ostream& ostr) {
     
-    if (name != String("")){
-        
-        ostr << prefix.value << name.value << " = " << value << " kt\n";
-    
+    unsigned int precision;
+
+    //if I am printing to terminal, I print with display_precision. Otherwise, I print with (data_precision.value)
+    if (ostr.rdbuf() == cout.rdbuf()) {
+        precision = (display_precision.value);
+    }
+    else {
+        precision = (data_precision.value);
+    }
+
+    if ((name.value) != "") {
+
+        ostr << prefix.value << name.value << " = " << to_string(precision) << endl;
+  
     }
 
 }
@@ -160,4 +170,110 @@ void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
     
     print(name, prefix, cout); 
 
+}
+
+
+//convert *this to string by printing it in the unit of measure unit_in, with numerical precision precision
+string Speed::to_string(const SpeedUnit& output_unit, unsigned int precision) {
+
+    Speed temp;
+    
+    temp = (*this);
+    temp.convert_to(output_unit);
+    
+    return(temp.to_string(precision));
+
+}
+
+
+//convert *this to string with numerical precision precision
+string Speed::to_string(unsigned int precision){
+    
+    stringstream output;
+    
+    output.precision(precision);
+    
+    output << fixed << value << " " << unit.value;
+    
+    return(output.str().c_str());
+    
+}
+
+
+
+//convert *this to unit of measure unit_in, set unit = unit_in and write the result in *this
+//inline
+void Speed::convert_to(const SpeedUnit& output_unit){
+    
+    //the value of this in units of measure SpeedUnit_types[0]
+    double value0 = 0.0;
+
+    
+    //1. convert *this to unit SpeedUnit_types[0] and write the result in value_in_SpeedUnit_types0
+    switch (unit.position_in_list(SpeedUnit_types)) {
+            
+        case 0:{
+            //unit = SpeedUnit_types[0]
+            
+            value0 = value;
+            
+            break;
+            
+        }
+
+        case 1:{
+            //unit = SpeedUnit_types[1]
+            
+            value0 = value * kmh_to_kt;
+            
+            break;
+            
+        }
+            
+        case 2:{
+            //unit = SpeedUnit_types[2]
+            
+            value0 = value * ms_to_kt;
+            
+            break;
+            
+        }
+            
+    }
+    
+    
+    //2. convert *this to unit output_unit and write the result in *this
+    switch (String(output_unit).position_in_list(SpeedUnit_types)) {
+            
+        case 0:{
+            //output_unit = SpeedUnit_types[0]
+            
+            value = value0;
+            
+            break;
+            
+        }
+
+        case 1:{
+            //output_unit = SpeedUnit_types[1]
+            
+            value = value0 * kt_to_kmh;
+
+            break;
+            
+        }
+            
+        case 2:{
+            //output_unit = SpeedUnit_types[2]
+            
+            value = value0 * kt_to_ms;
+
+            break;
+            
+        }
+            
+    }
+    
+    unit.set(output_unit);
+    
 }

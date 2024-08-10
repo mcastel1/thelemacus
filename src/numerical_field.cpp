@@ -26,6 +26,9 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
     parent = ((P*)(panel_of_parent->GetParent()));
     recent_value = recent_value_in;
 
+    //initialize check
+    check = new CHECK(this);
+
 
     value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     value->SetValue(wxString(""));

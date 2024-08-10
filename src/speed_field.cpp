@@ -31,7 +31,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
 
     
     //initialize check
-    check = new CheckSpeed<P>(this);
+//    check = new CheckSpeed<P>(this);
 
     flags.Center();
 

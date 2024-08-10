@@ -31,12 +31,12 @@ public:
     //a pointer to the functor that will be used to check whether *this is valid
     CHECK* check;
     //this points to an external vector<NON_GUI> where the recent values of *this are stored
-    NON_GUI* recent_value;
+    double* recent_value;
     double value_before_editing;
     bool ok, /*this is true if *this is being edited, false otherwise*/ editing;
     wxBoxSizer *sizer_h, *sizer_v;
 
-    NumericalField(wxPanel*, NON_GUI*, NON_GUI*);
+    NumericalField(wxPanel*, NON_GUI*, double*, vector<int>*);
 
     void FillInRecentValue(void);
     void Enable(bool);

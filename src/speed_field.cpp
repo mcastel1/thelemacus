@@ -57,15 +57,15 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
 //    value->SetValue(wxString(""));
     NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>>>::value->Bind(wxEVT_KILL_FOCUS, (*(NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::check->check_speed_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
-    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>>>::value->Bind(wxEVT_KEY_UP, &SpeedField::OnEditValue<wxKeyEvent>, this);
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>>>::value->Bind(wxEVT_KEY_UP, &NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::template OnEditValue<wxKeyEvent>, this);
 
 
 //    (unit->name) = new wxComboBox((parent->panel), wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, units, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
 //    unit = new SpeedUnitField<P>(parent->panel, &(speed->unit), &(wxGetApp().list_frame->data->recent_speed_units));
 
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->Bind(wxEVT_COMBOBOX, &SpeedField::OnEditUnit<wxCommandEvent>, this);
-    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->Bind(wxEVT_KEY_UP, &SpeedField::OnEditUnit<wxKeyEvent>, this);
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->Bind(wxEVT_COMBOBOX, &NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::template OnEditUnit<wxCommandEvent>, this);
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->Bind(wxEVT_KEY_UP, &NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::template OnEditUnit<wxKeyEvent>, this);
 
     
     //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
@@ -104,84 +104,6 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
 
 //explicit instantiations
 template void SpeedField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
-
-
-//this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
-template<class P> template<class E>  void SpeedField<P>::OnEditValue(E& event) {
-
-    bool success;
-
-    success = check_double((NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->GetValue()).ToStdString(), NULL, true, 0.0, DBL_MAX);
-
-    if (success) {
-
-        //because the text in value is valid, I set the background color of value to white
-        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->SetForegroundColour(wxGetApp().foreground_color);
-        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->SetFont(wxGetApp().default_font);
-
-    }
-
-    //value_ok is true/false is the text entered is valid/invalid
-    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value_ok = success;
-    //tries to enable button_reduce
-    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::parent->AllOk();
-
-    event.Skip(true);
-
-}
-
-//explicit instantiations
-template void SpeedField<RouteFrame>::OnEditValue<wxKeyEvent>(wxKeyEvent&);
-
-//this function is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
-template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
-
-    bool success;
-
-    //I check whether the name in the GUI field unit matches one of the unit names in (unit->catalog)
-    find_and_replace_case_insensitive(NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->name, (NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->catalog), &success, NULL);
-
-
-    if (success) {
-
-        //because the text in value is valid, I set the background color of unit to white
-        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->name->SetForegroundColour(wxGetApp().foreground_color);
-        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->name->SetFont(wxGetApp().default_font);
-
-    }
-
-    //value_ok is true/false is the text entered is valid/invalid
-    (NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->ok) = success;
-    //tries to enable button_reduce
-    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::parent->AllOk();
-
-    event.Skip(true);
-
-}
-
-//explicit instantiations
-template void SpeedField<RouteFrame>::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
-template void  SpeedField<RouteFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
-
-
-//enable/disable the SpeedField
-//template<class P> void SpeedField<P>::Enable(bool is_enabled) {
-//
-//    value->Enable(is_enabled);
-//    unit->Enable(is_enabled);
-//
-//}
-
-//explicit instantiations
-
-
-//template<class P> template<class T> void SpeedField<P>::InsertIn(T* host) {
-//
-//    host->Add(sizer_v);
-//
-//}
-
-//explicit instantiations
 
 
 template<class P> template <typename EventTag, typename Method, typename Object> void SpeedField<P>::Bind(EventTag tag, Method method, Object object) {

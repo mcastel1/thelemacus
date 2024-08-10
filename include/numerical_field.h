@@ -43,6 +43,8 @@ public:
     void FillInRecentValue(void);
     void Enable(bool);
     bool is_ok(void);
+    template<class E> void OnEditValue(E&);
+    template<class E> void OnEditUnit(E&);
     template<class E> void Check(E&);
     template<class T> void InsertIn(T*);
     template<class T> void InsertIn(T*, wxSizerFlags&);

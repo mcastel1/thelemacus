@@ -14,6 +14,7 @@
 #endif
 #include <wx/textctrl.h>
 
+#include "generic.h"
 #include "my_app.h"
 #include "constants.h"
 
@@ -133,3 +134,65 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
     return(value_ok && (unit->ok));
 
 }
+
+template bool NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::is_ok();
+
+
+//this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template<class E> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::OnEditValue(E& event) {
+
+    bool success;
+
+    success = check_double((value->GetValue().ToStdString()), NULL, true, 0.0, DBL_MAX);
+
+    if (success) {
+
+        //because the text in value is valid, I set the background color of value to white
+        value->SetForegroundColour(wxGetApp().foreground_color);
+        value->SetFont(wxGetApp().default_font);
+
+    }
+
+    //value_ok is true/false is the text entered is valid/invalid
+    value_ok = success;
+    //tries to enable button_reduce
+    parent->AllOk();
+
+    event.Skip(true);
+
+}
+
+template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::OnEditValue<wxKeyEvent>(wxKeyEvent&);
+
+
+
+
+//this method is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template<class E>  void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::OnEditUnit(E& event) {
+
+    bool success;
+
+    //I check whether the name in the GUI field unit matches one of the unit names in (unit->catalog)
+    find_and_replace_case_insensitive(unit->name, unit->catalog, &success, NULL);
+
+
+    if (success) {
+
+        //because the text in value is valid, I set the background color of unit to white
+        unit->name->SetForegroundColour(wxGetApp().foreground_color);
+        unit->name->SetFont(wxGetApp().default_font);
+
+    }
+
+    //value_ok is true/false is the text entered is valid/invalid
+    (unit->ok) = success;
+    //tries to enable button_reduce
+    parent->AllOk();
+
+    event.Skip(true);
+
+}
+
+
+template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::OnEditUnit<wxCommandEvent>(wxCommandEvent&);

@@ -65,6 +65,74 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
 
 
+        (*check)(event);
+
+        
+
+        if (is_ok() ||
+            (
+             ((value->GetForegroundColour()) != (wxGetApp().error_color)) &&
+             ((unit->name->GetForegroundColour()) != (wxGetApp().error_color)) &&
+             (String((value->GetValue().ToStdString())) == String("")) &&
+             (String((unit->name->GetValue().ToStdString())) == String(""))
+             )
+            ) {
+            //the GUI field  contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
+
+            if (is_ok()) {
+                //the content of the GUI field is valid  -> I insert it into recent_value, which points to a suitable location (initialized when *this was constructed)
+
+                //write the value writtn in *object into *recent_value
+                recent_value->set((*object));
+
+                //I update p->name according to the content of recent_itmes
+                FillInRecentValue();
+
+            }
+
+
+            //if check is true (false) -> set ok to true (false)
+            ok = is_ok();
+            //the background color of value and of unit->name is set to wxGetApp().foreground_color and the font to default_font, because in this case there is no erroneous value in value nor in unit. I call Reset to reset the font colors of the items in the list of unit to their default values
+            value->SetForegroundColour(wxGetApp().foreground_color);
+            value->SetFont(wxGetApp().default_font);
+            unit->name->SetForegroundColour(wxGetApp().foreground_color);
+            unit->name->SetFont(wxGetApp().default_font);
+
+            Reset(unit->name);
+            
+            //if the value written in name is correct, I store it in value_before_editing
+            if(ok){
+                NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::value_before_editing = (name->GetValue());
+            }
+
+        }else{
+            //the GUI field  does not contain a valid text,  it is not empty and with a red background color-> I prompt an error message frame
+
+
+            parent->print_error_message->SetAndCall(value, String("Value is not valid!"), String("Value must be a floating-point number."), (wxGetApp().path_file_error_icon));
+
+            ok = false;
+
+        }
+
+        if (!ok) {
+            //the entered value is not valid: I set the value back to the value before the editing process had started
+            name->SetValue(value_before_editing);
+            ok = true;
+
+            value->SetForegroundColour(wxGetApp().foreground_color);
+            valu->SetFont(wxGetApp().default_font);
+            unit->name->SetForegroundColour(wxGetApp().foreground_color);
+            unit->name->SetFont(wxGetApp().default_font);
+            
+            Reset(unit->name);
+        }
+        parent->AllOk();
+        
+        
+        
+
     }
     
     event.Skip(true);

@@ -33,7 +33,7 @@ public:
     CHECK* check;
     //this points to an external NON_GUI where the recent value of *this is stored
     NON_GUI* recent_value;
-    Double value_before_editing;
+    NON_GUI value_before_editing;
     bool ok, value_ok, /*this is true if *this is being edited, false otherwise*/ editing;
     wxBoxSizer *sizer_h, *sizer_v;
 

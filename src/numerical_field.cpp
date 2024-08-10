@@ -7,6 +7,13 @@
 
 #include "numerical_field.h"
 
+#include "date_field.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+#include <wx/textctrl.h>
+
 #include "my_app.h"
 #include "constants.h"
 
@@ -45,7 +52,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
     FillInRecentValue();
     //I just filled name with  a valid value, thus I store it in value_before_editing in order to start off with a valid value in value_before_editing
     value->GetValue().ToDouble(&value_before_editing);
-    AdjustWidth(value);
+//    AdjustWidth(value);
   
     value->Bind(wxEVT_KILL_FOCUS, &NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::Check<wxFocusEvent>, this);
   

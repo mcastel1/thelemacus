@@ -195,7 +195,7 @@ template void  SpeedField<RouteFrame>::OnEditUnit<wxCommandEvent>(wxCommandEvent
 template<class P> template <typename EventTag, typename Method, typename Object> void SpeedField<P>::Bind(EventTag tag, Method method, Object object) {
 
     NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->Bind(tag, method, object);
-    unit->Bind(tag, method, object);
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->Bind(tag, method, object);
 
 }
 
@@ -205,7 +205,7 @@ template void SpeedField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (Rou
 
 template<class P> bool SpeedField<P>::is_ok(void) {
 
-    return(value_ok && (unit->ok));
+    return((NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value_ok) && (NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->ok));
 
 }
 

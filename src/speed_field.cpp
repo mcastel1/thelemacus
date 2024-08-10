@@ -72,6 +72,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
 }
 
 //explicit instantiations
+template class SpeedField<RouteFrame>;
 
 
 //set the value in the GUI object value equal to the value in the non-GUI object speed
@@ -194,6 +195,7 @@ template<class P> template <typename EventTag, typename Method, typename Object>
 }
 
 //explicit instantiations
+template void SpeedField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 
 
 template<class P> bool SpeedField<P>::is_ok(void) {

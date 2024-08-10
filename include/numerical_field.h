@@ -31,13 +31,13 @@ public:
     MultipleItemField<P, NON_GUI_UNIT, CHECK_UNIT>* unit;
     //a pointer to the functor that will be used to check whether *this is valid
     CHECK* check;
-    //this points to an external vector<NON_GUI> where the recent values of *this are stored
-    Double* recent_value;
+    //this points to an external NON_GUI where the recent value of *this is stored
+    NON_GUI* recent_value;
     Double value_before_editing;
     bool ok, value_ok, /*this is true if *this is being edited, false otherwise*/ editing;
     wxBoxSizer *sizer_h, *sizer_v;
 
-    NumericalField(wxPanel*, NON_GUI*, Double*, vector<int>*);
+    NumericalField(wxPanel*, NON_GUI*, NON_GUI*, vector<int>*);
 
     void FillInRecentValue(void);
     void Enable(bool);

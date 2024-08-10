@@ -23,7 +23,7 @@
 
 
 //constructor of a SpeedField object, based on the parent frame frame
-template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* object_in, Double* recent_value_in, vector<int>* recent_units_in) : NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >(panel_of_parent, object_in, recent_value_in, recent_units_in){
+template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* object_in, Speed* recent_value_in, vector<int>* recent_units_in) : NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >(panel_of_parent, object_in, recent_value_in, recent_units_in){
 
     wxSizerFlags flags;
 

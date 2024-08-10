@@ -42,7 +42,7 @@ public:
 //    CheckSpeed<P>* check;
 
     
-    SpeedField(wxPanel*, Speed*, Double*, vector<int>*);
+    SpeedField(wxPanel*, Speed*, Speed*, vector<int>*);
     void set(void);
     template<class T> void get(T&);
 //    void Enable(bool);

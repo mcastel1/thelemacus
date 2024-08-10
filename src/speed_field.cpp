@@ -89,7 +89,7 @@ template class SpeedField<RouteFrame>;
 //write the value and the unit of the GUI field in SpeedField into the non-GUI field speed
 template<class P> template <class T> void SpeedField<P>::get(T& event) {
 
-    if(is_ok()){
+    if(NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::is_ok()){
         
         double x;
         

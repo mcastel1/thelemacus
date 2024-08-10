@@ -128,7 +128,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::set();
 
 
-template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::is_ok(void) {
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> bool NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::is_ok(void) {
 
     return(value_ok && (unit->ok));
 

@@ -27,13 +27,13 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
 //    parent = ((P*)(panel_of_parent->GetParent()));
 //    speed = p;
     //these flags will be used in the method InsertIn below, to insert this->unit
-    wxSizerFlags flags;
+//    wxSizerFlags flags;
 
     
     //initialize check
 //    check = new CheckSpeed<P>(this);
 
-    flags.Center();
+//    flags.Center();
 
 //    value = new wxTextCtrl((parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     //SetColor(value);

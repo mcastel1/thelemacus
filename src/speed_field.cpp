@@ -41,7 +41,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
     //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Speed object
 //    value->SetValue(wxString(""));
     value_ok = false;
-    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>>>::value->Bind(wxEVT_KILL_FOCUS, (*(check->check_speed_value)));
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>>>::value->Bind(wxEVT_KILL_FOCUS, (*(NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::check->check_speed_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
     NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>>>::value->Bind(wxEVT_KEY_UP, &SpeedField::OnEditValue<wxKeyEvent>, this);
 

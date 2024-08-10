@@ -23,10 +23,6 @@ using namespace std;
 
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::NumericalField(wxPanel* panel_of_parent, NON_GUI* object_in, double* recent_value_in, vector<int>* recent_units_in){
     
-    wxSizerFlags flags;
-
-    flags.Center();
-
     //set the non-GUI object
     object = object_in;
     
@@ -54,7 +50,6 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    unit->InsertIn(sizer_h, flags);
     
 }
 

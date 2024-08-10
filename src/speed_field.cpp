@@ -24,6 +24,11 @@
 //constructor of a SpeedField object, based on the parent frame frame
 template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* object_in, double* recent_value_in, vector<int>* recent_units_in) : NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >(panel_of_parent, object_in, recent_value_in, recent_units_in){
 
+    wxSizerFlags flags;
+
+    flags.Center();
+
+    
 //    parent = ((P*)(panel_of_parent->GetParent()));
 //    speed = p;
     //these flags will be used in the method InsertIn below, to insert this->unit
@@ -59,14 +64,16 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
     unit->Bind(wxEVT_COMBOBOX, &SpeedField::OnEditUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &SpeedField::OnEditUnit<wxKeyEvent>, this);
 
-
-//    sizer_h = new wxBoxSizer(wxHORIZONTAL);
-//    sizer_v = new wxBoxSizer(wxVERTICAL);
-
-//    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     
-//    sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-//    unit->InsertIn(sizer_h, flags);
+    //    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    //    sizer_v = new wxBoxSizer(wxVERTICAL);
+    
+    //    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
+    
+    //    sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+    //    unit->InsertIn(sizer_h, flags);
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->InsertIn(NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::sizer_h, flags);
+
     
 }
 

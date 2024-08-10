@@ -881,7 +881,7 @@ template<class E> void RouteFrame::UpdateLength(E& event) {
 
     if ((time->is_ok()) && (speed->is_ok())) {
 
-        length->set(Length(*(time->chrono), *(speed->speed)));
+        length->set(Length(*(time->chrono), *(speed->object)));
 
     }
     else {

@@ -13,11 +13,13 @@
 using namespace std;
 
 #include "check_unit.h"
+#include "double.h"
 #include "numerical_field.h"
 #include "speed.h"
 #include "speed_unit_field.h"
 
 template<class P> class CheckSpeed;
+class Double;
 class Speed;
 template<class P> class SpeedUnitField;
 
@@ -40,7 +42,7 @@ public:
 //    CheckSpeed<P>* check;
 
     
-    SpeedField(wxPanel*, Speed*, double*, vector<int>*);
+    SpeedField(wxPanel*, Speed*, Double*, vector<int>*);
     void set(void);
     template<class T> void get(T&);
 //    void Enable(bool);

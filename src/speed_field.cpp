@@ -102,7 +102,7 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
         double x;
         
         NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->GetValue().ToDouble(&x);
-        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::object->set(x, SpeedUnit((unit->name->GetValue()).ToStdString()));
+        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::object->set(x, SpeedUnit((NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->name->GetValue()).ToStdString()));
         
     }
 
@@ -147,19 +147,19 @@ template<class P> template<class E>  void SpeedField<P>::OnEditUnit(E& event) {
     bool success;
 
     //I check whether the name in the GUI field unit matches one of the unit names in (unit->catalog)
-    find_and_replace_case_insensitive(unit->name, (unit->catalog), &success, NULL);
+    find_and_replace_case_insensitive(NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->name, (NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->catalog), &success, NULL);
 
 
     if (success) {
 
         //because the text in value is valid, I set the background color of unit to white
-        unit->name->SetForegroundColour(wxGetApp().foreground_color);
-        unit->name->SetFont(wxGetApp().default_font);
+        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->name->SetForegroundColour(wxGetApp().foreground_color);
+        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->name->SetFont(wxGetApp().default_font);
 
     }
 
     //value_ok is true/false is the text entered is valid/invalid
-    (unit->ok) = success;
+    (NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->ok) = success;
     //tries to enable button_reduce
     NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::parent->AllOk();
 

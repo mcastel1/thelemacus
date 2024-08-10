@@ -30,8 +30,8 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
 //    wxSizerFlags flags;
 
     
-    //initialize check
-//    check = new CheckSpeed<P>(this);
+    //allocate check
+    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::check = new CheckSpeed<P>(this);
 
 //    flags.Center();
 

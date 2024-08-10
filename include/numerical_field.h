@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+#include "double.h"
 #include "multiple_item_field.h"
 
 using namespace std;
@@ -31,12 +32,12 @@ public:
     //a pointer to the functor that will be used to check whether *this is valid
     CHECK* check;
     //this points to an external vector<NON_GUI> where the recent values of *this are stored
-    double* recent_value;
-    double value_before_editing;
+    Double* recent_value;
+    Double value_before_editing;
     bool ok, value_ok, /*this is true if *this is being edited, false otherwise*/ editing;
     wxBoxSizer *sizer_h, *sizer_v;
 
-    NumericalField(wxPanel*, NON_GUI*, double*, vector<int>*);
+    NumericalField(wxPanel*, NON_GUI*, Double*, vector<int>*);
 
     void FillInRecentValue(void);
     void Enable(bool);

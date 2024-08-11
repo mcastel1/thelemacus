@@ -416,7 +416,7 @@ void Data::print(bool print_all_routes, String prefix, ostream& ostr) {
     print_recent_items(recent_length_units, String("length units"), prefix, ostr);
     print_recent_items(recent_speed_units, String("speed units"), prefix, ostr);
     
-    recent_speed_value.print(String("Recent speed value"), prefix, ostr);
+    recent_route_speed_value.print(String("Recent route speed value"), prefix, ostr);
 
 }
 
@@ -820,7 +820,7 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
     read_list_from_stream<S>(String("Recent length units"), input_stream, true, &recent_length_units);
     read_list_from_stream<S>(String("Recent speed units"), input_stream, true, &recent_speed_units);
     
-    recent_speed_value.read_from_stream(String("Recent speed value"), input_stream, true, prefix);
+    recent_route_speed_value.read_from_stream(String("Recent route speed value"), input_stream, true, prefix);
     
 }
 

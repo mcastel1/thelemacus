@@ -39,7 +39,7 @@ public:
     //the recent bodies, projections, ... selected by the user are stored here
     vector<int> recent_bodies, recent_projections, recent_length_formats, recent_route_types, recent_route_for_transport_types, recent_length_units, recent_speed_units;
     //the recent value of SpeedField is stored here
-    Speed recent_speed_value;
+    Speed recent_route_speed_value;
 
 
     Data(Catalog*, String);

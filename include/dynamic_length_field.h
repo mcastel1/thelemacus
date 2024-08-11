@@ -18,7 +18,7 @@ using namespace std;
 template<class P> class CheckLength;
 
 
-//an editable GUI field to enter a Length, composed of a box and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the DynamicLengthField object
+//an editable GUI field to enter a Length, composed of a box and a dropdown menu to enter the units of measure of the Length. P is the type of the parent which hosts the DynamicLengthField object
 template<class P> class DynamicLengthField: public LengthField<P>{
     
 public:

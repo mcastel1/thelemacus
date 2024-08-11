@@ -38,7 +38,7 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
     NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit =
     new SpeedUnitField<P>(
                           NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::parent->panel,
-                          &(NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::object->unit),
+                          NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::object->unit,
                           recent_units_in);
     
     //allocate check

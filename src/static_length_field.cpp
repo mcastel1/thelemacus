@@ -51,7 +51,7 @@ template<class P> void StaticLengthField<P>::set(const Length& l) {
 //set the value and the unit in the GUI object value equal to the value and the unit in the non-GUI object length
 template<class P> void StaticLengthField<P>::set(void) {
 
-    set(*(LengthField<P>::length));
+    set(*(LengthField<P>::object));
 
     (LengthField<P>::unit->ok) = true;
 

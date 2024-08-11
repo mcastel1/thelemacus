@@ -42,9 +42,14 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
     value_ok = false;
     value->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
-//    value->Bind(wxEVT_KEY_UP, &DynamicLengthField::OnEditValue<wxKeyEvent>, this);
+    //    value->Bind(wxEVT_KEY_UP, &DynamicLengthField::OnEditValue<wxKeyEvent>, this);
     
-    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), (LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
+    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::unit
+    = new LengthUnitField<P>(
+                             NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::parent->panel,
+                             NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::object->unit,
+                             &(wxGetApp().list_frame->data->recent_length_units)
+                             );
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
 //    LengthField<P>::unit->name->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
 //    LengthField<P>::unit->name->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);

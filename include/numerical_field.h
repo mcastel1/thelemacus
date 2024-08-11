@@ -40,6 +40,7 @@ public:
     NumericalField(wxPanel*, NON_GUI*, NON_GUI*, vector<int>*);
 
     void set(void);
+    template<class T> void get(T&);
     void FillInRecentValue(void);
     void Enable(bool);
     bool is_ok(void);

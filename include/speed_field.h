@@ -44,7 +44,7 @@ public:
     
     SpeedField(wxPanel*, Speed*, Speed*, vector<int>*);
 //    void set(void);
-    template<class T> void get(T&);
+//    template<class T> void get(T&);
 //    void Enable(bool);
 //    template<class T> void InsertIn(T*);
 //    bool is_ok(void);

@@ -86,31 +86,3 @@ template<class P> SpeedField<P>::SpeedField(wxPanel* panel_of_parent, Speed* obj
 
 //explicit instantiations
 template class SpeedField<RouteFrame>;
-
-
-
-
-//write the value and the unit of the GUI field in SpeedField into the non-GUI field speed
-template<class P> template <class T> void SpeedField<P>::get(T& event) {
-
-    if(NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::is_ok()){
-        
-        double x;
-        
-        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->GetValue().ToDouble(&x);
-        NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::object->set(x, SpeedUnit((NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->name->GetValue()).ToStdString()));
-        
-    }
-
-    event.Skip(true);
-
-}
-
-//explicit instantiations
-template void SpeedField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
-
-
-
-
-
-

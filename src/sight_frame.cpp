@@ -113,7 +113,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     height_of_eye = new DynamicLengthField<SightFrame>(
                                                        panel,
                                                        sight->height_of_eye,
-                                                       &(wxGetApp().list_frame->data->recent_length_value),
+                                                       &(wxGetApp().list_frame->data->recent_height_of_eye_value),
                                                        &(wxGetApp().list_frame->data->recent_length_units)
                                                        );
     

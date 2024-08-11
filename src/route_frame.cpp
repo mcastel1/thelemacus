@@ -102,13 +102,19 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     time = new ChronoField<RouteFrame>(panel, &(route->time));
     //the field for speed to set the Route length
     text_speed = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
-    speed = new SpeedField<RouteFrame>(panel, (route->speed) , &(wxGetApp().list_frame->data->recent_route_speed_value), &(wxGetApp().list_frame->data->recent_speed_units));
+    speed = new SpeedField<RouteFrame>(
+                                       panel,
+                                       route->speed,
+                                       &(wxGetApp().list_frame->data->recent_route_speed_value),
+                                       &(wxGetApp().list_frame->data->recent_speed_units)
+                                       );
     
     //the field for Length to set the Route length
     text_length = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
     length = new DynamicLengthField<RouteFrame>(
-                                                panel, route->length.
-                                                &(wxGetApp().list_frame->data->recent_length_value),
+                                                panel,
+                                                route->length,
+                                                &(wxGetApp().list_frame->data->recent_route_length_value),
                                                 &(wxGetApp().list_frame->data->recent_length_units)
                                                 );
 

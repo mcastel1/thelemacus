@@ -26,17 +26,17 @@ template<class P> class LengthField : public NumericalField<P, Length, LengthUni
 public:
     
     //the parent frame to which this object is attached
-    P* parent;
+//    P* parent;
     //unit of measure of the Length written in *this
-    LengthUnitField<P>* unit;
-    wxBoxSizer *sizer_h, *sizer_v;
-    Length* length;
+//    LengthUnitField<P>* unit;
+//    wxBoxSizer *sizer_h, *sizer_v;
+//    Length* length;
 
-    LengthField(wxPanel*, Length*);
-    
-    template<class E> void OnEditUnit(E&);
-    template<class T> void InsertIn(T*);
-    template<class T> void InsertIn(T*, wxSizerFlags&);
+    LengthField(wxPanel*, Length*, Length*, vector<int>*);
+
+//    template<class E> void OnEditUnit(E&);
+//    template<class T> void InsertIn(T*);
+//    template<class T> void InsertIn(T*, wxSizerFlags&);
     
 };
 

@@ -236,7 +236,7 @@ template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame
 
 
 //this method is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
-template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template<class E>  void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::OnEditUnit(E& event) {
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template<class E> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::OnEditUnit(E& event) {
 
     bool success;
 
@@ -264,3 +264,14 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
+
+
+
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template <typename EventTag, typename Method, typename Object> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::Bind(EventTag tag, Method method, Object object) {
+
+    value->Bind(tag, method, object);
+    unit->Bind(tag, method, object);
+
+}
+
+template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);

@@ -48,6 +48,7 @@ public:
     template<class E> void Check(E&);
     template<class T> void InsertIn(T*);
     template<class T> void InsertIn(T*, wxSizerFlags&);
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
 
 };
 

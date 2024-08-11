@@ -50,7 +50,7 @@ public:
 //    bool is_ok(void);
 //    template<class E> void OnEditValue(E&);
 //    template<class E> void OnEditUnit(E&);
-    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+//    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
 

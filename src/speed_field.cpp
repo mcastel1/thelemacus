@@ -110,15 +110,6 @@ template<class P> template <class T> void SpeedField<P>::get(T& event) {
 template void SpeedField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
-template<class P> template <typename EventTag, typename Method, typename Object> void SpeedField<P>::Bind(EventTag tag, Method method, Object object) {
-
-    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::value->Bind(tag, method, object);
-    NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>> >::unit->Bind(tag, method, object);
-
-}
-
-//explicit instantiations
-template void SpeedField<RouteFrame>::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 
 
 

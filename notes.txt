@@ -118,6 +118,7 @@
 
 
  ********** THINGS TO FIX ***********
+    - whenever a method in NumericalField touches recent_values_in or recent_units_in, add an if() that prevents from doing it if they are NULL
     - move all remaining fields of SpeedField to the parent class
     - code template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Check(E& event)
     - see whether ok and value_ok in SpeedField are doubles of the same thing and one can be get rid of 

@@ -103,10 +103,14 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     //the field for speed to set the Route length
     text_speed = new StaticText(panel, wxT("Speed"), wxDefaultPosition, wxDefaultSize, 0);
     speed = new SpeedField<RouteFrame>(panel, (route->speed) , &(wxGetApp().list_frame->data->recent_route_speed_value), &(wxGetApp().list_frame->data->recent_speed_units));
-
+    
     //the field for Length to set the Route length
     text_length = new StaticText(panel, wxT("Length"), wxDefaultPosition, wxDefaultSize, 0);
-    length = new DynamicLengthField<RouteFrame>(panel, (route->length));
+    length = new DynamicLengthField<RouteFrame>(
+                                                panel, route->length.
+                                                &(wxGetApp().list_frame->data->recent_length_value),
+                                                &(wxGetApp().list_frame->data->recent_length_units)
+                                                );
 
 
     //this is how to properly bind the DynamicLengthField length when it is inserted into a frame and I want a modification of the DynamicLengthField to trigger AllOk() in the frame. Given that I am including length in a frame, I want that every time value or unit is changed, SightFrame::AllOk() is triggered : 1. I first bind OnEditValue and OnEditUnit to length->value and length->unit 2. every time length is changed, OnEditValue and OnEditUnit will be called and set to true/false the value_ok and unit_ok variables 3. AllOk() will be called later, read the value_ok and unit_ok variables, and enable/disable button_reduce  accordingly

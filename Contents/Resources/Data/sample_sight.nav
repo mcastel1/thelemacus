@@ -10,7 +10,7 @@ Data:
 			starting heading = 239° 3.240000000001828'
 			length format = time and speed
 				time = 01:01:01
-				speed = 0.1200000000000000 km/h
+				speed = 0.1200000000000000 m/s
 			label = 
 	Positions:
 Recent bodies = 12 10 8
@@ -19,5 +19,5 @@ Recent length formats = 0 1
 Recent route types = 1 0 2
 Recent route for transport types = 1 0
 Recent length units = 1 0
-Recent speed units = 1 2
-Recent route speed value = 0.1200000000000000 km/h
+Recent speed units = 2 1
+Recent route speed value = 0.1200000000000000 m/s

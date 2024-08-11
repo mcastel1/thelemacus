@@ -10,8 +10,10 @@
 
 #include <iostream>
 
+#include "check_length.h"
 #include "length.h"
 #include "length_unit_field.h"
+#include "numerical_field.h"
 
 using namespace std;
 
@@ -19,7 +21,7 @@ class Length;
 
 
 //this class is for a GUI field containing a Length
-template<class P> class LengthField{
+template<class P> class LengthField : public NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>>>{
     
 public:
     

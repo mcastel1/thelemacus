@@ -55,7 +55,7 @@ Length::Length(Chrono time, Speed speed) {
     unit = new LengthUnit;
     
     //consider all possible units in which speed is expressed
-    switch (speed.unit.position_in_list(SpeedUnit_types)) {
+    switch (speed.unit->position_in_list(SpeedUnit_types)) {
             
         case 0: {
             //speed.unit = SpeedUnit_types[0]

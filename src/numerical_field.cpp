@@ -102,7 +102,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
             if(ok){
  
                 value->GetValue().ToDouble(&(object_before_editing.value));
-                object_before_editing.unit.set(String(unit->name->GetValue().ToStdString()));
+                object_before_editing.unit->set(String(unit->name->GetValue().ToStdString()));
  
             }
 
@@ -120,7 +120,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
             //the entered value is not valid: I set the value back to the value before the editing process had started
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, object_before_editing.value));
 
-            unit->name->SetValue(wxString(object_before_editing.unit.value));
+            unit->name->SetValue(wxString(object_before_editing.unit->value));
             ok = true;
 
             value->SetForegroundColour(wxGetApp().foreground_color);

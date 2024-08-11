@@ -46,6 +46,7 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
     size_t pos1, pos2;
     String unit_temp;
 
+    
     //prepend \t to prefix
     new_prefix << "\t" << prefix.value;
 
@@ -64,7 +65,8 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
 
         } while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
-    }else{
+    }
+    else {
 
         line.clear();
         getline(*input_stream, line);
@@ -72,40 +74,22 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
     }
 
     pos1 = line.find(" = ");
-    pos2 = line.find(" kt");
-
-    if (line.find(" kt") != (string::npos)) {
-        //the units of the speed read is kt
-        cout << prefix.value << "Unit is in kt\n";
-        pos2 = line.find(" kt");
-        unit_temp = SpeedUnit_types[0];
-    }
-    if (line.find(" km/h") != (string::npos)) {
-        //the units of the length read is km/h
-        cout << prefix.value << "Unit is in km/h\n";
-        pos2 = line.find(" km/h");
-        unit_temp = SpeedUnit_types[1];
-    }
-    if (line.find(" m/s") != (string::npos)) {
-        //the units of the length read is m/s
-        cout << prefix.value << "Unit is in m/s\n";
-        pos2 = line.find(" m/s");
-        unit_temp = SpeedUnit_types[2];
-    }
-
-    //X [km/h] = X [nm]/nm_to_km/[h] = X/nm_to_km [kt] = X 1000/3600 [m/s]
-
-    value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
-    if (unit_temp == SpeedUnit_types[1]) {
-        value /= nm_to_km;
-    }
-    if (unit_temp == SpeedUnit_types[2]) {
-        value /= (1e3) * nm_to_km / 3600.0;
-    }
+    pos1 += 3;
+    //from now on pos1 is the starting position of the  numerical value
+    //pos2-1 contains the last character of the numerical value
+    pos2 = line.find(" ", pos1);
+    
+    //thus I store the numerical value in to value ...
+    value = stod(line.substr(pos1, pos2 - pos1).c_str());
+    
+    // .. and the unit into unit
+    pos1 = pos2+1;
+    unit.set(line.substr(pos1));
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
     print(name, prefix, cout);
+
 
 }
 
@@ -114,10 +98,20 @@ template void Speed::read_from_stream<basic_fstream<char, char_traits<char>>>(St
 
 void Speed::print(String name, String prefix, ostream& ostr) {
     
-    if (name != String("")){
-        
-        ostr << prefix.value << name.value << " = " << value << " kt\n";
-    
+    unsigned int precision;
+
+    //if I am printing to terminal, I print with display_precision. Otherwise, I print with (data_precision.value)
+    if (ostr.rdbuf() == cout.rdbuf()) {
+        precision = (display_precision.value);
+    }
+    else {
+        precision = (data_precision.value);
+    }
+
+    if ((name.value) != "") {
+
+        ostr << prefix.value << name.value << " = " << to_string(precision) << endl;
+  
     }
 
 }
@@ -160,4 +154,110 @@ void Speed::set(String name, double x, [[maybe_unused]] String prefix) {
     
     print(name, prefix, cout); 
 
+}
+
+
+//convert *this to string by printing it in the unit of measure unit_in, with numerical precision precision
+string Speed::to_string(const SpeedUnit& output_unit, unsigned int precision) {
+
+    Speed temp;
+    
+    temp = (*this);
+    temp.convert_to(output_unit);
+    
+    return(temp.to_string(precision));
+
+}
+
+
+//convert *this to string with numerical precision precision
+string Speed::to_string(unsigned int precision){
+    
+    stringstream output;
+    
+    output.precision(precision);
+    
+    output << fixed << value << " " << unit.value;
+    
+    return(output.str().c_str());
+    
+}
+
+
+
+//convert *this to unit of measure unit_in, set unit = unit_in and write the result in *this
+//inline
+void Speed::convert_to(const SpeedUnit& output_unit){
+    
+    //the value of this in units of measure SpeedUnit_types[0]
+    double value0 = 0.0;
+
+    
+    //1. convert *this to unit SpeedUnit_types[0] and write the result in value_in_SpeedUnit_types0
+    switch (unit.position_in_list(SpeedUnit_types)) {
+            
+        case 0:{
+            //unit = SpeedUnit_types[0]
+            
+            value0 = value;
+            
+            break;
+            
+        }
+
+        case 1:{
+            //unit = SpeedUnit_types[1]
+            
+            value0 = value * kmh_to_kt;
+            
+            break;
+            
+        }
+            
+        case 2:{
+            //unit = SpeedUnit_types[2]
+            
+            value0 = value * ms_to_kt;
+            
+            break;
+            
+        }
+            
+    }
+    
+    
+    //2. convert *this to unit output_unit and write the result in *this
+    switch (String(output_unit).position_in_list(SpeedUnit_types)) {
+            
+        case 0:{
+            //output_unit = SpeedUnit_types[0]
+            
+            value = value0;
+            
+            break;
+            
+        }
+
+        case 1:{
+            //output_unit = SpeedUnit_types[1]
+            
+            value = value0 * kt_to_kmh;
+
+            break;
+            
+        }
+            
+        case 2:{
+            //output_unit = SpeedUnit_types[2]
+            
+            value = value0 * kt_to_ms;
+
+            break;
+            
+        }
+            
+    }
+    
+    unit.set(output_unit);
+    
 }

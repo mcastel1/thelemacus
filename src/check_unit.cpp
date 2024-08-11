@@ -73,3 +73,4 @@ template<class P, class GUI> template <class T> void CheckUnit<P, GUI>::operator
 template void CheckUnit<RouteFrame, DynamicLengthField<RouteFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckUnit<SightFrame, DynamicLengthField<SightFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckUnit<RouteFrame, SpeedField<RouteFrame> >::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckUnit<RouteFrame, SpeedField<RouteFrame> >::operator()<wxFocusEvent>(wxFocusEvent&);

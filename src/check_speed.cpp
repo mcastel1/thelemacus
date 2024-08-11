@@ -35,3 +35,4 @@ template<class P> template <class T> void CheckSpeed<P>::operator()(T& event) {
 
 //explicit instantitation
 template void CheckSpeed<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckSpeed<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

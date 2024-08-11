@@ -6,16 +6,18 @@ Data:
 			start position:
 				latitude = 4° 3.999999999999986'
 				longitude = 355° 56.00000000000023'
-				label = 
-			starting heading = 239° 3.235938700001952'
-			length format = length
-				length = 3000.0000000000000000 m
-			label = a
+				label = 2024-08-10 17:36:53 UTC+2
+			starting heading = 239° 3.240000000001828'
+			length format = time and speed
+				time = 01:01:01
+				speed = 0.8800000000000000 kt
+			label = 
 	Positions:
 Recent bodies = 12 10 8
 Recent projections = 1 0
-Recent length formats = 1 0
+Recent length formats = 0 1
 Recent route types = 1 0 2
 Recent route for transport types = 1 0
 Recent length units = 1 0
 Recent speed units = 0 1
+Recent route speed value = 0.8800000000000000 kt

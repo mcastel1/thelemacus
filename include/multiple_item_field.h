@@ -32,14 +32,14 @@ public:
     wxString value_before_editing;
     //this is the wxComboBox with the name of the projections
     wxComboBox* name;
-    //this points to an external vector<int> where the recent items are stored: the Fill() method  reads from *recent_items
+    //this points to an external vector<int> where the recent items are stored: the FillInRecentItems() method  reads from *recent_items
     vector<int>* recent_items;
     bool ok, /*this is true if *this is being edited, false otherwise*/editing;
 //    template<class T> void (MultipleItemField::*OnChooseItem)(T&);
 
 
     MultipleItemField(wxPanel*, NON_GUI*, const vector<String>&, vector<int>*);
-    void Fill(void);
+    void FillInRecentItems(void);
     void set(void);
     void set(const NON_GUI&);
     template<class E> void Get(E&);

@@ -332,13 +332,13 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
     pos1 = line.find(" = ");
     pos1 += 3;
     //from now on pos1 is the starting position of the  numerical value
-    //pos2-1 contains the last character of th enumerical value
+    //pos2-1 contains the last character of the numerical value
     pos2 = line.find(" ", pos1);
     
     //thus I store the numerical value in to value ...
     value = stod(line.substr(pos1, pos2 - pos1).c_str());
     
-    // .. and the unit inot unit
+    // .. and the unit into unit
     pos1 = pos2+1;
     unit->set(line.substr(pos1));
 

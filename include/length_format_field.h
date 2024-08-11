@@ -36,7 +36,7 @@ public:
 //    CheckLengthFormat<P>* check;
 
     LengthFormatField(wxPanel*, LengthFormat*, vector<int>*);
-//    void Fill(void);
+//    void FillInRecentItems(void);
 //    void set(void);
 //    template<class T> void InsertIn(T*);
     template<class E> void OnEdit(E&);

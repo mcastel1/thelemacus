@@ -33,7 +33,7 @@ public:
 //    CheckProjection<P>* check;
 
     ProjectionField(wxPanel*, vector<int>*);
-//    void Fill(void);
+//    void FillInRecentItems(void);
 //    void read_recent_projections(void);
 //    template<class T> void InsertIn(T*, wxSizerFlags&);
     template<class E> void OnEdit(E&);

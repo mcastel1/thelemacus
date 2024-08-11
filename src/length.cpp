@@ -338,7 +338,7 @@ template<class S> void Length::read_from_stream(String name, S* input_stream, bo
     //thus I store the numerical value in to value ...
     value = stod(line.substr(pos1, pos2 - pos1).c_str());
     
-    // .. and the unit inot unit
+    // .. and the unit into unit
     pos1 = pos2+1;
     unit->set(line.substr(pos1));
 

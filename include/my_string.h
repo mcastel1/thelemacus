@@ -40,7 +40,7 @@ public:
     void read_from_file_to(String, String, String, String);
     void write_to_file(String, FileRW&, String);
     void set(String, String, String);
-    void set(String);
+    void set(const String&);
     void set(string);
     void set_to_current_time(void);
     String append(String);

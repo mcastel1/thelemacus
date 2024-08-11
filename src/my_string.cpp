@@ -280,7 +280,7 @@ void String::set(String name, String input_string, [[maybe_unused]] String prefi
 
 //set the value of String *this to input_string, without printing out anything
 //inline 
-void String::set(String input_string) {
+void String::set(const String& input_string) {
 
     value = (input_string.value);
 

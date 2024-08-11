@@ -16,7 +16,7 @@
 //constructor of Speed that takes no arguments, and set the unit to the first entry of SpeedUnit_types
 Speed::Speed(void) {
     
-    unit = SpeedUnit(SpeedUnit_types[0]);
+    unit = new SpeedUnit(SpeedUnit_types[0]);
     
 }
 
@@ -24,7 +24,7 @@ Speed::Speed(void) {
 Speed::Speed(double value_in) {
 
     value = value_in;
-    unit = SpeedUnit(SpeedUnit_types[0]);
+    unit = new SpeedUnit(SpeedUnit_types[0]);
 
 }
 
@@ -33,7 +33,9 @@ Speed::Speed(double value_in) {
 Speed::Speed(double value_in, const SpeedUnit& unit_in) {
 
     value = value_in;
-    unit = unit_in;
+    unit = new SpeedUnit;
+    
+    unit->set(unit_in);
 
 }
 
@@ -84,7 +86,7 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
     
     // .. and the unit into unit
     pos1 = pos2+1;
-    unit.set(line.substr(pos1));
+    unit->set(line.substr(pos1));
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
@@ -121,7 +123,7 @@ void Speed::print(String name, String prefix, ostream& ostr) {
 void Speed::set(const Speed& x){
     
     value = (x.value);
-    unit.set(x.unit);
+    unit->set((*(x.unit)));
     
 }
 
@@ -137,7 +139,7 @@ void Speed::set(double x){
 void Speed::set(double value_in, const SpeedUnit& unit_in) {
     
     value = value_in;
-    unit = unit_in;
+    unit->set(unit_in);
     
 }
 
@@ -177,7 +179,7 @@ string Speed::to_string(unsigned int precision){
     
     output.precision(precision);
     
-    output << fixed << value << " " << unit.value;
+    output << fixed << value << " " << unit->value;
     
     return(output.str().c_str());
     
@@ -194,7 +196,7 @@ void Speed::convert_to(const SpeedUnit& output_unit){
 
     
     //1. convert *this to unit SpeedUnit_types[0] and write the result in value_in_SpeedUnit_types0
-    switch (unit.position_in_list(SpeedUnit_types)) {
+    switch (unit->position_in_list(SpeedUnit_types)) {
             
         case 0:{
             //unit = SpeedUnit_types[0]
@@ -258,6 +260,6 @@ void Speed::convert_to(const SpeedUnit& output_unit){
             
     }
     
-    unit.set(output_unit);
+    unit->set(output_unit);
     
 }

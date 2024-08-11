@@ -18,7 +18,7 @@ using namespace std;
 class Length;
 
 
-//this class is for a GUI field including a length
+//this class is for a GUI field containing a Length
 template<class P> class LengthField{
     
 public:

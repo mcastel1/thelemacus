@@ -21,11 +21,11 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
     flags.Center();
 
     //unit is allocated here and not in NumericalField constructor because it needs the argument LengthUnit_types, which is specifit to LengthField
-    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::unit =
-    new LengthUnitField<P>(
-                          NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::parent->panel,
-                          NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::object->unit,
-                          recent_units_in);
+//    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::unit =
+//    new LengthUnitField<P>(
+//                          NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::parent->panel,
+//                          NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::object->unit,
+//                          recent_units_in);
     
 //    //allocate check
 //    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::check = new CheckLength<P>(this);

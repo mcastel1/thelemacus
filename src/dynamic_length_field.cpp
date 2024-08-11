@@ -23,7 +23,7 @@
 
 
 //constructor of a EditableLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
-template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_parent, Length* p) : LengthField<P>( panel_of_parent, p) {
+template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_parent, Length* p, Length* recent_value_in, vector<int>* recent_units_in) : LengthField<P>(panel_of_parent, p, recent_value_in, recent_units_in){
 
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
@@ -73,7 +73,7 @@ template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
         double x;
         
         value->GetValue().ToDouble(&x);
-        LengthField<P>::length->set(x, LengthUnit((LengthField<P>::unit->name->GetValue()).ToStdString()));
+        LengthField<P>::object->set(x, LengthUnit((LengthField<P>::unit->name->GetValue()).ToStdString()));
         
     }
 
@@ -88,7 +88,7 @@ template void DynamicLengthField<SightFrame>::get<wxCommandEvent>(wxCommandEvent
 //set the value in the GUI object value equal to the value in the non-GUI object length
 template<class P> void DynamicLengthField<P>::set(void) {
     
-    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, LengthField<P>::length->value));
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, LengthField<P>::object->value));
     value_ok = true;
     
     LengthField<P>::unit->set();

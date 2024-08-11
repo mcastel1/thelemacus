@@ -10,12 +10,14 @@
 
 #include <iostream>
 
-using namespace std;
 
 #include "check_unit.h"
 #include "numerical_field.h"
 #include "speed.h"
 #include "speed_unit_field.h"
+
+using namespace std;
+
 
 template<class P> class CheckSpeed;
 class Speed;

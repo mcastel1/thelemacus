@@ -46,6 +46,7 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
     size_t pos1, pos2;
     String unit_temp;
 
+    
     //prepend \t to prefix
     new_prefix << "\t" << prefix.value;
 
@@ -64,7 +65,8 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
 
         } while (((line.find(name.value)) == (string::npos)) /*I run through the entire file by ignoring comment lines which start with '#'*/ || (line[0] == '#'));
 
-    }else{
+    }
+    else {
 
         line.clear();
         getline(*input_stream, line);
@@ -72,40 +74,22 @@ template<class S> void Speed::read_from_stream(String name, S* input_stream, boo
     }
 
     pos1 = line.find(" = ");
-    pos2 = line.find(" kt");
-
-    if (line.find(" kt") != (string::npos)) {
-        //the units of the speed read is kt
-        cout << prefix.value << "Unit is in kt\n";
-        pos2 = line.find(" kt");
-        unit_temp = SpeedUnit_types[0];
-    }
-    if (line.find(" km/h") != (string::npos)) {
-        //the units of the length read is km/h
-        cout << prefix.value << "Unit is in km/h\n";
-        pos2 = line.find(" km/h");
-        unit_temp = SpeedUnit_types[1];
-    }
-    if (line.find(" m/s") != (string::npos)) {
-        //the units of the length read is m/s
-        cout << prefix.value << "Unit is in m/s\n";
-        pos2 = line.find(" m/s");
-        unit_temp = SpeedUnit_types[2];
-    }
-
-    //X [km/h] = X [nm]/nm_to_km/[h] = X/nm_to_km [kt] = X 1000/3600 [m/s]
-
-    value = stod(line.substr(pos1 + 3, pos2 - (pos1 + 3)).c_str());
-    if (unit_temp == SpeedUnit_types[1]) {
-        value /= nm_to_km;
-    }
-    if (unit_temp == SpeedUnit_types[2]) {
-        value /= (1e3) * nm_to_km / 3600.0;
-    }
+    pos1 += 3;
+    //from now on pos1 is the starting position of the  numerical value
+    //pos2-1 contains the last character of the numerical value
+    pos2 = line.find(" ", pos1);
+    
+    //thus I store the numerical value in to value ...
+    value = stod(line.substr(pos1, pos2 - pos1).c_str());
+    
+    // .. and the unit into unit
+    pos1 = pos2+1;
+    unit.set(line.substr(pos1));
 
     cout << prefix.value << YELLOW << "... done.\n" << RESET;
 
     print(name, prefix, cout);
+
 
 }
 

@@ -13,13 +13,11 @@
 using namespace std;
 
 #include "check_unit.h"
-#include "double.h"
 #include "numerical_field.h"
 #include "speed.h"
 #include "speed_unit_field.h"
 
 template<class P> class CheckSpeed;
-class Double;
 class Speed;
 template<class P> class SpeedUnitField;
 

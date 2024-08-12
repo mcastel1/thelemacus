@@ -35,11 +35,24 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
     check = new CheckLength<P>(this);
     
     value = new wxTextCtrl((LengthField<P>::parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    
+    LengthField<P>::value->Bind(wxEVT_KILL_FOCUS, (*(LengthField<P>::check->check_length_value)));
+    //as text is changed in value by the user with the keyboard, call OnEditValue
+    LengthField<P>::value->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditValue<wxKeyEvent>, this);
+
+    
+    
     //SetColor(value);
-    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
-    //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
-    value->SetValue(wxString(""));
-    value_ok = false;
+    
+    
+//    value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
+//    //I set the value to an empty value and the flag ok to false, because for the time being this object is not properly linked to a Length object
+//    value->SetValue(wxString(""));
+//    value_ok = false;
+    //this method has to be here and not in the parent class because otherwise it would call non-allocated objects
+    LengthField<P>::FillInRecentValue();
+
+    
     value->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
     //    value->Bind(wxEVT_KEY_UP, &DynamicLengthField::OnEditValue<wxKeyEvent>, this);

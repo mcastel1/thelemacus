@@ -65,3 +65,4 @@ template void CheckLengthValue<RouteFrame>::operator()<wxCommandEvent>(wxCommand
 template void CheckLengthValue<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckLengthValue<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
 template void CheckLengthValue<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckLengthValue<ChartFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

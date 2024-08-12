@@ -40,3 +40,4 @@ template<class P> template <class T> void CheckLength<P>::operator()(T& event) {
 template void CheckLength<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckLength<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckLength<ChartFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckLength<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

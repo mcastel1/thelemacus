@@ -105,6 +105,10 @@ template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, Le
 template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (NumericalField<ChartFrame, Length, LengthUnit, CheckLength<ChartFrame>, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::*)(wxKeyEvent&), StaticLengthField<ChartFrame>*>(wxEventTypeTag<wxKeyEvent>, void (NumericalField<ChartFrame, Length, LengthUnit, CheckLength<ChartFrame>, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::*)(wxKeyEvent&), StaticLengthField<ChartFrame>*);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (StaticLengthField<ChartFrame>::*)(wxKeyEvent&), StaticLengthField<ChartFrame>*>(wxEventTypeTag<wxKeyEvent>, void (StaticLengthField<ChartFrame>::*)(wxKeyEvent&), StaticLengthField<ChartFrame>*);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::Bind<wxEventTypeTag<wxCommandEvent>, void (NumericalField<ChartFrame, Length, LengthUnit, CheckLength<ChartFrame>, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::*)(wxCommandEvent&), StaticLengthField<ChartFrame>*>(wxEventTypeTag<wxCommandEvent>, void (NumericalField<ChartFrame, Length, LengthUnit, CheckLength<ChartFrame>, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::*)(wxCommandEvent&), StaticLengthField<ChartFrame>*);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::*)(wxKeyEvent&), DynamicLengthField<RouteFrame>*>(wxEventTypeTag<wxKeyEvent>, void (NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::*)(wxKeyEvent&), DynamicLengthField<RouteFrame>*);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::*)(wxKeyEvent&), LengthField<RouteFrame>*>(wxEventTypeTag<wxKeyEvent>, void (NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::*)(wxKeyEvent&), LengthField<RouteFrame>*);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxFocusEvent>, void (NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::*)(wxFocusEvent&), LengthField<RouteFrame>*>(wxEventTypeTag<wxFocusEvent>, void (NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::*)(wxFocusEvent&), LengthField<RouteFrame>*);
 
 
 //set a tooltip with text text to *this
@@ -139,6 +143,7 @@ template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, Spe
 template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, LengthUnitField<ChartFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthUnitField<RouteFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnitField<SightFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
+template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 
 
 //set the value in the GUI object name equal to the value in the non-GUI NON_GUI object 'object'
@@ -156,6 +161,7 @@ template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<Rout
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::set();
 template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnitField<SightFrame>>>::set();
 template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::set();
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::set();
 
 
 template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::set(const NON_GUI& input) {

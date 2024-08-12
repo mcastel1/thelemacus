@@ -22,3 +22,6 @@ template<class P> LengthUnitField<P>::LengthUnitField(wxPanel* panel_of_parent, 
 
 }
  
+template class LengthUnitField<ChartFrame>;
+template class LengthUnitField<RouteFrame>;
+template class LengthUnitField<SightFrame>;

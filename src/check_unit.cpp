@@ -74,3 +74,6 @@ template void CheckUnit<RouteFrame, DynamicLengthField<RouteFrame>>::operator()<
 template void CheckUnit<SightFrame, DynamicLengthField<SightFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckUnit<RouteFrame, SpeedField<RouteFrame> >::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckUnit<RouteFrame, SpeedField<RouteFrame> >::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckUnit<ChartFrame, DynamicLengthField<ChartFrame> >::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> >::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckUnit<SightFrame, DynamicLengthField<SightFrame> >::operator()<wxFocusEvent>(wxFocusEvent&);

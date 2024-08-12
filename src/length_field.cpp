@@ -20,15 +20,11 @@ template<class P> LengthField<P>::LengthField(wxPanel* panel_of_parent, Length* 
 
     flags.Center();
 
-    //unit is allocated here and not in NumericalField constructor because it needs the argument LengthUnit_types, which is specifit to LengthField
-//    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::unit =
-//    new LengthUnitField<P>(
-//                          NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::parent->panel,
-//                          NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::object->unit,
-//                          recent_units_in);
     
 //    //allocate check
 //    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::check = new CheckLength<P>(this);
+    
+    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>>>::unit = new LengthUnitField<P>(NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>>>::parent->panel, NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>>>::object->unit, &(wxGetApp().list_frame->data->recent_length_units));
 
     //I bind unit to NumercialField::Check because when the unit of measure is changed, I want to update also the unit of measure of recent_object. I need to put this Bind() here rather than in the constructor of NumericalField, because otherwise unit->name would be NULL when thi Bind() is called
     NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::unit->Bind(wxEVT_KILL_FOCUS, &NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthField<P>> >::template Check<wxFocusEvent>, this);

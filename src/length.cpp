@@ -272,7 +272,7 @@ Length Length::convert(const LengthUnit& output_unit){
     
     Length result;
     
-    result = (*this);
+    result.set((*this));
     result.convert_to(output_unit);
     
     return result;

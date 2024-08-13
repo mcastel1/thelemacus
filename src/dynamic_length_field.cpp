@@ -53,7 +53,7 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
     LengthField<P>::FillInRecentValue();
 
     
-    value->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_value)));
+    LengthField<P>::value->Bind(wxEVT_KILL_FOCUS, (*(check->check_length_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
     //    value->Bind(wxEVT_KEY_UP, &DynamicLengthField::OnEditValue<wxKeyEvent>, this);
     
@@ -64,7 +64,7 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
 
     
     //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
-    LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+    LengthField<P>::sizer_h->Add(LengthField<P>::value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
     LengthField<P>::unit-> template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
 
 }
@@ -176,7 +176,7 @@ template class DynamicLengthField<RouteFrame>;
 //set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
 template<class P> void DynamicLengthField<P>::set(Length input) {
         
-    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
+    LengthField<P>::value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
     LengthField<P>::unit->set((*(input.unit)));
     
 }

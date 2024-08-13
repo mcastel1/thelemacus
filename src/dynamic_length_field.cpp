@@ -93,18 +93,18 @@ template void DynamicLengthField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent
 template void DynamicLengthField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
-//set the value in the GUI object value equal to the value in the non-GUI object length
-template<class P> void DynamicLengthField<P>::set(void) {
-    
-    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, LengthField<P>::object->value));
-    value_ok = true;
-    
-    LengthField<P>::unit->set();
-
-}
-
-template void DynamicLengthField<RouteFrame>::set();
-template void DynamicLengthField<SightFrame>::set();
+////set the value in the GUI object value equal to the value in the non-GUI object length
+//template<class P> void DynamicLengthField<P>::set(void) {
+//    
+//    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, LengthField<P>::object->value));
+//    value_ok = true;
+//    
+//    LengthField<P>::unit->set();
+//
+//}
+//
+//template void DynamicLengthField<RouteFrame>::set();
+//template void DynamicLengthField<SightFrame>::set();
 
 
 template<class P> bool DynamicLengthField<P>::is_ok(void) {

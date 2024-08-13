@@ -24,7 +24,7 @@ template<class P> class DynamicLengthField: public LengthField<P>{
 public:
 
     //the length value
-    wxTextCtrl *value;
+//    wxTextCtrl *value;
     CheckLength<P>* check;
     bool /*value_ok, *//*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
     

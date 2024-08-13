@@ -34,7 +34,7 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
     //initialize check
     check = new CheckLength<P>(this);
     
-    value = new wxTextCtrl((LengthField<P>::parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+//    value = new wxTextCtrl((LengthField<P>::parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     
     LengthField<P>::value->Bind(wxEVT_KILL_FOCUS, (*(LengthField<P>::check->check_length_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
@@ -75,18 +75,18 @@ template class DynamicLengthField<RouteFrame>;
 
 ////write the value and the unit of the GUI field in LengthField into the non-GUI field length
 //template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
-//    
+//
 //    if(LengthField<P>::is_ok()){
-//        
+//
 //        double x;
-//        
+//
 //        value->GetValue().ToDouble(&x);
 //        LengthField<P>::object->set(x, LengthUnit((LengthField<P>::unit->name->GetValue()).ToStdString()));
-//        
+//
 //    }
 //
 //    event.Skip(true);
-//    
+//
 //}
 //
 //template void DynamicLengthField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);

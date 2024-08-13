@@ -248,6 +248,8 @@ template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame
 template void NumericalField<ChartFrame, Length, LengthUnit, CheckLength<ChartFrame>, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::OnEditValue<wxKeyEvent>(wxKeyEvent&);
 template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::OnEditValue<wxKeyEvent>(wxKeyEvent&);
 template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >::OnEditValue<wxKeyEvent>(wxKeyEvent&);
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::OnEditValue<wxCommandEvent>(wxCommandEvent&);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >::OnEditValue<wxCommandEvent>(wxCommandEvent&);
 
 
 //this method is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk

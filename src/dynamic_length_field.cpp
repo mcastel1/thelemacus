@@ -173,12 +173,13 @@ template class DynamicLengthField<RouteFrame>;
 //template void DynamicLengthField<SightFrame>::Bind<wxEventTypeTag<wxCommandEvent>, void (SightFrame::*)(wxCommandEvent&), SightFrame*>(wxEventTypeTag<wxCommandEvent>, void (SightFrame::*)(wxCommandEvent&), SightFrame*);
 
 
-//set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
-template<class P> void DynamicLengthField<P>::set(Length input) {
-        
-    LengthField<P>::value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
-    LengthField<P>::unit->set((*(input.unit)));
-    
-}
+////set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object *input
+//template<class P> void DynamicLengthField<P>::set(Length input) {
+//
+//    LengthField<P>::value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
+//    LengthField<P>::unit->set((*(input.unit)));
+//
+//}
 
-template void DynamicLengthField<RouteFrame>::set(Length);
+//template void DynamicLengthField<RouteFrame>::set(Length);
+

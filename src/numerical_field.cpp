@@ -211,6 +211,16 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::set();
 
 
+//set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object input
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::set(const NON_GUI& input) {
+        
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
+    unit->set((*(input.unit)));
+    
+}
+
+
+
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> bool NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::is_ok(void) {
 
     return(value_ok && (unit->ok));

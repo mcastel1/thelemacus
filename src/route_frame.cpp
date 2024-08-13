@@ -893,8 +893,7 @@ template<class E> void RouteFrame::UpdateLength(E& event) {
 
         length->set(Length(*(time->chrono), *(speed->object)));
 
-    }
-    else {
+    }else{
 
         length->value->SetValue(wxString(""));
         length->unit->name->SetValue(wxString(""));

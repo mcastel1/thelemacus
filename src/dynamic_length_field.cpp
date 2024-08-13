@@ -53,7 +53,7 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
     LengthField<P>::FillInRecentValue();
 
     
-    LengthField<P>::value->Bind(wxEVT_KILL_FOCUS, (*(LengthField<P>::check->check_length_value)));
+//    LengthField<P>::value->Bind(wxEVT_KILL_FOCUS, (*(LengthField<P>::check->check_length_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
     //    value->Bind(wxEVT_KEY_UP, &DynamicLengthField::OnEditValue<wxKeyEvent>, this);
     

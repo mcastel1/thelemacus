@@ -62,7 +62,6 @@ thickness route selection over length screen = 2e-2
 color list = (255,0,00) (0,255,0) (25,202,161) (255,128,0) (0,255,255) (255,192,203) (51,102,0) (160,160,160) (255,255,0) (51,153,255)
 color selected item = (51,153,255)
 color horizon = (0,191,255)
-default height of eye = 7 ft
 #the exponent which sets the relation between zoom factor and value of slider
 exponent zoom = 3.0
 maximal zoom factor = 10000

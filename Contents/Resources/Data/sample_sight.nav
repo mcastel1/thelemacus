@@ -25,7 +25,7 @@ Data:
 			sextant altitude = 47° 13.50000000000009'
 			index error = 0° 1.9'
 			artificial horizon = n
-			height of eye = 1.2300000000000000 m
+			height of eye = 1.2300000000000000 ft
 			master-clock date and hour of sight:
 				date = 2021-06-21
 				hour = 21:01:20

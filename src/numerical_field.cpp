@@ -80,7 +80,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
             //the GUI field  contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             if (is_ok()) {
-                //the content of the GUI field is valid  -> I insert it into recent_value, which points to a suitable location (initialized when *this was constructed)
+                //the content of the GUI field is valid  -> I insert it into recent_object, which points to a suitable location (initialized when *this was constructed)
 
                 //write the value written in *this into *recent_object
                 value->GetValue().ToDouble(&(recent_object->value));

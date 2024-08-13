@@ -76,7 +76,7 @@ template class DynamicLengthField<RouteFrame>;
 //write the value and the unit of the GUI field in LengthField into the non-GUI field length
 template<class P> template <class T> void DynamicLengthField<P>::get(T& event) {
     
-    if(is_ok()){
+    if(LengthField<P>::is_ok()){
         
         double x;
         
@@ -107,13 +107,13 @@ template void DynamicLengthField<SightFrame>::get<wxCommandEvent>(wxCommandEvent
 //template void DynamicLengthField<SightFrame>::set();
 
 
-template<class P> bool DynamicLengthField<P>::is_ok(void) {
-
-    return(value_ok && (LengthField<P>::unit->ok));
-
-}
-
-template bool DynamicLengthField<SightFrame>::is_ok();
+//template<class P> bool DynamicLengthField<P>::is_ok(void) {
+//
+//    return(value_ok && (LengthField<P>::unit->ok));
+//
+//}
+//
+//template bool DynamicLengthField<SightFrame>::is_ok();
 
 
 //this function is called every time a keyboard button is lifted in this->value: it checks whether the text entered so far in value is valid and runs AllOk
@@ -148,16 +148,16 @@ template void DynamicLengthField<SightFrame>::OnEditValue<wxKeyEvent>(wxKeyEvent
 template void DynamicLengthField<SightFrame>::OnEditValue<wxCommandEvent>(wxCommandEvent&);
 
 
-//this function enables/disable the DynamicLengthField
-template<class P> void DynamicLengthField<P>::Enable(bool is_enabled) {
-
-    value->Enable(is_enabled);
-    LengthField<P>::unit->Enable(is_enabled);
-
-}
-
-template void DynamicLengthField<RouteFrame>::Enable(bool);
-template void DynamicLengthField<SightFrame>::Enable(bool);
+////this function enables/disable the DynamicLengthField
+//template<class P> void DynamicLengthField<P>::Enable(bool is_enabled) {
+//
+//    value->Enable(is_enabled);
+//    LengthField<P>::unit->Enable(is_enabled);
+//
+//}
+//
+//template void DynamicLengthField<RouteFrame>::Enable(bool);
+//template void DynamicLengthField<SightFrame>::Enable(bool);
 
 
 template<class P> template <typename EventTag, typename Method, typename Object> void DynamicLengthField<P>::Bind(EventTag tag, Method method, Object object) {

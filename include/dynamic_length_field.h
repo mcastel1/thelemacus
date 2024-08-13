@@ -33,8 +33,8 @@ public:
     void set(Length);
 //    void set(void);
     template<class T> void get(T&);
-    void Enable(bool);
-    bool is_ok(void);
+//    void Enable(bool);
+//    bool is_ok(void);
     template<class E> void OnEditValue(E&);
     template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     

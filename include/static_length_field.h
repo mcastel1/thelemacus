@@ -25,7 +25,8 @@ public:
     
     //the wxFrame parent of *this
     P* parent;
-
+    //the NON_GUI Length related to *this
+    Length* length;
     
     //the length value
     StaticText* value;

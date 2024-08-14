@@ -74,7 +74,7 @@ template<class P> void StaticLengthField<P>::set_value_keep_unit(void) {
     
     Length temp;
     
-    temp = (LengthField<P>::object->convert(LengthUnit(LengthField<P>::unit->name->GetValue().ToStdString())));
+    temp = (length->convert(LengthUnit(unit->name->GetValue().ToStdString())));
     
     set(temp);
 

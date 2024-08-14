@@ -80,7 +80,7 @@ template void StaticLengthField<ChartFrame>::set();
 
 
 //convert *length to the unis of measure in the GUI field *this and write the result in *this
-template<class P> void StaticLengthField<P>::set_value_keep_unit(void) {
+template<class P> void StaticLengthField<P>::SetValueKeepUnit(void) {
     
     Length temp;
     
@@ -90,7 +90,7 @@ template<class P> void StaticLengthField<P>::set_value_keep_unit(void) {
 
 }
 
-template void StaticLengthField<ChartFrame>::set_value_keep_unit();
+template void StaticLengthField<ChartFrame>::SetValueKeepUnit();
 
 
 //convert the numerical value stored into value according to the length unit unit

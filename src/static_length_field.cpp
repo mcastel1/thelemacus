@@ -96,7 +96,16 @@ template void StaticLengthField<ChartFrame>::SetValueKeepUnit();
 //convert the numerical value stored into value according to the length unit unit
 template<class P> template<class E>  void StaticLengthField<P>::ConvertUnit(E& event) {
     
-  
+    bool success;
+    unsigned int i;
+    
+    find_and_replace_case_insensitive(unit->name, unit->catalog, &success, &i);
+    if(success){
+                
+        set((length->convert(LengthUnit_types[i])));
+        
+    }
+
     event.Skip(true);
 
 }

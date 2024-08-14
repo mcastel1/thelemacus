@@ -140,6 +140,8 @@ template<class P> template<class T> void StaticLengthField<P>::InsertIn(T* host,
 
 }
 
+template void StaticLengthField<ChartFrame>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
+
 
 template <class P> template <typename EventTag, typename Method, typename Object> void StaticLengthField<P>::Bind(EventTag tag, Method method, Object object) {
 

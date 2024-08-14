@@ -10,13 +10,15 @@
 #include "chart_frame.h"
 
 //constructor of a StaticLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
-template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p){
+template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* length_in){
 
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
 
     flags.Center();
 
+    //set the non-GUI object
+    length = length_in;
     
     value = new StaticText(parent->panel,  "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));

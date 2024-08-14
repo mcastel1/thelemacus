@@ -24,8 +24,8 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     
 
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    unit->Bind(wxEVT_COMBOBOX, &OnEditUnit<wxCommandEvent>, this);
-    unit->Bind(wxEVT_KEY_UP, &OnEditUnit<wxKeyEvent>, this);
+    unit->Bind(wxEVT_COMBOBOX, &StaticLengthField::OnEditUnit<wxCommandEvent>, this);
+    unit->Bind(wxEVT_KEY_UP, &StaticLengthField::OnEditUnit<wxKeyEvent>, this);
 
     unit->Bind(wxEVT_COMBOBOX, &StaticLengthField<P>:: ConvertUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &StaticLengthField<P>:: ConvertUnit<wxKeyEvent>, this);
@@ -118,5 +118,13 @@ template<class P> template<class T> void StaticLengthField<P>::InsertIn(T* host)
 template<class P> template<class T> void StaticLengthField<P>::InsertIn(T* host, wxSizerFlags& flag) {
 
     host->Add(sizer_v, flag);
+
+}
+
+
+template <class P> template <typename EventTag, typename Method, typename Object> void StaticLengthField<P>::Bind(EventTag tag, Method method, Object object) {
+
+    value->Bind(tag, method, object);
+    unit->Bind(tag, method, object);
 
 }

@@ -10,7 +10,7 @@
 #include "chart_frame.h"
 
 //constructor of a StaticLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
-template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* length_in){
+template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* length_in, vector<int>* recent_units_in){
 
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
@@ -19,6 +19,7 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
 
     //set the non-GUI object
     length = length_in;
+    
     
     //set parent
     parent = ((P*)(panel_of_parent->GetParent()));
@@ -29,12 +30,18 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     value->SetLabel(wxString(""));
     
 
+    unit =
+    new LengthUnitField<P>(
+                          parent->panel,
+                          length->unit,
+                          recent_units_in);
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     unit->Bind(wxEVT_COMBOBOX, &StaticLengthField::OnEditUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &StaticLengthField::OnEditUnit<wxKeyEvent>, this);
 
     unit->Bind(wxEVT_COMBOBOX, &StaticLengthField<P>:: ConvertUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &StaticLengthField<P>:: ConvertUnit<wxKeyEvent>, this);
+//    unit->Bind(wxEVT_KILL_FOCUS, &StaticLengthField::Check<wxFocusEvent>, this)
     
     sizer_h = new wxBoxSizer(wxHORIZONTAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);

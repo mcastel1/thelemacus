@@ -19,12 +19,20 @@ using namespace std;
 class Length;
 
 //a non-editable GUI field to display a Length, composed of a static text and a dropdown menu to enter the units of measure of the length. P is the type of the parent which hosts the DynamicLengthField object
-template<class P> class StaticLengthField: public LengthField<P>{
+template<class P> class StaticLengthField{
     
 public:
     
+    //the wxFrame parent of *this
+    P* parent;
+
+    
     //the length value
     StaticText* value;
+    //the GUI field for the unit of measure of *this
+    MultipleItemField<P, LengthUnit, CheckUnit<P, StaticLengthField<P>>>* unit;
+    wxBoxSizer *sizer_h, *sizer_v;
+
     
     StaticLengthField(wxPanel*, Length*/*, String*/);
     

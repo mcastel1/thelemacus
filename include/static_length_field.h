@@ -31,16 +31,15 @@ public:
     //the length value
     StaticText* value;
     //the GUI field for the unit of measure of *this
-    MultipleItemField<P, LengthUnit, CheckUnit<P, StaticLengthField<P>>>* unit;
+    LengthUnitField<P>* unit;
     wxBoxSizer *sizer_h, *sizer_v;
 
     
-    StaticLengthField(wxPanel*, Length*/*, String*/);
+    StaticLengthField(wxPanel*, Length*, vector<int>*);
     
     void set(const Length&);
     void set(void);
     void set_value_keep_unit(void);
-    template<class E> void Check(E&);
     template<class E> void ConvertUnit(E&);
     template<class E> void OnEditUnit(E&);
     template<class T> void InsertIn(T*);

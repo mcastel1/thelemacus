@@ -20,6 +20,10 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     //set the non-GUI object
     length = length_in;
     
+    //set parent
+    parent = ((P*)(panel_of_parent->GetParent()));
+
+    
     value = new StaticText(parent->panel,  "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetLabel(wxString(""));
@@ -32,8 +36,13 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     unit->Bind(wxEVT_COMBOBOX, &StaticLengthField<P>:: ConvertUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &StaticLengthField<P>:: ConvertUnit<wxKeyEvent>, this);
     
+    sizer_h = new wxBoxSizer(wxHORIZONTAL);
+    sizer_v = new wxBoxSizer(wxVERTICAL);
+
+    sizer_v->Add(sizer_h, 0, wxALIGN_LEFT);
     //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
     sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+    
     unit-> template InsertIn<wxBoxSizer>(sizer_h, flags);
 
 }

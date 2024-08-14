@@ -12,7 +12,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "double.h"
 #include "sight.h"
 #include "position.h"
 #include "route.h"
@@ -38,7 +37,8 @@ public:
     vector<Route> crossing_route_list;
     //the recent bodies, projections, ... selected by the user are stored here
     vector<int> recent_bodies, recent_projections, recent_length_formats, recent_route_types, recent_route_for_transport_types, recent_length_units, recent_speed_units;
-    //the recent value of SpeedField is stored here
+    //the recent values of LengthField, SpeedField ... are stored here
+    Length recent_height_of_eye_value, recent_route_length_value;
     Speed recent_route_speed_value;
 
 
@@ -59,15 +59,6 @@ public:
     
     void print_recent_items(const vector<int>&, String, String, ostream&);
     void insert_recent_item(unsigned int, vector<int>*);
-
-//    void insert_recent_body(unsigned int);
-//    void print_recent_bodies(String, ostream&);
-//    void insert_recent_projection(unsigned int);
-//    void print_recent_projections(String, ostream&);
-//    void insert_recent_length_format(unsigned int);
-//    void print_recent_length_formats(String, ostream&);
-//    void insert_recent_route_type(unsigned int);
-//    void print_recent_route_types(String, ostream&);
 
     void menu(String);
     int compute_position(String);

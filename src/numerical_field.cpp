@@ -18,6 +18,7 @@
 #include "constants.h"
 #include "generic.h"
 #include "my_app.h"
+#include "sight_frame.h"
 
 #include <sstream>
 
@@ -56,6 +57,9 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 }
 
 template class NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >;
+template class NumericalField<ChartFrame, Length, LengthUnit, CheckLength<ChartFrame>, CheckUnit<ChartFrame, LengthField<ChartFrame> > >;
+template class NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >;
+template class NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >;
 
 
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template<class E> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::Check(E& event) {
@@ -76,11 +80,11 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
             //the GUI field  contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             if (is_ok()) {
-                //the content of the GUI field is valid  -> I insert it into recent_value, which points to a suitable location (initialized when *this was constructed)
+                //the content of the GUI field is valid  -> I insert it into recent_object, which points to a suitable location (initialized when *this was constructed)
 
                 //write the value written in *this into *recent_object
                 value->GetValue().ToDouble(&(recent_object->value));
-                recent_object->unit.set(String(unit->name->GetValue().ToStdString()));
+                recent_object->unit->set(String(unit->name->GetValue().ToStdString()));
                 
                 //I update p->name according to the content of recent_itmes
                 FillInRecentValue();
@@ -102,7 +106,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
             if(ok){
  
                 value->GetValue().ToDouble(&(object_before_editing.value));
-                object_before_editing.unit.set(String(unit->name->GetValue().ToStdString()));
+                object_before_editing.unit->set(String(unit->name->GetValue().ToStdString()));
  
             }
 
@@ -120,7 +124,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
             //the entered value is not valid: I set the value back to the value before the editing process had started
             value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, object_before_editing.value));
 
-            unit->name->SetValue(wxString(object_before_editing.unit.value));
+            unit->name->SetValue(wxString(object_before_editing.unit->value));
             ok = true;
 
             value->SetForegroundColour(wxGetApp().foreground_color);
@@ -139,6 +143,9 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
 }
 
+template void NumericalField<ChartFrame, Length, LengthUnit, CheckLength<ChartFrame>, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::Check<wxFocusEvent>(wxFocusEvent&);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >::Check<wxFocusEvent>(wxFocusEvent&);
+
 
 //update the value of the GUI (both the value and the unit)  in NumericalField according to recent_value and to the recent units in such a way that the recent value appears in the GUI field
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::FillInRecentValue(void) {
@@ -154,6 +161,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 }
 
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::FillInRecentValue();
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::FillInRecentValue();
 
 
 
@@ -166,6 +174,8 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
 }
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::Enable(bool);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >::Enable(bool);
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::Enable(bool);
 
 
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template<class T> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::InsertIn(T* host) {
@@ -175,6 +185,8 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 }
 
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template<class T> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::InsertIn(T* host, wxSizerFlags& flag) {
@@ -182,6 +194,8 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
     host->Add(sizer_v, flag);
 
 }
+
+template void NumericalField<ChartFrame, Length, LengthUnit, CheckLength<ChartFrame>, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 
 
 //set the value in the GUI object value equal to the value in the non-GUI object speed
@@ -195,6 +209,17 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 }
 
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::set();
+
+
+//set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object input
+template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::set(const NON_GUI& input) {
+        
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
+    unit->set((*(input.unit)));
+    
+}
+
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::set(Length const&);
 
 
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> bool NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::is_ok(void) {
@@ -231,8 +256,11 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 }
 
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::OnEditValue<wxKeyEvent>(wxKeyEvent&);
-
-
+template void NumericalField<ChartFrame, Length, LengthUnit, CheckLength<ChartFrame>, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::OnEditValue<wxKeyEvent>(wxKeyEvent&);
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::OnEditValue<wxKeyEvent>(wxKeyEvent&);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >::OnEditValue<wxKeyEvent>(wxKeyEvent&);
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::OnEditValue<wxCommandEvent>(wxCommandEvent&);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >::OnEditValue<wxCommandEvent>(wxCommandEvent&);
 
 
 //this method is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
@@ -264,10 +292,15 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
+template void NumericalField<ChartFrame, Length, LengthUnit, CheckLength<ChartFrame>, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+template void NumericalField<ChartFrame, Length, LengthUnit, CheckLength<ChartFrame>, CheckUnit<ChartFrame, LengthField<ChartFrame> > >::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
 
 
-
-template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template <typename EventTag, typename Method, typename Object> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::Bind(EventTag tag, Method method, Object object) {
+template <class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template <typename EventTag, typename Method, typename Object> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::Bind(EventTag tag, Method method, Object object) {
 
     value->Bind(tag, method, object);
     unit->Bind(tag, method, object);
@@ -275,3 +308,28 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 }
 
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*>(wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >::Bind<wxEventTypeTag<wxCommandEvent>, void (SightFrame::*)(wxCommandEvent&), SightFrame*>(wxEventTypeTag<wxCommandEvent>, void (SightFrame::*)(wxCommandEvent&), SightFrame*);
+
+
+//write the value and the unit of the GUI field in SpeedField into the non-GUI field speed
+template <class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template <class T> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::get(T& event) {
+
+    if(is_ok()){
+        
+        double x;
+        
+        value->GetValue().ToDouble(&x);
+        object->set(x, NON_GUI_UNIT((unit->name->GetValue().ToStdString())));
+        
+    }
+
+    event.Skip(true);
+
+}
+
+template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::get<wxCommandEvent>(wxCommandEvent&);
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthField<RouteFrame> > >::get<wxCommandEvent>(wxCommandEvent&);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthField<SightFrame> > >::get<wxCommandEvent>(wxCommandEvent&);

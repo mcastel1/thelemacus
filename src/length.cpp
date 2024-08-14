@@ -55,7 +55,7 @@ Length::Length(Chrono time, Speed speed) {
     unit = new LengthUnit;
     
     //consider all possible units in which speed is expressed
-    switch (speed.unit.position_in_list(SpeedUnit_types)) {
+    switch (speed.unit->position_in_list(SpeedUnit_types)) {
             
         case 0: {
             //speed.unit = SpeedUnit_types[0]
@@ -272,7 +272,7 @@ Length Length::convert(const LengthUnit& output_unit){
     
     Length result;
     
-    result = (*this);
+    result.set((*this));
     result.convert_to(output_unit);
     
     return result;
@@ -376,7 +376,7 @@ void Length::operator += (const Length& length) {
         LengthUnit unit_saved;
         
         //save the unit of measure of *this into unit_saved
-        unit_saved = (*unit);
+        unit_saved.set((*unit));
         
         //convert *this to the unit of measure of length : this will change unit to length.unit
         convert_to((*(length.unit)));
@@ -404,7 +404,7 @@ void Length::operator -= (const Length& length) {
         LengthUnit unit_saved;
         
         //save the unit of measure of *this into unit_saved
-        unit_saved = (*unit);
+        unit_saved.set((*unit));
         
         //convert *this to the unit of measure of length : this will change unit to length.unit
         convert_to((*(length.unit)));
@@ -530,8 +530,8 @@ Length Length::operator + (const Length& l) {
 
     Length s;
     
-    s = (*this);
-    s+= l;
+    s.set((*this));
+    s += l;
 
     return s;
 
@@ -543,7 +543,7 @@ Length Length::operator - (const Length& l) {
 
     Length s;
     
-    s = (*this);
+    s.set((*this));
     s -= l;
 
     return s;

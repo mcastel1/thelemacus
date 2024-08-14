@@ -469,7 +469,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
 
     //link the circle of equal altitude (*circle_of_equal_altitude) to sight (*this)
     temp << body->name->value << " " << time.to_string(display_precision.value, false) << " TAI, " << label.value;
-    (circle_of_equal_altitude->label).set(String(""), String(temp.str()), new_prefix);
+    circle_of_equal_altitude->label.set(String(""), String(temp.str()), new_prefix);
 
     check &= compute_H_o(new_prefix);
     circle_of_equal_altitude->omega.set(M_PI_2 - (H_o.value));

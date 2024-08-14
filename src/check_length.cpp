@@ -23,7 +23,7 @@ template<class P> CheckLength<P>::CheckLength(DynamicLengthField<P>* p_in) {
 }
 
 template class CheckLength<RouteFrame>;
-template class  CheckLength<SightFrame>;
+template class CheckLength<SightFrame>;
 
 
 //this functor checks the whole Length field by calling the check on its value and unit
@@ -39,3 +39,6 @@ template<class P> template <class T> void CheckLength<P>::operator()(T& event) {
 //explicit instantiations
 template void CheckLength<RouteFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckLength<SightFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckLength<ChartFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckLength<SightFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckLength<RouteFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

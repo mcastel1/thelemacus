@@ -110,7 +110,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     //height of eye
     StaticText* text_height_of_eye = new StaticText(panel, wxT("Height of eye"), wxDefaultPosition, wxDefaultSize, 0);
-    height_of_eye = new DynamicLengthField<SightFrame>(panel, (sight->height_of_eye)/*, LengthUnit_types[1]*/);
+    height_of_eye = new DynamicLengthField<SightFrame>(
+                                                       panel,
+                                                       sight->height_of_eye,
+                                                       &(wxGetApp().list_frame->data->recent_height_of_eye_value),
+                                                       &(wxGetApp().list_frame->data->recent_length_units)
+                                                       );
     
     //this is how to properly bind the DynamicLengthField height_of_eye when it is inserted into a frame and I want a modification of the DynamicLengthField to trigger AllOk() in the frame. Given that I am including height_of_eye in a frame, I want that every time value or unit is changed, SightFrame::AllOk() is triggered : 1. I first bind OnEditValue and OnEditUnit to height_of_eye->value and height_of_eye->unit 2. every time height_of_eye is changed, OnEditValue and OnEditUnit will be called and set to true/false the value_ok and unit_ok variables 3. AllOk() will be called later, read the value_ok and unit_ok variables, and enable/disable button_reduce  accordingly
     height_of_eye->Bind(wxEVT_COMBOBOX, &SightFrame::AllOk<wxCommandEvent>, this);
@@ -122,12 +127,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     
     
-    if (sight_in == NULL) {
-        //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye DynamicLengthField with this value, so the user won't have to enter the same value all the time
-        sight->height_of_eye->read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String("R"), String(""));
-        height_of_eye->set();
-
-    }
+//    if (sight_in == NULL) {
+//        //given that the height of eye may be often the same, I write a default value in sight->height_of_eye and fill in the height of eye DynamicLengthField with this value, so the user won't have to enter the same value all the time
+//        sight->height_of_eye->read_from_file_to(String("default height of eye"), (wxGetApp().path_file_init), String("R"), String(""));
+//        height_of_eye->LengthField<SightFrame>::set();
+//
+//    }
     //now that height_of_eye has been allocatd, I link artificial_horizon_check to height_of_eye
     (artificial_horizon_check->related_field) = height_of_eye;
 
@@ -521,7 +526,7 @@ void SightFrame::set(void) {
     if(!(artificial_horizon_check->checkbox->GetValue())) {
         
         height_of_eye->Enable(true);
-        height_of_eye->set();
+        height_of_eye->LengthField<SightFrame>::set();
         
     }else{
         
@@ -704,7 +709,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
 
             sight_position = sight - (&((parent->data->sight_list)[0]));
 
-            (parent->data->route_list).resize((parent->data->route_list).size() + 1);
+            parent->data->route_list.resize((parent->data->route_list).size() + 1);
             sight->reduce(&((parent->data->route_list)[(parent->data->route_list).size() - 1]), String(""));
 
             //I link the Sight to the Route, and the Route to the Sight

@@ -10,7 +10,7 @@
 #include "chart_frame.h"
 
 //constructor of a StaticLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
-template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p) : LengthField<P>( panel_of_parent, p) {
+template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p) : LengthField<P>(panel_of_parent, p, NULL, NULL) {
 
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
@@ -22,7 +22,7 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetLabel(wxString(""));
     
-    LengthField<P>::unit = new LengthUnitField<P>((LengthField<P>::parent->panel), (LengthField<P>::length->unit), &(wxGetApp().list_frame->data->recent_length_units));
+
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     LengthField<P>::unit->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
     LengthField<P>::unit->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
@@ -32,7 +32,7 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     
     //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
     LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    LengthField<P>::unit->MultipleItemField<P, LengthUnit, CheckUnit<P, LengthUnitField<P>> >::template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
+    LengthField<P>::unit->template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
 
 }
 
@@ -51,7 +51,7 @@ template<class P> void StaticLengthField<P>::set(const Length& l) {
 //set the value and the unit in the GUI object value equal to the value and the unit in the non-GUI object length
 template<class P> void StaticLengthField<P>::set(void) {
 
-    set(*(LengthField<P>::length));
+    set(*(LengthField<P>::object));
 
     (LengthField<P>::unit->ok) = true;
 
@@ -65,7 +65,7 @@ template<class P> void StaticLengthField<P>::set_value_keep_unit(void) {
     
     Length temp;
     
-    temp = (LengthField<P>::length->convert(LengthUnit(LengthField<P>::unit->name->GetValue().ToStdString())));
+    temp = (LengthField<P>::object->convert(LengthUnit(LengthField<P>::unit->name->GetValue().ToStdString())));
     
     set(temp);
 

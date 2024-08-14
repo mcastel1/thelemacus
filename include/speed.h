@@ -24,7 +24,7 @@ public:
     //the value of the Speed
     double value;
     //the unit of measure of the Speed
-    SpeedUnit unit;
+    SpeedUnit* unit;
 
     
     Speed();

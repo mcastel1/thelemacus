@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include "check_length_value.h"
+
 using namespace std;
 
 template<class P> class DynamicLengthField;

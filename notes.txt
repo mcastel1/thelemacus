@@ -109,7 +109,7 @@
      - in Route::draw_3D, code the part for loxodrome curves
      - move all constants to the init file , such as  the 0.15 in  'position_plot_area_now = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);'
      - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer
-     - replace use of epsilon_double with more proper methods
+     - replace use of epsilon_double witesh more proper methods
      - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
      - move all stuff which is general enough in the code to MyApp class
      - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
@@ -118,6 +118,9 @@
 
 
  ********** THINGS TO FIX ***********
+    - if you animate to a Route (press Reduce in SightFrame) and the Mercator projection is already centered on that Route from a previous identical animation, it blows up
+    - implement template<class P> void DynamicLengthField<P>::set(Length input) { in the parent class NumericalField and remove template<class P> void DynamicLengthField<P>::set(Length input) {
+    - whenever a method in NumericalField touches recent_values_in or recent_units_in, add an if() that prevents from doing it if they are NULL
     - move all remaining fields of SpeedField to the parent class
     - code template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Check(E& event)
     - see whether ok and value_ok in SpeedField are doubles of the same thing and one can be get rid of 

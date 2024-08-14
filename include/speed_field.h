@@ -10,16 +10,16 @@
 
 #include <iostream>
 
-using namespace std;
 
 #include "check_unit.h"
-#include "double.h"
 #include "numerical_field.h"
 #include "speed.h"
 #include "speed_unit_field.h"
 
+using namespace std;
+
+
 template<class P> class CheckSpeed;
-class Double;
 class Speed;
 template<class P> class SpeedUnitField;
 
@@ -44,7 +44,7 @@ public:
     
     SpeedField(wxPanel*, Speed*, Speed*, vector<int>*);
 //    void set(void);
-    template<class T> void get(T&);
+//    template<class T> void get(T&);
 //    void Enable(bool);
 //    template<class T> void InsertIn(T*);
 //    bool is_ok(void);

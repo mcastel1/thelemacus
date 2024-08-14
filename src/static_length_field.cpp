@@ -107,3 +107,10 @@ template<class P> template <class E> void StaticLengthField<P>::OnEditUnit(E& ev
     event.Skip(true);
 
 }
+
+
+template<class P> template<class T> void StaticLengthField<P>::InsertIn(T* host) {
+
+    host->Add(sizer_v);
+
+}

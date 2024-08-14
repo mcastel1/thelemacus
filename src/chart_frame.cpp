@@ -91,7 +91,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
 
     //text field showing the current value of the zoom slider
     chart_scale = new StaticText(panel, wxS(""), wxDefaultPosition, wxDefaultSize, 0);
-    observer_height = new StaticLengthField<ChartFrame>(panel, (draw_panel->d));
+    observer_height = new StaticLengthField<ChartFrame>(panel, draw_panel->d, &(wxGetApp().list_frame->data->recent_length_units));
 
     //navigation buttons
     button_up = new wxButton(panel, wxID_ANY, wxT("N"), wxDefaultPosition, GetTextExtent(wxS("000")), wxBU_EXACTFIT);

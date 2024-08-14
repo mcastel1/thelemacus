@@ -8,6 +8,8 @@
 #include "static_length_field.h"
 
 #include "chart_frame.h"
+#include "generic.h"
+
 
 //constructor of a StaticLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
 template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* length_in, vector<int>* recent_units_in){
@@ -31,10 +33,11 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     
 
     unit =
-    new LengthUnitField<P>(
-                          parent->panel,
-                          length->unit,
-                          recent_units_in);
+    new MultipleItemField<P, LengthUnit, CheckUnit<P, StaticLengthField<P>>>(
+                                                                             parent->panel,
+                                                                             length->unit,
+                                                                             LengthUnit_types,
+                                                                             recent_units_in);
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     unit->Bind(wxEVT_COMBOBOX, &StaticLengthField::OnEditUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &StaticLengthField::OnEditUnit<wxKeyEvent>, this);

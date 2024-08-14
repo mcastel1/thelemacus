@@ -40,6 +40,11 @@ public:
     void set(void);
     void set_value_keep_unit(void);
     template<class E> void ConvertUnit(E&);
+    template<class E> void OnEditUnit(E&);
+    template<class T> void InsertIn(T*);
+    template<class T> void InsertIn(T*, wxSizerFlags&);
+    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
+
 
 };
 

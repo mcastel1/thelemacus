@@ -24,8 +24,8 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     
 
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    unit->Bind(wxEVT_COMBOBOX, & OnEditUnit<wxCommandEvent>, this);
-    unit->Bind(wxEVT_KEY_UP, & OnEditUnit<wxKeyEvent>, this);
+    unit->Bind(wxEVT_COMBOBOX, &OnEditUnit<wxCommandEvent>, this);
+    unit->Bind(wxEVT_KEY_UP, &OnEditUnit<wxKeyEvent>, this);
 
     unit->Bind(wxEVT_COMBOBOX, &StaticLengthField<P>:: ConvertUnit<wxCommandEvent>, this);
     unit->Bind(wxEVT_KEY_UP, &StaticLengthField<P>:: ConvertUnit<wxKeyEvent>, this);
@@ -78,6 +78,32 @@ template void StaticLengthField<ChartFrame>::set_value_keep_unit();
 template<class P> template<class E>  void StaticLengthField<P>::ConvertUnit(E& event) {
     
   
+    event.Skip(true);
+
+}
+
+//this method is called every time a keyboard button is lifted in this->unit: it checks whether the text entered so far in unit is valid and runs AllOk
+template<class P> template <class E> void StaticLengthField<P>::OnEditUnit(E& event) {
+
+    bool success;
+
+    //I check whether the name in the GUI field unit matches one of the unit names in (unit->catalog)
+    find_and_replace_case_insensitive(unit->name, unit->catalog, &success, NULL);
+
+
+    if (success) {
+
+        //because the text in value is valid, I set the background color of unit to white
+        unit->name->SetForegroundColour(wxGetApp().foreground_color);
+        unit->name->SetFont(wxGetApp().default_font);
+
+    }
+
+    //value_ok is true/false is the text entered is valid/invalid
+    (unit->ok) = success;
+    //tries to enable button_reduce
+    parent->AllOk();
+
     event.Skip(true);
 
 }

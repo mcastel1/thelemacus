@@ -114,3 +114,9 @@ template<class P> template<class T> void StaticLengthField<P>::InsertIn(T* host)
     host->Add(sizer_v);
 
 }
+
+template<class P> template<class T> void StaticLengthField<P>::InsertIn(T* host, wxSizerFlags& flag) {
+
+    host->Add(sizer_v, flag);
+
+}

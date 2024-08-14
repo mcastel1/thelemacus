@@ -10,7 +10,7 @@
 #include "chart_frame.h"
 
 //constructor of a StaticLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
-template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p) : LengthField<P>(panel_of_parent, p, NULL, NULL) {
+template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* p){
 
     //these flags will be used in the method InsertIn below, to insert this->unit
     wxSizerFlags flags;
@@ -18,21 +18,21 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     flags.Center();
 
     
-    value = new StaticText((LengthField<P>::parent->panel),  "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    value = new StaticText(parent->panel,  "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
     value->SetInitialSize(value->GetSizeFromTextSize(value->GetTextExtent(wxS(sample_width_floating_point_field))));
     value->SetLabel(wxString(""));
     
 
     //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    LengthField<P>::unit->Bind(wxEVT_COMBOBOX, &LengthField<P>::template OnEditUnit<wxCommandEvent>, this);
-    LengthField<P>::unit->Bind(wxEVT_KEY_UP, &LengthField<P>::template OnEditUnit<wxKeyEvent>, this);
+    unit->Bind(wxEVT_COMBOBOX, & OnEditUnit<wxCommandEvent>, this);
+    unit->Bind(wxEVT_KEY_UP, & OnEditUnit<wxKeyEvent>, this);
 
-    LengthField<P>::unit->Bind(wxEVT_COMBOBOX, &StaticLengthField<P>:: template ConvertUnit<wxCommandEvent>, this);
-    LengthField<P>::unit->Bind(wxEVT_KEY_UP, &StaticLengthField<P>::template ConvertUnit<wxKeyEvent>, this);
+    unit->Bind(wxEVT_COMBOBOX, &StaticLengthField<P>:: ConvertUnit<wxCommandEvent>, this);
+    unit->Bind(wxEVT_KEY_UP, &StaticLengthField<P>:: ConvertUnit<wxKeyEvent>, this);
     
     //add value to sizer_h, which has been initialized by the constructor of the parent class LengthField
-    LengthField<P>::sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    LengthField<P>::unit->template InsertIn<wxBoxSizer>(LengthField<P>::sizer_h, flags);
+    sizer_h->Add(value, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
+    unit-> template InsertIn<wxBoxSizer>(sizer_h, flags);
 
 }
 

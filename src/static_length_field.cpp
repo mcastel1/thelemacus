@@ -54,7 +54,7 @@ template class StaticLengthField<ChartFrame>;
 template<class P> void StaticLengthField<P>::set(const Length& l) {
     
     value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, l.value));
-    LengthField<P>::unit->set((*(l.unit)));
+    unit->set((*(l.unit)));
     
 }
 
@@ -62,9 +62,7 @@ template<class P> void StaticLengthField<P>::set(const Length& l) {
 //set the value and the unit in the GUI object value equal to the value and the unit in the non-GUI object length
 template<class P> void StaticLengthField<P>::set(void) {
 
-    set(*(LengthField<P>::object));
-
-    (LengthField<P>::unit->ok) = true;
+    set(*(length));
 
 }
 

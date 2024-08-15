@@ -120,7 +120,6 @@
  ********** THINGS TO FIX ***********
     - when you close a ChartFrame there is a segmentation fault
     - if you animate to a Route (press Reduce in SightFrame) and the Mercator projection is already centered on that Route from a previous identical animation, it blows up
-    - implement template<class P> void DynamicLengthField<P>::set(Length input) { in the parent class NumericalField and remove template<class P> void DynamicLengthField<P>::set(Length input) {
     - whenever a method in NumericalField touches recent_values_in or recent_units_in, add an if() that prevents from doing it if they are NULL
     - move all remaining fields of SpeedField to the parent class
     - code template<class P, class NON_GUI, class CHECK> template<class E> void MultipleItemField<P, NON_GUI, CHECK>::Check(E& event)

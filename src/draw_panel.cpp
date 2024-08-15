@@ -3087,7 +3087,8 @@ template<class E> void DrawPanel::SetProjection(E& event) {
         //in the 3D projection the scale of the chart, shown in text_slider, does not makes sense -> set it to empty
         parent->chart_scale->SetLabel(wxS(""));
         parent->observer_height->unit->name->Enable(true);
-        parent->observer_height->set();
+//        parent->observer_height->set();
+        parent->observer_height->SetValueInMostRecentUnit();
 
         
     }

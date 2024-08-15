@@ -40,6 +40,7 @@ public:
     void set(const Length&);
     void set(void);
     void SetValueKeepUnit(void);
+    void SetValueInMostRecentUnit(void);
     template<class E> void ConvertUnit(E&);
     template<class E> void OnEditUnit(E&);
     template<class T> void InsertIn(T*);

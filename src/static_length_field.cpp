@@ -79,6 +79,16 @@ template<class P> void StaticLengthField<P>::set(void) {
 template void StaticLengthField<ChartFrame>::set();
 
 
+//convert write into the GUI field a Length equal to *length but converted to the most recent unit of measure stored in unit->recent_items->front()
+template<class P> void StaticLengthField<P>::SetValueInMostRecentUnit(void) {
+
+    set((length->convert(LengthUnit_types[unit->recent_items->front()])));
+
+}
+
+template void StaticLengthField<ChartFrame>::SetValueInMostRecentUnit();
+
+
 //convert *length to the unis of measure in the GUI field *this and write the result in *this
 template<class P> void StaticLengthField<P>::SetValueKeepUnit(void) {
     

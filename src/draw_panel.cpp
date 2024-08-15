@@ -2184,7 +2184,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
     //set
     d->set((-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer->omega))))*(wxGetApp().Re.value));
     //here I set the value of d into observer_height, not the unit of measure, because I want the user to decide the unit of measure by selecting in the wxComboBox in the unit field
-    parent->observer_height->set_value_keep_unit();
+    parent->observer_height->SetValueKeepUnit();
 
     //set phi_min/max
     circle_observer->reference_position->phi.normalize_pm_pi();
@@ -3087,7 +3087,8 @@ template<class E> void DrawPanel::SetProjection(E& event) {
         //in the 3D projection the scale of the chart, shown in text_slider, does not makes sense -> set it to empty
         parent->chart_scale->SetLabel(wxS(""));
         parent->observer_height->unit->name->Enable(true);
-        parent->observer_height->set();
+//        parent->observer_height->set();
+        parent->observer_height->SetValueInMostRecentUnit();
 
         
     }

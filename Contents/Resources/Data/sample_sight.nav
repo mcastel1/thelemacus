@@ -1,38 +1,5 @@
 Data:
 	Sights:
-		Sight #1:
-			body:
-				Type = moon
-				Name = moon
-				Radius = 938.1209999999999809 nm
-			limb = u
-			sextant altitude = 47° 57.79999999999987'
-			index error = 0° 1.9'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				date = 2021-06-21
-				hour = 21:01:20
-			use of stopwatch = y
-			stopwatch = 00:37:35
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = Sight was taken at BGC
-		Sight #2:
-			body:
-				Type = moon
-				Name = moon
-				Radius = 938.1209999999999809 nm
-			limb = u
-			sextant altitude = 47° 13.50000000000009'
-			index error = 0° 1.9'
-			artificial horizon = n
-			height of eye = 29.0000000000000000 ft
-			master-clock date and hour of sight:
-				date = 2021-06-21
-				hour = 21:01:20
-			use of stopwatch = y
-			stopwatch = 00:48:08.99
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = Sight was taken at BGC
 	Routes:
 	Positions:
 Recent bodies = 1 12 10
@@ -40,7 +7,7 @@ Recent projections = 1 0
 Recent length formats = 1 0
 Recent route types = 1 0 2
 Recent route for transport types = 1 0
-Recent length units = 2 0
+Recent length units = 1 0
 Recent speed units = 0 1
 Recent height of eye value = 29.0000000000000000 ft
 Recent route length value = 1.0000000000000000 nm

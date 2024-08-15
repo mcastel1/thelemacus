@@ -28,29 +28,8 @@ template<class P> class SpeedUnitField;
 template<class P> class SpeedField: public NumericalField<P, Speed, SpeedUnit, CheckSpeed<P>, CheckUnit<P, SpeedField<P>>>{
     
 public:
-    //the parent frame to which this object is attached
-//    P* parent;
-    //the speed value
-//    wxTextCtrl *value;
-    //unit of measure of the Speed written in *this
-//    SpeedUnitField<P>* unit;
-//    wxBoxSizer *sizer_h, *sizer_v;
-//    Speed* speed;
-    //ok = true if this Length is formatted properly and set to the same value as the non-GUI object length
-//    bool value_ok;
-//    bool /*this variable = true if this has been just enabled, and false otherwise*/ just_enabled;
-//    CheckSpeed<P>* check;
-
     
     SpeedField(wxPanel*, Speed*, Speed*, vector<int>*);
-//    void set(void);
-//    template<class T> void get(T&);
-//    void Enable(bool);
-//    template<class T> void InsertIn(T*);
-//    bool is_ok(void);
-//    template<class E> void OnEditValue(E&);
-//    template<class E> void OnEditUnit(E&);
-//    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
 

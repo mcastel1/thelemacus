@@ -118,9 +118,6 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     phi_max_temp.read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
     (*rectangle_observer_0) = PositionRectangle(Position(lambda_min_temp, phi_max_temp), Position(lambda_max_temp, phi_min_temp), String(""));
 
-
-
-
     LoadCoastLineData(String(""));
 
     if (!abort) {

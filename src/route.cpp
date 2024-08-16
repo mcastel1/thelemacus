@@ -125,8 +125,21 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
                 
             }
             
-            //set length according to t* (see notes)
-            set_length_from_input(fabs((p_end.lambda.value) - (p_start.lambda.value)));
+            if(fabs((p_end.lambda.value) - (p_start.lambda.value)) > epsilon_double){
+                //p_start and p_end have different longitudes
+                
+                //set *length from to t*  (see notes)
+                set_length_from_input(fabs((p_end.lambda.value) - (p_start.lambda.value)));
+                
+            }else{
+                //p_start and p_end have the same longitude
+
+                //the loxodrome is directed to either N or S -> set *length from the latitudes of p_start and p_end
+                //set the length format, the length unit and the value of the length from t
+                length_format.set(LengthFormat_types[1]);
+                length->set((wxGetApp().Re.value) * fabs((p_end.phi.value) - (p_start.phi.value)), LengthUnit_types[0]);
+                
+            }
             
             
             break;
@@ -1901,7 +1914,7 @@ void Route::set_length_from_time_speed(void){
 //set length equal to l(t), where l(t) is the value of the curvilinear length corresponding to the parametric coordinate t
 void Route::set_length_from_input(double t){
     
-    switch ( type.position_in_list(Route_types)) {
+    switch (type.position_in_list(Route_types)) {
             
         case 0:{
             //*this is a loxodrome

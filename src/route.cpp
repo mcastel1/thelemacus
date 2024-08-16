@@ -1992,8 +1992,7 @@ void Route::compute_end(String prefix) {
                 (t.value) = -tau * sqrt((1.0 - C) / C)
                 * log(1.0 / eta * tan(-tau * sqrt(C) * (length->value) / (2.0 * (wxGetApp().Re.value)) + atan(sqrt((1.0 - sin(reference_position->phi.value)) / (1.0 + sin(reference_position->phi.value))))));
                 
-            }
-            else {
+            }else{
                 //this is the limit of the expression above in the case Z -> pi/2
                 
                 (t.value) = (length->value) * (1.0 + gsl_pow_2(eta)) / (2.0 * (wxGetApp().Re.value) * eta);

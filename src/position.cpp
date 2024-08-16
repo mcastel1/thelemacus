@@ -168,9 +168,9 @@ bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
         Route temp;
 
         temp = route;
-        (*(temp.reference_position)) = (*this);
+        temp.reference_position->set((*this));
         temp.compute_end(new_prefix);
-        (*this) = (*(temp.end));
+        set((*(temp.end)));
 
         return true;
 

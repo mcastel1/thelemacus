@@ -125,8 +125,21 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
                 
             }
             
-            //set length according to t* (see notes)
-            set_length_from_input(fabs((p_end.lambda.value) - (p_start.lambda.value)));
+            if(fabs((p_end.lambda.value) - (p_start.lambda.value)) > epsilon_double){
+                //p_start and p_end have different longitudes
+                
+                //set *length from to t*  (see notes)
+                set_length_from_input(fabs((p_end.lambda.value) - (p_start.lambda.value)));
+                
+            }else{
+                //p_start and p_end have the same longitude
+
+                //the loxodrome is directed to either N or S -> set *length from the latitudes of p_start and p_end
+                //set the length format, the length unit and the value of the length from t
+                length_format.set(LengthFormat_types[1]);
+                length->set((wxGetApp().Re.value) * fabs((p_end.phi.value) - (p_start.phi.value)), LengthUnit_types[0]);
+                
+            }
             
             
             break;
@@ -1901,7 +1914,7 @@ void Route::set_length_from_time_speed(void){
 //set length equal to l(t), where l(t) is the value of the curvilinear length corresponding to the parametric coordinate t
 void Route::set_length_from_input(double t){
     
-    switch ( type.position_in_list(Route_types)) {
+    switch (type.position_in_list(Route_types)) {
             
         case 0:{
             //*this is a loxodrome
@@ -1986,24 +1999,44 @@ void Route::compute_end(String prefix) {
             /* cout << "tau = " << tau << "\n"; */
             /* cout << "C = " << C << "\n"; */
             
-            if (((Z.value) != M_PI_2) && ((Z.value) != 3.0 * M_PI_2)) {
-                //this is the general expression of t vs l for Z != pi/2
+            if ((Z != M_PI_2) && (Z != 3.0*M_PI_2) && (Z != 0.0) && (Z != M_PI)) {
+                //this is the general expression of t vs l for Z != {pi/2, 3 pi/2, 0, pi}
                 
                 (t.value) = -tau * sqrt((1.0 - C) / C)
                 * log(1.0 / eta * tan(-tau * sqrt(C) * (length->value) / (2.0 * (wxGetApp().Re.value)) + atan(sqrt((1.0 - sin(reference_position->phi.value)) / (1.0 + sin(reference_position->phi.value))))));
                 
-            }
-            else {
-                //this is the limit of the expression above in the case Z -> pi/2
+                end->phi.set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position->phi.value)))), prefix);
+                end->lambda.set(String(""), (reference_position->lambda.value) + sigma * (t.value), prefix);
+     
                 
-                (t.value) = (length->value) * (1.0 + gsl_pow_2(eta)) / (2.0 * (wxGetApp().Re.value) * eta);
+            }else{
+                
+                if((Z == M_PI_2) || (Z == 3.0*M_PI_2)){
+        
+                    //this is the limit of the expression above in the case Z -> pi/2 or Z-> 3 pi /2
+                    (t.value) = (length->value) * (1.0 + gsl_pow_2(eta)) / (2.0 * (wxGetApp().Re.value) * eta);
+                    
+                    end->phi.set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position->phi.value)))), prefix);
+                    end->lambda.set(String(""), (reference_position->lambda.value) + sigma * (t.value), prefix);
+
+                    
+                }
+                
+                if((Z == 0) || (Z == M_PI)){
+                    
+                    //this is the limit of the expression above in the case Z -> 0 or Z = pi
+                    
+                    
+                    
+                    end->phi.set(String(""),
+                                 (reference_position->phi.value) + (length->value)/(wxGetApp().Re.value) *
+                                 (Z == 0.0 ? 1.0 : -1.0),
+                                 prefix);
+                    end->lambda.set(String(""), (reference_position->lambda.value), prefix);
+                    
+                }
                 
             }
-            
-            /* t.print("t", prefix, cout); */
-            
-            end->phi.set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position->phi.value)))), prefix);
-            end->lambda.set(String(""), (reference_position->lambda.value) + sigma * (t.value), prefix);
             
             break;
             

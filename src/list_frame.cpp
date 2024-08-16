@@ -1820,9 +1820,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                    if(object->type == Route_types[2]){
                        //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
                        
-                       target_position = (*(object->reference_position));
-                       //                       target_omega = object->omega;
-                       
+                       target_position = (*(object->reference_position));                       
                        
                    }else{
                        //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth

@@ -118,6 +118,8 @@
 
 
  ********** THINGS TO FIX ***********
+    - subsitute set() method in (*(temp.reference_position)) = (*this); and in         (*this) = (*(temp.end));
+        in Route::transport_to
     - when you close a ChartFrame there is a segmentation fault
     - if you animate to a Route (press Reduce in SightFrame) and the Mercator projection is already centered on that Route from a previous identical animation, it blows up
     - move all remaining fields of SpeedField to the parent class

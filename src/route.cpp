@@ -1986,23 +1986,44 @@ void Route::compute_end(String prefix) {
             /* cout << "tau = " << tau << "\n"; */
             /* cout << "C = " << C << "\n"; */
             
-            if (((Z.value) != M_PI_2) && ((Z.value) != 3.0 * M_PI_2)) {
-                //this is the general expression of t vs l for Z != pi/2
+            if ((Z != M_PI_2) && (Z != 3.0*M_PI_2) && (Z != 0.0) && (Z != M_PI)) {
+                //this is the general expression of t vs l for Z != {pi/2, 3 pi/2, 0, pi}
                 
                 (t.value) = -tau * sqrt((1.0 - C) / C)
                 * log(1.0 / eta * tan(-tau * sqrt(C) * (length->value) / (2.0 * (wxGetApp().Re.value)) + atan(sqrt((1.0 - sin(reference_position->phi.value)) / (1.0 + sin(reference_position->phi.value))))));
                 
-            }else{
-                //this is the limit of the expression above in the case Z -> pi/2 or Z-> 3 pi /2
+                end->phi.set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position->phi.value)))), prefix);
+                end->lambda.set(String(""), (reference_position->lambda.value) + sigma * (t.value), prefix);
+     
                 
-                (t.value) = (length->value) * (1.0 + gsl_pow_2(eta)) / (2.0 * (wxGetApp().Re.value) * eta);
+            }else{
+                
+                if((Z == M_PI_2) || (Z == 3.0*M_PI_2)){
+        
+                    //this is the limit of the expression above in the case Z -> pi/2 or Z-> 3 pi /2
+                    (t.value) = (length->value) * (1.0 + gsl_pow_2(eta)) / (2.0 * (wxGetApp().Re.value) * eta);
+                    
+                    end->phi.set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position->phi.value)))), prefix);
+                    end->lambda.set(String(""), (reference_position->lambda.value) + sigma * (t.value), prefix);
+
+                    
+                }
+                
+                if((Z == 0) || (Z == M_PI)){
+                    
+                    //this is the limit of the expression above in the case Z -> 0 or Z = pi
+                    
+                    
+                    
+                    end->phi.set(String(""),
+                                 (reference_position->phi.value) + (length->value)/(wxGetApp().Re.value) *
+                                 (Z == 0.0 ? 1.0 : -1.0),
+                                 prefix);
+                    end->lambda.set(String(""), (reference_position->lambda.value), prefix);
+                    
+                }
                 
             }
-            
-            /* t.print("t", prefix, cout); */
-            
-            end->phi.set(String(""), asin(tanh(tau * sqrt(C / (1.0 - C)) * (t.value) + atanh(sin(reference_position->phi.value)))), prefix);
-            end->lambda.set(String(""), (reference_position->lambda.value) + sigma * (t.value), prefix);
             
             break;
             

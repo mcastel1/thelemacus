@@ -11,7 +11,7 @@
 #include "generic.h"
 
 
-//constructor of a StaticLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
+//constructor of a static Length field object
 template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_parent, Length* length_in, vector<int>* recent_units_in){
 
     //these flags will be used in the method InsertIn below, to insert this->unit

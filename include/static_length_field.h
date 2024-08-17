@@ -12,6 +12,7 @@
 
 #include "check_unit.h"
 #include "length.h"
+#include "multiple_item_field.h"
 #include "static_text.h"
 
 using namespace std;

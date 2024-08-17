@@ -32,11 +32,20 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
 
     flags.Center();
 
+    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::unit = new LengthUnitField<P>(NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::parent->panel, NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::object->unit, &(wxGetApp().list_frame->data->recent_length_units));
+
     
     //initialize check
     NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::check = new CheckLength<P>(this);
     
-//    value = new wxTextCtrl((LengthField<P>::parent->panel), wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    
+    //I bind unit to NumercialField::Check because when the unit of measure is changed, I want to update also the unit of measure of recent_object. I need to put this Bind() here rather than in the constructor of NumericalField, because otherwise unit->name would be NULL when thi Bind() is called
+    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::unit->Bind(wxEVT_KILL_FOCUS, &NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::template Check<wxFocusEvent>, this);
+    //as text is changed in unit from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
+    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::unit->Bind(wxEVT_COMBOBOX, &NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::template OnEditUnit<wxCommandEvent>, this);
+    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::unit->Bind(wxEVT_KEY_UP, &NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::template OnEditUnit<wxKeyEvent>, this);
+
+    
     
     NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::value->Bind(wxEVT_KILL_FOCUS, (*(NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::check->check_length_value)));
     //as text is changed in value by the user with the keyboard, call OnEditValue
@@ -45,6 +54,9 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
     
     //this method has to be here and not in the parent class because otherwise it would call non-allocated objects
     NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::FillInRecentValue();
+    
+    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::unit->InsertIn(NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::sizer_h, flags);
+
 
 }
 

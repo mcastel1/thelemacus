@@ -526,7 +526,7 @@ void SightFrame::set(void) {
     if(!(artificial_horizon_check->checkbox->GetValue())) {
         
         height_of_eye->Enable(true);
-        height_of_eye->LengthField<SightFrame>::set();
+        height_of_eye->set();
         
     }else{
         

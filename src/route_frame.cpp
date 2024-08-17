@@ -674,7 +674,7 @@ void RouteFrame::set(void) {
     if ((route->length_format) == (LengthFormat_types[1])) {
         //the Route length is simply expressed as a length rather than as a time and speed -> set length field
 
-        length->LengthField<RouteFrame>::set();
+        length->set();
 
     }
     else {
@@ -685,7 +685,7 @@ void RouteFrame::set(void) {
         
         route->set_length_from_time_speed();
         //        (route->length) = Length(route->time, route->speed);
-        length->LengthField<RouteFrame>::set();
+        length->set();
 
     }
 

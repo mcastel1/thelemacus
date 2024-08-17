@@ -96,6 +96,7 @@ template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, Dy
 template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::Bind<wxEventTypeTag<wxFocusEvent>, void (NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::*)(wxFocusEvent&), DynamicLengthField<SightFrame>*>(wxEventTypeTag<wxFocusEvent>, void (NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::*)(wxFocusEvent&), DynamicLengthField<SightFrame>*);
 template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::Bind<wxEventTypeTag<wxCommandEvent>, void (NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::*)(wxCommandEvent&), DynamicLengthField<SightFrame>*>(wxEventTypeTag<wxCommandEvent>, void (NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::*)(wxCommandEvent&), DynamicLengthField<SightFrame>*);
 template void MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame> >::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
+template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::Bind<wxEventTypeTag<wxCommandEvent>, void (SightFrame::*)(wxCommandEvent&), SightFrame*>(wxEventTypeTag<wxCommandEvent>, void (SightFrame::*)(wxCommandEvent&), SightFrame*);
 
 
 //set a tooltip with text text to *this
@@ -144,6 +145,8 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::set();
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::set();
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::set();
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::set();
+template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::set();
 
 
 template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::set(const NON_GUI& input) {

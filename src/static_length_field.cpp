@@ -79,10 +79,20 @@ template<class P> void StaticLengthField<P>::set(void) {
 template void StaticLengthField<ChartFrame>::set();
 
 
-//convert write into the GUI field a Length equal to *length but converted to the most recent unit of measure stored in unit->recent_items->front()
-template<class P> void StaticLengthField<P>::SetValueInMostRecentUnit(void) {
+//convert write into the GUI field a Length equal to *length but converted to the most recent unit of measure stored in unit->recent_items->front() if unit->recent_items containts at least one entry and LengthUnit_types[0] otherwise
+template<class P> void StaticLengthField<P>::SetValueInMostRecentUnit(void){
+    
+    if((unit->recent_items->size()) > 0){
+        //*unit->recent_items containts at least one entry -> I use the unit of measure unit->recent_items->front()
+        
+        set((length->convert(LengthUnit_types[unit->recent_items->front()])));
+        
+    }else{
+        //*unit->recent_items is empty -> I use the unit of measure LengthUnit_types[0]
 
-    set((length->convert(LengthUnit_types[unit->recent_items->front()])));
+        set((length->convert(LengthUnit_types[0])));
+        
+    }
 
 }
 

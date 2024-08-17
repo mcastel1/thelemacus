@@ -19,24 +19,11 @@ template<class P> class CheckLength;
 
 
 //an editable GUI field to enter a Length, composed of a box and a dropdown menu to enter the units of measure of the Length. P is the type of the parent which hosts the DynamicLengthField object
-template<class P> class DynamicLengthField: public LengthField<P>{
+template<class P> class DynamicLengthField: public NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>{
     
 public:
-
-    //the length value
-//    wxTextCtrl *value;
-//    CheckLength<P>* check;
-//    bool value_ok;
     
     DynamicLengthField(wxPanel*, Length*, Length*, vector<int>*);
-    
-//    void set(Length);
-//    void set(void);
-//    template<class T> void get(T&);
-//    void Enable(bool);
-//    bool is_ok(void);
-//    template<class E> void OnEditValue(E&);
-//    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
     
 };
 

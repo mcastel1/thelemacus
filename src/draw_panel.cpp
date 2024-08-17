@@ -19,9 +19,7 @@
 #include "draw_panel.h"
 #include "constants.h"
 #include "generic.h"
-#include "length_unit_field.h"
 #include "route_type.h"
-
 
 
 DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wxSize& size_in) : wxPanel(parent_in, wxID_ANY, position_in, size_in, wxTAB_TRAVERSAL, wxT("")) {

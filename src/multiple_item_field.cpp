@@ -114,9 +114,6 @@ template<class P, class NON_GUI, class CHECK> template<class T> void MultipleIte
 
 template void MultipleItemField<ChartFrame, Projection, void>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
-template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, LengthUnitField<ChartFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
-template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthUnitField<RouteFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
-template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnitField<SightFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, StaticLengthField<ChartFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 
 
@@ -129,11 +126,9 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 
 }
 
-template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthUnitField<RouteFrame>>>::set();
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::set();
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::set();
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::set();
-template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnitField<SightFrame>>>::set();
 
 
 template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::set(const NON_GUI& input) {
@@ -144,8 +139,6 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 
 }
 
-template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, LengthUnitField<ChartFrame>>>::set(LengthUnit const&);
-template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthUnitField<RouteFrame>>>::set(LengthUnit const&);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, StaticLengthField<ChartFrame> > >::set(LengthUnit const&);
 
 
@@ -334,6 +327,4 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 
 template void MultipleItemField<ChartFrame, Projection, void>::Enable(bool);
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::Enable(bool);
-template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthUnitField<RouteFrame> > >::Enable(bool);
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::Enable(bool);
-template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnitField<SightFrame> > >::Enable(bool);

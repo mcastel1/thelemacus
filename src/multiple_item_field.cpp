@@ -63,6 +63,8 @@ template class MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<Rou
 template class MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>;
 template class MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >;
 template class MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame>>;
+template class MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, StaticLengthField<ChartFrame> > >;
+template class MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >;
 
 
 template<class P, class NON_GUI, class CHECK> template <typename EventTag, typename Method, typename Object> void MultipleItemField<P, NON_GUI, CHECK>::Bind(EventTag tag, Method method, Object object) {
@@ -83,6 +85,11 @@ template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, Spe
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::Bind<wxEventTypeTag<wxFocusEvent>, void (NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::*)(wxFocusEvent&), SpeedField<RouteFrame>*>(wxEventTypeTag<wxFocusEvent>, void (NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::*)(wxFocusEvent&), SpeedField<RouteFrame>*);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, StaticLengthField<ChartFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (StaticLengthField<ChartFrame>::*)(wxKeyEvent&), StaticLengthField<ChartFrame>*>(wxEventTypeTag<wxKeyEvent>, void (StaticLengthField<ChartFrame>::*)(wxKeyEvent&), StaticLengthField<ChartFrame>*);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, StaticLengthField<ChartFrame> > >::Bind<wxEventTypeTag<wxCommandEvent>, void (StaticLengthField<ChartFrame>::*)(wxCommandEvent&), StaticLengthField<ChartFrame>*>(wxEventTypeTag<wxCommandEvent>, void (StaticLengthField<ChartFrame>::*)(wxCommandEvent&), StaticLengthField<ChartFrame>*);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::*)(wxKeyEvent&), DynamicLengthField<RouteFrame>*>(wxEventTypeTag<wxKeyEvent>, void (NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::*)(wxKeyEvent&), DynamicLengthField<RouteFrame>*);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxFocusEvent>, void (NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::*)(wxFocusEvent&), DynamicLengthField<RouteFrame>*>(wxEventTypeTag<wxFocusEvent>, void (NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::*)(wxFocusEvent&), DynamicLengthField<RouteFrame>*);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxCommandEvent>, void (NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::*)(wxCommandEvent&), DynamicLengthField<RouteFrame>*>(wxEventTypeTag<wxCommandEvent>, void (NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::*)(wxCommandEvent&), DynamicLengthField<RouteFrame>*);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*>(wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*);
 
 
 //set a tooltip with text text to *this
@@ -115,6 +122,7 @@ template<class P, class NON_GUI, class CHECK> template<class T> void MultipleIte
 template void MultipleItemField<ChartFrame, Projection, void>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, StaticLengthField<ChartFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 
 
 //set the value in the GUI object name equal to the value in the non-GUI NON_GUI object 'object'
@@ -140,6 +148,8 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, StaticLengthField<ChartFrame> > >::set(LengthUnit const&);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::set(LengthUnit const&);
+
 
 
 //set the value in the non-GUI object 'object' equal to the value in the GUI object name, with no abbreviations used (the value is copied as it is)
@@ -176,6 +186,8 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::CheckInCatalog(bool*, unsigned int*);
+template void MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, DynamicLengthField<ChartFrame> > >::CheckInCatalog(bool*, unsigned int*);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::CheckInCatalog(bool*, unsigned int*);
 
 
 //this method is called whenever the user kills the focus on the GUI field in order to check the content of the GUI field and do the necessary operations
@@ -328,3 +340,4 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 template void MultipleItemField<ChartFrame, Projection, void>::Enable(bool);
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::Enable(bool);
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::Enable(bool);
+template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::Enable(bool);

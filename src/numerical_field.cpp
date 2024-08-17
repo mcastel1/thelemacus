@@ -143,6 +143,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 }
 
 template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::Check<wxFocusEvent>(wxFocusEvent&);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::Check<wxFocusEvent>(wxFocusEvent&);
 
 
 //update the value of the GUI (both the value and the unit)  in NumericalField according to recent_value and to the recent units in such a way that the recent value appears in the GUI field
@@ -158,6 +159,8 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
     
 }
 
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::FillInRecentValue();
+
 
 //update the value of the GUI  in NumericalField according to NuericalField<P, NON_GUI>::recent_value in such a way that the recent value appears in the GUI field
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::Enable(bool is_enabled) {
@@ -169,6 +172,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 }
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::Enable(bool);
 template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::Enable(bool);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::Enable(bool);
 
 
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template<class T> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::InsertIn(T* host) {
@@ -179,6 +183,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template<class T> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::InsertIn(T* host, wxSizerFlags& flag) {
@@ -200,6 +205,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::set();
 template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::set();
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::set();
 
 
 //set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object input
@@ -298,6 +304,7 @@ template <class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_U
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*>(wxEventTypeTag<wxKeyEvent>, void (RouteFrame::*)(wxKeyEvent&), RouteFrame*);
 template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::Bind<wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*>(wxEventTypeTag<wxCommandEvent>, void (RouteFrame::*)(wxCommandEvent&), RouteFrame*);
+template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, DynamicLengthField<SightFrame> > >::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
 
 
 //write the value and the unit of the GUI field in SpeedField into the non-GUI field speed

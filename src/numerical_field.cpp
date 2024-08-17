@@ -269,7 +269,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
 template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedField<RouteFrame> > >::OnEditUnit<wxCommandEvent>(wxCommandEvent&);
-
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, DynamicLengthField<RouteFrame> > >::OnEditUnit<wxKeyEvent>(wxKeyEvent&);
 
 template <class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> template <typename EventTag, typename Method, typename Object> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::Bind(EventTag tag, Method method, Object object) {
 

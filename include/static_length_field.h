@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+#include "check_unit.h"
 #include "length.h"
 #include "static_text.h"
 

@@ -10,7 +10,9 @@
 
 #include <iostream>
 
+#include "check_unit.h"
 #include "length.h"
+#include "numerical_field.h"
 
 using namespace std;
 

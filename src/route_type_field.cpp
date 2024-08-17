@@ -31,35 +31,8 @@ template class RouteTypeField<RouteFrame>;
 
 //sets the value in the GUI object equal to the value in the non-GUI  object string
 template<class P> void RouteTypeField<P>::set(void) {
-    
-    switch((MultipleItemField<P, RouteType, CheckRouteType<P> >::object)->position_in_list(Route_types)) {
-            
-        case 0: {
-            
-            MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString((Route_types[0]).value));
-            
-            break;
-            
-        }
-            
-        case 1: {
-            
-            MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString((Route_types[1]).value));
-            
-            break;
-            
-        }
-            
-        case 2: {
-            
-            MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString((Route_types[2]).value));
-            
-            break;
-            
-        }
-            
-    }
-    
+        
+    MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString((Route_types[((MultipleItemField<P, RouteType, CheckRouteType<P> >::object)->position_in_list(Route_types))]).value));
     MultipleItemField<P, RouteType, CheckRouteType<P> >::ok = true;
     
 }

@@ -105,7 +105,6 @@
      - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
      - move all stuff which is general enough in the code to MyApp class
      - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
-     - the altitude over the horizon should be set to the last value entered
      - some paralles or meridians in grid in render_mercator contain the same wxPoint iterated many times -> remove them
 
 

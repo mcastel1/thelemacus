@@ -24,7 +24,7 @@
 
 
 
-//constructor of a EditableLengthField object, based on the parent frame frame. Note that some lines in this constructor could not be moved up to the constructor of LengthField<P>
+//constructor of a editable Length field object
 template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_parent, Length* p, Length* recent_value_in, vector<int>* recent_units_in) : NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>(panel_of_parent, p, recent_value_in, recent_units_in) {
 
     //these flags will be used in the method InsertIn below, to insert this->unit

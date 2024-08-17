@@ -32,8 +32,13 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
 
     flags.Center();
 
-    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::unit = new LengthUnitField<P>(NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::parent->panel, NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::object->unit, &(wxGetApp().list_frame->data->recent_length_units));
-
+    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>> >::unit =
+    new MultipleItemField<P, LengthUnit, CheckUnit<P, DynamicLengthField<P>>>(
+                                                                              NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>> >::parent->panel,
+                                                                              NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>> >::object->unit,
+                                                                              LengthUnit_types,
+                                                                              &(wxGetApp().list_frame->data->recent_length_units)
+                                                                              );
     
     //initialize check
     NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>::check = new CheckLength<P>(this);

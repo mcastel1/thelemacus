@@ -12,7 +12,6 @@
 
 #include "length.h"
 #include "static_text.h"
-#include "length_field.h"
 
 using namespace std;
 

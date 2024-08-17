@@ -87,7 +87,6 @@
      - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
      - try  wxDCClipper to quickly delete old image on DrawPanel
      - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things
-     - all unit fields should have the system              temp << "Available units are: "; message generated in the same way, as in template <class T> void CheckSpeedUnit<P>::operator()
      - when you enable / disable a field, enable/disable its wxStaticTexts and wxBoxSizers as well
      - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things 
      - add instrumental error

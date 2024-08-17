@@ -95,7 +95,7 @@
      - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
      - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
      - change     highlight_color = color_selected_item and     highlight_font = default_font;
-     with a better  choice
+        with a better  choice
      - add + / - button in chartframe to zoom in / out
      - add lambert projection and 3D sphere with no projection
      - add separator between recent items and non-recent items in BodyField->name

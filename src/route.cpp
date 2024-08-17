@@ -578,7 +578,6 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     Length length_saved;
 
     
-    
     if(length_format == LengthFormat_types[0]){
         //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
         
@@ -595,7 +594,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     compute_l_ends(&s, &compute_l_ends_ok, draw_panel, prefix);
  
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
-    if (compute_l_ends_ok) {
+    if(compute_l_ends_ok){
         
         bool check;
         //a vector where I will store the tentative points of each chunk of *this
@@ -605,10 +604,9 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
 
          //run over all chunks of *this which are visible
          //given that s contains the number of intersection points of *this and that each pair of intersection point delimits a chunk, and that v contains the chunks, the size of v is equal to thte size of s minus one.
-        for (j=0; j<(s.size()) - 1; j++) {
+        for(j=0; j<(s.size()) - 1; j++) {
             //run over all chunks
  
-            
             //tabulate the Route points of the jth chunk and store them in v_proposed
             for (v_tentative.clear(), n_points_check_ok=0, i = 0; i < n_points; i++) {
 
@@ -620,7 +618,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
                 
                 check = (draw_panel->GeoToDrawPanel)((*end), &p, false);
                 
-                if (check) {
+                if(check){
                     //end is a valid point -> convert it to a Position with GeoToDrawPanel
 
                     v_tentative.push_back(p);

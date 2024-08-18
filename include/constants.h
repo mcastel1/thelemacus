@@ -53,7 +53,7 @@ extern Angle max_lat, min_lat;
 #define chars_double "+-0123456789."
 #define color_white  (wxColour(255,255,255))
 //the types of Routes, Projections, Length units of measure are stored here, so I don't have to re-type them everywhere in the codde
-#define Route_types (vector<String> {String("loxodrome"), String("orthodrome"), String("circle of equal altitude")})
+#define Route_types (vector<RouteType> {RouteType("loxodrome"), RouteType("orthodrome"), RouteType("circle of equal altitude")})
 //the type of Routes used to transport a graphical object (i.e., a Position, a Route, etc...)
 #define Route_for_transport_types (vector<String> {Route_types[0], Route_types[1]})
 #define Projection_types (vector<Projection> {Projection("Mercator"), Projection("3D")})

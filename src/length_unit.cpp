@@ -22,7 +22,7 @@ LengthUnit::LengthUnit(const string& input) : String(input) {}
 //inline 
 bool LengthUnit::check(void){
     
-    return(position_in_list(LengthUnit_types) != (LengthUnit_types.size())) ;
+    return(position_in_vector((*this), LengthUnit_types) != (LengthUnit_types.size())) ;
     
 }
 

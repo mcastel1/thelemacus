@@ -11,7 +11,7 @@
 #include "sight_frame.h"
 
 
-template<class P, class GUI> CheckUnit<P, GUI>::CheckUnit(GUI* p_in, const vector<LengthUnit>& unit_types_in) {
+template<class P, class NON_GUI_UNIT, class GUI> CheckUnit<P, NON_GUI_UNIT, GUI>::CheckUnit(GUI* p_in, const vector<NON_GUI_UNIT>& unit_types_in) {
 
     p = p_in;
     unit_types = unit_types_in;
@@ -20,7 +20,7 @@ template<class P, class GUI> CheckUnit<P, GUI>::CheckUnit(GUI* p_in, const vecto
 
 template class CheckUnit<RouteFrame, LengthUnit, DynamicLengthField<RouteFrame>>;
 template class CheckUnit<SightFrame, LengthUnit, DynamicLengthField<SightFrame>>;
-template class CheckUnit<RouteFrame, SpeedField<RouteFrame>>;
+template class CheckUnit<RouteFrame, SpeedUnit, SpeedField<RouteFrame>>;
 
 
 //check the unit in the GUI field in LengthField

@@ -15,7 +15,7 @@ template<class P> CheckSpeed<P>::CheckSpeed(SpeedField<P>* p_in) {
     p = p_in;
 
     check_speed_value = new CheckSpeedValue<P>(p);
-    check_speed_unit = new CheckUnit<P, SpeedField<P>>(p, SpeedUnit_types);
+    check_speed_unit = new CheckUnit<P, SpeedUnit, SpeedField<P>>(p, SpeedUnit_types);
 
 }
 

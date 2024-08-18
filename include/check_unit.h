@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+#include "length_unit.h"
 #include "my_string.h"
 
 using namespace std;
@@ -27,7 +28,7 @@ public:
     //a vector of unit types, e.g., LengthUnit_types, which will be used to list the units of measures relative to *this
     vector<String> unit_types;
     
-    CheckUnit(GUI*, const vector<String>&);
+    CheckUnit(GUI*, const vector<LengthUnit>&);
     template<class T> void operator()(T&);
     
 };

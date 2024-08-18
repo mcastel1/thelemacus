@@ -21,6 +21,7 @@ public:
 
     LengthUnit();
     LengthUnit(const String&);
+    LengthUnit(const string&);
     
     bool check();
     

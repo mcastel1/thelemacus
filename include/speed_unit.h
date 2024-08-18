@@ -22,6 +22,7 @@ public:
 
     SpeedUnit();
     SpeedUnit(const String&);
+    SpeedUnit(const string&);
     
 };
 

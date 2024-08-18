@@ -59,7 +59,7 @@ extern Angle max_lat, min_lat;
 #define Projection_types (vector<Projection> {Projection("Mercator"), Projection("3D")})
 #define Limb_types (vector<String> {String("upper"), String("center"), String("lower")})
 #define LengthFormat_types (vector<String> {String("time and speed"), String("length")})
-#define LengthUnit_types (vector<String> {String("nm"), String("m"), String("ft")})
+#define LengthUnit_types (vector<LengthUnit> {LengthUnit("nm"), LengthUnit("m"), LengthUnit("ft")})
 #define SpeedUnit_types (vector<SpeedUnit> {SpeedUnit("kt"), SpeedUnit("km/h"), SpeedUnit("m/s")})
 #define ListControl_types (vector<String> {String("sight"), String("position"), String("route")})
 #define floor_min_lat (floor(rad_to_deg*((min_lat.normalize_pm_pi_ret()).value)))

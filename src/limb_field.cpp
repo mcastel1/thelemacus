@@ -13,6 +13,7 @@
 #include "check_limb.h"
 #include "constants.h"
 #include "limb_field.h"
+#include "limb_type.h"
 #include "my_string.h"
 #include "on_change_selection_in_limb_field.h"
 #include "sight_frame.h"

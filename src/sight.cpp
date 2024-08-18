@@ -18,6 +18,7 @@
 #include "constants.h"
 #include "file_r.h"
 #include "generic.h"
+#include "limb_type.h"
 #include "my_app.h"
 #include "units.h"
 

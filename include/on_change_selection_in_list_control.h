@@ -9,8 +9,8 @@
 #define on_change_selection_in_list_control_h
 
 #include "list_control.h"
+#include "listcontrol_type.h"
 #include "my_string.h"
-
 
 #include <iostream>
 
@@ -29,7 +29,7 @@ public:
     
     ListControl<S>* caller;
     //the type of listcontrol: "sight" if caller = listcontrol_sights, "position" if caller = listcontrol_positions, "route" if caller = listcontrol_routes
-    String type;
+    ListControlType type;
     
     OnChangeSelectionInListControl(ListControl<S>*, String);
     template<class T> void operator()(T&);

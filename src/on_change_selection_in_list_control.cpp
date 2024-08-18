@@ -8,6 +8,7 @@
 #include "on_change_selection_in_list_control.h"
 
 #include "generic.h"
+#include "listcontrol_type.h"
 
 
 template<class S> OnChangeSelectionInListControl<S>::OnChangeSelectionInListControl(ListControl<S>* caller_in, String type_in) {
@@ -39,7 +40,7 @@ template<class S> template<class T>void OnChangeSelectionInListControl<S>::opera
     if (i != -1) {
         //one item is selected
         
-        switch (type.position_in_list(ListControl_types)) {
+        switch (position_in_vector(type, ListControl_types)) {
                 
             case 0: {
                 //type.value = "sight"->caller is listcontrol_sights
@@ -68,7 +69,7 @@ template<class S> template<class T>void OnChangeSelectionInListControl<S>::opera
     else {
         //no item is selected -> disable the button to disconnect
         
-        switch (type.position_in_list(ListControl_types)) {
+        switch(position_in_vector(type, ListControl_types)) {
                 
             case 0: {
                 //type.value = "sight"->caller is listcontrol_sights

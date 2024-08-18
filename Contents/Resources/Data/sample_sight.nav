@@ -1,31 +1,56 @@
 Data:
-    Sights:
-        Sight #1:
-            body:
-                Type = moon
-                Name = moon
-                Radius = 938.12099999999998090061126276851 nm
-            limb = u
-            sextant altitude = 47° 57.799999999999869260136620141566'
-            index error = 0° 1.8999999999999996891375531049562'
-            artificial horizon = y
-            master-clock date and hour of sight:
-                date of master-clock date and hour of sight = 2021-06-21
-                hour of master-clock date and hour of sight = 21:01:20
-            use of stopwatch = y
-            hour of stopwatch = 00:37:35
-            hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-            label = Sight was taken at BGC
-    Routes:
-    Positions:
+	Sights:
+		Sight #1:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.1209999999999809 nm
+			limb = u
+			sextant altitude = 47° 57.79999999999987'
+			index error = 0° 1.9'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date = 2021-06-21
+				hour = 21:01:20
+			use of stopwatch = y
+			stopwatch = 00:37:35
+			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at BGC
+		Sight #2:
+			body:
+				Type = 
+				Name = sun
+				Radius = 0.0000000000000000 nm
+			limb = l
+			sextant altitude = 23° 3.000000000000043'
+			index error = 3° 2.999999999999989'
+			artificial horizon = n
+			height of eye = 23.0000000000000000 ft
+			master-clock date and hour of sight:
+				date = 2024-08-18
+				hour = 13:41:24
+			use of stopwatch = n
+			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2024-08-18 13:41:40 UTC+2
+	Routes:
+		Route #1:
+			type = orthodrome
+			start position:
+				latitude = 2° 1.999999999999993'
+				longitude = 2° 1.999999999999993'
+				label = 
+			starting heading = 234° 34.34999999999775'
+			length format = length
+				length = 2333000.0000000000000000 ft
+			label = 
+	Positions:
 Recent bodies = 12 10 8
 Recent projections = 1 0
 Recent length formats = 1 0
 Recent route types = 1 0 2
 Recent route for transport types = 1 0
-Recent length units = 0 1
+Recent length units = 2 0
 Recent speed units = 0 1
-Recent route speed value = 23 kt
-Recent height of eye value = 1 m
-Recent route length value = 1 nm
-
+Recent height of eye value = 23.0000000000000000 ft
+Recent route length value = 2333000.0000000000000000 ft
+Recent route speed value = 23.0000000000000000 kt

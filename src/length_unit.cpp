@@ -6,7 +6,9 @@
 //
 
 #include "length_unit.h"
+
 #include "constants.h"
+#include "generic.h"
 
 
 LengthUnit::LengthUnit(void) : String() {}

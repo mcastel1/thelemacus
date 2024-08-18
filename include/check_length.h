@@ -11,6 +11,8 @@
 #include <iostream>
 
 #include "check_length_value.h"
+#include "check_unit.h"
+#include "length_unit.h"
 
 using namespace std;
 

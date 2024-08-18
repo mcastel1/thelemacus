@@ -153,7 +153,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
     //set number column
     listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (int)(i + 1)));
 
-    //set body column
+    //set body_name column
     listcontrol->SetItem(i, j++, wxString(body->name->value));
 
     //set limb column
@@ -334,7 +334,7 @@ template<class S> bool Sight::read_from_stream([[maybe_unused]] String name, S* 
 template bool Sight::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
 
 
-//compute this->time and returns true if time lies within the data file of NASA JPL ephemerides files, and false otherwise. This function requires that body.name is specified: if body.name is "", it returns false.
+//compute this->time and returns true if time lies within the data file of NASA JPL ephemerides files, and false otherwise. This function requires that body_name.name is specified: if body_name.name is "", it returns false.
 bool Sight::check_time_interval(String prefix) {
 
     unsigned int i;
@@ -366,7 +366,7 @@ bool Sight::check_time_interval(String prefix) {
     
     
  
-    //find the position of body->name in wxGetApp().list_frame->catalog and store the result in i
+    //find the position of body_name->name in wxGetApp().list_frame->catalog and store the result in i
     for(i=0; (i<(wxGetApp().catalog->list.size())) && ((*(body->name)) != (*(((wxGetApp().catalog->list)[i]).name))); i++){}
 
     
@@ -651,7 +651,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
 
     file.set_name(String(temp.c_str()));
     if ((file.open(new_prefix)) && check_time_interval(new_prefix)) {
-        //the file corresponding to this->body exists and the time of *this lies within the time interval of NASA JPL ephemerides data
+        //the file corresponding to this->body_name exists and the time of *this lies within the time interval of NASA JPL ephemerides data
 
 
         //l_min is the ID of the line in NASA's webgeocalc data files at wihch the interpolation starts
@@ -669,9 +669,9 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
 
 
         if ((body->type->value) != "star") {
-            //in this case I am getting the coordinate of a body with a non-zero size
+            //in this case I am getting the coordinate of a body_name with a non-zero size
 
-            //if the body is not a star
+            //if the body_name is not a star
 
             double r_tab[(unsigned int)n_lines_ephemerides];
             gsl_spline* interpolation_r = gsl_spline_alloc(gsl_interp_cspline, ((unsigned int)n_lines_ephemerides));
@@ -759,7 +759,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
 
         }
         else {
-            //in this case I am getting the coordinate of a body with a zero size (a star)
+            //in this case I am getting the coordinate of a body_name with a zero size (a star)
 
             //if the body is a star
             double phi3, phi2, phi1;

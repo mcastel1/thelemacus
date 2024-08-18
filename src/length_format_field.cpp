@@ -39,7 +39,7 @@ template<class P> template<class E> void LengthFormatField<P>::OnEdit(E& event) 
     String s;
     bool success;
 
-    //I check whether the name in the GUI field body matches one of the body names in catalog
+    //I check whether the name in the GUI field body_name matches one of the body names in catalog
     find_and_replace_case_insensitive(MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::name, MultipleItemField<P, LengthFormat, CheckLengthFormat<P> >::items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid

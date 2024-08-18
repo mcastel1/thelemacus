@@ -30,7 +30,7 @@ template<class P> template<class T>void CheckBodyName<P>::operator()(T& event) {
         unsigned int i;
         bool check;
 
-        //I check whether the name in the GUI field body matches one of the body names in catalog
+        //I check whether the name in the GUI field body_name matches one of the body names in catalog
         for (check = false, i = 0; (i < (wxGetApp().catalog->list.size())) && (!check); i++) {
             if (String((p->name->GetValue().ToStdString())) == (*(((wxGetApp().catalog->list)[i]).name))) {
                 check = true;
@@ -57,7 +57,7 @@ template<class P> template<class T>void CheckBodyName<P>::operator()(T& event) {
 
                 }
 
-                //insert body #i into data->recent_bodies
+                //insert body_name #i into data->recent_bodies
 //                wxGetApp().list_frame->data->insert_recent_body(i);
                 wxGetApp().list_frame->data->insert_recent_item(i, &(wxGetApp().list_frame->data->recent_bodies));
                 //I update p->name according to the content of data->recent_bodies file

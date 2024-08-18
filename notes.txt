@@ -123,7 +123,6 @@
             }
         }
         i--;' with position_in_vector(..)
-    - when you reduce a star Sight, the circle of equal altitutde is centered on 0, 0 coordinates 
     - the index error must be stored as a recent_value and when the user opens a new SightFrame it should be automatically entered into index_error GUI field
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 `	- write write put_back_in , put_back)_in_Mercator and put_back_in_3D :

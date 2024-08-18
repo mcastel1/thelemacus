@@ -20,7 +20,7 @@ template<class P> class CheckLength;
 
 
 //an editable GUI field to enter a Length, composed of a box and a dropdown menu to enter the units of measure of the Length. P is the type of the parent which hosts the DynamicLengthField object
-template<class P> class DynamicLengthField: public NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, DynamicLengthField<P>>>{
+template<class P> class DynamicLengthField: public NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthUnit, DynamicLengthField<P>>>{
     
 public:
     

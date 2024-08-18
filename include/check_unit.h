@@ -28,7 +28,7 @@ public:
     //a vector of unit types, e.g., LengthUnit_types, which will be used to list the units of measures relative to *this
     vector<NON_GUI_UNIT> unit_types;
     
-    CheckUnit(GUI*, const vector<LengthUnit>&);
+    CheckUnit(GUI*, const vector<NON_GUI_UNIT>&);
     template<class T> void operator()(T&);
     
 };

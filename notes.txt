@@ -80,7 +80,6 @@
  ********** THINGS TO ADD/IMPROVE ************
      - add human error in sight frame to account for a systematic human error in estimating the moment when the body touches the horizon
      - add the possibility to add a poisition witch which to compare the distance when entering a sight
-     - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
      - code method DrawPanel::ProjectionToGeo_3D
      - move up all code blocks that look alike into a function (marked with `    //MOVE UP TO A SINGLE METHOD`)
      - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
@@ -109,6 +108,8 @@
 
 
  ********** THINGS TO FIX ***********
+    - LengthFormat_types must be a vector of LengthFormats, not of String, and similarly for the similar vectors
+    - ListControl_types and other _types should not be vectors of String(s) but of the correct types
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 `	- write write put_back_in , put_back)_in_Mercator and put_back_in_3D :
     - all icons in light mode must be revised and stored in dark mode

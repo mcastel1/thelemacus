@@ -8,12 +8,10 @@
 #include "speed_unit.h"
 
 
-
-
 SpeedUnit::SpeedUnit(void) : String() {}
 
 
 SpeedUnit::SpeedUnit(const String& input) : String(input.value) {}
 
 
-
+SpeedUnit::SpeedUnit(const string& input) : String(input) {}

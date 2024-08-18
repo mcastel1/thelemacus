@@ -16,7 +16,7 @@
 
 
 //constructor of a RouteTypeField object, based on the parent frame frame
-template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, RouteType* object_in, const vector<String>& route_types_in, vector<int>* recent_items_in) : MultipleItemField<P, RouteType, CheckRouteType<P> >(panel_of_parent, object_in, route_types_in, recent_items_in) {
+template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, RouteType* object_in, const vector<RouteType>& route_types_in, vector<int>* recent_items_in) : MultipleItemField<P, RouteType, CheckRouteType<P> >(panel_of_parent, object_in, route_types_in, recent_items_in) {
 
     MultipleItemField<P, RouteType, CheckRouteType<P> >::check = new CheckRouteType<P>(this);
     MultipleItemField<P, RouteType, CheckRouteType<P> >::name->Bind(wxEVT_KILL_FOCUS, *(MultipleItemField<P, RouteType, CheckRouteType<P> >::check));
@@ -31,8 +31,12 @@ template class RouteTypeField<RouteFrame>;
 
 //sets the value in the GUI object equal to the value in the non-GUI  object string
 template<class P> void RouteTypeField<P>::set(void) {
-        
-    MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString((Route_types[((MultipleItemField<P, RouteType, CheckRouteType<P> >::object)->position_in_list(Route_types))]).value));
+    
+    MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString(
+                                                                                 (Route_types[
+                                                                                              position_in_vector((*(MultipleItemField<P, RouteType, CheckRouteType<P> >::object)), Route_types)
+                                                                                              ]).value
+                                                                                 ));
     MultipleItemField<P, RouteType, CheckRouteType<P> >::ok = true;
     
 }

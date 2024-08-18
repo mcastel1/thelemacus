@@ -33,7 +33,7 @@ template<class P> StaticLengthField<P>::StaticLengthField(wxPanel* panel_of_pare
     
 
     unit =
-    new MultipleItemField<P, LengthUnit, CheckUnit<P, StaticLengthField<P>>>(
+    new MultipleItemField<P, LengthUnit, CheckUnit<P, LengthUnit, StaticLengthField<P>>>(
                                                                              parent->panel,
                                                                              length->unit,
                                                                              LengthUnit_types,

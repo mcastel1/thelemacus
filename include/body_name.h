@@ -21,6 +21,7 @@ public:
 
     BodyName();
     BodyName(const String&);
+    BodyName(const string&);
     
     bool check();
     

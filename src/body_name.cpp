@@ -16,6 +16,9 @@ BodyName::BodyName(void) : String() {}
 BodyName::BodyName(const String& input) : String(input.value) {}
 
 
+BodyName::BodyName(const string& input) : String(input) {}
+
+
 //return true if *this is one element in wxGetApp().catalog->list (i.e. *this is a valid Body name) and false otherwise
 bool BodyName::check(void){
     

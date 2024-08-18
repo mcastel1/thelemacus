@@ -9,6 +9,7 @@
 
 #include "check_length_value.h"
 #include "check_unit.h"
+#include "length_unit.h"
 #include "route_frame.h"
 #include "sight_frame.h"
 
@@ -18,7 +19,7 @@ template<class P> CheckLength<P>::CheckLength(DynamicLengthField<P>* p_in) {
     p = p_in;
 
     check_length_value = new CheckLengthValue<P>(p);
-    check_length_unit = new CheckUnit<P, DynamicLengthField<P>>(p, LengthUnit_types);
+    check_length_unit = new CheckUnit<P, LengthUnit, DynamicLengthField<P>>(p, LengthUnit_types);
 
 }
 

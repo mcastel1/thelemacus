@@ -325,7 +325,9 @@ template<class T> unsigned int position_in_vector(T x, const vector<T>& v){
 //explicit instantiation
 template unsigned int position_in_vector<Projection>(Projection, const vector<Projection>&);
 template unsigned int position_in_vector<String>(String, vector<String, allocator<String>> const&);
-
+template unsigned int position_in_vector<LengthUnit>(LengthUnit, vector<LengthUnit, allocator<LengthUnit> > const&);
+template unsigned int position_in_vector<RouteType>(RouteType, vector<RouteType, allocator<RouteType> > const&);
+template unsigned int position_in_vector<SpeedUnit>(SpeedUnit, vector<SpeedUnit, allocator<SpeedUnit> > const&);
 
 
 //convert element by element a vector whose entries are of type A into a vector whose entries are of type B and return the latter. This make sense if A can be re-casted into B
@@ -796,6 +798,7 @@ template void my_push_back<Sight>(vector<Sight, allocator<Sight>>*, Sight const&
 template void my_push_back<Position>(vector<Position, allocator<Position>>*, Position const&);
 template void my_push_back<PositionProjection>(vector<PositionProjection, allocator<PositionProjection>>*, PositionProjection const&);
 template void my_push_back<Angle>(vector<Angle, allocator<Angle>>*, Angle const&);
+template void my_push_back<BodyName>(vector<BodyName, allocator<BodyName> >*, BodyName const&);
 
 
 //copy the *content* (not the memory adresses) of source into dest. This methods calls the set() method of class T, which needs to be defined.

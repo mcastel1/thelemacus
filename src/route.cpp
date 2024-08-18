@@ -84,7 +84,7 @@ Route::Route(const RouteType& type_in,  Position p_start,  Position p_end){
     (*reference_position) = p_start;
     (length_format.value) = ((LengthFormat_types[1]).value);
     
-    switch (type.position_in_list(Route_types)) {
+    switch (position_in_vector(type, Route_types)) {
             
         case 0:{
             //*this is a loxodrome
@@ -677,7 +677,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
     
     vector<Angle> t;
     
-    switch (type.position_in_list(Route_types)) {
+    switch (position_in_vector(type, Route_types)) {
             
         case 0: {
             //the Route this is a loxodrome
@@ -1912,7 +1912,7 @@ void Route::set_length_from_time_speed(void){
 //set length equal to l(t), where l(t) is the value of the curvilinear length corresponding to the parametric coordinate t
 void Route::set_length_from_input(double t){
     
-    switch (type.position_in_list(Route_types)) {
+    switch (position_in_vector(type, Route_types)) {
             
         case 0:{
             //*this is a loxodrome
@@ -1970,7 +1970,7 @@ void Route::set_length_from_input(double t){
 void Route::compute_end(String prefix) {
     
     //picks the first (and only) character in string type.value
-    switch (type.position_in_list(Route_types)) {
+    switch (position_in_vector(type, Route_types)) {
             
             
         case 0:{
@@ -2301,7 +2301,7 @@ bool Route::phi_min_max(Angle* phi_min, Angle* phi_max, [[maybe_unused]] String 
     new_prefix = prefix.append(String("\t"));
     
     
-    switch (type.position_in_list(Route_types)) {
+    switch (position_in_vector(type, Route_types)) {
             
         case 0:{
             //*this is a loxodrome

@@ -10,6 +10,7 @@
 
 #include "speed.h"
 #include "constants.h"
+#include "generic.h"
 #include "units.h"
 
 
@@ -196,7 +197,7 @@ void Speed::convert_to(const SpeedUnit& output_unit){
 
     
     //1. convert *this to unit SpeedUnit_types[0] and write the result in value_in_SpeedUnit_types0
-    switch (unit->position_in_list(SpeedUnit_types)) {
+    switch (position_in_vector((*unit), SpeedUnit_types)) {
             
         case 0:{
             //unit = SpeedUnit_types[0]
@@ -229,7 +230,7 @@ void Speed::convert_to(const SpeedUnit& output_unit){
     
     
     //2. convert *this to unit output_unit and write the result in *this
-    switch (String(output_unit).position_in_list(SpeedUnit_types)) {
+    switch (position_in_vector(output_unit, SpeedUnit_types)) {
             
         case 0:{
             //output_unit = SpeedUnit_types[0]

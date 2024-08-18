@@ -10,6 +10,7 @@
 
 #include "speed.h"
 #include "constants.h"
+#include "generic.h"
 #include "units.h"
 
 
@@ -196,7 +197,7 @@ void Speed::convert_to(const SpeedUnit& output_unit){
 
     
     //1. convert *this to unit SpeedUnit_types[0] and write the result in value_in_SpeedUnit_types0
-    switch (unit->position_in_list(SpeedUnit_types)) {
+    switch (position_in_vector((*unit), SpeedUnit_types)) {
             
         case 0:{
             //unit = SpeedUnit_types[0]

@@ -39,6 +39,7 @@ public:
     void print(String, String, ostream&);
     template<class S> bool read_from_stream(String, S*, bool, String);
     void set(const Body&);
+    void set_from_name(const BodyName&);
     
     bool operator == (const Body&);
     

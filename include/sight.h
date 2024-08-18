@@ -48,7 +48,7 @@ public:
     String label;
     //this is the position in route_list of the route linked to Sight. If there is no route linked to Sight, then related_route = -1.
     Int related_route;
-    //all_items is a list of all the possible items which are part of a Sight object (master_clock_date_and_hour, body, ...). items is the list of items specific to a given Sight object: items may not include all the elements of all_items
+    //all_items is a list of all the possible items which are part of a Sight object (master_clock_date_and_hour, body_name, ...). items is the list of items specific to a given Sight object: items may not include all the elements of all_items
     vector<String> items, all_items;
     
     Sight();

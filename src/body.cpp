@@ -97,6 +97,23 @@ void Body::set(const Body& input){
 }
 
 
+//if input is a valid BodyName, set *this equal to the Body with name input
+void Body::set_from_name(const BodyName& input){
+    
+    unsigned int i;
+    
+    i = position_in_vector(input, wxGetApp().catalog->get_body_names());
+    
+    if(i != (wxGetApp().catalog->get_body_names().size())){
+        //input is a valid BodyName
+        
+        set((wxGetApp().catalog->list)[i]);
+        
+    }
+    
+}
+
+
 template bool Body::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
 
 

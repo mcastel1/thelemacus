@@ -42,7 +42,7 @@ template<class P> void BodyNameField<P>::set(void) {
 template void BodyNameField<SightFrame>::set();
 
 
-//sets the value in the non-GUI object body equal to the value in the GUI  object name
+//sets the value in the non-GUI object body_name equal to the value in the GUI  object name
 template<class P> template<class T> void BodyNameField<P>::get(T& event) {
 
     unsigned int i;
@@ -51,7 +51,7 @@ template<class P> template<class T> void BodyNameField<P>::get(T& event) {
     if (MultipleItemField<P, BodyName, CheckBodyName<P> >::ok) {
         //If the GUI field's content is ok...
 
-        //I find the position of the content of the GUI field in the list of  the body names in catalog
+        //I find the position of the content of the GUI field in the list of  the body_name names in catalog
         for (success = false, i = 0; (i < (wxGetApp().catalog->list.size())) && (!success); i++) {
             if (String(MultipleItemField<P, BodyName, CheckBodyName<P> >::name->GetValue().ToStdString()) == (*(((wxGetApp().catalog->list)[i]).name))) {
                 success = true;
@@ -59,7 +59,7 @@ template<class P> template<class T> void BodyNameField<P>::get(T& event) {
         }
         i--;
 
-        //I set the value of the non-GUI object body to the value obtained from the GUI object.
+        //I set the value of the non-GUI object body_name to the value obtained from the GUI object.
         (*(MultipleItemField<P, BodyName, CheckBodyName<P> >::object)) = (*(((wxGetApp().catalog->list)[i]).name));
 
     }
@@ -78,13 +78,13 @@ template<class P> template<class E> void BodyNameField<P>::OnEdit(E& event) {
     bool success;
 
 
-    //I check whether the name in the GUI field body matches one of the valid body names
+    //I check whether the name in the GUI field body_name matches one of the valid body_name names
     find_and_replace_case_insensitive(MultipleItemField<P, BodyName, CheckBodyName<P> >::name, MultipleItemField<P, BodyName, CheckBodyName<P> >::items, &success, &i);
 
     if (success) {
         //the text entered in name is valid
 
-        //I enable the limb field if and only if the selected body allows for a field and I run check on the existing text in the limb field
+        //I enable the limb field if and only if the selected body_name allows for a field and I run check on the existing text in the limb field
         MultipleItemField<P, BodyName, CheckBodyName<P> >::parent->limb->name->Enable(((MultipleItemField<P, BodyName, CheckBodyName<P> >::items)[i] == wxString("sun")) || ((MultipleItemField<P, BodyName, CheckBodyName<P> >::items)[i] == wxString("moon")));
         (*(MultipleItemField<P, BodyName, CheckBodyName<P> >::parent->limb->check))(event);
 
@@ -94,7 +94,7 @@ template<class P> template<class E> void BodyNameField<P>::OnEdit(E& event) {
 
     }
     else {
-        //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body related to limb is invalid
+        //the text entered in name is not valid: disable parent_frame->limb and set limb->ok to false because the body_name related to limb is invalid
 
         MultipleItemField<P, BodyName, CheckBodyName<P> >::parent->limb->name->Enable(false);
         MultipleItemField<P, BodyName, CheckBodyName<P> >::parent->limb->ok = false;

@@ -330,6 +330,7 @@ template unsigned int position_in_vector<LengthUnit>(LengthUnit, vector<LengthUn
 template unsigned int position_in_vector<RouteType>(RouteType, vector<RouteType, allocator<RouteType> > const&);
 template unsigned int position_in_vector<SpeedUnit>(SpeedUnit, vector<SpeedUnit, allocator<SpeedUnit> > const&);
 template unsigned int position_in_vector<ListControlType>(ListControlType, vector<ListControlType, allocator<ListControlType> > const&);
+template unsigned int position_in_vector<BodyName>(BodyName, vector<BodyName, allocator<BodyName> > const&);
 
 
 //convert element by element a vector whose entries are of type A into a vector whose entries are of type B and return the latter. This make sense if A can be re-casted into B

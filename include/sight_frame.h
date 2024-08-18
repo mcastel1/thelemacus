@@ -49,7 +49,7 @@ public:
     UnsetIdling<SightFrame>* unset_idling;
     PrintMessage<SightFrame, UnsetIdling<SightFrame> >* print_error_message;
     
-    BodyNameField<SightFrame>* body;
+    BodyNameField<SightFrame>* body_name;
     LimbField<SightFrame>* limb;
     CheckField<SightFrame, DynamicLengthField<SightFrame> >* artificial_horizon_check;
     CheckField<SightFrame, ChronoField<SightFrame> >* stopwatch_check;

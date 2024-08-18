@@ -86,7 +86,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
 
     StaticText* text_combo_body = new StaticText(panel, wxT("Celestial body"), wxDefaultPosition, wxDefaultSize, 0);
-    body = new BodyNameField<SightFrame>(panel, (sight->body->name), &(wxGetApp().list_frame->data->recent_bodies));
+    body_name = new BodyNameField<SightFrame>(panel, (sight->body->name), &(wxGetApp().list_frame->data->recent_bodies));
 
     StaticText* text_limb = new StaticText(panel, wxT("Limb"), wxDefaultPosition, wxDefaultSize, 0);
     limb = new LimbField<SightFrame>(panel, &(sight->limb));
@@ -213,7 +213,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Bind(wxEVT_BUTTON, &SightFrame::update_recent_items<wxCommandEvent>, this);
 
     //If I press reduce, I want all the fields in this SightFrame to be checked, and their values to be written in the respective non-GUI objects: to do this, I bind the presssing of reduce button to these functions
-    button_reduce->Bind(wxEVT_BUTTON, &BodyNameField<SightFrame>::get<wxCommandEvent>, body);
+    button_reduce->Bind(wxEVT_BUTTON, &BodyNameField<SightFrame>::get<wxCommandEvent>, body_name);
     button_reduce->Bind(wxEVT_BUTTON, &LimbField<SightFrame>::get<wxCommandEvent>, limb);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, H_s);
     button_reduce->Bind(wxEVT_BUTTON, &AngleField<SightFrame>::get<wxCommandEvent>, index_error);
@@ -228,7 +228,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     //bind the function SightFrame::KeyDown to the event where a keyboard dey is pressed down in panel, body, ... and all fields
     panel->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
-    body->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
+    body_name->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
     limb->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
     H_s->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
     index_error->Bind(wxEVT_KEY_DOWN, &SightFrame::KeyDown, this);
@@ -246,7 +246,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     button_reduce->Enable((sight_in != NULL));
 
     sizer_grid_measurement->Add(text_combo_body);
-    body->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
+    body_name->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
 
     sizer_grid_measurement->Add(text_limb);
     limb->InsertIn<wxFlexGridSizer>(sizer_grid_measurement);
@@ -387,8 +387,8 @@ void SightFrame::KeyDown(wxKeyEvent& event) {
 //run check on all the GUI fields that are members of SightFrame
 template<class E> void SightFrame::Check(E& event) {
 
-    (*(body->check))(event);
-    if (((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon"))) {
+    (*(body_name->check))(event);
+    if (((body_name->name->GetValue()) == wxString("sun")) || ((body_name->name->GetValue()) == wxString("moon"))) {
         //I check limb only if the body has a limb -> only if the body is either sun or moon
         (*(limb->check))(event);
     }
@@ -432,7 +432,7 @@ template<class E> void SightFrame::update_recent_items(E& event) {
 
     //I check whether the name in the GUI field body matches one of the body names in catalog, and store its id in i
     for (check = false, i = 0; (i < (wxGetApp().catalog->list).size()) && (!check); i++) {
-        if (String((body->name->GetValue().ToStdString())) == (*(((wxGetApp().catalog->list)[i]).name))) {
+        if (String((body_name->name->GetValue().ToStdString())) == (*(((wxGetApp().catalog->list)[i]).name))) {
             check = true;
         }
     }
@@ -453,7 +453,11 @@ template<class E> void SightFrame::update_recent_items(E& event) {
 //write into all the non-GUI objects the values of the GUI fields
 template<class T> void SightFrame::get(T& event) {
 
-    body->get(event);
+    //first, obtain the Body name from the GUI field body_name and write it into *(body_name->object) ...
+    body_name->get(event);
+    //... then, set (*(sight->body)) equal to the Body with name *(body_name->object)
+    sight->body->set_from_name((*(body_name->object)));
+    
     limb->get(event);
     artificial_horizon_check->get(event);
     H_s->get(event);
@@ -498,9 +502,9 @@ void SightFrame::set(void) {
 
     //    Time temp;
 
-    body->set();
+    body_name->set();
 
-    if(((body->name)->GetValue() == wxString("sun") || (body->name)->GetValue() == wxString("moon"))) {
+    if(((body_name->name)->GetValue() == wxString("sun") || (body_name->name)->GetValue() == wxString("moon"))) {
         //if  body is sun or moon, then I write the value in the non-GUI field Limb into the GUI LimbField
 
         limb->Enable(true);
@@ -586,8 +590,8 @@ bool SightFrame::is_ok(void) {
     }
     
     return(
-        (body->is_ok()) &&
-        ((!(((body->name->GetValue()) == wxString("sun")) || ((body->name->GetValue()) == wxString("moon")))) || (limb->is_ok())) &&
+        (body_name->is_ok()) &&
+        ((!(((body_name->name->GetValue()) == wxString("sun")) || ((body_name->name->GetValue()) == wxString("moon")))) || (limb->is_ok())) &&
         (H_s->is_ok()) &&
         (index_error->is_ok()) &&
         ((((artificial_horizon_check->checkbox)->GetValue())) || (height_of_eye->is_ok())) &&

@@ -30,7 +30,7 @@ public:
     
     void set(const Catalog&);
     void add(String, String, double);
-    vector<String> get_body_names(void);
+    vector<BodyName> get_body_names(void);
     void print(String, ostream&);
     void read_from_file_to(String, String, String, String);
     template<class S> void read_from_stream(String, S*, bool, String);

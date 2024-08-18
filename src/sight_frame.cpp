@@ -454,6 +454,7 @@ template<class E> void SightFrame::update_recent_items(E& event) {
 template<class T> void SightFrame::get(T& event) {
 
     body_name->get(event);
+    
     limb->get(event);
     artificial_horizon_check->get(event);
     H_s->get(event);

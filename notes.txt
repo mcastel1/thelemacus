@@ -108,6 +108,21 @@
 
 
  ********** THINGS TO FIX ***********
+    - replace 'template<class P> template<class T> void BodyNameField<P>::get(T& event) {
+
+    unsigned int i;
+    bool success;
+
+    if (MultipleItemField<P, BodyName, CheckBodyName<P> >::ok) {
+        //If the GUI field's content is ok...
+
+        //I find the position of the content of the GUI field in the list of  the body_name names in catalog
+        for (success = false, i = 0; (i < (wxGetApp().catalog->list.size())) && (!success); i++) {
+            if (String(MultipleItemField<P, BodyName, CheckBodyName<P> >::name->GetValue().ToStdString()) == (*(((wxGetApp().catalog->list)[i]).name))) {
+                success = true;
+            }
+        }
+        i--;' with position_in_vector(..)
     - when you reduce a star Sight, the circle of equal altitutde is centered on 0, 0 coordinates 
     - the index error must be stored as a recent_value and when the user opens a new SightFrame it should be automatically entered into index_error GUI field
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back

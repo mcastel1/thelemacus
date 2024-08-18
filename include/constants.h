@@ -60,7 +60,7 @@ extern Angle max_lat, min_lat;
 #define Limb_types (vector<String> {String("upper"), String("center"), String("lower")})
 #define LengthFormat_types (vector<String> {String("time and speed"), String("length")})
 #define LengthUnit_types (vector<String> {String("nm"), String("m"), String("ft")})
-#define SpeedUnit_types (vector<String> {String("kt"), String("km/h"), String("m/s")})
+#define SpeedUnit_types (vector<SpeedUnit> {SpeedUnit("kt"), SpeedUnit("km/h"), SpeedUnit("m/s")})
 #define ListControl_types (vector<String> {String("sight"), String("position"), String("route")})
 #define floor_min_lat (floor(rad_to_deg*((min_lat.normalize_pm_pi_ret()).value)))
 #define floor_max_lat (floor(rad_to_deg*((max_lat.normalize_pm_pi_ret()).value)))

@@ -453,7 +453,10 @@ template<class E> void SightFrame::update_recent_items(E& event) {
 //write into all the non-GUI objects the values of the GUI fields
 template<class T> void SightFrame::get(T& event) {
 
+    //first, obtain the Body name from the GUI field body_name and write it into *(body_name->object) ...
     body_name->get(event);
+    //... then, set (*(sight->body)) equal to the Body with name *(body_name->object)
+    sight->body->set_from_name((*(body_name->object)));
     
     limb->get(event);
     artificial_horizon_check->get(event);

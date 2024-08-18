@@ -230,7 +230,7 @@ void Speed::convert_to(const SpeedUnit& output_unit){
     
     
     //2. convert *this to unit output_unit and write the result in *this
-    switch (String(output_unit).position_in_list(SpeedUnit_types)) {
+    switch (position_in_vector(output_unit, SpeedUnit_types)) {
             
         case 0:{
             //output_unit = SpeedUnit_types[0]

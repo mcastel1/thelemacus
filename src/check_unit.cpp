@@ -11,7 +11,7 @@
 #include "sight_frame.h"
 
 
-template<class P, class GUI> CheckUnit<P, GUI>::CheckUnit(GUI* p_in, const vector<String>& unit_types_in) {
+template<class P, class GUI> CheckUnit<P, GUI>::CheckUnit(GUI* p_in, const vector<LengthUnit>& unit_types_in) {
 
     p = p_in;
     unit_types = unit_types_in;

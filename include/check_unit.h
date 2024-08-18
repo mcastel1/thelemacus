@@ -26,7 +26,7 @@ public:
     //the GUI field relative to *this
     GUI* p;
     //a vector of unit types, e.g., LengthUnit_types, which will be used to list the units of measures relative to *this
-    vector<String> unit_types;
+    vector<LengthUnit> unit_types;
     
     CheckUnit(GUI*, const vector<LengthUnit>&);
     template<class T> void operator()(T&);

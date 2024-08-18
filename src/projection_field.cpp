@@ -24,7 +24,7 @@ template<class P> ProjectionField<P>::ProjectionField(
                                                       vector<int>* recent_items_in) : MultipleItemField<P, Projection, void>(
                                                                                                                              panel_of_parent,
                                                                                                                              NULL,
-                                                                                                                             convert_vector<Projection, String>(Projection_types),
+                                                                                                                             Projection_types,
                                                                                                                              recent_items_in) {
 
 

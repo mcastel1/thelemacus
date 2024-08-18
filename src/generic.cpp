@@ -6,6 +6,7 @@
 //
 
 #include "generic.h"
+#include "listcontrol_type.h"
 
 
 #ifdef _WIN32
@@ -328,6 +329,7 @@ template unsigned int position_in_vector<String>(String, vector<String, allocato
 template unsigned int position_in_vector<LengthUnit>(LengthUnit, vector<LengthUnit, allocator<LengthUnit> > const&);
 template unsigned int position_in_vector<RouteType>(RouteType, vector<RouteType, allocator<RouteType> > const&);
 template unsigned int position_in_vector<SpeedUnit>(SpeedUnit, vector<SpeedUnit, allocator<SpeedUnit> > const&);
+template unsigned int position_in_vector<ListControlType>(ListControlType, vector<ListControlType, allocator<ListControlType> > const&);
 
 
 //convert element by element a vector whose entries are of type A into a vector whose entries are of type B and return the latter. This make sense if A can be re-casted into B

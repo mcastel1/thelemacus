@@ -24,7 +24,7 @@ template class CheckUnit<RouteFrame, SpeedUnit, SpeedField<RouteFrame>>;
 
 
 //check the unit in the GUI field in LengthField
-template<class P, class GUI> template <class T> void CheckUnit<P, GUI>::operator()(T& event) {
+template<class P, class NON_GUI_UNIT, class GUI> template <class T> void CheckUnit<P, NON_GUI_UNIT, GUI>::operator()(T& event) {
 
     P* f = (p->parent);
 

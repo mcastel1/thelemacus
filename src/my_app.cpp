@@ -287,9 +287,9 @@ bool MyApp::OnInit() {
     //to build the app on mac
     //            where_am_I(String(""));
     //to develop the app with Xcode on OSX (new MAC)
-    //    root_directory = String("/Users/michele/Documents/sight_reduction_program/");
+    root_directory = String("/Users/michelecastellana/Documents/thelemacus/");
     //to develop the app with Xcode on OSX (old MAC)
-    root_directory = String("/Users/macbookpro/Documents/thelemacus/");
+//    root_directory = String("/Users/macbookpro/Documents/thelemacus/");
 
 #endif
     

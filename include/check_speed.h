@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include "check_unit.h"
+#include "speed_unit.h"
 
 using namespace std;
 

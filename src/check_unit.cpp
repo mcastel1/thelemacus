@@ -18,8 +18,8 @@ template<class P, class GUI> CheckUnit<P, GUI>::CheckUnit(GUI* p_in, const vecto
 
 }
 
-template class CheckUnit<RouteFrame, DynamicLengthField<RouteFrame>>;
-template class CheckUnit<SightFrame, DynamicLengthField<SightFrame>>;
+template class CheckUnit<RouteFrame, LengthUnit, DynamicLengthField<RouteFrame>>;
+template class CheckUnit<SightFrame, LengthUnit, DynamicLengthField<SightFrame>>;
 template class CheckUnit<RouteFrame, SpeedField<RouteFrame>>;
 
 
@@ -70,8 +70,8 @@ template<class P, class GUI> template <class T> void CheckUnit<P, GUI>::operator
 
 }
 
-template void CheckUnit<RouteFrame, DynamicLengthField<RouteFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
-template void CheckUnit<SightFrame, DynamicLengthField<SightFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckUnit<RouteFrame, LengthUnit, DynamicLengthField<RouteFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CheckUnit<SightFrame, LengthUnit, DynamicLengthField<SightFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckUnit<RouteFrame, SpeedUnit, SpeedField<RouteFrame> >::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CheckUnit<RouteFrame, SpeedUnit, SpeedField<RouteFrame> >::operator()<wxFocusEvent>(wxFocusEvent&);
 template void CheckUnit<ChartFrame, LengthUnit, DynamicLengthField<ChartFrame> >::operator()<wxFocusEvent>(wxFocusEvent&);

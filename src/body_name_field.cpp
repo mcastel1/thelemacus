@@ -45,22 +45,11 @@ template void BodyNameField<SightFrame>::set();
 //sets the value in the non-GUI object body_name equal to the value in the GUI  object name
 template<class P> template<class T> void BodyNameField<P>::get(T& event) {
 
-    unsigned int i;
-    bool success;
-
     if (MultipleItemField<P, BodyName, CheckBodyName<P> >::ok) {
         //If the GUI field's content is ok...
-
-        //I find the position of the content of the GUI field in the list of  the body_name names in catalog
-        for (success = false, i = 0; (i < (wxGetApp().catalog->list.size())) && (!success); i++) {
-            if (String(MultipleItemField<P, BodyName, CheckBodyName<P> >::name->GetValue().ToStdString()) == (*(((wxGetApp().catalog->list)[i]).name))) {
-                success = true;
-            }
-        }
-        i--;
-
-        //I set the value of the non-GUI object body_name to the value obtained from the GUI object.
-        (*(MultipleItemField<P, BodyName, CheckBodyName<P> >::object)) = (*(((wxGetApp().catalog->list)[i]).name));
+        
+        //...I set the value of the non-GUI object body_name to the value obtained from the GUI object.
+        (MultipleItemField<P, BodyName, CheckBodyName<P> >::object)->set( (*(((wxGetApp().catalog->list)[(position_in_vector(BodyName(MultipleItemField<P, BodyName, CheckBodyName<P> >::name->GetValue().ToStdString()), wxGetApp().catalog->get_body_names()))]).name)));
 
     }
 

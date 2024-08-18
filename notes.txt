@@ -108,6 +108,7 @@
 
 
  ********** THINGS TO FIX ***********
+    - items in Listcontrols are not highlighted when mouse hovers on ListFrame on New Mac
     - if you zoom on England in the 3d projection with selection rectangle the result is wrong
     - disable the chart drag during the animation that moves the chart 
     - the index error must be stored as a recent_value and when the user opens a new SightFrame it should be automatically entered into index_error GUI field

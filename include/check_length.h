@@ -16,7 +16,7 @@ using namespace std;
 
 template<class P> class DynamicLengthField;
 template<class P> class CheckLengthValue;
-template<class P, class GUI> class CheckUnit;
+template<class P, class NON_GUI_UNIT, class GUI> class CheckUnit;
 
 
 template<class P> class CheckLength{
@@ -26,7 +26,7 @@ public:
     //p is the DynamicLengthField which is parent of the CheckLength object: the CheckLength object checks the validity of the entries in DynamicLengthField
     DynamicLengthField<P>* p;
     CheckLengthValue<P>* check_length_value;
-    CheckUnit<P, DynamicLengthField<P>>* check_length_unit;
+    CheckUnit<P, LengthUnit, DynamicLengthField<P>>* check_length_unit;
     
     CheckLength(DynamicLengthField<P>*);
     template <class T> void operator()(T&);

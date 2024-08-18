@@ -38,7 +38,7 @@ public:
 //    template<class T> void (MultipleItemField::*OnChooseItem)(T&);
 
 
-    MultipleItemField(wxPanel*, NON_GUI*, const vector<String>&, vector<int>*);
+    MultipleItemField(wxPanel*, NON_GUI*, const vector<NON_GUI>&, vector<int>*);
     void FillInRecentItems(void);
     void set(void);
     void set(const NON_GUI&);

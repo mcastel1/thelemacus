@@ -55,7 +55,7 @@ Length::Length(Chrono time, Speed speed) {
     unit = new LengthUnit;
     
     //consider all possible units in which speed is expressed
-    switch (speed.unit->position_in_list(SpeedUnit_types)) {
+    switch (position_in_vector((*(speed.unit)), SpeedUnit_types)) {
             
         case 0: {
             //speed.unit = SpeedUnit_types[0]
@@ -197,7 +197,7 @@ void Length::convert_to(const LengthUnit& output_unit){
 
     
     //1. convert *this to unit LengthUnit_types[0] and write the result in value_in_LengthUnit_types0
-    switch (unit->position_in_list(LengthUnit_types)) {
+    switch (position_in_vector((*unit), LengthUnit_types)) {
             
         case 0:{
             //unit = LengthUnit_types[0]
@@ -230,7 +230,7 @@ void Length::convert_to(const LengthUnit& output_unit){
     
     
     //2. convert *this to unit output_unit and write the result in *this
-    switch (String(output_unit).position_in_list(LengthUnit_types)) {
+    switch (position_in_vector(output_unit, LengthUnit_types)) {
             
         case 0:{
             //output_unit = LengthUnit_types[0]

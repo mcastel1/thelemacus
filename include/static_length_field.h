@@ -32,7 +32,7 @@ public:
     //the length value
     StaticText* value;
     //the GUI field for the unit of measure of *this
-    MultipleItemField<P, LengthUnit, CheckUnit<P, StaticLengthField<P>> >* unit;
+    MultipleItemField<P, LengthUnit, CheckUnit<P, LengthUnit, StaticLengthField<P>> >* unit;
     wxBoxSizer *sizer_h, *sizer_v;
 
     

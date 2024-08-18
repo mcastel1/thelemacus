@@ -58,7 +58,7 @@ extern Angle max_lat, min_lat;
 #define Route_for_transport_types (vector<RouteType> {Route_types[0], Route_types[1]})
 #define Projection_types (vector<Projection> {Projection("Mercator"), Projection("3D")})
 #define Limb_types (vector<String> {String("upper"), String("center"), String("lower")})
-#define LengthFormat_types (vector<String> {String("time and speed"), String("length")})
+#define LengthFormat_types (vector<LengthFormat> {LengthFormat("time and speed"), LengthFormat("length")})
 #define LengthUnit_types (vector<LengthUnit> {LengthUnit("nm"), LengthUnit("m"), LengthUnit("ft")})
 #define SpeedUnit_types (vector<SpeedUnit> {SpeedUnit("kt"), SpeedUnit("km/h"), SpeedUnit("m/s")})
 #define ListControl_types (vector<String> {String("sight"), String("position"), String("route")})

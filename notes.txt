@@ -12,7 +12,7 @@
      - to setup everything on Mac OS (incomplete):
             1. Download and install boost_1_83_0 from https://www.boost.org/users/history/version_1_83_0.html
             2. Download and install gsl (gnu scientifc library) from https://www.gnu.org/software/gsl/
-            3. Download and install wxWidgets
+            3. Download and install wxWidgets from https://www.wxwidgets.org/downloads/
             4. Open  /Applications/wxWidgets-XXX/samples/minimal/minimal_cocoa.xcodeproj/
             * remove minimal.cpp and insert main.cpp, lib.cpp, main.h, lib.h and constants.h in the project.
             * select both app-static and app-dynamic -> add /usr/local/include/gsl/ /usr/local/include/ /Applications/boost_1_83_0/ $(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include/ $(WXROOT)/include/ to 'User header search path' (you need to split this in multiple lines when you add)

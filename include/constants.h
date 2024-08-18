@@ -57,15 +57,15 @@ extern Angle max_lat, min_lat;
 //the type of Routes used to transport a graphical object (i.e., a Position, a Route, etc...)
 #define Route_for_transport_types (vector<RouteType> {Route_types[0], Route_types[1]})
 #define Projection_types (vector<Projection> {Projection("Mercator"), Projection("3D")})
-#define Limb_types (vector<String> {String("upper"), String("center"), String("lower")})
+#define Limb_types (vector<LimbType> {LimbType("upper"), LimbType("center"), LimbType("lower")})
 #define LengthFormat_types (vector<LengthFormat> {LengthFormat("time and speed"), LengthFormat("length")})
 #define LengthUnit_types (vector<LengthUnit> {LengthUnit("nm"), LengthUnit("m"), LengthUnit("ft")})
 #define SpeedUnit_types (vector<SpeedUnit> {SpeedUnit("kt"), SpeedUnit("km/h"), SpeedUnit("m/s")})
-#define ListControl_types (vector<String> {String("sight"), String("position"), String("route")})
-#define floor_min_lat (floor(rad_to_deg*((min_lat.normalize_pm_pi_ret()).value)))
-#define floor_max_lat (floor(rad_to_deg*((max_lat.normalize_pm_pi_ret()).value)))
-#define ceil_min_lat (ceil(rad_to_deg*((min_lat.normalize_pm_pi_ret()).value)))
-#define ceil_max_lat (ceil(rad_to_deg*((max_lat.normalize_pm_pi_ret()).value)))
+#define ListControl_types (vector<ListControlType> {ListControlType("sight"), ListControlType("position"), ListControlType("route")})
+#define floor_min_lat (floor(rad_to_deg*((min_lat.normalize_pm_pi_ret().value))))
+#define floor_max_lat (floor(rad_to_deg*((max_lat.normalize_pm_pi_ret().value))))
+#define ceil_min_lat (ceil(rad_to_deg*((min_lat.normalize_pm_pi_ret().value))))
+#define ceil_max_lat (ceil(rad_to_deg*((max_lat.normalize_pm_pi_ret().value))))
 //latitude span
 #define outfile_precision 16
 //#define wxDEBUG_LEVEL 0

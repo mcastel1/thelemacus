@@ -9,7 +9,7 @@ Data:
 			sextant altitude = 22° 13.39999999999995'
 			index error = 0° 1.9'
 			artificial horizon = n
-			height of eye = 1.0000000000000000 m
+			height of eye = 1.2300000000000000 m
 			master-clock date and hour of sight:
 				date = 2021-07-06
 				hour = 22:48:40
@@ -26,7 +26,7 @@ Data:
 			sextant altitude = 32° 16.80000000000014'
 			index error = 0° 1.9'
 			artificial horizon = n
-			height of eye = 2.0000000000000000 m
+			height of eye = 3.2100000000000000 m
 			master-clock date and hour of sight:
 				date = 2021-07-08
 				hour = 06:56:00
@@ -34,6 +34,22 @@ Data:
 			stopwatch = 00:01:46.83
 			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = Sight was taken at MP
+		Sight #3:
+			body:
+				Type = star
+				Name = spica
+				Right ascension = 201° 17.8999800000013'
+				Declination = 348° 50.32500000000149'
+			sextant altitude = 22° 2.000000000000082'
+			index error = 1° 0.9999999999999946'
+			artificial horizon = n
+			height of eye = 3.2100000000000000 m
+			master-clock date and hour of sight:
+				date = 2024-08-19
+				hour = 15:05:18
+			use of stopwatch = n
+			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = 2024-08-19 15:05:34 UTC+2
 	Routes:
 	Positions:
 		Position #1:
@@ -48,14 +64,14 @@ Data:
 			latitude = 48° 51.30916700000004'
 			longitude = 357° 35.41566699999892'
 			label = My Place (MP)
-Recent bodies = 0 4 12
+Recent bodies = 12 4 0
 Recent projections = 1 0
 Recent length formats = 1 0
 Recent route types = 1 0 2
 Recent route for transport types = 1 0
 Recent length units = 1 0
 Recent speed units = 0 1
-Recent index error = 0° 1.9'
-Recent height of eye value = 1.0000000000000000 m
+Recent index error = 1° 0.9999999999999946'
+Recent height of eye value = 3.2100000000000000 m
 Recent route length value = 1.0000000000000000 nm
 Recent route speed value = 23.0000000000000000 kt

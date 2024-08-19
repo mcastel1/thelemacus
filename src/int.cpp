@@ -173,6 +173,7 @@ template<class S> void Int::read_from_stream([[maybe_unused]] String name, S* in
 }
 
 template void Int::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
+template void Int::read_from_stream< basic_istringstream<char,struct char_traits<char>, allocator<char> > >( String, basic_istringstream<char,struct char_traits<char>, allocator<char> > *,bool, String);
 
 
 //reads from file the content after 'name = ' and writes it into *this.

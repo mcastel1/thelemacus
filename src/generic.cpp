@@ -863,13 +863,13 @@ void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString v, boo
 
     for ((*check) = false, j = 0; (j < v.size()) && (!(*check)); j++) {
 
-        if ((bool)(boost::iequals((control->GetValue()).ToStdString(), (v[j]).ToStdString()))) {
+        //if ((bool)(boost::iequals((control->GetValue()).ToStdString(), (v[j]).ToStdString()))) {
 
-            (*check) = true;
-            //I write in control the proper text value (i.e. with the correct upper/lower case, as taken from the list v)
-            control->SetValue(v[j]);
+        //    (*check) = true;
+        //    //I write in control the proper text value (i.e. with the correct upper/lower case, as taken from the list v)
+        //    control->SetValue(v[j]);
 
-        }
+        //}
 
     }
 

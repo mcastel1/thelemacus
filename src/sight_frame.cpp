@@ -102,7 +102,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     if (sight_in == NULL) {
         sight->index_error.read_from_file_to(String("index error"), (wxGetApp().path_file_init), String("R"), new_prefix);
     }
-    index_error = new AngleField<SightFrame>(panel, &(sight->index_error), String("+-"));
+    index_error = new AngleField<SightFrame>(
+                                             panel,
+                                             &(sight->index_error),
+                                             &(wxGetApp().list_frame->data->recent_index_error),
+                                             String("+-")
+                                             );
 
     //artificial horizon
     StaticText* text_artificial_horizon_check = new StaticText(panel, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0);

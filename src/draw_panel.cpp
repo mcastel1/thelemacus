@@ -3457,10 +3457,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
             if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
 
-//                gsl_vector_memcpy((rp_end_drag.r), (rp.r));
                 rotation_end_drag->set((*rotation));
-//                geo_end_drag.print(String("position end drag"), String(""), cout);
-//                rotation_end_drag.print(String("rotation end drag"), String(""), cout);
 
             }
 

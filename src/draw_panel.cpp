@@ -3369,9 +3369,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 //if the left button of the mouse is pressed, I record its position as the starting position of a (potential) mouse-dragging event
 void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
     
-    if(!(parent->idling)){
-        //*parent is not in idling mode -> I proceed
-        
+    if ((!idling) && (!(parent->idling)) && (!(parent->parent->idling))){
+        //I proceed only if this and its parent and the parent of its parent are not in idling mode
+
         position_start_drag = wxGetMousePosition();
         (this->*ScreenToGeo)(position_start_drag, geo_start_drag);
         
@@ -3405,8 +3405,9 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
 //if the left button of the mouse is released, I record its position as the ending position of a (potential) mouse-dragging event
 void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
     
-    if(!(parent->idling)){
-        
+    if ((!idling) && (!(parent->idling)) && (!(parent->parent->idling))){
+        //I proceed only if this and its parent and the parent of its parent are not in idling mode
+
         SetCursor(*wxCROSS_CURSOR);
         
         //if the mouse left button was previously down because of a dragging event, then the dragging event is now over, and I set mouse_dragging = false;

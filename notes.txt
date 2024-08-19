@@ -74,12 +74,12 @@
                         * in the MS Windows search bar type 'x64' -> 'x64 Native Tools Command Prompt ... ' app will appear -> open it and go to C:\boost_1_66_0
                         * do 'bootstrap.bat'
                         * do 'b2.exe variant=debug link=static runtime-link=static runtime-debugging=on address-model=64 architecture=x86 --with-filesystem --with-date_time'
-                 10. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to  project -> properties -> configuration properties -> VC++ directories ->  include directories, add 'C:\boost_1_83_0' , 'C:\gsl-1.16\' and 'C:\gsl-1.16\gsl'
-                 11. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio-> go to   project ->  minimal properties -> Configuration properties -> VC++ directories -> library directories -> add  'C:\boost_1_83_0\stage\lib'
-                 12. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to project -> configuration properties -> general -> C++ language standard  and set ISO C++20 Standard (/std:c++20)
-                 13. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> go to project -> minimal properties -> configuration properties -> general -> set target name to, say, 'Thelemacus_debug'
                  14. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio:
                      * Go to  project  -> minimal properties -> configuration properties -> linker -> input -> additional dependencies and add C:\gsl-1.16\lib\x64\Debug\gsl.lib and  C:\gsl-1.16\lib\x64\Debug\cblas.lib
+                     * go to  project -> properties -> configuration properties -> VC++ directories ->  include directories, add 'C:\boost_1_83_0' , 'C:\gsl-1.16\' and 'C:\gsl-1.16\gsl'
+                     * go to   project ->  minimal properties -> Configuration properties -> VC++ directories -> library directories -> add  'C:\boost_1_83_0\stage\lib'
+                     * go to project -> configuration properties -> general -> C++ language standard  and set ISO C++20 Standard (/std:c++20)
+                     * go to project -> minimal properties -> configuration properties -> general -> set target name to, say, 'Thelemacus_debug'
                  15. Update the paths of the resource files in resource_file_windows.rc
  - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging
  - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus

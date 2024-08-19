@@ -63,13 +63,20 @@
                           * click on 'gslhdrs' in the right panel and build it
                           * select on 'gsllib' and 'cblaslib' in the right panel and build them
                     * the GSL library will be installed in, say, C:\gsl-1.16\gsl (header files) and in C:\gsl-1.16\lib\x64\Debug\ (lib files)
-                 8: (New Mac): Install boost libary:
+                 8: Install boost libary:
+                    x Potential solution 1:
                         * download boost_1_66_0.zip from https://www.boost.org/users/history/version_1_66_0.html
                         * unzip boost_1_66_0.zip into, say, C:\boost_1_66_0
                         * in the MS Windows search bar type 'x64' -> 'x64 Native Tools Command Prompt ... ' app will appear -> open it and go to C:\boost_1_66_0
                         * do 'bootstrap.bat'
                         * do 'b2.exe variant=debug link=static runtime-link=static runtime-debugging=on address-model=64 architecture=x86 --with-filesystem --with-date_time'
                         * rename, file by file, 'C:\boost_1_66_0\stage\lib\*vc*.lib' -> 'C:\boost_1_66_0\stage\lib\*vc141*.lib'
+                    x Potential solution 2:
+                        * download boost_1_86_0.zip from https://www.boost.org/users/download/
+                        * unzip boost_1_86_0.zip into, say, C:\boost_1_86_0
+                        * in the MS Windows search bar type 'x64' -> 'x64 Native Tools Command Prompt ... ' app will appear -> open it and go to C:\boost_1_86_0
+                        * do 'bootstrap.bat'
+                        * do 'b2.exe variant=debug link=static runtime-link=static runtime-debugging=on --with-filesystem --with-date_time'
                  9. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio:
                      * Go to  project  -> minimal properties -> configuration properties -> linker -> input -> additional dependencies and add C:\gsl-1.16\lib\x64\Debug\gsl.lib and  C:\gsl-1.16\lib\x64\Debug\cblas.lib
                      * go to project -> properties -> configuration properties -> VC++ directories -> include directories, add 'C:\boost_1_66_0' , 'C:\gsl-1.16\' and 'C:\gsl-1.16\gsl' and 'C:\Mac\Home\Documents\thelemacus\include'

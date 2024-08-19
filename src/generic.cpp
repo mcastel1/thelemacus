@@ -594,7 +594,7 @@ template<class S> void read_list_from_stream(String name, S* input_stream, bool 
 }
 
 template void read_list_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, vector<int, allocator<int>>*);
-template void read_list_from_stream<std::__1::basic_istringstream<char, std::__1::char_traits<char>, std::__1::allocator<char>>>(String, std::__1::basic_istringstream<char, std::__1::char_traits<char>, std::__1::allocator<char>>*, bool, std::__1::vector<int, std::__1::allocator<int>>*);
+template void read_list_from_stream<basic_istringstream<char, char_traits<char>, allocator<char>>>(String, basic_istringstream<char, char_traits<char>, allocator<char>>*, bool, vector<int, allocator<int>>*);
 
 
 bool operator < (const Angle& x, const Angle& y) {

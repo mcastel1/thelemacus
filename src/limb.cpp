@@ -53,7 +53,7 @@ template<class S> void Limb::read_from_stream([[maybe_unused]] String name, S* i
 }
 
 template void Limb::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
-template void Limb::read_from_stream<std::__1::basic_istringstream<char, std::__1::char_traits<char>, std::__1::allocator<char>>>(String, std::__1::basic_istringstream<char, std::__1::char_traits<char>, std::__1::allocator<char>>*, bool, String);
+template void Limb::read_from_stream<basic_istringstream<char, char_traits<char>, allocator<char>>>(String, basic_istringstream<char, char_traits<char>, allocator<char>>*, bool, String);
 
 
 void Limb::print(String name, String prefix, ostream& ostr){

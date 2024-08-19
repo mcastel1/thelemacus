@@ -332,7 +332,7 @@ template<class S> bool Sight::read_from_stream([[maybe_unused]] String name, S* 
 }
 
 template bool Sight::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
-template bool Sight::read_from_stream<std::__1::basic_istringstream<char, std::__1::char_traits<char>, std::__1::allocator<char>>>(String, std::__1::basic_istringstream<char, std::__1::char_traits<char>, std::__1::allocator<char>>*, bool, String);
+template bool Sight::read_from_stream<basic_istringstream<char, char_traits<char>, allocator<char>>>(String, basic_istringstream<char, char_traits<char>, allocator<char>>*, bool, String);
 
 
 //compute this->time and returns true if time lies within the data file of NASA JPL ephemerides files, and false otherwise. This function requires that body_name.name is specified: if body_name.name is "", it returns false.

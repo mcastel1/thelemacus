@@ -831,6 +831,8 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
 }
 
 template void Data::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
+template void Data::read_from_stream< basic_istringstream<char,struct char_traits<char>, allocator<char> > >( String, basic_istringstream<char,struct char_traits<char>, allocator<char> > *,bool, String);
+
 
 
 //print recent_items to ostr. Here name is the "[plural name of the item]"  : for example, if I am printing a list of Bodies, name.value = "bodies". This method is used for GUI fields of the format MultipleItemField

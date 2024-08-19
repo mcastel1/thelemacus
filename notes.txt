@@ -63,25 +63,20 @@
                           * click on 'gslhdrs' in the right panel and build it
                           * select on 'gsllib' and 'cblaslib' in the right panel and build them
                     * the GSL library will be installed in, say, C:\gsl-1.16\gsl (header files) and in C:\gsl-1.16\lib\x64\Debug\ (lib files)
-                   
-                 9a. (New Mac): Install boost library :
-                    * download boost_1_83_0.zip (not 84 or later versions!) from https://sourceforge.net/projects/boost/files/boost/1.83.0/boost_1_83_0.zip/download?use_mirror=altushost-swe&use_mirror=altushost-swe&r=https%3A%2F%2Fsourceforge.net%2Fp%2Fboost%2Factivity%2F%3Fpage%3D0%26limit%3D100
-                    * extract boost_1_83_0.zip to, say,  C:\boost_1_83_0
-                    * Open command prompt -> cd into  C:\boost_1_83_0 ->  do 'bootstrap' and 'b2 variant=debug link=static runtime-link=static runtime-debugging=on address-model=64 architecture=x86'
-                 9b: (Old Mac): Install boost libary:
+                 8: (New Mac): Install boost libary:
                         * download boost_1_66_0.zip from https://www.boost.org/users/history/version_1_66_0.html
                         * unzip boost_1_66_0.zip into, say, C:\boost_1_66_0
                         * in the MS Windows search bar type 'x64' -> 'x64 Native Tools Command Prompt ... ' app will appear -> open it and go to C:\boost_1_66_0
                         * do 'bootstrap.bat'
                         * do 'b2.exe variant=debug link=static runtime-link=static runtime-debugging=on address-model=64 architecture=x86 --with-filesystem --with-date_time'
                         * rename, file by file, 'C:\boost_1_66_0\stage\lib\*vc*.lib' -> 'C:\boost_1_66_0\stage\lib\*vc141*.lib'
-                 14. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio:
+                 9. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio:
                      * Go to  project  -> minimal properties -> configuration properties -> linker -> input -> additional dependencies and add C:\gsl-1.16\lib\x64\Debug\gsl.lib and  C:\gsl-1.16\lib\x64\Debug\cblas.lib
                      * go to project -> properties -> configuration properties -> VC++ directories -> include directories, add 'C:\boost_1_66_0' , 'C:\gsl-1.16\' and 'C:\gsl-1.16\gsl' and 'C:\Mac\Home\Documents\thelemacus\include'
                      * go to project -> properties -> Configuration properties -> VC++ directories -> library directories -> add  'C:\boost_1_66_0\stage\lib'
                      * go to project -> properties -> configuration properties -> general -> C++ language standard  and set ISO C++20 Standard (/std:c++20)
                      * go to project -> properties -> configuration properties -> general -> set target name to, say, 'Thelemacus_debug'
-                 15. Update the paths of the resource files in resource_file_windows.rc
+                 10. Update the paths of the resource files in resource_file_windows.rc
  - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging
  - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus
  - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.

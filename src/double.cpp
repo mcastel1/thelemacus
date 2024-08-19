@@ -104,6 +104,8 @@ template<class S> void Double::read_from_stream(String name, S* input_stream, bo
 }
 
 template void Double::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
+template void Double::read_from_stream< basic_istringstream<char,struct char_traits<char>, allocator<char> > >( String, basic_istringstream<char,struct char_traits<char>, allocator<char> > *,bool, String);
+
 
 
 

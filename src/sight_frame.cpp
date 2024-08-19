@@ -113,6 +113,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
                                              &(wxGetApp().list_frame->data->recent_index_error),
                                              String("+-")
                                              );
+    if(sight_in == NULL){
+        //the Sight is a brand new one -> enter the most recent index error so the user does not have to re-type it from scratch
+        index_error->FillInRecentValue();
+    }
 
     //artificial horizon
     StaticText* text_artificial_horizon_check = new StaticText(panel, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0);

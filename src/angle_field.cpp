@@ -470,3 +470,5 @@ template<class P> void AngleField<P>::FillInRecentValue(void) {
     }
         
 }
+
+template void AngleField<SightFrame>::FillInRecentValue();

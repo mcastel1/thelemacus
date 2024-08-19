@@ -9,7 +9,7 @@
  - on APPLE:
     - replace SetMercatorAndNormalize whenever you can
     - the cmd (apple) key corresponds to WXK_CONTROL
-     - to setup everything on Mac OS (incomplete):
+     - to setup everything on Mac OS:
             1. Download and install boost_1_83_0 from https://www.boost.org/users/history/version_1_83_0.html
             2. Download and install gsl (gnu scientifc library) from https://www.gnu.org/software/gsl/
             3. Download and install wxWidgets from https://www.wxwidgets.org/downloads/

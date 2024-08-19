@@ -132,4 +132,3 @@
  on WIN32:
 	- in the mercator projection labels of meridians leave ugly traces when zooming in (horizontal segments)
     - remove odd hotrizontal lines in mercator projection, they occur when you zoom in too fast with the mouse wheel
-

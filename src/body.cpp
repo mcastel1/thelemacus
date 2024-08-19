@@ -83,7 +83,7 @@ template<class S> bool Body::read_from_stream(String name_in, S* input_stream, [
 
 }
 
-template bool Body::read_from_stream<std::__1::basic_istringstream<char, std::__1::char_traits<char>, std::__1::allocator<char>>>(String, std::__1::basic_istringstream<char, std::__1::char_traits<char>, std::__1::allocator<char>>*, bool, String);
+template bool Body::read_from_stream<basic_istringstream<char, char_traits<char>, allocator<char>>>(String, basic_istringstream<char, char_traits<char>, allocator<char>>*, bool, String);
 
 
 //set the *content* (not the memory adresses) of *this equal to the content of input

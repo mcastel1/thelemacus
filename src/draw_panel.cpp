@@ -3368,29 +3368,34 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
 
 //if the left button of the mouse is pressed, I record its position as the starting position of a (potential) mouse-dragging event
 void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
-
-    position_start_drag = wxGetMousePosition();
-    (this->*ScreenToGeo)(position_start_drag, geo_start_drag);
-
-    if (((parent->projection->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
-
-        //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
-        x_min_start_drag = x_min;
-        x_max_start_drag = x_max;
-        y_min_start_drag = y_min;
-        y_max_start_drag = y_max;
-        x_span_start_drag = x_span();
-
-    }
-
-    if (((parent->projection->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
-
-        //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
-        //        gsl_vector_memcpy((rp_start_drag.r), (rp.r));
-        rotation_start_drag->set((*rotation));
-        //        geo_start_drag.print(String("position start drag"), String(""), cout);
-        //        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
-
+    
+    if(!(parent->idling)){
+        //*parent is not in idling mode -> I proceed
+        
+        position_start_drag = wxGetMousePosition();
+        (this->*ScreenToGeo)(position_start_drag, geo_start_drag);
+        
+        if (((parent->projection->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+            
+            //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
+            x_min_start_drag = x_min;
+            x_max_start_drag = x_max;
+            y_min_start_drag = y_min;
+            y_max_start_drag = y_max;
+            x_span_start_drag = x_span();
+            
+        }
+        
+        if (((parent->projection->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
+            
+            //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
+            //        gsl_vector_memcpy((rp_start_drag.r), (rp.r));
+            rotation_start_drag->set((*rotation));
+            //        geo_start_drag.print(String("position start drag"), String(""), cout);
+            //        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
+            
+        }
+        
     }
 
     event.Skip(true);

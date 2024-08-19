@@ -3420,7 +3420,6 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
         (this->*ScreenToGeo)(position_start_drag, geo_end_drag);
 
 
-
         if (((parent->parent->highlighted_route_now) == -1) && (((parent->parent)->highlighted_position_now) == -1)) {
             //I am dragging the chart (not a Route nor  a Position)
 
@@ -3532,12 +3531,11 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
         }
 
-    }
-    else {
+    }else{
         //the left button of the mouse has not been lifted at the end of a drag
 
         //if, when the left button of the mouse was down, the mouse was hovering over a Position, then this position is selectd in listcontrol_positions and highlighted in color
-        if (((parent->parent)->highlighted_position_now) != -1) {
+        if ((parent->parent->highlighted_position_now) != -1) {
 
             //deselect any previously selected item in listcontrol_positions, if any
             parent->parent->listcontrol_positions->DeselectAll();
@@ -3546,10 +3544,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             parent->parent->SetFocus();  // focus on the ListFrame
 
             //select the highlighted position in ListFrame
-            ((parent->parent)->listcontrol_positions)->SetItemState((parent->parent)->highlighted_position_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+            parent->parent->listcontrol_positions->SetItemState((parent->parent)->highlighted_position_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 
             //set the beckgorund color of the Position in listcontrol_positions in ListFrame to the color of selected items
-            ((parent->parent)->listcontrol_positions)->SetItemBackgroundColour((parent->parent)->highlighted_position_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+            parent->parent->listcontrol_positions->SetItemBackgroundColour((parent->parent)->highlighted_position_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
 
         }
 

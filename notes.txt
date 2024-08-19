@@ -79,8 +79,8 @@
                         * do 'b2.exe variant=debug link=static runtime-link=static runtime-debugging=on --with-filesystem --with-date_time'
                  9. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio:
                      * Go to  project  -> minimal properties -> configuration properties -> linker -> input -> additional dependencies and add C:\gsl-1.16\lib\x64\Debug\gsl.lib and  C:\gsl-1.16\lib\x64\Debug\cblas.lib
-                     * go to project -> properties -> configuration properties -> VC++ directories -> include directories, add 'C:\boost_1_66_0' , 'C:\gsl-1.16\' and 'C:\gsl-1.16\gsl' and 'C:\Mac\Home\Documents\thelemacus\include'
-                     * go to project -> properties -> Configuration properties -> VC++ directories -> library directories -> add  'C:\boost_1_66_0\stage\lib'
+                     * go to project -> properties -> configuration properties -> VC++ directories -> include directories, add 'C:\boost_1_xx_0' , 'C:\gsl-1.16\' and 'C:\gsl-1.16\gsl' and 'C:\Mac\Home\Documents\thelemacus\include'
+                     * go to project -> properties -> Configuration properties -> VC++ directories -> library directories -> add  'C:\boost_1_xx_0\stage\lib'
                      * go to project -> properties -> configuration properties -> general -> C++ language standard  and set ISO C++20 Standard (/std:c++20)
                      * go to project -> properties -> configuration properties -> general -> set target name to, say, 'Thelemacus_debug'
                  10. Update the paths of the resource files in resource_file_windows.rc

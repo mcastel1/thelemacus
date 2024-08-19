@@ -78,32 +78,28 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+     - add instrumental error
+     - add readme file
      - add human error in sight frame to account for a systematic human error in estimating the moment when the body touches the horizon
      - add the possibility to add a poisition witch which to compare the distance when entering a sight
      - code method DrawPanel::ProjectionToGeo_3D
      - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
      - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
-     - try  wxDCClipper to quickly delete old image on DrawPanel
      - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things
-     - when you enable / disable a field, enable/disable its wxStaticTexts and wxBoxSizers as well
-     - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things 
-     - add instrumental error
-     - add readme file
+     - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things
      - center name of file in top bar of ListFrame
      - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
      - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
-     - change     highlight_color = color_selected_item and     highlight_font = default_font;
-        with a better  choice
      - add + / - button in chartframe to zoom in / out
-     - add lambert projection and 3D sphere with no projection
-     - add separator between recent items and non-recent items in BodyField->name
-     - set up output to a log file
      - move all constants to the init file , such as  the 0.15 in  'position_plot_area_now = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);'
+     - add lambert projection and 3D sphere with no projection
+     - set up output to a log file
      - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer
      - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
      - move all stuff which is general enough in the code to MyApp class
-     - create a derived class of wxDC and your function MyDrawSpline which exectues DrawSpline only if the number of points is > 1
      - some paralles or meridians in grid in render_mercator contain the same wxPoint iterated many times -> remove them
+     - try  wxDCClipper to quickly delete old image on DrawPanel
+     - add separator between recent items and non-recent items in BodyField->name
 
 
  ********** THINGS TO FIX ***********

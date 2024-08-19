@@ -86,7 +86,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
                 value->GetValue().ToDouble(&(recent_object->value));
                 recent_object->unit->set(String(unit->name->GetValue().ToStdString()));
                 
-                //I update p->name according to the content of recent_itmes
+                //update p->name according to the content of recent_itmes
                 FillInRecentValue();
 
             }

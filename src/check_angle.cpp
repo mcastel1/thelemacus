@@ -22,9 +22,13 @@ template<class P> CheckAngle<P>::CheckAngle(AngleField<P>* p_in) {
     check_arc_minute = new CheckArcMinute<P>(p);
     
     if(p->is_ok()){
+        //p is ok
         
-        //write the value written in *this into *recent_angle
+        //write the value written in *p into *recent_angle
         p->get_to_Angle((p->recent_angle));
+        
+ 
+
         
     }
 

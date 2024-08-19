@@ -187,9 +187,9 @@ template<class P> template <class T> void AngleField<P>::get(T& event) {
 }
 
 // explicit instantiations
-template void AngleField<PositionFrame>::<wxCommandEvent>(wxCommandEvent&);
 template void AngleField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
 template void AngleField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void AngleField<PositionFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 //write into the Angle (non-GUI) *x the values written in the GUI fields sign, deg and min
@@ -246,6 +246,7 @@ template<class P> void AngleField<P>::get_to_Angle(Angle* x){
     
 }
 
+template void AngleField<PositionFrame>::get_to_Angle(Angle*);
 
 
 //sets the value in the GUI objects deg and min equal to the value in the non-GUI Angle object angle
@@ -323,6 +324,9 @@ template<class P> bool AngleField<P>::is_ok(void) {
     return(output);
 
 }
+
+template bool AngleField<PositionFrame>::is_ok();
+
 
 //this function is called every time a keyboard button is lifted in this->sign: it checks whether the text entered so far in this->sign is valid and runs AllOk
 template<class P> template<class E> void AngleField<P>::OnEditSign(E& event) {

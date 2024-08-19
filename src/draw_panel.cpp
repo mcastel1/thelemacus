@@ -3465,8 +3465,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             (parent->dragging_chart) = false;
             (parent->parent->i_object_to_disconnect) = -1;
 
-        }
-        else {
+        }else{
             //I am dragging a Route or Position
 
             int i;
@@ -3541,7 +3540,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
         if (((parent->parent)->highlighted_position_now) != -1) {
 
             //deselect any previously selected item in listcontrol_positions, if any
-            ((parent->parent)->listcontrol_positions)->DeselectAll();
+            parent->parent->listcontrol_positions->DeselectAll();
 
             parent->parent->Raise();  // bring the ListFrame to front
             parent->parent->SetFocus();  // focus on the ListFrame

@@ -3573,8 +3573,6 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value != -1) {
                 //the selected Route is related to a Sight
 
-
-
                 //select the related Sight in ListFrame
                 ((parent->parent)->listcontrol_sights)->SetItemState((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 
@@ -3584,7 +3582,6 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             }
 
         }
-
 
     }
 

@@ -119,7 +119,8 @@
 
 
  ********** THINGS TO FIX ***********
-    - negative angles are not displayed with a '-' in the listcontrols 
+    - put back stuff taht you commented out in 'if ((bool)(boost::iequals((control->GetValue()).ToStdString(), (v[j]).ToStdString()))) {'
+    - negative angles are not displayed with a '-' in the listcontrols
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame on New Mac
     - if you zoom on England in the 3d projection with selection rectangle the result is wrong
     - the index error must be stored as a recent_value and when the user opens a new SightFrame it should be automatically entered into index_error GUI field

@@ -864,6 +864,7 @@ void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString v, boo
 
     for ((*check) = false, j = 0; (j < v.size()) && (!(*check)); j++) {
 
+        //put back this - start
         //if ((bool)(boost::iequals((control->GetValue()).ToStdString(), (v[j]).ToStdString()))) {
 
         //    (*check) = true;
@@ -871,6 +872,7 @@ void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString v, boo
         //    control->SetValue(v[j]);
 
         //}
+        //put back this -end 
 
     }
 

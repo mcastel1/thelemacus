@@ -122,7 +122,6 @@
 
 
  ********** THINGS TO FIX ***********
-    - put back stuff taht you commented out in 'if ((bool)(boost::iequals((control->GetValue()).ToStdString(), (v[j]).ToStdString()))) {'
     - negative angles are not displayed with a '-' in the listcontrols
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame on New Mac
     - if you zoom on England in the 3d projection with selection rectangle the result is wrong

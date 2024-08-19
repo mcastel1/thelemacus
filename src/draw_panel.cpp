@@ -3555,20 +3555,20 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
         if ((parent->parent->highlighted_route_now) != -1) {
 
             //deselect any previously selected item in listcontrol_routes, if any
-            ((parent->parent)->listcontrol_routes)->DeselectAll();
+            parent->parent->listcontrol_routes->DeselectAll();
 
             //deselect any previously selected item in listcontrol_sights, if any, to clear up things for the user and show only the selected Route in ListFrames
-            ((parent->parent)->listcontrol_sights)->DeselectAll();
+            parent->parent->listcontrol_sights->DeselectAll();
 
 
             parent->parent->Raise();  // bring the ListFrame to front
             parent->parent->SetFocus();  // focus on the ListFrame
 
             //select the highlighted Route in ListFrame
-            ((parent->parent)->listcontrol_routes)->SetItemState((parent->parent)->highlighted_route_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+            parent->parent->listcontrol_routes->SetItemState((parent->parent)->highlighted_route_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 
             //set the beckgorund color of the Route in listcontrol_routes in ListFrame to the color of selected items
-            ((parent->parent)->listcontrol_routes)->SetItemBackgroundColour((parent->parent)->highlighted_route_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+            parent->parent->listcontrol_routes->SetItemBackgroundColour(parent->parent->highlighted_route_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
 
             if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value != -1) {
                 //the selected Route is related to a Sight

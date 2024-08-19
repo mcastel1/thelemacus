@@ -171,6 +171,11 @@ template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p,
 
 }
 
+// explicit instantiations
+template class AngleField<PositionFrame>;
+template class AngleField<RouteFrame>;
+template class AngleField<SightFrame>;
+
 
 //writes to the non-GUI field angle the values written in the GUI fields sign, deg and min
 template<class P> template <class T> void AngleField<P>::get(T& event) {
@@ -284,6 +289,11 @@ template <class P> void AngleField<P>::set(void) {
     min_ok = true;
 
 }
+
+template void AngleField<RouteFrame>::set();
+template void AngleField<SightFrame>::set();
+template void AngleField<PositionFrame>::set();
+
 
 //checks whether the contents of the GUI fiels in AngleField are valid
 template<class P> bool AngleField<P>::is_ok(void) {
@@ -420,6 +430,8 @@ template<class P> void AngleField<P>::Enable(bool is_enabled) {
 
 }
 
+template void AngleField<RouteFrame>::Enable(bool);
+
 
 template<class P> template<class T> void AngleField<P>::InsertIn(T* host) {
 
@@ -433,7 +445,14 @@ template void AngleField<SightFrame>::InsertIn<wxBoxSizer>(wxBoxSizer*);
 template void  AngleField<SightFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 
 
-// explicit instantiations
-template class AngleField<PositionFrame>;
-template class AngleField<RouteFrame>;
-template class AngleField<SightFrame>;
+
+//if recent_angle != NULL, update the value of the GUI in AngleField according to recent_angle in such a way that the recent value appears in the GUI field
+template<class P> void AngleField<P>::FillInRecentValue(void) {
+   
+    //write *recent_angle into the non-GUI Angle field *angle
+    angle->set((*recent_angle));
+    
+    //write the value of *object into the GUI field *this
+    set();
+        
+}

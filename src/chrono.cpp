@@ -163,6 +163,8 @@ template<class S> bool Chrono::read_from_stream([[maybe_unused]] String name, S*
 }
 
 template bool Chrono::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
+template bool Chrono::read_from_stream< basic_istringstream<char,struct char_traits<char>, allocator<char> > >( String, basic_istringstream<char,struct char_traits<char>, allocator<char> > *,bool, String);
+
 
 
 //reads from file the content after 'name = ' and writes it into *this.

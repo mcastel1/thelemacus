@@ -177,14 +177,29 @@ template class AngleField<RouteFrame>;
 template class AngleField<SightFrame>;
 
 
-//writes into the non-GUI field angle the values written in the GUI fields sign, deg and min
+//writes into the Angle (non-GUI) angle the values written in the GUI fields sign, deg and min
 template<class P> template <class T> void AngleField<P>::get(T& event) {
 
-    if (is_ok()) {
+    get_to_Angle(angle);
 
+    event.Skip(true);
+
+}
+
+// explicit instantiations
+template void AngleField<PositionFrame>::<wxCommandEvent>(wxCommandEvent&);
+template void AngleField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
+template void AngleField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
+
+
+//write into the Angle (non-GUI) *x the values written in the GUI fields sign, deg and min
+template<class P> void AngleField<P>::get_to_Angle(Angle* x){
+    
+    if (is_ok()) {
 
         double min_temp;
         char c;
+        
 
         //set a value to c to avoid uninitialized-variable warning
         c = ' ';
@@ -224,20 +239,12 @@ template<class P> template <class T> void AngleField<P>::get(T& event) {
 
         }
 
-
         min->GetValue().ToDouble(&min_temp);
-        angle->from_sign_deg_min(c, wxAtoi(deg->GetValue()), min_temp);
+        x->from_sign_deg_min(c, wxAtoi(deg->GetValue()), min_temp);
 
     }
-
-    event.Skip(true);
-
+    
 }
-
-// explicit instantiations
-template void AngleField<PositionFrame>::   <wxCommandEvent>(wxCommandEvent&);
-template void AngleField<RouteFrame>::get<wxCommandEvent>(wxCommandEvent&);
-template void AngleField<SightFrame>::get<wxCommandEvent>(wxCommandEvent&);
 
 
 

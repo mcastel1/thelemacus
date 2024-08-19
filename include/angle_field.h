@@ -57,6 +57,7 @@ public:
     void Enable(bool);
     void set(void);
     template<class T> void get(T&);
+    void get_to_Angle(Angle*);
     template<class T> void InsertIn(T*);
     bool is_ok(void);
     template<class E> void OnEditSign(E&);

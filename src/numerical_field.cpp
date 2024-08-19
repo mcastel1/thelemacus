@@ -80,14 +80,14 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
             //the GUI field  contains a valid text, or it is empty and with a white background color, i.e., virgin -> I don't call an error message frame
 
             if (is_ok()) {
-                //the content of the GUI field is valid  -> I insert it into recent_object, which points to a suitable location (initialized when *this was constructed)
+                //the content of the GUI field is valid  -> I write it it into recent_object, which points to a suitable location (initialized when *this was constructed)
 
                 //write the value written in *this into *recent_object
                 value->GetValue().ToDouble(&(recent_object->value));
                 recent_object->unit->set(String(unit->name->GetValue().ToStdString()));
                 
-                //I update p->name according to the content of recent_itmes
-                FillInRecentValue();
+                //update p->name according to the content of recent_itmes
+//                FillInRecentValue();
 
             }
 
@@ -161,6 +161,8 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 }
 
 template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthUnit, DynamicLengthField<SightFrame> > >::FillInRecentValue();
+template void NumericalField<RouteFrame, Speed, SpeedUnit, CheckSpeed<RouteFrame>, CheckUnit<RouteFrame, SpeedUnit, SpeedField<RouteFrame>>>::FillInRecentValue();
+template void NumericalField<RouteFrame, Length, LengthUnit, CheckLength<RouteFrame>, CheckUnit<RouteFrame, LengthUnit, DynamicLengthField<RouteFrame>>>::FillInRecentValue();
 
 
 //update the value of the GUI  in NumericalField according to NuericalField<P, NON_GUI>::recent_value in such a way that the recent value appears in the GUI field

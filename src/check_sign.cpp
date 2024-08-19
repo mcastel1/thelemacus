@@ -66,6 +66,7 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
                 //the background color is set to white, because in this case there is no erroneous value in sign
                 p->sign->SetForegroundColour(wxGetApp().foreground_color);
                 p->sign->SetFont(wxGetApp().default_font);
+                
             }
 
         }
@@ -75,7 +76,15 @@ template<class P> template <class T> void CheckSign<P>::operator()(T& event) {
             (p->sign_ok) = false;
 
         }
-
+        
+        //if p is valid and p->recent_angle is not NULL, I write the content of the GUI field p into the non-GUI field *recent_angle so this content will be stored for the next time the user uses p
+        if((p->is_ok()) && ((p->recent_angle) != NULL)){
+            
+            //write the value written in *p into *recent_angle
+            p->get_to_Angle((p->recent_angle));
+  
+        }
+        
         f->AllOk();
 
     }

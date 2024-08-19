@@ -94,7 +94,12 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     //sextant altitude
     StaticText* text_H_s = new StaticText(panel, wxT("Sextant altitude"), wxDefaultPosition, wxDefaultSize, 0);
-    H_s = new AngleField<SightFrame>(panel, &(sight->H_s), String(""));
+    H_s = new AngleField<SightFrame>(
+                                     panel,
+                                     &(sight->H_s),
+                                     NULL,
+                                     String("")
+                                     );
 
     //index error
     StaticText* text_index_error = new StaticText(panel, wxT("Index error"), wxDefaultPosition, wxDefaultSize, 0);
@@ -102,7 +107,16 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     if (sight_in == NULL) {
         sight->index_error.read_from_file_to(String("index error"), (wxGetApp().path_file_init), String("R"), new_prefix);
     }
-    index_error = new AngleField<SightFrame>(panel, &(sight->index_error), String("+-"));
+    index_error = new AngleField<SightFrame>(
+                                             panel,
+                                             &(sight->index_error),
+                                             &(wxGetApp().list_frame->data->recent_index_error),
+                                             String("+-")
+                                             );
+    if(sight_in == NULL){
+        //the Sight is a brand new one -> enter the most recent index error so the user does not have to re-type it from scratch
+        index_error->FillInRecentValue();
+    }
 
     //artificial horizon
     StaticText* text_artificial_horizon_check = new StaticText(panel, wxT("Artificial horizon"), wxDefaultPosition, wxDefaultSize, 0);
@@ -116,6 +130,10 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
                                                        &(wxGetApp().list_frame->data->recent_height_of_eye_value),
                                                        &(wxGetApp().list_frame->data->recent_length_units)
                                                        );
+    if(sight_in == NULL){
+        //the Sight is a brand new one -> enter the most recent height of eye so the user does not have to re-type it from scratch
+        height_of_eye->FillInRecentValue();
+    }
     
     //this is how to properly bind the DynamicLengthField height_of_eye when it is inserted into a frame and I want a modification of the DynamicLengthField to trigger AllOk() in the frame. Given that I am including height_of_eye in a frame, I want that every time value or unit is changed, SightFrame::AllOk() is triggered : 1. I first bind OnEditValue and OnEditUnit to height_of_eye->value and height_of_eye->unit 2. every time height_of_eye is changed, OnEditValue and OnEditUnit will be called and set to true/false the value_ok and unit_ok variables 3. AllOk() will be called later, read the value_ok and unit_ok variables, and enable/disable button_reduce  accordingly
     height_of_eye->Bind(wxEVT_COMBOBOX, &SightFrame::AllOk<wxCommandEvent>, this);
@@ -189,7 +207,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
 
     //initialize stopwatch_check and stopwatch_reading
-    (stopwatch_check->checkbox)->SetValue(false);
+    stopwatch_check->checkbox->SetValue(false);
     stopwatch_reading->Enable(false);
 
     StaticText* text_TAI_minus_UTC = new StaticText(panel, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0);

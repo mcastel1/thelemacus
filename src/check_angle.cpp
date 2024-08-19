@@ -7,6 +7,7 @@
 
 #include "check_angle.h"
 
+#include "angle.h"
 #include "position_frame.h"
 #include "route_frame.h"
 #include "sight_frame.h"
@@ -31,9 +32,7 @@ template class CheckAngle<SightFrame>;
 //this functor checks the whole angle field by calling the check on its sign, arcdegree and arcminute parts‰
 template<class P> template <class T> void CheckAngle<P>::operator()(T& event) {
 
-    //    if((p->format) != String("")){
     (*check_sign)(event);
-    //    }
     (*check_arc_degree)(event);
     (*check_arc_minute)(event);
 

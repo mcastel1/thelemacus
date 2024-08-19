@@ -22,14 +22,15 @@
 
 
 
-//constructor of an AngleField object, based on the parent frame 'frame'. Here format_in is the format of the angle
-template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p, String format_in) {
+//constructor of an AngleField object, based on the parent frame 'frame'. Here format_in is the format of the angle and recent_angle_in is the memory adress of the Angle where the most recent value of *this is stored
+template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p, Angle* recent_angle_in, String format_in) {
 
     unsigned int i;
     
     
     parent = ((P*)(panel_of_parent->GetParent()));
     angle = p;
+    recent_angle = recent_angle_in;
 
     format = format_in;
 

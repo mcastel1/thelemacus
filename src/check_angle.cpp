@@ -24,7 +24,7 @@ template<class P> CheckAngle<P>::CheckAngle(AngleField<P>* p_in) {
     if(p->is_ok()){
         
         //write the value written in *this into *recent_angle
-        p->recent_angle->
+        p->get_to_Angle((p->recent_angle));
         
     }
 

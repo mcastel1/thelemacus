@@ -199,7 +199,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
 
     //initialize stopwatch_check and stopwatch_reading
-    (stopwatch_check->checkbox)->SetValue(false);
+    stopwatch_check->checkbox->SetValue(false);
     stopwatch_reading->Enable(false);
 
     StaticText* text_TAI_minus_UTC = new StaticText(panel, wxT("TAI - UTC"), wxDefaultPosition, wxDefaultSize, 0);

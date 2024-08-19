@@ -3843,7 +3843,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
 //this function is called whenever mouse is dragged on *this
 void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
     
-    if ((!idling) && (!(parent->idling)) && (!(parent->parent->idling))) {
+    if ((!idling) && (!(parent->idling)) && (!(parent->parent->idling))){
         //I proceed only if this and its parent and the parent of its parent are not in idling mode
         
         if (wxGetMouseState().LeftIsDown()) {

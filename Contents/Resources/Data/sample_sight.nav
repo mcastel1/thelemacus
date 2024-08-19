@@ -48,14 +48,14 @@ Data:
 			latitude = 48° 51.30916700000004'
 			longitude = 357° 35.41566699999892'
 			label = My Place (MP)
-Recent bodies = 0 4 12
+Recent bodies = 4 0 12
 Recent projections = 1 0
 Recent length formats = 1 0
 Recent route types = 1 0 2
 Recent route for transport types = 1 0
-Recent length units = 0 1
+Recent length units = 1 0
 Recent speed units = 0 1
 Recent index error = 0° 1.9'
-Recent height of eye value = 2.0000000000000000 m
+Recent height of eye value = 1.0000000000000000 m
 Recent route length value = 1.0000000000000000 nm
 Recent route speed value = 23.0000000000000000 kt

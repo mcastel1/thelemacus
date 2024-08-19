@@ -26,6 +26,8 @@
 template <class P> AngleField<P>::AngleField(wxPanel* panel_of_parent, Angle* p, String format_in) {
 
     unsigned int i;
+    
+    
     parent = ((P*)(panel_of_parent->GetParent()));
     angle = p;
 

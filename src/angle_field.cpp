@@ -177,7 +177,7 @@ template class AngleField<RouteFrame>;
 template class AngleField<SightFrame>;
 
 
-//writes to the non-GUI field angle the values written in the GUI fields sign, deg and min
+//writes into the non-GUI field angle the values written in the GUI fields sign, deg and min
 template<class P> template <class T> void AngleField<P>::get(T& event) {
 
     if (is_ok()) {
@@ -225,8 +225,7 @@ template<class P> template <class T> void AngleField<P>::get(T& event) {
         }
 
 
-        (min->GetValue()).ToDouble(&min_temp);
-
+        min->GetValue().ToDouble(&min_temp);
         angle->from_sign_deg_min(c, wxAtoi(deg->GetValue()), min_temp);
 
     }

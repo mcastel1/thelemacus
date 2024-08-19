@@ -259,6 +259,3 @@ void Rotation::read_from_file_to(String name, String filename, String mode, [[ma
     read_from_file<Rotation>(this, name, filename, mode, prefix);
 
 }
-
-
-

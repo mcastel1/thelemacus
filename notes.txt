@@ -60,6 +60,7 @@
                         - open  C:\gsl-1.16\gsl.lib.sln with Visual Studio
                           * go to project -> properties -> C/C++ -> code generation -> runtime library -> select 'Multi-threaded Debug (/MTd)'
                           * go to project -> properties -> configuration properties -> VC++ directories -> include directories -> add 'C:\gsl-1.16\'
+                          * click on 'gslhdrs' in the right panel and build it
                     * the GSL library will be installed in, say, C:\gsl-1.16\gsl (header files) and in C:\gsl-1.16\lib\x64\Debug\ (lib files)
                  8. Open C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln with Visual Studio -> Add C:\gsl-1.16\lib\x64\Debug\gsl.lib and  C:\gsl-1.16\lib\x64\Debug\cblas.lib to  -> project  -> minimal properties -> configuration properties -> linker -> input -> additional dependencies
                  9a. (New Mac): Install boost library : download boost_1_83_0.zip (not 84 or later versions!) from https://sourceforge.net/projects/boost/files/boost/1.83.0/boost_1_83_0.zip/download?use_mirror=altushost-swe&use_mirror=altushost-swe&r=https%3A%2F%2Fsourceforge.net%2Fp%2Fboost%2Factivity%2F%3Fpage%3D0%26limit%3D100 -> extract boost_1_83_0.zip to, say,  C:\boost_1_83_0 -> Open command prompt -> cd into  C:\boost_1_83_0 ->  do 'bootstrap' and 'b2 variant=debug link=static runtime-link=static runtime-debugging=on address-model=64 architecture=x86'

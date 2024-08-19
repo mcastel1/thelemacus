@@ -3404,185 +3404,189 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
 
 //if the left button of the mouse is released, I record its position as the ending position of a (potential) mouse-dragging event
 void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
-
-    SetCursor(*wxCROSS_CURSOR);
-
-    //if the mouse left button was previously down because of a dragging event, then the dragging event is now over, and I set mouse_dragging = false;
-    if (mouse_dragging) {
-        //the left button of the mouse has been lifted at the end of a drag
-
-        mouse_dragging = false;
-        //given that the mosue drag has ended, I re-bind OnMoueMOvement to the mouse motion event
-        this->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
-
-
-        position_end_drag = wxGetMousePosition();
-        (this->*ScreenToGeo)(position_start_drag, geo_end_drag);
-
-
-        if (((parent->parent->highlighted_route_now) == -1) && (((parent->parent)->highlighted_position_now) == -1)) {
-            //I am dragging the chart (not a Route nor  a Position)
-
-            if ((parent->projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
-                //I am using the Mercator projection
-
-                double delta_y;
-                PositionProjection p_ceil_min, p_floor_max;
-
-                delta_y = ((double)((position_end_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
-
-                (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
-                (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
-
-
-                if ((!((y_max + delta_y < (p_floor_max.y)) && (y_min + delta_y > (p_ceil_min.y))))) {
-                    //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset y_min, y_max to their original values
-
-                    //                    x_min = x_min_start_drag;
-                    //                    x_max = x_max_start_drag;
-                    y_min = y_min_start_drag;
-                    y_max = y_max_start_drag;
-
-                    (this->*Set_lambda_phi_min_max)();
-
-                    //re-draw the chart
-                    (this->*PreRender)();
-                    Refresh();
-                    FitAll();
-
+    
+    if(!(parent->idling)){
+        
+        SetCursor(*wxCROSS_CURSOR);
+        
+        //if the mouse left button was previously down because of a dragging event, then the dragging event is now over, and I set mouse_dragging = false;
+        if (mouse_dragging) {
+            //the left button of the mouse has been lifted at the end of a drag
+            
+            mouse_dragging = false;
+            //given that the mosue drag has ended, I re-bind OnMoueMOvement to the mouse motion event
+            this->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
+            
+            
+            position_end_drag = wxGetMousePosition();
+            (this->*ScreenToGeo)(position_start_drag, geo_end_drag);
+            
+            
+            if (((parent->parent->highlighted_route_now) == -1) && (((parent->parent)->highlighted_position_now) == -1)) {
+                //I am dragging the chart (not a Route nor  a Position)
+                
+                if ((parent->projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
+                    //I am using the Mercator projection
+                    
+                    double delta_y;
+                    PositionProjection p_ceil_min, p_floor_max;
+                    
+                    delta_y = ((double)((position_end_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
+                    
+                    (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
+                    (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
+                    
+                    
+                    if ((!((y_max + delta_y < (p_floor_max.y)) && (y_min + delta_y > (p_ceil_min.y))))) {
+                        //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset y_min, y_max to their original values
+                        
+                        //                    x_min = x_min_start_drag;
+                        //                    x_max = x_max_start_drag;
+                        y_min = y_min_start_drag;
+                        y_max = y_max_start_drag;
+                        
+                        (this->*Set_lambda_phi_min_max)();
+                        
+                        //re-draw the chart
+                        (this->*PreRender)();
+                        Refresh();
+                        FitAll();
+                        
+                    }
+                    
                 }
-
-            }
-
-            if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
-
-                rotation_end_drag->set((*rotation));
-
-            }
-
-            //the drag operation has ended -> I set
-            (parent->dragging_chart) = false;
-            (parent->parent->i_object_to_disconnect) = -1;
-
-        }else{
-            //I am dragging a Route or Position
-
-            int i;
-
-            //given that the drag is finished, I set to empty label_dragged_object for all ChartFrames
-            for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-                ((parent->parent->chart_frames[i])->draw_panel->label_dragged_object_now) = String("");
-            }
-
+                
+                if ((((parent->projection)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
+                    
+                    rotation_end_drag->set((*rotation));
+                    
+                }
+                
+                //the drag operation has ended -> I set
+                (parent->dragging_chart) = false;
+                (parent->parent->i_object_to_disconnect) = -1;
+                
+            }else{
+                //I am dragging a Route or Position
+                
+                int i;
+                
+                //given that the drag is finished, I set to empty label_dragged_object for all ChartFrames
+                for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
+                    ((parent->parent->chart_frames[i])->draw_panel->label_dragged_object_now) = String("");
+                }
+                
 #ifdef __APPLE__
-
-            parent->parent->RefreshAll();
-
+                
+                parent->parent->RefreshAll();
+                
 #endif
-
+                
 #ifdef WIN32
-
-
-            for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-                (parent->parent->chart_frames[i])->draw_panel->RefreshWIN32();
-            }
-
+                
+                
+                for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
+                    (parent->parent->chart_frames[i])->draw_panel->RefreshWIN32();
+                }
+                
 #endif
-
-            (parent->parent->dragging_object) = false;
-
-
-            if (!(((((draw_panel_origin.x) + (position_plot_area_now.x) < (position_end_drag.x)) && ((position_end_drag.x) < (draw_panel_origin.x) + (position_plot_area_now.x) + (size_plot_area.GetWidth()))) &&
-                (((draw_panel_origin.y) + (position_plot_area_now.y) < (position_end_drag.y)) && ((position_end_drag.y) < (draw_panel_origin.y) + (position_plot_area_now.y) + (size_plot_area.GetHeight())))))) {
-                // drag_end_position lies out the plot area
-
-                if ((parent->parent->highlighted_route_now) != -1) {
-                    //I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
-
-                    (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position)) = (*route_reference_position_drag_start);
-
-                    TabulateRoutes();
-                    Refresh();
-                    FitAll();
-
-                    print_error_message->SetAndCall(NULL, String("Error"), String("Route ground or start position outside plot area! Route start or start position must lie within the plot area."), (wxGetApp().path_file_error_icon));
-
+                
+                (parent->parent->dragging_object) = false;
+                
+                
+                if (!(((((draw_panel_origin.x) + (position_plot_area_now.x) < (position_end_drag.x)) && ((position_end_drag.x) < (draw_panel_origin.x) + (position_plot_area_now.x) + (size_plot_area.GetWidth()))) &&
+                       (((draw_panel_origin.y) + (position_plot_area_now.y) < (position_end_drag.y)) && ((position_end_drag.y) < (draw_panel_origin.y) + (position_plot_area_now.y) + (size_plot_area.GetHeight())))))) {
+                    // drag_end_position lies out the plot area
+                    
+                    if ((parent->parent->highlighted_route_now) != -1) {
+                        //I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
+                        
+                        (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position)) = (*route_reference_position_drag_start);
+                        
+                        TabulateRoutes();
+                        Refresh();
+                        FitAll();
+                        
+                        print_error_message->SetAndCall(NULL, String("Error"), String("Route ground or start position outside plot area! Route start or start position must lie within the plot area."), (wxGetApp().path_file_error_icon));
+                        
+                    }
+                    
+                    if ((((parent->parent)->highlighted_position_now) != -1)) {
+                        // I am dragging a Position: I restore the position under consideration to its value at the beginning of the drag
+                        
+                        //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
+                        (this->*ScreenToGeo)(position_start_drag, &((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]));
+                        
+                        
+                        //update the coordinates of the Position under consideration in listcontrol_positions
+                        ((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]).update_wxListCtrl(((parent->parent)->highlighted_position_now), (parent->parent)->listcontrol_positions);
+                        
+                        //given that the position under consideration has changed, I re-pain the chart
+                        Refresh();
+                        FitAll();
+                        
+                        print_error_message->SetAndCall(NULL, String("Error"), String("Position outside plot area! The position must lie within the plot area."), (wxGetApp().path_file_error_icon));
+                        
+                    }
+                    
                 }
-
-                if ((((parent->parent)->highlighted_position_now) != -1)) {
-                    // I am dragging a Position: I restore the position under consideration to its value at the beginning of the drag
-
-                    //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
-                    (this->*ScreenToGeo)(position_start_drag, &((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]));
-
-
-                    //update the coordinates of the Position under consideration in listcontrol_positions
-                    ((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]).update_wxListCtrl(((parent->parent)->highlighted_position_now), (parent->parent)->listcontrol_positions);
-
-                    //given that the position under consideration has changed, I re-pain the chart
-                    Refresh();
-                    FitAll();
-
-                    print_error_message->SetAndCall(NULL, String("Error"), String("Position outside plot area! The position must lie within the plot area."), (wxGetApp().path_file_error_icon));
-
+                
+            }
+            
+        }else{
+            //the left button of the mouse has not been lifted at the end of a drag
+            
+            //if, when the left button of the mouse was down, the mouse was hovering over a Position, then this position is selectd in listcontrol_positions and highlighted in color
+            if ((parent->parent->highlighted_position_now) != -1) {
+                
+                //deselect any previously selected item in listcontrol_positions, if any
+                parent->parent->listcontrol_positions->DeselectAll();
+                
+                parent->parent->Raise();  // bring the ListFrame to front
+                parent->parent->SetFocus();  // focus on the ListFrame
+                
+                //select the highlighted position in ListFrame
+                parent->parent->listcontrol_positions->SetItemState((parent->parent)->highlighted_position_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                
+                //set the beckgorund color of the Position in listcontrol_positions in ListFrame to the color of selected items
+                parent->parent->listcontrol_positions->SetItemBackgroundColour((parent->parent)->highlighted_position_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                
+            }
+            
+            //if, when the left button of the mouse was down, the mouse was hovering over a Route, then this Route and the related Sight (if any) is selectd in listcontrol_routes and listcontrol_sights, respectively, and highlighted in color
+            if ((parent->parent->highlighted_route_now) != -1) {
+                
+                //deselect any previously selected item in listcontrol_routes, if any
+                parent->parent->listcontrol_routes->DeselectAll();
+                
+                //deselect any previously selected item in listcontrol_sights, if any, to clear up things for the user and show only the selected Route in ListFrames
+                parent->parent->listcontrol_sights->DeselectAll();
+                
+                
+                parent->parent->Raise();  // bring the ListFrame to front
+                parent->parent->SetFocus();  // focus on the ListFrame
+                
+                //select the highlighted Route in ListFrame
+                parent->parent->listcontrol_routes->SetItemState((parent->parent)->highlighted_route_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                
+                //set the beckgorund color of the Route in listcontrol_routes in ListFrame to the color of selected items
+                parent->parent->listcontrol_routes->SetItemBackgroundColour(parent->parent->highlighted_route_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                
+                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value != -1) {
+                    //the selected Route is related to a Sight
+                    
+                    //select the related Sight in ListFrame
+                    ((parent->parent)->listcontrol_sights)->SetItemState((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                    
+                    //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
+                    parent->parent->listcontrol_sights->SetItemBackgroundColour((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                    
                 }
-
+                
             }
-
+            
         }
-
-    }else{
-        //the left button of the mouse has not been lifted at the end of a drag
-
-        //if, when the left button of the mouse was down, the mouse was hovering over a Position, then this position is selectd in listcontrol_positions and highlighted in color
-        if ((parent->parent->highlighted_position_now) != -1) {
-
-            //deselect any previously selected item in listcontrol_positions, if any
-            parent->parent->listcontrol_positions->DeselectAll();
-
-            parent->parent->Raise();  // bring the ListFrame to front
-            parent->parent->SetFocus();  // focus on the ListFrame
-
-            //select the highlighted position in ListFrame
-            parent->parent->listcontrol_positions->SetItemState((parent->parent)->highlighted_position_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
-
-            //set the beckgorund color of the Position in listcontrol_positions in ListFrame to the color of selected items
-            parent->parent->listcontrol_positions->SetItemBackgroundColour((parent->parent)->highlighted_position_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-
-        }
-
-        //if, when the left button of the mouse was down, the mouse was hovering over a Route, then this Route and the related Sight (if any) is selectd in listcontrol_routes and listcontrol_sights, respectively, and highlighted in color
-        if ((parent->parent->highlighted_route_now) != -1) {
-
-            //deselect any previously selected item in listcontrol_routes, if any
-            parent->parent->listcontrol_routes->DeselectAll();
-
-            //deselect any previously selected item in listcontrol_sights, if any, to clear up things for the user and show only the selected Route in ListFrames
-            parent->parent->listcontrol_sights->DeselectAll();
-
-
-            parent->parent->Raise();  // bring the ListFrame to front
-            parent->parent->SetFocus();  // focus on the ListFrame
-
-            //select the highlighted Route in ListFrame
-            parent->parent->listcontrol_routes->SetItemState((parent->parent)->highlighted_route_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
-
-            //set the beckgorund color of the Route in listcontrol_routes in ListFrame to the color of selected items
-            parent->parent->listcontrol_routes->SetItemBackgroundColour(parent->parent->highlighted_route_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-
-            if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value != -1) {
-                //the selected Route is related to a Sight
-
-                //select the related Sight in ListFrame
-                ((parent->parent)->listcontrol_sights)->SetItemState((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
-
-                //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
-                parent->parent->listcontrol_sights->SetItemBackgroundColour((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-
-            }
-
-        }
-
+        
     }
 
     event.Skip(true);

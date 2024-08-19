@@ -78,6 +78,8 @@ template<class S> void Catalog::read_from_stream([[maybe_unused]] String name, S
 }
 
 template void Catalog::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
+template void Catalog::read_from_stream<basic_istringstream<char,struct char_traits<char>,allocator<char> > >(String,basic_istringstream<char,struct char_traits<char>,allocator<char> > *,bool,String);
+
 
 
 //return the position in this->list of BodyName x. If x is not found in this->list, it returns this->list.size()

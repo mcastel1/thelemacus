@@ -459,11 +459,15 @@ template void  AngleField<SightFrame>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer
 
 //if recent_angle != NULL, update the value of the GUI in AngleField according to recent_angle in such a way that the recent value appears in the GUI field
 template<class P> void AngleField<P>::FillInRecentValue(void) {
-   
-    //write *recent_angle into the non-GUI Angle field *angle
-    angle->set((*recent_angle));
     
-    //write the value of *object into the GUI field *this
-    set();
+    if(recent_angle != NULL){
+        
+        //write *recent_angle into the non-GUI Angle field *angle
+        angle->set((*recent_angle));
+        
+        //write the value of *object into the GUI field *this
+        set();
+        
+    }
         
 }

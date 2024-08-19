@@ -3581,7 +3581,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 ((parent->parent)->listcontrol_sights)->SetItemState((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 
                 //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
-                ((parent->parent)->listcontrol_sights)->SetItemBackgroundColour((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                parent->parent->listcontrol_sights->SetItemBackgroundColour((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
 
             }
 

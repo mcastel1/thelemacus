@@ -57,8 +57,8 @@ template<class P> DynamicLengthField<P>::DynamicLengthField(wxPanel* panel_of_pa
     NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthUnit, DynamicLengthField<P>>>::value->Bind(wxEVT_KEY_UP, &NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthUnit, DynamicLengthField<P>>>::template OnEditValue<wxKeyEvent>, this);
 
     
-    //this method has to be here and not in the parent class because otherwise it would call non-allocated objects
-    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthUnit, DynamicLengthField<P>>>::FillInRecentValue();
+//    //this method has to be here and not in the parent class because otherwise it would call non-allocated objects
+//    NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthUnit, DynamicLengthField<P>>>::FillInRecentValue();
     
     NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthUnit, DynamicLengthField<P>>>::unit->InsertIn(NumericalField<P, Length, LengthUnit, CheckLength<P>, CheckUnit<P, LengthUnit, DynamicLengthField<P>>>::sizer_h, flags);
 

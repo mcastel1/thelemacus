@@ -128,6 +128,16 @@ template<class S> void Angle::read_from_stream(String name, S* input_stream, boo
 
 
 template void Angle::read_from_stream<basic_fstream<char, char_traits<char>>>(String, basic_fstream<char, char_traits<char>>*, bool, String);
+template void Angle::read_from_stream<basic_istringstream<char, char_traits<char>,allocator<char> > >(String, basic_istringstream<char, char_traits<char>, allocator<char> > *,bool, String); 
+
+
+/*
+ 
+ Severity    Code    Description    Project    File    Line    Suppression State    Details
+ Error    LNK2019    unresolved external symbol "public: void __cdecl Angle::read_from_stream<class std::basic_istringstream<char,struct std::char_traits<char>,class std::allocator<char> > >(class String,class std::basic_istringstream<char,struct std::char_traits<char>,class std::allocator<char> > *,bool,class String)" (??$read_from_stream@V?$basic_istringstream@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Angle@@QEAAXVString@@PEAV?$basic_istringstream@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@_N0@Z) referenced in function "void __cdecl read_from_file<class Angle>(class Angle *,class String,class String,class String,class String)" (??$read_from_file@VAngle@@@@YAXPEAVAngle@@VString@@111@Z)    minimal    C:\wxWidgets-3.2.5\samples\minimal\generic.obj    1
+
+ 
+ */
 
 
 //reads from file the content after 'name = ' and writes it into this.

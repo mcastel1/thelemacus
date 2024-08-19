@@ -91,12 +91,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
 
     //Z
     StaticText* text_Z = new StaticText(panel, wxT("Z"), wxDefaultPosition, wxDefaultSize, 0);
-    Z = new AngleField<RouteFrame>(
-                                   panel,
-                                   &(route->Z),
-                                   NULL,
-                                   String("")
-                                   );
+    Z = new AngleField<RouteFrame>(panel, &(route->Z), NULL, String(""));
 
     //format in which lengths are expressed
     StaticText* text_l_format = new StaticText(panel, wxT("Length format"), wxDefaultPosition, wxDefaultSize, 0);

@@ -70,11 +70,21 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
 
     //latitude
     StaticText* text_lat = new StaticText(panel, wxT("Latitude"), wxDefaultPosition, wxDefaultSize, 0);
-    lat = new AngleField<PositionFrame>(panel, &(position->phi), String("NS"));
+    lat = new AngleField<PositionFrame>(
+                                        panel,
+                                        &(position->phi),
+                                        NULL,
+                                        String("NS")
+                                        );
 
     //longitude
     StaticText* text_lon = new StaticText(panel, wxT("Longitude"), wxDefaultPosition, wxDefaultSize, 0);
-    lon = new AngleField<PositionFrame>(panel, &(position->lambda), String("EW"));
+    lon = new AngleField<PositionFrame>(
+                                        panel,
+                                        &(position->lambda),
+                                        NULL,
+                                        String("EW")
+                                        );
 
     //label
     StaticText* text_label = new StaticText(panel, wxT("Label"), wxDefaultPosition, wxDefaultSize, 0);

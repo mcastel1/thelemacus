@@ -47,7 +47,7 @@ public:
     //texts
     StaticText* text_deg, *text_min;
     wxBoxSizer *sizer_h, *sizer_v;
-    Angle /*the adress of GUI object Angle related to the GUI field *this*/*angle, /*the adress of the Angle containing the most recent value of the Angle related to the GUI field *this*/recent_angle;
+    Angle /*the adress of GUI object Angle related to the GUI field *this*/*angle, /*the adress of the Angle containing the most recent value of the Angle related to the GUI field *this*/*recent_angle;
     //deg_ok = true if the degrees part of this angle is formatted properly and set to the same value as the degree part of angle, and simiarly for min
     bool sign_ok, deg_ok, min_ok;
     CheckAngle<P>* check;

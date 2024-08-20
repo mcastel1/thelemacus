@@ -3924,10 +3924,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             y_min = y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
                             y_max = y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
                             
-                            if ((parent->projection) == Projection_types[0]) {
-                                (this->*Set_lambda_phi_min_max)();
-                            }
-                            
+                            (this->*Set_lambda_phi_min_max)();
                             
 #ifdef __APPLE__
                             //re-draw the chart

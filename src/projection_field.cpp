@@ -34,23 +34,21 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
     String s;
     bool success;
     
-    if(!(MultipleItemField<P, Projection, void>::editing)){
+    if(!(MultipleItemField<P, Projection, CheckProjection<P> >::editing)){
         //*the user has started editing *this
-        (MultipleItemField<P, Projection, void>::editing) = true;
+        (MultipleItemField<P, Projection, CheckProjection<P> >::editing) = true;
     }
 
     //I check whether the name in the GUI field body_name matches one of the body names in catalog
-    find_and_replace_case_insensitive(MultipleItemField<P, Projection, void>::name, MultipleItemField<P, Projection, void>::items, &success, NULL);
+    find_and_replace_case_insensitive(MultipleItemField<P, Projection, CheckProjection<P> >::name, MultipleItemField<P, Projection, CheckProjection<P> >::items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid
-    MultipleItemField<P, Projection, void>::ok = success;
+    MultipleItemField<P, Projection, CheckProjection<P> >::ok = success;
 
     if (success) {
 
-        MultipleItemField<P, Projection, void>::name->SetForegroundColour(wxGetApp().foreground_color);
-        MultipleItemField<P, Projection, void>::name->SetFont(wxGetApp().default_font);
-        //choose the projection entered in name button_reduce
-//        MultipleItemField<P, Projection, void>::parent->draw_panel->OnChooseProjection(event);
+        MultipleItemField<P, Projection, CheckProjection<P> >::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P, Projection, CheckProjection<P> >::name->SetFont(wxGetApp().default_font);
 
     }
 

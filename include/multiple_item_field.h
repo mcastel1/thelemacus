@@ -43,6 +43,7 @@ public:
     void set(void);
     void set(const NON_GUI&);
     template<class E> void Get(E&);
+    void Get(void);
     void Enable(bool);
     bool is_ok(void);
     void CheckInCatalog(bool*, unsigned int *);

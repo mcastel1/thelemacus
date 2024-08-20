@@ -182,6 +182,16 @@ template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, Le
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::Get<wxCommandEvent>(wxCommandEvent&);
 
 
+//same as Get(E& event)  but with no event argument
+template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::Get(void){
+    
+    wxCommandEvent dummy;
+    
+    Get(dummy);
+    
+}
+
+
 // if the content of the GUI field *this  matches one of the items in catalog, write true in *is_present and write the number of the corresponding entry in catalog in *i. If not, write false in *is_present and catalog.size() in *i
 template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::CheckInCatalog(bool* is_present, unsigned int * i) {
     

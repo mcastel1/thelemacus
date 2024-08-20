@@ -282,7 +282,7 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
 
 
 //    switch (((projection->name->GetValue()).ToStdString())[0]) {
-    switch (position_in_vector(Projection(projection_field->name->GetValue().ToStdString()), Projection_types)) {
+    switch (position_in_vector(projection, Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -361,7 +361,7 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
     //I am dragging the chart and the size of *this will not change -> set
     dragging_chart = true;
 
-    switch (position_in_vector(Projection(projection_field->name->GetValue().ToStdString()), Projection_types)) {
+    switch(position_in_vector(projection, Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -438,7 +438,7 @@ template<class T> void ChartFrame::MoveWest(T& event) {
     dragging_chart = true;
 
 
-    switch (position_in_vector(Projection((projection_field->name->GetValue().ToStdString())), Projection_types)) {
+    switch (position_in_vector(projection, Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -508,7 +508,7 @@ template<class T> void ChartFrame::MoveEast(T& event) {
     //I am dragging the chart and the size of *this will not change -> set
     dragging_chart = true;
 
-    switch (position_in_vector(Projection((projection_field->name->GetValue().ToStdString())), Projection_types)) {
+    switch (position_in_vector(projection, Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -715,7 +715,7 @@ void ChartFrame::Animate(void){
     ChartTransportHandler< UnsetIdling<ListFrame> >* chart_transport_handler;
         
     //allocate chart_transport_handler and set the starting Position and the Route for the transport
-    switch (position_in_vector(Projection((projection_field->name->GetValue().ToStdString())), Projection_types)) {
+    switch (position_in_vector(projection, Projection_types)) {
             
         case 0: {
             //I am using Projection_types[0]

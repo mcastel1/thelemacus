@@ -3031,7 +3031,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
 
     //set the ChartFrame title
     //extract the part of the title which comes before the name of the projection type
-    temp = String((parent->GetLabel()).ToStdString());
+    temp = String(parent->GetLabel().ToStdString());
     pos = (temp.value).find(" - ");
     temp.set(temp.value.substr(0, pos).c_str());
 

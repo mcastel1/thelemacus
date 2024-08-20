@@ -3898,7 +3898,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     
                     (parent->dragging_chart) = true;
                     
-                    if ((((parent->projection_field)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+                    if ((parent->projection) == Projection_types[0]) {
                         //I am using the mercator projection
                         
                         PositionProjection p_ceil_min, p_floor_max;

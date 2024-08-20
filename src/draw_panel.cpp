@@ -3616,126 +3616,96 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
 
 void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
     
-    stringstream s;
-    
-    //changes the 'sign' of selection rectangle
-    (parent->parent->selection_rectangle) = (!(parent->parent->selection_rectangle));
-    
-    if ((parent->parent->selection_rectangle)) {
-        //start drawing a selection rectangle
+    if ((!idling) && (!(parent->idling)) && (!(parent->parent->idling))){
+        //I proceed only if this and its parent and the parent of its parent are not in idling mode
         
-        int i;
-        bool check;
+        stringstream s;
         
-        //disable all button_resets while a selection rectangle is being drawn
-        for(i=0; i<parent->parent->chart_frames.size(); i++){
-            parent->parent->chart_frames[i]->button_reset->Enable(false);
-        }
+        //changes the 'sign' of selection rectangle
+        (parent->parent->selection_rectangle) = (!(parent->parent->selection_rectangle));
         
-        (*(parent->parent->geo_position_start)) = (*(parent->parent->geo_position_now));
-        
-        //store the position at the beginning of the selection process, to compute the zoom factor
-        //run over all ChartFrames : if in the i-th ChartFrame *geo_position_start falls within the plot area -> set label and position of the start position of selection_rectangle in that ChartFrame
-        for (i = 0, check = false; i < (parent->parent->chart_frames).size(); i++) {
+        if ((parent->parent->selection_rectangle)) {
+            //start drawing a selection rectangle
             
-            if (
-                (((parent->parent->chart_frames)[i])->draw_panel->*(((parent->parent->chart_frames)[i])->draw_panel->GeoToProjection))((*(parent->parent->geo_position_start)), ((parent->parent->chart_frames)[i])->draw_panel->projection_start, false)) {
-                    //*geo_position_start is valid in the i-th DrawPanel -> start the selection rectangle in the i-th DrawPanel
-                    
-                    ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                         (*(parent->parent->geo_position_now)),
-                                                                                         &(((parent->parent->chart_frames)[i])->draw_panel->position_start_label_selection_rectangle),
-                                                                                         &(parent->parent->start_label_selection_rectangle));
-                    
-                    ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
-                    check = true;
-                    
-                }
+            int i;
+            bool check;
             
+            //disable all button_resets while a selection rectangle is being drawn
+            for(i=0; i<parent->parent->chart_frames.size(); i++){
+                parent->parent->chart_frames[i]->button_reset->Enable(false);
+            }
             
-        }
-        
-        
-        if (!check) {
-            //*geo_position_start is invalid in all DrawPanels -> delete the selection rectangle by setting selection_rectangle to false
+            (*(parent->parent->geo_position_start)) = (*(parent->parent->geo_position_now));
             
-            (parent->parent->selection_rectangle) = false;
-            
-        }
-        
-        
-    }
-    else {
-        //end drawing a selection rectangle
-        
-        GetMouseGeoPosition((parent->parent->position_end));
-        drawpanel_position_end = (parent->parent->screen_position_now);
-        
-        unsigned int i;
-        
-        //store the position at the end of the selection process, to compute the zoom factor later
-        if ((this->*ScreenToProjection)(drawpanel_position_end, projection_end)) {
-            //drawpanel_position_end is valid
-            
-            Angle lambda_a, lambda_b;
-            
-            
-            //convert all the angles to the format between -pi and pi, so I can sort them numerically
-            parent->parent->geo_position_start->phi.normalize_pm_pi();
-            parent->parent->geo_position_start->lambda.normalize_pm_pi();
-            parent->parent->position_end->phi.normalize_pm_pi();
-            parent->parent->position_end->lambda.normalize_pm_pi();
-            
-            lambda_a = (parent->parent->geo_position_start->lambda);
-            lambda_b = (parent->parent->position_end->lambda);
-            
-            switch (position_in_vector(parent->projection, Projection_types)) {
-                    
-                case 0: {
-                    //I am using the Mercator projection
-                    
-                    if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end->x) - (projection_start->x))))) {
-                        //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
+            //store the position at the beginning of the selection process, to compute the zoom factor
+            //run over all ChartFrames : if in the i-th ChartFrame *geo_position_start falls within the plot area -> set label and position of the start position of selection_rectangle in that ChartFrame
+            for (i = 0, check = false; i < (parent->parent->chart_frames).size(); i++) {
+                
+                if (
+                    (((parent->parent->chart_frames)[i])->draw_panel->*(((parent->parent->chart_frames)[i])->draw_panel->GeoToProjection))((*(parent->parent->geo_position_start)), ((parent->parent->chart_frames)[i])->draw_panel->projection_start, false)) {
+                        //*geo_position_start is valid in the i-th DrawPanel -> start the selection rectangle in the i-th DrawPanel
                         
+                        ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
+                                                                                             (*(parent->parent->geo_position_now)),
+                                                                                             &(((parent->parent->chart_frames)[i])->draw_panel->position_start_label_selection_rectangle),
+                                                                                             &(parent->parent->start_label_selection_rectangle));
                         
-                        //in order to properly set lambda_min and lambda_max, I need to tell apart the following cases
-                        if(GSL_SIGN((lambda_a.normalize_pm_pi_ret().value)) == GSL_SIGN(lambda_b.normalize_pm_pi_ret().value)){
-                            //lambda_a and lambda_b lie in the same hemisphere
+                        ((parent->parent->chart_frames)[i])->draw_panel->Refresh();
+                        check = true;
+                        
+                    }
+                
+                
+            }
+            
+            
+            if (!check) {
+                //*geo_position_start is invalid in all DrawPanels -> delete the selection rectangle by setting selection_rectangle to false
+                
+                (parent->parent->selection_rectangle) = false;
+                
+            }
+            
+            
+        }
+        else {
+            //end drawing a selection rectangle
+            
+            GetMouseGeoPosition((parent->parent->position_end));
+            drawpanel_position_end = (parent->parent->screen_position_now);
+            
+            unsigned int i;
+            
+            //store the position at the end of the selection process, to compute the zoom factor later
+            if ((this->*ScreenToProjection)(drawpanel_position_end, projection_end)) {
+                //drawpanel_position_end is valid
+                
+                Angle lambda_a, lambda_b;
+                
+                
+                //convert all the angles to the format between -pi and pi, so I can sort them numerically
+                parent->parent->geo_position_start->phi.normalize_pm_pi();
+                parent->parent->geo_position_start->lambda.normalize_pm_pi();
+                parent->parent->position_end->phi.normalize_pm_pi();
+                parent->parent->position_end->lambda.normalize_pm_pi();
+                
+                lambda_a = (parent->parent->geo_position_start->lambda);
+                lambda_b = (parent->parent->position_end->lambda);
+                
+                switch (position_in_vector(parent->projection, Projection_types)) {
+                        
+                    case 0: {
+                        //I am using the Mercator projection
+                        
+                        if ((parent->ComputeZoomFactor_Mercator(fabs((projection_end->x) - (projection_start->x))))) {
+                            //if the zoom factor of the map resulting from the selection is valid, I update x_min, ... , y_max
                             
-                            if(lambda_b > lambda_a){
-                                
-                                (*(parent->lambda_min)) = lambda_b;
-                                (*(parent->lambda_max)) = lambda_a;
-                                
-                            }else{
-                                
-                                (*(parent->lambda_min)) = lambda_a;
-                                (*(parent->lambda_max)) = lambda_b;
-                                
-                            }
                             
-                        }else{
-                            //lambda_a and lambda_b lie in different hemispheres
-                            
-                            if(((lambda_a.normalize_pm_pi_ret().value) >= 0.0) && (lambda_b.normalize_pm_pi_ret().value) <= 0.0){
-                                //lambda_a lies in the poisitive-logitude hemishere (0 < lambda < 180), lambda_b in the nevative-longitude hemisphere (180 < lambda < 360)
+                            //in order to properly set lambda_min and lambda_max, I need to tell apart the following cases
+                            if(GSL_SIGN((lambda_a.normalize_pm_pi_ret().value)) == GSL_SIGN(lambda_b.normalize_pm_pi_ret().value)){
+                                //lambda_a and lambda_b lie in the same hemisphere
                                 
-                                if((parent->lambda_min->normalize_pm_pi_ret().value) > (parent->lambda_max->normalize_pm_pi_ret().value)){
-                                    
-                                    (*(parent->lambda_min)) = lambda_a;
-                                    (*(parent->lambda_max)) = lambda_b;
-                                    
-                                }else{
-                                    
-                                    (*(parent->lambda_min)) = lambda_b;
-                                    (*(parent->lambda_max)) = lambda_a;
-                                    
-                                }
-                                
-                            }else{
-                                //lambda_a lies in the negative-logitude hemishere (180 < lambda < 360), lambda_b in the positive-longitude hemisphere (0 < lambda < 180)
-                                
-                                if((parent->lambda_min->normalize_pm_pi_ret().value) > (parent->lambda_max->normalize_pm_pi_ret().value)){
+                                if(lambda_b > lambda_a){
                                     
                                     (*(parent->lambda_min)) = lambda_b;
                                     (*(parent->lambda_max)) = lambda_a;
@@ -3747,29 +3717,112 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                                     
                                 }
                                 
+                            }else{
+                                //lambda_a and lambda_b lie in different hemispheres
+                                
+                                if(((lambda_a.normalize_pm_pi_ret().value) >= 0.0) && (lambda_b.normalize_pm_pi_ret().value) <= 0.0){
+                                    //lambda_a lies in the poisitive-logitude hemishere (0 < lambda < 180), lambda_b in the nevative-longitude hemisphere (180 < lambda < 360)
+                                    
+                                    if((parent->lambda_min->normalize_pm_pi_ret().value) > (parent->lambda_max->normalize_pm_pi_ret().value)){
+                                        
+                                        (*(parent->lambda_min)) = lambda_a;
+                                        (*(parent->lambda_max)) = lambda_b;
+                                        
+                                    }else{
+                                        
+                                        (*(parent->lambda_min)) = lambda_b;
+                                        (*(parent->lambda_max)) = lambda_a;
+                                        
+                                    }
+                                    
+                                }else{
+                                    //lambda_a lies in the negative-logitude hemishere (180 < lambda < 360), lambda_b in the positive-longitude hemisphere (0 < lambda < 180)
+                                    
+                                    if((parent->lambda_min->normalize_pm_pi_ret().value) > (parent->lambda_max->normalize_pm_pi_ret().value)){
+                                        
+                                        (*(parent->lambda_min)) = lambda_b;
+                                        (*(parent->lambda_max)) = lambda_a;
+                                        
+                                    }else{
+                                        
+                                        (*(parent->lambda_min)) = lambda_a;
+                                        (*(parent->lambda_max)) = lambda_b;
+                                        
+                                    }
+                                    
+                                }
+                                
                             }
+                            
+                            
+                            
+                            if ((parent->parent->geo_position_start->phi) > ((parent->parent->position_end)->phi)) {
+                                (*(parent->phi_max)) = (((parent->parent)->geo_position_start)->phi);
+                                (*(parent->phi_min)) = (((parent->parent)->position_end)->phi);
+                            }else {
+                                (*(parent->phi_min)) = (((parent->parent)->geo_position_start)->phi);
+                                (*(parent->phi_max)) = (((parent->parent)->position_end)->phi);
+                            }
+                            //I normalize lambda_min, ..., phi_max for future use.
+                            parent->lambda_min->normalize();
+                            parent->lambda_max->normalize();
+                            parent->phi_min->normalize();
+                            parent->phi_max->normalize();
+                            
+                            parent->parent->geo_position_start->phi.normalize();
+                            parent->parent->geo_position_start->lambda.normalize();
+                            parent->parent->position_end->phi.normalize();
+                            parent->parent->position_end->lambda.normalize();
+                            
+                            (this->*PreRender)();
+                            parent->parent->RefreshAll();
+                            FitAll();
+                            
+                            parent->UpdateSlider();
+                            //the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen
+                            wxGetApp().ShowCharts(event);
+                            
+                        }
+                        else {
+                            //if the zoom factor is not valid, then I print an error message
+                            
+                            s.str("");
+                            s << "Zoom level must be >= 1 and <= " << (wxGetApp().zoom_factor_max.value) << ".";
+                            
+                            //set the title and message for the functor print_error_message, and then call the functor
+                            print_error_message->SetAndCall(NULL, String("Zoom level exceeded its maximal value!"), String(s.str().c_str()), (wxGetApp().path_file_error_icon));
                             
                         }
                         
                         
+                        break;
+                    }
                         
-                        if ((parent->parent->geo_position_start->phi) > ((parent->parent->position_end)->phi)) {
-                            (*(parent->phi_max)) = (((parent->parent)->geo_position_start)->phi);
-                            (*(parent->phi_min)) = (((parent->parent)->position_end)->phi);
-                        }else {
-                            (*(parent->phi_min)) = (((parent->parent)->geo_position_start)->phi);
-                            (*(parent->phi_max)) = (((parent->parent)->position_end)->phi);
-                        }
-                        //I normalize lambda_min, ..., phi_max for future use.
-                        parent->lambda_min->normalize();
-                        parent->lambda_max->normalize();
-                        parent->phi_min->normalize();
-                        parent->phi_max->normalize();
+                    case 1: {
+                        //I am using the 3d projection
                         
-                        parent->parent->geo_position_start->phi.normalize();
-                        parent->parent->geo_position_start->lambda.normalize();
-                        parent->parent->position_end->phi.normalize();
-                        parent->parent->position_end->lambda.normalize();
+                        Length l1, l2;
+                        Position reference_position_old;
+                        
+                        //store the current ground position of circle_observer into reference_position_old
+                        reference_position_old = (*(circle_observer->reference_position));
+                        
+                        //normalize lambda_a/b and then compute the algebric mean -> this is the correct value of the longitude of circle_observer
+                        circle_observer->reference_position->lambda.set((lambda_a.normalize_ret().value + lambda_b.normalize_ret().value)/2.0);
+                        
+                        //normalize the two latitudes between -pi and pi and then compute the algebraic mean -> this is the correct value of the two latitudes
+                        circle_observer->reference_position->phi.set(mean_pm_pi(parent->parent->geo_position_start->phi, parent->parent->position_end->phi));
+                        
+                        
+                        //compute omega as half of  the largest angular distance between the middle of selection rectangle and its corners
+                        circle_observer->reference_position->distance((*(parent->parent->geo_position_start)), &l1, String(""), String(""));
+                        circle_observer->reference_position->distance(Position(parent->parent->geo_position_start->lambda, parent->parent->position_end->phi), &l2, String(""), String(""));
+                        circle_observer->omega.set(((max(l1, l2).value) / (wxGetApp().Re.value))/2.0);
+                        
+                        
+                        //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
+                        //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
+                        rotation->set(((*rotation) * Rotation((*(circle_observer->reference_position)), reference_position_old)));
                         
                         (this->*PreRender)();
                         parent->parent->RefreshAll();
@@ -3779,79 +3832,31 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         //the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen
                         wxGetApp().ShowCharts(event);
                         
+                        
+                        break;
                     }
-                    else {
-                        //if the zoom factor is not valid, then I print an error message
                         
-                        s.str("");
-                        s << "Zoom level must be >= 1 and <= " << (wxGetApp().zoom_factor_max.value) << ".";
-                        
-                        //set the title and message for the functor print_error_message, and then call the functor
-                        print_error_message->SetAndCall(NULL, String("Zoom level exceeded its maximal value!"), String(s.str().c_str()), (wxGetApp().path_file_error_icon));
-                        
-                    }
-                    
-                    
-                    break;
                 }
-                    
-                case 1: {
-                    //I am using the 3d projection
-                    
-                    Length l1, l2;
-                    Position reference_position_old;
-                    
-                    //store the current ground position of circle_observer into reference_position_old
-                    reference_position_old = (*(circle_observer->reference_position));
-                    
-                    //normalize lambda_a/b and then compute the algebric mean -> this is the correct value of the longitude of circle_observer
-                    circle_observer->reference_position->lambda.set((lambda_a.normalize_ret().value + lambda_b.normalize_ret().value)/2.0);
-    
-                    //normalize the two latitudes between -pi and pi and then compute the algebraic mean -> this is the correct value of the two latitudes
-                    circle_observer->reference_position->phi.set(mean_pm_pi(parent->parent->geo_position_start->phi, parent->parent->position_end->phi));
-                    
-                    
-                    //compute omega as half of  the largest angular distance between the middle of selection rectangle and its corners
-                    circle_observer->reference_position->distance((*(parent->parent->geo_position_start)), &l1, String(""), String(""));
-                    circle_observer->reference_position->distance(Position(parent->parent->geo_position_start->lambda, parent->parent->position_end->phi), &l2, String(""), String(""));
-                    circle_observer->omega.set(((max(l1, l2).value) / (wxGetApp().Re.value))/2.0);
-                    
-                    
-                    //conpute the new rotation: the new rotation of the earth is the old one, composed with the rotation which brings the old reference_position onto the new one
-                    //The coordinate transformation between a vector r in reference frame O and a vector r' in reference frame O' is r = (rotation^T).r', rotation . Rotation(circle_observer.reference_position, reference_position_old). (rotation^T) =   Rotation(circle_observer.reference_position, reference_position_old)' (i.e., Rotation(circle_observer.reference_position, reference_position_old) in reference frame O'), thus I set rotation = Rotation(circle_observer.reference_position, reference_position_old)' * rotation, and by simplifying I obtain
-                    rotation->set(((*rotation) * Rotation((*(circle_observer->reference_position)), reference_position_old)));
-                    
-                    (this->*PreRender)();
-                    parent->parent->RefreshAll();
-                    FitAll();
-                    
-                    parent->UpdateSlider();
-                    //the aspect ratio of ChartFrame may have changed -> call ShowChart to reposition everything properly on the screen
-                    wxGetApp().ShowCharts(event);
-                    
-                    
-                    break;
-                }
-                    
+                
+                //set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
+                
+                (parent->parent->start_label_selection_rectangle) = String("");
+                (parent->parent->end_label_selection_rectangle_now) = String("");
+                
+            }else {
+                //the  end position for the selected rectangle is not valid -> cancel the rectangle by setting selection_rectangle to false and by setting to empty the text fields of the geographical positions of the selection triangle
+                
+                (parent->parent->selection_rectangle) = false;
+                (parent->parent->start_label_selection_rectangle) = String("");
+                (parent->parent->end_label_selection_rectangle_now) = String("");
+                
             }
             
-            //set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
+            //disable all button_resets while a selection rectangle is being drawn
+            for(i=0; i<parent->parent->chart_frames.size(); i++){
+                parent->parent->chart_frames[i]->button_reset->Enable(true);
+            }
             
-            (parent->parent->start_label_selection_rectangle) = String("");
-            (parent->parent->end_label_selection_rectangle_now) = String("");
-            
-        }else {
-            //the  end position for the selected rectangle is not valid -> cancel the rectangle by setting selection_rectangle to false and by setting to empty the text fields of the geographical positions of the selection triangle
-            
-            (parent->parent->selection_rectangle) = false;
-            (parent->parent->start_label_selection_rectangle) = String("");
-            (parent->parent->end_label_selection_rectangle_now) = String("");
-            
-        }
-        
-        //disable all button_resets while a selection rectangle is being drawn
-        for(i=0; i<parent->parent->chart_frames.size(); i++){
-            parent->parent->chart_frames[i]->button_reset->Enable(true);
         }
         
     }

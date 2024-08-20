@@ -191,7 +191,7 @@ bool Position::transport_to(Route route, [[maybe_unused]] String prefix) {
 //inline 
 void Position::put_back_in(DrawPanel* draw_panel){
         
-    switch (position_in_vector(Projection((draw_panel->parent->projection->name->GetValue()).ToStdString()), Projection_types)) {
+    switch (position_in_vector(Projection((draw_panel->parent->projection_field->name->GetValue()).ToStdString()), Projection_types)) {
             
         case 0: {
             //I am using the mercator projection

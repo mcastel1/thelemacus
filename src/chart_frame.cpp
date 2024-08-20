@@ -21,9 +21,9 @@ template<class P> class ChartTransportHandler;
 ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_in, wxID_ANY, title, pos, size) {
 
     unsigned long long int i, j;
-    String new_prefix, default_projection, color;
+    String new_prefix, color;
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
-    StaticText* empty_text_1, * empty_text_2, * empty_text_3, * empty_text_4, * empty_text_5;
+    StaticText *empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     wxCommandEvent dummy_event;
     //a wxSizerFlags object to insert stuff into sizers
     wxSizerFlags flags;

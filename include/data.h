@@ -36,7 +36,7 @@ public:
     vector<Route> route_list;
     vector<Route> crossing_route_list;
     //the recent bodies, projections, ... selected by the user are stored here
-    vector<int> recent_bodies, recent_projections, recent_length_formats, recent_route_types, recent_route_for_transport_types, recent_length_units, recent_speed_units;
+    vector<int> recent_bodies, recent_projections, recent_length_formats, recent_route_types, recent_Rout_types_for_transport, recent_length_units, recent_speed_units;
     //the recent values of LengthField, SpeedField ... are stored here
     Angle recent_index_error;
     Length recent_height_of_eye_value, recent_route_length_value;

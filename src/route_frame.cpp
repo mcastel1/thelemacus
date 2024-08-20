@@ -84,7 +84,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     StaticText* text_type = new StaticText(panel, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0);
     //if the Route of *this is for transport, then only show 'loxodrome' and 'orthodrome' in type
     if (for_transport) {
-        type = new RouteTypeField<RouteFrame>(panel, &(route->type), Route_for_transport_types, &(wxGetApp().list_frame->data->recent_route_for_transport_types));
+        type = new RouteTypeField<RouteFrame>(panel, &(route->type), Route_types_for_transport, &(wxGetApp().list_frame->data->recent_Rout_types_for_transport));
     }else{
         type = new RouteTypeField<RouteFrame>(panel, &(route->type), Route_types,  &(wxGetApp().list_frame->data->recent_route_types));
     }
@@ -297,7 +297,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
         //set as Route type the most recent item in recetn _route_types (or recent route_for_transport_types if the new Route has been created for a transport): set first type->object and then write in type the value written in type->object
 
         if(for_transport){
-            type->object->set(Route_types[wxGetApp().list_frame->data->recent_route_for_transport_types.front()]);
+            type->object->set(Route_types[wxGetApp().list_frame->data->recent_Rout_types_for_transport.front()]);
         }else{
             type->object->set(Route_types[wxGetApp().list_frame->data->recent_route_types.front()]);
         }

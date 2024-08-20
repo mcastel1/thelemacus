@@ -288,7 +288,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     lambda_a.normalize();
     lambda_b.normalize();
     
-    switch (position_in_vector(Projection((parent->projection_field->name->GetValue()).ToStdString()), Projection_types)) {
+    switch(position_in_vector(parent->projection, Projection_types)) {
             
         case 0: {
             //I am using Projection_types[0]

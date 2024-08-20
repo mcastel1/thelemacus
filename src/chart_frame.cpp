@@ -173,6 +173,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
 //    else {
 //        //if the construtor has been called with projection_in non-empty, I set projection_in equal to projection_in
 //    projection_field->name->SetValue(wxString(projection.value));
+    projection_field->object->set(Projection_types[wxGetApp().list_frame->data->recent_projections.front()]);
     projection_field->set();
 
 //    }

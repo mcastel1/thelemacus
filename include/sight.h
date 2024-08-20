@@ -69,7 +69,7 @@ public:
     bool check_time_interval(String);
     
     void add_to_ListControl(long, wxListCtrl*);
-    void update_wxListCtrl(long, wxListCtrl*);
+    void update_ListControl(long, wxListCtrl*);
     
 };
 

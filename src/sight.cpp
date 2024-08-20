@@ -143,7 +143,7 @@ bool Sight::compute_DH_refraction(String prefix) {
 
 
 
-void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
+void Sight::update_ListControl(long i, wxListCtrl* listcontrol) {
 
     unsigned int j;
     Time time_UTC;

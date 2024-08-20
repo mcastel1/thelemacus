@@ -124,21 +124,21 @@
  ********** THINGS TO FIX ***********
     - replace all 'projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))' with a switch case find_in_... with
     
-        switch (position_in_vector(projection, Projection_types)) {
-            
-        case 0: {
-            
-            break;
-            
-        }
-            
-        case 1: {
-            
-            break;
-            
-        }
-            
-    }
+switch (position_in_vector(projection, Projection_types)) {
+
+case 0: {
+
+break;
+
+}
+
+case 1: {
+
+break;
+
+}
+
+}
     
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame on New Mac
     - if you zoom on England in the 3d projection with selection rectangle the result is wrong

@@ -7,7 +7,7 @@ Data:
 				Right ascension = 213° 54.79890000000033'
 				Declination = 19° 10.69494000000002'
 			sextant altitude = 22° 13.39999999999995'
-			index error = 0° 1.9'
+			index error = 359° 58.09999999999951'
 			artificial horizon = n
 			height of eye = 1.2300000000000000 m
 			master-clock date and hour of sight:
@@ -41,7 +41,7 @@ Data:
 				Right ascension = 201° 17.8999800000013'
 				Declination = 348° 50.32500000000149'
 			sextant altitude = 22° 2.000000000000082'
-			index error = 1° 0.9999999999999946'
+			index error = 358° 57.65999999999982'
 			artificial horizon = n
 			height of eye = 3.2100000000000000 m
 			master-clock date and hour of sight:
@@ -71,7 +71,7 @@ Recent route types = 1 0 2
 Recent route for transport types = 1 0
 Recent length units = 1 0
 Recent speed units = 0 1
-Recent index error = 1° 0.9999999999999946'
+Recent index error = 358° 57.65999999999982'
 Recent height of eye value = 3.2100000000000000 m
 Recent route length value = 1.0000000000000000 nm
 Recent route speed value = 23.0000000000000000 kt

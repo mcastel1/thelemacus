@@ -66,6 +66,7 @@ template class MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame>
 template class MultipleItemField<ChartFrame, LengthUnit, CheckUnit<ChartFrame, LengthUnit, StaticLengthField<ChartFrame> > >;
 template class MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthUnit, DynamicLengthField<RouteFrame> > >;
 template class MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnit, DynamicLengthField<SightFrame> > >;
+template class MultipleItemField<ChartFrame, Projection, CheckProjection<ChartFrame>>;
 
 
 template<class P, class NON_GUI, class CHECK> template <typename EventTag, typename Method, typename Object> void MultipleItemField<P, NON_GUI, CHECK>::Bind(EventTag tag, Method method, Object object) {
@@ -97,6 +98,7 @@ template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, Le
 template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnit, DynamicLengthField<SightFrame> > >::Bind<wxEventTypeTag<wxCommandEvent>, void (NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthUnit, DynamicLengthField<SightFrame> > >::*)(wxCommandEvent&), DynamicLengthField<SightFrame>*>(wxEventTypeTag<wxCommandEvent>, void (NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthUnit, DynamicLengthField<SightFrame> > >::*)(wxCommandEvent&), DynamicLengthField<SightFrame>*);
 template void MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame> >::Bind<wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*>(wxEventTypeTag<wxKeyEvent>, void (SightFrame::*)(wxKeyEvent&), SightFrame*);
 template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnit, DynamicLengthField<SightFrame> > >::Bind<wxEventTypeTag<wxCommandEvent>, void (SightFrame::*)(wxCommandEvent&), SightFrame*>(wxEventTypeTag<wxCommandEvent>, void (SightFrame::*)(wxCommandEvent&), SightFrame*);
+template void MultipleItemField<ChartFrame, Projection, CheckProjection<ChartFrame>>::Bind<wxEventTypeTag<wxKeyEvent>, void (ChartFrame::*)(wxKeyEvent&), ChartFrame*>(wxEventTypeTag<wxKeyEvent>, void (ChartFrame::*)(wxKeyEvent&), ChartFrame*);
 
 
 //set a tooltip with text text to *this
@@ -107,7 +109,7 @@ template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI,
 }
 
 template void MultipleItemField<ChartFrame, Projection, void>::SetToolTip(String const&);
-
+template void MultipleItemField<ChartFrame, Projection, CheckProjection<ChartFrame>>::SetToolTip(String const&);
 
 template<class P, class NON_GUI, class CHECK> template<class T> void MultipleItemField<P, NON_GUI, CHECK>::InsertIn(T* host) {
 
@@ -119,6 +121,7 @@ template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<Rout
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 template void MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame> >::InsertIn<wxFlexGridSizer>(wxFlexGridSizer*);
 template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnit, DynamicLengthField<SightFrame> > >::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
+template void MultipleItemField<ChartFrame, Projection, CheckProjection<ChartFrame>>::InsertIn<wxBoxSizer>(wxBoxSizer*, wxSizerFlags&);
 
 
 template<class P, class NON_GUI, class CHECK> template<class T> void MultipleItemField<P, NON_GUI, CHECK>::InsertIn(T* host, wxSizerFlags& flag) {
@@ -353,3 +356,4 @@ template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<Rout
 template void MultipleItemField<RouteFrame, SpeedUnit, CheckUnit<RouteFrame, SpeedUnit, SpeedField<RouteFrame> > >::Enable(bool);
 template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, LengthUnit, DynamicLengthField<RouteFrame> > >::Enable(bool);
 template void MultipleItemField<SightFrame, LengthUnit, CheckUnit<SightFrame, LengthUnit, DynamicLengthField<SightFrame> > >::Enable(bool);
+template void MultipleItemField<ChartFrame, Projection, CheckProjection<ChartFrame>>::Enable(bool);

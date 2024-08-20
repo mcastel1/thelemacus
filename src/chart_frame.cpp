@@ -123,7 +123,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
     button_show_list->SetToolTip(wxString("Show the list of sights, positions and routes"));
 
-    projection_field = new ProjectionField<ChartFrame>(panel, &(wxGetApp().list_frame->data->recent_projections));
+    projection_field = new ProjectionField<ChartFrame>(panel, &projection, &(wxGetApp().list_frame->data->recent_projections));
     projection_field->name->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
     projection_field->SetToolTip(String("Choose the projection used in the chart"));
 

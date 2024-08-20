@@ -1,5 +1,5 @@
 #comment lines, such as this one, will be ignored
-show coastlines = y
+show coastlines = n
 #reasonable values for OSX
 #number of points coastline Mercator = 50000
 #number of points coastline 3D = 40000
@@ -71,8 +71,6 @@ display precision = 2
 time zone = +2
 relative displacement = 0.1
 omega draw 3d = 89° 32.157897987'
-#default projection = Mercator
-default projection = 3D
 minimal animation distance over size of observer region = 1e-2
 #the number of chart frames opened when the program starts
 number chart frames = 1

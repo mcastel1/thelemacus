@@ -34,7 +34,7 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
     
     
     
-    switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
+    switch (position_in_vector(chart_frame->projection, Projection_types)) {
             
         case 0:{
             //I am using Projection_types[0]
@@ -133,7 +133,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             (chart_frame->draw_panel->label_position_now) = String("");
 
        
-            switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
+            switch (position_in_vector(chart_frame->projection, Projection_types)) {
                     
                 case 0: {
                     //I am using Projection_types[0]
@@ -208,7 +208,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                                                                     String(""));
             
             
-            switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
+            switch (position_in_vector(chart_frame->projection, Projection_types)) {
                     
                 case 0: {
                     //I am using Projection_types[0]
@@ -306,7 +306,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
     }else {
         //the transport  is over
 
-        switch (position_in_vector(Projection((chart_frame->projection->name->GetValue().ToStdString())), Projection_types)) {
+        switch (position_in_vector(chart_frame->projection, Projection_types)) {
                 
             case 0: {
                 //I am using Projection_types[0]

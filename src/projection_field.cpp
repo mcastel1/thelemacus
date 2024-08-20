@@ -19,18 +19,16 @@
 
 
 //constructor of a ProjectionField object, based on the parent frame frame
-template<class P> ProjectionField<P>::ProjectionField(
-                                                      wxPanel* panel_of_parent,
-                                                      vector<int>* recent_items_in) : MultipleItemField<P, Projection, void>(
-                                                                                                                             panel_of_parent,
-                                                                                                                             NULL,
-                                                                                                                             Projection_types,
-                                                                                                                             recent_items_in) {
+template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, Projection* object_in, vector<int>* recent_items_in) : MultipleItemField<P, Projection, CheckProjection<P> >(panel_of_parent, object_in, Projection_types, recent_items_in){
 
+    
+    MultipleItemField<P, Projection, CheckProjection<P>>::check = new CheckProjection<P>(this);
+    MultipleItemField<P, Projection, CheckProjection<P>>::name->Bind(wxEVT_KILL_FOCUS, *(MultipleItemField<P, Projection, CheckProjection<P>>::check));
+    MultipleItemField<P, Projection, CheckProjection<P>>::name->Bind(wxEVT_COMBOBOX, *(MultipleItemField<P, Projection, CheckProjection<P>>::check));
 
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
-    MultipleItemField<P, Projection, void>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
-    MultipleItemField<P, Projection, void>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
+    MultipleItemField<P, Projection, CheckProjection<P>>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);
+    MultipleItemField<P, Projection, CheckProjection<P>>::name->Bind(wxEVT_KEY_UP, &ProjectionField::OnEdit<wxKeyEvent>, this);
 
 }
 
@@ -41,23 +39,21 @@ template<class P> template<class E> void ProjectionField<P>::OnEdit(E& event) {
     String s;
     bool success;
     
-    if(!(MultipleItemField<P, Projection, void>::editing)){
+    if(!(MultipleItemField<P, Projection, CheckProjection<P> >::editing)){
         //*the user has started editing *this
-        (MultipleItemField<P, Projection, void>::editing) = true;
+        (MultipleItemField<P, Projection, CheckProjection<P> >::editing) = true;
     }
 
     //I check whether the name in the GUI field body_name matches one of the body names in catalog
-    find_and_replace_case_insensitive(MultipleItemField<P, Projection, void>::name, MultipleItemField<P, Projection, void>::items, &success, NULL);
+    find_and_replace_case_insensitive(MultipleItemField<P, Projection, CheckProjection<P> >::name, MultipleItemField<P, Projection, CheckProjection<P> >::items, &success, NULL);
 
     //ok is true/false is the text enteres is valid/invalid
-    MultipleItemField<P, Projection, void>::ok = success;
+    MultipleItemField<P, Projection, CheckProjection<P> >::ok = success;
 
     if (success) {
 
-        MultipleItemField<P, Projection, void>::name->SetForegroundColour(wxGetApp().foreground_color);
-        MultipleItemField<P, Projection, void>::name->SetFont(wxGetApp().default_font);
-        //choose the projection entered in name button_reduce
-//        MultipleItemField<P, Projection, void>::parent->draw_panel->OnChooseProjection(event);
+        MultipleItemField<P, Projection, CheckProjection<P> >::name->SetForegroundColour(wxGetApp().foreground_color);
+        MultipleItemField<P, Projection, CheckProjection<P> >::name->SetFont(wxGetApp().default_font);
 
     }
 

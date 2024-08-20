@@ -11,36 +11,26 @@
 #include <iostream>
 #include <vector>
 
+#include "check_projection.h"
 #include "multiple_item_field.h"
 
 
 using namespace std;
 
+
+template<class P> class CheckProjection;
 class Projection;
 
 
-template<class P> class ProjectionField: public MultipleItemField<P, Projection, void>{
+template<class P> class ProjectionField: public MultipleItemField<P, Projection, CheckProjection<P> >{
     
 public:
-    
-//    P* parent;
-//    wxBoxSizer *sizer_h, *sizer_v;
-//    wxArrayString  /*this is equal to a standard list of the available graphical types*/items, /*same as projections, but it is fixed and never wrote to: it is a fixed catalog*/catalog;
-    //this is the wxComboBox with the name of the projections
-//    wxComboBox* name;
-//    vector<int> recent_items;
-//    bool ok;
-//    CheckProjection<P>* check;
 
-    ProjectionField(wxPanel*, vector<int>*);
-//    void FillInRecentItems(void);
-//    void read_recent_projections(void);
-//    template<class T> void InsertIn(T*, wxSizerFlags&);
+    ProjectionField(wxPanel*, Projection*, vector<int>*);
+    
     template<class E> void OnEdit(E&);
-//    template <typename EventTag, typename Method, typename Object> void Bind(EventTag, Method, Object);
-    
+   
 };
-
 
 
 #endif

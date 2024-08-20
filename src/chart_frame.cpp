@@ -18,18 +18,19 @@
 template<class P> class ChartTransportHandler;
 
 
-ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {
+ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_in, wxID_ANY, title, pos, size) {
 
     unsigned long long int i, j;
-    String new_prefix, default_projection, color;
+    String new_prefix, color;
     //empty wxStaticTexts to fill the empty spaces of the wxGridSizer sizer_buttons
-    StaticText* empty_text_1, * empty_text_2, * empty_text_3, * empty_text_4, * empty_text_5;
+    StaticText *empty_text_1, *empty_text_2, *empty_text_3, *empty_text_4, *empty_text_5;
     wxCommandEvent dummy_event;
     //a wxSizerFlags object to insert stuff into sizers
     wxSizerFlags flags;
 
 
-    parent = parent_input;
+    parent = parent_in;
+    projection.set(projection_in);
 
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
@@ -123,9 +124,9 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     button_show_list->Bind(wxEVT_BUTTON, &MyApp::ShowList, &wxGetApp());
     button_show_list->SetToolTip(wxString("Show the list of sights, positions and routes"));
 
-    projection = new ProjectionField<ChartFrame>(panel, &(wxGetApp().list_frame->data->recent_projections));
-    projection->name->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
-    projection->SetToolTip(String("Choose the projection used in the chart"));
+    projection_field = new ProjectionField<ChartFrame>(panel, &projection, &(wxGetApp().list_frame->data->recent_projections));
+    projection_field->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
+    projection_field->SetToolTip(String("Choose the projection used in the chart"));
 
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveNorth<wxCommandEvent>, this);
     button_down->Bind(wxEVT_BUTTON, &ChartFrame::MoveSouth<wxCommandEvent>, this);
@@ -138,7 +139,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
     panel->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
     draw_panel->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
-    projection->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
+    projection_field->Bind(wxEVT_KEY_DOWN, &ChartFrame::KeyDown<wxKeyEvent>, this);
 
     draw_panel->Bind(wxEVT_KEY_DOWN, &DrawPanel::KeyDown, draw_panel);
     panel->Bind(wxEVT_KEY_DOWN, &DrawPanel::KeyDown, draw_panel);
@@ -161,21 +162,11 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     empty_text_4 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize, 0);
     empty_text_5 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize, 0);
 
-    //when the ChartFrame is initialized with projection_in = "", I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of projection->name to either of these,
-    if (projection_in == Projection("")) {
-        //if the constructor has been called with an empty projection_in, I use the default projection by reading it from the init file.
 
-        default_projection.read_from_file_to(String("default projection"), (wxGetApp().path_file_init), String("R"), String(""));
-        projection->name->SetValue(wxString(default_projection.value));
+//    projection_field->object->set(Projection_types[wxGetApp().list_frame->data->recent_projections.front()]);
+    projection_field->set();
 
-    }
-    else {
-        //if the construtor has been called with projection_in non-empty, I set projection_in equal to projection_in
-
-        projection->name->SetValue(wxString(projection_in.value));
-
-    }
-    projection->value_before_editing = projection->name->GetValue();
+    (projection_field->value_before_editing) = (projection_field->name->GetValue());
 
     //create a dummy_event and then call SetProjection(dummy_event) to set all objects according to the choice of the projeciton above.
     //    draw_panel->OnChooseProjection(dummy_event);
@@ -210,7 +201,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     observer_height->StaticLengthField<ChartFrame>::InsertIn(sizer_slider, flags);
     sizer_slider->Add(sizer_buttons, 0, wxALIGN_CENTER | wxALL, 0);
     sizer_slider->Add(button_reset, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    projection->InsertIn(sizer_slider, flags);
+    projection_field->InsertIn(sizer_slider, flags);
     sizer_slider->AddStretchSpacer(1);
     sizer_slider->Add(button_show_list, 0, wxALIGN_CENTER | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
 
@@ -256,7 +247,7 @@ template<class T> void ChartFrame::OnPressCtrlW(T& event) {
     for (j = 0; j < (parent->chart_frames).size(); j++) {
 
         s.str("");
-        s << "Chart #" << j + 1 << " - " << ((((parent->chart_frames)[j])->projection)->name)->GetValue() << " projection";
+        s << "Chart #" << j + 1 << " - " << (((parent->chart_frames)[j])->projection.value) << " projection";
 
         ((parent->chart_frames)[j])->SetLabel(wxString(s.str().c_str()));
 
@@ -280,7 +271,7 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
 
 
 //    switch (((projection->name->GetValue()).ToStdString())[0]) {
-    switch (position_in_vector(Projection((projection->name->GetValue()).ToStdString()), Projection_types)) {
+    switch (position_in_vector(projection, Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -359,7 +350,7 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
     //I am dragging the chart and the size of *this will not change -> set
     dragging_chart = true;
 
-    switch (position_in_vector(Projection((projection->name->GetValue()).ToStdString()), Projection_types)) {
+    switch(position_in_vector(projection, Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -436,7 +427,7 @@ template<class T> void ChartFrame::MoveWest(T& event) {
     dragging_chart = true;
 
 
-    switch (position_in_vector(Projection((projection->name->GetValue().ToStdString())), Projection_types)) {
+    switch (position_in_vector(projection, Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -506,7 +497,7 @@ template<class T> void ChartFrame::MoveEast(T& event) {
     //I am dragging the chart and the size of *this will not change -> set
     dragging_chart = true;
 
-    switch (position_in_vector(Projection((projection->name->GetValue().ToStdString())), Projection_types)) {
+    switch (position_in_vector(projection, Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -633,7 +624,7 @@ template<class T> void ChartFrame::Reset(T& event) {
     idling = false;
     (draw_panel->idling) = false;
 
-    if ((projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if (projection == Projection_types[0]) {
 
         //read lambda_min, ...., phi_max from file_init
         lambda_min->read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -648,7 +639,7 @@ template<class T> void ChartFrame::Reset(T& event) {
 
     }
 
-    if ((projection->name->GetValue()) == wxString(((Projection_types[1]).value))) {
+    if (projection == Projection_types[1]) {
         //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
 
         parent->circle_observer_0->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -681,15 +672,15 @@ template<class T> void ChartFrame::ResetRender(T& event) {
     Reset<T>(event);
     
     (draw_panel->*(draw_panel->PreRender))();
-     //now that (size_chart.GetWidth()) and (size_chart.GetHeight()) have been set, I set width_chart_0 and height_chart_0 equal to width_chart and (size_chart.GetHeight())
-     (draw_panel->width_chart_0) = (draw_panel->size_chart.GetWidth());
-     (draw_panel->height_chart_0) = (draw_panel->size_chart.GetHeight());
-
-     draw_panel->CleanAndRenderAll();
-     
-     draw_panel->FitAll();
-     UpdateSlider();
-//     Animate();
+    //now that (size_chart.GetWidth()) and (size_chart.GetHeight()) have been set, I set width_chart_0 and height_chart_0 equal to width_chart and (size_chart.GetHeight())
+    (draw_panel->width_chart_0) = (draw_panel->size_chart.GetWidth());
+    (draw_panel->height_chart_0) = (draw_panel->size_chart.GetHeight());
+    
+    draw_panel->CleanAndRenderAll();
+    
+    draw_panel->FitAll();
+    UpdateSlider();
+    //     Animate();
     
     event.Skip(true);
 
@@ -713,7 +704,7 @@ void ChartFrame::Animate(void){
     ChartTransportHandler< UnsetIdling<ListFrame> >* chart_transport_handler;
         
     //allocate chart_transport_handler and set the starting Position and the Route for the transport
-    switch (position_in_vector(Projection((projection->name->GetValue().ToStdString())), Projection_types)) {
+    switch (position_in_vector(projection, Projection_types)) {
             
         case 0: {
             //I am using Projection_types[0]
@@ -848,13 +839,13 @@ void ChartFrame::UpdateSlider(void) {
 
     //compute the zoom factor of the chart and write it into zoom_factor
 
-    if ((projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if (projection == Projection_types[0]) {
 
         ComputeZoomFactor_Mercator((draw_panel->x_span()));
 
     }
 
-    if ((projection->name->GetValue()) == wxString(((Projection_types[1]).value))) {
+    if (projection == Projection_types[1]) {
         //is this necessary here ?
         ComputeZoomFactor_3D();
 
@@ -890,7 +881,7 @@ template<class T> void ChartFrame::OnMouseLeftDownOnSlider(T& event) {
     //mouse scrolling starts
     mouse_scrolling = true;
 
-    if ((projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if (projection == Projection_types[0]) {
 
         (draw_panel->x_center_scrolling) = ((draw_panel->x_min) + (draw_panel->x_max)) / 2.0;
         (draw_panel->y_center_scrolling) = ((draw_panel->y_min) + (draw_panel->y_max)) / 2.0;
@@ -996,10 +987,9 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
     (draw_panel->reference_positions_route_list_before) = (draw_panel->reference_positions_route_list_now);
     
 #endif
+    
 
-
-
-    if ((projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if (projection == Projection_types[0]) {
 
         PositionProjection p_min, p_max;
 
@@ -1036,7 +1026,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
     }
 
-    if ((projection->name->GetValue()) == wxString(((Projection_types[1]).value))) {
+    if (projection == Projection_types[1]) {
 
         (draw_panel->circle_observer->omega) = ((parent->circle_observer_0->omega) / (zoom_factor.value));
 
@@ -1378,7 +1368,11 @@ void ChartFrame::SetIdling(bool b) {
 }
 
 //I call this function when I know that all GUI fields are properly filled in ChartFrame, and thus set the non GUI Angle objects relative to the Euler angles for the rotation of the 3D earth,  and draw everything
-void ChartFrame::AllOk(void) {
+void ChartFrame::AllOk(void){
+
+    wxCommandEvent dummy;
+    
+    projection_field->MultipleItemField<ChartFrame, Projection, CheckProjection<ChartFrame> >::Get(dummy);
 
     (draw_panel->*(draw_panel->PreRender))();
     draw_panel->Refresh();
@@ -1404,6 +1398,6 @@ void ChartFrame::EnableAll(bool enable){
     button_left->Enable(enable);
     button_right->Enable(enable);
     slider->Enable(enable);
-    projection->Enable(enable);
+    projection_field->Enable(enable);
     
 }

@@ -1795,7 +1795,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
     
     for(i=0; i<chart_frames.size(); i++){
         
-        switch (position_in_vector(Projection(((chart_frames[i])->projection->name->GetValue().ToStdString())), Projection_types)) {
+        switch (position_in_vector(((chart_frames[i])->projection), Projection_types)) {
                 
             case 0: {
                 //I am using Projection_types[0]

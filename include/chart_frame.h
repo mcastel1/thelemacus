@@ -37,6 +37,8 @@ public:
     ListFrame* parent;
     DrawPanel *draw_panel;
     ChartPanel* panel;
+    //the non-GUI field related to projection_field
+    Projection projection;
     StaticText *chart_scale;
     //a static text displaying the height of the observer
     StaticLengthField<ChartFrame>* observer_height;
@@ -46,7 +48,8 @@ public:
     wxSlider* slider;
     wxBitmapButton *button_show_list, *button_reset;
     wxButton* button_up, *button_down, *button_left, *button_right;
-    ProjectionField<ChartFrame>* projection;
+    //the GUI field related to projection
+    ProjectionField<ChartFrame>* projection_field;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle *phi_min, *phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/*lambda_min, *lambda_max;
     //a vector of the points of the coastlines in DrawPanel coordinates: these are points of polygons concatenated in the linear arrays coastline_polygons_now/ before. The i-th polygon is stored n coastline_polygons_now/before[polygon_position_now/before[i]], coastline_polygons_now[polygon_position_now/before[i]+1], ..., coastline_polygons_now[polygon_position_now/before[i+1]-1]
@@ -92,10 +95,6 @@ public:
     //this is created for testing
     UnsetIdling<ChartFrame> *unset_idling;
     
-    
-    
-    
 };
-
 
 #endif

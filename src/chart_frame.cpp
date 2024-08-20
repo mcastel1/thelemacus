@@ -28,6 +28,7 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     //a wxSizerFlags object to insert stuff into sizers
     wxSizerFlags flags;
 
+
     parent = parent_input;
 
     //append \t to prefix

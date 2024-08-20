@@ -56,33 +56,11 @@ template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {
     if (success) {
         //the text entered in name is valid
 
-        //enable/disable the related fields in RouteFrame f
-//        enable = ((((MultipleItemField<P, RouteType, CheckRouteType<P> >::catalog)[i]) == wxString(((Route_types[0]).value))) || (((MultipleItemField<P, RouteType, CheckRouteType<P> >::catalog)[i]) == wxString(((Route_types[1]).value))));
-//
-//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->Z->Enable(enable);
-//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_phi->Enable(enable && (!(MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->for_transport)));
-//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_lambda->Enable(enable && (!(MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->for_transport)));
-//
-//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->GP_phi->Enable(!enable);
-//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->GP_lambda->Enable(!enable);
-//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->omega->Enable(!enable);
-
         //because the text in name is valid, I set the background color of name to white
         MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetForegroundColour(wxGetApp().foreground_color);
         MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetFont(wxGetApp().default_font);
 
     }
-//    else{
-
-//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->Z->Enable(false);
-//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_phi->Enable(false);
-//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->start_lambda->Enable(false);
-
-//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->GP_phi->Enable(false);
-//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->GP_lambda->Enable(false);
-//        MultipleItemField<P, RouteType, CheckRouteType<P> >::parent->omega->Enable(false);
-
-//    }
 
     //ok is true/false is the text entered is valid/invalid
     MultipleItemField<P, RouteType, CheckRouteType<P> >::ok = success;

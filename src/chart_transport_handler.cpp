@@ -155,9 +155,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     (projection_size_end.x) = chart_frame->draw_panel->x_span_0;
                     projection_size_end.y = (q_A.y) - (q_B.y);
                     projection_size_end /= (zoom_factor.value);
-
-                    
-                   
+               
                     break;
                     
                 }

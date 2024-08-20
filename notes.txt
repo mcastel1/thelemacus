@@ -125,7 +125,7 @@
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame on New Mac
     - if you zoom on England in the 3d projection with selection rectangle the result is wrong
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
-`	- write write put_back_in , put_back)_in_Mercator and put_back_in_3D :
+`	- write put_back_in , put_back)_in_Mercator and put_back_in_3D :
     - all icons in light mode must be revised and stored in dark mode
 	- when you switch from light to dark, all icons must be updated
  on OSX:

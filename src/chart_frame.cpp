@@ -844,17 +844,27 @@ void ChartFrame::UpdateSlider(void) {
 
     //compute the zoom factor of the chart and write it into zoom_factor
 
-    if (projection == Projection_types[0]) {
-
-        ComputeZoomFactor_Mercator((draw_panel->x_span()));
-
+    
+    switch (position_in_vector(projection, Projection_types)) {
+            
+        case 0: {
+            ComputeZoomFactor_Mercator((draw_panel->x_span()));
+            
+            break;
+            
+        }
+            
+        case 1: {
+            
+            //is this necessary here ?
+            ComputeZoomFactor_3D();
+            
+            break;
+            
+        }
+            
     }
 
-    if (projection == Projection_types[1]) {
-        //is this necessary here ?
-        ComputeZoomFactor_3D();
-
-    }
 
     //a tentative value for the value of slizer
     temp = round(pow(((zoom_factor.value) - ((wxGetApp().b_zoom).value)) / ((wxGetApp().a_zoom).value), 1.0 / ((wxGetApp().e_zoom).value)));

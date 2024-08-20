@@ -176,7 +176,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
         projection_field->name->SetValue(wxString(projection_in.value));
 
     }
-    projection_field->value_before_editing = projection_field->name->GetValue();
+    (projection_field->value_before_editing) = (projection_field->name->GetValue());
 
     //create a dummy_event and then call SetProjection(dummy_event) to set all objects according to the choice of the projeciton above.
     //    draw_panel->OnChooseProjection(dummy_event);
@@ -257,7 +257,7 @@ template<class T> void ChartFrame::OnPressCtrlW(T& event) {
     for (j = 0; j < (parent->chart_frames).size(); j++) {
 
         s.str("");
-        s << "Chart #" << j + 1 << " - " << ((((parent->chart_frames)[j])->projection_field)->name)->GetValue() << " projection";
+        s << "Chart #" << j + 1 << " - " << ((((parent->chart_frames)[j])->projection_field)->name->GetValue()) << " projection";
 
         ((parent->chart_frames)[j])->SetLabel(wxString(s.str().c_str()));
 
@@ -281,7 +281,7 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
 
 
 //    switch (((projection->name->GetValue()).ToStdString())[0]) {
-    switch (position_in_vector(Projection((projection_field->name->GetValue()).ToStdString()), Projection_types)) {
+    switch (position_in_vector(Projection(projection_field->name->GetValue().ToStdString()), Projection_types)) {
 
     case 0: {
         //I am using the mercator projection
@@ -360,7 +360,7 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
     //I am dragging the chart and the size of *this will not change -> set
     dragging_chart = true;
 
-    switch (position_in_vector(Projection((projection_field->name->GetValue()).ToStdString()), Projection_types)) {
+    switch (position_in_vector(Projection(projection_field->name->GetValue().ToStdString()), Projection_types)) {
 
     case 0: {
         //I am using the mercator projection

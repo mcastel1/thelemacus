@@ -85,12 +85,8 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
                 //write the value written in *this into *recent_object
                 value->GetValue().ToDouble(&(recent_object->value));
                 recent_object->unit->set(String(unit->name->GetValue().ToStdString()));
-                
-                //update p->name according to the content of recent_itmes
-//                FillInRecentValue();
 
             }
-
 
             //if check is true (false) -> set ok to true (false)
             ok = is_ok();
@@ -155,9 +151,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
     
     //write the value in *object into the GUI field *this
     set();
-    
-//    unit->FillInRecentItems();
-    
+        
 }
 
 template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFrame>, CheckUnit<SightFrame, LengthUnit, DynamicLengthField<SightFrame> > >::FillInRecentValue();

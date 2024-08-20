@@ -125,7 +125,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     button_show_list->SetToolTip(wxString("Show the list of sights, positions and routes"));
 
     projection_field = new ProjectionField<ChartFrame>(panel, &projection, &(wxGetApp().list_frame->data->recent_projections));
-    projection_field->name->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
+    projection_field->Bind(wxEVT_COMBOBOX, &DrawPanel::OnChooseProjection<wxCommandEvent>, draw_panel);
     projection_field->SetToolTip(String("Choose the projection used in the chart"));
 
     button_up->Bind(wxEVT_BUTTON, &ChartFrame::MoveNorth<wxCommandEvent>, this);
@@ -162,20 +162,20 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     empty_text_4 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize, 0);
     empty_text_5 = new StaticText(panel, wxT(""), wxDefaultPosition, wxDefaultSize, 0);
 
-    //when the ChartFrame is initialized with projection_in = "", I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of projection->name to either of these,
-    if (projection_in == Projection("")) {
-        //if the constructor has been called with an empty projection_in, I use the default projection by reading it from the init file.
+//    //when the ChartFrame is initialized with projection_in = "", I choose to draw either the Mercator or the 3D chart, by reading the name of the projection from file_init. I set the value of projection->name to either of these,
+//    if (projection_in == Projection("")) {
+//        //if the constructor has been called with an empty projection_in, I use the default projection by reading it from the init file.
+//
+//        default_projection.read_from_file_to(String("default projection"), (wxGetApp().path_file_init), String("R"), String(""));
+//        projection_field->name->SetValue(wxString(default_projection.value));
+//
+//    }
+//    else {
+//        //if the construtor has been called with projection_in non-empty, I set projection_in equal to projection_in
+//    projection_field->name->SetValue(wxString(projection.value));
+    projection_field->set();
 
-        default_projection.read_from_file_to(String("default projection"), (wxGetApp().path_file_init), String("R"), String(""));
-        projection_field->name->SetValue(wxString(default_projection.value));
-
-    }
-    else {
-        //if the construtor has been called with projection_in non-empty, I set projection_in equal to projection_in
-
-        projection_field->name->SetValue(wxString(projection_in.value));
-
-    }
+//    }
     (projection_field->value_before_editing) = (projection_field->name->GetValue());
 
     //create a dummy_event and then call SetProjection(dummy_event) to set all objects according to the choice of the projeciton above.

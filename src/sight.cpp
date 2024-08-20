@@ -235,7 +235,7 @@ void Sight::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
 }
 
 
-void Sight::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcontrol) {
+void Sight::add_to_ListControl(long position_in_listcontrol, wxListCtrl* listcontrol) {
 
     long i;
     wxListItem item;

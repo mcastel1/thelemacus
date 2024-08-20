@@ -710,8 +710,8 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
         parent->data->add_sight_and_reduce(sight, String(""));
 
         //add the sight and the related route to the GUI object listconstrol_sights and listcontrol_routes, respectively
-        //        sight->add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_sights));
-        //        (((this->parent->data)->route_list)[(sight->related_route).value]).add_to_wxListCtrl(position_in_listcontrol_sights, ((this->parent)->listcontrol_routes));
+        //        sight->add_to_ListControl(position_in_listcontrol_sights, ((this->parent)->listcontrol_sights));
+        //        (((this->parent->data)->route_list)[(sight->related_route).value]).add_to_ListControl(position_in_listcontrol_sights, ((this->parent)->listcontrol_routes));
 
     }
     else {

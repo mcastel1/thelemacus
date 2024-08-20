@@ -68,7 +68,7 @@ public:
     bool reduce(Route*, String);
     bool check_time_interval(String);
     
-    void add_to_wxListCtrl(long, wxListCtrl*);
+    void add_to_ListControl(long, wxListCtrl*);
     void update_wxListCtrl(long, wxListCtrl*);
     
 };

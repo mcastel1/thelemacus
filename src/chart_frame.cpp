@@ -635,7 +635,7 @@ template<class T> void ChartFrame::Reset(T& event) {
     idling = false;
     (draw_panel->idling) = false;
 
-    if ((projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if (projection == Projection_types[0]) {
 
         //read lambda_min, ...., phi_max from file_init
         lambda_min->read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -650,7 +650,7 @@ template<class T> void ChartFrame::Reset(T& event) {
 
     }
 
-    if ((projection_field->name->GetValue()) == wxString(((Projection_types[1]).value))) {
+    if (projection == Projection_types[1]) {
         //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
 
         parent->circle_observer_0->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));

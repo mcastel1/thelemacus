@@ -92,10 +92,6 @@ public:
     //this is created for testing
     UnsetIdling<ChartFrame> *unset_idling;
     
-    
-    
-    
 };
-
 
 #endif

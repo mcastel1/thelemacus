@@ -18,7 +18,7 @@
 template<class P> class ChartTransportHandler;
 
 
-ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_input, wxID_ANY, title, pos, size) {
+ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_in, wxID_ANY, title, pos, size) {
 
     unsigned long long int i, j;
     String new_prefix, default_projection, color;
@@ -29,7 +29,8 @@ ChartFrame::ChartFrame(ListFrame* parent_input, Projection projection_in, const 
     wxSizerFlags flags;
 
 
-    parent = parent_input;
+    parent = parent_in;
+    projection.set(projection_in);
 
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));

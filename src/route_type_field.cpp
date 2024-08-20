@@ -29,20 +29,6 @@ template<class P> RouteTypeField<P>::RouteTypeField(wxPanel* panel_of_parent, Ro
 template class RouteTypeField<RouteFrame>;
 
 
-//sets the value in the GUI object equal to the value in the non-GUI  object 
-template<class P> void RouteTypeField<P>::set(void) {
-    
-    MultipleItemField<P, RouteType, CheckRouteType<P> >::name->SetValue(wxString(
-                                                                                 (Route_types[
-                                                                                              position_in_vector((*(MultipleItemField<P, RouteType, CheckRouteType<P> >::object)), Route_types)
-                                                                                              ]).value
-                                                                                 ));
-    MultipleItemField<P, RouteType, CheckRouteType<P> >::ok = true;
-    
-}
-
-template void RouteTypeField<RouteFrame>::set();
-
 
 //this function is called every time a keyboard button is lifted in this->name: it checks whether the text entered so far in name is valid, tries to enable parent_frame->limb->name and runs AllOk
 template<class P> template<class E> void RouteTypeField<P>::OnEdit(E& event) {

@@ -122,7 +122,6 @@
 
 
  ********** THINGS TO FIX ***********
-    - check if template<class P> void RouteTypeField<P>::set(void) does the same thing as the set() method in the parent classs and, if it does, delete it 
     - drop the argument const vector<RouteType>& route_types_in from RouteTypeField's contructor and enter direclty when you call the constructor of the parent class
     - '         if ((parent->projection) == Projection_types[0]) {
                                 (this->*Set_lambda_phi_min_max)();

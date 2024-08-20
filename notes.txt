@@ -119,10 +119,27 @@
      - some paralles or meridians in grid in render_mercator contain the same wxPoint iterated many times -> remove them
      - try  wxDCClipper to quickly delete old image on DrawPanel
      - add separator between recent items and non-recent items in BodyField->name
+     - replace all 'projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))' with a switch case find_in_... with
+        '''
+        switch (position_in_vector(projection, Projection_types)) {
+
+            case 0: {
+
+                break;
+
+            }
+
+            case 1: {
+
+                break;
+
+            }
+
+        }
+        '''
 
 
  ********** THINGS TO FIX ***********
-    - replace all 'projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))' with a switch case find_in_...
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame on New Mac
     - if you zoom on England in the 3d projection with selection rectangle the result is wrong
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back

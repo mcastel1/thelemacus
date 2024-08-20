@@ -155,9 +155,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     (projection_size_end.x) = chart_frame->draw_panel->x_span_0;
                     projection_size_end.y = (q_A.y) - (q_B.y);
                     projection_size_end /= (zoom_factor.value);
-
-                    
-                   
+               
                     break;
                     
                 }
@@ -310,19 +308,6 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                 
             case 0: {
                 //I am using Projection_types[0]
-                
-//                PositionProjection temp;
-//
-//
-//                start.transport(&p_NE, transporting_route, String(""));
-//                (chart_frame->lambda_max) = (p_NE.lambda);
-//                (chart_frame->phi_max) =( p_NE.phi);
-//
-//                temp.SetMercator(p_NE);
-//                (chart_frame->draw_panel->*(chart_frame->draw_panel->ProjectionToGeo))(temp - projection_size, &p_SW);
-//
-//                (chart_frame->lambda_min) = p_SW.lambda;
-//                (chart_frame->phi_min) = p_SW.phi;
 
                 
                 break;
@@ -331,12 +316,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                 
             case 1: {
                 //I am using Projection_types[1]
-                
-                //do the whole transport rather than combining many little transports, to avoid rounding errors
-//                chart_frame->draw_panel->circle_observer.reference_position = start;
-//                chart_frame->draw_panel->circle_observer.reference_position.transport_to(transporting_route, String(""));
-
-//                chart_frame->draw_panel->rotation.set(((chart_frame->draw_panel->rotation_start_drag) * Rotation(transporting_route.end, start)));
+       
 
                 chart_frame->draw_panel->rotation_end_drag->set((*(chart_frame->draw_panel->rotation)));
 
@@ -346,12 +326,6 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                 
         }
             
-//        cout << "******************* After the transport *******************" << endl;
-//        transporting_route.compute_end(String(""));
-//        transporting_route.end.print(String("Expected arrival position"), String("\t"), cout);
-//        chart_frame->draw_panel->circle_observer.reference_position.print(String("Circle observer reference position"), String("\t"), cout);
-        
-
         (chart_frame->dragging_chart) = false;
         chart_frame->EnableAll(true);
         chart_frame->Fit();

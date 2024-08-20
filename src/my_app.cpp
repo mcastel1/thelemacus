@@ -474,9 +474,8 @@ bool MyApp::OnInit() {
         for (i = 0; i < (list_frame->chart_frames).size(); i++) {
              
             //open a Mercator projection for even i and a 3D projection for odd i
-//            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
-
-            projection = Projection_types[0];
+            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
+            //            projection = Projection_types[0];
 
             
             s.str("");

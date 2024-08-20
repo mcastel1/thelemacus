@@ -270,60 +270,57 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
     dragging_chart = true;
 
 
-//    switch (((projection->name->GetValue()).ToStdString())[0]) {
     switch (position_in_vector(projection, Projection_types)) {
-
-    case 0: {
-        //I am using the mercator projection
-
-
-        double delta;
-        PositionProjection p_ceil_min, p_floor_max;
-
-        //I set delta as a fraction of y_max - y_min
-        delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max) - (draw_panel->y_min));
-
-        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
-        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
-
-
-        if (((draw_panel->y_max) + delta < (p_floor_max.y)) && ((draw_panel->y_min) + delta > (p_ceil_min.y))) {
-            //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
-
-            //update y_min, y_max according to the drag.
-            (draw_panel->y_min) += delta;
-            (draw_panel->y_max) += delta;
-
-            (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-
-
+            
+        case 0: {
+            //I am using the mercator projection
+            
+            double delta;
+            PositionProjection p_ceil_min, p_floor_max;
+            
+            //I set delta as a fraction of y_max - y_min
+            delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max) - (draw_panel->y_min));
+            
+            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
+            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
+            
+            
+            if (((draw_panel->y_max) + delta < (p_floor_max.y)) && ((draw_panel->y_min) + delta > (p_ceil_min.y))) {
+                //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
+                
+                //update y_min, y_max according to the drag.
+                (draw_panel->y_min) += delta;
+                (draw_panel->y_max) += delta;
+                
+                (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
+                
+                
+            }
+            
+            break;
+            
         }
-
-        break;
-
-    }
-
-
-    case  1: {
-        //I am using the 3d projection
-
-        Angle /*the angular displacement of the operation MoveNorth*/delta;
-
-        //I set delta as a fraction of circle_obsrever.omega
-        delta = (draw_panel->circle_observer->omega) * ((wxGetApp().relative_displacement).value);
-
-        //since I am moving north, I increase the b Euler ancgle of rotation
-        (draw_panel->rotation->b) += delta;
-        //I update rotation->matrix
-        draw_panel->rotation->set(draw_panel->rotation->a, draw_panel->rotation->b, draw_panel->rotation->c);
-
-
-
-        break;
-
-    }
-
-
+            
+            
+        case  1: {
+            //I am using the 3d projection
+            
+            Angle /*the angular displacement of the operation MoveNorth*/delta;
+            
+            //I set delta as a fraction of circle_obsrever.omega
+            delta = (draw_panel->circle_observer->omega) * ((wxGetApp().relative_displacement).value);
+            
+            //since I am moving north, I increase the b Euler ancgle of rotation
+            (draw_panel->rotation->b) += delta;
+            //I update rotation->matrix
+            draw_panel->rotation->set(draw_panel->rotation->a, draw_panel->rotation->b, draw_panel->rotation->c);
+            
+            
+            
+            break;
+            
+        }
+            
     }
 
     //re-draw the charton
@@ -351,56 +348,56 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
     dragging_chart = true;
 
     switch(position_in_vector(projection, Projection_types)) {
-
-    case 0: {
-        //I am using the mercator projection
-
-
-        double delta;
-        PositionProjection p_ceil_min, p_floor_max;
-
-        //I set delta as a fraction of y_max - y_min
-        delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max) - (draw_panel->y_min));
-
-        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
-        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
-
-
-        if (((draw_panel->y_max) - delta < (p_floor_max.y)) && ((draw_panel->y_min) - delta > (p_ceil_min.y))) {
-            //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
-
-            //update y_min, y_max according to the drag.
-            (draw_panel->y_min) -= delta;
-            (draw_panel->y_max) -= delta;
-
-            (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-
-
+            
+        case 0: {
+            //I am using the mercator projection
+            
+            
+            double delta;
+            PositionProjection p_ceil_min, p_floor_max;
+            
+            //I set delta as a fraction of y_max - y_min
+            delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max) - (draw_panel->y_min));
+            
+            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
+            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
+            
+            
+            if (((draw_panel->y_max) - delta < (p_floor_max.y)) && ((draw_panel->y_min) - delta > (p_ceil_min.y))) {
+                //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
+                
+                //update y_min, y_max according to the drag.
+                (draw_panel->y_min) -= delta;
+                (draw_panel->y_max) -= delta;
+                
+                (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
+                
+                
+            }
+            
+            break;
+            
         }
-
-        break;
-
-    }
-
-
-    case  1: {
-        //I am using the 3d projection
-
-        Angle /*the angular displacement of the operation MoveNorth*/delta;
-
-        //I set delta as a fraction of circle_obsrever.omega
-        delta = (draw_panel->circle_observer->omega) * ((wxGetApp().relative_displacement).value);
-
-        //since I am moving north, I increase the b Euler ancgle of rotation
-        (draw_panel->rotation->b) -= delta;
-        //I update rotation->matrix
-        draw_panel->rotation->set(draw_panel->rotation->a, draw_panel->rotation->b, draw_panel->rotation->c);
-
-        break;
-
-    }
-
-
+            
+            
+        case  1: {
+            //I am using the 3d projection
+            
+            Angle /*the angular displacement of the operation MoveNorth*/delta;
+            
+            //I set delta as a fraction of circle_obsrever.omega
+            delta = (draw_panel->circle_observer->omega) * ((wxGetApp().relative_displacement).value);
+            
+            //since I am moving north, I increase the b Euler ancgle of rotation
+            (draw_panel->rotation->b) -= delta;
+            //I update rotation->matrix
+            draw_panel->rotation->set(draw_panel->rotation->a, draw_panel->rotation->b, draw_panel->rotation->c);
+            
+            break;
+            
+        }
+            
+            
     }
 
     //re-draw the chart
@@ -623,43 +620,46 @@ template<class T> void ChartFrame::Reset(T& event) {
 
     idling = false;
     (draw_panel->idling) = false;
+    
+    switch (position_in_vector(projection, Projection_types)) {
+            
+        case 0: {
+            //read lambda_min, ...., phi_max from file_init
+            lambda_min->read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
+            lambda_max->read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
+            phi_min->read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
+            phi_max->read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
+            draw_panel->Set_x_y_min_max_Mercator();
+            ComputeZoomFactor_Mercator(draw_panel->x_span());
+            
+            break;
+            
+        }
+            
+        case 1: {
+            //reset d and the earth orientation to the initial one and set the zoom factor accordingly
 
-    if (projection == Projection_types[0]) {
+            parent->circle_observer_0->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
+            zoom_factor.set(1.0);
+            ComputeZoomFactor_3D();
 
-        //read lambda_min, ...., phi_max from file_init
-        lambda_min->read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        lambda_max->read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        phi_min->read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        phi_max->read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        draw_panel->Set_x_y_min_max_Mercator();
-        ComputeZoomFactor_Mercator(draw_panel->x_span());
-
-        //reset the chart boundaries to the initial ones
-        //        (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-
+            draw_panel->rotation_0->read_from_file_to(String("rotation 0"), (wxGetApp().path_file_init), String("R"), String(""));
+            draw_panel->rotation->set((*(draw_panel->rotation_0)));
+            draw_panel->Set_x_y_min_max_3D();
+            (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
+            
+            break;
+            
+        }
+            
     }
-
-    if (projection == Projection_types[1]) {
-        //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
-
-        parent->circle_observer_0->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
-        zoom_factor.set(1.0);
-        ComputeZoomFactor_3D();
-
-        draw_panel->rotation_0->read_from_file_to(String("rotation 0"), (wxGetApp().path_file_init), String("R"), String(""));
-        draw_panel->rotation->set((*(draw_panel->rotation_0)));
-        draw_panel->Set_x_y_min_max_3D();
-        (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-
-    }
+            
 
     //now that x_min ... y_max have been set, I set x_min_0 ... equal to x_min ...
     (draw_panel->x_min_0) = (draw_panel->x_min);
     (draw_panel->x_max_0) = (draw_panel->x_max);
     (draw_panel->y_min_0) = (draw_panel->y_min);
     (draw_panel->y_max_0) = (draw_panel->y_max);
-
- 
 
     event.Skip(true);
 
@@ -841,17 +841,27 @@ void ChartFrame::UpdateSlider(void) {
 
     //compute the zoom factor of the chart and write it into zoom_factor
 
-    if (projection == Projection_types[0]) {
-
-        ComputeZoomFactor_Mercator((draw_panel->x_span()));
-
+    
+    switch (position_in_vector(projection, Projection_types)) {
+            
+        case 0: {
+            ComputeZoomFactor_Mercator((draw_panel->x_span()));
+            
+            break;
+            
+        }
+            
+        case 1: {
+            
+            //is this necessary here ?
+            ComputeZoomFactor_3D();
+            
+            break;
+            
+        }
+            
     }
 
-    if (projection == Projection_types[1]) {
-        //is this necessary here ?
-        ComputeZoomFactor_3D();
-
-    }
 
     //a tentative value for the value of slizer
     temp = round(pow(((zoom_factor.value) - ((wxGetApp().b_zoom).value)) / ((wxGetApp().a_zoom).value), 1.0 / ((wxGetApp().e_zoom).value)));
@@ -990,57 +1000,63 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
     
 #endif
     
+    switch (position_in_vector(projection, Projection_types)) {
+            
+        case 0: {
+            
+            PositionProjection p_min, p_max;
 
-    if (projection == Projection_types[0]) {
+            //update x_min, ..., y_max according to the zoom (scroll) and *lambda_min, ..., *phi_max
+            (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - (((double)(((draw_panel->size_chart).GetWidth()) * (draw_panel->x_span_0))) / ((double)(((zoom_factor.value) * (draw_panel->width_chart_0))))) / 2.0;
+            (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + (((double)(((draw_panel->size_chart).GetWidth()) * (draw_panel->x_span_0))) / ((double)(((zoom_factor.value) * (draw_panel->width_chart_0))))) / 2.0;
+            (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - (((double)(((draw_panel->size_chart).GetHeight()) * (draw_panel->x_span()))) / ((double)((draw_panel->size_chart).GetWidth()))) / 2.0;
+            (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + (((double)(((draw_panel->size_chart).GetHeight()) * (draw_panel->x_span()))) / ((double)((draw_panel->size_chart).GetWidth()))) / 2.0;
 
-        PositionProjection p_min, p_max;
+            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(max_lat)), &p_max, true);
+            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(min_lat)), &p_min, true);
 
-        //update x_min, ..., y_max according to the zoom (scroll) and *lambda_min, ..., *phi_max
-        (draw_panel->x_min) = ((double)((draw_panel->x_center_scrolling))) - (((double)(((draw_panel->size_chart).GetWidth()) * (draw_panel->x_span_0))) / ((double)(((zoom_factor.value) * (draw_panel->width_chart_0))))) / 2.0;
-        (draw_panel->x_max) = ((double)((draw_panel->x_center_scrolling))) + (((double)(((draw_panel->size_chart).GetWidth()) * (draw_panel->x_span_0))) / ((double)(((zoom_factor.value) * (draw_panel->width_chart_0))))) / 2.0;
-        (draw_panel->y_min) = ((double)((draw_panel->y_center_scrolling))) - (((double)(((draw_panel->size_chart).GetHeight()) * (draw_panel->x_span()))) / ((double)((draw_panel->size_chart).GetWidth()))) / 2.0;
-        (draw_panel->y_max) = ((double)((draw_panel->y_center_scrolling))) + (((double)(((draw_panel->size_chart).GetHeight()) * (draw_panel->x_span()))) / ((double)((draw_panel->size_chart).GetWidth()))) / 2.0;
+            if ((((draw_panel->y_max) <= (p_max.y)) && ((draw_panel->y_min) >= (p_min.y)) && ((draw_panel->x_span()) <= 2.0 * M_PI))) {
 
-        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(max_lat)), &p_max, true);
-        (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(min_lat)), &p_min, true);
+                (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
+                //            ComputeZoomFactor_Mercator((draw_panel->x_span));
 
-        if ((((draw_panel->y_max) <= (p_max.y)) && ((draw_panel->y_min) >= (p_min.y)) && ((draw_panel->x_span()) <= 2.0 * M_PI))) {
+                (draw_panel->*(draw_panel->PreRender))();
+                draw_panel->MyRefresh();
+                draw_panel->FitAll();
+                UpdateSlider();
 
-            (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-            //            ComputeZoomFactor_Mercator((draw_panel->x_span));
+            }
+            else {
+                //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set *lambda_min, ..., *phi_max accordingly.
+
+                //uncomment this if you want to print an error message
+                //print_error_message->SetAndCall(NULL, String("Error"), String("You moved the slider: Chart outside  boundaries! The chart must lie within the boundaries."));
+
+                //I reset the chart to its original configuration
+                Reset<T>(event);
+
+            }
+            
+            break;
+            
+        }
+            
+        case 1: {
+            
+            (draw_panel->circle_observer->omega) = ((parent->circle_observer_0->omega) / (zoom_factor.value));
 
             (draw_panel->*(draw_panel->PreRender))();
             draw_panel->MyRefresh();
             draw_panel->FitAll();
+
             UpdateSlider();
-
+            
+            break;
+            
         }
-        else {
-            //if the drag operation brings the chart out of the min and max latitude contained in the data files, I reset x_min, ..., y_max and the value of the slider to the values at the beginning of the drag, and set *lambda_min, ..., *phi_max accordingly.
-
-            //uncomment this if you want to print an error message
-            //print_error_message->SetAndCall(NULL, String("Error"), String("You moved the slider: Chart outside  boundaries! The chart must lie within the boundaries."));
-
-            //I reset the chart to its original configuration
-            Reset<T>(event);
-
-        }
-
+            
     }
-
-    if (projection == Projection_types[1]) {
-
-        (draw_panel->circle_observer->omega) = ((parent->circle_observer_0->omega) / (zoom_factor.value));
-
-        (draw_panel->*(draw_panel->PreRender))();
-        draw_panel->MyRefresh();
-        draw_panel->FitAll();
-
-        UpdateSlider();
-
-    }
-
-
+    
     event.Skip(true);
 
 }

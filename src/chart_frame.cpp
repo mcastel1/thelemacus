@@ -623,35 +623,40 @@ template<class T> void ChartFrame::Reset(T& event) {
 
     idling = false;
     (draw_panel->idling) = false;
+    
+    switch (position_in_vector(projection, Projection_types)) {
+            
+        case 0: {
+            //read lambda_min, ...., phi_max from file_init
+            lambda_min->read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
+            lambda_max->read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
+            phi_min->read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
+            phi_max->read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
+            draw_panel->Set_x_y_min_max_Mercator();
+            ComputeZoomFactor_Mercator(draw_panel->x_span());
+            
+            break;
+            
+        }
+            
+        case 1: {
+            //reset d and the earth orientation to the initial one and set the zoom factor accordingly
 
-    if (projection == Projection_types[0]) {
+            parent->circle_observer_0->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
+            zoom_factor.set(1.0);
+            ComputeZoomFactor_3D();
 
-        //read lambda_min, ...., phi_max from file_init
-        lambda_min->read_from_file_to(String("minimal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        lambda_max->read_from_file_to(String("maximal longitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        phi_min->read_from_file_to(String("minimal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        phi_max->read_from_file_to(String("maximal latitude"), (wxGetApp().path_file_init), String("R"), String(""));
-        draw_panel->Set_x_y_min_max_Mercator();
-        ComputeZoomFactor_Mercator(draw_panel->x_span());
-
-        //reset the chart boundaries to the initial ones
-        //        (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-
+            draw_panel->rotation_0->read_from_file_to(String("rotation 0"), (wxGetApp().path_file_init), String("R"), String(""));
+            draw_panel->rotation->set((*(draw_panel->rotation_0)));
+            draw_panel->Set_x_y_min_max_3D();
+            (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
+            
+            break;
+            
+        }
+            
     }
-
-    if (projection == Projection_types[1]) {
-        //reset d abd the earth orientation to the initial one and set the zoom factor accordingly
-
-        parent->circle_observer_0->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), String(""));
-        zoom_factor.set(1.0);
-        ComputeZoomFactor_3D();
-
-        draw_panel->rotation_0->read_from_file_to(String("rotation 0"), (wxGetApp().path_file_init), String("R"), String(""));
-        draw_panel->rotation->set((*(draw_panel->rotation_0)));
-        draw_panel->Set_x_y_min_max_3D();
-        (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-
-    }
+            
 
     //now that x_min ... y_max have been set, I set x_min_0 ... equal to x_min ...
     (draw_panel->x_min_0) = (draw_panel->x_min);

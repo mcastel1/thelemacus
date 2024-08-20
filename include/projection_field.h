@@ -11,11 +11,14 @@
 #include <iostream>
 #include <vector>
 
+#include "check_projection.h"
 #include "multiple_item_field.h"
 
 
 using namespace std;
 
+
+template<class P> class CheckProjection;
 class Projection;
 
 

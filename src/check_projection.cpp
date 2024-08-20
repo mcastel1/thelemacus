@@ -30,3 +30,4 @@ template<class P> template<class T> void CheckProjection<P>::operator()(T& event
 }
 
 template void CheckProjection<ChartFrame>::operator()<wxFocusEvent>(wxFocusEvent&);
+template void CheckProjection<ChartFrame>::operator()<wxCommandEvent>(wxCommandEvent&);

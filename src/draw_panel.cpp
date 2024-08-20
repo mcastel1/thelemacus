@@ -3099,10 +3099,18 @@ template void DrawPanel::SetProjection<wxCommandEvent>(wxCommandEvent&);
 
 //this method is called when the used has chosen Projection -> set all quantities according to the chosen Projection and call Reset to re-render everything
 template<class E> void DrawPanel::OnChooseProjection(E& event) {
-
-    SetProjection<E>(event);
-    parent->ResetRender<E>(event);
-    parent->Animate();
+    
+    //call Check on projection_field to check whether its value is ok
+    parent->projection_field->Check(event);
+    
+    if((parent->projection_field->is_ok())){
+        //projection_field is ok 
+        
+        SetProjection<E>(event);
+        parent->ResetRender<E>(event);
+        parent->Animate();
+        
+    }
 
     event.Skip(true);
 

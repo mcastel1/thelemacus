@@ -291,6 +291,7 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
 template void MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::Check<wxFocusEvent>(wxFocusEvent&);
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::Check<wxFocusEvent>(wxFocusEvent&);
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::Check<wxCommandEvent>(wxCommandEvent&);
+template void MultipleItemField<ChartFrame, Projection, CheckProjection<ChartFrame>>::Check<wxCommandEvent>(wxCommandEvent&);
 
 
 //update the GUI dropdown menu of MultipleItemField according to MultipleItemField<P, NON_GUI>::recent_items in such a way that the recent items appear on top
@@ -356,6 +357,7 @@ template<class P, class NON_GUI, class CHECK> bool MultipleItemField<P, NON_GUI,
 template bool MultipleItemField<RouteFrame, LengthFormat, CheckLengthFormat<RouteFrame>>::is_ok();
 template bool MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::is_ok();
 template bool MultipleItemField<SightFrame, BodyName, CheckBodyName<SightFrame> >::is_ok();
+template bool MultipleItemField<ChartFrame, Projection, CheckProjection<ChartFrame>>::is_ok();
 
 
 //this function enables/disable the LengthFormatField

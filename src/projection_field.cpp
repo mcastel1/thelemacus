@@ -24,6 +24,7 @@ template<class P> ProjectionField<P>::ProjectionField(wxPanel* panel_of_parent, 
     
     MultipleItemField<P, Projection, CheckProjection<P>>::check = new CheckProjection<P>(this);
     MultipleItemField<P, Projection, CheckProjection<P>>::name->Bind(wxEVT_KILL_FOCUS, *(MultipleItemField<P, Projection, CheckProjection<P>>::check));
+    MultipleItemField<P, Projection, CheckProjection<P>>::name->Bind(wxEVT_COMBOBOX, *(MultipleItemField<P, Projection, CheckProjection<P>>::check));
 
     //as text is changed in name from the user, i.e., with either a keyboard button or a selection in the listbox, call OnEdit
     MultipleItemField<P, Projection, CheckProjection<P>>::name->Bind(wxEVT_COMBOBOX, &ProjectionField::OnEdit<wxCommandEvent>, this);

@@ -182,7 +182,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             (((Position*)transported_object)->label) = ((Position*)transported_object)->label.append(String(" transported with ")).append(((MotionHandler<F>::transporting_route).label));
             
             //update the Position information in f
-            ((Position*)transported_object)->update_wxListCtrl(
+            ((Position*)transported_object)->update_ListControl(
                                                                address_position_in_vector<Position>(((Position*)transported_object), (MotionHandler<F>::parent)->data->position_list),
                                                                (MotionHandler<F>::parent)->listcontrol_positions
                                                                );

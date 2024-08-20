@@ -1207,8 +1207,8 @@ template<class E> void ListFrame::Disconnect(E& event) {
     (((data->route_list)[i_route]).related_sight).set(-1);
 
     //update the related wxListCtrls in ListFrame
-    ((data->sight_list)[i_object_to_disconnect]).update_wxListCtrl(i_object_to_disconnect, listcontrol_sights);
-    ((data->route_list)[i_route]).update_wxListCtrl(i_route, listcontrol_routes);
+    ((data->sight_list)[i_object_to_disconnect]).update_ListControl(i_object_to_disconnect, listcontrol_sights);
+    ((data->route_list)[i_route]).update_ListControl(i_route, listcontrol_routes);
 
     //set the background color of the related sight to white
     (listcontrol_sights)->SetItemBackgroundColour(i_object_to_disconnect, wxGetApp().background_color);

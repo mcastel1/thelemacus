@@ -91,7 +91,7 @@ template<class S> void ListControl<S>::set(vector<S> v, bool keep_selected_items
     //set *this
     DeleteAllItems();
     for (i = 0; i < v.size(); i++) {
-        (v[i]).add_to_wxListCtrl(-1, this);
+        (v[i]).add_to_ListControl(-1, this);
     }
 
     if (keep_selected_items) {

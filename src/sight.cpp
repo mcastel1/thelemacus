@@ -257,7 +257,7 @@ void Sight::add_to_ListControl(long position_in_listcontrol, wxListCtrl* listcon
 
     listcontrol->InsertItem(item);
 
-    update_wxListCtrl(i, listcontrol);
+    update_ListControl(i, listcontrol);
 
 }
 

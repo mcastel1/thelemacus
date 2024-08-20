@@ -3520,7 +3520,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                         
                         
                         //update the coordinates of the Position under consideration in listcontrol_positions
-                        ((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]).update_wxListCtrl(((parent->parent)->highlighted_position_now), (parent->parent)->listcontrol_positions);
+                        ((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]).update_ListControl(((parent->parent)->highlighted_position_now), (parent->parent)->listcontrol_positions);
                         
                         //given that the position under consideration has changed, I re-pain the chart
                         Refresh();
@@ -4058,7 +4058,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         
                         //update the data of the Route under consideration in listcontrol_routes
-                        ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).update_wxListCtrl((parent->parent->highlighted_route_now), parent->parent->listcontrol_routes);
+                        ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).update_ListControl((parent->parent->highlighted_route_now), parent->parent->listcontrol_routes);
                         
                         
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
@@ -4131,7 +4131,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         }
                         
                         //update the data of the Position under consideration in listcontrol_positions
-                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]).update_wxListCtrl((parent->parent->highlighted_position_now), parent->parent->listcontrol_positions);
+                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]).update_ListControl((parent->parent->highlighted_position_now), parent->parent->listcontrol_positions);
                         
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {

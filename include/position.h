@@ -57,8 +57,8 @@ public:
     string to_string(unsigned int);
     bool distance(Position, Length*, String, String);
     bool is_in(Route, String);
-    void add_to_wxListCtrl(long, wxListCtrl*);
-    void update_wxListCtrl(long, wxListCtrl*);
+    void add_to_ListControl(long, wxListCtrl*);
+    void update_ListControl(long, wxListCtrl*);
     void rotate(const String&, const Rotation&, Position*, const String&);
     
     bool operator==(const Position&);

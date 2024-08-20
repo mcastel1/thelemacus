@@ -78,8 +78,8 @@ public:
     int intersection(Route, bool, vector<Angle>*, String);
     bool closest_point_to(Position*, Angle*, Position, String);
     void size_Mercator(PositionProjection*);
-    void add_to_wxListCtrl(long, wxListCtrl*);
-    void update_wxListCtrl(long, wxListCtrl*);
+    void add_to_ListControl(long, wxListCtrl*);
+    void update_ListControl(long, wxListCtrl*);
     
     void DrawOld(unsigned int, Color, int, wxDC*, DrawPanel*);
     void DrawOld(unsigned int, wxDC*, DrawPanel*, String);

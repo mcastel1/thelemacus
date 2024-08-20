@@ -226,7 +226,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
 }
 
 //add the Route this to the wxListCtrl listcontrol
-void Route::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcontrol) {
+void Route::add_to_ListControl(long position_in_listcontrol, wxListCtrl* listcontrol) {
 
     unsigned int i;
     wxListItem item;
@@ -250,7 +250,7 @@ void Route::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcont
 
     listcontrol->InsertItem(item);
 
-    update_wxListCtrl(i, listcontrol);
+    update_ListControl(i, listcontrol);
 
 }
 
@@ -881,7 +881,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
 }
 
 
-void Route::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
+void Route::update_ListControl(long i, wxListCtrl* listcontrol) {
 
     unsigned int j;
 

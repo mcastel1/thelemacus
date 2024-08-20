@@ -97,7 +97,7 @@ bool Position::is_in(Route route, [[maybe_unused]] String prefix) {
 
 
 //creates an element in listcontrol and writes into this element the values of all the fields contained in this
-void Position::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listcontrol) {
+void Position::add_to_ListControl(long position_in_listcontrol, wxListCtrl* listcontrol) {
 
     unsigned int i;
     wxListItem item;
@@ -115,12 +115,12 @@ void Position::add_to_wxListCtrl(long position_in_listcontrol, wxListCtrl* listc
 
     listcontrol->InsertItem(item);
 
-    update_wxListCtrl(i, listcontrol);
+    update_ListControl(i, listcontrol);
 
 }
 
 //updates all the values in the GUI fields of item #i of listcontrol with the relative values of the non-GUI Position this
-void Position::update_wxListCtrl(long i, wxListCtrl* listcontrol) {
+void Position::update_ListControl(long i, wxListCtrl* listcontrol) {
 
     int j;
 

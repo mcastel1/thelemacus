@@ -664,8 +664,6 @@ template<class T> void ChartFrame::Reset(T& event) {
     (draw_panel->y_min_0) = (draw_panel->y_min);
     (draw_panel->y_max_0) = (draw_panel->y_max);
 
- 
-
     event.Skip(true);
 
 }

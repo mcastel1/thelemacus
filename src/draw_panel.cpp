@@ -3042,7 +3042,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
     parent->SetLabel(wxString(s.str().c_str()));
 
 
-    if ((parent->projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if ((parent->projection) == Projection_types[0]) {
         //if in projection "mercator" is selected, then I let the Draw function pointer point to PreRenderMercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
 
         PreRender = (&DrawPanel::PreRenderMercator);
@@ -3066,7 +3066,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
 
     }
 
-    if ((parent->projection_field->name->GetValue()) == wxString(((Projection_types[1]).value))) {
+    if ((parent->projection) == Projection_types[1]) {
         //if in projection ((Projection_types[1]).value) is selected, then I let the Draw function pointer point to PreRender3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
 
         PreRender = (&DrawPanel::PreRender3D);
@@ -3424,7 +3424,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             if (((parent->parent->highlighted_route_now) == -1) && (((parent->parent)->highlighted_position_now) == -1)) {
                 //I am dragging the chart (not a Route nor  a Position)
                 
-                if ((parent->projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))) {
+                if ((parent->projection) == Projection_types[0]) {
                     //I am using the Mercator projection
                     
                     double delta_y;

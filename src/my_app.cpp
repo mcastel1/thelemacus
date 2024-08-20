@@ -481,9 +481,12 @@ bool MyApp::OnInit() {
         (list_frame->chart_frames).resize(n_chart_frames.value);
         for (i = 0; i < (list_frame->chart_frames).size(); i++) {
              
-            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
+            //open a Mercator projection for even i and a 3D projection for odd i
+//            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
 
-            //open a Mercator projection for even is and a 3D projection for odd is
+            projection = Projection_types[0];
+
+            
             s.str("");
             s << "Chart #" << i + 1 << " - " << projection.value << " projection";
             

@@ -267,7 +267,9 @@ template<class P, class NON_GUI, class CHECK> template<class E> void MultipleIte
             name->SetForegroundColour(wxGetApp().foreground_color);
             name->SetFont(wxGetApp().default_font);
             Reset(name);
+            
         }
+        
         parent->AllOk();
 
     }

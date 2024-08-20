@@ -998,6 +998,29 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 #endif
 
 
+    switch(position_in_vector((*(projection->object)), Projection_types)) {
+            
+        case 0:{
+            
+            
+            
+            break;
+
+            
+            
+        }
+            
+            
+        case 1:{
+            
+            
+            
+            break;
+
+        }
+            
+    }
+    
 
     if ((projection->name->GetValue()) == wxString(((Projection_types[0]).value))) {
 

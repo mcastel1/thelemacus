@@ -850,13 +850,13 @@ void ChartFrame::UpdateSlider(void) {
 
     //compute the zoom factor of the chart and write it into zoom_factor
 
-    if ((projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if (projection == Projection_types[0]) {
 
         ComputeZoomFactor_Mercator((draw_panel->x_span()));
 
     }
 
-    if ((projection_field->name->GetValue()) == wxString(((Projection_types[1]).value))) {
+    if (projection == Projection_types[1]) {
         //is this necessary here ?
         ComputeZoomFactor_3D();
 

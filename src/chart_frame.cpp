@@ -998,30 +998,6 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
     (draw_panel->reference_positions_route_list_before) = (draw_panel->reference_positions_route_list_now);
     
 #endif
-
-
-    switch(position_in_vector((*(projection_field->object)), Projection_types)) {
-            
-        case 0:{
-            
-            
-            
-            break;
-
-            
-            
-        }
-            
-            
-        case 1:{
-            
-            
-            
-            break;
-
-        }
-            
-    }
     
 
     if (projection == Projection_types[0]) {

@@ -672,15 +672,15 @@ template<class T> void ChartFrame::ResetRender(T& event) {
     Reset<T>(event);
     
     (draw_panel->*(draw_panel->PreRender))();
-     //now that (size_chart.GetWidth()) and (size_chart.GetHeight()) have been set, I set width_chart_0 and height_chart_0 equal to width_chart and (size_chart.GetHeight())
-     (draw_panel->width_chart_0) = (draw_panel->size_chart.GetWidth());
-     (draw_panel->height_chart_0) = (draw_panel->size_chart.GetHeight());
-
-     draw_panel->CleanAndRenderAll();
-     
-     draw_panel->FitAll();
-     UpdateSlider();
-//     Animate();
+    //now that (size_chart.GetWidth()) and (size_chart.GetHeight()) have been set, I set width_chart_0 and height_chart_0 equal to width_chart and (size_chart.GetHeight())
+    (draw_panel->width_chart_0) = (draw_panel->size_chart.GetWidth());
+    (draw_panel->height_chart_0) = (draw_panel->size_chart.GetHeight());
+    
+    draw_panel->CleanAndRenderAll();
+    
+    draw_panel->FitAll();
+    UpdateSlider();
+    //     Animate();
     
     event.Skip(true);
 

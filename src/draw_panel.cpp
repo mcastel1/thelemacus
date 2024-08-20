@@ -3037,7 +3037,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
 
     //put together temp and the new name of the projection type and write the result into the title of parent
     s.str("");
-    s << (temp.value) << " - " << (parent->projection_field->name->GetValue().ToStdString()) << " projection";
+    s << (temp.value) << " - " << (parent->projection.value) << " projection";
     temp.set(s.str());
     parent->SetLabel(wxString(s.str().c_str()));
 
@@ -3668,7 +3668,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             lambda_a = (parent->parent->geo_position_start->lambda);
             lambda_b = (parent->parent->position_end->lambda);
             
-            switch (position_in_vector(Projection((parent->projection_field->name->GetValue().ToStdString())), Projection_types)) {
+            switch (position_in_vector(parent->projection, Projection_types)) {
                     
                 case 0: {
                     //I am using the Mercator projection
@@ -4179,7 +4179,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
             else {
                 //in this case, position_drag_now is not a valid position : in the Mercator projection, this does not make sense and I do nothing. In the 3D projection, I am dragging the chart from outside circle observer (I am rotating the earth) -> I proceed implementing this rotation
                 
-                switch (position_in_vector(Projection((parent->projection_field->name->GetValue().ToStdString())), Projection_types)) {
+                switch (position_in_vector(parent->projection, Projection_types)) {
                         
                     case 0: {
                         //I am using the mercator projection: then the position is invalid and I may print an error message

@@ -3037,7 +3037,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
 
     //put together temp and the new name of the projection type and write the result into the title of parent
     s.str("");
-    s << (temp.value) << " - " << (((parent->projection_field)->name)->GetValue().ToStdString()) << " projection";
+    s << (temp.value) << " - " << (parent->projection_field->name->GetValue().ToStdString()) << " projection";
     temp.set(s.str());
     parent->SetLabel(wxString(s.str().c_str()));
 

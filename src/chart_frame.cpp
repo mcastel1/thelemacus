@@ -258,7 +258,7 @@ template<class T> void ChartFrame::OnPressCtrlW(T& event) {
     for (j = 0; j < (parent->chart_frames).size(); j++) {
 
         s.str("");
-        s << "Chart #" << j + 1 << " - " << ((((parent->chart_frames)[j])->projection_field)->name->GetValue()) << " projection";
+        s << "Chart #" << j + 1 << " - " << (((parent->chart_frames)[j])->projection.value) << " projection";
 
         ((parent->chart_frames)[j])->SetLabel(wxString(s.str().c_str()));
 

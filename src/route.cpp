@@ -697,7 +697,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
             
             int check = -1;
             
-            switch (position_in_vector(Projection((draw_panel->parent->projection_field->name->GetValue().ToStdString())), Projection_types)) {
+            switch (position_in_vector(draw_panel->parent->projection, Projection_types)) {
                     
                 case 0: {
                     //I am using Projection_types[0]
@@ -753,7 +753,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
         case 2: {
             //the Route this is a circle of equal altitde.  its total length is the length of the circle itself, which reads:
             
-            switch (position_in_vector(Projection(draw_panel->parent->projection_field->name->GetValue().ToStdString()), Projection_types)) {
+            switch (position_in_vector(draw_panel->parent->projection, Projection_types)) {
                     
                 case 0: {
                     //I am using the Projection_types[0] projection

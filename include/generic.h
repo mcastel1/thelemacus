@@ -66,7 +66,7 @@ template<class T> void SetColor(T*);
 template <class T> void Reset(T*);
 wxImage RescaleProportionally(wxImage, const wxSize);
 String read_from_file(String, String, String, [[maybe_unused]] String);
-void my_cout(int, ...);
+//void my_cout(int, ...);
 bool operator < (const Length&, const Length&);
 template<class S> void read_list_from_stream(String, S*, bool, vector<int>*);
 double lambda_mercator(double);

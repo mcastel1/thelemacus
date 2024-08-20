@@ -114,8 +114,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     length = new DynamicLengthField<RouteFrame>(
                                                 panel,
                                                 route->length,
-                                                &(wxGetApp().list_frame->data->recent_route_length_value),
-                                                &(wxGetApp().list_frame->data->recent_length_units)
+                                                &(wxGetApp().list_frame->data->recent_route_length_value)
                                                 );
 
 

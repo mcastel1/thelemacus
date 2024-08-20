@@ -2369,6 +2369,8 @@ Rotation DrawPanel::rotation_start_end(const wxPoint& start, const wxPoint& end)
 bool DrawPanel::AdjustLatitudeLongitude3D(const int& i, const int& j, int* i_adjusted, int* j_adjusted){
     
     bool check;
+
+    check = false;
     
     //convert i,j into (*i_adjusted), (*j_adjusted)
     if (!((i >= -90) && (i <= 90))) {

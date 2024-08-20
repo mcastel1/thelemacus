@@ -37,7 +37,7 @@ public:
     bool ok, value_ok, /*this is true if *this is being edited, false otherwise*/ editing;
     wxBoxSizer *sizer_h, *sizer_v;
 
-    NumericalField(wxPanel*, NON_GUI*, NON_GUI*, vector<int>*);
+    NumericalField(wxPanel*, NON_GUI*, NON_GUI*);
 
     void set(void);
     void set(const NON_GUI&);

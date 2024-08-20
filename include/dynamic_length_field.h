@@ -24,7 +24,7 @@ template<class P> class DynamicLengthField: public NumericalField<P, Length, Len
     
 public:
     
-    DynamicLengthField(wxPanel*, Length*, Length*, vector<int>*);
+    DynamicLengthField(wxPanel*, Length*, Length*);
     
 };
 

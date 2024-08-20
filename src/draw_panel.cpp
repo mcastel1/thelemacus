@@ -3388,25 +3388,29 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
         position_start_drag = wxGetMousePosition();
         (this->*ScreenToGeo)(position_start_drag, geo_start_drag);
         
-        if ((parent->projection) == Projection_types[0]) {
-            
-            //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
-            x_min_start_drag = x_min;
-            x_max_start_drag = x_max;
-            y_min_start_drag = y_min;
-            y_max_start_drag = y_max;
-            x_span_start_drag = x_span();
-            
-        }
-        
-        if ((parent->projection) == Projection_types[1]) {
-            
-            //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
-            //        gsl_vector_memcpy((rp_start_drag.r), (rp.r));
-            rotation_start_drag->set((*rotation));
-            //        geo_start_drag.print(String("position start drag"), String(""), cout);
-            //        rotation_start_drag.print(String("rotation start drag"), String(""), cout);
-            
+        switch (position_in_vector(parent->projection, Projection_types)) {
+                
+            case 0: {
+                
+                    //store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
+                    x_min_start_drag = x_min;
+                    x_max_start_drag = x_max;
+                    y_min_start_drag = y_min;
+                    y_max_start_drag = y_max;
+                    x_span_start_drag = x_span();
+
+                break;
+                
+            }
+                
+            case 1: {
+                //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
+                    rotation_start_drag->set((*rotation));
+                
+                break;
+                
+            }
+                
         }
         
     }

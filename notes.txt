@@ -122,7 +122,8 @@
 
 
  ********** THINGS TO FIX ***********
-    - drop the argument const vector<RouteType>& route_types_in from RouteTypeField's contructor and enter direclty when you call the constructor of the parent class 
+    - check if template<class P> void RouteTypeField<P>::set(void) does the same thing as the set() method in the parent classs and, if it does, delete it 
+    - drop the argument const vector<RouteType>& route_types_in from RouteTypeField's contructor and enter direclty when you call the constructor of the parent class
     - replace all 'projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))' with a switch case find_in_...
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame on New Mac
     - if you zoom on England in the 3d projection with selection rectangle the result is wrong

@@ -675,6 +675,8 @@ template<class T> void ChartFrame::ResetRender(T& event) {
     //now that (size_chart.GetWidth()) and (size_chart.GetHeight()) have been set, I set width_chart_0 and height_chart_0 equal to width_chart and (size_chart.GetHeight())
     (draw_panel->width_chart_0) = (draw_panel->size_chart.GetWidth());
     (draw_panel->height_chart_0) = (draw_panel->size_chart.GetHeight());
+    (draw_panel->x_span_0) = (draw_panel->x_span());;
+    
     
     draw_panel->CleanAndRenderAll();
     

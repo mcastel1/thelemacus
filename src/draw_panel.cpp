@@ -3455,7 +3455,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                     
                 }
                 
-                if ((((parent->projection_field)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
+                if ((parent->projection) == Projection_types[1]) {
                     
                     rotation_end_drag->set((*rotation));
                     
@@ -3916,7 +3916,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             y_min = y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
                             y_max = y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
                             
-                            if ((((parent->projection_field)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+                            if ((parent->projection) == Projection_types[0]) {
                                 (this->*Set_lambda_phi_min_max)();
                             }
                             
@@ -3958,7 +3958,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                     }
                     
-                    if ((((parent->projection_field)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
+                    if ((parent->projection) == Projection_types[1]) {
                         //I am using the 3d projection
                         
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
@@ -4015,7 +4015,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         wxPoint q;
                         
-                        if ((((parent->projection_field)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+                        if ((parent->projection) == Projection_types[0]) {
                             
                             wxPoint p;
                             
@@ -4029,7 +4029,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         }
                         
                         
-                        if ((((parent->projection_field)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
+                        if ((parent->projection) == Projection_types[1]) {
                             
                             //compose rotation with the rotation resulting from the drag and then apply it to *route_reference_position_drag_now: *route_reference_position_drag_now -> rotation^{-1}.(rotation due to drag).rotation.(*route_reference_position_drag_now). In this way, when Render() will plot the position (*route_reference_position_drag_now), it will apply to *route_reference_position_drag_now the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.(*route_reference_position_drag_now) = (rotation due to drag).rotation.(*route_reference_position_drag_now), which is the desired result (i.e. route_reference_position_drag_now rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                             rotation_now_drag->set(
@@ -4110,14 +4110,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         wxPoint p;
                         
-                        if ((((parent->projection_field)->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+                        if ((parent->projection) == Projection_types[0]) {
                             
                             //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
                             (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]));
                             
                         }
                         
-                        if ((((parent->projection_field)->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
+                        if ((parent->projection) == Projection_types[1]) {
                             
                             //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                             (*rotation_now_drag) =

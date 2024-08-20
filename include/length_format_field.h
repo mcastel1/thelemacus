@@ -27,11 +27,7 @@ public:
     LengthFormatField(wxPanel*, LengthFormat*, vector<int>*);
 
     template<class E> void OnEdit(E&);
-    
    
 };
-
-
-
 
 #endif

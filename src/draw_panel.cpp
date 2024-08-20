@@ -3373,7 +3373,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
         position_start_drag = wxGetMousePosition();
         (this->*ScreenToGeo)(position_start_drag, geo_start_drag);
         
-        if (((parent->projection_field->name)->GetValue()) == wxString(((Projection_types[0]).value))) {
+        if ((parent->projection) == Projection_types[0]) {
             
             //I store the boundaries of the plot at the beginning of the drag, so if the drag is aborted I will restore these boundaries
             x_min_start_drag = x_min;
@@ -3384,7 +3384,7 @@ void DrawPanel::OnMouseLeftDown(wxMouseEvent& event) {
             
         }
         
-        if (((parent->projection_field->name)->GetValue()) == wxString(((Projection_types[1]).value))) {
+        if ((parent->projection) == Projection_types[1]) {
             
             //I store the orientation of the earth at the beginning of the drag in rotation_start_drag
             //        gsl_vector_memcpy((rp_start_drag.r), (rp.r));

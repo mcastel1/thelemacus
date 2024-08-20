@@ -19,16 +19,15 @@ using namespace std;
 class Projection;
 
 
-template<class P> class ProjectionField: public MultipleItemField<P, Projection, void>{
+template<class P> class ProjectionField: public MultipleItemField<P, Projection, CheckProjection<P> >{
     
 public:
 
-    ProjectionField(wxPanel*, vector<int>*);
+    ProjectionField(wxPanel*, Projection*, vector<int>*);
     
     template<class E> void OnEdit(E&);
    
 };
-
 
 
 #endif

@@ -180,7 +180,7 @@ template void MultipleItemField<RouteFrame, LengthUnit, CheckUnit<RouteFrame, Le
 }
 
 template void MultipleItemField<RouteFrame, RouteType, CheckRouteType<RouteFrame>>::Get<wxCommandEvent>(wxCommandEvent&);
-
+template void MultipleItemField<ChartFrame, Projection, CheckProjection<ChartFrame>>::Get<wxCommandEvent>(wxCommandEvent&);
 
 //same as Get(E& event)  but with no event argument
 template<class P, class NON_GUI, class CHECK> void MultipleItemField<P, NON_GUI, CHECK>::Get(void){

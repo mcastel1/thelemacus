@@ -7,8 +7,8 @@
 
 #include "check_projection.h"
 
+#include "chart_frame.h"
 #include "projection_field.h"
-
 
 
 template<class P> CheckProjection<P>::CheckProjection(ProjectionField<P>* p_in) {
@@ -17,12 +17,11 @@ template<class P> CheckProjection<P>::CheckProjection(ProjectionField<P>* p_in) 
 
 }
 
+template class CheckProjection<ChartFrame>;
+
 
 template<class P> template<class T> void CheckProjection<P>::operator()(T& event) {
-        
-    P* f = (p->parent);
-
-    
+            
     //And then do the check operations related to a general MultipleItem field by calling the Check method of the MultipleItemField parent class
     p->Check(event);
 
@@ -30,3 +29,4 @@ template<class P> template<class T> void CheckProjection<P>::operator()(T& event
 
 }
 
+template void CheckProjection<ChartFrame>::operator()<wxFocusEvent>(wxFocusEvent&);

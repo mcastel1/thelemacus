@@ -3040,53 +3040,60 @@ template<class E> void DrawPanel::SetProjection(E& event) {
     s << (temp.value) << " - " << (parent->projection.value) << " projection";
     temp.set(s.str());
     parent->SetLabel(wxString(s.str().c_str()));
+    
+    
+    switch (position_in_vector(parent->projection, Projection_types)) {
+            
+        case 0: {
+            
+            //if in projection "mercator" is selected, then I let the Draw function pointer point to PreRenderMercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
 
+                 PreRender = (&DrawPanel::PreRenderMercator);
+                 Render = (&DrawPanel::Render_Mercator);
+                 ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_Mercator);
+                 ProjectionToGeo = (&DrawPanel::ProjectionToGeo_Mercator);
+                 ScreenToProjection = (&DrawPanel::ScreenToMercator);
+                 CartesianToProjection = (&DrawPanel::CartesianToMercator);
+                 ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
+                 GeoToProjection = (&DrawPanel::GeoToMercator);
+                 Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
+                 Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_Mercator);
+                 Set_size_chart = (&DrawPanel::Set_size_chart_Mercator);
+                 (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_Mercator);
+                 
+                 //in the 3D projection the scale of the chart, shown in text_slider, does not makes sense -> set it to empty
+                 parent->observer_height->value->SetLabel(wxS(""));
+                 parent->observer_height->unit->name->SetValue(wxS(""));
+                 parent->observer_height->unit->name->Enable(false);
+            break;
+            
+        }
+            
+        case 1: {
+            //if in projection ((Projection_types[1]).value) is selected, then I let the Draw function pointer point to PreRender3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
 
-    if ((parent->projection) == Projection_types[0]) {
-        //if in projection "mercator" is selected, then I let the Draw function pointer point to PreRenderMercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
+               PreRender = (&DrawPanel::PreRender3D);
+               Render = (&DrawPanel::Render_3D);
+               ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_3D);
+               ProjectionToGeo = (&DrawPanel::ProjectionToGeo_3D);
+               ScreenToProjection = (&DrawPanel::ScreenTo3D);
+               CartesianToProjection = (&DrawPanel::CartesianTo3D);
+               ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
+               GeoToProjection = (&DrawPanel::GeoTo3D);
+               Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
+               Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_3D);
+               Set_size_chart = (&DrawPanel::Set_size_chart_3D);
+               (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
 
-        PreRender = (&DrawPanel::PreRenderMercator);
-        Render = (&DrawPanel::Render_Mercator);
-        ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_Mercator);
-        ProjectionToGeo = (&DrawPanel::ProjectionToGeo_Mercator);
-        ScreenToProjection = (&DrawPanel::ScreenToMercator);
-        CartesianToProjection = (&DrawPanel::CartesianToMercator);
-        ScreenToGeo = (&DrawPanel::ScreenToGeo_Mercator);
-        GeoToProjection = (&DrawPanel::GeoToMercator);
-        Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_Mercator);
-        Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_Mercator);
-        Set_size_chart = (&DrawPanel::Set_size_chart_Mercator);
-        (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_Mercator);
-        
-        //in the 3D projection the scale of the chart, shown in text_slider, does not makes sense -> set it to empty
-        parent->observer_height->value->SetLabel(wxS(""));
-        parent->observer_height->unit->name->SetValue(wxS(""));
-        parent->observer_height->unit->name->Enable(false);
-   
+               //in the 3D projection the scale of the chart, shown in text_slider, does not makes sense -> set it to empty
+               parent->chart_scale->SetLabel(wxS(""));
+               parent->observer_height->unit->name->Enable(true);
+               parent->observer_height->SetValueInMostRecentUnit();
 
-    }
-
-    if ((parent->projection) == Projection_types[1]) {
-        //if in projection ((Projection_types[1]).value) is selected, then I let the Draw function pointer point to PreRender3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
-
-        PreRender = (&DrawPanel::PreRender3D);
-        Render = (&DrawPanel::Render_3D);
-        ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_3D);
-        ProjectionToGeo = (&DrawPanel::ProjectionToGeo_3D);
-        ScreenToProjection = (&DrawPanel::ScreenTo3D);
-        CartesianToProjection = (&DrawPanel::CartesianTo3D);
-        ScreenToGeo = (&DrawPanel::ScreenToGeo_3D);
-        GeoToProjection = (&DrawPanel::GeoTo3D);
-        Set_x_y_min_max = (&DrawPanel::Set_x_y_min_max_3D);
-        Set_lambda_phi_min_max = (&DrawPanel::Set_lambda_phi_min_max_3D);
-        Set_size_chart = (&DrawPanel::Set_size_chart_3D);
-        (parent->UpdateSliderLabel) = (&ChartFrame::UpdateSliderLabel_3D);
-
-        //in the 3D projection the scale of the chart, shown in text_slider, does not makes sense -> set it to empty
-        parent->chart_scale->SetLabel(wxS(""));
-        parent->observer_height->unit->name->Enable(true);
-        parent->observer_height->SetValueInMostRecentUnit();
-
+            break;
+            
+        }
+            
     }
     
     event.Skip(true);

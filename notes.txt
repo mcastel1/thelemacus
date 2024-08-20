@@ -122,6 +122,7 @@
 
 
  ********** THINGS TO FIX ***********
+    - sometimes when you switch from 3d to mercator projection the chart shrinks during the animation 
     - drop the argument const vector<RouteType>& route_types_in from RouteTypeField's contructor and enter direclty when you call the constructor of the parent class
     - '         if ((parent->projection) == Projection_types[0]) {
                                 (this->*Set_lambda_phi_min_max)();

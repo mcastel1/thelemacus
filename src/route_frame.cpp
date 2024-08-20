@@ -737,7 +737,7 @@ template<class T> void RouteFrame::get(T& event) {
 
 
 //enable/disable the fields in *this according to the Route type
-template<class E> void RouteFrame::EnableDisableRouteTypeFields(E& event) {
+template<class E> void RouteFrame::EnableDisableRouteTypeFields([[maybe_unused]] E& event) {
     
     
     unsigned int i;

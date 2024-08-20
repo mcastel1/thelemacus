@@ -174,7 +174,7 @@ void Sight::update_ListControl(long i, wxListCtrl* listcontrol) {
     listcontrol->SetItem(i, j++, wxString(artificial_horizon.value));
 
     //set sextant altitude column
-    listcontrol->SetItem(i, j++, wxString((H_s).to_string(String(""), (display_precision.value), true)));
+    listcontrol->SetItem(i, j++, wxString(H_s.to_string(String(""), (display_precision.value), true)));
 
     //set index error
     listcontrol->SetItem(i, j++, wxString((index_error).to_string(String(""), (display_precision.value), true)));

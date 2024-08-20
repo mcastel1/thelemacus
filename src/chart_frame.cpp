@@ -892,7 +892,7 @@ template<class T> void ChartFrame::OnMouseLeftDownOnSlider(T& event) {
     //mouse scrolling starts
     mouse_scrolling = true;
 
-    if ((projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if (projection == Projection_types[0]) {
 
         (draw_panel->x_center_scrolling) = ((draw_panel->x_min) + (draw_panel->x_max)) / 2.0;
         (draw_panel->y_center_scrolling) = ((draw_panel->y_min) + (draw_panel->y_max)) / 2.0;
@@ -1024,7 +1024,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
     }
     
 
-    if ((projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))) {
+    if (projection == Projection_types[0]) {
 
         PositionProjection p_min, p_max;
 
@@ -1061,7 +1061,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
     }
 
-    if ((projection_field->name->GetValue()) == wxString(((Projection_types[1]).value))) {
+    if (projection == Projection_types[1]) {
 
         (draw_panel->circle_observer->omega) = ((parent->circle_observer_0->omega) / (zoom_factor.value));
 

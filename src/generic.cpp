@@ -770,20 +770,39 @@ Angle normalize_pm_pi_ret(const Angle& x){
 }
 
 
-//normalize a and b between -pi and pi, and return  the algebraic mean between a.value and b.value
-//inline
-double mean_pm_pi(Angle& a, Angle& b){
+//return the mean between a.value and b.value
+double mean_value(Angle& a, Angle& b){
     
-    return(((a.normalize_pm_pi_ret().value) + (b.normalize_pm_pi_ret().value))/2.0);
+    return( ((a.value) + (b.value))/2.0 );
     
 }
 
 
-//return the mean between a.value and b.value
-//inline
-double mean_value(Angle& a, Angle& b){
+//normalize a and b between -pi and pi, and return  the algebraic mean between a.value and b.value
+double mean_pm_pi(Angle& a, Angle& b){
     
-    return( ((a.value) + (b.value))/2.0 );
+    return(mean_value(a.normalize_pm_pi_ret(), b.normalize_pm_pi_ret());
+    
+}
+
+
+void mean_longitude(Angle& a, Angle& b, Angle* result){
+    
+    Angle a_, b_;
+    
+    a_ = a.normalize_pm_pi_ret();
+    b_ = b.normalize_pm_pi_ret();
+    
+    result->set(mean_value(a_, b_));
+    
+    if((a_.value) * (b_.value) < 0.0){
+        //a and b lie in different hemispheres
+        
+        if(fabs((a_.value)-(b_.value)) > M_PI){
+            (*result) += M_PI;
+        }
+        
+    }
     
 }
 

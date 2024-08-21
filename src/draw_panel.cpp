@@ -3813,6 +3813,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             if(fabs((lambda_a.value)-(lambda_b.value)) > M_PI){
                                 circle_observer->reference_position->lambda += M_PI;
                             }
+                            
                         }
                         
                         

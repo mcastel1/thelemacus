@@ -107,9 +107,9 @@ public:
                               const vector<wxPoint>&,
                               const vector<unsigned long long int>&,
                               const vector<wxPoint>&,
-                              wxColor,
-                              wxColor,
-                              double);
+                              const wxColor&,
+                              const wxColor&,
+                              const double&);
     bool (DrawPanel::*ProjectionToDrawPanel)(PositionProjection&, wxPoint*, bool);
     void (DrawPanel::*ProjectionToGeo)(const PositionProjection&, Position*);
     void (DrawPanel::*Set_x_y_min_max)(void);
@@ -128,9 +128,9 @@ public:
     void RenderPolygons(wxDC*,
                         const vector<unsigned long long int>&,
                         const vector<wxPoint>&,
-                        wxColor,
-                        wxColor,
-                        double
+                        const wxColor&,
+                        const wxColor&,
+                        const double&
                         );
     void RenderBackground(wxDC&,
                           const wxPoint&,
@@ -140,24 +140,24 @@ public:
                           const vector<wxPoint>&,
                           const vector<unsigned long long int>&,
                           const vector<wxPoint>&,
-                          wxColor,
-                          wxColor,
+                          const wxColor&,
+                          const wxColor&,
                           double);
     void RenderRoutes(wxDC&,
                       const vector< vector< vector<wxPoint> > >&,
                       const vector<wxPoint>&,
                       int,
-                      wxColor
+                      const wxColor&
                       );
     void RenderPositions(
                          wxDC&,
                          const vector<wxPoint>&,
                          int,
-                         wxColor);
-    void RenderMousePositionLabel(wxDC&, const String&, const wxPoint&, wxColor, wxColor);
-    void RenderDraggedObjectLabel(wxDC&, const wxPoint&, const String&, wxColor, wxColor);
-    void RenderSelectionRectangle(wxDC&, const wxPoint&, const wxPoint&, const String&, wxColor, wxColor);
-    void RenderSelectionRectangle(wxDC&, const Position&, const wxPoint&, const String&, wxColor, wxColor);
+                         const wxColor&);
+    void RenderMousePositionLabel(wxDC&, const String&, const wxPoint&, const wxColor&, const wxColor&);
+    void RenderDraggedObjectLabel(wxDC&, const wxPoint&, const String&, const wxColor&, const wxColor&);
+    void RenderSelectionRectangle(wxDC&, const wxPoint&, const wxPoint&, const String&, const wxColor&, const wxColor&);
+    void RenderSelectionRectangle(wxDC&, const Position&, const wxPoint&, const String&, const wxColor&, const wxColor&);
     void CleanAndRenderAll(void);
     void TabulateRoutes(void);
     void TabulatePositions(void);
@@ -203,9 +203,9 @@ public:
                          const vector<wxPoint>&,
                          const vector<unsigned long long int> &,
                          const vector<wxPoint>&,
-                         wxColor,
-                         wxColor,
-                         double);
+                         const wxColor&,
+                         const wxColor&,
+                         const double&);
     void Render_3D(wxDC*,
                    const wxPoint&,
                    const vector< vector< vector<wxPoint> > >&,
@@ -214,9 +214,9 @@ public:
                    const vector<wxPoint>&,
                    const vector<unsigned long long int> &,
                    const vector<wxPoint>&,
-                   wxColor,
-                   wxColor,
-                   double);
+                   const wxColor&,
+                   const wxColor&,
+                   const double&);
     void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);
     void DrawLabel(const Position&, Angle, Angle, Int, String);
     

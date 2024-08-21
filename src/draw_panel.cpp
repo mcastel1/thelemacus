@@ -3668,11 +3668,12 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
         }else{
             //end drawing a selection rectangle
             
+            unsigned int i;
+
             GetMouseGeoPosition((parent->parent->geo_position_end));
             drawpanel_position_end = (parent->parent->screen_position_now);
             
-            unsigned int i;
-            
+
             //store the position at the end of the selection process, to compute the zoom factor later
             if ((this->*ScreenToProjection)(drawpanel_position_end, projection_end)) {
                 //drawpanel_position_end is valid

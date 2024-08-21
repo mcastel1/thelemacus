@@ -1121,9 +1121,9 @@ inline void DrawPanel::Render_3D(
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                  const vector<unsigned long long int> & polygon_positions,
                                  const vector<wxPoint>& points_polygons,
-                                 wxColor foreground_color,
-                                 wxColor background_color,
-                                 double thickness
+                                 const wxColor& foreground_color,
+                                 const wxColor& background_color,
+                                 const double& thickness
                                  ) {
     
     int i, j;

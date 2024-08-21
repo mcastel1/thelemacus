@@ -109,7 +109,7 @@ public:
                               const vector<wxPoint>&,
                               const wxColor&,
                               const wxColor&,
-                              double);
+                              const double&);
     bool (DrawPanel::*ProjectionToDrawPanel)(PositionProjection&, wxPoint*, bool);
     void (DrawPanel::*ProjectionToGeo)(const PositionProjection&, Position*);
     void (DrawPanel::*Set_x_y_min_max)(void);
@@ -205,7 +205,7 @@ public:
                          const vector<wxPoint>&,
                          const wxColor&,
                          const wxColor&,
-                         double);
+                         const double&);
     void Render_3D(wxDC*,
                    const wxPoint&,
                    const vector< vector< vector<wxPoint> > >&,
@@ -216,7 +216,7 @@ public:
                    const vector<wxPoint>&,
                    const wxColor&,
                    const wxColor&,
-                   double);
+                   const double&);
     void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);
     void DrawLabel(const Position&, Angle, Angle, Int, String);
     

@@ -130,8 +130,8 @@ inline void DrawPanel::RenderMousePositionLabel(
                                                 wxDC& dc,
                                                 const String& label_position,
                                                 const wxPoint& position_label_position,
-                                                wxColor foreground_color,
-                                                wxColor background_color
+                                                const wxColor& foreground_color,
+                                                const wxColor& background_color
                                                 ) {
 
     //wipe out position_label_position by writing on top of it a rectangle filled with color backgound_color
@@ -177,8 +177,8 @@ inline void DrawPanel::RenderBackground(
                                         const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                         const vector<unsigned long long int>& polygon_positions,
                                         const vector<wxPoint>& points_coastline,
-                                        wxColour foreground_color,
-                                        wxColour background_color,
+                                        const wxColour& foreground_color,
+                                        const wxColour& background_color,
                                         double thickness
 ) {
 
@@ -235,8 +235,8 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                                                 const wxPoint& position,
                                                 const wxPoint& position_end_label,
                                                 const String& end_label,
-                                                wxColour foreground_color,
-                                                wxColour background_color) {
+                                                const wxColour& foreground_color,
+                                                const wxColour& background_color) {
 
     Position p;
 
@@ -252,8 +252,8 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                                                 const Position& geo_position,
                                                 const wxPoint& position_end_label,
                                                 const String& end_label,
-                                                wxColour foreground_color,
-                                                wxColour background_color) {
+                                                const wxColour& foreground_color,
+                                                const wxColour& background_color) {
     
     Angle lambda_a, lambda_b, lambda_ab_span, Z;
 
@@ -455,7 +455,7 @@ inline void DrawPanel::RenderRoutes(
                                     const vector< vector< vector<wxPoint> > >& points_curves,
                                     const vector<wxPoint>& reference_positions,
                                     int highlighted_route,
-                                    wxColor foreground_color
+                                    const wxColor& foreground_color
                                     ) {
 
     int i, j, color_id;
@@ -805,7 +805,7 @@ void DrawPanel::RefreshWIN32(void) {
 inline void DrawPanel::RenderPositions(wxDC& dc,
                                        const vector<wxPoint>& points,
                                        int highlighted_position,
-                                       wxColor foreground_color) {
+                                       const wxColor& foreground_color) {
 
     int i, color_id;
     double thickness, radius;
@@ -846,8 +846,8 @@ inline void DrawPanel::RenderPositions(wxDC& dc,
 inline void DrawPanel::RenderDraggedObjectLabel(wxDC& dc,
                                                 const wxPoint& position_label_dragged_object,
                                                 const String& label_dragged_object,
-                                                wxColor foreground_color,
-                                                wxColor background_color) {
+                                                const wxColor& foreground_color,
+                                                const wxColor& background_color) {
 
 
     //wipe out the space occupied by the label
@@ -895,9 +895,9 @@ void DrawPanel::FitAll() {
 inline void DrawPanel::RenderPolygons(wxDC* dc,
                                       const vector<unsigned long long int>& polygon_positions,
                                       const vector<wxPoint>& points_polygons,
-                                      wxColor foreground_color,
-                                      wxColor background_color,
-                                      double thickness) {
+                                      const wxColor& foreground_color,
+                                      const wxColor& background_color,
+                                      const double& thickness) {
     
     long long int i;
     
@@ -926,9 +926,9 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                        const vector<unsigned long long int>& polygon_positions,
                                        const vector<wxPoint>& points_polygons,
-                                       wxColor foreground_color,
-                                       wxColor background_color,
-                                       double thickness) {
+                                       const wxColor& foreground_color,
+                                       const wxColor& background_color,
+                                       const double& thickness) {
 
     Angle lambda, phi;
     Route route;

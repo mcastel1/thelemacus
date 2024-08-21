@@ -283,8 +283,8 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 
     
     //top and bottom horizontal edge of rectangle
-    lambda_a = (parent->parent->geo_position_start->lambda);
-    lambda_b = geo_position.lambda;
+    lambda_a.set(parent->parent->geo_position_start->lambda);
+    lambda_b.set(geo_position.lambda);
     lambda_a.normalize();
     lambda_b.normalize();
     

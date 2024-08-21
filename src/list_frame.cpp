@@ -57,7 +57,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     geo_position_start = new Position;
     geo_position_before = new Position;
     geo_position_now = new Position;
-    position_end = new Position;
+    geo_position_end = new Position;
     rectangle_observer_0 = new PositionRectangle;
     
     circle_observer_0 = new Route;

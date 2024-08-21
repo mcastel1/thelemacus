@@ -773,7 +773,7 @@ Angle normalize_pm_pi_ret(const Angle& x){
 //return the mean between a.value and b.value
 double mean_value(Angle& a, Angle& b){
     
-    return( ((a.value) + (b.value))/2.0 );
+    return(((a.value) + (b.value))/2.0);
     
 }
 
@@ -781,11 +781,11 @@ double mean_value(Angle& a, Angle& b){
 //normalize a and b between -pi and pi, and return  the algebraic mean between a.value and b.value
 double mean_pm_pi(Angle& a, Angle& b){
     
-    return(mean_value(a.normalize_pm_pi_ret(), b.normalize_pm_pi_ret());
+    return(((a.normalize_pm_pi_ret().value) + (b.normalize_pm_pi_ret().value))/2.0);
     
 }
 
-
+//retun the longitude in the middle of a rectangle which has one N/S side at longitude a, and another N/S side at longitude b, and write the result in *result
 void mean_longitude(Angle& a, Angle& b, Angle* result){
     
     Angle a_, b_;

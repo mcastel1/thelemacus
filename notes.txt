@@ -145,7 +145,6 @@
     - replace 'lambda_a = (parent->parent->geo_position_start->lambda);
                 lambda_b = (parent->parent->geo_position_end->lambda);' with set() method
     - change back '//set projections at startup - start''
-    - if you zoom on England in the 3d projection with selection rectangle the result is wrong
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 `	- write put_back_in , put_back)_in_Mercator and put_back_in_3D :
     - all icons in light mode must be revised and stored in dark mode

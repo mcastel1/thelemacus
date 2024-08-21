@@ -55,7 +55,7 @@
                      7. Install gsl:
                         * download gsl-1.16.tar.gz from https://ftp.gnu.org/gnu/gsl/ and unzip it in, say, C:/gsl-1.16
                         * download gnu-gsl-for-windows-master.zip from https://github.com/ahmadyan/gnu-gsl-for-windows/tree/master
-                        * follow the instructions in https://github.com/ahmadyan/gnu-gsl-for-windows/blob/master/build.vc11/gsl.vc11.readme.txt
+                        * follow the instructions in https://github.com/ahmadyan/gnu-gsl-for-windows/blob/master/build.vc11/gsl.vc11.readme.txt, i.e.:
                             - unzip the content of gnu-gsl-for-windows-master.zip into  C:/gsl-1.16 (answer yes when asked whether you should overwrite some files)
                             - you should have a folder C:\gsl-1.16\build.vc11
                             - open  C:\gsl-1.16\gsl.lib.sln with Visual Studio

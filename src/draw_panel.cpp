@@ -3687,8 +3687,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 parent->parent->geo_position_end->phi.normalize_pm_pi();
                 parent->parent->geo_position_end->lambda.normalize_pm_pi();
                 
-                lambda_a = (parent->parent->geo_position_start->lambda);
-                lambda_b = (parent->parent->geo_position_end->lambda);
+                lambda_a.set(parent->parent->geo_position_start->lambda);
+                lambda_b.set(parent->parent->geo_position_end->lambda);
                 
                 switch (position_in_vector(parent->projection, Projection_types)) {
                         

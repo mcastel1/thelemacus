@@ -473,9 +473,12 @@ bool MyApp::OnInit() {
         (list_frame->chart_frames).resize(n_chart_frames.value);
         for (i = 0; i < (list_frame->chart_frames).size(); i++) {
              
+            //set projections at startup - start
             //open a Mercator projection for even i and a 3D projection for odd i
-            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
+            //            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
             //            projection = Projection_types[0];
+            projection = Projection_types[1];
+            //set projecitons at startup - end
 
             
             s.str("");

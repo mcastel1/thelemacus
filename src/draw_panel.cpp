@@ -3635,7 +3635,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 parent->parent->chart_frames[i]->button_reset->Enable(false);
             }
             
-            (*(parent->parent->geo_position_start)) = (*(parent->parent->geo_position_now));
+//            (*(parent->parent->geo_position_start)) = (*(parent->parent->geo_position_now));
+            parent->parent->geo_position_start->set((*(parent->parent->geo_position_now)));
             
             //store the position at the beginning of the selection process, to compute the zoom factor
             //run over all ChartFrames : if in the i-th ChartFrame *geo_position_start falls within the plot area -> set label and position of the start position of selection_rectangle in that ChartFrame
@@ -3655,9 +3656,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         
                     }
                 
-                
             }
-            
             
             if (!check) {
                 //*geo_position_start is invalid in all DrawPanels -> delete the selection rectangle by setting selection_rectangle to false
@@ -3666,9 +3665,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 
             }
             
-            
-        }
-        else {
+        }else{
             //end drawing a selection rectangle
             
             GetMouseGeoPosition((parent->parent->position_end));

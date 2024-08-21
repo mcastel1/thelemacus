@@ -75,6 +75,7 @@ double phi_mercator(double);
 bool operator < (const Angle&, const Angle&);
 bool operator < (const Angle&, const double&);
 void AdjustWidth(wxComboBox*);
+template <class Tp> struct my_allocator;
 
 #endif
 

@@ -913,3 +913,29 @@ double phi_mercator(double y){
     return(rad_to_deg*atan(sinh(y)));
     
 }
+
+
+// minimal C++11 allocator with debug output
+template<class Tp> struct my_allocator
+{
+    typedef Tp value_type;
+ 
+    my_allocator() = default;
+    template<class T>
+    my_allocator(const my_allocator<T>&) {}
+ 
+    Tp* allocate(std::size_t n)
+    {
+        n *= sizeof(Tp);
+        Tp* p = static_cast<Tp*>(::operator new(n));
+        std::cout << "allocating " << n << " bytes @ " << p << '\n';
+        return p;
+    }
+ 
+    void deallocate(Tp* p, std::size_t n)
+    {
+        std::cout << "deallocating " << n * sizeof *p << " bytes @ " << p << "\n\n";
+        ::operator delete(p);
+    }
+    
+};

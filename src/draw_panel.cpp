@@ -3635,7 +3635,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 parent->parent->chart_frames[i]->button_reset->Enable(false);
             }
             
-            (*(parent->parent->geo_position_start)) = (*(parent->parent->geo_position_now));
+//            (*(parent->parent->geo_position_start)) = (*(parent->parent->geo_position_now));
+            parent->parent->geo_position_start->set((*(parent->parent->geo_position_now)));
             
             //store the position at the beginning of the selection process, to compute the zoom factor
             //run over all ChartFrames : if in the i-th ChartFrame *geo_position_start falls within the plot area -> set label and position of the start position of selection_rectangle in that ChartFrame
@@ -3655,9 +3656,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         
                     }
                 
-                
             }
-            
             
             if (!check) {
                 //*geo_position_start is invalid in all DrawPanels -> delete the selection rectangle by setting selection_rectangle to false
@@ -3666,16 +3665,15 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 
             }
             
-            
-        }
-        else {
+        }else{
             //end drawing a selection rectangle
             
-            GetMouseGeoPosition((parent->parent->position_end));
+            unsigned int i;
+
+            GetMouseGeoPosition((parent->parent->geo_position_end));
             drawpanel_position_end = (parent->parent->screen_position_now);
             
-            unsigned int i;
-            
+
             //store the position at the end of the selection process, to compute the zoom factor later
             if ((this->*ScreenToProjection)(drawpanel_position_end, projection_end)) {
                 //drawpanel_position_end is valid
@@ -3686,11 +3684,11 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 //convert all the angles to the format between -pi and pi, so I can sort them numerically
                 parent->parent->geo_position_start->phi.normalize_pm_pi();
                 parent->parent->geo_position_start->lambda.normalize_pm_pi();
-                parent->parent->position_end->phi.normalize_pm_pi();
-                parent->parent->position_end->lambda.normalize_pm_pi();
+                parent->parent->geo_position_end->phi.normalize_pm_pi();
+                parent->parent->geo_position_end->lambda.normalize_pm_pi();
                 
                 lambda_a = (parent->parent->geo_position_start->lambda);
-                lambda_b = (parent->parent->position_end->lambda);
+                lambda_b = (parent->parent->geo_position_end->lambda);
                 
                 switch (position_in_vector(parent->projection, Projection_types)) {
                         
@@ -3756,12 +3754,12 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             
                             
                             
-                            if ((parent->parent->geo_position_start->phi) > ((parent->parent->position_end)->phi)) {
+                            if ((parent->parent->geo_position_start->phi) > ((parent->parent->geo_position_end)->phi)) {
                                 (*(parent->phi_max)) = (((parent->parent)->geo_position_start)->phi);
-                                (*(parent->phi_min)) = (((parent->parent)->position_end)->phi);
+                                (*(parent->phi_min)) = (((parent->parent)->geo_position_end)->phi);
                             }else {
                                 (*(parent->phi_min)) = (((parent->parent)->geo_position_start)->phi);
-                                (*(parent->phi_max)) = (((parent->parent)->position_end)->phi);
+                                (*(parent->phi_max)) = (((parent->parent)->geo_position_end)->phi);
                             }
                             //I normalize lambda_min, ..., phi_max for future use.
                             parent->lambda_min->normalize();
@@ -3771,8 +3769,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                             
                             parent->parent->geo_position_start->phi.normalize();
                             parent->parent->geo_position_start->lambda.normalize();
-                            parent->parent->position_end->phi.normalize();
-                            parent->parent->position_end->lambda.normalize();
+                            parent->parent->geo_position_end->phi.normalize();
+                            parent->parent->geo_position_end->lambda.normalize();
                             
                             (this->*PreRender)();
                             parent->parent->RefreshAll();
@@ -3807,16 +3805,15 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         //store the current ground position of circle_observer into reference_position_old
                         reference_position_old = (*(circle_observer->reference_position));
                         
-                        //normalize lambda_a/b and then compute the algebric mean -> this is the correct value of the longitude of circle_observer
-                        circle_observer->reference_position->lambda.set((lambda_a.normalize_ret().value + lambda_b.normalize_ret().value)/2.0);
+                        mean_longitude(parent->parent->geo_position_start->lambda, parent->parent->geo_position_end->lambda, &(circle_observer->reference_position->lambda));
                         
                         //normalize the two latitudes between -pi and pi and then compute the algebraic mean -> this is the correct value of the two latitudes
-                        circle_observer->reference_position->phi.set(mean_pm_pi(parent->parent->geo_position_start->phi, parent->parent->position_end->phi));
+                        circle_observer->reference_position->phi.set(mean_pm_pi(parent->parent->geo_position_start->phi, parent->parent->geo_position_end->phi));
                         
                         
                         //compute omega as half of  the largest angular distance between the middle of selection rectangle and its corners
                         circle_observer->reference_position->distance((*(parent->parent->geo_position_start)), &l1, String(""), String(""));
-                        circle_observer->reference_position->distance(Position(parent->parent->geo_position_start->lambda, parent->parent->position_end->phi), &l2, String(""), String(""));
+                        circle_observer->reference_position->distance(Position(parent->parent->geo_position_start->lambda, parent->parent->geo_position_end->phi), &l2, String(""), String(""));
                         circle_observer->omega.set(((max(l1, l2).value) / (wxGetApp().Re.value))/2.0);
                         
                         

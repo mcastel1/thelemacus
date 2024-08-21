@@ -3808,6 +3808,14 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                         //normalize lambda_a/b and then compute the algebric mean -> this is the correct value of the longitude of circle_observer
                         circle_observer->reference_position->lambda.set(mean_pm_pi(lambda_a, lambda_b));
                         
+                        if((lambda_a.value) * (lambda_b.value) < 0.0){
+                            
+                            if(fabs((lambda_a.value)-(lambda_b.value)) > M_PI){
+                                circle_observer->reference_position->lambda += M_PI;
+                            }
+                        }
+                        
+                        
                         //normalize the two latitudes between -pi and pi and then compute the algebraic mean -> this is the correct value of the two latitudes
                         circle_observer->reference_position->phi.set(mean_pm_pi(parent->parent->geo_position_start->phi, parent->parent->geo_position_end->phi));
                         

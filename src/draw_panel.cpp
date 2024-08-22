@@ -336,10 +336,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 }
 
 
-//inline
 void DrawPanel::RenderAll(wxDC& dc) {
-    
-    
     
     (this->*Render)(
                     &dc,
@@ -355,18 +352,19 @@ void DrawPanel::RenderAll(wxDC& dc) {
                     wxGetApp().standard_thickness.value
                     );
     
-    
     RenderRoutes(dc,
                  points_route_list_now,
                  reference_positions_route_list_now,
                  (parent->parent->highlighted_route_now),
                  wxNullColour
                  );
+    
     RenderPositions(dc,
                     points_position_list_now,
                     (parent->parent->highlighted_position_now),
                     wxNullColour
                     );
+    
     RenderMousePositionLabel(
                              dc,
                              label_position_now,

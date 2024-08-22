@@ -519,7 +519,8 @@ bool MyApp::OnInit() {
             //open a Mercator projection for even i and a 3D projection for odd i
             //            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
             //            projection = Projection_types[0];
-            projection = Projection_types[1];
+            projection = Projection_types[0];
+//            projection = Projection_types[1];
             //set projecitons at startup - end
 
             

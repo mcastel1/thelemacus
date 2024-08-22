@@ -883,9 +883,21 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     dc->SetPen(wxPen(foreground_color, thickness));
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
+    
+    if(foreground_color == wxGetApp().foreground_color){
+        
+        //render coastlines
+        RenderPolygons(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
+        cout << " " << endl;
+        
+    }else{
+        
+        dc->Clear();
+        cout << " " << endl;
+        
+    }
 
-    //render coastlines
-    RenderPolygons(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
+    cout << " " << endl;
 
 
     //set thickness to normal thicnkness

@@ -505,7 +505,7 @@ void DrawPanel::CleanAndRenderAll(void) {
 
 
 //clean up everything on *this and re-draw: this method is used to replace on WIN32 the wxWidgets default function Refresh(), which is not efficient on WIN32
-void DrawPanel::RefreshWIN32(void) {
+inline void DrawPanel::RefreshWIN32(void) {
     
     wxClientDC dc(this);
     
@@ -1918,7 +1918,7 @@ void DrawPanel::SetIdling(bool b) {
 }
 
 //this function computes lambda_min, ... phi_max from x_min ... y_max for the mercator projection
-void DrawPanel::Set_lambda_phi_min_max_Mercator(void) {
+inline void DrawPanel::Set_lambda_phi_min_max_Mercator(void) {
     
     parent->lambda_min->set(deg_to_rad * lambda_mercator(x_min));
     parent->lambda_max->set(deg_to_rad * lambda_mercator(x_max));
@@ -1928,8 +1928,9 @@ void DrawPanel::Set_lambda_phi_min_max_Mercator(void) {
     
 }
 
+
 //this function computes lambda_min, ... phi_max (the  min/max latitudes and longitudes which encompass circle_observer) for the 3D projection
-void DrawPanel::Set_lambda_phi_min_max_3D(void) {
+inline void DrawPanel::Set_lambda_phi_min_max_3D(void) {
     
     //consider the vector rp = {0,-1,0}, corresponding to the center of the circle of equal altitude above
     gsl_vector_set((rp->r), 0, 0.0);
@@ -1990,7 +1991,7 @@ void DrawPanel::Set_lambda_phi_min_max_3D(void) {
 
 
 //this function computes x_min, ... y_max and from lambda_min ... phi_max in the Mercator projection
-void DrawPanel::Set_x_y_min_max_Mercator(void) {
+inline void DrawPanel::Set_x_y_min_max_Mercator(void) {
     
     PositionProjection p_min, p_max;
     Position temp;
@@ -2050,7 +2051,7 @@ void DrawPanel::Set_size_chart_3D(void) {
 }
 
 /*returns a double: the width of the chart wich takes into account the fact that x_min and x_max may encompass the meridian lambda = pi*/
-double DrawPanel::x_span(void) {
+inline double DrawPanel::x_span(void) {
     
     if (x_max >= x_min) {
         //in this case, x_max, x_min do not encompass the meridian lambda = pi
@@ -2064,7 +2065,7 @@ double DrawPanel::x_span(void) {
 }
 
 //this function computes x_min, ... y_max from d in the 3D projection
-void DrawPanel::Set_x_y_min_max_3D(void) {
+inline void DrawPanel::Set_x_y_min_max_3D(void) {
     
     Double d_temp;
     
@@ -2077,6 +2078,7 @@ void DrawPanel::Set_x_y_min_max_3D(void) {
     y_max = -y_min;
     
 }
+
 
 //puts point *p which lies outside the plot area, back into the plot area . It returns true if p is in the plot area, and false otherwise
 bool DrawPanel::PutBackIn(wxPoint q, wxPoint* p) {
@@ -2113,7 +2115,7 @@ bool DrawPanel::PutBackIn(wxPoint q, wxPoint* p) {
 
 
 //generate a Rotation from the two points start and end (which are referred to the origin of the screen) in the 3D projection.
-Rotation DrawPanel::rotation_start_end(const wxPoint& start, const wxPoint& end) {
+inline Rotation DrawPanel::rotation_start_end(const wxPoint& start, const wxPoint& end) {
     
     Position temp;
     Position p_start, p_end;
@@ -2243,6 +2245,7 @@ inline bool DrawPanel::ScreenToGeo_Mercator(const wxPoint& p, Position* q) {
     
 }
 
+
 //convert the point p in the DrawPanel coordinates to the relative geographic position q, see specifics of ScreenToGeo_Mercator and ScreenToGeo_3D
 inline bool DrawPanel::DrawPanelToGeo(const wxPoint& p, Position* q) {
     
@@ -2254,8 +2257,7 @@ inline bool DrawPanel::DrawPanelToGeo(const wxPoint& p, Position* q) {
 }
 
 
-
-//converts the point p on the screen with a 3D projection, to the relative geographic position q (if q!=NULL). It returns true if p lies within the circle denoting the boundaries of the earth, and false otherwise. If false is returned, q is the geographic position on the earth defined as follows: it lies on the intersection between the Earth and the x'z' plane and on the line between the center of the Earth and the vector rp corresponding to p (such vector rp lies on the x'z' plane)
+//convert the point p on the screen with a 3D projection, to the relative geographic position q (if q!=NULL). It returns true if p lies within the circle denoting the boundaries of the earth, and false otherwise. If false is returned, q is the geographic position on the earth defined as follows: it lies on the intersection between the Earth and the x'z' plane and on the line between the center of the Earth and the vector rp corresponding to p (such vector rp lies on the x'z' plane)
 inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
     
     PositionProjection temp;
@@ -2314,6 +2316,7 @@ inline bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
     }
     
 }
+
 
 //convert the point p on the screen to the  Mercator projection q of the relative geographic position, by writing into q only if q!=NULL. It returns true/false if q lies within the boundaris x_min .. y_max
 inline bool DrawPanel::ScreenToMercator(const wxPoint& p, PositionProjection* q) {
@@ -2386,7 +2389,6 @@ inline bool DrawPanel::GeoTo3D(const Position& p, PositionProjection* q, bool wr
 }
 
 
-
 // If the PositionProjection of q falls within the plot area,  write its Projection into p (if p!=NULL) and return true. If not, it returns false and, if write = true, it writes its projection in q
 inline bool DrawPanel::CartesianToMercator(const Cartesian& p, PositionProjection* q, bool write) {
     
@@ -2418,11 +2420,6 @@ inline bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, 
     check = (gsl_vector_get((rp->r), 1) < -1.0 / (1.0 + (d->value)/(wxGetApp().Re.value)));
     
     
-    
-    //    t2 = clock();
-    //    Ta = t2-t1;
-    
-    
     if (check || write) {
         
         if (q != NULL) {
@@ -2449,11 +2446,7 @@ inline bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, 
         
     }
     
-    //    t3 = clock();
-    //    Tb = t3-t2;
-    
     return out;
-    
     
 }
 

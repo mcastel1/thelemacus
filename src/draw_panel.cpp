@@ -147,7 +147,8 @@ inline void DrawPanel::RenderMousePositionLabel(
 
 
 //call either Refresh() or RefreshWIN32 according to the operating system
-inline void DrawPanel::MyRefresh(){
+//inline 
+void DrawPanel::MyRefresh(){
     
 #ifdef __APPLE__
     //I am on apple operating system-> I use the wxWidgets Refresh() method, which is fast

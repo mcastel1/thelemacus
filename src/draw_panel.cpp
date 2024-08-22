@@ -45,7 +45,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     rotation_0 = new Rotation;
     
     route_reference_position_drag_start = new Position;
-    route_reference_position_drag_before = new Position;
+    //    route_reference_position_drag_before = new Position;
     route_reference_position_drag_now = new Position;
     geo_start_drag = new Position;
     geo_end_drag = new Position;
@@ -1183,7 +1183,7 @@ void DrawPanel::PreRenderMercator(void) {
     SetSize(size_chart);
     
     //I am about to modify position_plot_area_now -> save it in position_plot_area_before
-    position_plot_area_before = position_plot_area_now;
+    //    position_plot_area_before = position_plot_area_now;
     
     //sets size_plot_area and stores into position_plot_area the screen position of the top-left edge of the plot area.
     if (
@@ -1326,8 +1326,8 @@ void DrawPanel::PreRenderMercator(void) {
     
     //compute labels on parallels and meridians
     //save parallels_and_meridians_labels_now and positions_parallels_and_meridians_labels_now into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
-    parallels_and_meridians_labels_before = parallels_and_meridians_labels_now;
-    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels_now;
+    //    parallels_and_meridians_labels_before = parallels_and_meridians_labels_now;
+    //    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels_now;
     parallels_and_meridians_labels_now.resize(0);
     positions_parallels_and_meridians_labels_now.resize(0);
     
@@ -1522,7 +1522,7 @@ void DrawPanel::PreRender3D(void) {
     size_plot_area.SetWidth((size_chart.GetWidth()) * (length_plot_area_over_length_chart.value));
     size_plot_area.SetHeight((size_chart.GetHeight()) * (length_plot_area_over_length_chart.value));
     
-    position_plot_area_before = position_plot_area_now;
+    //    position_plot_area_before = position_plot_area_now;
     position_plot_area_now = wxPoint((int)(((double)(size_chart.GetWidth())) * (1.0 - (length_plot_area_over_length_chart.value)) / 2.0),
                                      (int)(((double)(size_chart.GetHeight())) * (1.0 - (length_plot_area_over_length_chart.value)) / 2.0));
     
@@ -1686,8 +1686,8 @@ void DrawPanel::PreRender3D(void) {
     
     //compute labels on parallels and meridians
     //save parallels_and_meridians_labels_now and positions_parallels_and_meridians_labels_now into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
-    parallels_and_meridians_labels_before = parallels_and_meridians_labels_now;
-    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels_now;
+    //    parallels_and_meridians_labels_before = parallels_and_meridians_labels_now;
+    //    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels_now;
     parallels_and_meridians_labels_now.resize(0);
     positions_parallels_and_meridians_labels_now.resize(0);
     
@@ -1879,7 +1879,7 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
             
             (parent->parent->start_label_selection_rectangle) = String("");
             (parent->parent->end_label_selection_rectangle_now) = String("");
-            (parent->parent->end_label_selection_rectangle_before) = String("");
+            //            (parent->parent->end_label_selection_rectangle_before) = String("");
             
             parent->parent->RefreshAll();
             FitAll();
@@ -3903,7 +3903,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-
+                            
                             
                             ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
                             
@@ -3977,7 +3977,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-
+                            
                             (((parent->parent->chart_frames)[i])->draw_panel)->MyRefresh();
                             
                             

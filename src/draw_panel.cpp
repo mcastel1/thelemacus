@@ -453,7 +453,6 @@ inline void DrawPanel::RenderRoutes(
 }
 
 //clear everything and re-render all GUI objects
-//inline
 void DrawPanel::CleanAndRenderAll(void) {
     
     wxClientDC dc(this);
@@ -502,11 +501,10 @@ void DrawPanel::CleanAndRenderAll(void) {
                              wxGetApp().background_color
                              );
     
-    
 }
 
+
 //wipe out all Routes on *this and re-draw them: this method is used to replace on WIN32 the wxWidgets default function Refresh(), which is not efficient on WIN32
-//inline
 void DrawPanel::RefreshWIN32(void) {
     
     wxClientDC dc(this);

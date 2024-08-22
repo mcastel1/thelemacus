@@ -41,7 +41,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     rotation_start_drag = new Rotation;
     rotation_now_drag = new Rotation;
     rotation_end_drag = new Rotation;
-    rotation = new Rotation; 
+    rotation = new Rotation;
     rotation_0 = new Rotation;
     
     route_reference_position_drag_start = new Position;
@@ -115,7 +115,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 //END_EVENT_TABLE()
 
 
-//inline 
+//inline
 void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     
     wxPaintDC dc(this);
@@ -336,7 +336,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
 }
 
 
-//inline 
+//inline
 void DrawPanel::RenderAll(wxDC& dc) {
     
     
@@ -455,7 +455,7 @@ inline void DrawPanel::RenderRoutes(
 }
 
 //clear everything and re-render all GUI objects
-//inline 
+//inline
 void DrawPanel::CleanAndRenderAll(void) {
     
     wxClientDC dc(this);
@@ -508,7 +508,7 @@ void DrawPanel::CleanAndRenderAll(void) {
 }
 
 //wipe out all Routes on *this and re-draw them: this method is used to replace on WIN32 the wxWidgets default function Refresh(), which is not efficient on WIN32
-//inline 
+//inline
 void DrawPanel::RefreshWIN32(void) {
     
     wxClientDC dc(this);
@@ -878,74 +878,52 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
     int i, j;
     
-    if (foreground_color == wxGetApp().foreground_color) {
-        
-        //draw a rectangle (representing the border) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color
-        dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
-        dc->SetPen(wxPen(foreground_color, thickness));
-        //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
-        dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
-        
-        
-        
-        //render coastlines
-        RenderPolygons(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
-        cout << " " << endl;
-        
-        
-        
-        
-        //set thickness to normal thicnkness
-        //    thickness = max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
-        
-        //render parallels and meridians
-        for (i = 0; i < grid.size(); i++) {
-            for (j = 0; j < (grid[i]).size(); j++) {
-                
-                //            (grid[i]).DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
-                
-                if ((grid[i][j]).size() > 1) {
-                    dc->DrawLines((int)((grid[i][j]).size()), (grid[i][j]).data());
-                }
-                
-            }
-        }
-        //render parallels and meridian ticks
-        for (i = 0; i < ticks.size(); i++) {
-            for (j = 0; j < (ticks[i]).size(); j++) {
-                
-                //            (ticks[i]).DrawOld((wxGetApp().n_points_minor_ticks.value), foreground_color, thickness, dc, this);
-                if ((ticks[i][j]).size() > 1) {
-                    dc->DrawLines((int)((ticks[i][j]).size()), (ticks[i][j]).data());
-                }
-            }
-        }
-        
-        
-        
-        //render labels on parallels and meridians
-        //WIN32: THESE LINES YIELD PARALLEL AND MERIDIAN LABELS WITH THE CORRECT SIZE
-        dc->SetTextForeground(foreground_color);
-        dc->SetTextBackground(background_color);
-        dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
-        dc->SetBackgroundMode(wxSOLID);
-        for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
-            
-            dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
-            
-        }
-        //WIN32: THESE LINES YIELD PARALLEL AND MERIDIAN LABELS WITH THE CORRECT SIZE
-        
-    }
-    else {
-        
-        dc->Clear();
-        cout << " " << endl;
-        
-    }
     
+    //draw a rectangle (representing the border) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color
+    dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
+    dc->SetPen(wxPen(foreground_color, thickness));
+    //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
+    dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
+    
+        
+    //render coastlines
+    RenderPolygons(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
     cout << " " << endl;
+
+    //render parallels and meridians
+    for (i = 0; i < grid.size(); i++) {
+        for (j = 0; j < (grid[i]).size(); j++) {
+            
+            //            (grid[i]).DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
+            
+            if ((grid[i][j]).size() > 1) {
+                dc->DrawLines((int)((grid[i][j]).size()), (grid[i][j]).data());
+            }
+            
+        }
+    }
+    //render parallels and meridian ticks
+    for (i = 0; i < ticks.size(); i++) {
+        for (j = 0; j < (ticks[i]).size(); j++) {
+            
+            //            (ticks[i]).DrawOld((wxGetApp().n_points_minor_ticks.value), foreground_color, thickness, dc, this);
+            if ((ticks[i][j]).size() > 1) {
+                dc->DrawLines((int)((ticks[i][j]).size()), (ticks[i][j]).data());
+            }
+        }
+    }
     
+    
+    //render labels on parallels and meridians
+    dc->SetTextForeground(foreground_color);
+    dc->SetTextBackground(background_color);
+    dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
+    dc->SetBackgroundMode(wxSOLID);
+    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
+        
+        dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
+        
+    }
     
 }
 
@@ -1178,7 +1156,7 @@ inline void DrawPanel::Render_3D(
 
 
 //this function tabulates into points_route_list_now and reference_positions_route_list_now the points and reference Positions, respectively, of all Routes. points_route_list will then be used to render the Routes
-//inline 
+//inline
 void DrawPanel::TabulateRoutes(void) {
     
     unsigned int i;
@@ -1226,7 +1204,7 @@ void DrawPanel::TabulateRoutes(void) {
 
 
 //tabulate into points_position_list_now all the Positions. points_position_list will then be used to render the Positions
-//inline 
+//inline
 void DrawPanel::TabulatePositions(void) {
     
     unsigned int i;
@@ -1256,7 +1234,7 @@ void DrawPanel::TabulatePositions(void) {
 
 
 //draws coastlines, Routes and Positions on the Mercator-projection case
-//inline 
+//inline
 void DrawPanel::PreRenderMercator(void) {
     
     PositionProjection delta_temp;
@@ -1674,7 +1652,7 @@ void DrawPanel::PreRenderMercator(void) {
 }
 
 //this function draws coastlines, Routes and Positions in the 3D case
-//inline 
+//inline
 void DrawPanel::PreRender3D(void) {
     
     Angle lambda_in, lambda_out, /*phi is an auxiliary variable used in the loop which draws parallels*/phi;
@@ -2322,7 +2300,7 @@ Rotation DrawPanel::rotation_start_end(const wxPoint& start, const wxPoint& end)
 
 
 //if i needs to be adjusted because it is not between -90 and +90, this method adjusts the pair of latitude, longitude (in arcdegrees) (i, j) and, if the pair is valud with respect to the latitude bounbdaries, it writes the adjusted vlaues in (*i_adjustged, *j_adjusted) and returns true, while it returns false otherwise
-//inline 
+//inline
 bool DrawPanel::AdjustLatitudeLongitude3D(const int& i, const int& j, int* i_adjusted, int* j_adjusted){
     
     bool check;
@@ -2395,7 +2373,7 @@ bool DrawPanel::AdjustLatitudeLongitude3D(const int& i, const int& j, int* i_adj
 
 
 // the screen position p lies within the DrawPanel *this, it returns true and write it into the position q with respect to the DrawPanel *this. Otherwise, it returns alse, and does nothing with q
-//inline 
+//inline
 bool DrawPanel::ScreenToDrawPanel(const wxPoint& p, wxPoint* q) {
     
     bool check;
@@ -2412,7 +2390,7 @@ bool DrawPanel::ScreenToDrawPanel(const wxPoint& p, wxPoint* q) {
 }
 
 //if the point p (reckoned with respect to the origin of the screen) corresponds to a valid Position, i.e., it is in the plot area, convert p  into a geographic Position and  write the result into *q if q!=NULL. If p is in the plot area, it returns true and zero otherwise.
-//inline 
+//inline
 bool DrawPanel::ScreenToGeo_Mercator(const wxPoint& p, Position* q) {
     
     PositionProjection temp;
@@ -2435,7 +2413,7 @@ bool DrawPanel::ScreenToGeo_Mercator(const wxPoint& p, Position* q) {
 }
 
 //convert the point p in the DrawPanel coordinates to the relative geographic position q, see specifics of ScreenToGeo_Mercator and ScreenToGeo_3D
-//inline 
+//inline
 bool DrawPanel::DrawPanelToGeo(const wxPoint& p, Position* q) {
     
     //computes the poisition of the DrawPanel *this which will be needed in the following
@@ -2448,7 +2426,7 @@ bool DrawPanel::DrawPanelToGeo(const wxPoint& p, Position* q) {
 
 
 //converts the point p on the screen with a 3D projection, to the relative geographic position q (if q!=NULL). It returns true if p lies within the circle denoting the boundaries of the earth, and false otherwise. If false is returned, q is the geographic position on the earth defined as follows: it lies on the intersection between the Earth and the x'z' plane and on the line between the center of the Earth and the vector rp corresponding to p (such vector rp lies on the x'z' plane)
-//inline 
+//inline
 bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
     
     PositionProjection temp;
@@ -2509,7 +2487,7 @@ bool DrawPanel::ScreenToGeo_3D(const wxPoint& p, Position* q) {
 }
 
 //convert the point p on the screen to the  Mercator projection q of the relative geographic position, by writing into q only if q!=NULL. It returns true/false if q lies within the boundaris x_min .. y_max
-//inline 
+//inline
 bool DrawPanel::ScreenToMercator(const wxPoint& p, PositionProjection* q) {
     
     PositionProjection temp;
@@ -2532,7 +2510,7 @@ bool DrawPanel::ScreenToMercator(const wxPoint& p, PositionProjection* q) {
 
 
 //converts the point p on the screen (which is supposed to lie in the plot area), to the  3D projection (x,y), which is written in q if q!=NULL. If p lies within /outside the circle of the earth, it returns true/false.
-//inline 
+//inline
 bool DrawPanel::ScreenTo3D(const wxPoint& p, PositionProjection* q) {
     
     PositionProjection temp;
@@ -2572,7 +2550,7 @@ bool DrawPanel::ScreenTo3D(const wxPoint& p, PositionProjection* q) {
 
 
 //convert the geographic Position p  to the  3D PositionProjection (x,y). / If the PositionProjection of p falls in the visible side of the earth,  write its PositionProjection into *q (if q!=NULL) and returs true. If not, it returns false and, if write = true,  write its Projection in *q (if q!=NULL)
-//inline 
+//inline
 bool DrawPanel::GeoTo3D(const Position& p, PositionProjection* q, bool write) {
     
     
@@ -2600,7 +2578,7 @@ bool DrawPanel::GeoTo3D(const Position& p, PositionProjection* q, bool write) {
 
 
 // If the PositionProjection of q falls within the plot area,  write its Projection into p (if p!=NULL) and return true. If not, it returns false and, if write = true, it writes its projection in q
-//inline 
+//inline
 bool DrawPanel::CartesianToMercator(const Cartesian& p, PositionProjection* q, bool write) {
     
     Position temp;
@@ -2614,7 +2592,7 @@ bool DrawPanel::CartesianToMercator(const Cartesian& p, PositionProjection* q, b
 
 
 //convert the Cartesian position p  to the  3D PositionProjection (x,y). / If the PositionProjection of p falls in the visible side of the earth,  write its PositionProjection into *q (if q!=NULL) and return true. If not,  return false and, if write = true,  write its Projection in *q (if q!=NULL)
-//inline 
+//inline
 bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, bool write) {
     
     bool check, out;
@@ -2676,7 +2654,7 @@ bool DrawPanel::CartesianTo3D(const Cartesian& p, PositionProjection* q, bool wr
 
 
 //this function converts the geographic position p into the screen position p
-//inline 
+//inline
 void DrawPanel::GeoToScreen(const Position& q, wxPoint* p) {
     
     //updates the position of the draw pane this
@@ -2692,7 +2670,7 @@ void DrawPanel::GeoToScreen(const Position& q, wxPoint* p) {
 
 
 // If the projection of q falls within the plot area, it writes its projection into p (if p!=NULL) and returns true. If not, it returns false and, if write = true, it writes its projection in p
-//inline 
+//inline
 bool DrawPanel::GeoToMercator(const Position& q, PositionProjection* p, bool write) {
     
     //    clock_t t_start, t_end;
@@ -2741,7 +2719,7 @@ bool DrawPanel::GeoToMercator(const Position& q, PositionProjection* p, bool wri
 
 
 // convert the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p.
-//inline 
+//inline
 bool DrawPanel::GeoToDrawPanel(const Position& q, wxPoint* p, bool write) {
     
     PositionProjection temp;
@@ -2769,7 +2747,7 @@ bool DrawPanel::GeoToDrawPanel(const Position& q, wxPoint* p, bool write) {
 
 
 // convert the cartesian position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Cartesian position, return true and (if p!=NULL),  write the resulting DrawPanel coordinates in p. If q is not a valid Cartesian position,  return false and, if write = true and p!=NULL, it writes the drawpanel position in p.
-//inline 
+//inline
 bool DrawPanel::CartesianToDrawPanel(const Cartesian& q, wxPoint* p, bool write) {
     
     PositionProjection temp;
@@ -2795,7 +2773,7 @@ bool DrawPanel::CartesianToDrawPanel(const Cartesian& q, wxPoint* p, bool write)
 }
 
 //converts the Mercator projection q into the DrawPanel position p, reckoned with respect to the origin of the mercator draw panel.   If q is a valid PositionProjection , return true and (if p!=NULL),  write the resulting DrawPanel coordinates in p. If q is not a valid  PositionProjection,  return false and, if write = true and p!=NULL, write the DrawPanel position in p.
-//inline 
+//inline
 bool DrawPanel::ProjectionToDrawPanel_Mercator(PositionProjection& q, wxPoint* p, bool write) {
     
     bool check;
@@ -2831,7 +2809,7 @@ bool DrawPanel::ProjectionToDrawPanel_Mercator(PositionProjection& q, wxPoint* p
 
 
 //convert the Mercator Projection q into the Position p
-//inline 
+//inline
 void  DrawPanel::ProjectionToGeo_Mercator(const PositionProjection& q, Position* p) {
     
     p->lambda.set(deg_to_rad * lambda_mercator(q.x));
@@ -2841,7 +2819,7 @@ void  DrawPanel::ProjectionToGeo_Mercator(const PositionProjection& q, Position*
 
 
 //convert the Mercator Projection q into the Position p
-//inline 
+//inline
 void  DrawPanel::ProjectionToGeo_3D(const PositionProjection& q, Position* p) {
     
     
@@ -2849,7 +2827,7 @@ void  DrawPanel::ProjectionToGeo_3D(const PositionProjection& q, Position* p) {
 
 
 //this function converts the 3D PositionProjection q into the DrawPanel position p, reckoned with respect to the origin of the mercator DrawPanel.  If q is a valid PositionProjection, return true and (if p!=NULL), write the resulting DrawPanel coordinates in p. If q is not a valid  PositionProjection,  return false and, if write = true and p!=NULL, write the DrawPanel position in p.
-//inline 
+//inline
 bool DrawPanel::ProjectionToDrawPanel_3D(PositionProjection& q, wxPoint* p, bool write) {
     
     bool check;
@@ -3070,7 +3048,7 @@ template<class E> void DrawPanel::OnChooseProjection(E& event) {
     parent->projection_field->Check(event);
     
     if((parent->projection_field->is_ok())){
-        //projection_field is ok 
+        //projection_field is ok
         
         SetProjection<E>(event);
         parent->ResetRender<E>(event);

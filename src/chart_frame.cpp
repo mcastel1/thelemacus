@@ -67,6 +67,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
         j += (parent->coastline_polygons_Position[i].size());
     }
     coastline_polygons_now.resize(j);
+    polygon_position_now.reserve(parent->n_all_coastline_points);
     polygon_position_now.resize(parent->coastline_polygons_Position.size());
     coastline_polygons_before.resize(j);
     polygon_position_before.resize(parent->coastline_polygons_Position.size());

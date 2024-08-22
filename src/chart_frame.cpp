@@ -1253,7 +1253,6 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
     if ((parent->show_coastlines) == Answer('y', String(""))) {
         
-//        PositionProjection p_SW, p_NE, p_SW0, p_NE0;
         unsigned long long int n_added_polygons, l, p, m, every;
         bool new_polygon;
         

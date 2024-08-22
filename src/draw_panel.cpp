@@ -4011,37 +4011,41 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         rotation->set(rotation_start_end(position_start_drag, position_now_drag) * (*rotation_start_drag));
                         
                         
+                        /*
+                         #ifdef __APPLE__
+                         //re-draw the chart
+                         (this->*PreRender)();
+                         #endif
+                         #ifdef _WIN32
+                         //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
+                         (parent->polygon_position_before) = (parent->polygon_position_now);
+                         //                        parent->coastline_polygons_before.resize(parent->coastline_polygons_now.size());
+                         copy_n(parent->coastline_polygons_now.begin(), parent->coastline_polygons_now.size(), parent->coastline_polygons_before.begin() );
+                         
+                         position_plot_area_before = position_plot_area_now;
+                         grid_before.clear();
+                         grid_before = grid_now;
+                         ticks_before.clear();
+                         ticks_before = ticks_now;
+                         
+                         //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
+                         points_route_list_before.clear();
+                         points_route_list_before = points_route_list_now;
+                         
+                         points_position_list_before.clear();
+                         points_position_list_before = points_position_list_now;
+                         
+                         reference_positions_route_list_before.clear();
+                         reference_positions_route_list_before = reference_positions_route_list_now;
+                         
+                         //re-draw the chart
+                         (this->*PreRender)();
+                         
+                         #endif
+                         */
                         
-#ifdef __APPLE__
                         //re-draw the chart
                         (this->*PreRender)();
-#endif
-#ifdef _WIN32
-                        //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-                        (parent->polygon_position_before) = (parent->polygon_position_now);
-                        //                        parent->coastline_polygons_before.resize(parent->coastline_polygons_now.size());
-                        copy_n(parent->coastline_polygons_now.begin(), parent->coastline_polygons_now.size(), parent->coastline_polygons_before.begin() );
-                        
-                        position_plot_area_before = position_plot_area_now;
-                        grid_before.clear();
-                        grid_before = grid_now;
-                        ticks_before.clear();
-                        ticks_before = ticks_now;
-                        
-                        //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-                        points_route_list_before.clear();
-                        points_route_list_before = points_route_list_now;
-                        
-                        points_position_list_before.clear();
-                        points_position_list_before = points_position_list_now;
-                        
-                        reference_positions_route_list_before.clear();
-                        reference_positions_route_list_before = reference_positions_route_list_now;
-                        
-                        //re-draw the chart
-                        (this->*PreRender)();
-                        
-#endif
                         MyRefresh();
                         
                         FitAll();

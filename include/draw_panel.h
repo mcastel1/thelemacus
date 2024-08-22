@@ -132,17 +132,6 @@ public:
                         const wxColor&,
                         const double&
                         );
-    void RenderBackground(wxDC&,
-                          const wxPoint&,
-                          const vector< vector< vector<wxPoint> > >&,
-                          const vector< vector< vector<wxPoint> > >&,
-                          const vector<wxString>&,
-                          const vector<wxPoint>&,
-                          const vector<unsigned long long int>&,
-                          const vector<wxPoint>&,
-                          const wxColor&,
-                          const wxColor&,
-                          double);
     void RenderRoutes(wxDC&,
                       const vector< vector< vector<wxPoint> > >&,
                       const vector<wxPoint>&,

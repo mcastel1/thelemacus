@@ -167,67 +167,7 @@ void DrawPanel::MyRefresh(){
 
 }
 
-//render the coastline by using the set of points points_coastline, meridians, parallels and their labels
-inline void DrawPanel::RenderBackground(
-                                        wxDC& dc,
-                                        const wxPoint& position_plot_area,
-                                        const vector< vector< vector<wxPoint> > >& grid,
-                                        const vector< vector< vector<wxPoint> > >& ticks,
-                                        const vector<wxString>& parallels_and_meridians_labels,
-                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                        const vector<unsigned long long int>& polygon_positions,
-                                        const vector<wxPoint>& points_coastline,
-                                        const wxColour& foreground_color,
-                                        const wxColour& background_color,
-                                        double thickness
-) {
 
-    if (re_draw) {
-
-        m_bgbuffer.Create(size_chart, 32);
-        m_bgbuffer.UseAlpha();
-
-        wxMemoryDC mdc(m_bgbuffer);
-
-        //        mdc.SetPen(wxPen(foreground_color));
-        //        mdc.SetBrush(wxBrush(foreground_color));
-
-        wxGCDC dc_m_bgbuffer(mdc);
-        //this needs to be commented out in order to not show a 'trail' when dragging
-        //dc_m_bgbuffer.SetBackground(*wxTRANSPARENT_BRUSH);
-        //        dc_m_bgbuffer.Clear();
-
-        dc_m_bgbuffer.SetPen(wxPen(foreground_color));
-        dc_m_bgbuffer.SetBrush(wxBrush(foreground_color));
-        dc_m_bgbuffer.SetTextForeground(foreground_color);
-        dc_m_bgbuffer.SetTextBackground(background_color);
-        
-        (this->*Render)(
-                        &dc_m_bgbuffer,
-                        position_plot_area,
-                        grid,
-                        ticks,
-                        parallels_and_meridians_labels,
-                        positions_parallels_and_meridians_labels,
-                        polygon_positions,
-                        points_coastline,
-                        foreground_color,
-                        background_color,
-                        thickness
-                        );
-        
-        mdc.SelectObject(wxNullBitmap);
-
-        re_draw = false;
-    }
-
-    dc.SetPen(wxPen(foreground_color));
-    dc.SetBrush(wxBrush(background_color));
-    dc.SetTextForeground(foreground_color);
-    dc.SetTextBackground(background_color);
-    dc.DrawBitmap(m_bgbuffer, 0, 0, false);
-
-}
 
 
 //same as  DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color), but it takes a  position (reckoned with respect to the ordigin of *this) as input rather than a  geographic Position

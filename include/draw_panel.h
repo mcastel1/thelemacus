@@ -76,7 +76,7 @@ public:
     
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list: in this list there are as many elements as the number of connected curves in which the route is cut (because of the meridian lambda = pi). In each of these elements there are the  points, with respect to the origin of DrawPanel, which represent the route_list[i] discretized
-    vector< vector< vector<wxPoint> > > points_route_list_now,/* points_route_list_before*/;
+    vector< vector< vector<wxPoint> > > points_route_list_now/*, points_route_list_before*/;
     //I store in reference_positions_route_list_now (reference_positions_route_list_before) the coordinates, with respect to the origin of DrawPanel, of the reference positions of the Routes at the current (preceeding) step of a drag process
     vector<wxPoint> reference_positions_route_list_now/*, reference_positions_route_list_before*/, points_position_list_now/*, points_position_list_before*/;
     //the i-th element of this vector contains a list of critical values of the parametric angle (t) of the i-th route. At these critical values, route #i crosses the meridian lambda = pi
@@ -91,7 +91,7 @@ public:
     vector<wxString> parallels_and_meridians_labels_now/*, parallels_and_meridians_labels_before*/;
     //positions of labels of parallels and meridians at the current and preceeding chart configuration, respectively
     vector<wxPoint> positions_parallels_and_meridians_labels_now/*, positions_parallels_and_meridians_labels_before*/;
-    vector< vector< vector<wxPoint> > > /*parallels and meridians are stored in this vectors at the current step of the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_now, /*parallels and meridians are stored in these vectors at the preceeding step in the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*//*grid_before*/, ticks_now, /*ticks_before*/;
+    vector< vector< vector<wxPoint> > > /*parallels and meridians are stored in this vectors at the current step of the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_now, /*parallels and meridians are stored in these vectors at the preceeding step in the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*//*grid_before,*/ ticks_now/*, ticks_before*/;
     
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::PreRenderMercator or DrawPanel::PreRender3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*PreRender)(void);

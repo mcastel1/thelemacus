@@ -3142,7 +3142,19 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         else {
             //the highlighted Route has not changed ->  the chart does not need to be updated, but the coordinates of the instantaneous mouse position do -> call
             
-            MyRefresh();
+            wxClientDC dc(this);
+
+            //re-render mouse position label
+            
+            RenderMousePositionLabel(
+                                     dc,
+                                     label_position_now,
+                                     position_label_position_now,
+                                     wxGetApp().foreground_color,
+                                     wxGetApp().background_color
+                                     );
+            
+            
             
         }
         

@@ -1,11 +1,11 @@
 #comment lines, such as this one, will be ignored
-show coastlines = n
+show coastlines = y
 #reasonable values for OSX
 #number of points coastline Mercator = 50000
 #number of points coastline 3D = 40000
 #reasonable values for WIN32
-number of points coastline Mercator = 5000
-number of points coastline 3D = 5000
+number of points coastline Mercator = 20000
+number of points coastline 3D = 20000
 artificial horizon = y
 index error = 0° 1.9'
 hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37

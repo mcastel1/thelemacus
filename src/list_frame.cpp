@@ -1752,21 +1752,12 @@ void ListFrame::LoadCoastLineData(String prefix) {
                 for(j=0; j<coastline_polygons_map[i].size(); j++){
                     
                     delete_duplicates(&(coastline_polygons_map[i][j]));
-                    
-//                    sort(coastline_polygons_map[i][j].begin(), coastline_polygons_map[i][j].end());
-//                    coastline_polygons_map[i][j].erase(unique( coastline_polygons_map[i][j].begin(), coastline_polygons_map[i][j].end() ), coastline_polygons_map[i][j].end());
-//
-////                    l+= coastline_polygons_map[i][j].size();
-                    
+
                 }
                 
             }
 
         }
-
-        //destroy the progress_dialog so if the user aborts the loading process there are no pending frames while closing the application
-//        progress_dialog->Destroy();
-//        n_line.clear();
 
     }
 

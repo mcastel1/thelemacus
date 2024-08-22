@@ -59,6 +59,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     mouse_dragging = false;
     re_draw = true;
     mouse_in_plot_area = false;
+    counter = 0;
     
     parent = (parent_in->parent);
     
@@ -2954,41 +2955,47 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if ((parent->parent->selection_rectangle)) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
         
-#ifdef __APPLE__
-        
-        for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
+        if(counter % 2 == 0){
             
-            //write the label and position of the selection rectangle for each DrawPanel into end_label_selection_rectangle_now and position_end_label_selection_rectangle_now, respectively
-            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                 (*(parent->parent->geo_position_now)),
-                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now),
-                                                                                 &(parent->parent->end_label_selection_rectangle_now)
-                                                                                 );
+//#ifdef __APPLE__
             
+            for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
+                
+                //write the label and position of the selection rectangle for each DrawPanel into end_label_selection_rectangle_now and position_end_label_selection_rectangle_now, respectively
+                ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
+                                                                                     (*(parent->parent->geo_position_now)),
+                                                                                     &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now),
+                                                                                     &(parent->parent->end_label_selection_rectangle_now)
+                                                                                     );
+                
+                
+            }
+            
+            
+//#endif
+            
+            /*
+             #ifdef _WIN32
+             
+             //on WIN32, the Refresh() command slows down things -> I don't call it but use RefreshWIN32(), which cleans up the former selections rectangle in *this and draws a new one
+             (parent->parent->end_label_selection_rectangle_before) = (parent->parent->end_label_selection_rectangle_now);
+             
+             for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
+             
+             (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now);
+             
+             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((*(parent->parent->geo_position_now)), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(parent->parent->end_label_selection_rectangle_now));
+             
+             }
+             
+             #endif
+             */
+            
+            parent->parent->MyRefreshAll();
             
         }
         
-        
-#endif
-        
-        /*
-         #ifdef _WIN32
-         
-         //on WIN32, the Refresh() command slows down things -> I don't call it but use RefreshWIN32(), which cleans up the former selections rectangle in *this and draws a new one
-         (parent->parent->end_label_selection_rectangle_before) = (parent->parent->end_label_selection_rectangle_now);
-         
-         for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
-         
-         (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now);
-         
-         ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((*(parent->parent->geo_position_now)), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(parent->parent->end_label_selection_rectangle_now));
-         
-         }
-         
-         #endif
-         */
-        
-        parent->parent->MyRefreshAll();
+        counter++;
         
     }
     else {
@@ -3416,6 +3423,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             int i;
             bool check;
             
+            
             //disable all button_resets while a selection rectangle is being drawn
             for(i=0; i<parent->parent->chart_frames.size(); i++){
                 parent->parent->chart_frames[i]->button_reset->Enable(false);
@@ -3639,6 +3647,8 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             for(i=0; i<parent->parent->chart_frames.size(); i++){
                 parent->parent->chart_frames[i]->button_reset->Enable(true);
             }
+            
+            counter = 0;
             
         }
         

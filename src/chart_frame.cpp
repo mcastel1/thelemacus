@@ -70,9 +70,9 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     polygon_position_now.reserve(parent->n_all_coastline_points);
     polygon_position_now.resize(parent->coastline_polygons_Position.size());
     
-    coastline_polygons_before.resize(j);
-    polygon_position_before.reserve(parent->n_all_coastline_points);
-    polygon_position_before.resize(parent->coastline_polygons_Position.size());
+//    coastline_polygons_before.resize(j);
+//    polygon_position_before.reserve(parent->n_all_coastline_points);
+//    polygon_position_before.resize(parent->coastline_polygons_Position.size());
 
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 
@@ -973,35 +973,37 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
     }
 
     
-#ifdef WIN32
-    //I am on WIN32 operating system: I will refresh the plot under the scroll operation, where I will wipe out the graphical objects in the former plot by drawing with background_color on top of them -> I need to keep track of the _before graphical objects and on the current _now graphical objects, and I do it here:
-    
-    //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-    polygon_position_before = polygon_position_now;
-//    coastline_polygons_before.resize(coastline_polygons_now.size());
-    copy_n(coastline_polygons_now.begin(), coastline_polygons_now.size(), coastline_polygons_before.begin());
-
-    
-    (draw_panel->position_plot_area_before) = (draw_panel->position_plot_area_now);
-    draw_panel->grid_before.clear();
-    (draw_panel->grid_before) = (draw_panel->grid_now);
-    draw_panel->ticks_before.clear();
-    (draw_panel->ticks_before) = (draw_panel->ticks_now);
-    
-    (draw_panel->parallels_and_meridians_labels_before) = (draw_panel->parallels_and_meridians_labels_now);
-    (draw_panel->positions_parallels_and_meridians_labels_before) = (draw_panel->positions_parallels_and_meridians_labels_now);
-
-    //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-    draw_panel->points_route_list_before.clear();
-    (draw_panel->points_route_list_before) = (draw_panel->points_route_list_now);
-    
-    draw_panel->points_position_list_before.clear();
-    (draw_panel->points_position_list_before) = (draw_panel->points_position_list_now);
-    
-    draw_panel->reference_positions_route_list_before.clear();
-    (draw_panel->reference_positions_route_list_before) = (draw_panel->reference_positions_route_list_now);
-    
-#endif
+    /*
+     #ifdef WIN32
+     //I am on WIN32 operating system: I will refresh the plot under the scroll operation, where I will wipe out the graphical objects in the former plot by drawing with background_color on top of them -> I need to keep track of the _before graphical objects and on the current _now graphical objects, and I do it here:
+     
+     //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
+     polygon_position_before = polygon_position_now;
+     //    coastline_polygons_before.resize(coastline_polygons_now.size());
+     copy_n(coastline_polygons_now.begin(), coastline_polygons_now.size(), coastline_polygons_before.begin());
+     
+     
+     (draw_panel->position_plot_area_before) = (draw_panel->position_plot_area_now);
+     draw_panel->grid_before.clear();
+     (draw_panel->grid_before) = (draw_panel->grid_now);
+     draw_panel->ticks_before.clear();
+     (draw_panel->ticks_before) = (draw_panel->ticks_now);
+     
+     (draw_panel->parallels_and_meridians_labels_before) = (draw_panel->parallels_and_meridians_labels_now);
+     (draw_panel->positions_parallels_and_meridians_labels_before) = (draw_panel->positions_parallels_and_meridians_labels_now);
+     
+     //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
+     draw_panel->points_route_list_before.clear();
+     (draw_panel->points_route_list_before) = (draw_panel->points_route_list_now);
+     
+     draw_panel->points_position_list_before.clear();
+     (draw_panel->points_position_list_before) = (draw_panel->points_position_list_now);
+     
+     draw_panel->reference_positions_route_list_before.clear();
+     (draw_panel->reference_positions_route_list_before) = (draw_panel->reference_positions_route_list_now);
+     
+     #endif
+     */
     
     switch (position_in_vector(projection, Projection_types)) {
             
@@ -1021,7 +1023,6 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
             if ((((draw_panel->y_max) <= (p_max.y)) && ((draw_panel->y_min) >= (p_min.y)) && ((draw_panel->x_span()) <= 2.0 * M_PI))) {
 
                 (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
-                //            ComputeZoomFactor_Mercator((draw_panel->x_span));
 
                 (draw_panel->*(draw_panel->PreRender))();
                 draw_panel->MyRefresh();

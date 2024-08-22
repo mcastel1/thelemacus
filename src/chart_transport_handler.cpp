@@ -264,38 +264,36 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
 //            (MotionHandler<F>::transporting_route_temp).end.print(String("Expected arrival point with (MotionHandler<F>::transporting_route_temp)"), String("\t\t"), cout);
 //            chart_frame->draw_panel->circle_observer.reference_position.print(String("Reference position"), String("\t\t"), cout);
             
+            /*
+             #ifdef WIN32
+             //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
+             (chart_frame->polygon_position_before) = (chart_frame->polygon_position_now);
+             copy_n(chart_frame->coastline_polygons_now.begin(), chart_frame->coastline_polygons_now.size(), chart_frame->coastline_polygons_before.begin() );
+             
+             (chart_frame->draw_panel->position_plot_area_before) = (chart_frame->draw_panel->position_plot_area_now);
+             chart_frame->draw_panel->grid_before.clear();
+             (chart_frame->draw_panel->grid_before) = (chart_frame->draw_panel->grid_now);
+             chart_frame->draw_panel->ticks_before.clear();
+             (chart_frame->draw_panel->ticks_before) = (chart_frame->draw_panel->ticks_now);
+             
+             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
+             chart_frame->draw_panel->points_route_list_before.clear();
+             (chart_frame->draw_panel->points_route_list_before) = (chart_frame->draw_panel->points_route_list_now);
+             
+             chart_frame->draw_panel->points_position_list_before.clear();
+             (chart_frame->draw_panel->points_position_list_before) = (chart_frame->draw_panel->points_position_list_now);
+             
+             chart_frame->draw_panel->reference_positions_route_list_before.clear();
+             (chart_frame->draw_panel->reference_positions_route_list_before) = (chart_frame->draw_panel->reference_positions_route_list_now);
+             
+             
+             #endif
+             */
             
-#ifdef WIN32
-            //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-            (chart_frame->polygon_position_before) = (chart_frame->polygon_position_now);
-//            chart_frame->coastline_polygons_before.resize(chart_frame->coastline_polygons_now.size());
-            copy_n(chart_frame->coastline_polygons_now.begin(), chart_frame->coastline_polygons_now.size(), chart_frame->coastline_polygons_before.begin() );
-
-            (chart_frame->draw_panel->position_plot_area_before) = (chart_frame->draw_panel->position_plot_area_now);
-            chart_frame->draw_panel->grid_before.clear();
-            (chart_frame->draw_panel->grid_before) = (chart_frame->draw_panel->grid_now);
-            chart_frame->draw_panel->ticks_before.clear();
-            (chart_frame->draw_panel->ticks_before) = (chart_frame->draw_panel->ticks_now);
-            
-            //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-            chart_frame->draw_panel->points_route_list_before.clear();
-            (chart_frame->draw_panel->points_route_list_before) = (chart_frame->draw_panel->points_route_list_now);
-            
-            chart_frame->draw_panel->points_position_list_before.clear();
-            (chart_frame->draw_panel->points_position_list_before) = (chart_frame->draw_panel->points_position_list_now);
-            
-            chart_frame->draw_panel->reference_positions_route_list_before.clear();
-            (chart_frame->draw_panel->reference_positions_route_list_before) = (chart_frame->draw_panel->reference_positions_route_list_now);
-            
-   
-#endif
             //re-draw the chart
             (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();
             chart_frame->draw_panel->MyRefresh();
             chart_frame->UpdateSlider();
-            //            chart_frame->draw_panel->PaintNow();
-
-            //            cout << "\t\t t= " << t << "\n";
             
             (MotionHandler<F>::t)++;
 

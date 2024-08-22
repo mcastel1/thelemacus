@@ -1669,7 +1669,7 @@ void ListFrame::LoadCoastLineData(String prefix) {
             abort = false;
             
             getline(*(coastline_file.value), line);
-            while ((!((coastline_file.value)->eof())) && (!abort)) {
+            while ((!(coastline_file.value->eof())) && (!abort)) {
                 //run through polygons
                 
                 coastline_polygons_Position.resize(i + 1);

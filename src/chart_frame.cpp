@@ -1213,8 +1213,6 @@ void ChartFrame::GetCoastLineData_3D(void) {
             polygon_position_now.resize(n_added_polygons+1);
         }
         polygon_position_now.back() = l;
-
-
         
     }
 

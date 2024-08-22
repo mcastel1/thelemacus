@@ -70,9 +70,9 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     polygon_position_now.reserve(parent->n_all_coastline_points);
     polygon_position_now.resize(parent->coastline_polygons_Position.size());
     
-    coastline_polygons_before.resize(j);
-    polygon_position_before.reserve(parent->n_all_coastline_points);
-    polygon_position_before.resize(parent->coastline_polygons_Position.size());
+//    coastline_polygons_before.resize(j);
+//    polygon_position_before.reserve(parent->n_all_coastline_points);
+//    polygon_position_before.resize(parent->coastline_polygons_Position.size());
 
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 

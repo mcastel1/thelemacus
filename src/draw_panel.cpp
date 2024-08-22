@@ -92,9 +92,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
     (parent->parent->start_label_selection_rectangle) = String("");
     (parent->parent->end_label_selection_rectangle_now) = String("");
-#ifdef _WIN32
-    (parent->parent->end_label_selection_rectangle_before) = String("");
-#endif
+    //#ifdef _WIN32
+    //    (parent->parent->end_label_selection_rectangle_before) = String("");
+    //#endif
     label_dragged_object_now = String("");
     
     //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
@@ -2923,15 +2923,16 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     //    cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-draw_panel_origin).x << " , " << ((parent->parent->screen_position_now)-draw_panel_origin).y << "}\n";
     //lines for debug
     
-    
-#ifdef _WIN32
-    
-    //store the former _now positions into the _before positions
-    (parent->parent->screen_position_before) = (parent->parent->screen_position_now);
-    (*(parent->parent->geo_position_before)) = (*(parent->parent->geo_position_now));
-    label_position_before = label_position_now;
-    
-#endif
+    /*
+     #ifdef _WIN32
+     
+     //store the former _now positions into the _before positions
+     (parent->parent->screen_position_before) = (parent->parent->screen_position_now);
+     (*(parent->parent->geo_position_before)) = (*(parent->parent->geo_position_now));
+     label_position_before = label_position_now;
+     
+     #endif
+     */
     
     //update the instantaneous screen and geographic position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
     (parent->parent->mouse_moving) = true;

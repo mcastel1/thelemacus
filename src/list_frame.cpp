@@ -1743,6 +1743,8 @@ void ListFrame::LoadCoastLineData(String prefix) {
                 cout << prefix.value << "... done.\n";
                 
             }
+            
+            coastline_polygons_area_observer.reserve(n_all_coastline_points);
 
             coastline_file.close(String(""));
             

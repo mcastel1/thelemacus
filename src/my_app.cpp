@@ -288,6 +288,7 @@ template<class Tp> struct my_allocator
 bool MyApp::OnInit() {
     
     //test for reserve() method
+    /*
     constexpr int max_elements = 32;
     vector<int, my_allocator<int>> u;
     
@@ -300,7 +301,7 @@ bool MyApp::OnInit() {
     
     for (int n = 0; n < max_elements; ++n)
         u.push_back(n);
-    //
+    */
     
         
     unsigned int i;

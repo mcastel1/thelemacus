@@ -53,7 +53,6 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> class ShowQue
 class Sight;
 
 
-
 //this is a wxFrame designed to contain the list of sights, routes, etc...
 class ListFrame: public wxFrame{
     

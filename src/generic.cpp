@@ -913,6 +913,3 @@ double phi_mercator(double y){
     return(rad_to_deg*atan(sinh(y)));
     
 }
-
-
-

@@ -504,7 +504,7 @@ void DrawPanel::CleanAndRenderAll(void) {
 }
 
 
-//wipe out all Routes on *this and re-draw them: this method is used to replace on WIN32 the wxWidgets default function Refresh(), which is not efficient on WIN32
+//clean up everything on *this and re-draw: this method is used to replace on WIN32 the wxWidgets default function Refresh(), which is not efficient on WIN32
 void DrawPanel::RefreshWIN32(void) {
     
     wxClientDC dc(this);

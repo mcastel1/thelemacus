@@ -260,7 +260,7 @@ void MyApp::set_icon_paths(void){
     
 }
 
-// minimal C++11 allocator with debug output
+// test for reserve method() minimal C++11 allocator with debug output
 template<class Tp> struct my_allocator
 {
     typedef Tp value_type;
@@ -287,6 +287,7 @@ template<class Tp> struct my_allocator
 
 bool MyApp::OnInit() {
     
+    //test for reserve() method
     constexpr int max_elements = 32;
     vector<int, my_allocator<int>> u;
     
@@ -299,6 +300,7 @@ bool MyApp::OnInit() {
     
     for (int n = 0; n < max_elements; ++n)
         u.push_back(n);
+    //
     
         
     unsigned int i;

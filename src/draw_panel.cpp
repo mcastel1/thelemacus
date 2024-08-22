@@ -509,169 +509,12 @@ void DrawPanel::RefreshWIN32(void) {
     
     wxClientDC dc(this);
     
-    //1. erase _before objects
     
-    if ((parent->parent->mouse_moving)) {
-        //the mouse is moving -> wipe out the  mouse position label at the preceeding step of mouse movement
-        
-        RenderMousePositionLabel(
-                                 dc,
-                                 label_position_before,
-                                 position_label_position_now,
-                                 wxGetApp().background_color,
-                                 wxGetApp().background_color
-                                 );
-        
-    }
-    
-    if ((parent->dragging_chart) || (parent->mouse_scrolling)) {
-        //the whole chart is being dragged or scrolled -> wipe out all objects at the preceeding step of the drag
-        
-        //wipe out the Routes at the preceeding mouse position
-        RenderRoutes(dc,
-                     points_route_list_before,
-                     reference_positions_route_list_before,
-                     (parent->parent->highlighted_route_now),
-                     wxGetApp().background_color
-                     );
-        RenderPositions(dc,
-                        points_position_list_before,
-                        (parent->parent->highlighted_position_now),
-                        wxGetApp().background_color
-                        );
-        
-        //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
-        (this->*Render)(
-                        &dc,
-                        position_plot_area_before,
-                        grid_before,
-                        ticks_before,
-                        parallels_and_meridians_labels_before,
-                        positions_parallels_and_meridians_labels_before,
-                        parent->polygon_position_before,
-                        parent->coastline_polygons_before,
-                        wxGetApp().background_color,
-                        wxGetApp().background_color,
-                        wxGetApp().large_thickness.value
-                        );
-        
-    }
-    
-    if ((parent->parent->dragging_object)) {
-        
-        //wipe out the Routes, Positions and label of dragged object at the preceeding dragging configuration
-        RenderRoutes(dc,
-                     points_route_list_before,
-                     reference_positions_route_list_before,
-                     (parent->parent->highlighted_route_now),
-                     wxGetApp().background_color
-                     );
-        RenderPositions(dc,
-                        points_position_list_before,
-                        (parent->parent->highlighted_position_now),
-                        wxGetApp().background_color
-                        );
-        RenderDraggedObjectLabel(dc,
-                                 position_label_dragged_object_before,
-                                 label_dragged_object_before,
-                                 wxGetApp().background_color, wxGetApp().background_color
-                                 );
-        
-        //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
-        (this->*Render)(
-                        &dc,
-                        position_plot_area_now,
-                        grid_now,
-                        ticks_now,
-                        parallels_and_meridians_labels_now,
-                        positions_parallels_and_meridians_labels_now,
-                        parent->polygon_position_now,
-                        parent->coastline_polygons_now,
-                        wxGetApp().background_color,
-                        wxGetApp().background_color,
-                        wxGetApp().large_thickness.value
-                        );
-        
-        
-    }
-    
-    if ((parent->parent->changing_highlighted_object)) {
-        
-        //wipe out the Routes at the preceeding mouse position
-        RenderRoutes(dc,
-                     points_route_list_now,
-                     reference_positions_route_list_now,
-                     (parent->parent->highlighted_route_before),
-                     wxGetApp().background_color
-                     );
-        RenderPositions(dc,
-                        points_position_list_now,
-                        (parent->parent->highlighted_position_before),
-                        wxGetApp().background_color
-                        );
-        
-        //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
-        (this->*Render)(
-                        &dc,
-                        position_plot_area_now,
-                        grid_now,
-                        ticks_now,
-                        parallels_and_meridians_labels_now,
-                        positions_parallels_and_meridians_labels_now,
-                        parent->polygon_position_now,
-                        parent->coastline_polygons_now,
-                        wxGetApp().background_color,
-                        wxGetApp().background_color,
-                        wxGetApp().large_thickness.value
-                        );
-        
-        
-    }
-    
-    if ((parent->parent->selection_rectangle)) {
-        
-        //wipe out the preceeding selection rectangle
-        RenderSelectionRectangle(dc,
-                                 (*(parent->parent->geo_position_before)),
-                                 position_end_label_selection_rectangle_before,
-                                 parent->parent->end_label_selection_rectangle_before,
-                                 wxGetApp().background_color,
-                                 wxGetApp().background_color
-                                 );
-        
-        //wipe out the Routes at the preceeding mouse position
-        RenderRoutes(dc,
-                     points_route_list_now,
-                     reference_positions_route_list_now,
-                     (parent->parent->highlighted_route_now),
-                     wxGetApp().background_color
-                     );
-        RenderPositions(dc,
-                        points_position_list_now,
-                        (parent->parent->highlighted_position_now),
-                        wxGetApp().background_color
-                        );
-        
-        //wipe out the background without painting a wxBitmap: to do this, I use the large thickness to make sure that the new background drawn with color background_color is wide enough to completely covert the preceeding one
-        (this->*Render)(
-                        &dc,
-                        position_plot_area_now,
-                        grid_now,
-                        ticks_now,
-                        parallels_and_meridians_labels_now,
-                        positions_parallels_and_meridians_labels_now,
-                        parent->polygon_position_now,
-                        parent->coastline_polygons_now,
-                        wxGetApp().background_color,
-                        wxGetApp().background_color,
-                        wxGetApp().large_thickness.value
-                        );
-        
-        
-    }
+    //clean up everything
+    dc.Clear();
     
     
-    //re-render  _new objects
+    //re-render everything
     
     RenderMousePositionLabel(
                              dc,
@@ -729,7 +572,6 @@ void DrawPanel::RefreshWIN32(void) {
                                  wxGetApp().foreground_color,
                                  wxGetApp().background_color
                                  );
-        
         
     }
     
@@ -881,11 +723,11 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
     
-        
+    
     //render coastlines
     RenderPolygons(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
     cout << " " << endl;
-
+    
     //render parallels and meridians
     for (i = 0; i < grid.size(); i++) {
         for (j = 0; j < (grid[i]).size(); j++) {
@@ -3128,22 +2970,22 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         
 #endif
         
-#ifdef _WIN32
-        
-        //on WIN32, the Refresh() command slows down things -> I don't call it but use RefreshWIN32(), which cleans up the former selections rectangle in *this and draws a new one
-        (parent->parent->end_label_selection_rectangle_before) = (parent->parent->end_label_selection_rectangle_now);
-        
-        for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
-            
-            (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now);
-            
-            ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((*(parent->parent->geo_position_now)), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(parent->parent->end_label_selection_rectangle_now));
-            
-            //            ((parent->parent->chart_frames)[i])->draw_panel->RefreshWIN32();
-            
-        }
-        
-#endif
+        /*
+         #ifdef _WIN32
+         
+         //on WIN32, the Refresh() command slows down things -> I don't call it but use RefreshWIN32(), which cleans up the former selections rectangle in *this and draws a new one
+         (parent->parent->end_label_selection_rectangle_before) = (parent->parent->end_label_selection_rectangle_now);
+         
+         for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
+         
+         (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now);
+         
+         ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((*(parent->parent->geo_position_now)), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(parent->parent->end_label_selection_rectangle_now));
+         
+         }
+         
+         #endif
+         */
         
         parent->parent->MyRefreshAll();
         
@@ -3872,38 +3714,41 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             (this->*Set_lambda_phi_min_max)();
                             
-#ifdef __APPLE__
-                            //re-draw the chart
+                            /*
+                             #ifdef __APPLE__
+                             //re-draw the chart
+                             (this->*PreRender)();
+                             #endif
+                             #ifdef WIN32
+                             //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
+                             (parent->polygon_position_before) = (parent->polygon_position_now);
+                             //                            parent->coastline_polygons_before.resize(parent->coastline_polygons_now.size());
+                             copy_n(parent->coastline_polygons_now.begin(), parent->coastline_polygons_now.size(), parent->coastline_polygons_before.begin() );
+                             
+                             position_plot_area_before = position_plot_area_now;
+                             grid_before.clear();
+                             grid_before = grid_now;
+                             ticks_before.clear();
+                             ticks_before = ticks_now;
+                             
+                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
+                             points_route_list_before.clear();
+                             points_route_list_before = points_route_list_now;
+                             
+                             points_position_list_before.clear();
+                             points_position_list_before = points_position_list_now;
+                             
+                             reference_positions_route_list_before.clear();
+                             reference_positions_route_list_before = reference_positions_route_list_now;
+                             
+                             //re-draw the chart
+                             (this->*PreRender)();
+                             
+                             #endif
+                             */
+                            
                             (this->*PreRender)();
-#endif
-#ifdef WIN32
-                            //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-                            (parent->polygon_position_before) = (parent->polygon_position_now);
-                            //                            parent->coastline_polygons_before.resize(parent->coastline_polygons_now.size());
-                            copy_n(parent->coastline_polygons_now.begin(), parent->coastline_polygons_now.size(), parent->coastline_polygons_before.begin() );
-                            
-                            position_plot_area_before = position_plot_area_now;
-                            grid_before.clear();
-                            grid_before = grid_now;
-                            ticks_before.clear();
-                            ticks_before = ticks_now;
-                            
-                            //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-                            points_route_list_before.clear();
-                            points_route_list_before = points_route_list_now;
-                            
-                            points_position_list_before.clear();
-                            points_position_list_before = points_position_list_now;
-                            
-                            reference_positions_route_list_before.clear();
-                            reference_positions_route_list_before = reference_positions_route_list_now;
-                            
-                            //re-draw the chart
-                            (this->*PreRender)();
-                            
-#endif
                             MyRefresh();
-                            //                            FitAll();
                             
                         }
                         
@@ -3914,37 +3759,42 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                         rotation->set(rotation_start_end(position_start_drag, position_now_drag) * (*rotation_start_drag));
-#ifdef __APPLE__
                         
-                        //re-render the chart
+                        /*
+                         #ifdef __APPLE__
+                         
+                         //re-render the chart
+                         (this->*PreRender)();
+                         #endif
+                         #ifdef WIN32
+                         //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
+                         (parent->polygon_position_before) = (parent->polygon_position_now);
+                         //                        parent->coastline_polygons_before.resize(parent->coastline_polygons_now.size());
+                         copy_n(parent->coastline_polygons_now.begin(), parent->coastline_polygons_now.size(), parent->coastline_polygons_before.begin() );
+                         
+                         position_plot_area_before = position_plot_area_now;
+                         grid_before.clear();
+                         grid_before = grid_now;
+                         ticks_before.clear();
+                         ticks_before = ticks_now;
+                         
+                         //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
+                         points_route_list_before.clear();
+                         points_route_list_before = points_route_list_now;
+                         
+                         points_position_list_before.clear();
+                         points_position_list_before = points_position_list_now;
+                         
+                         reference_positions_route_list_before.clear();
+                         reference_positions_route_list_before = reference_positions_route_list_now;
+                         
+                         //re-draw the chart
+                         (this->*PreRender)();
+                         
+                         #endif
+                         */
+                        
                         (this->*PreRender)();
-#endif
-#ifdef WIN32
-                        //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-                        (parent->polygon_position_before) = (parent->polygon_position_now);
-                        //                        parent->coastline_polygons_before.resize(parent->coastline_polygons_now.size());
-                        copy_n(parent->coastline_polygons_now.begin(), parent->coastline_polygons_now.size(), parent->coastline_polygons_before.begin() );
-                        
-                        position_plot_area_before = position_plot_area_now;
-                        grid_before.clear();
-                        grid_before = grid_now;
-                        ticks_before.clear();
-                        ticks_before = ticks_now;
-                        
-                        //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-                        points_route_list_before.clear();
-                        points_route_list_before = points_route_list_now;
-                        
-                        points_position_list_before.clear();
-                        points_position_list_before = points_position_list_now;
-                        
-                        reference_positions_route_list_before.clear();
-                        reference_positions_route_list_before = reference_positions_route_list_now;
-                        
-                        //re-draw the chart
-                        (this->*PreRender)();
-                        
-#endif
                         MyRefresh();
                         
                     }
@@ -4027,27 +3877,32 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
                                                                                                  );
-                            
-#ifdef __APPLE__
+                            /*
+                             #ifdef __APPLE__
+                             
+                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
+                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
+                             
+                             #endif
+                             #ifdef _WIN32
+                             
+                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels
+                             ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
+                             (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
+                             
+                             ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
+                             (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
+                             
+                             
+                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
+                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
+                             
+                             #endif
+                             */
                             
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-                            
-#endif
-#ifdef _WIN32
-                            
-                            //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels
-                            ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
-                            (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
-                            
-                            ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
-                            (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
-                            
-                            
-                            //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
-                            ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-                            
-#endif
+
                             
                             ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
                             
@@ -4101,22 +3956,27 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
                                                                                                  );
-                            
-#ifdef __APPLE__
+                            /*
+                             #ifdef __APPLE__
+                             
+                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
+                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
+                             
+                             #endif
+                             #ifdef _WIN32
+                             
+                             ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
+                             (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
+                             
+                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
+                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
+                             
+                             #endif
+                             */
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-                            
-#endif
-#ifdef _WIN32
-                            
-                            ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
-                            (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
-                            
-                            //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
-                            ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-                            
-#endif
+
                             (((parent->parent->chart_frames)[i])->draw_panel)->MyRefresh();
                             
                             

@@ -698,7 +698,8 @@ inline void DrawPanel::RenderPolygons(wxDC* dc,
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::Render_Mercator(wxDC* dc,
                                        const wxPoint& position_plot_area,
-                                       const vector< vector<wxPoint> >& grid,
+                                       const vector<unsigned long long int>& grid_positions,
+                                       const vector<wxPoint>& grid_points,
                                        const vector< vector<wxPoint> >& ticks,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
@@ -729,21 +730,24 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     cout << " " << endl;
     
     //render parallels and meridians
-    for (i = 0; i < grid.size(); i++) {
+    for(i = 0; i < ((long long int)(grid_positions.size()))-1; i++) {
+        //run through grid
         
-        if ((grid[i]).size() > 1) {
-            dc->DrawLines((int)((grid[i]).size()), (grid[i]).data());
+        if(grid_positions[i+1] - grid_positions[i] > 1){
+            
+            dc->DrawLines((int)(grid_positions[i+1] - grid_positions[i]), (grid_points.data()) + grid_positions[i]);
+            
         }
-                
+        
     }
     //render parallels and meridian ticks
-    for (i = 0; i < ticks.size(); i++) {
-        
-        if ((ticks[i]).size() > 1) {
-            dc->DrawLines((int)((ticks[i]).size()), (ticks[i]).data());
-        }
-        
-    }
+//    for (i = 0; i < ticks.size(); i++) {
+//        
+//        if ((ticks[i]).size() > 1) {
+//            dc->DrawLines((int)((ticks[i]).size()), (ticks[i]).data());
+//        }
+//        
+//    }
     
     
     //render labels on parallels and meridians
@@ -882,7 +886,8 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 inline void DrawPanel::Render_3D(
                                  wxDC* dc,
                                  const wxPoint& position_plot_area,
-                                 const vector< vector<wxPoint> >& grid,
+                                 const vector<unsigned long long int>& grid_positions,
+                                 const vector<wxPoint>& grid_points,
                                  const vector< vector<wxPoint> >& ticks,
                                  const vector<wxString>& parallels_and_meridians_labels,
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
@@ -917,22 +922,26 @@ inline void DrawPanel::Render_3D(
     
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
+    
     //render parallels and meridians
-    for (i = 0; i < grid.size(); i++) {
+    for(i = 0; i < ((long long int)(grid_positions.size()))-1; i++) {
+        //run through grid
         
-        if ((grid[i]).size() > 1) {
-            dc->DrawSpline((int)((grid[i]).size()), (grid[i]).data());
+        if(grid_positions[i+1] - grid_positions[i] > 1){
+            
+            dc->DrawLines((int)(grid_positions[i+1] - grid_positions[i]), (grid_points.data()) + grid_positions[i]);
+            
         }
         
     }
-    //render parallel and meridian ticks
-    for (i = 0; i < ticks.size(); i++) {
-        
-        if ((ticks[i]).size() > 1) {
-            dc->DrawSpline((int)((ticks[i]).size()), (ticks[i]).data());
-        }
-        
-    }
+//    //render parallel and meridian ticks
+//    for (i = 0; i < ticks.size(); i++) {
+//        
+//        if ((ticks[i]).size() > 1) {
+//            dc->DrawSpline((int)((ticks[i]).size()), (ticks[i]).data());
+//        }
+//        
+//    }
     
     
     //render labels on parallels and meridians

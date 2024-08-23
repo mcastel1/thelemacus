@@ -101,7 +101,8 @@ public:
     bool (DrawPanel::*GeoToProjection)(const Position&, PositionProjection*, bool);
     void (DrawPanel::*Render)(wxDC*,
                               const wxPoint&,
-                              const vector< vector<wxPoint> >&,
+                              const vector<unsigned long long int>&,
+                              const vector<wxPoint>&,
                               const vector< vector<wxPoint> >&,
                               const vector<wxString>&,
                               const vector<wxPoint>&,
@@ -186,7 +187,8 @@ public:
 
     void Render_Mercator(wxDC*,
                          const wxPoint&,
-                         const vector< vector<wxPoint> >&,
+                         const vector<unsigned long long int>&,
+                         const vector<wxPoint>&,
                          const vector< vector<wxPoint> >&,
                          const vector<wxString>&,
                          const vector<wxPoint>&,
@@ -197,7 +199,8 @@ public:
                          const double&);
     void Render_3D(wxDC*,
                    const wxPoint&,
-                   const vector< vector<wxPoint> >&,
+                   const vector<unsigned long long int>&,
+                   const vector<wxPoint>&,
                    const vector< vector<wxPoint> >&,
                    const vector<wxString>&,
                    const vector<wxPoint>&,

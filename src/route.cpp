@@ -255,8 +255,7 @@ void Route::add_to_ListControl(long position_in_listcontrol, wxListCtrl* listcon
 }
 
 
-//inline 
-void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
+inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
 
     wxPoint p;
     bool end_connected;
@@ -302,6 +301,78 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
         else {
 
             end_connected = true;
+
+        }
+
+    }
+    
+    //write back length_saved into *length
+    length->set(length_saved);
+
+}
+
+
+//tabulate the points of Route *this in any projection of draw_panel and write them into points. This method pushes back all the points of the chunks of the tabulated Route at the end of points: the id of the entry in *points where the i-th chunk starts is (*positions)[i], and *positions is re-allocated and filled accordingly
+void Route::DrawOld(
+                    unsigned int n_points,
+                    DrawPanel* draw_panel,
+                    vector<unsigned long long int>* positions,
+                    vector<wxPoint>* points,
+                    [[maybe_unused]] String prefix
+                    ) {
+
+    wxPoint p;
+    bool chunk_end;
+    unsigned int i, n_points_chunk;
+    Length length_saved;
+    
+    if(length_format == LengthFormat_types[0]){
+        //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
+        
+        set_length_from_time_speed();
+
+    }else{
+        //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+
+        length_saved.set((*length));
+        length->convert_to(LengthUnit_types[0]);
+
+    }
+
+
+    //tabulate the Route points
+    //go through all the Route points
+    for(n_points_chunk = 0, chunk_end = true, i = 0; i < n_points; i++) {
+
+        compute_end((*length)*((double)i)/((double)(n_points - 1)), String(""));
+        
+        //treat the first and last point as a special one because it may be at the boundary of *rectangle_observer-> check if they are and, if they are, put them back into *rectangle_observer
+        if((i==0) || (i==n_points-1)){
+            end->put_back_in(draw_panel);
+        }
+
+        if ((draw_panel->GeoToDrawPanel)((*end), &p, false)) {
+            
+            //the Route point considered is valid -> I increase n_points_chunk
+            n_points_chunk++;
+            
+            if (chunk_end) {
+                //I reached the end of a chunk
+
+//                v->resize(v->size() + 1);
+                //I update *poisitions
+                positions->push_back((positions->back()) + n_points_chunk);
+           
+                chunk_end = false;
+
+            }
+
+            points->push_back(p);
+
+        }else{
+
+            chunk_end = true;
+            n_points_chunk = 0;
 
         }
 

@@ -937,6 +937,7 @@ inline void DrawPanel::Render_3D(
         }
         
     }
+    
 //    //render parallel and meridian ticks
 //    for (i = 0; i < ticks.size(); i++) {
 //        
@@ -1496,6 +1497,11 @@ inline void DrawPanel::PreRender3D(void) {
     wxString dummy_label;
     Route route;
     unsigned int n_intervals_ticks;
+    
+    //clear grid_points and grid_positions, and set the first entry of grid_positions to 0 because the position of the first Route chunk is 0
+    parent->grid_points.clear();
+    parent->grid_positions.clear();
+    parent->grid_positions.push_back(0);
     
     
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer

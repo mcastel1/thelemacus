@@ -1441,7 +1441,6 @@ inline void DrawPanel::PreRenderMercator(void) {
                                                                
                                                                ).value), LengthUnit_types[0]);
         
-        //put back this after changement of structure of ticks_noew
         route.DrawOld((wxGetApp().n_points_routes.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
         
         

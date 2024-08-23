@@ -341,6 +341,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
+                    positions_grid_now,
                     grid_now,
                     ticks_now,
                     parallels_and_meridians_labels_now,
@@ -471,6 +472,7 @@ void DrawPanel::CleanAndRenderAll(void) {
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
+                    positions_grid_now,
                     grid_now,
                     ticks_now,
                     parallels_and_meridians_labels_now,
@@ -531,6 +533,7 @@ inline void DrawPanel::RefreshWIN32(void) {
         (this->*Render)(
                         &dc,
                         position_plot_area_now,
+                        positions_grid_now,
                         grid_now,
                         ticks_now,
                         parallels_and_meridians_labels_now,
@@ -700,7 +703,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
                                        const wxPoint& position_plot_area,
                                        const vector<unsigned long long int>& grid_positions,
                                        const vector<wxPoint>& grid_points,
-                                       const vector< vector<wxPoint> >& ticks,
+                                       const vector<wxPoint>& ticks,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                        const vector<unsigned long long int>& polygon_positions,
@@ -888,7 +891,7 @@ inline void DrawPanel::Render_3D(
                                  const wxPoint& position_plot_area,
                                  const vector<unsigned long long int>& grid_positions,
                                  const vector<wxPoint>& grid_points,
-                                 const vector< vector<wxPoint> >& ticks,
+                                 const vector<wxPoint>& ticks,
                                  const vector<wxString>& parallels_and_meridians_labels,
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                  const vector<unsigned long long int> & polygon_positions,
@@ -898,7 +901,7 @@ inline void DrawPanel::Render_3D(
                                  const double& thickness
                                  ) {
     
-    int i, j;
+    int i;
     Double d_temp;
     Angle lambda;
     stringstream s;

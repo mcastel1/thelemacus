@@ -91,7 +91,8 @@ public:
     vector<wxString> parallels_and_meridians_labels_now/*, parallels_and_meridians_labels_before*/;
     //positions of labels of parallels and meridians at the current and preceeding chart configuration, respectively
     vector<wxPoint> positions_parallels_and_meridians_labels_now/*, positions_parallels_and_meridians_labels_before*/;
-    vector< vector<wxPoint> > /*parallels and meridians are stored in this vectors at the current step of the drag process of the chart: the i-th entry of this vector contains a Route chunk*/grid_now, ticks_now/*, ticks_before*/;
+    vector<unsigned long long int> positions_grid_now;
+    vector<wxPoint> /*parallels and meridians are stored in this vectors at the current step of the drag process of the chart: the i-th entry of this vector contains a Route chunk*/grid_now, ticks_now/*, ticks_before*/;
     
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::PreRenderMercator or DrawPanel::PreRender3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*PreRender)(void);
@@ -103,7 +104,7 @@ public:
                               const wxPoint&,
                               const vector<unsigned long long int>&,
                               const vector<wxPoint>&,
-                              const vector< vector<wxPoint> >&,
+                              const vector<wxPoint>&,
                               const vector<wxString>&,
                               const vector<wxPoint>&,
                               const vector<unsigned long long int>&,
@@ -189,7 +190,7 @@ public:
                          const wxPoint&,
                          const vector<unsigned long long int>&,
                          const vector<wxPoint>&,
-                         const vector< vector<wxPoint> >&,
+                         const vector<wxPoint>&,
                          const vector<wxString>&,
                          const vector<wxPoint>&,
                          const vector<unsigned long long int> &,
@@ -201,7 +202,7 @@ public:
                    const wxPoint&,
                    const vector<unsigned long long int>&,
                    const vector<wxPoint>&,
-                   const vector< vector<wxPoint> >&,
+                   const vector<wxPoint>&,
                    const vector<wxString>&,
                    const vector<wxPoint>&,
                    const vector<unsigned long long int> &,

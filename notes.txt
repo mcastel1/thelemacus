@@ -140,6 +140,13 @@
 
 
  ********** THINGS TO FIX ***********
+    - parallels are not shown with the new method in the mercator projection because the method void Route::DrawOld(
+                    unsigned int n_points,
+                    DrawPanel* draw_panel,
+                    vector<unsigned long long int>* positions,
+                    vector<wxPoint>* points,
+                    [[maybe_unused]] String prefix
+                    ) { has a bug
     - remove DrawPanel::ticks_now which should now be useless (with the new structure of ticks)
     - condense common parts of  'Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);' and of 'Draw(unsigned int, DrawPanel*, vector<unsigned long long int>*, vector<wxPoint>*, String prefix)'
     - put back lines after '            //put back this after changement of structure of ticks_noew' after change of structure of ticks vector

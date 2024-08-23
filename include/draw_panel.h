@@ -186,8 +186,8 @@ public:
 
     void Render_Mercator(wxDC*,
                          const wxPoint&,
-                         const vector< vector< vector<wxPoint> > >&,
-                         const vector< vector< vector<wxPoint> > >&,
+                         const vector< vector<wxPoint> >&,
+                         const vector< vector<wxPoint> >&,
                          const vector<wxString>&,
                          const vector<wxPoint>&,
                          const vector<unsigned long long int> &,
@@ -197,8 +197,8 @@ public:
                          const double&);
     void Render_3D(wxDC*,
                    const wxPoint&,
-                   const vector< vector< vector<wxPoint> > >&,
-                   const vector< vector< vector<wxPoint> > >&,
+                   const vector< vector<wxPoint> >&,
+                   const vector< vector<wxPoint> >&,
                    const vector<wxString>&,
                    const vector<wxPoint>&,
                    const vector<unsigned long long int> &,

@@ -472,8 +472,8 @@ void DrawPanel::CleanAndRenderAll(void) {
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
-                    positions_grid_now,
-                    grid_now,
+                    parent->grid_positions,
+                    parent->grid_points,
                     ticks_now,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
@@ -533,8 +533,8 @@ inline void DrawPanel::RefreshWIN32(void) {
         (this->*Render)(
                         &dc,
                         position_plot_area_now,
-                        positions_grid_now,
-                        grid_now,
+                        parent->grid_positions,
+                        parent->grid_points,
                         ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
@@ -1362,7 +1362,6 @@ inline void DrawPanel::PreRenderMercator(void) {
         
     }
     
-    grid_now.clear();
     ticks_now.clear();
     
     //prerender meridians
@@ -1394,10 +1393,7 @@ inline void DrawPanel::PreRenderMercator(void) {
          (route.reference_position->lambda.value) = (lambda_start.value);
          (route.reference_position->lambda.value) < (lambda_end.value);
          (route.reference_position->lambda.value) += delta_lambda) {
-        
-        //add the current meridian that is being drawn (route) to meridians_now
-        grid_now.resize((grid_now.size()) + 1);
-        
+                
         //put back this after changement of structure of ticks_noew
         route.Draw((wxGetApp().n_points_routes.value), this,
                    &(parent->grid_positions), &(parent->grid_points), String(""));
@@ -1450,7 +1446,6 @@ inline void DrawPanel::PreRenderMercator(void) {
         
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);
-        grid_now.resize((grid_now.size()) + 1);
         //put back this after changement of structure of ticks_noew
         //        route.DrawOld((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
         
@@ -1728,7 +1723,6 @@ inline void DrawPanel::PreRender3D(void) {
     }
     
     
-    grid_now.clear();
     ticks_now.clear();
     
     //draw meridians
@@ -1744,7 +1738,6 @@ inline void DrawPanel::PreRender3D(void) {
         
         //add the current meridian that is being drawn (route) to meridians
         //        grid_now.push_back(route);
-        grid_now.resize((grid_now.size()) + 1);
         
         //put back this after changement of structure of ticks_noew
 //        route.Draw((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
@@ -1800,7 +1793,6 @@ inline void DrawPanel::PreRender3D(void) {
         
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);
-        grid_now.resize((grid_now.size()) + 1);
         
         //put back this after changement of structure of ticks_noew
         //        route.Draw((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));

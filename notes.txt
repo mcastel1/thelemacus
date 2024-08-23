@@ -140,6 +140,7 @@
 
 
  ********** THINGS TO FIX ***********
+    - remove DrawPanel::ticks_now which should now be useless (with the new structure of ticks)
     - uncopmment //render parallel and meridian ticks in Render_Mecator and Render_3D
     - condense common parts of  'Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);' and of 'Draw(unsigned int, DrawPanel*, vector<unsigned long long int>*, vector<wxPoint>*, String prefix)'
     - put back lines after '            //put back this after changement of structure of ticks_noew' after change of structure of ticks vector

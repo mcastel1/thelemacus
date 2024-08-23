@@ -341,8 +341,8 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
-                    positions_grid_now,
-                    grid_now,
+                    parent->grid_positions,
+                    parent->grid_points,
                     ticks_now,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,

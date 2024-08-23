@@ -1366,10 +1366,9 @@ inline void DrawPanel::PreRenderMercator(void) {
              (route.reference_position->lambda.value) += delta_lambda_minor) {
             
             ticks_now.resize((ticks_now.size()) + 1);
-            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
-            
-            //            route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
-            
+            //put back this after changement of structure of ticks_noew
+            //            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
+                        
         }
         
     }
@@ -1382,8 +1381,9 @@ inline void DrawPanel::PreRenderMercator(void) {
         
         //add the current meridian that is being drawn (route) to meridians_now
         grid_now.resize((grid_now.size()) + 1);
-        route.Draw((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
-        //             route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
+        
+        //put back this after changement of structure of ticks_noew
+        //        route.Draw((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis
@@ -1397,8 +1397,10 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
                 ticks_now.resize((ticks_now.size()) + 1);
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
-                //                     route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+                
+                //put back this after changement of structure of ticks_noew
+                //                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
+
             }
             
             route.length->set((wxGetApp().Re.value) * ((parent->phi_max->normalize_pm_pi_ret().value) - (parent->phi_min->normalize_pm_pi_ret().value)), LengthUnit_types[0]);
@@ -1432,7 +1434,10 @@ inline void DrawPanel::PreRenderMercator(void) {
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);
         grid_now.resize((grid_now.size()) + 1);
-        route.DrawOld((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
+        //put back this after changement of structure of ticks_noew
+        //        route.DrawOld((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
+        
+        
         //here I use DrawOld because Draw cannot handle loxodromes
         //        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
         
@@ -1450,9 +1455,9 @@ inline void DrawPanel::PreRenderMercator(void) {
                      
                      //                    ticks_now.push_back(route);
                      ticks_now.resize((ticks_now.size()) + 1);
-                     route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
-                     //here I use DrawOld because Draw cannot handle loxodromes
-                     //                route.DrawOld(((wxGetApp().n_points_minor_ticks)).value, foreground_color, thickness, dc, this);
+                     
+                     //put back this after changement of structure of ticks_noew
+                     //                     route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
                      
                  }
             
@@ -1723,8 +1728,9 @@ inline void DrawPanel::PreRender3D(void) {
         //add the current meridian that is being drawn (route) to meridians
         //        grid_now.push_back(route);
         grid_now.resize((grid_now.size()) + 1);
-        route.Draw((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
-        //        route.Draw(((((parent->parent)->data)->n_points_routes).value), foreground_color, background_color, thickness, dc, this, String(""));
+        
+        //put back this after changement of structure of ticks_noew
+//        route.Draw((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -1744,8 +1750,9 @@ inline void DrawPanel::PreRender3D(void) {
                 
                 //                ticks_now.push_back(route);
                 ticks_now.resize((ticks_now.size()) + 1);
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
-                //                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+                
+                //put back this after changement of structure of ticks_noew
+                //                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
                 
             }
             
@@ -1777,8 +1784,9 @@ inline void DrawPanel::PreRender3D(void) {
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);
         grid_now.resize((grid_now.size()) + 1);
-        route.Draw((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
-        //        route.Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
+        
+        //put back this after changement of structure of ticks_noew
+        //        route.Draw((wxGetApp().n_points_routes.value), this, &(grid_now.back()), String(""));
         
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -1796,8 +1804,9 @@ inline void DrawPanel::PreRender3D(void) {
                      
                      //                    ticks_now.push_back(route);
                      ticks_now.resize((ticks_now.size()) + 1);
-                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
-                     //                route.Draw(((wxGetApp().n_points_minor_ticks)).value, foreground_color, background_color, thickness, dc, this, String(""));
+                     
+                     //put back this after changement of structure of ticks_noew
+                     //                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
                      
                  }
             

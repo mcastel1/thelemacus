@@ -91,7 +91,7 @@ public:
     vector<wxString> parallels_and_meridians_labels_now/*, parallels_and_meridians_labels_before*/;
     //positions of labels of parallels and meridians at the current and preceeding chart configuration, respectively
     vector<wxPoint> positions_parallels_and_meridians_labels_now/*, positions_parallels_and_meridians_labels_before*/;
-    vector< vector< vector<wxPoint> > > /*parallels and meridians are stored in this vectors at the current step of the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_now, /*parallels and meridians are stored in these vectors at the preceeding step in the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*//*grid_before,*/ ticks_now/*, ticks_before*/;
+    vector< vector<wxPoint> > /*parallels and meridians are stored in this vectors at the current step of the drag process of the chart: the i-th entry of this vector contains a Route chunk*/grid_now, ticks_now/*, ticks_before*/;
     
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::PreRenderMercator or DrawPanel::PreRender3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*PreRender)(void);

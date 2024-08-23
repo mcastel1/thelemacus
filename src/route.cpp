@@ -761,10 +761,10 @@ void Route::Draw(
             }
             
             //now I decide if v_proposed is a valid chunk (a chunk to be plotted), and thus if I sholud push it back to v or not
-            if(n_points_check_ok>0){
-                //v_tentative containts at least one point for which GeoToDrawPanel evaluated to true (without recurring to put_back_in) -> it is a valid chunk -> I add it to v. On the other hand, if n_points_check_ok == 0, then the only points in v_tentative may be the first and the last, which have been pushed back to v_tentative by put_back_in, and the chunk will be an odd chunk with only two points put into *rectangle_observer by put_back_in -> This may lead to odd diagonal lines in the Mercator projection
+            if(n_points_check_ok > 0){
+                //v_tentative containts at least one point for which GeoToDrawPanel evaluated to true (without recurring to put_back_in) -> it is a valid chunk -> I add it to points. On the other hand, if n_points_check_ok == 0, then the only points in v_tentative may be the first and the last, which have been pushed back to v_tentative by put_back_in, and the chunk will be an odd chunk with only two points put into *rectangle_observer by put_back_in -> This may lead to odd diagonal lines in the Mercator projection: thus, if n_points_check_ok == 0, I do not insert anytying in *points
                 
-                v->push_back(v_tentative);
+                points->insert(points->end(), v_tentative.begin(), v_tentative.end());
                 
             }
 

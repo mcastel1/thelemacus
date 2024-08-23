@@ -714,7 +714,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     PositionProjection temp;
     Position q;
     //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
-    int i, j;
+    int i;
     
     
     //draw a rectangle (representing the border) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color
@@ -730,25 +730,19 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     
     //render parallels and meridians
     for (i = 0; i < grid.size(); i++) {
-        for (j = 0; j < (grid[i]).size(); j++) {
-            
-            //            (grid[i]).DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
-            
-            if ((grid[i][j]).size() > 1) {
-                dc->DrawLines((int)((grid[i][j]).size()), (grid[i][j]).data());
-            }
-            
+        
+        if ((grid[i]).size() > 1) {
+            dc->DrawLines((int)((grid[i]).size()), (grid[i]).data());
         }
+                
     }
     //render parallels and meridian ticks
     for (i = 0; i < ticks.size(); i++) {
-        for (j = 0; j < (ticks[i]).size(); j++) {
-            
-            //            (ticks[i]).DrawOld((wxGetApp().n_points_minor_ticks.value), foreground_color, thickness, dc, this);
-            if ((ticks[i][j]).size() > 1) {
-                dc->DrawLines((int)((ticks[i][j]).size()), (ticks[i][j]).data());
-            }
+        
+        if ((ticks[i]).size() > 1) {
+            dc->DrawLines((int)((ticks[i]).size()), (ticks[i]).data());
         }
+        
     }
     
     
@@ -925,23 +919,19 @@ inline void DrawPanel::Render_3D(
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
     //render parallels and meridians
     for (i = 0; i < grid.size(); i++) {
-        for (j = 0; j < (grid[i]).size(); j++) {
-            
-            //        (grid[i]).Draw((parent->parent->data->n_points_routes.value), foreground_color, background_color, thickness, dc, this, String(""));
-            if ((grid[i][j]).size() > 1) {
-                dc->DrawSpline((int)((grid[i][j]).size()), (grid[i][j]).data());
-            }
+        
+        if ((grid[i]).size() > 1) {
+            dc->DrawSpline((int)((grid[i]).size()), (grid[i]).data());
         }
+        
     }
     //render parallel and meridian ticks
     for (i = 0; i < ticks.size(); i++) {
-        for (j = 0; j < (ticks[i]).size(); j++) {
-            
-            //        (ticks[i]).Draw((wxGetApp().n_points_minor_ticks.value), foreground_color, background_color, thickness, dc, this, String(""));
-            if ((ticks[i][j]).size() > 1) {
-                dc->DrawSpline((int)((ticks[i][j]).size()), (ticks[i][j]).data());
-            }
+        
+        if ((ticks[i]).size() > 1) {
+            dc->DrawSpline((int)((ticks[i]).size()), (ticks[i]).data());
         }
+        
     }
     
     

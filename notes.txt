@@ -140,13 +140,6 @@
 
 
  ********** THINGS TO FIX ***********
-    - make sure that  Route::DrawOld(
-                    unsigned int n_points,
-                    DrawPanel* draw_panel,
-                    vector<unsigned long long int>* positions,
-                    vector<wxPoint>* points,
-                    [[maybe_unused]] String prefix
-                    ) { does not add many Routes with size 1 (delete them in positions)
     - parallels are not shown with the new method in the mercator projection because the method void Route::DrawOld(
                     unsigned int n_points,
                     DrawPanel* draw_panel,

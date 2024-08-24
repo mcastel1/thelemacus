@@ -322,7 +322,7 @@ void Route::DrawOld(
                     ) {
 
     wxPoint p;
-    bool chunk_end;
+    bool starting_new_chunk;
     unsigned int i, n_points_chunk;
     Length length_saved;
     
@@ -342,7 +342,7 @@ void Route::DrawOld(
 
     //tabulate the Route points
     //go through all the Route points
-    for(n_points_chunk = 0, chunk_end = true, i = 0; i < n_points; i++) {
+    for(n_points_chunk = 0, starting_new_chunk = true, i = 0; i < n_points; i++) {
 
         compute_end((*length)*((double)i)/((double)(n_points - 1)), String(""));
         
@@ -354,29 +354,39 @@ void Route::DrawOld(
         if ((draw_panel->GeoToDrawPanel)((*end), &p, false)) {
             
             //the Route point considered is valid -> I increase n_points_chunk
-            n_points_chunk++;
-            
-            if (chunk_end) {
+
+            if (starting_new_chunk) {
                 //I reached the end of a chunk
 
 //                v->resize(v->size() + 1);
                 //I update *poisitions
-                positions->push_back((positions->back()) + n_points_chunk);
            
-                chunk_end = false;
+                starting_new_chunk = false;
 
             }
 
             points->push_back(p);
+            n_points_chunk++;
+            
+            if(i==n_points-1){
+                
+                positions->push_back((positions->back()) + n_points_chunk);
+                
+            }
 
         }else{
+            //I have reached the end of a chunk
 
-            chunk_end = true;
+            //I set starting_new_chunk = true in such a way that the next iterations will recognize it
+            starting_new_chunk = true;
+            positions->push_back((positions->back()) + n_points_chunk);
             n_points_chunk = 0;
 
         }
 
     }
+    
+
     
     //write back length_saved into *length
     length->set(length_saved);

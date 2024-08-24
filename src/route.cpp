@@ -379,7 +379,9 @@ void Route::DrawOld(
 
             //I set starting_new_chunk = true in such a way that the next iterations will recognize it
             starting_new_chunk = true;
-            positions->push_back((positions->back()) + n_points_chunk);
+            if(n_points_chunk > 0){
+                positions->push_back((positions->back()) + n_points_chunk);
+            }
             n_points_chunk = 0;
 
         }

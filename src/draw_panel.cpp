@@ -3173,42 +3173,54 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             if (((parent->parent->highlighted_route_now) == -1) && (((parent->parent)->highlighted_position_now) == -1)) {
                 //I am dragging the chart (not a Route nor  a Position)
                 
-                if ((parent->projection) == Projection_types[0]) {
-                    //I am using the Mercator projection
-                    
-                    double delta_y;
-                    PositionProjection p_ceil_min, p_floor_max;
-                    
-                    delta_y = ((double)((position_end_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
-                    
-                    (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
-                    (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
-                    
-                    
-                    if ((!((y_max + delta_y < (p_floor_max.y)) && (y_min + delta_y > (p_ceil_min.y))))) {
-                        //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset y_min, y_max to their original values
+                
+                switch (position_in_vector(parent->projection, Projection_types)) {
                         
-                        //                    x_min = x_min_start_drag;
-                        //                    x_max = x_max_start_drag;
-                        y_min = y_min_start_drag;
-                        y_max = y_max_start_drag;
+                    case 0: {
+                        //I am using the Mercator projection
                         
-                        (this->*Set_lambda_phi_min_max)();
+                        double delta_y;
+                        PositionProjection p_ceil_min, p_floor_max;
                         
-                        //re-draw the chart
-                        (this->*PreRender)();
-                        Refresh();
-                        FitAll();
+                        delta_y = ((double)((position_end_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
+                        
+                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
+                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
+                        
+                        
+                        if ((!((y_max + delta_y < (p_floor_max.y)) && (y_min + delta_y > (p_ceil_min.y))))) {
+                            //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset y_min, y_max to their original values
+                            
+                            //                    x_min = x_min_start_drag;
+                            //                    x_max = x_max_start_drag;
+                            y_min = y_min_start_drag;
+                            y_max = y_max_start_drag;
+                            
+                            (this->*Set_lambda_phi_min_max)();
+                            
+                            //re-draw the chart
+                            (this->*PreRender)();
+                            Refresh();
+                            FitAll();
+                            
+                        }
+                        
+                        break;
                         
                     }
-                    
+                        
+                        
+                    case 1: {
+                        
+                        rotation_end_drag->set((*rotation));
+                        
+                        break;
+                        
+                    }
+                        
                 }
-                
-                if ((parent->projection) == Projection_types[1]) {
-                    
-                    rotation_end_drag->set((*rotation));
-                    
-                }
+                        
+            
                 
                 //the drag operation has ended -> I set
                 (parent->dragging_chart) = false;

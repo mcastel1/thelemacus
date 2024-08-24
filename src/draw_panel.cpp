@@ -437,15 +437,6 @@ inline void DrawPanel::RenderRoutes(
                 dc.DrawSpline((int)((points_curves[i][j]).size()), (points_curves[i][j]).data());
             }
             
-            //render points of Routes for debug
-            /*
-             for(unsigned int l=0; l<points_curves[i][j].size(); l++){
-             dc.DrawCircle(points_curves[i][j][l], thickness);
-             }
-             */
-            //render points of Routes for debug
-            
-            
         }
         
     }

@@ -1351,7 +1351,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         
     }
     
-//    ticks_now.clear();
+    //    ticks_now.clear();
     
     //prerender meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop

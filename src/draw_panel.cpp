@@ -671,11 +671,11 @@ void DrawPanel::FitAll() {
 
 //render the polygons stored in points_polygons and polygon_positions
 inline void DrawPanel::RenderLines(wxDC* dc,
-                                      const vector<unsigned long long int>& polygon_positions,
-                                      const vector<wxPoint>& points_polygons,
-                                      const wxColor& foreground_color,
-                                      const wxColor& background_color,
-                                      const double& thickness) {
+                                   const vector<unsigned long long int>& polygon_positions,
+                                   const vector<wxPoint>& points_polygons,
+                                   const wxColor& foreground_color,
+                                   const wxColor& background_color,
+                                   const double& thickness) {
     
     long long int i;
     
@@ -926,14 +926,14 @@ inline void DrawPanel::Render_3D(
     //
     //    }
     
-//    //render parallel and meridian ticks
-//    for (i = 0; i < ticks.size(); i++) {
-//        
-//        if ((ticks[i]).size() > 1) {
-//            dc->DrawSpline((int)((ticks[i]).size()), (ticks[i]).data());
-//        }
-//        
-//    }
+    //    //render parallel and meridian ticks
+    //    for (i = 0; i < ticks.size(); i++) {
+    //        
+    //        if ((ticks[i]).size() > 1) {
+    //            dc->DrawSpline((int)((ticks[i]).size()), (ticks[i]).data());
+    //        }
+    //        
+    //    }
     
     
     //render labels on parallels and meridians
@@ -1371,7 +1371,7 @@ inline void DrawPanel::PreRenderMercator(void) {
             
             //            ticks_now.resize((ticks_now.size()) + 1);
             route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
-                        
+            
         }
         
     }
@@ -1381,7 +1381,7 @@ inline void DrawPanel::PreRenderMercator(void) {
          (route.reference_position->lambda.value) = (lambda_start.value);
          (route.reference_position->lambda.value) < (lambda_end.value);
          (route.reference_position->lambda.value) += delta_lambda) {
-                
+        
         route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
         
         if (gamma_lambda != 1) {
@@ -1397,7 +1397,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                 
                 //                ticks_now.resize((ticks_now.size()) + 1);
                 route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
-
+                
             }
             
             route.length->set((wxGetApp().Re.value) * ((parent->phi_max->normalize_pm_pi_ret().value) - (parent->phi_min->normalize_pm_pi_ret().value)), LengthUnit_types[0]);
@@ -1794,7 +1794,7 @@ inline void DrawPanel::PreRender3D(void) {
                  ) {
                      
                      //                    ticks_now.push_back(route);
-//                     ticks_now.resize((ticks_now.size()) + 1);
+                     //                     ticks_now.resize((ticks_now.size()) + 1);
                      
                      route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
                      
@@ -3085,7 +3085,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             //the highlighted Route has not changed ->  the chart does not need to be updated, but the coordinates of the instantaneous mouse position do -> call
             
             wxClientDC dc(this);
-
+            
             //re-render mouse position label
             
             RenderMousePositionLabel(
@@ -3219,8 +3219,8 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                     }
                         
                 }
-                        
-            
+                
+                
                 
                 //the drag operation has ended -> I set
                 (parent->dragging_chart) = false;
@@ -3594,7 +3594,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             for(i=0; i<parent->parent->chart_frames.size(); i++){
                 parent->parent->chart_frames[i]->button_reset->Enable(true);
             }
-                        
+            
         }
         
     }
@@ -3662,109 +3662,53 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     
                     (parent->dragging_chart) = true;
                     
-                    if ((parent->projection) == Projection_types[0]) {
-                        //I am using the mercator projection
-                        
-                        PositionProjection p_ceil_min, p_floor_max;
-                        
-                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
-                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
-                        
-                        
-                        if ((y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_max_start_drag) < (p_floor_max.y)) && (y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min_start_drag) > (p_ceil_min.y))) {
-                            //in this case, the drag operation does not end out of the min and max latitude contained in the data files
+                    
+                    switch (position_in_vector(parent->projection, Projection_types)) {
                             
-                            //update x_min, ..., y_max according to the drag.
-                            x_min = x_min_start_drag - ((double)((position_now_drag.x) - (position_start_drag.x))) / ((double)(size_plot_area.GetWidth())) * x_span_start_drag;
-                            x_max = x_max_start_drag - ((double)((position_now_drag.x) - (position_start_drag.x))) / ((double)(size_plot_area.GetWidth())) * x_span_start_drag;
-                            y_min = y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
-                            y_max = y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
+                        case 0: {
                             
-                            (this->*Set_lambda_phi_min_max)();
+                            //I am using the mercator projection
                             
-                            /*
-                             #ifdef __APPLE__
-                             //re-draw the chart
-                             (this->*PreRender)();
-                             #endif
-                             #ifdef WIN32
-                             //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-                             (parent->polygon_position_before) = (parent->polygon_position_now);
-                             //                            parent->coastline_polygons_before.resize(parent->coastline_polygons_now.size());
-                             copy_n(parent->coastline_polygons_now.begin(), parent->coastline_polygons_now.size(), parent->coastline_polygons_before.begin() );
-                             
-                             position_plot_area_before = position_plot_area_now;
-                             grid_before.clear();
-                             grid_before = grid_now;
-                             ticks_before.clear();
-                             ticks_before = ticks_now;
-                             
-                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-                             points_route_list_before.clear();
-                             points_route_list_before = points_route_list_now;
-                             
-                             points_position_list_before.clear();
-                             points_position_list_before = points_position_list_now;
-                             
-                             reference_positions_route_list_before.clear();
-                             reference_positions_route_list_before = reference_positions_route_list_now;
-                             
-                             //re-draw the chart
-                             (this->*PreRender)();
-                             
-                             #endif
-                             */
+                            PositionProjection p_ceil_min, p_floor_max;
+                            
+                            (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
+                            (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
+                            
+                            
+                            if ((y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_max_start_drag) < (p_floor_max.y)) && (y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min_start_drag) > (p_ceil_min.y))) {
+                                //in this case, the drag operation does not end out of the min and max latitude contained in the data files
+                                
+                                //update x_min, ..., y_max according to the drag.
+                                x_min = x_min_start_drag - ((double)((position_now_drag.x) - (position_start_drag.x))) / ((double)(size_plot_area.GetWidth())) * x_span_start_drag;
+                                x_max = x_max_start_drag - ((double)((position_now_drag.x) - (position_start_drag.x))) / ((double)(size_plot_area.GetWidth())) * x_span_start_drag;
+                                y_min = y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
+                                y_max = y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
+                                
+                                (this->*Set_lambda_phi_min_max)();
+                                (this->*PreRender)();
+                                MyRefresh();
+                                
+                            }
+                            
+                            
+                            break;
+                            
+                        }
+                            
+                        case 1: {
+                            
+                            //I am using the 3d projection
+                            
+                            //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
+                            rotation->set(rotation_start_end(position_start_drag, position_now_drag) * (*rotation_start_drag));
                             
                             (this->*PreRender)();
                             MyRefresh();
                             
+                            break;
+                            
                         }
-                        
-                    }
-                    
-                    if ((parent->projection) == Projection_types[1]) {
-                        //I am using the 3d projection
-                        
-                        //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
-                        rotation->set(rotation_start_end(position_start_drag, position_now_drag) * (*rotation_start_drag));
-                        
-                        /*
-                         #ifdef __APPLE__
-                         
-                         //re-render the chart
-                         (this->*PreRender)();
-                         #endif
-                         #ifdef WIN32
-                         //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-                         (parent->polygon_position_before) = (parent->polygon_position_now);
-                         //                        parent->coastline_polygons_before.resize(parent->coastline_polygons_now.size());
-                         copy_n(parent->coastline_polygons_now.begin(), parent->coastline_polygons_now.size(), parent->coastline_polygons_before.begin() );
-                         
-                         position_plot_area_before = position_plot_area_now;
-                         grid_before.clear();
-                         grid_before = grid_now;
-                         ticks_before.clear();
-                         ticks_before = ticks_now;
-                         
-                         //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-                         points_route_list_before.clear();
-                         points_route_list_before = points_route_list_now;
-                         
-                         points_position_list_before.clear();
-                         points_position_list_before = points_position_list_now;
-                         
-                         reference_positions_route_list_before.clear();
-                         reference_positions_route_list_before = reference_positions_route_list_now;
-                         
-                         //re-draw the chart
-                         (this->*PreRender)();
-                         
-                         #endif
-                         */
-                        
-                        (this->*PreRender)();
-                        MyRefresh();
-                        
+                            
                     }
                     
                     
@@ -3830,15 +3774,15 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             //on APPLE, I compute the coordinates of the reference position of the Route that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
-/*
-#ifdef _WIN32
-                            
-                            //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                            (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
-                            (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
-                            
-#endif
-*/
+                            /*
+                             #ifdef _WIN32
+                             
+                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
+                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
+                             (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
+                             
+                             #endif
+                             */
                             
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
@@ -3910,16 +3854,16 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             //on APPLE, I compute the coordinates of the Position that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow ->  I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
                             
-/*
-#ifdef _WIN32
-                            
-                            //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                            (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
-                            (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
-                            
-                            
-#endif
-*/
+                            /*
+                             #ifdef _WIN32
+                             
+                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
+                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
+                             (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
+                             
+                             
+                             #endif
+                             */
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                                  (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],

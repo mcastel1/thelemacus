@@ -680,7 +680,6 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if(compute_l_ends_ok){
         
-        bool check;
         //a vector where I will store the tentative points of each chunk of *this
         vector<wxPoint> v_tentative;
         //the number of points of each chunk for which GeoToDrawPanel returns true (without recurring to put_back_in)
@@ -700,9 +699,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
                             (s[j] * (1.0 + epsilon_double)) + (((s[j + 1] * (1.0 - epsilon_double)) - ((s[j] * (1.0 + epsilon_double)))) * ((double)i)/((double)(n_points - 1))),
                             String(""));
                 
-                check = (draw_panel->GeoToDrawPanel)((*end), &p, false);
-                
-                if(check){
+                if(((draw_panel->GeoToDrawPanel)((*end), &p, false))){
                     //end is a valid point -> convert it to a Position with GeoToDrawPanel
 
                     v_tentative.push_back(p);
@@ -790,7 +787,6 @@ void Route::Draw(
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if(compute_l_ends_ok){
         
-        bool check;
         //a vector where I will store the tentative points of each chunk of *this
         vector<wxPoint> v_tentative;
         //the number of points of each chunk for which GeoToDrawPanel returns true (without recurring to put_back_in)
@@ -810,9 +806,7 @@ void Route::Draw(
                             (s[j] * (1.0 + epsilon_double)) + (((s[j + 1] * (1.0 - epsilon_double)) - ((s[j] * (1.0 + epsilon_double)))) * ((double)i)/((double)(n_points - 1))),
                             String(""));
                 
-                check = (draw_panel->GeoToDrawPanel)((*end), &p, false);
-                
-                if(check){
+                if(((draw_panel->GeoToDrawPanel)((*end), &p, false))){
                     //end is a valid point -> convert it to a Position with GeoToDrawPanel
 
                     v_tentative.push_back(p);

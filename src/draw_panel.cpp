@@ -727,7 +727,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     //render coastlines
     RenderLines(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
     
-    //render parallels and meridians    
+    //render parallels and meridians
     RenderLines(dc, grid_positions, grid_points, foreground_color, background_color, thickness);
     
     
@@ -906,24 +906,25 @@ inline void DrawPanel::Render_3D(
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     
     //render coastlines
-    if((parent->parent->show_coastlines) == Answer('y', String(""))){
-        RenderLines(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
-    }
-    
-    dc->SetPen(wxPen(foreground_color, thickness));
-    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT)); //Set the brush to the device context
+    RenderLines(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
     
     //render parallels and meridians
-    for(i = 0; i < ((long long int)(grid_positions.size()))-1; i++) {
-        //run through grid
-        
-        if(grid_positions[i+1] - grid_positions[i] > 1){
-            
-            dc->DrawLines((int)(grid_positions[i+1] - grid_positions[i]), (grid_points.data()) + grid_positions[i]);
-            
-        }
-        
-    }
+    RenderLines(dc, grid_positions, grid_points, foreground_color, background_color, thickness);
+    
+    
+    //    dc->SetPen(wxPen(foreground_color, thickness));
+    //    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT));
+    //
+    //    for(i = 0; i < ((long long int)(grid_positions.size()))-1; i++) {
+    //        //run through grid
+    //
+    //        if(grid_positions[i+1] - grid_positions[i] > 1){
+    //
+    //            dc->DrawLines((int)(grid_positions[i+1] - grid_positions[i]), (grid_points.data()) + grid_positions[i]);
+    //
+    //        }
+    //
+    //    }
     
 //    //render parallel and meridian ticks
 //    for (i = 0; i < ticks.size(); i++) {

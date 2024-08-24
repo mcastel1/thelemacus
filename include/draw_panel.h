@@ -125,7 +125,7 @@ public:
     void RenderAll(wxDC&);
     void MyRefresh(void);
     void RefreshWIN32(void);
-    void RenderPolygons(wxDC*,
+    void RenderLines(wxDC*,
                         const vector<unsigned long long int>&,
                         const vector<wxPoint>&,
                         const wxColor&,

@@ -670,7 +670,7 @@ void DrawPanel::FitAll() {
 
 
 //render the polygons stored in points_polygons and polygon_positions
-inline void DrawPanel::RenderPolygons(wxDC* dc,
+inline void DrawPanel::RenderLines(wxDC* dc,
                                       const vector<unsigned long long int>& polygon_positions,
                                       const vector<wxPoint>& points_polygons,
                                       const wxColor& foreground_color,
@@ -725,28 +725,20 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     
     
     //render coastlines
-    RenderPolygons(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
-    cout << " " << endl;
+    RenderLines(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
     
-    //render parallels and meridians
-    for(i = 0; i < ((long long int)(grid_positions.size()))-1; i++) {
-        //run through grid
-        
-        if(grid_positions[i+1] - grid_positions[i] > 1){
-            
-            dc->DrawLines((int)(grid_positions[i+1] - grid_positions[i]), (grid_points.data()) + grid_positions[i]);
-            
-        }
-        
-    }
+    //render parallels and meridians    
+    RenderLines(dc, grid_positions, grid_points, foreground_color, background_color, thickness);
+    
+    
     //render parallels and meridian ticks
-//    for (i = 0; i < ticks.size(); i++) {
-//        
-//        if ((ticks[i]).size() > 1) {
-//            dc->DrawLines((int)((ticks[i]).size()), (ticks[i]).data());
-//        }
-//        
-//    }
+    //    for (i = 0; i < ticks.size(); i++) {
+    //
+    //        if ((ticks[i]).size() > 1) {
+    //            dc->DrawLines((int)((ticks[i]).size()), (ticks[i]).data());
+    //        }
+    //
+    //    }
     
     
     //render labels on parallels and meridians
@@ -915,7 +907,7 @@ inline void DrawPanel::Render_3D(
     
     //render coastlines
     if((parent->parent->show_coastlines) == Answer('y', String(""))){
-        RenderPolygons(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
+        RenderLines(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
     }
     
     dc->SetPen(wxPen(foreground_color, thickness));

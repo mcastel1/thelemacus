@@ -84,10 +84,12 @@ public:
     void DrawOld(unsigned int, Color, int, wxDC*, DrawPanel*);
     void DrawOld(unsigned int, wxDC*, DrawPanel*, String);
     void DrawOld(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
-    
+    void DrawOld(unsigned int, DrawPanel*, vector<unsigned long long int>*, vector<wxPoint>*, String prefix);
+
     void Draw(unsigned int, Color, Color, int, wxDC*, DrawPanel*, String);
     void Draw(unsigned int, wxDC*, DrawPanel*, String);
     void Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
+    void Draw(unsigned int, DrawPanel*, vector<unsigned long long int>*, vector<wxPoint>*, String prefix);
     
     void lambda_min_max(Angle*, Angle*, String);
     bool phi_min_max(Angle*, Angle*, String);

@@ -121,7 +121,7 @@
      - add separator between recent items and non-recent items in BodyField->name
      - replace all 'projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))' with a switch case find_in_... with
         '''
-        switch (position_in_vector(projection, Projection_types)) {
+        switch (position_in_vector(parent->projection, Projection_types)) {
 
             case 0: {
 
@@ -137,11 +137,11 @@
 
         }
         '''
+     -  condense common parts of  'Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);' and of 'Draw(unsigned int, DrawPanel*, vector<unsigned long long int>*, vector<wxPoint>*, String prefix)'
+
 
 
  ********** THINGS TO FIX ***********
-    - replace 'if ((parent->projection) == Projection_types[0]) {' with a swicth
-    - delete template<class Tp> struct my_allocator when you dont need it anymore
     - change back '//set projections at startup - start''
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 `	- write put_back_in , put_back)_in_Mercator and put_back_in_3D :

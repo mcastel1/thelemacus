@@ -91,7 +91,7 @@ public:
     vector<wxString> parallels_and_meridians_labels_now/*, parallels_and_meridians_labels_before*/;
     //positions of labels of parallels and meridians at the current and preceeding chart configuration, respectively
     vector<wxPoint> positions_parallels_and_meridians_labels_now/*, positions_parallels_and_meridians_labels_before*/;
-    vector< vector< vector<wxPoint> > > /*parallels and meridians are stored in this vectors at the current step of the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*/grid_now, /*parallels and meridians are stored in these vectors at the preceeding step in the drag process of the chart: the i-th entry of this vector is a vector of chunks of the Route*//*grid_before,*/ ticks_now/*, ticks_before*/;
+    //    vector<wxPoint> ticks_now/*, ticks_before*/;
     
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::PreRenderMercator or DrawPanel::PreRender3D, according to my needs, and similarly for the other pointers
     void (DrawPanel::*PreRender)(void);
@@ -101,8 +101,8 @@ public:
     bool (DrawPanel::*GeoToProjection)(const Position&, PositionProjection*, bool);
     void (DrawPanel::*Render)(wxDC*,
                               const wxPoint&,
-                              const vector< vector< vector<wxPoint> > >&,
-                              const vector< vector< vector<wxPoint> > >&,
+                              const vector<unsigned long long int>&,
+                              const vector<wxPoint>&,
                               const vector<wxString>&,
                               const vector<wxPoint>&,
                               const vector<unsigned long long int>&,
@@ -125,7 +125,7 @@ public:
     void RenderAll(wxDC&);
     void MyRefresh(void);
     void RefreshWIN32(void);
-    void RenderPolygons(wxDC*,
+    void RenderLines(wxDC*,
                         const vector<unsigned long long int>&,
                         const vector<wxPoint>&,
                         const wxColor&,
@@ -186,8 +186,8 @@ public:
 
     void Render_Mercator(wxDC*,
                          const wxPoint&,
-                         const vector< vector< vector<wxPoint> > >&,
-                         const vector< vector< vector<wxPoint> > >&,
+                         const vector<unsigned long long int>&,
+                         const vector<wxPoint>&,
                          const vector<wxString>&,
                          const vector<wxPoint>&,
                          const vector<unsigned long long int> &,
@@ -197,8 +197,8 @@ public:
                          const double&);
     void Render_3D(wxDC*,
                    const wxPoint&,
-                   const vector< vector< vector<wxPoint> > >&,
-                   const vector< vector< vector<wxPoint> > >&,
+                   const vector<unsigned long long int>&,
+                   const vector<wxPoint>&,
                    const vector<wxString>&,
                    const vector<wxPoint>&,
                    const vector<unsigned long long int> &,

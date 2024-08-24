@@ -3834,23 +3834,34 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         wxPoint p;
                         
-                        if ((parent->projection) == Projection_types[0]) {
-                            
-                            //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
-                            (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]));
-                            
+                        switch (position_in_vector(parent->projection, Projection_types)) {
+                                
+                            case 0: {
+                                
+                                
+                                //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
+                                (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]));
+                                
+                                break;
+                                
+                            }
+                                
+                            case 1: {
+                                
+                                //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                                (*rotation_now_drag) =
+                                (rotation->inverse()) *
+                                rotation_start_end(position_start_drag, position_now_drag) *
+                                (*rotation);
+                                geo_start_drag->rotate(String(""), (*rotation_now_drag), &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]), String(""));
+                                
+                                break;
+                                
+                            }
+                                
                         }
                         
-                        if ((parent->projection) == Projection_types[1]) {
-                            
-                            //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
-                            (*rotation_now_drag) =
-                            (rotation->inverse()) *
-                            rotation_start_end(position_start_drag, position_now_drag) *
-                            (*rotation);
-                            geo_start_drag->rotate(String(""), (*rotation_now_drag), &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]), String(""));
-                            
-                        }
+                        
                         
                         //update the data of the Position under consideration in listcontrol_positions
                         ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]).update_ListControl((parent->parent->highlighted_position_now), parent->parent->listcontrol_positions);

@@ -343,7 +343,6 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                     position_plot_area_now,
                     parent->grid_positions,
                     parent->grid_points,
-                    ticks_now,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
                     parent->polygon_position_now,
@@ -474,7 +473,6 @@ void DrawPanel::CleanAndRenderAll(void) {
                     position_plot_area_now,
                     parent->grid_positions,
                     parent->grid_points,
-                    ticks_now,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
                     parent->polygon_position_now,
@@ -535,7 +533,6 @@ inline void DrawPanel::RefreshWIN32(void) {
                         position_plot_area_now,
                         parent->grid_positions,
                         parent->grid_points,
-                        ticks_now,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
                         parent->polygon_position_now,
@@ -703,7 +700,6 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
                                        const wxPoint& position_plot_area,
                                        const vector<unsigned long long int>& grid_positions,
                                        const vector<wxPoint>& grid_points,
-                                       const vector<wxPoint>& ticks,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                        const vector<unsigned long long int>& polygon_positions,
@@ -891,7 +887,6 @@ inline void DrawPanel::Render_3D(
                                  const wxPoint& position_plot_area,
                                  const vector<unsigned long long int>& grid_positions,
                                  const vector<wxPoint>& grid_points,
-                                 const vector<wxPoint>& ticks,
                                  const vector<wxString>& parallels_and_meridians_labels,
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                  const vector<unsigned long long int> & polygon_positions,
@@ -1363,7 +1358,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         
     }
     
-    ticks_now.clear();
+//    ticks_now.clear();
     
     //prerender meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
@@ -1381,7 +1376,7 @@ inline void DrawPanel::PreRenderMercator(void) {
              (route.reference_position->lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
              (route.reference_position->lambda.value) += delta_lambda_minor) {
             
-            ticks_now.resize((ticks_now.size()) + 1);
+            //            ticks_now.resize((ticks_now.size()) + 1);
             //put back this after changement of structure of ticks_noew
             //            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
                         
@@ -1409,7 +1404,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->lambda.value) - (lambda_saved.value) < delta_lambda;
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
-                ticks_now.resize((ticks_now.size()) + 1);
+//                ticks_now.resize((ticks_now.size()) + 1);
                 route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
 
             }
@@ -1461,7 +1456,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                  ) {
                      
                      //                    ticks_now.push_back(route);
-                     ticks_now.resize((ticks_now.size()) + 1);
+                     //                     ticks_now.resize((ticks_now.size()) + 1);
                      
                      route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
                      
@@ -1722,7 +1717,7 @@ inline void DrawPanel::PreRender3D(void) {
     }
     
     
-    ticks_now.clear();
+    //    ticks_now.clear();
     
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
@@ -1757,7 +1752,7 @@ inline void DrawPanel::PreRender3D(void) {
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
                 //                ticks_now.push_back(route);
-                ticks_now.resize((ticks_now.size()) + 1);
+                //                ticks_now.resize((ticks_now.size()) + 1);
                 
                 route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
                 
@@ -1808,7 +1803,7 @@ inline void DrawPanel::PreRender3D(void) {
                  ) {
                      
                      //                    ticks_now.push_back(route);
-                     ticks_now.resize((ticks_now.size()) + 1);
+//                     ticks_now.resize((ticks_now.size()) + 1);
                      
                      route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
                      

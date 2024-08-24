@@ -147,7 +147,7 @@ inline void DrawPanel::RenderMousePositionLabel(
 
 
 //call either Refresh() or RefreshWIN32 according to the operating system
-//inline 
+//inline
 void DrawPanel::MyRefresh(){
     
 #ifdef __APPLE__
@@ -928,11 +928,11 @@ inline void DrawPanel::Render_3D(
     
     //    //render parallel and meridian ticks
     //    for (i = 0; i < ticks.size(); i++) {
-    //        
+    //
     //        if ((ticks[i]).size() > 1) {
     //            dc->DrawSpline((int)((ticks[i]).size()), (ticks[i]).data());
     //        }
-    //        
+    //
     //    }
     
     
@@ -2528,7 +2528,7 @@ inline bool DrawPanel::GeoToDrawPanel(const Position& q, wxPoint* p, bool write)
 
 
 // convert the cartesian position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Cartesian position, return true and (if p!=NULL),  write the resulting DrawPanel coordinates in p. If q is not a valid Cartesian position,  return false and, if write = true and p!=NULL, it writes the drawpanel position in p.
-//inline 
+//inline
 bool DrawPanel::CartesianToDrawPanel(const Cartesian& q, wxPoint* p, bool write) {
     
     PositionProjection temp;
@@ -3728,44 +3728,49 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         wxPoint q;
                         
-                        if ((parent->projection) == Projection_types[0]) {
-                            
-                            wxPoint p;
-                            
-                            //convert the coordinates of route_reference_position_drag_now into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (ground) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
-                            
-                            GeoToDrawPanel((*route_reference_position_drag_start), &p, false);
-                            
-                            //this command is the same for all types of Routes
-                            DrawPanelToGeo(p + (position_now_drag - position_start_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
-                            
-                        }
-                        
-                        
-                        if ((parent->projection) == Projection_types[1]) {
-                            
-                            //compose rotation with the rotation resulting from the drag and then apply it to *route_reference_position_drag_now: *route_reference_position_drag_now -> rotation^{-1}.(rotation due to drag).rotation.(*route_reference_position_drag_now). In this way, when Render() will plot the position (*route_reference_position_drag_now), it will apply to *route_reference_position_drag_now the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.(*route_reference_position_drag_now) = (rotation due to drag).rotation.(*route_reference_position_drag_now), which is the desired result (i.e. route_reference_position_drag_now rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
-                            rotation_now_drag->set(
-                                                   (rotation->inverse()) *
-                                                   rotation_start_end(position_start_drag, position_now_drag) *
-                                                   (*rotation));
-                            
-                            
-                            if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
+                        switch (position_in_vector(parent->projection, Projection_types)) {
                                 
-                                //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((parent->parent->data->route_list)[(parent->parent->highlighted_route)]).reference_position));
-                                route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                            case 0: {
+                                
+                                wxPoint p;
+                                
+                                //convert the coordinates of route_reference_position_drag_now into DrawPanel coordinates, shift these coordinates according to the mouse drag, and  assign the resulting point to the starting (ground) Position of the Route under consideration if the Route is a loxodrome or orthodrome (circle of equal altitude): in this way, the whole Route under consideration is dragged along with the mouse
+                                
+                                GeoToDrawPanel((*route_reference_position_drag_start), &p, false);
+                                
+                                //this command is the same for all types of Routes
+                                DrawPanelToGeo(p + (position_now_drag - position_start_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
+                                
+                                break;
                                 
                             }
-                            else {
                                 
-                                route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                            case 1: {
+                                
+                                //compose rotation with the rotation resulting from the drag and then apply it to *route_reference_position_drag_now: *route_reference_position_drag_now -> rotation^{-1}.(rotation due to drag).rotation.(*route_reference_position_drag_now). In this way, when Render() will plot the position (*route_reference_position_drag_now), it will apply to *route_reference_position_drag_now the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.(*route_reference_position_drag_now) = (rotation due to drag).rotation.(*route_reference_position_drag_now), which is the desired result (i.e. route_reference_position_drag_now rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                                rotation_now_drag->set(
+                                                       (rotation->inverse()) *
+                                                       rotation_start_end(position_start_drag, position_now_drag) *
+                                                       (*rotation));
+                                
+                                
+                                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
+                                    
+                                    //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((parent->parent->data->route_list)[(parent->parent->highlighted_route)]).reference_position));
+                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                                    
+                                }
+                                else {
+                                    
+                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                                    
+                                }
+                                
+                                break;
                                 
                             }
-                            
+                                
                         }
-                        
-                        
                         
                         
                         //update the data of the Route under consideration in listcontrol_routes

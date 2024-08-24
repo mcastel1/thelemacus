@@ -1377,8 +1377,7 @@ inline void DrawPanel::PreRenderMercator(void) {
              (route.reference_position->lambda.value) += delta_lambda_minor) {
             
             //            ticks_now.resize((ticks_now.size()) + 1);
-            //put back this after changement of structure of ticks_noew
-            //            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(ticks_now.back()), String(""));
+            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
                         
         }
         
@@ -1390,7 +1389,6 @@ inline void DrawPanel::PreRenderMercator(void) {
          (route.reference_position->lambda.value) < (lambda_end.value);
          (route.reference_position->lambda.value) += delta_lambda) {
                 
-        //put back this after changement of structure of ticks_noew
         route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
         
         if (gamma_lambda != 1) {
@@ -1404,7 +1402,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->lambda.value) - (lambda_saved.value) < delta_lambda;
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
-//                ticks_now.resize((ticks_now.size()) + 1);
+                //                ticks_now.resize((ticks_now.size()) + 1);
                 route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
 
             }

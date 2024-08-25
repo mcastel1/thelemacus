@@ -694,7 +694,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                        const vector<unsigned long long int>& polygon_positions,
-                                       const vector<wxPoint>& points_polygons,
+                                       const vector<wxPoint>& polygon_points,
                                        const wxColor& foreground_color,
                                        const wxColor& background_color,
                                        const double& thickness) {
@@ -716,7 +716,7 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     
     
     //render coastlines
-    RenderLines(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
+    RenderLines(dc, polygon_positions, polygon_points, foreground_color, background_color, thickness);
     
     //render parallels and meridians
     RenderLines(dc, grid_positions, grid_points, foreground_color, background_color, thickness);

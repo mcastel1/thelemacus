@@ -662,8 +662,8 @@ void DrawPanel::FitAll() {
 
 //render the polygons stored in points_polygons and polygon_positions
 inline void DrawPanel::RenderLines(wxDC* dc,
-                                   const vector<unsigned long long int>& polygon_positions,
-                                   const vector<wxPoint>& points_polygons,
+                                   const vector<unsigned long long int>& positions,
+                                   const vector<wxPoint>& points,
                                    const wxColor& foreground_color,
                                    const wxColor& background_color,
                                    const double& thickness) {
@@ -672,12 +672,12 @@ inline void DrawPanel::RenderLines(wxDC* dc,
     
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for(i = 0; i < ((long long int)(polygon_positions.size()))-1; i++) {
+    for(i = 0; i < ((long long int)(positions.size()))-1; i++) {
         //run through polygons
         
-        if(polygon_positions[i+1] - polygon_positions[i] > 1){
+        if(positions[i+1] - positions[i] > 1){
             
-            dc->DrawLines((int)(polygon_positions[i+1] - polygon_positions[i]), (points_polygons.data()) + polygon_positions[i]);
+            dc->DrawLines((int)(positions[i+1] - positions[i]), (points.data()) + positions[i]);
             
         }
         

@@ -345,8 +345,8 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                     parent->grid_points,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
-                    parent->polygon_position_now,
-                    parent->coastline_polygons_now,
+                    parent->coastline_positions,
+                    parent->coastline_points,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
@@ -466,8 +466,8 @@ void DrawPanel::CleanAndRenderAll(void) {
                     parent->grid_points,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
-                    parent->polygon_position_now,
-                    parent->coastline_polygons_now,
+                    parent->coastline_positions,
+                    parent->coastline_points,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
@@ -526,8 +526,8 @@ inline void DrawPanel::RefreshWIN32(void) {
                         parent->grid_points,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->polygon_position_now,
-                        parent->coastline_polygons_now,
+                        parent->coastline_positions,
+                        parent->coastline_points,
                         wxGetApp().foreground_color,
                         wxGetApp().background_color,
                         wxGetApp().standard_thickness.value
@@ -3938,10 +3938,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                          (this->*PreRender)();
                          #endif
                          #ifdef _WIN32
-                         //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-                         (parent->polygon_position_before) = (parent->polygon_position_now);
-                         //                        parent->coastline_polygons_before.resize(parent->coastline_polygons_now.size());
-                         copy_n(parent->coastline_polygons_now.begin(), parent->coastline_polygons_now.size(), parent->coastline_polygons_before.begin() );
+                         //I am about to update coastline_points-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
+                         (parent->polygon_position_before) = (parent->coastline_positions);
+                         //                        parent->coastline_polygons_before.resize(parent->coastline_points.size());
+                         copy_n(parent->coastline_points.begin(), parent->coastline_points.size(), parent->coastline_polygons_before.begin() );
                          
                          position_plot_area_before = position_plot_area_now;
                          grid_before.clear();

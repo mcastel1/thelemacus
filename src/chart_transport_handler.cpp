@@ -266,9 +266,9 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             
             /*
              #ifdef WIN32
-             //I am about to update coastline_polygons_now-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-             (chart_frame->polygon_position_before) = (chart_frame->polygon_position_now);
-             copy_n(chart_frame->coastline_polygons_now.begin(), chart_frame->coastline_polygons_now.size(), chart_frame->coastline_polygons_before.begin() );
+             //I am about to update coastline_points-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
+             (chart_frame->polygon_position_before) = (chart_frame->coastline_positions);
+             copy_n(chart_frame->coastline_points.begin(), chart_frame->coastline_points.size(), chart_frame->coastline_polygons_before.begin() );
              
              (chart_frame->draw_panel->position_plot_area_before) = (chart_frame->draw_panel->position_plot_area_now);
              chart_frame->draw_panel->grid_before.clear();

@@ -341,12 +341,10 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
-                    parent->grid_positions,
-                    parent->grid_points,
+                    parent->grid,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
-                    parent->coastline_positions,
-                    parent->coastline_points,
+                    parent->coastlines,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
@@ -462,12 +460,10 @@ void DrawPanel::CleanAndRenderAll(void) {
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
-                    parent->grid_positions,
-                    parent->grid_points,
+                    parent->grid,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
-                    parent->coastline_positions,
-                    parent->coastline_points,
+                    parent->coastlines,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
@@ -522,12 +518,10 @@ inline void DrawPanel::RefreshWIN32(void) {
         (this->*Render)(
                         &dc,
                         position_plot_area_now,
-                        parent->grid_positions,
-                        parent->grid_points,
+                        parent->grid,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->coastline_positions,
-                        parent->coastline_points,
+                        parent->coastlines,
                         wxGetApp().foreground_color,
                         wxGetApp().background_color,
                         wxGetApp().standard_thickness.value

@@ -125,8 +125,7 @@ public:
     void MyRefresh(void);
     void RefreshWIN32(void);
     void RenderLines(wxDC*,
-                        const vector<unsigned long long int>&,
-                        const vector<wxPoint>&,
+                        const Lines&,
                         const wxColor&,
                         const wxColor&,
                         const double&

@@ -17,9 +17,10 @@
 #include "chart_frame.h"
 #include "chart_panel.h"
 #include "int.h"
-#include "position.h"
 #include "length.h"
+#include "lines.h"
 #include "my_app.h"
+#include "position.h"
 #include "position_projection.h"
 #include "position_rectangle.h"
 #include "print_message.h"
@@ -101,12 +102,10 @@ public:
     bool (DrawPanel::*GeoToProjection)(const Position&, PositionProjection*, bool);
     void (DrawPanel::*Render)(wxDC*,
                               const wxPoint&,
-                              const vector<unsigned long long int>&,
-                              const vector<wxPoint>&,
+                              const Lines&,
                               const vector<wxString>&,
                               const vector<wxPoint>&,
-                              const vector<unsigned long long int>&,
-                              const vector<wxPoint>&,
+                              const Lines&,
                               const wxColor&,
                               const wxColor&,
                               const double&);
@@ -186,23 +185,19 @@ public:
 
     void Render_Mercator(wxDC*,
                          const wxPoint&,
-                         const vector<unsigned long long int>&,
-                         const vector<wxPoint>&,
+                         const Lines&,
                          const vector<wxString>&,
                          const vector<wxPoint>&,
-                         const vector<unsigned long long int> &,
-                         const vector<wxPoint>&,
+                         const Lines&,
                          const wxColor&,
                          const wxColor&,
                          const double&);
     void Render_3D(wxDC*,
                    const wxPoint&,
-                   const vector<unsigned long long int>&,
-                   const vector<wxPoint>&,
+                   const Lines&,
                    const vector<wxString>&,
                    const vector<wxPoint>&,
-                   const vector<unsigned long long int> &,
-                   const vector<wxPoint>&,
+                   const Lines&,
                    const wxColor&,
                    const wxColor&,
                    const double&);

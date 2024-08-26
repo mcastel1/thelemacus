@@ -19,8 +19,8 @@ class Lines{
 public:
     
     //position[j] = [the # of the entry in points at which the j-th chunk of connnected points starts]. Such j-th chunk is given by points[position[j]], points[position[j]+1], .... , points[osition[j+1]-1]
-    vector<unsigned long long int>& positions;
-    vector<wxPoint>& points;
+    vector<unsigned long long int> positions;
+    vector<wxPoint> points;
     
 };
 

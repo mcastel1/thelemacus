@@ -1059,9 +1059,9 @@ inline void DrawPanel::PreRenderMercator(void) {
     //client_dc->Clear();
     
     //clear grid_points and grid_positions, and set the first entry of grid_positions to 0 because the position of the first Route chunk is 0
-    parent->grid_points.clear();
-    parent->grid_positions.clear();
-    parent->grid_positions.push_back(0);
+    parent->grid.points.clear();
+    parent->grid.positions.clear();
+    parent->grid.positions.push_back(0);
     
     //here I compute multiple quantities relative to the y axis: this computation is done here, at the very beginning of PreRenderMercator, because these quantitites will be needed immediatly to compute size_label_horizontal
     //set phi_start, phi_end and delta_phi

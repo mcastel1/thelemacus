@@ -1311,7 +1311,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[m][j], &q, false)){
                     //(parent->coastline_polygons_Position)[i][j] is a valid point
                     
-                    coastline_points[l++] = q;
+                    (coastlines.points)[l++] = q;
                     new_polygon = false;
                     
                 }else{

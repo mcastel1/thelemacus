@@ -66,15 +66,17 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     for(i=0, j=0; i<parent->coastline_polygons_Position.size(); i++) {
         j += (parent->coastline_polygons_Position[i].size());
     }
-    coastline_points.resize(j);
-    coastline_positions.reserve(parent->n_all_coastline_points);
-    coastline_positions.resize(parent->coastline_polygons_Position.size());
+    
+    //    coastline_points.resize(j);
+    coastlines.positions.reserve(parent->n_all_coastline_points);
+    //    coastline_positions.reserve(parent->n_all_coastline_points);
+    //    coastline_positions.resize(parent->coastline_polygons_Position.size());
     
     
-//    coastline_polygons_before.resize(j);
-//    polygon_position_before.reserve(parent->n_all_coastline_points);
-//    polygon_position_before.resize(parent->coastline_polygons_Position.size());
-
+    //    coastline_polygons_before.resize(j);
+    //    polygon_position_before.reserve(parent->n_all_coastline_points);
+    //    polygon_position_before.resize(parent->coastline_polygons_Position.size());
+    
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 
     panel = new ChartPanel(this, wxDefaultPosition, wxDefaultSize);

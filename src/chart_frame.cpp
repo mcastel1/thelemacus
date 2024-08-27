@@ -1290,15 +1290,15 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         if(every==0){every = 1;}
         
         
-        for(p=0, i=0, l=0, n_added_polygons=0, coastline_positions.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0, coastlines.positions.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
             
             new_polygon=true;
             n_added_polygons++;
-            if(n_added_polygons > coastline_positions.size()){
-                coastline_positions.resize(n_added_polygons);
+            if(n_added_polygons > coastlines.positions.size()){
+                coastlines.positions.resize(n_added_polygons);
             }
-            coastline_positions[n_added_polygons-1] = l;
+            (coastlines.positions)[n_added_polygons-1] = l;
             
             //the id of the polygon that is being added, i.e. , the # of the polygon as entry of coastline_polygons_Position
             m = (parent->coastline_polygons_area_observer)[i];
@@ -1319,13 +1319,13 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
                     
                     if(!new_polygon){
                         
-                        //updated coastline_positions with the position of the new polygon
+                        //updated coastlines.positions with the position of the new polygon
                         new_polygon = true;
                         n_added_polygons++;
-                        if(n_added_polygons > coastline_positions.size()){
-                            coastline_positions.resize(n_added_polygons);
+                        if(n_added_polygons > coastlines.positions.size()){
+                            coastlines.positions.resize(n_added_polygons);
                         }
-                        coastline_positions[n_added_polygons-1] = l;
+                        (coastlines.positions)[n_added_polygons-1] = l;
                         
                     }
 
@@ -1337,10 +1337,10 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 
         }
         
-        if(n_added_polygons+1 > coastline_positions.size()){
-            coastline_positions.resize(n_added_polygons+1);
+        if(n_added_polygons+1 > coastlines.positions.size()){
+            coastlines.positions.resize(n_added_polygons+1);
         }
-        coastline_positions.back() = l;
+        coastlines.positions.back() = l;
 
         
     }

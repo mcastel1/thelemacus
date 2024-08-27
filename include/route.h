@@ -16,6 +16,7 @@
 #include "draw_panel.h"
 #include "length.h"
 #include "length_format.h"
+#include "lines.h"
 #include "my_string.h"
 #include "position.h"
 #include "position_projection.h"
@@ -89,7 +90,7 @@ public:
     void Draw(unsigned int, Color, Color, int, wxDC*, DrawPanel*, String);
     void Draw(unsigned int, wxDC*, DrawPanel*, String);
     void Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
-    void Draw(unsigned int, DrawPanel*, vector<unsigned long long int>*, vector<wxPoint>*, String prefix);
+    void Draw(unsigned int, DrawPanel*, const Lines&, String prefix);
     
     void lambda_min_max(Angle*, Angle*, String);
     bool phi_min_max(Angle*, Angle*, String);

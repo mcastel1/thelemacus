@@ -756,8 +756,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
 void Route::Draw(
                  unsigned int n_points,
                  DrawPanel* draw_panel,
-                 vector<unsigned long long int>* positions,
-                 vector<wxPoint>* points,
+                 const Lines& lines,
                  [[maybe_unused]] String prefix
                  ) {
 

@@ -707,10 +707,10 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     
     
     //render coastlines
-    RenderLines(dc, polygon_positions, polygon_points, foreground_color, background_color, thickness);
+    RenderLines(dc, coastlines, foreground_color, background_color, thickness);
     
     //render parallels and meridians
-    RenderLines(dc, grid_positions, grid_points, foreground_color, background_color, thickness);
+    RenderLines(dc, grid, foreground_color, background_color, thickness);
     
     
     //render parallels and meridian ticks
@@ -886,10 +886,10 @@ inline void DrawPanel::Render_3D(
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     
     //render coastlines
-    RenderLines(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
+    RenderLines(dc, coastlines, foreground_color, background_color, thickness);
     
     //render parallels and meridians
-    RenderLines(dc, grid_positions, grid_points, foreground_color, background_color, thickness);
+    RenderLines(dc, grid, foreground_color, background_color, thickness);
     
     
     //    dc->SetPen(wxPen(foreground_color, thickness));

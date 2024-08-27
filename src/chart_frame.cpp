@@ -1174,10 +1174,10 @@ void ChartFrame::GetCoastLineData_3D(void) {
             
             new_polygon=true;
             n_added_polygons++;
-            if(n_added_polygons > coastline_positions.size()){
-                coastline_positions.resize(n_added_polygons);
+            if(n_added_polygons >  coastlines.positions.size()){
+                coastlines.positions.resize(n_added_polygons);
             }
-            coastline_positions[n_added_polygons-1] = l;
+            coastlines.positions[n_added_polygons-1] = l;
             
             //the id of the polygon that is being added, i.e. , the # of the polygon as entry of coastline_polygons_Position
             m = (parent->coastline_polygons_area_observer)[i];

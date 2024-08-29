@@ -316,8 +316,7 @@ inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector<
 void Route::DrawOld(
                     unsigned int n_points,
                     DrawPanel* draw_panel,
-                    vector<unsigned long long int>* positions,
-                    vector<wxPoint>* points,
+                    Lines* lines,
                     [[maybe_unused]] String prefix
                     ) {
 
@@ -365,12 +364,12 @@ void Route::DrawOld(
 
             }
 
-            points->push_back(p);
+            lines->points.push_back(p);
             n_points_chunk++;
             
             if(i==n_points-1){
                 
-                positions->push_back((positions->back()) + n_points_chunk);
+                lines->positions.push_back((lines->positions.back()) + n_points_chunk);
                 
             }
 
@@ -380,7 +379,7 @@ void Route::DrawOld(
             //I set starting_new_chunk = true in such a way that the next iterations will recognize it
             starting_new_chunk = true;
             if(n_points_chunk > 0){
-                positions->push_back((positions->back()) + n_points_chunk);
+                lines->positions.push_back((lines->positions.back()) + n_points_chunk);
             }
             n_points_chunk = 0;
 

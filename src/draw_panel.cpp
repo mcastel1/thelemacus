@@ -1408,7 +1408,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                                                                
                                                                ).value), LengthUnit_types[0]);
         
-        route.DrawOld((wxGetApp().n_points_routes.value), this, parent->grid, String(""));
+        route.DrawOld((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
         
         
         //here I use DrawOld because Draw cannot handle loxodromes
@@ -1429,7 +1429,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                      //                    ticks_now.push_back(route);
                      //                     ticks_now.resize((ticks_now.size()) + 1);
                      
-                     route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, parent->grid, String(""));
+                     route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
                      
                  }
             

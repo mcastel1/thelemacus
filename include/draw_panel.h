@@ -89,9 +89,9 @@ public:
     wxMemoryInputStream * memory_input_stream;
     UnsetIdling<DrawPanel>* unset_idling;
     //labels of parallels and meridians at the current and preceeding chart configuration, respectively
-    vector<wxString> parallels_and_meridians_labels_now/*, parallels_and_meridians_labels_before*/;
+    vector<wxString> parallels_and_meridians_labels;
     //positions of labels of parallels and meridians at the current and preceeding chart configuration, respectively
-    vector<wxPoint> positions_parallels_and_meridians_labels_now/*, positions_parallels_and_meridians_labels_before*/;
+    vector<wxPoint> positions_parallels_and_meridians_labels_now;
     //    vector<wxPoint> ticks_now/*, ticks_before*/;
     
     //this is a pointer to a class-member function which takes a void and returns a void. I will let it point to wither DrawPanel::PreRenderMercator or DrawPanel::PreRender3D, according to my needs, and similarly for the other pointers

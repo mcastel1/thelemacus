@@ -80,7 +80,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     circle_observer->type = RouteType(((Route_types[2]).value));
     
     //clears the vector label_phi because tehre are not y labels yet.
-    parallels_and_meridians_labels_now.resize(0);
+    parallels_and_meridians_labels.resize(0);
     positions_parallels_and_meridians_labels_now.resize(0);
     
     
@@ -342,7 +342,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                     &dc,
                     position_plot_area_now,
                     parent->grid,
-                    parallels_and_meridians_labels_now,
+                    parallels_and_meridians_labels,
                     positions_parallels_and_meridians_labels_now,
                     parent->coastlines,
                     wxGetApp().foreground_color,
@@ -465,7 +465,7 @@ void DrawPanel::CleanAndRenderAll(void) {
                     &dc,
                     position_plot_area_now,
                     parent->grid,
-                    parallels_and_meridians_labels_now,
+                    parallels_and_meridians_labels,
                     positions_parallels_and_meridians_labels_now,
                     parent->coastlines,
                     wxGetApp().foreground_color,
@@ -524,7 +524,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         &dc,
                         position_plot_area_now,
                         parent->grid,
-                        parallels_and_meridians_labels_now,
+                        parallels_and_meridians_labels,
                         positions_parallels_and_meridians_labels_now,
                         parent->coastlines,
                         wxGetApp().foreground_color,
@@ -834,11 +834,11 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
         WriteLabel(q, min, max, precision, mode, &wx_string);
         
         
-        parallels_and_meridians_labels_now.push_back(wx_string);
+        parallels_and_meridians_labels.push_back(wx_string);
         positions_parallels_and_meridians_labels_now.push_back(p);
         
         
-        size = String(parallels_and_meridians_labels_now.back().ToStdString()).get_size(this);
+        size = String(parallels_and_meridians_labels.back().ToStdString()).get_size(this);
         
         if (mode == String("NS")) {
             //            I am drawing parallels label
@@ -1301,10 +1301,10 @@ inline void DrawPanel::PreRenderMercator(void) {
     
     
     //compute labels on parallels and meridians
-    //save parallels_and_meridians_labels_now and positions_parallels_and_meridians_labels_now into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
-    //    parallels_and_meridians_labels_before = parallels_and_meridians_labels_now;
+    //save parallels_and_meridians_labels and positions_parallels_and_meridians_labels_now into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
+    //    parallels_and_meridians_labels_before = parallels_and_meridians_labels;
     //    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels_now;
-    parallels_and_meridians_labels_now.resize(0);
+    parallels_and_meridians_labels.resize(0);
     positions_parallels_and_meridians_labels_now.resize(0);
     
     //compute labels on parallels
@@ -1655,10 +1655,10 @@ inline void DrawPanel::PreRender3D(void) {
     
     
     //compute labels on parallels and meridians
-    //save parallels_and_meridians_labels_now and positions_parallels_and_meridians_labels_now into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
-    //    parallels_and_meridians_labels_before = parallels_and_meridians_labels_now;
+    //save parallels_and_meridians_labels and positions_parallels_and_meridians_labels_now into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
+    //    parallels_and_meridians_labels_before = parallels_and_meridians_labels;
     //    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels_now;
-    parallels_and_meridians_labels_now.resize(0);
+    parallels_and_meridians_labels.resize(0);
     positions_parallels_and_meridians_labels_now.resize(0);
     
     //compute labels on parallels

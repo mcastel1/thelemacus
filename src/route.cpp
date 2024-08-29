@@ -756,7 +756,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
 void Route::Draw(
                  unsigned int n_points,
                  DrawPanel* draw_panel,
-                 const Lines& lines,
+                 Lines* lines,
                  [[maybe_unused]] String prefix
                  ) {
 
@@ -841,9 +841,9 @@ void Route::Draw(
                 //w containts at least one point for which GeoToDrawPanel evaluated to true (without recurring to put_back_in) -> it is a valid chunk -> I add it to points. On the other hand, if n_points_check_ok == 0, then the only points in w may be the first and the last, which have been pushed back to w by put_back_in, and the chunk will be an odd chunk with only two points put into *rectangle_observer by put_back_in -> This may lead to odd diagonal lines in the Mercator projection: thus, if n_points_check_ok == 0, I do not insert anytying in *points
                 
                 //I update *points
-                lines.points.insert(lines.points.end(), w.begin(), w.end());
+                lines->points.insert(lines->points.end(), w.begin(), w.end());
                 //I update *poisitions
-                lines.positions.push_back((lines.positions.back()) + (w.size()));
+                lines->positions.push_back((lines->positions.back()) + (w.size()));
                 
             }
 

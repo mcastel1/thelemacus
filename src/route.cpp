@@ -312,7 +312,7 @@ inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector<
 }
 
 
-//tabulate the points of Route *this in any projection of draw_panel and write them into points. This method pushes back all the points of the chunks of the tabulated Route at the end of points: the id of the entry in *points where the i-th chunk starts is (*positions)[i], and *positions is re-allocated and filled accordingly
+//reset *lines and tabulate the points of Route *this in any projection of draw_panel and write them into *lines.
 void Route::DrawOld(
                     unsigned int n_points,
                     DrawPanel* draw_panel,
@@ -341,7 +341,7 @@ void Route::DrawOld(
 
     //tabulate the Route points
     //go through all the Route points
-    for(n_points_chunk = 0, starting_new_chunk = true, i = 0; i < n_points; i++) {
+    for(lines->reset(), n_points_chunk = 0, starting_new_chunk = true, i = 0; i < n_points; i++) {
 
         compute_end((*length)*((double)i)/((double)(n_points - 1)), String(""));
         
@@ -751,7 +751,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
 }
 
 
-//tabulate the points of Route *this in any projection of draw_panel and writes them into points. This method pushes back all the points of the chunks of the tabulated Route at the end of points: the id of the entry in *points where the i-th chunk starts is (*positions)[i], and *positions is re-allocated and filled accordingly
+//reset *lines and tabulate the points of Route *this in any projection of draw_panel and writes them into *lines.
 void Route::Draw(
                  unsigned int n_points,
                  DrawPanel* draw_panel,
@@ -789,6 +789,8 @@ void Route::Draw(
         vector<wxPoint> w;
         //the number of points of each chunk for which GeoToDrawPanel returns true (without recurring to put_back_in)
         unsigned int n_points_check_ok;
+        
+        lines->reset();
 
          //run over all chunks of *this which are visible
          //given that s contains the number of intersection points of *this and that each pair of intersection point delimits a chunk, and that v contains the chunks, the size of v is equal to thte size of s minus one.

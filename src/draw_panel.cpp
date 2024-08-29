@@ -424,18 +424,19 @@ inline void DrawPanel::RenderRoutes(
             dc.DrawCircle(reference_positions[i], radius);
         }
         
-        //draw the route points
-        //run over all connected chunks of routes
-        for (j = 0; j < (points_curves[i]).size(); j++) {
-            
-            if ((points_curves[i][j]).size() > 1) {
-                //I need to add this consdition to make sure that I am not drawing an empty connected chunk
-                
-                
-                dc.DrawSpline((int)((points_curves[i][j]).size()), (points_curves[i][j]).data());
-            }
-            
-        }
+        //draw the Route points
+        //run over all connected chunks of Route #i
+        //        for (j = 0; j < (points_curves[i]).positions.size() - 1; j++) {
+        //
+        //            if (((points_curves[i]).positions)[j+1]  - ((points_curves[i]).positions)[j] > 1) {
+        //                //I need to add this consdition to make sure that I am not drawing an empty connected chunk
+        //
+        //
+        //                dc.DrawSpline(((points_curves[i]).positions)[j+1]  - ((points_curves[i]).positions)[j], (points_curves[i][j]).data());
+        //            }
+        //
+        //        }
+        RenderLines(&dc, points_curves[i], foreground_color, thickness);
         
     }
     
@@ -658,7 +659,6 @@ void DrawPanel::FitAll() {
 inline void DrawPanel::RenderLines(wxDC* dc,
                                    const Lines& lines,
                                    const wxColor& foreground_color,
-                                   const wxColor& background_color,
                                    const double& thickness) {
     
     long long int i;
@@ -707,10 +707,10 @@ inline void DrawPanel::RenderMercator(wxDC* dc,
     
     
     //render coastlines
-    RenderLines(dc, coastlines, foreground_color, background_color, thickness);
+    RenderLines(dc, coastlines, foreground_color, thickness);
     
     //render parallels and meridians
-    RenderLines(dc, grid, foreground_color, background_color, thickness);
+    RenderLines(dc, grid, foreground_color, thickness);
     
     
     //render parallels and meridian ticks
@@ -886,10 +886,10 @@ inline void DrawPanel::Render3D(
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     
     //render coastlines
-    RenderLines(dc, coastlines, foreground_color, background_color, thickness);
+    RenderLines(dc, coastlines, foreground_color, thickness);
     
     //render parallels and meridians
-    RenderLines(dc, grid, foreground_color, background_color, thickness);
+    RenderLines(dc, grid, foreground_color, thickness);
     
     
     //    dc->SetPen(wxPen(foreground_color, thickness));

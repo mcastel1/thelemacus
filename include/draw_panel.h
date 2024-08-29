@@ -127,7 +127,6 @@ public:
     void RenderLines(wxDC*,
                         const Lines&,
                         const wxColor&,
-                        const wxColor&,
                         const double&
                         );
     void RenderRoutes(wxDC&,

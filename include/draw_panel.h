@@ -131,7 +131,7 @@ public:
                         const double&
                         );
     void RenderRoutes(wxDC&,
-                      const vector< vector< vector<wxPoint> > >&,
+                      const vector<Lines>&,
                       const vector<wxPoint>&,
                       int,
                       const wxColor&

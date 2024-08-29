@@ -1169,7 +1169,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
         
         
         
-        for(p=0, i=0, l=0, n_added_polygons=0, coastlines.points.clear(), coastlines.positions.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0, coastlines.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
             
             new_polygon=true;
@@ -1292,7 +1292,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         if(every==0){every = 1;}
         
         
-        for(p=0, i=0, l=0, n_added_polygons=0, coastlines.points.clear(), coastlines.positions.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0, coastlines.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
             
             new_polygon=true;

@@ -397,6 +397,7 @@ inline void DrawPanel::RenderRoutes(
     int i, j, color_id;
     double thickness, radius;
     wxPoint p;
+    wxColour foreground_color_for_RenderLines;
     
     //render Routes
     for (i = 0, color_id = 0; i < (points_curves.size()); i++) {
@@ -411,13 +412,15 @@ inline void DrawPanel::RenderRoutes(
             radius = 4 * thickness;
         }
         
-        if (foreground_color != wxNullColour) {
-            dc.SetPen(wxPen(foreground_color, thickness));
-            //dc.SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
+        if (foreground_color != wxNullColour){
+            foreground_color_for_RenderLines = foreground_color;
+        }else{
+            foreground_color_for_RenderLines = (wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())];
         }
-        else {
-            dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
-        }
+
+        //        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
+        dc.SetPen(wxPen(foreground_color_for_RenderLines, thickness));
+
         
         //draw  reference_position[i] only if it is included in the plot area
         if (DrawPanelToGeo(reference_positions[i], NULL)) {
@@ -436,7 +439,7 @@ inline void DrawPanel::RenderRoutes(
         //            }
         //
         //        }
-        RenderLines(&dc, points_curves[i], foreground_color, thickness);
+        RenderLines(&dc, points_curves[i], foreground_color_for_RenderLines, thickness);
         
     }
     
@@ -473,7 +476,8 @@ void DrawPanel::CleanAndRenderAll(void) {
     RenderRoutes(dc,
                  routes_lines,
                  reference_positions_route_list_now,
-                 (parent->parent->highlighted_route_now), wxNullColour
+                 (parent->parent->highlighted_route_now), 
+                 wxNullColour
                  );
     
     RenderPositions(dc,
@@ -2935,71 +2939,71 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 (parent->parent->listcontrol_sights)->SetItemBackgroundColour((((parent->parent->data->route_list)[i]).related_sight).value, wxGetApp().background_color);
             }
             
-            //run over Routes and check whether the mouse is hovering over one of them
-            for (j = 0; j < (routes_lines[i]).size(); j++) {
-                
-                for (l = 0; l < ((int)((routes_lines[i][j]).size())) - 1; l++) {
-                    
-                    //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
-                    
-                    if (/*to recognize that the mouse is hovering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ (((routes_lines[i][j][l]).x) != ((routes_lines[i][j][l + 1]).x))
-                        
-                        &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
-                        
-                        (((((routes_lines[i][j][l]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((routes_lines[i][j][l + 1]).x))) ||
-                         
-                         ((((routes_lines[i][j][l + 1]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((routes_lines[i][j][l]).x))))
-                        
-                        &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
-                        
-                        (
-                         fabs(
-                              (position_draw_panel_now.y) -
-                              (((routes_lines[i][j][l]).y) + ((double)(((routes_lines[i][j][l + 1]).y) - ((routes_lines[i][j][l]).y))) / ((double)(((routes_lines[i][j][l + 1]).x) - ((routes_lines[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((routes_lines[i][j][l]).x))))
-                              )
-                         
-                         <= (thickness_route_selection_over_length_screen.value) * ((double)(wxGetApp().rectangle_display.GetWidth())) / 2.0
-                         )
-                        ) {
-                        //the mouse is overing over a Route
-                        
-                        
-                        //set the highlighted route to i, so as to use highlighted_route in other functions
-                        (parent->parent->highlighted_route_now) = i;
-                        
-                        parent->parent->listcontrol_routes->EnsureVisible(i);
-                        if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
-                            parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->data->route_list)[i]).related_sight.value);
-                        }
-                        
-                        //set highlighted_sight_now and the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                        (parent->parent->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-                        if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
-                            
-                            (parent->parent->highlighted_sight_now) = (((parent->parent->data->route_list)[i]).related_sight.value);
-                            
-                            parent->parent->listcontrol_sights->SetItemBackgroundColour(
-                                                                                        (parent->parent->highlighted_sight_now),
-                                                                                        (wxGetApp().color_selected_item)
-                                                                                        );
-                        }
-                        else {
-                            
-                            (parent->parent->highlighted_sight_now) = -1;
-                            
-                        }
-                        
-                        
-                        // quit the loops over l ad j
-                        break;
-                        break;
-                        
-                    }
-                    
-                }
-                
-            }
-            
+//            //run over Routes and check whether the mouse is hovering over one of them
+//            for (j = 0; j < (routes_lines[i]).size(); j++) {
+//                
+//                for (l = 0; l < ((int)((routes_lines[i][j]).size())) - 1; l++) {
+//                    
+//                    //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
+//                    
+//                    if (/*to recognize that the mouse is hovering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ (((routes_lines[i][j][l]).x) != ((routes_lines[i][j][l + 1]).x))
+//                        
+//                        &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
+//                        
+//                        (((((routes_lines[i][j][l]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((routes_lines[i][j][l + 1]).x))) ||
+//                         
+//                         ((((routes_lines[i][j][l + 1]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((routes_lines[i][j][l]).x))))
+//                        
+//                        &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
+//                        
+//                        (
+//                         fabs(
+//                              (position_draw_panel_now.y) -
+//                              (((routes_lines[i][j][l]).y) + ((double)(((routes_lines[i][j][l + 1]).y) - ((routes_lines[i][j][l]).y))) / ((double)(((routes_lines[i][j][l + 1]).x) - ((routes_lines[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((routes_lines[i][j][l]).x))))
+//                              )
+//                         
+//                         <= (thickness_route_selection_over_length_screen.value) * ((double)(wxGetApp().rectangle_display.GetWidth())) / 2.0
+//                         )
+//                        ) {
+//                        //the mouse is overing over a Route
+//                        
+//                        
+//                        //set the highlighted route to i, so as to use highlighted_route in other functions
+//                        (parent->parent->highlighted_route_now) = i;
+//                        
+//                        parent->parent->listcontrol_routes->EnsureVisible(i);
+//                        if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
+//                            parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->data->route_list)[i]).related_sight.value);
+//                        }
+//                        
+//                        //set highlighted_sight_now and the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
+//                        (parent->parent->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
+//                        if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
+//                            
+//                            (parent->parent->highlighted_sight_now) = (((parent->parent->data->route_list)[i]).related_sight.value);
+//                            
+//                            parent->parent->listcontrol_sights->SetItemBackgroundColour(
+//                                                                                        (parent->parent->highlighted_sight_now),
+//                                                                                        (wxGetApp().color_selected_item)
+//                                                                                        );
+//                        }
+//                        else {
+//                            
+//                            (parent->parent->highlighted_sight_now) = -1;
+//                            
+//                        }
+//                        
+//                        
+//                        // quit the loops over l ad j
+//                        break;
+//                        break;
+//                        
+//                    }
+//                    
+//                }
+//                
+//            }
+//            
         }
         
         

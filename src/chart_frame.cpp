@@ -67,7 +67,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
         j += (parent->coastline_polygons_Position[i].size());
     }
     
-    //    coastline_points.resize(j);
+    coastlines.points.reserve(j);
     coastlines.positions.reserve(parent->n_all_coastline_points);
     //    coastline_positions.reserve(parent->n_all_coastline_points);
     //    coastline_positions.resize(parent->coastline_polygons_Position.size());
@@ -1169,7 +1169,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
         
         
         
-        for(p=0, i=0, l=0, n_added_polygons=0, coastlines.positions.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0, coastlines.points.clear(), coastlines.positions.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
             
             new_polygon=true;
@@ -1187,7 +1187,9 @@ void ChartFrame::GetCoastLineData_3D(void) {
                 
                 if((draw_panel->CartesianToDrawPanel)((parent->coastline_polygons_Cartesian)[m][j], &q, false)){
                     
-                    coastlines.points[l++] = q;
+//                    coastlines.points[l++] = q;
+                    coastlines.points.push_back(q);
+                    l++;
                     new_polygon = false;
                     
                 }else{
@@ -1290,7 +1292,7 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
         if(every==0){every = 1;}
         
         
-        for(p=0, i=0, l=0, n_added_polygons=0, coastlines.positions.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0, coastlines.points.clear(), coastlines.positions.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
             
             new_polygon=true;
@@ -1311,7 +1313,9 @@ void ChartFrame::GetCoastLineData_Mercator(void) {
 //                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[m][j], &q, false)){
                     //(parent->coastline_polygons_Position)[i][j] is a valid point
                     
-                    (coastlines.points)[l++] = q;
+                    //                    (coastlines.points)[l++] = q;
+                    coastlines.points.push_back(q);
+                    l++;
                     new_polygon = false;
                     
                 }else{

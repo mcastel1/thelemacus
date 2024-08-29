@@ -24,6 +24,7 @@ public:
     
     Lines(void);
     
+    void clear(void);
     void reset(void);
     
 };

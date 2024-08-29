@@ -312,12 +312,11 @@ inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector<
 }
 
 
-//tabulate the points of Route *this in any projection of draw_panel and write them into points. This method pushes back all the points of the chunks of the tabulated Route at the end of points: the id of the entry in *points where the i-th chunk starts is (*positions)[i], and *positions is re-allocated and filled accordingly
+//reset *lines and tabulate the points of Route *this in any projection of draw_panel and write them into *lines.
 void Route::DrawOld(
                     unsigned int n_points,
                     DrawPanel* draw_panel,
-                    vector<unsigned long long int>* positions,
-                    vector<wxPoint>* points,
+                    Lines* lines,
                     [[maybe_unused]] String prefix
                     ) {
 
@@ -365,12 +364,12 @@ void Route::DrawOld(
 
             }
 
-            points->push_back(p);
+            lines->points.push_back(p);
             n_points_chunk++;
             
             if(i==n_points-1){
                 
-                positions->push_back((positions->back()) + n_points_chunk);
+                lines->positions.push_back((lines->positions.back()) + n_points_chunk);
                 
             }
 
@@ -380,7 +379,7 @@ void Route::DrawOld(
             //I set starting_new_chunk = true in such a way that the next iterations will recognize it
             starting_new_chunk = true;
             if(n_points_chunk > 0){
-                positions->push_back((positions->back()) + n_points_chunk);
+                lines->positions.push_back((lines->positions.back()) + n_points_chunk);
             }
             n_points_chunk = 0;
 
@@ -752,12 +751,11 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
 }
 
 
-//tabulate the points of Route *this in any projection of draw_panel and writes them into points. This method pushes back all the points of the chunks of the tabulated Route at the end of points: the id of the entry in *points where the i-th chunk starts is (*positions)[i], and *positions is re-allocated and filled accordingly
+//reset *lines and tabulate the points of Route *this in any projection of draw_panel and writes them into *lines.
 void Route::Draw(
                  unsigned int n_points,
                  DrawPanel* draw_panel,
-                 vector<unsigned long long int>* positions,
-                 vector<wxPoint>* points,
+                 Lines* lines,
                  [[maybe_unused]] String prefix
                  ) {
 
@@ -791,7 +789,7 @@ void Route::Draw(
         vector<wxPoint> w;
         //the number of points of each chunk for which GeoToDrawPanel returns true (without recurring to put_back_in)
         unsigned int n_points_check_ok;
-
+        
          //run over all chunks of *this which are visible
          //given that s contains the number of intersection points of *this and that each pair of intersection point delimits a chunk, and that v contains the chunks, the size of v is equal to thte size of s minus one.
         for(j=0; j<(s.size()) - 1; j++) {
@@ -842,9 +840,9 @@ void Route::Draw(
                 //w containts at least one point for which GeoToDrawPanel evaluated to true (without recurring to put_back_in) -> it is a valid chunk -> I add it to points. On the other hand, if n_points_check_ok == 0, then the only points in w may be the first and the last, which have been pushed back to w by put_back_in, and the chunk will be an odd chunk with only two points put into *rectangle_observer by put_back_in -> This may lead to odd diagonal lines in the Mercator projection: thus, if n_points_check_ok == 0, I do not insert anytying in *points
                 
                 //I update *points
-                points->insert(points->end(), w.begin(), w.end());
+                lines->points.insert(lines->points.end(), w.begin(), w.end());
                 //I update *poisitions
-                positions->push_back((positions->back()) + (w.size()));
+                lines->positions.push_back((lines->positions.back()) + (w.size()));
                 
             }
 

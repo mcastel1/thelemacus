@@ -341,19 +341,17 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
-                    parent->grid_positions,
-                    parent->grid_points,
+                    parent->grid,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
-                    parent->coastline_positions,
-                    parent->coastline_points,
+                    parent->coastlines,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
                     );
     
     RenderRoutes(dc,
-                 points_route_list_now,
+                 routes_lines,
                  reference_positions_route_list_now,
                  (parent->parent->highlighted_route_now),
                  wxNullColour
@@ -390,7 +388,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
 //render the Routes whose point coordinates with respect to the origin of DrawPanel are stored in points_curves, and whose reference-position coordinates with respect to the origin of DrawPanel are stored in reference_positions. the Route #highlighted_route is rendered with larger thickness. If foreground_color != wxNUllColour, the Routes are rendered with the colors in color_list, otherwise they are rendered with foreground_color
 inline void DrawPanel::RenderRoutes(
                                     wxDC& dc,
-                                    const vector< vector< vector<wxPoint> > >& points_curves,
+                                    const vector<Lines>& points_curves,
                                     const vector<wxPoint>& reference_positions,
                                     int highlighted_route,
                                     const wxColor& foreground_color
@@ -399,6 +397,7 @@ inline void DrawPanel::RenderRoutes(
     int i, j, color_id;
     double thickness, radius;
     wxPoint p;
+    wxColour foreground_color_for_RenderLines;
     
     //render Routes
     for (i = 0, color_id = 0; i < (points_curves.size()); i++) {
@@ -413,31 +412,34 @@ inline void DrawPanel::RenderRoutes(
             radius = 4 * thickness;
         }
         
-        if (foreground_color != wxNullColour) {
-            dc.SetPen(wxPen(foreground_color, thickness));
-            //dc.SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
+        if (foreground_color != wxNullColour){
+            foreground_color_for_RenderLines = foreground_color;
+        }else{
+            foreground_color_for_RenderLines = (wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())];
         }
-        else {
-            dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
-        }
+
+        //        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
+        dc.SetPen(wxPen(foreground_color_for_RenderLines, thickness));
+
         
         //draw  reference_position[i] only if it is included in the plot area
         if (DrawPanelToGeo(reference_positions[i], NULL)) {
             dc.DrawCircle(reference_positions[i], radius);
         }
         
-        //draw the route points
-        //run over all connected chunks of routes
-        for (j = 0; j < (points_curves[i]).size(); j++) {
-            
-            if ((points_curves[i][j]).size() > 1) {
-                //I need to add this consdition to make sure that I am not drawing an empty connected chunk
-                
-                
-                dc.DrawSpline((int)((points_curves[i][j]).size()), (points_curves[i][j]).data());
-            }
-            
-        }
+        //draw the Route points
+        //run over all connected chunks of Route #i
+        //        for (j = 0; j < (points_curves[i]).positions.size() - 1; j++) {
+        //
+        //            if (((points_curves[i]).positions)[j+1]  - ((points_curves[i]).positions)[j] > 1) {
+        //                //I need to add this consdition to make sure that I am not drawing an empty connected chunk
+        //
+        //
+        //                dc.DrawSpline(((points_curves[i]).positions)[j+1]  - ((points_curves[i]).positions)[j], (points_curves[i][j]).data());
+        //            }
+        //
+        //        }
+        RenderLines(&dc, points_curves[i], foreground_color_for_RenderLines, thickness);
         
     }
     
@@ -462,21 +464,20 @@ void DrawPanel::CleanAndRenderAll(void) {
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
-                    parent->grid_positions,
-                    parent->grid_points,
+                    parent->grid,
                     parallels_and_meridians_labels_now,
                     positions_parallels_and_meridians_labels_now,
-                    parent->coastline_positions,
-                    parent->coastline_points,
+                    parent->coastlines,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
                     );
     
     RenderRoutes(dc,
-                 points_route_list_now,
+                 routes_lines,
                  reference_positions_route_list_now,
-                 (parent->parent->highlighted_route_now), wxNullColour
+                 (parent->parent->highlighted_route_now), 
+                 wxNullColour
                  );
     
     RenderPositions(dc,
@@ -522,18 +523,16 @@ inline void DrawPanel::RefreshWIN32(void) {
         (this->*Render)(
                         &dc,
                         position_plot_area_now,
-                        parent->grid_positions,
-                        parent->grid_points,
+                        parent->grid,
                         parallels_and_meridians_labels_now,
                         positions_parallels_and_meridians_labels_now,
-                        parent->coastline_positions,
-                        parent->coastline_points,
+                        parent->coastlines,
                         wxGetApp().foreground_color,
                         wxGetApp().background_color,
                         wxGetApp().standard_thickness.value
                         );
         RenderRoutes(dc,
-                     points_route_list_now,
+                     routes_lines,
                      reference_positions_route_list_now,
                      (parent->parent->highlighted_route_now), wxNullColour
                      );
@@ -662,22 +661,20 @@ void DrawPanel::FitAll() {
 
 //render the polygons stored in points_polygons and polygon_positions
 inline void DrawPanel::RenderLines(wxDC* dc,
-                                   const vector<unsigned long long int>& polygon_positions,
-                                   const vector<wxPoint>& points_polygons,
+                                   const Lines& lines,
                                    const wxColor& foreground_color,
-                                   const wxColor& background_color,
                                    const double& thickness) {
     
     long long int i;
     
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
-    for(i = 0; i < ((long long int)(polygon_positions.size()))-1; i++) {
+    for(i = 0; i < ((long long int)(lines.positions.size()))-1; i++) {
         //run through polygons
         
-        if(polygon_positions[i+1] - polygon_positions[i] > 1){
+        if((lines.positions)[i+1] - (lines.positions)[i] > 1){
             
-            dc->DrawLines((int)(polygon_positions[i+1] - polygon_positions[i]), (points_polygons.data()) + polygon_positions[i]);
+            dc->DrawLines((int)((lines.positions)[i+1] - (lines.positions)[i]), (lines.points.data()) + (lines.positions)[i]);
             
         }
         
@@ -687,14 +684,12 @@ inline void DrawPanel::RenderLines(wxDC* dc,
 
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-inline void DrawPanel::Render_Mercator(wxDC* dc,
+inline void DrawPanel::RenderMercator(wxDC* dc,
                                        const wxPoint& position_plot_area,
-                                       const vector<unsigned long long int>& grid_positions,
-                                       const vector<wxPoint>& grid_points,
+                                       const Lines& grid,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                       const vector<unsigned long long int>& polygon_positions,
-                                       const vector<wxPoint>& points_polygons,
+                                       const Lines& coastlines,
                                        const wxColor& foreground_color,
                                        const wxColor& background_color,
                                        const double& thickness) {
@@ -716,10 +711,10 @@ inline void DrawPanel::Render_Mercator(wxDC* dc,
     
     
     //render coastlines
-    RenderLines(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
+    RenderLines(dc, coastlines, foreground_color, thickness);
     
     //render parallels and meridians
-    RenderLines(dc, grid_positions, grid_points, foreground_color, background_color, thickness);
+    RenderLines(dc, grid, foreground_color, thickness);
     
     
     //render parallels and meridian ticks
@@ -865,15 +860,13 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 }
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-inline void DrawPanel::Render_3D(
+inline void DrawPanel::Render3D(
                                  wxDC* dc,
                                  const wxPoint& position_plot_area,
-                                 const vector<unsigned long long int>& grid_positions,
-                                 const vector<wxPoint>& grid_points,
+                                 const Lines& grid,
                                  const vector<wxString>& parallels_and_meridians_labels,
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                 const vector<unsigned long long int> & polygon_positions,
-                                 const vector<wxPoint>& points_polygons,
+                                 const Lines& coastlines,
                                  const wxColor& foreground_color,
                                  const wxColor& background_color,
                                  const double& thickness
@@ -897,10 +890,10 @@ inline void DrawPanel::Render_3D(
     //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     
     //render coastlines
-    RenderLines(dc, polygon_positions, points_polygons, foreground_color, background_color, thickness);
+    RenderLines(dc, coastlines, foreground_color, thickness);
     
     //render parallels and meridians
-    RenderLines(dc, grid_positions, grid_points, foreground_color, background_color, thickness);
+    RenderLines(dc, grid, foreground_color, thickness);
     
     
     //    dc->SetPen(wxPen(foreground_color, thickness));
@@ -982,9 +975,9 @@ inline void DrawPanel::TabulateRoutes(void) {
     wxPoint p;
     
     //resize points_route_list_now and reference_position_route_list_now, which needs to have the same size as (data->route_list), and clear up points_route_list
-    points_route_list_now.resize((parent->parent->data->route_list).size());
-    for (i = 0; i < (points_route_list_now.size()); i++) {
-        (points_route_list_now[i]).clear();
+    routes_lines.resize(parent->parent->data->route_list.size());
+    for (i = 0; i < (routes_lines.size()); i++) {
+        (routes_lines[i]).clear();
     }
     
     reference_positions_route_list_now.clear();
@@ -993,16 +986,18 @@ inline void DrawPanel::TabulateRoutes(void) {
     //tabulate the points of routes
     for (i = 0; i < parent->parent->data->route_list.size(); i++) {
         
+        (routes_lines[i]).reset();
+        
         //write the points of the curves corresponding to the Routes into points_route_list_now
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
         if (((parent->parent->data->route_list)[i]).type != (Route_types[0])) {
             
-            ((parent->parent->data->route_list)[i]).Draw((unsigned int)(wxGetApp().n_points_routes.value), this, (points_route_list_now.data()) + i, String(""));
+            ((parent->parent->data->route_list)[i]).Draw((unsigned int)(wxGetApp().n_points_routes.value), this, (routes_lines.data()) + i, String(""));
             
         }
         else {
             
-            ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)(wxGetApp().n_points_routes.value), this, (points_route_list_now.data()) + i, String(""));
+            ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)(wxGetApp().n_points_routes.value), this, (routes_lines.data()) + i, String(""));
             
         }
         
@@ -1070,9 +1065,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //client_dc->Clear();
     
     //clear grid_points and grid_positions, and set the first entry of grid_positions to 0 because the position of the first Route chunk is 0
-    parent->grid_points.clear();
-    parent->grid_positions.clear();
-    parent->grid_positions.push_back(0);
+    parent->grid.reset();
     
     //here I compute multiple quantities relative to the y axis: this computation is done here, at the very beginning of PreRenderMercator, because these quantitites will be needed immediatly to compute size_label_horizontal
     //set phi_start, phi_end and delta_phi
@@ -1103,7 +1096,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         else { delta_phi += deg_to_rad * 5.0 / ((double)gamma_phi); }
     }
     
-    //here I set up things to plot meridians and parallels in Render_Mercator
+    //here I set up things to plot meridians and parallels in RenderMercator
     
     //set phi_start/end
     (phi_start.value) = floor((parent->phi_min->normalize_pm_pi_ret().value) / delta_phi) * delta_phi;
@@ -1232,7 +1225,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //    DrawPanelToGeo(wxPoint(position_plot_area_now + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/ - wxPoint(1, 1), &p_SE);
     
     //fetch the data on the region that I am about to plot from the data files and store it into parent->coastline_polygons_now
-    parent->GetCoastLineData_Mercator();
+    parent->GetCoastLineDataMercator();
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.GetWidth())) / ((double)size_label_horizontal)));
@@ -1361,7 +1354,7 @@ inline void DrawPanel::PreRenderMercator(void) {
              (route.reference_position->lambda.value) += delta_lambda_minor) {
             
             //            ticks_now.resize((ticks_now.size()) + 1);
-            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
+            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
             
         }
         
@@ -1373,7 +1366,7 @@ inline void DrawPanel::PreRenderMercator(void) {
          (route.reference_position->lambda.value) < (lambda_end.value);
          (route.reference_position->lambda.value) += delta_lambda) {
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis
@@ -1387,7 +1380,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
                 //                ticks_now.resize((ticks_now.size()) + 1);
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
+                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
                 
             }
             
@@ -1419,7 +1412,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                                                                
                                                                ).value), LengthUnit_types[0]);
         
-        route.DrawOld((wxGetApp().n_points_routes.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
+        route.DrawOld((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
         
         
         //here I use DrawOld because Draw cannot handle loxodromes
@@ -1440,7 +1433,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                      //                    ticks_now.push_back(route);
                      //                     ticks_now.resize((ticks_now.size()) + 1);
                      
-                     route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
+                     route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
                      
                  }
             
@@ -1476,17 +1469,15 @@ inline void DrawPanel::PreRender3D(void) {
     unsigned int n_intervals_ticks;
     
     //clear grid_points and grid_positions, and set the first entry of grid_positions to 0 because the position of the first Route chunk is 0
-    parent->grid_points.clear();
-    parent->grid_positions.clear();
-    parent->grid_positions.push_back(0);
-    
+    parent->grid.reset();
+
     
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
     parent->zoom_factor.set((parent->parent->circle_observer_0->omega.value) / (circle_observer->omega.value));
     (this->*Set_x_y_min_max)();
     (this->*Set_lambda_phi_min_max)();
     
-    parent->GetCoastLineData_3D();
+    parent->GetCoastLineData3D();
     
     if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
         //I am not dragging the chart nor scrolling -> the size of the chart may change -> re-compute it
@@ -1509,7 +1500,7 @@ inline void DrawPanel::PreRender3D(void) {
     n_intervals_ticks = (unsigned int)(wxGetApp().n_intervals_ticks_preferred.value);
     
     
-    //here I set up things to plot paralles and meridians in Render_3D
+    //here I set up things to plot paralles and meridians in Render3D
     
     //set lambda_span
     if (((*(parent->lambda_min)) == 0.0) && ((*(parent->lambda_max)) == 0.0)) {
@@ -1715,7 +1706,7 @@ inline void DrawPanel::PreRender3D(void) {
         //add the current meridian that is being drawn (route) to meridians
         //        grid_now.push_back(route);
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -1736,7 +1727,7 @@ inline void DrawPanel::PreRender3D(void) {
                 //                ticks_now.push_back(route);
                 //                ticks_now.resize((ticks_now.size()) + 1);
                 
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
+                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
                 
             }
             
@@ -1768,7 +1759,7 @@ inline void DrawPanel::PreRender3D(void) {
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
         
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -1787,7 +1778,7 @@ inline void DrawPanel::PreRender3D(void) {
                      //                    ticks_now.push_back(route);
                      //                     ticks_now.resize((ticks_now.size()) + 1);
                      
-                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid_positions), &(parent->grid_points), String(""));
+                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
                      
                  }
             
@@ -2756,7 +2747,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
             //if in projection "mercator" is selected, then I let the Draw function pointer point to PreRenderMercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
             
             PreRender = (&DrawPanel::PreRenderMercator);
-            Render = (&DrawPanel::Render_Mercator);
+            Render = (&DrawPanel::RenderMercator);
             ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_Mercator);
             ProjectionToGeo = (&DrawPanel::ProjectionToGeo_Mercator);
             ScreenToProjection = (&DrawPanel::ScreenToMercator);
@@ -2780,7 +2771,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
             //if in projection ((Projection_types[1]).value) is selected, then I let the Draw function pointer point to PreRender3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
             
             PreRender = (&DrawPanel::PreRender3D);
-            Render = (&DrawPanel::Render_3D);
+            Render = (&DrawPanel::Render3D);
             ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_3D);
             ProjectionToGeo = (&DrawPanel::ProjectionToGeo_3D);
             ScreenToProjection = (&DrawPanel::ScreenTo3D);
@@ -2947,26 +2938,26 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             }
             
             //run over Routes and check whether the mouse is hovering over one of them
-            for (j = 0; j < (points_route_list_now[i]).size(); j++) {
+            for (j = 0; j < (routes_lines[i]).positions.size() - 1; j++) {
                 
-                for (l = 0; l < ((int)((points_route_list_now[i][j]).size())) - 1; l++) {
+                for (l = ((routes_lines[i]).positions)[j]; l < ((routes_lines[i]).positions)[j+1]; l++) {
                     
                     //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
                     
-                    if (/*to recognize that the mouse is hovering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ (((points_route_list_now[i][j][l]).x) != ((points_route_list_now[i][j][l + 1]).x))
+                    if (/*to recognize that the mouse is hovering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ (((((routes_lines[i]).points)[l]).x) != ((((routes_lines[i]).points)[l+1]).x))
                         
                         &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
                         
-                        (((((points_route_list_now[i][j][l]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((points_route_list_now[i][j][l + 1]).x))) ||
+                        (((((((routes_lines[i]).points)[l]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((((routes_lines[i]).points)[l+1]).x))) ||
                          
-                         ((((points_route_list_now[i][j][l + 1]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((points_route_list_now[i][j][l]).x))))
+                         ((((((routes_lines[i]).points)[l+1]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((((routes_lines[i]).points)[l]).x))))
                         
                         &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
                         
                         (
                          fabs(
                               (position_draw_panel_now.y) -
-                              (((points_route_list_now[i][j][l]).y) + ((double)(((points_route_list_now[i][j][l + 1]).y) - ((points_route_list_now[i][j][l]).y))) / ((double)(((points_route_list_now[i][j][l + 1]).x) - ((points_route_list_now[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list_now[i][j][l]).x))))
+                              (((((routes_lines[i]).points)[l]).y) + ((double)(((((routes_lines[i]).points)[l+1]).y) - ((((routes_lines[i]).points)[l]).y))) / ((double)(((((routes_lines[i]).points)[l+1]).x) - ((((routes_lines[i]).points)[l]).x))) * ((double)((position_draw_panel_now.x) - ((((routes_lines[i]).points)[l]).x))))
                               )
                          
                          <= (thickness_route_selection_over_length_screen.value) * ((double)(wxGetApp().rectangle_display.GetWidth())) / 2.0
@@ -3010,7 +3001,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 }
                 
             }
-            
+           
         }
         
         

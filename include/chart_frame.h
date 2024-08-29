@@ -12,14 +12,16 @@
 
 #include "angle.h"
 #include "draw_panel.h"
-#include "unset_idling.h"
 #include "chart_panel.h"
+#include "lines.h"
+#include "list_frame.h"
 #include "print_message.h"
 #include "projection.h"
 #include "projection_field.h"
-#include "list_frame.h"
 #include "static_length_field.h"
 #include "static_text.h"
+#include "unset_idling.h"
+
 
 using namespace std;
 
@@ -52,9 +54,10 @@ public:
     ProjectionField<ChartFrame>* projection_field;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle *phi_min, *phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/*lambda_min, *lambda_max;
-    //a vector of the points of the coastlines in DrawPanel coordinates: these are points of polygons concatenated in the linear arrays coastline_points/ before. The i-th polygon is stored n coastline_points/before[coastline_positions/before[i]], coastline_points[coastline_positions/before[i]+1], ..., coastline_points[coastline_positions/before[i+1]-1]
-    vector<wxPoint> coastline_points/*, coastline_polygons_before*/, grid_points;
-    vector<unsigned long long int> coastline_positions/*, polygon_position_before*/, grid_positions;
+//    //a vector of the points of the coastlines in DrawPanel coordinates: these are points of polygons concatenated in the linear arrays coastline_points/ before. The i-th polygon is stored n coastline_points/before[coastline_positions/before[i]], coastline_points[coastline_positions/before[i]+1], ..., coastline_points[coastline_positions/before[i+1]-1]
+//    vector<wxPoint> coastline_points/*, coastline_polygons_before*/, grid_points;
+//    vector<unsigned long long int> coastline_positions/*, polygon_position_before*/, grid_positions;
+    Lines grid, coastlines;
 
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling, /*this is true if the chart is being dragged, and thus the size of *this must not change across multiple Draw(s), and false otherwise*/ dragging_chart;
@@ -65,8 +68,8 @@ public:
     
     ChartFrame(ListFrame*, Projection, const wxString&, const wxPoint&, const wxSize&, String);
 
-    void GetCoastLineData_Mercator(void);
-    void GetCoastLineData_3D(void);
+    void GetCoastLineDataMercator(void);
+    void GetCoastLineData3D(void);
     void UpdateSlider(void);
     bool ComputeZoomFactor_Mercator(double);
     bool ComputeZoomFactor_3D(void);

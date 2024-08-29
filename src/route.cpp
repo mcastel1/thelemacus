@@ -341,7 +341,7 @@ void Route::DrawOld(
 
     //tabulate the Route points
     //go through all the Route points
-    for(lines->reset(), n_points_chunk = 0, starting_new_chunk = true, i = 0; i < n_points; i++) {
+    for(n_points_chunk = 0, starting_new_chunk = true, i = 0; i < n_points; i++) {
 
         compute_end((*length)*((double)i)/((double)(n_points - 1)), String(""));
         
@@ -790,8 +790,6 @@ void Route::Draw(
         //the number of points of each chunk for which GeoToDrawPanel returns true (without recurring to put_back_in)
         unsigned int n_points_check_ok;
         
-        lines->reset();
-
          //run over all chunks of *this which are visible
          //given that s contains the number of intersection points of *this and that each pair of intersection point delimits a chunk, and that v contains the chunks, the size of v is equal to thte size of s minus one.
         for(j=0; j<(s.size()) - 1; j++) {

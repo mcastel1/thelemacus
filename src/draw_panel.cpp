@@ -1063,9 +1063,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //client_dc->Clear();
     
     //clear grid_points and grid_positions, and set the first entry of grid_positions to 0 because the position of the first Route chunk is 0
-    parent->grid.points.clear();
-    parent->grid.positions.clear();
-    parent->grid.positions.push_back(0);
+    parent->grid.reset();
     
     //here I compute multiple quantities relative to the y axis: this computation is done here, at the very beginning of PreRenderMercator, because these quantitites will be needed immediatly to compute size_label_horizontal
     //set phi_start, phi_end and delta_phi
@@ -1469,10 +1467,8 @@ inline void DrawPanel::PreRender3D(void) {
     unsigned int n_intervals_ticks;
     
     //clear grid_points and grid_positions, and set the first entry of grid_positions to 0 because the position of the first Route chunk is 0
-    parent->grid.points.clear();
-    parent->grid.positions.clear();
-    parent->grid.positions.push_back(0);
-    
+    parent->grid.reset();
+
     
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
     parent->zoom_factor.set((parent->parent->circle_observer_0->omega.value) / (circle_observer->omega.value));

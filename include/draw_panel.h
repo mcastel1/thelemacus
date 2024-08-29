@@ -182,7 +182,7 @@ public:
     double x_span(void);
     Rotation rotation_start_end(const wxPoint&, const wxPoint&);
 
-    void Render_Mercator(wxDC*,
+    void RenderMercator(wxDC*,
                          const wxPoint&,
                          const Lines&,
                          const vector<wxString>&,
@@ -191,7 +191,7 @@ public:
                          const wxColor&,
                          const wxColor&,
                          const double&);
-    void Render_3D(wxDC*,
+    void Render3D(wxDC*,
                    const wxPoint&,
                    const Lines&,
                    const vector<wxString>&,

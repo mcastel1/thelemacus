@@ -680,7 +680,7 @@ inline void DrawPanel::RenderLines(wxDC* dc,
 
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-inline void DrawPanel::Render_Mercator(wxDC* dc,
+inline void DrawPanel::RenderMercator(wxDC* dc,
                                        const wxPoint& position_plot_area,
                                        const Lines& grid,
                                        const vector<wxString>& parallels_and_meridians_labels,
@@ -856,7 +856,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 }
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
-inline void DrawPanel::Render_3D(
+inline void DrawPanel::Render3D(
                                  wxDC* dc,
                                  const wxPoint& position_plot_area,
                                  const Lines& grid,
@@ -1092,7 +1092,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         else { delta_phi += deg_to_rad * 5.0 / ((double)gamma_phi); }
     }
     
-    //here I set up things to plot meridians and parallels in Render_Mercator
+    //here I set up things to plot meridians and parallels in RenderMercator
     
     //set phi_start/end
     (phi_start.value) = floor((parent->phi_min->normalize_pm_pi_ret().value) / delta_phi) * delta_phi;
@@ -1498,7 +1498,7 @@ inline void DrawPanel::PreRender3D(void) {
     n_intervals_ticks = (unsigned int)(wxGetApp().n_intervals_ticks_preferred.value);
     
     
-    //here I set up things to plot paralles and meridians in Render_3D
+    //here I set up things to plot paralles and meridians in Render3D
     
     //set lambda_span
     if (((*(parent->lambda_min)) == 0.0) && ((*(parent->lambda_max)) == 0.0)) {
@@ -2745,7 +2745,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
             //if in projection "mercator" is selected, then I let the Draw function pointer point to PreRenderMercator, same for other functions, and I disable the fields of the angle for the Euler rotation of the 3d earth, which are not necessary
             
             PreRender = (&DrawPanel::PreRenderMercator);
-            Render = (&DrawPanel::Render_Mercator);
+            Render = (&DrawPanel::RenderMercator);
             ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_Mercator);
             ProjectionToGeo = (&DrawPanel::ProjectionToGeo_Mercator);
             ScreenToProjection = (&DrawPanel::ScreenToMercator);
@@ -2769,7 +2769,7 @@ template<class E> void DrawPanel::SetProjection(E& event) {
             //if in projection ((Projection_types[1]).value) is selected, then I let the Draw function pointer point to PreRender3D, same for other functions, and I enable the angles for the 3d rotation of the 3d earth, which are now needed from the user.
             
             PreRender = (&DrawPanel::PreRender3D);
-            Render = (&DrawPanel::Render_3D);
+            Render = (&DrawPanel::Render3D);
             ProjectionToDrawPanel = (&DrawPanel::ProjectionToDrawPanel_3D);
             ProjectionToGeo = (&DrawPanel::ProjectionToGeo_3D);
             ScreenToProjection = (&DrawPanel::ScreenTo3D);

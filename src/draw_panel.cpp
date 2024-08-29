@@ -1350,7 +1350,7 @@ inline void DrawPanel::PreRenderMercator(void) {
              (route.reference_position->lambda.value) += delta_lambda_minor) {
             
             //            ticks_now.resize((ticks_now.size()) + 1);
-            route.Draw((wxGetApp().n_points_minor_ticks.value), this, parent->grid, String(""));
+            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
             
         }
         
@@ -1362,7 +1362,7 @@ inline void DrawPanel::PreRenderMercator(void) {
          (route.reference_position->lambda.value) < (lambda_end.value);
          (route.reference_position->lambda.value) += delta_lambda) {
         
-        route.Draw((wxGetApp().n_points_routes.value), this, parent->grid, String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis
@@ -1376,7 +1376,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
                 //                ticks_now.resize((ticks_now.size()) + 1);
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, parent->grid, String(""));
+                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
                 
             }
             
@@ -1704,7 +1704,7 @@ inline void DrawPanel::PreRender3D(void) {
         //add the current meridian that is being drawn (route) to meridians
         //        grid_now.push_back(route);
         
-        route.Draw((wxGetApp().n_points_routes.value), this, parent->grid, String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -1725,7 +1725,7 @@ inline void DrawPanel::PreRender3D(void) {
                 //                ticks_now.push_back(route);
                 //                ticks_now.resize((ticks_now.size()) + 1);
                 
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, parent->grid, String(""));
+                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
                 
             }
             
@@ -1757,7 +1757,7 @@ inline void DrawPanel::PreRender3D(void) {
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);
         
-        route.Draw((wxGetApp().n_points_routes.value), this, parent->grid, String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
         
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -1776,7 +1776,7 @@ inline void DrawPanel::PreRender3D(void) {
                      //                    ticks_now.push_back(route);
                      //                     ticks_now.resize((ticks_now.size()) + 1);
                      
-                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, parent->grid, String(""));
+                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
                      
                  }
             

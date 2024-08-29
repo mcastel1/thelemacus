@@ -352,7 +352,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     RenderRoutes(dc,
                  routes,
-                 reference_positions_route_list_now,
+                 reference_positions_route_list,
                  (parent->parent->highlighted_route_now),
                  wxNullColour
                  );
@@ -475,7 +475,7 @@ void DrawPanel::CleanAndRenderAll(void) {
     
     RenderRoutes(dc,
                  routes,
-                 reference_positions_route_list_now,
+                 reference_positions_route_list,
                  (parent->parent->highlighted_route_now), 
                  wxNullColour
                  );
@@ -533,7 +533,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         );
         RenderRoutes(dc,
                      routes,
-                     reference_positions_route_list_now,
+                     reference_positions_route_list,
                      (parent->parent->highlighted_route_now), wxNullColour
                      );
         RenderPositions(dc,
@@ -968,7 +968,7 @@ inline void DrawPanel::Render3D(
 
 
 
-//this function tabulates into points_route_list_now and reference_positions_route_list_now the points and reference Positions, respectively, of all Routes. points_route_list will then be used to render the Routes
+//this function tabulates into points_route_list_now and reference_positions_route_list the points and reference Positions, respectively, of all Routes. points_route_list will then be used to render the Routes
 inline void DrawPanel::TabulateRoutes(void) {
     
     unsigned int i;
@@ -980,8 +980,8 @@ inline void DrawPanel::TabulateRoutes(void) {
         (routes[i]).clear();
     }
     
-    reference_positions_route_list_now.clear();
-    reference_positions_route_list_now.resize((parent->parent->data->route_list.size()));
+    reference_positions_route_list.clear();
+    reference_positions_route_list.resize((parent->parent->data->route_list.size()));
     
     //tabulate the points of routes
     for (i = 0; i < parent->parent->data->route_list.size(); i++) {
@@ -1001,14 +1001,14 @@ inline void DrawPanel::TabulateRoutes(void) {
             
         }
         
-        //write the reference Positions into reference_positions_route_list_now
+        //write the reference Positions into reference_positions_route_list
         if (GeoToDrawPanel((*(((parent->parent->data->route_list)[i]).reference_position)), &p, false)) {
-            //the reference position falls in the plot area -> write it into reference_positions_route_list_now
-            reference_positions_route_list_now[i] = p;
+            //the reference position falls in the plot area -> write it into reference_positions_route_list
+            reference_positions_route_list[i] = p;
         }
         else {
-            //the reference position does not fall in the plot area -> write a 'Null' value into reference_positions_route_list_now which will be ignored in other methods because it lies outside the plot area
-            reference_positions_route_list_now[i] = wxPoint(0, 0);
+            //the reference position does not fall in the plot area -> write a 'Null' value into reference_positions_route_list which will be ignored in other methods because it lies outside the plot area
+            reference_positions_route_list[i] = wxPoint(0, 0);
         }
         
     }
@@ -1030,7 +1030,7 @@ inline void DrawPanel::TabulatePositions(void) {
     //tabulate the points of Positions
     for (i = 0; i < (parent->parent->data->position_list.size()); i++) {
         
-        //write the reference Positions into reference_positions_route_list_now
+        //write the reference Positions into reference_positions_route_list
         if (GeoToDrawPanel((parent->parent->data->position_list)[i], &p, false)) {
             //the  position falls in the plot area -> write it into points_position_list_now
             points_position_list_now[i] = p;
@@ -3791,7 +3791,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                              (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
                              
                              ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
-                             (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now);
+                             (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list);
                              
                              
                              //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
@@ -3948,7 +3948,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                          points_position_list_before = points_position_list_now;
                          
                          reference_positions_route_list_before.clear();
-                         reference_positions_route_list_before = reference_positions_route_list_now;
+                         reference_positions_route_list_before = reference_positions_route_list;
                          
                          //re-draw the chart
                          (this->*PreRender)();

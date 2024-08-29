@@ -1003,7 +1003,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
      (draw_panel->points_position_list_before) = (draw_panel->points_position_list_now);
      
      draw_panel->reference_positions_route_list_before.clear();
-     (draw_panel->reference_positions_route_list_before) = (draw_panel->reference_positions_route_list_now);
+     (draw_panel->reference_positions_route_list_before) = (draw_panel->reference_positions_route_list);
      
      #endif
      */

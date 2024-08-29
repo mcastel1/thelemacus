@@ -284,7 +284,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
              (chart_frame->draw_panel->points_position_list_before) = (chart_frame->draw_panel->points_position_list_now);
              
              chart_frame->draw_panel->reference_positions_route_list_before.clear();
-             (chart_frame->draw_panel->reference_positions_route_list_before) = (chart_frame->draw_panel->reference_positions_route_list_now);
+             (chart_frame->draw_panel->reference_positions_route_list_before) = (chart_frame->draw_panel->reference_positions_route_list);
              
              
              #endif

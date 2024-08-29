@@ -81,7 +81,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     //clears the vector label_phi because tehre are not y labels yet.
     parallels_and_meridians_labels.resize(0);
-    positions_parallels_and_meridians_labels_now.resize(0);
+    positions_parallels_and_meridians_labels.resize(0);
     
     
     idling = false;
@@ -343,7 +343,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                     position_plot_area_now,
                     parent->grid,
                     parallels_and_meridians_labels,
-                    positions_parallels_and_meridians_labels_now,
+                    positions_parallels_and_meridians_labels,
                     parent->coastlines,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
@@ -466,7 +466,7 @@ void DrawPanel::CleanAndRenderAll(void) {
                     position_plot_area_now,
                     parent->grid,
                     parallels_and_meridians_labels,
-                    positions_parallels_and_meridians_labels_now,
+                    positions_parallels_and_meridians_labels,
                     parent->coastlines,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
@@ -525,7 +525,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         position_plot_area_now,
                         parent->grid,
                         parallels_and_meridians_labels,
-                        positions_parallels_and_meridians_labels_now,
+                        positions_parallels_and_meridians_labels,
                         parent->coastlines,
                         wxGetApp().foreground_color,
                         wxGetApp().background_color,
@@ -835,7 +835,7 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
         
         
         parallels_and_meridians_labels.push_back(wx_string);
-        positions_parallels_and_meridians_labels_now.push_back(p);
+        positions_parallels_and_meridians_labels.push_back(p);
         
         
         size = String(parallels_and_meridians_labels.back().ToStdString()).get_size(this);
@@ -843,13 +843,13 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
         if (mode == String("NS")) {
             //            I am drawing parallels label
             
-            (positions_parallels_and_meridians_labels_now.back()) += wxPoint(-(size.GetWidth()) - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value), -(size.GetHeight()) / 2);
+            (positions_parallels_and_meridians_labels.back()) += wxPoint(-(size.GetWidth()) - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value), -(size.GetHeight()) / 2);
             
         }
         else {
             //            I am drawing meridians labels
             
-            (positions_parallels_and_meridians_labels_now.back()) += wxPoint(-(size.GetWidth()) / 2, (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value));
+            (positions_parallels_and_meridians_labels.back()) += wxPoint(-(size.GetWidth()) / 2, (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value));
             
         }
         
@@ -1301,11 +1301,11 @@ inline void DrawPanel::PreRenderMercator(void) {
     
     
     //compute labels on parallels and meridians
-    //save parallels_and_meridians_labels and positions_parallels_and_meridians_labels_now into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
+    //save parallels_and_meridians_labels and positions_parallels_and_meridians_labels into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
     //    parallels_and_meridians_labels_before = parallels_and_meridians_labels;
-    //    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels_now;
+    //    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels;
     parallels_and_meridians_labels.resize(0);
-    positions_parallels_and_meridians_labels_now.resize(0);
+    positions_parallels_and_meridians_labels.resize(0);
     
     //compute labels on parallels
     for (first_label = true,
@@ -1655,11 +1655,11 @@ inline void DrawPanel::PreRender3D(void) {
     
     
     //compute labels on parallels and meridians
-    //save parallels_and_meridians_labels and positions_parallels_and_meridians_labels_now into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
+    //save parallels_and_meridians_labels and positions_parallels_and_meridians_labels into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
     //    parallels_and_meridians_labels_before = parallels_and_meridians_labels;
-    //    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels_now;
+    //    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels;
     parallels_and_meridians_labels.resize(0);
-    positions_parallels_and_meridians_labels_now.resize(0);
+    positions_parallels_and_meridians_labels.resize(0);
     
     //compute labels on parallels
     for (first_label = true,

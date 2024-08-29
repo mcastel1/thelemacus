@@ -427,18 +427,7 @@ inline void DrawPanel::RenderRoutes(
             dc.DrawCircle(reference_positions[i], radius);
         }
         
-        //draw the Route points
-        //run over all connected chunks of Route #i
-        //        for (j = 0; j < (points_curves[i]).positions.size() - 1; j++) {
-        //
-        //            if (((points_curves[i]).positions)[j+1]  - ((points_curves[i]).positions)[j] > 1) {
-        //                //I need to add this consdition to make sure that I am not drawing an empty connected chunk
-        //
-        //
-        //                dc.DrawSpline(((points_curves[i]).positions)[j+1]  - ((points_curves[i]).positions)[j], (points_curves[i][j]).data());
-        //            }
-        //
-        //        }
+
         RenderLines(&dc, routes_in[i], foreground_color_for_RenderLines, thickness);
         
     }

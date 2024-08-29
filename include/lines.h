@@ -24,6 +24,8 @@ public:
     
     Lines(void);
     
+    void reset(void);
+    
 };
 
 #endif

@@ -18,3 +18,13 @@ Lines::Lines(void){
     positions.push_back(0);
     
 }
+
+
+//reset *this by clearing all vectors and addind a first entry '0' to positions
+void Lines::reset(void){
+    
+    points.clear();
+    positions.clear();
+    positions.push_back(0);
+    
+}

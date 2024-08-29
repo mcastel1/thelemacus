@@ -1221,7 +1221,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //    DrawPanelToGeo(wxPoint(position_plot_area_now + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/ - wxPoint(1, 1), &p_SE);
     
     //fetch the data on the region that I am about to plot from the data files and store it into parent->coastline_polygons_now
-    parent->GetCoastLineData_Mercator();
+    parent->GetCoastLineDataMercator();
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.GetWidth())) / ((double)size_label_horizontal)));
@@ -1475,7 +1475,7 @@ inline void DrawPanel::PreRender3D(void) {
     (this->*Set_x_y_min_max)();
     (this->*Set_lambda_phi_min_max)();
     
-    parent->GetCoastLineData_3D();
+    parent->GetCoastLineData3D();
     
     if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
         //I am not dragging the chart nor scrolling -> the size of the chart may change -> re-compute it

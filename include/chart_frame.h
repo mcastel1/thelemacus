@@ -68,8 +68,8 @@ public:
     
     ChartFrame(ListFrame*, Projection, const wxString&, const wxPoint&, const wxSize&, String);
 
-    void GetCoastLineData_Mercator(void);
-    void GetCoastLineData_3D(void);
+    void GetCoastLineDataMercator(void);
+    void GetCoastLineData3D(void);
     void UpdateSlider(void);
     bool ComputeZoomFactor_Mercator(double);
     bool ComputeZoomFactor_3D(void);

@@ -1099,7 +1099,7 @@ bool ChartFrame::SetSlider(unsigned int slider_value) {
 
 
 //get the datapoints of coastlines and store them into parent->coastline_points
-void ChartFrame::GetCoastLineData_3D(void) {
+void ChartFrame::GetCoastLineData3D(void) {
 
     unsigned long long int i, j;
     //integer values of min/max lat/lon to be extractd from p_coastline
@@ -1226,7 +1226,7 @@ void ChartFrame::GetCoastLineData_3D(void) {
 
 
 //this function efficiently reads coastline data stored in data_x in the interval of latitudes (*lambda_min), (*lambda_max), (*phi_min), (*phi_max), and writes this data x and y, writing n_points points at the most. This data is stored into parent->coastline_points
-void ChartFrame::GetCoastLineData_Mercator(void) {
+void ChartFrame::GetCoastLineDataMercator(void) {
 
     int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
     unsigned long long int i, j;

@@ -975,7 +975,7 @@ inline void DrawPanel::TabulateRoutes(void) {
     wxPoint p;
     
     //resize points_route_list_now and reference_position_route_list_now, which needs to have the same size as (data->route_list), and clear up points_route_list
-    routes_lines.resize((parent->parent->data->route_list).size());
+    routes_lines.resize(parent->parent->data->route_list.size());
     for (i = 0; i < (routes_lines.size()); i++) {
         (routes_lines[i]).clear();
     }

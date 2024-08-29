@@ -394,7 +394,7 @@ inline void DrawPanel::RenderRoutes(
                                     const wxColor& foreground_color
                                     ) {
     
-    int i, j, color_id;
+    int i, color_id;
     double thickness, radius;
     wxPoint p;
     wxColour foreground_color_for_RenderLines;

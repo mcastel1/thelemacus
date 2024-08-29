@@ -388,7 +388,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
 //render the Routes whose point coordinates with respect to the origin of DrawPanel are stored in points_curves, and whose reference-position coordinates with respect to the origin of DrawPanel are stored in reference_positions. the Route #highlighted_route is rendered with larger thickness. If foreground_color != wxNUllColour, the Routes are rendered with the colors in color_list, otherwise they are rendered with foreground_color
 inline void DrawPanel::RenderRoutes(
                                     wxDC& dc,
-                                    const vector<Lines>& points_curves,
+                                    const vector<Lines>& routes_in,
                                     const vector<wxPoint>& reference_positions,
                                     int highlighted_route,
                                     const wxColor& foreground_color
@@ -400,7 +400,7 @@ inline void DrawPanel::RenderRoutes(
     wxColour foreground_color_for_RenderLines;
     
     //render Routes
-    for (i = 0, color_id = 0; i < (points_curves.size()); i++) {
+    for (i = 0, color_id = 0; i < (routes_in.size()); i++) {
         
         //set the route thickness and pen
         if (i == highlighted_route) {
@@ -439,7 +439,7 @@ inline void DrawPanel::RenderRoutes(
         //            }
         //
         //        }
-        RenderLines(&dc, points_curves[i], foreground_color_for_RenderLines, thickness);
+        RenderLines(&dc, routes_in[i], foreground_color_for_RenderLines, thickness);
         
     }
     

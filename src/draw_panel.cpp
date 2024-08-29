@@ -351,7 +351,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                     );
     
     RenderRoutes(dc,
-                 points_route_list_now,
+                 routes_lines,
                  reference_positions_route_list_now,
                  (parent->parent->highlighted_route_now),
                  wxNullColour
@@ -470,7 +470,7 @@ void DrawPanel::CleanAndRenderAll(void) {
                     );
     
     RenderRoutes(dc,
-                 points_route_list_now,
+                 routes_lines,
                  reference_positions_route_list_now,
                  (parent->parent->highlighted_route_now), wxNullColour
                  );
@@ -527,7 +527,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         wxGetApp().standard_thickness.value
                         );
         RenderRoutes(dc,
-                     points_route_list_now,
+                     routes_lines,
                      reference_positions_route_list_now,
                      (parent->parent->highlighted_route_now), wxNullColour
                      );
@@ -971,9 +971,9 @@ inline void DrawPanel::TabulateRoutes(void) {
     wxPoint p;
     
     //resize points_route_list_now and reference_position_route_list_now, which needs to have the same size as (data->route_list), and clear up points_route_list
-    points_route_list_now.resize((parent->parent->data->route_list).size());
-    for (i = 0; i < (points_route_list_now.size()); i++) {
-        (points_route_list_now[i]).clear();
+    routes_lines.resize((parent->parent->data->route_list).size());
+    for (i = 0; i < (routes_lines.size()); i++) {
+        (routes_lines[i]).clear();
     }
     
     reference_positions_route_list_now.clear();
@@ -986,12 +986,12 @@ inline void DrawPanel::TabulateRoutes(void) {
         //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
         if (((parent->parent->data->route_list)[i]).type != (Route_types[0])) {
             
-            ((parent->parent->data->route_list)[i]).Draw((unsigned int)(wxGetApp().n_points_routes.value), this, (points_route_list_now.data()) + i, String(""));
+            ((parent->parent->data->route_list)[i]).Draw((unsigned int)(wxGetApp().n_points_routes.value), this, (routes_lines.data()) + i, String(""));
             
         }
         else {
             
-            ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)(wxGetApp().n_points_routes.value), this, (points_route_list_now.data()) + i, String(""));
+            ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)(wxGetApp().n_points_routes.value), this, (routes_lines.data()) + i, String(""));
             
         }
         
@@ -2936,26 +2936,26 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             }
             
             //run over Routes and check whether the mouse is hovering over one of them
-            for (j = 0; j < (points_route_list_now[i]).size(); j++) {
+            for (j = 0; j < (routes_lines[i]).size(); j++) {
                 
-                for (l = 0; l < ((int)((points_route_list_now[i][j]).size())) - 1; l++) {
+                for (l = 0; l < ((int)((routes_lines[i][j]).size())) - 1; l++) {
                     
                     //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
                     
-                    if (/*to recognize that the mouse is hovering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ (((points_route_list_now[i][j][l]).x) != ((points_route_list_now[i][j][l + 1]).x))
+                    if (/*to recognize that the mouse is hovering over a Route, I need the abscissas of two subsequent points of the Route to be different. Otherwise, there is not space on the screen where to recognize the presence of the mouse*/ (((routes_lines[i][j][l]).x) != ((routes_lines[i][j][l + 1]).x))
                         
                         &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
                         
-                        (((((points_route_list_now[i][j][l]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((points_route_list_now[i][j][l + 1]).x))) ||
+                        (((((routes_lines[i][j][l]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((routes_lines[i][j][l + 1]).x))) ||
                          
-                         ((((points_route_list_now[i][j][l + 1]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((points_route_list_now[i][j][l]).x))))
+                         ((((routes_lines[i][j][l + 1]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((routes_lines[i][j][l]).x))))
                         
                         &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
                         
                         (
                          fabs(
                               (position_draw_panel_now.y) -
-                              (((points_route_list_now[i][j][l]).y) + ((double)(((points_route_list_now[i][j][l + 1]).y) - ((points_route_list_now[i][j][l]).y))) / ((double)(((points_route_list_now[i][j][l + 1]).x) - ((points_route_list_now[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((points_route_list_now[i][j][l]).x))))
+                              (((routes_lines[i][j][l]).y) + ((double)(((routes_lines[i][j][l + 1]).y) - ((routes_lines[i][j][l]).y))) / ((double)(((routes_lines[i][j][l + 1]).x) - ((routes_lines[i][j][l]).x))) * ((double)((position_draw_panel_now.x) - ((routes_lines[i][j][l]).x))))
                               )
                          
                          <= (thickness_route_selection_over_length_screen.value) * ((double)(wxGetApp().rectangle_display.GetWidth())) / 2.0

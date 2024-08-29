@@ -77,7 +77,7 @@ public:
     
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a list: in this list there are as many elements as the number of connected curves in which the route is cut (because of the meridian lambda = pi). In each of these elements there are the  points, with respect to the origin of DrawPanel, which represent the route_list[i] discretized
-    vector< vector< vector<wxPoint> > > points_route_list_now/*, points_route_list_before*/;
+    vector< vector< vector<wxPoint> > > routes_lines;
     //I store in reference_positions_route_list_now (reference_positions_route_list_before) the coordinates, with respect to the origin of DrawPanel, of the reference positions of the Routes at the current (preceeding) step of a drag process
     vector<wxPoint> reference_positions_route_list_now/*, reference_positions_route_list_before*/, points_position_list_now/*, points_position_list_before*/;
     //the i-th element of this vector contains a list of critical values of the parametric angle (t) of the i-th route. At these critical values, route #i crosses the meridian lambda = pi

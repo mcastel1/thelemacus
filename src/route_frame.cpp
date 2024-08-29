@@ -387,7 +387,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
         for (i = 0; i < (parent->chart_frames.size()); i++) {
 
-            (((parent->chart_frames)[i])->draw_panel)->points_route_list_now.resize(((((parent->chart_frames)[i])->draw_panel)->points_route_list_now).size() + 1);
+            (((parent->chart_frames)[i])->draw_panel)->routes_lines.resize(((((parent->chart_frames)[i])->draw_panel)->routes_lines).size() + 1);
             (((parent->chart_frames)[i])->draw_panel)->reference_positions_route_list_now.resize(((parent->chart_frames)[i])->draw_panel->reference_positions_route_list_now.size() + 1);
 
         }

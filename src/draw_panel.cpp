@@ -441,14 +441,6 @@ void DrawPanel::CleanAndRenderAll(void) {
     
     dc.Clear();
     
-    RenderMousePositionLabel(
-                             dc,
-                             label_position_now,
-                             position_label_position_now,
-                             wxGetApp().foreground_color,
-                             wxGetApp().background_color
-                             );
-    
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
@@ -476,6 +468,14 @@ void DrawPanel::CleanAndRenderAll(void) {
     RenderDraggedObjectLabel(dc,
                              position_label_dragged_object_now,
                              label_dragged_object_now,
+                             wxGetApp().foreground_color,
+                             wxGetApp().background_color
+                             );
+    
+    RenderMousePositionLabel(
+                             dc,
+                             label_position_now,
+                             position_label_position_now,
                              wxGetApp().foreground_color,
                              wxGetApp().background_color
                              );

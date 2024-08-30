@@ -344,7 +344,6 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                     parent->grid,
                     parallels_and_meridians_labels,
                     positions_parallels_and_meridians_labels,
-                    parent->coastlines,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
@@ -456,7 +455,6 @@ void DrawPanel::CleanAndRenderAll(void) {
                     parent->grid,
                     parallels_and_meridians_labels,
                     positions_parallels_and_meridians_labels,
-                    parent->coastlines,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
@@ -515,7 +513,6 @@ inline void DrawPanel::RefreshWIN32(void) {
                         parent->grid,
                         parallels_and_meridians_labels,
                         positions_parallels_and_meridians_labels,
-                        parent->coastlines,
                         wxGetApp().foreground_color,
                         wxGetApp().background_color,
                         wxGetApp().standard_thickness.value
@@ -678,7 +675,6 @@ inline void DrawPanel::RenderMercator(wxDC* dc,
                                        const Lines& grid,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                       const Lines& coastlines,
                                        const wxColor& foreground_color,
                                        const wxColor& background_color,
                                        const double& thickness) {
@@ -689,10 +685,8 @@ inline void DrawPanel::RenderMercator(wxDC* dc,
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
     
-    //render coastlines
-    RenderLines(dc, coastlines, foreground_color, thickness);
     
-    //render parallels and meridians
+    //render parallels and meridians and coastlines
     RenderLines(dc, grid, foreground_color, thickness);
 
     
@@ -835,7 +829,6 @@ inline void DrawPanel::Render3D(
                                  const Lines& grid,
                                  const vector<wxString>& parallels_and_meridians_labels,
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                 const Lines& coastlines,
                                  const wxColor& foreground_color,
                                  const wxColor& background_color,
                                  const double& thickness
@@ -845,9 +838,7 @@ inline void DrawPanel::Render3D(
     PositionProjection dummy_projection;
     Position q, temp;
     
-    //render coastlines
-    RenderLines(dc, coastlines, foreground_color, thickness);
-    //render parallels and meridians
+    //render parallels and meridians and coastlines
     RenderLines(dc, grid, foreground_color, thickness);
     
     

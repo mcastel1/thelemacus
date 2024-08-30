@@ -104,7 +104,6 @@ public:
                               const Lines&,
                               const vector<wxString>&,
                               const vector<wxPoint>&,
-                              const Lines&,
                               const wxColor&,
                               const wxColor&,
                               const double&);
@@ -185,7 +184,6 @@ public:
                          const Lines&,
                          const vector<wxString>&,
                          const vector<wxPoint>&,
-                         const Lines&,
                          const wxColor&,
                          const wxColor&,
                          const double&);
@@ -194,7 +192,6 @@ public:
                    const Lines&,
                    const vector<wxString>&,
                    const vector<wxPoint>&,
-                   const Lines&,
                    const wxColor&,
                    const wxColor&,
                    const double&);

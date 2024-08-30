@@ -841,52 +841,14 @@ inline void DrawPanel::Render3D(
                                  const double& thickness
                                  ) {
     
-    int i;
     Double d_temp;
-    Angle lambda;
-    stringstream s;
-    wxString wx_string;
-    //this is a list of tabulated points for dummy_route, such as a meridian, which will be created and destroyed just after
-    vector<wxPoint> points_dummy_route;
     PositionProjection dummy_projection;
-    wxPoint p;
     Position q, temp;
-    
-    
-    //draws a rectangle filled with color wxGetApp().background_color and with border wich color wxGetApp().foregrond_color on bitmap_image, so bitmap_image will have the right background color
-    //dc->SetBrush(wxBrush(wxGetApp().background_color));
-    //dc->SetPen(wxPen(foreground_color, thickness));
-    //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     
     //render coastlines
     RenderLines(dc, coastlines, foreground_color, thickness);
-    
     //render parallels and meridians
     RenderLines(dc, grid, foreground_color, thickness);
-    
-    
-    //    dc->SetPen(wxPen(foreground_color, thickness));
-    //    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_TRANSPARENT));
-    //
-    //    for(i = 0; i < ((long long int)(grid_positions.size()))-1; i++) {
-    //        //run through grid
-    //
-    //        if(grid_positions[i+1] - grid_positions[i] > 1){
-    //
-    //            dc->DrawLines((int)(grid_positions[i+1] - grid_positions[i]), (grid_points.data()) + grid_positions[i]);
-    //
-    //        }
-    //
-    //    }
-    
-    //    //render parallel and meridian ticks
-    //    for (i = 0; i < ticks.size(); i++) {
-    //
-    //        if ((ticks[i]).size() > 1) {
-    //            dc->DrawSpline((int)((ticks[i]).size()), (ticks[i]).data());
-    //        }
-    //
-    //    }
     
     
     //render labels on parallels and meridians
@@ -894,7 +856,7 @@ inline void DrawPanel::Render3D(
     dc->SetTextBackground(background_color);
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
     dc->SetBackgroundMode(wxSOLID);
-    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
+    for (int i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i]/* + wxPoint(-width_label - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
         

@@ -341,7 +341,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
-                    parent->grid,
+                    parent->curves,
                     parallels_and_meridians_labels,
                     positions_parallels_and_meridians_labels,
                     wxGetApp().foreground_color,
@@ -452,7 +452,7 @@ void DrawPanel::CleanAndRenderAll(void) {
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
-                    parent->grid,
+                    parent->curves,
                     parallels_and_meridians_labels,
                     positions_parallels_and_meridians_labels,
                     wxGetApp().foreground_color,
@@ -510,7 +510,7 @@ inline void DrawPanel::RefreshWIN32(void) {
         (this->*Render)(
                         &dc,
                         position_plot_area_now,
-                        parent->grid,
+                        parent->curves,
                         parallels_and_meridians_labels,
                         positions_parallels_and_meridians_labels,
                         wxGetApp().foreground_color,
@@ -987,7 +987,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //client_dc->Clear();
     
     //clear grid_points and grid_positions, and set the first entry of grid_positions to 0 because the position of the first Route chunk is 0
-    parent->grid.reset();
+    parent->curves.reset();
     
     //here I compute multiple quantities relative to the y axis: this computation is done here, at the very beginning of PreRenderMercator, because these quantitites will be needed immediatly to compute size_label_horizontal
     //set phi_start, phi_end and delta_phi
@@ -1276,7 +1276,7 @@ inline void DrawPanel::PreRenderMercator(void) {
              (route.reference_position->lambda.value) += delta_lambda_minor) {
             
             //            ticks_now.resize((ticks_now.size()) + 1);
-            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
+            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
             
         }
         
@@ -1288,7 +1288,7 @@ inline void DrawPanel::PreRenderMercator(void) {
          (route.reference_position->lambda.value) < (lambda_end.value);
          (route.reference_position->lambda.value) += delta_lambda) {
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis
@@ -1302,7 +1302,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
                 //                ticks_now.resize((ticks_now.size()) + 1);
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
+                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                 
             }
             
@@ -1334,7 +1334,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                                                                
                                                                ).value), LengthUnit_types[0]);
         
-        route.DrawOld((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
+        route.DrawOld((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
         
         
         //here I use DrawOld because Draw cannot handle loxodromes
@@ -1355,7 +1355,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                      //                    ticks_now.push_back(route);
                      //                     ticks_now.resize((ticks_now.size()) + 1);
                      
-                     route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
+                     route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                      
                  }
             
@@ -1391,7 +1391,7 @@ inline void DrawPanel::PreRender3D(void) {
     unsigned int n_intervals_ticks;
     
     //clear grid_points and grid_positions, and set the first entry of grid_positions to 0 because the position of the first Route chunk is 0
-    parent->grid.reset();
+    parent->curves.reset();
 
     
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
@@ -1628,7 +1628,7 @@ inline void DrawPanel::PreRender3D(void) {
         //add the current meridian that is being drawn (route) to meridians
         //        grid_now.push_back(route);
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -1649,7 +1649,7 @@ inline void DrawPanel::PreRender3D(void) {
                 //                ticks_now.push_back(route);
                 //                ticks_now.resize((ticks_now.size()) + 1);
                 
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
+                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                 
             }
             
@@ -1681,7 +1681,7 @@ inline void DrawPanel::PreRender3D(void) {
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
         
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -1700,7 +1700,7 @@ inline void DrawPanel::PreRender3D(void) {
                      //                    ticks_now.push_back(route);
                      //                     ticks_now.resize((ticks_now.size()) + 1);
                      
-                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
+                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                      
                  }
             

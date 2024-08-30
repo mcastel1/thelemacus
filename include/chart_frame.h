@@ -57,7 +57,7 @@ public:
 //    //a vector of the points of the coastlines in DrawPanel coordinates: these are points of polygons concatenated in the linear arrays coastline_points/ before. The i-th polygon is stored n coastline_points/before[coastline_positions/before[i]], coastline_points[coastline_positions/before[i]+1], ..., coastline_points[coastline_positions/before[i+1]-1]
 //    vector<wxPoint> coastline_points/*, coastline_polygons_before*/, grid_points;
 //    vector<unsigned long long int> coastline_positions/*, polygon_position_before*/, grid_positions;
-    Lines grid;
+    Lines curves;
 
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling, /*this is true if the chart is being dragged, and thus the size of *this must not change across multiple Draw(s), and false otherwise*/ dragging_chart;

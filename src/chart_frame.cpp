@@ -1292,7 +1292,7 @@ void ChartFrame::GetCoastLineDataMercator(void) {
         if(every==0){every = 1;}
         
         
-        for(p=0, i=0, l=0, n_added_polygons=0, curves.reset(); i<parent->coastline_polygons_area_observer.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0; i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
             
             if((l != (curves.positions.back())) && new_polygon){

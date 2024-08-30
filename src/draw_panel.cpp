@@ -672,7 +672,7 @@ inline void DrawPanel::RenderLines(wxDC* dc,
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::RenderMercator(wxDC* dc,
                                        const wxPoint& position_plot_area,
-                                       const Lines& grid,
+                                       const Lines& curves_in,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                        const wxColor& foreground_color,
@@ -687,7 +687,7 @@ inline void DrawPanel::RenderMercator(wxDC* dc,
     
     
     //render parallels and meridians and coastlines
-    RenderLines(dc, grid, foreground_color, thickness);
+    RenderLines(dc, curves_in, foreground_color, thickness);
 
     
     //render labels on parallels and meridians

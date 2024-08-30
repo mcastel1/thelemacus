@@ -683,45 +683,25 @@ inline void DrawPanel::RenderMercator(wxDC* dc,
                                        const wxColor& background_color,
                                        const double& thickness) {
     
-    Angle lambda, phi;
-    Route route;
-    wxPoint p;
-    PositionProjection temp;
-    Position q;
-    //this = true if, while drawing the x or y axis labels, the label that I one is about to draw is the first one
-    int i;
-    
-    
+        
     //draw a rectangle (representing the border) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color
     dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
     dc->SetPen(wxPen(foreground_color, thickness));
-    //dc->DrawRectangle(0, 0, (size_chart.GetWidth()), (size_chart.GetHeight()));
     dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
-    
     
     //render coastlines
     RenderLines(dc, coastlines, foreground_color, thickness);
     
     //render parallels and meridians
     RenderLines(dc, grid, foreground_color, thickness);
-    
-    
-    //render parallels and meridian ticks
-    //    for (i = 0; i < ticks.size(); i++) {
-    //
-    //        if ((ticks[i]).size() > 1) {
-    //            dc->DrawLines((int)((ticks[i]).size()), (ticks[i]).data());
-    //        }
-    //
-    //    }
-    
+
     
     //render labels on parallels and meridians
     dc->SetTextForeground(foreground_color);
     dc->SetTextBackground(background_color);
     dc->SetBrush(wxBrush(wxNullBrush)); //Set the brush to the device context
     dc->SetBackgroundMode(wxSOLID);
-    for (i = 0; i < parallels_and_meridians_labels.size(); i++) {
+    for (int i = 0; i < parallels_and_meridians_labels.size(); i++) {
         
         dc->DrawText(parallels_and_meridians_labels[i], positions_parallels_and_meridians_labels[i] /*+ wxPoint(-width_label - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value), -height_label / 2)*/);
         

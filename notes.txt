@@ -116,7 +116,6 @@
      - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer
      - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
      - move all stuff which is general enough in the code to MyApp class
-     - some paralles or meridians in grid in render_mercator contain the same wxPoint iterated many times -> remove them
      - try  wxDCClipper to quickly delete old image on DrawPanel
      - add separator between recent items and non-recent items in BodyField->name
      - replace all 'projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))' with a switch case find_in_... with

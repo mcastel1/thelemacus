@@ -105,8 +105,6 @@
      - code method DrawPanel::ProjectionToGeo_3D
      - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
      - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
-     - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things
-     - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things
      - center name of file in top bar of ListFrame
      - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
      - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color

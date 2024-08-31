@@ -68,6 +68,8 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
             (*((MotionHandler<F>::parent)->set_idling))();
+            
+            ((MotionHandler<F>::parent)->transporting) = true;
 
 //            (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
             (MotionHandler<F>::transporting_route_temp).set((MotionHandler<F>::transporting_route));
@@ -157,7 +159,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 
             }
 
-            (MotionHandler<F>::parent)->RefreshAll();
+            (MotionHandler<F>::parent)->MyRefreshAll();
             //            cout << "\t\t t= " << t << "\n";
             
             (MotionHandler<F>::t)++;
@@ -234,7 +236,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         (MotionHandler<F>::parent)->listcontrol_routes->set(((MotionHandler<F>::parent)->data->route_list), false);
         (MotionHandler<F>::parent)->Resize();
         //re-draw everything
-        (MotionHandler<F>::parent)->PreRenderAll();
+        //(MotionHandler<F>::parent)->PreRenderAll();
         
         //re-bind DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement once the transport is over
         for (unsigned int i = 0; i < ((MotionHandler<F>::parent)->chart_frames.size()); i++) {
@@ -270,6 +272,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 
         (MotionHandler<F>::timer)->Stop();
         (*((MotionHandler<F>::parent)->unset_idling))();
+        ((MotionHandler<F>::parent)->transporting) = false;
         
         //call the functor to be called at the end of the animation, if any
         if((MotionHandler<F>::f) != NULL){

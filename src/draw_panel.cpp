@@ -118,6 +118,16 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     
     wxPaintDC dc(this);
+
+#ifdef WIN32
+    //if I am using WIN32, I use Direct2D renderer to speed up things
+    wxGraphicsRenderer* rend;
+    wxGraphicsContext* context;
+
+    rend = wxGraphicsRenderer::GetDirect2DRenderer();
+    context = rend->CreateContext(dc);
+    dc.SetGraphicsContext(context);
+#endif
     
     RenderAll(dc);
     
@@ -437,7 +447,17 @@ inline void DrawPanel::RenderRoutes(
 void DrawPanel::CleanAndRenderAll(void) {
     
     wxClientDC dc(this);
+
+#ifdef WIN32
+//if I am using WIN32, I use Direct2D renderer to speed up things
+    wxGraphicsRenderer* rend;
+    wxGraphicsContext* context;
     
+    rend = wxGraphicsRenderer::GetDirect2DRenderer();
+    context = rend->CreateContext(dc);
+    dc.SetGraphicsContext(context);
+#endif
+
     
     dc.Clear();
     
@@ -483,11 +503,18 @@ void DrawPanel::CleanAndRenderAll(void) {
 }
 
 
+#ifdef WIN32
 //clean up everything on *this and re-draw: this method is used to replace on WIN32 the wxWidgets default function Refresh(), which is not efficient on WIN32
 inline void DrawPanel::RefreshWIN32(void) {
     
     wxClientDC dc(this);
+    wxGraphicsRenderer* rend;
+    wxGraphicsContext* context;
     
+    rend = wxGraphicsRenderer::GetDirect2DRenderer();
+    context = rend->CreateContext(dc);
+    dc.SetGraphicsContext(context);
+
     
     //clean up everything
     dc.Clear();
@@ -495,16 +522,17 @@ inline void DrawPanel::RefreshWIN32(void) {
     
     //re-render everything
     
-    RenderMousePositionLabel(
-                             dc,
-                             label_position_now,
-                             position_label_position_now,
-                             wxGetApp().foreground_color,
-                             wxGetApp().background_color
-                             );
-    
-    if ((parent->dragging_chart) || (parent->mouse_scrolling) || (parent->parent->selection_rectangle) || (parent->parent->dragging_object) || (parent->parent->changing_highlighted_object)) {
-        //I am either drawing a selection rectangle, dragging an object or changing the highlighted object -> I need to re-render all GUI objects
+    if (
+        (parent->dragging_chart) ||
+        (parent->mouse_scrolling) ||
+        (parent->parent->selection_rectangle) ||
+        (parent->parent->dragging_object) ||
+        (parent->parent->changing_highlighted_object) ||
+        (parent->parent->transporting_with_new_route) ||
+        (parent->parent->transporting_with_selected_route) ||
+        (parent->parent->transporting)
+        ) {
+        //I am either drawing a selection rectangle, dragging or transporting an object or changing the highlighted object -> I need to re-render all GUI objects
         
         //re-render all  objects in *this which may have been partially cancelled by the clean operation above
         (this->*Render)(
@@ -550,8 +578,17 @@ inline void DrawPanel::RefreshWIN32(void) {
                                  );
         
     }
+
+    RenderMousePositionLabel(
+        dc,
+        label_position_now,
+        position_label_position_now,
+        wxGetApp().foreground_color,
+        wxGetApp().background_color
+    );
     
 }
+#endif
 
 
 

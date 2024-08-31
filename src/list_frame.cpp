@@ -69,6 +69,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     file_is_untitled = true;
     enable_highlight = true;
     selecting_route_for_position = false;
+    transporting = false;
     transporting_with_new_route = false;
     transporting_with_selected_route = false;
     changing_highlighted_object = false;

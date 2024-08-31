@@ -121,7 +121,9 @@ public:
     void PaintEvent(wxPaintEvent&);
     void RenderAll(wxDC&);
     void MyRefresh(void);
+#ifdef WIN32
     void RefreshWIN32(void);
+#endif
     void RenderLines(wxDC*,
                         const Lines&,
                         const wxColor&,

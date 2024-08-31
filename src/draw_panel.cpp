@@ -487,7 +487,13 @@ void DrawPanel::CleanAndRenderAll(void) {
 inline void DrawPanel::RefreshWIN32(void) {
     
     wxClientDC dc(this);
-    
+
+    wxGraphicsRenderer* rend;
+
+    rend = wxGraphicsRenderer::GetDirect2DRenderer();
+    wxGraphicsContext* context = rend->CreateContext(dc);
+    dc.SetGraphicsContext(context);
+
     
     //clean up everything
     dc.Clear();

@@ -118,6 +118,16 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     
     wxPaintDC dc(this);
+
+#ifdef WIN32
+    //if I am using WIN32, I use Direct2D renderer to speed up things
+    wxGraphicsRenderer* rend;
+    wxGraphicsContext* context;
+
+    rend = wxGraphicsRenderer::GetDirect2DRenderer();
+    context = rend->CreateContext(dc);
+    dc.SetGraphicsContext(context);
+#endif
     
     RenderAll(dc);
     

@@ -437,7 +437,17 @@ inline void DrawPanel::RenderRoutes(
 void DrawPanel::CleanAndRenderAll(void) {
     
     wxClientDC dc(this);
+
+#ifdef WIN32
+//if I am using WIN32, I use Direct2D renderer to speed up things
+    wxGraphicsRenderer* rend;
+    wxGraphicsContext* context;
     
+    rend = wxGraphicsRenderer::GetDirect2DRenderer();
+    context = rend->CreateContext(dc);
+    dc.SetGraphicsContext(context);
+#endif
+
     
     dc.Clear();
     
@@ -488,11 +498,6 @@ void DrawPanel::CleanAndRenderAll(void) {
 inline void DrawPanel::RefreshWIN32(void) {
     
     wxClientDC dc(this);
-
-    
-    
-
-    
     wxGraphicsRenderer* rend;
     wxGraphicsContext* context;
     

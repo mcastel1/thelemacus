@@ -512,14 +512,6 @@ inline void DrawPanel::RefreshWIN32(void) {
     
     //re-render everything
     
-    RenderMousePositionLabel(
-                             dc,
-                             label_position_now,
-                             position_label_position_now,
-                             wxGetApp().foreground_color,
-                             wxGetApp().background_color
-                             );
-    
     if ((parent->dragging_chart) || (parent->mouse_scrolling) || (parent->parent->selection_rectangle) || (parent->parent->dragging_object) || (parent->parent->changing_highlighted_object)) {
         //I am either drawing a selection rectangle, dragging an object or changing the highlighted object -> I need to re-render all GUI objects
         
@@ -567,6 +559,14 @@ inline void DrawPanel::RefreshWIN32(void) {
                                  );
         
     }
+
+    RenderMousePositionLabel(
+        dc,
+        label_position_now,
+        position_label_position_now,
+        wxGetApp().foreground_color,
+        wxGetApp().background_color
+    );
     
 }
 #endif

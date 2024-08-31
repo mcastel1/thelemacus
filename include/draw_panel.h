@@ -104,7 +104,6 @@ public:
                               const Lines&,
                               const vector<wxString>&,
                               const vector<wxPoint>&,
-                              const Lines&,
                               const wxColor&,
                               const wxColor&,
                               const double&);
@@ -122,7 +121,9 @@ public:
     void PaintEvent(wxPaintEvent&);
     void RenderAll(wxDC&);
     void MyRefresh(void);
+#ifdef WIN32
     void RefreshWIN32(void);
+#endif
     void RenderLines(wxDC*,
                         const Lines&,
                         const wxColor&,
@@ -185,7 +186,6 @@ public:
                          const Lines&,
                          const vector<wxString>&,
                          const vector<wxPoint>&,
-                         const Lines&,
                          const wxColor&,
                          const wxColor&,
                          const double&);
@@ -194,7 +194,6 @@ public:
                    const Lines&,
                    const vector<wxString>&,
                    const vector<wxPoint>&,
-                   const Lines&,
                    const wxColor&,
                    const wxColor&,
                    const double&);

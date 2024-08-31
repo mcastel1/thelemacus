@@ -67,8 +67,8 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
         j += (parent->coastline_polygons_Position[i].size());
     }
     
-    coastlines.points.reserve(j);
-    coastlines.positions.reserve(parent->n_all_coastline_points);
+    curves.points.reserve(j);
+    curves.positions.reserve(parent->n_all_coastline_points);
     //    coastline_positions.reserve(parent->n_all_coastline_points);
     //    coastline_positions.resize(parent->coastline_polygons_Position.size());
     
@@ -975,39 +975,6 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
 
     }
 
-    
-    /*
-     #ifdef WIN32
-     //I am on WIN32 operating system: I will refresh the plot under the scroll operation, where I will wipe out the graphical objects in the former plot by drawing with background_color on top of them -> I need to keep track of the _before graphical objects and on the current _now graphical objects, and I do it here:
-     
-     //I am about to update coastline_points-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-     polygon_position_before = coastline_positions;
-     //    coastline_polygons_before.resize(coastline_points.size());
-     copy_n(coastline_points.begin(), coastline_points.size(), coastline_polygons_before.begin());
-     
-     
-     (draw_panel->position_plot_area_before) = (draw_panel->position_plot_area_now);
-     draw_panel->grid_before.clear();
-     (draw_panel->grid_before) = (draw_panel->grid_now);
-     draw_panel->ticks_before.clear();
-     (draw_panel->ticks_before) = (draw_panel->ticks_now);
-     
-     (draw_panel->parallels_and_meridians_labels_before) = (draw_panel->parallels_and_meridians_labels);
-     (draw_panel->positions_parallels_and_meridians_labels_before) = (draw_panel->positions_parallels_and_meridians_labels);
-     
-     //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-     draw_panel->points_route_list_before.clear();
-     (draw_panel->points_route_list_before) = (draw_panel->points_route_list_now);
-     
-     draw_panel->points_position_list_before.clear();
-     (draw_panel->points_position_list_before) = (draw_panel->points_position_list_now);
-     
-     draw_panel->reference_positions_route_list_before.clear();
-     (draw_panel->reference_positions_route_list_before) = (draw_panel->reference_positions_route_list);
-     
-     #endif
-     */
-    
     switch (position_in_vector(projection, Projection_types)) {
             
         case 0: {
@@ -1098,7 +1065,7 @@ bool ChartFrame::SetSlider(unsigned int slider_value) {
 
 
 
-//get the datapoints of coastlines and store them into parent->coastline_points
+//get the datapoints of curves and store them into parent->coastline_points
 void ChartFrame::GetCoastLineData3D(void) {
 
     unsigned long long int i, j;
@@ -1169,15 +1136,15 @@ void ChartFrame::GetCoastLineData3D(void) {
         
         
         
-        for(p=0, i=0, l=0, n_added_polygons=0, coastlines.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0, curves.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
             
             new_polygon=true;
             n_added_polygons++;
-            if(n_added_polygons >  coastlines.positions.size()){
-                coastlines.positions.resize(n_added_polygons);
+            if(n_added_polygons >  curves.positions.size()){
+                curves.positions.resize(n_added_polygons);
             }
-            coastlines.positions[n_added_polygons-1] = l;
+            curves.positions[n_added_polygons-1] = l;
             
             //the id of the polygon that is being added, i.e. , the # of the polygon as entry of coastline_polygons_Position
             m = (parent->coastline_polygons_area_observer)[i];
@@ -1187,8 +1154,8 @@ void ChartFrame::GetCoastLineData3D(void) {
                 
                 if((draw_panel->CartesianToDrawPanel)((parent->coastline_polygons_Cartesian)[m][j], &q, false)){
                     
-//                    coastlines.points[l++] = q;
-                    coastlines.points.push_back(q);
+//                    curves.points[l++] = q;
+                    curves.points.push_back(q);
                     l++;
                     new_polygon = false;
                     
@@ -1200,10 +1167,10 @@ void ChartFrame::GetCoastLineData3D(void) {
                         //updated coastline_positions with the position of the new polygon
                         new_polygon = true;
                         n_added_polygons++;
-                        if(n_added_polygons > coastlines.positions.size()){
-                            coastlines.positions.resize(n_added_polygons);
+                        if(n_added_polygons > curves.positions.size()){
+                            curves.positions.resize(n_added_polygons);
                         }
-                        coastlines.positions[n_added_polygons-1] = l;
+                        curves.positions[n_added_polygons-1] = l;
                         
                     }
 
@@ -1215,10 +1182,10 @@ void ChartFrame::GetCoastLineData3D(void) {
 
         }
         
-        if(n_added_polygons+1 > coastlines.positions.size()){
-            coastlines.positions.resize(n_added_polygons+1);
+        if(n_added_polygons+1 > curves.positions.size()){
+            curves.positions.resize(n_added_polygons+1);
         }
-        coastlines.positions.back() = l;
+        curves.positions.back() = l;
         
     }
 
@@ -1292,15 +1259,12 @@ void ChartFrame::GetCoastLineDataMercator(void) {
         if(every==0){every = 1;}
         
         
-        for(p=0, i=0, l=0, n_added_polygons=0, coastlines.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
+        for(p=0, i=0, l=0, n_added_polygons=0; i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
             
-            new_polygon=true;
-            n_added_polygons++;
-            if(n_added_polygons > coastlines.positions.size()){
-                coastlines.positions.resize(n_added_polygons);
+            if((l != (curves.positions.back())) && new_polygon){
+                curves.positions.push_back(l);
             }
-            (coastlines.positions)[n_added_polygons-1] = l;
             
             //the id of the polygon that is being added, i.e. , the # of the polygon as entry of coastline_polygons_Position
             m = (parent->coastline_polygons_area_observer)[i];
@@ -1309,42 +1273,38 @@ void ChartFrame::GetCoastLineDataMercator(void) {
                 //run through points in a polygon
                 
                 if((draw_panel->*(draw_panel->ProjectionToDrawPanel))((parent->coastline_polygons_Mercator)[m][j], &q, false)){
-                
-//                if ((draw_panel->GeoToDrawPanel)((parent->coastline_polygons_Position)[m][j], &q, false)){
-                    //(parent->coastline_polygons_Position)[i][j] is a valid point
-                    
-                    //                    (coastlines.points)[l++] = q;
-                    coastlines.points.push_back(q);
+                    //(parent->coastline_polygons_Position)[i][j] is  a valid point
+
+                    curves.points.push_back(q);
                     l++;
                     new_polygon = false;
                     
                 }else{
                     //(parent->coastline_polygons_Position)[i][j] is not a valid point -> I start a new polygon
                     
-                    if(!new_polygon){
-                        
-                        //updated coastlines.positions with the position of the new polygon
-                        new_polygon = true;
-                        n_added_polygons++;
-                        if(n_added_polygons > coastlines.positions.size()){
-                            coastlines.positions.resize(n_added_polygons);
-                        }
-                        (coastlines.positions)[n_added_polygons-1] = l;
-                        
+                    
+                    new_polygon = true;
+                    
+                    //updated curves.positions with the position of the new polygon
+                    if((l != (curves.positions.back()))){
+                        curves.positions.push_back(l);
                     }
+                    
+            
 
                 }
                 
             }
             
             p = j - ((parent->coastline_polygons_Position[m]).size());
+            new_polygon = true;
 
         }
         
-        if(n_added_polygons+1 > coastlines.positions.size()){
-            coastlines.positions.resize(n_added_polygons+1);
+        if(n_added_polygons+1 > curves.positions.size()){
+            curves.positions.resize(n_added_polygons+1);
         }
-        coastlines.positions.back() = l;
+        curves.positions.back() = l;
 
         
     }

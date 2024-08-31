@@ -118,6 +118,16 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     
     wxPaintDC dc(this);
+
+#ifdef WIN32
+    //if I am using WIN32, I use Direct2D renderer to speed up things
+    wxGraphicsRenderer* rend;
+    wxGraphicsContext* context;
+
+    rend = wxGraphicsRenderer::GetDirect2DRenderer();
+    context = rend->CreateContext(dc);
+    dc.SetGraphicsContext(context);
+#endif
     
     RenderAll(dc);
     
@@ -341,10 +351,9 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
-                    parent->grid,
+                    parent->curves,
                     parallels_and_meridians_labels,
                     positions_parallels_and_meridians_labels,
-                    parent->coastlines,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
@@ -438,25 +447,26 @@ inline void DrawPanel::RenderRoutes(
 void DrawPanel::CleanAndRenderAll(void) {
     
     wxClientDC dc(this);
+
+#ifdef WIN32
+//if I am using WIN32, I use Direct2D renderer to speed up things
+    wxGraphicsRenderer* rend;
+    wxGraphicsContext* context;
     
+    rend = wxGraphicsRenderer::GetDirect2DRenderer();
+    context = rend->CreateContext(dc);
+    dc.SetGraphicsContext(context);
+#endif
+
     
     dc.Clear();
-    
-    RenderMousePositionLabel(
-                             dc,
-                             label_position_now,
-                             position_label_position_now,
-                             wxGetApp().foreground_color,
-                             wxGetApp().background_color
-                             );
     
     (this->*Render)(
                     &dc,
                     position_plot_area_now,
-                    parent->grid,
+                    parent->curves,
                     parallels_and_meridians_labels,
                     positions_parallels_and_meridians_labels,
-                    parent->coastlines,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
@@ -482,21 +492,6 @@ void DrawPanel::CleanAndRenderAll(void) {
                              wxGetApp().background_color
                              );
     
-}
-
-
-//clean up everything on *this and re-draw: this method is used to replace on WIN32 the wxWidgets default function Refresh(), which is not efficient on WIN32
-inline void DrawPanel::RefreshWIN32(void) {
-    
-    wxClientDC dc(this);
-    
-    
-    //clean up everything
-    dc.Clear();
-    
-    
-    //re-render everything
-    
     RenderMousePositionLabel(
                              dc,
                              label_position_now,
@@ -505,17 +500,47 @@ inline void DrawPanel::RefreshWIN32(void) {
                              wxGetApp().background_color
                              );
     
-    if ((parent->dragging_chart) || (parent->mouse_scrolling) || (parent->parent->selection_rectangle) || (parent->parent->dragging_object) || (parent->parent->changing_highlighted_object)) {
-        //I am either drawing a selection rectangle, dragging an object or changing the highlighted object -> I need to re-render all GUI objects
+}
+
+
+#ifdef WIN32
+//clean up everything on *this and re-draw: this method is used to replace on WIN32 the wxWidgets default function Refresh(), which is not efficient on WIN32
+inline void DrawPanel::RefreshWIN32(void) {
+    
+    wxClientDC dc(this);
+    wxGraphicsRenderer* rend;
+    wxGraphicsContext* context;
+    
+    rend = wxGraphicsRenderer::GetDirect2DRenderer();
+    context = rend->CreateContext(dc);
+    dc.SetGraphicsContext(context);
+
+    
+    //clean up everything
+    dc.Clear();
+    
+    
+    //re-render everything
+    
+    if (
+        (parent->dragging_chart) ||
+        (parent->mouse_scrolling) ||
+        (parent->parent->selection_rectangle) ||
+        (parent->parent->dragging_object) ||
+        (parent->parent->changing_highlighted_object) ||
+        (parent->parent->transporting_with_new_route) ||
+        (parent->parent->transporting_with_selected_route) ||
+        (parent->parent->transporting)
+        ) {
+        //I am either drawing a selection rectangle, dragging or transporting an object or changing the highlighted object -> I need to re-render all GUI objects
         
         //re-render all  objects in *this which may have been partially cancelled by the clean operation above
         (this->*Render)(
                         &dc,
                         position_plot_area_now,
-                        parent->grid,
+                        parent->curves,
                         parallels_and_meridians_labels,
                         positions_parallels_and_meridians_labels,
-                        parent->coastlines,
                         wxGetApp().foreground_color,
                         wxGetApp().background_color,
                         wxGetApp().standard_thickness.value
@@ -553,8 +578,17 @@ inline void DrawPanel::RefreshWIN32(void) {
                                  );
         
     }
+
+    RenderMousePositionLabel(
+        dc,
+        label_position_now,
+        position_label_position_now,
+        wxGetApp().foreground_color,
+        wxGetApp().background_color
+    );
     
 }
+#endif
 
 
 
@@ -675,10 +709,9 @@ inline void DrawPanel::RenderLines(wxDC* dc,
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::RenderMercator(wxDC* dc,
                                        const wxPoint& position_plot_area,
-                                       const Lines& grid,
+                                       const Lines& curves_in,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                       const Lines& coastlines,
                                        const wxColor& foreground_color,
                                        const wxColor& background_color,
                                        const double& thickness) {
@@ -689,11 +722,9 @@ inline void DrawPanel::RenderMercator(wxDC* dc,
     dc->SetPen(wxPen(foreground_color, thickness));
     dc->DrawRectangle(position_plot_area.x, position_plot_area.y, (size_plot_area.GetWidth()), (size_plot_area.GetHeight()));
     
-    //render coastlines
-    RenderLines(dc, coastlines, foreground_color, thickness);
     
-    //render parallels and meridians
-    RenderLines(dc, grid, foreground_color, thickness);
+    //render parallels and meridians and coastlines
+    RenderLines(dc, curves_in, foreground_color, thickness);
 
     
     //render labels on parallels and meridians
@@ -835,7 +866,6 @@ inline void DrawPanel::Render3D(
                                  const Lines& grid,
                                  const vector<wxString>& parallels_and_meridians_labels,
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
-                                 const Lines& coastlines,
                                  const wxColor& foreground_color,
                                  const wxColor& background_color,
                                  const double& thickness
@@ -845,9 +875,7 @@ inline void DrawPanel::Render3D(
     PositionProjection dummy_projection;
     Position q, temp;
     
-    //render coastlines
-    RenderLines(dc, coastlines, foreground_color, thickness);
-    //render parallels and meridians
+    //render parallels and meridians and coastlines
     RenderLines(dc, grid, foreground_color, thickness);
     
     
@@ -996,7 +1024,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //client_dc->Clear();
     
     //clear grid_points and grid_positions, and set the first entry of grid_positions to 0 because the position of the first Route chunk is 0
-    parent->grid.reset();
+    parent->curves.reset();
     
     //here I compute multiple quantities relative to the y axis: this computation is done here, at the very beginning of PreRenderMercator, because these quantitites will be needed immediatly to compute size_label_horizontal
     //set phi_start, phi_end and delta_phi
@@ -1285,7 +1313,7 @@ inline void DrawPanel::PreRenderMercator(void) {
              (route.reference_position->lambda.value) += delta_lambda_minor) {
             
             //            ticks_now.resize((ticks_now.size()) + 1);
-            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
+            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
             
         }
         
@@ -1297,7 +1325,7 @@ inline void DrawPanel::PreRenderMercator(void) {
          (route.reference_position->lambda.value) < (lambda_end.value);
          (route.reference_position->lambda.value) += delta_lambda) {
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis
@@ -1311,7 +1339,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
                 //                ticks_now.resize((ticks_now.size()) + 1);
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
+                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                 
             }
             
@@ -1343,7 +1371,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                                                                
                                                                ).value), LengthUnit_types[0]);
         
-        route.DrawOld((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
+        route.DrawOld((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
         
         
         //here I use DrawOld because Draw cannot handle loxodromes
@@ -1364,7 +1392,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                      //                    ticks_now.push_back(route);
                      //                     ticks_now.resize((ticks_now.size()) + 1);
                      
-                     route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
+                     route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                      
                  }
             
@@ -1400,7 +1428,7 @@ inline void DrawPanel::PreRender3D(void) {
     unsigned int n_intervals_ticks;
     
     //clear grid_points and grid_positions, and set the first entry of grid_positions to 0 because the position of the first Route chunk is 0
-    parent->grid.reset();
+    parent->curves.reset();
 
     
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
@@ -1637,7 +1665,7 @@ inline void DrawPanel::PreRender3D(void) {
         //add the current meridian that is being drawn (route) to meridians
         //        grid_now.push_back(route);
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -1658,7 +1686,7 @@ inline void DrawPanel::PreRender3D(void) {
                 //                ticks_now.push_back(route);
                 //                ticks_now.resize((ticks_now.size()) + 1);
                 
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
+                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                 
             }
             
@@ -1690,7 +1718,7 @@ inline void DrawPanel::PreRender3D(void) {
         //add the current parallel that is being drawn to parallels
         //        grid_now.push_back(route);
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->grid), String(""));
+        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
         
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -1709,7 +1737,7 @@ inline void DrawPanel::PreRender3D(void) {
                      //                    ticks_now.push_back(route);
                      //                     ticks_now.resize((ticks_now.size()) + 1);
                      
-                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->grid), String(""));
+                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                      
                  }
             

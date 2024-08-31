@@ -98,7 +98,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
                                                                                                                                                                                                                         Route(RouteType(Route_types[0]), (*(parent->transporting_route_saved)->reference_position), (*((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position)),
                                                                                                                                                                                                                       transport_handler
                                                                                                                                                                                                                       );
-        
+
         //start the transport
         //        (*transport_handler)();
         (*auxiliary_transport_handler_outbound)();

@@ -27,6 +27,7 @@
      
  
      - on WIN32:
+            - remember that the command ((chart_frames[i])->draw_panel)->FitAll(); makes a flash because it obliges the program to re-initialize from scratch the chartframe, avoid it!
             - whenever you add a new .cpp and .h file, remember to add it in 'Source Files' in the Visual Studio file, e.g., C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln
             - to read sample_sight.nav from an actual file on disk rather than from WIN32 resources
                 * select "Case 2" in 'Fork ...' in lib.cpp -> the .exe file will look for sample_sight.nav in the folder [folder where .exe file is executed]/Contents/Resources/Data/
@@ -148,7 +149,9 @@
     - all icons in light mode must be revised and stored in dark mode
 	- when you switch from light to dark, all icons must be updated
  on OSX:
+    - when you transport a Route with an existing Route, and select the transporting Route in ListFrame, if you press Enter the trnsport is not triggered (if you double click on the Route it is triggered)
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame Mac
  on WIN32:
+    - remove whenever you can the command '((chart_frames[i])->draw_panel)->FitAll();' in 'ListFrame::PreRenderAll(void)', because it triggers a flash
     - in the 3d projeciton, when you press Reduce in SightFrame and the animation is triggered, the observer height is displayed oddly
     - when you drag a Route with the Mouse, the chart flashes -> try to implement for Routes the same method you used for coastlines, parallels and meridians (store the wxPoints in a point vector and the beginning poisition of each chunk in a position vector) to fix this

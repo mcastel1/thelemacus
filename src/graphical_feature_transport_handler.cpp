@@ -236,7 +236,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         (MotionHandler<F>::parent)->listcontrol_routes->set(((MotionHandler<F>::parent)->data->route_list), false);
         (MotionHandler<F>::parent)->Resize();
         //re-draw everything
-        (MotionHandler<F>::parent)->PreRenderAll();
+        //(MotionHandler<F>::parent)->PreRenderAll();
         
         //re-bind DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement once the transport is over
         for (unsigned int i = 0; i < ((MotionHandler<F>::parent)->chart_frames.size()); i++) {

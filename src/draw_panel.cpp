@@ -522,8 +522,17 @@ inline void DrawPanel::RefreshWIN32(void) {
     
     //re-render everything
     
-    if ((parent->dragging_chart) || (parent->mouse_scrolling) || (parent->parent->selection_rectangle) || (parent->parent->dragging_object) || (parent->parent->changing_highlighted_object)) {
-        //I am either drawing a selection rectangle, dragging an object or changing the highlighted object -> I need to re-render all GUI objects
+    if (
+        (parent->dragging_chart) ||
+        (parent->mouse_scrolling) ||
+        (parent->parent->selection_rectangle) ||
+        (parent->parent->dragging_object) ||
+        (parent->parent->changing_highlighted_object) ||
+        (parent->parent->transporting_with_new_route) ||
+        (parent->parent->transporting_with_selected_route) ||
+        (parent->parent->transporting)
+        ) {
+        //I am either drawing a selection rectangle, dragging or transporting an object or changing the highlighted object -> I need to re-render all GUI objects
         
         //re-render all  objects in *this which may have been partially cancelled by the clean operation above
         (this->*Render)(

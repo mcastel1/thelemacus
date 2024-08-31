@@ -483,15 +483,21 @@ void DrawPanel::CleanAndRenderAll(void) {
 }
 
 
+#ifdef WIN32
 //clean up everything on *this and re-draw: this method is used to replace on WIN32 the wxWidgets default function Refresh(), which is not efficient on WIN32
 inline void DrawPanel::RefreshWIN32(void) {
     
     wxClientDC dc(this);
 
-    wxGraphicsRenderer* rend;
+    
+    
 
+    
+    wxGraphicsRenderer* rend;
+    wxGraphicsContext* context;
+    
     rend = wxGraphicsRenderer::GetDirect2DRenderer();
-    wxGraphicsContext* context = rend->CreateContext(dc);
+    context = rend->CreateContext(dc);
     dc.SetGraphicsContext(context);
 
     
@@ -558,6 +564,7 @@ inline void DrawPanel::RefreshWIN32(void) {
     }
     
 }
+#endif
 
 
 

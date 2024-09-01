@@ -395,6 +395,7 @@ bool MyApp::OnInit() {
     data_precision.read_from_file_to(String("data precision"), (wxGetApp().path_file_init), String("R"), String(""));
     display_precision.read_from_file_to(String("display precision"), (wxGetApp().path_file_init), String("R"), String(""));
     time_check_light_dark.read_from_file_to(String("time check light dark"), (wxGetApp().path_file_init), String("R"), String(""));
+    time_refresh.read_from_file_to(String("time refresh"), (wxGetApp().path_file_init), String("R"), String(""));
     animation_time.read_from_file_to(String("animation time"), (wxGetApp().path_file_init), String("R"), String(""));
     time_zone.read_from_file_to(String("time zone"), (wxGetApp().path_file_init), String("R"), String(""));
     

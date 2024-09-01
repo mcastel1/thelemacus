@@ -3592,7 +3592,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
             }
             
             mouse_dragging = true;
-            parent->parent->timer->Start(time_interval_refresh, wxTIMER_CONTINUOUS);
+            parent->parent->timer->Start(wxGetApp().time_refresh, wxTIMER_CONTINUOUS);
             
             SetCursor(wxCURSOR_HAND);
             
@@ -3749,7 +3749,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
                                 
                                 parent->parent->refresh = false;
-                                parent->parent->timer->Start(time_interval_refresh, wxTIMER_CONTINUOUS);
+                                parent->parent->timer->Start(wxGetApp().time_refresh, wxTIMER_CONTINUOUS);
                             }
                    
                             

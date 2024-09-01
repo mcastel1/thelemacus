@@ -3103,6 +3103,8 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             //the left button of the mouse has been lifted at the end of a drag
             
             mouse_dragging = false;
+            parent->parent->timer->Stop();
+
             //given that the mosue drag has ended, I re-bind OnMoueMOvement to the mouse motion event
             this->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
             
@@ -3555,6 +3557,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
             if (!mouse_dragging) {
                 //the mouse has started dragging
                 
+                
                 //If I am dragging a Route, I save the starting point of this Route into *route_reference_position_drag_now
                 
                 //during the mouse drag, I disable DrawPanel::OnMouseMovement
@@ -3589,6 +3592,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
             }
             
             mouse_dragging = true;
+            parent->parent->timer->Start(time_interval_refresh, wxTIMER_CONTINUOUS);
             
             SetCursor(wxCURSOR_HAND);
             
@@ -3736,34 +3740,18 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
                                                                                                  );
-                            /*
-                             #ifdef __APPLE__
-                             
-                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
-                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-                             
-                             #endif
-                             #ifdef _WIN32
-                             
-                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels
-                             ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
-                             (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
-                             
-                             ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
-                             (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list);
-                             
-                             
-                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
-                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-                             
-                             #endif
-                             */
                             
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
                             
-                            
-                            ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
+                           
+                            if(parent->parent->refresh){
+                                ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
+                                
+                                parent->parent->refresh = false;
+                                parent->parent->timer->Start(time_interval_refresh, wxTIMER_CONTINUOUS);
+                            }
+                   
                             
                             
                         }

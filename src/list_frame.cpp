@@ -65,6 +65,9 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     
     timer = new wxTimer();
 
+    timer->Bind(wxEVT_TIMER, &ListFrame::OnTimer, this);
+
+    
     //the file has not been modified yet -> I set
     file_has_been_modified = false;
     //for the time being, the file has no title
@@ -79,6 +82,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     mouse_moving = false;
     //when a ListFrame is created, no Route nor Position is  being dragged
     dragging_object = false;
+    refresh = true;
     i_object_to_disconnect = -1;
 
 
@@ -102,13 +106,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_info_message->image_path = wxGetApp().path_file_info_icon;
     print_error_message->image_path = wxGetApp().path_file_error_icon;
 
-
     data = new Data(wxGetApp().catalog, String(""));
     
-    
-    timer->Bind(wxEVT_TIMER, &ListFrame::OnTimer, this);
-    timer->Start(/*time_check_light_dark is converted in milliseconds, because Start() takes its first argument in milliseconds*/(0.1) * 1000.0, wxTIMER_CONTINUOUS);
-
     
     //read show_coastlines from file_init
     show_coastlines.read_from_file_to(String("show coastlines"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -2008,6 +2007,9 @@ template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event) {
 }
 
 
-inline void ListFrame::OnTimer([[maybe_unused]] wxTimerEvent& event){
+void ListFrame::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
+    refresh = true;
+    cout << "Ontimer has been called ! " << endl;
 }
+

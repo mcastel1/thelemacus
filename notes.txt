@@ -142,6 +142,7 @@
 
  ********** THINGS TO FIX ***********
     - change ' timer->Start(/*time_check_light_dark is converted in milliseconds, because Start() takes its first argument in milliseconds*/(0.1) * 1000.0, wxTIMER_CONTINUOUS);'
+    - change elapsed_time_drag
     - CHECK THAT THE RADIUS OF THE EARTH AND OF ALL PLANETS IS CORRECT AND CORREPONDS TO THE CORRECT UNIT OF 1 nm = 1852 m.
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 	- write put_back_in , put_back)_in_Mercator and put_back_in_3D :

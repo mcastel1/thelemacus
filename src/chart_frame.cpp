@@ -1139,12 +1139,9 @@ void ChartFrame::GetCoastLineData3D(void) {
         for(p=0, i=0, l=0, n_added_polygons=0, curves.clear(); i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
             
-            new_polygon=true;
-            n_added_polygons++;
-            if(n_added_polygons >  curves.positions.size()){
-                curves.positions.resize(n_added_polygons);
+            if((l != (curves.positions.back())) && new_polygon){
+                curves.positions.push_back(l);
             }
-            curves.positions[n_added_polygons-1] = l;
             
             //the id of the polygon that is being added, i.e. , the # of the polygon as entry of coastline_polygons_Position
             m = (parent->coastline_polygons_area_observer)[i];
@@ -1154,7 +1151,6 @@ void ChartFrame::GetCoastLineData3D(void) {
                 
                 if((draw_panel->CartesianToDrawPanel)((parent->coastline_polygons_Cartesian)[m][j], &q, false)){
                     
-//                    curves.points[l++] = q;
                     curves.points.push_back(q);
                     l++;
                     new_polygon = false;
@@ -1162,23 +1158,18 @@ void ChartFrame::GetCoastLineData3D(void) {
                 }else{
                     //(parent->coastline_polygons_Position)[i][j] is not a valid point -> I start a new polygon
                     
-                    if(!new_polygon){
-                        
-                        //updated coastline_positions with the position of the new polygon
-                        new_polygon = true;
-                        n_added_polygons++;
-                        if(n_added_polygons > curves.positions.size()){
-                            curves.positions.resize(n_added_polygons);
-                        }
-                        curves.positions[n_added_polygons-1] = l;
-                        
+                    new_polygon = true;
+                    
+                    //updated curves.positions with the position of the new polygon
+                    if((l != (curves.positions.back()))){
+                        curves.positions.push_back(l);
                     }
-
                 }
                 
             }
             
             p = j - ((parent->coastline_polygons_Cartesian[m]).size());
+            new_polygon = true;
 
         }
         
@@ -1282,15 +1273,12 @@ void ChartFrame::GetCoastLineDataMercator(void) {
                 }else{
                     //(parent->coastline_polygons_Position)[i][j] is not a valid point -> I start a new polygon
                     
-                    
                     new_polygon = true;
                     
                     //updated curves.positions with the position of the new polygon
                     if((l != (curves.positions.back()))){
                         curves.positions.push_back(l);
                     }
-                    
-            
 
                 }
                 
@@ -1305,7 +1293,6 @@ void ChartFrame::GetCoastLineDataMercator(void) {
             curves.positions.resize(n_added_polygons+1);
         }
         curves.positions.back() = l;
-
         
     }
     

@@ -200,8 +200,7 @@ string Chrono::to_string(unsigned int precision, bool time_zone) {
 
 
 //return the value of *this expresser in hours
-//inline 
-double Chrono::get(void) {
+inline double Chrono::get(void) {
 
     return(((double)h) + ((double)m) / 60.0 + ((double)s) / (60.0 * 60.0));
 
@@ -237,3 +236,10 @@ void Chrono::print(String name, String prefix, ostream& ostr) {
 
 };
 
+
+//return *this expressed in milliseconds
+inline int Chrono::to_milliseconds(void){
+    
+    return ((h * 60.0 * 60.0 + m * 60.0 + s) * 1000.0);
+    
+}

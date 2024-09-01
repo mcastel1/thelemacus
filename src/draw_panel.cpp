@@ -3591,6 +3591,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 
             }
             
+            //given that the mouse has started dragging, I set mouse_dragging to true and I start parent->parent->timer
             mouse_dragging = true;
             parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
             
@@ -3744,15 +3745,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
                             
-                           
                             if(parent->parent->refresh){
+                                //the charts can be Refresh()ed -> I call refresh, set parent->parent->refresh = false and re-start parent->parent->timer which will start again counting time until the next Refresh() will be authorized 
+                                
                                 ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
                                 
                                 parent->parent->refresh = false;
                                 parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
                             }
-                   
-                            
                             
                         }
                         

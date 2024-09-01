@@ -72,7 +72,7 @@ extern Angle max_lat, min_lat;
 #define WXK_PLUS 61
 #define WXK_MINUS 45
 #define max_dialog 100
-#define time_interval_refresh 100
+#define time_interval_refresh 10
 
 
 //this string defines the width of GUI fields hosting floating-point numbers

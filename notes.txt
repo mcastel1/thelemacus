@@ -98,6 +98,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+     - when you drag a Route do not call TabulateRoutes -> tabulate only the Route that you are dragging
      - add instrumental error
      - add readme file
      - add human error in sight frame to account for a systematic human error in estimating the moment when the body touches the horizon

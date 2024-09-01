@@ -127,6 +127,8 @@ public:
     AskRemoveRelatedSight* ask_remove_related_sight;
     AskRemoveRelatedRoute* ask_remove_related_route;
     
+    wxTimer* timer;
+    
     ListFrame(const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     void set(void);
@@ -179,7 +181,7 @@ public:
     template<class E> void KeyDown(E&);
     template<class T> void ComputePosition(T&);
     template<class T, class F> void AnimateToObject(T*, F*);
-
+    void OnTimer(wxTimerEvent&);
     
 };
 

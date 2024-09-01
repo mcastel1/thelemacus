@@ -62,6 +62,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     
     circle_observer_0 = new Route;
     transporting_route_saved = new Route;
+    
+    timer = new wxTimer();
 
     //the file has not been modified yet -> I set
     file_has_been_modified = false;
@@ -102,6 +104,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 
 
     data = new Data(wxGetApp().catalog, String(""));
+    
+    timer->Bind(wxEVT_TIMER, &ListFrame::OnTimer, this);
 
     //read show_coastlines from file_init
     show_coastlines.read_from_file_to(String("show coastlines"), (wxGetApp().path_file_init), String("R"), String(""));
@@ -1997,5 +2001,10 @@ template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event) {
     
     //ask the user whether he/she wants to transport the sight with a an existing route or with a new route.
     print_question->SetAndCall(NULL, String("You want to determine the astronomical position"), String("With what route do you want to do it?"), String("All routes"), String("Some routes"));
+    
+}
+
+
+inline void ListFrame::OnTimer([[maybe_unused]] wxTimerEvent& event){
     
 }

@@ -332,7 +332,7 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
     //re-draw the charton
     (draw_panel->*(draw_panel->PreRender))();
     draw_panel->Refresh();
-    draw_panel->FitAll();
+//    draw_panel->FitAll();
 
     //I stopped dragging the chart -> set
     dragging_chart = false;
@@ -409,7 +409,7 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
     //re-draw the chart
     (draw_panel->*(draw_panel->PreRender))();
     draw_panel->Refresh();
-    draw_panel->FitAll();
+//    draw_panel->FitAll();
 
     //I stopped dragging the chart -> set
     dragging_chart = false;
@@ -479,7 +479,7 @@ template<class T> void ChartFrame::MoveWest(T& event) {
     //re-draw the chart
     (draw_panel->*(draw_panel->PreRender))();
     draw_panel->Refresh();
-    draw_panel->FitAll();
+//    draw_panel->FitAll();
 
     //I stopped dragging the chart -> set
     dragging_chart = false;
@@ -549,7 +549,7 @@ template<class T> void ChartFrame::MoveEast(T& event) {
     //re-draw the chart
     (draw_panel->*(draw_panel->PreRender))();
     draw_panel->Refresh();
-    draw_panel->FitAll();
+//    draw_panel->FitAll();
 
     //I stopped dragging the chart -> set
     dragging_chart = false;

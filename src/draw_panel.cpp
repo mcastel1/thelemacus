@@ -3919,7 +3919,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         (this->*PreRender)();
                         MyRefresh();
                         
-                        FitAll();
+//                        FitAll();
                         
                         break;
                         

@@ -140,9 +140,8 @@
 
 
  ********** THINGS TO FIX ***********
-    - change back '//set projections at startup - start''
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
-`	- write put_back_in , put_back)_in_Mercator and put_back_in_3D :
+	- write put_back_in , put_back)_in_Mercator and put_back_in_3D :
     - all icons in light mode must be revised and stored in dark mode
 	- when you switch from light to dark, all icons must be updated
  on OSX:
@@ -150,6 +149,5 @@
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame Mac
  on WIN32:
     - when you drag a Route, add a timer that re-renders everything only if at least tot seconds have passed since the last rendering -> this should remove the flashes
-    - remove whenever you can the command '((chart_frames[i])->draw_panel)->FitAll();' in 'ListFrame::PreRenderAll(void)', because it triggers a flash
     - in the 3d projeciton, when you press Reduce in SightFrame and the animation is triggered, the observer height is displayed oddly
     - when you drag a Route with the Mouse, the chart flashes -> try to implement for Routes the same method you used for coastlines, parallels and meridians (store the wxPoints in a point vector and the beginning poisition of each chunk in a position vector) to fix this

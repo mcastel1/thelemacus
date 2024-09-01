@@ -105,8 +105,11 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 
     data = new Data(wxGetApp().catalog, String(""));
     
+    
     timer->Bind(wxEVT_TIMER, &ListFrame::OnTimer, this);
+    timer->Start(/*time_check_light_dark is converted in milliseconds, because Start() takes its first argument in milliseconds*/(0.1) * 1000.0, wxTIMER_CONTINUOUS);
 
+    
     //read show_coastlines from file_init
     show_coastlines.read_from_file_to(String("show coastlines"), (wxGetApp().path_file_init), String("R"), String(""));
     //read load_sample_sight from file_init

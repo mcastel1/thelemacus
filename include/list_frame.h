@@ -171,9 +171,7 @@ public:
     void OnCloseAllChartFrames(wxCommandEvent&);
     void OnComputePosition(void);
     
-    //    void OnMouseOnListControlSights(wxMouseEvent&);
     void OnMouseMovement(wxMouseEvent&);
-    //    void OnMouseOnListControlPositions(wxMouseEvent&);
     
     void OnModifyFile(void);
     void OnSaveFile(void);
@@ -184,7 +182,9 @@ public:
     template<class E> void KeyDown(E&);
     template<class T> void ComputePosition(T&);
     template<class T, class F> void AnimateToObject(T*, F*);
+#ifdef WIN32
     void OnTimer(wxTimerEvent&);
+#endif
 
 };
 

@@ -2009,10 +2009,12 @@ template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event) {
 }
 
 
-
+#ifdef WIN32
+//this method is used on WIN32 only, and it is called everytime *timer triggers a wxTimerEvent: it sets refresh to true, because enough time has elapsed since the last Refresh() during the drag of a graphical object, thus allowing for a new Refresh().
 void ListFrame::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
     refresh = true;
     
 }
+#endif
 

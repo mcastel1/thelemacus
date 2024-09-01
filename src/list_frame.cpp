@@ -2009,9 +2009,10 @@ template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event) {
 }
 
 
+
 void ListFrame::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
     refresh = true;
-    cout << "Ontimer has been called ! " << endl;
+    
 }
 

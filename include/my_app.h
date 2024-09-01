@@ -63,7 +63,9 @@ public:
     boost::posix_time::ptime utc_time;
     wxSystemSettings* settings;
     Chrono /*the code checks every time_check whether the operating system has changed its light/dark mode*/time_check_light_dark, /*the time step between two subsequent animation frames */animation_time;
+#ifdef WIN32
     Chrono /*when a graphical object is dragged, two Refresh() calls are spaced bv a time larger or equal to time_refresh. This is used only on WIN32, where the drag of a graphical object generates some ugly flashes if time_refresh is not used*/time_refresh;
+#endif
     //this is true/false if the system is in dark/light mode, respectively
     bool dark_mode, idling;
     //the rectangle used to measure the size of the display

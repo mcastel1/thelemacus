@@ -3595,7 +3595,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
             
             //given that the mouse has started dragging, I set mouse_dragging to true and I start parent->parent->timer
             mouse_dragging = true;
-#ifdef __APPLE__
+#ifdef WIN32
             parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
 #endif
 
@@ -3756,7 +3756,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
                                 
                                 parent->parent->refresh = false;
-#ifdef __APPLE__
+#ifdef WIN32
                                 parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
 #endif
 

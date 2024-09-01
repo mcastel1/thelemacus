@@ -30,7 +30,7 @@ void ExistingRoute::operator()(wxCommandEvent& event) {
     copy((f->data->route_list).begin(), (f->data->route_list).end(), (f->route_list_saved).begin());
 
     //print an info message
-    (f->print_question_message)->SetAndCall(NULL, String(""), String("You are about to transport with an existing route. Select the Route and press enter.\nDo you want to continue?"), String("Yes"), String("No, I want to cancel"));
+    f->print_question_message->SetAndCall(NULL, String(""), String("You are about to transport with an existing route. Select the Route and press enter.\nDo you want to continue?"), String("Yes"), String("No, I want to cancel"));
 
     event.Skip(true);
 

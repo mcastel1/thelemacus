@@ -40,8 +40,8 @@ template<class NON_GUI, class P> void ToDoAtEndOfTransport<NON_GUI, P>::operator
     
     parent->listcontrol_sights->set((parent->data->sight_list), false);
     parent->listcontrol_routes->set((parent->data->route_list), false);
-    parent->Resize();
-    parent->PreRenderAll();
+    //parent->Resize();
+    //parent->PreRenderAll();
 
 }
 

@@ -3,7 +3,6 @@
 	- remember that  of Routes do not go through the points of Routes exactly, see https://docs.wxwidgets.org/latest/classwx_d_c.html#ad72d38c75ac6b3f80c1f957dd94089fa 
 	- a common error is that when you need to compute the arithmetic mean of two latitudes phi_1 and phi_2, you should *not* do (phi_1+phi_2)/2 but ((phi_1.normalize_pm_pi_ret().value) + (phi_2.normalize_pm_pi_ret().value))/2
     - declare progress dialogs on the heap (i.e., not as wxProgressDialog* progress_dialog; progress_dialog = new ...,) but on the stack (i.e., as  wxProgressDialog progress_dialog([constructor arguments])). This is because if you declare them on the heap, the progress dialog will stay forever open and it will prevent the app from closing. On the other hand, if you declare it on the stack , it will be destroyed authomatically once the method that calls it stops running
-    - when I do the animation transprot with show coastlines = y, the animations are much slower than with show coastlines = n, because the charts are heavy for the cpu
     - be careful when you debug with breakpoints stuff that include timers ! You may stop at a breakpoint, but the timer in the code has started running and is running while you are stopped at the breakpoint
     - to use a lambda capture with CallAfter: `CallAfter([=] {FillAndRaiseOtherFrame();});`
     - on APPLE:
@@ -28,6 +27,7 @@
      
  
      - on WIN32:
+            - remember that the command ((chart_frames[i])->draw_panel)->FitAll(); makes a flash because it obliges the program to re-initialize from scratch the chartframe, avoid it!
             - whenever you add a new .cpp and .h file, remember to add it in 'Source Files' in the Visual Studio file, e.g., C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln
             - to read sample_sight.nav from an actual file on disk rather than from WIN32 resources
                 * select "Case 2" in 'Fork ...' in lib.cpp -> the .exe file will look for sample_sight.nav in the folder [folder where .exe file is executed]/Contents/Resources/Data/
@@ -89,7 +89,6 @@
      - sometimes the drag operation with mercator projection ends up to the original positon because you end up hitting the max min latitude when dragging
      - to make the app executable: $chmod +x /Thelemacus.app/Contents/MacOS/Thelemacus
      - to watch a variable any time it changes value, 1. set a breakpoint 2. in the lldb console type watch set variable MyClass.variable_in_the_class 3. Press play again.
-     - ChartDirector uses colors in the format 0xRRGGBB, while wxWidgets in format 0xBBGGRR
      - when a new chartframe is created, call ShowCharts to re-arrange all chartframes.
      - when a new chartframe is created, position it so it is not hidden by the menu bar on top of the screen
      - per creare un progetto xcode con wxwidgets 1. decomprimi il tar.gz di wxwidgets 2. in samples/minimal/ modifical minimal_cocoa mettendoci i files C++ e le referenze in system header search path, library search path, le linking flag, etc.
@@ -99,6 +98,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
+     - when you drag a Route do not call TabulateRoutes -> tabulate only the Route that you are dragging
      - add instrumental error
      - add readme file
      - add human error in sight frame to account for a systematic human error in estimating the moment when the body touches the horizon
@@ -106,8 +106,6 @@
      - code method DrawPanel::ProjectionToGeo_3D
      - code the remainign parts of Route::set_length for orthodromes and, eventually, circles of equal altitude
      - handle light/dark mode on WIN32 (you will need to activate WIN32 for this) and create resources for images in the /Dark/ folder and write the WIN32 part of void MyApp::OnTimer
-     - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things
-     - check whether you can remove Fitall in void ListFrame::PreRenderAll(void) { and whether it speeds up things
      - center name of file in top bar of ListFrame
      - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
      - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
@@ -118,12 +116,11 @@
      - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer
      - in DrawPanel::draw_3D : when drawing minor ticks on the x axis : because I am drawing a loxodrome, I am using the old function Route::draw -> replace this with Route::draw_3D in the future
      - move all stuff which is general enough in the code to MyApp class
-     - some paralles or meridians in grid in render_mercator contain the same wxPoint iterated many times -> remove them
      - try  wxDCClipper to quickly delete old image on DrawPanel
      - add separator between recent items and non-recent items in BodyField->name
      - replace all 'projection_field->name->GetValue()) == wxString(((Projection_types[0]).value))' with a switch case find_in_... with
         '''
-        switch (position_in_vector(projection, Projection_types)) {
+        switch (position_in_vector(parent->projection, Projection_types)) {
 
             case 0: {
 
@@ -139,18 +136,24 @@
 
         }
         '''
+     -  condense common parts of  'Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);' and of 'Draw(unsigned int, DrawPanel*, vector<unsigned long long int>*, vector<wxPoint>*, String prefix)'
+
 
 
  ********** THINGS TO FIX ***********
+<<<<<<< HEAD
     - CHECK THAT THE RADIUS OF THE EARTH AND OF ALL PLANETS IS CORRECT AND CORREPONDS TO THE CORRECT UNIT OF 1 nm = 1852 m. 
     - change back '//set projections at startup - start''
+=======
+>>>>>>> speed-up-win32
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
-`	- write put_back_in , put_back)_in_Mercator and put_back_in_3D :
+	- write put_back_in , put_back)_in_Mercator and put_back_in_3D :
     - all icons in light mode must be revised and stored in dark mode
 	- when you switch from light to dark, all icons must be updated
  on OSX:
+    - when you transport a Route with an existing Route, and select the transporting Route in ListFrame, if you press Enter the trnsport is not triggered (if you double click on the Route it is triggered)
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame Mac
  on WIN32:
+    - when you drag a Route, add a timer that re-renders everything only if at least tot seconds have passed since the last rendering -> this should remove the flashes
     - in the 3d projeciton, when you press Reduce in SightFrame and the animation is triggered, the observer height is displayed oddly
-	- in the mercator projection labels of meridians leave ugly traces when zooming in (horizontal segments)
-    - remove odd hotrizontal lines in mercator projection, they occur when you zoom in too fast with the mouse wheel
+    - when you drag a Route with the Mouse, the chart flashes -> try to implement for Routes the same method you used for coastlines, parallels and meridians (store the wxPoints in a point vector and the beginning poisition of each chunk in a position vector) to fix this

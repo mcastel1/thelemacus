@@ -51,6 +51,16 @@ Data:
 			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = 2024-08-19 15:05:34 UTC+2
 	Routes:
+		Route #1:
+			type = orthodrome
+			start position:
+				latitude = 3° 2.999999999999996'
+				longitude = 356° 56.99999999999908'
+				label = 
+			starting heading = 7° 22.99999999999999'
+			length format = length
+				length = 3000.0000000000000000 nm
+			label = X
 	Positions:
 		Position #1:
 			latitude = 48° 51.17938547473737'
@@ -69,9 +79,9 @@ Recent projections = 1 0
 Recent length formats = 1 0
 Recent route types = 1 0 2
 Recent route for transport types = 1 0
-Recent length units = 1 0
+Recent length units = 0 1
 Recent speed units = 0 1
 Recent index error = 358° 57.65999999999982'
 Recent height of eye value = 3.2100000000000000 m
-Recent route length value = 1.0000000000000000 nm
+Recent route length value = 3000.0000000000000000 nm
 Recent route speed value = 23.0000000000000000 kt

@@ -255,8 +255,7 @@ void Route::add_to_ListControl(long position_in_listcontrol, wxListCtrl* listcon
 }
 
 
-//inline 
-void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
+inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
 
     wxPoint p;
     bool end_connected;
@@ -306,6 +305,89 @@ void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector
         }
 
     }
+    
+    //write back length_saved into *length
+    length->set(length_saved);
+
+}
+
+
+//reset *lines and tabulate the points of Route *this in any projection of draw_panel and write them into *lines.
+void Route::DrawOld(
+                    unsigned int n_points,
+                    DrawPanel* draw_panel,
+                    Lines* lines,
+                    [[maybe_unused]] String prefix
+                    ) {
+
+    wxPoint p;
+    bool starting_new_chunk;
+    unsigned int i, n_points_chunk;
+    Length length_saved;
+    
+    if(length_format == LengthFormat_types[0]){
+        //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
+        
+        set_length_from_time_speed();
+
+    }else{
+        //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+
+        length_saved.set((*length));
+        length->convert_to(LengthUnit_types[0]);
+
+    }
+
+
+    //tabulate the Route points
+    //go through all the Route points
+    for(n_points_chunk = 0, starting_new_chunk = true, i = 0; i < n_points; i++) {
+
+        compute_end((*length)*((double)i)/((double)(n_points - 1)), String(""));
+        
+        //treat the first and last point as a special one because it may be at the boundary of *rectangle_observer-> check if they are and, if they are, put them back into *rectangle_observer
+        if((i==0) || (i==n_points-1)){
+            end->put_back_in(draw_panel);
+        }
+
+        if ((draw_panel->GeoToDrawPanel)((*end), &p, false)) {
+            
+            //the Route point considered is valid -> I increase n_points_chunk
+
+            if (starting_new_chunk) {
+                //I reached the end of a chunk
+
+//                v->resize(v->size() + 1);
+                //I update *poisitions
+           
+                starting_new_chunk = false;
+
+            }
+
+            lines->points.push_back(p);
+            n_points_chunk++;
+            
+            if(i==n_points-1){
+                
+                lines->positions.push_back((lines->positions.back()) + n_points_chunk);
+                
+            }
+
+        }else{
+            //I have reached the end of a chunk
+
+            //I set starting_new_chunk = true in such a way that the next iterations will recognize it
+            starting_new_chunk = true;
+            if(n_points_chunk > 0){
+                lines->positions.push_back((lines->positions.back()) + n_points_chunk);
+            }
+            n_points_chunk = 0;
+
+        }
+
+    }
+    
+
     
     //write back length_saved into *length
     length->set(length_saved);
@@ -567,6 +649,7 @@ void Route::Draw(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe
 
 }
 
+
 //tabulate the points of Route *this in any projection of draw_panel and writes them into v
 void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
 
@@ -596,9 +679,8 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if(compute_l_ends_ok){
         
-        bool check;
         //a vector where I will store the tentative points of each chunk of *this
-        vector<wxPoint> v_tentative;
+        vector<wxPoint> w;
         //the number of points of each chunk for which GeoToDrawPanel returns true (without recurring to put_back_in)
         unsigned int n_points_check_ok;
 
@@ -608,7 +690,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
             //run over all chunks
  
             //tabulate the Route points of the jth chunk and store them in v_proposed
-            for (v_tentative.clear(), n_points_check_ok=0, i = 0; i < n_points; i++) {
+            for (w.clear(), n_points_check_ok=0, i = 0; i < n_points; i++) {
 
                 //I slightly increase s[j] and slightly decrease s[j+1] (both by epsilon_double) in order to plot a chunk of the Route *this which is slightly smaller than the chunk [s[j], s[j+1]] and thus avoid  the odd lines that cross the whole plot area in the Mercator projection and that connect two points of the same chunk that are far from each other  on the plot area
                 //                compute_end(Length(((s[j]).value) * (1.0 + epsilon_double) + (((s[j + 1]).value) * (1.0 - epsilon_double) - ((s[j]).value) * (1.0 + epsilon_double)) * ((double)i) / ((double)(n_points - 1))), String(""));
@@ -616,12 +698,10 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
                             (s[j] * (1.0 + epsilon_double)) + (((s[j + 1] * (1.0 - epsilon_double)) - ((s[j] * (1.0 + epsilon_double)))) * ((double)i)/((double)(n_points - 1))),
                             String(""));
                 
-                check = (draw_panel->GeoToDrawPanel)((*end), &p, false);
-                
-                if(check){
+                if(((draw_panel->GeoToDrawPanel)((*end), &p, false))){
                     //end is a valid point -> convert it to a Position with GeoToDrawPanel
 
-                    v_tentative.push_back(p);
+                    w.push_back(p);
                     n_points_check_ok++;
 
                 }else{
@@ -634,7 +714,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
                         
                         if((draw_panel->GeoToDrawPanel)((*end), &p, false)){
                             
-                            v_tentative.push_back(p);
+                            w.push_back(p);
                             
                         }
 
@@ -651,9 +731,9 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
             
             //now I decide if v_proposed is a valid chunk (a chunk to be plotted), and thus if I sholud push it back to v or not
             if(n_points_check_ok>0){
-                //v_tentative containts at least one point for which GeoToDrawPanel evaluated to true (without recurring to put_back_in) -> it is a valid chunk -> I add it to v. On the other hand, if n_points_check_ok == 0, then the only points in v_tentative may be the first and the last, which have been pushed back to v_tentative by put_back_in, and the chunk will be an odd chunk with only two points put into *rectangle_observer by put_back_in -> This may lead to odd diagonal lines in the Mercator projection
+                //w containts at least one point for which GeoToDrawPanel evaluated to true (without recurring to put_back_in) -> it is a valid chunk -> I add it to v. On the other hand, if n_points_check_ok == 0, then the only points in w may be the first and the last, which have been pushed back to w by put_back_in, and the chunk will be an odd chunk with only two points put into *rectangle_observer by put_back_in -> This may lead to odd diagonal lines in the Mercator projection
                 
-                v->push_back(v_tentative);
+                v->push_back(w);
                 
             }
 
@@ -669,6 +749,117 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
     length->set(length_saved);
 
 }
+
+
+//reset *lines and tabulate the points of Route *this in any projection of draw_panel and writes them into *lines.
+void Route::Draw(
+                 unsigned int n_points,
+                 DrawPanel* draw_panel,
+                 Lines* lines,
+                 [[maybe_unused]] String prefix
+                 ) {
+
+    unsigned int i, j;
+    wxPoint p;
+    Angle lambda_a, lambda_b;
+    vector<Length> s;
+    bool compute_l_ends_ok;
+    Length length_saved;
+
+    
+    if(length_format == LengthFormat_types[0]){
+        //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
+        
+        set_length_from_time_speed();
+
+    }else{
+        //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+
+        length_saved.set((*length));
+        length->convert_to(LengthUnit_types[0]);
+
+    }
+
+    compute_l_ends(&s, &compute_l_ends_ok, draw_panel, prefix);
+ 
+    //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
+    if(compute_l_ends_ok){
+        
+        //a vector where I will store the tentative points of each chunk of *this
+        vector<wxPoint> w;
+        //the number of points of each chunk for which GeoToDrawPanel returns true (without recurring to put_back_in)
+        unsigned int n_points_check_ok;
+        
+         //run over all chunks of *this which are visible
+         //given that s contains the number of intersection points of *this and that each pair of intersection point delimits a chunk, and that v contains the chunks, the size of v is equal to thte size of s minus one.
+        for(j=0; j<(s.size()) - 1; j++) {
+            //run over all chunks
+ 
+            //tabulate the Route points of the jth chunk and store them in w
+            for(w.clear(), n_points_check_ok=0, i = 0; i < n_points; i++) {
+
+                //I slightly increase s[j] and slightly decrease s[j+1] (both by epsilon_double) in order to plot a chunk of the Route *this which is slightly smaller than the chunk [s[j], s[j+1]] and thus avoid  the odd lines that cross the whole plot area in the Mercator projection and that connect two points of the same chunk that are far from each other  on the plot area
+                //                compute_end(Length(((s[j]).value) * (1.0 + epsilon_double) + (((s[j + 1]).value) * (1.0 - epsilon_double) - ((s[j]).value) * (1.0 + epsilon_double)) * ((double)i) / ((double)(n_points - 1))), String(""));
+                compute_end(
+                            (s[j] * (1.0 + epsilon_double)) + (((s[j + 1] * (1.0 - epsilon_double)) - ((s[j] * (1.0 + epsilon_double)))) * ((double)i)/((double)(n_points - 1))),
+                            String(""));
+                
+                if(((draw_panel->GeoToDrawPanel)((*end), &p, false))){
+                    //end is a valid point -> convert it to a Position with GeoToDrawPanel
+
+                    w.push_back(p);
+                    n_points_check_ok++;
+
+                }else{
+                    //end is not a valid point
+                    
+                    if((i==0) || (i==n_points-1)){
+                        //the non-valid point is the first or last point in the Route chunk -> the point may be non valid because it lies on the edge, i.e., because of a rounding error -> put it back in and, if the Position that has been put_back_in is valid, convert it to a Position with GeoToDrawPanel
+                        
+                        end->put_back_in(draw_panel);
+                        
+                        if((draw_panel->GeoToDrawPanel)((*end), &p, false)){
+                            
+                            w.push_back(p);
+                            
+                        }
+
+                    }else{
+                        //the non-valid point lies in the middle of the Route chunk -> the reason why the point is non-valid cannot be a rounding error -> do not push the point to v_tentaive and break the for loop over i to terminate drawing the route chunk and switch to the next one
+                        
+                        break;
+                        
+                    }
+     
+                }
+                
+            }
+            
+            //now I decide if v_proposed is a valid chunk (a chunk to be plotted), and thus if I sholud push it back to v or not
+            if(n_points_check_ok > 0){
+                //w containts at least one point for which GeoToDrawPanel evaluated to true (without recurring to put_back_in) -> it is a valid chunk -> I add it to points. On the other hand, if n_points_check_ok == 0, then the only points in w may be the first and the last, which have been pushed back to w by put_back_in, and the chunk will be an odd chunk with only two points put into *rectangle_observer by put_back_in -> This may lead to odd diagonal lines in the Mercator projection: thus, if n_points_check_ok == 0, I do not insert anytying in *points
+                
+                //I update *points
+                lines->points.insert(lines->points.end(), w.begin(), w.end());
+                //I update *poisitions
+                lines->positions.push_back((lines->positions.back()) + (w.size()));
+                
+            }
+
+        }
+
+    }else {
+
+        //        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
+
+    }
+    
+    //write back length_saved into length
+    length->set(length_saved);
+
+}
+
+
 
 
 //compute the values of the Length l for Route *this at which *this crosses draw_panel->*circle/*rectangle_observer, and writes them in *s. For (*s)[i] < l < (*s)[i+1], the Route *this lies within draw_panel -> circle/ draw_panel->*rectangle_observer, and it is thus visible. If success != NULL, it writes true in *success if the values of the length above could be computed succesfully, and false otherwise.

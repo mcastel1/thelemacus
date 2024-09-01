@@ -55,7 +55,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     size_t pos_end;
     
     geo_position_start = new Position;
-    geo_position_before = new Position;
+//    geo_position_before = new Position;
     geo_position_now = new Position;
     geo_position_end = new Position;
     rectangle_observer_0 = new PositionRectangle;
@@ -69,6 +69,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     file_is_untitled = true;
     enable_highlight = true;
     selecting_route_for_position = false;
+    transporting = false;
     transporting_with_new_route = false;
     transporting_with_selected_route = false;
     changing_highlighted_object = false;
@@ -1669,7 +1670,7 @@ void ListFrame::LoadCoastLineData(String prefix) {
             abort = false;
             
             getline(*(coastline_file.value), line);
-            while ((!((coastline_file.value)->eof())) && (!abort)) {
+            while ((!(coastline_file.value->eof())) && (!abort)) {
                 //run through polygons
                 
                 coastline_polygons_Position.resize(i + 1);
@@ -1743,6 +1744,8 @@ void ListFrame::LoadCoastLineData(String prefix) {
                 cout << prefix.value << "... done.\n";
                 
             }
+            
+            coastline_polygons_area_observer.reserve(n_all_coastline_points);
 
             coastline_file.close(String(""));
             
@@ -1752,21 +1755,12 @@ void ListFrame::LoadCoastLineData(String prefix) {
                 for(j=0; j<coastline_polygons_map[i].size(); j++){
                     
                     delete_duplicates(&(coastline_polygons_map[i][j]));
-                    
-//                    sort(coastline_polygons_map[i][j].begin(), coastline_polygons_map[i][j].end());
-//                    coastline_polygons_map[i][j].erase(unique( coastline_polygons_map[i][j].begin(), coastline_polygons_map[i][j].end() ), coastline_polygons_map[i][j].end());
-//
-////                    l+= coastline_polygons_map[i][j].size();
-                    
+
                 }
                 
             }
 
         }
-
-        //destroy the progress_dialog so if the user aborts the loading process there are no pending frames while closing the application
-//        progress_dialog->Destroy();
-//        n_line.clear();
 
     }
 

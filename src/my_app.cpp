@@ -48,7 +48,7 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         }
         
         //reset the images of all buttons
-
+        
         
         //I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
         list_frame->PreRenderAll();
@@ -161,7 +161,7 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
                                                              ));
         
     }
-        
+    
 }
 
 template void MyApp::ShowCharts<wxCloseEvent>(wxCloseEvent&);
@@ -182,7 +182,7 @@ void MyApp::ShowCharts(void){
 //make a nice animation to present all charts, by dragging them to the desired point from a point on the antipodes
 //inline 
 void MyApp::AnimateCharts(void){
-
+    
     for(unsigned int i=0; i<(list_frame->chart_frames.size()); i++){
         ((list_frame->chart_frames)[i])->Animate();
     }
@@ -220,8 +220,8 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 #endif
 #ifdef _WIN32
     //I am on WIN32 operating system: I remove the '\"'that is present in root_directory at the beginning and at the end to obatin a root_directory that can be used as a path
-
-   //regex vowel_re("//");
+    
+    //regex vowel_re("//");
     //root_directory.value.erase(remove(root_directory.value.begin(), root_directory.value.end(), '\\'), root_directory.value.end());
     //boost::replace_all(root_directory.value, "\\", "\");
     //root_directory.value = my_replace(root_directory.value, '\\', '/');
@@ -260,8 +260,52 @@ void MyApp::set_icon_paths(void){
     
 }
 
+/*
+ // test for reserve method() minimal C++11 allocator with debug output. a vector allocated with     vector<int, my_allocator<int>> u; will call my_allocator every time bytes are allocated / deallocated, which allows for monitoring memory allcoation
+ template<class Tp> struct my_allocator
+ {
+ typedef Tp value_type;
+ 
+ my_allocator() = default;
+ template<class T>
+ my_allocator(const my_allocator<T>&) {}
+ 
+ Tp* allocate(std::size_t n)
+ {
+ n *= sizeof(Tp);
+ Tp* p = static_cast<Tp*>(::operator new(n));
+ std::cout << "allocating " << n << " bytes @ " << p << '\n';
+ return p;
+ }
+ 
+ void deallocate(Tp* p, std::size_t n)
+ {
+ std::cout << "deallocating " << n * sizeof *p << " bytes @ " << p << "\n\n";
+ ::operator delete(p);
+ }
+ 
+ };
+ */
+
 bool MyApp::OnInit() {
-        
+    
+    //test for reserve() method
+    /*
+     constexpr int max_elements = 32;
+     vector<int, my_allocator<int>> u;
+     
+     u.reserve(max_elements); // reserves at least max_elements * sizeof(int) bytes
+     
+     for (int n = 0; n < max_elements; ++n)
+     u.push_back(n);
+     
+     u.clear();
+     
+     for (int n = 0; n < max_elements; ++n)
+     u.push_back(n);
+     */
+    
+    
     unsigned int i;
     Int n_chart_frames;
     stringstream s;
@@ -289,8 +333,8 @@ bool MyApp::OnInit() {
     //to develop the app with Xcode on OSX (new MAC)
     root_directory = String("/Users/michelecastellana/Documents/thelemacus/");
     //to develop the app with Xcode on OSX (old MAC)
-//    root_directory = String("/Users/macbookpro/Documents/thelemacus/");
-
+    //    root_directory = String("/Users/macbookpro/Documents/thelemacus/");
+    
 #endif
     
 #ifdef _WIN32
@@ -335,7 +379,7 @@ bool MyApp::OnInit() {
     //files in code directory
     
     Re.set(Re_temp, LengthUnit_types[0]);
-
+    
     
     //files in data directory
     //    path_file_recent = data_directory.append(read_from_file(String("name file recent"), (wxGetApp().path_file_init), String("R"), String("")));
@@ -363,24 +407,24 @@ bool MyApp::OnInit() {
     size_icon_over_width_screen.read_from_file_to(String("size icon over width screen"), (wxGetApp().path_file_init), String("R"),  String(""));
     size_message_image_over_width_screen.read_from_file_to(String("size message image over width screen"), (wxGetApp().path_file_init), String("R"),  String(""));
     point_size.read_from_file_to(String("point size"), (wxGetApp().path_file_init), String("R"), String(""));
-
+    
     chart_transport_zoom_factor_coefficient.read_from_file_to(String("chart transport zoom factor coefficient"), (wxGetApp().path_file_init), String("R"),  String(""));
     minimal_animation_distance_over_size_of_observer_region.read_from_file_to(String("minimal animation distance over size of observer region"), (wxGetApp().path_file_init), String("R"),  String(""));
-
+    
     
     /*
-    //test for Length::convert_to
-    Length a, b(1.4355, LengthUnit_types[2]);
-    
-    a.set(1.34253, LengthUnit_types[2]);
-//    a.unit = LengthUnit_types[0];
-//    LengthUnit_types[1].print(String("sss"), false, String("---"), cout);
-    
-    a.print(String("a"), String("\t"), cout);
-    b.print(String("b"), String("\t"), cout);
-    a+=b;
-    a.print(String("a+b"), String("\t"), cout);
-    */
+     //test for Length::convert_to
+     Length a, b(1.4355, LengthUnit_types[2]);
+     
+     a.set(1.34253, LengthUnit_types[2]);
+     //    a.unit = LengthUnit_types[0];
+     //    LengthUnit_types[1].print(String("sss"), false, String("---"), cout);
+     
+     a.print(String("a"), String("\t"), cout);
+     b.print(String("b"), String("\t"), cout);
+     a+=b;
+     a.print(String("a+b"), String("\t"), cout);
+     */
     
     //----- test for Data::read_from_file_to - start
     /*
@@ -397,13 +441,13 @@ bool MyApp::OnInit() {
     
     //set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen
     size_small_button = dummy_frame->ToDIP(wxSize(
-                               ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_small_button_over_width_screen).value),
-                               ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_small_button_over_width_screen).value)
-                               ));
+                                                  ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_small_button_over_width_screen).value),
+                                                  ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_small_button_over_width_screen).value)
+                                                  ));
     size_large_button = dummy_frame->ToDIP(wxSize(
-                               ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value),
-                               ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)
-                               ));
+                                                  ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value),
+                                                  ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)
+                                                  ));
     
     
     length_plot_area_over_length_chart.read_from_file_to(String("length of plot area over length of chart"), (wxGetApp().path_file_init), String("R"),  String(""));
@@ -445,25 +489,25 @@ bool MyApp::OnInit() {
     dark_mode = (settings->GetAppearance()).IsDark();
     
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
-        
+    
     catalog = new Catalog(path_file_catalog, String(""));
     list_frame = new ListFrame("Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
-
+    
     if(!(list_frame->abort)){
         //the user has not pressed cancel while charts were loading -> I proceed and start the app
         
         show_all = new ShowAll(list_frame);
         //note that in disclaimer I do not bind est button to CloseApp, but to Show all
         disclaimer = new QuestionFrame<ShowAll, CloseApp, CloseApp>(NULL, show_all, String("Yes"), close_app, String("No"), close_app, true, true, false,
-                                                                          "Welcome to Thelemacus!",
-                                                                          //                                                                          "On December 16, 1719, Captain J. Cook perceived the first Australian aborigens from HMS Endeavour, off the coast of Perth.\n He was on a mission commissioned by King John III, designed to discover new commercial routes, and new worlds.\n His voyage had been made possible by the novel, state-of-the art astronomical positioning methods\n based on the marine chronometer built by J. Harrison, which was on board the Endeavour. \nThe reliability of the positioning method allowed the british realm to trace and map the coasts of new, unknonw lands, \nand paved the way to a new way to sail which lasted until the invention of GPS.\n With this application, you will bring back to life astronomical positioning methods, in a way that no other existing application allows for, and entering in a novel historical path. "
-                                                                          "This is the state-of-the art application for celestial navigation, I hope you will enjoy it!\nRemember that this software comes with no warranty, use at your own risk!\nDo you want to proceed?\n\nFair winds, following seas ..."
-                                                                          ,
-                                                                          
-                                                                          wxGetApp().path_file_warning_icon,
-                                                                          wxDefaultPosition,
-                                                                          wxDefaultSize,
-                                                                          String(""));
+                                                                    "Welcome to Thelemacus!",
+                                                                    //                                                                          "On December 16, 1719, Captain J. Cook perceived the first Australian aborigens from HMS Endeavour, off the coast of Perth.\n He was on a mission commissioned by King John III, designed to discover new commercial routes, and new worlds.\n His voyage had been made possible by the novel, state-of-the art astronomical positioning methods\n based on the marine chronometer built by J. Harrison, which was on board the Endeavour. \nThe reliability of the positioning method allowed the british realm to trace and map the coasts of new, unknonw lands, \nand paved the way to a new way to sail which lasted until the invention of GPS.\n With this application, you will bring back to life astronomical positioning methods, in a way that no other existing application allows for, and entering in a novel historical path. "
+                                                                    "This is the state-of-the art application for celestial navigation, I hope you will enjoy it!\nRemember that this software comes with no warranty, use at your own risk!\nDo you want to proceed?\n\nFair winds, following seas ..."
+                                                                    ,
+                                                                    
+                                                                    wxGetApp().path_file_warning_icon,
+                                                                    wxDefaultPosition,
+                                                                    wxDefaultSize,
+                                                                    String(""));
         disclaimer->Show(true);
         disclaimer->Raise();
         
@@ -472,14 +516,15 @@ bool MyApp::OnInit() {
         n_chart_frames.read_from_file_to(String("number chart frames"), (wxGetApp().path_file_init), String("R"), String(""));
         (list_frame->chart_frames).resize(n_chart_frames.value);
         for (i = 0; i < (list_frame->chart_frames).size(); i++) {
-             
+            
             //set projections at startup - start
             //open a Mercator projection for even i and a 3D projection for odd i
             //            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
             //            projection = Projection_types[0];
-            projection = Projection_types[1];
+            projection = Projection_types[0];
+            //            projection = Projection_types[1];
             //set projecitons at startup - end
-
+            
             
             s.str("");
             s << "Chart #" << i + 1 << " - " << projection.value << " projection";
@@ -489,13 +534,13 @@ bool MyApp::OnInit() {
             (list_frame->chart_frames)[i] = new ChartFrame(
                                                            list_frame,
                                                            projection,
-//                                                           String(""),
+                                                           //                                                           String(""),
                                                            s.str(),
                                                            wxDefaultPosition,
                                                            wxDefaultSize,
                                                            String("")
                                                            );
-
+            
             
         }
         
@@ -526,5 +571,5 @@ bool MyApp::OnInit() {
         return false;
         
     }
-        
+    
 }

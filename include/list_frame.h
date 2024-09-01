@@ -53,7 +53,6 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> class ShowQue
 class Sight;
 
 
-
 //this is a wxFrame designed to contain the list of sights, routes, etc...
 class ListFrame: public wxFrame{
     
@@ -84,13 +83,13 @@ public:
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
     DeletePosition *delete_position;
-    wxPoint /*the instantaneous positions of the mouse with respect to the screen: this position is kept to the right value by DrawPanel::OnMouseMovement method, that is called every time the mouse moves. This variable belongs to ListFrame rather than to single ChartFrames or DrawPanel, because there is a unique screen position for all of them*/ screen_position_now, screen_position_before;
+    wxPoint /*the instantaneous positions of the mouse with respect to the screen: this position is kept to the right value by DrawPanel::OnMouseMovement method, that is called every time the mouse moves. This variable belongs to ListFrame rather than to single ChartFrames or DrawPanel, because there is a unique screen position for all of them*/ screen_position_now;
     OnChangeSelectionInListControl<Sight>* on_change_selection_in_listcontrol_sights; OnChangeSelectionInListControl<Route>* on_change_selection_in_listcontrol_routes; OnChangeSelectionInListControl<Position>* on_change_selection_in_listcontrol_positions;
     ExistingRoute *existing_route;
     NewRoute *new_route;
     //a temporary value of data->crossing_route_list
     vector<Route> crossing_route_list_temp;
-    bool /*this is true if the mouse is moving, and false otherwise*/mouse_moving, /*this is true if a selection rectangle is being drawn, and false otherwise */selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling, /*this is equal to true if file has been modified, false otherwise*/file_has_been_modified, /*this is equal to true if the file has no name, false otherwise*/file_is_untitled, /*this is true if I am computing the astronomical position, false otherwise*/selecting_route_for_position, /*this is equal to true (false) if the user has (has not) pressed cancel while charts were loading */abort, /*if this is true, I am transporting an object with a new Route, otherwise it is false*/ transporting_with_new_route, /*if this is true, I am transporting an object with an existing Route, otherwise it is false*/ transporting_with_selected_route, /*this is true if a Route or Position is being dragged, and false otherwise*/ dragging_object,    /*this is true if the highlighted Route / Position is being changed and false otherwise */  changing_highlighted_object;
+    bool /*this is true if the mouse is moving, and false otherwise*/mouse_moving, /*this is true if a selection rectangle is being drawn, and false otherwise */selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling, /*this is equal to true if file has been modified, false otherwise*/file_has_been_modified, /*this is equal to true if the file has no name, false otherwise*/file_is_untitled, /*this is true if I am computing the astronomical position, false otherwise*/selecting_route_for_position, /*this is equal to true (false) if the user has (has not) pressed cancel while charts were loading */abort, /*if this is true, I am transporting an object with a new Route, otherwise it is false*/ transporting_with_new_route, /*if this is true, I am transporting an object with an existing Route, otherwise it is false*/ transporting_with_selected_route,/* if this is true, I am transporting an object with a Route (it may be new, selected, or a temporarily created Route)*/ transporting, /*this is true if a Route or Position is being dragged, and false otherwise*/ dragging_object,    /*this is true if the highlighted Route / Position is being changed and false otherwise */  changing_highlighted_object;
 
     Answer /*if this is y/n, the coastlines are shown/not shown*/show_coastlines, /*if this is y/n, sample_sight.nav is loaded/not loaded at startup*/ load_sample_sight;
     //the file where the data is read and written
@@ -111,7 +110,7 @@ public:
     vector<unsigned long long int> coastline_polygons_area_observer;
     Position /*these are the geographic Positions where the right mouse button is clicked at the beginning, the current and preceeding Position during mouse movement, and the mouse Position and at the end of the drawing process for the selection rectangle*/ *geo_position_start, *geo_position_before, *geo_position_now, *geo_position_end;
     PositionRectangle /*same DrawPanel::*rectangle_observer, but for the initial configutaiton of ChartFrame*/ *rectangle_observer_0;
-    String transported_object_type, /*the labels that will be drawn on position_start_label_selection_rectangle and position_end_label_selection_rectangle_now, respectively. end_label_selection_rectangle_now is the label of the end point of selection rectangle now, while end_label_selection_rectangle_before is the label of the end point of selection rectangle at the preceeding mouse position*/start_label_selection_rectangle, end_label_selection_rectangle_now, end_label_selection_rectangle_before;
+    String transported_object_type, /*the labels that will be drawn on position_start_label_selection_rectangle and position_end_label_selection_rectangle_now, respectively. end_label_selection_rectangle_now is the label of the end point of selection rectangle now, while end_label_selection_rectangle_before is the label of the end point of selection rectangle at the preceeding mouse position*/start_label_selection_rectangle, end_label_selection_rectangle_now/*, end_label_selection_rectangle_before*/;
     
     //a functor to set/unset idling mode in *this
     SetIdling<ListFrame>* set_idling;

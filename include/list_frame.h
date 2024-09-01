@@ -126,9 +126,12 @@ public:
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;
     AskRemoveRelatedSight* ask_remove_related_sight;
     AskRemoveRelatedRoute* ask_remove_related_route;
-    
+ 
+#ifdef WIN32
+    //*timer is used to avoid ugly flashes in WIN32 which occur when dragging an object, and it is used only on WIN32
     wxTimer* timer;
-    
+#endif
+
     ListFrame(const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     void set(void);

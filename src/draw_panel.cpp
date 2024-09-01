@@ -3103,8 +3103,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             //the left button of the mouse has been lifted at the end of a drag
             
             mouse_dragging = false;
+#ifdef WIN32
             parent->parent->timer->Stop();
-
+#endif
+            
             //given that the mosue drag has ended, I re-bind OnMoueMOvement to the mouse motion event
             this->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
             
@@ -3593,7 +3595,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
             
             //given that the mouse has started dragging, I set mouse_dragging to true and I start parent->parent->timer
             mouse_dragging = true;
+#ifdef __APPLE__
             parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
+#endif
+
             
             SetCursor(wxCURSOR_HAND);
             
@@ -3751,7 +3756,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
                                 
                                 parent->parent->refresh = false;
+#ifdef __APPLE__
                                 parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
+#endif
+
                             }
                             
                         }

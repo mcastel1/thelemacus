@@ -63,9 +63,11 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     circle_observer_0 = new Route;
     transporting_route_saved = new Route;
     
+#ifdef WIN32
     timer = new wxTimer();
 
     timer->Bind(wxEVT_TIMER, &ListFrame::OnTimer, this);
+#endif
 
     
     //the file has not been modified yet -> I set

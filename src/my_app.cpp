@@ -557,7 +557,7 @@ bool MyApp::OnInit() {
         highlight_font = default_font;
         error_font.SetWeight(wxFONTWEIGHT_BOLD);
         
-        timer->Start(/*time_check_light_dark is converted in milliseconds, because Start() takes its first argument in milliseconds*/((time_check_light_dark.h) * 60.0 * 60.0 + (time_check_light_dark.m) * 60.0 + (time_check_light_dark.s)) * 1000.0, wxTIMER_CONTINUOUS);
+        timer->Start(/*time_check_light_dark is converted in milliseconds, because Start() takes its first argument in milliseconds*/time_check_light_dark.to_milliseconds(), wxTIMER_CONTINUOUS);
         
         
         return true;

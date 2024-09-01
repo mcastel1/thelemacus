@@ -3749,6 +3749,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
+#ifdef __APPLE__
+                            //I am on APPLE operating systme: I call MyRefresh() to refresh the charts after the drag event
+                            ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
+                            
+#endif
+#ifdef WIN32
+                            //I am on WIN32 operating system -> a refresh of the charts called too often may cause ugly flashes on the chart -> I call MyRefresh() only if enough time has passed since the last one, by checking the refresh variable
                             
                             if(parent->parent->refresh){
                                 //the charts can be Refresh()ed -> I call refresh, set parent->parent->refresh = false and re-start parent->parent->timer which will start again counting time until the next Refresh() will be authorized 
@@ -3756,11 +3763,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
                                 
                                 parent->parent->refresh = false;
-#ifdef WIN32
                                 parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
-#endif
 
                             }
+#endif
                             
                         }
                         

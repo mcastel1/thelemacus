@@ -84,8 +84,10 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     mouse_moving = false;
     //when a ListFrame is created, no Route nor Position is  being dragged
     dragging_object = false;
+#ifdef WIN32
     refresh = true;
-    i_object_to_disconnect = -1;
+#endif
+  i_object_to_disconnect = -1;
 
 
     set_idling = new SetIdling<ListFrame>(this);

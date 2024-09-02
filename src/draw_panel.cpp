@@ -3806,7 +3806,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
         
 #ifdef __APPLE__
                     //I am on APPLE operating systme: I call MyRefresh() to refresh the charts after the drag event
-                    ((parent->parent->chart_frames)[i])->draw_panel->MyRefreshAll();
+                    parent->parent->MyRefreshAll();
                         
 #endif
 #ifdef WIN32

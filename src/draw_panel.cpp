@@ -3740,24 +3740,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-#ifdef __APPLE__
-                            //I am on APPLE operating systme: I call MyRefresh() to refresh the charts after the drag event
-                            ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
-                            
-#endif
-#ifdef WIN32
-                            //I am on WIN32 operating system -> a refresh of the charts called too often may cause ugly flashes on the chart -> I call MyRefresh() only if enough time has passed since the last one, by checking the refresh variable
-                            
-                            if(parent->parent->refresh){
-                                //the charts can be Refresh()ed -> I call refresh, set parent->parent->refresh = false and re-start parent->parent->timer which will start again counting time until the next Refresh() will be authorized 
-                                
-                                ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
-                                
-                                parent->parent->refresh = false;
-                                parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
 
-                            }
-#endif
                             
                         }
                         
@@ -3813,14 +3796,38 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-                            
-                            (((parent->parent->chart_frames)[i])->draw_panel)->MyRefresh();
-                            
+                                                        
                             
                         }
                         
                     }
                     
+                    
+        
+#ifdef __APPLE__
+                    //I am on APPLE operating systme: I call MyRefresh() to refresh the charts after the drag event
+                    ((parent->parent->chart_frames)[i])->draw_panel->MyRefreshAll();
+                        
+#endif
+#ifdef WIN32
+                    
+                    if(parent->parent->refresh){
+                        //I am on WIN32 operating system -> a refresh of the charts called too often may cause ugly flashes on the chart -> I call MyRefresh() only if enough time has passed since the last one, by checking the refresh variable
+                        
+                        for (i = 0; i < parent->parent->chart_frames.size(); i++) {
+                            
+                            //the charts can be Refresh()ed -> I call refresh, set parent->parent->refresh = false and re-start parent->parent->timer which will start again counting time until the next Refresh() will be authorized
+                            
+                            ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
+                            
+                            parent->parent->refresh = false;
+                            parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
+                            
+                        }
+                        
+                    }
+#endif
+
                 }
                 
             }
@@ -3863,6 +3870,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
         }
         
     }
+    
     event.Skip(true);
 }
 

@@ -3730,15 +3730,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             //on APPLE, I compute the coordinates of the reference position of the Route that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
-                            /*
-                             #ifdef _WIN32
-                             
-                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
-                             (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
-                             
-                             #endif
-                             */
                             
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
@@ -3813,39 +3804,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             //on APPLE, I compute the coordinates of the Position that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow ->  I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
                             
-                            /*
-                             #ifdef _WIN32
-                             
-                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
-                             (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
-                             
-                             
-                             #endif
-                             */
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                                  (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
                                                                                                  );
-                            /*
-                             #ifdef __APPLE__
-                             
-                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
-                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-                             
-                             #endif
-                             #ifdef _WIN32
-                             
-                             ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
-                             (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
-                             
-                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
-                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-                             
-                             #endif
-                             */
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
@@ -3883,46 +3847,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                         rotation->set(rotation_start_end(position_start_drag, position_now_drag) * (*rotation_start_drag));
                         
-                        
-                        /*
-                         #ifdef __APPLE__
-                         //re-draw the chart
-                         (this->*PreRender)();
-                         #endif
-                         #ifdef _WIN32
-                         //I am about to update coastline_points-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-                         (parent->polygon_position_before) = (parent->coastline_positions);
-                         //                        parent->coastline_polygons_before.resize(parent->coastline_points.size());
-                         copy_n(parent->coastline_points.begin(), parent->coastline_points.size(), parent->coastline_polygons_before.begin() );
-                         
-                         position_plot_area_before = position_plot_area_now;
-                         grid_before.clear();
-                         grid_before = grid_now;
-                         ticks_before.clear();
-                         ticks_before = ticks_now;
-                         
-                         //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-                         points_route_list_before.clear();
-                         points_route_list_before = points_route_list_now;
-                         
-                         points_position_list_before.clear();
-                         points_position_list_before = points_position_list_now;
-                         
-                         reference_positions_route_list_before.clear();
-                         reference_positions_route_list_before = reference_positions_route_list;
-                         
-                         //re-draw the chart
-                         (this->*PreRender)();
-                         
-                         #endif
-                         */
-                        
                         //re-draw the chart
                         (this->*PreRender)();
                         MyRefresh();
-                        
-//                        FitAll();
-                        
+                                            
                         break;
                         
                     }
@@ -3935,9 +3863,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
         }
         
     }
-    
     event.Skip(true);
-    
 }
 
 

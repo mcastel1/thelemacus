@@ -90,6 +90,10 @@ public:
     //a temporary value of data->crossing_route_list
     vector<Route> crossing_route_list_temp;
     bool /*this is true if the mouse is moving, and false otherwise*/mouse_moving, /*this is true if a selection rectangle is being drawn, and false otherwise */selection_rectangle, /*this is true/false if highlighting of routes and sights is enabled/disables*/enable_highlight, /*idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false*/ idling, /*this is equal to true if file has been modified, false otherwise*/file_has_been_modified, /*this is equal to true if the file has no name, false otherwise*/file_is_untitled, /*this is true if I am computing the astronomical position, false otherwise*/selecting_route_for_position, /*this is equal to true (false) if the user has (has not) pressed cancel while charts were loading */abort, /*if this is true, I am transporting an object with a new Route, otherwise it is false*/ transporting_with_new_route, /*if this is true, I am transporting an object with an existing Route, otherwise it is false*/ transporting_with_selected_route,/* if this is true, I am transporting an object with a Route (it may be new, selected, or a temporarily created Route)*/ transporting, /*this is true if a Route or Position is being dragged, and false otherwise*/ dragging_object,    /*this is true if the highlighted Route / Position is being changed and false otherwise */  changing_highlighted_object;
+#ifdef WIN32
+    //refresh is used on WIN32 only: refresh = true is a new Refresh() is authorized during the drag of an object on the chart, and false otherwise. refresh is used to avoid ugly flashes during the drag of an object. 
+    bool refresh;
+#endif
 
     Answer /*if this is y/n, the coastlines are shown/not shown*/show_coastlines, /*if this is y/n, sample_sight.nav is loaded/not loaded at startup*/ load_sample_sight;
     //the file where the data is read and written
@@ -126,7 +130,12 @@ public:
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;
     AskRemoveRelatedSight* ask_remove_related_sight;
     AskRemoveRelatedRoute* ask_remove_related_route;
-    
+ 
+#ifdef WIN32
+    //*timer is used to avoid ugly flashes in WIN32 which occur when dragging an object, and it is used only on WIN32
+    wxTimer* timer;
+#endif
+
     ListFrame(const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     void set(void);
@@ -166,9 +175,7 @@ public:
     void OnCloseAllChartFrames(wxCommandEvent&);
     void OnComputePosition(void);
     
-    //    void OnMouseOnListControlSights(wxMouseEvent&);
     void OnMouseMovement(wxMouseEvent&);
-    //    void OnMouseOnListControlPositions(wxMouseEvent&);
     
     void OnModifyFile(void);
     void OnSaveFile(void);
@@ -179,8 +186,10 @@ public:
     template<class E> void KeyDown(E&);
     template<class T> void ComputePosition(T&);
     template<class T, class F> void AnimateToObject(T*, F*);
+#ifdef WIN32
+    void OnTimer(wxTimerEvent&);
+#endif
 
-    
 };
 
 

@@ -62,7 +62,14 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     
     circle_observer_0 = new Route;
     transporting_route_saved = new Route;
+    
+#ifdef WIN32
+    timer = new wxTimer();
 
+    timer->Bind(wxEVT_TIMER, &ListFrame::OnTimer, this);
+#endif
+
+    
     //the file has not been modified yet -> I set
     file_has_been_modified = false;
     //for the time being, the file has no title
@@ -77,7 +84,10 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     mouse_moving = false;
     //when a ListFrame is created, no Route nor Position is  being dragged
     dragging_object = false;
-    i_object_to_disconnect = -1;
+#ifdef WIN32
+    refresh = true;
+#endif
+  i_object_to_disconnect = -1;
 
 
     set_idling = new SetIdling<ListFrame>(this);
@@ -100,9 +110,9 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_info_message->image_path = wxGetApp().path_file_info_icon;
     print_error_message->image_path = wxGetApp().path_file_error_icon;
 
-
     data = new Data(wxGetApp().catalog, String(""));
-
+    
+    
     //read show_coastlines from file_init
     show_coastlines.read_from_file_to(String("show coastlines"), (wxGetApp().path_file_init), String("R"), String(""));
     //read load_sample_sight from file_init
@@ -1999,3 +2009,14 @@ template<class T> void ListFrame::ComputePosition([[maybe_unused]] T& event) {
     print_question->SetAndCall(NULL, String("You want to determine the astronomical position"), String("With what route do you want to do it?"), String("All routes"), String("Some routes"));
     
 }
+
+
+#ifdef WIN32
+//this method is used on WIN32 only, and it is called everytime *timer triggers a wxTimerEvent: it sets refresh to true, because enough time has elapsed since the last Refresh() during the drag of a graphical object, thus allowing for a new Refresh().
+void ListFrame::OnTimer([[maybe_unused]] wxTimerEvent& event) {
+    
+    refresh = true;
+    
+}
+#endif
+

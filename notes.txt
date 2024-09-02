@@ -150,7 +150,7 @@
     - when you transport a Route with an existing Route, and select the transporting Route in ListFrame, if you press Enter the trnsport is not triggered (if you double click on the Route it is triggered)
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame Mac
  on WIN32:
+    - when you change projection in chartframe, there is an odd flash due to fitting of the chartframe to its new content 
     - Mercator Projection: when you are already zoomed back at the max and try to zoom back more, there are ugly 'vibrations' in the chart
-    - use the technique you used to remove flashes when dragging a Route, to drags of Positions
     - in the 3d projeciton, when you press Reduce in SightFrame and the animation is triggered, the observer height is displayed oddly
     - when you drag a Route with the Mouse, the chart flashes -> try to implement for Routes the same method you used for coastlines, parallels and meridians (store the wxPoints in a point vector and the beginning poisition of each chunk in a position vector) to fix this

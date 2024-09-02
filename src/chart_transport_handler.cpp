@@ -264,32 +264,6 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
 //            (MotionHandler<F>::transporting_route_temp).end.print(String("Expected arrival point with (MotionHandler<F>::transporting_route_temp)"), String("\t\t"), cout);
 //            chart_frame->draw_panel->circle_observer.reference_position.print(String("Reference position"), String("\t\t"), cout);
             
-            /*
-             #ifdef WIN32
-             //I am about to update coastline_points-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-             (chart_frame->polygon_position_before) = (chart_frame->coastline_positions);
-             copy_n(chart_frame->coastline_points.begin(), chart_frame->coastline_points.size(), chart_frame->coastline_polygons_before.begin() );
-             
-             (chart_frame->draw_panel->position_plot_area_before) = (chart_frame->draw_panel->position_plot_area_now);
-             chart_frame->draw_panel->grid_before.clear();
-             (chart_frame->draw_panel->grid_before) = (chart_frame->draw_panel->grid_now);
-             chart_frame->draw_panel->ticks_before.clear();
-             (chart_frame->draw_panel->ticks_before) = (chart_frame->draw_panel->ticks_now);
-             
-             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-             chart_frame->draw_panel->points_route_list_before.clear();
-             (chart_frame->draw_panel->points_route_list_before) = (chart_frame->draw_panel->points_route_list_now);
-             
-             chart_frame->draw_panel->points_position_list_before.clear();
-             (chart_frame->draw_panel->points_position_list_before) = (chart_frame->draw_panel->points_position_list_now);
-             
-             chart_frame->draw_panel->reference_positions_route_list_before.clear();
-             (chart_frame->draw_panel->reference_positions_route_list_before) = (chart_frame->draw_panel->reference_positions_route_list);
-             
-             
-             #endif
-             */
-            
             //re-draw the chart
             (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();
             chart_frame->draw_panel->MyRefresh();
@@ -299,7 +273,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
 
         }
 
-    }else {
+    }else{
         //the transport  is over
 
         switch (position_in_vector(chart_frame->projection, Projection_types)) {

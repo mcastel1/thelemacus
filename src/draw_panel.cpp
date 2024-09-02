@@ -1438,13 +1438,13 @@ inline void DrawPanel::PreRender3D(void) {
     
     parent->GetCoastLineData3D();
     
-    if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
-        //I am not dragging the chart nor scrolling -> the size of the chart may change -> re-compute it
-        parent->SetSize(
-                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
-                        (((wxGetApp().rectangle_display).GetSize()).GetHeight())
-                        );
-    }
+    //if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
+    //    //I am not dragging the chart nor scrolling -> the size of the chart may change -> re-compute it
+    //    parent->SetSize(
+    //                    (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
+    //                    (((wxGetApp().rectangle_display).GetSize()).GetHeight())
+    //                    );
+    //}
     (this->*Set_size_chart)();
     SetSize(size_chart);
     

@@ -1053,14 +1053,12 @@ bool ChartFrame::SetSlider(unsigned int slider_value) {
 
         return true;
 
-    }
-    else {
+    }else{
 
         return false;
 
     }
-
-
+    
 }
 
 

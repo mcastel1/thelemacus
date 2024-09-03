@@ -3894,10 +3894,12 @@ void DrawPanel::OnMouseWheel(wxMouseEvent& event) {
     //    cout << "Slider value new = " << i << "\n";
     
     //if i gets out of range, put it back in the correct range
-    if (i < 1) { i = 1; }
-    if (i > ((parent->slider)->GetMax())) { i = ((parent->slider)->GetMax()); }
+//    if (i < 1) { i = 1; }
+//    if (i > ((parent->slider)->GetMax())) { i = ((parent->slider)->GetMax()); }
     
-    parent->SetSlider(i);
+    if((i >= parent->slider->GetMin()) && (i <= parent->slider->GetMax())){
+        parent->SetSlider(i);
+    }
     
     event.Skip(true);
     

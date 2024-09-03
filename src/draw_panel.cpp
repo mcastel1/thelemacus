@@ -3730,7 +3730,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).update_ListControl((parent->parent->highlighted_route_now), parent->parent->listcontrol_routes);
                         
                         
-                        for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
+                        for (i = 0; i < parent->parent->chart_frames.size(); i++) {
                             //on APPLE, I compute the coordinates of the reference position of the Route that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
                             
                             //obtain the coordinates of the reference position of the Route that is being dragged

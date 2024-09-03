@@ -565,7 +565,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             menu_file->Enable(wxID_HIGHEST + 7, true);
             set();
             SetLabel(data_file.name->value);
-            PreRenderAll();
+            PreRenderAndFitAll();
 
         }
         else {
@@ -852,7 +852,7 @@ void ListFrame::OnComputePosition(void) {
 
 
 //calls PreRender and FitAll in all che ChartFrames which are children of *this
-void ListFrame::PreRenderAll(void) {
+void ListFrame::PreRenderAndFitAll(void) {
 
     for (long i = 0; i < (chart_frames.size()); i++) {
 
@@ -1457,7 +1457,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event) {
             SetLabel(wxString(data_file.name->value));
             //resize and draw all charts according to the newly loaded data
             Resize();
-            PreRenderAll();
+            PreRenderAndFitAll();
 
         }
 

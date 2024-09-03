@@ -152,7 +152,7 @@ bool Body::check(unsigned int* j, Catalog catalog, [[maybe_unused]] String prefi
 
     for (i = 0, check = false; (i < (catalog).list.size()) && (!check); i++) {
 
-        if (((((catalog).list)[i]).name) == name) {
+        if ((((catalog.list)[i]).name) == name) {
             check = true;
         }
 

@@ -2002,7 +2002,7 @@ inline void DrawPanel::Set_x_y_min_max_3D(void) {
     //set d
     d_temp.set(-1.0 + sqrt(1.0 + gsl_pow_2(tan(circle_observer->omega))));
     
-    x_min = -((d_temp.value) / sqrt(gsl_pow_2(((d_temp).value) + 1.0) - 1.0));
+    x_min = -((d_temp.value) / sqrt(gsl_pow_2((d_temp.value) + 1.0) - 1.0));
     x_max = -x_min;
     y_min = x_min;
     y_max = -y_min;

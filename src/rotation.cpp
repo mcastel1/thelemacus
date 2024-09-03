@@ -103,12 +103,12 @@ Rotation::Rotation(Position p, Position q) {
 
         (*this) = (Rotation(
             Angle(String(""), 0.0, String("")),
-            Angle(String(""), M_PI_2 - (((rotation_axis).phi).value), String("")),
-            Angle(String(""), -((((rotation_axis).lambda).value) + M_PI_2), String(""))
+            Angle(String(""), M_PI_2 - ((rotation_axis.phi).value), String("")),
+            Angle(String(""), -(((rotation_axis.lambda).value) + M_PI_2), String(""))
         )
             * Rotation(
-                Angle(String(""), (((rotation_axis).lambda).value) + M_PI_2, String("")),
-                Angle(String(""), -(M_PI_2 - (((rotation_axis).phi).value)), String("")),
+                Angle(String(""), ((rotation_axis.lambda).value) + M_PI_2, String("")),
+                Angle(String(""), -(M_PI_2 - ((rotation_axis.phi).value)), String("")),
                 rotation_angle
             ));
 

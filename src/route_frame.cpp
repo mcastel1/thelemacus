@@ -439,7 +439,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         parent->listcontrol_routes->set((parent->data->route_list), false);
         parent->Resize();
         parent->OnModifyFile();
-//        parent->PreRenderAll();
+//        parent->PreRenderAndFitAll();
 
     }
 

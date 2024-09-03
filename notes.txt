@@ -98,7 +98,7 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
-     - when you drag a Route do not call TabulateRoutes -> tabulate only the Route that you are dragging
+     - when you drag a Position do not call TabulatePositions -> tabulate only the Position that you are dragging
      - add instrumental error
      - add readme file
      - add human error in sight frame to account for a systematic human error in estimating the moment when the body touches the horizon
@@ -150,5 +150,6 @@
     - when you transport a Route with an existing Route, and select the transporting Route in ListFrame, if you press Enter the trnsport is not triggered (if you double click on the Route it is triggered)
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame Mac
  on WIN32:
+    - the center of a reference Position of a Route is red while the color of the Route is different from Red
     - in the 3d projeciton, when you press Reduce in SightFrame and the animation is triggered, the observer height is displayed oddly
     - when you drag a Route with the Mouse, the chart flashes -> try to implement for Routes the same method you used for coastlines, parallels and meridians (store the wxPoints in a point vector and the beginning poisition of each chunk in a position vector) to fix this

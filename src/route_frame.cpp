@@ -410,7 +410,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     //insert the animation here
     
 
-//    parent->PreRenderAll();
+//    parent->PreRenderAndFitAll();
 
     if ((parent->transporting_with_new_route)) {
         //if I am adding a new Route for transport, call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
@@ -439,7 +439,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         parent->listcontrol_routes->set((parent->data->route_list), false);
         parent->Resize();
         parent->OnModifyFile();
-//        parent->PreRenderAll();
+//        parent->PreRenderAndFitAll();
 
     }
 

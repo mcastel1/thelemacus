@@ -48,7 +48,7 @@ void DeleteRoute::operator()(wxCommandEvent& event) {
     (*(f->on_change_selection_in_listcontrol_routes))(event);
     f->Resize();
     //given that a Route has been removed, I re-draw everything
-    f->PreRenderAll();
+    f->PreRenderAndFitAll();
 
     event.Skip(true);
 

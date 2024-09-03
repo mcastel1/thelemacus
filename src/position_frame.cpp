@@ -248,7 +248,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     parent->Resize();
     parent->OnModifyFile();
     
-//    parent->PreRenderAll();
+//    parent->PreRenderAndFitAll();
     parent->AnimateToObject<Position, UnsetIdling<ListFrame> >(position, parent->unset_idling);
     
 

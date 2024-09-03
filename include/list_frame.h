@@ -139,7 +139,7 @@ public:
     ListFrame(const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     void set(void);
-    void PreRenderAll(void);
+    void PreRenderAndFitAll(void);
     void MyRefreshAll(void);
     void RefreshAll(void);
     void TabulatePositionsAll(void);

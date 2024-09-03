@@ -69,7 +69,7 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
     parent->data->route_list.resize((parent->route_list_for_transport).size());
     copy((parent->route_list_for_transport).begin(), (parent->route_list_for_transport).end(), ((parent->data)->route_list).begin());
     parent->TabulateRoutesAll();
-    parent->PreRenderAll();
+    parent->PreRenderAndFitAll();
 
     //I bind listcontrol_routes to on_select_route_in_listcontrol_routes_for_transport in such a way that when the user will double clock on an item in listcontrol (or single-click it and then press enter), I perform the transport
     parent->listcontrol_routes->Unbind(wxEVT_LIST_ITEM_ACTIVATED, &ListFrame::OnModifyRoute<wxListEvent>, parent);

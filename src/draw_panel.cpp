@@ -1093,25 +1093,25 @@ inline void DrawPanel::PreRenderMercator(void) {
     
     /*set the aspect ratio between height and width equal to the ratio between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     
-    if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
-        //the ChartFrame is not being dragged and the mouse is not scrolling -> the chart's size will change -> re-compute its size
-        
-        if ((y_max - y_min) > x_span()) {
-            //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
-            parent->SetSize(
-                            (((wxGetApp().rectangle_display).GetSize()).GetHeight()) / ((y_max - y_min) / x_span()),
-                            (((wxGetApp().rectangle_display).GetSize()).GetHeight())
-                            );
-            
-        }
-        else {
-            //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
-            parent->SetSize(
-                            (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
-                            (((wxGetApp().rectangle_display).GetSize()).GetHeight()) * ((y_max - y_min) / x_span())
-                            );
-        }
-    }
+    //if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
+    //    //the ChartFrame is not being dragged and the mouse is not scrolling -> the chart's size will change -> re-compute its size
+    //    
+    //    if ((y_max - y_min) > x_span()) {
+    //        //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
+    //        parent->SetSize(
+    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()) / ((y_max - y_min) / x_span()),
+    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight())
+    //                        );
+    //        
+    //    }
+    //    else {
+    //        //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
+    //        parent->SetSize(
+    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
+    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()) * ((y_max - y_min) / x_span())
+    //                        );
+    //    }
+    //}
     
     (this->*Set_size_chart)();
     //set the size of *this equal to the size of the chart, in such a way that draw_panel can properly contain the chart
@@ -1438,13 +1438,13 @@ inline void DrawPanel::PreRender3D(void) {
     
     parent->GetCoastLineData3D();
     
-    if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
-        //I am not dragging the chart nor scrolling -> the size of the chart may change -> re-compute it
-        parent->SetSize(
-                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
-                        (((wxGetApp().rectangle_display).GetSize()).GetHeight())
-                        );
-    }
+    //if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
+    //    //I am not dragging the chart nor scrolling -> the size of the chart may change -> re-compute it
+    //    parent->SetSize(
+    //                    (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
+    //                    (((wxGetApp().rectangle_display).GetSize()).GetHeight())
+    //                    );
+    //}
     (this->*Set_size_chart)();
     SetSize(size_chart);
     

@@ -51,7 +51,7 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         
         
         //I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
-        list_frame->PreRenderAll();
+        list_frame->PreRenderAndFitAll();
     }
     
     dark_mode = (settings->GetAppearance()).IsDark();

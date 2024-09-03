@@ -924,52 +924,54 @@ inline void DrawPanel::Render3D(
     
 }
 
+//tabulate into routes and reference_positions_route_list the points and reference Positions, respectively, of  Route (parent->parent->data->route_list)[i]. points_route_list will then be used to Render the Route
+inline void DrawPanel::TabulateRoute(const unsigned int& i){
+    
+    wxPoint p;
+
+    
+    (routes[i]).reset();
+    
+    //write the points of the curves corresponding to the Routes into points_route_list_now
+    //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
+    if (((parent->parent->data->route_list)[i]).type != (Route_types[0])) {
+        
+        ((parent->parent->data->route_list)[i]).Draw((unsigned int)(wxGetApp().n_points_routes.value), this, (routes.data()) + i, String(""));
+        
+    }else{
+        
+        ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)(wxGetApp().n_points_routes.value), this, (routes.data()) + i, String(""));
+        
+    }
+    
+    //write the reference Positions into reference_positions_route_list
+    if (GeoToDrawPanel((*(((parent->parent->data->route_list)[i]).reference_position)), &p, false)) {
+        //the reference position falls in the plot area -> write it into reference_positions_route_list
+        reference_positions_route_list[i] = p;
+    }else{
+        //the reference position does not fall in the plot area -> write a 'Null' value into reference_positions_route_list which will be ignored in other methods because it lies outside the plot area
+        reference_positions_route_list[i] = wxPoint(0, 0);
+    }
+    
+    
+}
 
 
 
-//this function tabulates into points_route_list_now and reference_positions_route_list the points and reference Positions, respectively, of all Routes. points_route_list will then be used to render the Routes
+//tabulate into routes and reference_positions_route_list the points and reference Positions, respectively, of all Routes. points_route_list will then be used to render the Routes
 inline void DrawPanel::TabulateRoutes(void) {
     
     unsigned int i;
-    wxPoint p;
     
     //resize points_route_list_now and reference_position_route_list_now, which needs to have the same size as (data->route_list), and clear up points_route_list
     routes.resize(parent->parent->data->route_list.size());
-    for (i = 0; i < (routes.size()); i++) {
-        (routes[i]).clear();
-    }
     
     reference_positions_route_list.clear();
     reference_positions_route_list.resize((parent->parent->data->route_list.size()));
     
     //tabulate the points of routes
-    for (i = 0; i < parent->parent->data->route_list.size(); i++) {
-        
-        (routes[i]).reset();
-        
-        //write the points of the curves corresponding to the Routes into points_route_list_now
-        //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
-        if (((parent->parent->data->route_list)[i]).type != (Route_types[0])) {
-            
-            ((parent->parent->data->route_list)[i]).Draw((unsigned int)(wxGetApp().n_points_routes.value), this, (routes.data()) + i, String(""));
-            
-        }
-        else {
-            
-            ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)(wxGetApp().n_points_routes.value), this, (routes.data()) + i, String(""));
-            
-        }
-        
-        //write the reference Positions into reference_positions_route_list
-        if (GeoToDrawPanel((*(((parent->parent->data->route_list)[i]).reference_position)), &p, false)) {
-            //the reference position falls in the plot area -> write it into reference_positions_route_list
-            reference_positions_route_list[i] = p;
-        }
-        else {
-            //the reference position does not fall in the plot area -> write a 'Null' value into reference_positions_route_list which will be ignored in other methods because it lies outside the plot area
-            reference_positions_route_list[i] = wxPoint(0, 0);
-        }
-        
+    for (i = 0; i < parent->parent->data->route_list.size(); i++){
+        TabulateRoute(i);
     }
     
 }

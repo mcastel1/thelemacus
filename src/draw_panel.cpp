@@ -1093,25 +1093,25 @@ inline void DrawPanel::PreRenderMercator(void) {
     
     /*set the aspect ratio between height and width equal to the ratio between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
     
-    if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
-        //the ChartFrame is not being dragged and the mouse is not scrolling -> the chart's size will change -> re-compute its size
-        
-        if ((y_max - y_min) > x_span()) {
-            //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
-            parent->SetSize(
-                            (((wxGetApp().rectangle_display).GetSize()).GetHeight()) / ((y_max - y_min) / x_span()),
-                            (((wxGetApp().rectangle_display).GetSize()).GetHeight())
-                            );
-            
-        }
-        else {
-            //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
-            parent->SetSize(
-                            (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
-                            (((wxGetApp().rectangle_display).GetSize()).GetHeight()) * ((y_max - y_min) / x_span())
-                            );
-        }
-    }
+    //if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
+    //    //the ChartFrame is not being dragged and the mouse is not scrolling -> the chart's size will change -> re-compute its size
+    //    
+    //    if ((y_max - y_min) > x_span()) {
+    //        //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
+    //        parent->SetSize(
+    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()) / ((y_max - y_min) / x_span()),
+    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight())
+    //                        );
+    //        
+    //    }
+    //    else {
+    //        //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
+    //        parent->SetSize(
+    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
+    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()) * ((y_max - y_min) / x_span())
+    //                        );
+    //    }
+    //}
     
     (this->*Set_size_chart)();
     //set the size of *this equal to the size of the chart, in such a way that draw_panel can properly contain the chart
@@ -1438,13 +1438,13 @@ inline void DrawPanel::PreRender3D(void) {
     
     parent->GetCoastLineData3D();
     
-    if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
-        //I am not dragging the chart nor scrolling -> the size of the chart may change -> re-compute it
-        parent->SetSize(
-                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
-                        (((wxGetApp().rectangle_display).GetSize()).GetHeight())
-                        );
-    }
+    //if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
+    //    //I am not dragging the chart nor scrolling -> the size of the chart may change -> re-compute it
+    //    parent->SetSize(
+    //                    (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
+    //                    (((wxGetApp().rectangle_display).GetSize()).GetHeight())
+    //                    );
+    //}
     (this->*Set_size_chart)();
     SetSize(size_chart);
     
@@ -3103,6 +3103,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
             //the left button of the mouse has been lifted at the end of a drag
             
             mouse_dragging = false;
+#ifdef WIN32
+            parent->parent->timer->Stop();
+#endif
+            
             //given that the mosue drag has ended, I re-bind OnMoueMOvement to the mouse motion event
             this->Bind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, this);
             
@@ -3555,6 +3559,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
             if (!mouse_dragging) {
                 //the mouse has started dragging
                 
+                
                 //If I am dragging a Route, I save the starting point of this Route into *route_reference_position_drag_now
                 
                 //during the mouse drag, I disable DrawPanel::OnMouseMovement
@@ -3588,7 +3593,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 
             }
             
+            //given that the mouse has started dragging, I set mouse_dragging to true and I start parent->parent->timer
             mouse_dragging = true;
+#ifdef WIN32
+            parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
+#endif
+
             
             SetCursor(wxCURSOR_HAND);
             
@@ -3720,15 +3730,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             //on APPLE, I compute the coordinates of the reference position of the Route that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow -> I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
-                            /*
-                             #ifdef _WIN32
-                             
-                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
-                             (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
-                             
-                             #endif
-                             */
                             
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
@@ -3736,35 +3737,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
                                                                                                  );
-                            /*
-                             #ifdef __APPLE__
-                             
-                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
-                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-                             
-                             #endif
-                             #ifdef _WIN32
-                             
-                             //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before, for all DrawPanels
-                             ((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before.clear();
-                             (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_route_list_now);
-                             
-                             ((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before.clear();
-                             (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->reference_positions_route_list);
-                             
-                             
-                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
-                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-                             
-                             #endif
-                             */
                             
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoutes();
-                            
-                            
-                            ((parent->parent->chart_frames)[i])->draw_panel->MyRefresh();
-                            
+
                             
                         }
                         
@@ -3811,50 +3787,47 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                             //on APPLE, I compute the coordinates of the Position that is being dragged and I call Refresh(), because Refresh() is fast. On WIN32 Refresh() is slow ->  I use the RefreshWIN32() method, which wipes out graphical objects at the preceeding instant of time by drawing on them with color wxGetApp().background_color, and then renders the objects at the present instant of time with color wxGetApp().foreground_color
                             
-                            /*
-                             #ifdef _WIN32
-                             
-                             //store the string with the coordinated of the object that is being dragged into label_dragged_position and its position into position_label_dragged_position, so PaintEvent will read it and draw the label of its coordinates on it
-                             (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now);
-                             (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now);
-                             
-                             
-                             #endif
-                             */
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                                  (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
                                                                                                  );
-                            /*
-                             #ifdef __APPLE__
-                             
-                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
-                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-                             
-                             #endif
-                             #ifdef _WIN32
-                             
-                             ((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before.clear();
-                             (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_before) = (((parent->parent->chart_frames)[i])->draw_panel->points_position_list_now);
-                             
-                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
-                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-                             
-                             #endif
-                             */
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
-                            
-                            (((parent->parent->chart_frames)[i])->draw_panel)->MyRefresh();
-                            
+                                                        
                             
                         }
                         
                     }
                     
+                    
+        
+#ifdef __APPLE__
+                    //I am on APPLE operating systme: I call MyRefresh() to refresh the charts after the drag event
+                    parent->parent->MyRefreshAll();
+                        
+#endif
+#ifdef WIN32
+                    
+                    if(parent->parent->refresh){
+                        //I am on WIN32 operating system -> a refresh of the charts called too often may cause ugly flashes on the chart -> I call MyRefresh() only if enough time has passed since the last one, by checking the refresh variable
+
+                        //the charts can be Refresh()ed -> I call refresh on all DrawPanels, set parent->parent->refresh = false and re-start parent->parent->timer which will start again counting time until the next Refresh() will be authorized
+                        
+                        parent->parent->MyRefreshAll();
+                        
+                        for (i = 0; i < parent->parent->chart_frames.size(); i++) {
+  
+                            parent->parent->refresh = false;
+                            parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
+                            
+                        }
+                        
+                    }
+#endif
+
                 }
                 
             }
@@ -3881,46 +3854,10 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                         rotation->set(rotation_start_end(position_start_drag, position_now_drag) * (*rotation_start_drag));
                         
-                        
-                        /*
-                         #ifdef __APPLE__
-                         //re-draw the chart
-                         (this->*PreRender)();
-                         #endif
-                         #ifdef _WIN32
-                         //I am about to update coastline_points-> save the previous configuration of points_coastline into coastline_polygons_before, which will be used by RefreshWIN32()
-                         (parent->polygon_position_before) = (parent->coastline_positions);
-                         //                        parent->coastline_polygons_before.resize(parent->coastline_points.size());
-                         copy_n(parent->coastline_points.begin(), parent->coastline_points.size(), parent->coastline_polygons_before.begin() );
-                         
-                         position_plot_area_before = position_plot_area_now;
-                         grid_before.clear();
-                         grid_before = grid_now;
-                         ticks_before.clear();
-                         ticks_before = ticks_now;
-                         
-                         //store the data on the Routes at the preceeding step of the drag into points_route_list_before and reference_positions_route_list_before,
-                         points_route_list_before.clear();
-                         points_route_list_before = points_route_list_now;
-                         
-                         points_position_list_before.clear();
-                         points_position_list_before = points_position_list_now;
-                         
-                         reference_positions_route_list_before.clear();
-                         reference_positions_route_list_before = reference_positions_route_list;
-                         
-                         //re-draw the chart
-                         (this->*PreRender)();
-                         
-                         #endif
-                         */
-                        
                         //re-draw the chart
                         (this->*PreRender)();
                         MyRefresh();
-                        
-//                        FitAll();
-                        
+                                            
                         break;
                         
                     }
@@ -3935,7 +3872,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
     }
     
     event.Skip(true);
-    
 }
 
 

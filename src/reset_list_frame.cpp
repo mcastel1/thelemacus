@@ -36,7 +36,7 @@ template <class T> void ResetListFrame::operator()(T& event) {
     //resize, set an 'untitled' label for the new, empty ListFrame, and update the chartframes
     p->Resize();
     p->SetLabel(wxString("untitled"));
-    p->PreRenderAll();
+    p->PreRenderAndFitAll();
 
     event.Skip(true);
 

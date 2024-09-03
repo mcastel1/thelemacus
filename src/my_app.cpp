@@ -51,7 +51,7 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         
         
         //I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
-        list_frame->PreRenderAll();
+        list_frame->PreRenderAndFitAll();
     }
     
     dark_mode = (settings->GetAppearance()).IsDark();
@@ -395,6 +395,9 @@ bool MyApp::OnInit() {
     data_precision.read_from_file_to(String("data precision"), (wxGetApp().path_file_init), String("R"), String(""));
     display_precision.read_from_file_to(String("display precision"), (wxGetApp().path_file_init), String("R"), String(""));
     time_check_light_dark.read_from_file_to(String("time check light dark"), (wxGetApp().path_file_init), String("R"), String(""));
+#ifdef WIN32
+    time_refresh.read_from_file_to(String("time refresh"), (wxGetApp().path_file_init), String("R"), String(""));
+#endif
     animation_time.read_from_file_to(String("animation time"), (wxGetApp().path_file_init), String("R"), String(""));
     time_zone.read_from_file_to(String("time zone"), (wxGetApp().path_file_init), String("R"), String(""));
     
@@ -556,7 +559,7 @@ bool MyApp::OnInit() {
         highlight_font = default_font;
         error_font.SetWeight(wxFONTWEIGHT_BOLD);
         
-        timer->Start(/*time_check_light_dark is converted in milliseconds, because Start() takes its first argument in milliseconds*/((time_check_light_dark.h) * 60.0 * 60.0 + (time_check_light_dark.m) * 60.0 + (time_check_light_dark.s)) * 1000.0, wxTIMER_CONTINUOUS);
+        timer->Start(/*time_check_light_dark is converted in milliseconds, because Start() takes its first argument in milliseconds*/time_check_light_dark.to_milliseconds(), wxTIMER_CONTINUOUS);
         
         
         return true;

@@ -95,7 +95,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     //#ifdef _WIN32
     //    (parent->parent->end_label_selection_rectangle_before) = String("");
     //#endif
-    label_dragged_object_now = String("");
+    label_dragged_object = String("");
     
     //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
     SetBackgroundColour(wxGetApp().background_color);
@@ -387,7 +387,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     if ((parent->parent->dragging_object)) {
         //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
-        RenderDraggedObjectLabel(dc, position_label_dragged_object, label_dragged_object_now, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderDraggedObjectLabel(dc, position_label_dragged_object, label_dragged_object, wxGetApp().foreground_color, wxGetApp().background_color);
     }
     
 }
@@ -487,7 +487,7 @@ void DrawPanel::CleanAndRenderAll(void) {
     
     RenderDraggedObjectLabel(dc,
                              position_label_dragged_object,
-                             label_dragged_object_now,
+                             label_dragged_object,
                              wxGetApp().foreground_color,
                              wxGetApp().background_color
                              );
@@ -557,7 +557,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         );
         RenderDraggedObjectLabel(dc,
                                  position_label_dragged_object,
-                                 label_dragged_object_now,
+                                 label_dragged_object,
                                  wxGetApp().foreground_color,
                                  wxGetApp().background_color
                                  );
@@ -3157,7 +3157,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 
                 //given that the drag is finished, I set to empty label_dragged_object for all ChartFrames
                 for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
-                    ((parent->parent->chart_frames[i])->draw_panel->label_dragged_object_now) = String("");
+                    ((parent->parent->chart_frames[i])->draw_panel->label_dragged_object) = String("");
                 }
                 
 #ifdef __APPLE__
@@ -3714,7 +3714,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                                  (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position)),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object),
-                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object)
                                                                                                  );
                             
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
@@ -3770,7 +3770,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                                  (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object),
-                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
+                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object)
                                                                                                  );
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts

@@ -45,7 +45,7 @@ public:
     
     ChartFrame* parent;
     PrintMessage<DrawPanel, UnsetIdling<DrawPanel> >* print_error_message;
-    wxPoint draw_panel_origin, position_plot_area, drawpanel_position_end, position_start_drag, position_end_drag, /*the positions where the will be placed the labels start_label_selection_rectangle, end_label_selection_rectangle_now of the start and end point of selection_rectangle. position_end_label_selection_rectangle is the position of the end point of the selection rectangle*/ position_start_label_selection_rectangle, position_end_label_selection_rectangle_now, position_now_drag, position_draw_panel_now, /*the position of label_position_now*/ position_label_position_now, /*the position of label_dragged_object at the current step of the drag process*/ position_label_dragged_object;
+    wxPoint draw_panel_origin, position_plot_area, drawpanel_position_end, position_start_drag, position_end_drag, /*the positions where the will be placed the labels start_label_selection_rectangle, end_label_selection_rectangle_now of the start and end point of selection_rectangle. position_end_label_selection_rectangle is the position of the end point of the selection rectangle*/ position_start_label_selection_rectangle, position_end_label_selection_rectangle, position_now_drag, position_draw_panel_now, /*the position of label_position_now*/ position_label_position_now, /*the position of label_dragged_object at the current step of the drag process*/ position_label_dragged_object;
 
     //size, in pixels, of vertical and horizontal labels
     unsigned int size_label_vertical, size_label_horizontal;

@@ -382,7 +382,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     //render selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
-        RenderSelectionRectangle(dc, (*(parent->parent->geo_position_now)), position_end_label_selection_rectangle_now, parent->parent->end_label_selection_rectangle_now, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderSelectionRectangle(dc, (*(parent->parent->geo_position_now)), position_end_label_selection_rectangle, parent->parent->end_label_selection_rectangle_now, wxGetApp().foreground_color, wxGetApp().background_color);
     }
     
     if ((parent->parent->dragging_object)) {
@@ -571,7 +571,7 @@ inline void DrawPanel::RefreshWIN32(void) {
         //re-draw the current selection rectangle
         RenderSelectionRectangle(dc,
                                  (*(parent->parent->geo_position_now)),
-                                 position_end_label_selection_rectangle_now,
+                                 position_end_label_selection_rectangle,
                                  parent->parent->end_label_selection_rectangle_now,
                                  wxGetApp().foreground_color,
                                  wxGetApp().background_color
@@ -2841,10 +2841,10 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         
         for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
             
-            //write the label and position of the selection rectangle for each DrawPanel into end_label_selection_rectangle_now and position_end_label_selection_rectangle_now, respectively
+            //write the label and position of the selection rectangle for each DrawPanel into end_label_selection_rectangle_now and position_end_label_selection_rectangle, respectively
             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                  (*(parent->parent->geo_position_now)),
-                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now),
+                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle),
                                                                                  &(parent->parent->end_label_selection_rectangle_now)
                                                                                  );
             

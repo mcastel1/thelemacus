@@ -387,7 +387,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     if ((parent->parent->dragging_object)) {
         //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
-        RenderDraggedObjectLabel(dc, position_label_dragged_object_now, label_dragged_object_now, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderDraggedObjectLabel(dc, position_label_dragged_object, label_dragged_object_now, wxGetApp().foreground_color, wxGetApp().background_color);
     }
     
 }
@@ -486,7 +486,7 @@ void DrawPanel::CleanAndRenderAll(void) {
                     );
     
     RenderDraggedObjectLabel(dc,
-                             position_label_dragged_object_now,
+                             position_label_dragged_object,
                              label_dragged_object_now,
                              wxGetApp().foreground_color,
                              wxGetApp().background_color
@@ -556,7 +556,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         wxNullColour
                         );
         RenderDraggedObjectLabel(dc,
-                                 position_label_dragged_object_now,
+                                 position_label_dragged_object,
                                  label_dragged_object_now,
                                  wxGetApp().foreground_color,
                                  wxGetApp().background_color
@@ -3734,7 +3734,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                                  (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position)),
-                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
                                                                                                  );
                             
@@ -3790,7 +3790,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                                  (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
-                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object_now),
+                                                                                                 &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object_now)
                                                                                                  );
                             

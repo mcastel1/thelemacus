@@ -53,7 +53,8 @@ public:
     //the GUI field related to projection
     ProjectionField<ChartFrame>* projection_field;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
-    //curves contains multiple curves to be rendered, e.g., parallels, meridians, Routes, ticks, etc ... 
+    /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle *phi_min, *phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/*lambda_min, *lambda_max;
+    //curves contains multiple curves to be rendered, e.g., parallels, meridians, Routes, ticks, etc ...
     Lines curves;
 
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false

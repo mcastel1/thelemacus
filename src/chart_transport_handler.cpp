@@ -130,7 +130,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             (chart_frame->parent->highlighted_position_now) = -1;
 
             
-            (chart_frame->draw_panel->label_position_now) = String("");
+            (chart_frame->draw_panel->label_position) = String("");
 
        
             switch (position_in_vector(chart_frame->projection, Projection_types)) {

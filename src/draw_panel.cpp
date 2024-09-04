@@ -65,7 +65,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     SetCursor(*wxCROSS_CURSOR);
     
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
-    label_position_now = String("");
+    label_position = String("");
     
     circle_observer->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), prefix);
     thickness_route_selection_over_length_screen.read_from_file_to(String("thickness route selection over length screen"), (wxGetApp().path_file_init), String("R"), prefix);
@@ -374,7 +374,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     RenderMousePositionLabel(
                              dc,
-                             label_position_now,
+                             label_position,
                              position_label_position_now,
                              wxGetApp().foreground_color,
                              wxGetApp().background_color
@@ -494,7 +494,7 @@ void DrawPanel::CleanAndRenderAll(void) {
     
     RenderMousePositionLabel(
                              dc,
-                             label_position_now,
+                             label_position,
                              position_label_position_now,
                              wxGetApp().foreground_color,
                              wxGetApp().background_color
@@ -581,7 +581,7 @@ inline void DrawPanel::RefreshWIN32(void) {
 
     RenderMousePositionLabel(
         dc,
-        label_position_now,
+        label_position,
         position_label_position_now,
         wxGetApp().foreground_color,
         wxGetApp().background_color
@@ -665,7 +665,7 @@ void DrawPanel::FitAll() {
     this->SetMinSize(size_chart);
     parent->SetMinSize(ToDIP(wxSize(
                                     (size_chart.GetWidth()) + ((parent->slider)->GetSize().GetWidth()) + 4 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value),
-                                    (size_chart.GetHeight()) + ((label_position_now.get_size(this)).GetHeight()) + 6 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value)
+                                    (size_chart.GetHeight()) + ((label_position.get_size(this)).GetHeight()) + 6 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value)
                                     )));
     
     //position position_label_position_now at the bottom left corner of *this
@@ -1136,13 +1136,13 @@ inline void DrawPanel::PreRenderMercator(void) {
         ((size_chart.GetWidth()) - (((int)size_label_horizontal) + 3 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))) * (size_chart.GetHeight()) / (size_chart.GetWidth())
         < (size_chart.GetHeight()) - (((int)size_label_vertical) + 3 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))
         ) {
-            //if I set size_plot_area's width first to leave room for parallel labels and label_position_now, then there is enough space to set size_plot_area's height by keeping the aspect ratio
+            //if I set size_plot_area's width first to leave room for parallel labels and label_position, then there is enough space to set size_plot_area's height by keeping the aspect ratio
             
             size_plot_area.SetWidth(
                                     (size_chart.GetWidth())
                                     //space for  parallel labels
                                     - (((int)size_label_horizontal) + 3 * ((wxGetApp().border).value))
-                                    //space for label_position_now
+                                    //space for label_position
                                     - ((((int)size_label_vertical) + ((wxGetApp().border).value))) * (size_chart.GetWidth()) / (size_chart.GetHeight())
                                     );
             size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight()) / (size_chart.GetWidth()));
@@ -1154,13 +1154,13 @@ inline void DrawPanel::PreRenderMercator(void) {
             
         }
     else {
-        //if I set size_plot_area's width first to leave room for  parallel labels and label_position_now and there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first, by leaving space in the resulting height for meridian labels and label_position_now , and set the width later according to the aspect ratio
+        //if I set size_plot_area's width first to leave room for  parallel labels and label_position and there is not enough space to set size_plot_area's height by keeping the aspect ratio -> I set size_plot_area's height first, by leaving space in the resulting height for meridian labels and label_position, and set the width later according to the aspect ratio
         
         size_plot_area.SetHeight(
                                  (size_chart.GetHeight())
                                  //space for meridian labels
                                  - (((int)size_label_vertical) + 3 * ((wxGetApp().border).value))
-                                 //space for label_position_now
+                                 //space for label_position
                                  - (((int)size_label_vertical) + ((wxGetApp().border).value))
                                  );
         size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth()) / (size_chart.GetHeight()));
@@ -2805,30 +2805,19 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     //    cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-draw_panel_origin).x << " , " << ((parent->parent->screen_position_now)-draw_panel_origin).y << "}\n";
     //lines for debug
     
-    /*
-     #ifdef _WIN32
-     
-     //store the former _now positions into the _before positions
-     (parent->parent->screen_position_before) = (parent->parent->screen_position_now);
-     (*(parent->parent->geo_position_before)) = (*(parent->parent->geo_position_now));
-     label_position_before = label_position_now;
-     
-     #endif
-     */
-    
     //update the instantaneous screen and geographic position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
     (parent->parent->mouse_moving) = true;
     (parent->parent->screen_position_now) = wxGetMousePosition();
     mouse_in_plot_area = (this->*ScreenToGeo)((parent->parent->screen_position_now), (parent->parent->geo_position_now));
     if (mouse_in_plot_area && (!parent->parent->selection_rectangle)) {
-        //the mouse has a screen position corresponding to a geographic position and no selection rectangle is being drawn -> I show the instantaneous mouse coordinates : I write them into label_position_now, otherwise label_position_now is left empty,
+        //the mouse has a screen position corresponding to a geographic position and no selection rectangle is being drawn -> I show the instantaneous mouse coordinates : I write them into label_position, otherwise label_position is left empty,
         
-        label_position_now = String((parent->parent->geo_position_now->to_string(display_precision.value)));
+        label_position = String((parent->parent->geo_position_now->to_string(display_precision.value)));
         
     }
     else {
         
-        label_position_now = String("");
+        label_position = String("");
         
     }
     
@@ -3010,7 +2999,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             
             RenderMousePositionLabel(
                                      dc,
-                                     label_position_now,
+                                     label_position,
                                      position_label_position_now,
                                      wxGetApp().foreground_color,
                                      wxGetApp().background_color

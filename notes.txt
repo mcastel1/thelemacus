@@ -109,7 +109,7 @@
      - when I enter an invalide value in a (for example) AngleField and the error message is prompted and I click ok -> make sure that the focus is set to the field so the user can directly correct its value
      - when switching to dark mode, buttons with images must have white and black inverted -> adjust color of PNG images according to app color
      - add + / - button in chartframe to zoom in / out
-     - move all constants to the init file , such as  the 0.15 in  'position_plot_area_now = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);'
+     - move all constants to the init file , such as  the 0.15 in  'position_plot_area = wxPoint((size_chart.GetWidth())*0.15, (size_chart.GetHeight())*0.1);'
      - add lambert projection and 3D sphere with no projection
      - set up output to a log file
      - when one tries to drag a route , ask the user whether he wants to disconnect it from the sight by allowing no for an answer

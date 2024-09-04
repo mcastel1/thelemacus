@@ -2859,7 +2859,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         //run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
         
         //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
-        position_draw_panel_now = (parent->parent->screen_position_now) - draw_panel_origin;
+        position_draw_panel = (parent->parent->screen_position_now) - draw_panel_origin;
         
         //save the id of the Route highlighted at the preceeding step into highlighted_route_before
         (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
@@ -2886,16 +2886,16 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                         
                         &&/*I check the the mouse's abscissa falls within the abscissas of two subsewquent points of the Route*/
                         
-                        (((((((routes[i]).points)[l]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((((routes[i]).points)[l+1]).x))) ||
+                        (((((((routes[i]).points)[l]).x) <= (position_draw_panel.x)) && ((position_draw_panel.x) <= ((((routes[i]).points)[l+1]).x))) ||
                          
-                         ((((((routes[i]).points)[l+1]).x) <= (position_draw_panel_now.x)) && ((position_draw_panel_now.x) <= ((((routes[i]).points)[l]).x))))
+                         ((((((routes[i]).points)[l+1]).x) <= (position_draw_panel.x)) && ((position_draw_panel.x) <= ((((routes[i]).points)[l]).x))))
                         
                         &&/*I check the the mouse's ordinate falls within the ordinates of the two subsewquent points of the Route above*/
                         
                         (
                          fabs(
-                              (position_draw_panel_now.y) -
-                              (((((routes[i]).points)[l]).y) + ((double)(((((routes[i]).points)[l+1]).y) - ((((routes[i]).points)[l]).y))) / ((double)(((((routes[i]).points)[l+1]).x) - ((((routes[i]).points)[l]).x))) * ((double)((position_draw_panel_now.x) - ((((routes[i]).points)[l]).x))))
+                              (position_draw_panel.y) -
+                              (((((routes[i]).points)[l]).y) + ((double)(((((routes[i]).points)[l+1]).y) - ((((routes[i]).points)[l]).y))) / ((double)(((((routes[i]).points)[l+1]).x) - ((((routes[i]).points)[l]).x))) * ((double)((position_draw_panel.x) - ((((routes[i]).points)[l]).x))))
                               )
                          
                          <= (thickness_route_selection_over_length_screen.value) * ((double)(wxGetApp().rectangle_display.GetWidth())) / 2.0

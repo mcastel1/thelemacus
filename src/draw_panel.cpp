@@ -2851,30 +2851,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             
         }
         
-        
-        //#endif
-        
-        /*
-         #ifdef _WIN32
-         
-         //on WIN32, the Refresh() command slows down things -> I don't call it but use RefreshWIN32(), which cleans up the former selections rectangle in *this and draws a new one
-         (parent->parent->end_label_selection_rectangle_before) = (parent->parent->end_label_selection_rectangle_now);
-         
-         for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
-         
-         (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_before) = (((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now);
-         
-         ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition((*(parent->parent->geo_position_now)), &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle_now), &(parent->parent->end_label_selection_rectangle_now));
-         
-         }
-         
-         #endif
-         */
-        
         parent->parent->MyRefreshAll();
         
-    }
-    else {
+    }else{
         //no selection rectangle is being drawn
         
         //run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes

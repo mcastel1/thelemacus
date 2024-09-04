@@ -147,6 +147,7 @@ public:
     void CleanAndRenderAll(void);
     void TabulateRoute(const unsigned int&);
     void TabulateRoutes(void);
+    void TabulatePosition(const unsigned int&);
     void TabulatePositions(void);
     void FitAll();
     

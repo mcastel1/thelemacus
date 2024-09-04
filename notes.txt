@@ -98,7 +98,6 @@
  
  
  ********** THINGS TO ADD/IMPROVE ************
-     - when you drag a Position do not call TabulatePositions -> tabulate only the Position that you are dragging
      - add instrumental error
      - add readme file
      - add human error in sight frame to account for a systematic human error in estimating the moment when the body touches the horizon

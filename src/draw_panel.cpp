@@ -977,29 +977,38 @@ inline void DrawPanel::TabulateRoutes(void) {
 }
 
 
-
-//tabulate into points_position_list_now all the Positions. points_position_list will then be used to render the Positions
-inline void DrawPanel::TabulatePositions(void) {
+//tabulate into points_position_list_now  the i-th Position in parent->parent->data->position_list
+inline void DrawPanel::TabulatePosition(const unsigned int& i){
     
-    unsigned int i;
     wxPoint p;
     
-    //resize points_position_list_now and, which needs to have the same size as (data->position_list)
-    points_position_list_now.clear();
-    points_position_list_now.resize((parent->parent->data->position_list).size());
-    
-    //tabulate the points of Positions
-    for (i = 0; i < (parent->parent->data->position_list.size()); i++) {
-        
-        //write the reference Positions into reference_positions_route_list
+
+    //write the reference Positions into reference_positions_route_list
         if (GeoToDrawPanel((parent->parent->data->position_list)[i], &p, false)) {
-            //the  position falls in the plot area -> write it into points_position_list_now
+            //the  Position falls in the plot area -> write it into points_position_list_now
             points_position_list_now[i] = p;
-        }
-        else {
+        }else{
             //the  position does not fall in the plot area -> write a 'Null' value into points_position_list_now which will be ignored in other methods because it lies outside the plot area
             points_position_list_now[i] = wxPoint(0, 0);
         }
+    
+}
+
+
+
+//tabulate into points_position_list_now all the Positions
+inline void DrawPanel::TabulatePositions(void) {
+    
+    unsigned int i;
+
+    //resize points_position_list_now and, which needs to have the same size as (data->position_list)
+    points_position_list_now.clear();
+    points_position_list_now.resize(parent->parent->data->position_list.size());
+    
+    //tabulate the points of all Positions
+    for (i = 0; i < (parent->parent->data->position_list.size()); i++) {
+        
+        TabulatePosition(i);
         
     }
     
@@ -1409,13 +1418,6 @@ inline void DrawPanel::PreRenderMercator(void) {
     //tell PaintEvent that everything but highligghteable objects (coastlines, meridians ... ) must be re-drawn
     re_draw = true;
     
-    //    (parent->point_coastline_now).clear();
-    
-    
-    //center the parent in the middle of the screen because the plot shape has changed and the plot may thus be misplaced on the screen
-    //    parent->CenterOnScreen();
-    
-    
 }
 
 //this function draws coastlines, Routes and Positions in the 3D case
@@ -1613,12 +1615,8 @@ inline void DrawPanel::PreRender3D(void) {
     TabulateRoutes();
     TabulatePositions();
     
-    
-    
+
     //compute labels on parallels and meridians
-    //save parallels_and_meridians_labels and positions_parallels_and_meridians_labels into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
-    //    parallels_and_meridians_labels_before = parallels_and_meridians_labels;
-    //    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels;
     parallels_and_meridians_labels.resize(0);
     positions_parallels_and_meridians_labels.resize(0);
     
@@ -3797,7 +3795,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                                                                                  );
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
-                            ((parent->parent->chart_frames)[i])->draw_panel->TabulatePositions();
+                            ((parent->parent->chart_frames)[i])->draw_panel->TabulatePosition(parent->parent->highlighted_position_now);
                                                         
                             
                         }

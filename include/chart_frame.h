@@ -53,10 +53,7 @@ public:
     //the GUI field related to projection
     ProjectionField<ChartFrame>* projection_field;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
-    /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle *phi_min, *phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/*lambda_min, *lambda_max;
-//    //a vector of the points of the coastlines in DrawPanel coordinates: these are points of polygons concatenated in the linear arrays coastline_points/ before. The i-th polygon is stored n coastline_points/before[coastline_positions/before[i]], coastline_points[coastline_positions/before[i]+1], ..., coastline_points[coastline_positions/before[i+1]-1]
-//    vector<wxPoint> coastline_points/*, coastline_polygons_before*/, grid_points;
-//    vector<unsigned long long int> coastline_positions/*, polygon_position_before*/, grid_positions;
+    //curves contains multiple curves to be rendered, e.g., parallels, meridians, Routes, ticks, etc ... 
     Lines curves;
 
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false

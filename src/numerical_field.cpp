@@ -109,7 +109,6 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
         }else{
             //the GUI field  does not contain a valid text,  it is not empty and with a red background color-> I prompt an error message frame
 
-
             parent->print_error_message->SetAndCall(value, String("Value is not valid!"), String("Value must be a floating-point number."), (wxGetApp().path_file_error_icon));
 
             ok = false;

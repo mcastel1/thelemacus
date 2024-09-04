@@ -55,7 +55,6 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     size_t pos_end;
     
     geo_position_start = new Position;
-//    geo_position_before = new Position;
     geo_position_now = new Position;
     geo_position_end = new Position;
     rectangle_observer_0 = new PositionRectangle;

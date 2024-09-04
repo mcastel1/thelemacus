@@ -45,7 +45,6 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     rotation_0 = new Rotation;
     
     route_reference_position_drag_start = new Position;
-    //    route_reference_position_drag_before = new Position;
     route_reference_position_drag_now = new Position;
     geo_start_drag = new Position;
     geo_end_drag = new Position;
@@ -92,9 +91,6 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
     (parent->parent->start_label_selection_rectangle) = String("");
     (parent->parent->end_label_selection_rectangle_now) = String("");
-    //#ifdef _WIN32
-    //    (parent->parent->end_label_selection_rectangle_before) = String("");
-    //#endif
     label_dragged_object = String("");
     
     //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
@@ -1128,8 +1124,6 @@ inline void DrawPanel::PreRenderMercator(void) {
     //set the size of *this equal to the size of the chart, in such a way that draw_panel can properly contain the chart
     SetSize(size_chart);
     
-    //I am about to modify position_plot_area -> save it in position_plot_area_before
-    //    position_plot_area_before = position_plot_area;
     
     //sets size_plot_area and stores into position_plot_area the screen position of the top-left edge of the plot area.
     if (
@@ -1271,9 +1265,6 @@ inline void DrawPanel::PreRenderMercator(void) {
     
     
     //compute labels on parallels and meridians
-    //save parallels_and_meridians_labels and positions_parallels_and_meridians_labels into parallels_and_meridians_labels_before and  positions_parallels_and_meridians_labels_before, respectively.  clears all labels previously drawn
-    //    parallels_and_meridians_labels_before = parallels_and_meridians_labels;
-    //    positions_parallels_and_meridians_labels_before = positions_parallels_and_meridians_labels;
     parallels_and_meridians_labels.resize(0);
     positions_parallels_and_meridians_labels.resize(0);
     
@@ -1805,7 +1796,6 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
             
             (parent->parent->start_label_selection_rectangle) = String("");
             (parent->parent->end_label_selection_rectangle_now) = String("");
-            //            (parent->parent->end_label_selection_rectangle_before) = String("");
             
             parent->parent->RefreshAll();
             FitAll();

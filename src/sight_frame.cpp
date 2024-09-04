@@ -755,7 +755,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     parent->Resize();
     parent->OnModifyFile();
     
-//    parent->PreRenderAndFitAll();
+    //    parent->PreRenderAndFitAll();
     //animate the charts to bring them to the Route related to the newly reduced Sight
     parent->AnimateToObject<Route, UnsetIdling<ListFrame> >(&((parent->data->route_list)[(sight->related_route).value]), parent->unset_idling);
     

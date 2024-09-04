@@ -152,5 +152,4 @@
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame Mac
  on WIN32:
     - the center of a reference Position of a Route is red while the color of the Route is different from Red
-    - in the 3d projeciton, when you press Reduce in SightFrame and the animation is triggered, the observer height is displayed oddly
     - when you drag a Route with the Mouse, the chart flashes -> try to implement for Routes the same method you used for coastlines, parallels and meridians (store the wxPoints in a point vector and the beginning poisition of each chunk in a position vector) to fix this

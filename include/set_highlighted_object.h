@@ -1,11 +1,11 @@
 //
-//  unset_idling.h
+//  set_highlighted_object.h
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#ifndef unset_idling_h
+#ifndef set_highlighted_object_h
 #define unset_idling_h
 
 #include <iostream>
@@ -17,14 +17,14 @@
 using namespace std;
 
 //this functor sets idling -> false in parent
-template<class P> class UnsetIdling{
+template<class P> class SetHighlightedObject{
     
 public:
         
     //the frame which called this struct
     P* parent;
     
-    UnsetIdling(P*);
+    SetHighlightedObject(P*);
     
     void operator()(wxCommandEvent&);
     void operator()(void);

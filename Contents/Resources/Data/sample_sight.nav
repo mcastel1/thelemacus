@@ -52,11 +52,35 @@ Data:
 			label = 2024-08-19 15:05:34 UTC+2
 	Routes:
 		Route #1:
+			type = circle of equal altitude
+			ground position:
+				latitude = 19° 4.791556920751834'
+				longitude = 58° 3.153800292175054'
+				label = 
+			aperture angle = 67° 48.97432326426439'
+			label = arcturus 2021-07-06 23:08:54 TAI, Sight was taken at BGC
+		Route #2:
+			type = circle of equal altitude
+			ground position:
+				latitude = 22° 26.19257563497504'
+				longitude = 283° 9.816241912048465'
+				label = 
+			aperture angle = 57° 33.91467540750569'
+			label = sun 2021-07-08 06:58:24 TAI, Sight was taken at MP
+		Route #3:
+			type = circle of equal altitude
+			ground position:
+				latitude = 348° 42.61691024440324'
+				longitude = 353° 9.502127670429971'
+				label = 
+			aperture angle = 67° 1.043903007195932'
+			label = spica 2024-08-19 15:05:55 TAI, 2024-08-19 15:05:34 UTC+2
+		Route #4:
 			type = orthodrome
 			start position:
 				latitude = 3° 2.999999999999996'
 				longitude = 356° 56.99999999999908'
-				label = 
+				label = 2024-09-05 13:49:41 UTC+2
 			starting heading = 7° 22.99999999999999'
 			length format = length
 				length = 3000.0000000000000000 nm

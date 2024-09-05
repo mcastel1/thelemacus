@@ -6,7 +6,7 @@
 //
 
 #ifndef set_highlighted_object_h
-#define unset_idling_h
+#define set_highlighted_object_h
 
 #include <iostream>
 

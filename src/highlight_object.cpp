@@ -47,8 +47,6 @@ template<class P> template<class E> void HighlightObject<P>::operator()(E& event
         
     }
 
-    (*(parent->unset_idling))();
-
     event.Skip(true);
 
 }

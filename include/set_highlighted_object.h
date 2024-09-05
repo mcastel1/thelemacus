@@ -23,8 +23,8 @@ public:
         
     //the frame which called this struct
     P* parent;
-    //the addresses where are stored the ids of the object highlighted in the past and the object hihglighted now: these adresses are needed for this functor to write in them when the highlighted object changes 
-    int *higlighted_object_before, *highlighted_object_now;
+    
+    int /*higlighted_object_before and highlighted_object_now are the addresses where are stored the ids of the object highlighted in the past and the object hihglighted now: these adresses are needed for this functor to write in them when the highlighted object changes */*higlighted_object_before, *highlighted_object_now, /*the value that will be set when the functor is called*/ value_to_set;
     
     SetHighlightedObject(P*, int*, int*);
     

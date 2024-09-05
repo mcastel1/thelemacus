@@ -1251,7 +1251,7 @@ template<class E> void ListFrame::DisconnectAndPromptMessage(E& event) {
     Disconnect<E>(event);
 
     //print an info message
-    print_info_message->SetAndCall(NULL, String("Warning"), String("The route which is being dragged was related to a sight! Disconnecting the route from the sight."), (wxGetApp().path_file_info_icon));
+    print_info_message->SetAndCall(NULL, String("Warning"), String("The route which you want do disconnect is connected to a sight: disconnecting the route from the sight."), (wxGetApp().path_file_info_icon));
 
  
     event.Skip(true);

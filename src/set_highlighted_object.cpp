@@ -19,6 +19,12 @@ template<class P> SetHighlightedObject<P>::SetHighlightedObject(P* parent_in, in
 }
 
 
+template<class P> void SetHighlightedObject<P>::set_value(const int& i){
+    
+    value = i;
+    
+}
+
 template<class P>  template<class E> void SetHighlightedObject<P>::operator()(E& event) {
 
     event.Skip(true);

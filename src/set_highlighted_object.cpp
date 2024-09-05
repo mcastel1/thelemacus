@@ -53,3 +53,5 @@ template<class P> void SetHighlightedObject<P>::operator()(void){
     (*this)(dummy);
 
 }
+
+template void SetHighlightedObject<ListFrame>::operator()();

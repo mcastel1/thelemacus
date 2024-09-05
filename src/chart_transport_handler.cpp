@@ -92,6 +92,7 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
 
 template void ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>::operator()();
 template void ChartTransportHandler<UnsetIdling<ListFrame>>::operator()();
+template void ChartTransportHandler<SetHighlightedObject<ListFrame>>::operator()();
 
 
 //this method iterates the animation

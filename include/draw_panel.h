@@ -128,6 +128,11 @@ public:
                         const Lines&,
                         const wxColor&,
                         const double&
+                        );    
+    void RenderLinesAsSplines(wxDC*,
+                        const Lines&,
+                        const wxColor&,
+                        const double&
                         );
     void RenderRoutes(wxDC&,
                       const vector<Lines>&,

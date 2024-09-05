@@ -433,7 +433,7 @@ inline void DrawPanel::RenderRoutes(
         }
         
 
-        RenderLines(&dc, routes_in[i], foreground_color_for_RenderLines, thickness);
+        RenderLinesAsSplines(&dc, routes_in[i], foreground_color_for_RenderLines, thickness);
         
     }
     
@@ -678,7 +678,7 @@ void DrawPanel::FitAll() {
 }
 
 
-//render the polygons stored in points_polygons and polygon_positions
+//render the polygons stored in lines as a sequence of lines
 inline void DrawPanel::RenderLines(wxDC* dc,
                                    const Lines& lines,
                                    const wxColor& foreground_color,
@@ -694,6 +694,30 @@ inline void DrawPanel::RenderLines(wxDC* dc,
         if((lines.positions)[i+1] - (lines.positions)[i] > 1){
             
             dc->DrawLines((int)((lines.positions)[i+1] - (lines.positions)[i]), (lines.points.data()) + (lines.positions)[i]);
+            
+        }
+        
+    }
+    
+}
+
+
+//render the polygons stored in lines as an spline. Note: the curve is not an interpolating curve - it does not go through all points. It may be considered a smoothing curve
+inline void DrawPanel::RenderLinesAsSplines(wxDC* dc,
+                                   const Lines& lines,
+                                   const wxColor& foreground_color,
+                                   const double& thickness) {
+    
+    long long int i;
+    
+    dc->SetPen(wxPen(foreground_color, thickness));
+    dc->SetBrush(wxBrush(foreground_color, wxBRUSHSTYLE_SOLID));
+    for(i = 0; i < ((long long int)(lines.positions.size()))-1; i++) {
+        //run through polygons
+        
+        if((lines.positions)[i+1] - (lines.positions)[i] > 1){
+            
+            dc->DrawSpline((int)((lines.positions)[i+1] - (lines.positions)[i]), (lines.points.data()) + (lines.positions)[i]);
             
         }
         
@@ -720,7 +744,7 @@ inline void DrawPanel::RenderMercator(wxDC* dc,
     
     
     //render parallels and meridians and coastlines
-    RenderLines(dc, curves_in, foreground_color, thickness);
+    RenderLinesAsSplines(dc, curves_in, foreground_color, thickness);
 
     
     //render labels on parallels and meridians
@@ -872,7 +896,7 @@ inline void DrawPanel::Render3D(
     Position q, temp;
     
     //render parallels and meridians and coastlines
-    RenderLines(dc, grid, foreground_color, thickness);
+    RenderLinesAsSplines(dc, grid, foreground_color, thickness);
     
     
     //render labels on parallels and meridians

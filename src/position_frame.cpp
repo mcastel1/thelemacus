@@ -239,7 +239,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
         my_push_back(&(this->parent->data->position_list), *position);
     }
 
-    (parent->listcontrol_positions)->set(parent->data->position_list, false);
+    parent->listcontrol_positions->set(parent->data->position_list, false);
 
     //given that I have reset the content of listcontrol_positions, now no items are selected in this ListControl -> I call:
     (*(parent->on_change_selection_in_listcontrol_positions))(event);

@@ -8,6 +8,7 @@ number of points coastline Mercator = 10000
 number of points coastline 3D = 10000
 artificial horizon = y
 index error = 0° 1.9'
+angle zoom to position = 0° 10.2343'
 hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 length of plot area over length of chart = 0.8
 length of chart over length of chart frame = 0.8

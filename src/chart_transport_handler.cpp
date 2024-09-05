@@ -14,7 +14,7 @@
 #include "chart_frame.h"
 #include "double.h"
 #include "generic.h"
-#include "set_highlighted_object.h"
+#include "highlight_object.h"
 
 
 //constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with proposed zoom factor proposed _zoom_factor at end fo the transport.  This is a `proposed` zoom factor because, if such proposed zoom factor is < 1 or > zoom_factor_max, the actual zoom factor will be set to 1 and zoom_factor_max, respectively. Othersize, the actual zoom_factor will be equal to proposed_zoom_factor.
@@ -70,7 +70,7 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
 
 template class ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
 template class ChartTransportHandler<UnsetIdling<ListFrame>>;
-template class ChartTransportHandler<SetHighlightedObject<ListFrame>>;
+template class ChartTransportHandler<HighlightObject<ListFrame>>;
 
 
 //prompt the movement of the center of the chart from position a to position b
@@ -92,7 +92,7 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
 
 template void ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>::operator()();
 template void ChartTransportHandler<UnsetIdling<ListFrame>>::operator()();
-template void ChartTransportHandler<SetHighlightedObject<ListFrame>>::operator()();
+template void ChartTransportHandler<HighlightObject<ListFrame>>::operator()();
 
 
 //this method iterates the animation

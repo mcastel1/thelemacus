@@ -24,7 +24,7 @@
 #include "route_frame.h"
 #include "sight.h"
 #include "set_idling.h"
-#include "set_highlighted_object.h"
+#include "highlight_object.h"
 #include "unset_idling.h"
 
 using namespace std;

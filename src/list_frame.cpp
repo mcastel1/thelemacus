@@ -1992,7 +1992,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
 }
 
 template void ListFrame::AnimateToObject<Position, UnsetIdling<ListFrame>>(Position*, UnsetIdling<ListFrame>*);
-template void ListFrame::AnimateToObject<Route, SetHighlightedObject<ListFrame>>(Route*, SetHighlightedObject<ListFrame>*);
+template void ListFrame::AnimateToObject<Route, HighlightObject<ListFrame>>(Route*, HighlightObject<ListFrame>*);
 
 
 //compute the astronomical position and updated all the GUI fields in set() and re-draws everything

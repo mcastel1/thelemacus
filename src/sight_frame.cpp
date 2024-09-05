@@ -757,11 +757,11 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     
     //animate the charts to bring them to the Route related to the newly reduced Sight by setting the highlighted_route equal to the newly added Route, so the user can see it easily:
     //1. set the highlighted_route equal to the newly added Route, so the user can see it easily
-    parent->set_highlighted_route->set_value(sight->related_route.value);
-    parent->set_highlighted_route->operator()(event);
-    //2. in parent->set_highlighted_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->set_highlighted_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
-    parent->set_highlighted_route->set_value(-1);
-    parent->AnimateToObject<Route, SetHighlightedObject<ListFrame> >(&((parent->data->route_list)[sight->related_route.value]), parent->set_highlighted_route);
+    parent->highlight_route->set_value(sight->related_route.value);
+    parent->highlight_route->operator()(event);
+    //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
+    parent->highlight_route->set_value(-1);
+    parent->AnimateToObject<Route, HighlightObject<ListFrame> >(&((parent->data->route_list)[sight->related_route.value]), parent->highlight_route);
     
     event.Skip(true);
 

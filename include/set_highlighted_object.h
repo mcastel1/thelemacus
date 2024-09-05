@@ -17,7 +17,7 @@
 using namespace std;
 
 //this functor sets a highlighted object (i.e. a Route or a Position) to a given value and stores the id of the old highlighted object
-template<class P> class SetHighlightedObject{
+template<class P> class HighlightObject{
     
 public:
         
@@ -26,7 +26,7 @@ public:
     
     int /*higlighted_object_before and highlighted_object_now are the addresses where are stored the ids of the object highlighted in the past and the object hihglighted now: these adresses are needed for this functor to write in them when the highlighted object changes */*higlighted_object_before, *highlighted_object_now, /*the value that will be set when the functor is called*/ value;
     
-    SetHighlightedObject(P*, int*, int*);
+    HighlightObject(P*, int*, int*);
     
     void set_value(const int&);
     template<class E> void operator()(E&);

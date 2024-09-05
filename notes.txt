@@ -137,6 +137,47 @@
         }
         '''
      -  condense common parts of  'Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);' and of 'Draw(unsigned int, DrawPanel*, vector<unsigned long long int>*, vector<wxPoint>*, String prefix)'
+     - in DrawPanel::OnMouseMovement, use HighlightObject functor at 
+                '//run over all the Positions, check if the mouse is hovering over one of them, and change the background color of the related Position in listcontrol_positions
+                (parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now);
+                
+                for ((parent->parent->highlighted_position_now) = -1, i = 0; i < (parent->parent->data->position_list).size(); i++) {
+                    
+                    GeoToScreen((parent->parent->data->position_list)[i], &q);
+                    
+                    if (sqrt(gsl_pow_2(((parent->parent->screen_position_now).x) - (q.x)) + gsl_pow_2(((parent->parent->screen_position_now).y) - (q.y))) <
+                        4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth())) {
+                        //the mouse is over a position
+                        
+                        //sets the highlighted position to i, so as to use highlighted_position_now in other functions
+                        (parent->parent->highlighted_position_now) = i;
+                        
+                        (parent->parent->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
+                        parent->parent->listcontrol_positions->EnsureVisible(i);
+                        
+                    }
+                    else {
+                        //no Position is highlighted -> reset the background color in listcontrol positions, and in listcontrol_positions go back to showing the first  item
+                        
+                        (parent->parent->listcontrol_positions)->SetItemBackgroundColour(i, wxGetApp().background_color);
+                        parent->parent->listcontrol_positions->EnsureVisible(0);
+                        
+                    }
+                    
+                }
+                
+                if (((parent->parent->highlighted_route_before) != (parent->parent->highlighted_route_now)) || ((parent->parent->highlighted_position_before) != (parent->parent->highlighted_position_now))) {
+                    //the highlighted Route or Position has changed -> update the charts
+                    
+                    (parent->parent->changing_highlighted_object) = true;
+                    
+                    parent->parent->MyRefreshAll();
+                    
+                    (parent->parent->changing_highlighted_object) = false;
+                    
+                    
+                }'
+            
 
 
 

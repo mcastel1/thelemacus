@@ -2932,7 +2932,6 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                             
                         }
                         
-                        
                         // quit the loops over l ad j
                         break;
                         break;

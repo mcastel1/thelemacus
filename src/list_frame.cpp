@@ -91,8 +91,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);
-    set_highlighted_route = new SetHighlightedObject<ListFrame>(this, &highlighted_route_before, &highlighted_route_now);
-    set_highlighted_position = new SetHighlightedObject<ListFrame>(this, &highlighted_position_before, &highlighted_position_now);
+    highlight_route = new HighlightObject<ListFrame>(this, &highlighted_route_before, &highlighted_route_now);
+    highlight_position = new HighlightObject<ListFrame>(this, &highlighted_position_before, &highlighted_position_now);
     confirm_transport = new ConfirmTransport<ListFrame>(this);
     close = new CloseFrame<ListFrame>(this);
     (*unset_idling)();

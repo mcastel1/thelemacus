@@ -121,7 +121,7 @@ public:
     SetIdling<ListFrame>* set_idling;
     UnsetIdling<ListFrame>* unset_idling;
     //functors to set the highighted Routes, Position, ...
-    SetHighlightedObject<ListFrame> *set_highlighted_route, *set_highlighted_position;
+    HighlightObject<ListFrame> *highlight_route, *highlight_position;
     ConfirmTransport<ListFrame>* confirm_transport;
     CloseFrame<ListFrame>* close;
     //a functor to let the user select a Route in listcontrol_routes

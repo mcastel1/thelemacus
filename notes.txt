@@ -1,6 +1,7 @@
  
  notes:
-	- remember that  of Routes do not go through the points of Routes exactly, see https://docs.wxwidgets.org/latest/classwx_d_c.html#ad72d38c75ac6b3f80c1f957dd94089fa 
+    - to remove background on PNG images use https://www.photoroom.com/tools/background-remover
+	- remember that  of Routes do not go through the points of Routes exactly, see https://docs.wxwidgets.org/latest/classwx_d_c.html#ad72d38c75ac6b3f80c1f957dd94089fa
 	- a common error is that when you need to compute the arithmetic mean of two latitudes phi_1 and phi_2, you should *not* do (phi_1+phi_2)/2 but ((phi_1.normalize_pm_pi_ret().value) + (phi_2.normalize_pm_pi_ret().value))/2
     - declare progress dialogs on the heap (i.e., not as wxProgressDialog* progress_dialog; progress_dialog = new ...,) but on the stack (i.e., as  wxProgressDialog progress_dialog([constructor arguments])). This is because if you declare them on the heap, the progress dialog will stay forever open and it will prevent the app from closing. On the other hand, if you declare it on the stack , it will be destroyed authomatically once the method that calls it stops running
     - be careful when you debug with breakpoints stuff that include timers ! You may stop at a breakpoint, but the timer in the code has started running and is running while you are stopped at the breakpoint
@@ -140,7 +141,7 @@
 
 
  ********** THINGS TO FIX ***********
-    - when you select a Sight and click on disconnect you get the error message '****The route that is being dragged**** was connected to a sight ... ' 
+    - when you select a Sight and click on disconnect you get the error message '****The route that is being dragged**** was connected to a sight ... '
     - remember to increase the points of Routes or draw them as Splines rather than lines (so they don't look like polygons)
     - rename all variables with _now suffix which is no longer needed, e.g., position_label_position_now
     - CHECK THAT THE RADIUS OF THE EARTH AND OF ALL PLANETS IS CORRECT AND CORREPONDS TO THE CORRECT UNIT OF 1 nm = 1852 m.

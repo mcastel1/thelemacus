@@ -2839,9 +2839,6 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if ((parent->parent->selection_rectangle)) {
         //a selection rectangle is being drawn -> update the instantaneous position of the final corner of the rectangle
         
-        
-        //#ifdef __APPLE__
-        
         for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
             
             //write the label and position of the selection rectangle for each DrawPanel into end_label_selection_rectangle_now and position_end_label_selection_rectangle, respectively
@@ -2945,7 +2942,6 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         }
         
         
-        
         if ((parent->parent->highlighted_route_now) == -1) {
             //no Route is highlighted -> in listcontrol_sights and listcontrol_routes go back to showing the first respective items
             
@@ -3002,8 +2998,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             (parent->parent->changing_highlighted_object) = false;
             
             
-        }
-        else {
+        }else{
             //the highlighted Route has not changed ->  the chart does not need to be updated, but the coordinates of the instantaneous mouse position do -> call
             
             wxClientDC dc(this);

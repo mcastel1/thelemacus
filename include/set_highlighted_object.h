@@ -16,7 +16,7 @@
 
 using namespace std;
 
-//this functor sets idling -> false in parent
+//this functor sets a highlighted object (i.e. a Route or a Position) to a given value and stores the id of the old highlighted object 
 template<class P> class SetHighlightedObject{
     
 public:

@@ -30,6 +30,7 @@ public:
     
     void set_value(const int&);
     template<class E> void operator()(E&);
+    void operator()(void);
     
 };
 

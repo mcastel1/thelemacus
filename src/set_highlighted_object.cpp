@@ -33,7 +33,7 @@ template void SetHighlightedObject<ListFrame>::set_value(int const&);
 
 
 //store the value of the previoudly highlighted object in *highlighted_object_before and set *highlighted_object_now to value
-template<class P>  template<class E> void SetHighlightedObject<P>::operator()(E& event){
+template<class P> template<class E> void SetHighlightedObject<P>::operator()(E& event){
     
     (*higlighted_object_before) = (*highlighted_object_now);
     (*highlighted_object_now) = value;
@@ -44,3 +44,12 @@ template<class P>  template<class E> void SetHighlightedObject<P>::operator()(E&
 
 template void SetHighlightedObject<ListFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
 
+
+//same as SetHighlightedObject<P>::operator()(E& event but with no argument
+template<class P> void SetHighlightedObject<P>::operator()(void){
+    
+    wxCommandEvent dummy;
+
+    (*this)(dummy);
+
+}

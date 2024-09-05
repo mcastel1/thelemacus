@@ -2022,11 +2022,9 @@ void ListFrame::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
 
 //store the value of highlighted_route_now into highlighted_route_before, and set highlighted_route_now to i
-inline void ListFrame::SetHighlightedRoute(const unsigned int& i){
+void ListFrame::SetHighlightedRoute(const unsigned int& i){
 
     highlighted_route_before = highlighted_route_now;
     highlighted_route_now = i;
 
-    
 }
-

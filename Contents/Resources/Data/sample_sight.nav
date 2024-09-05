@@ -2,110 +2,90 @@ Data:
 	Sights:
 		Sight #1:
 			body:
-				Type = star
-				Name = arcturus
-				Right ascension = 213° 54.79890000000033'
-				Declination = 19° 10.69494000000002'
-			sextant altitude = 22° 13.39999999999995'
-			index error = 359° 58.09999999999951'
-			artificial horizon = n
-			height of eye = 1.2300000000000000 m
+				Type = moon
+				Name = moon
+				Radius = 938.12099999999998090061126276851 nm
+			limb = u
+			sextant altitude = 47° 57.799999999999869260136620141566'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
 			master-clock date and hour of sight:
-				date = 2021-07-06
-				hour = 22:48:40
+				date of master-clock date and hour of sight = 2021-06-21
+				hour of master-clock date and hour of sight = 21:01:20
 			use of stopwatch = y
-			stopwatch = 00:19:36.82
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			hour of stopwatch = 00:37:35
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
 			label = Sight was taken at BGC
 		Sight #2:
 			body:
-				Type = sun
-				Name = sun
-				Radius = 375647.9481641468591988 nm
-			limb = l
-			sextant altitude = 32° 16.80000000000014'
-			index error = 0° 1.9'
-			artificial horizon = n
-			height of eye = 3.2100000000000000 m
+				Type = moon
+				Name = moon
+				Radius = 938.12099999999998090061126276851 nm
+			limb = u
+			sextant altitude = 47° 13.500000000000085265128291212022'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
 			master-clock date and hour of sight:
-				date = 2021-07-08
-				hour = 06:56:00
+				date of master-clock date and hour of sight = 2021-06-21
+				hour of master-clock date and hour of sight = 21:01:20
 			use of stopwatch = y
-			stopwatch = 00:01:46.83
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = Sight was taken at MP
+			hour of stopwatch = 00:48:08.9900000000000002131628207280301
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at BGC
 		Sight #3:
 			body:
 				Type = star
-				Name = spica
-				Right ascension = 201° 17.8999800000013'
-				Declination = 348° 50.32500000000149'
-			sextant altitude = 22° 2.000000000000082'
-			index error = 358° 57.65999999999982'
-			artificial horizon = n
-			height of eye = 3.2100000000000000 m
+				Name = arcturus
+				Right ascension = 213° 54.79890000000068539520725607872'
+				Declination = 19° 10.694899999999947226569929625839'
+			sextant altitude = 67° 13.399999999999749888957012444735'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
 			master-clock date and hour of sight:
-				date = 2024-08-19
-				hour = 15:05:18
-			use of stopwatch = n
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = 2024-08-19 15:05:34 UTC+2
-	Routes:
-		Route #1:
-			type = circle of equal altitude
-			ground position:
-				latitude = 19° 4.791556920751834'
-				longitude = 58° 3.153800292175054'
-				label = 
-			aperture angle = 67° 48.97432326426439'
-			label = arcturus 2021-07-06 23:08:54 TAI, Sight was taken at BGC
-		Route #2:
-			type = circle of equal altitude
-			ground position:
-				latitude = 22° 26.19257563497504'
-				longitude = 283° 9.816241912048465'
-				label = 
-			aperture angle = 57° 33.91467540750569'
-			label = sun 2021-07-08 06:58:24 TAI, Sight was taken at MP
-		Route #3:
-			type = circle of equal altitude
-			ground position:
-				latitude = 348° 42.61691024440324'
-				longitude = 353° 9.502127670429971'
-				label = 
-			aperture angle = 67° 1.043903007195932'
-			label = spica 2024-08-19 15:05:55 TAI, 2024-08-19 15:05:34 UTC+2
-		Route #4:
-			type = orthodrome
-			start position:
-				latitude = 3° 2.999999999999996'
-				longitude = 356° 56.99999999999908'
-				label = 2024-09-05 13:49:41 UTC+2
-			starting heading = 7° 22.99999999999999'
-			length format = length
-				length = 3000.0000000000000000 nm
-			label = X
+				date of master-clock date and hour of sight = 2021-07-06
+				hour of master-clock date and hour of sight = 22:48:40
+			use of stopwatch = y
+			hour of stopwatch = 00:19:36.819000000000002614797267597169
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at BGC
+		Sight #4:
+			body:
+				Type = sun
+				Name = sun
+				Radius = 375648 nm
+			limb = l
+			sextant altitude = 53° 16.800000000000068212102632969618'
+			index error = 0° 1.8999999999999996891375531049562'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date of master-clock date and hour of sight = 2021-07-08
+				hour of master-clock date and hour of sight = 06:56:00
+			use of stopwatch = y
+			hour of stopwatch = 00:01:46.826000000000000511590769747272
+			hour of TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at MP
+    Routes:
 	Positions:
 		Position #1:
-			latitude = 48° 51.17938547473737'
-			longitude = 357° 35.17815979031332'
+			latitude = 48° 51.179385474737415506751858629286'
+			longitude = 357° 35.178159790311838150955736637115'
 			label = Centre Sportif Maryse Hilsz (MH)
 		Position #2:
-			latitude = 48° 51.32716700000022'
-			longitude = 357° 35.56550000000021'
+			latitude = 48° 51.327167000000031293893698602915'
+			longitude = 357° 35.565500000000156433088704943657'
 			label = Baby Gym Campo (BGC)
 		Position #3:
-			latitude = 48° 51.30916700000004'
-			longitude = 357° 35.41566699999892'
+			latitude = 48° 51.309166999999860081516089849174'
+			longitude = 357° 35.41566699999748379923403263092'
 			label = My Place (MP)
-Recent bodies = 12 4 0
+Recent bodies = 12 10 8
 Recent projections = 1 0
 Recent length formats = 1 0
 Recent route types = 1 0 2
 Recent route for transport types = 1 0
 Recent length units = 0 1
 Recent speed units = 0 1
-Recent index error = 358° 57.65999999999982'
-Recent height of eye value = 3.2100000000000000 m
-Recent route length value = 3000.0000000000000000 nm
-Recent route speed value = 23.0000000000000000 kt
+Recent route speed value = 23 kt
+Recent height of eye value = 1 m
+Recent route length value = 1 nm
+Recent index error = 1° 12.23423'

@@ -141,7 +141,6 @@
 
 
  ********** THINGS TO FIX ***********
-    - when you select a Sight and click on disconnect you get the error message '****The route that is being dragged**** was connected to a sight ... '
     - remember to increase the points of Routes or draw them as Splines rather than lines (so they don't look like polygons)
     - rename all variables with _now suffix which is no longer needed, e.g., position_label_position_now
     - CHECK THAT THE RADIUS OF THE EARTH AND OF ALL PLANETS IS CORRECT AND CORREPONDS TO THE CORRECT UNIT OF 1 nm = 1852 m.

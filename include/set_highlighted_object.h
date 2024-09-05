@@ -16,15 +16,17 @@
 
 using namespace std;
 
-//this functor sets a highlighted object (i.e. a Route or a Position) to a given value and stores the id of the old highlighted object 
+//this functor sets a highlighted object (i.e. a Route or a Position) to a given value and stores the id of the old highlighted object
 template<class P> class SetHighlightedObject{
     
 public:
         
     //the frame which called this struct
     P* parent;
+    //the addresses where are stored the ids of the object highlighted in the past and the object hihglighted now: these adresses are needed for this functor to write in them when the highlighted object changes 
+    int *higlighted_object_before, *highlighted_object_now;
     
-    SetHighlightedObject(P*);
+    SetHighlightedObject(P*, int*, int*);
     
     void operator()(wxCommandEvent&);
     void operator()(void);

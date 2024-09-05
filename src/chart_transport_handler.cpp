@@ -125,9 +125,9 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
 
             
             //I don't want anything to be highlighted during the chart transport, so I set
-            (chart_frame->parent->highlighted_route_now) = -1;
-            (chart_frame->parent->highlighted_sight_now) = -1;
-            (chart_frame->parent->highlighted_position_now) = -1;
+            //            (chart_frame->parent->highlighted_route_now) = -1;
+            //            (chart_frame->parent->highlighted_sight_now) = -1;
+            //            (chart_frame->parent->highlighted_position_now) = -1;
 
             
             (chart_frame->draw_panel->label_position) = String("");

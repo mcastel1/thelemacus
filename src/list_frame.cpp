@@ -1900,11 +1900,6 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                 //trigger the animation
                 (chart_transport_handlers[i])->operator()();
                 
-                
-                //                }
-                
-                
-                
                 break;
                 
             }

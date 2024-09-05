@@ -720,7 +720,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
         if ((sight->related_route.value) != -1) {
             //sight has a related Route -> reduce sight and write the resulting Route into such related Route
 
-            sight->reduce(&((parent->data->route_list)[(sight->related_route).value]), String(""));
+            sight->reduce(&((parent->data->route_list)[sight->related_route.value]), String(""));
 
         }
         else {
@@ -755,9 +755,10 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     parent->Resize();
     parent->OnModifyFile();
     
-    //    parent->PreRenderAndFitAll();
-    //animate the charts to bring them to the Route related to the newly reduced Sight
-    parent->AnimateToObject<Route, UnsetIdling<ListFrame> >(&((parent->data->route_list)[(sight->related_route).value]), parent->unset_idling);
+    //animate the charts to bring them to the Route related to the newly reduced Sight by setting the highlighted_route equal to the newly added Route, so the user can see it easily
+    parent->highlighted_route_before = parent->highlighted_route_now;
+    parent->highlighted_route_now = sight->related_route.value;
+    parent->AnimateToObject<Route, UnsetIdling<ListFrame> >(&((parent->data->route_list)[sight->related_route.value]), parent->unset_idling);
     
     event.Skip(true);
 

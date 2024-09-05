@@ -1872,7 +1872,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                     //the target Position of the animation is *object
                     target_position = (*object);
                     //Positions do not have a size such as Routes -> create a Route of type Route_types[2] which has target_position as a reference_position and which has an aprture angle equal to angle_zoom_to_position -> compute its size in the mercator projection and write it into target_size
-                    Route(Route_types[2], target_position, Angle(M_PI/1000.0)).size_Mercator(&target_size);
+                    Route(Route_types[2], target_position, wxGetApp().angle_zoom_to_position).size_Mercator(&target_size);
                     
                 }
                 
@@ -1935,7 +1935,6 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                        
                        object->compute_end(((*(object->length))/2.0), String(""));
                        target_position = (*(object->end));
-                       //                    target_position = route.reference_position;
 
                        omega_end = (object->length->value)/2.0/(wxGetApp().Re.value);
                        
@@ -1952,8 +1951,9 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                     
                     //the target Position of the animation is *object
                     target_position = (*object);
-                    //Positions do not have a size such as Routes -> I move the chart on the Position with the animation by keeping the same omega as in the beginnign of the animation
-                    omega_end = ((chart_frames[i])->draw_panel->circle_observer->omega);
+                    
+                    //Positions do not have a size such as Routes -> set omega_end equal to  angle_zoom_to_position projection and write it into target_size
+                    omega_end.set(wxGetApp().angle_zoom_to_position);
                     
                 }
             

@@ -756,7 +756,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     parent->OnModifyFile();
     
     //animate the charts to bring them to the Route related to the newly reduced Sight by setting the highlighted_route equal to the newly added Route, so the user can see it easily
-    //    parent->SetHighlightedRoute(sight->related_route.value);
+    parent->set_highlighted_route->set_value(sight->related_route.value);
     parent->AnimateToObject<Route, UnsetIdling<ListFrame> >(&((parent->data->route_list)[sight->related_route.value]), parent->unset_idling);
     
     event.Skip(true);

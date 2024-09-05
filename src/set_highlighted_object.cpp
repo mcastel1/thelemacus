@@ -29,6 +29,7 @@ template<class P> void SetHighlightedObject<P>::set_value(const int& i){
     
 }
 
+template void SetHighlightedObject<ListFrame>::set_value(int const&);
 
 //store the value of the previoudly highlighted object in *highlighted_object_before and set *highlighted_object_now to value
 template<class P>  template<class E> void SetHighlightedObject<P>::operator()(E& event){

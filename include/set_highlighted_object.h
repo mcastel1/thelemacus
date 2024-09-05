@@ -28,8 +28,7 @@ public:
     
     SetHighlightedObject(P*, int*, int*);
     
-    void operator()(wxCommandEvent&);
-    void operator()(void);
+    template<class E> void operator()(E&);
     
 };
 

@@ -19,17 +19,9 @@ template<class P> SetHighlightedObject<P>::SetHighlightedObject(P* parent_in, in
 }
 
 
-template<class P> void SetHighlightedObject<P>::operator()(wxCommandEvent& event) {
+template<class P>  template<class E> void SetHighlightedObject<P>::operator()(E& event) {
 
     event.Skip(true);
 
 }
 
-//this is the same as template<class P> void SetHighlightedObject<P>::operator()(void){ but without the event argument
-template<class P> void SetHighlightedObject<P>::operator()(void) {
-
-    wxCommandEvent dummy;
-
-    (*this)(dummy);
-
-}

@@ -25,7 +25,12 @@ template<class P> void SetHighlightedObject<P>::set_value(const int& i){
     
 }
 
-template<class P>  template<class E> void SetHighlightedObject<P>::operator()(E& event) {
+
+//store the value of the previoudly highlighted object in *highlighted_object_before and set *highlighted_object_now to value
+template<class P>  template<class E> void SetHighlightedObject<P>::operator()(E& event){
+    
+    (*higlighted_object_before) = (*highlighted_object_now);
+    (*highlighted_object_now) = value;
 
     event.Skip(true);
 

@@ -1025,7 +1025,10 @@ void ListFrame::OnDisconnectSight(wxCommandEvent& event) {
 
     //set i_object_to_disconnect to the currently selected Sight in listcontrol_sights and call Disconnect to disconnect that Sight from its related Route
     i_object_to_disconnect = ((int)(listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
-    DisconnectAndPromptMessage(event);
+    
+    Disconnect(event);
+    //print an info message
+    print_info_message->SetAndCall(NULL, String("Warning"), String("The sight which you want do disconnect is connected to a route: disconnecting the sight from the route."), wxGetApp().path_file_info_icon);
 
 }
 
@@ -1034,8 +1037,11 @@ void ListFrame::OnDisconnectRoute(wxCommandEvent& event) {
 
     //set i_object_to_disconnect to the currently selected Route in listcontrol_routes and call Disconnect to disconnect that Route from its related Sight
     i_object_to_disconnect = (((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight.value);
-    DisconnectAndPromptMessage(event);
-
+    
+    Disconnect(event);
+    //print an info message
+    print_info_message->SetAndCall(NULL, String("Warning"), String("The route which you want do disconnect is connected to a sight: disconnecting the route from the sight."), wxGetApp().path_file_info_icon);
+    
 }
 
 void ListFrame::OnTransportPosition(wxCommandEvent& event) {

@@ -137,6 +137,7 @@
         }
         '''
      -  condense common parts of  'Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);' and of 'Draw(unsigned int, DrawPanel*, vector<unsigned long long int>*, vector<wxPoint>*, String prefix)'
+     - check if in init.txt you can remove 'index error = 0° 1.9''
 
 
 

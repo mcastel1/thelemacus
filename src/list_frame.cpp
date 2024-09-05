@@ -1871,7 +1871,7 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
                     
                     //the target Position of the animation is *object
                     target_position = (*object);
-                    //Positions do not have a size such as Routes
+                    //Positions do not have a size such as Routes -> create a Route of type Route_types[2] which has target_position as a reference_position and which has an aprture angle equal to angle_zoom_to_position -> compute its size in the mercator projection and write it into target_size
                     Route(Route_types[2], target_position, Angle(M_PI/1000.0)).size_Mercator(&target_size);
                     
                 }

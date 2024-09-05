@@ -2875,7 +2875,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 (parent->parent->listcontrol_sights)->SetItemBackgroundColour((((parent->parent->data->route_list)[i]).related_sight).value, wxGetApp().background_color);
             }
             
-            //run over Routes and check whether the mouse is hovering over one of them
+            //run over all Routes and check whether the mouse is hovering over one of them
             for (j = 0; j < (routes[i]).positions.size() - 1; j++) {
                 
                 for (l = ((routes[i]).positions)[j]; l < ((routes[i]).positions)[j+1]; l++) {

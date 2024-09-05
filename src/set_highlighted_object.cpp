@@ -21,7 +21,6 @@ template<class P> SetHighlightedObject<P>::SetHighlightedObject(P* parent_in, in
 
 template<class P> void SetHighlightedObject<P>::operator()(wxCommandEvent& event) {
 
-\
     event.Skip(true);
 
 }

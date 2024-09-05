@@ -24,6 +24,7 @@
 #include "route_frame.h"
 #include "sight.h"
 #include "set_idling.h"
+#include "set_highlighted_object.h"
 #include "unset_idling.h"
 
 using namespace std;
@@ -119,6 +120,8 @@ public:
     //a functor to set/unset idling mode in *this
     SetIdling<ListFrame>* set_idling;
     UnsetIdling<ListFrame>* unset_idling;
+    //functors to set the highighted Routes, Position, ...
+    SetHighlightedObject<ListFrame> *set_highlighted_route, *set_highlighted_position;
     ConfirmTransport<ListFrame>* confirm_transport;
     CloseFrame<ListFrame>* close;
     //a functor to let the user select a Route in listcontrol_routes
@@ -186,7 +189,7 @@ public:
     template<class E> void KeyDown(E&);
     template<class T> void ComputePosition(T&);
     template<class T, class F> void AnimateToObject(T*, F*);
-    void SetHighlightedRoute(const int&);
+//    void SetHighlightedRoute(const int&);
     
 #ifdef WIN32
     void OnTimer(wxTimerEvent&);

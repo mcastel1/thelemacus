@@ -91,6 +91,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);
+    set_highlighted_route = new SetHighlightedObject<ListFrame>(this, &highlighted_route_before, &highlighted_route_now);
+    set_highlighted_position = new SetHighlightedObject<ListFrame>(this, &highlighted_position_before, &highlighted_position_now);
     confirm_transport = new ConfirmTransport<ListFrame>(this);
     close = new CloseFrame<ListFrame>(this);
     (*unset_idling)();
@@ -2021,10 +2023,10 @@ void ListFrame::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 #endif
 
 
-//store the value of highlighted_route_now into highlighted_route_before, and set highlighted_route_now to i. This works also if i = -1
-void ListFrame::SetHighlightedRoute(const int& i){
-
-    highlighted_route_before = highlighted_route_now;
-    highlighted_route_now = i;
-
-}
+////store the value of highlighted_route_now into highlighted_route_before, and set highlighted_route_now to i. This works also if i = -1
+//void ListFrame::SetHighlightedRoute(const int& i){
+//
+//    highlighted_route_before = highlighted_route_now;
+//    highlighted_route_now = i;
+//
+//}

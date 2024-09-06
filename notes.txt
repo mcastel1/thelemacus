@@ -142,7 +142,8 @@
 
 
  ********** THINGS TO FIX ***********
-    - Mercator projection: when the animation toward a Position brings the chart outside the chart boundaries, there is a segmentation fault 
+    - size_Mercator returns a size which is way bigger than the size of a circle of equal altitude when run on a circle of equal altitude 
+    - Mercator projection: when the animation toward a Position brings the chart outside the chart boundaries, there is a segmentation fault
     - in the mercator projection, if the animation brings you to a Route that is too large and the animation cannot go too N or S becasuse otherwise it would hit the boundaries of the chart, then you cannot drag the chart with the mouse
     - rename all variables with _now suffix which is no longer needed, e.g., position_label_position_now
     - CHECK THAT THE RADIUS OF THE EARTH AND OF ALL PLANETS IS CORRECT AND CORREPONDS TO THE CORRECT UNIT OF 1 nm = 1852 m.

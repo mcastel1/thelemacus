@@ -250,7 +250,13 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     
     
     //animate the charts to bring them to the Position. Set  highlighted_position equal to the newly added/modified Position, so the user can see it easily during the animation:
+    
+    //de-highlight all Routes
+    parent->highlight_route->set_value(-1);
+    parent->highlight_route->operator()(event);
+
     //1. set the highlighted_position equal to the id of the newly added/modified Position, so the user can see it easily
+
     parent->highlight_position->set_value(
                                        ((position_in_listcontrol_positions == -1) ? ((int)(parent->data->position_list.size()))-1 : ((int)position_in_listcontrol_positions))
                                        

@@ -455,6 +455,11 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //If I am adding a new Route for transport, I do not call any animation, because there is already the transport animation that will be prompted. Otherwise, I call an animation that zooms on the newly added Route
         if (!(parent->transporting_with_new_route)) {
             //I am not adding a new Route for transrpot -> animate the charts to bring them to the Route related to the new Route. Set the highlighted_route equal to the newly added /modified Route, so the user can see it easily during the animation:
+            
+            //de-highlight all Positions
+            parent->highlight_position->set_value(-1);
+            parent->highlight_position->operator()(event);
+            
             //1. set the highlighted_route equal to the id of the newly added/modified Route, so the user can see it easily
             parent->highlight_route->set_value(
                                                ((position_in_listcontrol_routes == -1) ? ((int)(parent->data->route_list.size()))-1 : ((int)position_in_listcontrol_routes))

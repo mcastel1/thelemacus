@@ -1271,135 +1271,138 @@ template  void ListFrame::DisconnectAndPromptMessage<wxMouseEvent>(wxMouseEvent&
 
 //when the mouse hovers over a given element of listcontrol_routes, sets highlighted_route_now equal to the id of that route, and the same for the relaetd sight in listcontrol_sights.
 void ListFrame::OnMouseMovement(wxMouseEvent& event) {
-
-    int i, j;
-
-    //                cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
-
-    //save the id of the  Sight Route and Position highlighted at the preceeding step into highlighted_route_before
-    highlighted_route_before = highlighted_route_now;
-    highlighted_position_before = highlighted_position_now;
-
-
-    //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
-    MousePositionOnListControl(listcontrol_sights, &highlighted_sight_now);
-    MousePositionOnListControl(listcontrol_positions, &highlighted_position_now);
-    MousePositionOnListControl(listcontrol_routes, &highlighted_route_now);
-
-    if ((highlighted_sight_now == wxNOT_FOUND) && (highlighted_position_now == wxNOT_FOUND) && (highlighted_route_now == wxNOT_FOUND)) {
-        //the mouse is not hovering over an element in listcontrol_sights nor listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights
-
-        //set the beckgorund color of the Routes in listcontrol_sights and listcontrol_routes  and the background color of the Positions in listcontrol_positions to white
-        for (i = 0; i < (listcontrol_sights->GetItemCount()); i++) {
-            listcontrol_sights->SetItemBackgroundColour(i, wxGetApp().background_color);
-        }
-        for (i = 0; i < (listcontrol_positions->GetItemCount()); i++) {
-            listcontrol_positions->SetItemBackgroundColour(i, wxGetApp().background_color);
-        }
-        for (i = 0; i < (listcontrol_routes->GetItemCount()); i++) {
-            listcontrol_routes->SetItemBackgroundColour(i, wxGetApp().background_color);
-        }
-
-    }
-    else {
-        //the mouse is hovering over either an element of listcontrol_sights, or an element of listcontrol_routes, or an element of listcontrol_positions
-
-        if ((highlighted_sight_now != wxNOT_FOUND) && enable_highlight) {
-            // the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
-
-            highlighted_route_now = (((data->sight_list)[highlighted_sight_now]).related_route.value);
-
+    
+    if(!idling){
+        
+        int i, j;
+        
+        //                cout << "Position of mouse screen = {" << wxGetMousePosition().x << " , " << wxGetMousePosition().y << "}\n";
+        
+        //save the id of the  Sight Route and Position highlighted at the preceeding step into highlighted_route_before
+        highlighted_route_before = highlighted_route_now;
+        highlighted_position_before = highlighted_position_now;
+        
+        
+        //check whether the mouse is hovering over an element of listcontrol_routes / listcontrol_sights
+        MousePositionOnListControl(listcontrol_sights, &highlighted_sight_now);
+        MousePositionOnListControl(listcontrol_positions, &highlighted_position_now);
+        MousePositionOnListControl(listcontrol_routes, &highlighted_route_now);
+        
+        if ((highlighted_sight_now == wxNOT_FOUND) && (highlighted_position_now == wxNOT_FOUND) && (highlighted_route_now == wxNOT_FOUND)) {
+            //the mouse is not hovering over an element in listcontrol_sights nor listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights
+            
+            //set the beckgorund color of the Routes in listcontrol_sights and listcontrol_routes  and the background color of the Positions in listcontrol_positions to white
             for (i = 0; i < (listcontrol_sights->GetItemCount()); i++) {
-
-                if (i == highlighted_sight_now) {
-
-                    //set the beckgorund color of the sight in listcontrol_sights and of its related route to a highlight color
-                    listcontrol_sights->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-                    if ((highlighted_route_now != -1) && ((listcontrol_routes->GetItemCount()) > highlighted_route_now)) {
-                        listcontrol_routes->SetItemBackgroundColour(highlighted_route_now, (wxGetApp().color_selected_item));
-                    }
-
-                }
-                else {
-
-                    //set the beckgorund color of the sight in listcontrol_sights and of its related route to white
-                    listcontrol_sights->SetItemBackgroundColour(i, wxGetApp().background_color);
-                    if ((((((data->sight_list)[i]).related_route).value) != -1) && ((listcontrol_routes->GetItemCount()) > ((((data->sight_list)[i]).related_route).value))) {
-                        listcontrol_routes->SetItemBackgroundColour(((((data->sight_list)[i]).related_route).value), wxGetApp().background_color);
-                    }
-
-                }
-
+                listcontrol_sights->SetItemBackgroundColour(i, wxGetApp().background_color);
             }
-
-        }
-
-
-        if (highlighted_position_now != wxNOT_FOUND) {
-            //the mouse is hovering over an element of listcontrool_positions -> highlight it and the related position in listcontrol_positions, and set  a white background in all other leements in listcontrol_positions
-
             for (i = 0; i < (listcontrol_positions->GetItemCount()); i++) {
-
-                if (i == highlighted_position_now) {
-
-                    //set the beckgorund color of the Position in listcontrol_positions to a highlight color
-                    listcontrol_positions->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-
-                }
-                else {
-
-                    //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
-                    listcontrol_positions->SetItemBackgroundColour(i, wxGetApp().background_color);
-
-                }
-
+                listcontrol_positions->SetItemBackgroundColour(i, wxGetApp().background_color);
             }
-
-        }
-
-        if ((highlighted_route_now != wxNOT_FOUND) && enable_highlight) {
-            //the mouse is hovering over an element of listcontrool_routes -> highlight it and the related sight in listcontrol_sights, and set  a white background in all other leements in listcontrol_routes and listcontorl_sights
-
-            j = ((((data->route_list)[highlighted_route_now]).related_sight).value);
-
             for (i = 0; i < (listcontrol_routes->GetItemCount()); i++) {
-
-                if (i == highlighted_route_now) {
-
-                    //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
-                    listcontrol_routes->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-                    if ((j != -1) && ((listcontrol_sights->GetItemCount()) > j)) {
-                        listcontrol_sights->SetItemBackgroundColour(j, (wxGetApp().color_selected_item));
-                    }
-
-                }
-                else {
-
-                    //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
-                    listcontrol_routes->SetItemBackgroundColour(i, wxGetApp().background_color);
-                    if ((((((data->route_list)[i]).related_sight).value) != -1) && ((listcontrol_sights->GetItemCount()) > ((((data->route_list)[i]).related_sight).value))) {
-                        listcontrol_sights->SetItemBackgroundColour(((((data->route_list)[i]).related_sight).value), wxGetApp().background_color);
-                    }
-
-                }
-
+                listcontrol_routes->SetItemBackgroundColour(i, wxGetApp().background_color);
             }
-
+            
         }
-
+        else {
+            //the mouse is hovering over either an element of listcontrol_sights, or an element of listcontrol_routes, or an element of listcontrol_positions
+            
+            if ((highlighted_sight_now != wxNOT_FOUND) && enable_highlight) {
+                // the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
+                
+                highlighted_route_now = (((data->sight_list)[highlighted_sight_now]).related_route.value);
+                
+                for (i = 0; i < (listcontrol_sights->GetItemCount()); i++) {
+                    
+                    if (i == highlighted_sight_now) {
+                        
+                        //set the beckgorund color of the sight in listcontrol_sights and of its related route to a highlight color
+                        listcontrol_sights->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
+                        if ((highlighted_route_now != -1) && ((listcontrol_routes->GetItemCount()) > highlighted_route_now)) {
+                            listcontrol_routes->SetItemBackgroundColour(highlighted_route_now, (wxGetApp().color_selected_item));
+                        }
+                        
+                    }
+                    else {
+                        
+                        //set the beckgorund color of the sight in listcontrol_sights and of its related route to white
+                        listcontrol_sights->SetItemBackgroundColour(i, wxGetApp().background_color);
+                        if ((((((data->sight_list)[i]).related_route).value) != -1) && ((listcontrol_routes->GetItemCount()) > ((((data->sight_list)[i]).related_route).value))) {
+                            listcontrol_routes->SetItemBackgroundColour(((((data->sight_list)[i]).related_route).value), wxGetApp().background_color);
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+            
+            if (highlighted_position_now != wxNOT_FOUND) {
+                //the mouse is hovering over an element of listcontrool_positions -> highlight it and the related position in listcontrol_positions, and set  a white background in all other leements in listcontrol_positions
+                
+                for (i = 0; i < (listcontrol_positions->GetItemCount()); i++) {
+                    
+                    if (i == highlighted_position_now) {
+                        
+                        //set the beckgorund color of the Position in listcontrol_positions to a highlight color
+                        listcontrol_positions->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
+                        
+                    }
+                    else {
+                        
+                        //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
+                        listcontrol_positions->SetItemBackgroundColour(i, wxGetApp().background_color);
+                        
+                    }
+                    
+                }
+                
+            }
+            
+            if ((highlighted_route_now != wxNOT_FOUND) && enable_highlight) {
+                //the mouse is hovering over an element of listcontrool_routes -> highlight it and the related sight in listcontrol_sights, and set  a white background in all other leements in listcontrol_routes and listcontorl_sights
+                
+                j = ((((data->route_list)[highlighted_route_now]).related_sight).value);
+                
+                for (i = 0; i < (listcontrol_routes->GetItemCount()); i++) {
+                    
+                    if (i == highlighted_route_now) {
+                        
+                        //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
+                        listcontrol_routes->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
+                        if ((j != -1) && ((listcontrol_sights->GetItemCount()) > j)) {
+                            listcontrol_sights->SetItemBackgroundColour(j, (wxGetApp().color_selected_item));
+                        }
+                        
+                    }
+                    else {
+                        
+                        //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
+                        listcontrol_routes->SetItemBackgroundColour(i, wxGetApp().background_color);
+                        if ((((((data->route_list)[i]).related_sight).value) != -1) && ((listcontrol_sights->GetItemCount()) > ((((data->route_list)[i]).related_sight).value))) {
+                            listcontrol_sights->SetItemBackgroundColour(((((data->route_list)[i]).related_sight).value), wxGetApp().background_color);
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        if ((highlighted_route_before != highlighted_route_now) || (highlighted_position_before != highlighted_position_now)) {
+            //the highlighted Sight, or Route or Position has changed -> re-render the charts
+            
+            changing_highlighted_object = true;
+            
+            MyRefreshAll();
+            
+            changing_highlighted_object = false;
+            
+        }
+        
     }
-
-    if ((highlighted_route_before != highlighted_route_now) || (highlighted_position_before != highlighted_position_now)) {
-        //the highlighted Sight, or Route or Position has changed -> re-render the charts
-
-        changing_highlighted_object = true;
-
-        MyRefreshAll();
-
-        changing_highlighted_object = false;
-
-    }
-
 
     event.Skip(true);
 

@@ -24,6 +24,7 @@
 #include "route_frame.h"
 #include "sight.h"
 #include "set_idling.h"
+#include "highlight_object.h"
 #include "unset_idling.h"
 
 using namespace std;
@@ -68,8 +69,6 @@ public:
     ListControl<Sight> *listcontrol_sights;
     ListControl<Route>* listcontrol_routes;
     ListControl<Position>* listcontrol_positions;
-//    //this is used to transport objects listed in *this
-//    GraphicalFeatureTransportHandler* transport_handler;
     //extract_colors is created only to detect the background and foreground colors set by the operating systems, it has no other use. As a result, its size will be set to zero.
     wxTextCtrl* extract_colors;
     wxPanel *panel;
@@ -119,6 +118,8 @@ public:
     //a functor to set/unset idling mode in *this
     SetIdling<ListFrame>* set_idling;
     UnsetIdling<ListFrame>* unset_idling;
+    //functors to set the highighted Routes, Position, ...
+    HighlightObject<ListFrame> *highlight_route, *highlight_position;
     ConfirmTransport<ListFrame>* confirm_transport;
     CloseFrame<ListFrame>* close;
     //a functor to let the user select a Route in listcontrol_routes
@@ -139,6 +140,7 @@ public:
     ListFrame(const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     void set(void);
+    void set_idling_all(const bool&);
     void PreRenderAndFitAll(void);
     void MyRefreshAll(void);
     void RefreshAll(void);
@@ -186,6 +188,8 @@ public:
     template<class E> void KeyDown(E&);
     template<class T> void ComputePosition(T&);
     template<class T, class F> void AnimateToObject(T*, F*);
+//    void SetHighlightedRoute(const int&);
+    
 #ifdef WIN32
     void OnTimer(wxTimerEvent&);
 #endif

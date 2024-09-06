@@ -14,6 +14,7 @@
 #include "chart_frame.h"
 #include "double.h"
 #include "generic.h"
+#include "highlight_object.h"
 
 
 //constructor of ChartTransportHandler, which initializes *this with the Route transporting_route_in (used to to the transport) and with proposed zoom factor proposed _zoom_factor at end fo the transport.  This is a `proposed` zoom factor because, if such proposed zoom factor is < 1 or > zoom_factor_max, the actual zoom factor will be set to 1 and zoom_factor_max, respectively. Othersize, the actual zoom_factor will be equal to proposed_zoom_factor.
@@ -69,6 +70,7 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
 
 template class ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
 template class ChartTransportHandler<UnsetIdling<ListFrame>>;
+template class ChartTransportHandler<HighlightObject<ListFrame>>;
 
 
 //prompt the movement of the center of the chart from position a to position b
@@ -76,6 +78,11 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
 //void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
     
     if(!((MotionHandler<F>::parent)->idling)){
+        //I start the animation only if *parent is not in idling mode
+        
+        //because I am about to trigger an animation, I set *this, all ChartFrames and DrawPanels to idling mode
+        (*((MotionHandler<F>::parent)->set_idling))();
+        (MotionHandler<F>::parent)->set_idling_all(true);
         
         //the animation transport starts here (only if the parent ChartFrame is not in idling mode)
         (MotionHandler<F>::timer)->Start(
@@ -90,6 +97,7 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
 
 template void ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>::operator()();
 template void ChartTransportHandler<UnsetIdling<ListFrame>>::operator()();
+template void ChartTransportHandler<HighlightObject<ListFrame>>::operator()();
 
 
 //this method iterates the animation
@@ -103,7 +111,6 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             //I am at the beginning of the transport and *parent is not in idling mode -> proceed with the transport
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
-            (*((MotionHandler<F>::parent)->set_idling))();
             (chart_frame->dragging_chart) = true;
             chart_frame->EnableAll(false);
 
@@ -125,9 +132,9 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
 
             
             //I don't want anything to be highlighted during the chart transport, so I set
-            (chart_frame->parent->highlighted_route_now) = -1;
-            (chart_frame->parent->highlighted_sight_now) = -1;
-            (chart_frame->parent->highlighted_position_now) = -1;
+            //            (chart_frame->parent->highlighted_route_now) = -1;
+            //            (chart_frame->parent->highlighted_sight_now) = -1;
+            //            (chart_frame->parent->highlighted_position_now) = -1;
 
             
             (chart_frame->draw_panel->label_position) = String("");
@@ -313,6 +320,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
         
         (MotionHandler<F>::timer)->Stop();
         (*((MotionHandler<F>::parent)->unset_idling))();
+        (MotionHandler<F>::parent)->set_idling_all(false);
         
         //call the functor to be called at the end of the animation, if any
         if((MotionHandler<F>::f) != NULL){

@@ -239,7 +239,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
         my_push_back(&(this->parent->data->position_list), *position);
     }
 
-    (parent->listcontrol_positions)->set((parent->data)->position_list, false);
+    parent->listcontrol_positions->set(parent->data->position_list, false);
 
     //given that I have reset the content of listcontrol_positions, now no items are selected in this ListControl -> I call:
     (*(parent->on_change_selection_in_listcontrol_positions))(event);
@@ -248,10 +248,24 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     parent->Resize();
     parent->OnModifyFile();
     
-//    parent->PreRenderAndFitAll();
-    parent->AnimateToObject<Position, UnsetIdling<ListFrame> >(position, parent->unset_idling);
     
+    //animate the charts to bring them to the Position. Set  highlighted_position equal to the newly added/modified Position, so the user can see it easily during the animation:
+    
+    //de-highlight all Routes
+    parent->highlight_route->set_value(-1);
+    parent->highlight_route->operator()(event);
 
+    //1. set the highlighted_position equal to the id of the newly added/modified Position, so the user can see it easily
+
+    parent->highlight_position->set_value(
+                                       ((position_in_listcontrol_positions == -1) ? ((int)(parent->data->position_list.size()))-1 : ((int)position_in_listcontrol_positions))
+                                       
+                                       );
+    parent->highlight_position->operator()(event);
+    //2. in parent->highlight_position, set the value of the highlighted Position to be set equal to -1, and call AnimateToObject with second argument parent->highlight_position : in this way, when the animation is over, the highlighted Position will be set to -1, i.e., no Route will be highlighted when the animation is over
+    parent->highlight_position->set_value(-1);
+    parent->AnimateToObject<Position, HighlightObject<ListFrame>>(position, parent->highlight_position);
+    
     event.Skip(true);
 
     Close(TRUE);

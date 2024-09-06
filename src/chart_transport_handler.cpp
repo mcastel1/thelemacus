@@ -78,6 +78,11 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
 //void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
     
     if(!((MotionHandler<F>::parent)->idling)){
+        //I start the animation only if *parent is not in idling mode
+        
+        //because I am about to trigger an animation, I set *this, all ChartFrames and DrawPanels to idling mode
+        (*((MotionHandler<F>::parent)->set_idling))();
+        (MotionHandler<F>::parent)->set_idling_all_DrawPanels(true);
         
         //the animation transport starts here (only if the parent ChartFrame is not in idling mode)
         (MotionHandler<F>::timer)->Start(

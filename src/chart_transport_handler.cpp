@@ -82,7 +82,7 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
         
         //because I am about to trigger an animation, I set *this, all ChartFrames and DrawPanels to idling mode
         (*((MotionHandler<F>::parent)->set_idling))();
-        (MotionHandler<F>::parent)->set_idling_all_DrawPanels(true);
+        (MotionHandler<F>::parent)->set_idling_all(true);
         
         //the animation transport starts here (only if the parent ChartFrame is not in idling mode)
         (MotionHandler<F>::timer)->Start(
@@ -320,7 +320,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
         
         (MotionHandler<F>::timer)->Stop();
         (*((MotionHandler<F>::parent)->unset_idling))();
-        (MotionHandler<F>::parent)->set_idling_all_DrawPanels(false);
+        (MotionHandler<F>::parent)->set_idling_all(false);
         
         //call the functor to be called at the end of the animation, if any
         if((MotionHandler<F>::f) != NULL){

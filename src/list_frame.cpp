@@ -944,6 +944,17 @@ void ListFrame::set() {
 
 }
 
+
+//set/unset the idling of all DrawPanels under *this to value
+void ListFrame::set_idling_all_DrawPanels(const bool& value){
+    
+    for(unsigned int i=0; i<chart_frames.size(); i++){
+        (chart_frames[i])->draw_panel->SetIdling(value);
+    }
+    
+}
+
+
 void ListFrame::OnAddSight(wxCommandEvent& event) {
 
     SightFrame* sight_frame = new SightFrame(this, NULL, -1, "New sight", wxDefaultPosition, wxDefaultSize, String(""));

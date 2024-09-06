@@ -69,8 +69,6 @@ public:
     ListControl<Sight> *listcontrol_sights;
     ListControl<Route>* listcontrol_routes;
     ListControl<Position>* listcontrol_positions;
-//    //this is used to transport objects listed in *this
-//    GraphicalFeatureTransportHandler* transport_handler;
     //extract_colors is created only to detect the background and foreground colors set by the operating systems, it has no other use. As a result, its size will be set to zero.
     wxTextCtrl* extract_colors;
     wxPanel *panel;
@@ -142,6 +140,7 @@ public:
     ListFrame(const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
     void set(void);
+    void set_idling_all_DrawPanels(const bool&);
     void PreRenderAndFitAll(void);
     void MyRefreshAll(void);
     void RefreshAll(void);

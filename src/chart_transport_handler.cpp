@@ -107,6 +107,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
             (*((MotionHandler<F>::parent)->set_idling))();
+            (MotionHandler<F>::parent)->set_idling_all_DrawPanels(true);
             (chart_frame->dragging_chart) = true;
             chart_frame->EnableAll(false);
 
@@ -316,6 +317,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
         
         (MotionHandler<F>::timer)->Stop();
         (*((MotionHandler<F>::parent)->unset_idling))();
+        (MotionHandler<F>::parent)->set_idling_all_DrawPanels(false);
         
         //call the functor to be called at the end of the animation, if any
         if((MotionHandler<F>::f) != NULL){

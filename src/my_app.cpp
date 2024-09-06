@@ -152,7 +152,7 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
                                                              /*here I shift everything down on the screen by the height of the menu_bar, because otherwise the ChartFrame on the top would be partially corvered by the menu bar and the one on the bottom would leave an empty space t the bottom of the screen */
                                                              
                                                              
-                                                             (((list_frame->menu_bar)->GetSize()).GetHeight()) +
+                                                             (list_frame->menu_bar->GetSize().GetHeight()) +
                                                              
 #endif
                                                              

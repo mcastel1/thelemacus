@@ -106,8 +106,6 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             //I am at the beginning of the transport and *parent is not in idling mode -> proceed with the transport
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
-            (*((MotionHandler<F>::parent)->set_idling))();
-            (MotionHandler<F>::parent)->set_idling_all_DrawPanels(true);
             (chart_frame->dragging_chart) = true;
             chart_frame->EnableAll(false);
 

@@ -1813,10 +1813,12 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
     
     chart_transport_handlers.resize(chart_frames.size());
     
-    
+    //because I am about to trigger an animation, I set *this, all ChartFrames and DrawPanels to idling mode
+    (*set_idling)();
+    set_idling_all_DrawPanels(true);
+
     //bring all charts to front to show the animation
     wxGetApp().ShowCharts();
-
     
     for(i=0; i<chart_frames.size(); i++){
         

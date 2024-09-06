@@ -143,6 +143,16 @@
 
 
  ********** THINGS TO FIX ***********
+    - replace
+        '        (*((MotionHandler<F>::parent)->set_idling))();
+        (MotionHandler<F>::parent)->set_idling_all_DrawPanels(true);'
+        
+        and
+        
+        '        (*((MotionHandler<F>::parent)->unset_idling))();
+        (MotionHandler<F>::parent)->set_idling_all_DrawPanels(false);'
+        
+        at the beginning and end of the animation with a method that sets ListFrame, all DrawPanels and ChartFrames to idlinge true / false
     - when you press Modify in RouteFrame and prompt the message         parent->print_info_message->message.set(String("The route which has been modified was related to a sight! Disconnecting the route from the sight."));, the Route is not highlighted during the animation (you need to change the functor to be called at the end of the animation)
     - rename all variables with _now suffix which is no longer needed, e.g., position_label_position_now
     - CHECK THAT THE RADIUS OF THE EARTH AND OF ALL PLANETS IS CORRECT AND CORREPONDS TO THE CORRECT UNIT OF 1 nm = 1852 m.
@@ -153,5 +163,4 @@
     - when you transport a Route with an existing Route, and select the transporting Route in ListFrame, if you press Enter the trnsport is not triggered (if you double click on the Route it is triggered)
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame Mac
  on WIN32:
-    - when zooming on a Position the position is not highlighted 
     - the center of a reference Position of a Route is red while the color of the Route is different from Red

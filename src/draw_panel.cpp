@@ -363,7 +363,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                  );
     
     RenderPositions(dc,
-                    points_position_list_now,
+                    points_position_list,
                     (parent->parent->highlighted_position_now),
                     wxNullColour
                     );
@@ -476,7 +476,7 @@ void DrawPanel::CleanAndRenderAll(void) {
                  );
     
     RenderPositions(dc,
-                    points_position_list_now,
+                    points_position_list,
                     (parent->parent->highlighted_position_now),
                     wxNullColour
                     );
@@ -997,7 +997,7 @@ inline void DrawPanel::TabulateRoutes(void) {
 }
 
 
-//tabulate into points_position_list_now  the i-th Position in parent->parent->data->position_list
+//tabulate into points_position_list  the i-th Position in parent->parent->data->position_list
 inline void DrawPanel::TabulatePosition(const unsigned int& i){
     
     wxPoint p;
@@ -1005,25 +1005,25 @@ inline void DrawPanel::TabulatePosition(const unsigned int& i){
 
     //write the reference Positions into reference_positions_route_list
         if (GeoToDrawPanel((parent->parent->data->position_list)[i], &p, false)) {
-            //the  Position falls in the plot area -> write it into points_position_list_now
-            points_position_list_now[i] = p;
+            //the  Position falls in the plot area -> write it into points_position_list
+            points_position_list[i] = p;
         }else{
-            //the  position does not fall in the plot area -> write a 'Null' value into points_position_list_now which will be ignored in other methods because it lies outside the plot area
-            points_position_list_now[i] = wxPoint(0, 0);
+            //the  position does not fall in the plot area -> write a 'Null' value into points_position_list which will be ignored in other methods because it lies outside the plot area
+            points_position_list[i] = wxPoint(0, 0);
         }
     
 }
 
 
 
-//tabulate into points_position_list_now all the Positions
+//tabulate into points_position_list all the Positions
 inline void DrawPanel::TabulatePositions(void) {
     
     unsigned int i;
 
     //resize points_position_list_now and, which needs to have the same size as (data->position_list)
-    points_position_list_now.clear();
-    points_position_list_now.resize(parent->parent->data->position_list.size());
+    points_position_list.clear();
+    points_position_list.resize(parent->parent->data->position_list.size());
     
     //tabulate the points of all Positions
     for (i = 0; i < (parent->parent->data->position_list.size()); i++) {

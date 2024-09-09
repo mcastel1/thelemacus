@@ -1671,7 +1671,6 @@ inline void DrawPanel::PreRender3D(void) {
          (route.reference_position->lambda.value) += delta_lambda) {
         
         //add the current meridian that is being drawn (route) to meridians
-        //        grid_now.push_back(route);
         
         route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
         
@@ -1690,9 +1689,6 @@ inline void DrawPanel::PreRender3D(void) {
             for ((route.reference_position->lambda.value) = (lambda_saved.value);
                  (route.reference_position->lambda.value) - (lambda_saved.value) < delta_lambda;
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
-                
-                //                ticks_now.push_back(route);
-                //                ticks_now.resize((ticks_now.size()) + 1);
                 
                 route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                 
@@ -1724,7 +1720,6 @@ inline void DrawPanel::PreRender3D(void) {
         route.reference_position->phi.set(GSL_SIGN(phi.value) * M_PI_2);
         
         //add the current parallel that is being drawn to parallels
-        //        grid_now.push_back(route);
         
         route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
         
@@ -1741,9 +1736,6 @@ inline void DrawPanel::PreRender3D(void) {
                  (route.reference_position->phi.value) - (phi.value) < delta_phi;
                  (route.reference_position->phi.value) += delta_phi_minor
                  ) {
-                     
-                     //                    ticks_now.push_back(route);
-                     //                     ticks_now.resize((ticks_now.size()) + 1);
                      
                      route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                      

@@ -90,7 +90,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     //text for the coordinates of the mouse cursor relative to the corners of the selection rectangle
     (parent->parent->start_label_selection_rectangle) = String("");
-    (parent->parent->end_label_selection_rectangle_now) = String("");
+    (parent->parent->end_label_selection_rectangle) = String("");
     label_dragged_object = String("");
     
     //set the background color of *this to background_color, so there is no need to draw a rectangle filled with background_color every time a paint event is triggered -> the code is faster
@@ -363,7 +363,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                  );
     
     RenderPositions(dc,
-                    points_position_list_now,
+                    points_position_list,
                     (parent->parent->highlighted_position_now),
                     wxNullColour
                     );
@@ -371,14 +371,14 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     RenderMousePositionLabel(
                              dc,
                              label_position,
-                             position_label_position_now,
+                             position_label_position,
                              wxGetApp().foreground_color,
                              wxGetApp().background_color
                              );
     
     //render selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
-        RenderSelectionRectangle(dc, (*(parent->parent->geo_position_now)), position_end_label_selection_rectangle, parent->parent->end_label_selection_rectangle_now, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderSelectionRectangle(dc, (*(parent->parent->geo_position_now)), position_end_label_selection_rectangle, parent->parent->end_label_selection_rectangle, wxGetApp().foreground_color, wxGetApp().background_color);
     }
     
     if ((parent->parent->dragging_object)) {
@@ -476,7 +476,7 @@ void DrawPanel::CleanAndRenderAll(void) {
                  );
     
     RenderPositions(dc,
-                    points_position_list_now,
+                    points_position_list,
                     (parent->parent->highlighted_position_now),
                     wxNullColour
                     );
@@ -491,7 +491,7 @@ void DrawPanel::CleanAndRenderAll(void) {
     RenderMousePositionLabel(
                              dc,
                              label_position,
-                             position_label_position_now,
+                             position_label_position,
                              wxGetApp().foreground_color,
                              wxGetApp().background_color
                              );
@@ -544,10 +544,11 @@ inline void DrawPanel::RefreshWIN32(void) {
         RenderRoutes(dc,
                      routes,
                      reference_positions_route_list,
-                     (parent->parent->highlighted_route_now), wxNullColour
+                     (parent->parent->highlighted_route_now), 
+                     wxNullColour
                      );
         RenderPositions(dc,
-                        points_position_list_now,
+                        points_position_list,
                         (parent->parent->highlighted_position_now),
                         wxNullColour
                         );
@@ -568,7 +569,7 @@ inline void DrawPanel::RefreshWIN32(void) {
         RenderSelectionRectangle(dc,
                                  (*(parent->parent->geo_position_now)),
                                  position_end_label_selection_rectangle,
-                                 parent->parent->end_label_selection_rectangle_now,
+                                 parent->parent->end_label_selection_rectangle,
                                  wxGetApp().foreground_color,
                                  wxGetApp().background_color
                                  );
@@ -578,7 +579,7 @@ inline void DrawPanel::RefreshWIN32(void) {
     RenderMousePositionLabel(
         dc,
         label_position,
-        position_label_position_now,
+        position_label_position,
         wxGetApp().foreground_color,
         wxGetApp().background_color
     );
@@ -664,8 +665,8 @@ void DrawPanel::FitAll() {
                                     (size_chart.GetHeight()) + ((label_position.get_size(this)).GetHeight()) + 6 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value)
                                     )));
     
-    //position position_label_position_now at the bottom left corner of *this
-    position_label_position_now = wxPoint(
+    //put position_label_position at the bottom left corner of *this
+    position_label_position = wxPoint(
                                           (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value),
                                           (size_chart.GetHeight())
                                           - (size_label_vertical + (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))
@@ -952,7 +953,7 @@ inline void DrawPanel::TabulateRoute(const unsigned int& i){
     
     (routes[i]).reset();
     
-    //write the points of the curves corresponding to the Routes into points_route_list_now
+    //write the points of the curves corresponding to the Routes into routes
     //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
     if (((parent->parent->data->route_list)[i]).type != (Route_types[0])) {
         
@@ -983,7 +984,7 @@ inline void DrawPanel::TabulateRoutes(void) {
     
     unsigned int i;
     
-    //resize points_route_list_now and reference_position_route_list_now, which needs to have the same size as (data->route_list), and clear up points_route_list
+    //resize routes, which needs to have the same size as (data->route_list), and clear up points_route_list
     routes.resize(parent->parent->data->route_list.size());
     
     reference_positions_route_list.clear();
@@ -997,7 +998,7 @@ inline void DrawPanel::TabulateRoutes(void) {
 }
 
 
-//tabulate into points_position_list_now  the i-th Position in parent->parent->data->position_list
+//tabulate into points_position_list  the i-th Position in parent->parent->data->position_list
 inline void DrawPanel::TabulatePosition(const unsigned int& i){
     
     wxPoint p;
@@ -1005,25 +1006,25 @@ inline void DrawPanel::TabulatePosition(const unsigned int& i){
 
     //write the reference Positions into reference_positions_route_list
         if (GeoToDrawPanel((parent->parent->data->position_list)[i], &p, false)) {
-            //the  Position falls in the plot area -> write it into points_position_list_now
-            points_position_list_now[i] = p;
+            //the  Position falls in the plot area -> write it into points_position_list
+            points_position_list[i] = p;
         }else{
-            //the  position does not fall in the plot area -> write a 'Null' value into points_position_list_now which will be ignored in other methods because it lies outside the plot area
-            points_position_list_now[i] = wxPoint(0, 0);
+            //the  position does not fall in the plot area -> write a 'Null' value into points_position_list which will be ignored in other methods because it lies outside the plot area
+            points_position_list[i] = wxPoint(0, 0);
         }
     
 }
 
 
 
-//tabulate into points_position_list_now all the Positions
+//tabulate into points_position_list all the Positions
 inline void DrawPanel::TabulatePositions(void) {
     
     unsigned int i;
 
-    //resize points_position_list_now and, which needs to have the same size as (data->position_list)
-    points_position_list_now.clear();
-    points_position_list_now.resize(parent->parent->data->position_list.size());
+    //resize points_position_list and, which needs to have the same size as (data->position_list)
+    points_position_list.clear();
+    points_position_list.resize(parent->parent->data->position_list.size());
     
     //tabulate the points of all Positions
     for (i = 0; i < (parent->parent->data->position_list.size()); i++) {
@@ -1212,7 +1213,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //    DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/ + wxPoint(1, 1), &p_NW);
     //    DrawPanelToGeo(wxPoint(position_plot_area + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/ - wxPoint(1, 1), &p_SE);
     
-    //fetch the data on the region that I am about to plot from the data files and store it into parent->coastline_polygons_now
+    //fetch the data on the region that I am about to plot from the data files and store them
     parent->GetCoastLineDataMercator();
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
@@ -1320,7 +1321,6 @@ inline void DrawPanel::PreRenderMercator(void) {
         
     }
     
-    //    ticks_now.clear();
     
     //prerender meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
@@ -1338,7 +1338,6 @@ inline void DrawPanel::PreRenderMercator(void) {
              (route.reference_position->lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
              (route.reference_position->lambda.value) += delta_lambda_minor) {
             
-            //            ticks_now.resize((ticks_now.size()) + 1);
             route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
             
         }
@@ -1364,7 +1363,6 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->lambda.value) - (lambda_saved.value) < delta_lambda;
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
-                //                ticks_now.resize((ticks_now.size()) + 1);
                 route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                 
             }
@@ -1414,9 +1412,6 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->phi.value) - (phi.value) < delta_phi;
                  (route.reference_position->phi.value) += delta_phi_minor
                  ) {
-                     
-                     //                    ticks_now.push_back(route);
-                     //                     ticks_now.resize((ticks_now.size()) + 1);
                      
                      route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                      
@@ -1663,9 +1658,7 @@ inline void DrawPanel::PreRender3D(void) {
         
     }
     
-    
-    //    ticks_now.clear();
-    
+        
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
@@ -1678,7 +1671,6 @@ inline void DrawPanel::PreRender3D(void) {
          (route.reference_position->lambda.value) += delta_lambda) {
         
         //add the current meridian that is being drawn (route) to meridians
-        //        grid_now.push_back(route);
         
         route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
         
@@ -1697,9 +1689,6 @@ inline void DrawPanel::PreRender3D(void) {
             for ((route.reference_position->lambda.value) = (lambda_saved.value);
                  (route.reference_position->lambda.value) - (lambda_saved.value) < delta_lambda;
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
-                
-                //                ticks_now.push_back(route);
-                //                ticks_now.resize((ticks_now.size()) + 1);
                 
                 route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                 
@@ -1731,7 +1720,6 @@ inline void DrawPanel::PreRender3D(void) {
         route.reference_position->phi.set(GSL_SIGN(phi.value) * M_PI_2);
         
         //add the current parallel that is being drawn to parallels
-        //        grid_now.push_back(route);
         
         route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
         
@@ -1748,9 +1736,6 @@ inline void DrawPanel::PreRender3D(void) {
                  (route.reference_position->phi.value) - (phi.value) < delta_phi;
                  (route.reference_position->phi.value) += delta_phi_minor
                  ) {
-                     
-                     //                    ticks_now.push_back(route);
-                     //                     ticks_now.resize((ticks_now.size()) + 1);
                      
                      route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                      
@@ -1819,7 +1804,7 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
             
             
             (parent->parent->start_label_selection_rectangle) = String("");
-            (parent->parent->end_label_selection_rectangle_now) = String("");
+            (parent->parent->end_label_selection_rectangle) = String("");
             
             parent->parent->RefreshAll();
             FitAll();
@@ -2802,7 +2787,7 @@ bool DrawPanel::GetMouseGeoPosition(Position* p) {
     
     //    (parent->parent->screen_position_now) = wxGetMousePosition();
     
-    return ((this->*ScreenToGeo)((parent->parent->screen_position_now), p));
+    return ((this->*ScreenToGeo)((parent->parent->screen_position), p));
     
 }
 
@@ -2812,14 +2797,14 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     //lines for debug
     //    cout << "\nMouse moved";
     //    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
-    //    cout << "Position of mouse screen = {" << (parent->parent->screen_position_now).x << " , " << (parent->parent->screen_position_now).y << "}\n";
-    //    cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-draw_panel_origin).x << " , " << ((parent->parent->screen_position_now)-draw_panel_origin).y << "}\n";
+    //    cout << "Position of mouse screen = {" << (parent->parent->screen_position).x << " , " << (parent->parent->screen_position).y << "}\n";
+    //    cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position)-draw_panel_origin).x << " , " << ((parent->parent->screen_position)-draw_panel_origin).y << "}\n";
     //lines for debug
     
     //update the instantaneous screen and geographic position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
     (parent->parent->mouse_moving) = true;
-    (parent->parent->screen_position_now) = wxGetMousePosition();
-    mouse_in_plot_area = (this->*ScreenToGeo)((parent->parent->screen_position_now), (parent->parent->geo_position_now));
+    (parent->parent->screen_position) = wxGetMousePosition();
+    mouse_in_plot_area = (this->*ScreenToGeo)((parent->parent->screen_position), (parent->parent->geo_position_now));
     if (mouse_in_plot_area && (!parent->parent->selection_rectangle)) {
         //the mouse has a screen position corresponding to a geographic position and no selection rectangle is being drawn -> I show the instantaneous mouse coordinates : I write them into label_position, otherwise label_position is left empty,
         
@@ -2845,11 +2830,11 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             
             for (i = 0; i < (parent->parent->chart_frames.size()); i++) {
                 
-                //write the label and position of the selection rectangle for each DrawPanel into end_label_selection_rectangle_now and position_end_label_selection_rectangle, respectively
+                //write the label and position of the selection rectangle for each DrawPanel into end_label_selection_rectangle and position_end_label_selection_rectangle, respectively
                 ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
                                                                                      (*(parent->parent->geo_position_now)),
                                                                                      &(((parent->parent->chart_frames)[i])->draw_panel->position_end_label_selection_rectangle),
-                                                                                     &(parent->parent->end_label_selection_rectangle_now)
+                                                                                     &(parent->parent->end_label_selection_rectangle)
                                                                                      );
                 
                 
@@ -2863,7 +2848,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             //run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
             
             //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
-            position_draw_panel = (parent->parent->screen_position_now) - draw_panel_origin;
+            position_draw_panel = (parent->parent->screen_position) - draw_panel_origin;
             
             //save the id of the Route highlighted at the preceeding step into highlighted_route_before
             (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
@@ -2949,16 +2934,12 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             if ((parent->parent->highlighted_route_now) == -1) {
                 //no Route is highlighted -> in listcontrol_sights and listcontrol_routes go back to showing the first respective items
                 
-                if ((parent->parent->listcontrol_routes->GetItemCount()) > 0) {
-                    
+                if((parent->parent->listcontrol_routes->GetItemCount()) > 0){
                     parent->parent->listcontrol_routes->EnsureVisible(0);
-                    
                 }
                 
-                if ((parent->parent->listcontrol_sights->GetItemCount()) > 0) {
-                    
+                if((parent->parent->listcontrol_sights->GetItemCount()) > 0){
                     parent->parent->listcontrol_sights->EnsureVisible(0);
-                    
                 }
                 
             }
@@ -2971,7 +2952,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 
                 GeoToScreen((parent->parent->data->position_list)[i], &q);
                 
-                if (sqrt(gsl_pow_2(((parent->parent->screen_position_now).x) - (q.x)) + gsl_pow_2(((parent->parent->screen_position_now).y) - (q.y))) <
+                if (sqrt(gsl_pow_2(((parent->parent->screen_position).x) - (q.x)) + gsl_pow_2(((parent->parent->screen_position).y) - (q.y))) <
                     4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth())) {
                     //the mouse is over a position
                     
@@ -3012,7 +2993,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 RenderMousePositionLabel(
                                          dc,
                                          label_position,
-                                         position_label_position_now,
+                                         position_label_position,
                                          wxGetApp().foreground_color,
                                          wxGetApp().background_color
                                          );
@@ -3338,7 +3319,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             unsigned int i;
             
             GetMouseGeoPosition((parent->parent->geo_position_end));
-            drawpanel_position_end = (parent->parent->screen_position_now);
+            drawpanel_position_end = (parent->parent->screen_position);
             
             
             //store the position at the end of the selection process, to compute the zoom factor later
@@ -3505,14 +3486,14 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
                 //set to empty the text fields of the geographical positions of the selek÷ction triangle, which is now useless
                 
                 (parent->parent->start_label_selection_rectangle) = String("");
-                (parent->parent->end_label_selection_rectangle_now) = String("");
+                (parent->parent->end_label_selection_rectangle) = String("");
                 
             }else {
                 //the  end position for the selected rectangle is not valid -> cancel the rectangle by setting selection_rectangle to false and by setting to empty the text fields of the geographical positions of the selection triangle
                 
                 (parent->parent->selection_rectangle) = false;
                 (parent->parent->start_label_selection_rectangle) = String("");
-                (parent->parent->end_label_selection_rectangle_now) = String("");
+                (parent->parent->end_label_selection_rectangle) = String("");
                 
             }
             
@@ -3587,7 +3568,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
             
             
             if ((this->*ScreenToGeo)(position_now_drag, NULL)) {
-                //position_drag_now is a valid Position
+                //position_now_drag is a valid Position
                 
                 if ((((parent->parent->highlighted_route_now) == -1) && ((parent->parent->highlighted_position_now) == -1))) {
                     //the whole chart is being dragged (the mouse is not over a Route nor a Position while dragging)
@@ -3688,11 +3669,9 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 
                                 if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
                                     
-                                    //                        DrawPanelToGeo(p + (position_now_drag - position_start_drag), &(((parent->parent->data->route_list)[(parent->parent->highlighted_route)]).reference_position));
                                     route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
                                     
-                                }
-                                else {
+                                }else{
                                     
                                     route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
                                     

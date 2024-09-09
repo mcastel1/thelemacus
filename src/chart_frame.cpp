@@ -62,7 +62,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
     
-    //coastline_polygons_now/before and polygon_position_now/before are resized to their maximum possible value
+    //coastline_polygons_Position is resized to its maximum possible value
     for(i=0, j=0; i<parent->coastline_polygons_Position.size(); i++) {
         j += (parent->coastline_polygons_Position[i].size());
     }
@@ -209,8 +209,6 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     sizer_h->Add(sizer_slider, 0, wxALIGN_TOP | wxALL | wxEXPAND, 0);
 
     sizer_v->Add(sizer_h, 0, wxALIGN_LEFT | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-    //    sizer_v->Add(text_position_now, 0, wxALIGN_LEFT | wxALL, (wxGetApp().rectangle_display.GetSize().GetWidth()) * (length_border_over_length_screen.value));
-        //    sizer_v->Fit(panel);
 
 #ifdef _WIN32
     //if I am on WIN32, I set the icon from the icon set in the .rc file

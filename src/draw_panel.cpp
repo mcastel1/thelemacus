@@ -2934,16 +2934,12 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             if ((parent->parent->highlighted_route_now) == -1) {
                 //no Route is highlighted -> in listcontrol_sights and listcontrol_routes go back to showing the first respective items
                 
-                if ((parent->parent->listcontrol_routes->GetItemCount()) > 0) {
-                    
+                if((parent->parent->listcontrol_routes->GetItemCount()) > 0){
                     parent->parent->listcontrol_routes->EnsureVisible(0);
-                    
                 }
                 
-                if ((parent->parent->listcontrol_sights->GetItemCount()) > 0) {
-                    
+                if((parent->parent->listcontrol_sights->GetItemCount()) > 0){
                     parent->parent->listcontrol_sights->EnsureVisible(0);
-                    
                 }
                 
             }

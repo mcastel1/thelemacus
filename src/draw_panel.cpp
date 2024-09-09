@@ -3572,7 +3572,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
             
             
             if ((this->*ScreenToGeo)(position_now_drag, NULL)) {
-                //position_drag_now is a valid Position
+                //position_now_drag is a valid Position
                 
                 if ((((parent->parent->highlighted_route_now) == -1) && ((parent->parent->highlighted_position_now) == -1))) {
                     //the whole chart is being dragged (the mouse is not over a Route nor a Position while dragging)

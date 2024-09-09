@@ -665,7 +665,7 @@ void DrawPanel::FitAll() {
                                     (size_chart.GetHeight()) + ((label_position.get_size(this)).GetHeight()) + 6 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value)
                                     )));
     
-    //position position_label_position_now at the bottom left corner of *this
+    //put position_label_position at the bottom left corner of *this
     position_label_position = wxPoint(
                                           (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value),
                                           (size_chart.GetHeight())
@@ -1213,7 +1213,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //    DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/ + wxPoint(1, 1), &p_NW);
     //    DrawPanelToGeo(wxPoint(position_plot_area + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/ - wxPoint(1, 1), &p_SE);
     
-    //fetch the data on the region that I am about to plot from the data files and store it into parent->coastline_polygons_now
+    //fetch the data on the region that I am about to plot from the data files and store them
     parent->GetCoastLineDataMercator();
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis

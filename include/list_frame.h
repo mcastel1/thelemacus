@@ -82,7 +82,7 @@ public:
     DeleteSight *delete_sight, *delete_sight_and_related_route;
     DeleteRoute *delete_route, *delete_route_and_related_sight;
     DeletePosition *delete_position;
-    wxPoint /*the instantaneous positions of the mouse with respect to the screen: this position is kept to the right value by DrawPanel::OnMouseMovement method, that is called every time the mouse moves. This variable belongs to ListFrame rather than to single ChartFrames or DrawPanel, because there is a unique screen position for all of them*/ screen_position_now;
+    wxPoint /*the instantaneous positions of the mouse with respect to the screen: this position is kept to the right value by DrawPanel::OnMouseMovement method, that is called every time the mouse moves. This variable belongs to ListFrame rather than to single ChartFrames or DrawPanel, because there is a unique screen position for all of them*/ screen_position;
     OnChangeSelectionInListControl<Sight>* on_change_selection_in_listcontrol_sights; OnChangeSelectionInListControl<Route>* on_change_selection_in_listcontrol_routes; OnChangeSelectionInListControl<Position>* on_change_selection_in_listcontrol_positions;
     ExistingRoute *existing_route;
     NewRoute *new_route;

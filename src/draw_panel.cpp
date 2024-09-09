@@ -2787,7 +2787,7 @@ bool DrawPanel::GetMouseGeoPosition(Position* p) {
     
     //    (parent->parent->screen_position_now) = wxGetMousePosition();
     
-    return ((this->*ScreenToGeo)((parent->parent->screen_position_now), p));
+    return ((this->*ScreenToGeo)((parent->parent->screen_position), p));
     
 }
 
@@ -2797,14 +2797,14 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     //lines for debug
     //    cout << "\nMouse moved";
     //    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
-    //    cout << "Position of mouse screen = {" << (parent->parent->screen_position_now).x << " , " << (parent->parent->screen_position_now).y << "}\n";
-    //    cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position_now)-draw_panel_origin).x << " , " << ((parent->parent->screen_position_now)-draw_panel_origin).y << "}\n";
+    //    cout << "Position of mouse screen = {" << (parent->parent->screen_position).x << " , " << (parent->parent->screen_position).y << "}\n";
+    //    cout << "Position of mouse draw panel = {" << ((parent->parent->screen_position)-draw_panel_origin).x << " , " << ((parent->parent->screen_position)-draw_panel_origin).y << "}\n";
     //lines for debug
     
     //update the instantaneous screen and geographic position of the mouse on the chart and compute mouse_in_plot_area, which will be used by other methods.
     (parent->parent->mouse_moving) = true;
-    (parent->parent->screen_position_now) = wxGetMousePosition();
-    mouse_in_plot_area = (this->*ScreenToGeo)((parent->parent->screen_position_now), (parent->parent->geo_position_now));
+    (parent->parent->screen_position) = wxGetMousePosition();
+    mouse_in_plot_area = (this->*ScreenToGeo)((parent->parent->screen_position), (parent->parent->geo_position_now));
     if (mouse_in_plot_area && (!parent->parent->selection_rectangle)) {
         //the mouse has a screen position corresponding to a geographic position and no selection rectangle is being drawn -> I show the instantaneous mouse coordinates : I write them into label_position, otherwise label_position is left empty,
         
@@ -2848,7 +2848,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             //run over all the routes, check if the mouse is hovering over one of them, and change the background color of the related position in listcontrol_routes
             
             //I compute the position of the mouse with respect to the origin of the DrawPanel, so I can compare it with points_route_list[i], which are also with respect to the origin of the draw panel
-            position_draw_panel = (parent->parent->screen_position_now) - draw_panel_origin;
+            position_draw_panel = (parent->parent->screen_position) - draw_panel_origin;
             
             //save the id of the Route highlighted at the preceeding step into highlighted_route_before
             (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
@@ -2956,7 +2956,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 
                 GeoToScreen((parent->parent->data->position_list)[i], &q);
                 
-                if (sqrt(gsl_pow_2(((parent->parent->screen_position_now).x) - (q.x)) + gsl_pow_2(((parent->parent->screen_position_now).y) - (q.y))) <
+                if (sqrt(gsl_pow_2(((parent->parent->screen_position).x) - (q.x)) + gsl_pow_2(((parent->parent->screen_position).y) - (q.y))) <
                     4.0 * ((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth())) {
                     //the mouse is over a position
                     
@@ -3323,7 +3323,7 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             unsigned int i;
             
             GetMouseGeoPosition((parent->parent->geo_position_end));
-            drawpanel_position_end = (parent->parent->screen_position_now);
+            drawpanel_position_end = (parent->parent->screen_position);
             
             
             //store the position at the end of the selection process, to compute the zoom factor later

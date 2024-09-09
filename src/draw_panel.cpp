@@ -544,7 +544,8 @@ inline void DrawPanel::RefreshWIN32(void) {
         RenderRoutes(dc,
                      routes,
                      reference_positions_route_list,
-                     (parent->parent->highlighted_route_now), wxNullColour
+                     (parent->parent->highlighted_route_now), 
+                     wxNullColour
                      );
         RenderPositions(dc,
                         points_position_list,

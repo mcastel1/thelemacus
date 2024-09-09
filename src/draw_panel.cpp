@@ -953,7 +953,7 @@ inline void DrawPanel::TabulateRoute(const unsigned int& i){
     
     (routes[i]).reset();
     
-    //write the points of the curves corresponding to the Routes into points_route_list_now
+    //write the points of the curves corresponding to the Routes into routes
     //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
     if (((parent->parent->data->route_list)[i]).type != (Route_types[0])) {
         
@@ -984,7 +984,7 @@ inline void DrawPanel::TabulateRoutes(void) {
     
     unsigned int i;
     
-    //resize points_route_list_now and reference_position_route_list_now, which needs to have the same size as (data->route_list), and clear up points_route_list
+    //resize routes, which needs to have the same size as (data->route_list), and clear up points_route_list
     routes.resize(parent->parent->data->route_list.size());
     
     reference_positions_route_list.clear();

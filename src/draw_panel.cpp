@@ -578,7 +578,7 @@ inline void DrawPanel::RefreshWIN32(void) {
     RenderMousePositionLabel(
         dc,
         label_position,
-        position_label_position_now,
+        position_label_position,
         wxGetApp().foreground_color,
         wxGetApp().background_color
     );

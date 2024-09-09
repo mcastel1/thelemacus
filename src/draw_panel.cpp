@@ -1022,7 +1022,7 @@ inline void DrawPanel::TabulatePositions(void) {
     
     unsigned int i;
 
-    //resize points_position_list_now and, which needs to have the same size as (data->position_list)
+    //resize points_position_list and, which needs to have the same size as (data->position_list)
     points_position_list.clear();
     points_position_list.resize(parent->parent->data->position_list.size());
     
@@ -1321,7 +1321,6 @@ inline void DrawPanel::PreRenderMercator(void) {
         
     }
     
-    //    ticks_now.clear();
     
     //prerender meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
@@ -1339,7 +1338,6 @@ inline void DrawPanel::PreRenderMercator(void) {
              (route.reference_position->lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
              (route.reference_position->lambda.value) += delta_lambda_minor) {
             
-            //            ticks_now.resize((ticks_now.size()) + 1);
             route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
             
         }
@@ -1365,7 +1363,6 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->lambda.value) - (lambda_saved.value) < delta_lambda;
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
-                //                ticks_now.resize((ticks_now.size()) + 1);
                 route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                 
             }
@@ -1415,9 +1412,6 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->phi.value) - (phi.value) < delta_phi;
                  (route.reference_position->phi.value) += delta_phi_minor
                  ) {
-                     
-                     //                    ticks_now.push_back(route);
-                     //                     ticks_now.resize((ticks_now.size()) + 1);
                      
                      route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
                      
@@ -1664,9 +1658,7 @@ inline void DrawPanel::PreRender3D(void) {
         
     }
     
-    
-    //    ticks_now.clear();
-    
+        
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));

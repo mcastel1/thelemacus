@@ -62,7 +62,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     idling = false;
     unset_idling = new UnsetIdling<ChartFrame>(this);
     
-    //coastline_polygons_now/before and polygon_position_now/before are resized to their maximum possible value
+    //coastline_polygons_Position is resized to its maximum possible value
     for(i=0, j=0; i<parent->coastline_polygons_Position.size(); i++) {
         j += (parent->coastline_polygons_Position[i].size());
     }

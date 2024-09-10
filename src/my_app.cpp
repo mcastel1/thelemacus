@@ -52,6 +52,15 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         //1. reset all icon paths to the paths relative to the newly selected mode (light or dark)
         wxGetApp().set_icon_paths();
         //2. assign to all buttons the images with the paths in 1.
+        
+        list_frame->button_add_sight->SetBitmapLabel(Bitmap(wxGetApp().path_file_plus_icon, wxGetApp().size_small_button));
+        list_frame->button_add_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_plus_icon, wxGetApp().size_small_button));
+        list_frame->button_add_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_plus_icon, wxGetApp().size_small_button));
+        
+        list_frame->button_modify_sight->SetBitmapLabel(Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button));
+        list_frame->button_modify_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button));
+        list_frame->button_modify_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button));
+        
         list_frame->button_delete_sight->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
         list_frame->button_delete_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
         list_frame->button_delete_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));

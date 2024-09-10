@@ -12,6 +12,7 @@
 #include <boost/date_time.hpp>
 
 
+#include "bitmap.h"
 #include "catalog.h"
 #include "close_app.h"
 #include "close_frame.h"
@@ -48,6 +49,8 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         }
         
         //reset the images of all buttons
+        wxGetApp().path_file_trash_icon = image_directory.append(read_from_file(String("name file trash icon"), wxGetApp().path_file_init, String("R"), String("")));
+        list_frame->button_delete_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
         
         
         //I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.

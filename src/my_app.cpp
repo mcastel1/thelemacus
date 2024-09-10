@@ -72,6 +72,8 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         list_frame->button_delete_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
         list_frame->button_delete_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
         
+        list_frame->button_show_map->SetBitmapLabel(Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
+        
         
         //I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
         list_frame->PreRenderAndFitAll();

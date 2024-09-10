@@ -51,7 +51,9 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         //reset the images of all buttons
         //1. reset all icon paths to the paths relative to the newly selected mode (light or dark)
         wxGetApp().set_icon_paths();
-        //2. assign to all buttons the images with the paths in 1. 
+        //2. assign to all buttons the images with the paths in 1.
+        list_frame->button_delete_sight->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
+        list_frame->button_delete_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
         list_frame->button_delete_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
         
         

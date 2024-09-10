@@ -105,7 +105,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     button_reset = new wxBitmapButton(
                                       panel,
                                       wxID_ANY,
-                                      Bitmap(wxGetApp().path_file_reset_icon, (wxGetApp().size_large_button) - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                      Bitmap(wxGetApp().path_file_reset_icon, (wxGetApp().size_large_button) - ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))),
                                       wxDefaultPosition,
                                       wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
                                       wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -115,7 +115,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     button_show_list = new wxBitmapButton(
                                           panel,
                                           wxID_ANY,
-                                          Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                          Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))),
                                           wxDefaultPosition,
                                           wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
                                           wxBU_EXACTFIT | wxSIMPLE_BORDER

@@ -448,7 +448,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
 
 
 
-        sizer_box_sight->Add(listcontrol_sights, 0, wxALL, ((wxGetApp().border).value));
+        sizer_box_sight->Add(listcontrol_sights, 0, wxALL, (wxGetApp().border.value));
 
 
         //listcontrol_positions with positions
@@ -471,7 +471,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         headers.push_back(wxString("Label"));
         listcontrol_positions->SetColumns(headers);
 
-        sizer_box_position->Add(listcontrol_positions, 1, wxALL, ((wxGetApp().border).value));
+        sizer_box_position->Add(listcontrol_positions, 1, wxALL, (wxGetApp().border.value));
 
 
         //listcontrol routes with routes
@@ -514,7 +514,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         listcontrol_routes->SetColumns(headers);
 
 
-        sizer_box_route->Add(listcontrol_routes, 1, wxALL, ((wxGetApp().border).value));
+        sizer_box_route->Add(listcontrol_routes, 1, wxALL, (wxGetApp().border.value));
 
         //bing everything to KeyDown method, so when a key is pressed on *this, panel, listcontrol... then KeyDown is called
         Bind(wxEVT_KEY_DOWN, &ListFrame::KeyDown<wxKeyEvent>, this);
@@ -590,7 +590,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         button_show_map = new wxBitmapButton(
                                              panel,
                                              wxID_ANY,
-                                             Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                             Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))),
                                              wxDefaultPosition,
                                              (wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
                                              wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -602,7 +602,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         button_compute_position = new wxBitmapButton(
                                                      panel,
                                                      wxID_ANY,
-                                                     Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                                     Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))),
                                                      wxDefaultPosition,
                                                      (wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
                                                      wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -657,20 +657,20 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         sizer_buttons_sight->Add(button_transport_sight, 0, wxALIGN_CENTER);
         sizer_buttons_sight->Add(button_disconnect_sight, 0, wxALIGN_CENTER);
         sizer_buttons_sight->Add(button_delete_sight, 0, wxALIGN_CENTER);
-        sizer_box_sight->Add(sizer_buttons_sight, 0, wxALIGN_LEFT | wxALL, ((wxGetApp().border).value));
+        sizer_box_sight->Add(sizer_buttons_sight, 0, wxALIGN_LEFT | wxALL, (wxGetApp().border.value));
 
         sizer_buttons_position->Add(button_add_position, 0, wxALIGN_CENTER);
         sizer_buttons_position->Add(button_modify_position, 0, wxALIGN_CENTER);
         sizer_buttons_position->Add(button_transport_position, 0, wxALIGN_CENTER);
         sizer_buttons_position->Add(button_delete_position, 0, wxALIGN_CENTER);
-        sizer_box_position->Add(sizer_buttons_position, 0, wxALIGN_LEFT | wxALL, ((wxGetApp().border).value));
+        sizer_box_position->Add(sizer_buttons_position, 0, wxALIGN_LEFT | wxALL, (wxGetApp().border.value));
 
         sizer_buttons_route->Add(button_add_route, 0, wxALIGN_CENTER);
         sizer_buttons_route->Add(button_modify_route, 0, wxALIGN_CENTER);
         sizer_buttons_route->Add(button_transport_route, 0, wxALIGN_CENTER);
         sizer_buttons_route->Add(button_disconnect_route, 0, wxALIGN_CENTER);
         sizer_buttons_route->Add(button_delete_route, 0, wxALIGN_CENTER);
-        sizer_box_route->Add(sizer_buttons_route, 0, wxALIGN_LEFT | wxALL, ((wxGetApp().border).value));
+        sizer_box_route->Add(sizer_buttons_route, 0, wxALIGN_LEFT | wxALL, (wxGetApp().border.value));
 
 
         //
@@ -680,19 +680,19 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         //        listcontrol_sights->SetColumnWidth(i, ((listcontrol_sights->GetSize()).GetWidth())/(listcontrol_sights->GetColumnCount()));
         //    }
 
-        sizer_v->Add(sizer_box_sight, 1, wxALL, ((wxGetApp().border).value));
-        sizer_v->Add(sizer_box_position, 1, wxALL, ((wxGetApp().border).value));
-        sizer_listcontrol_routes_plus_buttons->Add(sizer_box_route, 0, wxALL, ((wxGetApp().border).value));
+        sizer_v->Add(sizer_box_sight, 1, wxALL, (wxGetApp().border.value));
+        sizer_v->Add(sizer_box_position, 1, wxALL, (wxGetApp().border.value));
+        sizer_listcontrol_routes_plus_buttons->Add(sizer_box_route, 0, wxALL, (wxGetApp().border.value));
         //    sizer_listcontrol_routes_plus_buttons->AddStretchSpacer(1);
         //here I set the flag '0' to avoid button_show_map from being stretched
-        sizer_big_buttons->Add(button_compute_position, 0, wxALL | wxALIGN_CENTER, ((wxGetApp().border).value));
-        sizer_big_buttons->Add(button_show_map, 0, wxALL | wxALIGN_CENTER, ((wxGetApp().border).value));
+        sizer_big_buttons->Add(button_compute_position, 0, wxALL | wxALIGN_CENTER, (wxGetApp().border.value));
+        sizer_big_buttons->Add(button_show_map, 0, wxALL | wxALIGN_CENTER, (wxGetApp().border.value));
         //    sizer_listcontrol_routes_plus_buttons->Add(sizer_big_buttons, 0);
         //by adding the flag wxEXPAND here, I let the StretchSpacer in sizer_listcontrol_routes_plus_buttons expand, and thus I flush to the right button_show_map
-        sizer_v->Add(sizer_listcontrol_routes_plus_buttons, 1, wxALL, ((wxGetApp().border).value));
-        sizer_h->Add(sizer_v, 1, wxALIGN_BOTTOM, ((wxGetApp().border).value));
-        sizer_h->Add(sizer_big_buttons, 0, wxALIGN_CENTER, ((wxGetApp().border).value));
-        sizer_all->Add(sizer_h, 1, wxALL | wxEXPAND, ((wxGetApp().border).value));
+        sizer_v->Add(sizer_listcontrol_routes_plus_buttons, 1, wxALL, (wxGetApp().border.value));
+        sizer_h->Add(sizer_v, 1, wxALIGN_BOTTOM, (wxGetApp().border.value));
+        sizer_h->Add(sizer_big_buttons, 0, wxALIGN_CENTER, (wxGetApp().border.value));
+        sizer_all->Add(sizer_h, 1, wxALL | wxEXPAND, (wxGetApp().border.value));
 
 #ifdef _WIN32
         //if I am on WIN32, I set the icon from the icon set in the .rc file

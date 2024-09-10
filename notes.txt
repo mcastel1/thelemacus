@@ -1,6 +1,7 @@
  
  notes:
     - to remove background on PNG images use https://www.photoroom.com/tools/background-remover
+    - if you get an error message ' Use of undeclared identifier 'ToDIP' ' it is because the ToDIP method belongs to the wxwindow class, thus you need to call [some wxWindow].ToDIP(...)
 	- remember that  of Routes do not go through the points of Routes exactly, see https://docs.wxwidgets.org/latest/classwx_d_c.html#ad72d38c75ac6b3f80c1f957dd94089fa
 	- a common error is that when you need to compute the arithmetic mean of two latitudes phi_1 and phi_2, you should *not* do (phi_1+phi_2)/2 but ((phi_1.normalize_pm_pi_ret().value) + (phi_2.normalize_pm_pi_ret().value))/2
     - declare progress dialogs on the heap (i.e., not as wxProgressDialog* progress_dialog; progress_dialog = new ...,) but on the stack (i.e., as  wxProgressDialog progress_dialog([constructor arguments])). This is because if you declare them on the heap, the progress dialog will stay forever open and it will prevent the app from closing. On the other hand, if you declare it on the stack , it will be destroyed authomatically once the method that calls it stops running
@@ -151,7 +152,6 @@
     - CHECK THAT THE RADIUS OF THE EARTH AND OF ALL PLANETS IS CORRECT AND CORREPONDS TO THE CORRECT UNIT OF 1 nm = 1852 m.
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 	- write put_back_in , put_back)_in_Mercator and put_back_in_3D :
-	- when you switch from light to dark, all icons must be updated
  on OSX:
     - when you transport a Route with an existing Route, and select the transporting Route in ListFrame, if you press Enter the trnsport is not triggered (if you double click on the Route it is triggered)
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame Mac

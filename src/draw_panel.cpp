@@ -1160,9 +1160,9 @@ inline void DrawPanel::PreRenderMercator(void) {
             size_plot_area.SetWidth(
                                     (size_chart.GetWidth())
                                     //space for  parallel labels
-                                    - (((int)size_label_horizontal) + 3 * ((wxGetApp().border).value))
+                                    - (((int)size_label_horizontal) + 3 * (wxGetApp().border.value))
                                     //space for label_position
-                                    - ((((int)size_label_vertical) + ((wxGetApp().border).value))) * (size_chart.GetWidth()) / (size_chart.GetHeight())
+                                    - ((((int)size_label_vertical) + (wxGetApp().border.value))) * (size_chart.GetWidth()) / (size_chart.GetHeight())
                                     );
             size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight()) / (size_chart.GetWidth()));
             
@@ -1178,9 +1178,9 @@ inline void DrawPanel::PreRenderMercator(void) {
         size_plot_area.SetHeight(
                                  (size_chart.GetHeight())
                                  //space for meridian labels
-                                 - (((int)size_label_vertical) + 3 * ((wxGetApp().border).value))
+                                 - (((int)size_label_vertical) + 3 * (wxGetApp().border.value))
                                  //space for label_position
-                                 - (((int)size_label_vertical) + ((wxGetApp().border).value))
+                                 - (((int)size_label_vertical) + (wxGetApp().border.value))
                                  );
         size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth()) / (size_chart.GetHeight()));
         

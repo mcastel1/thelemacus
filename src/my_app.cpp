@@ -12,6 +12,7 @@
 #include <boost/date_time.hpp>
 
 
+#include "bitmap.h"
 #include "catalog.h"
 #include "close_app.h"
 #include "close_frame.h"
@@ -48,6 +49,36 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         }
         
         //reset the images of all buttons
+        //1. reset all icon paths to the paths relative to the newly selected mode (light or dark)
+        wxGetApp().set_icon_paths();
+        //2. assign to all buttons the images with the paths in 1.
+        
+        list_frame->button_add_sight->SetBitmapLabel(Bitmap(wxGetApp().path_file_plus_icon, wxGetApp().size_small_button));
+        list_frame->button_add_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_plus_icon, wxGetApp().size_small_button));
+        list_frame->button_add_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_plus_icon, wxGetApp().size_small_button));
+        
+        list_frame->button_modify_sight->SetBitmapLabel(Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button));
+        list_frame->button_modify_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button));
+        list_frame->button_modify_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button));
+        
+        list_frame->button_disconnect_sight->SetBitmapLabel(Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button));
+        list_frame->button_disconnect_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button));
+
+        list_frame->button_transport_sight->SetBitmapLabel(Bitmap(wxGetApp().path_file_transport_icon, wxGetApp().size_small_button));
+        list_frame->button_transport_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_transport_icon, wxGetApp().size_small_button));
+        list_frame->button_transport_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_transport_icon, wxGetApp().size_small_button));
+        
+        list_frame->button_delete_sight->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
+        list_frame->button_delete_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
+        list_frame->button_delete_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
+        
+        list_frame->button_show_map->SetBitmapLabel(Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - list_frame->ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
+        list_frame->button_compute_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - list_frame->ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
+        
+        for(unsigned int i = 0; i<list_frame->chart_frames.size(); i++){
+            ((list_frame->chart_frames)[i])->button_reset->SetBitmapLabel(Bitmap(wxGetApp().path_file_reset_icon, (wxGetApp().size_large_button) - ((list_frame->chart_frames)[i])->ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
+            ((list_frame->chart_frames)[i])->button_show_list->SetBitmapLabel(Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ((list_frame->chart_frames)[i])->ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
+        }
         
         
         //I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
@@ -128,8 +159,8 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
     if ((list_frame->chart_frames.size()) > 1) {
         //if ((list_frame->chart_frames).size() > 1 it makes sens to introduce delta_x, delta_y
         
-        delta_x = (((double)(rectangle_display.GetWidth())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetWidth()))) / 2.0 - 2.0 * ((wxGetApp().border).value)) / ((double)(((list_frame->chart_frames).size()) - 1));
-        delta_y = (((double)(rectangle_display.GetHeight())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetHeight()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetHeight()))) / 2.0 - 2.0 * ((wxGetApp().border).value)) / ((double)(((list_frame->chart_frames).size()) - 1));
+        delta_x = (((double)(rectangle_display.GetWidth())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetWidth()))) / 2.0 - 2.0 * (wxGetApp().border.value)) / ((double)(((list_frame->chart_frames).size()) - 1));
+        delta_y = (((double)(rectangle_display.GetHeight())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetHeight()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetHeight()))) / 2.0 - 2.0 * (wxGetApp().border.value)) / ((double)(((list_frame->chart_frames).size()) - 1));
         
     }else{
         //if ((list_frame->chart_frames).size() <= 1, it does not make sense to define delta_x, delta_y, and I set
@@ -145,7 +176,7 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
         ((list_frame->chart_frames)[i])->Raise();
         ((list_frame->chart_frames)[i])->SetPosition(wxPoint(
                                                              
-                                                             (((double)(((list_frame->chart_frames)[0])->GetSize().GetWidth())) - ((double)(((list_frame->chart_frames)[i])->GetSize().GetWidth()))) / 2.0 + ((wxGetApp().border).value) + delta_x * ((double)i)
+                                                             (((double)(((list_frame->chart_frames)[0])->GetSize().GetWidth())) - ((double)(((list_frame->chart_frames)[i])->GetSize().GetWidth()))) / 2.0 + (wxGetApp().border.value) + delta_x * ((double)i)
                                                              ,
 #ifdef __APPLE__
                                                              //I am on APPLE operating system -> there is a menu bar
@@ -241,21 +272,21 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 void MyApp::set_icon_paths(void){
     
     //files in image directory
-    path_file_app_icon = image_directory.append(read_from_file(String("name file app icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_error_icon = image_directory.append(read_from_file(String("name file error icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_warning_icon = image_directory.append(read_from_file(String("name file warning icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_info_icon = image_directory.append(read_from_file(String("name file info icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_question_icon = image_directory.append(read_from_file(String("name file question icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_plus_icon = image_directory.append(read_from_file(String("name file plus icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_list_icon = image_directory.append(read_from_file(String("name file list icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_reset_icon = image_directory.append(read_from_file(String("name file reset icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_position_icon = image_directory.append(read_from_file(String("name file position icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_map_icon = image_directory.append(read_from_file(String("name file map icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_pencil_icon = image_directory.append(read_from_file(String("name file pencil icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_trash_icon = image_directory.append(read_from_file(String("name file trash icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_transport_icon = image_directory.append(read_from_file(String("name file transport icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_disconnect_icon = image_directory.append(read_from_file(String("name file disconnect icon"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_michele_icon = image_directory.append(read_from_file(String("name file michele icon"), (wxGetApp().path_file_init), String("R"), String("")));
+    path_file_app_icon = image_directory.append(read_from_file(String("name file app icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_error_icon = image_directory.append(read_from_file(String("name file error icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_warning_icon = image_directory.append(read_from_file(String("name file warning icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_info_icon = image_directory.append(read_from_file(String("name file info icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_question_icon = image_directory.append(read_from_file(String("name file question icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_plus_icon = image_directory.append(read_from_file(String("name file plus icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_list_icon = image_directory.append(read_from_file(String("name file list icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_reset_icon = image_directory.append(read_from_file(String("name file reset icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_position_icon = image_directory.append(read_from_file(String("name file position icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_map_icon = image_directory.append(read_from_file(String("name file map icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_pencil_icon = image_directory.append(read_from_file(String("name file pencil icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_trash_icon = image_directory.append(read_from_file(String("name file trash icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_transport_icon = image_directory.append(read_from_file(String("name file transport icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_disconnect_icon = image_directory.append(read_from_file(String("name file disconnect icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_michele_icon = image_directory.append(read_from_file(String("name file michele icon"), wxGetApp().path_file_init, String("R"), String("")));
     
     
 }

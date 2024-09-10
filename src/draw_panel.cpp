@@ -632,8 +632,8 @@ inline void DrawPanel::RenderPositions(wxDC& dc,
 
 //render the coordinates of an object (Route or Position) which is being dragged by rendering the label label_dragged_object at position position_label_dragged_object (reckoned with respect to the origin of *this)
 inline void DrawPanel::RenderDraggedObjectLabel(wxDC& dc,
-                                                const wxPoint& position_label_dragged_object,
-                                                const String& label_dragged_object,
+                                                const wxPoint& position_label_to_render,
+                                                const String& label_to_render,
                                                 const wxColor& foreground_color,
                                                 const wxColor& background_color) {
     
@@ -641,13 +641,13 @@ inline void DrawPanel::RenderDraggedObjectLabel(wxDC& dc,
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_label_dragged_object, get_size(label_dragged_object, &dc));
+    dc.DrawRectangle(position_label_to_render, get_size(label_to_render, &dc));
     
     
     //render label_dragged_object
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
-    dc.DrawText(wxString(label_dragged_object.value), position_label_dragged_object);
+    dc.DrawText(wxString(label_to_render.value), position_label_to_render);
     
 }
 

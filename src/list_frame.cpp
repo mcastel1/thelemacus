@@ -590,7 +590,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         button_show_map = new wxBitmapButton(
                                              panel,
                                              wxID_ANY,
-                                             Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - ToDIP(wxSize(((wxGetApp().border).value), ((wxGetApp().border).value)))),
+                                             Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))),
                                              wxDefaultPosition,
                                              (wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
                                              wxBU_EXACTFIT | wxSIMPLE_BORDER

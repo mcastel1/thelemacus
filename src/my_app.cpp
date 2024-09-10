@@ -75,6 +75,11 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         list_frame->button_show_map->SetBitmapLabel(Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - list_frame->ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
         list_frame->button_compute_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - list_frame->ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
         
+        for(unsigned int i = 0; i<list_frame->chart_frames.size(); i++){
+            ((list_frame->chart_frames)[i])->button_reset->SetBitmapLabel(Bitmap(wxGetApp().path_file_reset_icon, (wxGetApp().size_large_button) - ((list_frame->chart_frames)[i])->ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
+            ((list_frame->chart_frames)[i])->button_show_list->SetBitmapLabel(Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ((list_frame->chart_frames)[i])->ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
+        }
+        
         
         //I re-draw all the ChartFrames so their fore/background colors will be adapted to the new mode of the operating system.
         list_frame->PreRenderAndFitAll();

@@ -346,7 +346,6 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     (this->*Render)(
                     &dc,
-                    parent->curves,
                     parallels_and_meridians_labels,
                     positions_parallels_and_meridians_labels,
                     wxGetApp().foreground_color,
@@ -458,7 +457,6 @@ void DrawPanel::CleanAndRenderAll(void) {
     
     (this->*Render)(
                     &dc,
-                    parent->curves,
                     parallels_and_meridians_labels,
                     positions_parallels_and_meridians_labels,
                     wxGetApp().foreground_color,
@@ -531,7 +529,6 @@ inline void DrawPanel::RefreshWIN32(void) {
         //re-render all  objects in *this which may have been partially cancelled by the clean operation above
         (this->*Render)(
                         &dc,
-                        parent->curves,
                         parallels_and_meridians_labels,
                         positions_parallels_and_meridians_labels,
                         wxGetApp().foreground_color,
@@ -726,7 +723,6 @@ inline void DrawPanel::RenderLinesAsSplines(wxDC* dc,
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::RenderMercator(wxDC* dc,
-                                       const Lines& curves_in,
                                        const vector<wxString>& parallels_and_meridians_labels,
                                        const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                        const wxColor& foreground_color,
@@ -741,7 +737,7 @@ inline void DrawPanel::RenderMercator(wxDC* dc,
     
     
     //render parallels and meridians and coastlines
-    RenderLinesAsSplines(dc, curves_in, foreground_color, thickness);
+    RenderLinesAsSplines(dc, parent->curves, foreground_color, thickness);
 
     
     //render labels on parallels and meridians
@@ -879,7 +875,6 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::Render3D(
                                  wxDC* dc,
-                                 const Lines& grid,
                                  const vector<wxString>& parallels_and_meridians_labels,
                                  const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                  const wxColor& foreground_color,
@@ -892,7 +887,7 @@ inline void DrawPanel::Render3D(
     Position q, temp;
     
     //render parallels and meridians and coastlines
-    RenderLinesAsSplines(dc, grid, foreground_color, thickness);
+    RenderLinesAsSplines(dc, parent->curves, foreground_color, thickness);
     
     
     //render labels on parallels and meridians

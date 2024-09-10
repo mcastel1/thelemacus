@@ -183,15 +183,9 @@ public:
     bool PutBackIn(wxPoint, wxPoint*);
     double x_span(void);
     Rotation rotation_start_end(const wxPoint&, const wxPoint&);
-
-    void RenderMercator(wxDC*,
-                         const wxColor&,
-                         const wxColor&,
-                         const double&);
-    void Render3D(wxDC*,
-                  const wxColor&,
-                   const wxColor&,
-                   const double&);
+    
+    void RenderMercator(wxDC*, const wxColor&, const wxColor&, const double&);
+    void Render3D(wxDC*, const wxColor&, const wxColor&, const double&);
     void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);
     void DrawLabel(const Position&, Angle, Angle, Int, String);
     

@@ -130,11 +130,11 @@ inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 }
 
 
-//render the mouse position with colors foreground_color and background_color
+//render the mouse position label label_to_render ad position position_label_to_render with colors foreground_color and background_color
 inline void DrawPanel::RenderMousePositionLabel(
                                                 wxDC& dc,
-                                                const String& label_position,
-                                                const wxPoint& position_label_position,
+                                                const String& label_to_render,
+                                                const wxPoint& position_label_to_render,
                                                 const wxColor& foreground_color,
                                                 const wxColor& background_color
                                                 ) {
@@ -142,11 +142,11 @@ inline void DrawPanel::RenderMousePositionLabel(
     //wipe out position_label_position by writing on top of it a rectangle filled with color backgound_color
     dc.SetPen(background_color);
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_label_position, get_size(label_position, &dc));
+    dc.DrawRectangle(position_label_to_render, get_size(label_to_render, &dc));
     
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
-    dc.DrawText(wxString(label_position.value), position_label_position);
+    dc.DrawText(wxString(label_to_render.value), position_label_to_render);
     
     
 }
@@ -346,10 +346,6 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     (this->*Render)(
                     &dc,
-                    position_plot_area,
-                    parent->curves,
-                    parallels_and_meridians_labels,
-                    positions_parallels_and_meridians_labels,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
@@ -459,10 +455,6 @@ void DrawPanel::CleanAndRenderAll(void) {
     
     (this->*Render)(
                     &dc,
-                    position_plot_area,
-                    parent->curves,
-                    parallels_and_meridians_labels,
-                    positions_parallels_and_meridians_labels,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
@@ -533,10 +525,6 @@ inline void DrawPanel::RefreshWIN32(void) {
         //re-render all  objects in *this which may have been partially cancelled by the clean operation above
         (this->*Render)(
                         &dc,
-                        position_plot_area,
-                        parent->curves,
-                        parallels_and_meridians_labels,
-                        positions_parallels_and_meridians_labels,
                         wxGetApp().foreground_color,
                         wxGetApp().background_color,
                         wxGetApp().standard_thickness.value
@@ -632,8 +620,8 @@ inline void DrawPanel::RenderPositions(wxDC& dc,
 
 //render the coordinates of an object (Route or Position) which is being dragged by rendering the label label_dragged_object at position position_label_dragged_object (reckoned with respect to the origin of *this)
 inline void DrawPanel::RenderDraggedObjectLabel(wxDC& dc,
-                                                const wxPoint& position_label_dragged_object,
-                                                const String& label_dragged_object,
+                                                const wxPoint& position_label_to_render,
+                                                const String& label_to_render,
                                                 const wxColor& foreground_color,
                                                 const wxColor& background_color) {
     
@@ -641,13 +629,13 @@ inline void DrawPanel::RenderDraggedObjectLabel(wxDC& dc,
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_label_dragged_object, get_size(label_dragged_object, &dc));
+    dc.DrawRectangle(position_label_to_render, get_size(label_to_render, &dc));
     
     
     //render label_dragged_object
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
-    dc.DrawText(wxString(label_dragged_object.value), position_label_dragged_object);
+    dc.DrawText(wxString(label_to_render.value), position_label_to_render);
     
 }
 
@@ -729,10 +717,6 @@ inline void DrawPanel::RenderLinesAsSplines(wxDC* dc,
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::RenderMercator(wxDC* dc,
-                                       const wxPoint& position_plot_area,
-                                       const Lines& curves_in,
-                                       const vector<wxString>& parallels_and_meridians_labels,
-                                       const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                        const wxColor& foreground_color,
                                        const wxColor& background_color,
                                        const double& thickness) {
@@ -745,7 +729,7 @@ inline void DrawPanel::RenderMercator(wxDC* dc,
     
     
     //render parallels and meridians and coastlines
-    RenderLinesAsSplines(dc, curves_in, foreground_color, thickness);
+    RenderLinesAsSplines(dc, parent->curves, foreground_color, thickness);
 
     
     //render labels on parallels and meridians
@@ -883,10 +867,6 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::Render3D(
                                  wxDC* dc,
-                                 const wxPoint& position_plot_area,
-                                 const Lines& grid,
-                                 const vector<wxString>& parallels_and_meridians_labels,
-                                 const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                  const wxColor& foreground_color,
                                  const wxColor& background_color,
                                  const double& thickness
@@ -897,7 +877,7 @@ inline void DrawPanel::Render3D(
     Position q, temp;
     
     //render parallels and meridians and coastlines
-    RenderLinesAsSplines(dc, grid, foreground_color, thickness);
+    RenderLinesAsSplines(dc, parent->curves, foreground_color, thickness);
     
     
     //render labels on parallels and meridians

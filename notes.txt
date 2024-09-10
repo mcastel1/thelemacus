@@ -149,7 +149,6 @@
     - Mercator projection: when the animation towards a Position brings the chart outside the chart boundaries, there is a segmentation fault
     - in the mercator projection, if the animation brings you to a Route that is too large and the animation cannot go too N or S becasuse otherwise it would hit the boundaries of the chart, then you cannot drag the chart with the mouse
     - when you press Modify in RouteFrame and prompt the message         parent->print_info_message->message.set(String("The route which has been modified was related to a sight! Disconnecting the route from the sight."));, the Route is not highlighted during the animation (you need to change the functor to be called at the end of the animation)
-    - rename all variables with _now suffix which is no longer needed, e.g., position_label_position_now
     - CHECK THAT THE RADIUS OF THE EARTH AND OF ALL PLANETS IS CORRECT AND CORREPONDS TO THE CORRECT UNIT OF 1 nm = 1852 m.
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 	- write put_back_in , put_back)_in_Mercator and put_back_in_3D :
@@ -157,5 +156,5 @@
     - when you transport a Route with an existing Route, and select the transporting Route in ListFrame, if you press Enter the trnsport is not triggered (if you double click on the Route it is triggered)
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame Mac
  on WIN32:
-    - after you selec a projection in ChartFrame the projection combobox is empty
+    - after you select a projection in ChartFrame the projection combobox is empty
     - the center of a reference Position of a Route is red while the color of the Route is different from Red

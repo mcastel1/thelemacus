@@ -29,8 +29,6 @@
 //this method  is executed reguarly over time, to check whether to switch between light and dark mode
 void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
-#ifdef __APPLE__
-    
     
     if(dark_mode != (settings->GetAppearance().IsDark())) {
         //the dark mode of the operating system has changed
@@ -86,13 +84,7 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     }
     
     dark_mode = (settings->GetAppearance()).IsDark();
-    
-#endif
-#ifdef _WIN32
-    
-#endif
-    
-    
+
 }
 
 //if the user presses Ctrl + Q to exit the app, I call this function which prompts a message frame

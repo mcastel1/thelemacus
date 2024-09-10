@@ -100,8 +100,6 @@ public:
     bool (DrawPanel::*ScreenToGeo)(const wxPoint&, Position*);
     bool (DrawPanel::*GeoToProjection)(const Position&, PositionProjection*, bool);
     void (DrawPanel::*Render)(wxDC*,
-                              const vector<wxString>&,
-                              const vector<wxPoint>&,
                               const wxColor&,
                               const wxColor&,
                               const double&);
@@ -187,15 +185,11 @@ public:
     Rotation rotation_start_end(const wxPoint&, const wxPoint&);
 
     void RenderMercator(wxDC*,
-                         const vector<wxString>&,
-                         const vector<wxPoint>&,
                          const wxColor&,
                          const wxColor&,
                          const double&);
     void Render3D(wxDC*,
-                   const vector<wxString>&,
-                   const vector<wxPoint>&,
-                   const wxColor&,
+                  const wxColor&,
                    const wxColor&,
                    const double&);
     void WriteLabel(const Position&, Angle, Angle, Int, String, wxString*);

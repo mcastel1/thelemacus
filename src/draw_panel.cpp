@@ -346,8 +346,6 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     (this->*Render)(
                     &dc,
-                    parallels_and_meridians_labels,
-                    positions_parallels_and_meridians_labels,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
@@ -457,8 +455,6 @@ void DrawPanel::CleanAndRenderAll(void) {
     
     (this->*Render)(
                     &dc,
-                    parallels_and_meridians_labels,
-                    positions_parallels_and_meridians_labels,
                     wxGetApp().foreground_color,
                     wxGetApp().background_color,
                     wxGetApp().standard_thickness.value
@@ -529,8 +525,6 @@ inline void DrawPanel::RefreshWIN32(void) {
         //re-render all  objects in *this which may have been partially cancelled by the clean operation above
         (this->*Render)(
                         &dc,
-                        parallels_and_meridians_labels,
-                        positions_parallels_and_meridians_labels,
                         wxGetApp().foreground_color,
                         wxGetApp().background_color,
                         wxGetApp().standard_thickness.value
@@ -723,8 +717,6 @@ inline void DrawPanel::RenderLinesAsSplines(wxDC* dc,
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::RenderMercator(wxDC* dc,
-                                       const vector<wxString>& parallels_and_meridians_labels,
-                                       const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                        const wxColor& foreground_color,
                                        const wxColor& background_color,
                                        const double& thickness) {
@@ -875,8 +867,6 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::Render3D(
                                  wxDC* dc,
-                                 const vector<wxString>& parallels_and_meridians_labels,
-                                 const vector<wxPoint>& positions_parallels_and_meridians_labels,
                                  const wxColor& foreground_color,
                                  const wxColor& background_color,
                                  const double& thickness

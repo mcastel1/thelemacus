@@ -60,6 +60,9 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         list_frame->button_modify_sight->SetBitmapLabel(Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button));
         list_frame->button_modify_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button));
         list_frame->button_modify_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_pencil_icon, wxGetApp().size_small_button));
+        
+        list_frame->button_disconnect_sight->SetBitmapLabel(Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button));
+        list_frame->button_disconnect_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_disconnect_icon, wxGetApp().size_small_button));
 
         list_frame->button_transport_sight->SetBitmapLabel(Bitmap(wxGetApp().path_file_transport_icon, wxGetApp().size_small_button));
         list_frame->button_transport_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_transport_icon, wxGetApp().size_small_button));

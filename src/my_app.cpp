@@ -90,14 +90,6 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 //if the user presses Ctrl + Q to exit the app, I call this function which prompts a message frame
 template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
     
-    //    for(; 0<chart_frames.size(); ){
-    //        (chart_frames[0])->OnClose(event);
-    //    }
-    //
-    //    Destroy();
-    //    Close(true);
-    
-    //    return this->wxApp::OnPressCtrlQ();
     UnsetIdling<ListFrame>* unset_idling;
     CloseFrame<ListFrame>* close;
     ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>* print_question;
@@ -109,30 +101,7 @@ template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
     print_question = new ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(list_frame, close, unset_idling, unset_idling);
     
     print_question->SetAndCall(NULL, String("You pressed CTRL+Q"), String("Do you want to quit the app?"), String("Yes"), String("No"));
-    
-    //    QuestionFrame<Close<ListFrame>, UnsetIdling<ListFrame>>* question_frame = new QuestionFrame<Close<ListFrame>, UnsetIdling<ListFrame>>(NULL,
-    //                                                                                                        close,
-    //                                                                                                        String("Yes"),
-    //                                                                                                        unset_idling, String("No"),
-    //                                                                                                        "",
-    //                                                                                                        "Do you want to close the app?",
-    //                                                                                                        wxDefaultPosition,
-    //                                                                                                        wxDefaultSize,
-    //                                                                                                        String(""));
-    //    question_frame->Show(true);
-    
-    
-    //    print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(list_frame, unset_idling);
-    //    print_info_message = new PrintMessage<ListFrame, Close<ListFrame> >(list_frame, close);
-    //    print_info_message->SetAndCall(NULL, String("You want to exit the app"), String("Exiting the app"));
-    
-    
-    
-    
-    //    delete list_frame;
-    //
-    
-    
+  
 }
 
 template void MyApp::OnPressCtrlQ<wxCommandEvent>(wxCommandEvent&);

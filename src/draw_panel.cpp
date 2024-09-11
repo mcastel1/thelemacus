@@ -347,7 +347,13 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     //render selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
-        RenderSelectionRectangle(dc, (*(parent->parent->geo_position_now)), position_end_label_selection_rectangle, parent->parent->end_label_selection_rectangle, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderSelectionRectangle(dc, 
+                                 (*(parent->parent->geo_position_now)),
+                                 position_end_label_selection_rectangle,
+                                 parent->parent->end_label_selection_rectangle,
+                                 wxGetApp().foreground_color,
+                                 wxGetApp().background_color
+                                 );
     }
     
     if ((parent->parent->dragging_object)) {

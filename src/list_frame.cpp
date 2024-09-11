@@ -945,17 +945,10 @@ void ListFrame::set() {
 }
 
 
-//set/unset the idling of *this, all ChartFrames and DrawPanels equal to value
-void ListFrame::set_idling_all(const bool& value){
-    
-    if(value){
-        (*set_idling)();
-    }else{
-        (*unset_idling)();
-    }
-    
+//set/unset the idling  membre of all DrawPanels equal to value
+void ListFrame::SetIdlingAllDrawPanels(const bool& value){
+        
     for(unsigned int i=0; i<chart_frames.size(); i++){
-        (chart_frames[i])->SetIdling(value);
         (chart_frames[i])->draw_panel->SetIdling(value);
     }
     

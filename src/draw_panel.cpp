@@ -356,11 +356,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                  wxNullColour
                  );
     
-    RenderPositions(dc,
-                    points_position_list,
-                    (parent->parent->highlighted_position_now),
-                    wxNullColour
-                    );
+    RenderPositions(dc, wxNullColour);
     
     RenderMousePositionLabel(
                              dc,
@@ -463,11 +459,7 @@ void DrawPanel::CleanAndRenderAll(void) {
                  wxNullColour
                  );
     
-    RenderPositions(dc,
-                    points_position_list,
-                    (parent->parent->highlighted_position_now),
-                    wxNullColour
-                    );
+    RenderPositions(dc, wxNullColour);
     
     RenderDraggedObjectLabel(dc,
                              wxGetApp().foreground_color,
@@ -527,11 +519,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                      (parent->parent->highlighted_route_now), 
                      wxNullColour
                      );
-        RenderPositions(dc,
-                        points_position_list,
-                        (parent->parent->highlighted_position_now),
-                        wxNullColour
-                        );
+        RenderPositions(dc, wxNullColour);
         RenderDraggedObjectLabel(dc,
                                  wxGetApp().foreground_color,
                                  wxGetApp().background_color
@@ -566,10 +554,7 @@ inline void DrawPanel::RefreshWIN32(void) {
 
 
 //render the Positions:  if foreground_color == wxNullColour, this method uses as foreground color the colors in color_list, otherwise it uses foreground_color
-inline void DrawPanel::RenderPositions(wxDC& dc,
-                                       const vector<wxPoint>& points,
-                                       int highlighted_position,
-                                       const wxColor& foreground_color) {
+inline void DrawPanel::RenderPositions(wxDC& dc, const wxColor& foreground_color) {
     
     int i, color_id;
     double thickness, radius;
@@ -577,10 +562,10 @@ inline void DrawPanel::RenderPositions(wxDC& dc,
     
     
     //draw Positions
-    for (i = 0, color_id = 0; i < (points.size()); i++) {
+    for (i = 0, color_id = 0; i < (points_position_list.size()); i++) {
         
         //set thickness and pen
-        if (i == highlighted_position) {
+        if (i == (parent->parent->highlighted_position_now)) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = thickness;
         }
@@ -596,9 +581,9 @@ inline void DrawPanel::RenderPositions(wxDC& dc,
             dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
         }
         
-        if (DrawPanelToGeo(points[i], NULL)) {
+        if (DrawPanelToGeo(points_position_list[i], NULL)) {
             //the point returned from GeoToDrawPanel falls within the plot area -> plot it
-            dc.DrawCircle(points[i], radius);
+            dc.DrawCircle(points_position_list[i], radius);
         }
         
     }

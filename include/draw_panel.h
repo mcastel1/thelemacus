@@ -136,11 +136,7 @@ public:
                       int,
                       const wxColor&
                       );
-    void RenderPositions(
-                         wxDC&,
-                         const vector<wxPoint>&,
-                         int,
-                         const wxColor&);
+    void RenderPositions(wxDC&, const wxColor&);
     void RenderMousePositionLabel(wxDC&, const wxColor&, const wxColor&);
     void RenderDraggedObjectLabel(wxDC&, const wxColor&, const wxColor&);
     void RenderSelectionRectangle(wxDC&, const wxPoint&, const wxPoint&, const String&, const wxColor&, const wxColor&);

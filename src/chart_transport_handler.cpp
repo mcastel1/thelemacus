@@ -80,9 +80,8 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
     if(!((MotionHandler<F>::parent)->idling)){
         //I start the animation only if *parent is not in idling mode
         
-        //because I am about to trigger an animation, I set *this, all ChartFrames and DrawPanels to idling mode
-        (*((MotionHandler<F>::parent)->set_idling))();
-        (MotionHandler<F>::parent)->set_idling_all(true);
+        //because I am about to trigger an animation, I set all DrawPanels to idling mode. I do not set the ChartFrame to idling mode because I need the projection_field to be updated with the recently selected value of the projection, if needed
+        (MotionHandler<F>::parent)->SetIdlingAllDrawPanels(true);
         
         //the animation transport starts here (only if the parent ChartFrame is not in idling mode)
         (MotionHandler<F>::timer)->Start(
@@ -312,8 +311,8 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
 
         
         (MotionHandler<F>::timer)->Stop();
-        (*((MotionHandler<F>::parent)->unset_idling))();
-        (MotionHandler<F>::parent)->set_idling_all(false);
+//        (*((MotionHandler<F>::parent)->unset_idling))();
+        (MotionHandler<F>::parent)->SetIdlingAllDrawPanels(false);
         
         //call the functor to be called at the end of the animation, if any
         if((MotionHandler<F>::f) != NULL){

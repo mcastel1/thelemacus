@@ -64,7 +64,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         //the time parameter is undedr its maximum value
 
         if((MotionHandler<F>::t) == 0) {
-            //I am at the beginning of the transport and *parent is not in idling mode -> proceed with the transport
+            //I am at the beginning of the transport
             
             //set parameters back to their original value and reset listcontrol_routes to the original list of Routes
             (*((MotionHandler<F>::parent)->set_idling))();

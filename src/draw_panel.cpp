@@ -130,11 +130,9 @@ inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
 }
 
 
-//render the mouse position label label_to_render ad position position_label_to_render with colors foreground_color and background_color
+//render the mouse position label  with colors foreground_color and background_color
 inline void DrawPanel::RenderMousePositionLabel(
                                                 wxDC& dc,
-                                                const String& label_to_render,
-                                                const wxPoint& position_label_to_render,
                                                 const wxColor& foreground_color,
                                                 const wxColor& background_color
                                                 ) {
@@ -142,11 +140,11 @@ inline void DrawPanel::RenderMousePositionLabel(
     //wipe out position_label_position by writing on top of it a rectangle filled with color backgound_color
     dc.SetPen(background_color);
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_label_to_render, get_size(label_to_render, &dc));
+    dc.DrawRectangle(position_label_position, get_size(label_position, &dc));
     
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
-    dc.DrawText(wxString(label_to_render.value), position_label_to_render);
+    dc.DrawText(wxString(label_position.value), position_label_position);
     
     
 }
@@ -366,8 +364,6 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     RenderMousePositionLabel(
                              dc,
-                             label_position,
-                             position_label_position,
                              wxGetApp().foreground_color,
                              wxGetApp().background_color
                              );
@@ -480,8 +476,6 @@ void DrawPanel::CleanAndRenderAll(void) {
     
     RenderMousePositionLabel(
                              dc,
-                             label_position,
-                             position_label_position,
                              wxGetApp().foreground_color,
                              wxGetApp().background_color
                              );
@@ -562,8 +556,6 @@ inline void DrawPanel::RefreshWIN32(void) {
 
     RenderMousePositionLabel(
         dc,
-        label_position,
-        position_label_position,
         wxGetApp().foreground_color,
         wxGetApp().background_color
     );
@@ -2965,8 +2957,6 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 
                 RenderMousePositionLabel(
                                          dc,
-                                         label_position,
-                                         position_label_position,
                                          wxGetApp().foreground_color,
                                          wxGetApp().background_color
                                          );

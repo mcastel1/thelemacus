@@ -172,25 +172,6 @@ void DrawPanel::MyRefresh(){
 }
 
 
-
-
-//same as  DrawPanel::RenderSelectionRectangle(wxDC& dc, Position geo_position, wxColour foreground_color, wxColour background_color), but it takes a  position (reckoned with respect to the ordigin of *this) as input rather than a  geographic Position
-inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
-                                                const wxPoint& position,
-                                                const wxPoint& position_end_label,
-                                                const String& end_label,
-                                                const wxColour& foreground_color,
-                                                const wxColour& background_color) {
-    
-    Position p;
-    
-    if(DrawPanelToGeo(position, &p)){
-        RenderSelectionRectangle(dc, p, position_end_label, end_label, foreground_color, background_color);
-    }
-    
-}
-
-
 //render a selection rectangle with end Position geo_position (geographic position), foreground color foreground_color and backgrund color background_color, and label at its endpoint end_label located at position_end_label
 inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
                                                 const Position& geo_position,

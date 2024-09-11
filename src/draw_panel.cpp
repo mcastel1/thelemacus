@@ -379,7 +379,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     if ((parent->parent->dragging_object)) {
         //I am draggingn a Route or Position -> show the coordinates of the Position or of the Route's reference_position
-        RenderDraggedObjectLabel(dc, position_label_dragged_object, label_dragged_object, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderDraggedObjectLabel(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     }
     
 }
@@ -474,8 +474,6 @@ void DrawPanel::CleanAndRenderAll(void) {
                     );
     
     RenderDraggedObjectLabel(dc,
-                             position_label_dragged_object,
-                             label_dragged_object,
                              wxGetApp().foreground_color,
                              wxGetApp().background_color
                              );
@@ -541,8 +539,6 @@ inline void DrawPanel::RefreshWIN32(void) {
                         wxNullColour
                         );
         RenderDraggedObjectLabel(dc,
-                                 position_label_dragged_object,
-                                 label_dragged_object,
                                  wxGetApp().foreground_color,
                                  wxGetApp().background_color
                                  );
@@ -620,22 +616,19 @@ inline void DrawPanel::RenderPositions(wxDC& dc,
 
 //render the coordinates of an object (Route or Position) which is being dragged by rendering the label label_dragged_object at position position_label_dragged_object (reckoned with respect to the origin of *this)
 inline void DrawPanel::RenderDraggedObjectLabel(wxDC& dc,
-                                                const wxPoint& position_label_to_render,
-                                                const String& label_to_render,
                                                 const wxColor& foreground_color,
                                                 const wxColor& background_color) {
-    
     
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_label_to_render, get_size(label_to_render, &dc));
+    dc.DrawRectangle(position_label_dragged_object, get_size(label_dragged_object, &dc));
     
     
     //render label_dragged_object
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
-    dc.DrawText(wxString(label_to_render.value), position_label_to_render);
+    dc.DrawText(wxString(label_dragged_object.value), position_label_dragged_object);
     
 }
 

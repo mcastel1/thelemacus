@@ -142,7 +142,7 @@ public:
                          int,
                          const wxColor&);
     void RenderMousePositionLabel(wxDC&, const String&, const wxPoint&, const wxColor&, const wxColor&);
-    void RenderDraggedObjectLabel(wxDC&, const wxPoint&, const String&, const wxColor&, const wxColor&);
+    void RenderDraggedObjectLabel(wxDC&, const wxColor&, const wxColor&);
     void RenderSelectionRectangle(wxDC&, const wxPoint&, const wxPoint&, const String&, const wxColor&, const wxColor&);
     void RenderSelectionRectangle(wxDC&, const Position&, const wxPoint&, const String&, const wxColor&, const wxColor&);
     void CleanAndRenderAll(void);

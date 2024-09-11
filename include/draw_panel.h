@@ -130,12 +130,7 @@ public:
                         const wxColor&,
                         const double&
                         );
-    void RenderRoutes(wxDC&,
-                      const vector<Lines>&,
-                      const vector<wxPoint>&,
-                      int,
-                      const wxColor&
-                      );
+    void RenderRoutes(wxDC&, const wxColor&);
     void RenderPositions(wxDC&, const wxColor&);
     void RenderMousePositionLabel(wxDC&, const wxColor&, const wxColor&);
     void RenderDraggedObjectLabel(wxDC&, const wxColor&, const wxColor&);

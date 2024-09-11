@@ -325,12 +325,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
                     wxGetApp().standard_thickness.value
                     );
     
-    RenderRoutes(dc,
-                 routes,
-                 reference_positions_route_list,
-                 (parent->parent->highlighted_route_now),
-                 wxNullColour
-                 );
+    RenderRoutes(dc, wxNullColour);
     
     RenderPositions(dc, wxNullColour);
     
@@ -355,13 +350,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
 
 
 //render the Routes whose point coordinates with respect to the origin of DrawPanel are stored in points_curves, and whose reference-position coordinates with respect to the origin of DrawPanel are stored in reference_positions. the Route #highlighted_route is rendered with larger thickness. If foreground_color != wxNUllColour, the Routes are rendered with the colors in color_list, otherwise they are rendered with foreground_color
-inline void DrawPanel::RenderRoutes(
-                                    wxDC& dc,
-                                    const vector<Lines>& routes_in,
-                                    const vector<wxPoint>& reference_positions,
-                                    int highlighted_route,
-                                    const wxColor& foreground_color
-                                    ) {
+inline void DrawPanel::RenderRoutes(wxDC& dc, const wxColor& foreground_color) {
     
     int i, color_id;
     double thickness, radius;
@@ -369,10 +358,10 @@ inline void DrawPanel::RenderRoutes(
     wxColour foreground_color_for_RenderLines;
     
     //render Routes
-    for (i = 0, color_id = 0; i < (routes_in.size()); i++) {
+    for (i = 0, color_id = 0; i < (routes.size()); i++) {
         
         //set the route thickness and pen
-        if (i == highlighted_route) {
+        if (i == (parent->parent->highlighted_route_now)) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = thickness;
         }
@@ -392,12 +381,12 @@ inline void DrawPanel::RenderRoutes(
 
         
         //draw  reference_position[i] only if it is included in the plot area
-        if (DrawPanelToGeo(reference_positions[i], NULL)) {
-            dc.DrawCircle(reference_positions[i], radius);
+        if (DrawPanelToGeo(reference_positions_route_list[i], NULL)) {
+            dc.DrawCircle(reference_positions_route_list[i], radius);
         }
         
 
-        RenderLinesAsSplines(&dc, routes_in[i], foreground_color_for_RenderLines, thickness);
+        RenderLinesAsSplines(&dc, routes[i], foreground_color_for_RenderLines, thickness);
         
     }
     
@@ -428,12 +417,7 @@ void DrawPanel::CleanAndRenderAll(void) {
                     wxGetApp().standard_thickness.value
                     );
     
-    RenderRoutes(dc,
-                 routes,
-                 reference_positions_route_list,
-                 (parent->parent->highlighted_route_now), 
-                 wxNullColour
-                 );
+    RenderRoutes(dc, wxNullColour);
     
     RenderPositions(dc, wxNullColour);
     
@@ -489,12 +473,7 @@ inline void DrawPanel::RefreshWIN32(void) {
                         wxGetApp().background_color,
                         wxGetApp().standard_thickness.value
                         );
-        RenderRoutes(dc,
-                     routes,
-                     reference_positions_route_list,
-                     (parent->parent->highlighted_route_now), 
-                     wxNullColour
-                     );
+        RenderRoutes(dc, wxNullColour);
         RenderPositions(dc, wxNullColour);
         RenderDraggedObjectLabel(dc,
                                  wxGetApp().foreground_color,

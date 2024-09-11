@@ -139,7 +139,7 @@ public:
     void RenderPositions(wxDC&, const wxColor&);
     void RenderMousePositionLabel(wxDC&, const wxColor&, const wxColor&);
     void RenderDraggedObjectLabel(wxDC&, const wxColor&, const wxColor&);
-    void RenderSelectionRectangle(wxDC&, const Position&, const wxPoint&, const String&, const wxColor&, const wxColor&);
+    void RenderSelectionRectangle(wxDC&, const wxColor&, const wxColor&);
     void CleanAndRenderAll(void);
     void TabulateRoute(const unsigned int&);
     void TabulateRoutes(void);

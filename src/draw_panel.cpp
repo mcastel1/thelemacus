@@ -173,12 +173,7 @@ void DrawPanel::MyRefresh(){
 
 
 //render a selection rectangle with end Position geo_position (geographic position), foreground color foreground_color and backgrund color background_color, and label at its endpoint end_label located at position_end_label
-inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
-                                                const Position& geo_position,
-                                                const wxPoint& position_end_label,
-                                                const String& end_label,
-                                                const wxColour& foreground_color,
-                                                const wxColour& background_color) {
+inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foreground_color, const wxColour& background_color) {
     
     Angle lambda_a, lambda_b, lambda_ab_span, Z;
     
@@ -194,22 +189,22 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     (Route(
            RouteType(((Route_types[1]).value)),
            (*(parent->parent->geo_position_start)),
-           Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
-           Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
+           Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret((*(parent->parent->geo_position_now)).phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
+           Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret((*(parent->parent->geo_position_now)).phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
            )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
     
     //left vertical edge of rectangle
     (Route(
            RouteType(((Route_types[1]).value)),
-           geo_position,
-           Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
-           Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(geo_position.phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
+           (*(parent->parent->geo_position_now)),
+           Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret((*(parent->parent->geo_position_now)).phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
+           Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret((*(parent->parent->geo_position_now)).phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
            )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
     
     
     //top and bottom horizontal edge of rectangle
     lambda_a.set(parent->parent->geo_position_start->lambda);
-    lambda_b.set(geo_position.lambda);
+    lambda_b.set((*(parent->parent->geo_position_now)).lambda);
     lambda_a.normalize();
     lambda_b.normalize();
     
@@ -250,9 +245,9 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             //now that lambda_span and Z have been set, I draw the Routes corresponding to the top and bottom horizontal edges
             Route(
                   RouteType(((Route_types[0]).value)),
-                  geo_position,
+                  (*(parent->parent->geo_position_now)),
                   Z+M_PI,
-                  Length((wxGetApp().Re.value) * cos(geo_position.phi) * (lambda_ab_span.value))
+                  Length((wxGetApp().Re.value) * cos((*(parent->parent->geo_position_now)).phi) * (lambda_ab_span.value))
                   ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
             Route(
                   RouteType(((Route_types[0]).value)),
@@ -269,7 +264,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             
             Angle temp, lambda_span_temp, Z_temp;
             
-            temp.value = (normalize_pm_pi_ret(geo_position.lambda).value) - (parent->parent->geo_position_start->lambda.normalize_pm_pi_ret().value);
+            temp.value = (normalize_pm_pi_ret((*(parent->parent->geo_position_now)).lambda).value) - (parent->parent->geo_position_start->lambda.normalize_pm_pi_ret().value);
             
             if(fabs(temp.value) < M_PI){
                 lambda_span_temp.set(fabs(temp.value));
@@ -293,9 +288,9 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
             //            //top horizontal edge of rectangle
             (Route(
                    RouteType(((Route_types[0]).value)),
-                   geo_position,
+                   (*(parent->parent->geo_position_now)),
                    Z_temp+M_PI,
-                   Length((wxGetApp().Re.value) * cos(geo_position.phi) * (lambda_span_temp.value))
+                   Length((wxGetApp().Re.value) * cos((*(parent->parent->geo_position_now)).phi) * (lambda_span_temp.value))
                    )).DrawOld(wxGetApp().n_points_routes.value, &dc, this, String(""));
             
             
@@ -309,12 +304,12 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc,
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));
     dc.SetBrush(wxBrush(background_color, wxBRUSHSTYLE_SOLID));
-    dc.DrawRectangle(position_end_label, get_size(end_label, &dc));
+    dc.DrawRectangle(position_end_label_selection_rectangle, get_size((parent->parent->end_label_selection_rectangle), &dc));
     
     //render the rectangle
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
-    dc.DrawText(wxString(end_label.value), position_end_label);
+    dc.DrawText(wxString((parent->parent->end_label_selection_rectangle).value), position_end_label_selection_rectangle);
     dc.DrawText(wxString(parent->parent->start_label_selection_rectangle.value), position_start_label_selection_rectangle);
     
     
@@ -347,13 +342,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     //render selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
-        RenderSelectionRectangle(dc, 
-                                 (*(parent->parent->geo_position_now)),
-                                 position_end_label_selection_rectangle,
-                                 parent->parent->end_label_selection_rectangle,
-                                 wxGetApp().foreground_color,
-                                 wxGetApp().background_color
-                                 );
+        RenderSelectionRectangle(dc, wxGetApp().foreground_color, wxGetApp().background_color);
     }
     
     if ((parent->parent->dragging_object)) {
@@ -519,13 +508,7 @@ inline void DrawPanel::RefreshWIN32(void) {
     if ((parent->parent->selection_rectangle)) {
         
         //re-draw the current selection rectangle
-        RenderSelectionRectangle(dc,
-                                 (*(parent->parent->geo_position_now)),
-                                 position_end_label_selection_rectangle,
-                                 parent->parent->end_label_selection_rectangle,
-                                 wxGetApp().foreground_color,
-                                 wxGetApp().background_color
-                                 );
+        RenderSelectionRectangle(dc, wxGetApp().foreground_color, wxGetApp().background_color);
         
     }
 

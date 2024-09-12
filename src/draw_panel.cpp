@@ -1748,11 +1748,11 @@ void DrawPanel::SetIdling(bool b) {
 //this function computes lambda_min, ... phi_max from x_min ... y_max for the mercator projection
 inline void DrawPanel::Set_lambda_phi_min_max_Mercator(void) {
     
-    parent->lambda_min->set(deg_to_rad * lambda_mercator(x_min));
-    parent->lambda_max->set(deg_to_rad * lambda_mercator(x_max));
+    parent->lambda_min->set(lambda_mercator(x_min));
+    parent->lambda_max->set(lambda_mercator(x_max));
     
-    parent->phi_min->set(deg_to_rad * phi_mercator(y_min));
-    parent->phi_max->set(deg_to_rad * phi_mercator(y_max));
+    parent->phi_min->set(phi_mercator(y_min));
+    parent->phi_max->set(phi_mercator(y_max));
     
 }
 
@@ -2432,8 +2432,8 @@ inline bool DrawPanel::ProjectionToDrawPanel_Mercator(PositionProjection& q, wxP
 //convert the Mercator Projection q into the Position p
 inline void DrawPanel::ProjectionToGeo_Mercator(const PositionProjection& q, Position* p) {
     
-    p->lambda.set(deg_to_rad * lambda_mercator(q.x));
-    p->phi.set(deg_to_rad * phi_mercator(q.y));
+    p->lambda.set(lambda_mercator(q.x));
+    p->phi.set(phi_mercator(q.y));
     
 }
 

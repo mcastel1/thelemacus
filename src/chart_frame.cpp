@@ -351,7 +351,6 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
             
             
             double delta;
-            PositionProjection p_ceil_min, p_floor_max;
             
             //I set delta as a fraction of y_max - y_min
             delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max) - (draw_panel->y_min));

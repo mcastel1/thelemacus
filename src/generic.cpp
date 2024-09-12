@@ -898,18 +898,18 @@ void find_and_replace_case_insensitive(wxComboBox* control, wxArrayString v, boo
 }
 
 
-//this function returns the longitude value (expressed in degrees, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
+//return the longitude value (expressed in radians, positive towards W) of the inverse spherical Mercator projection from the rectangular x value
 //inline
 double lambda_mercator(double x){
     
-    return (-x*rad_to_deg - 360.0*floor((x-(-M_PI))/(2.0*M_PI)));
+    return (-x - two_M_PI*floor((x+M_PI)/two_M_PI));
     
 }
 
-//this function returns the latitude value (expressed in degrees) of the inverse spherical Mercator projection from the rectangular y value
+//return the latitude value (expressed in radians) of the inverse spherical Mercator projection from the rectangular y value
 //inline
 double phi_mercator(double y){
     
-    return(rad_to_deg*atan(sinh(y)));
+    return(atan(sinh(y)));
     
 }

@@ -144,7 +144,8 @@
 
 
  ********** THINGS TO FIX ***********
-    - replace 2.0*M_PI with two_M_PI everywhere 
+    - check that floor_max_lat etc are still the correct values now that you changed the coastline data to polygons
+    - replace 2.0*M_PI with two_M_PI everywhere
     - lambda_mercator() and phi_mercator() have a useless and time-consuming conversion to degrees
     - if you disable coastlines the app crashes
     - size_Mercator returns a size which is way bigger than the size of a circle of equal altitude when run on a circle of equal altitude

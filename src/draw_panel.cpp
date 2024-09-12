@@ -2984,7 +2984,6 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                         //I am using the Mercator projection
                         
                         double delta_y;
-                        PositionProjection p_ceil_min, p_floor_max;
                         
                         delta_y = ((double)((position_end_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
                         
@@ -3479,7 +3478,6 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //I am using the mercator projection
                             
-                            PositionProjection p_ceil_min, p_floor_max;
                             
                             (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
                             (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);

@@ -146,7 +146,6 @@
  ********** THINGS TO FIX ***********
     - size_Mercator returns a size which is way bigger than the size of a circle of equal altitude when run on a circle of equal altitude
     - Mercator projection: when the animation towards a Position brings the chart outside the chart boundaries, there is a segmentation fault
-    - in the mercator projection, if the animation brings you to a Route that is too large and the animation cannot go too N or S becasuse otherwise it would hit the boundaries of the chart, then you cannot drag the chart with the mouse
     - when you press Modify in RouteFrame and prompt the message         parent->print_info_message->message.set(String("The route which has been modified was related to a sight! Disconnecting the route from the sight."));, the Route is not highlighted during the animation (you need to change the functor to be called at the end of the animation)
     - CHECK THAT THE RADIUS OF THE EARTH AND OF ALL PLANETS IS CORRECT AND CORREPONDS TO THE CORRECT UNIT OF 1 nm = 1852 m.
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back

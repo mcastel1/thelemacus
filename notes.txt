@@ -144,6 +144,7 @@
 
 
  ********** THINGS TO FIX ***********
+    - if you disable coastlines the app crashes
     - size_Mercator returns a size which is way bigger than the size of a circle of equal altitude when run on a circle of equal altitude
     - Mercator projection: when the animation towards a Position brings the chart outside the chart boundaries, there is a segmentation fault
     - in the mercator projection, if the animation brings you to a Route that is too large and the animation cannot go too N or S becasuse otherwise it would hit the boundaries of the chart, then you cannot drag the chart with the mouse

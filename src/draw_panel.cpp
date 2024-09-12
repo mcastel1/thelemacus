@@ -2991,10 +2991,6 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                         
                         delta_y = ((double)((position_end_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
                         
-                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
-                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
-                        
-                        
                         if ((!((y_max + delta_y < (p_floor_max.y)) && (y_min + delta_y > (p_ceil_min.y))))) {
                             //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset y_min, y_max to their original values
                             
@@ -3479,12 +3475,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     switch (position_in_vector(parent->projection, Projection_types)) {
                             
                         case 0: {
-                            
                             //I am using the mercator projection
-                            
-                            
-                            (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
-                            (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
                             
                             
                             if ((y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_max_start_drag) < (p_floor_max.y)) && (y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min_start_drag) > (p_ceil_min.y))) {

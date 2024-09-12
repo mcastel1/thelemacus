@@ -352,7 +352,7 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
             //I set delta as a fraction of y_max - y_min
             delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max) - (draw_panel->y_min));
             
-            if (((draw_panel->y_max) - delta < (draw_panel->p_floor_max.y)) && ((draw_panel->y_min) - delta > (draw_panel->p_ceil_min.y))) {
+            if (((draw_panel->y_max) - delta < (draw_panel->p_floor_max->y)) && ((draw_panel->y_min) - delta > (draw_panel->p_ceil_min->y))) {
                 //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
                 
                 //update y_min, y_max according to the drag.

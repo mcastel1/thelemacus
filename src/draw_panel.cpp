@@ -2989,26 +2989,26 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                     case 0: {
                         //I am using the Mercator projection
                         
-                        double delta_y;
-                        
-                        delta_y = ((double)((position_end_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
-                        
-                        if ((!((y_max + delta_y < (p_floor_max->y)) && (y_min + delta_y > (p_ceil_min->y))))) {
-                            //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset y_min, y_max to their original values
-                            
-                            //                    x_min = x_min_start_drag;
-                            //                    x_max = x_max_start_drag;
-                            y_min = y_min_start_drag;
-                            y_max = y_max_start_drag;
-                            
-                            (this->*Set_lambda_phi_min_max)();
-                            
-                            //re-draw the chart
-                            (this->*PreRender)();
-                            Refresh();
-                            FitAll();
-                            
-                        }
+//                        double delta_y;
+//                        
+//                        delta_y = ((double)((position_end_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
+//                        
+//                        if ((!((y_max + delta_y < (p_floor_max->y)) && (y_min + delta_y > (p_ceil_min->y))))) {
+//                            //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset y_min, y_max to their original values
+//                            
+//                            //                    x_min = x_min_start_drag;
+//                            //                    x_max = x_max_start_drag;
+//                            y_min = y_min_start_drag;
+//                            y_max = y_max_start_drag;
+//                            
+//                            (this->*Set_lambda_phi_min_max)();
+//                            
+//                            //re-draw the chart
+//                            (this->*PreRender)();
+//                            Refresh();
+//                            FitAll();
+//                            
+//                        }
                         
                         break;
                         

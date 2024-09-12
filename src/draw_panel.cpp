@@ -34,8 +34,6 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     projection_start = new PositionProjection;
     projection_end = new PositionProjection;
-    p_ceil_min = new PositionProjection;
-    p_floor_max = new PositionProjection;
     
     r = new Cartesian;
     rp = new Cartesian;
@@ -67,10 +65,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     label_position = String("");
-    
-    //set p_floor_max and p_ceil_min from floor_max_lar and ceil_min_lat. Here I use GeoToMercator and not GeoToProjection because GeoToProjection has not been assigned yet
-    GeoToMercator(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), p_floor_max, true);
-    GeoToMercator(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), p_ceil_min, true);
+
     
     circle_observer->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), prefix);
     thickness_route_selection_over_length_screen.read_from_file_to(String("thickness route selection over length screen"), (wxGetApp().path_file_init), String("R"), prefix);

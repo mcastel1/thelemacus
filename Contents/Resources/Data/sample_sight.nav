@@ -4,11 +4,11 @@ Data:
 		Route #1:
 			type = circle of equal altitude
 			ground position:
-				latitude = 56° 43.39000000000002'
-				longitude = 269° 14.89000000000035'
-				label = 
+				latitude = 57° 43.16999999999954'
+				longitude = 302° 23.44999999999838'
+				label = 2024-09-12 16:43:18 UTC+2
 			aperture angle = 22° 12.51999999999995'
-			label = 2024-09-12 07:45:56 UTC+2
+			label = 2024-09-12 16:43:55 UTC+2
 	Positions:
 Recent bodies = 12 10 8
 Recent projections = 1 0

@@ -144,6 +144,7 @@
 
 
  ********** THINGS TO FIX ***********
+    - check if buttons work properly on a real WIN32 machine 
     - check that floor_max_lat etc are still the correct values now that you changed the coastline data to polygons
     - replace 2.0*M_PI with two_M_PI everywhere
     - if you disable coastlines the app crashes

@@ -34,6 +34,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     projection_start = new PositionProjection;
     projection_end = new PositionProjection;
+    p_ceil_min = new PositionProjection;
+    p_floor_max = new PositionProjection;
     
     r = new Cartesian;
     rp = new Cartesian;
@@ -65,6 +67,10 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
     label_position = String("");
+    
+    //set p_floor_max and p_ceil_min from floor_max_lar and ceil_min_lat. Here I use GeoToMercator and not GeoToProjection because GeoToProjection has not been assigned yet
+    GeoToMercator(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), p_floor_max, true);
+    GeoToMercator(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), p_ceil_min, true);
     
     circle_observer->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), prefix);
     thickness_route_selection_over_length_screen.read_from_file_to(String("thickness route selection over length screen"), (wxGetApp().path_file_init), String("R"), prefix);
@@ -114,12 +120,12 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
 inline void DrawPanel::PaintEvent([[maybe_unused]] wxPaintEvent& event) {
     
     wxPaintDC dc(this);
-
+    
 #ifdef WIN32
     //if I am using WIN32, I use Direct2D renderer to speed up things
     wxGraphicsRenderer* rend;
     wxGraphicsContext* context;
-
+    
     rend = wxGraphicsRenderer::GetDirect2DRenderer();
     context = rend->CreateContext(dc);
     dc.SetGraphicsContext(context);
@@ -375,17 +381,17 @@ inline void DrawPanel::RenderRoutes(wxDC& dc, const wxColor& foreground_color) {
         }else{
             foreground_color_for_RenderLines = (wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())];
         }
-
+        
         //        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
         dc.SetPen(wxPen(foreground_color_for_RenderLines, thickness));
-
+        
         
         //draw  reference_position[i] only if it is included in the plot area
         if (DrawPanelToGeo(reference_positions_route_list[i], NULL)) {
             dc.DrawCircle(reference_positions_route_list[i], radius);
         }
         
-
+        
         RenderLinesAsSplines(&dc, routes[i], foreground_color_for_RenderLines, thickness);
         
     }
@@ -396,9 +402,9 @@ inline void DrawPanel::RenderRoutes(wxDC& dc, const wxColor& foreground_color) {
 void DrawPanel::CleanAndRenderAll(void) {
     
     wxClientDC dc(this);
-
+    
 #ifdef WIN32
-//if I am using WIN32, I use Direct2D renderer to speed up things
+    //if I am using WIN32, I use Direct2D renderer to speed up things
     wxGraphicsRenderer* rend;
     wxGraphicsContext* context;
     
@@ -406,7 +412,7 @@ void DrawPanel::CleanAndRenderAll(void) {
     context = rend->CreateContext(dc);
     dc.SetGraphicsContext(context);
 #endif
-
+    
     
     dc.Clear();
     
@@ -446,7 +452,7 @@ inline void DrawPanel::RefreshWIN32(void) {
     rend = wxGraphicsRenderer::GetDirect2DRenderer();
     context = rend->CreateContext(dc);
     dc.SetGraphicsContext(context);
-
+    
     
     //clean up everything
     dc.Clear();
@@ -464,25 +470,25 @@ inline void DrawPanel::RefreshWIN32(void) {
         (parent->parent->transporting_with_selected_route) ||
         (parent->parent->transporting)
         ) {
-        //I am either drawing a selection rectangle, dragging or transporting an object or changing the highlighted object -> I need to re-render all GUI objects
-        
-        //re-render all  objects in *this which may have been partially cancelled by the clean operation above
-        (this->*Render)(
-                        &dc,
-                        wxGetApp().foreground_color,
-                        wxGetApp().background_color,
-                        wxGetApp().standard_thickness.value
-                        );
-        RenderRoutes(dc, wxNullColour);
-        RenderPositions(dc, wxNullColour);
-        RenderDraggedObjectLabel(dc,
-                                 wxGetApp().foreground_color,
-                                 wxGetApp().background_color
-                                 );
-        
-        
-        
-    }
+            //I am either drawing a selection rectangle, dragging or transporting an object or changing the highlighted object -> I need to re-render all GUI objects
+            
+            //re-render all  objects in *this which may have been partially cancelled by the clean operation above
+            (this->*Render)(
+                            &dc,
+                            wxGetApp().foreground_color,
+                            wxGetApp().background_color,
+                            wxGetApp().standard_thickness.value
+                            );
+            RenderRoutes(dc, wxNullColour);
+            RenderPositions(dc, wxNullColour);
+            RenderDraggedObjectLabel(dc,
+                                     wxGetApp().foreground_color,
+                                     wxGetApp().background_color
+                                     );
+            
+            
+            
+        }
     
     if ((parent->parent->selection_rectangle)) {
         
@@ -490,12 +496,12 @@ inline void DrawPanel::RefreshWIN32(void) {
         RenderSelectionRectangle(dc, wxGetApp().foreground_color, wxGetApp().background_color);
         
     }
-
+    
     RenderMousePositionLabel(
-        dc,
-        wxGetApp().foreground_color,
-        wxGetApp().background_color
-    );
+                             dc,
+                             wxGetApp().foreground_color,
+                             wxGetApp().background_color
+                             );
     
 }
 #endif
@@ -574,10 +580,10 @@ void DrawPanel::FitAll() {
     
     //put position_label_position at the bottom left corner of *this
     position_label_position = wxPoint(
-                                          (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value),
-                                          (size_chart.GetHeight())
-                                          - (size_label_vertical + (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))
-                                          );
+                                      (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value),
+                                      (size_chart.GetHeight())
+                                      - (size_label_vertical + (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))
+                                      );
     
     parent->panel->SetSizerAndFit(parent->sizer_v);
     parent->panel->Fit();
@@ -612,9 +618,9 @@ inline void DrawPanel::RenderLines(wxDC* dc,
 
 //render the polygons stored in lines as an spline. Note: the curve is not an interpolating curve - it does not go through all points. It may be considered a smoothing curve
 inline void DrawPanel::RenderLinesAsSplines(wxDC* dc,
-                                   const Lines& lines,
-                                   const wxColor& foreground_color,
-                                   const double& thickness) {
+                                            const Lines& lines,
+                                            const wxColor& foreground_color,
+                                            const double& thickness) {
     
     long long int i;
     
@@ -636,11 +642,11 @@ inline void DrawPanel::RenderLinesAsSplines(wxDC* dc,
 
 //remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::RenderMercator(wxDC* dc,
-                                       const wxColor& foreground_color,
-                                       const wxColor& background_color,
-                                       const double& thickness) {
+                                      const wxColor& foreground_color,
+                                      const wxColor& background_color,
+                                      const double& thickness) {
     
-        
+    
     //draw a rectangle (representing the border) whose border and fill are with color wxGetApp().background_color on bitmap_image, so it will have the right background color
     dc->SetBrush(wxBrush(background_color, wxBRUSHSTYLE_TRANSPARENT));
     dc->SetPen(wxPen(foreground_color, thickness));
@@ -649,7 +655,7 @@ inline void DrawPanel::RenderMercator(wxDC* dc,
     
     //render parallels and meridians and coastlines
     RenderLinesAsSplines(dc, parent->curves, foreground_color, thickness);
-
+    
     
     //render labels on parallels and meridians
     dc->SetTextForeground(foreground_color);
@@ -785,11 +791,11 @@ void DrawPanel::DrawLabel(const Position& q, Angle min, Angle max, Int precision
 
 //This function renders the chart in the 3D case. remember that any Draw command in this function takes as coordinates the coordinates relative to the position of the DrawPanel object!
 inline void DrawPanel::Render3D(
-                                 wxDC* dc,
-                                 const wxColor& foreground_color,
-                                 const wxColor& background_color,
-                                 const double& thickness
-                                 ) {
+                                wxDC* dc,
+                                const wxColor& foreground_color,
+                                const wxColor& background_color,
+                                const double& thickness
+                                ) {
     
     Double d_temp;
     PositionProjection dummy_projection;
@@ -848,7 +854,7 @@ inline void DrawPanel::Render3D(
 inline void DrawPanel::TabulateRoute(const unsigned int& i){
     
     wxPoint p;
-
+    
     
     (routes[i]).reset();
     
@@ -902,15 +908,15 @@ inline void DrawPanel::TabulatePosition(const unsigned int& i){
     
     wxPoint p;
     
-
+    
     //write the reference Positions into reference_positions_route_list
-        if (GeoToDrawPanel((parent->parent->data->position_list)[i], &p, false)) {
-            //the  Position falls in the plot area -> write it into points_position_list
-            points_position_list[i] = p;
-        }else{
-            //the  position does not fall in the plot area -> write a 'Null' value into points_position_list which will be ignored in other methods because it lies outside the plot area
-            points_position_list[i] = wxPoint(0, 0);
-        }
+    if (GeoToDrawPanel((parent->parent->data->position_list)[i], &p, false)) {
+        //the  Position falls in the plot area -> write it into points_position_list
+        points_position_list[i] = p;
+    }else{
+        //the  position does not fall in the plot area -> write a 'Null' value into points_position_list which will be ignored in other methods because it lies outside the plot area
+        points_position_list[i] = wxPoint(0, 0);
+    }
     
 }
 
@@ -920,7 +926,7 @@ inline void DrawPanel::TabulatePosition(const unsigned int& i){
 inline void DrawPanel::TabulatePositions(void) {
     
     unsigned int i;
-
+    
     //resize points_position_list and, which needs to have the same size as (data->position_list)
     points_position_list.clear();
     points_position_list.resize(parent->parent->data->position_list.size());
@@ -1066,9 +1072,9 @@ inline void DrawPanel::PreRenderMercator(void) {
             size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight()) / (size_chart.GetWidth()));
             
             position_plot_area = wxPoint(
-                                             ((int)size_label_horizontal) + 2 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value),
-                                             (((int)(size_chart.GetHeight())) - (((int)(size_plot_area.GetHeight())) + ((int)size_label_vertical) + (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))) / 2
-                                             );
+                                         ((int)size_label_horizontal) + 2 * (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value),
+                                         (((int)(size_chart.GetHeight())) - (((int)(size_plot_area.GetHeight())) + ((int)size_label_vertical) + (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))) / 2
+                                         );
             
         }
     else {
@@ -1093,15 +1099,15 @@ inline void DrawPanel::PreRenderMercator(void) {
         }
         
         position_plot_area = wxPoint(
-                                         
-                                         (((int)(size_chart.GetWidth())) - (((int)(size_plot_area.GetWidth())) - ((int)size_label_horizontal) - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))) / 2
-                                         
-                                         
-                                         ,
-                                         
-                                         (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value)
-                                         
-                                         );
+                                     
+                                     (((int)(size_chart.GetWidth())) - (((int)(size_plot_area.GetWidth())) - ((int)size_label_horizontal) - (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value))) / 2
+                                     
+                                     
+                                     ,
+                                     
+                                     (wxGetApp().rectangle_display.GetWidth()) * (length_border_over_length_screen.value)
+                                     
+                                     );
         
     }
     
@@ -1342,7 +1348,7 @@ inline void DrawPanel::PreRender3D(void) {
     
     //clear grid_points and grid_positions, and set the first entry of grid_positions to 0 because the position of the first Route chunk is 0
     parent->curves.reset();
-
+    
     
     //set zoom_factor, the boundaries of x and y for the chart, and the latitudes and longitudes which comrpise circle_observer
     parent->zoom_factor.set((parent->parent->circle_observer_0->omega.value) / (circle_observer->omega.value));
@@ -1366,7 +1372,7 @@ inline void DrawPanel::PreRender3D(void) {
     
     //    position_plot_area_before = position_plot_area;
     position_plot_area = wxPoint((int)(((double)(size_chart.GetWidth())) * (1.0 - (length_plot_area_over_length_chart.value)) / 2.0),
-                                     (int)(((double)(size_chart.GetHeight())) * (1.0 - (length_plot_area_over_length_chart.value)) / 2.0));
+                                 (int)(((double)(size_chart.GetHeight())) * (1.0 - (length_plot_area_over_length_chart.value)) / 2.0));
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     n_intervals_ticks = (unsigned int)(wxGetApp().n_intervals_ticks_preferred.value);
@@ -1524,7 +1530,7 @@ inline void DrawPanel::PreRender3D(void) {
     TabulateRoutes();
     TabulatePositions();
     
-
+    
     //compute labels on parallels and meridians
     parallels_and_meridians_labels.resize(0);
     positions_parallels_and_meridians_labels.resize(0);
@@ -1557,7 +1563,7 @@ inline void DrawPanel::PreRender3D(void) {
         
     }
     
-        
+    
     //draw meridians
     //set route equal to a meridian going through lambda: I set everything except for the longitude of the ground posision, which will vary in the loop befor and will be fixed inside the loop
     route.type.set(String(((Route_types[1]).value)));
@@ -1748,11 +1754,11 @@ void DrawPanel::SetIdling(bool b) {
 //this function computes lambda_min, ... phi_max from x_min ... y_max for the mercator projection
 inline void DrawPanel::Set_lambda_phi_min_max_Mercator(void) {
     
-    parent->lambda_min->set(deg_to_rad * lambda_mercator(x_min));
-    parent->lambda_max->set(deg_to_rad * lambda_mercator(x_max));
+    parent->lambda_min->set(lambda_mercator(x_min));
+    parent->lambda_max->set(lambda_mercator(x_max));
     
-    parent->phi_min->set(deg_to_rad * phi_mercator(y_min));
-    parent->phi_max->set(deg_to_rad * phi_mercator(y_max));
+    parent->phi_min->set(phi_mercator(y_min));
+    parent->phi_max->set(phi_mercator(y_max));
     
 }
 
@@ -2432,8 +2438,8 @@ inline bool DrawPanel::ProjectionToDrawPanel_Mercator(PositionProjection& q, wxP
 //convert the Mercator Projection q into the Position p
 inline void DrawPanel::ProjectionToGeo_Mercator(const PositionProjection& q, Position* p) {
     
-    p->lambda.set(deg_to_rad * lambda_mercator(q.x));
-    p->phi.set(deg_to_rad * phi_mercator(q.y));
+    p->lambda.set(lambda_mercator(q.x));
+    p->phi.set(phi_mercator(q.y));
     
 }
 
@@ -2692,7 +2698,7 @@ bool DrawPanel::GetMouseGeoPosition(Position* p) {
 
 void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     
-
+    
     //lines for debug
     //    cout << "\nMouse moved";
     //    //    cout << "Position of text_position_now = {" << ((parent->text_position_now)->GetPosition()).x << " , " << ((parent->text_position_now)->GetPosition()).x << "}\n";
@@ -2984,15 +2990,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                         //I am using the Mercator projection
                         
                         double delta_y;
-                        PositionProjection p_ceil_min, p_floor_max;
                         
                         delta_y = ((double)((position_end_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
                         
-                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
-                        (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
-                        
-                        
-                        if ((!((y_max + delta_y < (p_floor_max.y)) && (y_min + delta_y > (p_ceil_min.y))))) {
+                        if ((!((y_max + delta_y < (p_floor_max->y)) && (y_min + delta_y > (p_ceil_min->y))))) {
                             //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset y_min, y_max to their original values
                             
                             //                    x_min = x_min_start_drag;
@@ -3457,7 +3458,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
 #ifdef WIN32
             parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
 #endif
-
+            
             
             SetCursor(wxCURSOR_HAND);
             
@@ -3476,29 +3477,31 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     switch (position_in_vector(parent->projection, Projection_types)) {
                             
                         case 0: {
-                            
                             //I am using the mercator projection
                             
-                            PositionProjection p_ceil_min, p_floor_max;
+                            //                            bool my_A, my_B;
+                            //                            double my_LHS;
+                            //                            
+                            //                            my_LHS = y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_max_start_drag);
+                            //                            
+                            //                            my_A = (y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_max_start_drag) <= (p_floor_max->y));
+                            //                            my_B =(y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min_start_drag) > (p_ceil_min->y));
                             
-                            (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
-                            (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
                             
+                            //                            if (1/*(y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_max_start_drag) < (p_floor_max->y)) && (y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min_start_drag) > (p_ceil_min->y))*/) {
+                            //                                //in this case, the drag operation does not end out of the min and max latitude contained in the data files
                             
-                            if ((y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_max_start_drag) < (p_floor_max.y)) && (y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min_start_drag) > (p_ceil_min.y))) {
-                                //in this case, the drag operation does not end out of the min and max latitude contained in the data files
-                                
-                                //update x_min, ..., y_max according to the drag.
-                                x_min = x_min_start_drag - ((double)((position_now_drag.x) - (position_start_drag.x))) / ((double)(size_plot_area.GetWidth())) * x_span_start_drag;
-                                x_max = x_max_start_drag - ((double)((position_now_drag.x) - (position_start_drag.x))) / ((double)(size_plot_area.GetWidth())) * x_span_start_drag;
-                                y_min = y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
-                                y_max = y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
-                                
-                                (this->*Set_lambda_phi_min_max)();
-                                (this->*PreRender)();
-                                MyRefresh();
-                                
-                            }
+                            //update x_min, ..., y_max according to the drag.
+                            x_min = x_min_start_drag - ((double)((position_now_drag.x) - (position_start_drag.x))) / ((double)(size_plot_area.GetWidth())) * x_span_start_drag;
+                            x_max = x_max_start_drag - ((double)((position_now_drag.x) - (position_start_drag.x))) / ((double)(size_plot_area.GetWidth())) * x_span_start_drag;
+                            y_min = y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
+                            y_max = y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
+                            
+                            (this->*Set_lambda_phi_min_max)();
+                            (this->*PreRender)();
+                            MyRefresh();
+                            
+                            //                            }
                             
                             
                             break;
@@ -3597,7 +3600,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoute(parent->parent->highlighted_route_now);
-
+                            
                             
                         }
                         
@@ -3653,30 +3656,30 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
                             ((parent->parent->chart_frames)[i])->draw_panel->TabulatePosition(parent->parent->highlighted_position_now);
-                                                        
+                            
                             
                         }
                         
                     }
                     
                     
-        
+                    
 #ifdef __APPLE__
                     //I am on APPLE operating systme: I call MyRefresh() to refresh the charts after the drag event
                     parent->parent->MyRefreshAll();
-                        
+                    
 #endif
 #ifdef WIN32
                     
                     if(parent->parent->refresh){
                         //I am on WIN32 operating system -> a refresh of the charts called too often may cause ugly flashes on the chart -> I call MyRefresh() only if enough time has passed since the last one, by checking the refresh variable
-
+                        
                         //the charts can be Refresh()ed -> I call refresh on all DrawPanels, set parent->parent->refresh = false and re-start parent->parent->timer which will start again counting time until the next Refresh() will be authorized
                         
                         parent->parent->MyRefreshAll();
                         
                         for (i = 0; i < parent->parent->chart_frames.size(); i++) {
-  
+                            
                             parent->parent->refresh = false;
                             parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
                             
@@ -3684,7 +3687,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                     }
 #endif
-
+                    
                 }
                 
             }
@@ -3714,7 +3717,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         //re-draw the chart
                         (this->*PreRender)();
                         MyRefresh();
-                                            
+                        
                         break;
                         
                     }
@@ -3751,8 +3754,8 @@ void DrawPanel::OnMouseWheel(wxMouseEvent& event) {
     //    cout << "Slider value new = " << i << "\n";
     
     //if i gets out of range, put it back in the correct range
-//    if (i < 1) { i = 1; }
-//    if (i > ((parent->slider)->GetMax())) { i = ((parent->slider)->GetMax()); }
+    //    if (i < 1) { i = 1; }
+    //    if (i > ((parent->slider)->GetMax())) { i = ((parent->slider)->GetMax()); }
     
     if((i >= parent->slider->GetMin()) && (i <= parent->slider->GetMax())){
         parent->SetSlider(i);

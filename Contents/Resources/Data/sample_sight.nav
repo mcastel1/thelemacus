@@ -1,91 +1,23 @@
 Data:
 	Sights:
-		Sight #1:
-			body:
-				Type = moon
-				Name = moon
-				Radius = 938.1209999999999809 nm
-			limb = u
-			sextant altitude = 47° 57.79999999999987'
-			index error = 0° 1.9'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				date = 2021-06-21
-				hour = 21:01:20
-			use of stopwatch = y
-			stopwatch = 00:37:35
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = Sight was taken at BGC
-		Sight #2:
-			body:
-				Type = moon
-				Name = moon
-				Radius = 938.1209999999999809 nm
-			limb = u
-			sextant altitude = 47° 13.50000000000008'
-			index error = 0° 1.9'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				date = 2021-06-21
-				hour = 21:01:20
-			use of stopwatch = y
-			stopwatch = 00:48:08.99
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = Sight was taken at BGC
-		Sight #3:
-			body:
-				Type = star
-				Name = arcturus
-				Right ascension = 213° 54.79890000000033'
-				Declination = 19° 10.69489999999992'
-			sextant altitude = 67° 13.39999999999974'
-			index error = 0° 1.9'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				date = 2021-07-06
-				hour = 22:48:40
-			use of stopwatch = y
-			stopwatch = 00:19:36.819
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = Sight was taken at BGC
-		Sight #4:
-			body:
-				Type = sun
-				Name = sun
-				Radius = 375648.0000000000000000 nm
-			limb = l
-			sextant altitude = 53° 16.8'
-			index error = 0° 1.9'
-			artificial horizon = y
-			master-clock date and hour of sight:
-				date = 2021-07-08
-				hour = 06:56:00
-			use of stopwatch = y
-			stopwatch = 00:01:46.826
-			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
-			label = Sight was taken at MP
 	Routes:
+		Route #1:
+			type = circle of equal altitude
+			ground position:
+				latitude = 57° 43.16999999999954'
+				longitude = 302° 23.44999999999838'
+				label = 2024-09-12 16:43:18 UTC+2
+			aperture angle = 22° 12.51999999999995'
+			label = 2024-09-12 16:43:55 UTC+2
 	Positions:
-		Position #1:
-			latitude = 48° 51.17938547473737'
-			longitude = 357° 35.17815979031332'
-			label = Centre Sportif Maryse Hilsz (MH)
-		Position #2:
-			latitude = 48° 51.32716700000022'
-			longitude = 357° 35.56550000000021'
-			label = Baby Gym Campo (BGC)
-		Position #3:
-			latitude = 28° 51.30999999999991'
-			longitude = 237° 35.41999999999946'
-			label = X marks the spot
 Recent bodies = 12 10 8
 Recent projections = 1 0
 Recent length formats = 1 0
-Recent route types = 1 0 2
+Recent route types = 2 0 1
 Recent route for transport types = 1 0
 Recent length units = 0 1
 Recent speed units = 0 1
-Recent index error = 1° 12.23423000000001'
+Recent index error = 1° 12.23'
 Recent height of eye value = 1.0000000000000000 m
 Recent route length value = 1.0000000000000000 nm
 Recent route speed value = 23.0000000000000000 kt

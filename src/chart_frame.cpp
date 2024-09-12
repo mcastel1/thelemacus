@@ -273,16 +273,13 @@ template<class T> void ChartFrame::MoveNorth(T& event) {
             //I am using the mercator projection
             
             double delta;
-            PositionProjection p_ceil_min, p_floor_max;
             
             //I set delta as a fraction of y_max - y_min
             delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max) - (draw_panel->y_min));
-            
-            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
-            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
+
             
             
-            if (((draw_panel->y_max) + delta < (p_floor_max.y)) && ((draw_panel->y_min) + delta > (p_ceil_min.y))) {
+            if (((draw_panel->y_max) + delta < (draw_panel->p_floor_max->y)) && ((draw_panel->y_min) + delta > (draw_panel->p_ceil_min->y))) {
                 //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
                 
                 //update y_min, y_max according to the drag.
@@ -351,16 +348,11 @@ template<class T> void ChartFrame::MoveSouth(T& event) {
             
             
             double delta;
-            PositionProjection p_ceil_min, p_floor_max;
             
             //I set delta as a fraction of y_max - y_min
             delta = ((wxGetApp().relative_displacement).value) * ((draw_panel->y_max) - (draw_panel->y_min));
             
-            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
-            (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
-            
-            
-            if (((draw_panel->y_max) - delta < (p_floor_max.y)) && ((draw_panel->y_min) - delta > (p_ceil_min.y))) {
+            if (((draw_panel->y_max) - delta < (draw_panel->p_floor_max->y)) && ((draw_panel->y_min) - delta > (draw_panel->p_ceil_min->y))) {
                 //if the movement operation does not bring the chart out of the min and max latitude contained in the data files, I update y_min, y_max and update the chart
                 
                 //update y_min, y_max according to the drag.
@@ -1211,7 +1203,7 @@ void ChartFrame::GetCoastLineDataMercator(void) {
         bool new_polygon;
         
         //go through coastline_polygons_map and fetch the polygons that fall within *rectangle_observer and store their ids into coastline_polygons_area_observer
-        for(parent->coastline_polygons_area_observer.clear(), i=i_min-floor_min_lat; i<i_max-floor_min_lat; i++) {
+        for(parent->coastline_polygons_area_observer.clear(), i=i_min-floor_min_lat; (i<i_max-floor_min_lat) && /*this addidional condition is needed in case i_min and i_max do not constrain i to  be in the latitude range covered by coastline_polygons_map*/ (i<parent->coastline_polygons_map.size()); i++) {
             for(j=j_min; j<j_max; j++) {
                 
                 for(l=0; l<(parent->coastline_polygons_map)[i][j % 360].size(); l++){

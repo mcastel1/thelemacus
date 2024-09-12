@@ -1203,7 +1203,7 @@ void ChartFrame::GetCoastLineDataMercator(void) {
         bool new_polygon;
         
         //go through coastline_polygons_map and fetch the polygons that fall within *rectangle_observer and store their ids into coastline_polygons_area_observer
-        for(parent->coastline_polygons_area_observer.clear(), i=i_min-floor_min_lat; i<i_max-floor_min_lat; i++) {
+        for(parent->coastline_polygons_area_observer.clear(), i=i_min-floor_min_lat; (i<i_max-floor_min_lat) && /*this addidional condition is needed in case i_min and i_max do not constrain i to  be in the latitude range covered by coastline_polygons_map*/ (i<parent->coastline_polygons_map.size()); i++) {
             for(j=j_min; j<j_max; j++) {
                 
                 for(l=0; l<(parent->coastline_polygons_map)[i][j % 360].size(); l++){

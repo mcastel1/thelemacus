@@ -144,7 +144,6 @@
 
 
  ********** THINGS TO FIX ***********
-    - if you press OK in routeframe and go to a Route that is too high in latitiude (mercator projection) and then drag the chart, when you lift the mouse button you are brought back to the original chart configuration 
     - check that floor_max_lat etc are still the correct values now that you changed the coastline data to polygons
     - replace 2.0*M_PI with two_M_PI everywhere
     - lambda_mercator() and phi_mercator() have a useless and time-consuming conversion to degrees

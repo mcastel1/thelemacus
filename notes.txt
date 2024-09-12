@@ -144,6 +144,7 @@
 
 
  ********** THINGS TO FIX ***********
+    - lambda_mercator() and phi_mercator() have a useless and time-consuming conversion to degrees 
     - if you disable coastlines the app crashes
     - size_Mercator returns a size which is way bigger than the size of a circle of equal altitude when run on a circle of equal altitude
     - Mercator projection: when the animation towards a Position brings the chart outside the chart boundaries, there is a segmentation fault

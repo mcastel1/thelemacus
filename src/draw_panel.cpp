@@ -34,6 +34,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     projection_start = new PositionProjection;
     projection_end = new PositionProjection;
+    p_ceil_min = new PositionProjection;
+    p_floor_max = new PositionProjection;
     
     r = new Cartesian;
     rp = new Cartesian;
@@ -67,8 +69,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     label_position = String("");
     
     //set p_floor_max and p_ceil_min from floor_max_lar and ceil_min_lat
-    (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), &p_floor_max, true);
-    (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), &p_ceil_min, true);
+    (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * floor_max_lat)), p_floor_max, true);
+    (this->*GeoToProjection)(Position(Angle(0.0), Angle(deg_to_rad * ceil_min_lat)), p_ceil_min, true);
     
     circle_observer->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), prefix);
     thickness_route_selection_over_length_screen.read_from_file_to(String("thickness route selection over length screen"), (wxGetApp().path_file_init), String("R"), prefix);
@@ -2991,7 +2993,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                         
                         delta_y = ((double)((position_end_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min);
                         
-                        if ((!((y_max + delta_y < (p_floor_max.y)) && (y_min + delta_y > (p_ceil_min.y))))) {
+                        if ((!((y_max + delta_y < (p_floor_max->y)) && (y_min + delta_y > (p_ceil_min->y))))) {
                             //in this case,  the drag operation ends out  the min and max latitude contained in the data files -> reset y_min, y_max to their original values
                             
                             //                    x_min = x_min_start_drag;
@@ -3478,7 +3480,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             //I am using the mercator projection
                             
                             
-                            if ((y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_max_start_drag) < (p_floor_max.y)) && (y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min_start_drag) > (p_ceil_min.y))) {
+                            if ((y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_max_start_drag) < (p_floor_max->y)) && (y_min_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max - y_min_start_drag) > (p_ceil_min->y))) {
                                 //in this case, the drag operation does not end out of the min and max latitude contained in the data files
                                 
                                 //update x_min, ..., y_max according to the drag.

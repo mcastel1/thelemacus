@@ -156,5 +156,4 @@
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame Mac
  on WIN32:
     - dark mode is not recognized 
-    - after you select a projection in ChartFrame the projection combobox is empty
     - the center of a reference Position of a Route is red while the color of the Route is different from Red

@@ -147,7 +147,6 @@
     - check if buttons work properly on a real WIN32 machine
     - check that floor_max_lat etc are still the correct values now that you changed the coastline data to polygons
     - replace 2.0*M_PI with two_M_PI everywhere
-    - if you disable coastlines the app crashes
     - size_Mercator returns a size which is way bigger than the size of a circle of equal altitude when run on a circle of equal altitude
     - when you press Modify in RouteFrame and prompt the message         parent->print_info_message->message.set(String("The route which has been modified was related to a sight! Disconnecting the route from the sight."));, the Route is not highlighted during the animation (you need to change the functor to be called at the end of the animation)
     - CHECK THAT THE RADIUS OF THE EARTH AND OF ALL PLANETS IS CORRECT AND CORREPONDS TO THE CORRECT UNIT OF 1 nm = 1852 m.

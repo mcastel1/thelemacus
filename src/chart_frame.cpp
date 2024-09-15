@@ -1154,8 +1154,8 @@ void ChartFrame::GetCoastLineData3D(void) {
 //this function efficiently reads coastline data stored in data_x in the interval of latitudes (*lambda_min), (*lambda_max), (*phi_min), (*phi_max), and writes this data x and y, writing n_points points at the most. This data is stored into parent->coastline_points
 void ChartFrame::GetCoastLineDataMercator(void) {
 
-    int i_min = 0, i_max = 0, j_min = 0, j_max = 0;
-    unsigned long long int i, j;
+    int i=0, i_min = 0, i_max = 0, j_min = 0, j_max = 0;
+    unsigned long long int j;
     wxPoint q;
 
     if (((*lambda_min) < M_PI) && ((*lambda_max) > M_PI)) {
@@ -1189,8 +1189,11 @@ void ChartFrame::GetCoastLineDataMercator(void) {
         unsigned long long int n_added_polygons, l, p, m, every;
         bool new_polygon;
         
+        
         //go through coastline_polygons_map and fetch the polygons that fall within *rectangle_observer and store their ids into coastline_polygons_area_observer
-        for(parent->coastline_polygons_area_observer.clear(), i=i_min-floor_min_lat; (i<i_max-floor_min_lat) && /*this addidional condition is needed in case i_min and i_max do not constrain i to  be in the latitude range covered by coastline_polygons_map*/ (i<parent->coastline_polygons_map.size()); i++) {
+        for(parent->coastline_polygons_area_observer.clear(), i =  (i_min - floor_min_lat > 0 ? i_min - floor_min_lat : 0);
+            (i<i_max-floor_min_lat) && /*this addidional condition is needed in case i_min and i_max do not constrain i to  be in the latitude range covered by coastline_polygons_map*/ (i<parent->coastline_polygons_map.size());
+            i++) {
             for(j=j_min; j<j_max; j++) {
                 
                 for(l=0; l<(parent->coastline_polygons_map)[i][j % 360].size(); l++){

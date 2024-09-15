@@ -1189,11 +1189,6 @@ void ChartFrame::GetCoastLineDataMercator(void) {
         unsigned long long int n_added_polygons, l, p, m, every;
         bool new_polygon;
         
-        i=i_min-floor_min_lat;
-        check_A = (i < i_max - floor_min_lat);
-        check_B = (i < ((int)(parent->coastline_polygons_map.size())));
-
-        cout << check_A << check_B;
         
         //go through coastline_polygons_map and fetch the polygons that fall within *rectangle_observer and store their ids into coastline_polygons_area_observer
         for(parent->coastline_polygons_area_observer.clear(), i =  (i_min - floor_min_lat > 0 ? i_min - floor_min_lat : 0);

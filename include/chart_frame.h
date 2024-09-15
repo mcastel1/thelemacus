@@ -36,8 +36,6 @@ class ChartFrame: public wxFrame{
     
 public:
     
-    bool check_A, check_B;
-
     ListFrame* parent;
     DrawPanel *draw_panel;
     ChartPanel* panel;

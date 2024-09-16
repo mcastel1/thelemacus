@@ -275,8 +275,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                 lambda_span_temp.set(two_M_PI - fabs(temp.value));
                 Z_temp = Angle(-(M_PI_2 + M_PI * (1.0 + GSL_SIGN(temp.value)) / 2.0));
             }
-            
-            
+        
             
             //bottom horizontal edge of rectangle
             (Route(
@@ -295,12 +294,13 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                    Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_now->phi) * (lambda_span_temp.value))
                    )).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
             
-            
             break;
+            
         }
             
-            
     }
+    
+    RenderLinesAsSplines(&dc, parent->curves_selection_rectangle, foreground_color, wxGetApp().standard_thickness.value);
     
     //render the labels of the selection rectangle
     //wipe out the space occupied by the label

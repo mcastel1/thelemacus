@@ -751,7 +751,7 @@ void Route::Draw(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wx
 }
 
 
-//reset *lines and tabulate the points of Route *this in any projection of draw_panel and writes them into *lines.
+//reset *lines and tabulate the points of Route *this in any projection of draw_panel and write them into *lines.
 void Route::Draw(
                  unsigned int n_points,
                  DrawPanel* draw_panel,

@@ -53,7 +53,7 @@ void Data::print_to_kml(String prefix) {
 
             for (j = 0; j < (unsigned int)(wxGetApp().n_points_routes.value); j++) {
 
-                //I consider a Length equal to a temporary value of the length of the route, which spans between 0 and 2.0*M_PI*(Re*sin(((route_list[i]).omega.value))) across the for loop over j
+                //I consider a Length equal to a temporary value of the length of the route, which spans between 0 and two_M_PI*(Re*sin(((route_list[i]).omega.value))) across the for loop over j
                 //I compute the coordinate of the endpoint of route_list[i] for the ((route_list[i]).l) above
                 (route_list[i]).compute_end(Length(2.0 * M_PI * ((wxGetApp().Re.value) * sin(((route_list[i]).omega.value))) * ((double)j) / ((double)(wxGetApp().n_points_routes.value - 1))), new_prefix);
 

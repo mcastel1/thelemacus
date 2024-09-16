@@ -129,7 +129,7 @@ bool PositionProjection::CheckMercator(DrawPanel* draw_panel){
     }else {
         //this is the 'non-normal' configuration where the boundaries of the chart encompass the meridian lambda = pi
 
-        output = ((((draw_panel->x_min) <= x) && (x <= (draw_panel->x_max) + 2.0*M_PI)) ||  (((draw_panel->x_min) - 2.0*M_PI <= x) && (x <= (draw_panel->x_max))));
+        output = ((((draw_panel->x_min) <= x) && (x <= (draw_panel->x_max) + two_M_PI)) ||  (((draw_panel->x_min) - two_M_PI <= x) && (x <= (draw_panel->x_max))));
 
     }
 

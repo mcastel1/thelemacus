@@ -1381,7 +1381,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
                                 //I add 0 and 2*M_PI to the vector t, so I create two chunks of the curve *this which are comprised into circle
                                 my_push_back(t, Angle(0.0));
                                 my_push_back(t, Angle(2.0 * M_PI));
-                                //                                    (t->back()).value = 2.0*M_PI;
+                                //                                    (t->back()).value = two_M_PI;
 
                                 sort(t->begin(), t->end());
 

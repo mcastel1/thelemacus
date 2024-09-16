@@ -1161,7 +1161,7 @@ void ChartFrame::GetCoastLineDataMercator(void) {
     if (((*lambda_min) < M_PI) && ((*lambda_max) > M_PI)) {
 
         j_min = floor(rad_to_deg * (lambda_max->value));
-        j_max = ceil(rad_to_deg * ((lambda_min->value) + 2.0*M_PI));
+        j_max = ceil(rad_to_deg * ((lambda_min->value) + two_M_PI));
 
     }else {
 
@@ -1174,7 +1174,7 @@ void ChartFrame::GetCoastLineDataMercator(void) {
         else {
 
             j_min = floor(rad_to_deg * (lambda_max->value));
-            j_max = ceil(rad_to_deg * ((lambda_min->value) + 2.0*M_PI));
+            j_max = ceil(rad_to_deg * ((lambda_min->value) + two_M_PI));
 
         }
 

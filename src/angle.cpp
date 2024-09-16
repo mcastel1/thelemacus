@@ -339,7 +339,7 @@ void Angle::print(String name, String prefix, ostream& ostr) {
 //inline 
 bool Angle::is_zero_epsilon_double(void){
     
-    return((fabs(value) < epsilon_double) || (fabs(value-2.0*M_PI) < epsilon_double));
+    return((fabs(value) < epsilon_double) || (fabs(value-two_M_PI) < epsilon_double));
 
 }
 

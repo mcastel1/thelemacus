@@ -230,7 +230,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                    }else{
                        //{lambda_a in A & lambda_b in B} or {lambda_a in B and lambda_b in A}
                        
-                       lambda_ab_span.set(2.0*M_PI - fabs((lambda_b.value) - (lambda_a.value)));
+                       lambda_ab_span.set(two_M_PI - fabs((lambda_b.value) - (lambda_a.value)));
                        Z = Angle(GSL_SIGN((lambda_b.value) - (lambda_a.value)) * M_PI_2);
                        
                    }
@@ -271,7 +271,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                 lambda_span_temp.set(fabs(temp.value));
                 Z_temp = Angle(M_PI_2 + M_PI * (1.0 + GSL_SIGN(temp.value)) / 2.0);
             }else{
-                lambda_span_temp.set(2.0*M_PI - fabs(temp.value));
+                lambda_span_temp.set(two_M_PI - fabs(temp.value));
                 Z_temp = Angle(-(M_PI_2 + M_PI * (1.0 + GSL_SIGN(temp.value)) / 2.0));
             }
             
@@ -2318,7 +2318,7 @@ inline bool DrawPanel::GeoToMercator(const Position& q, PositionProjection* p, b
             (p->x) = (temp.x);
             //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian: if p->x is smaller than x_max, then it nees to be translated to the right by 2pi in order to be plotted
             if ((x_max < x_min) && ((p->x) <= x_max)) {
-                (p->x) += 2.0*M_PI;
+                (p->x) += two_M_PI;
             }
             
             (p->y) = (temp.y);
@@ -2411,7 +2411,7 @@ inline bool DrawPanel::ProjectionToDrawPanel_Mercator(PositionProjection& q, wxP
             
             //this is needed if lambda_min, lambda_max encompass the Greenwich antimeridian: if q.x is smaller than x_max, then it nees to be translated to the right by 2 * pi
             if ((x_max < x_min) && ((temp.x) <= x_max)) {
-                (temp.x) += 2.0*M_PI;
+                (temp.x) += two_M_PI;
             }
             
             (p->x) = (position_plot_area.x) + ((temp.x) - x_min) / x_span() * (size_plot_area.GetWidth());

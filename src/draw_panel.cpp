@@ -184,6 +184,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
     
+    parent->curves_selection_rectangle.reset();
     
     //I draw the four edges of the rectangle in a way that is independent of the projection used
     //right vertical edge of rectangle

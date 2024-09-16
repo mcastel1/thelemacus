@@ -186,7 +186,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
     
     parent->curves_selection_rectangle.reset();
     
-    //I draw the four edges of the rectangle in a way that is independent of the projection used
+    //draw the 4 edges of the rectangle in a way that is independent of the projection used
     //right vertical edge of rectangle
     (Route(
            RouteType(((Route_types[1]).value)),

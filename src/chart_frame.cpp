@@ -70,8 +70,8 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     curves.points.reserve(j);
     curves.positions.reserve(parent->n_all_coastline_points);
     //allocate the maximal number of points and positions that will be needed for a selection rectangle: n_points_routes times the number of Routes in selection_rectangle, which is 4
-    curves_selection_rectangle.points.reserve(4*(wxGetApp().n_points_routes));
-    curves_selection_rectangle.positions.reserve(4*(wxGetApp().n_points_routes));
+    curves_selection_rectangle.points.reserve(4*(wxGetApp().n_points_routes.value));
+    curves_selection_rectangle.positions.reserve(4*(wxGetApp().n_points_routes.value));
     
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 

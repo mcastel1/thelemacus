@@ -192,7 +192,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
            (*(parent->parent->geo_position_start)),
            Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
            Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
-           )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
+           )).Draw((wxGetApp().n_points_routes.value), &dc, this, String(""));
     
     //left vertical edge of rectangle
     (Route(
@@ -200,7 +200,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
            (*(parent->parent->geo_position_now)),
            Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
            Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
-           )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
+           )).Draw((wxGetApp().n_points_routes.value), &dc, this, String(""));
     
     
     //top and bottom horizontal edge of rectangle

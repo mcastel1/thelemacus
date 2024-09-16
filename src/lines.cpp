@@ -10,12 +10,8 @@
 #include "lines.h"
 
 Lines::Lines(void){
-    
-    points.clear();
-    positions.clear();
-    
-    //add zero as a first entry of positions because the first chunk will start with points[0]
-    positions.push_back(0);
+      
+    reset();
     
 }
 

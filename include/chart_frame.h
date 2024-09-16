@@ -54,8 +54,7 @@ public:
     ProjectionField<ChartFrame>* projection_field;
     PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >* print_error_message;
     /*the latitude/longitude setting the boundaries of the plotted area on earth*/Angle *phi_min, *phi_max, /*it is not necessarily true that lambda_min < lambda_max: lambda_min(max) correspond to the left(right) edge of the plot area*/*lambda_min, *lambda_max;
-    //curves contains multiple curves to be rendered, e.g., parallels, meridians, Routes, ticks, etc ...
-    Lines curves;
+    Lines /*curves contains multiple graphical objects to be rendered, e.g., parallels, meridians, Routes, ticks, etc ...*/ curves, /*curves selection_rectangle contains the curves of the selection rectangle*/ curves_selection_rectangle;
 
     //idling = true means that the user is interacting with a temporary dialog window, thus all the handlers of wxFOCUS_EVENT do not make sense when idling = true and they will be disabled until idling is set back to false
     bool idling, /*this is true if the user is currently scrolling*/mouse_scrolling, /*this is true if the chart is being dragged, and thus the size of *this must not change across multiple Draw(s), and false otherwise*/ dragging_chart;

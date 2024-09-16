@@ -9,6 +9,7 @@
 
 #include "lines.h"
 
+//construct and initializes a new Lines object
 Lines::Lines(void){
       
     reset();

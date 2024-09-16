@@ -1129,7 +1129,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     if ((((*(parent->lambda_min)) < M_PI) && ((*(parent->lambda_max)) > M_PI)) || ((*(parent->lambda_min)) < (*(parent->lambda_max)))) {
         //the 'anomalous' situation where the chart encompasses the Greenwich antimeridian
         
-        lambda_span = (parent->lambda_min->value) - (parent->lambda_max->value) + 2.0 * M_PI;
+        lambda_span = (parent->lambda_min->value) - (parent->lambda_max->value) + two_M_PI;
         
     }
     else {
@@ -1168,7 +1168,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     if (((*(parent->lambda_min)) < M_PI) && ((*(parent->lambda_max)) > M_PI)) {
         
         (lambda_start.value) = ceil(((*(parent->lambda_max)).value) / delta_lambda) * delta_lambda;
-        (lambda_end.value) = ((*(parent->lambda_min)).value) + (2.0 * M_PI);
+        (lambda_end.value) = ((*(parent->lambda_min)).value) + two_M_PI;
         
     }
     else {
@@ -1182,7 +1182,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         else {
             
             (lambda_start.value) = ceil(((*(parent->lambda_max)).value) / delta_lambda) * delta_lambda;
-            (lambda_end.value) = ((*(parent->lambda_min)).value) + 2.0 * M_PI;
+            (lambda_end.value) = ((*(parent->lambda_min)).value) + two_M_PI;
             
         }
         
@@ -1291,7 +1291,7 @@ inline void DrawPanel::PreRenderMercator(void) {
         route.length->set(
                           (wxGetApp().Re.value) * cos(phi) * ((
                                                                
-                                                               ((((*(parent->lambda_min))) < M_PI) && (((*(parent->lambda_max))) > M_PI)) ? (((*(parent->lambda_min))) - ((*(parent->lambda_max))) + 2.0 * M_PI) : (((*(parent->lambda_min))) - ((*(parent->lambda_max))))
+                                                               ((((*(parent->lambda_min))) < M_PI) && (((*(parent->lambda_max))) > M_PI)) ? (((*(parent->lambda_min))) - ((*(parent->lambda_max))) + two_M_PI) : (((*(parent->lambda_min))) - ((*(parent->lambda_max))))
                                                                
                                                                ).value), LengthUnit_types[0]);
         
@@ -1388,7 +1388,7 @@ inline void DrawPanel::PreRender3D(void) {
         
         if (((*(parent->lambda_min)) < M_PI) && ((*(parent->lambda_max)) > M_PI)) {
             
-            lambda_span = ((*(parent->lambda_min)).value) - ((*(parent->lambda_max)).value) + 2.0 * M_PI;
+            lambda_span = ((*(parent->lambda_min)).value) - ((*(parent->lambda_max)).value) + two_M_PI;
             
         }
         else {
@@ -1435,7 +1435,7 @@ inline void DrawPanel::PreRender3D(void) {
         //in this case circle_observer spans all longitudes
         
         (lambda_start.value) = 0.0;
-        (lambda_end.value) = 2.0 * M_PI;
+        (lambda_end.value) = two_M_PI;
         
     }
     else {
@@ -1444,7 +1444,7 @@ inline void DrawPanel::PreRender3D(void) {
         if (((*(parent->lambda_min)) < M_PI) && ((*(parent->lambda_max)) > M_PI)) {
             
             (lambda_start.value) = floor(((*(parent->lambda_max)).value) / delta_lambda) * delta_lambda;
-            (lambda_end.value) = ((*(parent->lambda_min)).value) + (2.0 * M_PI);
+            (lambda_end.value) = ((*(parent->lambda_min)).value) + two_M_PI;
             
         }
         else {
@@ -1616,7 +1616,7 @@ inline void DrawPanel::PreRender3D(void) {
         
         //route.omega  and route.reference_position->phi of the circle of equal altitude are set for each value of phi as functions of phi, in such a way that route.omega is always smaller than pi/2
         route.omega.set(M_PI_2 - fabs(phi.value));
-        route.length->set(2.0 * M_PI * (wxGetApp().Re.value) * sin(route.omega), LengthUnit_types[0]);
+        route.length->set(two_M_PI * (wxGetApp().Re.value) * sin(route.omega), LengthUnit_types[0]);
         route.reference_position->phi.set(GSL_SIGN(phi.value) * M_PI_2);
         
         //add the current parallel that is being drawn to parallels
@@ -1888,7 +1888,7 @@ inline double DrawPanel::x_span(void) {
     }
     else {
         //in this case, x_max, x_min encompass the meridian lambda = pi
-        return(2.0 * M_PI - (x_min - x_max));
+        return(two_M_PI - (x_min - x_max));
     }
     
 }

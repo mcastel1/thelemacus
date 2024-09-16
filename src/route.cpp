@@ -219,7 +219,7 @@ Route::Route(RouteType type_in, Position reference_position_in, Angle omega_in) 
     length_format.set((LengthFormat_types[1]));
     
     //the lenght of the circle of equal altitude is set by default
-    length->set(2.0 * M_PI * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
+    length->set(two_M_PI * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
 
     related_sight.set(-1);
 
@@ -957,7 +957,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                             
                             s->resize(2);
                             ((*s)[0]).set(0.0, LengthUnit_types[0]);
-                            ((*s)[1]).set(2.0 * M_PI * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
+                            ((*s)[1]).set(two_M_PI * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
                             
                         }else{
                             
@@ -1004,7 +1004,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                             //*this is fully included into circle_observer and does not interscet with circle_observer: in this case, I draw the full circle of equal altitude *this
                             
                             ((*s)[0]).set(0.0, LengthUnit_types[0]);
-                            ((*s)[1]).set(2.0 * M_PI * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
+                            ((*s)[1]).set(two_M_PI * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
                             
                         }
                         else {
@@ -1036,7 +1036,7 @@ void Route::compute_l_ends(vector<Length>* s, bool* success, DrawPanel* draw_pan
                             }else{
                                 
                                 ((*s)[0]).set(((t[1]).value) * ((wxGetApp().Re.value) * sin(omega)), LengthUnit_types[0]);
-                                ((*s)[1]).set((2.0 * M_PI + ((t[0]).value)) * ((wxGetApp().Re.value) * sin(omega)), LengthUnit_types[0]);
+                                ((*s)[1]).set((two_M_PI + ((t[0]).value)) * ((wxGetApp().Re.value) * sin(omega)), LengthUnit_types[0]);
                                 
                             }
                             
@@ -1380,7 +1380,7 @@ int Route::inclusion(Route circle, bool write_t, vector<Angle>* t, [[maybe_unuse
 
                                 //I add 0 and 2*M_PI to the vector t, so I create two chunks of the curve *this which are comprised into circle
                                 my_push_back(t, Angle(0.0));
-                                my_push_back(t, Angle(2.0 * M_PI));
+                                my_push_back(t, Angle(two_M_PI));
                                 //                                    (t->back()).value = two_M_PI;
 
                                 sort(t->begin(), t->end());
@@ -1547,8 +1547,8 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
 
         //push back into u the angle which corresponds to the endpoint of Route *this
         if (type == (Route_types[2])) {
-            my_push_back(&u, Angle(2.0 * M_PI));
-            (u.back()).value = 2.0 * M_PI;
+            my_push_back(&u, Angle(two_M_PI));
+            (u.back()).value = two_M_PI;
         }
 
         sort(u.begin(), u.end());
@@ -1710,11 +1710,11 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
                     //if I find a viable instersection point, I set output to 1
                     output = 1;
 
-                    if (compute_end(Length((wxGetApp().Re.value) * (2.0 * M_PI - acos(cos_t_p))), prefix)) {
+                    if (compute_end(Length((wxGetApp().Re.value) * (two_M_PI - acos(cos_t_p))), prefix)) {
 
                         if (write_t) {
                             t->resize((t->size()) + 1);
-                            (t->back()).set(String(""), 2.0 * M_PI - acos(cos_t_p), prefix);
+                            (t->back()).set(String(""), two_M_PI - acos(cos_t_p), prefix);
                         }
 
                         //if I find a viable instersection point, I set output to true
@@ -1734,11 +1734,11 @@ int Route::intersection(Route route, bool write_t, vector<Angle>* t, [[maybe_unu
                     //if I find a viable instersection point, I set output to 1
                     output = 1;
 
-                    if (compute_end(Length((wxGetApp().Re.value) * (2.0 * M_PI - acos(cos_t_m))), prefix)) {
+                    if (compute_end(Length((wxGetApp().Re.value) * (two_M_PI - acos(cos_t_m))), prefix)) {
 
                         if (write_t) {
                             t->resize((t->size()) + 1);
-                            (t->back()).set(String(""), 2.0 * M_PI - acos(cos_t_m), prefix);
+                            (t->back()).set(String(""), two_M_PI - acos(cos_t_m), prefix);
                         }
 
                         //if I find a viable instersection point, I set output to 1
@@ -1921,7 +1921,7 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
         reference_position->read_from_stream<S>(String("reference position"), input_stream, false, new_prefix);
         omega.read_from_stream<S>(String("omega"), input_stream, false, new_prefix);
         
-        length->set(2.0 * M_PI * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
+        length->set(two_M_PI * (wxGetApp().Re.value) * sin(omega), LengthUnit_types[0]);
 
     }else{
 
@@ -2177,7 +2177,7 @@ void Route::compute_end(String prefix) {
             eta = sqrt((1.0 - sin(reference_position->phi.value)) / (1.0 + sin(reference_position->phi.value)));
             
             //tau = +-_{notes}
-            if (((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < 2.0 * M_PI))) { tau = +1; }
+            if (((0.0 <= (Z.value)) && ((Z.value) < M_PI_2)) || ((3.0 * M_PI_2 <= (Z.value)) && ((Z.value) < two_M_PI))) { tau = +1; }
             else { tau = -1; }
             
             if ((0.0 <= (Z.value)) && ((Z.value) < M_PI)) { sigma = -1; }
@@ -2402,7 +2402,7 @@ void Route::lambda_min_max(Angle* lambda_min, Angle* lambda_max, [[maybe_unused]
             
             //compute the values of the parametric Angle t, t_min and t_max, which yield the position with the largest and smallest longitude (p_max and p_min) on the circle of equal altitude
             t_max.set(String(""), acos(-tan(reference_position->phi.value) * tan((omega.value))), new_prefix);
-            t_min.set(String(""), 2.0 * M_PI - acos(-tan(reference_position->phi.value) * tan((omega.value))), new_prefix);
+            t_min.set(String(""), two_M_PI - acos(-tan(reference_position->phi.value) * tan((omega.value))), new_prefix);
             
             //p_max =  Position on the circle of equal altitude  at t = t_max
             length->set((wxGetApp().Re.value) * sin((omega.value)) * (t_max.value), LengthUnit_types[0]);

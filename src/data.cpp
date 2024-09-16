@@ -55,7 +55,7 @@ void Data::print_to_kml(String prefix) {
 
                 //I consider a Length equal to a temporary value of the length of the route, which spans between 0 and two_M_PI*(Re*sin(((route_list[i]).omega.value))) across the for loop over j
                 //I compute the coordinate of the endpoint of route_list[i] for the ((route_list[i]).l) above
-                (route_list[i]).compute_end(Length(2.0 * M_PI * ((wxGetApp().Re.value) * sin(((route_list[i]).omega.value))) * ((double)j) / ((double)(wxGetApp().n_points_routes.value - 1))), new_prefix);
+                (route_list[i]).compute_end(Length(two_M_PI * ((wxGetApp().Re.value) * sin(((route_list[i]).omega.value))) * ((double)j) / ((double)(wxGetApp().n_points_routes.value - 1))), new_prefix);
 
                 //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude, and in the third altitude (I am not interested in altitude, thus is set it to 0); The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90.
 

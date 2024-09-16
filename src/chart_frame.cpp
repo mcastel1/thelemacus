@@ -960,7 +960,7 @@ template<class T> void ChartFrame::OnScroll(/*wxScrollEvent*/ T& event) {
             (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(max_lat)), &p_max, true);
             (draw_panel->*(draw_panel->GeoToProjection))(Position(Angle(0.0), Angle(min_lat)), &p_min, true);
 
-            if ((((draw_panel->y_max) <= (p_max.y)) && ((draw_panel->y_min) >= (p_min.y)) && ((draw_panel->x_span()) <= 2.0 * M_PI))) {
+            if ((((draw_panel->y_max) <= (p_max.y)) && ((draw_panel->y_min) >= (p_min.y)) && ((draw_panel->x_span()) <= two_M_PI))) {
 
                 (draw_panel->*(draw_panel->Set_lambda_phi_min_max))();
 

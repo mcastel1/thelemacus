@@ -476,7 +476,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
     check &= compute_H_o(new_prefix);
     circle_of_equal_altitude->omega.set(M_PI_2 - (H_o.value));
     
-    circle_of_equal_altitude->length->set(2.0 * M_PI * (wxGetApp().Re.value) * sin(circle_of_equal_altitude->omega), LengthUnit_types[0]);
+    circle_of_equal_altitude->length->set(two_M_PI * (wxGetApp().Re.value) * sin(circle_of_equal_altitude->omega), LengthUnit_types[0]);
 
     if (!check) {
 
@@ -556,7 +556,7 @@ void Sight::compute_DH_parallax_and_limb(String prefix) {
         {
             int status = 0;
             int iter = 0;
-            double x = 0.0, x_lo = 0.0, x_hi = 2.0 * M_PI;
+            double x = 0.0, x_lo = 0.0, x_hi = two_M_PI;
             gsl_function F;
             const gsl_root_fsolver_type* T;
             gsl_root_fsolver* s;
@@ -707,7 +707,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
             for (sum = 0.0, l = 0; l < n_lines_ephemerides - 1; l++) {
                 //cout << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
                 if (((GHA_tab[l] - sum) > 0.0) && (GHA_tab[l + 1] < 0.0)) {
-                    sum += 2.0 * M_PI;
+                    sum += two_M_PI;
                 }
                 GHA_tab[l + 1] += sum;
             }
@@ -785,7 +785,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
                 if ((sin((*(body->d))) * sin(phi2) * sin(phi3) + cos((*(body->d))) * sin((body->RA->value)) * (cos(phi3) * sin(phi1) + cos(phi1) * cos(phi2) * sin(phi3)) + cos((*(body->RA))) * cos((*(body->d))) * (cos(phi1) * cos(phi3) - cos(phi2) * sin(phi1) * sin(phi3))) < 0.0) {
                     GHA_tab[l - l_min] += M_PI;
                 }
-                GHA_tab[l - l_min] = GHA_tab[l - l_min] - 2.0 * M_PI * floor(GHA_tab[l - l_min] / (2.0 * M_PI));
+                GHA_tab[l - l_min] = GHA_tab[l - l_min] - two_M_PI * floor(GHA_tab[l - l_min] / two_M_PI);
 
 
                 MJD_tab[l - l_min] = ((double)(l - l_min)) / n_lines_per_day_ephemerides;
@@ -800,7 +800,7 @@ bool Sight::get_coordinates(Route* circle_of_equal_altitude, [[maybe_unused]] St
             for (sum = 0.0, l = 0; l < n_lines_ephemerides - 1; l++) {
                 //cout << GHA_tab[l] << " " << d_tab[l] << " " << r_tab[l] << "\n";
                 if (((GHA_tab[l] - sum) > M_PI) && (GHA_tab[l + 1] < M_PI)) {
-                    sum += 2.0 * M_PI;
+                    sum += two_M_PI;
                 }
                 GHA_tab[l + 1] += sum;
             }

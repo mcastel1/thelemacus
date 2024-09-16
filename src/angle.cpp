@@ -253,7 +253,7 @@ void Angle::set(const Angle& input){
 
 void Angle::normalize(void) {
 
-    value = value - 2.0 * M_PI * floor(value / (2.0 * M_PI));
+    value = value - two_M_PI * floor(value / two_M_PI);
 
 }
 
@@ -261,7 +261,7 @@ Angle Angle::normalize_ret(void) {
 
     Angle temp;
 
-    temp.set(value - 2.0 * M_PI * floor(value / (2.0 * M_PI)));
+    temp.set(value - two_M_PI * floor(value / two_M_PI));
     
     return temp;
 }
@@ -271,7 +271,7 @@ Angle Angle::normalize_ret(void) {
 void Angle::normalize_pm_pi(void) {
 
     normalize();
-    if (value > M_PI) { value -= 2.0 * M_PI; }
+    if (value > M_PI) { value -= two_M_PI; }
 
 }
 
@@ -282,7 +282,7 @@ Angle Angle::span(Angle x) {
 
     if (((*this) < M_PI) && (x > M_PI)) {
 
-        delta.set((value + (2.0 * M_PI)) - (x.value));
+        delta.set((value + two_M_PI) - (x.value));
 
     }
     else {
@@ -394,7 +394,7 @@ string Angle::to_string(String mode, unsigned int precision, bool add_spaces) {
 
 
     if ((mode != String("")) && (value_temp > M_PI)) {
-        value_temp -= 2.0 * M_PI;
+        value_temp -= two_M_PI;
         value_temp = fabs(value_temp);
     }
 
@@ -509,7 +509,7 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
                     }
                     else {
 
-                        output << round(fabs(rad_to_deg * (2.0 * M_PI - value))) << wxGetApp().degree_symbol.value << " S";
+                        output << round(fabs(rad_to_deg * (two_M_PI - value))) << wxGetApp().degree_symbol.value << " S";
 
                     }
 
@@ -519,7 +519,7 @@ string Angle::deg_to_string(String mode, [[maybe_unused]] unsigned int precision
             else {
                 //in this case, I output the sign of the angle in the East/West format (West = +, East = -)
 
-                if (value > M_PI) { value -= 2.0 * M_PI; }
+                if (value > M_PI) { value -= two_M_PI; }
                 output << round(fabs(rad_to_deg * value)) << wxGetApp().degree_symbol.value;
 
                 if (value > 0.0) { output << " W"; }
@@ -551,7 +551,7 @@ string Angle::min_to_string(String mode, unsigned int precision) {
 
     if (mode != String("")) {
         //in this case, I print out the angle in the format >=-180° and <180°
-        if (value > M_PI) { value -= 2.0 * M_PI; }
+        if (value > M_PI) { value -= two_M_PI; }
     }
 
     output << (fabs(rad_to_deg * value) - floor(fabs(rad_to_deg * value))) * 60.0 << "'";

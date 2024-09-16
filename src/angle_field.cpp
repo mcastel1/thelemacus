@@ -280,7 +280,7 @@ template <class P> void AngleField<P>::set(void) {
             if (format == String("EW")) { sign->SetValue(wxString("E")); }
             if (format == String("NS")) { sign->SetValue(wxString("S")); }
 
-            (angle_temp.value) = 2.0 * M_PI - (angle->value);
+            (angle_temp.value) = two_M_PI - (angle->value);
             angle_temp.to_deg_min(&deg_temp, &min_temp, display_precision.value);
 
         }

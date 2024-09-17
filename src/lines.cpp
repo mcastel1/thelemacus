@@ -33,3 +33,12 @@ void Lines::reset(void){
     positions.push_back(0);
     
 }
+
+
+//truncate the tail of *this by resetting the size of points and positions to points_size and positions_size, respectively
+void Lines::reset(const unsigned long& points_size, const unsigned long& positions_size){
+    
+    points.resize(points_size);
+    positions.resize(positions_size);
+    
+}

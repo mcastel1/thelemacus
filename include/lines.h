@@ -29,6 +29,7 @@ public:
     
     void clear(void);
     void reset(void);
+    void reset(const unsigned long&, const unsigned long&);
     
 };
 

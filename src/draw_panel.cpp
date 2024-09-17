@@ -1307,6 +1307,10 @@ inline void DrawPanel::PreRenderMercator(void) {
     //tell PaintEvent that everything but highligghteable objects (coastlines, meridians ... ) must be re-drawn
     re_draw = true;
     
+    //store the tail of parent_curves into curves_points_size and curves_positions_size
+    parent->curves_points_size =  parent->curves.points.size();
+    parent->curves_positions_size = parent->curves.positions.size();
+    
 }
 
 //this function draws coastlines, Routes and Positions in the 3D case

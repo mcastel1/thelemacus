@@ -1029,28 +1029,6 @@ inline void DrawPanel::PreRenderMercator(void) {
     //set rectangle_obseerver
     (*rectangle_observer) = PositionRectangle(Position((*(parent->lambda_min)), (*(parent->phi_max))), Position((*(parent->lambda_max)), (*(parent->phi_min))), String(""));
     
-    /*set the aspect ratio between height and width equal to the ratio between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
-    
-    //if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
-    //    //the ChartFrame is not being dragged and the mouse is not scrolling -> the chart's size will change -> re-compute its size
-    //    
-    //    if ((y_max - y_min) > x_span()) {
-    //        //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
-    //        parent->SetSize(
-    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()) / ((y_max - y_min) / x_span()),
-    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight())
-    //                        );
-    //        
-    //    }
-    //    else {
-    //        //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
-    //        parent->SetSize(
-    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
-    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()) * ((y_max - y_min) / x_span())
-    //                        );
-    //    }
-    //}
-    
     (this->*Set_size_chart)();
     //set the size of *this equal to the size of the chart, in such a way that draw_panel can properly contain the chart
     SetSize(size_chart);
@@ -1113,12 +1091,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
     
     tick_length = (((wxGetApp().tick_length_over_width_plot_area)).value) * (size_plot_area.GetWidth());
-    
-    //set p_NW and p_SE
-    //updates the position of the draw pane this
-    //    DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/ + wxPoint(1, 1), &p_NW);
-    //    DrawPanelToGeo(wxPoint(position_plot_area + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/ - wxPoint(1, 1), &p_SE);
-    
+        
     //fetch the data on the region that I am about to plot from the data files and store them
     parent->GetCoastLineDataMercator();
     

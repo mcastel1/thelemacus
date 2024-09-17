@@ -300,8 +300,10 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
             
     }
     
-    RenderLinesAsSplines(&dc, parent->curves_selection_rectangle, foreground_color, wxGetApp().standard_thickness.value);
+//    RenderLinesAsSplines(&dc, parent->curves_selection_rectangle, foreground_color, wxGetApp().standard_thickness.value);
     
+    /*
+        PUT THIS BACK WHEN BUG IS FIXED
     //render the labels of the selection rectangle
     //wipe out the space occupied by the label
     dc.SetPen(wxPen(background_color));
@@ -313,6 +315,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
     dc.SetTextBackground(background_color);
     dc.DrawText(wxString((parent->parent->end_label_selection_rectangle).value), position_end_label_selection_rectangle);
     dc.DrawText(wxString(parent->parent->start_label_selection_rectangle.value), position_start_label_selection_rectangle);
+    */
     
     
 }

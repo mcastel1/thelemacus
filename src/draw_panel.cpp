@@ -184,7 +184,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
     
-    parent->curves_selection_rectangle.reset();
+//    parent->curves_selection_rectangle.reset();
     
     //draw the 4 edges of the rectangle in a way that is independent of the projection used
     //right vertical edge of rectangle
@@ -193,7 +193,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
            (*(parent->parent->geo_position_start)),
            Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
            Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
-           )).Draw(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+           )).Draw(wxGetApp().n_points_routes.value, this, &(parent->curves), String(""));
     
     //left vertical edge of rectangle
     (Route(
@@ -201,7 +201,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
            (*(parent->parent->geo_position_now)),
            Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
            Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
-           )).Draw(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+           )).Draw(wxGetApp().n_points_routes.value, this, &(parent->curves), String(""));
     
     
     //top and bottom horizontal edge of rectangle
@@ -250,13 +250,13 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                   (*(parent->parent->geo_position_now)),
                   Z+M_PI,
                   Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_now->phi) * (lambda_ab_span.value))
-                  ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+                  ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves), String(""));
             Route(
                   RouteType(((Route_types[0]).value)),
                   (*(parent->parent->geo_position_start)),
                   Z,
                   Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_start->phi) * (lambda_ab_span.value))
-                  ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));;
+                  ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves), String(""));;
             
             break;
         }
@@ -284,7 +284,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                    Z_temp,
                    Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_start->phi) * (lambda_span_temp.value))
                    )
-             ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+             ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves), String(""));
             
             //top horizontal edge of rectangle
             (Route(
@@ -292,7 +292,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                    (*(parent->parent->geo_position_now)),
                    Z_temp+M_PI,
                    Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_now->phi) * (lambda_span_temp.value))
-                   )).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+                   )).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves), String(""));
             
             break;
             
@@ -456,6 +456,13 @@ inline void DrawPanel::RefreshWIN32(void) {
     //clean up everything
     dc.Clear();
     
+    if ((parent->parent->selection_rectangle)) {
+        
+        //re-draw the current selection rectangle
+        RenderSelectionRectangle(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+        
+    }
+    
     
     //re-render everything
     
@@ -489,12 +496,7 @@ inline void DrawPanel::RefreshWIN32(void) {
             
         }
     
-    if ((parent->parent->selection_rectangle)) {
-        
-        //re-draw the current selection rectangle
-        RenderSelectionRectangle(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-        
-    }
+
     
     RenderMousePositionLabel(
                              dc,

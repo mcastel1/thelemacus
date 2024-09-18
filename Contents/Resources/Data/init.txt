@@ -53,7 +53,7 @@ standard thickness over length screen = 1e-3
 #this should not be too short : if it is, it will slow down the code and consume battery
 time check light dark = 00:00:01
 #this is used only on WIN32
-time refresh = 00:00:00.01
+time refresh = 00:00:00.5
 #the temporal length of animations
 animation time = 00:00:1
 number of animation steps = 50

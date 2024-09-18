@@ -67,15 +67,6 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
             
         }
         
-//        transport_handler = new GraphicalFeatureTransportHandler<Route, UnsetIdling<ListFrame> >(
-//                                                                                                 parent,
-//                                                                                                 &((parent->data->route_list)[(parent->i_object_to_transport)]),
-//                                                                                                 (parent->transported_object_type),
-//                                                                                                 ((parent->data->route_list)[(parent->i_transporting_route)]),
-//                                                                                                 parent->unset_idling
-//                                                                                                 );
-        
-        
         auxiliary_transport_handler_inbound = new GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> >(parent,
                                                                                                              &(parent->data->route_list)[(parent->i_transporting_route)],
                                                                                                              String("route"),
@@ -147,7 +138,6 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         //these timers of auxiliary_transport_handler and transport_handler run at the same time -> change this with CallAfter and a lambda call
         //start the auxiliary transport
         (*auxiliary_transport_handler_outbound)();
-        //        (*transport_handler)();
         
     }
     

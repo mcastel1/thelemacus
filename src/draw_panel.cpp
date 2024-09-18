@@ -2725,7 +2725,30 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 
             }
             
+#ifdef __APPLE__
+            //I am on APPLE operating systme: I call MyRefresh() to refresh the charts after the drag event
             parent->parent->MyRefreshAll();
+            
+#endif
+#ifdef WIN32
+            
+            if(parent->parent->refresh){
+                //I am on WIN32 operating system -> a refresh of the charts called too often may cause ugly flashes on the chart -> I call MyRefresh() only if enough time has passed since the last one, by checking the refresh variable
+                
+                //the charts can be Refresh()ed -> I call refresh on all DrawPanels, set parent->parent->refresh = false and re-start parent->parent->timer which will start again counting time until the next Refresh() will be authorized
+                
+                parent->parent->MyRefreshAll();
+                
+                for (i = 0; i < parent->parent->chart_frames.size(); i++) {
+                    
+                    parent->parent->refresh = false;
+                    parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
+                    
+                }
+                
+            }
+            
+#endif
             
         }else{
             //no selection rectangle is being drawn
@@ -3156,6 +3179,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             bool check;
             
             
+#ifdef WIN32
+            parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
+#endif
+            
             //disable all button_resets while a selection rectangle is being drawn
             for(i=0; i<parent->parent->chart_frames.size(); i++){
                 parent->parent->chart_frames[i]->button_reset->Enable(false);
@@ -3196,9 +3223,12 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             
             unsigned int i;
             
+#ifdef WIN32
+            parent->parent->timer->Stop();
+#endif
+            
             GetMouseGeoPosition((parent->parent->geo_position_end));
             drawpanel_position_end = (parent->parent->screen_position);
-            
             
             //store the position at the end of the selection process, to compute the zoom factor later
             if ((this->*ScreenToProjection)(drawpanel_position_end, projection_end)) {

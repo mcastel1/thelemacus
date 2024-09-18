@@ -25,9 +25,6 @@ template<class NON_GUI, class F> GraphicalFeatureTransportHandler<NON_GUI, F>::G
 
     transported_object = object_in;
     type_of_transported_object = type_of_transported_object_in;
-//    (MotionHandler<F>::transporting_route) = transporting_route_in;
-//    (MotionHandler<F>::f) = f_in;
-    
 
     (MotionHandler<F>::timer)->Bind(wxEVT_TIMER, &GraphicalFeatureTransportHandler::OnTimer, this);
 

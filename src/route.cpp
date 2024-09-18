@@ -432,10 +432,6 @@ void Route::Draw(
 
         }
 
-    }else {
-
-        //        cout << prefix.value << RED << "I could not compute ends of Route!\n" << RESET;
-
     }
     
     //write back length_saved into length

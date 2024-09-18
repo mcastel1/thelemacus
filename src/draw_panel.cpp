@@ -189,7 +189,6 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
     
     //draw the 4 edges of the rectangle in a way that is independent of the projection used
     //right vertical edge of rectangle
-    //THIS IS SLOW - START
     (Route(
            RouteType(((Route_types[1]).value)),
            (*(parent->parent->geo_position_start)),
@@ -204,7 +203,6 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
            Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
            Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
            )).Draw(wxGetApp().n_points_routes.value, this, &(parent->curves), String(""));
-    //THIS IS SLOW - END
     
     //top and bottom horizontal edge of rectangle
     lambda_a.set(parent->parent->geo_position_start->lambda);

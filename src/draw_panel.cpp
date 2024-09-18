@@ -52,8 +52,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     rectangle_observer = new PositionRectangle;
     
-    
-    
+    //reserve enough entries in points_dummy, so push_backs into points_dummy are not slow
+    points_dummy.reserve(wxGetApp().n_points_routes.value);
+    end_values_dummy.reserve(wxGetApp().n_points_routes.value);
     
     mouse_dragging = false;
     re_draw = true;
@@ -184,15 +185,16 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
     dc.SetTextForeground(foreground_color);
     dc.SetTextBackground(background_color);
     
+    parent->curves_selection_rectangle.reset();
     
-    //I draw the four edges of the rectangle in a way that is independent of the projection used
+    //draw the 4 edges of the rectangle in a way that is independent of the projection used
     //right vertical edge of rectangle
     (Route(
            RouteType(((Route_types[1]).value)),
            (*(parent->parent->geo_position_start)),
            Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
            Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
-           )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
+           )).Draw(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
     
     //left vertical edge of rectangle
     (Route(
@@ -200,8 +202,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
            (*(parent->parent->geo_position_now)),
            Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
            Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
-           )).Draw(((wxGetApp().n_points_routes).value), &dc, this, String(""));
-    
+           )).Draw(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
     
     //top and bottom horizontal edge of rectangle
     lambda_a.set(parent->parent->geo_position_start->lambda);
@@ -249,13 +250,13 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                   (*(parent->parent->geo_position_now)),
                   Z+M_PI,
                   Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_now->phi) * (lambda_ab_span.value))
-                  ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
+                  ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
             Route(
                   RouteType(((Route_types[0]).value)),
                   (*(parent->parent->geo_position_start)),
                   Z,
                   Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_start->phi) * (lambda_ab_span.value))
-                  ).DrawOld((wxGetApp().n_points_routes.value), &dc, this, String(""));
+                  ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));;
             
             break;
         }
@@ -274,8 +275,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                 lambda_span_temp.set(two_M_PI - fabs(temp.value));
                 Z_temp = Angle(-(M_PI_2 + M_PI * (1.0 + GSL_SIGN(temp.value)) / 2.0));
             }
-            
-            
+        
             
             //bottom horizontal edge of rectangle
             (Route(
@@ -284,22 +284,23 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                    Z_temp,
                    Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_start->phi) * (lambda_span_temp.value))
                    )
-             ).DrawOld(wxGetApp().n_points_routes.value, &dc, this, String(""));
+             ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
             
-            //            //top horizontal edge of rectangle
+            //top horizontal edge of rectangle
             (Route(
                    RouteType(((Route_types[0]).value)),
                    (*(parent->parent->geo_position_now)),
                    Z_temp+M_PI,
                    Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_now->phi) * (lambda_span_temp.value))
-                   )).DrawOld(wxGetApp().n_points_routes.value, &dc, this, String(""));
-            
+                   )).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
             
             break;
+            
         }
             
-            
     }
+    
+    RenderLinesAsSplines(&dc, parent->curves_selection_rectangle, foreground_color, wxGetApp().standard_thickness.value);
     
     //render the labels of the selection rectangle
     //wipe out the space occupied by the label
@@ -312,7 +313,6 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
     dc.SetTextBackground(background_color);
     dc.DrawText(wxString((parent->parent->end_label_selection_rectangle).value), position_end_label_selection_rectangle);
     dc.DrawText(wxString(parent->parent->start_label_selection_rectangle.value), position_start_label_selection_rectangle);
-    
     
 }
 
@@ -451,7 +451,7 @@ inline void DrawPanel::RefreshWIN32(void) {
     
     //clean up everything
     dc.Clear();
-    
+     
     
     //re-render everything
     
@@ -486,10 +486,12 @@ inline void DrawPanel::RefreshWIN32(void) {
         }
     
     if ((parent->parent->selection_rectangle)) {
-        
+
+        parent->curves.reset(parent->curves_points_size, parent->curves_positions_size);
+
         //re-draw the current selection rectangle
         RenderSelectionRectangle(dc, wxGetApp().foreground_color, wxGetApp().background_color);
-        
+
     }
     
     RenderMousePositionLabel(
@@ -1023,28 +1025,6 @@ inline void DrawPanel::PreRenderMercator(void) {
     //set rectangle_obseerver
     (*rectangle_observer) = PositionRectangle(Position((*(parent->lambda_min)), (*(parent->phi_max))), Position((*(parent->lambda_max)), (*(parent->phi_min))), String(""));
     
-    /*set the aspect ratio between height and width equal to the ratio between the y and x range: in this way, the aspect ratio of the plot is equal to 1*/
-    
-    //if ((!(parent->dragging_chart)) && (!(parent->mouse_scrolling))) {
-    //    //the ChartFrame is not being dragged and the mouse is not scrolling -> the chart's size will change -> re-compute its size
-    //    
-    //    if ((y_max - y_min) > x_span()) {
-    //        //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
-    //        parent->SetSize(
-    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()) / ((y_max - y_min) / x_span()),
-    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight())
-    //                        );
-    //        
-    //    }
-    //    else {
-    //        //set the height and width of ChartFrame with the correct aspect ratio and in such a way that the Chart Frame object fits into the screen
-    //        parent->SetSize(
-    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()),
-    //                        (((wxGetApp().rectangle_display).GetSize()).GetHeight()) * ((y_max - y_min) / x_span())
-    //                        );
-    //    }
-    //}
-    
     (this->*Set_size_chart)();
     //set the size of *this equal to the size of the chart, in such a way that draw_panel can properly contain the chart
     SetSize(size_chart);
@@ -1107,12 +1087,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
     
     tick_length = (((wxGetApp().tick_length_over_width_plot_area)).value) * (size_plot_area.GetWidth());
-    
-    //set p_NW and p_SE
-    //updates the position of the draw pane this
-    //    DrawPanelToGeo(wxPoint(position_plot_area) /*I move the NW boundary of the plot area to the interior by one pixel*/ + wxPoint(1, 1), &p_NW);
-    //    DrawPanelToGeo(wxPoint(position_plot_area + size_plot_area) /*I move the SE boundary of the plot area to the interior by one pixel*/ - wxPoint(1, 1), &p_SE);
-    
+        
     //fetch the data on the region that I am about to plot from the data files and store them
     parent->GetCoastLineDataMercator();
     
@@ -1327,6 +1302,10 @@ inline void DrawPanel::PreRenderMercator(void) {
     
     //tell PaintEvent that everything but highligghteable objects (coastlines, meridians ... ) must be re-drawn
     re_draw = true;
+    
+    //store the tail of parent_curves into curves_points_size and curves_positions_size
+    parent->curves_points_size =  parent->curves.points.size();
+    parent->curves_positions_size = parent->curves.positions.size();
     
 }
 
@@ -2740,7 +2719,30 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 
             }
             
+#ifdef __APPLE__
+            //I am on APPLE operating systme: I call MyRefresh() to refresh the charts after the drag event
             parent->parent->MyRefreshAll();
+            
+#endif
+#ifdef WIN32
+            
+            if(parent->parent->refresh){
+                //I am on WIN32 operating system -> a refresh of the charts called too often may cause ugly flashes on the chart -> I call MyRefresh() only if enough time has passed since the last one, by checking the refresh variable
+                
+                //the charts can be Refresh()ed -> I call refresh on all DrawPanels, set parent->parent->refresh = false and re-start parent->parent->timer which will start again counting time until the next Refresh() will be authorized
+                
+                parent->parent->MyRefreshAll();
+                
+                for (i = 0; i < parent->parent->chart_frames.size(); i++) {
+                    
+                    parent->parent->refresh = false;
+                    parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
+                    
+                }
+                
+            }
+            
+#endif
             
         }else{
             //no selection rectangle is being drawn
@@ -3171,6 +3173,10 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             bool check;
             
             
+#ifdef WIN32
+            parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
+#endif
+            
             //disable all button_resets while a selection rectangle is being drawn
             for(i=0; i<parent->parent->chart_frames.size(); i++){
                 parent->parent->chart_frames[i]->button_reset->Enable(false);
@@ -3211,9 +3217,12 @@ void DrawPanel::OnMouseRightDown(wxMouseEvent& event) {
             
             unsigned int i;
             
+#ifdef WIN32
+            parent->parent->timer->Stop();
+#endif
+            
             GetMouseGeoPosition((parent->parent->geo_position_end));
             drawpanel_position_end = (parent->parent->screen_position);
-            
             
             //store the position at the end of the selection process, to compute the zoom factor later
             if ((this->*ScreenToProjection)(drawpanel_position_end, projection_end)) {

@@ -9,13 +9,10 @@
 
 #include "lines.h"
 
+//construct and initializes a new Lines object
 Lines::Lines(void){
-    
-    points.clear();
-    positions.clear();
-    
-    //add zero as a first entry of positions because the first chunk will start with points[0]
-    positions.push_back(0);
+      
+    reset();
     
 }
 
@@ -34,5 +31,14 @@ void Lines::reset(void){
     
     clear();
     positions.push_back(0);
+    
+}
+
+
+//truncate the tail of *this by resetting the size of points and positions to points_size and positions_size, respectively
+void Lines::reset(const unsigned long& points_size, const unsigned long& positions_size){
+    
+    points.resize(points_size);
+    positions.resize(positions_size);
     
 }

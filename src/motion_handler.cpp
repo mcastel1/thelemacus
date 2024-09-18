@@ -22,7 +22,6 @@ template<class F> MotionHandler<F>::MotionHandler(ListFrame* parent_in, const Ro
     f = f_in;
 
     t = 0;
-//    timer->Bind(wxEVT_TIMER, &GraphicalObjectTransportHandler::OnTimer, this);
 
 }
 

@@ -311,7 +311,6 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
 
         
         (MotionHandler<F>::timer)->Stop();
-//        (*((MotionHandler<F>::parent)->unset_idling))();
         (MotionHandler<F>::parent)->SetIdlingAllDrawPanels(false);
         
         //call the functor to be called at the end of the animation, if any

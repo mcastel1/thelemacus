@@ -1739,7 +1739,7 @@ void Route::set_length_from_input(double t){
 
 
 //write into this->end the Position on the Route at length this->length (which needs to be correclty set before this method is called) along the Route from start.  This method requires that Route::length is expressed in units LengthUnit_types[0]
-void Route::compute_end(String prefix) {
+inline void Route::compute_end(String prefix) {
     
     //picks the first (and only) character in string type.value
     switch (position_in_vector(type, Route_types)) {
@@ -1861,7 +1861,7 @@ void Route::compute_end(String prefix) {
 
 
 //This is an overload of compute_end: if d <= (this->l), it writes into this->end the position on the Route at length d along the Route from start and it returns true. If d > (this->l), it returns false.  This method requires that Route::length and d are expressed in units LengthUnit_types[0]
-bool Route::compute_end(Length d, [[maybe_unused]] String prefix) {
+inline bool Route::compute_end(Length d, [[maybe_unused]] String prefix) {
     
     set_length_from_time_speed();
 

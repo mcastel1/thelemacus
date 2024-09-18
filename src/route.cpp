@@ -255,63 +255,6 @@ void Route::add_to_ListControl(long position_in_listcontrol, wxListCtrl* listcon
 }
 
 
-inline void Route::DrawOld(unsigned int n_points, DrawPanel* draw_panel, vector< vector<wxPoint> >* v, [[maybe_unused]] String prefix) {
-
-    wxPoint p;
-    bool end_connected;
-    unsigned int i;
-    Length length_saved;
-    
-    if(length_format == LengthFormat_types[0]){
-        //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
-        
-        set_length_from_time_speed();
-
-    }else{
-        //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
-
-        length_saved.set((*length));
-        length->convert_to(LengthUnit_types[0]);
-
-    }
-
-
-    //tabulate the Route points
-    for (/*this is true if at the preceeding step in the loop over i, I encountered a point which does not lie in the visible side of the chart, and thus terminated a connectd component of dummy_route*/v->clear(), end_connected = true, i = 0; i < n_points; i++) {
-
-        compute_end((*length)*((double)i)/((double)(n_points - 1)), String(""));
-        
-        //treat the first and last point as a special one because it may be at the boundary of *rectangle_observer-> check if they are and, if they are, put them back into *rectangle_observer
-        if((i==0) || (i==n_points-1)){
-            end->put_back_in(draw_panel);
-        }
-
-        if ((draw_panel->GeoToDrawPanel)((*end), &p, false)) {
-
-            if (end_connected) {
-
-                v->resize(v->size() + 1);
-                end_connected = false;
-
-            }
-
-            ((*v)[v->size() - 1]).push_back(p);
-
-        }
-        else {
-
-            end_connected = true;
-
-        }
-
-    }
-    
-    //write back length_saved into *length
-    length->set(length_saved);
-
-}
-
-
 //reset *lines and tabulate the points of Route *this in any projection of draw_panel and write them into *lines.
 void Route::DrawOld(
                     unsigned int n_points,
@@ -484,25 +427,6 @@ void Route::DrawOld(unsigned int n_points, Color color, int width, wxDC* dc, Dra
 
     //write back length_saved into length
     length->set(length_saved);
-
-}
-
-//inline 
-void Route::DrawOld(unsigned int n_points, wxDC* dc, DrawPanel* draw_panel, [[maybe_unused]] String prefix) {
-
-    int i;
-    vector< vector<wxPoint> > v;
-
-    DrawOld(n_points, draw_panel, &v, prefix);
-
-    for (i = 0; i < (v.size()); i++) {
-        //run over all chunks of the Route written in v
-        if (((v[i]).size()) > 1) {
-            //the i-th chunk v[i] has at least two points -> draw it
-            dc->DrawSpline((int)((v[i]).size()), (v[i]).data());
-        }
-    }
-
 
 }
 

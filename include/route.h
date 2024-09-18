@@ -83,8 +83,6 @@ public:
     void update_ListControl(long, wxListCtrl*);
     
     void DrawOld(unsigned int, Color, int, wxDC*, DrawPanel*);
-    void DrawOld(unsigned int, wxDC*, DrawPanel*, String);
-    void DrawOld(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
     void DrawOld(unsigned int, DrawPanel*, Lines*, String prefix);
 
     void Draw(unsigned int, Color, Color, int, wxDC*, DrawPanel*, String);

@@ -487,8 +487,6 @@ inline void DrawPanel::RefreshWIN32(void) {
     
     if ((parent->parent->selection_rectangle)) {
 
-        parent->curves.reset(parent->curves_points_size, parent->curves_positions_size);
-
         //re-draw the current selection rectangle
         RenderSelectionRectangle(dc, wxGetApp().foreground_color, wxGetApp().background_color);
 

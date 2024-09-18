@@ -299,9 +299,6 @@ void Route::DrawOld(
 
             if (starting_new_chunk) {
                 //I reached the end of a chunk
-
-//                v->resize(v->size() + 1);
-                //I update *poisitions
            
                 starting_new_chunk = false;
 

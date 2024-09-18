@@ -346,7 +346,7 @@ void Route::Draw(
     unsigned int i, j;
     wxPoint p;
     Angle lambda_a, lambda_b;
-    vector<Length> s;
+//    vector<Length> s;
     bool compute_l_ends_ok;
     Length length_saved;
 
@@ -364,7 +364,7 @@ void Route::Draw(
 
     }
 
-    compute_l_ends(&s, &compute_l_ends_ok, draw_panel, prefix);
+    compute_l_ends(&(draw_panel->end_values_dummy), &compute_l_ends_ok, draw_panel, prefix);
  
     //comoute the end values of l and writes them in s. If compute_l_ends returns true, than the endpoints have been computed correclty, and I can proceed
     if(compute_l_ends_ok){
@@ -376,7 +376,7 @@ void Route::Draw(
         
          //run over all chunks of *this which are visible
          //given that s contains the number of intersection points of *this and that each pair of intersection point delimits a chunk, and that v contains the chunks, the size of v is equal to thte size of s minus one.
-        for(j=0; j<(s.size()) - 1; j++) {
+        for(j=0; j<(draw_panel->end_values_dummy.size()) - 1; j++) {
             //run over all chunks
  
             //tabulate the Route points of the jth chunk and store them in w
@@ -385,7 +385,7 @@ void Route::Draw(
                 //I slightly increase s[j] and slightly decrease s[j+1] (both by epsilon_double) in order to plot a chunk of the Route *this which is slightly smaller than the chunk [s[j], s[j+1]] and thus avoid  the odd lines that cross the whole plot area in the Mercator projection and that connect two points of the same chunk that are far from each other  on the plot area
                 //                compute_end(Length(((s[j]).value) * (1.0 + epsilon_double) + (((s[j + 1]).value) * (1.0 - epsilon_double) - ((s[j]).value) * (1.0 + epsilon_double)) * ((double)i) / ((double)(n_points - 1))), String(""));
                 compute_end(
-                            (s[j] * (1.0 + epsilon_double)) + (((s[j + 1] * (1.0 - epsilon_double)) - ((s[j] * (1.0 + epsilon_double)))) * ((double)i)/((double)(n_points - 1))),
+                            ((draw_panel->end_values_dummy)[j] * (1.0 + epsilon_double)) + ((((draw_panel->end_values_dummy)[j + 1] * (1.0 - epsilon_double)) - (((draw_panel->end_values_dummy)[j] * (1.0 + epsilon_double)))) * ((double)i)/((double)(n_points - 1))),
                             String(""));
                 
                 if(((draw_panel->GeoToDrawPanel)((*end), &p, false))){

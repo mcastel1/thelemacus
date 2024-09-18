@@ -54,6 +54,7 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     //reserve enough entries in points_dummy, so push_backs into points_dummy are not slow
     points_dummy.reserve(wxGetApp().n_points_routes.value);
+    end_values_dummy.reserve(wxGetApp().n_points_routes.value);
     
     mouse_dragging = false;
     re_draw = true;

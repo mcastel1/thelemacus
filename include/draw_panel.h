@@ -78,8 +78,9 @@ public:
     wxSizer* sizer_h, *sizer_v;
     //the i-th element of point_route_list is a Lines object: this Lines object contains are as many elements as the number of connected curves in which the Route is cut (because of the meridian lambda = pi). In each of these elements there are the points of the Route chunk with respect to the origin of DrawPanel
     vector<Lines> routes;
-    //I store in reference_positions_route_list the coordinates, with respect to the origin of DrawPanel, of the reference Positions of the Routes at the current step of a drag process
-    vector<wxPoint> reference_positions_route_list, points_position_list, points_dummy;
+    vector<wxPoint> /*I store in reference_positions_route_list the coordinates, with respect to the origin of DrawPanel, of the reference Positions of the Routes at the current step of a drag process*/ reference_positions_route_list, points_position_list, /*a temporary vector used to store wxPoints of Routes: points_dummy is reserved before hand, so its re-allocation or push_backs are not slow*/ points_dummy;
+    /*a temporary vector used to store the Lengths where Routes intersect, for example, a rectangle: it is reserved before hand, so its re-allocation or push_backs are not slow*/
+    vector<Length> end_values_dummy;
     //the i-th element of this vector contains a list of critical values of the parametric angle (t) of the i-th route. At these critical values, route #i crosses the meridian lambda = pi
     //the chart contains the plot area, and the following quantities are the width and height of chart and plot area
     wxSize size_chart, size_plot_area;

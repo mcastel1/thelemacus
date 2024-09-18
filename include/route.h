@@ -88,8 +88,6 @@ public:
     void DrawOld(unsigned int, DrawPanel*, Lines*, String prefix);
 
     void Draw(unsigned int, Color, Color, int, wxDC*, DrawPanel*, String);
-    void Draw(unsigned int, wxDC*, DrawPanel*, String);
-    void Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);
     void Draw(unsigned int, DrawPanel*, Lines*, String prefix);
     
     void lambda_min_max(Angle*, Angle*, String);

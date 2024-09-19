@@ -22,7 +22,7 @@
                     * select both app-static and app-dynamic -> add '/Applications/boost_1_83_0/stage/lib/' to 'Runpath search paths' and to 'Library Search Paths'
                     * select both app-static and app-dynamic -> add '/usr/local/lib' to Library Search Paths
                     * select both app-static and app-dynamic  set 'Always search user paths (deprecated)' to 'Yes'
-                    * set Product -> scheme -> dynamic
+                    * set Product -> scheme -> app-dynamic
                 6. Add all necessary paths by adding, say, 'export PATH="/Applications/wxWidgets-3.2.4/build-cocoa-debug:$PATH"' to ~/.zprofile
                 7. To make breakpoints in included files to work in Xcode, create file  ~/.lldbinit and write in it 'settings set target.inline-breakpoint-strategy always'
                 8. To build the app with make_app.sh:

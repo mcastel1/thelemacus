@@ -145,7 +145,6 @@
 
 
  ********** THINGS TO FIX ***********
-    - when you start a selection rectangle in the mercator projection, the start Position is not the right one 
     - check if buttons work properly on a real WIN32 machine
     - check that floor_max_lat etc are still the correct values now that you changed the coastline data to polygons
     - size_Mercator returns a size which is way bigger than the size of a circle of equal altitude when run on a circle of equal altitude

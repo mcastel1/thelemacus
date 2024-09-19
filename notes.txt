@@ -153,7 +153,6 @@
     - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
 	- write put_back_in , put_back)_in_Mercator and put_back_in_3D :
  on OSX:
-    - when you transport a Route with an existing Route, and select the transporting Route in ListFrame, if you press Enter the trnsport is not triggered (if you double click on the Route it is triggered)
     - items in Listcontrols are not highlighted when mouse hovers on ListFrame Mac
  on WIN32:
     - dark mode is not recognized

@@ -14,18 +14,19 @@
                 1. Download and install boost_1_83_0 from https://www.boost.org/users/history/version_1_83_0.html
                 2. Download and install gsl (gnu scientifc library) from https://www.gnu.org/software/gsl/
                 3. Download and install wxWidgets from https://www.wxwidgets.org/downloads/
-                4. Open  /Applications/wxWidgets-XXX/samples/minimal/minimal_cocoa.xcodeproj/
-                * remove minimal.cpp, click on 'minimal_cocoa' with the blue icon on its left, then 'build phases' -> 'compile sources' -> add main.cpp and all .cpp files in src/
-                * select both app-static and app-dynamic -> add /usr/local/include/gsl/ /usr/local/include/ /Applications/boost_1_83_0/ /Applications/wxWidgets-x.x.x/build/osx/setup/cocoa/include/ and /Users/michelecastellana/Documents/thelemacus/include/ to 'User header search path' (you need to split this in multiple lines when you add)
-                * select both app-static and app-dynamic -> add -lgsl -lcblas -lboost_filesystem -lboost_system to 'Other linker flags' (you need to split this in multiple lines when you add)
-                * select both app-static and app-dynamic -> add '/Applications/boost_1_83_0/stage/lib/' to 'Runpath search paths' and to 'Library Search Paths'
-                * select both app-static and app-dynamic -> add '/usr/local/lib' to Library Search Paths
-                * select both app-static and app-dynamic  set 'Always search user paths (deprecated)' to 'Yes'
-                * set Product -> scheme -> dynamic
-                5. Add all necessary paths by adding, say, 'export PATH="/Applications/wxWidgets-3.2.4/build-cocoa-debug:$PATH"' to ~/.zprofile
-                6. To make breakpoints in included files to work in Xcode, create file  ~/.lldbinit and write in it 'settings set target.inline-breakpoint-strategy always'
-                7. To build the app with make_app.sh:
-                * download the libpng library from https://sourceforge.net/projects/libpng/
+                4. Open wxWidgets-xxx/build/osx/wxcocoa.xcodeproj/ with Xcode and build it
+                5. Open  /Applications/wxWidgets-XXX/samples/minimal/minimal_cocoa.xcodeproj/
+                    * remove minimal.cpp, click on 'minimal_cocoa' with the blue icon on its left, then 'build phases' -> 'compile sources' -> add main.cpp and all .cpp files in src/
+                    * select both app-static and app-dynamic -> add /usr/local/include/gsl/ /usr/local/include/ /Applications/boost_1_83_0/ /Applications/wxWidgets-x.x.x/build/osx/setup/cocoa/include/ and /Users/michelecastellana/Documents/thelemacus/include/ to 'User header search path' (you need to split this in multiple lines when you add)
+                    * select both app-static and app-dynamic -> add -lgsl -lcblas -lboost_filesystem -lboost_system to 'Other linker flags' (you need to split this in multiple lines when you add)
+                    * select both app-static and app-dynamic -> add '/Applications/boost_1_83_0/stage/lib/' to 'Runpath search paths' and to 'Library Search Paths'
+                    * select both app-static and app-dynamic -> add '/usr/local/lib' to Library Search Paths
+                    * select both app-static and app-dynamic  set 'Always search user paths (deprecated)' to 'Yes'
+                    * set Product -> scheme -> dynamic
+                6. Add all necessary paths by adding, say, 'export PATH="/Applications/wxWidgets-3.2.4/build-cocoa-debug:$PATH"' to ~/.zprofile
+                7. To make breakpoints in included files to work in Xcode, create file  ~/.lldbinit and write in it 'settings set target.inline-breakpoint-strategy always'
+                8. To build the app with make_app.sh:
+                    * download the libpng library from https://sourceforge.net/projects/libpng/
      
  
      - on WIN32:

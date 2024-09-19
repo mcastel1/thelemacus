@@ -17,7 +17,7 @@
                 4. Open wxWidgets-xxx/build/osx/wxcocoa.xcodeproj/ with Xcode and build it
                 5. Open  /Applications/wxWidgets-XXX/samples/minimal/minimal_cocoa.xcodeproj/
                     * remove minimal.cpp, click on 'minimal_cocoa' with the blue icon on its left, then 'build phases' -> 'compile sources' -> add main.cpp and all .cpp files in src/
-                    * select both app-static and app-dynamic -> add /usr/local/include/gsl/ /usr/local/include/ /Applications/boost_1_83_0/ /Applications/wxWidgets-x.x.x/build/osx/setup/cocoa/include/ and /Users/michelecastellana/Documents/thelemacus/include/ to 'User header search path' (you need to split this in multiple lines when you add)
+                    * select both app-static and app-dynamic -> add /usr/local/include/gsl/ /usr/local/include/ /Applications/boost_1_83_0/ /Applications/wxWidgets-x.x.x/build/osx/setup/cocoa/include/ and /Applications/wxWidgets-xxx/include/ and /Users/michelecastellana/Documents/thelemacus/include/ to 'User header search path' (you need to split this in multiple lines when you add)
                     * select both app-static and app-dynamic -> add -lgsl -lcblas -lboost_filesystem -lboost_system to 'Other linker flags' (you need to split this in multiple lines when you add)
                     * select both app-static and app-dynamic -> add '/Applications/boost_1_83_0/stage/lib/' to 'Runpath search paths' and to 'Library Search Paths'
                     * select both app-static and app-dynamic -> add '/usr/local/lib' to Library Search Paths

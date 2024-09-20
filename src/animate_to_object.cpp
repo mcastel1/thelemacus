@@ -17,6 +17,8 @@ template<class T, class F> AnimateToObject<T, F>::AnimateToObject(ListFrame* par
     
 }
 
+template class AnimateToObject<Position, HighlightObject<ListFrame>>;
+
 
 //trigger the animation
 template<class T, class F> template<class E> void AnimateToObject<T, F>::operator()(E& event) {
@@ -31,7 +33,7 @@ template<class T, class F> template<class E> void AnimateToObject<T, F>::operato
     Length d;
     
     chart_transport_handlers.resize(parent->chart_frames.size());
-
+    
     //bring all charts to front to show the animation
     wxGetApp().ShowCharts();
     
@@ -49,59 +51,58 @@ template<class T, class F> template<class E> void AnimateToObject<T, F>::operato
                 Double zoom_factor;
                 
                 if(std::is_same<T, Route>::value){
-                    //object is a Route
+                    //*object is a Route
                     
-                    //I introduce the Route* object and set object_in = object by casting object_in into a Route pointer. This is necessary to make this method work with multiple types T (T=Position, T=Route, ...)
-                    Route* object;
+                    Route* route_object;
                     
-                    object = ((Route*)object);
+                    route_object = (Route*)object;
                     
-                   if(object->type == Route_types[2]){
-                       //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
-                       
-                       target_position = (*(object->reference_position));
-                       
-                   }else{
-                       //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
-                       
-                       Length length_saved;
-                       
-                       if((object->length_format) == LengthFormat_types[0]){
-                           //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
-                           
-                           object->set_length_from_time_speed();
-
-                       }else{
-                           //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
-
-                           length_saved.set((*(object->length)));
-                           object->length->convert_to(LengthUnit_types[0]);
-
-                       }
-
-                                
-                       object->compute_end(((*(object->length))/2.0), String(""));
-                       target_position = (*(object->end));
-                       
-                       //write back length_saved into *length
-                       object->length->set(length_saved);
-                       
-                   }
+                    if(route_object->type == Route_types[2]){
+                        //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
+                        
+                        target_position = (*(route_object->reference_position));
+                        
+                    }else{
+                        //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
+                        
+                        Length length_saved;
+                        
+                        if((route_object->length_format) == LengthFormat_types[0]){
+                            //length_format = LengthFormat_types[0] -> compute length from time and speed and have it in units LengthUnit_types[0] because this is the standard unit used to draw Routes
+                            
+                            route_object->set_length_from_time_speed();
+                            
+                        }else{
+                            //length_format = LengtFormat_types[1] -> save *length into length_saved and convert the unit of measure of *length to LengthUnit_types[0] because this is the standard unit used to draw Routes
+                            
+                            length_saved.set((*(route_object->length)));
+                            route_object->length->convert_to(LengthUnit_types[0]);
+                            
+                        }
+                        
+                        
+                        route_object->compute_end(((*(route_object->length))/2.0), String(""));
+                        target_position = (*(route_object->end));
+                        
+                        //write back length_saved into *length
+                        route_object->length->set(length_saved);
+                        
+                    }
                     
-                    //compute the size of the object to which the animation is directed and store it into target_size
-                    object->size_Mercator(&target_size);
+                    //compute the size of the route_object to which the animation is directed and store it into target_size
+                    route_object->size_Mercator(&target_size);
                     
                 }
                 
                 if(std::is_same<T, Position>::value){
                     //object is a Position
                     
-                    Position* object;
+                    Position* position_object;
                     
-                    object = ((Position*)object);
+                    position_object = (Position*)object;
                     
-                    //the target Position of the animation is *object
-                    target_position = (*object);
+                    //the target Position of the animation is *position_object
+                    target_position = (*position_object);
                     //Positions do not have a size such as Routes -> create a Route of type Route_types[2] which has target_position as a reference_position and which has an aprture angle equal to angle_zoom_to_position -> compute its size in the mercator projection and write it into target_size
                     Route(Route_types[2], target_position, wxGetApp().angle_zoom_to_position).size_Mercator(&target_size);
                     
@@ -143,47 +144,47 @@ template<class T, class F> template<class E> void AnimateToObject<T, F>::operato
                 if(std::is_same<T, Route>::value){
                     //object is a Route
                     
-                    //I introduce the Route* object and set object_in = object by casting object_in into a Route pointer. This is necessary to make this method work with multiple types T (T=Position, T=Route, ...)
-                    Route* object;
+                    //I introduce the Route* route_object and set route_object = object by casting objec into a Route pointer. This is necessary to make this method work with multiple types T (T=Position, T=Route, ...)
+                    Route* route_object;
                     
-                    object = ((Route*)object);
+                    route_object = (Route*)object;
                     
-                   if(object->type == Route_types[2]){
-                       //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
-                       
-                       target_position = (*(object->reference_position));
-                       omega_end = object->omega;
-                       
-                       
-                   }else{
-                       //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
-                       
-                       object->set_length_from_time_speed();
-                       
-                       object->compute_end(((*(object->length))/2.0), String(""));
-                       target_position = (*(object->end));
-
-                       omega_end = (object->length->value)/2.0/(wxGetApp().Re.value);
-                       
-                   }
+                    if(route_object->type == Route_types[2]){
+                        //*route is a circle of equal altiutde -> at the end of the animation, the chart must be centered at the center of the circle of equal altitude, i.e., at reference_position. target_omega is given by the aperture angle of the circle of equal altitude, i.e., route.omega
+                        
+                        target_position = (*(route_object->reference_position));
+                        omega_end = route_object->omega;
+                        
+                        
+                    }else{
+                        //*route is a loxodrome or an orthodrome -> at the end of the animaiton, the chart must be centered at the middle point of *route for *route to be visible at the end of the animation. The aperture angle is estimated as half the length of *route divided by the radius of the Earth
+                        
+                        route_object->set_length_from_time_speed();
+                        
+                        route_object->compute_end(((*(route_object->length))/2.0), String(""));
+                        target_position = (*(route_object->end));
+                        
+                        omega_end = (route_object->length->value)/2.0/(wxGetApp().Re.value);
+                        
+                    }
                     
                 }
                 
                 if(std::is_same<T, Position>::value){
-                    //object is a Position
+                    //*object is a Position
                     
-                    Position* object;
+                    Position* position_object;
                     
-                    object = ((Position*)object);
+                    position_object = (Position*)object;
                     
                     //the target Position of the animation is *object
-                    target_position = (*object);
+                    target_position = (*position_object);
                     
                     //Positions do not have a size such as Routes -> set omega_end equal to  angle_zoom_to_position projection and write it into target_size
                     omega_end.set(wxGetApp().angle_zoom_to_position);
                     
                 }
-            
+                
                 //compute the distance between the start and end poisition of the proposed andimation and store it in d
                 target_position.distance(*(((parent->chart_frames)[i])->draw_panel->circle_observer->reference_position), &d, String(""), String(""));
                 
@@ -216,7 +217,9 @@ template<class T, class F> template<class E> void AnimateToObject<T, F>::operato
     }
     
     
-
+    
     event.Skip(true);
-
+    
 }
+
+template void AnimateToObject<Position, HighlightObject<ListFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);

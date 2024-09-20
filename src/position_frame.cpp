@@ -7,6 +7,7 @@
 
 #include "position_frame.h"
 
+#include "animate_to_object.h"
 #include "generic.h"
 #include "on_change_selection_in_list_control.h"
 #include "string_field.h"
@@ -207,6 +208,9 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
 
     unsigned int i;
     stringstream s;
+    //this functor will be used to trigger the animation to the Position once button_ok has been pressed
+    AnimateToObject<Position, HighlightObject<ListFrame>> animate_to_position(parent, position, parent->highlight_position);
+    
 
     if (label->value->GetValue().ToStdString() == "") {
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
@@ -264,7 +268,10 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     parent->highlight_position->operator()(event);
     //2. in parent->highlight_position, set the value of the highlighted Position to be set equal to -1, and call AnimateToObjectOld with second argument parent->highlight_position : in this way, when the animation is over, the highlighted Position will be set to -1, i.e., no Route will be highlighted when the animation is over
     parent->highlight_position->set_value(-1);
-    parent->AnimateToObjectOld<Position, HighlightObject<ListFrame>>(position, parent->highlight_position);
+    
+    
+//    parent->AnimateToObjectOld<Position, HighlightObject<ListFrame>>(position, parent->highlight_position);
+    animate_to_position.operator()(event);
     
     event.Skip(true);
 

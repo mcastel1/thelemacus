@@ -113,14 +113,10 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             (chart_frame->dragging_chart) = true;
             chart_frame->EnableAll(false);
 
-            //            (MotionHandler<F>::transporting_route_temp) = (MotionHandler<F>::transporting_route);
             (MotionHandler<F>::transporting_route_temp).set((MotionHandler<F>::transporting_route));
             
-            
-            //            (MotionHandler<F>::start) = ((MotionHandler<F>::transporting_route).reference_position);
             (MotionHandler<F>::start)->set((*((MotionHandler<F>::transporting_route).reference_position)));
             
-  
             //during the transport, I disconnect DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
             chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
             chart_frame->parent->listcontrol_sights->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
@@ -131,7 +127,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
 
             (chart_frame->draw_panel->label_position) = String("");
 
-       
+    
             switch (position_in_vector(chart_frame->projection, Projection_types)) {
                     
                 case 0: {
@@ -162,8 +158,6 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                 case 1: {
                     //I am using Projection_types[1]
                     
-     
-                    
                     //the Position where I start the animation (start) may not coincide with circle_observer.reference_position (for example, I may want to start the animaiton from the antipode of circle_observer.reference_position to show a nice turn of the earth during the animaiton): thus, to start the animation, I need to first set rotation to the rotation that brings circle_observer.reference_position to be centered on start -> to do this, I do
                     chart_frame->draw_panel->rotation->set(((*(chart_frame->draw_panel->rotation)) * Rotation((*(MotionHandler<F>::start)), (*(chart_frame->draw_panel->circle_observer->reference_position)))));
 
@@ -180,15 +174,6 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                 }
                     
             }
-            
-//            cout << "******************* Before the transport *******************" << endl;
-//            (MotionHandler<F>::transporting_route).compute_end(String(""));
-//            (MotionHandler<F>::transporting_route).reference_position.print(String("Start position of transporting route"), String("\t"), cout);
-//            (MotionHandler<F>::transporting_route).end.print(String("Expected arrival position"), String("\t"), cout);
-//            chart_frame->draw_panel->circle_observer.reference_position.print(String("Circle observer reference position"), String("\t"), cout);
-
-
-         
             
             (MotionHandler<F>::t)++;
 
@@ -257,11 +242,6 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                 }
                     
             }
-            
-//            cout << "********* t = " << t << " *************" << endl;
-//            (MotionHandler<F>::transporting_route_temp).compute_end(String(""));
-//            (MotionHandler<F>::transporting_route_temp).end.print(String("Expected arrival point with (MotionHandler<F>::transporting_route_temp)"), String("\t\t"), cout);
-//            chart_frame->draw_panel->circle_observer.reference_position.print(String("Reference position"), String("\t\t"), cout);
             
             //re-draw the chart
             (chart_frame->draw_panel->*(chart_frame->draw_panel->PreRender))();

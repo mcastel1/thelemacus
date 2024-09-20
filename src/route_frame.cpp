@@ -446,8 +446,23 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         parent->print_info_message->title.set(String("Warning"));
         parent->print_info_message->message.set(String("The route which has been modified was related to a sight! Disconnecting the route from the sight."));
         
-        parent->AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(route, parent->print_info_message);
+        //de-highlight all Positions
+        parent->highlight_position->set_value(-1);
+        parent->highlight_position->operator()(event);
+        
+        //1. set the highlighted_route equal to the id of the newly added/modified Route, so the user can see it easily
+        parent->highlight_route->set_value(
+                                           ((position_in_listcontrol_routes == -1) ? ((int)(parent->data->route_list.size()))-1 : ((int)position_in_listcontrol_routes))
+                                           
+                                           );
+        parent->highlight_route->operator()(event);
+        
+        //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
+        parent->highlight_route->set_value(-1);
 
+        
+        //        parent->AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(route, parent->print_info_message);
+        parent->AnimateToObject<Route, HighlightObject<ListFrame>>(route, parent->highlight_route);
         
     }else{
         //I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling (intended as 'do nothing' here) at the end of the animation

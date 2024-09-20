@@ -1800,7 +1800,7 @@ void ListFrame::LoadCoastLineData(String prefix) {
 
 
 
-//makes an animation which centers the chart on the object *object_in (which may be a Route, Position, ...) and adjust the chart zoom factor in such a way that *object_in is nicely visible at the end of the animation. Here f is the functor of the function that will be called at the end of the animation, and it is entered into the constructor of ChartTransrportHandler. If no functor is to be called at the end of the animation, one may let f point to a UnsetIdling<> functoer
+
 template<class T, class F> void ListFrame::AnimateToObjectOld(T* object_in, F* f){
     
     unsigned int i;
@@ -1888,10 +1888,6 @@ template<class T, class F> void ListFrame::AnimateToObjectOld(T* object_in, F* f
                     Route(Route_types[2], target_position, wxGetApp().angle_zoom_to_position).size_Mercator(&target_size);
                     
                 }
-                
-                //compute the distance between the start and end poisition of the proposed andimation and store it in d
-                //                //I do the animaiton only if the start and end position of the animation are large enough, in order to avoid NaNs in the transporting_route
-                //                if (d > (wxGetApp().minimal_animation_distance_over_size_of_observer_region.value) * Re*(chart_frames[i])->draw_panel->circle_observer.omega.value) {
                 
                 center.lambda.set((((*((chart_frames[i])->lambda_min)) + (*((chart_frames[i])->lambda_max))).value)/2.0);
                 center.phi.set(mean_pm_pi((*((chart_frames[i])->phi_min)), (*((chart_frames[i])->phi_max))));

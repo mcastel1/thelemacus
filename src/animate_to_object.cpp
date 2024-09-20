@@ -10,11 +10,7 @@
 #include "list_frame.h"
 
 
-template<class P> AnimateToObject<P>::AnimateToObject(P* parent_in) : parent(parent_in) {
-    
-    
-    
+template<class P, class T, class F> AnimateToObject<P, T, F>::AnimateToObject(P* parent_in, T* object_in, F* f_in) : parent(parent_in), object(object_in), f(f_in) {
     
 }
 
-template class AnimateToObject<ListFrame>;

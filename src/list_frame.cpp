@@ -103,7 +103,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
-    print_info_message_disconnect_route = new PrintMessage<ListFrame, LaunchAnimation>(this, launch_animation);
+    print_info_message_disconnect_route = new PrintMessage<ListFrame, AnimateToObjectNew>(this, launch_animation);
     print_question_message = new ShowQuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(this, confirm_transport, unset_idling, unset_idling);
     //create extract_color with zero size, because I will need extract_color only to get colors
     

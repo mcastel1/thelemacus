@@ -10,24 +10,17 @@
 
 #include <iostream>
 
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-#endif
 
 using namespace std;
 
-//this functor sets idling -> false in parent
 template<class P> class AnimateToObject{
     
 public:
         
-    //the frame which called this struct
+    //the frame which called *this
     P* parent;
     
     AnimateToObject(P*);
-    
-    void operator()(wxCommandEvent&);
-    void operator()(void);
     
 };
 

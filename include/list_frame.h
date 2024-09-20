@@ -124,7 +124,9 @@ public:
     CloseFrame<ListFrame>* close;
     //a functor to let the user select a Route in listcontrol_routes
     SelectRoute* select_route;
-    PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, * print_info_message;
+    PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, *print_info_message;
+    //a functor to show an info message that a Route is being disconnected from a Sight, which launches an animation with LaunchAnimation after button_ok is pressed
+    PrintMessage<ListFrame, LaunchAnimation> *print_info_message_disconnect_route;
     ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> , UnsetIdling<ListFrame> >* print_question_message;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;

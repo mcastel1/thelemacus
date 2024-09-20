@@ -10,7 +10,7 @@
     - on APPLE:
         - replace SetMercatorAndNormalize whenever you can
         - the cmd (apple) key corresponds to WXK_CONTROL
-         - to setup everything on Mac OS:
+         - to setup everything:
                 1. Download and install boost_1_83_0 from https://www.boost.org/users/history/version_1_83_0.html
                 2. Download and install gsl (gnu scientifc library) from https://www.gnu.org/software/gsl/
                 3. Download and install wxWidgets from https://www.wxwidgets.org/downloads/
@@ -27,6 +27,18 @@
                 7. To make breakpoints in included files to work in Xcode, create file  ~/.lldbinit and write in it 'settings set target.inline-breakpoint-strategy always'
                 8. To build the app with make_app.sh:
                     * download the libpng library from https://sourceforge.net/projects/libpng/
+                    
+        - to build the a sample:
+                * unzip wxWidgets-xxxx.tar.gz in, say, wxWidgets-3.2.2
+                * cd  wxWidgets-3.2.2
+                * mkdir my_build
+                * cd my_build
+                * ../configure
+                * make
+                * sudo make install
+                * cd samples/
+                * cd [name of the sample that you want to build, e.g. `calendar`]
+                * make
      
  
      - on WIN32:

@@ -103,7 +103,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
-    print_info_message_disconnect_route = new PrintMessage<ListFrame, AnimateToObjectNew>(this, launch_animation);
+//    print_info_message_disconnect_route = new PrintMessage<ListFrame, AnimateToObjectNew>(this, launch_animation);
     print_question_message = new ShowQuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(this, confirm_transport, unset_idling, unset_idling);
     //create extract_color with zero size, because I will need extract_color only to get colors
     
@@ -805,7 +805,7 @@ void ListFrame::OnComputePosition(void) {
 
                 set();
                 //bring all charts to the astronomical position with an animation and do nothing at the end of the animation
-                AnimateToObject<Route, UnsetIdling<ListFrame> >(&(data->route_list.back()), unset_idling);
+                AnimateToObjectOld<Route, UnsetIdling<ListFrame> >(&(data->route_list.back()), unset_idling);
 
                 break;
                 
@@ -813,7 +813,7 @@ void ListFrame::OnComputePosition(void) {
             case 1:
                 //the astronomical Position couldbe computed by using only some crossings/Routes
 
-                //set all parameters to prepare the printing of an error message, which will be called by ChartTransportHandler in AnimateToObject at the end of the animation. To do this, I enter print_error_message as an argument in the call to AnimateToObject
+                //set all parameters to prepare the printing of an error message, which will be called by ChartTransportHandler in AnimateToObjectOld at the end of the animation. To do this, I enter print_error_message as an argument in the call to AnimateToObjectOld
                 print_warning_message->control = NULL;
                 print_warning_message->message.set(String("Not all routes could be used to compute the astronomical position! Rome routes yield invalid crossings."));
                 print_warning_message->title.set(String("Warning"));
@@ -821,7 +821,7 @@ void ListFrame::OnComputePosition(void) {
      
                 set();
                 //bring all charts to the astronomical Position with an animation
-                AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(&(data->route_list.back()), print_warning_message);
+                AnimateToObjectOld<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(&(data->route_list.back()), print_warning_message);
 
                 break;
                 
@@ -830,7 +830,7 @@ void ListFrame::OnComputePosition(void) {
             
                 //the astronomical Position could be computed but not its error -> a Position has been added to position_list, but no Route (repreenting its error circle) has been added to route_list
 
-                //set all parameters to prepare the printing of an error message, which will be called by ChartTransportHandler in AnimateToObject at the end of the animation. To do this, I enter print_error_message as an argument in the call to AnimateToObject
+                //set all parameters to prepare the printing of an error message, which will be called by ChartTransportHandler in AnimateToObjectOld at the end of the animation. To do this, I enter print_error_message as an argument in the call to AnimateToObjectOld
                 print_warning_message->control = NULL;
                 print_warning_message->message.set(String("The error on the astronomical position could not be computed!"));
                 print_warning_message->title.set(String("Warning"));
@@ -838,7 +838,7 @@ void ListFrame::OnComputePosition(void) {
      
                 set();
                 //bring all charts to the astronomical Position with an animation
-                AnimateToObject<Position, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(&(data->position_list.back()), print_warning_message);
+                AnimateToObjectOld<Position, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(&(data->position_list.back()), print_warning_message);
 
                 break;
  
@@ -1801,7 +1801,7 @@ void ListFrame::LoadCoastLineData(String prefix) {
 
 
 //makes an animation which centers the chart on the object *object_in (which may be a Route, Position, ...) and adjust the chart zoom factor in such a way that *object_in is nicely visible at the end of the animation. Here f is the functor of the function that will be called at the end of the animation, and it is entered into the constructor of ChartTransrportHandler. If no functor is to be called at the end of the animation, one may let f point to a UnsetIdling<> functoer
-template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
+template<class T, class F> void ListFrame::AnimateToObjectOld(T* object_in, F* f){
     
     unsigned int i;
     //the Position where the chart will be centered by the animation triggered when the user presses ok
@@ -2004,9 +2004,9 @@ template<class T, class F> void ListFrame::AnimateToObject(T* object_in, F* f){
     
 }
 
-template void ListFrame::AnimateToObject<Position, UnsetIdling<ListFrame>>(Position*, UnsetIdling<ListFrame>*);
-template void ListFrame::AnimateToObject<Route, HighlightObject<ListFrame>>(Route*, HighlightObject<ListFrame>*);
-template void ListFrame::AnimateToObject<Position, HighlightObject<ListFrame>>(Position*, HighlightObject<ListFrame>*);
+template void ListFrame::AnimateToObjectOld<Position, UnsetIdling<ListFrame>>(Position*, UnsetIdling<ListFrame>*);
+template void ListFrame::AnimateToObjectOld<Route, HighlightObject<ListFrame>>(Route*, HighlightObject<ListFrame>*);
+template void ListFrame::AnimateToObjectOld<Position, HighlightObject<ListFrame>>(Position*, HighlightObject<ListFrame>*);
 
 
 //compute the astronomical position and updated all the GUI fields in set() and re-draws everything

@@ -440,7 +440,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
     
     if(prompt_disconnection_message){
-        //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
+        //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObjectOld with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
 
         parent->print_info_message->control = NULL;
         parent->print_info_message->title.set(String("Warning"));
@@ -457,12 +457,12 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
                                            );
         parent->highlight_route->operator()(event);
         
-        //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
+        //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObjectOld with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
         parent->highlight_route->set_value(-1);
 
         
-        //        parent->AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(route, parent->print_info_message);
-        parent->AnimateToObject<Route, HighlightObject<ListFrame>>(route, parent->highlight_route);
+        //        parent->AnimateToObjectOld<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(route, parent->print_info_message);
+        parent->AnimateToObjectOld<Route, HighlightObject<ListFrame>>(route, parent->highlight_route);
         
     }else{
         //I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling (intended as 'do nothing' here) at the end of the animation
@@ -481,9 +481,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
                                                
                                                );
             parent->highlight_route->operator()(event);
-            //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
+            //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObjectOld with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
             parent->highlight_route->set_value(-1);
-            parent->AnimateToObject<Route, HighlightObject<ListFrame>>(route, parent->highlight_route);
+            parent->AnimateToObjectOld<Route, HighlightObject<ListFrame>>(route, parent->highlight_route);
             
         }
         

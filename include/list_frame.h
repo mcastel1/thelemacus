@@ -126,7 +126,7 @@ public:
     SelectRoute* select_route;
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, *print_info_message;
     //a functor to show an info message that a Route is being disconnected from a Sight, which launches an animation with AnimateToObjectNew after button_ok is pressed
-    PrintMessage<ListFrame, AnimateToObjectNew> *print_info_message_disconnect_route;
+//    PrintMessage<ListFrame, AnimateToObjectNew> *print_info_message_disconnect_route;
     ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> , UnsetIdling<ListFrame> >* print_question_message;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
@@ -189,7 +189,7 @@ public:
     template<class E> void OnPressCtrlShiftS(E&);
     template<class E> void KeyDown(E&);
     template<class T> void ComputePosition(T&);
-    template<class T, class F> void AnimateToObject(T*, F*);
+    template<class T, class F> void AnimateToObjectOld(T*, F*);
 //    void SetHighlightedRoute(const int&);
     
 #ifdef WIN32

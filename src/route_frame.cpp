@@ -414,7 +414,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //if I am adding a new Route for transport, call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
         (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
 
-        //set the reference position of the transporting Route to the initial position of the object that has been transported: in thiw way, the transporting Route will look nice on the chart
+        //set the reference Position of the transporting Route to the initial position of the object that has been transported: in thiw way, the transporting Route will look nice on the chart
         if ((parent->transported_object_type) == String("position")) {
 
             //store the starting position in *geo_position_start
@@ -444,8 +444,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     if(prompt_disconnection_message){
         //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
 
-        AnimateToObject<Route, HighlightObject<ListFrame>> animate(parent, route, parent->highlight_route);
-        ShowQuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>> print_question(parent, &animate, parent->unset_idling, parent->unset_idling);
+        parent->animate_to_route = new AnimateToObject<Route, HighlightObject<ListFrame>>(parent, route, parent->highlight_route);
+        
+        ShowQuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>> print_question(parent, parent->animate_to_route, parent->unset_idling, parent->unset_idling);
         
 //        parent->print_info_message->control = NULL;
 //        parent->print_info_message->title.set(String("Warning"));

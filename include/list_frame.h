@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+#include "animate_to_object.h"
 #include "answer.h"
 #include "catalog.h"
 #include "chart_frame.h"
@@ -29,6 +30,7 @@
 
 using namespace std;
 
+template<class T, class F> class AnimateToObject;
 class AskRemoveRelatedSight;
 class AskRemoveRelatedRoute;
 class Cartesian;
@@ -125,9 +127,9 @@ public:
     //a functor to let the user select a Route in listcontrol_routes
     SelectRoute* select_route;
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, *print_info_message;
-    //a functor to show an info message that a Route is being disconnected from a Sight, which launches an animation with AnimateToObjectNew after button_ok is pressed
-//    PrintMessage<ListFrame, AnimateToObjectNew> *print_info_message_disconnect_route;
     ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> , UnsetIdling<ListFrame> >* print_question_message;
+    //functor to trigger an animation towards a Route by de-highlighting it at the end of the animation
+    AnimateToObject<Route, HighlightObject<ListFrame>>* animate_to_route;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;

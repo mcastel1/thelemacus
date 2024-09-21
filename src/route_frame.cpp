@@ -486,7 +486,6 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             parent->highlight_route->operator()(event);
             //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObjectOld with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
             parent->highlight_route->set_value(-1);
-//            parent->AnimateToObjectOld<Route, HighlightObject<ListFrame>>(route, parent->highlight_route);
             animate.operator()();
             
         }

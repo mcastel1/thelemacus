@@ -1,12 +1,12 @@
 //
-//  disconnect.h
+//  disconnect_sight.h
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#ifndef disconnect_h
-#define disconnect_h
+#ifndef disconnect_sight_h
+#define disconnect_sight_h
 
 #include <iostream>
 
@@ -16,7 +16,7 @@
 using namespace std;
 
 //this functor disconnects a Sight from a Route in ListFrame *parent
-class Disconnect{
+class DisconnectSight{
     
 public:
         
@@ -24,12 +24,11 @@ public:
     ListFrame* parent;
     int sight_id;
     
-    Disconnect(ListFrame*, const int&);
+    DisconnectSight(ListFrame*, const int&);
     
     void operator()(wxCommandEvent&);
     void operator()(void);
     
 };
-
 
 #endif

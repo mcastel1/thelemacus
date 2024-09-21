@@ -15,6 +15,7 @@
 #include "catalog.h"
 #include "chart_frame.h"
 #include "data.h"
+#include "disconnect_sight.h"
 #include "list_control.h"
 #include "my_app.h"
 #include "position.h"
@@ -42,6 +43,7 @@ class Data;
 class DeletePosition;
 class DeleteRoute;
 class DeleteSight;
+class DisconnectSight;
 class ExistingRoute;
 template<class P> class ListControl;
 class NewRoute;
@@ -126,6 +128,8 @@ public:
     CloseFrame<ListFrame>* close;
     //a functor to let the user select a Route in listcontrol_routes
     SelectRoute* select_route;
+    //functor used to disconnect a Sight from a Route
+    DisconnectSight* disconnect_sight;
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, *print_info_message;
     ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> , UnsetIdling<ListFrame> >* print_question_message;
     //functor to trigger an animation towards a Route by de-highlighting it at the end of the animation

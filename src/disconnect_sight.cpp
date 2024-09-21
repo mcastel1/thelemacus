@@ -1,24 +1,22 @@
 //
-//  disconnect.cpp
+//  disconnect_sight.cpp
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#include "disconnect.h"
-
-#include "list_frame.h"
+#include "disconnect_sight.h"
 
 
-//constructor of the Disconnect functor: parent_in is the ListFrame parent of *this, sight_id_in is the # of the Sight to be disconnected from Route # route_id_in
-Disconnect::Disconnect(ListFrame* parent_in, const int& sight_id_in) : parent(parent_in), sight_id(sight_id_in) {
+//constructor of the DisconnectSight functor: parent_in is the ListFrame parent of *this, sight_id_in is the # of the Sight to be disconnected from Route # route_id_in
+DisconnectSight::DisconnectSight(ListFrame* parent_in, const int& sight_id_in) : parent(parent_in), sight_id(sight_id_in) {
     
     
 }
 
 
 //disconnects sight i_sight from its related Route
-void Disconnect::operator()(wxCommandEvent& event) {
+void DisconnectSight::operator()(wxCommandEvent& event) {
     
     int i_route;
     
@@ -56,7 +54,7 @@ void Disconnect::operator()(wxCommandEvent& event) {
 
 
 // same as ConnectDisconnect::operator()(wxCommandEvent& event) but without the event argument
-void Disconnect::operator()(void) {
+void DisconnectSight::operator()(void) {
     
     wxCommandEvent dummy;
     

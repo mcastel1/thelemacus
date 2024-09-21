@@ -22,9 +22,9 @@ public:
         
     //the ListFrame that called this functor
     ListFrame* parent;
-    int sight_id, route_id;
+    int sight_id;
     
-    ConnectDisconnect(ListFrame*, const int&, const int&);
+    ConnectDisconnect(ListFrame*, const int&, const bool&);
     
     void operator()(wxCommandEvent&);
     void operator()(void);

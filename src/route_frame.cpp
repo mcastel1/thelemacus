@@ -369,7 +369,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
             //because I am modifying and thus altering the Route, I disconnect it from its related sight
             (parent->i_object_to_disconnect) = (route->related_sight.value);
-            parent->Disconnect(event);
+            parent->DisconnectOld(event);
             //set i_obeject_to_disconnect to its original value
             (parent->i_object_to_disconnect) = -1;
             

@@ -190,7 +190,6 @@ public:
     template<class E> void KeyDown(E&);
     template<class T> void ComputePosition(T&);
     template<class T, class F> void AnimateToObjectOld(T*, F*);
-//    void SetHighlightedRoute(const int&);
     
 #ifdef WIN32
     void OnTimer(wxTimerEvent&);

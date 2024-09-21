@@ -209,7 +209,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     unsigned int i;
     stringstream s;
     //this functor will be used to trigger the animation to the Position once button_ok has been pressed
-    AnimateToObject<Position, HighlightObject<ListFrame>> animate_to_position(parent, position, parent->highlight_position);
+    AnimateToObject<Position, HighlightObject<ListFrame>> animate(parent, position, parent->highlight_position);
     
 
     if (label->value->GetValue().ToStdString() == "") {
@@ -271,7 +271,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     
     
 //    parent->AnimateToObjectOld<Position, HighlightObject<ListFrame>>(position, parent->highlight_position);
-    animate_to_position.operator()(event);
+    animate.operator()(event);
     
     event.Skip(true);
 

@@ -30,6 +30,7 @@ public:
     AnimateToObject(ListFrame*, T*, F*);
     
     template<class E> void operator()(E&);
+    void operator()(void);
 
 };
 

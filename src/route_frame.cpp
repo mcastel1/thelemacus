@@ -441,7 +441,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
     
     if(prompt_disconnection_message){
-        //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObjectOld with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
+        //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
 
         AnimateToObject<Route, HighlightObject<ListFrame>> animate(parent, route, parent->highlight_route);
         
@@ -460,7 +460,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
                                            );
         parent->highlight_route->operator()(event);
         
-        //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObjectOld with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
+        //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
         parent->highlight_route->set_value(-1);
 
         animate.operator()();
@@ -484,7 +484,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
                                                
                                                );
             parent->highlight_route->operator()(event);
-            //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObjectOld with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
+            //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
             parent->highlight_route->set_value(-1);
             animate.operator()();
             

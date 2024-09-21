@@ -754,7 +754,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     //1. set the highlighted_route equal to the newly added Route, so the user can see it easily
     parent->highlight_route->set_value(sight->related_route.value);
     parent->highlight_route->operator()(event);
-    //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObjectOld with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
+    //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
     parent->highlight_route->set_value(-1);
     
     //animate is declared here and not at the beginning  because at the beginning of this method related_route may be undefined

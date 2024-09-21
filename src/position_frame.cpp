@@ -269,8 +269,6 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     //2. in parent->highlight_position, set the value of the highlighted Position to be set equal to -1, and call AnimateToObjectOld with second argument parent->highlight_position : in this way, when the animation is over, the highlighted Position will be set to -1, i.e., no Route will be highlighted when the animation is over
     parent->highlight_position->set_value(-1);
     
-    
-//    parent->AnimateToObjectOld<Position, HighlightObject<ListFrame>>(position, parent->highlight_position);
     animate.operator()(event);
     
     event.Skip(true);

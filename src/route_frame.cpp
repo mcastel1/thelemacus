@@ -5,6 +5,7 @@
 //  Created by Michele on 11/06/2024.
 //
 
+#include "animate_to_object.h"
 #include "check_chrono.h"
 #include "check_length.h"
 #include "check_route_type.h"
@@ -442,6 +443,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     if(prompt_disconnection_message){
         //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObjectOld with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
 
+        AnimateToObject<Route, HighlightObject<ListFrame>> animate(parent, route, parent->highlight_route);
+        
         parent->print_info_message->control = NULL;
         parent->print_info_message->title.set(String("Warning"));
         parent->print_info_message->message.set(String("The route which has been modified was related to a sight! Disconnecting the route from the sight."));
@@ -460,9 +463,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObjectOld with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
         parent->highlight_route->set_value(-1);
 
-        
-        //        parent->AnimateToObjectOld<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(route, parent->print_info_message);
-        parent->AnimateToObjectOld<Route, HighlightObject<ListFrame>>(route, parent->highlight_route);
+        animate.operator()();
         
     }else{
         //I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling (intended as 'do nothing' here) at the end of the animation
@@ -471,6 +472,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         if (!(parent->transporting_with_new_route)) {
             //I am not adding a new Route for transrpot -> animate the charts to bring them to the Route related to the new Route. Set the highlighted_route equal to the newly added /modified Route, so the user can see it easily during the animation:
             
+           AnimateToObject<Route, HighlightObject<ListFrame>> animate(parent, route, parent->highlight_route);
+
             //de-highlight all Positions
             parent->highlight_position->set_value(-1);
             parent->highlight_position->operator()(event);
@@ -483,7 +486,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             parent->highlight_route->operator()(event);
             //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObjectOld with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
             parent->highlight_route->set_value(-1);
-            parent->AnimateToObjectOld<Route, HighlightObject<ListFrame>>(route, parent->highlight_route);
+//            parent->AnimateToObjectOld<Route, HighlightObject<ListFrame>>(route, parent->highlight_route);
+            animate.operator()();
             
         }
         

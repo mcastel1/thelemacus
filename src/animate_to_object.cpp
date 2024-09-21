@@ -21,6 +21,8 @@ template class AnimateToObject<Position, HighlightObject<ListFrame>>;
 template class AnimateToObject<Route, UnsetIdling<ListFrame>>;
 template class AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
 template class AnimateToObject<Position, PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
+template class AnimateToObject<Route, HighlightObject<ListFrame>>;
+
 
 //trigger the animation
 template<class T, class F> template<class E> void AnimateToObject<T, F>::operator()(E& event) {
@@ -239,3 +241,4 @@ template<class T, class F> void AnimateToObject<T, F>::operator()(void) {
 template void AnimateToObject<Route, UnsetIdling<ListFrame>>::operator()();
 template void AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame>>>::operator()();
 template void AnimateToObject<Position, PrintMessage<ListFrame, UnsetIdling<ListFrame>>>::operator()();
+template void AnimateToObject<Route, HighlightObject<ListFrame>>::operator()();

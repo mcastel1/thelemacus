@@ -809,7 +809,6 @@ void ListFrame::OnComputePosition(void) {
                 
                 set();
                 //bring all charts to the astronomical position with an animation and do nothing at the end of the animation
-                //                AnimateToObjectOld<Route, UnsetIdling<ListFrame> >(&(data->route_list.back()), unset_idling);
                 animate.operator()();
                 
                 break;
@@ -830,7 +829,6 @@ void ListFrame::OnComputePosition(void) {
                 
                 set();
                 //bring all charts to the astronomical Position with an animation
-                //                AnimateToObjectOld<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(&(data->route_list.back()), print_warning_message);
                 animate.operator()();
                 
                 break;
@@ -852,7 +850,6 @@ void ListFrame::OnComputePosition(void) {
                 
                 set();
                 //bring all charts to the astronomical Position with an animation
-                //                AnimateToObjectOld<Position, PrintMessage<ListFrame, UnsetIdling<ListFrame> > >(&(data->position_list.back()), print_warning_message);
                 animate.operator()();
                 
                 break;

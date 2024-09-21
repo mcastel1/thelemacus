@@ -368,10 +368,10 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             //the Route that I am moidifying is related to a Sight
 
             //because I am modifying and thus altering the Route, I disconnect it from its related sight
-            (parent->i_object_to_disconnect) = (route->related_sight.value);
+            (parent->disconnect_sight->sight_id) = (route->related_sight.value);
             parent->DisconnectOld(event);
             //set i_obeject_to_disconnect to its original value
-            (parent->i_object_to_disconnect) = -1;
+            (parent->disconnect_sight->sight_id) = -1;
             
             prompt_disconnection_message = true;
 

@@ -86,9 +86,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     dragging_object = false;
 #ifdef WIN32
     refresh = true;
-#endif
-    i_object_to_disconnect = -1;
-    
+#endif    
     
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);
@@ -1050,8 +1048,8 @@ void ListFrame::OnTransportSight(wxCommandEvent& event) {
 //this method is called when the useer wants to disconnect a Sight from its related Route
 void ListFrame::OnDisconnectSight(wxCommandEvent& event) {
     
-    //set i_object_to_disconnect to the currently selected Sight in listcontrol_sights and call DisconnectOld to disconnect that Sight from its related Route
-    i_object_to_disconnect = ((int)(listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+    //set the # of the Sight to disconnect equal to the currently selected Sight in listcontrol_sights and call DisconnectOld to disconnect that Sight from its related Route
+    (disconnect_sight->sight_id) = ((int)(listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
     DisconnectOld(event);
     //print an info message
@@ -1063,7 +1061,7 @@ void ListFrame::OnDisconnectSight(wxCommandEvent& event) {
 void ListFrame::OnDisconnectRoute(wxCommandEvent& event) {
     
     //set i_object_to_disconnect to the currently selected Route in listcontrol_routes and call DisconnectOld to disconnect that Route from its related Sight
-    i_object_to_disconnect = (((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight.value);
+    (disconnect_sight->sight_id) = (((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight.value);
     
     DisconnectOld(event);
     //print an info message
@@ -1244,18 +1242,18 @@ template<class E> void ListFrame::DisconnectOld(E& event) {
     
     int i_route;
     
-    i_route = (((data->sight_list)[i_object_to_disconnect]).related_route).value;
+    i_route = (((data->sight_list)[(disconnect_sight->sight_id)]).related_route).value;
     
     //disconnect route and sight
-    (((data->sight_list)[i_object_to_disconnect]).related_route).set(-1);
+    (((data->sight_list)[(disconnect_sight->sight_id)]).related_route).set(-1);
     (((data->route_list)[i_route]).related_sight).set(-1);
     
     //update the related wxListCtrls in ListFrame
-    ((data->sight_list)[i_object_to_disconnect]).update_ListControl(i_object_to_disconnect, listcontrol_sights);
+    ((data->sight_list)[(disconnect_sight->sight_id)]).update_ListControl((disconnect_sight->sight_id), listcontrol_sights);
     ((data->route_list)[i_route]).update_ListControl(i_route, listcontrol_routes);
     
     //set the background color of the related sight to white
-    (listcontrol_sights)->SetItemBackgroundColour(i_object_to_disconnect, wxGetApp().background_color);
+    (listcontrol_sights)->SetItemBackgroundColour((disconnect_sight->sight_id), wxGetApp().background_color);
     
     //if an item is selected in listcontrol_sights, enable /disable button_transport_sight and button_disconnect_sight if the selected sight is related / unrelated to a Route
     if ((listcontrol_sights->GetSelectedItemCount()) != 0) {

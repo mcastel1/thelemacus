@@ -29,12 +29,12 @@ template<class NON_GUI, class P> void ToDoAtEndOfTransport<NON_GUI, P>::operator
         (*object_a) = (*object_b);
     }
     
-    if((parent->i_object_to_disconnect) != -1){
+    if((parent->disconnect_sight->sight_id) != -1){
         
         //print an info message
         parent->print_info_message->SetAndCall(NULL, String("Warning"), String("The transported route  was related to a sight! The route has been disconnected from the sight."), (wxGetApp().path_file_info_icon));
         
-       (parent->i_object_to_disconnect) = -1;
+       (parent->disconnect_sight->sight_id) = -1;
         
     }
     

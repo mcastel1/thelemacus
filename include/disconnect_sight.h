@@ -26,7 +26,7 @@ public:
     
     DisconnectSight(ListFrame*, const int&);
     
-    void operator()(wxCommandEvent&);
+    template <class E> void operator()(E&);
     void operator()(void);
     
 };

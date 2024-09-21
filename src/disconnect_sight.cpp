@@ -16,7 +16,7 @@ DisconnectSight::DisconnectSight(ListFrame* parent_in, const int& sight_id_in) :
 
 
 //disconnects sight i_sight from its related Route
-void DisconnectSight::operator()(wxCommandEvent& event) {
+template <class E> void DisconnectSight::operator()(E& event) {
     
     int i_route;
     
@@ -51,6 +51,9 @@ void DisconnectSight::operator()(wxCommandEvent& event) {
     event.Skip(true);
     
 }
+
+template void DisconnectSight::operator()<wxMouseEvent>(wxMouseEvent&);
+template void DisconnectSight::operator()<wxTimerEvent>(wxTimerEvent&);
 
 
 // same as ConnectDisconnect::operator()(wxCommandEvent& event) but without the event argument

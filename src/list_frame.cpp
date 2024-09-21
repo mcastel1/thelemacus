@@ -1274,7 +1274,7 @@ template<class E> void ListFrame::DisconnectOld(E& event) {
     
 }
 
-template void ListFrame::Disconnect<wxTimerEvent>(wxTimerEvent&);
+template void ListFrame::DisconnectOld<wxTimerEvent>(wxTimerEvent&);
 
 
 //disconnects sight i_sight from its related Route and prompt a message frame to inform the user

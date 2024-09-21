@@ -214,7 +214,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                     //I am transporting a Sight (i.e., Route related to a Sight) or I am transporting a Route that is connected to a Sight -> disconnect the Route from the sight
 
                     ((MotionHandler<F>::parent)->i_object_to_disconnect) = (((Route*)transported_object)->related_sight.value);
-                    (MotionHandler<F>::parent)->Disconnect(event);
+                    (MotionHandler<F>::parent)->DisconnectOld(event);
 
                 }
                 

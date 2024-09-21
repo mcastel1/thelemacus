@@ -1,12 +1,12 @@
 //
-//  connect_disconnect.h
+//  disconnect.h
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#ifndef connect_disconnect_h
-#define connect_disconnect_h
+#ifndef disconnect_h
+#define disconnect_h
 
 #include <iostream>
 
@@ -15,8 +15,8 @@
 
 using namespace std;
 
-//this functor either connects or disconnects a Sight and a Route in ListFrame *parent
-class ConnectDisconnect{
+//this functor disconnects a Sight from a Route in ListFrame *parent
+class Disconnect{
     
 public:
         
@@ -24,7 +24,7 @@ public:
     ListFrame* parent;
     int sight_id;
     
-    ConnectDisconnect(ListFrame*, const int&, const bool&);
+    Disconnect(ListFrame*, const int&);
     
     void operator()(wxCommandEvent&);
     void operator()(void);

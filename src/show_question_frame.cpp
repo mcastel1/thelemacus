@@ -8,6 +8,7 @@
 #include "show_question_frame.h"
 
 #include "all_routes.h"
+#include "animate_to_object.h"
 #include "my_app.h"
 #include "question_frame.h"
 #include "reset_list_frame.h"
@@ -35,6 +36,7 @@ template class ShowQuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetId
 template class ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>;
 template class ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class ShowQuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 
 
 //set the wxControl, title and question and answers for the functor *this,  set enable_button_y/n both to true,  and bind_esc_to_button_b to true. Then call the functor operator() with CallAfter
@@ -63,6 +65,7 @@ template void ShowQuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdl
 template void ShowQuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
 template void ShowQuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
 template void ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
+template void ShowQuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetAndCall(wxControl*, String, String, String, String);
 
 
 //set the wxControl, title and question and answers for the functor *this,  set enable_butoon_y/n to enable_button_y/n_in, and set bind_esc_to_button_b = bind_esc_to_button_b_in.  I call the functor operator() with CallAfter

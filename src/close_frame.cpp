@@ -8,6 +8,7 @@
 #include "close_frame.h"
 
 #include "all_routes.h"
+#include "animate_to_object.h"
 #include "destroy_frame.h"
 #include "list_frame.h"
 #include "position_frame.h"
@@ -43,6 +44,7 @@ template class CloseFrame<QuestionFrame<ConfirmTransport<ListFrame>, UnsetIdling
 template class CloseFrame<QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 template class CloseFrame<QuestionFrame<AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>>;
 template class CloseFrame<QuestionFrame<CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
+template class CloseFrame<QuestionFrame<AnimateToObject<Route, HighlightObject<ListFrame>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 
 
 //closes a frame of type F
@@ -84,3 +86,4 @@ template void CloseFrame<QuestionFrame<ConfirmTransport<ListFrame>, UnsetIdling<
 template void CloseFrame<QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<QuestionFrame<AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<QuestionFrame<CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CloseFrame<QuestionFrame<AnimateToObject<Route, HighlightObject<ListFrame>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);

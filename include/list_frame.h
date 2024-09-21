@@ -177,7 +177,6 @@ public:
     template<class E> void OnPressDeleteRoute(E&);
     bool CheckRoutesForTransport(void);
     
-    template<class E> void DisconnectOld(E&);
     template<class E> void DisconnectAndPromptMessage(E&);
     
     void OnAddChartFrame(wxCommandEvent&);

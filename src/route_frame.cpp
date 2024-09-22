@@ -354,16 +354,19 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     if (position_in_listcontrol_routes == -1) {
         //I am creating a new Route
         
+        prompt_disconnection_message = false;
+        
         //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
         
-        prompt_disconnection_message = false;
-        
+
     }else {
         //I am modifying an existing Route
         
         if ((route->related_sight) != -1) {
             //the Route that I am moidifying is related to a Sight
+            
+            prompt_disconnection_message = true;
             
             //because I am modifying and thus altering the Route, I disconnect it from its related sight
             (parent->disconnect_sight->sight_id) = (route->related_sight.value);
@@ -371,7 +374,32 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             //set i_obeject_to_disconnect to its original value
             (parent->disconnect_sight->sight_id) = -1;
             
-            prompt_disconnection_message = true;
+
+            //moved block code --start
+            //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
+            
+            
+            parent->animate_to_route = new AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>(parent, route, parent->highlight_route);
+            
+            ShowQuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>> print_question(parent, parent->animate_to_route, parent->unset_idling, parent->unset_idling);
+            
+            //de-highlight all Positions
+            parent->highlight_position->set_value(-1);
+            parent->highlight_position->operator()(event);
+            
+            //1. set the highlighted_route equal to the id of the newly added/modified Route, so the user can see it easily
+            parent->highlight_route->set_value(
+                                               ((position_in_listcontrol_routes == -1) ? ((int)(parent->data->route_list.size()))-1 : ((int)position_in_listcontrol_routes))
+                                               
+                                               );
+            parent->highlight_route->operator()(event);
+            
+            //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
+            parent->highlight_route->set_value(-1);
+            
+            print_question.SetAndCall(NULL, String("Warning"), String("The route which has been modified was related to a sight! Do you want to modify the route and disconnect it from the sight?"), String("Yes"), String("No"));
+            
+            //moved block-code ---- end
             
         }else{
             
@@ -439,31 +467,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     }
     
     
-    if(prompt_disconnection_message){
-        //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
 
-        
-        parent->animate_to_route = new AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>(parent, route, parent->highlight_route);
-        
-        ShowQuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>> print_question(parent, parent->animate_to_route, parent->unset_idling, parent->unset_idling);
-        
-        //de-highlight all Positions
-        parent->highlight_position->set_value(-1);
-        parent->highlight_position->operator()(event);
-        
-        //1. set the highlighted_route equal to the id of the newly added/modified Route, so the user can see it easily
-        parent->highlight_route->set_value(
-                                           ((position_in_listcontrol_routes == -1) ? ((int)(parent->data->route_list.size()))-1 : ((int)position_in_listcontrol_routes))
-                                           
-                                           );
-        parent->highlight_route->operator()(event);
-        
-        //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
-        parent->highlight_route->set_value(-1);
-        
-        print_question.SetAndCall(NULL, String("Warning"), String("The route which has been modified was related to a sight! Do you want to modify the route and disconnect it from the sight?"), String("Yes"), String("No"));
-        
-    }
     
     if(!prompt_disconnection_message){
         //I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling (intended as 'do nothing' here) at the end of the animation

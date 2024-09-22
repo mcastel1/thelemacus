@@ -104,3 +104,7 @@ template void OnChangeSelectionInListControl<Position>::operator()<wxCommandEven
 template void OnChangeSelectionInListControl<Route>::operator()<wxListEvent>(wxListEvent&);
 template void OnChangeSelectionInListControl<Sight>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void OnChangeSelectionInListControl<Sight>::operator()<wxListEvent>(wxListEvent&);
+template void OnChangeSelectionInListControl<Route>::operator()<wxMouseEvent>(wxMouseEvent&);
+template void OnChangeSelectionInListControl<Route>::operator()<wxTimerEvent>(wxTimerEvent&);
+template void  OnChangeSelectionInListControl<Sight>::operator()<wxMouseEvent>(wxMouseEvent&);
+template void OnChangeSelectionInListControl<Sight>::operator()<wxTimerEvent>(wxTimerEvent&);

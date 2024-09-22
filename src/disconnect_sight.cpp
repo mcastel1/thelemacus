@@ -8,6 +8,8 @@
 #include "disconnect_sight.h"
 
 
+#include "on_change_selection_in_list_control.h"
+
 //constructor of the DisconnectSight functor: parent_in is the ListFrame parent of *this, sight_id_in is the # of the Sight to be disconnected from Route # route_id_in
 DisconnectSight::DisconnectSight(ListFrame* parent_in, const int& sight_id_in) : parent(parent_in), sight_id(sight_id_in) {
     
@@ -44,6 +46,20 @@ template <class E> void DisconnectSight::operator()(E& event) {
         parent->button_disconnect_sight->Enable(enable);
         
     }
+
+    //call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
+    parent->listcontrol_sights->set((parent->data->sight_list), true);
+    parent->listcontrol_positions->set((parent->data->position_list), true);
+    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
+    parent->listcontrol_routes->set((parent->data->route_list), false);
+    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
+    
+    //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
+    (*(parent->on_change_selection_in_listcontrol_sights))(event);
+    (*(parent->on_change_selection_in_listcontrol_routes))(event);
+    
+    (*(parent->unset_idling))();
+    parent->Resize();
     
     //the Route has been disconnected from the sight -> a new Route which is not connected to any Sight is created -> the data of the file has been modified
     parent->OnModifyFile();

@@ -20,7 +20,7 @@ OnNewRouteInListControlRoutesForTransport::OnNewRouteInListControlRoutesForTrans
 
 
 
-//if a new item listcontrol_routes is created, I transport the sight/position under consideration with such Route
+//if a new item listcontrol_routes is created, I transport the Sight/Position under consideration with such Route
 template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& event) {
     
     //the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
@@ -82,6 +82,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         
         //start the transport
         (*transport_handler)();
+        
     }
     
     event.Skip(true);

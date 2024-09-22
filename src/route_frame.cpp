@@ -413,23 +413,24 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     
     
     
-    //call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
-    parent->listcontrol_sights->set((parent->data->sight_list), true);
-    parent->listcontrol_positions->set((parent->data->position_list), true);
-    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
-    parent->listcontrol_routes->set((parent->data->route_list), false);
-    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
-    
-    //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
-    (*(parent->on_change_selection_in_listcontrol_sights))(event);
-    (*(parent->on_change_selection_in_listcontrol_routes))(event);
-    
-    (*(parent->unset_idling))();
-    parent->Resize();
-    parent->OnModifyFile();
+//    //call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
+//    parent->listcontrol_sights->set((parent->data->sight_list), true);
+//    parent->listcontrol_positions->set((parent->data->position_list), true);
+//    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
+//    parent->listcontrol_routes->set((parent->data->route_list), false);
+//    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
+//    
+//    //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
+//    (*(parent->on_change_selection_in_listcontrol_sights))(event);
+//    (*(parent->on_change_selection_in_listcontrol_routes))(event);
+//    
+//    (*(parent->unset_idling))();
+//    parent->Resize();
+//    parent->OnModifyFile();
     
     if ((parent->transporting_with_new_route)) {
-        //if I am adding a new Route for transport, call on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
+        //I am adding a new Route for transport -> call *on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
+        
         (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
         
         //set the reference Position of the transporting Route to the initial position of the object that has been transported: in thiw way, the transporting Route will look nice on the chart

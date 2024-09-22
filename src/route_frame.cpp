@@ -359,14 +359,46 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
         
-        //if I am adding a new Route, I resize points_route_list to add a new element to it
-        
+        //I am adding a new Route -> I resize points_route_list to add a new element to it
         for (i = 0; i < (parent->chart_frames.size()); i++) {
             
             ((parent->chart_frames)[i])->draw_panel->routes.resize(((parent->chart_frames)[i])->draw_panel->routes.size() + 1);
             ((parent->chart_frames)[i])->draw_panel->reference_positions_route_list.resize(((parent->chart_frames)[i])->draw_panel->reference_positions_route_list.size() + 1);
             
         }
+        
+        
+        if ((parent->transporting_with_new_route)) {
+            //I am adding a new Route for transport -> call *on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
+            
+            (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
+            
+            //set the reference Position of the transporting Route to the initial position of the object that has been transported: in thiw way, the transporting Route will look nice on the chart
+            if ((parent->transported_object_type) == String("position")) {
+                
+                //store the starting Position in *geo_position_start
+                (*(((parent->data->route_list)[(parent->i_transporting_route)]).reference_position)) = (parent->data->position_list)[(parent->i_object_to_transport)];
+                
+            }
+            else {
+                
+                if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
+                    
+                    //store the starting reference position in *geo_position_start
+                    (*((parent->data->route_list)[(parent->i_transporting_route)]).reference_position) = (*(((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position));
+                    
+                }
+                
+            }
+            
+            //I refresh everything because of the modification above
+            //call listcontrol_routes->set with true because I want to keep the selection in listcontrol_routes
+            parent->listcontrol_routes->set(parent->data->route_list, false);
+            parent->Resize();
+            parent->OnModifyFile();
+            
+        }
+        
 
     }else {
         //I am modifying an existing Route
@@ -428,36 +460,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 //    parent->Resize();
 //    parent->OnModifyFile();
     
-    if ((parent->transporting_with_new_route)) {
-        //I am adding a new Route for transport -> call *on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
-        
-        (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
-        
-        //set the reference Position of the transporting Route to the initial position of the object that has been transported: in thiw way, the transporting Route will look nice on the chart
-        if ((parent->transported_object_type) == String("position")) {
-            
-            //store the starting Position in *geo_position_start
-            (*(((parent->data->route_list)[(parent->i_transporting_route)]).reference_position)) = (parent->data->position_list)[(parent->i_object_to_transport)];
-            
-        }
-        else {
-            
-            if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
-                
-                //store the starting reference position in *geo_position_start
-                (*((parent->data->route_list)[(parent->i_transporting_route)]).reference_position) = (*(((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position));
-                
-            }
-            
-        }
-        
-        //I refresh everything because of the modification above
-        //call listcontrol_routes->set with true because I want to keep the selection in listcontrol_routes
-        parent->listcontrol_routes->set(parent->data->route_list, false);
-        parent->Resize();
-        parent->OnModifyFile();
-        
-    }
+    
     
     
 

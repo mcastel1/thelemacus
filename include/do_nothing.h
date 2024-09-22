@@ -10,26 +10,17 @@
 
 #include <iostream>
 
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-#endif
-
 using namespace std;
 
-//this functor sets idling -> false in parent
-template<class P> class UnsetIdling{
+//this is a dummy functor thad does nothing. It exists because the structure of the code of Thelemacus requires, for example, an animation to be provided with a functor that specifies what to do when the animation is over, and DoNothing is used when nothing needs to be done at the end of the animation.
+class DoNothing{
     
 public:
-        
-    //the frame which called this struct
-    P* parent;
+
+    DoNothing();
     
-    UnsetIdling(P*);
-    
-    void operator()(wxCommandEvent&);
-    void operator()(void);
+    template <class E> void operator()(E&);
     
 };
-
 
 #endif

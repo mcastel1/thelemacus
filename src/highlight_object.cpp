@@ -33,7 +33,7 @@ template<class P, class F> void HighlightObject<P, F>::set_value(const int& i){
 template void HighlightObject<ListFrame, DoNothing>::set_value(int const&);
 
 
-//store the value of the previoudly highlighted object in *highlighted_object_before and set *highlighted_object_now to value
+//store the value of the previoudly highlighted object in *highlighted_object_before, set *highlighted_object_now to value and refresh all to show the newly highlighted object
 template<class P, class F> template<class E> void HighlightObject<P, F>::operator()(E& event){
     
     (*higlighted_object_before) = (*highlighted_object_now);
@@ -46,6 +46,12 @@ template<class P, class F> template<class E> void HighlightObject<P, F>::operato
         parent->MyRefreshAll();
         parent->changing_highlighted_object = false;
         
+    }
+    
+    if(f != NULL){
+        //*this has been constructed with f_in != NULL -> call the action to be executed after *this is called
+        
+        (*f)(event);
     }
 
     event.Skip(true);

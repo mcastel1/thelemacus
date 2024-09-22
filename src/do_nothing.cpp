@@ -21,3 +21,4 @@ template<class E> void DoNothing::operator()(E& event) {
 }
 
 
+template void DoNothing::operator()<wxCommandEvent>(wxCommandEvent&);

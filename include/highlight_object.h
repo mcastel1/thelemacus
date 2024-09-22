@@ -16,7 +16,7 @@
 
 using namespace std;
 
-//this functor sets a highlighted object (i.e. a Route or a Position) to a given value and stores the id of the old highlighted object
+//this functor sets a highlighted object (i.e. a Route or a Position) to a given value and stores the id of the old highlighted object.  f is the functor that will be called at the end of the highlight operation,and it will be entered into the constructor. P is the type of the parent of *this and F the type of f 
 template<class P> class HighlightObject{
     
 public:

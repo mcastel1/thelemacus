@@ -22,6 +22,7 @@ template<class P, class F> HighlightObject<P, F>::HighlightObject(P* parent_in, 
 }
 
 template class HighlightObject<ListFrame, DoNothing>;
+template class HighlightObject<ListFrame, DisconnectSight>;
 
 
 template<class P, class F> void HighlightObject<P, F>::set_value(const int& i){

@@ -125,6 +125,8 @@ public:
     UnsetIdling<ListFrame>* unset_idling;
     //functors to set the highighted Routes, Position, ...
     HighlightObject<ListFrame, DoNothing> *highlight_route, *highlight_position;
+    //functor to highlight a Route and then disconnect a Sight from its related Route
+    HighlightObject<ListFrame, DisconnectSight> *highlight_route_and_disconnect_sight;
     ConfirmTransport<ListFrame>* confirm_transport;
     CloseFrame<ListFrame>* close;
     //a functor to let the user select a Route in listcontrol_routes

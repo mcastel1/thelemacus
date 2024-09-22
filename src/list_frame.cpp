@@ -90,8 +90,13 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);
+    //initialize disconnect_sight with a dummy # of the Sight to be disconnected (disconnect_sight->sight_id): disconnect_sight->sight_id will be set later when *disconnect_sight will be called on a Sight
+    disconnect_sight = new DisconnectSight(this, -1);
+
+    
     highlight_route = new HighlightObject<ListFrame, DoNothing>(this, &highlighted_route_before, &highlighted_route_now, NULL);
     highlight_position = new HighlightObject<ListFrame, DoNothing>(this, &highlighted_position_before, &highlighted_position_now, NULL);
+    highlight_route_and_disconnect_sight = new HighlightObject<ListFrame, DisconnectSight>(this, &highlighted_route_before, &highlighted_route_now, disconnect_sight);
     confirm_transport = new ConfirmTransport<ListFrame>(this);
     close = new CloseFrame<ListFrame>(this);
     (*unset_idling)();
@@ -99,8 +104,6 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     ask_remove_related_sight = new AskRemoveRelatedSight(this);
     ask_remove_related_route = new AskRemoveRelatedRoute(this);
     select_route = new SelectRoute(this);
-    //initialize disconnect_sight with a dummy # of the Sight to be disconnected (disconnect_sight->sight_id): disconnect_sight->sight_id will be set later when *disconnect_sight will be called on a Sight
-    disconnect_sight = new DisconnectSight(this, -1);
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);

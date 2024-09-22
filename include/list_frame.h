@@ -136,7 +136,7 @@ public:
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, *print_info_message;
     ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> , UnsetIdling<ListFrame> >* print_question_message;
     //functor to trigger an animation towards a Route by de-highlighting it at the end of the animation
-    AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>* animate_to_route;
+    AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>* animate_to_route;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;

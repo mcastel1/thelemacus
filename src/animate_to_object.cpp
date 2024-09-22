@@ -22,6 +22,7 @@ template class AnimateToObject<Route, UnsetIdling<ListFrame>>;
 template class AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
 template class AnimateToObject<Position, PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
 template class AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>;
+template class AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>;
 
 
 //trigger the animation
@@ -226,7 +227,7 @@ template<class T, class F> template<class E> void AnimateToObject<T, F>::operato
     
 }
 
-template void AnimateToObject<Position, HighlightObject<ListFrame, DoNothing>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>::operator()<wxCommandEvent>(wxCommandEvent&);
 
 
 //this is the same as template<class T, class F> template<class E> void AnimateToObject<T, F>::operator()(E& event) but without the event argument

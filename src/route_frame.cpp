@@ -376,12 +376,6 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             
             prompt_disconnection_message = true;
             
-//            parent->disconnect_sight->operator()(event);
-            //set i_obeject_to_disconnect to its original value
-//            (parent->disconnect_sight->sight_id) = -1;
-            
-
-            //moved block code --start
             //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
             
             //because I am modifying and thus altering the Route, I prepare the value of the Sight that may be disconnected by disconnect_sight if the user presses yes at the QuestionFrame below
@@ -408,9 +402,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             parent->highlight_route_and_disconnect_sight->set_value(-1);
             
             print_question.SetAndCall(NULL, String("Warning"), String("The route which has been modified was related to a sight! Do you want to modify the route and disconnect it from the sight?"), String("Yes"), String("No"));
-            
-            //moved block-code ---- end
-            
+                        
         }else{
             
             prompt_disconnection_message = false;

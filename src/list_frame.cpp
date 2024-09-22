@@ -86,14 +86,12 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     dragging_object = false;
 #ifdef WIN32
     refresh = true;
-#endif
-    i_object_to_disconnect = -1;
-    
+#endif    
     
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);
-    highlight_route = new HighlightObject<ListFrame>(this, &highlighted_route_before, &highlighted_route_now);
-    highlight_position = new HighlightObject<ListFrame>(this, &highlighted_position_before, &highlighted_position_now);
+    highlight_route = new HighlightObject<ListFrame, DoNothing>(this, &highlighted_route_before, &highlighted_route_now, NULL);
+    highlight_position = new HighlightObject<ListFrame, DoNothing>(this, &highlighted_position_before, &highlighted_position_now, NULL);
     confirm_transport = new ConfirmTransport<ListFrame>(this);
     close = new CloseFrame<ListFrame>(this);
     (*unset_idling)();
@@ -101,6 +99,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     ask_remove_related_sight = new AskRemoveRelatedSight(this);
     ask_remove_related_route = new AskRemoveRelatedRoute(this);
     select_route = new SelectRoute(this);
+    //initialize disconnect_sight with a dummy # of the Sight to be disconnected (disconnect_sight->sight_id): disconnect_sight->sight_id will be set later when *disconnect_sight will be called on a Sight
+    disconnect_sight = new DisconnectSight(this, -1);
     print_warning_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_error_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
     print_info_message = new PrintMessage<ListFrame, UnsetIdling<ListFrame> >(this, unset_idling);
@@ -1048,10 +1048,12 @@ void ListFrame::OnTransportSight(wxCommandEvent& event) {
 //this method is called when the useer wants to disconnect a Sight from its related Route
 void ListFrame::OnDisconnectSight(wxCommandEvent& event) {
     
-    //set i_object_to_disconnect to the currently selected Sight in listcontrol_sights and call Disconnect to disconnect that Sight from its related Route
-    i_object_to_disconnect = ((int)(listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+    //set the # of the Sight to disconnect equal to the currently selected Sight in listcontrol_sights and call DisconnectOld to disconnect that Sight from its related Route
+    (disconnect_sight->sight_id) = ((int)(listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
-    Disconnect(event);
+    //    DisconnectOld(event);
+    disconnect_sight->operator()(event);
+    
     //print an info message
     print_info_message->SetAndCall(NULL, String("Warning"), String("The sight which you want do disconnect is connected to a route: disconnecting the sight from the route."), wxGetApp().path_file_info_icon);
     
@@ -1060,10 +1062,12 @@ void ListFrame::OnDisconnectSight(wxCommandEvent& event) {
 //this method is called when the useer wants to disconnect a Route from its related Sight
 void ListFrame::OnDisconnectRoute(wxCommandEvent& event) {
     
-    //set i_object_to_disconnect to the currently selected Route in listcontrol_routes and call Disconnect to disconnect that Route from its related Sight
-    i_object_to_disconnect = (((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight.value);
+    //set i_object_to_disconnect to the currently selected Route in listcontrol_routes and call DisconnectOld to disconnect that Route from its related Sight
+    (disconnect_sight->sight_id) = (((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight.value);
     
-    Disconnect(event);
+    //    DisconnectOld(event);
+    disconnect_sight->operator()(event);
+
     //print an info message
     print_info_message->SetAndCall(NULL, String("Warning"), String("The route which you want do disconnect is connected to a sight: disconnecting the route from the sight."), wxGetApp().path_file_info_icon);
     
@@ -1236,50 +1240,12 @@ template<class E> void ListFrame::OnPressDeleteRoute(E& event) {
     
 }
 
-//disconnects sight i_sight from its related Route
-template<class E> void ListFrame::Disconnect(E& event) {
-    
-    int i_route;
-    
-    i_route = (((data->sight_list)[i_object_to_disconnect]).related_route).value;
-    
-    //disconnect route and sight
-    (((data->sight_list)[i_object_to_disconnect]).related_route).set(-1);
-    (((data->route_list)[i_route]).related_sight).set(-1);
-    
-    //update the related wxListCtrls in ListFrame
-    ((data->sight_list)[i_object_to_disconnect]).update_ListControl(i_object_to_disconnect, listcontrol_sights);
-    ((data->route_list)[i_route]).update_ListControl(i_route, listcontrol_routes);
-    
-    //set the background color of the related sight to white
-    (listcontrol_sights)->SetItemBackgroundColour(i_object_to_disconnect, wxGetApp().background_color);
-    
-    //if an item is selected in listcontrol_sights, enable /disable button_transport_sight and button_disconnect_sight if the selected sight is related / unrelated to a Route
-    if ((listcontrol_sights->GetSelectedItemCount()) != 0) {
-        
-        bool enable;
-        
-        enable = ((((data->sight_list)[listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value != -1);
-        
-        button_transport_sight->Enable(enable);
-        button_disconnect_sight->Enable(enable);
-        
-    }
-    
-    //the Route has been disconnected from the sight -> a new Route which is not connected to any Sight is created -> the data of the file has been modified
-    OnModifyFile();
-    
-    event.Skip(true);
-    
-}
-
-template void ListFrame::Disconnect<wxTimerEvent>(wxTimerEvent&);
-
 
 //disconnects sight i_sight from its related Route and prompt a message frame to inform the user
 template<class E> void ListFrame::DisconnectAndPromptMessage(E& event) {
     
-    Disconnect<E>(event);
+    //    DisconnectOld<E>(event);
+    disconnect_sight->operator()(event);
     
     //print an info message
     print_info_message->SetAndCall(NULL, String("Warning"), String("The route which you want do disconnect is connected to a sight: disconnecting the route from the sight."), (wxGetApp().path_file_info_icon));

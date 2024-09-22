@@ -32,3 +32,4 @@ template class MotionHandler<GraphicalFeatureTransportHandler<Route, ToDoAtEndOf
 template class MotionHandler<GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>;
 template class MotionHandler<GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>;
 template class MotionHandler<HighlightObject<ListFrame, DoNothing>>;
+template class MotionHandler<HighlightObject<ListFrame, DisconnectSight>>;

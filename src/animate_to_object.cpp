@@ -228,6 +228,7 @@ template<class T, class F> template<class E> void AnimateToObject<T, F>::operato
 }
 
 template void AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void AnimateToObject<Position, HighlightObject<ListFrame, DoNothing>>::operator()<wxCommandEvent>(wxCommandEvent&);
 
 
 //this is the same as template<class T, class F> template<class E> void AnimateToObject<T, F>::operator()(E& event) but without the event argument

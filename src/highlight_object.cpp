@@ -59,7 +59,7 @@ template<class P, class F> template<class E> void HighlightObject<P, F>::operato
 
 }
 
-template void HighlightObject<ListFrame, DoNothing>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void HighlightObject<ListFrame, DisconnectSight>::operator()();
 
 
 //same as HighlightObject<P, F>::operator()(E& event but with no argument

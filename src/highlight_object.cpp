@@ -11,6 +11,7 @@
     #include "wx/wx.h"
 #endif
 
+#include "do_nothing.h"
 #include "list_frame.h"
 
 
@@ -20,7 +21,7 @@ template<class P, class F> HighlightObject<P, F>::HighlightObject(P* parent_in, 
 
 }
 
-template class HighlightObject<ListFrame>;
+template class HighlightObject<ListFrame, DoNothing>;
 
 
 template<class P, class F> void HighlightObject<P, F>::set_value(const int& i){
@@ -29,10 +30,10 @@ template<class P, class F> void HighlightObject<P, F>::set_value(const int& i){
     
 }
 
-template void HighlightObject<ListFrame>::set_value(int const&);
+template void HighlightObject<ListFrame, DoNothing>::set_value(int const&);
 
 
-//store the value of the previoudly highlighted object in *highlighted_object_before and set *highlighted_object_now to value
+//store the value of the previoudly highlighted object in *highlighted_object_before, set *highlighted_object_now to value and refresh all to show the newly highlighted object
 template<class P, class F> template<class E> void HighlightObject<P, F>::operator()(E& event){
     
     (*higlighted_object_before) = (*highlighted_object_now);
@@ -46,12 +47,18 @@ template<class P, class F> template<class E> void HighlightObject<P, F>::operato
         parent->changing_highlighted_object = false;
         
     }
+    
+    if(f != NULL){
+        //*this has been constructed with f_in != NULL -> call the action to be executed after *this is called
+        
+        (*f)(event);
+    }
 
     event.Skip(true);
 
 }
 
-template void HighlightObject<ListFrame>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void HighlightObject<ListFrame, DoNothing>::operator()<wxCommandEvent>(wxCommandEvent&);
 
 
 //same as HighlightObject<P, F>::operator()(E& event but with no argument
@@ -63,4 +70,4 @@ template<class P, class F> void HighlightObject<P, F>::operator()(void){
 
 }
 
-template void HighlightObject<ListFrame>::operator()();
+template void HighlightObject<ListFrame, DoNothing>::operator()();

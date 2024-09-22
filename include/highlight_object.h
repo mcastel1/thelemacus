@@ -16,7 +16,7 @@
 
 using namespace std;
 
-//this functor sets a highlighted object (i.e. a Route or a Position) to a given value and stores the id of the old highlighted object.  f is the functor that will be called at the end of the highlight operation,and it will be entered into the constructor. P is the type of the parent of *this and F the type of f
+//this functor sets a highlighted object (i.e. a Route or a Position) to a given value and stores the id of the old highlighted object.  f is the functor that will be called at the end of the highlight operation,and it will be entered into the constructor. P is the type of the parent of *this and F the type of f. If nothing has to be exectued after this functor, then *this is initialized with template arguments P, DoNothing and the constructor is called with f_in = NULL
 template<class P, class F> class HighlightObject{
     
 public:

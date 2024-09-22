@@ -70,7 +70,7 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
 
 template class ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
 template class ChartTransportHandler<UnsetIdling<ListFrame>>;
-template class ChartTransportHandler<HighlightObject<ListFrame>>;
+template class ChartTransportHandler<HighlightObject<ListFrame, DoNothing>>;
 
 
 //prompt the movement of the center of the chart from position a to position b
@@ -96,7 +96,7 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
 
 template void ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>::operator()();
 template void ChartTransportHandler<UnsetIdling<ListFrame>>::operator()();
-template void ChartTransportHandler<HighlightObject<ListFrame>>::operator()();
+template void ChartTransportHandler<HighlightObject<ListFrame, DoNothing>>::operator()();
 
 
 //this method iterates the animation

@@ -359,6 +359,14 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
         
+        //if I am adding a new Route, I resize points_route_list to add a new element to it
+        
+        for (i = 0; i < (parent->chart_frames.size()); i++) {
+            
+            ((parent->chart_frames)[i])->draw_panel->routes.resize(((parent->chart_frames)[i])->draw_panel->routes.size() + 1);
+            ((parent->chart_frames)[i])->draw_panel->reference_positions_route_list.resize(((parent->chart_frames)[i])->draw_panel->reference_positions_route_list.size() + 1);
+            
+        }
 
     }else {
         //I am modifying an existing Route
@@ -410,16 +418,6 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     }
     
     
-    //if I am adding a new Route, I resize points_route_list to add a new element to it
-    if (position_in_listcontrol_routes == -1) {
-        
-        for (i = 0; i < (parent->chart_frames.size()); i++) {
-            
-            (((parent->chart_frames)[i])->draw_panel)->routes.resize(((((parent->chart_frames)[i])->draw_panel)->routes).size() + 1);
-            (((parent->chart_frames)[i])->draw_panel)->reference_positions_route_list.resize(((parent->chart_frames)[i])->draw_panel->reference_positions_route_list.size() + 1);
-            
-        }
-    }
     
     //call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
     parent->listcontrol_sights->set((parent->data->sight_list), true);

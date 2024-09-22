@@ -16,6 +16,7 @@
 #include "chart_frame.h"
 #include "data.h"
 #include "disconnect_sight.h"
+#include "do_nothing.h"
 #include "list_control.h"
 #include "my_app.h"
 #include "position.h"
@@ -123,7 +124,7 @@ public:
     SetIdling<ListFrame>* set_idling;
     UnsetIdling<ListFrame>* unset_idling;
     //functors to set the highighted Routes, Position, ...
-    HighlightObject<ListFrame> *highlight_route, *highlight_position;
+    HighlightObject<ListFrame, DoNothing> *highlight_route, *highlight_position;
     ConfirmTransport<ListFrame>* confirm_transport;
     CloseFrame<ListFrame>* close;
     //a functor to let the user select a Route in listcontrol_routes
@@ -133,7 +134,7 @@ public:
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, *print_info_message;
     ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> , UnsetIdling<ListFrame> >* print_question_message;
     //functor to trigger an animation towards a Route by de-highlighting it at the end of the animation
-    AnimateToObject<Route, HighlightObject<ListFrame>>* animate_to_route;
+    AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>* animate_to_route;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;

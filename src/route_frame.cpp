@@ -441,10 +441,11 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     
     if(prompt_disconnection_message){
         //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
+
         
-        parent->animate_to_route = new AnimateToObject<Route, HighlightObject<ListFrame>>(parent, route, parent->highlight_route);
+        parent->animate_to_route = new AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>(parent, route, parent->highlight_route);
         
-        ShowQuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>> print_question(parent, parent->animate_to_route, parent->unset_idling, parent->unset_idling);
+        ShowQuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>> print_question(parent, parent->animate_to_route, parent->unset_idling, parent->unset_idling);
         
         //de-highlight all Positions
         parent->highlight_position->set_value(-1);
@@ -469,7 +470,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         if (!(parent->transporting_with_new_route)) {
             //I am not adding a new Route for transrpot -> animate the charts to bring them to the Route related to the new Route. Set the highlighted_route equal to the newly added /modified Route, so the user can see it easily during the animation:
             
-            AnimateToObject<Route, HighlightObject<ListFrame>> animate(parent, route, parent->highlight_route);
+
+            AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>> animate(parent, route, parent->highlight_route);
             
             //de-highlight all Positions
             parent->highlight_position->set_value(-1);

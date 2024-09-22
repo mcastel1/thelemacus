@@ -8,7 +8,7 @@
 #include "do_nothing.h"
 
 
-template<class P> DoNothing<P>::DoNothing(void) {
+DoNothing::DoNothing(void) {
 
 
 }

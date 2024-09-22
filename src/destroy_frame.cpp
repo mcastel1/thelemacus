@@ -44,7 +44,7 @@ template class DestroyFrame<QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<Lis
 template class DestroyFrame<QuestionFrame<AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
-
+template class DestroyFrame<QuestionFrame<AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 
 //destroys a frame of type F
 template<class F> void DestroyFrame<F>::operator()(void) {

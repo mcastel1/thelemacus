@@ -32,6 +32,7 @@ template<class P, class F> void HighlightObject<P, F>::set_value(const int& i){
 }
 
 template void HighlightObject<ListFrame, DoNothing>::set_value(int const&);
+template void HighlightObject<ListFrame, DisconnectSight>::set_value(int const&);
 
 
 //store the value of the previoudly highlighted object in *highlighted_object_before, set *highlighted_object_now to value and refresh all to show the newly highlighted object

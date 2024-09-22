@@ -396,15 +396,16 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             parent->highlight_position->set_value(-1);
             parent->highlight_position->operator()(event);
             
-            //1. set the highlighted_route equal to the id of the newly added/modified Route, so the user can see it easily
+            //1. set highlighted_route equal to the id of the newly added/modified Route and highlight it with ` parent->highlight_route->operator()(event)`, so the user can see it easily
             parent->highlight_route->set_value(
                                                ((position_in_listcontrol_routes == -1) ? ((int)(parent->data->route_list.size()))-1 : ((int)position_in_listcontrol_routes))
                                                
                                                );
             parent->highlight_route->operator()(event);
             
-            //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
-            parent->highlight_route->set_value(-1);
+            //2. in highlight_route_and_disconnect_sight, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route_and_disconnect_sight : in this way, when the animation is over, the highlighted Route will be set to -1 by the functor *highlight_route_and_disconnect_sight, i.e., no Route will be highlighted when the animation is over, and
+            //3. after the highlighted Route has been set to -1, highlight_route_and_disconnect_sight calls *disconnect_sight -> the Sight related to the Route will be disconnected from the Route
+            parent->highlight_route_and_disconnect_sight->set_value(-1);
             
             print_question.SetAndCall(NULL, String("Warning"), String("The route which has been modified was related to a sight! Do you want to modify the route and disconnect it from the sight?"), String("Yes"), String("No"));
             

@@ -153,6 +153,7 @@
      -  condense common parts of  'Draw(unsigned int, DrawPanel*, vector< vector<wxPoint> >*, String);' and of 'Draw(unsigned int, DrawPanel*, vector<unsigned long long int>*, vector<wxPoint>*, String prefix)'
      - check if in init.txt you can remove 'index error = 0° 1.9''
      - in DrawPanel::OnMouseMovement, try to use the HighlightObject functor by replacign with it multiple lines of code that are already present in DrawPanel::OnMouseMovement
+     - DrawPanel::reference_positions_route_list may be get rid of, and you may use instead ListFrame::data->route_list[i].reference_position
 
 
 

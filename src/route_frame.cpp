@@ -348,16 +348,21 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     }
     
     
-    //write the values of the GUI fields in the non-GUI fields
+    //write the values of the GUI fields in the non-GUI field of *this
     get(event);
+
+
     
     if (position_in_listcontrol_routes == -1) {
-        //I am creating a new Route
+        //I am creating a new Route (thus the newly created Route is necessarily unrelated to a Sight)
         
         prompt_disconnection_message = false;
         
         //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
+        
+        //update the ListControls of parents with the new non-GUI data resulting from the addition of *route
+        parent->Set(true, true, true);
         
         //I am adding a new Route -> I resize points_route_list to add a new element to it
         for (i = 0; i < (parent->chart_frames.size()); i++) {
@@ -379,8 +384,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
                 //store the starting Position in *geo_position_start
                 (*(((parent->data->route_list)[(parent->i_transporting_route)]).reference_position)) = (parent->data->position_list)[(parent->i_object_to_transport)];
                 
-            }
-            else {
+            }else{
                 
                 if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
                     
@@ -392,10 +396,10 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             }
             
             //I refresh everything because of the modification above
-            //call listcontrol_routes->set with true because I want to keep the selection in listcontrol_routes
-            parent->listcontrol_routes->set(parent->data->route_list, false);
-            parent->Resize();
-            parent->OnModifyFile();
+            //call ListFrame::set with keep_selected_items_listcontrol_* = true with true because I want to keep the selection in all listcontrols
+//            parent->listcontrol_routes->set(parent->data->route_list, false);
+//            parent->Resize();
+//            parent->OnModifyFile();
             
         }
         

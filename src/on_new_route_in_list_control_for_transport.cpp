@@ -29,6 +29,36 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     ToDoAtEndOfTransport<Route, ListFrame>* to_do_at_end_of_transport;
 
     to_do_at_end_of_transport = new ToDoAtEndOfTransport<Route, ListFrame>(NULL, NULL, parent);
+    
+    //set the reference Position of the transporting Route to the initial position of the object that has been transported: in thiw way, the transporting Route will look nice on the chart
+    if ((parent->transported_object_type) == String("position")) {
+        
+        //the id of the Position that will be transported
+        (parent->i_object_to_transport) = ((int)(parent->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+        
+        //store the starting Position in *geo_position_start
+        (*(((parent->data->route_list)[(parent->i_transporting_route)]).reference_position)) = (parent->data->position_list)[(parent->i_object_to_transport)];
+        
+    }else{
+        
+        if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
+            
+            if ((parent->transported_object_type) == String("sight")) {
+                
+                //the id of the Route that will be transported
+                (parent->i_object_to_transport) = (((((parent->data)->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
+                
+            }
+            
+            //store the starting reference Position in *geo_position_start
+            (*((parent->data->route_list)[(parent->i_transporting_route)]).reference_position) = (*(((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position));
+            
+        }
+        
+    }
+
+    //tabulate the points of the newly added Route in all chart_frames
+    parent->TabulateRouteAll(((int)(parent->data->route_list.size()))-1);
 
 
     if (((parent->transported_object_type) == String("sight")) || ((parent->transported_object_type) == String("route"))) {
@@ -37,12 +67,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> >* transport_handler;
 
         
-        if ((parent->transported_object_type) == String("sight")) {
-            
-            //the id of the Route that will be transported
-            (parent->i_object_to_transport) = (((((parent->data)->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
-            
-        }
+
         
         transport_handler = new GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> >(
                                                                                                                  parent,
@@ -63,8 +88,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         GraphicalFeatureTransportHandler<Position, ToDoAtEndOfTransport<Route, ListFrame> >* transport_handler;
         
         
-        //the id of the Route or Position that will be transported
-        (parent->i_object_to_transport) = ((int)(parent->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+
         
         transport_handler = new GraphicalFeatureTransportHandler<Position, ToDoAtEndOfTransport<Route, ListFrame> >(parent,
                                                                                                                     &((parent->data->position_list)[(parent->i_object_to_transport)]),

@@ -361,15 +361,14 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
         
-        //I am adding a new Route -> I resize points_route_list to add a new element to it and tabulate the points of the newly added Route in all chart_frames
+        //I am adding a new Route -> I resize points_route_list to add a new element to it and down below I will tabulate the points of the newly added Route in all chart_frames
         for (i = 0; i < (parent->chart_frames.size()); i++) {
             
             ((parent->chart_frames)[i])->draw_panel->routes.resize(((parent->chart_frames)[i])->draw_panel->routes.size() + 1);
             ((parent->chart_frames)[i])->draw_panel->reference_positions_route_list.resize(((parent->chart_frames)[i])->draw_panel->reference_positions_route_list.size() + 1);
             
         }
-        parent->TabulateRouteAll(((int)(parent->data->route_list.size()))-1);
-        
+
         //update the ListControls of parents with the new non-GUI data resulting from the addition of *route
         parent->Set(true, true, true);
         
@@ -377,6 +376,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         if (!(parent->transporting_with_new_route)) {
             //the newly added Route is not added for transport, but it is simply added as a new Route -> animate the charts to bring them to the Route related to the new Route. Set the highlighted_route equal to the newly added /modified Route, so the user can see it easily during the animation:
             
+            //            tabulate the points of the newly added Route in all chart_frames
+            parent->TabulateRouteAll(((int)(parent->data->route_list.size()))-1);
 
             AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>> animate(parent, route, parent->highlight_route);
             
@@ -402,25 +403,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         }else{
             //the newly added Route is  added for transport -> call *on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
             
-            //trigger the animation that transports the object with the new Route
+            //trigger the animation that transports the object with the new Route, which will also tabulate the points of the newly added Route in all ChartFrames (see  OnNewRouteInListControlRoutesForTransport::operator())
             (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
             
-            //set the reference Position of the transporting Route to the initial position of the object that has been transported: in thiw way, the transporting Route will look nice on the chart
-            if ((parent->transported_object_type) == String("position")) {
-                
-                //store the starting Position in *geo_position_start
-                (*(((parent->data->route_list)[(parent->i_transporting_route)]).reference_position)) = (parent->data->position_list)[(parent->i_object_to_transport)];
-                
-            }else{
-                
-                if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
-                    
-                    //store the starting reference Position in *geo_position_start
-                    (*((parent->data->route_list)[(parent->i_transporting_route)]).reference_position) = (*(((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position));
-                    
-                }
-                
-            }
 
 
             

@@ -10,10 +10,13 @@
 
 #include <iostream>
 
+#include "animate_to_object.h"
 #include "answer.h"
 #include "catalog.h"
 #include "chart_frame.h"
 #include "data.h"
+#include "disconnect_sight.h"
+#include "do_nothing.h"
 #include "list_control.h"
 #include "my_app.h"
 #include "position.h"
@@ -29,6 +32,7 @@
 
 using namespace std;
 
+template<class T, class F> class AnimateToObject;
 class AskRemoveRelatedSight;
 class AskRemoveRelatedRoute;
 class Cartesian;
@@ -40,6 +44,7 @@ class Data;
 class DeletePosition;
 class DeleteRoute;
 class DeleteSight;
+class DisconnectSight;
 class ExistingRoute;
 template<class P> class ListControl;
 class NewRoute;
@@ -98,7 +103,7 @@ public:
     //the file where the data is read and written
     FileRW data_file;
     unsigned int margin;
-    int /*the # of the sight/route/position which is highlighted at the current (_now) or preceeding (_before) step of mouse movement, because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight_now, highlighted_route_now, highlighted_route_before,  highlighted_position_now, highlighted_position_before, /*# of the object to transport or disconnect */i_object_to_transport, i_object_to_disconnect, i_transporting_route;
+    int /*the # of the sight/route/position which is highlighted at the current (_now) or preceeding (_before) step of mouse movement, because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight_now, highlighted_route_now, highlighted_route_before,  highlighted_position_now, highlighted_position_before, /*# of the object to transport*/ i_object_to_transport, i_transporting_route;
     /*map[i] is the position in data->route_list of the i-th Route in route_list_for_transport*/
     vector<int> map;
     //coastline_polygons_Position/Cartesian/Mercator[i] is a vector which contains the the coastline datapoints (in Position/Cartesian/Mercator projection format) of polygon #i
@@ -119,13 +124,19 @@ public:
     SetIdling<ListFrame>* set_idling;
     UnsetIdling<ListFrame>* unset_idling;
     //functors to set the highighted Routes, Position, ...
-    HighlightObject<ListFrame> *highlight_route, *highlight_position;
+    HighlightObject<ListFrame, DoNothing> *highlight_route, *highlight_position;
+    //functor to highlight a Route and then disconnect a Sight from its related Route
+    HighlightObject<ListFrame, DisconnectSight> *highlight_route_and_disconnect_sight;
     ConfirmTransport<ListFrame>* confirm_transport;
     CloseFrame<ListFrame>* close;
     //a functor to let the user select a Route in listcontrol_routes
     SelectRoute* select_route;
-    PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, * print_info_message;
+    //functor used to disconnect a Sight from a Route
+    DisconnectSight* disconnect_sight;
+    PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, *print_info_message;
     ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> , UnsetIdling<ListFrame> >* print_question_message;
+    //functor to trigger an animation towards a Route by de-highlighting it at the end of the animation
+    AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>* animate_to_route;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;
@@ -139,13 +150,14 @@ public:
 
     ListFrame(const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
-    void set(void);
+    void Set(const bool&, const bool&, const bool&);
     void SetIdlingAllDrawPanels(const bool&);
     void PreRenderAndFitAll(void);
     void MyRefreshAll(void);
     void RefreshAll(void);
     void TabulatePositionsAll(void);
     void TabulateRoutesAll(void);
+    void TabulateRouteAll(const unsigned int&);
     void Resize(void);
     
     void LoadCoastLineData(String);
@@ -169,7 +181,6 @@ public:
     template<class E> void OnPressDeleteRoute(E&);
     bool CheckRoutesForTransport(void);
     
-    template<class E> void Disconnect(E&);
     template<class E> void DisconnectAndPromptMessage(E&);
     
     void OnAddChartFrame(wxCommandEvent&);
@@ -187,15 +198,11 @@ public:
     template<class E> void OnPressCtrlShiftS(E&);
     template<class E> void KeyDown(E&);
     template<class T> void ComputePosition(T&);
-    template<class T, class F> void AnimateToObject(T*, F*);
-//    void SetHighlightedRoute(const int&);
     
 #ifdef WIN32
     void OnTimer(wxTimerEvent&);
 #endif
 
 };
-
-
 
 #endif

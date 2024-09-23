@@ -154,19 +154,11 @@
      - check if in init.txt you can remove 'index error = 0° 1.9''
      - in DrawPanel::OnMouseMovement, try to use the HighlightObject functor by replacign with it multiple lines of code that are already present in DrawPanel::OnMouseMovement
      - DrawPanel::reference_positions_route_list may be get rid of, and you may use instead ListFrame::data->route_list[i].reference_position
+     - write put_back_in , put_back)_in_Mercator and put_back_in_3D :
 
 
 
  ********** THINGS TO FIX ***********
-    - check if buttons work properly on a real WIN32 machine
-    - check that floor_max_lat etc are still the correct values now that you changed the coastline data to polygons
-    - size_Mercator returns a size which is way bigger than the size of a circle of equal altitude when run on a circle of equal altitude
-    - when you press Modify in RouteFrame and prompt the message         parent->print_info_message->message.set(String("The route which has been modified was related to a sight! Disconnecting the route from the sight."));, the Route is not highlighted during the animation (you need to change the functor to be called at the end of the animation)
-    - CHECK THAT THE RADIUS OF THE EARTH AND OF ALL PLANETS IS CORRECT AND CORREPONDS TO THE CORRECT UNIT OF 1 nm = 1852 m.
-    - the scale factor is not centered anymore in the mercator projection if one zooms in and then back
-	- write put_back_in , put_back)_in_Mercator and put_back_in_3D :
  on OSX:
-    - items in Listcontrols are not highlighted when mouse hovers on ListFrame Mac
  on WIN32:
     - dark mode is not recognized
-    - the center of a reference Position of a Route is red while the color of the Route is different from Red

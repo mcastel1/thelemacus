@@ -7,6 +7,7 @@
 
 #include "sight_frame.h"
 
+#include "animate_to_object.h"
 #include "body_name.h"
 #include "check_check.h"
 #include "check_chrono.h"
@@ -686,6 +687,7 @@ void SightFrame::OnPressCancel([[maybe_unused]] wxCommandEvent& event) {
 void SightFrame::OnPressReduce(wxCommandEvent& event) {
 
     stringstream s;
+    
 
     if (label->value->GetValue().ToStdString() == "") {
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
@@ -700,17 +702,10 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     //writes the values of the GUI fields in the non-GUI fields
     get(event);
 
-    //    sight->print(String("sight entered via GUI"), String(""), cout);
-
-
     if (position_in_listcontrol_sights == -1) {
         //if the constructor of SightFrame has been called with sight_in = NULL, then I push back the newly allocated sight to the end of sight_list and reduce it
 
         parent->data->add_sight_and_reduce(sight, String(""));
-
-        //add the sight and the related route to the GUI object listconstrol_sights and listcontrol_routes, respectively
-        //        sight->add_to_ListControl(position_in_listcontrol_sights, ((this->parent)->listcontrol_sights));
-        //        (((this->parent->data)->route_list)[(sight->related_route).value]).add_to_ListControl(position_in_listcontrol_sights, ((this->parent)->listcontrol_routes));
 
     }
     else {
@@ -730,12 +725,12 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
 
             sight_position = sight - (&((parent->data->sight_list)[0]));
 
-            parent->data->route_list.resize((parent->data->route_list).size() + 1);
-            sight->reduce(&((parent->data->route_list)[(parent->data->route_list).size() - 1]), String(""));
+            parent->data->route_list.resize((parent->data->route_list.size()) + 1);
+            sight->reduce(&((parent->data->route_list)[(parent->data->route_list.size()) - 1]), String(""));
 
             //I link the Sight to the Route, and the Route to the Sight
-            (sight->related_route.value) = ((int)(parent->data->route_list).size()) - 1;
-            ((((parent->data->route_list)[(parent->data->route_list).size() - 1]).related_sight).value) = ((int)sight_position);
+            (sight->related_route.value) = ((int)(parent->data->route_list.size())) - 1;
+            (((parent->data->route_list)[(parent->data->route_list.size()) - 1]).related_sight.value) = ((int)sight_position);
 
 
         }
@@ -761,7 +756,11 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     parent->highlight_route->operator()(event);
     //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
     parent->highlight_route->set_value(-1);
-    parent->AnimateToObject<Route, HighlightObject<ListFrame> >(&((parent->data->route_list)[sight->related_route.value]), parent->highlight_route);
+    
+    //animate is declared here and not at the beginning  because at the beginning of this method related_route may be undefined
+    AnimateToObject<Route, HighlightObject<ListFrame, DoNothing> > animate(parent, &((parent->data->route_list)[sight->related_route.value]), parent->highlight_route);
+    animate.operator()();
+    
     
     event.Skip(true);
 

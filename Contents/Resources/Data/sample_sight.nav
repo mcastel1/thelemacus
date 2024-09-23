@@ -1,23 +1,45 @@
 Data:
 	Sights:
+		Sight #1:
+			body:
+				Type = moon
+				Name = moon
+				Radius = 938.1209999999999809 nm
+			limb = u
+			sextant altitude = 47° 57.79999999999987'
+			index error = 0° 1.9'
+			artificial horizon = y
+			master-clock date and hour of sight:
+				date = 2021-06-21
+				hour = 21:01:20
+			use of stopwatch = y
+			stopwatch = 00:37:35
+			TAI - UTC at time of master-clock synchronization with UTC = 00:00:37
+			label = Sight was taken at BGC
 	Routes:
 		Route #1:
-			type = circle of equal altitude
-			ground position:
-				latitude = 57° 43.16999999999954'
-				longitude = 302° 23.44999999999838'
-				label = 2024-09-12 16:43:18 UTC+2
-			aperture angle = 22° 12.51999999999995'
-			label = 2024-09-12 16:43:55 UTC+2
+			type = orthodrome
+			start position:
+				latitude = 23° 3.00000000000004'
+				longitude = 356° 56.99999999999908'
+				label = 2024-09-20 21:56:30 UTC+2
+			starting heading = 245° 4.351999999998839'
+			length format = length
+				length = 3000.0000000000000000 nm
+			label = X
 	Positions:
+		Position #1:
+			latitude = 23° 3.00000000000004'
+			longitude = 3° 2.999999999999996'
+			label = 2024-09-20 21:56:46 UTC+2
 Recent bodies = 12 10 8
 Recent projections = 1 0
 Recent length formats = 1 0
-Recent route types = 2 0 1
+Recent route types = 1 0 2
 Recent route for transport types = 1 0
 Recent length units = 0 1
 Recent speed units = 0 1
-Recent index error = 1° 12.23'
+Recent index error = 1° 12.23423000000001'
 Recent height of eye value = 1.0000000000000000 m
-Recent route length value = 1.0000000000000000 nm
+Recent route length value = 3000.0000000000000000 nm
 Recent route speed value = 23.0000000000000000 kt

@@ -570,7 +570,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
             
             file_is_untitled = false;
             menu_file->Enable(wxID_HIGHEST + 7, true);
-            set(false, false, false);
+            Set(false, false, false);
             SetLabel(data_file.name->value);
             PreRenderAndFitAll();
             
@@ -590,7 +590,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         }
         
         
-        set(false, false, false);
+        Set(false, false, false);
         
         //button to show map
         button_show_map = new wxBitmapButton(
@@ -811,7 +811,7 @@ void ListFrame::OnComputePosition(void) {
                 //this functor will be used to trigger the animation
                 AnimateToObject<Route, UnsetIdling<ListFrame> > animate(this, &(data->route_list.back()), unset_idling);
                 
-                set(false, false, false);
+                Set(false, false, false);
                 //bring all charts to the astronomical position with an animation and do nothing at the end of the animation
                 animate.operator()();
                 
@@ -831,7 +831,7 @@ void ListFrame::OnComputePosition(void) {
                 print_warning_message->title.set(String("Warning"));
                 print_warning_message->image_path.set(wxGetApp().path_file_warning_icon);
                 
-                set(false, false, false);
+                Set(false, false, false);
                 //bring all charts to the astronomical Position with an animation
                 animate.operator()();
                 
@@ -852,7 +852,7 @@ void ListFrame::OnComputePosition(void) {
                 print_warning_message->title.set(String("Warning"));
                 print_warning_message->image_path.set(wxGetApp().path_file_warning_icon);
                 
-                set(false, false, false);
+                Set(false, false, false);
                 //bring all charts to the astronomical Position with an animation
                 animate.operator()();
                 
@@ -943,7 +943,7 @@ void ListFrame::Resize(void) {
 }
 
 //set all the GUI fileds in *this from the data in this->data and adapts the size of columns and panel accordingly. If keep_selected_items_listcontrol_sights = true, I re-select the items in listcontrol_sights that were selected before this method was called (if they are compatible with the new size of *this)
-void ListFrame::set(const bool& keep_selected_items_listcontrol_sights,
+void ListFrame::Set(const bool& keep_selected_items_listcontrol_sights,
                     const bool& keep_selected_items_listcontrol_positions,
                     const bool& keep_selected_items_listcontrol_routes
                     ) {
@@ -1457,7 +1457,7 @@ template<class E> void ListFrame::OnPressCtrlO(E& event) {
             //emable the menu item to close data_file
             menu_file->Enable(wxID_HIGHEST + 7, true);
             //load the data in data into the GUI fields of *this
-            set(false, false, false);
+            Set(false, false, false);
             //change the title of *this to the filename
             SetLabel(wxString(data_file.name->value));
             //resize and draw all charts according to the newly loaded data

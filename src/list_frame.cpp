@@ -900,7 +900,7 @@ void ListFrame::MyRefreshAll(void) {
     
 }
 
-//tabulate Routes in all chart_frames
+//tabulate all Routes in all chart_frames
 void ListFrame::TabulateRoutesAll(void) {
     
     for (long i = 0; i < (chart_frames.size()); i++) {
@@ -909,7 +909,18 @@ void ListFrame::TabulateRoutesAll(void) {
     
 }
 
-//tabulate Positions in all chart_frames
+
+//tabulate Route # route_id in all chart_frames
+void ListFrame::TabulateRouteAll(const unsigned int& route_id) {
+    
+    for (long i = 0; i < (chart_frames.size()); i++) {
+        (chart_frames[i])->draw_panel->TabulateRoute(route_id);
+    }
+    
+}
+
+
+//tabulate all Positions in all chart_frames
 void ListFrame::TabulatePositionsAll(void) {
     
     for (long i = 0; i < (chart_frames.size()); i++) {

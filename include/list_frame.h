@@ -157,6 +157,7 @@ public:
     void RefreshAll(void);
     void TabulatePositionsAll(void);
     void TabulateRoutesAll(void);
+    void TabulateRouteAll(const unsigned int&);
     void Resize(void);
     
     void LoadCoastLineData(String);

@@ -360,19 +360,18 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         
         //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
-        //tabulate the points of the newly added Route in all chart_frames
-        parent->TabulateRouteAll(((int)(parent->data->route_list.size()))-1);
         
-        //update the ListControls of parents with the new non-GUI data resulting from the addition of *route
-        parent->Set(true, true, true);
-        
-        //I am adding a new Route -> I resize points_route_list to add a new element to it
+        //I am adding a new Route -> I resize points_route_list to add a new element to it and tabulate the points of the newly added Route in all chart_frames
         for (i = 0; i < (parent->chart_frames.size()); i++) {
             
             ((parent->chart_frames)[i])->draw_panel->routes.resize(((parent->chart_frames)[i])->draw_panel->routes.size() + 1);
             ((parent->chart_frames)[i])->draw_panel->reference_positions_route_list.resize(((parent->chart_frames)[i])->draw_panel->reference_positions_route_list.size() + 1);
             
         }
+        parent->TabulateRouteAll(((int)(parent->data->route_list.size()))-1);
+        
+        //update the ListControls of parents with the new non-GUI data resulting from the addition of *route
+        parent->Set(true, true, true);
         
         
         if (!(parent->transporting_with_new_route)) {

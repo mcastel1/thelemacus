@@ -942,17 +942,20 @@ void ListFrame::Resize(void) {
     
 }
 
-//set all the GUI fileds in *this from the data in this->data and adapts the size of columns and panel accordingly
-void ListFrame::set() {
+//set all the GUI fileds in *this from the data in this->data and adapts the size of columns and panel accordingly. If keep_selected_items_listcontrol_sights = true, I re-select the items in listcontrol_sights that were selected before this method was called (if they are compatible with the new size of *this)
+void ListFrame::set(const bool& keep_selected_items_listcontrol_sights,
+                    const bool& keep_selected_items_listcontrol_positions,
+                    const bool& keep_selected_items_listcontrol_routes
+                    ) {
     
     //write the sights contained into data->sight_list into listcontrol_sights
-    listcontrol_sights->set(data->sight_list, false);
+    listcontrol_sights->set(data->sight_list, keep_selected_items_listcontrol_sights);
     
     //write the positions into data->position_list into listcontrol_sights
-    listcontrol_positions->set(data->position_list, false);
+    listcontrol_positions->set(data->position_list, keep_selected_items_listcontrol_positions);
     
     //write the routes into data->route_list into listcontrol_routes
-    listcontrol_routes->set(data->route_list, false);
+    listcontrol_routes->set(data->route_list, keep_selected_items_listcontrol_routes);
     
     Resize();
     //    Maximize(panel);

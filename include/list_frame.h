@@ -150,7 +150,7 @@ public:
 
     ListFrame(const wxString&, const wxString&, const wxPoint&, const wxSize&, String);
     
-    void set(void);
+    void set(const bool&, const bool&, const bool&);
     void SetIdlingAllDrawPanels(const bool&);
     void PreRenderAndFitAll(void);
     void MyRefreshAll(void);

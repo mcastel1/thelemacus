@@ -354,7 +354,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 
     
     if (position_in_listcontrol_routes == -1) {
-        //I am creating a new Route (thus the newly created Route is necessarily unrelated to a Sight)
+        //I am creating a new Route (which is thus necessarily unrelated to a Sight)
         
         prompt_disconnection_message = false;
         
@@ -401,6 +401,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         }else{
             //the newly added Route is  added for transport -> call *on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
             
+            //trigger the animation that transports the object with the new Route
             (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
             
             //set the reference Position of the transporting Route to the initial position of the object that has been transported: in thiw way, the transporting Route will look nice on the chart
@@ -413,12 +414,14 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
                 
                 if (((parent->transported_object_type) == String("sight")) || (parent->transported_object_type) == String("route")) {
                     
-                    //store the starting reference position in *geo_position_start
+                    //store the starting reference Position in *geo_position_start
                     (*((parent->data->route_list)[(parent->i_transporting_route)]).reference_position) = (*(((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position));
                     
                 }
                 
             }
+
+
             
             //I refresh everything because of the modification above
             //call ListFrame::set with keep_selected_items_listcontrol_* = true with true because I want to keep the selection in all listcontrols

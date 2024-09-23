@@ -955,8 +955,16 @@ void ListFrame::Set(const bool& keep_selected_items_listcontrol_sights,
     listcontrol_positions->set(data->position_list, keep_selected_items_listcontrol_positions);
     
     //write the routes into data->route_list into listcontrol_routes
+    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
     listcontrol_routes->set(data->route_list, keep_selected_items_listcontrol_routes);
+    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
     
+    //the selected items in listcontrol_sights, ... may have changed -> I call on_change_selection_in_listcontrol_sights , ... to enable/disable the disableable buttons of listcontrol_sights, .... :
+    (*on_change_selection_in_listcontrol_sights)();
+    (*on_change_selection_in_listcontrol_positions)();
+    (*on_change_selection_in_listcontrol_routes)();
+    
+
     Resize();
     //    Maximize(panel);
     

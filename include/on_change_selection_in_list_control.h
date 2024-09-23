@@ -33,6 +33,7 @@ public:
     
     OnChangeSelectionInListControl(ListControl<S>*, String);
     template<class T> void operator()(T&);
+    void operator()(void);
     
 };
 

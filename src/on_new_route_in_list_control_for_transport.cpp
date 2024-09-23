@@ -28,11 +28,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     //do the tasks tha need to be done at the end of the transport
     ToDoAtEndOfTransport<Route, ListFrame>* to_do_at_end_of_transport;
 
-    to_do_at_end_of_transport = new ToDoAtEndOfTransport<Route, ListFrame>(
-                                                                  NULL,
-                                                                  NULL,
-                                                                  parent
-                                                                  );
+    to_do_at_end_of_transport = new ToDoAtEndOfTransport<Route, ListFrame>(NULL, NULL, parent);
 
 
     if (((parent->transported_object_type) == String("sight")) || ((parent->transported_object_type) == String("route"))) {
@@ -43,13 +39,10 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         
         if ((parent->transported_object_type) == String("sight")) {
             
-            
             //the id of the Route that will be transported
             (parent->i_object_to_transport) = (((((parent->data)->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
             
-            
         }
-        
         
         transport_handler = new GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> >(
                                                                                                                  parent,

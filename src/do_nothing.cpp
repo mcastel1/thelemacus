@@ -7,6 +7,10 @@
 
 #include "do_nothing.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
 
 DoNothing::DoNothing(void) {
 

@@ -350,8 +350,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     
     //write the values of the GUI fields in the non-GUI field of *this
     get(event);
-
-
+    
+    
     
     if (position_in_listcontrol_routes == -1) {
         //I am creating a new Route (which is thus necessarily unrelated to a Sight)
@@ -368,7 +368,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             ((parent->chart_frames)[i])->draw_panel->reference_positions_route_list.resize(((parent->chart_frames)[i])->draw_panel->reference_positions_route_list.size() + 1);
             
         }
-
+        
         //update the ListControls of parents with the new non-GUI data resulting from the addition of *route
         parent->Set(true, true, true);
         
@@ -378,12 +378,12 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             
             //            tabulate the points of the newly added Route in all chart_frames
             parent->TabulateRouteAll(((int)(parent->data->route_list.size()))-1);
-
+            
             AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>> animate(parent, route, parent->highlight_route);
             
             
             parent->Set(true, true, false);
-    
+            
             
             //de-highlight all Positions
             parent->highlight_position->set_value(-1);
@@ -406,24 +406,24 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             //trigger the animation that transports the object with the new Route, which will also tabulate the points of the newly added Route in all ChartFrames (see  OnNewRouteInListControlRoutesForTransport::operator())
             (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
             
-
-
+            
+            
             
             //I refresh everything because of the modification above
             //call ListFrame::set with keep_selected_items_listcontrol_* = true with true because I want to keep the selection in all listcontrols
-//            parent->listcontrol_routes->set(parent->data->route_list, false);
-//            parent->Resize();
-//            parent->OnModifyFile();
+            //            parent->listcontrol_routes->set(parent->data->route_list, false);
+            //            parent->Resize();
+            //            parent->OnModifyFile();
             
             
         }
         
-
+        
     }else {
         //I am modifying an existing Route
         
         if ((route->related_sight) != -1) {
-            //the Route that I am moidifying is related to a Sight
+            //the existing Route that I am moidifying is related to a Sight
             
             prompt_disconnection_message = true;
             
@@ -431,7 +431,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             
             //because I am modifying and thus altering the Route, I prepare the value of the Sight that may be disconnected by disconnect_sight if the user presses yes at the QuestionFrame below
             (parent->disconnect_sight->sight_id) = (route->related_sight.value);
-
+            
             
             parent->animate_to_route = new AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>(parent, route, parent->highlight_route_and_disconnect_sight);
             
@@ -453,10 +453,33 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             parent->highlight_route_and_disconnect_sight->set_value(-1);
             
             print_question.SetAndCall(NULL, String("Warning"), String("The route which has been modified was related to a sight! Do you want to modify the route and disconnect it from the sight?"), String("Yes"), String("No"));
-                        
+            
         }else{
+            //the existing Route that I am modifying is not related to a Sight -> I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling at the end of the animation
             
             prompt_disconnection_message = false;
+            
+            
+            //
+            
+            
+            //de-highlight all Positions
+            parent->highlight_position->set_value(-1);
+            parent->highlight_position->operator()(event);
+            
+            //1. set the highlighted_route equal to the id of the newly added/modified Route, so the user can see it easily
+            parent->highlight_route->set_value(
+                                               ((position_in_listcontrol_routes == -1) ? ((int)(parent->data->route_list.size()))-1 : ((int)position_in_listcontrol_routes))
+                                               
+                                               );
+            parent->highlight_route->operator()(event);
+            //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
+            parent->highlight_route->set_value(-1);
+            parent->AnimateToObject<Route, HighlightObject<ListFrame>>(route, parent->highlight_route);
+            
+            
+            
+            //
             
         }
         
@@ -464,25 +487,25 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     
     
     
-//    //call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
-//    parent->listcontrol_sights->set((parent->data->sight_list), true);
-//    parent->listcontrol_positions->set((parent->data->position_list), true);
-//    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
-//    parent->listcontrol_routes->set((parent->data->route_list), false);
-//    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
-//    
-//    //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
-//    (*(parent->on_change_selection_in_listcontrol_sights))(event);
-//    (*(parent->on_change_selection_in_listcontrol_routes))(event);
-//    
-//    (*(parent->unset_idling))();
-//    parent->Resize();
-//    parent->OnModifyFile();
+    //    //call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
+    //    parent->listcontrol_sights->set((parent->data->sight_list), true);
+    //    parent->listcontrol_positions->set((parent->data->position_list), true);
+    //    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
+    //    parent->listcontrol_routes->set((parent->data->route_list), false);
+    //    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
+    //
+    //    //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
+    //    (*(parent->on_change_selection_in_listcontrol_sights))(event);
+    //    (*(parent->on_change_selection_in_listcontrol_routes))(event);
+    //
+    //    (*(parent->unset_idling))();
+    //    parent->Resize();
+    //    parent->OnModifyFile();
     
     
     
     
-
+    
     
     if(!prompt_disconnection_message){
         //I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling (intended as 'do nothing' here) at the end of the animation

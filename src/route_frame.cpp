@@ -373,8 +373,33 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         }
         
         
-        if ((parent->transporting_with_new_route)) {
-            //I am adding a new Route for transport -> call *on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
+        if (!(parent->transporting_with_new_route)) {
+            //the newly added Route is not added for transport, but it is simply added as a new Route -> animate the charts to bring them to the Route related to the new Route. Set the highlighted_route equal to the newly added /modified Route, so the user can see it easily during the animation:
+            
+
+            AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>> animate(parent, route, parent->highlight_route);
+            
+            
+            parent->Set(true, true, false);
+    
+            
+            //de-highlight all Positions
+            parent->highlight_position->set_value(-1);
+            parent->highlight_position->operator()(event);
+            
+            //1. set the highlighted_route equal to the id of the newly added/modified Route, so the user can see it easily
+            parent->highlight_route->set_value(
+                                               ((position_in_listcontrol_routes == -1) ? ((int)(parent->data->route_list.size()))-1 : ((int)position_in_listcontrol_routes))
+                                               
+                                               );
+            parent->highlight_route->operator()(event);
+            //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
+            parent->highlight_route->set_value(-1);
+            animate.operator()();
+            
+            
+        }else{
+            //the newly added Route is  added for transport -> call *on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route
             
             (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
             
@@ -400,6 +425,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
 //            parent->listcontrol_routes->set(parent->data->route_list, false);
 //            parent->Resize();
 //            parent->OnModifyFile();
+            
             
         }
         
@@ -474,28 +500,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         
         //If I am adding a new Route for transport, I do not call any animation, because there is already the transport animation that will be prompted. Otherwise, I call an animation that zooms on the newly added Route
         if (!(parent->transporting_with_new_route)) {
-            //I am not adding a new Route for transrpot -> animate the charts to bring them to the Route related to the new Route. Set the highlighted_route equal to the newly added /modified Route, so the user can see it easily during the animation:
-            
-
-            AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>> animate(parent, route, parent->highlight_route);
-            
-            
-            parent->Set(true, true, false);
-    
-            
-            //de-highlight all Positions
-            parent->highlight_position->set_value(-1);
-            parent->highlight_position->operator()(event);
-            
-            //1. set the highlighted_route equal to the id of the newly added/modified Route, so the user can see it easily
-            parent->highlight_route->set_value(
-                                               ((position_in_listcontrol_routes == -1) ? ((int)(parent->data->route_list.size()))-1 : ((int)position_in_listcontrol_routes))
-                                               
-                                               );
-            parent->highlight_route->operator()(event);
-            //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
-            parent->highlight_route->set_value(-1);
-            animate.operator()();
+            //I am not adding a new Route for transrpot
             
         }
         

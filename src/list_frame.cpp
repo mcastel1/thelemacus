@@ -950,10 +950,8 @@ void ListFrame::Set(const bool& keep_selected_items_listcontrol_sights,
     
     //write the sights contained into data->sight_list into listcontrol_sights
     listcontrol_sights->set(data->sight_list, keep_selected_items_listcontrol_sights);
-    
     //write the positions into data->position_list into listcontrol_sights
     listcontrol_positions->set(data->position_list, keep_selected_items_listcontrol_positions);
-    
     //write the routes into data->route_list into listcontrol_routes
     //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
     listcontrol_routes->set(data->route_list, keep_selected_items_listcontrol_routes);
@@ -966,7 +964,7 @@ void ListFrame::Set(const bool& keep_selected_items_listcontrol_sights,
     
 
     Resize();
-    //    Maximize(panel);
+    OnModifyFile();
     
 }
 

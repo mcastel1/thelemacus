@@ -476,20 +476,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>> animate(parent, route, parent->highlight_route);
             
             
-            //set liscontrols - start
             parent->Set(true, true, false);
-            
-            //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
-            (*(parent->on_change_selection_in_listcontrol_sights))(event);
-            (*(parent->on_change_selection_in_listcontrol_routes))(event);
-            
-            (*(parent->unset_idling))();
-            parent->Resize();
-            parent->OnModifyFile();
-            
-            
-            //set listcontrols - end
-            
+    
             
             //de-highlight all Positions
             parent->highlight_position->set_value(-1);

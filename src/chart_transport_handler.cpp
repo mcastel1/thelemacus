@@ -82,6 +82,14 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
     if(!((MotionHandler<F>::parent)->idling)){
         //I start the animation only if *parent is not in idling mode
         
+        //before I initiate the transport, I unbind DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
+        chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
+        chart_frame->parent->listcontrol_sights->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+        chart_frame->parent->listcontrol_positions->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+        chart_frame->parent->listcontrol_routes->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+        chart_frame->parent->panel->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+        chart_frame->draw_panel->Unbind(wxEVT_MOUSEWHEEL, &DrawPanel::OnMouseWheel, chart_frame->draw_panel);
+        
         //because I am about to trigger an animation, I set all DrawPanels to idling mode. I do not set the ChartFrame to idling mode because I need the projection_field to be updated with the recently selected value of the projection, if needed
         (MotionHandler<F>::parent)->SetIdlingAllDrawPanels(true);
         
@@ -120,14 +128,6 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             (MotionHandler<F>::transporting_route_temp).set((MotionHandler<F>::transporting_route));
             
             (MotionHandler<F>::start)->set((*((MotionHandler<F>::transporting_route).reference_position)));
-            
-            //during the transport, I unbind DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
-            chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
-            chart_frame->parent->listcontrol_sights->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
-            chart_frame->parent->listcontrol_positions->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
-            chart_frame->parent->listcontrol_routes->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
-            chart_frame->parent->panel->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
-            chart_frame->draw_panel->Unbind(wxEVT_MOUSEWHEEL, &DrawPanel::OnMouseWheel, chart_frame->draw_panel);
 
             (chart_frame->draw_panel->label_position) = String("");
 

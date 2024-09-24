@@ -224,13 +224,20 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     
     
     
-    //I push back the newly allocated Position to the end of position_list
-    parent->data->add_position(position, String(""));
+
     
-    for (i = 0; i < (parent->chart_frames.size()); i++) {
+    if (position_in_listcontrol_positions== -1) {
+        //I am creating a new Position
         
-        ((parent->chart_frames)[i])->draw_panel->points_position_list.resize((((parent->chart_frames)[i])->draw_panel)->points_position_list.size() + 1);
-        ((parent->chart_frames)[i])->draw_panel->points_position_list.resize(((parent->chart_frames)[i])->draw_panel->points_position_list.size() + 1);
+        //I push back the newly allocated Position to the end of position_list
+        parent->data->add_position(position, String(""));
+        
+        for (i = 0; i < (parent->chart_frames.size()); i++) {
+            
+            ((parent->chart_frames)[i])->draw_panel->points_position_list.resize((((parent->chart_frames)[i])->draw_panel)->points_position_list.size() + 1);
+            ((parent->chart_frames)[i])->draw_panel->points_position_list.resize(((parent->chart_frames)[i])->draw_panel->points_position_list.size() + 1);
+            
+        }
         
     }
     

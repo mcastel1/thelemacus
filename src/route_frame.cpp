@@ -397,7 +397,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             parent->highlight_route->operator()(event);
             //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
             parent->highlight_route->set_value(-1);
-            animate.operator()();
+            animate.operator()(event);
             
             
         }else{
@@ -462,18 +462,23 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             
             prompt_disconnection_message = false;
             
+            
+            AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>> animate(parent, route, parent->highlight_route_and_unset_idling);
+            
             //
             //1. de-highlight all Positions
             parent->highlight_position->set_value(-1);
             parent->highlight_position->operator()(event);
             
             //2. set the highlighted_route equal to the id of the newly added/modified Route, so the user can see it easily
-            parent->highlight_route->set_value(position_in_listcontrol_routes);
+            parent->highlight_route->set_value(((int)position_in_listcontrol_routes));
             parent->highlight_route->operator()(event);
             
             //3. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
             parent->highlight_route->set_value(-1);
-            parent->AnimateToObject<Route, HighlightObject<ListFrame>>(route, parent->highlight_route);
+//            parent->AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>>(route, parent->highlight_route_and_unset_idling);
+            animate.operator()(event);
+
             //
             
         }

@@ -355,7 +355,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //I am creating a new Route (which is thus necessarily unrelated to a Sight)
         
         
-        //I push back the newly allocated route to the end of route_list and reduce it
+        //I push back the newly allocated Route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
         
         //I am adding a new Route -> I resize points_route_list to add a new element to it and down below I will tabulate the points of the newly added Route in all chart_frames
@@ -457,7 +457,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             //the existing Route that I am modifying is not related to a Sight -> I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling at the end of the animation
                         
             
-            AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>> animate(parent, route, parent->highlight_route_and_unset_idling);
+            AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>> animate(parent, route, parent->highlight_and_unset_idling);
             
             //
             //1. de-highlight all Positions
@@ -470,7 +470,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             
             //3. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
             parent->highlight_route->set_value(-1);
-//            parent->AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>>(route, parent->highlight_route_and_unset_idling);
+//            parent->AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>>(route, parent->highlight_and_unset_idling);
             animate.operator()(event);
 
             //

@@ -209,7 +209,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     unsigned int i;
     stringstream s;
     //this functor will be used to trigger the animation to the Position once button_ok has been pressed
-    AnimateToObject<Position, HighlightObject<ListFrame, UnsetIdling<ListFrame>>> animate(parent, position, parent->highlight_and_unset_idling);
+    AnimateToObject<Position, HighlightObject<ListFrame, UnsetIdling<ListFrame>>> animate(parent, position, parent->highlight_route_and_unset_idling);
 
     
     if (label->value->GetValue().ToStdString() == "") {
@@ -257,8 +257,8 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
                                           
                                           );
     parent->highlight_position->operator()(event);
-    //2. in parent->highlight_and_unset_idling, set the value of the highlighted Position to be set equal to -1, and call AnimateToObject with second argument parent->highlight_and_unset_idling : in this way, when the animation is over, the highlighted Position will be set to -1, i.e., no Route will be highlighted when the animation is over
-    parent->highlight_and_unset_idling->set_value(-1);
+    //2. in parent->highlight_route_and_unset_idling, set the value of the highlighted Position to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route_and_unset_idling : in this way, when the animation is over, the highlighted Position will be set to -1, i.e., no Route will be highlighted when the animation is over
+    parent->highlight_route_and_unset_idling->set_value(-1);
     animate.operator()(event);
     
     

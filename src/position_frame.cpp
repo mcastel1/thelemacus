@@ -209,7 +209,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     unsigned int i;
     stringstream s;
     //this functor will be used to trigger the animation to the Position once button_ok has been pressed
-    AnimateToObject<Position, HighlightObject<ListFrame, UnsetIdling<ListFrame>>> animate(parent, position, parent->highlight_route_and_unset_idling);
+    AnimateToObject<Position, HighlightObject<ListFrame, UnsetIdling<ListFrame>>> animate(parent, position, parent->highlight_position_and_unset_idling);
 
     
     if (label->value->GetValue().ToStdString() == "") {
@@ -257,48 +257,10 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
                                           
                                           );
     parent->highlight_position->operator()(event);
-    //2. in parent->highlight_route_and_unset_idling, set the value of the highlighted Position to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route_and_unset_idling : in this way, when the animation is over, the highlighted Position will be set to -1, i.e., no Route will be highlighted when the animation is over
-    parent->highlight_route_and_unset_idling->set_value(-1);
+    //2. in parent->highlight_position_and_unset_idling, set the value of the highlighted Position to be set equal to -1, and call AnimateToObject with second argument parent->highlight_position_and_unset_idling : in this way, when the animation is over, the highlighted Position will be set to -1, i.e., no Route will be highlighted when the animation is over
+    parent->highlight_position_and_unset_idling->set_value(-1);
     animate.operator()(event);
     
-    
-    
-//    
-//    
-//    
-//    //
-//    //    //if the constructor of PositionFrame has been called with sight_in = NULL, then I push back the newly allocated Position to the end of position_list
-//    //    if (position_in_listcontrol_positions == -1) {
-//    //        my_push_back(&(this->parent->data->position_list), *position);
-//    //    }
-//    
-//    parent->listcontrol_positions->set(parent->data->position_list, false);
-//    
-//    //given that I have reset the content of listcontrol_positions, now no items are selected in this ListControl -> I call:
-//    (*(parent->on_change_selection_in_listcontrol_positions))(event);
-//    
-//    (*(parent->unset_idling))();
-//    parent->Resize();
-//    parent->OnModifyFile();
-//    
-//    
-//    //animate the charts to bring them to the Position. Set  highlighted_position equal to the newly added/modified Position, so the user can see it easily during the animation:
-//    
-//    //de-highlight all Routes
-//    parent->highlight_route->set_value(-1);
-//    parent->highlight_route->operator()(event);
-//    
-//    //1. set the highlighted_position equal to the id of the newly added/modified Position, so the user can see it easily
-//    
-//    parent->highlight_position->set_value(
-//                                          ((position_in_listcontrol_positions == -1) ? ((int)(parent->data->position_list.size()))-1 : ((int)position_in_listcontrol_positions))
-//                                          
-//                                          );
-//    parent->highlight_position->operator()(event);
-//    //2. in parent->highlight_position, set the value of the highlighted Position to be set equal to -1, and call AnimateToObject with second argument parent->highlight_position : in this way, when the animation is over, the highlighted Position will be set to -1, i.e., no Route will be highlighted when the animation is over
-//    parent->highlight_position->set_value(-1);
-//    
-//    animate.operator()(event);
     
     event.Skip(true);
     

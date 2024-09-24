@@ -419,7 +419,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         }
         
         
-    }else {
+    }else{
         //I am modifying an existing Route
         
         //update the ListControls of parents with the new non-GUI data resulting from the addition of *route
@@ -463,15 +463,15 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             prompt_disconnection_message = false;
             
             //
-            //de-highlight all Positions
+            //1. de-highlight all Positions
             parent->highlight_position->set_value(-1);
             parent->highlight_position->operator()(event);
             
-            //1. set the highlighted_route equal to the id of the newly added/modified Route, so the user can see it easily
+            //2. set the highlighted_route equal to the id of the newly added/modified Route, so the user can see it easily
             parent->highlight_route->set_value(position_in_listcontrol_routes);
             parent->highlight_route->operator()(event);
             
-            //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
+            //3. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
             parent->highlight_route->set_value(-1);
             parent->AnimateToObject<Route, HighlightObject<ListFrame>>(route, parent->highlight_route);
             //

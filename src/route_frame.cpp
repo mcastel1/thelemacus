@@ -355,7 +355,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         //I am creating a new Route (which is thus necessarily unrelated to a Sight)
         
         
-        //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
+        //I push back the newly allocated route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
         
         //I am adding a new Route -> I resize points_route_list to add a new element to it and down below I will tabulate the points of the newly added Route in all chart_frames

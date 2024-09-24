@@ -228,8 +228,8 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
 
         for (i = 0; i < (parent->chart_frames.size()); i++) {
 
-            ((((parent->chart_frames)[i])->draw_panel)->points_position_list).resize(((((parent->chart_frames)[i])->draw_panel)->points_position_list).size() + 1);
-            ((((parent->chart_frames)[i])->draw_panel)->points_position_list).resize(((((parent->chart_frames)[i])->draw_panel)->points_position_list).size() + 1);
+            ((parent->chart_frames)[i])->draw_panel->points_position_list.resize((((parent->chart_frames)[i])->draw_panel)->points_position_list.size() + 1);
+            ((parent->chart_frames)[i])->draw_panel->points_position_list.resize(((parent->chart_frames)[i])->draw_panel->points_position_list.size() + 1);
 
         }
     }

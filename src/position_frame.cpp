@@ -209,8 +209,8 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     unsigned int i;
     stringstream s;
     //this functor will be used to trigger the animation to the Position once button_ok has been pressed
-    AnimateToObject<Position, HighlightObject<ListFrame, DoNothing>> animate(parent, position, parent->highlight_position);
-    
+    AnimateToObject<Position, HighlightObject<ListFrame, UnsetIdling<ListFrame>>> animate(parent, position, parent->highlight_and_unset_idling);
+
     
     if (label->value->GetValue().ToStdString() == "") {
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
@@ -239,7 +239,6 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     
     parent->TabulatePositionAll(((int)(parent->data->position_list.size()))-1);
     
-    AnimateToObject<Position, HighlightObject<ListFrame, UnsetIdling<ListFrame>>> animate(parent, position, parent->highlight_and_unset_idling);
     
     //de-highlight all Routes
     parent->highlight_route->set_value(-1);

@@ -127,7 +127,8 @@ public:
     HighlightObject<ListFrame, DoNothing> *highlight_route, *highlight_position;
     //functor to highlight a Route and then disconnect a Sight from its related Route
     HighlightObject<ListFrame, DisconnectSight> *highlight_route_and_disconnect_sight;
-    HighlightObject<ListFrame, UnsetIdling<ListFrame>> *highlight_route_and_unset_idling;
+    //these functors are used to highlight/de-highlight Routes or Position and unset idling in *this
+    HighlightObject<ListFrame, UnsetIdling<ListFrame>> *highlight_route_and_unset_idling, *highlight_position_and_unset_idling;
     ConfirmTransport<ListFrame>* confirm_transport;
     CloseFrame<ListFrame>* close;
     //a functor to let the user select a Route in listcontrol_routes
@@ -157,6 +158,7 @@ public:
     void MyRefreshAll(void);
     void RefreshAll(void);
     void TabulatePositionsAll(void);
+    void TabulatePositionAll(const unsigned int&);
     void TabulateRoutesAll(void);
     void TabulateRouteAll(const unsigned int&);
     void Resize(void);

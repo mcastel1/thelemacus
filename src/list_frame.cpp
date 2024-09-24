@@ -98,6 +98,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     highlight_position = new HighlightObject<ListFrame, DoNothing>(this, &highlighted_position_before, &highlighted_position_now, NULL);
     highlight_route_and_disconnect_sight = new HighlightObject<ListFrame, DisconnectSight>(this, &highlighted_route_before, &highlighted_route_now, disconnect_sight);
     highlight_route_and_unset_idling = new HighlightObject<ListFrame, UnsetIdling<ListFrame>>(this, &highlighted_route_before, &highlighted_route_now, unset_idling);
+    highlight_position_and_unset_idling = new HighlightObject<ListFrame, UnsetIdling<ListFrame>>(this, &highlighted_position_before, &highlighted_position_now, unset_idling);
     confirm_transport = new ConfirmTransport<ListFrame>(this);
     close = new CloseFrame<ListFrame>(this);
     (*unset_idling)();
@@ -926,6 +927,15 @@ void ListFrame::TabulatePositionsAll(void) {
     
     for (long i = 0; i < (chart_frames.size()); i++) {
         (chart_frames[i])->draw_panel->TabulatePositions();
+    }
+    
+}
+
+//tabulate Position # position_id in all chart_frames
+void ListFrame::TabulatePositionAll(const unsigned int& position_id) {
+    
+    for (long i = 0; i < (chart_frames.size()); i++) {
+        (chart_frames[i])->draw_panel->TabulatePosition(position_id);
     }
     
 }

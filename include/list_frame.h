@@ -157,6 +157,7 @@ public:
     void MyRefreshAll(void);
     void RefreshAll(void);
     void TabulatePositionsAll(void);
+    void TabulatePositionAll(const unsigned int&);
     void TabulateRoutesAll(void);
     void TabulateRouteAll(const unsigned int&);
     void Resize(void);

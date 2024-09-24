@@ -930,6 +930,15 @@ void ListFrame::TabulatePositionsAll(void) {
     
 }
 
+//tabulate Position # position_id in all chart_frames
+void ListFrame::TabulatePositionAll(const unsigned int& position_id) {
+    
+    for (long i = 0; i < (chart_frames.size()); i++) {
+        (chart_frames[i])->draw_panel->TabulatePosition(position_id);
+    }
+    
+}
+
 
 //fit the size of all listcontrols inside *this to their respective content and resize the respective sizers and *this to fit the new size of the listcontrols
 void ListFrame::Resize(void) {

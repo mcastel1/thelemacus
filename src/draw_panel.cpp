@@ -900,7 +900,7 @@ inline void DrawPanel::TabulateRoutes(void) {
 
 
 //tabulate into points_position_list  the i-th Position in parent->parent->data->position_list
-inline void DrawPanel::TabulatePosition(const unsigned int& i){
+void DrawPanel::TabulatePosition(const unsigned int& i){
     
     wxPoint p;
     

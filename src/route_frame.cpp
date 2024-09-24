@@ -379,7 +379,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>> animate(parent, route, parent->highlight_route);
             
             
-            parent->Set(true, true, false);
+            //            parent->Set(true, true, false);
             
             
             //de-highlight all Positions

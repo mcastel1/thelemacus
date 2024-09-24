@@ -531,15 +531,19 @@ bool Data::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix)
 //adds to Data-> this the Route written in *route_in
 void Data::add_route(Route* route_in, [[maybe_unused]] String prefix) {
 
-
-    //    route.enter(String("new route"), prefix);
-
     my_push_back(&route_list, *route_in);
     cout << prefix.value << "Route added as position #" << route_list.size() << ".\n";
 
-
 }
 
+
+//adds to Data-> this the Position written in *position_in
+void Data::add_position(Position* position_in, [[maybe_unused]] String prefix) {
+
+    my_push_back(&position_list, *position_in);
+    cout << prefix.value << "Position added as position #" << position_list.size() << ".\n";
+
+}
 
 
 //removes sight #i from sight_list by updating all the connections to between sights and routes. If remove_related_route = 'y', it removes also the route related to sight i

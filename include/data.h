@@ -47,6 +47,7 @@ public:
     
     bool add_sight_and_reduce(Sight*, String);
     void add_route(Route*, String);
+    void add_position(Position*, String);
     void remove_sight(unsigned int, Answer, String);
     void remove_position(unsigned int, String);
     void remove_route(unsigned int, Answer, String);

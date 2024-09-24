@@ -215,9 +215,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     if (label->value->GetValue().ToStdString() == "") {
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
 
-        wxCommandEvent dummy;
-
-        (label->set_to_current_time)(dummy);
+        (label->set_to_current_time)(event);
 
     }
 

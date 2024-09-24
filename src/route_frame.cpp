@@ -337,8 +337,6 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     
     unsigned int i;
     stringstream s;
-    //this is true if a message to that the modified Route is being disconnected from its related sight has to be prompted, false otherwise
-    bool prompt_disconnection_message;
     
     if (label->value->GetValue().ToStdString() == "") {
         //if the user entered no label, I set a label with the time at which Reduce has been pressed
@@ -356,7 +354,6 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     if (position_in_listcontrol_routes == -1) {
         //I am creating a new Route (which is thus necessarily unrelated to a Sight)
         
-        prompt_disconnection_message = false;
         
         //if the constructor of RouteFrame has been called with route_in = NULL, then I push back the newly allocated route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
@@ -428,7 +425,6 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         if ((route->related_sight) != -1) {
             //the existing Route that I am moidifying is related to a Sight
             
-            prompt_disconnection_message = true;
             
             //I am modifying an existing Route and the Route that I am modifying is related to a Sight -> prepare the warning message to be prompted at the end of the animation and call AnimateToObject with parent->print_info_message as an argument, in such a way that, at the end of the animation, this message is prompted
             
@@ -459,9 +455,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             
         }else{
             //the existing Route that I am modifying is not related to a Sight -> I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling at the end of the animation
-            
-            prompt_disconnection_message = false;
-            
+                        
             
             AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>> animate(parent, route, parent->highlight_route_and_unset_idling);
             
@@ -501,22 +495,6 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     //    (*(parent->unset_idling))();
     //    parent->Resize();
     //    parent->OnModifyFile();
-    
-    
-    
-    
-    
-    
-    if(!prompt_disconnection_message){
-        //I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling (intended as 'do nothing' here) at the end of the animation
-        
-        //If I am adding a new Route for transport, I do not call any animation, because there is already the transport animation that will be prompted. Otherwise, I call an animation that zooms on the newly added Route
-        if (!(parent->transporting_with_new_route)) {
-            //I am not adding a new Route for transrpot
-            
-        }
-        
-    }
     
     
     event.Skip(true);

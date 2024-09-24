@@ -218,9 +218,13 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
         (label->set_to_current_time)(event);
 
     }
-
+    
+    //writes the values of the GUI fields in the non-GUI fields
+    get(event);
+    
     //if I am adding a new Position, I resize points_position_list to add a new element to it
     if (position_in_listcontrol_positions == -1) {
+        //I am creating a new Position
 
         for (i = 0; i < (parent->chart_frames.size()); i++) {
 
@@ -231,8 +235,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     }
 
 
-    //writes the values of the GUI fields in the non-GUI fields
-    get(event);
+
 
     //if the constructor of PositionFrame has been called with sight_in = NULL, then I push back the newly allocated Position to the end of position_list
     if (position_in_listcontrol_positions == -1) {

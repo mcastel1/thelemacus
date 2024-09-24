@@ -376,7 +376,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             //            tabulate the points of the newly added Route in all chart_frames
             parent->TabulateRouteAll(((int)(parent->data->route_list.size()))-1);
             
-            AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>> animate(parent, route, parent->highlight_route);
+            AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>> animate(parent, route, parent->highlight_route_and_unset_idling);
             
             
             //            parent->Set(true, true, false);
@@ -393,9 +393,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
                                                );
             parent->highlight_route->operator()(event);
             //2. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
-            parent->highlight_route->set_value(-1);
+            parent->highlight_route_and_unset_idling->set_value(-1);
             animate.operator()(event);
-            
             
         }else{
             //the newly added Route is  added for transport -> call *on_new_route_in_listcontrol_routes_for_transport to execute the transport with this Route

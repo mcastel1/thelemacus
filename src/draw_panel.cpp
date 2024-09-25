@@ -510,7 +510,7 @@ inline void DrawPanel::RenderPositions(wxDC& dc, const wxColor& foreground_color
     int i, color_id;
     double thickness, radius;
     wxPoint p;
-    
+    wxColor color;
     
     //draw Positions
     for (i = 0, color_id = 0; i < (points_position_list.size()); i++) {
@@ -525,12 +525,11 @@ inline void DrawPanel::RenderPositions(wxDC& dc, const wxColor& foreground_color
             radius = 4 * thickness;
         }
         
-        if (foreground_color != wxNullColour) {
-            dc.SetPen(wxPen(foreground_color, thickness));
-        }
-        else {
-            dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
-        }
+        color = ((foreground_color != wxNullColour) ? foreground_color : (wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())]);
+        
+        dc.SetPen(wxPen(color, thickness));
+        dc.SetBrush(wxBrush(color, wxBRUSHSTYLE_SOLID));
+        
         
         if (DrawPanelToGeo(points_position_list[i], NULL)) {
             //the point returned from GeoToDrawPanel falls within the plot area -> plot it

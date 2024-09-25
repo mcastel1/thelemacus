@@ -379,7 +379,8 @@ inline void DrawPanel::RenderRoutes(wxDC& dc, const wxColor& foreground_color) {
         
         //        dc.SetPen(wxPen((wxGetApp().color_list)[(color_id++) % ((wxGetApp().color_list).size())], thickness));
         dc.SetPen(wxPen(foreground_color_for_RenderLines, thickness));
-        
+        dc.SetBrush(wxBrush(foreground_color_for_RenderLines, wxBRUSHSTYLE_SOLID));
+
         
         //draw  reference_position[i] only if it is included in the plot area
         if (DrawPanelToGeo(reference_positions_route_list[i], NULL)) {

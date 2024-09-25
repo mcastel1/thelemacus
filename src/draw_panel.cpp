@@ -64,8 +64,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     
     SetCursor(*wxCROSS_CURSOR);
     
-    //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart
-    label_position = String("");
+    //text field showing the latitude and longitude of the intantaneous (now) mouse position on the chart: as *this is constructed it is empty, but I initialize it with " " (and not with "") to leave space for a non-empty label_position which may be rendered later
+    label_position = String(" ");
 
     
     circle_observer->omega.read_from_file_to(String("omega draw 3d"), (wxGetApp().path_file_init), String("R"), prefix);
@@ -2684,14 +2684,15 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     (parent->parent->screen_position) = wxGetMousePosition();
     mouse_in_plot_area = (this->*ScreenToGeo)((parent->parent->screen_position), (parent->parent->geo_position_now));
     if (mouse_in_plot_area && (!parent->parent->selection_rectangle)) {
-        //the mouse has a screen position corresponding to a geographic position and no selection rectangle is being drawn -> I show the instantaneous mouse coordinates : I write them into label_position, otherwise label_position is left empty,
+        //the mouse's screen position corresponds to a valid geographic Position and no selection rectangle is being drawn -> I show the instantaneous mouse coordinates : I write them into label_position, otherwise label_position is left empty,
         
         label_position = String((parent->parent->geo_position_now->to_string(display_precision.value)));
         
     }
     else {
+        //the mouse's screen position does not correspond to a valid geographic Position ->I set it to the empty value " " (and not to "") in order to leave room for a non-empty label_position which may be rendered later
         
-        label_position = String("");
+        label_position = String(" ");
         
     }
     

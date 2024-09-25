@@ -227,6 +227,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     draw_panel->Refresh();
     draw_panel->FitAll();
 
+    SetClientSize(panel->GetBestSize());
     //    CenterOnScreen();
 
 }

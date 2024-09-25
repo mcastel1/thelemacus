@@ -169,6 +169,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     if (position_in != NULL) { set(); }
     
+    SetClientSize(panel->GetBestSize());
     Centre();
     
 }

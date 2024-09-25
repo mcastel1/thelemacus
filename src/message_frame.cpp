@@ -80,6 +80,8 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     panel->Fit();
     Fit();
 
+    
+    SetClientSize(panel->GetBestSize());
     CentreOnScreen();
 
 }

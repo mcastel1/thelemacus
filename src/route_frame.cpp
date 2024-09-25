@@ -327,6 +327,7 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     Check();
     AllOk();
     
+    SetClientSize(panel->GetBestSize());
     Centre();
     
 }

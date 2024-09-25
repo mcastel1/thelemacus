@@ -107,6 +107,7 @@ template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F
     panel->Fit();
     Fit();
 
+    SetClientSize(panel->GetBestSize());
     CentreOnScreen();
 
 }

@@ -354,6 +354,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     Check();
     AllOk();
 
+    SetClientSize(panel->GetBestSize());
     Centre();
 
 }

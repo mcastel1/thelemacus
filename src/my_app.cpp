@@ -24,6 +24,10 @@
 #include "show_question_frame.h"
 #include "splash_frame.h"
 
+#include <wx/splash.h>
+
+
+
 
 
 
@@ -279,24 +283,66 @@ void MyApp::set_icon_paths(void){
  };
  */
 
+// Doesn't work well for alpha compositing
+wxImage alphaToBlackAndWhiteMask (wxImage img) {
+
+    // Some image types (e.g. gif) have a mask for the transparent pixels
+    // instead of an alpha channel.
+    if (!img.HasAlpha() && img.HasMask()) {
+        img.InitAlpha();
+    }
+
+    if (img.HasAlpha()) {
+        unsigned char *rgb = img.GetData();
+        unsigned char *alpha = img.GetAlpha();
+
+        for (int x = 0, y = 0; x < img.GetWidth()*img.GetHeight()*3; x+=3, y++) {
+            // If alpha pixel, make white. Else make black.
+            // An alpha value of 0 corresponds to a transparent pixel (null opacity)
+            // while a value of 255 means that the pixel is 100% opaque.
+            if (alpha[y] < 20) { // Using some threshold for almost transparent pixels.
+                rgb[x] = 0xff;// red
+                rgb[x+1] = 0xff;// green
+                rgb[x+2] = 0xff;// blue
+            } else {
+                rgb[x] = 0x00;// red
+                rgb[x+1] = 0x00;// green
+                rgb[x+2] = 0x00;// blue
+            }
+        }
+
+        // Remove alpha channel so that the pixels turned white will show
+        img.ClearAlpha();
+    }
+
+    return img;
+}
+
 bool MyApp::OnInit() {
     
-    //test for reserve() method
-    /*
-     constexpr int max_elements = 32;
-     vector<int, my_allocator<int>> u;
-     
-     u.reserve(max_elements); // reserves at least max_elements * sizeof(int) bytes
-     
-     for (int n = 0; n < max_elements; ++n)
-     u.push_back(n);
-     
-     u.clear();
-     
-     for (int n = 0; n < max_elements; ++n)
-     u.push_back(n);
-     */
-    
+    wxImage::AddHandler(new wxGIFHandler);
+    wxImage splashImg;
+    if (splashImg.LoadFile(_T("/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/Light/fire.gif"), wxBITMAP_TYPE_GIF)) {
+
+        bool hasAlpha = splashImg.HasAlpha() || splashImg.HasMask();
+
+        wxRegion splashRgn;
+        if (hasAlpha) {
+            splashRgn = wxRegion(alphaToBlackAndWhiteMask(splashImg), *wxWHITE);
+        }
+        wxSplashScreen scrn{ splashImg,
+            wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT,
+            5000, nullptr, -1, wxDefaultPosition, wxDefaultSize,
+            wxBORDER_NONE | wxSTAY_ON_TOP | (hasAlpha ? wxFRAME_SHAPED : 0x00) };
+        if (hasAlpha) {
+            scrn.SetShape(splashRgn);
+        }
+
+        // yield main loop so splash screen can show
+        wxAppConsole::Yield();
+        //Sleep for two seconds before destroying the splash screen and showing main frame
+        wxSleep(2);
+    }
     
     
     unsigned int i;

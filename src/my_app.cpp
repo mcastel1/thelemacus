@@ -22,7 +22,6 @@
 #include "question_frame.h"
 #include "show_all.h"
 #include "show_question_frame.h"
-#include "splash_frame.h"
 
 #include <wx/splash.h>
 
@@ -320,20 +319,27 @@ wxImage alphaToBlackAndWhiteMask (wxImage img) {
 
 bool MyApp::OnInit() {
     
-    wxImage::AddHandler(new wxGIFHandler);
-    wxImage splashImg;
-    if (splashImg.LoadFile(_T("/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/Light/jolly_rogers.gif"), wxBITMAP_TYPE_GIF)) {
+    unsigned int i;
+    Int n_chart_frames;
+    stringstream s;
+    String temp;
+    Projection projection;
+    wxFrame* dummy_frame;
+    ShowAll* show_all;
+    wxImage splash_image;
 
-        bool hasAlpha = splashImg.HasAlpha() || splashImg.HasMask();
+    wxInitAllImageHandlers();
+    
+
+    if (splash_image.LoadFile(_T("/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/Light/jolly_rogers.gif"), wxBITMAP_TYPE_GIF)) {
+
+        bool hasAlpha = splash_image.HasAlpha() || splash_image.HasMask();
 
         wxRegion splashRgn;
         if (hasAlpha) {
-            splashRgn = wxRegion(alphaToBlackAndWhiteMask(splashImg), *wxWHITE);
+            splashRgn = wxRegion(alphaToBlackAndWhiteMask(splash_image), *wxWHITE);
         }
-        wxSplashScreen scrn{ splashImg,
-            wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT,
-            5000, nullptr, -1, wxDefaultPosition, wxDefaultSize,
-            wxBORDER_NONE | wxSTAY_ON_TOP | (hasAlpha ? wxFRAME_SHAPED : 0x00) };
+        wxSplashScreen scrn{ splash_image, wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT, 5000, nullptr, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP | (hasAlpha ? wxFRAME_SHAPED : 0x00) };
         if (hasAlpha) {
             scrn.SetShape(splashRgn);
         }
@@ -342,25 +348,11 @@ bool MyApp::OnInit() {
         wxAppConsole::Yield();
         //Sleep for two seconds before destroying the splash screen and showing main frame
         wxSleep(2);
+        
     }
-    
-    
-    unsigned int i;
-    Int n_chart_frames;
-    stringstream s;
-    String temp;
-    Projection projection;
-    wxFrame* dummy_frame;
-    ShowAll* show_all;
-    //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
-    //    Chrono current_time, dawn, dusk;
-    
-    wxInitAllImageHandlers();
-    
-    
+
     degree_symbol = String("\u00b0");
-    
-    
+        
     
     //detect the operating system
 #ifdef __APPLE__

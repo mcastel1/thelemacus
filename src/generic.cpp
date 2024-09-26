@@ -913,3 +913,39 @@ double phi_mercator(double y){
     return(atan(sinh(y)));
     
 }
+
+
+//constuct a wxImage for the splash screen of the app. Doesn't work well for alpha compositing
+wxImage alphaToBlackAndWhiteMask (wxImage img) {
+
+    // Some image types (e.g. gif) have a mask for the transparent pixels
+    // instead of an alpha channel.
+    if (!img.HasAlpha() && img.HasMask()) {
+        img.InitAlpha();
+    }
+
+    if (img.HasAlpha()) {
+        unsigned char *rgb = img.GetData();
+        unsigned char *alpha = img.GetAlpha();
+
+        for (int x = 0, y = 0; x < img.GetWidth()*img.GetHeight()*3; x+=3, y++) {
+            // If alpha pixel, make white. Else make black.
+            // An alpha value of 0 corresponds to a transparent pixel (null opacity)
+            // while a value of 255 means that the pixel is 100% opaque.
+            if (alpha[y] < 20) { // Using some threshold for almost transparent pixels.
+                rgb[x] = 0xff;// red
+                rgb[x+1] = 0xff;// green
+                rgb[x+2] = 0xff;// blue
+            } else {
+                rgb[x] = 0x00;// red
+                rgb[x+1] = 0x00;// green
+                rgb[x+2] = 0x00;// blue
+            }
+        }
+
+        // Remove alpha channel so that the pixels turned white will show
+        img.ClearAlpha();
+    }
+
+    return img;
+}

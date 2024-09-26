@@ -22,6 +22,7 @@
 #include "question_frame.h"
 #include "show_all.h"
 #include "show_question_frame.h"
+#include "splash_frame.h"
 
 
 

@@ -322,7 +322,7 @@ bool MyApp::OnInit() {
     
     wxImage::AddHandler(new wxGIFHandler);
     wxImage splashImg;
-    if (splashImg.LoadFile(_T("/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/Light/fire.gif"), wxBITMAP_TYPE_GIF)) {
+    if (splashImg.LoadFile(_T("/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/Light/jolly_rogers.gif"), wxBITMAP_TYPE_GIF)) {
 
         bool hasAlpha = splashImg.HasAlpha() || splashImg.HasMask();
 

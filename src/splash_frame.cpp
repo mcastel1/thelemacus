@@ -13,7 +13,10 @@
 
 
 
-SplashFrame::SplashFrame(void) :  wxFrame(NULL, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxFRAME_SHAPED|wxCLIP_CHILDREN) {
+SplashFrame::SplashFrame(const String& image_path_in) : wxFrame(NULL, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxFRAME_SHAPED|wxCLIP_CHILDREN), image_path(image_path_in) {
+    
+    CreateShapedFrame();
+
 
 //    wxRect rectangle;
 //
@@ -80,3 +83,15 @@ SplashFrame::SplashFrame(void) :  wxFrame(NULL, -1, wxEmptyString, wxDefaultPosi
 
 }
 
+void SplashFrame::CreateShapedFrame(){
+    
+    wxBitmap bmpMask;
+    bmpMask.LoadFile(image_path.value, wxBITMAP_TYPE_PNG);
+
+    m_bmpBackground.LoadFile(_T("skin.png"), wxBITMAP_TYPE_PNG);
+    SetClientSize(m_bmpBackground.GetSize());
+
+    wxRegion rgn(bmpMask, *wxBLACK);
+
+    SetShape(rgn);
+}

@@ -508,11 +508,7 @@ bool MyApp::OnInit() {
     
     catalog = new Catalog(path_file_catalog, String(""));
     list_frame = new ListFrame("Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
-    
-    SplashFrame splash_frame(wxGetApp().path_file_splash_icon);
-    splash_frame.Show(true);
-    splash_frame.Raise();
-    
+ 
     
     if(!(list_frame->abort)){
         //the user has not pressed cancel while charts were loading -> I proceed and start the app

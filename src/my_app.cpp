@@ -454,33 +454,6 @@ bool MyApp::OnInit() {
     minimal_animation_distance_over_size_of_observer_region.read_from_file_to(String("minimal animation distance over size of observer region"), (wxGetApp().path_file_init), String("R"),  String(""));
     
     
-    /*
-     //test for Length::convert_to
-     Length a, b(1.4355, LengthUnit_types[2]);
-     
-     a.set(1.34253, LengthUnit_types[2]);
-     //    a.unit = LengthUnit_types[0];
-     //    LengthUnit_types[1].print(String("sss"), false, String("---"), cout);
-     
-     a.print(String("a"), String("\t"), cout);
-     b.print(String("b"), String("\t"), cout);
-     a+=b;
-     a.print(String("a+b"), String("\t"), cout);
-     */
-    
-    //----- test for Data::read_from_file_to - start
-    /*
-     Data* my_data;
-     Catalog* my_catalog;
-     
-     my_catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
-     my_data = new Data(my_catalog, String(""));
-     
-     my_data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String("**"));
-     
-     */
-    //----- test for Data::read_from_file_to - end
-    
     //set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen
     size_small_button = dummy_frame->ToDIP(wxSize(
                                                   ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_small_button_over_width_screen).value),

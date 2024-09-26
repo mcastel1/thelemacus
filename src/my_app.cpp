@@ -249,7 +249,7 @@ void MyApp::set_icon_paths(void){
     path_file_transport_icon = image_directory.append(read_from_file(String("name file transport icon"), wxGetApp().path_file_init, String("R"), String("")));
     path_file_disconnect_icon = image_directory.append(read_from_file(String("name file disconnect icon"), wxGetApp().path_file_init, String("R"), String("")));
     path_file_michele_icon = image_directory.append(read_from_file(String("name file michele icon"), wxGetApp().path_file_init, String("R"), String("")));
-    
+    path_file_splash_icon = image_directory.append(read_from_file(String("name file splash icon"), wxGetApp().path_file_init, String("R"), String("")));
     
 }
 
@@ -297,6 +297,7 @@ bool MyApp::OnInit() {
      for (int n = 0; n < max_elements; ++n)
      u.push_back(n);
      */
+    
     
     
     unsigned int i;
@@ -489,6 +490,10 @@ bool MyApp::OnInit() {
     
     catalog = new Catalog(path_file_catalog, String(""));
     list_frame = new ListFrame("Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
+    
+    SplashFrame splash_frame(wxGetApp().path_file_splash_icon);
+
+    
     
     if(!(list_frame->abort)){
         //the user has not pressed cancel while charts were loading -> I proceed and start the app

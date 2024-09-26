@@ -120,3 +120,4 @@ name file transport icon = transport_icon.png
 name file position icon = position_icon.png
 name file disconnect icon = disconnect_icon.png
 name file michele icon = michele_icon.png
+name file splash icon = jolly_rogers.png

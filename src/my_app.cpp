@@ -511,7 +511,7 @@ bool MyApp::OnInit() {
         
         //allocate and show the chart frames
         n_chart_frames.read_from_file_to(String("number chart frames"), (wxGetApp().path_file_init), String("R"), String(""));
-        (list_frame->chart_frames).resize(n_chart_frames.value);
+        list_frame->chart_frames.resize(n_chart_frames.value);
         for (i = 0; i < (list_frame->chart_frames).size(); i++) {
             
             //set projections at startup - start

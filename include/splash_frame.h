@@ -18,8 +18,6 @@
 using namespace std;
 
 
-
-
 class SplashFrame: public wxFrame{
     
 public:
@@ -30,12 +28,9 @@ private:
     
     String image_path;
     void CreateShapedFrame();
+    void OnDraw(wxPaintEvent &event);
     wxBitmap m_bmpBackground;
 
-
-    
 };
-
-
 
 #endif

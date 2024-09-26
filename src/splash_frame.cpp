@@ -16,6 +16,8 @@
 SplashFrame::SplashFrame(const String& image_path_in) : wxFrame(NULL, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxFRAME_SHAPED|wxCLIP_CHILDREN), image_path(image_path_in) {
     
     CreateShapedFrame();
+    Connect(wxEVT_PAINT, wxPaintEventHandler(SplashFrame::OnDraw));
+    CentreOnScreen();
 
 
 //    wxRect rectangle;
@@ -88,10 +90,20 @@ void SplashFrame::CreateShapedFrame(){
     wxBitmap bmpMask;
     bmpMask.LoadFile(image_path.value, wxBITMAP_TYPE_PNG);
 
-    m_bmpBackground.LoadFile(_T("skin.png"), wxBITMAP_TYPE_PNG);
+    m_bmpBackground.LoadFile(image_path.value, wxBITMAP_TYPE_PNG);
+//    m_bmpBackground.LoadFile(_T("skin.png"), wxBITMAP_TYPE_PNG);
     SetClientSize(m_bmpBackground.GetSize());
 
     wxRegion rgn(bmpMask, *wxBLACK);
 
     SetShape(rgn);
+}
+
+
+void SplashFrame::OnDraw(wxPaintEvent& event){
+    
+    wxPaintDC dc(this);
+
+    dc.DrawBitmap(m_bmpBackground, wxPoint(-1, -1));
+    
 }

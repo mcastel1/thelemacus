@@ -296,27 +296,7 @@ bool MyApp::OnInit() {
     wxImage splash_image;
 
     wxInitAllImageHandlers();
-    
 
-    if (splash_image.LoadFile(_T("/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/Light/jolly_rogers.gif"), wxBITMAP_TYPE_GIF)) {
-
-        bool hasAlpha = splash_image.HasAlpha() || splash_image.HasMask();
-
-        wxRegion splashRgn;
-        if (hasAlpha) {
-            splashRgn = wxRegion(alphaToBlackAndWhiteMask(splash_image), *wxWHITE);
-        }
-        wxSplashScreen scrn{ splash_image, wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT, 5000, nullptr, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP | (hasAlpha ? wxFRAME_SHAPED : 0x00) };
-        if (hasAlpha) {
-            scrn.SetShape(splashRgn);
-        }
-
-        // yield main loop so splash screen can show
-        wxAppConsole::Yield();
-        //Sleep for two seconds before destroying the splash screen and showing main frame
-        wxSleep(2);
-        
-    }
 
     degree_symbol = String("\u00b0");
         
@@ -464,6 +444,30 @@ bool MyApp::OnInit() {
     dark_mode = (settings->GetAppearance()).IsDark();
     
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
+    
+    
+    //prompt the splash image of the app
+    if (splash_image.LoadFile(wxString(wxGetApp().path_file_splash_icon.value), wxBITMAP_TYPE_GIF, -1)) {
+
+        bool hasAlpha = splash_image.HasAlpha() || splash_image.HasMask();
+        
+        splash_image.Rescale(rectangle_display.height, rectangle_display.height);
+
+        wxRegion splashRgn;
+        if (hasAlpha) {
+            splashRgn = wxRegion(alphaToBlackAndWhiteMask(splash_image), *wxWHITE);
+        }
+        wxSplashScreen scrn{ splash_image, wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT, 5000, nullptr, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP | (hasAlpha ? wxFRAME_SHAPED : 0x00) };
+        if (hasAlpha) {
+            scrn.SetShape(splashRgn);
+        }
+
+        // yield main loop so splash screen can show
+        wxAppConsole::Yield();
+        //Sleep for two seconds before destroying the splash screen and showing main frame
+        wxSleep(2);
+        
+    }
     
     catalog = new Catalog(path_file_catalog, String(""));
     list_frame = new ListFrame("Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));

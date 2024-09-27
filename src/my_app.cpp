@@ -445,9 +445,9 @@ bool MyApp::OnInit() {
     
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
     
-    
+    //R"("Hello \ world")"
     //prompt the splash image of the app
-    if (splash_image.LoadFile(wxString("C:\Mac\Home\Documents\thelemacus\Contents\Resources\Images\Dark\splash_icon.gif"), wxBITMAP_TYPE_GIF, -1)) {
+    if (splash_image.LoadFile(wxString("C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Dark/splash_icon.gif"), wxBITMAP_TYPE_GIF, -1)) {
 
         bool hasAlpha = splash_image.HasAlpha() || splash_image.HasMask();
         
@@ -465,7 +465,7 @@ bool MyApp::OnInit() {
         // yield main loop so splash screen can show
         wxAppConsole::Yield();
         //Sleep for two seconds before destroying the splash screen and showing main frame
-        wxSleep(2);
+        wxSleep(5);
         
     }
     

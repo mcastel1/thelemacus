@@ -451,7 +451,7 @@ bool MyApp::OnInit() {
 
         bool hasAlpha = splash_image.HasAlpha() || splash_image.HasMask();
         
-        splash_image.Rescale(rectangle_display.height, rectangle_display.height);
+        //        splash_image.Rescale(rectangle_display.height, rectangle_display.height);
 
         wxRegion splashRgn;
         if (hasAlpha) {

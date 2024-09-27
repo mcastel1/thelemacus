@@ -447,7 +447,7 @@ bool MyApp::OnInit() {
     
     
     //prompt the splash image of the app
-    if (splash_image.LoadFile(wxString(wxGetApp().path_file_splash_icon.value), wxBITMAP_TYPE_GIF, -1)) {
+    if (splash_image.LoadFile(wxString("C:\Mac\Home\Documents\thelemacus\Contents\Resources\Images\Dark\splash_icon.gif"), wxBITMAP_TYPE_GIF, -1)) {
 
         bool hasAlpha = splash_image.HasAlpha() || splash_image.HasMask();
         

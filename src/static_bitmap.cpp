@@ -20,7 +20,7 @@ StaticBitmap::StaticBitmap(wxWindow* parent, String path, [[maybe_unused]] wxSiz
     file.set_name(path);
 
 #ifdef __APPLE__
-    //I am on apple operating system
+    //I am on APPLE operating system
 
     SetBitmap(
         Bitmap(file.name.value,
@@ -34,7 +34,7 @@ StaticBitmap::StaticBitmap(wxWindow* parent, String path, [[maybe_unused]] wxSiz
 #endif
 
 #ifdef _WIN32
-    //I am on windows operating system
+    //I am on WIN32 operating system
 
     wxBitmap temp;
 

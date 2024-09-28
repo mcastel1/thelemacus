@@ -30,6 +30,7 @@ info_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Lig
 trash_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/trash_icon.png"
 warning_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/warning_icon.png"
 splash_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/splash_icon.gif"
+splash_icon_png RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/splash_icon_png.png"
 jolly_rogers RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/jolly_rogers.png"
 
 

@@ -445,7 +445,13 @@ bool MyApp::OnInit() {
     
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
     
-    //R"("Hello \ world")"
+    
+    wxBitmap bitmap_temp;
+    
+    bitmap_temp = wxBitmap(wxString(String("C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/splash_icon_png.png").filename_without_folder_nor_extension(String("")).value), wxBITMAP_TYPE_PNG_RESOURCE);
+    bitmap_temp = wxBitmap(bitmap_temp.ConvertToImage().Scale(rectangle_display.height, rectangle_display.height));
+    //SetBitmap(temp);
+
     //prompt the splash image of the app
     if (splash_image.LoadFile(wxString("C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Dark/splash_icon.gif"), wxBITMAP_TYPE_GIF, -1)) {
 

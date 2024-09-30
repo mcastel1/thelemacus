@@ -77,7 +77,7 @@ relative displacement = 0.1
 omega draw 3d = 89° 32.157897987'
 minimal animation distance over size of observer region = 1e-2
 #the number of chart frames opened when the program starts
-number chart frames = 1
+number chart frames = 2
 #initial rotation with which the 3D projection is displayed
 #rotation 0 =
 #alpha = 138° 3.43879'

@@ -16,7 +16,7 @@
 
 
 //initialize this by setting parent equal to parent_in, higlighted_object_before equal to higlighted_object_before_in and higlighted_object_now equal to higlighted_object_now_in
-template<class P, class F> HighlightObject<P, F>::HighlightObject(P* parent_in, int* highlighted_object_before_in, int* highlighted_object_now_in, F* f_in):  parent(parent_in), higlighted_object_before(highlighted_object_before_in), highlighted_object_now(highlighted_object_now_in), f(f_in) {
+template<class P, class F> HighlightObject<P, F>::HighlightObject(P* parent_in, int* highlighted_object_before_in, int* highlighted_object_now_in, F* f_in):  parent(parent_in), f(f_in), higlighted_object_before(highlighted_object_before_in), highlighted_object_now(highlighted_object_now_in) {
 
 
 }

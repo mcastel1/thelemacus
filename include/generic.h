@@ -76,7 +76,7 @@ bool operator < (const Angle&, const Angle&);
 bool operator < (const Angle&, const double&);
 void AdjustWidth(wxComboBox*);
 wxImage alphaToBlackAndWhiteMask (wxImage);
-bool read_image_from_resource_data(const String&, wxImage*);
+bool read_image_from_resource_data(String, wxImage*);
 #endif
 
 

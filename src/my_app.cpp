@@ -475,7 +475,7 @@ bool MyApp::OnInit() {
 
     
     //prompt the splash image of the app
-    if (read_image_from_resource_data(String("mydata"), &splash_image)) {
+    if (read_image_from_resource_data(String("C:/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/Dark/mydata.dat"), &splash_image)) {
 
         bool hasAlpha = splash_image.HasAlpha() || splash_image.HasMask();
         

@@ -951,13 +951,25 @@ wxImage alphaToBlackAndWhiteMask (wxImage img) {
 }
 
 
-//read the image named 'name' in WIN32 resources from a raw data file written in the resources, and load it into *image. Return true if the image has been loaded correctly, false otherwise
-bool read_image_from_resource_data(const String& name, wxImage* image){
+//read the image in path in WIN32 resources from a raw data file written in the resources, and load it into *image. Return true if the image has been loaded correctly, false otherwise
+bool read_image_from_resource_data(String path, wxImage* image){
+    
+
+#ifdef __APPLE__
+
+    
+    return (image->LoadFile(wxString(path.value), wxBITMAP_TYPE_GIF, -1));
+
+    
+#endif
+    
+#ifdef _WIN32
+
     
     const void* data = NULL;
     size_t size;
     
-    if (!wxLoadUserResource(&data, &size, "mydata", L"MYDATA") ) {
+    if (!wxLoadUserResource(&data, &size, path.filename_without_folder_nor_extension(String("")).value, L"MYDATA") ) {
         
         return false;
         
@@ -968,5 +980,7 @@ bool read_image_from_resource_data(const String& name, wxImage* image){
         return(image->LoadFile(input_stream, wxBITMAP_TYPE_GIF));
         
     }
+    
+#endif
     
 }

@@ -489,7 +489,7 @@ bool MyApp::OnInit() {
         if (hasAlpha) {
             splashRgn = wxRegion(alphaToBlackAndWhiteMask(splash_image), *wxWHITE);
         }
-        wxSplashScreen scrn{ splash_image, wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT, 5000, nullptr, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP | (hasAlpha ? wxFRAME_SHAPED : 0x00) };
+        wxSplashScreen scrn{ splash_image, wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT, 1000, nullptr, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP | (hasAlpha ? wxFRAME_SHAPED : 0x00) };
         if (hasAlpha) {
             scrn.SetShape(splashRgn);
         }
@@ -531,9 +531,9 @@ bool MyApp::OnInit() {
             
             //set projections at startup - start
             //open a Mercator projection for even i and a 3D projection for odd i
-            //            projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
+                        projection = (((i % 2) == 0) ? (Projection_types[0]) : (Projection_types[1]));
             //            projection = Projection_types[0];
-            projection = Projection_types[0];
+            //            projection = Projection_types[0];
             //            projection = Projection_types[1];
             //set projecitons at startup - end
             

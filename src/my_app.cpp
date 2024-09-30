@@ -446,14 +446,35 @@ bool MyApp::OnInit() {
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
     
     
-    wxBitmap bitmap_temp;
-    
-    bitmap_temp = wxBitmap(wxString(String("C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/splash_icon_png.png").filename_without_folder_nor_extension(String("")).value), wxBITMAP_TYPE_PNG_RESOURCE);
-    bitmap_temp = wxBitmap(bitmap_temp.ConvertToImage().Scale(rectangle_display.height, rectangle_display.height));
-    //SetBitmap(temp);
+    const void* my_data = nullptr;
+    size_t my_size = 0;
 
+    if ( !wxLoadUserResource(&my_data, &my_size, "mydata", L"MYDATA") ) {
+        //        ... handle error ...
+    }else{
+        // Use the data in any way, for example:
+        wxMemoryInputStream input_stream(my_data, my_size);
+        
+        
+        if (splash_image.LoadFile(input_stream, wxBITMAP_TYPE_GIF)){
+
+            cout << "Image loaded" << endl;
+            idling = true;
+            
+        }else{
+            
+            cout << "Image not loaded" << endl;
+            idling = false;
+
+
+        }
+    }
+    
+    
+    
+    
     //prompt the splash image of the app
-    if (splash_image.LoadFile(wxString("C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Dark/splash_icon.gif"), wxBITMAP_TYPE_GIF, -1)) {
+    if (1) {
 
         bool hasAlpha = splash_image.HasAlpha() || splash_image.HasMask();
         

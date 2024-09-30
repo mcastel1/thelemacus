@@ -11,10 +11,10 @@ clear; clear;
 #the name of the app that you want to create
 APP_NAME='Thelemacus'
 #the path to the icon of the app
-ICON_PATH='/Users/michele/Documents/sight_reduction_program/Contents/Resources/Images/Light/jolly_roger.icns'
+ICON_PATH='/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/Light/jolly_roger.icns'
 #the path to the .cpp file
-INPUT_PATH='/Users/michele/Documents/sight_reduction_program'
-OUTPUT_PATH='/Users/michele/Desktop'
+INPUT_PATH='/Users/michelecastellana/Documents/thelemacus'
+OUTPUT_PATH='/Users/michelecastellana/Desktop'
 APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries'
 WX_VERSION='3.2.4'
 WXWIDGETS_LIB_DIRECTORY='/Applications/wxWidgets-3.2.4/build-cocoa-debug/lib'
@@ -43,9 +43,9 @@ mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 
 #compile Thelemacus
-#/Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/bk-deps g++ `wx-config --cxxflags` -std=gnu++11 -mmacosx-version-min=10.10 -c -O3 -o temp.o -I/Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib/wx/include/osx_cocoa-unicode-3.2 -I/usr/local/include/gsl/  -I../../../include -D_FILE_OFFSET_BITS=64  -D__WXOSX_COCOA__      -I/Users/michele/Documents/sight_reduction_program/ -DWXUSINGDLL -I../../../samples/minimal/../../samples -Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy -Woverloaded-virtual -Wno-deprecated-declarations -g -O0 -I$BOOST_INCLUDE_DIRECTORY -I/usr/local/Cellar/pcre2/10.39/include -fno-common  -fvisibility=hidden -fvisibility-inlines-hidden -dynamic -fPIC -DPIC   $INPUT_PATH/main.cpp
+#/Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/bk-deps g++ `wx-config --cxxflags` -std=gnu++11 -mmacosx-version-min=10.10 -c -O3 -o temp.o -I/Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib/wx/include/osx_cocoa-unicode-3.2 -I/usr/local/include/gsl/  -I../../../include -D_FILE_OFFSET_BITS=64  -D__WXOSX_COCOA__      -I/Users/michelecastellana/Documents/thelemacus/ -DWXUSINGDLL -I../../../samples/minimal/../../samples -Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy -Woverloaded-virtual -Wno-deprecated-declarations -g -O0 -I$BOOST_INCLUDE_DIRECTORY -I/usr/local/Cellar/pcre2/10.39/include -fno-common  -fvisibility=hidden -fvisibility-inlines-hidden -dynamic -fPIC -DPIC   $INPUT_PATH/main.cpp
 #g++ `wx-config --cxxflags --libs`  -std=gnu++11 -mmacosx-version-min=12.0 -o $APP_NAME  temp.o    -L/Applications/wxWidgets-$WX_VERSION/build-cocoa-debug/lib    -L$LIBPNG_LIB_DIRECTORY -L$BOOST_LIB_DIRECTORY -L$LIBPCRE2_LIB_DIRECTORY -L$LIBJPEG_LIB_DIRECTORY -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL -lpng -ljpeg -L$LIBTIFF_LIB_DIRECTORY -ltiff -framework WebKit  -lgsl -lcblas  -framework IOKit -framework Carbon -framework Cocoa -framework QuartzCore -framework AudioToolbox -framework System -framework OpenGL -framework Security -lpthread -liconv -lcurl -lpcre2-32  -lz -framework Security  -L/usr/local/bin  -lboost_filesystem -lboost_system
- g++ main.cpp -o $APP_NAME  `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -I/Applications/boost_1_83_0 -L/Applications/boost_1_83_0/stage/lib/ -lboost_filesystem -lboost_system   -Wall -Wno-c++11-extensions --std=c++17  -O3 -rpath /Applications/boost_1_83_0/stage/lib -I$INPUT_PATH/include -I$INPUT_PATH/src
+ g++ main.cpp src/*.cpp -o $APP_NAME  `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -I/Applications/boost_1_83_0 -L/Applications/boost_1_83_0/stage/lib/ -lboost_filesystem -lboost_system   -Wall -Wno-c++11-extensions --std=c++17  -O3 -rpath /Applications/boost_1_83_0/stage/lib -I$INPUT_PATH/include -I$INPUT_PATH/src
 
 
 #set links fo $APP_NAME

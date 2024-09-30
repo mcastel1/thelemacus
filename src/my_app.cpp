@@ -23,6 +23,10 @@
 #include "show_all.h"
 #include "show_question_frame.h"
 
+#include <wx/splash.h>
+
+
+
 
 
 
@@ -247,8 +251,7 @@ void MyApp::set_icon_paths(void){
     path_file_trash_icon = image_directory.append(read_from_file(String("name file trash icon"), wxGetApp().path_file_init, String("R"), String("")));
     path_file_transport_icon = image_directory.append(read_from_file(String("name file transport icon"), wxGetApp().path_file_init, String("R"), String("")));
     path_file_disconnect_icon = image_directory.append(read_from_file(String("name file disconnect icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_michele_icon = image_directory.append(read_from_file(String("name file michele icon"), wxGetApp().path_file_init, String("R"), String("")));
-    
+    path_file_splash_icon = image_directory.append(read_from_file(String("name file splash icon"), wxGetApp().path_file_init, String("R"), String("")));
     
 }
 
@@ -279,24 +282,9 @@ void MyApp::set_icon_paths(void){
  };
  */
 
+
+
 bool MyApp::OnInit() {
-    
-    //test for reserve() method
-    /*
-     constexpr int max_elements = 32;
-     vector<int, my_allocator<int>> u;
-     
-     u.reserve(max_elements); // reserves at least max_elements * sizeof(int) bytes
-     
-     for (int n = 0; n < max_elements; ++n)
-     u.push_back(n);
-     
-     u.clear();
-     
-     for (int n = 0; n < max_elements; ++n)
-     u.push_back(n);
-     */
-    
     
     unsigned int i;
     Int n_chart_frames;
@@ -305,15 +293,13 @@ bool MyApp::OnInit() {
     Projection projection;
     wxFrame* dummy_frame;
     ShowAll* show_all;
-    //this contains the current time, the time of the transition from night to day (dawn), and the time of the transition from day to night (dusk)
-    //    Chrono current_time, dawn, dusk;
-    
+    wxImage splash_image;
+
     wxInitAllImageHandlers();
-    
-    
+
+
     degree_symbol = String("\u00b0");
-    
-    
+        
     
     //detect the operating system
 #ifdef __APPLE__
@@ -407,33 +393,6 @@ bool MyApp::OnInit() {
     minimal_animation_distance_over_size_of_observer_region.read_from_file_to(String("minimal animation distance over size of observer region"), (wxGetApp().path_file_init), String("R"),  String(""));
     
     
-    /*
-     //test for Length::convert_to
-     Length a, b(1.4355, LengthUnit_types[2]);
-     
-     a.set(1.34253, LengthUnit_types[2]);
-     //    a.unit = LengthUnit_types[0];
-     //    LengthUnit_types[1].print(String("sss"), false, String("---"), cout);
-     
-     a.print(String("a"), String("\t"), cout);
-     b.print(String("b"), String("\t"), cout);
-     a+=b;
-     a.print(String("a+b"), String("\t"), cout);
-     */
-    
-    //----- test for Data::read_from_file_to - start
-    /*
-     Data* my_data;
-     Catalog* my_catalog;
-     
-     my_catalog = new Catalog((wxGetApp().path_file_catalog), String(""));
-     my_data = new Data(my_catalog, String(""));
-     
-     my_data->read_from_file_to(String("Data"), (wxGetApp().path_file_sample_sight), String("R"), String("**"));
-     
-     */
-    //----- test for Data::read_from_file_to - end
-    
     //set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen
     size_small_button = dummy_frame->ToDIP(wxSize(
                                                   ((wxGetApp().rectangle_display).GetWidth()) * ((wxGetApp().size_small_button_over_width_screen).value),
@@ -486,8 +445,65 @@ bool MyApp::OnInit() {
     
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
     
+    
+//    const void* my_data = nullptr;
+//    size_t my_size = 0;
+//
+//    if ( !wxLoadUserResource(&my_data, &my_size, "mydata", L"MYDATA") ) {
+//        //        ... handle error ...
+//    }else{
+//        // Use the data in any way, for example:
+//        wxMemoryInputStream input_stream(my_data, my_size);
+//        
+//        
+//        if (splash_image.LoadFile(input_stream, wxBITMAP_TYPE_GIF)){
+//
+//            cout << "Image loaded" << endl;
+//            idling = true;
+//            
+//        }else{
+//            
+//            cout << "Image not loaded" << endl;
+//            idling = false;
+//
+//
+//        }
+//    }
+    
+    
+     
+
+    
+    //prompt the splash image of the app
+    if (read_image_from_resource_data(path_file_splash_icon, &splash_image)) {
+
+        bool hasAlpha = splash_image.HasAlpha() || splash_image.HasMask();
+        
+#ifdef _WIN32
+        //on WIN32 the image needs to be resized
+
+        splash_image.Rescale(rectangle_display.height, rectangle_display.height);
+#endif
+
+        wxRegion splashRgn;
+        if (hasAlpha) {
+            splashRgn = wxRegion(alphaToBlackAndWhiteMask(splash_image), *wxWHITE);
+        }
+        wxSplashScreen scrn{ splash_image, wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT, 5000, nullptr, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP | (hasAlpha ? wxFRAME_SHAPED : 0x00) };
+        if (hasAlpha) {
+            scrn.SetShape(splashRgn);
+        }
+
+        // yield main loop so splash screen can show
+        wxAppConsole::Yield();
+        //Sleep for two seconds before destroying the splash screen and showing main frame
+        wxSleep(5);
+        
+    }
+    
     catalog = new Catalog(path_file_catalog, String(""));
     list_frame = new ListFrame("Unnamed", "", wxDefaultPosition, wxDefaultSize, String(""));
+ 
     
     if(!(list_frame->abort)){
         //the user has not pressed cancel while charts were loading -> I proceed and start the app
@@ -510,7 +526,7 @@ bool MyApp::OnInit() {
         
         //allocate and show the chart frames
         n_chart_frames.read_from_file_to(String("number chart frames"), (wxGetApp().path_file_init), String("R"), String(""));
-        (list_frame->chart_frames).resize(n_chart_frames.value);
+        list_frame->chart_frames.resize(n_chart_frames.value);
         for (i = 0; i < (list_frame->chart_frames).size(); i++) {
             
             //set projections at startup - start

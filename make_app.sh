@@ -153,6 +153,7 @@ LIB_B='libwx_osx_cocoau_html-3.3.0.0.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTOR
 #libraries called by libwx_osx_cocoau_html-3.3.0.0.0.dylib
 LIB_A='libwx_osx_cocoau_html-3.3.0.0.0.dylib'
 DIR_LIB_A=$APP_LIBRARY_DIRECTORY
+#I comment this out otherwise I get an error when running this script (this path is already present so I get a dublicate error if I include it)
 #install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
 LIB_B='libwx_osx_cocoau_core-3.3.0.0.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A

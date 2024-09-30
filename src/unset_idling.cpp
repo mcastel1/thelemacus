@@ -40,6 +40,14 @@ template<class P> void UnsetIdling<P>::operator()(wxCommandEvent& event) {
 
 }
 
+template void UnsetIdling<ChartFrame>::operator()(wxCommandEvent&);
+template void UnsetIdling<RouteFrame>::operator()(wxCommandEvent&);
+template void UnsetIdling<SightFrame>::operator()(wxCommandEvent&);
+template void UnsetIdling<PositionFrame>::operator()(wxCommandEvent&);
+template void UnsetIdling<DrawPanel>::operator()(wxCommandEvent&);
+template void UnsetIdling<ListFrame>::operator()(wxCommandEvent&);
+
+
 //this is the same as template<class P> void UnsetIdling<P>::operator()(void){ but without the event argument
 template<class P> void UnsetIdling<P>::operator()(void) {
 

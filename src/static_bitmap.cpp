@@ -45,4 +45,3 @@ StaticBitmap::StaticBitmap(wxWindow* parent, String path, [[maybe_unused]] wxSiz
 #endif
 
 }
-

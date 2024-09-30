@@ -668,6 +668,8 @@ template<class T> void ChartFrame::ResetRender(T& event) {
 
 }
 
+template void ChartFrame::ResetRender<wxCommandEvent>(wxCommandEvent&);
+
 
 template<class T> void ChartFrame::ResetRenderAnimate(T& event) {
     

@@ -24,6 +24,8 @@ template<class S> ListControl<S>::ListControl(wxWindow* parent_in, vector<wxButt
 }
 
 template class ListControl<Position>;
+template class ListControl<Route>;
+template class ListControl<Sight>;
 
 
 //set all columns of *this: add a first dummy column, which is not correctly sized on WIN32 (I don't know why) -> add the real columns -> remove the dummy column. The  size of column i that fits the header is stored in header_width[i]

@@ -16,7 +16,7 @@
 
 
 //initialize this by setting parent equal to parent_in, higlighted_object_before equal to higlighted_object_before_in and higlighted_object_now equal to higlighted_object_now_in
-template<class P, class F> HighlightObject<P, F>::HighlightObject(P* parent_in, int* highlighted_object_before_in, int* highlighted_object_now_in, F* f_in):  parent(parent_in), higlighted_object_before(highlighted_object_before_in), highlighted_object_now(highlighted_object_now_in), f(f_in) {
+template<class P, class F> HighlightObject<P, F>::HighlightObject(P* parent_in, int* highlighted_object_before_in, int* highlighted_object_now_in, F* f_in):  parent(parent_in), f(f_in), higlighted_object_before(highlighted_object_before_in), highlighted_object_now(highlighted_object_now_in) {
 
 
 }
@@ -62,7 +62,7 @@ template<class P, class F> template<class E> void HighlightObject<P, F>::operato
 
 }
 
-template void HighlightObject<ListFrame, DisconnectSight>::operator()();
+template void HighlightObject<ListFrame, DoNothing>::operator()<wxCommandEvent>(wxCommandEvent&);
 
 
 //same as HighlightObject<P, F>::operator()(E& event but with no argument
@@ -76,3 +76,4 @@ template<class P, class F> void HighlightObject<P, F>::operator()(void){
 
 template void HighlightObject<ListFrame, DoNothing>::operator()();
 template void HighlightObject<ListFrame, UnsetIdling<ListFrame>>::operator()();
+template void HighlightObject<ListFrame, DisconnectSight>::operator()();

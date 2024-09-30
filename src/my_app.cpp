@@ -446,34 +446,6 @@ bool MyApp::OnInit() {
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
     
     
-//    const void* my_data = nullptr;
-//    size_t my_size = 0;
-//
-//    if ( !wxLoadUserResource(&my_data, &my_size, "mydata", L"MYDATA") ) {
-//        //        ... handle error ...
-//    }else{
-//        // Use the data in any way, for example:
-//        wxMemoryInputStream input_stream(my_data, my_size);
-//        
-//        
-//        if (splash_image.LoadFile(input_stream, wxBITMAP_TYPE_GIF)){
-//
-//            cout << "Image loaded" << endl;
-//            idling = true;
-//            
-//        }else{
-//            
-//            cout << "Image not loaded" << endl;
-//            idling = false;
-//
-//
-//        }
-//    }
-    
-    
-     
-
-    
     //prompt the splash image of the app
     if (read_image_from_resource_data(path_file_splash_icon, &splash_image)) {
 
@@ -489,7 +461,7 @@ bool MyApp::OnInit() {
         if (hasAlpha) {
             splashRgn = wxRegion(alphaToBlackAndWhiteMask(splash_image), *wxWHITE);
         }
-        wxSplashScreen scrn{ splash_image, wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT, 5000, nullptr, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP | (hasAlpha ? wxFRAME_SHAPED : 0x00) };
+        wxSplashScreen scrn{ splash_image, wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT, 1000, nullptr, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP | (hasAlpha ? wxFRAME_SHAPED : 0x00) };
         if (hasAlpha) {
             scrn.SetShape(splashRgn);
         }

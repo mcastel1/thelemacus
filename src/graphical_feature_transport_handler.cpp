@@ -52,6 +52,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
 template void GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Position, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>::operator()();
 template void GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>>>::operator()();
 template void GraphicalFeatureTransportHandler<Position, ToDoAtEndOfTransport<Route, ListFrame>>::operator()();
+template void GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame>>::operator()();
 
 
 //this method iterates the animation

@@ -53,7 +53,6 @@ install_name_tool -change $BOOST_LIB_DIRECTORY/libboost_system.dylib @rpath/libb
 install_name_tool -change $LIBPNG_LIB_DIRECTORY/libpng16.16.dylib @rpath/libpng16.16.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_xrc-3.3.0.0.0.dylib @rpath/libwx_osx_cocoau_xrc-3.3.0.0.0.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_html-3.3.0.0.0.dylib @rpath/libwx_osx_cocoau_html-3.3.0.0.0.dylib $APP_NAME
-install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_html-3.3.0.0.0.dylib @rpath/libwx_osx_cocoau_html-3.3.0.0.0.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_qa-3.3.0.0.0.dylib @rpath/libwx_osx_cocoau_qa-3.3.0.0.0.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_core-3.3.0.0.0.dylib @rpath/libwx_osx_cocoau_core-3.3.0.0.0.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_baseu_xml-3.3.0.0.0.dylib @rpath/libwx_baseu_xml-3.3.0.0.0.dylib $APP_NAME
@@ -76,7 +75,6 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$BOOST_LIB_DIRECTORY/libboost_a
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPNG_LIB_DIRECTORY/libpng16.16.dylib
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZ_LIB_DIRECTORY/libz.1.dylib
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_xrc-3.3.0.0.0.dylib
-LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_html-3.3.0.0.0.dylib
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_html-3.3.0.0.0.dylib
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_qa-3.3.0.0.0.dylib
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_core-3.3.0.0.0.dylib

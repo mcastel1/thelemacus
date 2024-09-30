@@ -446,35 +446,36 @@ bool MyApp::OnInit() {
     n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
     
     
-    const void* my_data = nullptr;
-    size_t my_size = 0;
-
-    if ( !wxLoadUserResource(&my_data, &my_size, "mydata", L"MYDATA") ) {
-        //        ... handle error ...
-    }else{
-        // Use the data in any way, for example:
-        wxMemoryInputStream input_stream(my_data, my_size);
-        
-        
-        if (splash_image.LoadFile(input_stream, wxBITMAP_TYPE_GIF)){
-
-            cout << "Image loaded" << endl;
-            idling = true;
-            
-        }else{
-            
-            cout << "Image not loaded" << endl;
-            idling = false;
-
-
-        }
-    }
+//    const void* my_data = nullptr;
+//    size_t my_size = 0;
+//
+//    if ( !wxLoadUserResource(&my_data, &my_size, "mydata", L"MYDATA") ) {
+//        //        ... handle error ...
+//    }else{
+//        // Use the data in any way, for example:
+//        wxMemoryInputStream input_stream(my_data, my_size);
+//        
+//        
+//        if (splash_image.LoadFile(input_stream, wxBITMAP_TYPE_GIF)){
+//
+//            cout << "Image loaded" << endl;
+//            idling = true;
+//            
+//        }else{
+//            
+//            cout << "Image not loaded" << endl;
+//            idling = false;
+//
+//
+//        }
+//    }
     
     
-    
+     
+
     
     //prompt the splash image of the app
-    if (1) {
+    if (read_image_from_resource_data(String("mydata"), &splash_image)) {
 
         bool hasAlpha = splash_image.HasAlpha() || splash_image.HasMask();
         

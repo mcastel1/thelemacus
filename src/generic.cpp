@@ -949,3 +949,24 @@ wxImage alphaToBlackAndWhiteMask (wxImage img) {
 
     return img;
 }
+
+
+//read the image named 'name' in WIN32 resources from a raw data file written in the resources, and load it into *image. Return true if the image has been loaded correctly, false otherwise
+bool read_image_from_resource_data(const String& name, wxImage* image){
+    
+    const void* data = NULL;
+    size_t size;
+    
+    if (!wxLoadUserResource(&data, &size, "mydata", L"MYDATA") ) {
+        
+        return false;
+        
+    }else{
+        // Use the data in any way, for example:
+        wxMemoryInputStream input_stream(data, size);
+        
+        return(image->LoadFile(input_stream, wxBITMAP_TYPE_GIF));
+        
+    }
+    
+}

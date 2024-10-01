@@ -15,7 +15,7 @@
 
 
 //given a wxListCtrl* list_control, if * list_control has at least one item, it finds on what element of *list_control the mouse is currently on and writes the id of this element in i. Otherwise, it writes wxNOT_FOUND in *i
-void MousePositionOnListControl(wxListCtrl* list_control, int* i){
+void MousePositionOnListControl(wxListCtrl* list_control, Int* i){
     
     if((list_control->GetItemCount()) > 0){
         //*list_control has a non-zero size -> write in *i the number of the item on which the mouse is hovering
@@ -40,14 +40,14 @@ void MousePositionOnListControl(wxListCtrl* list_control, int* i){
 #endif
         
         //store in i the # of the item on which the mouse is hovering
-        (*i) = ((int)(list_control->HitTest(p, hit_test_flag)));
+        i->set(((int)(list_control->HitTest(p, hit_test_flag))));
         
         //    cout << "\nMouse is on item # " << (*i);
         
     }else{
         //*list_control has zero size -> write in *t wxNOT_FOUND
         
-        (*i) = wxNOT_FOUND;
+        i->set(wxNOT_FOUND);
         
     }
     

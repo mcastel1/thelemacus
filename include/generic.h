@@ -18,6 +18,7 @@
 #include "constants.h"
 #include "position.h"
 #include "double.h"
+#include "int.h"
 #include "length.h"
 #include "file_rw.h"
 #include "my_app.h"
@@ -38,7 +39,7 @@ double cot(const Angle&);
 double acos(const Double&);
 double atan(double, double);
 int floor_exp(double);
-void MousePositionOnListControl(wxListCtrl*, int*);
+void MousePositionOnListControl(wxListCtrl*, Int*);
 template<class C> void read_from_file(C*, String, String, [[maybe_unused]] String, [[maybe_unused]] String);
 bool check_unsigned_int(string, unsigned int*, bool, unsigned int, unsigned int);
 bool check_int(string, int*, bool, int, int);

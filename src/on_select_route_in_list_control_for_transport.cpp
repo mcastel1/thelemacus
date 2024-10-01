@@ -108,7 +108,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
         
         
         //the id of the Position that will be transported,
-        (parent->i_object_to_transport) = ((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
+        parent->i_object_to_transport.set(((int)((parent->listcontrol_positions->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)))));
         
         auxiliary_transport_handler_inbound = new GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> >(parent,
                                                                                                              &(parent->data->route_list)[(parent->i_transporting_route.get())],

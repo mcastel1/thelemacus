@@ -2860,7 +2860,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                     //the mouse is over a position
                     
                     //sets the highlighted position to i, so as to use highlighted_position_now in other functions
-                    (parent->parent->highlighted_position_now) = i;
+                    parent->parent->highlighted_position_now.set(i);
                     
                     (parent->parent->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                     parent->parent->listcontrol_positions->EnsureVisible(i);
@@ -3622,7 +3622,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 
                                 
                                 //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
-                                (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]));
+                                (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now.get())]));
                                 
                                 break;
                                 
@@ -3630,12 +3630,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 
                             case 1: {
                                 
-                                //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                                //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now.get())]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                                 (*rotation_now_drag) =
                                 (rotation->inverse()) *
                                 rotation_start_end(position_start_drag, position_now_drag) *
                                 (*rotation);
-                                geo_start_drag->rotate(String(""), (*rotation_now_drag), &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]), String(""));
+                                geo_start_drag->rotate(String(""), (*rotation_now_drag), &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())]), String(""));
                                 
                                 break;
                                 
@@ -3646,7 +3646,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         
                         //update the data of the Position under consideration in listcontrol_positions
-                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]).update_ListControl((parent->parent->highlighted_position_now), parent->parent->listcontrol_positions);
+                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())]).update_ListControl((parent->parent->highlighted_position_now), parent->parent->listcontrol_positions);
                         
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
@@ -3654,7 +3654,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                                 (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
+                                                                                                 (parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())],
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object)
                                                                                                  );

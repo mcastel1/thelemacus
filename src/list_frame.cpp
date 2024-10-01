@@ -191,8 +191,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         }
         
         //no positions nor routes are highlighted when ListFrame is constructed
-        highlighted_route_now = -1;
-        highlighted_position_now = -1;
+        highlighted_route_now.set(-1);
+        highlighted_position_now.set(-1);
         
         menu_bar = new wxMenuBar;
         menu_app = new wxMenu;
@@ -1175,7 +1175,7 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
     transported_object_type = String("route");
     
     //I store the # of the selected Route into i_object_to_transport
-    i_object_to_transport = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+    i_object_to_transport.set(((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
     
     //here set i_object_to_transport to the currently selected Route
     

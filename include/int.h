@@ -23,11 +23,12 @@ private:
 
 public:
     
-    
-    template<class S> void read_from_stream(String, S*, bool, String);
-    void read_from_file_to(String, String, String, String);
     void set(const Int&);
     void set(String, int, String);
+    int get(void);
+    template<class S> void read_from_stream(String, S*, bool, String);
+    void read_from_file_to(String, String, String, String);
+
     void set(int);
     void my_round(Int precision);
     String to_string_spaces(void);

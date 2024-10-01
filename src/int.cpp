@@ -45,6 +45,14 @@ void Int::set(int i) {
 }
 
 
+//getter
+inline int Int::get(void){
+    
+    return value;
+    
+}
+
+
 //round up *this in such a way that when it is prnted out, only precision.value signifiant digits are shown
 void Int::my_round(Int precision){
     

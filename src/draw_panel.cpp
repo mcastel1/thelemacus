@@ -2851,7 +2851,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             //run over all the Positions, check if the mouse is hovering over one of them, and change the background color of the related Position in listcontrol_positions
             (parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now);
             
-            for ((parent->parent->highlighted_position_now) = -1, i = 0; i < parent->parent->data->position_list.size(); i++) {
+            for (parent->parent->highlighted_position_now.set(-1), i = 0; i < parent->parent->data->position_list.size(); i++) {
                 
                 GeoToScreen((parent->parent->data->position_list)[i], &q);
                 
@@ -3064,7 +3064,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                     if ((parent->parent->highlighted_route_now) != -1) {
                         //I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
                         
-                        (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position)) = (*route_reference_position_drag_start);
+                        (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position)) = (*route_reference_position_drag_start);
                         
                         TabulateRoutes();
                         Refresh();
@@ -3078,11 +3078,11 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                         // I am dragging a Position: I restore the position under consideration to its value at the beginning of the drag
                         
                         //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
-                        (this->*ScreenToGeo)(position_start_drag, &((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]));
+                        (this->*ScreenToGeo)(position_start_drag, &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())]));
                         
                         
                         //update the coordinates of the Position under consideration in listcontrol_positions
-                        ((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]).update_ListControl(((parent->parent)->highlighted_position_now), (parent->parent)->listcontrol_positions);
+                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())]).update_ListControl((parent->parent->highlighted_position_now.get()), (parent->parent)->listcontrol_positions);
                         
                         //given that the position under consideration has changed, I re-pain the chart
                         Refresh();
@@ -3130,10 +3130,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 parent->parent->SetFocus();  // focus on the ListFrame
                 
                 //select the highlighted Route in ListFrame
-                parent->parent->listcontrol_routes->SetItemState((parent->parent)->highlighted_route_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                parent->parent->listcontrol_routes->SetItemState(parent->parent->highlighted_route_now.get(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                 
                 //set the beckgorund color of the Route in listcontrol_routes in ListFrame to the color of selected items
-                parent->parent->listcontrol_routes->SetItemBackgroundColour(parent->parent->highlighted_route_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                parent->parent->listcontrol_routes->SetItemBackgroundColour(parent->parent->highlighted_route_now.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                 
                 if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight) != -1) {
                     //the selected Route is related to a Sight

@@ -53,7 +53,7 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
             /*condition that the Route is not a circle of equal altitude*/
             (((parent->data->route_list)[i]).type != (Route_types[2])) &&
             /*condition that the Route does not coincide with the object to transport*/
-            (((parent->transported_object_type) != String("route")) || ((parent->i_object_to_transport) != i))
+            (((parent->transported_object_type) != String("route")) || ((parent->i_object_to_transport.get()) != i))
             ) {
 
                 //            parent->route_list_for_transport.push_back((parent->data->route_list)[i]);

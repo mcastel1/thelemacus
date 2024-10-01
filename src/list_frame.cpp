@@ -1339,7 +1339,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
                         //set the beckgorund color of the sight in listcontrol_sights and of its related route to a highlight color
                         listcontrol_sights->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                         if ((highlighted_route_now != -1) && ((listcontrol_routes->GetItemCount()) > highlighted_route_now)) {
-                            listcontrol_routes->SetItemBackgroundColour(highlighted_route_now, (wxGetApp().color_selected_item));
+                            listcontrol_routes->SetItemBackgroundColour(highlighted_route_now.get(), (wxGetApp().color_selected_item));
                         }
                         
                     }

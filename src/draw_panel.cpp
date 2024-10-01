@@ -1212,7 +1212,7 @@ inline void DrawPanel::PreRenderMercator(void) {
              (route.reference_position->lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
              (route.reference_position->lambda.value) += delta_lambda_minor) {
             
-            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
+            route.Draw((wxGetApp().n_points_minor_ticks.get()), this, &(parent->curves), String(""));
             
         }
         
@@ -3437,7 +3437,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
                         
-                        if (((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value) != -1) {
+                        if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight) != -1) {
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
                             
                             (parent->parent->disconnect_sight->sight_id) = ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value);

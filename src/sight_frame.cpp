@@ -731,7 +731,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
 
             //I link the Sight to the Route, and the Route to the Sight
             sight->related_route.set(((int)(parent->data->route_list.size())) - 1);
-            (((parent->data->route_list)[(parent->data->route_list.size()) - 1]).related_sight.value) = ((int)sight_position);
+            ((parent->data->route_list)[(parent->data->route_list.size()) - 1]).related_sight.set(((int)sight_position));
 
 
         }

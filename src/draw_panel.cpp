@@ -728,7 +728,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
                 }
                 else {
                     
-                    s << angle_label.min_to_string(mode, (precision.value));
+                    s << angle_label.min_to_string(mode, (precision.get()));
                     
                 }
                 
@@ -999,7 +999,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     for (size_label_horizontal = 0,
          first_label = true,
          //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
+         label_precision.set(((gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))))),
          ((q.phi).value) = (phi_start.value),
          (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
          ((q.phi).value) < (phi_end.value);

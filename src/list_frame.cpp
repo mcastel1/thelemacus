@@ -1348,7 +1348,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
                         //set the beckgorund color of the sight in listcontrol_sights and of its related route to white
                         listcontrol_sights->SetItemBackgroundColour(i, wxGetApp().background_color);
                         if (((((data->sight_list)[i]).related_route) != -1) && ((listcontrol_routes->GetItemCount()) > (((data->sight_list)[i]).related_route.get()))) {
-                            listcontrol_routes->SetItemBackgroundColour(((((data->sight_list)[i]).related_route).value), wxGetApp().background_color);
+                            listcontrol_routes->SetItemBackgroundColour((((data->sight_list)[i]).related_route.get()), wxGetApp().background_color);
                         }
                         
                     }
@@ -1400,7 +1400,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
                         
                         //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
                         listcontrol_routes->SetItemBackgroundColour(i, wxGetApp().background_color);
-                        if ((((((data->route_list)[i]).related_sight).value) != -1) && ((listcontrol_sights->GetItemCount()) > ((((data->route_list)[i]).related_sight).value))) {
+                        if (((((data->route_list)[i]).related_sight) != -1) && ((listcontrol_sights->GetItemCount()) > ((((data->route_list)[i]).related_sight).value))) {
                             listcontrol_sights->SetItemBackgroundColour(((((data->route_list)[i]).related_sight).value), wxGetApp().background_color);
                         }
                         

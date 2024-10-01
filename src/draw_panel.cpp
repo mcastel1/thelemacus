@@ -1287,7 +1287,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->phi.value) += delta_phi_minor
                  ) {
                      
-                     route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
+                     route.DrawOld((wxGetApp().n_points_minor_ticks.get()), this, &(parent->curves), String(""));
                      
                  }
             
@@ -1460,7 +1460,7 @@ inline void DrawPanel::PreRender3D(void) {
     }
     
     delta_phi = deg_to_rad / ((double)gamma_phi);
-    while (((wxGetApp().n_intervals_ticks_preferred).value) * delta_phi < phi_span) {
+    while ((wxGetApp().n_intervals_ticks_preferred.get()) * delta_phi < phi_span) {
         if (delta_phi == deg_to_rad / ((double)gamma_phi)) { delta_phi += deg_to_rad * 4.0 / ((double)gamma_phi); }
         else { delta_phi += deg_to_rad * 5.0 / ((double)gamma_phi); }
     }
@@ -1482,7 +1482,7 @@ inline void DrawPanel::PreRender3D(void) {
     for (size_label_horizontal = 0,
          first_label = true,
          //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
+         label_precision.set(((gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))))),
          ((q.phi).value) = (phi_start.value),
          (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
          ((q.phi).value) < (phi_end.value);

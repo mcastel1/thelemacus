@@ -17,6 +17,7 @@
 #include "data.h"
 #include "disconnect_sight.h"
 #include "do_nothing.h"
+#include "int.h"
 #include "list_control.h"
 #include "my_app.h"
 #include "position.h"
@@ -103,7 +104,7 @@ public:
     //the file where the data is read and written
     FileRW data_file;
     unsigned int margin;
-    int /*the # of the sight/route/position which is highlighted at the current (_now) or preceeding (_before) step of mouse movement, because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight_now, highlighted_route_now, highlighted_route_before,  highlighted_position_now, highlighted_position_before, /*# of the object to transport*/ i_object_to_transport, i_transporting_route;
+    Int /*the # of the sight/route/position which is highlighted at the current (_now) or preceeding (_before) step of mouse movement, because the mouse is hovering over it in listcontrol_sights/routes/positions*/highlighted_sight_now, highlighted_route_now, highlighted_route_before,  highlighted_position_now, highlighted_position_before, /*# of the object to transport*/ i_object_to_transport, i_transporting_route;
     /*map[i] is the position in data->route_list of the i-th Route in route_list_for_transport*/
     vector<int> map;
     //coastline_polygons_Position/Cartesian/Mercator[i] is a vector which contains the the coastline datapoints (in Position/Cartesian/Mercator projection format) of polygon #i

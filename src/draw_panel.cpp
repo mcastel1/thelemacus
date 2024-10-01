@@ -362,7 +362,7 @@ inline void DrawPanel::RenderRoutes(wxDC& dc, const wxColor& foreground_color) {
     for (i = 0, color_id = 0; i < (routes.size()); i++) {
         
         //set the route thickness and pen
-        if (i == (parent->parent->highlighted_route_now)) {
+        if (i == (parent->parent->highlighted_route_now.get())) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = thickness;
         }
@@ -516,7 +516,7 @@ inline void DrawPanel::RenderPositions(wxDC& dc, const wxColor& foreground_color
     for (i = 0, color_id = 0; i < (points_position_list.size()); i++) {
         
         //set thickness and pen
-        if (i == (parent->parent->highlighted_position_now)) {
+        if (i == (parent->parent->highlighted_position_now.get())) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = thickness;
         }
@@ -2756,7 +2756,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             //save the id of the Route highlighted at the preceeding step into highlighted_route_before
             (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
             
-            for ((parent->parent->highlighted_route_now) = -1, i = 0; i < (parent->parent->data->route_list).size(); i++) {
+            for (parent->parent->highlighted_route_now.set(-1), i = 0; i < (parent->parent->data->route_list).size(); i++) {
                 
                 //set the backgorund color of the Route in listcontrol_routes and of its related sight to white
                 //when only a fraction of the Routes is Drawn, this will create a problem ---
@@ -2797,7 +2797,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                             
                             
                             //set the highlighted route to i, so as to use highlighted_route in other functions
-                            (parent->parent->highlighted_route_now) = i;
+                            parent->parent->highlighted_route_now.set(i);
                             
                             parent->parent->listcontrol_routes->EnsureVisible(i);
                             if ((((parent->parent->data->route_list)[i]).related_sight.get()) != -1) {
@@ -2808,16 +2808,16 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                             (parent->parent->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                             if ((((parent->parent->data->route_list)[i]).related_sight.get()) != -1) {
                                 
-                                (parent->parent->highlighted_sight_now) = (((parent->parent->data->route_list)[i]).related_sight.get());
+                                parent->parent->highlighted_sight_now.set(((parent->parent->data->route_list)[i]).related_sight);
                                 
                                 parent->parent->listcontrol_sights->SetItemBackgroundColour(
-                                                                                            (parent->parent->highlighted_sight_now),
+                                                                                            (parent->parent->highlighted_sight_now.get()),
                                                                                             (wxGetApp().color_selected_item)
                                                                                             );
                             }
                             else {
                                 
-                                (parent->parent->highlighted_sight_now) = -1;
+                                parent->parent->highlighted_sight_now.set(-1);
                                 
                             }
                             
@@ -3109,10 +3109,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 parent->parent->SetFocus();  // focus on the ListFrame
                 
                 //select the highlighted position in ListFrame
-                parent->parent->listcontrol_positions->SetItemState((parent->parent)->highlighted_position_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                parent->parent->listcontrol_positions->SetItemState(parent->parent->highlighted_position_now.get(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                 
                 //set the beckgorund color of the Position in listcontrol_positions in ListFrame to the color of selected items
-                parent->parent->listcontrol_positions->SetItemBackgroundColour((parent->parent)->highlighted_position_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                parent->parent->listcontrol_positions->SetItemBackgroundColour(parent->parent->highlighted_position_now.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                 
             }
             

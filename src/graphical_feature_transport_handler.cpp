@@ -195,7 +195,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 String new_label;
                 
                 //un-highlight the Route that is being transported
-                (MotionHandler<F>::parent)->highlighted_route_now = -1;
+                (MotionHandler<F>::parent)->highlighted_route_now.set(-1);
 
                 //do the whole transport rather than combining many little transports, to avoid rounding errors
                 //                (*(((Route*)transported_object)->reference_position)) = (*(MotionHandler<F>::start));

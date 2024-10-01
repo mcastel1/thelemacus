@@ -510,9 +510,9 @@ bool Data::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix)
     check &= ((sight_list[sight_list.size() - 1]).reduce(&(route_list[route_list.size() - 1]), prefix));
 
     //I link the sight to the route, and the route to the sight
-    ((sight_list[sight_list.size() - 1]).related_route.get()) = ((int)route_list.size()) - 1;
-    (sight_in->related_route.get()) = ((int)route_list.size()) - 1;
-    (((route_list[route_list.size() - 1]).related_sight).value) = ((int)sight_list.size()) - 1;
+    (sight_list[sight_list.size() - 1]).related_route.set(((int)route_list.size()) - 1);
+    sight_in->related_route.set(((int)route_list.size()) - 1);
+    (route_list[route_list.size() - 1]).related_sight.set(((int)sight_list.size()) - 1);
 
 
     if (check) {

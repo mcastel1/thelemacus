@@ -44,7 +44,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
     //the animation transport starts here
     (MotionHandler<F>::timer)->Start(
         /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
-        (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
+        (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.get()) - 1)) * 1000.0,
         wxTIMER_CONTINUOUS);
     
 }
@@ -58,7 +58,7 @@ template void GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route
 //this method iterates the animation
 template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
-    if(((MotionHandler<F>::t) < (wxGetApp().n_animation_steps.value))) {
+    if(((MotionHandler<F>::t) < (wxGetApp().n_animation_steps.get()))) {
         //the time parameter is undedr its maximum value
 
         if((MotionHandler<F>::t) == 0) {
@@ -128,7 +128,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             (MotionHandler<F>::transporting_route_temp).length->set(
                                                                     String(""),
                                                                     ((MotionHandler<F>::transporting_route).length->value) *
-                                                                    (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
+                                                                    (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.get()) + 1))))
                                                                     ,
                                                                     String(""));
 
@@ -211,10 +211,10 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 //set back listcontrol_routes to route_list, in order to include all Routes (not only those which are not related to a Sight)
                 (MotionHandler<F>::parent)->listcontrol_routes->set(((MotionHandler<F>::parent)->data->route_list), false);
 
-                if ((type_of_transported_object == String("sight")) || ( ((type_of_transported_object == String("route")) && ((((Route*)transported_object)->related_sight.value) != -1)) )) {
+                if ((type_of_transported_object == String("sight")) || ( ((type_of_transported_object == String("route")) && ((((Route*)transported_object)->related_sight.get()) != -1)) )) {
                     //I am transporting a Sight (i.e., Route related to a Sight) or I am transporting a Route that is connected to a Sight -> disconnect the Route from the sight
 
-                    ((MotionHandler<F>::parent)->disconnect_sight->sight_id) = (((Route*)transported_object)->related_sight.value);
+                    ((MotionHandler<F>::parent)->disconnect_sight->sight_id) = (((Route*)transported_object)->related_sight.get());
                     (MotionHandler<F>::parent)->disconnect_sight->operator()(event);
 
                 }

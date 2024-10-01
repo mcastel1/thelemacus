@@ -21,7 +21,7 @@ FileRW::FileRW() {
     
 
     //set the precision of *value
-    value->precision((data_precision.value));
+    value->precision((data_precision.get()));
 
 }
 

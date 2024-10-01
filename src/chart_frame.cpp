@@ -70,8 +70,8 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     curves.points.reserve(j);
     curves.positions.reserve(parent->n_all_coastline_points);
     //allocate the maximal number of points and positions that will be needed for a selection rectangle: n_points_routes times the number of Routes in selection_rectangle, which is 4
-    curves_selection_rectangle.points.reserve(4*(wxGetApp().n_points_routes.value));
-    curves_selection_rectangle.positions.reserve(4*(wxGetApp().n_points_routes.value));
+    curves_selection_rectangle.points.reserve(4*(wxGetApp().n_points_routes.get()));
+    curves_selection_rectangle.positions.reserve(4*(wxGetApp().n_points_routes.get()));
     
     print_error_message = new PrintMessage<ChartFrame, UnsetIdling<ChartFrame> >(this, unset_idling);
 
@@ -108,7 +108,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     button_reset = new wxBitmapButton(
                                       panel,
                                       wxID_ANY,
-                                      Bitmap(wxGetApp().path_file_reset_icon, (wxGetApp().size_large_button) - ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))),
+                                      Bitmap(wxGetApp().path_file_reset_icon, (wxGetApp().size_large_button) - ToDIP(wxSize((wxGetApp().border.get()), (wxGetApp().border.get())))),
                                       wxDefaultPosition,
                                       wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
                                       wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -118,7 +118,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     button_show_list = new wxBitmapButton(
                                           panel,
                                           wxID_ANY,
-                                          Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))),
+                                          Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ToDIP(wxSize((wxGetApp().border.get()), (wxGetApp().border.get())))),
                                           wxDefaultPosition,
                                           wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value)),
                                           wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -1105,7 +1105,7 @@ void ChartFrame::GetCoastLineData3D(void) {
         delete_duplicates(&(parent->coastline_polygons_area_observer));
         
         //this is a computationally efficient way of estimating every: the number of coastline points falling within circle_observer is estimated as (parent->n_all_coastline_points)*(draw_panel->circle_observer.omega.value))/M_PI), and every is set accordingly in such a way that, for every circle_observer, the number of plotting points is n_points_plot_coastline_3D
-        every = ((unsigned long long int)(((parent->n_all_coastline_points)*(draw_panel->circle_observer->omega.value))/M_PI) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
+        every = ((unsigned long long int)(((parent->n_all_coastline_points)*(draw_panel->circle_observer->omega.value))/M_PI) / ((double)(wxGetApp().n_points_plot_coastline_3D.get())));
         if(every==0){every = 1;}
         
         
@@ -1223,7 +1223,7 @@ void ChartFrame::GetCoastLineDataMercator(void) {
                 
             }
         }
-        every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
+        every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.get()))));
         if(every==0){every = 1;}
         
         

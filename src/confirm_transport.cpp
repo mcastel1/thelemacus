@@ -49,7 +49,7 @@ template<class P> void ConfirmTransport<P>::operator()(wxCommandEvent& event) {
 
         if (
             /*condition that the Route is not relatied to a Sight*/
-            (((((parent->data->route_list)[i]).related_sight).value) == -1) &&
+            ((((parent->data->route_list)[i]).related_sight) == -1) &&
             /*condition that the Route is not a circle of equal altitude*/
             (((parent->data->route_list)[i]).type != (Route_types[2])) &&
             /*condition that the Route does not coincide with the object to transport*/

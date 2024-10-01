@@ -493,7 +493,7 @@ wxImage RescaleProportionally(wxImage image, const wxSize size) {
     output = image;
 
     original_size = (output.GetSize());
-    size_minus_margins = wxSize((size.GetWidth()) - (wxGetApp().border.value), (size.GetHeight()) - (wxGetApp().border.value));
+    size_minus_margins = wxSize((size.GetWidth()) - (wxGetApp().border.get()), (size.GetHeight()) - (wxGetApp().border.get()));
 
     scaling_factor.set(String(""),
         (

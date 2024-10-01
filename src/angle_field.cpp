@@ -259,7 +259,7 @@ template <class P> void AngleField<P>::set(void) {
 
     if (format == String("")) {
 
-        angle->to_deg_min(&deg_temp, &min_temp, display_precision.value);
+        angle->to_deg_min(&deg_temp, &min_temp, display_precision.get());
 
     }
     else {
@@ -271,7 +271,7 @@ template <class P> void AngleField<P>::set(void) {
             if (format == String("EW")) { sign->SetValue(wxString("W")); }
             if (format == String("NS")) { sign->SetValue(wxString("N")); }
 
-            angle->to_deg_min(&deg_temp, &min_temp, display_precision.value);
+            angle->to_deg_min(&deg_temp, &min_temp, display_precision.get());
 
         }
         else {
@@ -281,7 +281,7 @@ template <class P> void AngleField<P>::set(void) {
             if (format == String("NS")) { sign->SetValue(wxString("S")); }
 
             (angle_temp.value) = two_M_PI - (angle->value);
-            angle_temp.to_deg_min(&deg_temp, &min_temp, display_precision.value);
+            angle_temp.to_deg_min(&deg_temp, &min_temp, display_precision.get());
 
         }
 
@@ -289,7 +289,7 @@ template <class P> void AngleField<P>::set(void) {
 
     //all the cases above must share these lines, so I put them here
     deg->SetValue(wxString::Format(wxT("%i"), deg_temp));
-    min->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, min_temp));
+    min->SetValue(wxString::Format(wxT("%.*f"), display_precision.get(), min_temp));
 
     sign_ok = true;
     deg_ok = true;

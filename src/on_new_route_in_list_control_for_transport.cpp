@@ -46,7 +46,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
             if ((parent->transported_object_type) == String("sight")) {
                 
                 //the id of the Route that will be transported
-                (parent->i_object_to_transport) = (((((parent->data)->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value);
+                (parent->i_object_to_transport) = ((((parent->data)->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route.get());
                 
             }
             

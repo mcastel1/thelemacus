@@ -323,7 +323,7 @@ int Data::compute_position(String prefix) {
                 (*(error_circle.reference_position)) = center;
                 (error_circle.omega.value) = (r.value) / (wxGetApp().Re.value);
                 (error_circle.label) = String("error on astronomical position");
-                (error_circle.related_sight.get().value) = -1;
+                error_circle.related_sight.set(-1);
                 
                 r.print(String("error on astronomical position"), prefix, cout);
                 my_push_back(&route_list, error_circle);

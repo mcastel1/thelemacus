@@ -16,10 +16,13 @@ using namespace std;
 
 
 class Int{
-    
+
+private:
+
+    int value;
+
 public:
     
-    int value;
     
     template<class S> void read_from_stream(String, S*, bool, String);
     void read_from_file_to(String, String, String, String);

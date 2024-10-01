@@ -91,7 +91,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 
                 
                 //highlight the Position that is being transported
-                (MotionHandler<F>::parent)->highlighted_position_now = address_position_in_vector<Position>(((Position*)transported_object), (MotionHandler<F>::parent)->data->position_list);
+                (MotionHandler<F>::parent)->highlighted_position_now.set(address_position_in_vector<Position>(((Position*)transported_object), (MotionHandler<F>::parent)->data->position_list));
                 
             }else {
 
@@ -103,7 +103,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                     
                     
                     //highlight the Position that is being transported
-                    (MotionHandler<F>::parent)->highlighted_route_now = address_position_in_vector<Route>(((Route*)transported_object), (MotionHandler<F>::parent)->data->route_list);
+                    (MotionHandler<F>::parent)->highlighted_route_now.set(address_position_in_vector<Route>(((Route*)transported_object), (MotionHandler<F>::parent)->data->route_list));
 
                 }
                 
@@ -174,7 +174,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             ((Position*)transported_object)->set((*(MotionHandler<F>::start)));
             
             //un-highlight the Position that is being transported
-            (MotionHandler<F>::parent)->highlighted_position_now = -1;
+            (MotionHandler<F>::parent)->highlighted_position_now.set(-1);
             ((Position*)transported_object)->transport_to((MotionHandler<F>::transporting_route), String(""));
 
 

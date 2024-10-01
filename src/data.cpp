@@ -590,7 +590,7 @@ void Data::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unu
 
         }
         else {
-            //the related route must not be removed: given that its related sight has been deleted, I set its related_sight.value to -1
+            //the related route must not be removed: given that its related sight has been deleted, I set its related_sight.get() to -1
 
             (route_list[i_related_route.value]).related_sight.set(-1);
 

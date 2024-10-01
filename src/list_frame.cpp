@@ -1096,7 +1096,7 @@ void ListFrame::OnDisconnectSight(wxCommandEvent& event) {
 void ListFrame::OnDisconnectRoute(wxCommandEvent& event) {
     
     //set i_object_to_disconnect to the currently selected Route in listcontrol_routes and call DisconnectOld to disconnect that Route from its related Sight
-    (disconnect_sight->sight_id) = (((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight.value);
+    (disconnect_sight->sight_id) = (((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight.get());
     
     disconnect_sight->operator()(event);
 
@@ -1235,7 +1235,7 @@ bool ListFrame::CheckRoutesForTransport(void) {
         
         if(
            /*condition that the Route is not relatied to a Sight*/
-           ((((data->route_list)[i]).related_sight.value) == -1) &&
+           ((((data->route_list)[i]).related_sight.get()) == -1) &&
            /*condition that the Route is not a circle of equal altitude*/
            (((data->route_list)[i]).type != Route_types[2]) &&
            /*condition that the Route does not coincide with the object to transport*/

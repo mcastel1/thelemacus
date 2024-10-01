@@ -58,7 +58,7 @@ template<class S> template<class T>void OnChangeSelectionInListControl<S>::opera
                 //type.value = "route" -> caller is listcontrol_routes
                 
                 //the selected Route has/does not have a related Sight -> enable/disable the button to disconnect the selected Route
-                list_frame_pointer->button_disconnect_route->Enable(((((list_frame_pointer->data->route_list)[i]).related_sight.value) != -1));
+                list_frame_pointer->button_disconnect_route->Enable(((((list_frame_pointer->data->route_list)[i]).related_sight.get()) != -1));
                 
                 break;
                 

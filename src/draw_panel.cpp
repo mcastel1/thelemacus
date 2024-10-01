@@ -2800,15 +2800,15 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                             (parent->parent->highlighted_route_now) = i;
                             
                             parent->parent->listcontrol_routes->EnsureVisible(i);
-                            if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
-                                parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->data->route_list)[i]).related_sight.value);
+                            if ((((parent->parent->data->route_list)[i]).related_sight.get()) != -1) {
+                                parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->data->route_list)[i]).related_sight.get());
                             }
                             
                             //set highlighted_sight_now and the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                             (parent->parent->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-                            if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
+                            if ((((parent->parent->data->route_list)[i]).related_sight.get()) != -1) {
                                 
-                                (parent->parent->highlighted_sight_now) = (((parent->parent->data->route_list)[i]).related_sight.value);
+                                (parent->parent->highlighted_sight_now) = (((parent->parent->data->route_list)[i]).related_sight.get());
                                 
                                 parent->parent->listcontrol_sights->SetItemBackgroundColour(
                                                                                             (parent->parent->highlighted_sight_now),

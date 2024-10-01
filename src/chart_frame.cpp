@@ -1105,7 +1105,7 @@ void ChartFrame::GetCoastLineData3D(void) {
         delete_duplicates(&(parent->coastline_polygons_area_observer));
         
         //this is a computationally efficient way of estimating every: the number of coastline points falling within circle_observer is estimated as (parent->n_all_coastline_points)*(draw_panel->circle_observer.omega.value))/M_PI), and every is set accordingly in such a way that, for every circle_observer, the number of plotting points is n_points_plot_coastline_3D
-        every = ((unsigned long long int)(((parent->n_all_coastline_points)*(draw_panel->circle_observer->omega.value))/M_PI) / ((double)(wxGetApp().n_points_plot_coastline_3D.value)));
+        every = ((unsigned long long int)(((parent->n_all_coastline_points)*(draw_panel->circle_observer->omega.value))/M_PI) / ((double)(wxGetApp().n_points_plot_coastline_3D.get())));
         if(every==0){every = 1;}
         
         
@@ -1223,7 +1223,7 @@ void ChartFrame::GetCoastLineDataMercator(void) {
                 
             }
         }
-        every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.value))));
+        every = ((unsigned long long int)(((double)m) / ((double)(wxGetApp().n_points_plot_coastline_Mercator.get()))));
         if(every==0){every = 1;}
         
         

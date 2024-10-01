@@ -211,10 +211,10 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
                 //set back listcontrol_routes to route_list, in order to include all Routes (not only those which are not related to a Sight)
                 (MotionHandler<F>::parent)->listcontrol_routes->set(((MotionHandler<F>::parent)->data->route_list), false);
 
-                if ((type_of_transported_object == String("sight")) || ( ((type_of_transported_object == String("route")) && ((((Route*)transported_object)->related_sight.value) != -1)) )) {
+                if ((type_of_transported_object == String("sight")) || ( ((type_of_transported_object == String("route")) && ((((Route*)transported_object)->related_sight.get()) != -1)) )) {
                     //I am transporting a Sight (i.e., Route related to a Sight) or I am transporting a Route that is connected to a Sight -> disconnect the Route from the sight
 
-                    ((MotionHandler<F>::parent)->disconnect_sight->sight_id) = (((Route*)transported_object)->related_sight.value);
+                    ((MotionHandler<F>::parent)->disconnect_sight->sight_id) = (((Route*)transported_object)->related_sight.get());
                     (MotionHandler<F>::parent)->disconnect_sight->operator()(event);
 
                 }

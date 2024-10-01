@@ -1309,7 +1309,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
         MousePositionOnListControl(listcontrol_positions, &highlighted_position_now);
         MousePositionOnListControl(listcontrol_routes, &highlighted_route_now);
         
-        if ((highlighted_sight_now == wxNOT_FOUND) && (highlighted_position_now == wxNOT_FOUND) && (highlighted_route_now == wxNOT_FOUND)) {
+        if (((highlighted_sight_now.get()) == wxNOT_FOUND) && (highlighted_position_now == wxNOT_FOUND) && (highlighted_route_now == wxNOT_FOUND)) {
             //the mouse is not hovering over an element in listcontrol_sights nor listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights
             
             //set the beckgorund color of the Routes in listcontrol_sights and listcontrol_routes  and the background color of the Positions in listcontrol_positions to white
@@ -1330,11 +1330,11 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
             if ((highlighted_sight_now != wxNOT_FOUND) && enable_highlight) {
                 // the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
                 
-                highlighted_route_now = (((data->sight_list)[highlighted_sight_now]).related_route.get());
+                highlighted_route_now = (((data->sight_list)[highlighted_sight_now.get()]).related_route.get());
                 
                 for (i = 0; i < (listcontrol_sights->GetItemCount()); i++) {
                     
-                    if (i == highlighted_sight_now) {
+                    if (i == (highlighted_sight_now.get())) {
                         
                         //set the beckgorund color of the sight in listcontrol_sights and of its related route to a highlight color
                         listcontrol_sights->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));

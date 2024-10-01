@@ -3660,7 +3660,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                                                                                  );
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
-                            ((parent->parent->chart_frames)[i])->draw_panel->TabulatePosition(parent->parent->highlighted_position_now);
+                            ((parent->parent->chart_frames)[i])->draw_panel->TabulatePosition(parent->parent->highlighted_position_now.get());
                             
                             
                         }

@@ -679,18 +679,18 @@ void Route::update_ListControl(long i, wxListCtrl* listcontrol) {
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));
 
-        listcontrol->SetItem(i, j++, wxString(reference_position->to_string((display_precision.value))));
-        listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), (display_precision.value), true)));
+        listcontrol->SetItem(i, j++, wxString(reference_position->to_string((display_precision.get()))));
+        listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), (display_precision.get()), true)));
 
     }
     else {
         //in this case the type of this is 'loxodrome' or 'orthodrome': the last two fields are empty, and I fill in only the first three fields
 
-        listcontrol->SetItem(i, j++, wxString(reference_position->to_string((display_precision.value))));
-        listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.value), false)));
+        listcontrol->SetItem(i, j++, wxString(reference_position->to_string((display_precision.get()))));
+        listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.get()), false)));
         
         set_length_from_time_speed();
-        listcontrol->SetItem(i, j++, wxString(length->to_string((display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(length->to_string((display_precision.get()))));
 
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));

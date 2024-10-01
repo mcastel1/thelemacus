@@ -136,7 +136,7 @@ template<class P> void ChronoField<P>::set(Chrono chrono_in) {
 
     hour->SetValue(wxString::Format(wxT("%i"), chrono_in.h));
     minute->SetValue(wxString::Format(wxT("%i"), chrono_in.m));
-    second->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, chrono_in.s));
+    second->SetValue(wxString::Format(wxT("%.*f"), display_precision.get(), chrono_in.s));
 
     hour_ok = true;
     minute_ok = true;

@@ -999,7 +999,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     for (size_label_horizontal = 0,
          first_label = true,
          //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
+         (label_precision.value) = (gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
          ((q.phi).value) = (phi_start.value),
          (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
          ((q.phi).value) < (phi_end.value);
@@ -1015,7 +1015,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
     
     //take the angle 0° 0.0' expresed with display_precision: the height of this angle label is the largest possible -> set it equal to size_label_vertical
-    size_label_vertical = (GetTextExtent(wxString((Angle(0, 0.0).to_string(String("NS"), (display_precision.value), false)))).GetHeight());
+    size_label_vertical = (GetTextExtent(wxString((Angle(0, 0.0).to_string(String("NS"), (display_precision.get()), false)))).GetHeight());
     
     
     //set x_min, ..., y_max for the following
@@ -1170,7 +1170,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //compute labels on parallels
     for (first_label = true,
          //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
+         (label_precision.value) = (gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
          ((q.phi).value) = (phi_start.value),
          (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
          ((q.phi).value) < (phi_end.value);
@@ -1184,7 +1184,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //compute labels on meridians
     for (first_label = true,
          //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))),
+         (label_precision.value) = (gamma_lambda == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))),
          (q.lambda.value) = (lambda_start.value),
          (q.phi) = (*(parent->phi_min)) + epsilon_double;
          (q.lambda.value) < (lambda_end.value);
@@ -1482,7 +1482,7 @@ inline void DrawPanel::PreRender3D(void) {
     for (size_label_horizontal = 0,
          first_label = true,
          //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
+         (label_precision.value) = (gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
          ((q.phi).value) = (phi_start.value),
          (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
          ((q.phi).value) < (phi_end.value);
@@ -1498,7 +1498,7 @@ inline void DrawPanel::PreRender3D(void) {
     }
     
     //take the angle 0° 0.0' expresed with display_precision: the height of this angle label is the largest possible -> set it equal to size_label_vertical
-    size_label_vertical = (GetTextExtent(wxString((Angle(0, 0.0).to_string(String("NS"), (display_precision.value), false)))).GetHeight());
+    size_label_vertical = (GetTextExtent(wxString((Angle(0, 0.0).to_string(String("NS"), (display_precision.get()), false)))).GetHeight());
     
     TabulateRoutes();
     TabulatePositions();
@@ -1511,7 +1511,7 @@ inline void DrawPanel::PreRender3D(void) {
     //compute labels on parallels
     for (first_label = true,
          //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
+         (label_precision.value) = (gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
          (q.phi.value) = floor((circle_observer->reference_position->phi.normalize_pm_pi_ret().value - circle_observer->omega.value) / delta_phi) * delta_phi,
          (q.lambda) = lambda_middle;
          (q.phi.value) < (circle_observer->reference_position->phi.normalize_pm_pi_ret().value) + (circle_observer->omega.value);
@@ -1525,7 +1525,7 @@ inline void DrawPanel::PreRender3D(void) {
     //compute labels on meridians
     for (first_label = true,
          //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))),
+         (label_precision.value) = (gamma_lambda == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))),
          ((q.lambda).value) = (lambda_start.value),
          (q.phi) = phi_middle;
          ((q.lambda).value) < (lambda_end.value);
@@ -2520,7 +2520,7 @@ void DrawPanel::SetLabelAndAdjustPosition(const Position& p, wxPoint* position, 
     wxPoint shift;
     
     //set the text of *label
-    label->set(to_string(p, display_precision.value));
+    label->set(to_string(p, display_precision.get()));
     
     //the default value of the shift
     shift = wxPoint(
@@ -2687,7 +2687,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if (mouse_in_plot_area && (!parent->parent->selection_rectangle)) {
         //the mouse's screen position corresponds to a valid geographic Position and no selection rectangle is being drawn -> I show the instantaneous mouse coordinates : I write them into label_position, otherwise label_position is left empty,
         
-        label_position = String((parent->parent->geo_position_now->to_string(display_precision.value)));
+        label_position = String((parent->parent->geo_position_now->to_string(display_precision.get())));
         
     }
     else {

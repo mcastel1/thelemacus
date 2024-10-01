@@ -318,7 +318,7 @@ void Angle::print(String name, String prefix, ostream& ostr) {
     
     //if I am printing to terminal, I print with display_precision. Otherwise, I print with (data_precision.value)
     if (ostr.rdbuf() == cout.rdbuf()) {
-        precision = (display_precision.value);
+        precision = (display_precision.get());
     }else{
         precision = (data_precision.value);
     }

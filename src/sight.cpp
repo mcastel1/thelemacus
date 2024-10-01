@@ -174,16 +174,16 @@ void Sight::update_ListControl(long i, wxListCtrl* listcontrol) {
     listcontrol->SetItem(i, j++, wxString(artificial_horizon.value));
 
     //set sextant altitude column
-    listcontrol->SetItem(i, j++, wxString(H_s.to_string(String(""), (display_precision.value), true)));
+    listcontrol->SetItem(i, j++, wxString(H_s.to_string(String(""), (display_precision.get()), true)));
 
     //set index error
-    listcontrol->SetItem(i, j++, wxString(index_error.to_string(String(""), (display_precision.value), true)));
+    listcontrol->SetItem(i, j++, wxString(index_error.to_string(String(""), (display_precision.get()), true)));
 
     //set height of eye column
     if (artificial_horizon.value == 'n') {
 
         //write the height_of_eye with its original unit of measure
-        listcontrol->SetItem(i, j++, wxString(height_of_eye->to_string( (display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(height_of_eye->to_string( (display_precision.get()))));
 
     }
     else {
@@ -196,21 +196,21 @@ void Sight::update_ListControl(long i, wxListCtrl* listcontrol) {
     //I add to master_clock_date_and_hour the value stopwatch (if any): I write the result in time_UTC and I write in the GUI object  time_UTC
     time_UTC = master_clock_date_and_hour;
     //    if((use_stopwatch.value)=='y'){time_UTC += stopwatch;}
-    listcontrol->SetItem(i, j++, wxString(time_UTC.to_string(display_precision.value, false)));
+    listcontrol->SetItem(i, j++, wxString(time_UTC.to_string(display_precision.get(), false)));
 
     //set use of stopwatch
     listcontrol->SetItem(i, j++, wxString((use_stopwatch.value)));
 
     //set stopwatch reading
     if ((use_stopwatch.value) == 'y') {
-        listcontrol->SetItem(i, j++, wxString((stopwatch).to_string(display_precision.value, false)));
+        listcontrol->SetItem(i, j++, wxString((stopwatch).to_string(display_precision.get(), false)));
     }
     else {
         listcontrol->SetItem(i, j++, wxString(""));
     }
 
     //set TAI-UTC
-    listcontrol->SetItem(i, j++, wxString((TAI_minus_UTC).to_string((display_precision.value), false)));
+    listcontrol->SetItem(i, j++, wxString((TAI_minus_UTC).to_string((display_precision.get()), false)));
 
     //update label column
     //    if(label != String("")){
@@ -470,7 +470,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
     check &= get_coordinates(circle_of_equal_altitude, new_prefix);
 
     //link the circle of equal altitude (*circle_of_equal_altitude) to sight (*this)
-    temp << body->name->value << " " << time.to_string(display_precision.value, false) << " TAI, " << label.value;
+    temp << body->name->value << " " << time.to_string(display_precision.get(), false) << " TAI, " << label.value;
     circle_of_equal_altitude->label.set(String(""), String(temp.str()), new_prefix);
 
     check &= compute_H_o(new_prefix);

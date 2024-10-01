@@ -139,8 +139,8 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
     catalog = cata;
     job_id = -1;
 
-    plot_command.precision((data_precision.value));
-    command.precision((data_precision.value));
+    plot_command.precision((data_precision.get()));
+    command.precision((data_precision.get()));
 
     //read number of intervals for ticks from file_init
     wxGetApp().n_intervals_ticks_preferred.read_from_file_to(String("preferred number of intervals for ticks"), wxGetApp().path_file_init, String("R"), new_prefix);

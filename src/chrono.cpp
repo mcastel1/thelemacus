@@ -224,12 +224,12 @@ void Chrono::print(String name, String prefix, ostream& ostr) {
 
     unsigned int precision;
 
-    //if I am printing to terminal, I print with display_precision. Otherwise, I print with (data_precision.value)
+    //if I am printing to terminal, I print with display_precision. Otherwise, I print with (data_precision.get())
     if (ostr.rdbuf() == cout.rdbuf()) {
         precision = (display_precision.get());
     }
     else {
-        precision = (data_precision.value);
+        precision = (data_precision.get());
     }
 
     ostr << prefix.value << (name.value) << " = " << to_string(precision, false) << "\n";

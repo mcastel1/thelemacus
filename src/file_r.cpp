@@ -25,7 +25,7 @@ FileR::FileR() {
     //allocate value
 
     //set the precision of *value
-    value->precision((data_precision.value));
+    value->precision((data_precision.get()));
 
 }
 

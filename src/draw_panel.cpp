@@ -53,8 +53,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     rectangle_observer = new PositionRectangle;
     
     //reserve enough entries in points_dummy, so push_backs into points_dummy are not slow
-    points_dummy.reserve(wxGetApp().n_points_routes.value);
-    end_values_dummy.reserve(wxGetApp().n_points_routes.value);
+    points_dummy.reserve(wxGetApp().n_points_routes.get());
+    end_values_dummy.reserve(wxGetApp().n_points_routes.get());
     
     mouse_dragging = false;
     re_draw = true;
@@ -194,7 +194,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
            (*(parent->parent->geo_position_start)),
            Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
            Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
-           )).Draw(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+           )).Draw(wxGetApp().n_points_routes.get(), this, &(parent->curves_selection_rectangle), String(""));
     
     //left vertical edge of rectangle
     (Route(
@@ -202,7 +202,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
            (*(parent->parent->geo_position_now)),
            Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
            Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
-           )).Draw(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+           )).Draw(wxGetApp().n_points_routes.get(), this, &(parent->curves_selection_rectangle), String(""));
     
     //top and bottom horizontal edge of rectangle
     lambda_a.set(parent->parent->geo_position_start->lambda);
@@ -250,13 +250,13 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                   (*(parent->parent->geo_position_now)),
                   Z+M_PI,
                   Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_now->phi) * (lambda_ab_span.value))
-                  ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+                  ).DrawOld(wxGetApp().n_points_routes.get(), this, &(parent->curves_selection_rectangle), String(""));
             Route(
                   RouteType(((Route_types[0]).value)),
                   (*(parent->parent->geo_position_start)),
                   Z,
                   Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_start->phi) * (lambda_ab_span.value))
-                  ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));;
+                  ).DrawOld(wxGetApp().n_points_routes.get(), this, &(parent->curves_selection_rectangle), String(""));;
             
             break;
         }
@@ -284,7 +284,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                    Z_temp,
                    Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_start->phi) * (lambda_span_temp.value))
                    )
-             ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+             ).DrawOld(wxGetApp().n_points_routes.get(), this, &(parent->curves_selection_rectangle), String(""));
             
             //top horizontal edge of rectangle
             (Route(
@@ -292,7 +292,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                    (*(parent->parent->geo_position_now)),
                    Z_temp+M_PI,
                    Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_now->phi) * (lambda_span_temp.value))
-                   )).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+                   )).DrawOld(wxGetApp().n_points_routes.get(), this, &(parent->curves_selection_rectangle), String(""));
             
             break;
             
@@ -858,11 +858,11 @@ inline void DrawPanel::TabulateRoute(const unsigned int& i){
     //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
     if (((parent->parent->data->route_list)[i]).type != (Route_types[0])) {
         
-        ((parent->parent->data->route_list)[i]).Draw((unsigned int)(wxGetApp().n_points_routes.value), this, (routes.data()) + i, String(""));
+        ((parent->parent->data->route_list)[i]).Draw((unsigned int)(wxGetApp().n_points_routes.get()), this, (routes.data()) + i, String(""));
         
     }else{
         
-        ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)(wxGetApp().n_points_routes.value), this, (routes.data()) + i, String(""));
+        ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)(wxGetApp().n_points_routes.get()), this, (routes.data()) + i, String(""));
         
     }
     
@@ -1224,7 +1224,7 @@ inline void DrawPanel::PreRenderMercator(void) {
          (route.reference_position->lambda.value) < (lambda_end.value);
          (route.reference_position->lambda.value) += delta_lambda) {
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
+        route.Draw((wxGetApp().n_points_routes.get()), this, &(parent->curves), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis
@@ -1269,11 +1269,11 @@ inline void DrawPanel::PreRenderMercator(void) {
                                                                
                                                                ).value), LengthUnit_types[0]);
         
-        route.DrawOld((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
+        route.DrawOld((wxGetApp().n_points_routes.get()), this, &(parent->curves), String(""));
         
         
         //here I use DrawOld because Draw cannot handle loxodromes
-        //        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
+        //        route.DrawOld((parent->parent->data->n_points_routes.get()), foreground_color, thickness, dc, this);
         
         if (gamma_phi != 1) {
             //draw smaller ticks -> set route to a loxodrome pointing towards the E and draw it
@@ -1550,7 +1550,7 @@ inline void DrawPanel::PreRender3D(void) {
         
         //add the current meridian that is being drawn (route) to meridians
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
+        route.Draw((wxGetApp().n_points_routes.get()), this, &(parent->curves), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -1599,7 +1599,7 @@ inline void DrawPanel::PreRender3D(void) {
         
         //add the current parallel that is being drawn to parallels
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
+        route.Draw((wxGetApp().n_points_routes.get()), this, &(parent->curves), String(""));
         
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it

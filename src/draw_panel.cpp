@@ -2754,7 +2754,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             position_draw_panel = (parent->parent->screen_position) - draw_panel_origin;
             
             //save the id of the Route highlighted at the preceeding step into highlighted_route_before
-            (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
+            parent->parent->highlighted_route_before.set((parent->parent->highlighted_route_now));
             
             for (parent->parent->highlighted_route_now.set(-1), i = 0; i < (parent->parent->data->route_list).size(); i++) {
                 
@@ -3135,14 +3135,14 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 //set the beckgorund color of the Route in listcontrol_routes in ListFrame to the color of selected items
                 parent->parent->listcontrol_routes->SetItemBackgroundColour(parent->parent->highlighted_route_now.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                 
-                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight) != -1) {
+                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight) != -1) {
                     //the selected Route is related to a Sight
                     
                     //select the related Sight in ListFrame
-                    ((parent->parent)->listcontrol_sights)->SetItemState(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight.get(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                    ((parent->parent)->listcontrol_sights)->SetItemState(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight.get(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                     
                     //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
-                    parent->parent->listcontrol_sights->SetItemBackgroundColour(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                    parent->parent->listcontrol_sights->SetItemBackgroundColour(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                     
                 }
                 
@@ -3433,14 +3433,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 if ((parent->parent->highlighted_route_now) != -1) {
                     //set *route_reference_position_drag_now to the start Position (if the route is a loxodrome / orthodrome) or to the ground Position (if the route is a circle of equal altitutde)
                     
-                    if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
+                    if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).type) == (Route_types[2])) {
                         
-                        (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
+                        (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position));
                         
-                        if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight) != -1) {
+                        if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight) != -1) {
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
                             
-                            (parent->parent->disconnect_sight->sight_id) = (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight.get());
+                            (parent->parent->disconnect_sight->sight_id) = (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight.get());
                             
                             parent->parent->DisconnectAndPromptMessage(event);
                             
@@ -3449,7 +3449,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     }
                     else {
                         
-                        (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
+                        (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position));
                         
                     }
                     
@@ -3572,13 +3572,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                                        (*rotation));
                                 
                                 
-                                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
+                                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).type) == (Route_types[2])) {
                                     
-                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position), String(""));
                                     
                                 }else{
                                     
-                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position), String(""));
                                     
                                 }
                                 
@@ -3590,7 +3590,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         
                         //update the data of the Route under consideration in listcontrol_routes
-                        ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).update_ListControl((parent->parent->highlighted_route_now), parent->parent->listcontrol_routes);
+                        ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).update_ListControl((parent->parent->highlighted_route_now.get()), parent->parent->listcontrol_routes);
                         
                         
                         for (i = 0; i < parent->parent->chart_frames.size(); i++) {
@@ -3598,7 +3598,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                                 (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position)),
+                                                                                                 (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position)),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object)
                                                                                                  );

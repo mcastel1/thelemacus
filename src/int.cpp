@@ -11,10 +11,8 @@
 #include "generic.h"
 
 
-
 //setter: set value equal to i
-//inline
-void Int::set(String name, int i, [[maybe_unused]] String prefix) {
+inline void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
     String new_prefix;
 
@@ -29,7 +27,7 @@ void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
 
 //setter: set the content (not the memory adresses) of *this equal to the content of x
-void Int::set(const Int& x){
+inline void Int::set(const Int& x){
     
     value = (x.value);
     
@@ -37,8 +35,7 @@ void Int::set(const Int& x){
 
 
 //setter: same as Int::set(String name, int i, [[maybe_unused]] String prefix) {, but without printing out anything
-//inline 
-void Int::set(int i) {
+inline void Int::set(int i) {
 
     value = i;
 

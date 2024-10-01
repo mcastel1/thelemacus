@@ -2849,7 +2849,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             
             
             //run over all the Positions, check if the mouse is hovering over one of them, and change the background color of the related Position in listcontrol_positions
-            (parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now);
+            parent->parent->highlighted_position_before.set((parent->parent->highlighted_position_now));
             
             for (parent->parent->highlighted_position_now.set(-1), i = 0; i < parent->parent->data->position_list.size(); i++) {
                 
@@ -3604,7 +3604,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                                                                                  );
                             
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
-                            ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoute(parent->parent->highlighted_route_now);
+                            ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoute(parent->parent->highlighted_route_now.get());
                             
                             
                         }

@@ -23,13 +23,13 @@ template <class E> void DisconnectSight::operator()(E& event) {
     if(
        (sight_id >= 0)
        && (sight_id < (parent->data->sight_list.size()))
-       && (((parent->data->sight_list)[sight_id]).related_route.value >= 0)
-       && (((parent->data->sight_list)[sight_id]).related_route.value < (parent->data->route_list.size()))
+       && (((parent->data->sight_list)[sight_id]).related_route.get() >= 0)
+       && (((parent->data->sight_list)[sight_id]).related_route.get() < (parent->data->route_list.size()))
        ){
         
         int i_route;
         
-        i_route = ((parent->data->sight_list)[sight_id]).related_route.value;
+        i_route = ((parent->data->sight_list)[sight_id]).related_route.get();
         
         //disconnect route and sight
         ((parent->data->sight_list)[sight_id]).related_route.set(-1);

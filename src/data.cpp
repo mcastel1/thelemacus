@@ -500,7 +500,7 @@ bool Data::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix)
     //I link the sight to the route, and the route to the sight
     //create a new route in the respective list
     route_list.resize(route_list.size() + 1);
-    (sight_in->related_route.value) = ((int)(route_list.size())) - 1;
+    (sight_in->related_route.get()) = ((int)(route_list.size())) - 1;
     //push back sight_in into sight_list
     my_push_back(&sight_list, *sight_in);
     (((route_list[route_list.size() - 1]).related_sight).value) = ((int)(sight_list.size())) - 1;
@@ -510,8 +510,8 @@ bool Data::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix)
     check &= ((sight_list[sight_list.size() - 1]).reduce(&(route_list[route_list.size() - 1]), prefix));
 
     //I link the sight to the route, and the route to the sight
-    ((sight_list[sight_list.size() - 1]).related_route.value) = ((int)route_list.size()) - 1;
-    (sight_in->related_route.value) = ((int)route_list.size()) - 1;
+    ((sight_list[sight_list.size() - 1]).related_route.get()) = ((int)route_list.size()) - 1;
+    (sight_in->related_route.get()) = ((int)route_list.size()) - 1;
     (((route_list[route_list.size() - 1]).related_sight).value) = ((int)sight_list.size()) - 1;
 
 
@@ -634,13 +634,13 @@ void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
     //update the linking indexed of sights in accordance with the deletion of the route
     for (j = 0; j < sight_list.size(); j++) {
 
-        if ((((sight_list[j]).related_route.value) != -1) && (((sight_list[j]).related_route.value) >= ((int)i))) {
+        if ((((sight_list[j]).related_route.get()) != -1) && (((sight_list[j]).related_route.get()) >= ((int)i))) {
 
-            if (((sight_list[j]).related_route.value) == ((int)i)) {
-                ((sight_list[j]).related_route.value) = -1;
+            if (((sight_list[j]).related_route.get()) == ((int)i)) {
+                ((sight_list[j]).related_route.get()) = -1;
             }
             else {
-                ((sight_list[j]).related_route.value)--;
+                ((sight_list[j]).related_route.get())--;
             }
 
         }

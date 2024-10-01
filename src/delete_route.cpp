@@ -25,7 +25,7 @@ void DeleteRoute::operator()(wxCommandEvent& event) {
 
     int i_related_sight;
 
-    i_related_sight = ((((f->data)->route_list)[i_route_to_remove]).related_sight).value;
+    i_related_sight = (((f->data)->route_list)[i_route_to_remove]).related_sight.get();
 
     //remove the sight related to the route which I am about to remove from the GUI object listcontrol_sights
     if ((i_related_sight != -1) && (remove_related_sight == Answer('y', String("")))) {

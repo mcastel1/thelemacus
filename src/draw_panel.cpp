@@ -696,7 +696,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
     if (/*If this condition is true, then angle_label.value*K is an integer multiple of one degree*/fabs(rad_to_deg * (angle_label.value) - round(rad_to_deg * (angle_label.value))) < epsilon_double) {
         //in this case, (angle_label.value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
         
-        s << angle_label.deg_to_string(mode, (precision.value));
+        s << angle_label.deg_to_string(mode, (precision.get()));
         
     }
     else {
@@ -705,7 +705,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
         if (deg_to_rad * fabs(rad_to_deg * (angle_label.value) - ((double)round(rad_to_deg * (angle_label.value)))) < delta / 2.0) {
             //in this case, (angle_label.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
             
-            s << angle_label.deg_to_string(mode, (precision.value));
+            s << angle_label.deg_to_string(mode, (precision.get()));
             
         }
         else {

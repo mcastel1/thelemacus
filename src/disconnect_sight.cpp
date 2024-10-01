@@ -47,7 +47,7 @@ template <class E> void DisconnectSight::operator()(E& event) {
             
             bool enable;
             
-            enable = ((((parent->data->sight_list)[parent->listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route).value != -1);
+            enable = ((((parent->data->sight_list)[parent->listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route) != -1);
             
             parent->button_transport_sight->Enable(enable);
             parent->button_disconnect_sight->Enable(enable);

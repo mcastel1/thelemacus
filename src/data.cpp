@@ -475,7 +475,7 @@ void Data::print_routes(bool print_all_routes, String prefix, ostream& ostr) {
     for (i = 0, j = 0; i < (route_list.size()); i++) {
 
         //if print_all_routes = false, I only print routes which are not linked to a sight. This is to avoid doubles: If I print also Routes which are related to a Sight, then when the file to which I am saving will be read again, the code will reduce them and create double Routes identical to the ones already present in the file.
-        if (((((route_list[i]).related_sight).value) == -1) || print_all_routes) {
+        if ((((route_list[i]).related_sight) == -1) || print_all_routes) {
 
             name.str("");
             name << "Route #" << j + 1;
@@ -581,18 +581,18 @@ void Data::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unu
     cout << prefix.value << "Sight removed.\n";
 
 
-    if ((i_related_route.value) != -1) {
+    if (i_related_route != -1) {
 
         if (remove_related_route == Answer('y', prefix)) {
             //the related route must be removed -> I remove it
 
-            remove_route((i_related_route.value), Answer('n', prefix), prefix);
+            remove_route((i_related_route.get()), Answer('n', prefix), prefix);
 
         }
         else {
             //the related route must not be removed: given that its related sight has been deleted, I set its related_sight.get() to -1
 
-            (route_list[i_related_route.value]).related_sight.set(-1);
+            (route_list[i_related_route.get()]).related_sight.set(-1);
 
         }
 

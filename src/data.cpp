@@ -565,7 +565,7 @@ void Data::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unu
     //update the linking indexed of routes in accordance with the deletion of the sight
     for (j = 0; j < route_list.size(); j++) {
 
-        if ((((route_list[j]).related_sight) != -1) && ((((route_list[j]).related_sight).value) >= ((int)i))) {
+        if ((((route_list[j]).related_sight) != -1) && (((route_list[j]).related_sight) >= ((int)i))) {
 
             if (((route_list[j]).related_sight) == ((int)i)) {
                 (route_list[j]).related_sight.set(-1);

@@ -99,42 +99,53 @@ String Int::to_string_spaces(void){
 }
 
 
-bool Int::operator == (const Int& i) {
+inline bool Int::operator == (const Int& i) {
 
     return (value == (i.value));
 
 }
 
-bool Int::operator != (const Int& i) {
+
+inline bool Int::operator != (const Int& i) {
 
     return (!((*this) == i));
 
 }
 
-bool Int::operator == (const int& i) {
+
+inline bool Int::operator == (const int& i) {
 
     return (value == i);
 
 }
 
-bool Int::operator != (const int& i) {
+
+inline bool Int::operator != (const int& i) {
 
     return (!((*this) == i));
 
 }
 
-bool Int::operator > (const Int& i) {
+
+inline bool Int::operator > (const Int& i) {
 
     return(value > (i.value));
 
 }
 
-bool Int::operator > (const int& i) {
+
+inline bool Int::operator > (const int& i) {
 
     return(value > i);
 
 }
 
+
+inline bool Int::operator >= (const int& i) {
+
+    return(value >= i);
+
+}
 
 
 //reads an Int from File file, which must be already open, and it search the file from the beginning if search_entire_stream = true, does not search the file from the beginning otherwise. Writes the result in *this

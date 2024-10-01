@@ -652,7 +652,7 @@ void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
 
     if (((i_related_sight.value) != -1) && (remove_related_sight == Answer('y', prefix))) {
 
-        remove_sight(i_related_sight.value, Answer('n', prefix), prefix);
+        remove_sight(i_related_sight.get(), Answer('n', prefix), prefix);
 
     }
 

@@ -1093,7 +1093,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.GetWidth())) / ((double)size_label_horizontal)));
     n_intervals_ticks = min(
-                            (unsigned int)(wxGetApp().n_intervals_ticks_preferred.value),
+                            (unsigned int)(wxGetApp().n_intervals_ticks_preferred.get()),
                             n_intervals_ticks_max
                             );
     
@@ -1170,7 +1170,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //compute labels on parallels
     for (first_label = true,
          //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
+         label_precision.set(((gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))))),
          ((q.phi).value) = (phi_start.value),
          (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
          ((q.phi).value) < (phi_end.value);
@@ -1184,7 +1184,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //compute labels on meridians
     for (first_label = true,
          //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_lambda == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))),
+         label_precision.set(((gamma_lambda == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))))),
          (q.lambda.value) = (lambda_start.value),
          (q.phi) = (*(parent->phi_min)) + epsilon_double;
          (q.lambda.value) < (lambda_end.value);

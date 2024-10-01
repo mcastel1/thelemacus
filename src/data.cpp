@@ -571,7 +571,7 @@ void Data::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unu
                 (route_list[j]).related_sight.set(-1);
             }
             else {
-                ((route_list[j]).related_sight.value)--;
+                (route_list[j]).related_sight.set( (route_list[j]).related_sight.get() - 1 );
             }
 
         }
@@ -640,7 +640,7 @@ void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
                 (sight_list[j]).related_route.set(-1);
             }
             else {
-                ((sight_list[j]).related_route.get())--;
+                (sight_list[j]).related_route.set( (sight_list[j]).related_route.get()-1 );
             }
 
         }

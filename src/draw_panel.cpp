@@ -1348,7 +1348,7 @@ inline void DrawPanel::PreRender3D(void) {
                                  (int)(((double)(size_chart.GetHeight())) * (1.0 - (length_plot_area_over_length_chart.value)) / 2.0));
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
-    n_intervals_ticks = (unsigned int)(wxGetApp().n_intervals_ticks_preferred.value);
+    n_intervals_ticks = (unsigned int)(wxGetApp().n_intervals_ticks_preferred.get());
     
     
     //here I set up things to plot paralles and meridians in Render3D
@@ -1511,7 +1511,7 @@ inline void DrawPanel::PreRender3D(void) {
     //compute labels on parallels
     for (first_label = true,
          //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
+         label_precision.set(((gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))))),
          (q.phi.value) = floor((circle_observer->reference_position->phi.normalize_pm_pi_ret().value - circle_observer->omega.value) / delta_phi) * delta_phi,
          (q.lambda) = lambda_middle;
          (q.phi.value) < (circle_observer->reference_position->phi.normalize_pm_pi_ret().value) + (circle_observer->omega.value);
@@ -1525,7 +1525,7 @@ inline void DrawPanel::PreRender3D(void) {
     //compute labels on meridians
     for (first_label = true,
          //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_lambda == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))),
+         label_precision.set(((gamma_lambda == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))))),
          ((q.lambda).value) = (lambda_start.value),
          (q.phi) = phi_middle;
          ((q.lambda).value) < (lambda_end.value);
@@ -1568,7 +1568,7 @@ inline void DrawPanel::PreRender3D(void) {
                  (route.reference_position->lambda.value) - (lambda_saved.value) < delta_lambda;
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
+                route.Draw((wxGetApp().n_points_minor_ticks.get()), this, &(parent->curves), String(""));
                 
             }
             
@@ -1615,7 +1615,7 @@ inline void DrawPanel::PreRender3D(void) {
                  (route.reference_position->phi.value) += delta_phi_minor
                  ) {
                      
-                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
+                     route.Draw((wxGetApp().n_points_minor_ticks.get()), this, &(parent->curves), String(""));
                      
                  }
             
@@ -2763,8 +2763,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 (parent->parent->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
                 //when only a fraction of the Routes is Drawn, this will create a problem ---
                 
-                if ((((parent->parent->data->route_list)[i]).related_sight).value != -1) {
-                    (parent->parent->listcontrol_sights)->SetItemBackgroundColour((((parent->parent->data->route_list)[i]).related_sight).value, wxGetApp().background_color);
+                if ((((parent->parent->data->route_list)[i]).related_sight) != -1) {
+                    (parent->parent->listcontrol_sights)->SetItemBackgroundColour(((parent->parent->data->route_list)[i]).related_sight.get(), wxGetApp().background_color);
                 }
                 
                 //run over all Routes and check whether the mouse is hovering over one of them
@@ -3135,14 +3135,14 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 //set the beckgorund color of the Route in listcontrol_routes in ListFrame to the color of selected items
                 parent->parent->listcontrol_routes->SetItemBackgroundColour(parent->parent->highlighted_route_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                 
-                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value != -1) {
+                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight) != -1) {
                     //the selected Route is related to a Sight
                     
                     //select the related Sight in ListFrame
-                    ((parent->parent)->listcontrol_sights)->SetItemState((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                    ((parent->parent)->listcontrol_sights)->SetItemState(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight.get(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                     
                     //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
-                    parent->parent->listcontrol_sights->SetItemBackgroundColour((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                    parent->parent->listcontrol_sights->SetItemBackgroundColour(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                     
                 }
                 

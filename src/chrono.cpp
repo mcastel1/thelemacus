@@ -191,7 +191,7 @@ string Chrono::to_string(unsigned int precision, bool time_zone) {
     if (s < 10.0) { output << 0; }
     output << s;
     if (time_zone) {
-        output << " UTC" << (wxGetApp().time_zone > 0 ? "+" : "-") << fabs(wxGetApp().time_zone.value);
+        output << " UTC" << (wxGetApp().time_zone > 0 ? "+" : "-") << fabs(wxGetApp().time_zone.get());
     }
 
     return (output.str().c_str());

@@ -96,7 +96,7 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
         //the animation transport starts here (only if the parent ChartFrame is not in idling mode)
         (MotionHandler<F>::timer)->Start(
                      /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
-                     (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
+                     (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.get()) - 1)) * 1000.0,
                      wxTIMER_CONTINUOUS);
         
     }
@@ -115,7 +115,7 @@ template void ChartTransportHandler<HighlightObject<ListFrame, UnsetIdling<ListF
 template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
     
-    if(((MotionHandler<F>::t) < (wxGetApp().n_animation_steps.value))) {
+    if(((MotionHandler<F>::t) < (wxGetApp().n_animation_steps.get()))) {
         //the time parameter is undedr its maximum value
 
         if((MotionHandler<F>::t) == 0) {
@@ -189,7 +189,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             (MotionHandler<F>::transporting_route_temp).length->set(
                                                                     String(""),
                                                                     ((MotionHandler<F>::transporting_route).length->value) *
-                                                                    (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)))))
+                                                                    (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.get())))))
                                                                     ,
                                                                     String(""));
             
@@ -208,7 +208,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     
                     
                     //update projection_size
-                    projection_size = projection_size_start + (projection_size_end - projection_size_start) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
+                    projection_size = projection_size_start + (projection_size_end - projection_size_start) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.get()) + 1))));
 
                     
                     //shift q_center to the NE and to the SW by projection_size/2 -> these will be the updated values of p_NE and p_SE
@@ -238,7 +238,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     //                    (*(chart_frame->draw_panel->circle_observer->reference_position)) = (*((MotionHandler<F>::transporting_route_temp).end));
                     chart_frame->draw_panel->circle_observer->reference_position->set((*((MotionHandler<F>::transporting_route_temp).end)));
 
-                    chart_frame->draw_panel->circle_observer->omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
+                    chart_frame->draw_panel->circle_observer->omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.get()) + 1))));
                     
                     
                     break;

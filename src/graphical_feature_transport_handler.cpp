@@ -44,7 +44,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
     //the animation transport starts here
     (MotionHandler<F>::timer)->Start(
         /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
-        (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
+        (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.get()) - 1)) * 1000.0,
         wxTIMER_CONTINUOUS);
     
 }
@@ -58,7 +58,7 @@ template void GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route
 //this method iterates the animation
 template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 
-    if(((MotionHandler<F>::t) < (wxGetApp().n_animation_steps.value))) {
+    if(((MotionHandler<F>::t) < (wxGetApp().n_animation_steps.get()))) {
         //the time parameter is undedr its maximum value
 
         if((MotionHandler<F>::t) == 0) {
@@ -128,7 +128,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
             (MotionHandler<F>::transporting_route_temp).length->set(
                                                                     String(""),
                                                                     ((MotionHandler<F>::transporting_route).length->value) *
-                                                                    (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))))
+                                                                    (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.get()) + 1))))
                                                                     ,
                                                                     String(""));
 

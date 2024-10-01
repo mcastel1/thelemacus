@@ -571,7 +571,7 @@ void Data::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unu
                 (route_list[j]).related_sight.set(-1);
             }
             else {
-                (((route_list[j]).related_sight).value)--;
+                ((route_list[j]).related_sight.value)--;
             }
 
         }

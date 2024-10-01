@@ -1383,7 +1383,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
             if ((highlighted_route_now != wxNOT_FOUND) && enable_highlight) {
                 //the mouse is hovering over an element of listcontrool_routes -> highlight it and the related sight in listcontrol_sights, and set  a white background in all other leements in listcontrol_routes and listcontorl_sights
                 
-                j = ((((data->route_list)[highlighted_route_now]).related_sight).value);
+                j = (((data->route_list)[highlighted_route_now]).related_sight.get());
                 
                 for (i = 0; i < (listcontrol_routes->GetItemCount()); i++) {
                     

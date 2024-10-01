@@ -565,10 +565,10 @@ void Data::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unu
     //update the linking indexed of routes in accordance with the deletion of the sight
     for (j = 0; j < route_list.size(); j++) {
 
-        if (((((route_list[j]).related_sight).value) != -1) && ((((route_list[j]).related_sight).value) >= ((int)i))) {
+        if ((((route_list[j]).related_sight) != -1) && ((((route_list[j]).related_sight).value) >= ((int)i))) {
 
-            if ((((route_list[j]).related_sight).value) == ((int)i)) {
-                (((route_list[j]).related_sight).value) = -1;
+            if (((route_list[j]).related_sight) == ((int)i)) {
+                (route_list[j]).related_sight.set(-1);
             }
             else {
                 (((route_list[j]).related_sight).value)--;
@@ -637,7 +637,7 @@ void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
         if ((((sight_list[j]).related_route.get()) != -1) && (((sight_list[j]).related_route.get()) >= ((int)i))) {
 
             if (((sight_list[j]).related_route.get()) == ((int)i)) {
-                ((sight_list[j]).related_route.get()) = -1;
+                (sight_list[j]).related_route.set(-1);
             }
             else {
                 ((sight_list[j]).related_route.get())--;
@@ -744,8 +744,8 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
                 cout << new_prefix.value << "Route added as route #" << route_list.size() << ".\n";
 
                 //I link the sight to the route, and the route to the sight
-                ((route_list[route_list.size() - 1].related_sight).value) = ((int)(sight_list.size())) - 1;
-                ((sight_list[sight_list.size() - 1].related_route).value) = ((int)(route_list.size())) - 1;
+                (route_list[route_list.size() - 1].related_sight.set(((int)(sight_list.size())) - 1));
+                (sight_list[sight_list.size() - 1].related_route.set(((int)(route_list.size())) - 1));
 
             }
 

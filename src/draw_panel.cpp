@@ -715,7 +715,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
             if (ceil((rad_to_deg * ((max.normalize_pm_pi_ret()).value))) - floor((rad_to_deg * ((min.normalize_pm_pi_ret()).value))) != 1) {
                 //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                 
-                s << angle_label.min_to_string(mode, (precision.value));
+                s << angle_label.min_to_string(mode, (precision.get()));
                 
             }
             else {
@@ -723,7 +723,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
                 
                 if (first_label) {
                     
-                    s << angle_label.to_string(mode, (precision.value), false);
+                    s << angle_label.to_string(mode, (precision.get()), false);
                     
                 }
                 else {

@@ -983,7 +983,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
     
     delta_phi = deg_to_rad / ((double)gamma_phi);
-    while (((wxGetApp().n_intervals_ticks_preferred).value) * delta_phi < phi_span) {
+    while ((wxGetApp().n_intervals_ticks_preferred.get()) * delta_phi < phi_span) {
         if (delta_phi == deg_to_rad / ((double)gamma_phi)) { delta_phi += deg_to_rad * 4.0 / ((double)gamma_phi); }
         else { delta_phi += deg_to_rad * 5.0 / ((double)gamma_phi); }
     }

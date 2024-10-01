@@ -55,7 +55,7 @@ Sight::Sight(void) {
     //initiazlie the limb to a 'n/a' value
     limb.value = 'n';
     atmosphere->initialize();
-    (related_route.value) = -1;
+    related_route.set(-1);
 
 }
 
@@ -218,7 +218,7 @@ void Sight::update_ListControl(long i, wxListCtrl* listcontrol) {
 
     listcontrol->SetItem(i, j++, wxString(label.value));
 
-    if ((related_route.value) == -1) {
+    if (related_route == -1) {
         //if the sight is not connected to a route, I leave the column field empty
 
         listcontrol->SetItem(i, j++, wxString(""));
@@ -227,7 +227,7 @@ void Sight::update_ListControl(long i, wxListCtrl* listcontrol) {
     else {
         //if the sight is connected to a route, I write the # of the related route in the column field
 
-        listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (related_route.value) + 1));
+        listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (related_route.get()) + 1));
 
     }
 
@@ -321,7 +321,7 @@ template<class S> bool Sight::read_from_stream([[maybe_unused]] String name, S* 
     }
 
     //given that the sight is not yet related to a route, I set
-    (related_route.value) = -1;
+    related_route.set(-1);
 
     if (!check) {
         cout << prefix.value << RED << "Error reading sight!\n" << RESET;
@@ -418,8 +418,8 @@ void Sight::print(String name, String prefix, ostream& ostr) {
         
         label.print(String("label"), true, new_prefix, ostr);
         
-        if (((related_route.value) != -1) && (&ostr == &cout)) {
-            ostr << new_prefix.value << "# of related route = " << (related_route.value) + 1 << "\n";
+        if ((related_route != -1) && (&ostr == &cout)) {
+            ostr << new_prefix.value << "# of related route = " << (related_route.get()) + 1 << "\n";
         }
         
     }

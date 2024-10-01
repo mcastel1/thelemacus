@@ -622,7 +622,7 @@ void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
     Int i_related_sight;
     stringstream name;
 
-    (i_related_sight.value) = (((route_list[i]).related_sight).value);
+    (i_related_sight.value) = ((route_list[i]).related_sight.get());
 
     name.str("");
     name << "Route to be removed: #" << i + 1;

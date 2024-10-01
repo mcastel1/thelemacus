@@ -1538,7 +1538,7 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 
 
     //when a sight is read from file, it is not yet linked to any route, thus I set
-    (related_sight.value) = -1;
+    related_sight.set(-1);
 
 }
 

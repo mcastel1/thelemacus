@@ -12,7 +12,7 @@
 
 
 //setter: set value equal to i
-inline void Int::set(String name, int i, [[maybe_unused]] String prefix) {
+void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
     String new_prefix;
 
@@ -27,7 +27,7 @@ inline void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
 
 //setter: set the content (not the memory adresses) of *this equal to the content of x
-inline void Int::set(const Int& x){
+void Int::set(const Int& x){
     
     value = (x.value);
     
@@ -35,7 +35,7 @@ inline void Int::set(const Int& x){
 
 
 //setter: same as Int::set(String name, int i, [[maybe_unused]] String prefix) {, but without printing out anything
-inline void Int::set(int i) {
+void Int::set(int i) {
 
     value = i;
 
@@ -43,7 +43,7 @@ inline void Int::set(int i) {
 
 
 //getter
-inline int Int::get(void){
+int Int::get(void){
     
     return value;
     
@@ -96,49 +96,49 @@ String Int::to_string_spaces(void){
 }
 
 
-inline bool Int::operator == (const Int& i) {
+bool Int::operator == (const Int& i) {
 
     return (value == (i.value));
 
 }
 
 
-inline bool Int::operator != (const Int& i) {
+bool Int::operator != (const Int& i) {
 
     return (!((*this) == i));
 
 }
 
 
-inline bool Int::operator == (const int& i) {
+bool Int::operator == (const int& i) {
 
     return (value == i);
 
 }
 
 
-inline bool Int::operator != (const int& i) {
+bool Int::operator != (const int& i) {
 
     return (!((*this) == i));
 
 }
 
 
-inline bool Int::operator > (const Int& i) {
+bool Int::operator > (const Int& i) {
 
     return(value > (i.value));
 
 }
 
 
-inline bool Int::operator > (const int& i) {
+bool Int::operator > (const int& i) {
 
     return(value > i);
 
 }
 
 
-inline bool Int::operator >= (const int& i) {
+bool Int::operator >= (const int& i) {
 
     return(value >= i);
 

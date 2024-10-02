@@ -34,7 +34,6 @@ template class CloseFrame<MessageFrame<UnsetIdling<PositionFrame>>>;
 template class CloseFrame<MessageFrame<UnsetIdling<DrawPanel>>>;
 template class CloseFrame<MessageFrame<UnsetIdling<ChartFrame>>>;
 template class CloseFrame<QuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>>;
-template class CloseFrame<QuestionFrame<void, ShowAll, CloseApp, CloseApp>>;
 template class CloseFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>>;
 template class CloseFrame<QuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 template class CloseFrame<QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>;
@@ -78,7 +77,6 @@ template void CloseFrame<MessageFrame<UnsetIdling<DrawPanel>>>::operator()<wxCom
 template void CloseFrame<MessageFrame<UnsetIdling<ChartFrame>>>::operator()<wxKeyEvent>(wxKeyEvent&);
 template void CloseFrame<MessageFrame<UnsetIdling<ChartFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<QuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
-template void CloseFrame<QuestionFrame<void, ShowAll, CloseApp, CloseApp>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<QuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>::operator()<wxCommandEvent>(wxCommandEvent&);

@@ -43,7 +43,6 @@ template class DestroyFrame<QuestionFrame<ListFrame, ConfirmTransport<ListFrame>
 template class DestroyFrame<QuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<ListFrame, AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
-template class DestroyFrame<QuestionFrame<void, ShowAll, CloseApp, CloseApp>>;
 template class DestroyFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>>;
 
@@ -72,7 +71,7 @@ template void DestroyFrame<QuestionFrame<ListFrame, ExistingRoute, NewRoute, Uns
 template void DestroyFrame<QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
-template void DestroyFrame<QuestionFrame<void, ShowAll, CloseApp, CloseApp>>::operator()();
+//template void DestroyFrame<QuestionFrame<void, ShowAll, CloseApp, CloseApp>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>::operator()();

@@ -49,7 +49,7 @@ public:
     F_ABORT* f_abort;
     String string_a, string_b;
     
-    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, F_ABORT*, bool, bool, bool, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
+    QuestionFrame(T*, F_A*, String, F_B*, String, F_ABORT*, bool, bool, bool, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
     template<class E> void KeyDown(E&);
     
 };

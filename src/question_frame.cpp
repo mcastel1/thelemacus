@@ -75,7 +75,9 @@ template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B
     button_b->Bind(wxEVT_BUTTON, *close_frame);
     
     if(parent){
-        button_a->Bind(wxEVT_BUTTON, *(parent->set_idling));
+        //FIX THIS LATER: here bind the esc button to parent->unset_idling
+        button_a->Bind(wxEVT_BUTTON, *(parent->unset_idling));
+        button_b->Bind(wxEVT_BUTTON, *(parent->unset_idling));
     }
 
 

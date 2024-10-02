@@ -73,6 +73,11 @@ template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B
     button_b = new wxButton(panel, wxID_ANY, string_b.value, wxDefaultPosition, wxDefaultSize);
     button_b->Bind(wxEVT_BUTTON, *f_b);
     button_b->Bind(wxEVT_BUTTON, *close_frame);
+    
+    if(parent){
+        button_a->Bind(wxEVT_BUTTON, *(parent->set_idling));
+    }
+
 
     panel->Bind(wxEVT_KEY_DOWN, &QuestionFrame::KeyDown<wxKeyEvent>, this);
 
@@ -112,7 +117,6 @@ template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B
 
 }
 
-template class QuestionFrame<void, ShowAll, CloseApp, CloseApp>;
 template class QuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>;
@@ -125,6 +129,7 @@ template class QuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, 
 template class QuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>;
 template class QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>;
+template class QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>;
 
 
 //if the user presses return/escape, I call f_a / f_b

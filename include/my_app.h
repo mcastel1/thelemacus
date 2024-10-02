@@ -23,6 +23,7 @@
 #include "int.h"
 #include "length.h"
 #include "list_frame.h"
+#include "set_idling.h"
 
 using namespace std;
 
@@ -56,9 +57,11 @@ public:
     Angle /*the minimal Angle at which two Routes must cross for them to be used to compute the astronomical Position*/ min_crossing_angle, /*when animating and zooming onto a Position, the size of the chart at the end of the zoom will be enough to encompass a circle of equal altitude with omega = angle_zoom_to_position*/ angle_zoom_to_position;
     String degree_symbol;
 
+    //a functor to set/unset idling mode in *this
+    SetIdling<MyApp>* set_idling;
     wxTimer* timer;
     //the disclaimer window shown at the beginning of the app
-    QuestionFrame<void, ShowAll, CloseApp, CloseApp>* disclaimer;
+    QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>* disclaimer;
     //type of the Boost library which contains the local time, intended as the time of the machine where the app is running
     boost::posix_time::ptime utc_time;
     wxSystemSettings* settings;

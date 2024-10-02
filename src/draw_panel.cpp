@@ -362,7 +362,7 @@ inline void DrawPanel::RenderRoutes(wxDC& dc, const wxColor& foreground_color) {
     for (i = 0, color_id = 0; i < (routes.size()); i++) {
         
         //set the route thickness and pen
-        if (i == (parent->parent->highlighted_route_now)) {
+        if (i == (parent->parent->highlighted_route_now.get())) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = thickness;
         }
@@ -516,7 +516,7 @@ inline void DrawPanel::RenderPositions(wxDC& dc, const wxColor& foreground_color
     for (i = 0, color_id = 0; i < (points_position_list.size()); i++) {
         
         //set thickness and pen
-        if (i == (parent->parent->highlighted_position_now)) {
+        if (i == (parent->parent->highlighted_position_now.get())) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = thickness;
         }
@@ -2754,9 +2754,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             position_draw_panel = (parent->parent->screen_position) - draw_panel_origin;
             
             //save the id of the Route highlighted at the preceeding step into highlighted_route_before
-            (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
+            parent->parent->highlighted_route_before.set((parent->parent->highlighted_route_now));
             
-            for ((parent->parent->highlighted_route_now) = -1, i = 0; i < (parent->parent->data->route_list).size(); i++) {
+            for (parent->parent->highlighted_route_now.set(-1), i = 0; i < (parent->parent->data->route_list).size(); i++) {
                 
                 //set the backgorund color of the Route in listcontrol_routes and of its related sight to white
                 //when only a fraction of the Routes is Drawn, this will create a problem ---
@@ -2797,7 +2797,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                             
                             
                             //set the highlighted route to i, so as to use highlighted_route in other functions
-                            (parent->parent->highlighted_route_now) = i;
+                            parent->parent->highlighted_route_now.set(i);
                             
                             parent->parent->listcontrol_routes->EnsureVisible(i);
                             if ((((parent->parent->data->route_list)[i]).related_sight.get()) != -1) {
@@ -2808,16 +2808,16 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                             (parent->parent->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                             if ((((parent->parent->data->route_list)[i]).related_sight.get()) != -1) {
                                 
-                                (parent->parent->highlighted_sight_now) = (((parent->parent->data->route_list)[i]).related_sight.get());
+                                parent->parent->highlighted_sight_now.set(((parent->parent->data->route_list)[i]).related_sight);
                                 
                                 parent->parent->listcontrol_sights->SetItemBackgroundColour(
-                                                                                            (parent->parent->highlighted_sight_now),
+                                                                                            (parent->parent->highlighted_sight_now.get()),
                                                                                             (wxGetApp().color_selected_item)
                                                                                             );
                             }
                             else {
                                 
-                                (parent->parent->highlighted_sight_now) = -1;
+                                parent->parent->highlighted_sight_now.set(-1);
                                 
                             }
                             
@@ -2849,9 +2849,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             
             
             //run over all the Positions, check if the mouse is hovering over one of them, and change the background color of the related Position in listcontrol_positions
-            (parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now);
+            parent->parent->highlighted_position_before.set((parent->parent->highlighted_position_now));
             
-            for ((parent->parent->highlighted_position_now) = -1, i = 0; i < parent->parent->data->position_list.size(); i++) {
+            for (parent->parent->highlighted_position_now.set(-1), i = 0; i < parent->parent->data->position_list.size(); i++) {
                 
                 GeoToScreen((parent->parent->data->position_list)[i], &q);
                 
@@ -2860,7 +2860,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                     //the mouse is over a position
                     
                     //sets the highlighted position to i, so as to use highlighted_position_now in other functions
-                    (parent->parent->highlighted_position_now) = i;
+                    parent->parent->highlighted_position_now.set(i);
                     
                     (parent->parent->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                     parent->parent->listcontrol_positions->EnsureVisible(i);
@@ -3064,7 +3064,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                     if ((parent->parent->highlighted_route_now) != -1) {
                         //I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
                         
-                        (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position)) = (*route_reference_position_drag_start);
+                        (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position)) = (*route_reference_position_drag_start);
                         
                         TabulateRoutes();
                         Refresh();
@@ -3078,11 +3078,11 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                         // I am dragging a Position: I restore the position under consideration to its value at the beginning of the drag
                         
                         //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
-                        (this->*ScreenToGeo)(position_start_drag, &((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]));
+                        (this->*ScreenToGeo)(position_start_drag, &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())]));
                         
                         
                         //update the coordinates of the Position under consideration in listcontrol_positions
-                        ((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]).update_ListControl(((parent->parent)->highlighted_position_now), (parent->parent)->listcontrol_positions);
+                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())]).update_ListControl((parent->parent->highlighted_position_now.get()), (parent->parent)->listcontrol_positions);
                         
                         //given that the position under consideration has changed, I re-pain the chart
                         Refresh();
@@ -3109,10 +3109,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 parent->parent->SetFocus();  // focus on the ListFrame
                 
                 //select the highlighted position in ListFrame
-                parent->parent->listcontrol_positions->SetItemState((parent->parent)->highlighted_position_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                parent->parent->listcontrol_positions->SetItemState(parent->parent->highlighted_position_now.get(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                 
                 //set the beckgorund color of the Position in listcontrol_positions in ListFrame to the color of selected items
-                parent->parent->listcontrol_positions->SetItemBackgroundColour((parent->parent)->highlighted_position_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                parent->parent->listcontrol_positions->SetItemBackgroundColour(parent->parent->highlighted_position_now.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                 
             }
             
@@ -3130,19 +3130,19 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 parent->parent->SetFocus();  // focus on the ListFrame
                 
                 //select the highlighted Route in ListFrame
-                parent->parent->listcontrol_routes->SetItemState((parent->parent)->highlighted_route_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                parent->parent->listcontrol_routes->SetItemState(parent->parent->highlighted_route_now.get(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                 
                 //set the beckgorund color of the Route in listcontrol_routes in ListFrame to the color of selected items
-                parent->parent->listcontrol_routes->SetItemBackgroundColour(parent->parent->highlighted_route_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                parent->parent->listcontrol_routes->SetItemBackgroundColour(parent->parent->highlighted_route_now.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                 
-                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight) != -1) {
+                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight) != -1) {
                     //the selected Route is related to a Sight
                     
                     //select the related Sight in ListFrame
-                    ((parent->parent)->listcontrol_sights)->SetItemState(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight.get(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                    ((parent->parent)->listcontrol_sights)->SetItemState(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight.get(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                     
                     //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
-                    parent->parent->listcontrol_sights->SetItemBackgroundColour(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                    parent->parent->listcontrol_sights->SetItemBackgroundColour(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                     
                 }
                 
@@ -3433,14 +3433,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 if ((parent->parent->highlighted_route_now) != -1) {
                     //set *route_reference_position_drag_now to the start Position (if the route is a loxodrome / orthodrome) or to the ground Position (if the route is a circle of equal altitutde)
                     
-                    if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
+                    if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).type) == (Route_types[2])) {
                         
-                        (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
+                        (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position));
                         
-                        if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight) != -1) {
+                        if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight) != -1) {
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
                             
-                            (parent->parent->disconnect_sight->sight_id) = (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight.get());
+                            (parent->parent->disconnect_sight->sight_id) = (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight.get());
                             
                             parent->parent->DisconnectAndPromptMessage(event);
                             
@@ -3449,7 +3449,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     }
                     else {
                         
-                        (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
+                        (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position));
                         
                     }
                     
@@ -3557,7 +3557,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 GeoToDrawPanel((*route_reference_position_drag_start), &p, false);
                                 
                                 //this command is the same for all types of Routes
-                                DrawPanelToGeo(p + (position_now_drag - position_start_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
+                                DrawPanelToGeo(p + (position_now_drag - position_start_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position));
                                 
                                 break;
                                 
@@ -3572,13 +3572,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                                        (*rotation));
                                 
                                 
-                                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
+                                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).type) == (Route_types[2])) {
                                     
-                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position), String(""));
                                     
                                 }else{
                                     
-                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position), String(""));
                                     
                                 }
                                 
@@ -3590,7 +3590,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         
                         //update the data of the Route under consideration in listcontrol_routes
-                        ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).update_ListControl((parent->parent->highlighted_route_now), parent->parent->listcontrol_routes);
+                        ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).update_ListControl((parent->parent->highlighted_route_now.get()), parent->parent->listcontrol_routes);
                         
                         
                         for (i = 0; i < parent->parent->chart_frames.size(); i++) {
@@ -3598,13 +3598,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                                 (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position)),
+                                                                                                 (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position)),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object)
                                                                                                  );
                             
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
-                            ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoute(parent->parent->highlighted_route_now);
+                            ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoute(parent->parent->highlighted_route_now.get());
                             
                             
                         }
@@ -3622,7 +3622,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 
                                 
                                 //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
-                                (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]));
+                                (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now.get())]));
                                 
                                 break;
                                 
@@ -3630,12 +3630,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 
                             case 1: {
                                 
-                                //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                                //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now.get())]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                                 (*rotation_now_drag) =
                                 (rotation->inverse()) *
                                 rotation_start_end(position_start_drag, position_now_drag) *
                                 (*rotation);
-                                geo_start_drag->rotate(String(""), (*rotation_now_drag), &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]), String(""));
+                                geo_start_drag->rotate(String(""), (*rotation_now_drag), &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())]), String(""));
                                 
                                 break;
                                 
@@ -3646,7 +3646,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         
                         //update the data of the Position under consideration in listcontrol_positions
-                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]).update_ListControl((parent->parent->highlighted_position_now), parent->parent->listcontrol_positions);
+                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())]).update_ListControl((parent->parent->highlighted_position_now.get()), parent->parent->listcontrol_positions);
                         
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
@@ -3654,13 +3654,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                                 (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
+                                                                                                 (parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())],
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object)
                                                                                                  );
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
-                            ((parent->parent->chart_frames)[i])->draw_panel->TabulatePosition(parent->parent->highlighted_position_now);
+                            ((parent->parent->chart_frames)[i])->draw_panel->TabulatePosition(parent->parent->highlighted_position_now.get());
                             
                             
                         }

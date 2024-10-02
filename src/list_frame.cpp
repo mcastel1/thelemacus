@@ -191,8 +191,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         }
         
         //no positions nor routes are highlighted when ListFrame is constructed
-        highlighted_route_now = -1;
-        highlighted_position_now = -1;
+        highlighted_route_now.set(-1);
+        highlighted_position_now.set(-1);
         
         menu_bar = new wxMenuBar;
         menu_app = new wxMenu;
@@ -1175,7 +1175,7 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
     transported_object_type = String("route");
     
     //I store the # of the selected Route into i_object_to_transport
-    i_object_to_transport = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+    i_object_to_transport.set(((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
     
     //here set i_object_to_transport to the currently selected Route
     
@@ -1309,7 +1309,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
         MousePositionOnListControl(listcontrol_positions, &highlighted_position_now);
         MousePositionOnListControl(listcontrol_routes, &highlighted_route_now);
         
-        if ((highlighted_sight_now == wxNOT_FOUND) && (highlighted_position_now == wxNOT_FOUND) && (highlighted_route_now == wxNOT_FOUND)) {
+        if (((highlighted_sight_now.get()) == wxNOT_FOUND) && (highlighted_position_now == wxNOT_FOUND) && (highlighted_route_now == wxNOT_FOUND)) {
             //the mouse is not hovering over an element in listcontrol_sights nor listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights
             
             //set the beckgorund color of the Routes in listcontrol_sights and listcontrol_routes  and the background color of the Positions in listcontrol_positions to white
@@ -1330,16 +1330,16 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
             if ((highlighted_sight_now != wxNOT_FOUND) && enable_highlight) {
                 // the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
                 
-                highlighted_route_now = (((data->sight_list)[highlighted_sight_now]).related_route.get());
+                highlighted_route_now.set((((data->sight_list)[highlighted_sight_now.get()]).related_route.get()));
                 
                 for (i = 0; i < (listcontrol_sights->GetItemCount()); i++) {
                     
-                    if (i == highlighted_sight_now) {
+                    if (i == (highlighted_sight_now.get())) {
                         
                         //set the beckgorund color of the sight in listcontrol_sights and of its related route to a highlight color
                         listcontrol_sights->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-                        if ((highlighted_route_now != -1) && ((listcontrol_routes->GetItemCount()) > highlighted_route_now)) {
-                            listcontrol_routes->SetItemBackgroundColour(highlighted_route_now, (wxGetApp().color_selected_item));
+                        if ((highlighted_route_now != -1) && ((listcontrol_routes->GetItemCount()) > highlighted_route_now.get())) {
+                            listcontrol_routes->SetItemBackgroundColour(highlighted_route_now.get(), (wxGetApp().color_selected_item));
                         }
                         
                     }
@@ -1363,7 +1363,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
                 
                 for (i = 0; i < (listcontrol_positions->GetItemCount()); i++) {
                     
-                    if (i == highlighted_position_now) {
+                    if (highlighted_position_now == i) {
                         
                         //set the beckgorund color of the Position in listcontrol_positions to a highlight color
                         listcontrol_positions->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
@@ -1383,11 +1383,11 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
             if ((highlighted_route_now != wxNOT_FOUND) && enable_highlight) {
                 //the mouse is hovering over an element of listcontrool_routes -> highlight it and the related sight in listcontrol_sights, and set  a white background in all other leements in listcontrol_routes and listcontorl_sights
                 
-                j = (((data->route_list)[highlighted_route_now]).related_sight.get());
+                j = (((data->route_list)[highlighted_route_now.get()]).related_sight.get());
                 
                 for (i = 0; i < (listcontrol_routes->GetItemCount()); i++) {
                     
-                    if (i == highlighted_route_now) {
+                    if (highlighted_route_now == i) {
                         
                         //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                         listcontrol_routes->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));

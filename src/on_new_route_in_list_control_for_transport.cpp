@@ -24,7 +24,7 @@ OnNewRouteInListControlRoutesForTransport::OnNewRouteInListControlRoutesForTrans
 template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& event) {
     
     //the id of the Route that will do the transport: it is the last item in listcontrol_routes, because it is the item of the newly added Route
-    (parent->i_transporting_route) = ((parent->listcontrol_routes)->GetItemCount()) - 1;
+    parent->i_transporting_route.set(((parent->listcontrol_routes)->GetItemCount()) - 1);
     //do the tasks tha need to be done at the end of the transport
     ToDoAtEndOfTransport<Route, ListFrame>* to_do_at_end_of_transport;
 
@@ -34,10 +34,10 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
     if ((parent->transported_object_type) == String("position")) {
         
         //the id of the Position that will be transported
-        (parent->i_object_to_transport) = ((int)(parent->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED));
+        parent->i_object_to_transport.set(((int)(parent->listcontrol_positions)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
         
         //store the starting Position in *geo_position_start
-        (*(((parent->data->route_list)[(parent->i_transporting_route)]).reference_position)) = (parent->data->position_list)[(parent->i_object_to_transport)];
+        (*(((parent->data->route_list)[(parent->i_transporting_route.get())]).reference_position)) = (parent->data->position_list)[(parent->i_object_to_transport.get())];
         
     }else{
         
@@ -46,12 +46,12 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
             if ((parent->transported_object_type) == String("sight")) {
                 
                 //the id of the Route that will be transported
-                (parent->i_object_to_transport) = ((((parent->data)->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route.get());
+                parent->i_object_to_transport.set(((((parent->data)->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route.get()));
                 
             }
             
             //store the starting reference Position in *geo_position_start
-            (*((parent->data->route_list)[(parent->i_transporting_route)]).reference_position) = (*(((parent->data->route_list)[(parent->i_object_to_transport)]).reference_position));
+            (*((parent->data->route_list)[(parent->i_transporting_route.get())]).reference_position) = (*(((parent->data->route_list)[(parent->i_object_to_transport.get())]).reference_position));
             
         }
         
@@ -71,9 +71,9 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         
         transport_handler = new GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> >(
                                                                                                                  parent,
-                                                                                                                 &((parent->data->route_list)[(parent->i_object_to_transport)]),
+                                                                                                                 &((parent->data->route_list)[(parent->i_object_to_transport.get())]),
                                                                                                                  (parent->transported_object_type),
-                                                                                                                 ((parent->data->route_list)[(parent->i_transporting_route)]),
+                                                                                                                 ((parent->data->route_list)[(parent->i_transporting_route.get())]),
                                                                                                                  to_do_at_end_of_transport
                                                                                                                  );
         
@@ -91,9 +91,9 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
 
         
         transport_handler = new GraphicalFeatureTransportHandler<Position, ToDoAtEndOfTransport<Route, ListFrame> >(parent,
-                                                                                                                    &((parent->data->position_list)[(parent->i_object_to_transport)]),
+                                                                                                                    &((parent->data->position_list)[(parent->i_object_to_transport.get())]),
                                                                                                                     (parent->transported_object_type),
-                                                                                                                    ((parent->data->route_list)[(parent->i_transporting_route)]),
+                                                                                                                    ((parent->data->route_list)[(parent->i_transporting_route.get())]),
                                                                                                                     to_do_at_end_of_transport
                                                                                                                     );
         

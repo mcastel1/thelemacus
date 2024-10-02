@@ -116,6 +116,14 @@ template class QuestionFrame<void, ShowAll, CloseApp, CloseApp>;
 template class QuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>;
 
 
 //if the user presses return/escape, I call f_a / f_b

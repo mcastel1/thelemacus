@@ -34,6 +34,8 @@ template class DestroyFrame<MessageFrame<UnsetIdling<DrawPanel>>>;
 template class DestroyFrame<MessageFrame<UnsetIdling<ChartFrame>>>;
 template class DestroyFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>>;
+template class DestroyFrame<QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>;
+template class DestroyFrame<QuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>>;
 
 //destroys a frame of type F
 template<class F> void DestroyFrame<F>::operator()(void) {
@@ -53,3 +55,4 @@ template void DestroyFrame<MessageFrame<UnsetIdling<ChartFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
+template void DestroyFrame<QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>::operator()();

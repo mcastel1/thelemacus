@@ -29,7 +29,7 @@ using namespace std;
 class Catalog;
 class CloseApp;
 class ListFrame;
-template<class F_A, class F_B, class F_ABORT> class QuestionFrame;
+template<class T, class F_A, class F_B, class F_ABORT> class QuestionFrame;
 class ShowAll;
 
 
@@ -58,7 +58,7 @@ public:
 
     wxTimer* timer;
     //the disclaimer window shown at the beginning of the app
-    QuestionFrame<ShowAll, CloseApp, CloseApp>* disclaimer;
+    QuestionFrame<void, ShowAll, CloseApp, CloseApp>* disclaimer;
     //type of the Boost library which contains the local time, intended as the time of the machine where the app is running
     boost::posix_time::ptime utc_time;
     wxSystemSettings* settings;

@@ -123,7 +123,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
 
             if (((control->GetForegroundColour()) != (wxGetApp().error_color))) {
 
-                question_frame = new QuestionFrame<F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, f_abort, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
+                question_frame = new QuestionFrame<T, F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, f_abort, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
                 question_frame->Show(true);
                 question_frame->Raise();
 
@@ -137,7 +137,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
         else {
             //this question has not been prompted from a control
 
-            question_frame = new QuestionFrame<F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, f_abort, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
+            question_frame = new QuestionFrame<T, F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, f_abort, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
             question_frame->Show(true);
             question_frame->Raise();
 

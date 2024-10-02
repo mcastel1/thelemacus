@@ -27,7 +27,7 @@
 
 
 
-template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F_ABORT>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, F_ABORT* f_abort_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
+template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B, F_ABORT>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, F_ABORT* f_abort_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
 
     wxRect rectangle;
     vector<StaticText*> text;
@@ -128,7 +128,7 @@ template class QuestionFrame<AnimateToObject<Route, HighlightObject<ListFrame, D
 
 
 //if the user presses return/escape, I call f_a / f_b
-template<typename F_A, typename F_B, typename F_ABORT> template<class E> void QuestionFrame<F_A, F_B, F_ABORT>::KeyDown(E& event) {
+template<class T, class F_A, class F_B, class F_ABORT> template<class E> void QuestionFrame<T, F_A, F_B, F_ABORT>::KeyDown(E& event) {
 
     wxCommandEvent dummy;
 

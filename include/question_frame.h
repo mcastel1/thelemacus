@@ -51,6 +51,7 @@ public:
     
     QuestionFrame(T*, F_A*, String, F_B*, String, F_ABORT*, bool, bool, bool, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
     template<class E> void KeyDown(E&);
+    void SetIdlingAndShow(void);
     
 };
 

@@ -167,3 +167,13 @@ template<class T, class F_A, class F_B, class F_ABORT> template<class E> void Qu
 
 }
 
+
+//set the parent of *this to idling and show *this
+template<class T, class F_A, class F_B, class F_ABORT>  void QuestionFrame<T, F_A, F_B, F_ABORT>::SetIdlingAndShow(void){
+ 
+    if(parent){
+        parent->set_idling();
+    }
+    Show(true);
+    
+}

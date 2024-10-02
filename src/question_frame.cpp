@@ -48,7 +48,7 @@ template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B
 
     //SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    close_frame = new CloseFrame< QuestionFrame<F_A, F_B, F_ABORT> >(this);
+    close_frame = new CloseFrame< QuestionFrame<T, F_A, F_B, F_ABORT> >(this);
 
     //image
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
@@ -112,19 +112,7 @@ template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B
 
 }
 
-template class QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
-template class QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<ShowAll, CloseApp, CloseApp>;
-template class QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>;
-template class QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>;
-template class QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>;
-template class QuestionFrame<ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>;
-template class QuestionFrame<CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+
 
 
 //if the user presses return/escape, I call f_a / f_b
@@ -167,4 +155,3 @@ template<class T, class F_A, class F_B, class F_ABORT> template<class E> void Qu
 
 }
 
-template void QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::KeyDown<wxKeyEvent>(wxKeyEvent&);

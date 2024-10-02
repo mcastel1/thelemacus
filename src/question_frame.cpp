@@ -112,7 +112,10 @@ template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B
 
 }
 
-
+template class QuestionFrame<void, ShowAll, CloseApp, CloseApp>;
+template class QuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>;
 
 
 //if the user presses return/escape, I call f_a / f_b

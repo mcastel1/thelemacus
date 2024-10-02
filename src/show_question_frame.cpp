@@ -108,8 +108,8 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
 
     if (!(f->idling)) {
 
-        //I may be about to prompt a temporary dialog window, thus I set f->idling to true
-        (*(f->set_idling))();
+        //        //I may be about to prompt a temporary dialog window, thus I set f->idling to true
+        //        (*(f->set_idling))();
 
         if (control != NULL) {
             //this question has been prompted from a control
@@ -141,7 +141,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
     }
 
     //AFTER the question has been aswered and the related frame closed, I unset idling in f
-//    f->CallAfter(*unset_idling);
+    //    f->CallAfter(*unset_idling);
 
 }
 

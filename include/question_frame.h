@@ -26,11 +26,13 @@ class String;
 
 
 
-//this is a wxFrame designed to ask a  yes/no question to the GUI user. F_A is the type of the functor class which will be called when the button yes is pressed. This type is variables, so it has been 'templated'. Same for F_B. If the user presses enter (esc), f_a  (f_b) are called
-template<typename F_A, typename F_B, typename F_ABORT> class QuestionFrame: public wxFrame{
+//a wxFrame designed to ask a  yes/no question to the GUI user. T is the type of the parent that called *this. F_A is the type of the functor class which will be called when the button yes is pressed. This type is variables, so it has been 'templated'. Same for F_B. If the user presses enter (esc), f_a  (f_b) are called
+template<class T, class F_A, class F_B, class F_ABORT> class QuestionFrame: public wxFrame{
     
 public:
-        //the non-GUI object connected to the GUI object MessageFrame
+    //the parent of *this
+    T* parent;
+    //the non-GUI object connected to the GUI object MessageFrame
     wxPanel *panel;
     wxBoxSizer *sizer_v, *sizer_h, *sizer_buttons;
     wxGridSizer* sizer_grid;
@@ -47,8 +49,9 @@ public:
     F_ABORT* f_abort;
     String string_a, string_b;
     
-    QuestionFrame(wxWindow*, F_A*, String, F_B*, String, F_ABORT*, bool, bool, bool, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
+    QuestionFrame(T*, F_A*, String, F_B*, String, F_ABORT*, bool, bool, bool, const wxString&, const wxString&,  String, const wxPoint&, const wxSize&, String);
     template<class E> void KeyDown(E&);
+    void SetIdlingAndShow(void);
     
 };
 

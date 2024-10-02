@@ -29,6 +29,7 @@ template class SetIdling<RouteFrame>;
 template class SetIdling<SightFrame>;
 template class SetIdling<DrawPanel>;
 template class SetIdling<ChartFrame>;
+template class SetIdling<MyApp>;
 
 
 template<class P> void SetIdling<P>::operator()(wxCommandEvent& event) {
@@ -38,6 +39,9 @@ template<class P> void SetIdling<P>::operator()(wxCommandEvent& event) {
     event.Skip(true);
 
 }
+
+template void SetIdling<MyApp>::operator()(wxCommandEvent&);
+
 
 //this is the same as template<class P> void SetIdling<P>::operator()(wxCommandEvent& event){ but without the event argument
 template<class P> void SetIdling<P>::operator()(void) {

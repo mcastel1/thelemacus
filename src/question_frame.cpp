@@ -27,7 +27,7 @@
 
 
 
-template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F_ABORT>::QuestionFrame(wxWindow* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, F_ABORT* f_abort_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
+template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B, F_ABORT>::QuestionFrame(T* parent_in, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, F_ABORT* f_abort_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(((wxWindow*)parent_in), wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
 
     wxRect rectangle;
     vector<StaticText*> text;
@@ -40,6 +40,7 @@ template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F
     f_b = f_b_in;
     string_b = string_b_in;
     f_abort = f_abort_in;
+    parent = parent_in;
     
     enable_button_a = enable_button_a_in;
     enable_button_b = enable_button_b_in;
@@ -48,7 +49,7 @@ template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F
 
     //SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    close_frame = new CloseFrame< QuestionFrame<F_A, F_B, F_ABORT> >(this);
+    close_frame = new CloseFrame< QuestionFrame<T, F_A, F_B, F_ABORT> >(this);
 
     //image
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
@@ -73,6 +74,13 @@ template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F
     button_b = new wxButton(panel, wxID_ANY, string_b.value, wxDefaultPosition, wxDefaultSize);
     button_b->Bind(wxEVT_BUTTON, *f_b);
     button_b->Bind(wxEVT_BUTTON, *close_frame);
+    
+    if(parent){
+        //FIX THIS LATER: here bind the esc button to parent->unset_idling
+        button_a->Bind(wxEVT_BUTTON, *(parent->unset_idling));
+        button_b->Bind(wxEVT_BUTTON, *(parent->unset_idling));
+    }
+
 
     panel->Bind(wxEVT_KEY_DOWN, &QuestionFrame::KeyDown<wxKeyEvent>, this);
 
@@ -112,23 +120,23 @@ template<typename F_A, typename F_B, typename F_ABORT> QuestionFrame<F_A, F_B, F
 
 }
 
-template class QuestionFrame<ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
-template class QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<ShowAll, CloseApp, CloseApp>;
-template class QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>;
-template class QuestionFrame<DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>;
-template class QuestionFrame<SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>;
-template class QuestionFrame<ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>;
-template class QuestionFrame<CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>;
+template class QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>;
+template class QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>;
 
 
 //if the user presses return/escape, I call f_a / f_b
-template<typename F_A, typename F_B, typename F_ABORT> template<class E> void QuestionFrame<F_A, F_B, F_ABORT>::KeyDown(E& event) {
+template<class T, class F_A, class F_B, class F_ABORT> template<class E> void QuestionFrame<T, F_A, F_B, F_ABORT>::KeyDown(E& event) {
 
     wxCommandEvent dummy;
 
@@ -167,4 +175,25 @@ template<typename F_A, typename F_B, typename F_ABORT> template<class E> void Qu
 
 }
 
-template void QuestionFrame<DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::KeyDown<wxKeyEvent>(wxKeyEvent&);
+
+//set the parent of *this to idling and show *this
+template<class T, class F_A, class F_B, class F_ABORT>  void QuestionFrame<T, F_A, F_B, F_ABORT>::SetIdlingAndShow(void){
+ 
+    if(parent != NULL){
+        (*(parent->set_idling))();
+    }
+    Show(true);
+    
+}
+
+template void QuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>::SetIdlingAndShow();

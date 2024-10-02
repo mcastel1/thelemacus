@@ -106,25 +106,18 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
 template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::operator()(void) {
 
 
-    SetIdling<T>* set_idling;
-    UnsetIdling<T>* unset_idling;
-
-    set_idling = new SetIdling<T>(f);
-    unset_idling = new UnsetIdling<T>(f);
-
-
     if (!(f->idling)) {
 
-        //I may be about to prompt a temporary dialog window, thus I set f->idling to true
-        (*set_idling)();
+        //        //I may be about to prompt a temporary dialog window, thus I set f->idling to true
+        //        (*(f->set_idling))();
 
         if (control != NULL) {
             //this question has been prompted from a control
 
             if (((control->GetForegroundColour()) != (wxGetApp().error_color))) {
 
-                question_frame = new QuestionFrame<F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, f_abort, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
-                question_frame->Show(true);
+                question_frame = new QuestionFrame<T, F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, f_abort, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
+                question_frame->SetIdlingAndShow();
                 question_frame->Raise();
 
                 EnableDisableButtons();
@@ -137,8 +130,8 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
         else {
             //this question has not been prompted from a control
 
-            question_frame = new QuestionFrame<F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, f_abort, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
-            question_frame->Show(true);
+            question_frame = new QuestionFrame<T, F_YES, F_NO, F_ABORT>(f, f_yes, answer_y, f_no, answer_n, f_abort, enable_button_a, enable_button_b, bind_esc_to_button_b, title.value, question.value, wxGetApp().path_file_question_icon, wxDefaultPosition, wxDefaultSize, String(""));
+            question_frame->SetIdlingAndShow();
             question_frame->Raise();
 
             EnableDisableButtons();
@@ -148,7 +141,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
     }
 
     //AFTER the question has been aswered and the related frame closed, I unset idling in f
-    f->CallAfter(*unset_idling);
+    //    f->CallAfter(*unset_idling);
 
 }
 

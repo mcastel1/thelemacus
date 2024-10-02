@@ -148,7 +148,7 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
     }
 
     //AFTER the question has been aswered and the related frame closed, I unset idling in f
-    f->CallAfter(*unset_idling);
+//    f->CallAfter(*unset_idling);
 
 }
 

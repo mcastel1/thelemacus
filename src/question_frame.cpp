@@ -127,7 +127,7 @@ template class QuestionFrame<ListFrame, AskRemoveRelatedSight, UnsetIdling<ListF
 template class QuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
-template class QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
+template class QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSightAndUnsetIdling>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>;
@@ -192,7 +192,7 @@ template void QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<Lis
 template void QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>::SetIdlingAndShow();
 template void QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>::SetIdlingAndShow();
 template void QuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
-template void QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSightAndUnsetIdling>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
 template void QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
 template void QuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
 template void QuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();

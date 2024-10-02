@@ -15,7 +15,7 @@
 #include "catalog.h"
 #include "chart_frame.h"
 #include "data.h"
-#include "disconnect_sight.h"
+#include "disconnect_sight_and_unset_idling.h"
 #include "do_nothing.h"
 #include "int.h"
 #include "list_control.h"
@@ -45,7 +45,7 @@ class Data;
 class DeletePosition;
 class DeleteRoute;
 class DeleteSight;
-class DisconnectSight;
+class DisconnectSightAndUnsetIdling;
 class ExistingRoute;
 template<class P> class ListControl;
 class NewRoute;
@@ -127,7 +127,7 @@ public:
     //functors to set the highighted Routes, Position, ...
     HighlightObject<ListFrame, DoNothing> *highlight_route, *highlight_position;
     //functor to highlight a Route and then disconnect a Sight from its related Route
-    HighlightObject<ListFrame, DisconnectSight> *highlight_route_and_disconnect_sight;
+    HighlightObject<ListFrame, DisconnectSightAndUnsetIdling> *highlight_route_and_disconnect_sight;
     //these functors are used to highlight/de-highlight Routes or Position and unset idling in *this
     HighlightObject<ListFrame, UnsetIdling<ListFrame>> *highlight_route_and_unset_idling, *highlight_position_and_unset_idling;
     ConfirmTransport<ListFrame>* confirm_transport;
@@ -135,11 +135,11 @@ public:
     //a functor to let the user select a Route in listcontrol_routes
     SelectRoute* select_route;
     //functor used to disconnect a Sight from a Route
-    DisconnectSight* disconnect_sight;
+    DisconnectSightAndUnsetIdling* disconnect_sight;
     PrintMessage<ListFrame, UnsetIdling<ListFrame> >* print_warning_message, *print_error_message, *print_info_message;
     ShowQuestionFrame< ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame> , UnsetIdling<ListFrame> >* print_question_message;
     //functor to trigger an animation towards a Route by de-highlighting it at the end of the animation
-    AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>* animate_to_route;
+    AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSightAndUnsetIdling>>* animate_to_route;
     
     OnSelectRouteInListControlRoutesForTransport* on_select_route_in_listcontrol_routes_for_transport;
     OnNewRouteInListControlRoutesForTransport* on_new_route_in_listcontrol_routes_for_transport;

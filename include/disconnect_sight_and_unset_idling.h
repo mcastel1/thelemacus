@@ -1,12 +1,12 @@
 //
-//  disconnect_sight.h
+//  disconnect_sight_and_unset_idling.h
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#ifndef disconnect_sight_h
-#define disconnect_sight_h
+#ifndef disconnect_sight_and_unset_idling_h
+#define disconnect_sight_and_unset_idling_h
 
 #include <iostream>
 
@@ -16,7 +16,7 @@
 using namespace std;
 
 //this functor disconnects a Sight from a Route in ListFrame *parent
-class DisconnectSight{
+class DisconnectSightAndUnsetIdling{
     
 public:
         
@@ -24,7 +24,7 @@ public:
     ListFrame* parent;
     int sight_id;
     
-    DisconnectSight(ListFrame*, const int&);
+    DisconnectSightAndUnsetIdling(ListFrame*, const int&);
     
     template <class E> void operator()(E&);
     void operator()(void);

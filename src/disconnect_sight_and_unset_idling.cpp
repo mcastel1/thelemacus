@@ -1,24 +1,24 @@
 //
-//  disconnect_sight.cpp
+//  disconnect_sight_and_unset_idling.cpp
 //  thelemacus
 //
 //  Created by Michele on 11/06/2024.
 //
 
-#include "disconnect_sight.h"
+#include "disconnect_sight_and_unset_idling.h"
 
 
 #include "on_change_selection_in_list_control.h"
 
-//constructor of the DisconnectSight functor: parent_in is the ListFrame parent of *this, sight_id_in is the # of the Sight to be disconnected from Route # route_id_in
-DisconnectSight::DisconnectSight(ListFrame* parent_in, const int& sight_id_in) : parent(parent_in), sight_id(sight_id_in) {
+//constructor of the DisconnectSightAndUnsetIdling functor: parent_in is the ListFrame parent of *this, sight_id_in is the # of the Sight to be disconnected from Route # route_id_in
+DisconnectSightAndUnsetIdling::DisconnectSightAndUnsetIdling(ListFrame* parent_in, const int& sight_id_in) : parent(parent_in), sight_id(sight_id_in) {
     
     
 }
 
 
 //if sight_id is valid and Sight #sight_id has a related Route contained in parent->data->route_list, disconnect Sight i_sight from its related Route. Otherwise, do nothing.
-template <class E> void DisconnectSight::operator()(E& event) {
+template <class E> void DisconnectSightAndUnsetIdling::operator()(E& event) {
     
     if(
        (sight_id >= 0)
@@ -77,12 +77,12 @@ template <class E> void DisconnectSight::operator()(E& event) {
     
 }
 
-template void DisconnectSight::operator()<wxMouseEvent>(wxMouseEvent&);
-template void DisconnectSight::operator()<wxTimerEvent>(wxTimerEvent&);
+template void DisconnectSightAndUnsetIdling::operator()<wxMouseEvent>(wxMouseEvent&);
+template void DisconnectSightAndUnsetIdling::operator()<wxTimerEvent>(wxTimerEvent&);
 
 
 // same as ConnectDisconnect::operator()(wxCommandEvent& event) but without the event argument
-void DisconnectSight::operator()(void) {
+void DisconnectSightAndUnsetIdling::operator()(void) {
     
     wxCommandEvent dummy;
     

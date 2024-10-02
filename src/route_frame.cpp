@@ -432,9 +432,9 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             (parent->disconnect_sight->sight_id) = (route->related_sight.get());
             
             
-            parent->animate_to_route = new AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>(parent, route, parent->highlight_route_and_disconnect_sight);
+            parent->animate_to_route = new AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSightAndUnsetIdling>>(parent, route, parent->highlight_route_and_disconnect_sight);
             
-            ShowQuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>> print_question(parent, parent->animate_to_route, parent->unset_idling, parent->unset_idling);
+            ShowQuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSightAndUnsetIdling>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>> print_question(parent, parent->animate_to_route, parent->unset_idling, parent->unset_idling);
             
             //de-highlight all Positions
             parent->highlight_position->set_value(-1);

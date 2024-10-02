@@ -22,7 +22,7 @@ template class AnimateToObject<Route, UnsetIdling<ListFrame>>;
 template class AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
 template class AnimateToObject<Position, PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
 template class AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>;
-template class AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>;
+template class AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSightAndUnsetIdling>>;
 template class AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>>;
 template class AnimateToObject<Position, HighlightObject<ListFrame, UnsetIdling<ListFrame>>>;
 
@@ -229,7 +229,7 @@ template<class T, class F> template<class E> void AnimateToObject<T, F>::operato
     
 }
 
-template void AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSightAndUnsetIdling>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void AnimateToObject<Position, HighlightObject<ListFrame, DoNothing>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void AnimateToObject<Position, HighlightObject<ListFrame, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);

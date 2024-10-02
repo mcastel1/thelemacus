@@ -71,7 +71,7 @@ template<class F> ChartTransportHandler<F>::ChartTransportHandler(ChartFrame* ch
 template class ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>;
 template class ChartTransportHandler<UnsetIdling<ListFrame>>;
 template class ChartTransportHandler<HighlightObject<ListFrame, DoNothing>>;
-template class ChartTransportHandler<HighlightObject<ListFrame, DisconnectSight>>;
+template class ChartTransportHandler<HighlightObject<ListFrame, DisconnectSightAndUnsetIdling>>;
 template class ChartTransportHandler<HighlightObject<ListFrame, UnsetIdling<ListFrame>>>;
 
 
@@ -108,7 +108,7 @@ template<class F> void ChartTransportHandler<F>::operator()(void) {
 template void ChartTransportHandler<PrintMessage<ListFrame, UnsetIdling<ListFrame>>>::operator()();
 template void ChartTransportHandler<UnsetIdling<ListFrame>>::operator()();
 template void ChartTransportHandler<HighlightObject<ListFrame, DoNothing>>::operator()();
-template void ChartTransportHandler<HighlightObject<ListFrame, DisconnectSight>>::operator()();
+template void ChartTransportHandler<HighlightObject<ListFrame, DisconnectSightAndUnsetIdling>>::operator()();
 template void ChartTransportHandler<HighlightObject<ListFrame, UnsetIdling<ListFrame>>>::operator()();
 
 

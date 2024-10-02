@@ -248,3 +248,4 @@ template void AnimateToObject<Route, UnsetIdling<ListFrame>>::operator()();
 template void AnimateToObject<Route, PrintMessage<ListFrame, UnsetIdling<ListFrame>>>::operator()();
 template void AnimateToObject<Position, PrintMessage<ListFrame, UnsetIdling<ListFrame>>>::operator()();
 template void AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>::operator()();
+template void AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>>::operator()();

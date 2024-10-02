@@ -2770,7 +2770,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 //run over all Routes and check whether the mouse is hovering over one of them
                 for (j = 0; j < (routes[i]).positions.size() - 1; j++) {
                     
-                    for (l = ((routes[i]).positions)[j]; l < ((routes[i]).positions)[j+1]; l++) {
+                    for (l = (int)(((routes[i]).positions)[j]); l < (int)(((routes[i]).positions)[j+1]); l++) {
                         
                         //if the mouse is hovering over one of the points of route #i, I set the background color of route i in listcontrol_routes to a color different from white, to highlight it, and I highlight also the related sight in listcontrol_sights
                         

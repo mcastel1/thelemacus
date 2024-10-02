@@ -759,7 +759,7 @@ void SightFrame::OnPressReduce(wxCommandEvent& event) {
     parent->highlight_route->set_value(-1);
     
     //animate is declared here and not at the beginning  because at the beginning of this method related_route may be undefined
-    AnimateToObject<Route, HighlightObject<ListFrame, DoNothing> > animate(parent, &((parent->data->route_list)[sight->related_route.get()]), parent->highlight_route);
+    AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>> > animate(parent, &((parent->data->route_list)[sight->related_route.get()]), parent->highlight_route_and_unset_idling);
     animate.operator()();
     
     

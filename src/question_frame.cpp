@@ -27,7 +27,7 @@
 
 
 
-template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B, F_ABORT>::QuestionFrame(T* parent, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, F_ABORT* f_abort_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(((wxWindow*)parent), wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
+template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B, F_ABORT>::QuestionFrame(T* parent_in, F_A* f_a_in, String string_a_in, F_B* f_b_in, String string_b_in, F_ABORT* f_abort_in, bool enable_button_a_in, bool enable_button_b_in, bool bind_esc_to_button_b_in, const wxString& title, const wxString& message, String path_icon_file, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(((wxWindow*)parent_in), wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
 
     wxRect rectangle;
     vector<StaticText*> text;
@@ -40,6 +40,7 @@ template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B
     f_b = f_b_in;
     string_b = string_b_in;
     f_abort = f_abort_in;
+    parent = parent_in;
     
     enable_button_a = enable_button_a_in;
     enable_button_b = enable_button_b_in;
@@ -178,7 +179,7 @@ template<class T, class F_A, class F_B, class F_ABORT> template<class E> void Qu
 //set the parent of *this to idling and show *this
 template<class T, class F_A, class F_B, class F_ABORT>  void QuestionFrame<T, F_A, F_B, F_ABORT>::SetIdlingAndShow(void){
  
-    if(parent){
+    if(parent != NULL){
         (*(parent->set_idling))();
     }
     Show(true);

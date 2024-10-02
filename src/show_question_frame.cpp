@@ -106,17 +106,10 @@ template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQues
 template<class T, typename F_YES, typename F_NO, typename F_ABORT> void ShowQuestionFrame<T, F_YES, F_NO, F_ABORT>::operator()(void) {
 
 
-    SetIdling<T>* set_idling;
-    UnsetIdling<T>* unset_idling;
-
-    set_idling = new SetIdling<T>(f);
-    unset_idling = new UnsetIdling<T>(f);
-
-
     if (!(f->idling)) {
 
         //I may be about to prompt a temporary dialog window, thus I set f->idling to true
-        (*set_idling)();
+        (*(f->set_idling))();
 
         if (control != NULL) {
             //this question has been prompted from a control

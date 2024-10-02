@@ -79,27 +79,28 @@ template class ChartTransportHandler<HighlightObject<ListFrame, UnsetIdling<List
 template<class F> void ChartTransportHandler<F>::operator()(void) {
 //void ChartTransportHandler::MoveChart(const Position& a, const Position& b){
     
-    if(!((MotionHandler<F>::parent)->idling)){
-        //I start the animation only if *parent is not in idling mode
-        
-        //before I initiate the transport, I unbind DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
-        chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
-        chart_frame->parent->listcontrol_sights->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
-        chart_frame->parent->listcontrol_positions->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
-        chart_frame->parent->listcontrol_routes->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
-        chart_frame->parent->panel->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
-        chart_frame->draw_panel->Unbind(wxEVT_MOUSEWHEEL, &DrawPanel::OnMouseWheel, chart_frame->draw_panel);
-        
-        //because I am about to trigger an animation, I set all DrawPanels to idling mode. I do not set the ChartFrame to idling mode because I need the projection_field to be updated with the recently selected value of the projection, if needed
-        (MotionHandler<F>::parent)->SetIdlingAllDrawPanels(true);
-        
-        //the animation transport starts here (only if the parent ChartFrame is not in idling mode)
-        (MotionHandler<F>::timer)->Start(
-                     /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
-                     (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.value) - 1)) * 1000.0,
-                     wxTIMER_CONTINUOUS);
-        
-    }
+    //    if(!((MotionHandler<F>::parent)->idling)){
+    //I start the animation only if *parent is not in idling mode
+    
+    //before I initiate the transport, I unbind DrawPanel::OnMouseMovement and ListFrame::OnMouseMovement from mouse movements
+    chart_frame->draw_panel->Unbind(wxEVT_MOTION, &DrawPanel::OnMouseMovement, chart_frame->draw_panel);
+    chart_frame->parent->listcontrol_sights->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+    chart_frame->parent->listcontrol_positions->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+    chart_frame->parent->listcontrol_routes->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+    chart_frame->parent->panel->Unbind(wxEVT_MOTION, &ListFrame::OnMouseMovement, chart_frame->parent);
+    chart_frame->draw_panel->Unbind(wxEVT_MOUSEWHEEL, &DrawPanel::OnMouseWheel, chart_frame->draw_panel);
+    
+    //because I am about to trigger an animation, I set all DrawPanels to idling mode. I do not set the ChartFrame to idling mode because I need the projection_field to be updated with the recently selected value of the projection, if needed
+    (MotionHandler<F>::parent)->SetIdlingAllDrawPanels(true);
+    (*((MotionHandler<F>::parent)->set_idling))();
+    
+    //the animation transport starts here (only if the parent ChartFrame is not in idling mode)
+    (MotionHandler<F>::timer)->Start(
+                                     /*animation_time is converted in milliseconds, because Start() takes its first argument in milliseconds*/
+                                     (wxGetApp().animation_time.get()) * 60.0 * 60.0 / ((double)((wxGetApp().n_animation_steps.get()) - 1)) * 1000.0,
+                                     wxTIMER_CONTINUOUS);
+    
+    //    }
     
     
 }
@@ -115,7 +116,7 @@ template void ChartTransportHandler<HighlightObject<ListFrame, UnsetIdling<ListF
 template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTimerEvent& event) {
     
     
-    if(((MotionHandler<F>::t) < (wxGetApp().n_animation_steps.value))) {
+    if(((MotionHandler<F>::t) < (wxGetApp().n_animation_steps.get()))) {
         //the time parameter is undedr its maximum value
 
         if((MotionHandler<F>::t) == 0) {
@@ -189,7 +190,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
             (MotionHandler<F>::transporting_route_temp).length->set(
                                                                     String(""),
                                                                     ((MotionHandler<F>::transporting_route).length->value) *
-                                                                    (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value)))))
+                                                                    (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.get())))))
                                                                     ,
                                                                     String(""));
             
@@ -208,7 +209,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     
                     
                     //update projection_size
-                    projection_size = projection_size_start + (projection_size_end - projection_size_start) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
+                    projection_size = projection_size_start + (projection_size_end - projection_size_start) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.get()) + 1))));
 
                     
                     //shift q_center to the NE and to the SW by projection_size/2 -> these will be the updated values of p_NE and p_SE
@@ -238,7 +239,7 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
                     //                    (*(chart_frame->draw_panel->circle_observer->reference_position)) = (*((MotionHandler<F>::transporting_route_temp).end));
                     chart_frame->draw_panel->circle_observer->reference_position->set((*((MotionHandler<F>::transporting_route_temp).end)));
 
-                    chart_frame->draw_panel->circle_observer->omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.value) + 1))));
+                    chart_frame->draw_panel->circle_observer->omega = omega_start.value + (omega_end.value - omega_start.value) * (M_EULER + gsl_sf_psi_n(0, ((double)((MotionHandler<F>::t) + 1)))) / (M_EULER + gsl_sf_psi_n(0, ((double)((wxGetApp().n_animation_steps.get()) + 1))));
                     
                     
                     break;
@@ -296,6 +297,8 @@ template<class F> void ChartTransportHandler<F>::OnTimer([[maybe_unused]] wxTime
         
         (MotionHandler<F>::timer)->Stop();
         (MotionHandler<F>::parent)->SetIdlingAllDrawPanels(false);
+        //        (*((MotionHandler<F>::parent)->set_idling))();
+
         
         //call the functor to be called at the end of the animation, if any
         if((MotionHandler<F>::f) != NULL){

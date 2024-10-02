@@ -53,8 +53,8 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     rectangle_observer = new PositionRectangle;
     
     //reserve enough entries in points_dummy, so push_backs into points_dummy are not slow
-    points_dummy.reserve(wxGetApp().n_points_routes.value);
-    end_values_dummy.reserve(wxGetApp().n_points_routes.value);
+    points_dummy.reserve(wxGetApp().n_points_routes.get());
+    end_values_dummy.reserve(wxGetApp().n_points_routes.get());
     
     mouse_dragging = false;
     re_draw = true;
@@ -194,7 +194,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
            (*(parent->parent->geo_position_start)),
            Angle(M_PI * (1.0 - GSL_SIGN((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
            Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
-           )).Draw(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+           )).Draw(wxGetApp().n_points_routes.get(), this, &(parent->curves_selection_rectangle), String(""));
     
     //left vertical edge of rectangle
     (Route(
@@ -202,7 +202,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
            (*(parent->parent->geo_position_now)),
            Angle(M_PI * (1.0 + GSL_SIGN((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value))) / 2.0),
            Length((wxGetApp().Re.value) * fabs((normalize_pm_pi_ret(parent->parent->geo_position_now->phi).value) - (parent->parent->geo_position_start->phi.normalize_pm_pi_ret().value)))
-           )).Draw(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+           )).Draw(wxGetApp().n_points_routes.get(), this, &(parent->curves_selection_rectangle), String(""));
     
     //top and bottom horizontal edge of rectangle
     lambda_a.set(parent->parent->geo_position_start->lambda);
@@ -250,13 +250,13 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                   (*(parent->parent->geo_position_now)),
                   Z+M_PI,
                   Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_now->phi) * (lambda_ab_span.value))
-                  ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+                  ).DrawOld(wxGetApp().n_points_routes.get(), this, &(parent->curves_selection_rectangle), String(""));
             Route(
                   RouteType(((Route_types[0]).value)),
                   (*(parent->parent->geo_position_start)),
                   Z,
                   Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_start->phi) * (lambda_ab_span.value))
-                  ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));;
+                  ).DrawOld(wxGetApp().n_points_routes.get(), this, &(parent->curves_selection_rectangle), String(""));;
             
             break;
         }
@@ -284,7 +284,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                    Z_temp,
                    Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_start->phi) * (lambda_span_temp.value))
                    )
-             ).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+             ).DrawOld(wxGetApp().n_points_routes.get(), this, &(parent->curves_selection_rectangle), String(""));
             
             //top horizontal edge of rectangle
             (Route(
@@ -292,7 +292,7 @@ inline void DrawPanel::RenderSelectionRectangle(wxDC& dc, const wxColour& foregr
                    (*(parent->parent->geo_position_now)),
                    Z_temp+M_PI,
                    Length((wxGetApp().Re.value) * cos(parent->parent->geo_position_now->phi) * (lambda_span_temp.value))
-                   )).DrawOld(wxGetApp().n_points_routes.value, this, &(parent->curves_selection_rectangle), String(""));
+                   )).DrawOld(wxGetApp().n_points_routes.get(), this, &(parent->curves_selection_rectangle), String(""));
             
             break;
             
@@ -362,7 +362,7 @@ inline void DrawPanel::RenderRoutes(wxDC& dc, const wxColor& foreground_color) {
     for (i = 0, color_id = 0; i < (routes.size()); i++) {
         
         //set the route thickness and pen
-        if (i == (parent->parent->highlighted_route_now)) {
+        if (i == (parent->parent->highlighted_route_now.get())) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = thickness;
         }
@@ -516,7 +516,7 @@ inline void DrawPanel::RenderPositions(wxDC& dc, const wxColor& foreground_color
     for (i = 0, color_id = 0; i < (points_position_list.size()); i++) {
         
         //set thickness and pen
-        if (i == (parent->parent->highlighted_position_now)) {
+        if (i == (parent->parent->highlighted_position_now.get())) {
             thickness = max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1);
             radius = thickness;
         }
@@ -696,7 +696,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
     if (/*If this condition is true, then angle_label.value*K is an integer multiple of one degree*/fabs(rad_to_deg * (angle_label.value) - round(rad_to_deg * (angle_label.value))) < epsilon_double) {
         //in this case, (angle_label.value) (or, in other words, the latitude phi) = n degrees, with n integer: I write on the axis the value of phi  in degrees
         
-        s << angle_label.deg_to_string(mode, (precision.value));
+        s << angle_label.deg_to_string(mode, (precision.get()));
         
     }
     else {
@@ -705,7 +705,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
         if (deg_to_rad * fabs(rad_to_deg * (angle_label.value) - ((double)round(rad_to_deg * (angle_label.value)))) < delta / 2.0) {
             //in this case, (angle_label.value) coincides with an integer mulitple of a degree: I print out its arcdegree part only
             
-            s << angle_label.deg_to_string(mode, (precision.value));
+            s << angle_label.deg_to_string(mode, (precision.get()));
             
         }
         else {
@@ -715,7 +715,7 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
             if (ceil((rad_to_deg * ((max.normalize_pm_pi_ret()).value))) - floor((rad_to_deg * ((min.normalize_pm_pi_ret()).value))) != 1) {
                 //in this case, the phi interval which is plotted spans more than a degree: there will already be at least one tic in the plot which indicates the arcdegrees to which the arcminutes belong -> I print out its arcminute part only.
                 
-                s << angle_label.min_to_string(mode, (precision.value));
+                s << angle_label.min_to_string(mode, (precision.get()));
                 
             }
             else {
@@ -723,12 +723,12 @@ void DrawPanel::WriteLabel(const Position& q, Angle min, Angle max, Int precisio
                 
                 if (first_label) {
                     
-                    s << angle_label.to_string(mode, (precision.value), false);
+                    s << angle_label.to_string(mode, (precision.get()), false);
                     
                 }
                 else {
                     
-                    s << angle_label.min_to_string(mode, (precision.value));
+                    s << angle_label.min_to_string(mode, (precision.get()));
                     
                 }
                 
@@ -858,11 +858,11 @@ inline void DrawPanel::TabulateRoute(const unsigned int& i){
     //change this at the end, when you will have a function Draw that handles loxodromes. Then, you will use only the first case of this if
     if (((parent->parent->data->route_list)[i]).type != (Route_types[0])) {
         
-        ((parent->parent->data->route_list)[i]).Draw((unsigned int)(wxGetApp().n_points_routes.value), this, (routes.data()) + i, String(""));
+        ((parent->parent->data->route_list)[i]).Draw((unsigned int)(wxGetApp().n_points_routes.get()), this, (routes.data()) + i, String(""));
         
     }else{
         
-        ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)(wxGetApp().n_points_routes.value), this, (routes.data()) + i, String(""));
+        ((parent->parent->data->route_list)[i]).DrawOld((unsigned int)(wxGetApp().n_points_routes.get()), this, (routes.data()) + i, String(""));
         
     }
     
@@ -983,7 +983,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
     
     delta_phi = deg_to_rad / ((double)gamma_phi);
-    while (((wxGetApp().n_intervals_ticks_preferred).value) * delta_phi < phi_span) {
+    while ((wxGetApp().n_intervals_ticks_preferred.get()) * delta_phi < phi_span) {
         if (delta_phi == deg_to_rad / ((double)gamma_phi)) { delta_phi += deg_to_rad * 4.0 / ((double)gamma_phi); }
         else { delta_phi += deg_to_rad * 5.0 / ((double)gamma_phi); }
     }
@@ -999,7 +999,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     for (size_label_horizontal = 0,
          first_label = true,
          //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
+         label_precision.set(((gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))))),
          ((q.phi).value) = (phi_start.value),
          (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
          ((q.phi).value) < (phi_end.value);
@@ -1015,7 +1015,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     }
     
     //take the angle 0° 0.0' expresed with display_precision: the height of this angle label is the largest possible -> set it equal to size_label_vertical
-    size_label_vertical = (GetTextExtent(wxString((Angle(0, 0.0).to_string(String("NS"), (display_precision.value), false)))).GetHeight());
+    size_label_vertical = (GetTextExtent(wxString((Angle(0, 0.0).to_string(String("NS"), (display_precision.get()), false)))).GetHeight());
     
     
     //set x_min, ..., y_max for the following
@@ -1039,9 +1039,9 @@ inline void DrawPanel::PreRenderMercator(void) {
             size_plot_area.SetWidth(
                                     (size_chart.GetWidth())
                                     //space for  parallel labels
-                                    - (((int)size_label_horizontal) + 3 * (wxGetApp().border.value))
+                                    - (((int)size_label_horizontal) + 3 * (wxGetApp().border.get()))
                                     //space for label_position
-                                    - ((((int)size_label_vertical) + (wxGetApp().border.value))) * (size_chart.GetWidth()) / (size_chart.GetHeight())
+                                    - ((((int)size_label_vertical) + (wxGetApp().border.get()))) * (size_chart.GetWidth()) / (size_chart.GetHeight())
                                     );
             size_plot_area.SetHeight((size_plot_area.GetWidth()) * (size_chart.GetHeight()) / (size_chart.GetWidth()));
             
@@ -1057,9 +1057,9 @@ inline void DrawPanel::PreRenderMercator(void) {
         size_plot_area.SetHeight(
                                  (size_chart.GetHeight())
                                  //space for meridian labels
-                                 - (((int)size_label_vertical) + 3 * (wxGetApp().border.value))
+                                 - (((int)size_label_vertical) + 3 * (wxGetApp().border.get()))
                                  //space for label_position
-                                 - (((int)size_label_vertical) + (wxGetApp().border.value))
+                                 - (((int)size_label_vertical) + (wxGetApp().border.get()))
                                  );
         size_plot_area.SetWidth((size_plot_area.GetHeight()) * (size_chart.GetWidth()) / (size_chart.GetHeight()));
         
@@ -1093,7 +1093,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
     n_intervals_ticks_max = ((unsigned int)floor(((double)(size_plot_area.GetWidth())) / ((double)size_label_horizontal)));
     n_intervals_ticks = min(
-                            (unsigned int)(wxGetApp().n_intervals_ticks_preferred.value),
+                            (unsigned int)(wxGetApp().n_intervals_ticks_preferred.get()),
                             n_intervals_ticks_max
                             );
     
@@ -1170,7 +1170,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //compute labels on parallels
     for (first_label = true,
          //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
+         label_precision.set(((gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))))),
          ((q.phi).value) = (phi_start.value),
          (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
          ((q.phi).value) < (phi_end.value);
@@ -1184,7 +1184,7 @@ inline void DrawPanel::PreRenderMercator(void) {
     //compute labels on meridians
     for (first_label = true,
          //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))),
+         label_precision.set(((gamma_lambda == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))))),
          (q.lambda.value) = (lambda_start.value),
          (q.phi) = (*(parent->phi_min)) + epsilon_double;
          (q.lambda.value) < (lambda_end.value);
@@ -1212,7 +1212,7 @@ inline void DrawPanel::PreRenderMercator(void) {
              (route.reference_position->lambda.value) - ((lambda_start.value) - delta_lambda) < delta_lambda;
              (route.reference_position->lambda.value) += delta_lambda_minor) {
             
-            route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
+            route.Draw((wxGetApp().n_points_minor_ticks.get()), this, &(parent->curves), String(""));
             
         }
         
@@ -1224,7 +1224,7 @@ inline void DrawPanel::PreRenderMercator(void) {
          (route.reference_position->lambda.value) < (lambda_end.value);
          (route.reference_position->lambda.value) += delta_lambda) {
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
+        route.Draw((wxGetApp().n_points_routes.get()), this, &(parent->curves), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis
@@ -1237,7 +1237,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->lambda.value) - (lambda_saved.value) < delta_lambda;
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
+                route.Draw((wxGetApp().n_points_minor_ticks.get()), this, &(parent->curves), String(""));
                 
             }
             
@@ -1269,11 +1269,11 @@ inline void DrawPanel::PreRenderMercator(void) {
                                                                
                                                                ).value), LengthUnit_types[0]);
         
-        route.DrawOld((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
+        route.DrawOld((wxGetApp().n_points_routes.get()), this, &(parent->curves), String(""));
         
         
         //here I use DrawOld because Draw cannot handle loxodromes
-        //        route.DrawOld((parent->parent->data->n_points_routes.value), foreground_color, thickness, dc, this);
+        //        route.DrawOld((parent->parent->data->n_points_routes.get()), foreground_color, thickness, dc, this);
         
         if (gamma_phi != 1) {
             //draw smaller ticks -> set route to a loxodrome pointing towards the E and draw it
@@ -1287,7 +1287,7 @@ inline void DrawPanel::PreRenderMercator(void) {
                  (route.reference_position->phi.value) += delta_phi_minor
                  ) {
                      
-                     route.DrawOld((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
+                     route.DrawOld((wxGetApp().n_points_minor_ticks.get()), this, &(parent->curves), String(""));
                      
                  }
             
@@ -1348,7 +1348,7 @@ inline void DrawPanel::PreRender3D(void) {
                                  (int)(((double)(size_chart.GetHeight())) * (1.0 - (length_plot_area_over_length_chart.value)) / 2.0));
     
     //the number of ticks is given by the minimum between the preferred value and the value allowed by fitting the (maximum) size of each axis label into the witdh of the axis
-    n_intervals_ticks = (unsigned int)(wxGetApp().n_intervals_ticks_preferred.value);
+    n_intervals_ticks = (unsigned int)(wxGetApp().n_intervals_ticks_preferred.get());
     
     
     //here I set up things to plot paralles and meridians in Render3D
@@ -1460,7 +1460,7 @@ inline void DrawPanel::PreRender3D(void) {
     }
     
     delta_phi = deg_to_rad / ((double)gamma_phi);
-    while (((wxGetApp().n_intervals_ticks_preferred).value) * delta_phi < phi_span) {
+    while ((wxGetApp().n_intervals_ticks_preferred.get()) * delta_phi < phi_span) {
         if (delta_phi == deg_to_rad / ((double)gamma_phi)) { delta_phi += deg_to_rad * 4.0 / ((double)gamma_phi); }
         else { delta_phi += deg_to_rad * 5.0 / ((double)gamma_phi); }
     }
@@ -1482,7 +1482,7 @@ inline void DrawPanel::PreRender3D(void) {
     for (size_label_horizontal = 0,
          first_label = true,
          //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
+         label_precision.set(((gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))))),
          ((q.phi).value) = (phi_start.value),
          (q.lambda) = (*(parent->lambda_min)) - epsilon_double;
          ((q.phi).value) < (phi_end.value);
@@ -1498,7 +1498,7 @@ inline void DrawPanel::PreRender3D(void) {
     }
     
     //take the angle 0° 0.0' expresed with display_precision: the height of this angle label is the largest possible -> set it equal to size_label_vertical
-    size_label_vertical = (GetTextExtent(wxString((Angle(0, 0.0).to_string(String("NS"), (display_precision.value), false)))).GetHeight());
+    size_label_vertical = (GetTextExtent(wxString((Angle(0, 0.0).to_string(String("NS"), (display_precision.get()), false)))).GetHeight());
     
     TabulateRoutes();
     TabulatePositions();
@@ -1511,7 +1511,7 @@ inline void DrawPanel::PreRender3D(void) {
     //compute labels on parallels
     for (first_label = true,
          //set the label precision: if gamma_phi = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_phi*K*60 (the spacing between labels in arcminuted) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_phi == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))),
+         label_precision.set(((gamma_phi == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_phi * rad_to_deg * 60)))))),
          (q.phi.value) = floor((circle_observer->reference_position->phi.normalize_pm_pi_ret().value - circle_observer->omega.value) / delta_phi) * delta_phi,
          (q.lambda) = lambda_middle;
          (q.phi.value) < (circle_observer->reference_position->phi.normalize_pm_pi_ret().value) + (circle_observer->omega.value);
@@ -1525,7 +1525,7 @@ inline void DrawPanel::PreRender3D(void) {
     //compute labels on meridians
     for (first_label = true,
          //set the label precision: if gamma_lambda = 1, then labels correspond to integer degrees, and I set label_precision = display_precision. If not, I take the log delta_lambda*K*60 (the spacing between labels in arcminutes) -> I obtain the number of digits reqired to proprely display arcminutes in the labels -> round it up for safety with ceil() -> add 2 -> obtain the number of digits to safely display the digits before the '.' (2) and the digits after the '.' in the arcminute part of labels
-         (label_precision.value) = (gamma_lambda == 1) ? (display_precision.value) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))),
+         label_precision.set(((gamma_lambda == 1) ? (display_precision.get()) : (2 + ceil(fabs(log(delta_lambda * rad_to_deg * 60)))))),
          ((q.lambda).value) = (lambda_start.value),
          (q.phi) = phi_middle;
          ((q.lambda).value) < (lambda_end.value);
@@ -1550,7 +1550,7 @@ inline void DrawPanel::PreRender3D(void) {
         
         //add the current meridian that is being drawn (route) to meridians
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
+        route.Draw((wxGetApp().n_points_routes.get()), this, &(parent->curves), String(""));
         
         if (gamma_lambda != 1) {
             //draw intermediate ticks on the longitude axis by setting route to an orthodrome pointing to the north
@@ -1568,7 +1568,7 @@ inline void DrawPanel::PreRender3D(void) {
                  (route.reference_position->lambda.value) - (lambda_saved.value) < delta_lambda;
                  (route.reference_position->lambda.value) += delta_lambda_minor) {
                 
-                route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
+                route.Draw((wxGetApp().n_points_minor_ticks.get()), this, &(parent->curves), String(""));
                 
             }
             
@@ -1599,7 +1599,7 @@ inline void DrawPanel::PreRender3D(void) {
         
         //add the current parallel that is being drawn to parallels
         
-        route.Draw((wxGetApp().n_points_routes.value), this, &(parent->curves), String(""));
+        route.Draw((wxGetApp().n_points_routes.get()), this, &(parent->curves), String(""));
         
         if (gamma_phi != 1) {
             //to draw smaller ticks, I set route to a loxodrome pointing towards the E and draw it
@@ -1615,7 +1615,7 @@ inline void DrawPanel::PreRender3D(void) {
                  (route.reference_position->phi.value) += delta_phi_minor
                  ) {
                      
-                     route.Draw((wxGetApp().n_points_minor_ticks.value), this, &(parent->curves), String(""));
+                     route.Draw((wxGetApp().n_points_minor_ticks.get()), this, &(parent->curves), String(""));
                      
                  }
             
@@ -2520,7 +2520,7 @@ void DrawPanel::SetLabelAndAdjustPosition(const Position& p, wxPoint* position, 
     wxPoint shift;
     
     //set the text of *label
-    label->set(to_string(p, display_precision.value));
+    label->set(to_string(p, display_precision.get()));
     
     //the default value of the shift
     shift = wxPoint(
@@ -2687,7 +2687,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
     if (mouse_in_plot_area && (!parent->parent->selection_rectangle)) {
         //the mouse's screen position corresponds to a valid geographic Position and no selection rectangle is being drawn -> I show the instantaneous mouse coordinates : I write them into label_position, otherwise label_position is left empty,
         
-        label_position = String((parent->parent->geo_position_now->to_string(display_precision.value)));
+        label_position = String((parent->parent->geo_position_now->to_string(display_precision.get())));
         
     }
     else {
@@ -2754,17 +2754,17 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             position_draw_panel = (parent->parent->screen_position) - draw_panel_origin;
             
             //save the id of the Route highlighted at the preceeding step into highlighted_route_before
-            (parent->parent->highlighted_route_before) = (parent->parent->highlighted_route_now);
+            parent->parent->highlighted_route_before.set((parent->parent->highlighted_route_now));
             
-            for ((parent->parent->highlighted_route_now) = -1, i = 0; i < (parent->parent->data->route_list).size(); i++) {
+            for (parent->parent->highlighted_route_now.set(-1), i = 0; i < (parent->parent->data->route_list).size(); i++) {
                 
                 //set the backgorund color of the Route in listcontrol_routes and of its related sight to white
                 //when only a fraction of the Routes is Drawn, this will create a problem ---
                 (parent->parent->listcontrol_routes)->SetItemBackgroundColour(i, wxGetApp().background_color);
                 //when only a fraction of the Routes is Drawn, this will create a problem ---
                 
-                if ((((parent->parent->data->route_list)[i]).related_sight).value != -1) {
-                    (parent->parent->listcontrol_sights)->SetItemBackgroundColour((((parent->parent->data->route_list)[i]).related_sight).value, wxGetApp().background_color);
+                if ((((parent->parent->data->route_list)[i]).related_sight) != -1) {
+                    (parent->parent->listcontrol_sights)->SetItemBackgroundColour(((parent->parent->data->route_list)[i]).related_sight.get(), wxGetApp().background_color);
                 }
                 
                 //run over all Routes and check whether the mouse is hovering over one of them
@@ -2797,27 +2797,27 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                             
                             
                             //set the highlighted route to i, so as to use highlighted_route in other functions
-                            (parent->parent->highlighted_route_now) = i;
+                            parent->parent->highlighted_route_now.set(i);
                             
                             parent->parent->listcontrol_routes->EnsureVisible(i);
-                            if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
-                                parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->data->route_list)[i]).related_sight.value);
+                            if ((((parent->parent->data->route_list)[i]).related_sight.get()) != -1) {
+                                parent->parent->listcontrol_sights->EnsureVisible(((parent->parent->data->route_list)[i]).related_sight.get());
                             }
                             
                             //set highlighted_sight_now and the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                             (parent->parent->listcontrol_routes)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-                            if ((((parent->parent->data->route_list)[i]).related_sight.value) != -1) {
+                            if ((((parent->parent->data->route_list)[i]).related_sight.get()) != -1) {
                                 
-                                (parent->parent->highlighted_sight_now) = (((parent->parent->data->route_list)[i]).related_sight.value);
+                                parent->parent->highlighted_sight_now.set(((parent->parent->data->route_list)[i]).related_sight);
                                 
                                 parent->parent->listcontrol_sights->SetItemBackgroundColour(
-                                                                                            (parent->parent->highlighted_sight_now),
+                                                                                            (parent->parent->highlighted_sight_now.get()),
                                                                                             (wxGetApp().color_selected_item)
                                                                                             );
                             }
                             else {
                                 
-                                (parent->parent->highlighted_sight_now) = -1;
+                                parent->parent->highlighted_sight_now.set(-1);
                                 
                             }
                             
@@ -2849,9 +2849,9 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
             
             
             //run over all the Positions, check if the mouse is hovering over one of them, and change the background color of the related Position in listcontrol_positions
-            (parent->parent->highlighted_position_before) = (parent->parent->highlighted_position_now);
+            parent->parent->highlighted_position_before.set((parent->parent->highlighted_position_now));
             
-            for ((parent->parent->highlighted_position_now) = -1, i = 0; i < parent->parent->data->position_list.size(); i++) {
+            for (parent->parent->highlighted_position_now.set(-1), i = 0; i < parent->parent->data->position_list.size(); i++) {
                 
                 GeoToScreen((parent->parent->data->position_list)[i], &q);
                 
@@ -2860,7 +2860,7 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                     //the mouse is over a position
                     
                     //sets the highlighted position to i, so as to use highlighted_position_now in other functions
-                    (parent->parent->highlighted_position_now) = i;
+                    parent->parent->highlighted_position_now.set(i);
                     
                     (parent->parent->listcontrol_positions)->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
                     parent->parent->listcontrol_positions->EnsureVisible(i);
@@ -3064,7 +3064,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                     if ((parent->parent->highlighted_route_now) != -1) {
                         //I am dragging a Route: I restore the starting position of the route under consideration to its value at the beginning of the drag and re-tabulate the route points
                         
-                        (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position)) = (*route_reference_position_drag_start);
+                        (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position)) = (*route_reference_position_drag_start);
                         
                         TabulateRoutes();
                         Refresh();
@@ -3078,11 +3078,11 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                         // I am dragging a Position: I restore the position under consideration to its value at the beginning of the drag
                         
                         //convert the coordinates of position_start_drag into geographic coordinates, and assign these to the Position under consideration
-                        (this->*ScreenToGeo)(position_start_drag, &((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]));
+                        (this->*ScreenToGeo)(position_start_drag, &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())]));
                         
                         
                         //update the coordinates of the Position under consideration in listcontrol_positions
-                        ((parent->parent->data->position_list)[((parent->parent)->highlighted_position_now)]).update_ListControl(((parent->parent)->highlighted_position_now), (parent->parent)->listcontrol_positions);
+                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())]).update_ListControl((parent->parent->highlighted_position_now.get()), (parent->parent)->listcontrol_positions);
                         
                         //given that the position under consideration has changed, I re-pain the chart
                         Refresh();
@@ -3109,10 +3109,10 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 parent->parent->SetFocus();  // focus on the ListFrame
                 
                 //select the highlighted position in ListFrame
-                parent->parent->listcontrol_positions->SetItemState((parent->parent)->highlighted_position_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                parent->parent->listcontrol_positions->SetItemState(parent->parent->highlighted_position_now.get(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                 
                 //set the beckgorund color of the Position in listcontrol_positions in ListFrame to the color of selected items
-                parent->parent->listcontrol_positions->SetItemBackgroundColour((parent->parent)->highlighted_position_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                parent->parent->listcontrol_positions->SetItemBackgroundColour(parent->parent->highlighted_position_now.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                 
             }
             
@@ -3130,19 +3130,19 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 parent->parent->SetFocus();  // focus on the ListFrame
                 
                 //select the highlighted Route in ListFrame
-                parent->parent->listcontrol_routes->SetItemState((parent->parent)->highlighted_route_now, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                parent->parent->listcontrol_routes->SetItemState(parent->parent->highlighted_route_now.get(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                 
                 //set the beckgorund color of the Route in listcontrol_routes in ListFrame to the color of selected items
-                parent->parent->listcontrol_routes->SetItemBackgroundColour(parent->parent->highlighted_route_now, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                parent->parent->listcontrol_routes->SetItemBackgroundColour(parent->parent->highlighted_route_now.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                 
-                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value != -1) {
+                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight) != -1) {
                     //the selected Route is related to a Sight
                     
                     //select the related Sight in ListFrame
-                    ((parent->parent)->listcontrol_sights)->SetItemState((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+                    ((parent->parent)->listcontrol_sights)->SetItemState(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight.get(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
                     
                     //set the beckgorund color of the related Sight in listcontrol_sights in ListFrame to the color of selected items
-                    parent->parent->listcontrol_sights->SetItemBackgroundColour((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+                    parent->parent->listcontrol_sights->SetItemBackgroundColour(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight.get(), wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
                     
                 }
                 
@@ -3433,14 +3433,14 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                 if ((parent->parent->highlighted_route_now) != -1) {
                     //set *route_reference_position_drag_now to the start Position (if the route is a loxodrome / orthodrome) or to the ground Position (if the route is a circle of equal altitutde)
                     
-                    if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
+                    if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).type) == (Route_types[2])) {
                         
-                        (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
+                        (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position));
                         
-                        if (((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value) != -1) {
+                        if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight) != -1) {
                             //here I am dragging a circle of equal altitude originally related to a sight. After dragging, this circle of equal altitude no longer results from that sight, thus I disconnect the sight and the circle of equal altitude, and update the wxListCtrs in parent->parent accordingly
                             
-                            (parent->parent->disconnect_sight->sight_id) = ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).related_sight).value);
+                            (parent->parent->disconnect_sight->sight_id) = (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).related_sight.get());
                             
                             parent->parent->DisconnectAndPromptMessage(event);
                             
@@ -3449,7 +3449,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     }
                     else {
                         
-                        (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
+                        (*route_reference_position_drag_start) = (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position));
                         
                     }
                     
@@ -3557,7 +3557,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 GeoToDrawPanel((*route_reference_position_drag_start), &p, false);
                                 
                                 //this command is the same for all types of Routes
-                                DrawPanelToGeo(p + (position_now_drag - position_start_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position));
+                                DrawPanelToGeo(p + (position_now_drag - position_start_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position));
                                 
                                 break;
                                 
@@ -3572,13 +3572,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                                        (*rotation));
                                 
                                 
-                                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).type) == (Route_types[2])) {
+                                if ((((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).type) == (Route_types[2])) {
                                     
-                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position), String(""));
                                     
                                 }else{
                                     
-                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position), String(""));
+                                    route_reference_position_drag_start->rotate(String(""), (*rotation_now_drag), (((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position), String(""));
                                     
                                 }
                                 
@@ -3590,7 +3590,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         
                         //update the data of the Route under consideration in listcontrol_routes
-                        ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).update_ListControl((parent->parent->highlighted_route_now), parent->parent->listcontrol_routes);
+                        ((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).update_ListControl((parent->parent->highlighted_route_now.get()), parent->parent->listcontrol_routes);
                         
                         
                         for (i = 0; i < parent->parent->chart_frames.size(); i++) {
@@ -3598,13 +3598,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                                 (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now)]).reference_position)),
+                                                                                                 (*(((parent->parent->data->route_list)[(parent->parent->highlighted_route_now.get())]).reference_position)),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object)
                                                                                                  );
                             
                             //given that the Route under consideration has changed, I re-tabulate the Routes and re-render the charts
-                            ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoute(parent->parent->highlighted_route_now);
+                            ((parent->parent->chart_frames)[i])->draw_panel->TabulateRoute(parent->parent->highlighted_route_now.get());
                             
                             
                         }
@@ -3622,7 +3622,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 
                                 
                                 //convert the coordinates of position_now_drag into geographic coordinates, and assign these to the Position under consideration: in this way, the Position under consideration is dragged along with the mouse
-                                (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]));
+                                (this->*ScreenToGeo)(position_now_drag, &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now.get())]));
                                 
                                 break;
                                 
@@ -3630,12 +3630,12 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                                 
                             case 1: {
                                 
-                                //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now)]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
+                                //compose rotation with the rotation resulting from the drag and then apply it to pp == &(((parent->parent->data)->position_list)[(parent->parent->highlighted_position_now.get())]): pp -> rotation^{-1}.(rotation due to drag).rotation.pp. In this way, when Render() will plot the position pp, it will apply to pp the global rotation  'rotation' again, and the result will be rotation . rotation^{-1}.(rotation due to drag).rotation.pp = (rotation due to drag).rotation.pp, which is the desired result (i.e. pp rotated by the global rotation 'rotation', and then rotated by the rotation due to the drag)
                                 (*rotation_now_drag) =
                                 (rotation->inverse()) *
                                 rotation_start_end(position_start_drag, position_now_drag) *
                                 (*rotation);
-                                geo_start_drag->rotate(String(""), (*rotation_now_drag), &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]), String(""));
+                                geo_start_drag->rotate(String(""), (*rotation_now_drag), &((parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())]), String(""));
                                 
                                 break;
                                 
@@ -3646,7 +3646,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         
                         //update the data of the Position under consideration in listcontrol_positions
-                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now)]).update_ListControl((parent->parent->highlighted_position_now), parent->parent->listcontrol_positions);
+                        ((parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())]).update_ListControl((parent->parent->highlighted_position_now.get()), parent->parent->listcontrol_positions);
                         
                         //given that the Position under consideration has changed, I re-paint the charts
                         for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
@@ -3654,13 +3654,13 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             
                             //obtain the coordinates of the reference position of the Route that is being dragged
                             ((parent->parent->chart_frames)[i])->draw_panel->SetLabelAndPosition(
-                                                                                                 (parent->parent->data->position_list)[(parent->parent->highlighted_position_now)],
+                                                                                                 (parent->parent->data->position_list)[(parent->parent->highlighted_position_now.get())],
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->position_label_dragged_object),
                                                                                                  &(((parent->parent->chart_frames)[i])->draw_panel->label_dragged_object)
                                                                                                  );
                             
                             //given that the Positions under consideration has changed, I re-tabulate the Positions and re-render the charts
-                            ((parent->parent->chart_frames)[i])->draw_panel->TabulatePosition(parent->parent->highlighted_position_now);
+                            ((parent->parent->chart_frames)[i])->draw_panel->TabulatePosition(parent->parent->highlighted_position_now.get());
                             
                             
                         }

@@ -11,9 +11,7 @@
 #include "generic.h"
 
 
-
-//set value equal to i
-//inline 
+//setter: set value equal to i
 void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 
     String new_prefix;
@@ -28,7 +26,7 @@ void Int::set(String name, int i, [[maybe_unused]] String prefix) {
 }
 
 
-//set the content (not the memory adresses) of *this equal to the content of x
+//setter: set the content (not the memory adresses) of *this equal to the content of x
 void Int::set(const Int& x){
     
     value = (x.value);
@@ -36,12 +34,19 @@ void Int::set(const Int& x){
 }
 
 
-//same as Int::set(String name, int i, [[maybe_unused]] String prefix) {, but without printing out anything
-//inline 
+//setter: same as Int::set(String name, int i, [[maybe_unused]] String prefix) {, but without printing out anything
 void Int::set(int i) {
 
     value = i;
 
+}
+
+
+//getter
+int Int::get(void){
+    
+    return value;
+    
 }
 
 
@@ -97,11 +102,13 @@ bool Int::operator == (const Int& i) {
 
 }
 
+
 bool Int::operator != (const Int& i) {
 
     return (!((*this) == i));
 
 }
+
 
 bool Int::operator == (const int& i) {
 
@@ -109,11 +116,13 @@ bool Int::operator == (const int& i) {
 
 }
 
+
 bool Int::operator != (const int& i) {
 
     return (!((*this) == i));
 
 }
+
 
 bool Int::operator > (const Int& i) {
 
@@ -121,12 +130,19 @@ bool Int::operator > (const Int& i) {
 
 }
 
+
 bool Int::operator > (const int& i) {
 
     return(value > i);
 
 }
 
+
+bool Int::operator >= (const int& i) {
+
+    return(value >= i);
+
+}
 
 
 //reads an Int from File file, which must be already open, and it search the file from the beginning if search_entire_stream = true, does not search the file from the beginning otherwise. Writes the result in *this

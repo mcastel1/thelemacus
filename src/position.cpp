@@ -130,10 +130,10 @@ void Position::update_ListControl(long i, wxListCtrl* listcontrol) {
     listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (int)(i + 1)));
 
     //update latitude column
-    listcontrol->SetItem(i, j++, wxString(phi.to_string(String("NS"), (display_precision.value), true)));
+    listcontrol->SetItem(i, j++, wxString(phi.to_string(String("NS"), (display_precision.get()), true)));
 
     //update longitude column
-    listcontrol->SetItem(i, j++, wxString(lambda.to_string(String("EW"), (display_precision.value), true)));
+    listcontrol->SetItem(i, j++, wxString(lambda.to_string(String("EW"), (display_precision.get()), true)));
 
     //update label column
     //    if(label != String("")){

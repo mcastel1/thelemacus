@@ -55,7 +55,7 @@ Sight::Sight(void) {
     //initiazlie the limb to a 'n/a' value
     limb.value = 'n';
     atmosphere->initialize();
-    (related_route.value) = -1;
+    related_route.set(-1);
 
 }
 
@@ -174,16 +174,16 @@ void Sight::update_ListControl(long i, wxListCtrl* listcontrol) {
     listcontrol->SetItem(i, j++, wxString(artificial_horizon.value));
 
     //set sextant altitude column
-    listcontrol->SetItem(i, j++, wxString(H_s.to_string(String(""), (display_precision.value), true)));
+    listcontrol->SetItem(i, j++, wxString(H_s.to_string(String(""), (display_precision.get()), true)));
 
     //set index error
-    listcontrol->SetItem(i, j++, wxString(index_error.to_string(String(""), (display_precision.value), true)));
+    listcontrol->SetItem(i, j++, wxString(index_error.to_string(String(""), (display_precision.get()), true)));
 
     //set height of eye column
     if (artificial_horizon.value == 'n') {
 
         //write the height_of_eye with its original unit of measure
-        listcontrol->SetItem(i, j++, wxString(height_of_eye->to_string( (display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(height_of_eye->to_string( (display_precision.get()))));
 
     }
     else {
@@ -196,21 +196,21 @@ void Sight::update_ListControl(long i, wxListCtrl* listcontrol) {
     //I add to master_clock_date_and_hour the value stopwatch (if any): I write the result in time_UTC and I write in the GUI object  time_UTC
     time_UTC = master_clock_date_and_hour;
     //    if((use_stopwatch.value)=='y'){time_UTC += stopwatch;}
-    listcontrol->SetItem(i, j++, wxString(time_UTC.to_string(display_precision.value, false)));
+    listcontrol->SetItem(i, j++, wxString(time_UTC.to_string(display_precision.get(), false)));
 
     //set use of stopwatch
     listcontrol->SetItem(i, j++, wxString((use_stopwatch.value)));
 
     //set stopwatch reading
     if ((use_stopwatch.value) == 'y') {
-        listcontrol->SetItem(i, j++, wxString((stopwatch).to_string(display_precision.value, false)));
+        listcontrol->SetItem(i, j++, wxString((stopwatch).to_string(display_precision.get(), false)));
     }
     else {
         listcontrol->SetItem(i, j++, wxString(""));
     }
 
     //set TAI-UTC
-    listcontrol->SetItem(i, j++, wxString((TAI_minus_UTC).to_string((display_precision.value), false)));
+    listcontrol->SetItem(i, j++, wxString((TAI_minus_UTC).to_string((display_precision.get()), false)));
 
     //update label column
     //    if(label != String("")){
@@ -218,7 +218,7 @@ void Sight::update_ListControl(long i, wxListCtrl* listcontrol) {
 
     listcontrol->SetItem(i, j++, wxString(label.value));
 
-    if ((related_route.value) == -1) {
+    if (related_route == -1) {
         //if the sight is not connected to a route, I leave the column field empty
 
         listcontrol->SetItem(i, j++, wxString(""));
@@ -227,7 +227,7 @@ void Sight::update_ListControl(long i, wxListCtrl* listcontrol) {
     else {
         //if the sight is connected to a route, I write the # of the related route in the column field
 
-        listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (related_route.value) + 1));
+        listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (related_route.get()) + 1));
 
     }
 
@@ -321,7 +321,7 @@ template<class S> bool Sight::read_from_stream([[maybe_unused]] String name, S* 
     }
 
     //given that the sight is not yet related to a route, I set
-    (related_route.value) = -1;
+    related_route.set(-1);
 
     if (!check) {
         cout << prefix.value << RED << "Error reading sight!\n" << RESET;
@@ -418,8 +418,8 @@ void Sight::print(String name, String prefix, ostream& ostr) {
         
         label.print(String("label"), true, new_prefix, ostr);
         
-        if (((related_route.value) != -1) && (&ostr == &cout)) {
-            ostr << new_prefix.value << "# of related route = " << (related_route.value) + 1 << "\n";
+        if ((related_route != -1) && (&ostr == &cout)) {
+            ostr << new_prefix.value << "# of related route = " << (related_route.get()) + 1 << "\n";
         }
         
     }
@@ -470,7 +470,7 @@ bool Sight::reduce(Route* circle_of_equal_altitude, [[maybe_unused]] String pref
     check &= get_coordinates(circle_of_equal_altitude, new_prefix);
 
     //link the circle of equal altitude (*circle_of_equal_altitude) to sight (*this)
-    temp << body->name->value << " " << time.to_string(display_precision.value, false) << " TAI, " << label.value;
+    temp << body->name->value << " " << time.to_string(display_precision.get(), false) << " TAI, " << label.value;
     circle_of_equal_altitude->label.set(String(""), String(temp.str()), new_prefix);
 
     check &= compute_H_o(new_prefix);

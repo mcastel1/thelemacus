@@ -51,11 +51,11 @@ void Data::print_to_kml(String prefix) {
 
 
 
-            for (j = 0; j < (unsigned int)(wxGetApp().n_points_routes.value); j++) {
+            for (j = 0; j < (unsigned int)(wxGetApp().n_points_routes.get()); j++) {
 
                 //I consider a Length equal to a temporary value of the length of the route, which spans between 0 and two_M_PI*(Re*sin(((route_list[i]).omega.value))) across the for loop over j
                 //I compute the coordinate of the endpoint of route_list[i] for the ((route_list[i]).l) above
-                (route_list[i]).compute_end(Length(two_M_PI * ((wxGetApp().Re.value) * sin(((route_list[i]).omega.value))) * ((double)j) / ((double)(wxGetApp().n_points_routes.value - 1))), new_prefix);
+                (route_list[i]).compute_end(Length(two_M_PI * ((wxGetApp().Re.value) * sin(((route_list[i]).omega.value))) * ((double)j) / ((double)(wxGetApp().n_points_routes.get() - 1))), new_prefix);
 
                 //I write the coordinates (longitude = lambda_kml, latitude = phi_kml) in plot_command, and thus in the kml file, in degrees with decimal points. In the first column there is longitude, in the second  latitude, and in the third altitude (I am not interested in altitude, thus is set it to 0); The - sign in lambda_kml is added because kml adopt the convention that longitude is positive towards the east, while in this library it is positive towards the west. 360 is substracted to lambda_kml and phi_kml in such a way that -180 < lambda_kml < 180 and -90 < phi < 90.
 
@@ -139,8 +139,8 @@ Data::Data(Catalog* cata, [[maybe_unused]] String prefix) {
     catalog = cata;
     job_id = -1;
 
-    plot_command.precision((data_precision.value));
-    command.precision((data_precision.value));
+    plot_command.precision((data_precision.get()));
+    command.precision((data_precision.get()));
 
     //read number of intervals for ticks from file_init
     wxGetApp().n_intervals_ticks_preferred.read_from_file_to(String("preferred number of intervals for ticks"), wxGetApp().path_file_init, String("R"), new_prefix);
@@ -323,7 +323,7 @@ int Data::compute_position(String prefix) {
                 (*(error_circle.reference_position)) = center;
                 (error_circle.omega.value) = (r.value) / (wxGetApp().Re.value);
                 (error_circle.label) = String("error on astronomical position");
-                ((error_circle.related_sight).value) = -1;
+                error_circle.related_sight.set(-1);
                 
                 r.print(String("error on astronomical position"), prefix, cout);
                 my_push_back(&route_list, error_circle);
@@ -475,7 +475,7 @@ void Data::print_routes(bool print_all_routes, String prefix, ostream& ostr) {
     for (i = 0, j = 0; i < (route_list.size()); i++) {
 
         //if print_all_routes = false, I only print routes which are not linked to a sight. This is to avoid doubles: If I print also Routes which are related to a Sight, then when the file to which I am saving will be read again, the code will reduce them and create double Routes identical to the ones already present in the file.
-        if (((((route_list[i]).related_sight).value) == -1) || print_all_routes) {
+        if ((((route_list[i]).related_sight) == -1) || print_all_routes) {
 
             name.str("");
             name << "Route #" << j + 1;
@@ -500,19 +500,19 @@ bool Data::add_sight_and_reduce(Sight* sight_in, [[maybe_unused]] String prefix)
     //I link the sight to the route, and the route to the sight
     //create a new route in the respective list
     route_list.resize(route_list.size() + 1);
-    (sight_in->related_route.value) = ((int)(route_list.size())) - 1;
+    sight_in->related_route.set(((int)(route_list.size())) - 1);
     //push back sight_in into sight_list
     my_push_back(&sight_list, *sight_in);
-    (((route_list[route_list.size() - 1]).related_sight).value) = ((int)(sight_list.size())) - 1;
+    ((route_list[route_list.size() - 1]).related_sight.set(((int)(sight_list.size())) - 1));
 
     //I commented this out because now the sight is enetered through the GUI
     //    (sight_list[sight_list.size()-1]).enter((*catalog), String("new sight"), prefix);
     check &= ((sight_list[sight_list.size() - 1]).reduce(&(route_list[route_list.size() - 1]), prefix));
 
     //I link the sight to the route, and the route to the sight
-    ((sight_list[sight_list.size() - 1]).related_route.value) = ((int)route_list.size()) - 1;
-    (sight_in->related_route.value) = ((int)route_list.size()) - 1;
-    (((route_list[route_list.size() - 1]).related_sight).value) = ((int)sight_list.size()) - 1;
+    (sight_list[sight_list.size() - 1]).related_route.set(((int)route_list.size()) - 1);
+    sight_in->related_route.set(((int)route_list.size()) - 1);
+    (route_list[route_list.size() - 1]).related_sight.set(((int)sight_list.size()) - 1);
 
 
     if (check) {
@@ -565,13 +565,13 @@ void Data::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unu
     //update the linking indexed of routes in accordance with the deletion of the sight
     for (j = 0; j < route_list.size(); j++) {
 
-        if (((((route_list[j]).related_sight).value) != -1) && ((((route_list[j]).related_sight).value) >= ((int)i))) {
+        if ((((route_list[j]).related_sight) != -1) && (((route_list[j]).related_sight) >= ((int)i))) {
 
-            if ((((route_list[j]).related_sight).value) == ((int)i)) {
-                (((route_list[j]).related_sight).value) = -1;
+            if (((route_list[j]).related_sight) == ((int)i)) {
+                (route_list[j]).related_sight.set(-1);
             }
             else {
-                (((route_list[j]).related_sight).value)--;
+                (route_list[j]).related_sight.set( (route_list[j]).related_sight.get() - 1 );
             }
 
         }
@@ -581,18 +581,18 @@ void Data::remove_sight(unsigned int i, Answer remove_related_route, [[maybe_unu
     cout << prefix.value << "Sight removed.\n";
 
 
-    if ((i_related_route.value) != -1) {
+    if (i_related_route != -1) {
 
         if (remove_related_route == Answer('y', prefix)) {
             //the related route must be removed -> I remove it
 
-            remove_route((i_related_route.value), Answer('n', prefix), prefix);
+            remove_route((i_related_route.get()), Answer('n', prefix), prefix);
 
         }
         else {
-            //the related route must not be removed: given that its related sight has been deleted, I set its related_sight.value to -1
+            //the related route must not be removed: given that its related sight has been deleted, I set its related_sight.get() to -1
 
-            (route_list[i_related_route.value]).related_sight.set(-1);
+            (route_list[i_related_route.get()]).related_sight.set(-1);
 
         }
 
@@ -622,7 +622,7 @@ void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
     Int i_related_sight;
     stringstream name;
 
-    (i_related_sight.value) = (((route_list[i]).related_sight).value);
+    i_related_sight.set(((route_list[i]).related_sight)) ;
 
     name.str("");
     name << "Route to be removed: #" << i + 1;
@@ -634,13 +634,13 @@ void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
     //update the linking indexed of sights in accordance with the deletion of the route
     for (j = 0; j < sight_list.size(); j++) {
 
-        if ((((sight_list[j]).related_route.value) != -1) && (((sight_list[j]).related_route.value) >= ((int)i))) {
+        if ((((sight_list[j]).related_route.get()) != -1) && (((sight_list[j]).related_route.get()) >= ((int)i))) {
 
-            if (((sight_list[j]).related_route.value) == ((int)i)) {
-                ((sight_list[j]).related_route.value) = -1;
+            if (((sight_list[j]).related_route.get()) == ((int)i)) {
+                (sight_list[j]).related_route.set(-1);
             }
             else {
-                ((sight_list[j]).related_route.value)--;
+                (sight_list[j]).related_route.set( (sight_list[j]).related_route.get()-1 );
             }
 
         }
@@ -650,9 +650,9 @@ void Data::remove_route(unsigned int i, Answer remove_related_sight, [[maybe_unu
     cout << prefix.value << "Route removed.\n";
 
 
-    if (((i_related_sight.value) != -1) && (remove_related_sight == Answer('y', prefix))) {
+    if ((i_related_sight != -1) && (remove_related_sight == Answer('y', prefix))) {
 
-        remove_sight(i_related_sight.value, Answer('n', prefix), prefix);
+        remove_sight(i_related_sight.get(), Answer('n', prefix), prefix);
 
     }
 
@@ -744,8 +744,8 @@ template<class S> void Data::read_from_stream(String name, S* input_stream, bool
                 cout << new_prefix.value << "Route added as route #" << route_list.size() << ".\n";
 
                 //I link the sight to the route, and the route to the sight
-                ((route_list[route_list.size() - 1].related_sight).value) = ((int)(sight_list.size())) - 1;
-                ((sight_list[sight_list.size() - 1].related_route).value) = ((int)(route_list.size())) - 1;
+                (route_list[route_list.size() - 1].related_sight.set(((int)(sight_list.size())) - 1));
+                (sight_list[sight_list.size() - 1].related_route.set(((int)(route_list.size())) - 1));
 
             }
 

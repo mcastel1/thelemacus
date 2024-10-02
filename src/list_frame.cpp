@@ -191,8 +191,8 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         }
         
         //no positions nor routes are highlighted when ListFrame is constructed
-        highlighted_route_now = -1;
-        highlighted_position_now = -1;
+        highlighted_route_now.set(-1);
+        highlighted_position_now.set(-1);
         
         menu_bar = new wxMenuBar;
         menu_app = new wxMenu;
@@ -456,7 +456,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         
         
         
-        sizer_box_sight->Add(listcontrol_sights, 0, wxALL, (wxGetApp().border.value));
+        sizer_box_sight->Add(listcontrol_sights, 0, wxALL, (wxGetApp().border.get()));
         
         
         //listcontrol_positions with positions
@@ -479,7 +479,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         headers.push_back(wxString("Label"));
         listcontrol_positions->SetColumns(headers);
         
-        sizer_box_position->Add(listcontrol_positions, 1, wxALL, (wxGetApp().border.value));
+        sizer_box_position->Add(listcontrol_positions, 1, wxALL, (wxGetApp().border.get()));
         
         
         //listcontrol routes with routes
@@ -522,7 +522,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         listcontrol_routes->SetColumns(headers);
         
         
-        sizer_box_route->Add(listcontrol_routes, 1, wxALL, (wxGetApp().border.value));
+        sizer_box_route->Add(listcontrol_routes, 1, wxALL, (wxGetApp().border.get()));
         
         //bing everything to KeyDown method, so when a key is pressed on *this, panel, listcontrol... then KeyDown is called
         Bind(wxEVT_KEY_DOWN, &ListFrame::KeyDown<wxKeyEvent>, this);
@@ -598,7 +598,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         button_show_map = new wxBitmapButton(
                                              panel,
                                              wxID_ANY,
-                                             Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))),
+                                             Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - ToDIP(wxSize((wxGetApp().border.get()), (wxGetApp().border.get())))),
                                              wxDefaultPosition,
                                              (wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
                                              wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -610,7 +610,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         button_compute_position = new wxBitmapButton(
                                                      panel,
                                                      wxID_ANY,
-                                                     Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))),
+                                                     Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - ToDIP(wxSize((wxGetApp().border.get()), (wxGetApp().border.get())))),
                                                      wxDefaultPosition,
                                                      (wxSize((wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value), (wxGetApp().rectangle_display.GetWidth()) * ((wxGetApp().size_large_button_over_width_screen).value))),
                                                      wxBU_EXACTFIT | wxSIMPLE_BORDER
@@ -665,20 +665,20 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         sizer_buttons_sight->Add(button_transport_sight, 0, wxALIGN_CENTER);
         sizer_buttons_sight->Add(button_disconnect_sight, 0, wxALIGN_CENTER);
         sizer_buttons_sight->Add(button_delete_sight, 0, wxALIGN_CENTER);
-        sizer_box_sight->Add(sizer_buttons_sight, 0, wxALIGN_LEFT | wxALL, (wxGetApp().border.value));
+        sizer_box_sight->Add(sizer_buttons_sight, 0, wxALIGN_LEFT | wxALL, (wxGetApp().border.get()));
         
         sizer_buttons_position->Add(button_add_position, 0, wxALIGN_CENTER);
         sizer_buttons_position->Add(button_modify_position, 0, wxALIGN_CENTER);
         sizer_buttons_position->Add(button_transport_position, 0, wxALIGN_CENTER);
         sizer_buttons_position->Add(button_delete_position, 0, wxALIGN_CENTER);
-        sizer_box_position->Add(sizer_buttons_position, 0, wxALIGN_LEFT | wxALL, (wxGetApp().border.value));
+        sizer_box_position->Add(sizer_buttons_position, 0, wxALIGN_LEFT | wxALL, (wxGetApp().border.get()));
         
         sizer_buttons_route->Add(button_add_route, 0, wxALIGN_CENTER);
         sizer_buttons_route->Add(button_modify_route, 0, wxALIGN_CENTER);
         sizer_buttons_route->Add(button_transport_route, 0, wxALIGN_CENTER);
         sizer_buttons_route->Add(button_disconnect_route, 0, wxALIGN_CENTER);
         sizer_buttons_route->Add(button_delete_route, 0, wxALIGN_CENTER);
-        sizer_box_route->Add(sizer_buttons_route, 0, wxALIGN_LEFT | wxALL, (wxGetApp().border.value));
+        sizer_box_route->Add(sizer_buttons_route, 0, wxALIGN_LEFT | wxALL, (wxGetApp().border.get()));
         
         
         //
@@ -688,19 +688,19 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
         //        listcontrol_sights->SetColumnWidth(i, ((listcontrol_sights->GetSize()).GetWidth())/(listcontrol_sights->GetColumnCount()));
         //    }
         
-        sizer_v->Add(sizer_box_sight, 1, wxALL, (wxGetApp().border.value));
-        sizer_v->Add(sizer_box_position, 1, wxALL, (wxGetApp().border.value));
-        sizer_listcontrol_routes_plus_buttons->Add(sizer_box_route, 0, wxALL, (wxGetApp().border.value));
+        sizer_v->Add(sizer_box_sight, 1, wxALL, (wxGetApp().border.get()));
+        sizer_v->Add(sizer_box_position, 1, wxALL, (wxGetApp().border.get()));
+        sizer_listcontrol_routes_plus_buttons->Add(sizer_box_route, 0, wxALL, (wxGetApp().border.get()));
         //    sizer_listcontrol_routes_plus_buttons->AddStretchSpacer(1);
         //here I set the flag '0' to avoid button_show_map from being stretched
-        sizer_big_buttons->Add(button_compute_position, 0, wxALL | wxALIGN_CENTER, (wxGetApp().border.value));
-        sizer_big_buttons->Add(button_show_map, 0, wxALL | wxALIGN_CENTER, (wxGetApp().border.value));
+        sizer_big_buttons->Add(button_compute_position, 0, wxALL | wxALIGN_CENTER, (wxGetApp().border.get()));
+        sizer_big_buttons->Add(button_show_map, 0, wxALL | wxALIGN_CENTER, (wxGetApp().border.get()));
         //    sizer_listcontrol_routes_plus_buttons->Add(sizer_big_buttons, 0);
         //by adding the flag wxEXPAND here, I let the StretchSpacer in sizer_listcontrol_routes_plus_buttons expand, and thus I flush to the right button_show_map
-        sizer_v->Add(sizer_listcontrol_routes_plus_buttons, 1, wxALL, (wxGetApp().border.value));
-        sizer_h->Add(sizer_v, 1, wxALIGN_BOTTOM, (wxGetApp().border.value));
-        sizer_h->Add(sizer_big_buttons, 0, wxALIGN_CENTER, (wxGetApp().border.value));
-        sizer_all->Add(sizer_h, 1, wxALL | wxEXPAND, (wxGetApp().border.value));
+        sizer_v->Add(sizer_listcontrol_routes_plus_buttons, 1, wxALL, (wxGetApp().border.get()));
+        sizer_h->Add(sizer_v, 1, wxALIGN_BOTTOM, (wxGetApp().border.get()));
+        sizer_h->Add(sizer_big_buttons, 0, wxALIGN_CENTER, (wxGetApp().border.get()));
+        sizer_all->Add(sizer_h, 1, wxALL | wxEXPAND, (wxGetApp().border.get()));
         
 #ifdef _WIN32
         //if I am on WIN32, I set the icon from the icon set in the .rc file
@@ -1096,7 +1096,7 @@ void ListFrame::OnDisconnectSight(wxCommandEvent& event) {
 void ListFrame::OnDisconnectRoute(wxCommandEvent& event) {
     
     //set i_object_to_disconnect to the currently selected Route in listcontrol_routes and call DisconnectOld to disconnect that Route from its related Sight
-    (disconnect_sight->sight_id) = (((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight.value);
+    (disconnect_sight->sight_id) = (((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight.get());
     
     disconnect_sight->operator()(event);
 
@@ -1175,7 +1175,7 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
     transported_object_type = String("route");
     
     //I store the # of the selected Route into i_object_to_transport
-    i_object_to_transport = ((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+    i_object_to_transport.set(((int)(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))));
     
     //here set i_object_to_transport to the currently selected Route
     
@@ -1235,7 +1235,7 @@ bool ListFrame::CheckRoutesForTransport(void) {
         
         if(
            /*condition that the Route is not relatied to a Sight*/
-           ((((data->route_list)[i]).related_sight.value) == -1) &&
+           ((((data->route_list)[i]).related_sight.get()) == -1) &&
            /*condition that the Route is not a circle of equal altitude*/
            (((data->route_list)[i]).type != Route_types[2]) &&
            /*condition that the Route does not coincide with the object to transport*/
@@ -1257,7 +1257,7 @@ bool ListFrame::CheckRoutesForTransport(void) {
 template<class E> void ListFrame::OnPressDeleteRoute(E& event) {
     
     //ask the user whether he/she really wants to remove the Route: if the answer is yes, then QuestionFrame calls the functor ask_remove_related_sight. If no, I call the functor unsed_idling, which does nothing and simply sets idling to false
-    QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>* question_frame = new QuestionFrame<AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(NULL,
+    QuestionFrame<ListFrame, AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>* question_frame = new QuestionFrame<ListFrame, AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(NULL,
                                                                                                                                                                                                     ask_remove_related_sight, String("Yes"), unset_idling, String("No"), unset_idling, true, true, true,
                                                                                                                                                                                                     "",
                                                                                                                                                                                                     "Do you really want to remove this route?",
@@ -1309,7 +1309,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
         MousePositionOnListControl(listcontrol_positions, &highlighted_position_now);
         MousePositionOnListControl(listcontrol_routes, &highlighted_route_now);
         
-        if ((highlighted_sight_now == wxNOT_FOUND) && (highlighted_position_now == wxNOT_FOUND) && (highlighted_route_now == wxNOT_FOUND)) {
+        if (((highlighted_sight_now.get()) == wxNOT_FOUND) && (highlighted_position_now == wxNOT_FOUND) && (highlighted_route_now == wxNOT_FOUND)) {
             //the mouse is not hovering over an element in listcontrol_sights nor listcontrol_routes: set a white background in all elements in listonctrol_routes and listcontrol_sights
             
             //set the beckgorund color of the Routes in listcontrol_sights and listcontrol_routes  and the background color of the Positions in listcontrol_positions to white
@@ -1330,16 +1330,16 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
             if ((highlighted_sight_now != wxNOT_FOUND) && enable_highlight) {
                 // the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
                 
-                highlighted_route_now = (((data->sight_list)[highlighted_sight_now]).related_route.value);
+                highlighted_route_now.set((((data->sight_list)[highlighted_sight_now.get()]).related_route.get()));
                 
                 for (i = 0; i < (listcontrol_sights->GetItemCount()); i++) {
                     
-                    if (i == highlighted_sight_now) {
+                    if (i == (highlighted_sight_now.get())) {
                         
                         //set the beckgorund color of the sight in listcontrol_sights and of its related route to a highlight color
                         listcontrol_sights->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
-                        if ((highlighted_route_now != -1) && ((listcontrol_routes->GetItemCount()) > highlighted_route_now)) {
-                            listcontrol_routes->SetItemBackgroundColour(highlighted_route_now, (wxGetApp().color_selected_item));
+                        if ((highlighted_route_now != -1) && ((listcontrol_routes->GetItemCount()) > highlighted_route_now.get())) {
+                            listcontrol_routes->SetItemBackgroundColour(highlighted_route_now.get(), (wxGetApp().color_selected_item));
                         }
                         
                     }
@@ -1347,8 +1347,8 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
                         
                         //set the beckgorund color of the sight in listcontrol_sights and of its related route to white
                         listcontrol_sights->SetItemBackgroundColour(i, wxGetApp().background_color);
-                        if ((((((data->sight_list)[i]).related_route).value) != -1) && ((listcontrol_routes->GetItemCount()) > ((((data->sight_list)[i]).related_route).value))) {
-                            listcontrol_routes->SetItemBackgroundColour(((((data->sight_list)[i]).related_route).value), wxGetApp().background_color);
+                        if (((((data->sight_list)[i]).related_route) != -1) && ((listcontrol_routes->GetItemCount()) > (((data->sight_list)[i]).related_route.get()))) {
+                            listcontrol_routes->SetItemBackgroundColour((((data->sight_list)[i]).related_route.get()), wxGetApp().background_color);
                         }
                         
                     }
@@ -1363,7 +1363,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
                 
                 for (i = 0; i < (listcontrol_positions->GetItemCount()); i++) {
                     
-                    if (i == highlighted_position_now) {
+                    if (highlighted_position_now == i) {
                         
                         //set the beckgorund color of the Position in listcontrol_positions to a highlight color
                         listcontrol_positions->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
@@ -1383,11 +1383,11 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
             if ((highlighted_route_now != wxNOT_FOUND) && enable_highlight) {
                 //the mouse is hovering over an element of listcontrool_routes -> highlight it and the related sight in listcontrol_sights, and set  a white background in all other leements in listcontrol_routes and listcontorl_sights
                 
-                j = ((((data->route_list)[highlighted_route_now]).related_sight).value);
+                j = (((data->route_list)[highlighted_route_now.get()]).related_sight.get());
                 
                 for (i = 0; i < (listcontrol_routes->GetItemCount()); i++) {
                     
-                    if (i == highlighted_route_now) {
+                    if (highlighted_route_now == i) {
                         
                         //set the beckgorund color of the Route in listcontrol_routes and of its related sight to a highlight color
                         listcontrol_routes->SetItemBackgroundColour(i, (wxGetApp().color_selected_item));
@@ -1400,8 +1400,8 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
                         
                         //set the beckgorund color of the Route in listcontrol_routes and of its related sight to white
                         listcontrol_routes->SetItemBackgroundColour(i, wxGetApp().background_color);
-                        if ((((((data->route_list)[i]).related_sight).value) != -1) && ((listcontrol_sights->GetItemCount()) > ((((data->route_list)[i]).related_sight).value))) {
-                            listcontrol_sights->SetItemBackgroundColour(((((data->route_list)[i]).related_sight).value), wxGetApp().background_color);
+                        if (((((data->route_list)[i]).related_sight) != -1) && ((listcontrol_sights->GetItemCount()) > (((data->route_list)[i]).related_sight.get()))) {
+                            listcontrol_sights->SetItemBackgroundColour((((data->route_list)[i]).related_sight.get()), wxGetApp().background_color);
                         }
                         
                     }

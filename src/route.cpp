@@ -679,18 +679,18 @@ void Route::update_ListControl(long i, wxListCtrl* listcontrol) {
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));
 
-        listcontrol->SetItem(i, j++, wxString(reference_position->to_string((display_precision.value))));
-        listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), (display_precision.value), true)));
+        listcontrol->SetItem(i, j++, wxString(reference_position->to_string((display_precision.get()))));
+        listcontrol->SetItem(i, j++, wxString(omega.to_string(String(""), (display_precision.get()), true)));
 
     }
     else {
         //in this case the type of this is 'loxodrome' or 'orthodrome': the last two fields are empty, and I fill in only the first three fields
 
-        listcontrol->SetItem(i, j++, wxString(reference_position->to_string((display_precision.value))));
-        listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.value), false)));
+        listcontrol->SetItem(i, j++, wxString(reference_position->to_string((display_precision.get()))));
+        listcontrol->SetItem(i, j++, wxString(Z.to_string(String(""), (display_precision.get()), false)));
         
         set_length_from_time_speed();
-        listcontrol->SetItem(i, j++, wxString(length->to_string((display_precision.value))));
+        listcontrol->SetItem(i, j++, wxString(length->to_string((display_precision.get()))));
 
         listcontrol->SetItem(i, j++, wxString(""));
         listcontrol->SetItem(i, j++, wxString(""));
@@ -701,7 +701,7 @@ void Route::update_ListControl(long i, wxListCtrl* listcontrol) {
     listcontrol->SetItem(i, j++, wxString(label.value));
 
 
-    if ((related_sight.value) == -1) {
+    if ((related_sight.get()) == -1) {
         //if the route is not connected to a sight, I leave the column field empty
 
         listcontrol->SetItem(i, j++, wxString(""));
@@ -710,7 +710,7 @@ void Route::update_ListControl(long i, wxListCtrl* listcontrol) {
     else {
         //if the route is connected to a sight, I write the # of the related sight in the column field
 
-        listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (related_sight.value) + 1));
+        listcontrol->SetItem(i, j++, wxString::Format(wxT("%i"), (related_sight.get()) + 1));
 
     }
 
@@ -1538,7 +1538,7 @@ template<class S> void Route::read_from_stream([[maybe_unused]] String name, S* 
 
 
     //when a sight is read from file, it is not yet linked to any route, thus I set
-    (related_sight.value) = -1;
+    related_sight.set(-1);
 
 }
 
@@ -1933,9 +1933,9 @@ void Route::print(String name, String prefix, ostream& ostr) {
         label.print(String("label"), true, new_prefix, ostr);
         
         
-        if ((related_sight.value) != -1) {
+        if ((related_sight.get()) != -1) {
             
-            cout << new_prefix.value << "Related sight # = " << (related_sight.value) + 1 << "\n";
+            cout << new_prefix.value << "Related sight # = " << (related_sight.get()) + 1 << "\n";
             
         }
         

@@ -74,12 +74,12 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         list_frame->button_delete_route->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
         list_frame->button_delete_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_trash_icon, wxGetApp().size_small_button));
         
-        list_frame->button_show_map->SetBitmapLabel(Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - list_frame->ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
-        list_frame->button_compute_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - list_frame->ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
+        list_frame->button_show_map->SetBitmapLabel(Bitmap(wxGetApp().path_file_map_icon, wxGetApp().size_large_button - list_frame->ToDIP(wxSize((wxGetApp().border.get()), (wxGetApp().border.get())))));
+        list_frame->button_compute_position->SetBitmapLabel(Bitmap(wxGetApp().path_file_position_icon, wxGetApp().size_large_button - list_frame->ToDIP(wxSize((wxGetApp().border.get()), (wxGetApp().border.get())))));
         
         for(unsigned int i = 0; i<list_frame->chart_frames.size(); i++){
-            ((list_frame->chart_frames)[i])->button_reset->SetBitmapLabel(Bitmap(wxGetApp().path_file_reset_icon, (wxGetApp().size_large_button) - ((list_frame->chart_frames)[i])->ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
-            ((list_frame->chart_frames)[i])->button_show_list->SetBitmapLabel(Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ((list_frame->chart_frames)[i])->ToDIP(wxSize((wxGetApp().border.value), (wxGetApp().border.value)))));
+            ((list_frame->chart_frames)[i])->button_reset->SetBitmapLabel(Bitmap(wxGetApp().path_file_reset_icon, (wxGetApp().size_large_button) - ((list_frame->chart_frames)[i])->ToDIP(wxSize((wxGetApp().border.get()), (wxGetApp().border.get())))));
+            ((list_frame->chart_frames)[i])->button_show_list->SetBitmapLabel(Bitmap(wxGetApp().path_file_list_icon, (wxGetApp().size_large_button) - ((list_frame->chart_frames)[i])->ToDIP(wxSize((wxGetApp().border.get()), (wxGetApp().border.get())))));
         }
         
         
@@ -94,15 +94,13 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
 //if the user presses Ctrl + Q to exit the app, I call this function which prompts a message frame
 template<class T> void MyApp::OnPressCtrlQ([[maybe_unused]] T& event) {
     
-    UnsetIdling<ListFrame>* unset_idling;
     CloseFrame<ListFrame>* close;
     ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>* print_question;
-    unset_idling = new UnsetIdling<ListFrame>(list_frame);
     close = new CloseFrame<ListFrame>(list_frame);
     
     //    PrintMessage<ListFrame, Close<ListFrame> >* print_info_message;
     
-    print_question = new ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(list_frame, close, unset_idling, unset_idling);
+    print_question = new ShowQuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>(list_frame, close, list_frame->unset_idling, list_frame->unset_idling);
     
     print_question->SetAndCall(NULL, String("You pressed CTRL+Q"), String("Do you want to quit the app?"), String("Yes"), String("No"));
   
@@ -124,8 +122,8 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
     if ((list_frame->chart_frames.size()) > 1) {
         //if ((list_frame->chart_frames).size() > 1 it makes sens to introduce delta_x, delta_y
         
-        delta_x = (((double)(rectangle_display.GetWidth())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetWidth()))) / 2.0 - 2.0 * (wxGetApp().border.value)) / ((double)(((list_frame->chart_frames).size()) - 1));
-        delta_y = (((double)(rectangle_display.GetHeight())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetHeight()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetHeight()))) / 2.0 - 2.0 * (wxGetApp().border.value)) / ((double)(((list_frame->chart_frames).size()) - 1));
+        delta_x = (((double)(rectangle_display.GetWidth())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetWidth()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetWidth()))) / 2.0 - 2.0 * (wxGetApp().border.get())) / ((double)(((list_frame->chart_frames).size()) - 1));
+        delta_y = (((double)(rectangle_display.GetHeight())) - ((double)(((((list_frame->chart_frames)[0])->GetSize()).GetHeight()) + ((((list_frame->chart_frames)[((list_frame->chart_frames).size()) - 1])->GetSize()).GetHeight()))) / 2.0 - 2.0 * (wxGetApp().border.get())) / ((double)(((list_frame->chart_frames).size()) - 1));
         
     }else{
         //if ((list_frame->chart_frames).size() <= 1, it does not make sense to define delta_x, delta_y, and I set
@@ -141,7 +139,7 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
         ((list_frame->chart_frames)[i])->Raise();
         ((list_frame->chart_frames)[i])->SetPosition(wxPoint(
                                                              
-                                                             (((double)(((list_frame->chart_frames)[0])->GetSize().GetWidth())) - ((double)(((list_frame->chart_frames)[i])->GetSize().GetWidth()))) / 2.0 + (wxGetApp().border.value) + delta_x * ((double)i)
+                                                             (((double)(((list_frame->chart_frames)[0])->GetSize().GetWidth())) - ((double)(((list_frame->chart_frames)[i])->GetSize().GetWidth()))) / 2.0 + (wxGetApp().border.get()) + delta_x * ((double)i)
                                                              ,
 #ifdef __APPLE__
                                                              //I am on APPLE operating system -> there is a menu bar
@@ -152,7 +150,7 @@ template<class T> void MyApp::ShowCharts([[maybe_unused]] T& event) {
                                                              
 #endif
                                                              
-                                                             (((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)(((list_frame->chart_frames)[i])->GetSize().GetHeight()))) / 2.0 + (wxGetApp().border.value) + delta_y * ((double)i)
+                                                             (((double)((((list_frame->chart_frames)[0])->GetSize()).GetHeight())) - ((double)(((list_frame->chart_frames)[i])->GetSize().GetHeight()))) / 2.0 + (wxGetApp().border.get()) + delta_y * ((double)i)
                                                              
                                                              ));
         
@@ -330,6 +328,8 @@ bool MyApp::OnInit() {
     settings = new wxSystemSettings();
     timer = new wxTimer();
     close_app = new CloseApp(this);
+    set_idling = new SetIdling<MyApp>(this);
+
     
     dummy_frame = new wxFrame();
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
@@ -451,11 +451,13 @@ bool MyApp::OnInit() {
 
         bool hasAlpha = splash_image.HasAlpha() || splash_image.HasMask();
         
-#ifdef _WIN32
+        
+//#ifdef _WIN32
         //on WIN32 the image needs to be resized
 
         splash_image.Rescale(rectangle_display.height, rectangle_display.height);
-#endif
+        
+//#endif
 
         wxRegion splashRgn;
         if (hasAlpha) {
@@ -482,7 +484,7 @@ bool MyApp::OnInit() {
         
         show_all = new ShowAll(list_frame);
         //note that in disclaimer I do not bind est button to CloseApp, but to Show all
-        disclaimer = new QuestionFrame<ShowAll, CloseApp, CloseApp>(NULL, show_all, String("Yes"), close_app, String("No"), close_app, true, true, false,
+        disclaimer = new QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>(NULL, show_all, String("Yes"), close_app, String("No"), close_app, true, true, false,
                                                                     "Welcome to Thelemacus!",
                                                                     //                                                                          "On December 16, 1719, Captain J. Cook perceived the first Australian aborigens from HMS Endeavour, off the coast of Perth.\n He was on a mission commissioned by King John III, designed to discover new commercial routes, and new worlds.\n His voyage had been made possible by the novel, state-of-the art astronomical positioning methods\n based on the marine chronometer built by J. Harrison, which was on board the Endeavour. \nThe reliability of the positioning method allowed the british realm to trace and map the coasts of new, unknonw lands, \nand paved the way to a new way to sail which lasted until the invention of GPS.\n With this application, you will bring back to life astronomical positioning methods, in a way that no other existing application allows for, and entering in a novel historical path. "
                                                                     "This is the state-of-the art application for celestial navigation, I hope you will enjoy it!\nRemember that this software comes with no warranty, use at your own risk!\nDo you want to proceed?\n\nFair winds, following seas ..."
@@ -498,7 +500,7 @@ bool MyApp::OnInit() {
         
         //allocate and show the chart frames
         n_chart_frames.read_from_file_to(String("number chart frames"), (wxGetApp().path_file_init), String("R"), String(""));
-        list_frame->chart_frames.resize(n_chart_frames.value);
+        list_frame->chart_frames.resize(n_chart_frames.get());
         for (i = 0; i < (list_frame->chart_frames).size(); i++) {
             
             //set projections at startup - start

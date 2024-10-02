@@ -63,7 +63,7 @@ template class StaticLengthField<ChartFrame>;
 //set the value and the unit of the GUI field *this equal to the value and the unit in the non-GUI object input
 template<class P> void StaticLengthField<P>::set(const Length& l) {
     
-    value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.value, l.value));
+    value->SetLabel(wxString::Format(wxT("%.*f"), display_precision.get(), l.value));
     unit->set((*(l.unit)));
     
 }

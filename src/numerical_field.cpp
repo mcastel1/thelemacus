@@ -117,7 +117,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 
         if (!ok) {
             //the entered value is not valid: I set the value back to the value before the editing process had started
-            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, object_before_editing.value));
+            value->SetValue(wxString::Format(wxT("%.*f"), display_precision.get(), object_before_editing.value));
 
             unit->name->SetValue(wxString(object_before_editing.unit->value));
             ok = true;
@@ -192,7 +192,7 @@ template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UN
 //set the value in the GUI object value equal to the value in the non-GUI object speed
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::set(void) {
         
-    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, object->value));
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.get(), object->value));
     value_ok = true;
     
     unit->MultipleItemField<P, NON_GUI_UNIT, CHECK_UNIT>::set();
@@ -207,7 +207,7 @@ template void NumericalField<SightFrame, Length, LengthUnit, CheckLength<SightFr
 //set the value and unit of measure in the GUI field *this equal to the value and the unit of measure in the non-GUI object input
 template<class P, class NON_GUI, class NON_GUI_UNIT, class CHECK, class CHECK_UNIT> void NumericalField<P, NON_GUI, NON_GUI_UNIT, CHECK, CHECK_UNIT>::set(const NON_GUI& input) {
         
-    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.value, input.value));
+    value->SetValue(wxString::Format(wxT("%.*f"), display_precision.get(), input.value));
     unit->set((*(input.unit)));
     
 }

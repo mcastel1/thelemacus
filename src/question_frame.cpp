@@ -124,6 +124,7 @@ template class QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<L
 template class QuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>;
 template class QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>;
+template class QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>;
 
 
 //if the user presses return/escape, I call f_a / f_b

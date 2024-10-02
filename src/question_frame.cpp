@@ -177,8 +177,18 @@ template<class T, class F_A, class F_B, class F_ABORT> template<class E> void Qu
 template<class T, class F_A, class F_B, class F_ABORT>  void QuestionFrame<T, F_A, F_B, F_ABORT>::SetIdlingAndShow(void){
  
     if(parent){
-        parent->set_idling();
+        (*(parent->set_idling))();
     }
     Show(true);
     
 }
+
+template void QuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, DeletePosition, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSight>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();
+template void QuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>::SetIdlingAndShow();

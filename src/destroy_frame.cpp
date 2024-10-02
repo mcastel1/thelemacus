@@ -45,6 +45,7 @@ template class DestroyFrame<QuestionFrame<ListFrame, AskRemoveRelatedSight, Unse
 template class DestroyFrame<QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<void, ShowAll, CloseApp, CloseApp>>;
 template class DestroyFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>;
+template class DestroyFrame<QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>>;
 
 
 //destroys a frame of type F
@@ -75,3 +76,4 @@ template void DestroyFrame<QuestionFrame<void, ShowAll, CloseApp, CloseApp>>::op
 template void DestroyFrame<QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>::operator()();
+template void DestroyFrame<QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>>::operator()();

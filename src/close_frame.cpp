@@ -46,6 +46,7 @@ template class CloseFrame<QuestionFrame<ListFrame, ConfirmTransport<ListFrame>, 
 template class CloseFrame<QuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 template class CloseFrame<QuestionFrame<ListFrame, AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>;
 template class CloseFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>;
+template class CloseFrame<QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>>;
 
 
 //closes a frame of type F
@@ -89,3 +90,4 @@ template void CloseFrame<QuestionFrame<ListFrame, ConfirmTransport<ListFrame>, U
 template void CloseFrame<QuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<QuestionFrame<ListFrame, AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
 template void CloseFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>::operator()<wxCommandEvent>(wxCommandEvent&);
+template void CloseFrame<QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>>::operator()<wxCommandEvent>(wxCommandEvent&);

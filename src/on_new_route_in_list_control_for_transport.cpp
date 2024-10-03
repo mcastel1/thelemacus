@@ -66,9 +66,7 @@ template<class T> void OnNewRouteInListControlRoutesForTransport::operator()(T& 
         
         GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> >* transport_handler;
 
-        
-
-        
+            
         transport_handler = new GraphicalFeatureTransportHandler<Route, ToDoAtEndOfTransport<Route, ListFrame> >(
                                                                                                                  parent,
                                                                                                                  &((parent->data->route_list)[(parent->i_object_to_transport.get())]),

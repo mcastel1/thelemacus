@@ -360,37 +360,38 @@ bool MyApp::OnInit() {
     
     
     //files in data directory
-    //    path_file_recent = data_directory.append(read_from_file(String("name file recent"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_catalog = data_directory.append(read_from_file(String("name file catalog"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_coastline_file = data_directory.append(read_from_file(String("name coastline file"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_n_line = data_directory.append(read_from_file(String("name file n line"), (wxGetApp().path_file_init), String("R"), String("")));
-    path_file_sample_sight = data_directory.append(read_from_file(String("name file sample sight"), (wxGetApp().path_file_init), String("R"), String("")));
+    //    path_file_recent = data_directory.append(read_from_file(String("name file recent"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_catalog = data_directory.append(read_from_file(String("name file catalog"), wxGetApp().path_file_init, String("R"), String("")));
+    path_coastline_file = data_directory.append(read_from_file(String("name coastline file"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_n_line = data_directory.append(read_from_file(String("name file n line"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_sample_sight = data_directory.append(read_from_file(String("name file sample sight"), wxGetApp().path_file_init, String("R"), String("")));
     
     
     set_icon_paths();
     
     
-    data_precision.read_from_file_to(String("data precision"), (wxGetApp().path_file_init), String("R"), String(""));
-    display_precision.read_from_file_to(String("display precision"), (wxGetApp().path_file_init), String("R"), String(""));
-    time_check_light_dark.read_from_file_to(String("time check light dark"), (wxGetApp().path_file_init), String("R"), String(""));
+    data_precision.read_from_file_to(String("data precision"), wxGetApp().path_file_init, String("R"), String(""));
+    display_precision.read_from_file_to(String("display precision"), wxGetApp().path_file_init, String("R"), String(""));
+    time_check_light_dark.read_from_file_to(String("time check light dark"), wxGetApp().path_file_init, String("R"), String(""));
+    time_splash_image.read_from_file_to(String("time splash image"), wxGetApp().path_file_init, String("R"), String(""));
 #ifdef WIN32
-    time_refresh.read_from_file_to(String("time refresh"), (wxGetApp().path_file_init), String("R"), String(""));
+    time_refresh.read_from_file_to(String("time refresh"), wxGetApp().path_file_init, String("R"), String(""));
 #endif
-    animation_time.read_from_file_to(String("animation time"), (wxGetApp().path_file_init), String("R"), String(""));
-    time_zone.read_from_file_to(String("time zone"), (wxGetApp().path_file_init), String("R"), String(""));
+    animation_time.read_from_file_to(String("animation time"), wxGetApp().path_file_init, String("R"), String(""));
+    time_zone.read_from_file_to(String("time zone"), wxGetApp().path_file_init, String("R"), String(""));
     
     
-    max_lat.read_from_file_to(String("maximal latitude coastline data"), (wxGetApp().path_file_init), String("R"), String(""));
-    min_lat.read_from_file_to(String("minimal latitude coastline data"), (wxGetApp().path_file_init), String("R"), String(""));
+    max_lat.read_from_file_to(String("maximal latitude coastline data"), wxGetApp().path_file_init, String("R"), String(""));
+    min_lat.read_from_file_to(String("minimal latitude coastline data"), wxGetApp().path_file_init, String("R"), String(""));
     
-    size_small_button_over_width_screen.read_from_file_to(String("size small button over width screen"), (wxGetApp().path_file_init), String("R"),  String(""));
-    size_large_button_over_width_screen.read_from_file_to(String("size large button over width screen"), (wxGetApp().path_file_init), String("R"),  String(""));
-    size_icon_over_width_screen.read_from_file_to(String("size icon over width screen"), (wxGetApp().path_file_init), String("R"),  String(""));
-    size_message_image_over_width_screen.read_from_file_to(String("size message image over width screen"), (wxGetApp().path_file_init), String("R"),  String(""));
-    point_size.read_from_file_to(String("point size"), (wxGetApp().path_file_init), String("R"), String(""));
+    size_small_button_over_width_screen.read_from_file_to(String("size small button over width screen"), wxGetApp().path_file_init, String("R"),  String(""));
+    size_large_button_over_width_screen.read_from_file_to(String("size large button over width screen"), wxGetApp().path_file_init, String("R"),  String(""));
+    size_icon_over_width_screen.read_from_file_to(String("size icon over width screen"), wxGetApp().path_file_init, String("R"),  String(""));
+    size_message_image_over_width_screen.read_from_file_to(String("size message image over width screen"), wxGetApp().path_file_init, String("R"),  String(""));
+    point_size.read_from_file_to(String("point size"), wxGetApp().path_file_init, String("R"), String(""));
     
-    chart_transport_zoom_factor_coefficient.read_from_file_to(String("chart transport zoom factor coefficient"), (wxGetApp().path_file_init), String("R"),  String(""));
-    minimal_animation_distance_over_size_of_observer_region.read_from_file_to(String("minimal animation distance over size of observer region"), (wxGetApp().path_file_init), String("R"),  String(""));
+    chart_transport_zoom_factor_coefficient.read_from_file_to(String("chart transport zoom factor coefficient"), wxGetApp().path_file_init, String("R"),  String(""));
+    minimal_animation_distance_over_size_of_observer_region.read_from_file_to(String("minimal animation distance over size of observer region"), wxGetApp().path_file_init, String("R"),  String(""));
     
     
     //set size_small/large_button from size_small_button_over_width_screen and size_large_button_over_width_screen
@@ -404,31 +405,31 @@ bool MyApp::OnInit() {
                                                   ));
     
     
-    length_plot_area_over_length_chart.read_from_file_to(String("length of plot area over length of chart"), (wxGetApp().path_file_init), String("R"),  String(""));
-    length_chart_over_length_chart_frame.read_from_file_to(String("length of chart over length of chart frame"), (wxGetApp().path_file_init), String("R"),  String(""));
-    length_border_over_length_screen.read_from_file_to(String("length of border over length of screen"), (wxGetApp().path_file_init), String("R"),  String(""));
+    length_plot_area_over_length_chart.read_from_file_to(String("length of plot area over length of chart"), wxGetApp().path_file_init, String("R"),  String(""));
+    length_chart_over_length_chart_frame.read_from_file_to(String("length of chart over length of chart frame"), wxGetApp().path_file_init, String("R"),  String(""));
+    length_border_over_length_screen.read_from_file_to(String("length of border over length of screen"), wxGetApp().path_file_init, String("R"),  String(""));
     
     border.set(String("border"), (rectangle_display.GetWidth()) * (length_border_over_length_screen.value), String(""));
     
     //read n_points_minor_ticks from file_init
-    n_points_minor_ticks.read_from_file_to(String("number of points for minor ticks"), (wxGetApp().path_file_init), String("R"), String(""));
+    n_points_minor_ticks.read_from_file_to(String("number of points for minor ticks"), wxGetApp().path_file_init, String("R"), String(""));
     //read relative_displacement from file_init
-    relative_displacement.read_from_file_to(String("relative displacement"), (wxGetApp().path_file_init), String("R"), String(""));
+    relative_displacement.read_from_file_to(String("relative displacement"), wxGetApp().path_file_init, String("R"), String(""));
     //read standard_thickness_over_length_screen from file_init
-    standard_thickness_over_length_screen.read_from_file_to(String("standard thickness over length screen"), (wxGetApp().path_file_init), String("R"),  String(""));
+    standard_thickness_over_length_screen.read_from_file_to(String("standard thickness over length screen"), wxGetApp().path_file_init, String("R"),  String(""));
     //read large_thickness_over_length_screen from file_init
-    large_thickness_over_length_screen.read_from_file_to(String("large thickness over length screen"), (wxGetApp().path_file_init), String("R"),  String(""));
+    large_thickness_over_length_screen.read_from_file_to(String("large thickness over length screen"), wxGetApp().path_file_init, String("R"),  String(""));
     //read color horizon from file
-    color_horizon.read_from_file(String("color horizon"), (wxGetApp().path_file_init), String("R"), String(""));
+    color_horizon.read_from_file(String("color horizon"), wxGetApp().path_file_init, String("R"), String(""));
     //read color selected item from file
-    color_selected_item.read_from_file(String("color selected item"), (wxGetApp().path_file_init), String("R"), String(""));
+    color_selected_item.read_from_file(String("color selected item"), wxGetApp().path_file_init, String("R"), String(""));
     //read tick length over width plot area from file_init
-    tick_length_over_width_plot_area.read_from_file_to(String("tick length over width plot area"), (wxGetApp().path_file_init), String("R"), String(""));
+    tick_length_over_width_plot_area.read_from_file_to(String("tick length over width plot area"), wxGetApp().path_file_init, String("R"), String(""));
     //read tick length over width plot area from file_init
-    tick_length_over_aperture_circle_observer.read_from_file_to(String("tick length over aperture circle observer"), (wxGetApp().path_file_init), String("R"), String(""));
+    tick_length_over_aperture_circle_observer.read_from_file_to(String("tick length over aperture circle observer"), wxGetApp().path_file_init, String("R"), String(""));
     //read min_crossing_angle from file_init
-    min_crossing_angle.read_from_file_to(String("minimal crossing angle between circles of equal altitude"), (wxGetApp().path_file_init), String("R"), String(""));
-    angle_zoom_to_position.read_from_file_to(String("angle zoom to position"), (wxGetApp().path_file_init), String("R"), String(""));
+    min_crossing_angle.read_from_file_to(String("minimal crossing angle between circles of equal altitude"), wxGetApp().path_file_init, String("R"), String(""));
+    angle_zoom_to_position.read_from_file_to(String("angle zoom to position"), wxGetApp().path_file_init, String("R"), String(""));
     
     standard_thickness.set(String("standard thickness"), max((int)((((wxGetApp().standard_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1), String(""));
     large_thickness.set(String("large thickness"), max((int)((((wxGetApp().large_thickness_over_length_screen)).value) / 2.0 * (wxGetApp().rectangle_display).GetWidth()), 1), String(""));
@@ -439,11 +440,11 @@ bool MyApp::OnInit() {
     
     foreground_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     background_color = Color(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
-    error_color.read_from_file(String("error color"), (wxGetApp().path_file_init), String("R"), String(""));
+    error_color.read_from_file(String("error color"), wxGetApp().path_file_init, String("R"), String(""));
     highlight_color = color_selected_item;
     dark_mode = (settings->GetAppearance()).IsDark();
     
-    n_animation_steps.read_from_file_to(String("number of animation steps"), (wxGetApp().path_file_init), String("R"), String(""));
+    n_animation_steps.read_from_file_to(String("number of animation steps"), wxGetApp().path_file_init, String("R"), String(""));
     
     
     //prompt the splash image of the app
@@ -463,7 +464,7 @@ bool MyApp::OnInit() {
         if (hasAlpha) {
             splashRgn = wxRegion(alphaToBlackAndWhiteMask(splash_image), *wxWHITE);
         }
-        wxSplashScreen scrn{ splash_image, wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT, 1000, nullptr, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP | (hasAlpha ? wxFRAME_SHAPED : 0x00) };
+        wxSplashScreen scrn{ splash_image, wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT, ((int)(wxGetApp().time_splash_image.to_milliseconds())), nullptr, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP | (hasAlpha ? wxFRAME_SHAPED : 0x00) };
         if (hasAlpha) {
             scrn.SetShape(splashRgn);
         }
@@ -471,7 +472,7 @@ bool MyApp::OnInit() {
         // yield main loop so splash screen can show
         wxAppConsole::Yield();
         //Sleep for two seconds before destroying the splash screen and showing main frame
-        wxSleep(5);
+        wxSleep(wxGetApp().time_splash_image.to_seconds());
         
     }
     
@@ -499,7 +500,7 @@ bool MyApp::OnInit() {
         
         
         //allocate and show the chart frames
-        n_chart_frames.read_from_file_to(String("number chart frames"), (wxGetApp().path_file_init), String("R"), String(""));
+        n_chart_frames.read_from_file_to(String("number chart frames"), wxGetApp().path_file_init, String("R"), String(""));
         list_frame->chart_frames.resize(n_chart_frames.get());
         for (i = 0; i < (list_frame->chart_frames).size(); i++) {
             

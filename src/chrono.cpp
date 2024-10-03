@@ -237,9 +237,17 @@ void Chrono::print(String name, String prefix, ostream& ostr) {
 };
 
 
+//return *this expressed in seconds
+double Chrono::to_seconds(void){
+    
+    return (h * 60.0 * 60.0 + m * 60.0 + s);
+    
+}
+
+
 //return *this expressed in milliseconds
 unsigned int Chrono::to_milliseconds(void){
     
-    return ((h * 60.0 * 60.0 + m * 60.0 + s) * 1000.0);
+    return (((int)(to_seconds() * 1000.0)));
     
 }

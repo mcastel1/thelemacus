@@ -14,7 +14,7 @@ using namespace std;
 
 
 
-//this functor does all the necessary tasks to be done at the end of an animated transporty: sets the non-GUI object *object_a  (for example, a Position, Route...) of type NON_GUI equal to *object_b, sets and redraws everything in the parent of type P, ...
+//this functor does all the necessary tasks to be done at the end of an animated transport: set the non-GUI object *object_a  (for example, a Position, Route...) of type NON_GUI equal to *object_b, set and re-render everything in the parent of type P, set the parent to non-idling mode, ...
 template<class NON_GUI, class P> class ToDoAtEndOfTransport{
     
 public:

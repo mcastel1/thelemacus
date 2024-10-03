@@ -39,6 +39,7 @@ template<class NON_GUI, class P> void ToDoAtEndOfTransport<NON_GUI, P>::operator
     }
     
     parent->Set(false, true, false);
+    (*(parent->unset_idling))();
 
 }
 

@@ -371,21 +371,10 @@ void SightFrame::KeyDown(wxKeyEvent& event) {
 
         OnPressCancel(dummy);
 
-    }
-    else {
+    }else{
 
         if (((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)) {
             //the user pressed return or numpad return
-
-            /*
-             //example of a lambda!
-            CallAfter(
-                      [  ] (  ) -> void
-                      {
-                          cout << "Lambda ! \n";
-                      }
-                      );
-             */
 
             if (is_ok()) {
                 //if all fields are ok, I do as if the user presssed button_reduce

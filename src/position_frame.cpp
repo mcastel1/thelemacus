@@ -226,9 +226,6 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     get(event);
     
     
-    
-
-    
     if (position_in_listcontrol_positions== -1) {
         //I am creating a new Position
         
@@ -237,7 +234,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
         
         for (i = 0; i < (parent->chart_frames.size()); i++) {
             
-            ((parent->chart_frames)[i])->draw_panel->points_position_list.resize((((parent->chart_frames)[i])->draw_panel)->points_position_list.size() + 1);
+            ((parent->chart_frames)[i])->draw_panel->points_position_list.resize(((parent->chart_frames)[i])->draw_panel->points_position_list.size() + 1);
             ((parent->chart_frames)[i])->draw_panel->points_position_list.resize(((parent->chart_frames)[i])->draw_panel->points_position_list.size() + 1);
             
         }

@@ -38,11 +38,6 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     //allocate sizers
     frame_sizer = new wxBoxSizer(wxVERTICAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
-
-    //    sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
-    //    sizer_grid = new wxGridSizer(3, 1, 0, 0);
-
-
     StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize, 0);
 
     //bind the function MessageFrame<FF_OK>::KeyDown to the event where a keyboard dey is down

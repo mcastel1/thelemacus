@@ -30,6 +30,7 @@ class String;
 template<class T, class F_A, class F_B, class F_ABORT> class QuestionFrame: public wxFrame{
     
 public:
+
     //the parent of *this
     T* parent;
     //the non-GUI object connected to the GUI object MessageFrame

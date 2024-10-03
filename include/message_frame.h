@@ -18,11 +18,13 @@ using namespace std;
 template<class P> class CloseFrame;
 
 
-//this is a wxFrame designed to show a message to the GUI user. FF_OK is the type of the functor class which will be called when the button ok is pressed. This type is variable, so it has been 'templated'
-template<class FF_OK> class MessageFrame: public wxFrame{
+//this is a wxFrame designed to show a message to the GUI user. T is the type of the parent that called *this. FF_OK is the type of the functor class which will be called when the button ok is pressed. This type is variable, so it has been 'templated'
+template<class T, class FF_OK> class MessageFrame: public wxFrame{
     
 public:
     
+    //the parent of *this
+    T* parent;
     wxPanel *panel;
     wxBoxSizer *frame_sizer, *sizer_v;
     wxGridSizer* sizer_grid;

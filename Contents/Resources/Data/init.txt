@@ -52,6 +52,7 @@ plot area y margin over y size chart = 0.1
 standard thickness over length screen = 1e-3
 #this should not be too short : if it is, it will slow down the code and consume battery
 time check light dark = 00:00:01
+time splash image = 00:00:10.2372583687
 #this is used only on WIN32
 time refresh = 00:00:00.01
 #the temporal length of animations

@@ -67,7 +67,7 @@ public:
     //type of the Boost library which contains the local time, intended as the time of the machine where the app is running
     boost::posix_time::ptime utc_time;
     wxSystemSettings* settings;
-    Chrono /*the code checks every time_check whether the operating system has changed its light/dark mode*/time_check_light_dark, /*the time step between two subsequent animation frames */animation_time;
+    Chrono /*the code checks every time_check whether the operating system has changed its light/dark mode*/time_check_light_dark, /*the time step between two subsequent animation frames */animation_time, /*the time during which the splash image is shown when the app is started*/ time_splash_image;
 #ifdef WIN32
     Chrono /*when a graphical object is dragged, two Refresh() calls are spaced bv a time larger or equal to time_refresh. This is used only on WIN32, where the drag of a graphical object generates some ugly flashes if time_refresh is not used*/time_refresh;
 #endif

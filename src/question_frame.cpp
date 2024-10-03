@@ -76,7 +76,6 @@ template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B
     button_b->Bind(wxEVT_BUTTON, *close_frame);
     
     if(parent){
-        //FIX THIS LATER: here bind the esc button to parent->unset_idling
         button_a->Bind(wxEVT_BUTTON, *(parent->unset_idling));
         button_b->Bind(wxEVT_BUTTON, *(parent->unset_idling));
     }
@@ -135,7 +134,7 @@ template class QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<Li
 template class QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>;
 
 
-//if the user presses return/escape, I call f_a / f_b
+//if the user presses return/escape, I call f_a / f_b + close_frame and (if parent!=NULL) unset_idling. These calls reflect the calls made with Bind() to button_a, button_b in the constructor of QuestionFrame
 template<class T, class F_A, class F_B, class F_ABORT> template<class E> void QuestionFrame<T, F_A, F_B, F_ABORT>::KeyDown(E& event) {
 
     wxCommandEvent dummy;
@@ -169,6 +168,11 @@ template<class T, class F_A, class F_B, class F_ABORT> template<class E> void Qu
     }
 
     (*close_frame)(dummy);
+    
+    //if parent != NULL, call parent->unset_idling
+    if(parent){
+        *(parent->unset_idling);
+    }
 
 
     event.Skip(true);

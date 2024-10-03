@@ -171,7 +171,7 @@ template<class T, class F_A, class F_B, class F_ABORT> template<class E> void Qu
     
     //if parent != NULL, call parent->unset_idling
     if(parent){
-        *(parent->unset_idling);
+        (*(parent->unset_idling))();
     }
 
 

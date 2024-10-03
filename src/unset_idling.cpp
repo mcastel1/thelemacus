@@ -64,3 +64,4 @@ template void UnsetIdling<RouteFrame>::operator()();
 template void UnsetIdling<SightFrame>::operator()();
 template void UnsetIdling<DrawPanel>::operator()();
 template void UnsetIdling<ChartFrame>::operator()();
+template void UnsetIdling<MyApp>::operator()();

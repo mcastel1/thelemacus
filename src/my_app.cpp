@@ -472,7 +472,7 @@ bool MyApp::OnInit() {
         // yield main loop so splash screen can show
         wxAppConsole::Yield();
         //Sleep for two seconds before destroying the splash screen and showing main frame
-        wxSleep(((int)(wxGetApp().time_splash_image.to_seconds())));
+        wxSleep(wxGetApp().time_splash_image.to_seconds());
         
     }
     

@@ -35,6 +35,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
 
+    //set to idling mode the parent ListFrame
     (*(parent->set_idling))();
 
     set_idling = new SetIdling<SightFrame>(this);

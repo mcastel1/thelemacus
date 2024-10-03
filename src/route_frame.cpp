@@ -32,6 +32,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     for_transport = for_transport_in;
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
+
+    //set to idling mode the parent ListFrame 
+    (*(parent->set_idling))();
+
     
     //SetColor(this);
     

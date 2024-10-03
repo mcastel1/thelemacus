@@ -25,7 +25,9 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-    //SetColor(this);
+
+    //set to idling mode the parent ListFrame
+    (*(parent->set_idling))();
     
     set_idling = new SetIdling<PositionFrame>(this);
     unset_idling = new UnsetIdling<PositionFrame>(this);

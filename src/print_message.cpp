@@ -70,7 +70,7 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void) 
         
         if (((control->GetForegroundColour()) != (wxGetApp().error_color))) {
             
-            message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
+            message_frame = new MessageFrame<T, FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
             message_frame->Show(true);
             message_frame->Raise();
             
@@ -84,7 +84,7 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void) 
     }
     else {
 
-        message_frame = new MessageFrame<FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
+        message_frame = new MessageFrame<T, FF_OK>(f, f_ok, title.value, message.value, image_path, wxDefaultPosition, wxDefaultSize, String(""));
         message_frame->Show(true);
         message_frame->Raise();
 

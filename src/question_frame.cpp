@@ -34,6 +34,7 @@ template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B
     //the wxString message will be split into multiple Strings which were separated by a '\n' in message, each string will be written in an entry of message_split
     vector<String> message_split;
     int i;
+    
 
     f_a = f_a_in;
     string_a = string_a_in;

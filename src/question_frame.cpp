@@ -48,8 +48,10 @@ template<class T, class F_A, class F_B, class F_ABORT> QuestionFrame<T, F_A, F_B
     
     bind_esc_to_button_b = bind_esc_to_button_b_in;
     
-    //set to idling mode the parent ListFrame
-    (*(parent->set_idling))();
+    //set to idling mode the parent if parent != NULL
+    if(parent){
+        (*(parent->set_idling))();
+    }
 
     //SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));

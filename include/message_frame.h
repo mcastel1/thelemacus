@@ -28,7 +28,6 @@ public:
     wxGridSizer* sizer_grid;
     wxButton* button_ok;
     StaticBitmap* image;
-    //    wxBitmap* m_bitmap;
     //pointer to the class containing the functor which will be called when the button ok is pressed
     FF_OK* f_ok;
     
@@ -36,10 +35,6 @@ public:
     //initialize the functor to close this MessageFrame when button_ok will be pressed
     CloseFrame<MessageFrame>* close_frame;
     void KeyDown(wxKeyEvent&);
-    //    void OnPaint(wxPaintEvent&);
-    //    void OnPressOk(wxCommandEvent&);
-    
-    //    DECLARE_EVENT_TABLE();
     
 };
 

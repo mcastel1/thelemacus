@@ -24,6 +24,9 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     wxRect rectangle;
 
     f_ok = f_ok_in;
+    
+    //set to idling mode the parent ListFrame
+    (*(parent->set_idling))();
 
     //SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));

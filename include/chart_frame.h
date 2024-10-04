@@ -95,9 +95,6 @@ public:
     template<class T> void ResetRenderAnimate(T&);
     void Animate(void);
     
-    //this is created for testing
-    UnsetIdling<ChartFrame> *unset_idling;
-    
 };
 
 #endif

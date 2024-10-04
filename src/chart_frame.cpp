@@ -62,8 +62,7 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
     zoom_factor.set(1.0);
     //read zoom_factor_max from file_init
     wxGetApp().zoom_factor_max.read_from_file_to(String("maximal zoom factor"), (wxGetApp().path_file_init), String("R"), String(""));
-    idling = false;
-    unset_idling = new UnsetIdling<ChartFrame>(this);
+    (*unset_idling)();
     
     //coastline_polygons_Position is resized to its maximum possible value
     for(i=0, j=0; i<parent->coastline_polygons_Position.size(); i++) {

@@ -85,8 +85,9 @@ DrawPanel::DrawPanel(ChartPanel* parent_in, const wxPoint& position_in, const wx
     positions_parallels_and_meridians_labels.resize(0);
     
     
-    idling = false;
+    set_idling = new SetIdling<DrawPanel>(this);
     unset_idling = new UnsetIdling<DrawPanel>(this);
+    (*unset_idling)();
     print_error_message = new PrintMessage<DrawPanel, UnsetIdling<DrawPanel> >(this, unset_idling);
     
     
@@ -1716,13 +1717,6 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
     
 }
 
-
-
-void DrawPanel::SetIdling(bool b) {
-    
-    idling = b;
-    
-}
 
 //this function computes lambda_min, ... phi_max from x_min ... y_max for the mercator projection
 inline void DrawPanel::Set_lambda_phi_min_max_Mercator(void) {

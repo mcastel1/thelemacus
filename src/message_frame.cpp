@@ -86,6 +86,11 @@ template<class T, class FF_OK> MessageFrame<T, FF_OK>::MessageFrame(T* parent_in
 }
 
 template class MessageFrame<ChartFrame, UnsetIdling<ChartFrame>>;
+template class MessageFrame<RouteFrame, UnsetIdling<RouteFrame>>;
+template class MessageFrame<SightFrame, UnsetIdling<SightFrame>>;
+template class MessageFrame<PositionFrame, UnsetIdling<PositionFrame>>;
+template class MessageFrame<DrawPanel, UnsetIdling<DrawPanel>>;
+template class MessageFrame<ListFrame, UnsetIdling<ListFrame>>;
 
 
 //if a key is pressed in the keyboard, I call this function

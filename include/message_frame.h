@@ -18,7 +18,7 @@ using namespace std;
 template<class P> class CloseFrame;
 
 
-//this is a wxFrame designed to show a message to the GUI user. T is the type of the parent that called *this. FF_OK is the type of the functor class which will be called when the button ok is pressed. This type is variable, so it has been 'templated'
+//this is a wxFrame designed to show a message to the GUI user. T is the type of the parent that called *this. FF_OK is the type of the functor class which will be called when the button ok is pressed. This type is variable, so it has been 'templated'. Note that here I do not name the type FF_OK -> F_OK because it would cause confusion with a type defined in wxWidgets
 template<class T, class FF_OK> class MessageFrame: public wxFrame{
     
 public:
@@ -33,7 +33,7 @@ public:
     //pointer to the class containing the functor which will be called when the button ok is pressed
     FF_OK* f_ok;
     
-    MessageFrame(wxWindow*, FF_OK*, const wxString&, const wxString&, String, const wxPoint&, const wxSize&, String);
+    MessageFrame(T*, FF_OK*, const wxString&, const wxString&, String, const wxPoint&, const wxSize&, String);
     //initialize the functor to close this MessageFrame when button_ok will be pressed
     CloseFrame<MessageFrame>* close_frame;
     void KeyDown(wxKeyEvent&);

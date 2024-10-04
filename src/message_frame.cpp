@@ -19,7 +19,7 @@
 #include "sight_frame.h"
 #include "static_text.h"
 
-template<class T, class FF_OK> MessageFrame<T, FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, String image_path, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN), f_ok(f_ok_in) {
+template<class T, class FF_OK> MessageFrame<T, FF_OK>::MessageFrame(T* parent_in, FF_OK* f_ok_in, const wxString& title, const wxString& message, String image_path, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(((wxWindow*)parent_in), wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN), parent(parent_in), f_ok(f_ok_in) {
 
     wxRect rectangle;
 
@@ -31,7 +31,7 @@ template<class T, class FF_OK> MessageFrame<T, FF_OK>::MessageFrame(wxWindow* pa
 
     //SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    close_frame = new CloseFrame< MessageFrame<FF_OK> >(this);
+    close_frame = new CloseFrame< MessageFrame<T, FF_OK> >(this);
 
     //image
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display

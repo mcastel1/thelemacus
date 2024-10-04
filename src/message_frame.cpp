@@ -100,8 +100,12 @@ template<class T, class FF_OK> void MessageFrame<T, FF_OK>::KeyDown(wxKeyEvent& 
         //the user presses esc or return -> I close *this and set the idling variable to false
 
         (*close_frame)(event);
-        (f_ok->parent->idling) = false;
-
+        
+        //if parent != NULL, call parent->unset_idling
+        if(parent){
+            (*(parent->unset_idling))();
+        }
+        
     }
 
 }

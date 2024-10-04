@@ -32,11 +32,13 @@ public:
     StaticBitmap* image;
     //pointer to the class containing the functor which will be called when the button ok is pressed
     FF_OK* f_ok;
+    //functor to close *this
+    CloseFrame<MessageFrame>* close_frame;
     
     MessageFrame(T*, FF_OK*, const wxString&, const wxString&, String, const wxPoint&, const wxSize&, String);
-    //initialize the functor to close this MessageFrame when button_ok will be pressed
-    CloseFrame<MessageFrame>* close_frame;
+
     void KeyDown(wxKeyEvent&);
+    void SetIdlingAndShow(void);
     
 };
 

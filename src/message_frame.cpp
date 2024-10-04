@@ -106,3 +106,13 @@ template<class T, class FF_OK> void MessageFrame<T, FF_OK>::KeyDown(wxKeyEvent& 
 
 }
 
+
+//set the parent of *this to idling and show *this
+template<class T, class FF_OK>  void MessageFrame<T, FF_OK>::SetIdlingAndShow(void){
+ 
+    if(parent != NULL){
+        (*(parent->set_idling))();
+    }
+    Show(true);
+    
+}

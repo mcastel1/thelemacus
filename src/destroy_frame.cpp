@@ -69,3 +69,9 @@ template void DestroyFrame<QuestionFrame<ListFrame, AnimateToObject<Route, Highl
 template void DestroyFrame<QuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>>::operator()();
+template void DestroyFrame<MessageFrame<ChartFrame, UnsetIdling<ChartFrame>>>::operator()();
+template void DestroyFrame<MessageFrame<RouteFrame, UnsetIdling<RouteFrame>>>::operator()();
+template void DestroyFrame<MessageFrame<SightFrame, UnsetIdling<SightFrame>>>::operator()();
+template void DestroyFrame<MessageFrame<PositionFrame, UnsetIdling<PositionFrame>>>::operator()();
+template void DestroyFrame<MessageFrame<ListFrame, UnsetIdling<ListFrame>>>::operator()();
+template void DestroyFrame<MessageFrame<DrawPanel, UnsetIdling<DrawPanel>>>::operator()();

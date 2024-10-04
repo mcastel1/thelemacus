@@ -58,3 +58,4 @@ template void SetIdling<PositionFrame>::operator()();
 template void SetIdling<SightFrame>::operator()();
 template void SetIdling<RouteFrame>::operator()();
 template void SetIdling<ChartFrame>::operator()();
+template void SetIdling<MyApp>::operator()();

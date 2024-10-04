@@ -53,6 +53,9 @@ template<class T, class FF_OK> MessageFrame<T, FF_OK>::MessageFrame(T* parent_in
     //    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
     button_ok->Bind(wxEVT_BUTTON, *close_frame);
     button_ok->Bind(wxEVT_BUTTON, *f_ok);
+    if(parent){
+        button_ok->Bind(wxEVT_BUTTON, *(parent->unset_idling));
+    }
 
     image = new StaticBitmap(
                              panel,
@@ -99,6 +102,7 @@ template<class T, class FF_OK> void MessageFrame<T, FF_OK>::KeyDown(wxKeyEvent& 
     if (((event.GetKeyCode()) == WXK_ESCAPE) || ((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)) {
         //the user presses esc or return -> I close *this and set the idling variable to false
 
+        (*f_ok)();
         (*close_frame)(event);
         
         //if parent != NULL, call parent->unset_idling

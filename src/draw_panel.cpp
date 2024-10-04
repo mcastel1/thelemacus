@@ -1718,7 +1718,7 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
 }
 
 
-inline void DrawPanel::SetIdlingValue(bool b) {
+void DrawPanel::SetIdlingValue(bool b) {
     
     idling = b;
     

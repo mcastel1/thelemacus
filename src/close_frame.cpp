@@ -41,6 +41,11 @@ template class CloseFrame<QuestionFrame<ListFrame, AskRemoveRelatedSight, UnsetI
 template class CloseFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>;
 template class CloseFrame<QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>>;
 template class CloseFrame<MessageFrame<ChartFrame, UnsetIdling<ChartFrame>>>;
+template class CloseFrame<MessageFrame<RouteFrame, UnsetIdling<RouteFrame>>>;
+template class CloseFrame<MessageFrame<SightFrame, UnsetIdling<SightFrame>>>;
+template class CloseFrame<MessageFrame<PositionFrame, UnsetIdling<PositionFrame>>>;
+template class CloseFrame<MessageFrame<DrawPanel, UnsetIdling<DrawPanel>>>;
+template class CloseFrame<MessageFrame<ListFrame, UnsetIdling<ListFrame>>>;
 
 
 //closes a frame of type F

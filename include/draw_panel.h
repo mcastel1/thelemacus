@@ -114,6 +114,7 @@ public:
     
     DrawPanel(ChartPanel*, const wxPoint& position_in, const wxSize& size_in);
 
+    void SetIdlingValue(bool);
     void PreRenderMercator(void);
     void PreRender3D(void);
     void PaintEvent(wxPaintEvent&);

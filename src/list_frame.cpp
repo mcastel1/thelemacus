@@ -995,7 +995,7 @@ void ListFrame::Set(const bool& keep_selected_items_listcontrol_sights,
 void ListFrame::SetIdlingAllDrawPanels(const bool& value){
     
     for(unsigned int i=0; i<chart_frames.size(); i++){
-        (chart_frames[i])->draw_panel->SetIdling(value);
+        (chart_frames[i])->draw_panel->SetIdlingValue(value);
     }
     
 }

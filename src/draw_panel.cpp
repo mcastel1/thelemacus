@@ -1718,6 +1718,13 @@ void DrawPanel::KeyDown(wxKeyEvent& event) {
 }
 
 
+inline void DrawPanel::SetIdlingValue(bool b) {
+    
+    idling = b;
+    
+}
+
+
 //this function computes lambda_min, ... phi_max from x_min ... y_max for the mercator projection
 inline void DrawPanel::Set_lambda_phi_min_max_Mercator(void) {
     

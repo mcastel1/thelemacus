@@ -13,11 +13,10 @@
 #include "generic.h"
 #include "static_length_field.h"
 #include "units.h"
-#include "set_idling.h"
 #include "unset_idling.h"
 
-template<class P> class ChartTransportHandler;
 
+template<class P> class ChartTransportHandler;
 
 ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxString& title, const wxPoint& pos, const wxSize& size, String prefix) : wxFrame(parent_in, wxID_ANY, title, pos, size) {
 
@@ -1279,12 +1278,6 @@ void ChartFrame::GetCoastLineDataMercator(void) {
     
 }
 
-
-void ChartFrame::SetIdling(bool b) {
-
-    idling = b;
-
-}
 
 //I call this function when I know that all GUI fields are properly filled in ChartFrame, and thus set the non GUI Angle objects relative to the Euler angles for the rotation of the 3D earth,  and draw everything
 void ChartFrame::AllOk(void){

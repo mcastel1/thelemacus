@@ -20,6 +20,7 @@
 #include "projection_field.h"
 #include "static_length_field.h"
 #include "static_text.h"
+#include "set_idling.h"
 #include "unset_idling.h"
 
 
@@ -77,7 +78,6 @@ public:
     template<class T> void OnScroll(T&);
     bool SetSlider(unsigned int);
     template<class T> void OnPressCtrlW(T&);
-    void SetIdling(bool);
     void AllOk(void);
     template<class T> void AllOk(T&);
     void EnableAll(bool);

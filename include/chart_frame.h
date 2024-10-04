@@ -81,6 +81,9 @@ public:
     void AllOk(void);
     template<class T> void AllOk(T&);
     void EnableAll(bool);
+    //a functor to set/unset idling mode in *this
+    SetIdling<ChartFrame>* set_idling;
+    UnsetIdling<ChartFrame>* unset_idling;
     
     template<class T> void MoveNorth(T&);
     template<class T> void MoveSouth(T&);

@@ -13,6 +13,7 @@
 #include "generic.h"
 #include "static_length_field.h"
 #include "units.h"
+#include "set_idling.h"
 #include "unset_idling.h"
 
 template<class P> class ChartTransportHandler;
@@ -31,6 +32,9 @@ ChartFrame::ChartFrame(ListFrame* parent_in, Projection projection_in, const wxS
 
     parent = parent_in;
     projection.set(projection_in);
+    
+    set_idling = new SetIdling<ChartFrame>(this);
+    unset_idling = new UnsetIdling<ChartFrame>(this);
 
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));

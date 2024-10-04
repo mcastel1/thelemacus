@@ -91,8 +91,8 @@ template<class T, typename FF_OK> void PrintMessage<T, FF_OK>::operator()(void) 
     }
 
 
-    //AFTER the dialog window has been closed, I set f->idling to calse
-    f->CallAfter(*unset_idling);
+//    //AFTER the dialog window has been closed, I set f->idling to calse
+//    f->CallAfter(*unset_idling);
 
 
 }

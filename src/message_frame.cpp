@@ -50,7 +50,6 @@ template<class T, class FF_OK> MessageFrame<T, FF_OK>::MessageFrame(T* parent_in
 
     //buttons
     button_ok = new wxButton(panel, wxID_ANY, "Ok", wxDefaultPosition, wxDefaultSize);
-    //    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
     button_ok->Bind(wxEVT_BUTTON, *close_frame);
     button_ok->Bind(wxEVT_BUTTON, *f_ok);
     if(parent){
@@ -81,7 +80,6 @@ template<class T, class FF_OK> MessageFrame<T, FF_OK>::MessageFrame(T* parent_in
     panel->SetSizerAndFit(sizer_v);
     panel->Fit();
     Fit();
-
     
     SetClientSize(panel->GetBestSize());
     CentreOnScreen();

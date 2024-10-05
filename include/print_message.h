@@ -30,9 +30,8 @@ public:
     
     void SetAndCall(wxControl*, String, String, String);
     void operator()(void);
-    
+    void SetIdlingAndShow(void);
     
 };
-
 
 #endif

@@ -2698,7 +2698,8 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
         
     }
     
-    if(!idling){
+    if((!idling) && (!(parent->idling)) && (!(parent->parent->idling))){
+        //I proceed only if *this, nor the parent ChartFrame, nor the grandparent ListFrame are in idlind mode
         
         wxPoint q;
         stringstream s;

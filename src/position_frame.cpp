@@ -25,7 +25,9 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
-    //SetColor(this);
+
+    //set to idling mode the parent ListFrame
+    (*(parent->set_idling))();
     
     set_idling = new SetIdling<PositionFrame>(this);
     unset_idling = new UnsetIdling<PositionFrame>(this);
@@ -98,7 +100,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_ok->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
     button_ok->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
     button_ok->Bind(wxEVT_BUTTON, &StringField<PositionFrame>::get<wxCommandEvent>, label);
-    button_ok->Bind(wxEVT_BUTTON, &::PositionFrame::OnPressOk, this);
+    button_ok->Bind(wxEVT_BUTTON, &PositionFrame::OnPressOk, this);
     button_cancel->Bind(wxEVT_BUTTON, &PositionFrame::OnPressCancel, this);
     
     
@@ -224,9 +226,6 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
     get(event);
     
     
-    
-
-    
     if (position_in_listcontrol_positions== -1) {
         //I am creating a new Position
         
@@ -235,7 +234,7 @@ void PositionFrame::OnPressOk(wxCommandEvent& event) {
         
         for (i = 0; i < (parent->chart_frames.size()); i++) {
             
-            ((parent->chart_frames)[i])->draw_panel->points_position_list.resize((((parent->chart_frames)[i])->draw_panel)->points_position_list.size() + 1);
+            ((parent->chart_frames)[i])->draw_panel->points_position_list.resize(((parent->chart_frames)[i])->draw_panel->points_position_list.size() + 1);
             ((parent->chart_frames)[i])->draw_panel->points_position_list.resize(((parent->chart_frames)[i])->draw_panel->points_position_list.size() + 1);
             
         }

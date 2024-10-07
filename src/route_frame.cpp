@@ -32,6 +32,10 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     for_transport = for_transport_in;
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
+
+    //set to idling mode the parent ListFrame 
+    (*(parent->set_idling))();
+
     
     //SetColor(this);
     
@@ -351,10 +355,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
     get(event);
     
     
-    
     if (position_in_listcontrol_routes == -1) {
         //I am creating a new Route (which is thus necessarily unrelated to a Sight)
-        
         
         //I push back the newly allocated Route to the end of route_list and reduce it
         parent->data->add_route(route, String(""));
@@ -403,18 +405,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             //trigger the animation that transports the object with the new Route, which will also tabulate the points of the newly added Route in all ChartFrames (see  OnNewRouteInListControlRoutesForTransport::operator())
             (*(parent->on_new_route_in_listcontrol_routes_for_transport))(event);
             
-            
-            
-            
-            //I refresh everything because of the modification above
-            //call ListFrame::set with keep_selected_items_listcontrol_* = true with true because I want to keep the selection in all listcontrols
-            //            parent->listcontrol_routes->set(parent->data->route_list, false);
-            //            parent->Resize();
-            //            parent->OnModifyFile();
-            
-            
-        }
-        
+        }        
         
     }else{
         //I am modifying an existing Route
@@ -456,10 +447,8 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
         }else{
             //the existing Route that I am modifying is not related to a Sight -> I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling at the end of the animation
                         
-            
             AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>> animate(parent, route, parent->highlight_route_and_unset_idling);
             
-            //
             //1. de-highlight all Positions
             parent->highlight_position->set_value(-1);
             parent->highlight_position->operator()(event);
@@ -470,33 +459,13 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             
             //3. in parent->highlight_route, set the value of the highlighted Route to be set equal to -1, and call AnimateToObject with second argument parent->highlight_route : in this way, when the animation is over, the highlighted Route will be set to -1, i.e., no Route will be highlighted when the animation is over
             parent->highlight_route_and_unset_idling->set_value(-1);
-//            parent->AnimateToObject<Route, HighlightObject<ListFrame, UnsetIdling<ListFrame>>>(route, parent->highlight_route_and_unset_idling);
             animate.operator()(event);
-
-            //
             
         }
         
     }
     
-    
-    
-    //    //call listcontrol_sights->set with true because I want to keep the selection in listcontrol_sights
-    //    parent->listcontrol_sights->set((parent->data->sight_list), true);
-    //    parent->listcontrol_positions->set((parent->data->position_list), true);
-    //    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
-    //    parent->listcontrol_routes->set((parent->data->route_list), false);
-    //    //THIS CORRUPTS THE UNITS OF MEASURE OF route_list[i].length
-    //
-    //    //given that I have reset the content of listcontrol_sights and listcontrol_routes, now no items will be selected in these ListControls -> I call:
-    //    (*(parent->on_change_selection_in_listcontrol_sights))(event);
-    //    (*(parent->on_change_selection_in_listcontrol_routes))(event);
-    //
-    //    (*(parent->unset_idling))();
-    //    parent->Resize();
-    //    parent->OnModifyFile();
-    
-    
+
     event.Skip(true);
     
     Close(TRUE);

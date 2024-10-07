@@ -1,5 +1,13 @@
  
  notes:
+    -       //example of a lambda!
+            CallAfter(
+                      [  ] (  ) -> void
+                      {
+                          cout << "Lambda ! \n";
+                      }
+                      );
+             
     - to remove background on PNG images use https://www.photoroom.com/tools/background-remover
     - if you get an error message ' Use of undeclared identifier 'ToDIP' ' it is because the ToDIP method belongs to the wxwindow class, thus you need to call [some wxWindow].ToDIP(...)
 	- remember that  of Routes do not go through the points of Routes exactly, see https://docs.wxwidgets.org/latest/classwx_d_c.html#ad72d38c75ac6b3f80c1f957dd94089fa

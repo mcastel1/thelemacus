@@ -30,6 +30,7 @@ class String;
 template<class T, class F_A, class F_B, class F_ABORT> class QuestionFrame: public wxFrame{
     
 public:
+
     //the parent of *this
     T* parent;
     //the non-GUI object connected to the GUI object MessageFrame
@@ -39,7 +40,7 @@ public:
     wxButton* button_a, *button_b;
     bool enable_button_a, enable_button_b, /*if this is true, then pressing esc will be equivalent to pressing button b, if this is false, pressing esc will call *f_abort*/bind_esc_to_button_b;
     StaticBitmap* image;
-    //initialize the functor to close thie QuestionFrame when button_a or button_b will be pressed
+    //functor to close *this 
     CloseFrame<QuestionFrame>* close_frame;
     //pointer to the class containing the functor which will be called when the button yes is pressed
     F_A* f_a;
@@ -54,6 +55,5 @@ public:
     void SetIdlingAndShow(void);
     
 };
-
 
 #endif

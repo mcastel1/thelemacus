@@ -35,6 +35,7 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
     //append \t to prefix
     new_prefix = prefix.append(String("\t"));
 
+    //set to idling mode the parent ListFrame
     (*(parent->set_idling))();
 
     set_idling = new SetIdling<SightFrame>(this);
@@ -370,21 +371,10 @@ void SightFrame::KeyDown(wxKeyEvent& event) {
 
         OnPressCancel(dummy);
 
-    }
-    else {
+    }else{
 
         if (((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)) {
             //the user pressed return or numpad return
-
-            /*
-             //example of a lambda!
-            CallAfter(
-                      [  ] (  ) -> void
-                      {
-                          cout << "Lambda ! \n";
-                      }
-                      );
-             */
 
             if (is_ok()) {
                 //if all fields are ok, I do as if the user presssed button_reduce

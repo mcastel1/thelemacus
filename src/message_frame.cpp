@@ -19,15 +19,19 @@
 #include "sight_frame.h"
 #include "static_text.h"
 
-template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_OK* f_ok_in, const wxString& title, const wxString& message, String image_path, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(parent, wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN) {
+template<class T, class FF_OK> MessageFrame<T, FF_OK>::MessageFrame(T* parent_in, FF_OK* f_ok_in, const wxString& title, const wxString& message, String image_path, const wxPoint& pos, const wxSize& size, [[maybe_unused]] String prefix) : wxFrame(((wxWindow*)parent_in), wxID_ANY, title, pos, size, wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN), parent(parent_in), f_ok(f_ok_in) {
 
     wxRect rectangle;
 
-    f_ok = f_ok_in;
+    
+    //set to idling mode the parent if parent != NULL
+    if(parent){
+        (*(parent->set_idling))();
+    }
 
     //SetColor(this);
     panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT(""));
-    close_frame = new CloseFrame< MessageFrame<FF_OK> >(this);
+    close_frame = new CloseFrame< MessageFrame<T, FF_OK> >(this);
 
     //image
     //obtain width and height of the display, and create an image with a size given by a fraction of the size of the display
@@ -38,22 +42,19 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     //allocate sizers
     frame_sizer = new wxBoxSizer(wxVERTICAL);
     sizer_v = new wxBoxSizer(wxVERTICAL);
-
-    //    sizer_buttons = new wxBoxSizer(wxHORIZONTAL);
-    //    sizer_grid = new wxGridSizer(3, 1, 0, 0);
-
-
     StaticText* text = new StaticText(panel, message, wxDefaultPosition, wxDefaultSize, 0);
 
-    //bind the function MessageFrame<FF_OK>::KeyDown to the event where a keyboard dey is down
-    panel->Bind(wxEVT_KEY_DOWN, &MessageFrame<FF_OK>::KeyDown, this);
+    //bind the function MessageFrame<T, FF_OK>::KeyDown to the event where a keyboard dey is down
+    panel->Bind(wxEVT_KEY_DOWN, &MessageFrame<T, FF_OK>::KeyDown, this);
 
 
     //buttons
     button_ok = new wxButton(panel, wxID_ANY, "Ok", wxDefaultPosition, wxDefaultSize);
-    //    button_ok->Bind(wxEVT_BUTTON, &MessageFrame::OnPressOk, this);
     button_ok->Bind(wxEVT_BUTTON, *close_frame);
     button_ok->Bind(wxEVT_BUTTON, *f_ok);
+    if(parent){
+        button_ok->Bind(wxEVT_BUTTON, *(parent->unset_idling));
+    }
 
     image = new StaticBitmap(
                              panel,
@@ -79,43 +80,45 @@ template<typename FF_OK> MessageFrame<FF_OK>::MessageFrame(wxWindow* parent, FF_
     panel->SetSizerAndFit(sizer_v);
     panel->Fit();
     Fit();
-
     
     SetClientSize(panel->GetBestSize());
     CentreOnScreen();
 
 }
 
-template class MessageFrame<UnsetIdling<ListFrame>>;
-template class MessageFrame<UnsetIdling<RouteFrame>>;
-template class MessageFrame<UnsetIdling<SightFrame>>;
-template class MessageFrame<UnsetIdling<PositionFrame>>;
-template class MessageFrame<UnsetIdling<DrawPanel>>;
-template class MessageFrame<UnsetIdling<ChartFrame>>;
+template class MessageFrame<ChartFrame, UnsetIdling<ChartFrame>>;
+template class MessageFrame<RouteFrame, UnsetIdling<RouteFrame>>;
+template class MessageFrame<SightFrame, UnsetIdling<SightFrame>>;
+template class MessageFrame<PositionFrame, UnsetIdling<PositionFrame>>;
+template class MessageFrame<DrawPanel, UnsetIdling<DrawPanel>>;
+template class MessageFrame<ListFrame, UnsetIdling<ListFrame>>;
 
 
 //if a key is pressed in the keyboard, I call this function
-template<typename FF_OK> void MessageFrame<FF_OK>::KeyDown(wxKeyEvent& event) {
+template<class T, class FF_OK> void MessageFrame<T, FF_OK>::KeyDown(wxKeyEvent& event) {
 
     if (((event.GetKeyCode()) == WXK_ESCAPE) || ((event.GetKeyCode()) == WXK_RETURN) || ((event.GetKeyCode()) == WXK_NUMPAD_ENTER)) {
         //the user presses esc or return -> I close *this and set the idling variable to false
 
+        (*f_ok)();
         (*close_frame)(event);
-        (f_ok->parent->idling) = false;
-
+        
+        //if parent != NULL, call parent->unset_idling
+        if(parent){
+            (*(parent->unset_idling))();
+        }
+        
     }
 
 }
 
-//template<typename FF_OK> void MessageFrame<FF_OK>::OnPaint(wxPaintEvent& WXUNUSED(event)){
-//
-//    wxPaintDC dc(this);
-//    wxScopedPtr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
-//
-//    gc->SetFont(*wxNORMAL_FONT, *wxBLACK);
-//    gc->DrawBitmap(*m_bitmap, 0, 0,
-//                   (wxGetApp().rectangle_display.GetWidth())*((wxGetApp().size_message_image_over_width_screen).value),
-//                   (wxGetApp().rectangle_display.GetWidth())*((wxGetApp().size_message_image_over_width_screen).value)
-//                   );
-//
-//}
+
+//set the parent of *this to idling and show *this
+template<class T, class FF_OK>  void MessageFrame<T, FF_OK>::SetIdlingAndShow(void){
+ 
+    if(parent != NULL){
+        (*(parent->set_idling))();
+    }
+    Show(true);
+    
+}

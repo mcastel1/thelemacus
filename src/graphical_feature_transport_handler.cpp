@@ -269,7 +269,7 @@ template<class NON_GUI, class F> void GraphicalFeatureTransportHandler<NON_GUI, 
         }
 
         (MotionHandler<F>::timer)->Stop();
-        (*((MotionHandler<F>::parent)->unset_idling))();
+        //        (*((MotionHandler<F>::parent)->unset_idling))();
         ((MotionHandler<F>::parent)->transporting) = false;
         
         //call the functor to be called at the end of the animation, if any

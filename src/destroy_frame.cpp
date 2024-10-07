@@ -26,12 +26,12 @@ template<class F> DestroyFrame<F>::DestroyFrame(F* frame_in) {
 }
 
 template class DestroyFrame<ListFrame>;
-template class DestroyFrame<MessageFrame<UnsetIdling<ListFrame>>>;
-template class DestroyFrame<MessageFrame<UnsetIdling<RouteFrame>>>;
-template class DestroyFrame<MessageFrame<UnsetIdling<SightFrame>>>;
-template class DestroyFrame<MessageFrame<UnsetIdling<PositionFrame>>>;
-template class DestroyFrame<MessageFrame<UnsetIdling<DrawPanel>>>;
-template class DestroyFrame<MessageFrame<UnsetIdling<ChartFrame>>>;
+template class DestroyFrame<MessageFrame<ListFrame, UnsetIdling<ListFrame>>>;
+template class DestroyFrame<MessageFrame<RouteFrame, UnsetIdling<RouteFrame>>>;
+template class DestroyFrame<MessageFrame<SightFrame, UnsetIdling<SightFrame>>>;
+template class DestroyFrame<MessageFrame<PositionFrame, UnsetIdling<PositionFrame>>>;
+template class DestroyFrame<MessageFrame<DrawPanel, UnsetIdling<DrawPanel>>>;
+template class DestroyFrame<MessageFrame<ChartFrame, UnsetIdling<ChartFrame>>>;
 template class DestroyFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>>;
 template class DestroyFrame<QuestionFrame<ListFrame, SaveAndReset<ListFrame>, ResetListFrame, ResetListFrame>>;
@@ -56,12 +56,6 @@ template<class F> void DestroyFrame<F>::operator()(void) {
 }
 
 template void DestroyFrame<ListFrame>::operator()();
-template void DestroyFrame<MessageFrame<UnsetIdling<ListFrame>>>::operator()();
-template void DestroyFrame<MessageFrame<UnsetIdling<RouteFrame>>>::operator()();
-template void DestroyFrame<MessageFrame<UnsetIdling<SightFrame>>>::operator()();
-template void DestroyFrame<MessageFrame<UnsetIdling<PositionFrame>>>::operator()();
-template void DestroyFrame<MessageFrame<UnsetIdling<DrawPanel>>>::operator()();
-template void DestroyFrame<MessageFrame<UnsetIdling<ChartFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteSight, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, AllRoutes, SomeRoutes, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, CloseFrame<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
@@ -71,8 +65,13 @@ template void DestroyFrame<QuestionFrame<ListFrame, ExistingRoute, NewRoute, Uns
 template void DestroyFrame<QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DisconnectSightAndUnsetIdling>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, ConfirmTransport<ListFrame>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, AskRemoveRelatedSight, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
-//template void DestroyFrame<QuestionFrame<void, ShowAll, CloseApp, CloseApp>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, AnimateToObject<Route, HighlightObject<ListFrame, DoNothing>>, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, AskRemoveRelatedRoute, UnsetIdling<ListFrame>, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<ListFrame, DeleteRoute, DeleteRoute, UnsetIdling<ListFrame>>>::operator()();
 template void DestroyFrame<QuestionFrame<MyApp, ShowAll, CloseApp, CloseApp>>::operator()();
+template void DestroyFrame<MessageFrame<ChartFrame, UnsetIdling<ChartFrame>>>::operator()();
+template void DestroyFrame<MessageFrame<RouteFrame, UnsetIdling<RouteFrame>>>::operator()();
+template void DestroyFrame<MessageFrame<SightFrame, UnsetIdling<SightFrame>>>::operator()();
+template void DestroyFrame<MessageFrame<PositionFrame, UnsetIdling<PositionFrame>>>::operator()();
+template void DestroyFrame<MessageFrame<ListFrame, UnsetIdling<ListFrame>>>::operator()();
+template void DestroyFrame<MessageFrame<DrawPanel, UnsetIdling<DrawPanel>>>::operator()();

@@ -20,6 +20,7 @@
 #include "projection_field.h"
 #include "static_length_field.h"
 #include "static_text.h"
+#include "set_idling.h"
 #include "unset_idling.h"
 
 
@@ -77,10 +78,12 @@ public:
     template<class T> void OnScroll(T&);
     bool SetSlider(unsigned int);
     template<class T> void OnPressCtrlW(T&);
-    void SetIdling(bool);
     void AllOk(void);
     template<class T> void AllOk(T&);
     void EnableAll(bool);
+    //a functor to set/unset idling mode in *this
+    SetIdling<ChartFrame>* set_idling;
+    UnsetIdling<ChartFrame>* unset_idling;
     
     template<class T> void MoveNorth(T&);
     template<class T> void MoveSouth(T&);
@@ -91,9 +94,6 @@ public:
     template<class T> void ResetRender(T&);
     template<class T> void ResetRenderAnimate(T&);
     void Animate(void);
-    
-    //this is created for testing
-    UnsetIdling<ChartFrame> *unset_idling;
     
 };
 

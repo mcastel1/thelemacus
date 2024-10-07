@@ -26,6 +26,7 @@
 #include "print_message.h"
 #include "route.h"
 #include "rotation.h"
+#include "set_idling.h"
 #include "unset_idling.h"
 
 
@@ -88,6 +89,7 @@ public:
     //this is true if the label which is being drawn is the first among the parallel/meridian labels, false otherwise
     bool first_label;
     wxMemoryInputStream * memory_input_stream;
+    SetIdling<DrawPanel>* set_idling;
     UnsetIdling<DrawPanel>* unset_idling;
     //labels of parallels and meridians at the current and preceeding chart configuration, respectively
     vector<wxString> parallels_and_meridians_labels;
@@ -112,7 +114,7 @@ public:
     
     DrawPanel(ChartPanel*, const wxPoint& position_in, const wxSize& size_in);
 
-    void SetIdling(bool);
+    void SetIdlingValue(bool);
     void PreRenderMercator(void);
     void PreRender3D(void);
     void PaintEvent(wxPaintEvent&);

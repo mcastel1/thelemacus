@@ -100,7 +100,7 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     button_ok->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lat);
     button_ok->Bind(wxEVT_BUTTON, &AngleField<PositionFrame>::get<wxCommandEvent>, lon);
     button_ok->Bind(wxEVT_BUTTON, &StringField<PositionFrame>::get<wxCommandEvent>, label);
-    button_ok->Bind(wxEVT_BUTTON, &::PositionFrame::OnPressOk, this);
+    button_ok->Bind(wxEVT_BUTTON, &PositionFrame::OnPressOk, this);
     button_cancel->Bind(wxEVT_BUTTON, &PositionFrame::OnPressCancel, this);
     
     

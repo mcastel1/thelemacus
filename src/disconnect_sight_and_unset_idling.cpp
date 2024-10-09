@@ -11,7 +11,7 @@
 #include "on_change_selection_in_list_control.h"
 
 //constructor of the DisconnectSightAndUnsetIdling functor: parent_in is the ListFrame parent of *this, sight_id_in is the # of the Sight to be disconnected from Route # route_id_in
-DisconnectSightAndUnsetIdling::DisconnectSightAndUnsetIdling(ListFrame* parent_in, const int& sight_id_in) : parent(parent_in), sight_id(sight_id_in) {
+DisconnectSightAndUnsetIdling::DisconnectSightAndUnsetIdling(ListFrame* parent_in, const Int& sight_id_in) : parent(parent_in), sight_id(sight_id_in) {
     
     
 }
@@ -22,25 +22,25 @@ template <class E> void DisconnectSightAndUnsetIdling::operator()(E& event) {
     
     if(
        (sight_id >= 0)
-       && (sight_id < (parent->data->sight_list.size()))
-       && (((parent->data->sight_list)[sight_id]).related_route.get() >= 0)
-       && (((parent->data->sight_list)[sight_id]).related_route.get() < (parent->data->route_list.size()))
+       && (sight_id < ((int)(parent->data->sight_list.size())))
+       && (((parent->data->sight_list)[sight_id.get()]).related_route.get() >= 0)
+       && (((parent->data->sight_list)[sight_id.get()]).related_route.get() < (parent->data->route_list.size()))
        ){
         
         int i_route;
         
-        i_route = ((parent->data->sight_list)[sight_id]).related_route.get();
+        i_route = ((parent->data->sight_list)[sight_id.get()]).related_route.get();
         
         //disconnect route and sight
-        ((parent->data->sight_list)[sight_id]).related_route.set(-1);
+        ((parent->data->sight_list)[sight_id.get()]).related_route.set(-1);
         ((parent->data->route_list)[i_route]).related_sight.set(-1);
         
         //update the related wxListCtrls in ListFrame
-        ((parent->data->sight_list)[sight_id]).update_ListControl(sight_id, parent->listcontrol_sights);
+        ((parent->data->sight_list)[sight_id.get()]).update_ListControl(sight_id.get(), parent->listcontrol_sights);
         ((parent->data->route_list)[i_route]).update_ListControl(i_route, parent->listcontrol_routes);
         
         //set the background color of the related sight to white
-        parent->listcontrol_sights->SetItemBackgroundColour(sight_id, wxGetApp().background_color);
+        parent->listcontrol_sights->SetItemBackgroundColour(sight_id.get(), wxGetApp().background_color);
         
         //if an item is selected in listcontrol_sights, enable /disable button_transport_sight and button_disconnect_sight if the selected sight is related / unrelated to a Route
         if ((parent->listcontrol_sights->GetSelectedItemCount()) != 0) {

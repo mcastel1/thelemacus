@@ -63,7 +63,7 @@ template<class T> void OnSelectRouteInListControlRoutesForTransport::operator()(
             //the transported object is a Sight
             
             //the id of the Route that will be transported is the one of the Route related to the Sight that is being transported
-            parent->i_object_to_transport.set((((parent->data->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route.get()));
+            parent->i_object_to_transport.set(((parent->data->sight_list)[(parent->listcontrol_sights)->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)]).related_route);
             
         }
         

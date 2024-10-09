@@ -91,7 +91,7 @@ ListFrame::ListFrame(const wxString& title, [[maybe_unused]] const wxString& mes
     set_idling = new SetIdling<ListFrame>(this);
     unset_idling = new UnsetIdling<ListFrame>(this);
     //initialize disconnect_sight with a dummy # of the Sight to be disconnected (disconnect_sight->sight_id): disconnect_sight->sight_id will be set later when *disconnect_sight will be called on a Sight
-    disconnect_sight = new DisconnectSightAndUnsetIdling(this, -1);
+    disconnect_sight = new DisconnectSightAndUnsetIdling(this, Int(-1));
 
     
     highlight_route = new HighlightObject<ListFrame, DoNothing>(this, &highlighted_route_before, &highlighted_route_now, NULL);
@@ -1096,7 +1096,7 @@ void ListFrame::OnDisconnectSight(wxCommandEvent& event) {
 void ListFrame::OnDisconnectRoute(wxCommandEvent& event) {
     
     //set i_object_to_disconnect to the currently selected Route in listcontrol_routes and call DisconnectOld to disconnect that Route from its related Sight
-    (disconnect_sight->sight_id) = (((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight.get());
+    disconnect_sight->sight_id.set(((data->route_list)[(listcontrol_routes->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED))]).related_sight);
     
     disconnect_sight->operator()(event);
 
@@ -1328,7 +1328,7 @@ void ListFrame::OnMouseMovement(wxMouseEvent& event) {
             if ((highlighted_sight_now != wxNOT_FOUND) && enable_highlight) {
                 // the mouse is hovering over an element of listcontrool_sights -> highlight it and the related route in listcontrol_routes, and set  a white background in all other leements in listcontrol_sights and listcontorl_routes
                 
-                highlighted_route_now.set((((data->sight_list)[highlighted_sight_now.get()]).related_route.get()));
+                highlighted_route_now.set(((data->sight_list)[highlighted_sight_now.get()]).related_route);
                 
                 for (i = 0; i < (listcontrol_sights->GetItemCount()); i++) {
                     

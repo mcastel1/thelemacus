@@ -10,6 +10,12 @@
 #include "int.h"
 #include "generic.h"
 
+//void constructor
+Int::Int(void){}
+
+//construct *this by assignign value_input to value
+Int::Int(const int& value_input): value(value_input){}
+
 
 //setter: set value equal to i
 void Int::set(String name, int i, [[maybe_unused]] String prefix) {

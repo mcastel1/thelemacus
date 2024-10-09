@@ -131,9 +131,23 @@ bool Int::operator > (const Int& i) {
 }
 
 
+bool Int::operator < (const Int& i) {
+
+    return(value < (i.value));
+
+}
+
+
 bool Int::operator > (const int& i) {
 
     return(value > i);
+
+}
+
+
+bool Int::operator < (const int& i) {
+
+    return(value < i);
 
 }
 

@@ -11,7 +11,7 @@
 #include "on_change_selection_in_list_control.h"
 
 //constructor of the DisconnectSightAndUnsetIdling functor: parent_in is the ListFrame parent of *this, sight_id_in is the # of the Sight to be disconnected from Route # route_id_in
-DisconnectSightAndUnsetIdling::DisconnectSightAndUnsetIdling(ListFrame* parent_in, const int& sight_id_in) : parent(parent_in), sight_id(sight_id_in) {
+DisconnectSightAndUnsetIdling::DisconnectSightAndUnsetIdling(ListFrame* parent_in, const Int& sight_id_in) : parent(parent_in), sight_id(sight_id_in) {
     
     
 }

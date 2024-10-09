@@ -1083,7 +1083,7 @@ void ListFrame::OnTransportSight(wxCommandEvent& event) {
 void ListFrame::OnDisconnectSight(wxCommandEvent& event) {
     
     //set the # of the Sight to disconnect equal to the currently selected Sight in listcontrol_sights and call DisconnectOld to disconnect that Sight from its related Route
-    (disconnect_sight->sight_id) = ((int)(listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
+    disconnect_sight->sight_id.set((int)(listcontrol_sights->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)));
     
     disconnect_sight->operator()(event);
     

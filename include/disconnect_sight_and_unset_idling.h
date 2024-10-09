@@ -10,10 +10,11 @@
 
 #include <iostream>
 
-
+#include "int.h"
 #include "list_frame.h"
 
 using namespace std;
+
 
 //this functor disconnects a Sight from a Route in ListFrame *parent
 class DisconnectSightAndUnsetIdling{
@@ -22,9 +23,9 @@ public:
         
     //the ListFrame that called this functor
     ListFrame* parent;
-    int sight_id;
+    Int sight_id;
     
-    DisconnectSightAndUnsetIdling(ListFrame*, const int&);
+    DisconnectSightAndUnsetIdling(ListFrame*, const Int&);
     
     template <class E> void operator()(E&);
     void operator()(void);

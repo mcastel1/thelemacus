@@ -174,6 +174,11 @@ PositionFrame::PositionFrame(ListFrame* parent_input, Position* position_in, lon
     SetClientSize(panel->GetBestSize());
     Centre();
     
+    //set the focus on button_ok in order to set the focus on one element of *this
+    CallAfter( [=] {
+     button_ok->SetFocus();
+    });
+    
 }
 
 

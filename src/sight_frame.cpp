@@ -357,6 +357,11 @@ SightFrame::SightFrame(ListFrame* parent_input, Sight* sight_in, long position_i
 
     SetClientSize(panel->GetBestSize());
     Centre();
+    
+    //set the focus on button_reduce in order to set the focus on one element of *this
+    CallAfter( [=] {
+     button_reduce->SetFocus();
+    });
 
 }
 

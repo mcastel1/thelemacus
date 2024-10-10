@@ -1088,7 +1088,7 @@ void ListFrame::OnDisconnectSight(wxCommandEvent& event) {
     disconnect_sight->operator()(event);
     
     //print an info message
-    print_info_message->SetAndCall(NULL, String("Warning"), String("The sight which you want do disconnect is connected to a route: disconnecting the sight from the route."), wxGetApp().path_file_info_icon);
+    print_info_message->SetAndCall(NULL, String("Warning"), String("The sight that you want do disconnect is connected to a route: disconnecting the sight from the route."), wxGetApp().path_file_info_icon);
     
 }
 
@@ -1101,7 +1101,7 @@ void ListFrame::OnDisconnectRoute(wxCommandEvent& event) {
     disconnect_sight->operator()(event);
 
     //print an info message
-    print_info_message->SetAndCall(NULL, String("Warning"), String("The route which you want do disconnect is connected to a sight: disconnecting the route from the sight."), wxGetApp().path_file_info_icon);
+    print_info_message->SetAndCall(NULL, String("Warning"), String("The route that you want do disconnect is connected to a sight: disconnecting the route from the sight."), wxGetApp().path_file_info_icon);
     
 }
 
@@ -1115,7 +1115,7 @@ void ListFrame::OnTransportPosition(wxCommandEvent& event) {
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>(this, existing_route, new_route, unset_idling);
     
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, false);
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a position. With which route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, false);
     
     OnModifyFile();
     
@@ -1183,7 +1183,7 @@ void ListFrame::OnTransportRoute(wxCommandEvent& event) {
     //ask the user whether he/she wants to transport the sight with a an existing Route or with a new Route.
     ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>* print_question = new ShowQuestionFrame<ListFrame, ExistingRoute, NewRoute, UnsetIdling<ListFrame>>(this, existing_route, new_route, unset_idling);
     
-    print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With what route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, false);
+    print_question->SetAndCall(NULL, String(""), String("You want to transport a route. With which route do you want to transport? Press ESC to abort."), String("Existing route"), String("New route"), CheckRoutesForTransport(), true, false);
     
     OnModifyFile();
     

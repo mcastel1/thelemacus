@@ -447,7 +447,7 @@ void RouteFrame::OnPressOk(wxCommandEvent& event) {
             //3. after the highlighted Route has been set to -1, highlight_route_and_disconnect_sight calls *disconnect_sight -> the Sight related to the Route will be disconnected from the Route
             parent->highlight_route_and_disconnect_sight->set_value(-1);
             
-            print_question.SetAndCall(NULL, String("Warning"), String("The route which has been modified was related to a sight! Do you want to modify the route and disconnect it from the sight?"), String("Yes"), String("No"));
+            print_question.SetAndCall(NULL, String("Warning"), String("The route that has been modified was related to a sight! Do you want to modify the route and disconnect it from the sight?"), String("Yes"), String("No"));
             
         }else{
             //the existing Route that I am modifying is not related to a Sight -> I don't need to prompt a message warning the user that the Route under consideration is being disconnected from its related Sight -> trigger the animation that centers the chart on *route by callling UnsetIdling at the end of the animation

@@ -45,6 +45,7 @@ public:
     wxMenuBar *menuBar;
     
     PositionFrame(ListFrame*, Position*, long, const wxString&, const wxPoint&, const wxSize&, String);
+    
     void set(void);
     template<class T> void get(T&);
     void OnPressCancel(wxCommandEvent& event);

@@ -334,6 +334,11 @@ RouteFrame::RouteFrame(ListFrame* parent_input, Route* route_in, bool for_transp
     SetClientSize(panel->GetBestSize());
     Centre();
     
+    //set the focus on button_ok in order to set the focus on one element of *this
+    CallAfter( [=] {
+     button_ok->SetFocus();
+    });
+    
 }
 
 

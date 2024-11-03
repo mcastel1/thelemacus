@@ -1,0 +1,122 @@
+%% Overleaf			
+%% Software Manual and Technical Document Template	
+%% 									
+%% This provides an example of a software manual created in Overleaf.
+
+\documentclass{ol-softwaremanual}
+
+% Packages used in this example
+\usepackage{graphicx}  % for including images
+\usepackage{microtype} % for typographical enhancements
+% \usepackage{minted}    % for code listings
+\usepackage{amsmath}   % for equations and mathematics
+% \setminted{style=friendly,fontsize=\small}
+% \renewcommand{\listoflistingscaption}{List of Code Listings}
+\usepackage{hyperref}  % for hyperlinks
+\usepackage[a4paper,top=4.2cm,bottom=4.2cm,left=3.5cm,right=3.5cm]{geometry}
+\usepackage{authblk}
+\usepackage{pdfsync}
+\usepackage{boldline}
+\usepackage{longtable}
+\usepackage[version=3]{acro}
+% \usepackage[printonlyused,withpage]{acronym}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{anysize}
+% \marginsize{2cm}{2cm}{1.cm}{1.cm}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{verbatim} 
+\usepackage{bm}
+\usepackage{etoolbox}
+%\usepackage{amssymb}
+%\usepackage{amsfonts,amsmath}
+\usepackage{multirow}
+% \usepackage[T1]{fontenc}
+\usepackage{yfonts}
+\usepackage{xr-hyper} 
+% \externaldocument{manuscript}
+\usepackage{xcite} 
+% \externalcitedocument{manuscript}
+\usepackage{mathrsfs}
+% \usepackage{fancyhdr}
+% \usepackage{relsize}
+%  \usepackage{newpxtext,newpxmath}
+%  \usepackage{booktabs,siunitx}
+\usepackage{array,booktabs,ragged2e}
+\usepackage{enumitem}   
+\usepackage{empheq}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[title,toc,titletoc,page]{appendix}
+\usepackage[capitalise]{cleveref}
+\usepackage[most]{tcolorbox}
+\usepackage{tocloft}
+\usepackage{eurosym}
+% \usepackage[colorlinks]{hyperref}
+
+ % for setting page size and margins
+
+% Custom macros used in this example document
+\newcommand{\doclink}[2]{\href{#1}{#2}\footnote{\url{#1}}}
+\newcommand{\cs}[1]{\texttt{\textbackslash #1}}
+
+\acsetup{
+  make-links ,
+  pages / display = first ,
+  pages / fill    = {, }
+}
+
+\hypersetup{colorlinks=true,
+	linkcolor=blue,
+	anchorcolor=black,
+	citecolor=red,
+	urlcolor=blue
+}
+
+\input{acronyms}
+\input{definitions}
+
+
+% Frontmatter data; appears on title page
+\title{Documentation}
+\version{1.0}
+\author{Michele Castellana}
+\softwarelogo{\includegraphics[width=8cm]{logo}}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+% \listoflistings
+\newpage
+
+\section{Introduction}
+
+
+\thel  is a navigational-astronomy application, which allows to compute one's position on the surface of the Earth, on both land and sea, based on sextant measurements. \thel is conceived to make the user's life easy, and it is designed for an intuitive and quick use. 
+
+\subsection{Thelemacus is free software}
+
+\thel is ``free software''; this means that everyone is free to use it. The software is not in the public domain \cite{castellana2024thelemacus}; it is copyrighted and there are conditions on its distribution. These conditions are designed to permit everything that a good cooperating citizen would want to do.
+
+\subsection{Obtaining Thelemacus}
+
+The source code for the library can be obtained from the GitHub repository \href{https://github.com/mcastel1/thelemacus}{mcastel1/thelemacus}. The executable can be downloaded from my \href{https://sites.google.com/site/michelecastellana/home}{website}, for OSx and Windows.  
+
+Announcements of new releases, updates and other relevant events are made \href{https://sites.google.com/site/michelecastellana/home}{online}. 
+
+\subsection{No warranty}
+
+The \thel has no warranty, it is provided ``as is.'' It is your responsibility to validate the behavior of \thel and its accuracy using the source code provided, or to purchase support and warranties from commercial redistributors. Consult \thel's  License for further details.
+
+
+\printacronyms[pages={display=none,seq/use=false}]
+
+
+%C check overlap between main-text and supplementary-material bibliography
+\bibliographystyle{unsrt}
+%\addcontentsline{toc}{section}{\refname}
+\bibliography{/Users/michelecastellana/Dropbox/my_bibliography/bibliography}
+
+
+\end{document}

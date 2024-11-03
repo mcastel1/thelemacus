@@ -1,0 +1,158 @@
+%latexmk -pvc -pdf -view=none supplementary.tex
+\documentclass[]{book}
+
+% \usepackage{draftwatermark}
+\usepackage{authblk}
+\usepackage{pdfsync}
+\usepackage{boldline}
+\usepackage{longtable}
+\usepackage[version=3]{acro}
+% \usepackage[printonlyused,withpage]{acronym}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{anysize}
+\marginsize{2cm}{2cm}{1.cm}{1.cm}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{verbatim} 
+\usepackage{bm}
+\usepackage{etoolbox}
+%\usepackage{amssymb}
+%\usepackage{amsfonts,amsmath}
+\usepackage{multirow}
+% \usepackage[T1]{fontenc}
+\usepackage{yfonts}
+\usepackage{mathrsfs}
+\usepackage[colorlinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{relsize}
+%  \usepackage{newpxtext,newpxmath}
+ \usepackage{booktabs,siunitx}
+\usepackage{array,booktabs,ragged2e}
+\usepackage{enumitem}   
+\usepackage{empheq}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[title,toc,titletoc,page]{appendix}
+\usepackage[capitalise]{cleveref}
+\usepackage[most]{tcolorbox}
+\usepackage{tocloft}
+\usepackage{eurosym}
+
+\acsetup{
+  make-links ,
+  pages / display = first ,
+  pages / fill    = {, }
+}
+
+
+%\SetWatermarkText{CONFIDENTIAL}
+%\SetWatermarkScale{.9}
+%\SetWatermarkColor{red}%\SetWatermarkColor[rgb]{1,1,1}
+%\SetWatermarkAngle{60}
+
+\pagestyle{fancy}
+\fancyhf{}
+\makeatletter
+\fancyhead[L]{Thelemacus documentation}
+\makeatother
+\fancyhead[R]{\thepage}
+
+% \usepackage{xr}
+%\pagestyle{myheadings}
+%\usepackage{geometry}
+%\externaldocument{sm_2}
+%\geometry{tmargin=4cm,bmargin=4cm}
+
+\newcommand{\crefrangeconjunction}{--}
+\newcommand{\mycaption}[2]{\caption[#1]{\textbf{#1}. #2}}
+
+\hypersetup{colorlinks=true,
+	linkcolor=blue,
+	anchorcolor=black,
+	citecolor=red,
+	urlcolor=black
+}
+
+\renewcommand*\oldstylenums[1]{\textosf{#1}}
+\addtolength{\cftsecnumwidth}{10pt}
+
+
+\input{acronyms}
+\input{definitions}
+
+% add these two lines to your long preamble    
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+\SetMathAlphabet{\mathcal}{bold}{OMS}{cmsy}{b}{n}
+
+
+\tcbset{highlight math style={boxsep=2mm,colback=white,colframe=black}}
+
+
+%\newcommand\ddfrac[2]{\frac{\displaystyle #1}{\displaystyle #2}}
+%\usepackage{amssymb,graphicx,amsmath}
+%\usepackage{times}
+
+% \arraycolsep0.5mm
+
+
+\newlength{\figsize}
+\setlength{\figsize}{1\columnwidth}
+
+
+\usepackage{xr-hyper} 
+% \externaldocument{manuscript}
+\usepackage{xcite} 
+% \externalcitedocument{manuscript}
+
+\makeatletter 
+\arraycolsep0.5mm
+
+%C update title
+\title{Thelemacus documentation\\
+\large{Version 1.0}}
+\author{Michele Castellana}
+% \affil[1]{Institut Curie, PSL Research University, CNRS UMR168, France}
+% \date{}
+
+% \setlength{\parskip}{5pt plus 0pt minus 0pt}
+
+
+
+\begin{document} 
+
+\maketitle 
+
+\pagebreak
+\tableofcontents
+% \listoffigures
+
+\chapter{Introduction}
+
+\thel  is a navigational-astronomy application, which allows the navigator to compute his/her position based on sextant measurements. 
+
+
+%  \begin{figure}
+% \begin{center}
+% \includegraphics[scale=1.2]{figures/fig34.eps}
+% \mycaption{
+% %C Add data for N = 1024 to this figure 
+% \label{fig_extr_theta}
+% Fit and extrapolation of the stiffness exponent with respect to the number of discretization intervals}{\textbf{A}) 
+% Expectation value of the energy gap with respect to the ground state as a function of the number of renormalization-group steps $k$, for a given number of discretization bins $N$,   of samples $S$ and of Robbins-Monro iterations $Q$, and for multiple values of the interaction exponent $\iexp$ (points), in semi-logarithmic scale. The data has been fitted with the function in the right-hand side of \cref{eq180} (lines). 
+% \textbf{B}) Stiffness exponent $\theta_N$ (points) obtained as a fit of \textbf{A}. We determined
+% $\theta$ (horizontal line) and its error bar (horizontal band) by fitting $\theta_N$ with 
+%  \cref{eq_fit_theta} (curves). 
+% }
+% \end{center}
+% \end{figure}
+
+\printacronyms[pages={display=none,seq/use=false}]
+
+
+%C check overlap between main-text and supplementary-material bibliography
+\bibliographystyle{unsrt}
+%\addcontentsline{toc}{section}{\refname}
+\bibliography{/Users/michelecastellana/Dropbox/my_bibliography/bibliography}
+
+
+
+\end{document}

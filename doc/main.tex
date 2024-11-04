@@ -19,6 +19,7 @@
 \usepackage{boldline}
 \usepackage{longtable}
 \usepackage[version=3]{acro}
+\usepackage{gensymb}
 % \usepackage[printonlyused,withpage]{acronym}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{anysize}
@@ -136,16 +137,24 @@ If you would like to refer to \thel in a journal article, the recommended way is
 \section{Using \thel}
 
 In order to use \thel, the user needs to be familiar with taking a celestial sight with a sextant, please see \cite{bowditch2002the} for details. The results of this measurements will be 
-\begin{itemize}
-\item The name of the celestial body 
+\begin{enumerate}
+\item The name of the celestial body, e.g. the star `Arcturus'
 \item If the body is the Sun or the Moon, the limb (`upper', `center' or `lower') of the body which has been considered in the measurement
-\item The height of the celestial body over the horizon, expressed in degrees and arcminutes
-\item 
-\end{itemize}
+\item The angular height of the celestial body over the horizon, expressed in degrees and arcminutes, e.g., $54 \degree \, 45.34'$
+\item Whether the observer used an artificial horizon or not
+\item \ac{UTC} date and time of the measurement, e.g., $2024$-$11$-$4$ $22$:$04$:$23$ \ac{UTC}
+\end{enumerate}
 
 
+\begin{enumerate}
+  \item The index error of the sextant,  i.e., and angle expressed in degrees and arcminutes, e.g., $0 \degree \, 1.34'$
+  \item The height of the observer above sea level
+  \item Whether the observer has used a stopwatch or not and, if so, the reading of the stopwatch, e.g., $1\hr \, 34 \min \, 12.43 \sec$
+  \item The difference between \ac{TAI} and \ac{UTC} at the time of the measurement 
+\end{enumerate}
 
-\printacronyms[pages={display=none,seq/use=false}]
+
+\printacronyms[pages={display=all,seq/use=false}]
 
 
 %C check overlap between main-text and supplementary-material bibliography

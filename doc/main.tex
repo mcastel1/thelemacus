@@ -160,31 +160,49 @@ Additional information, which is most likely the same across multiple sights, is
   \item \label{item-tai-utc} The difference between \ac{TAI} and \ac{UTC} at the time of the measurement, e.g., $00$:$00$:$34$. 
 \end{enumerate}
 
-\item  \label{item-position} \textbf{Position}: A location on the surface of the Earth, expressed in latitude and longitude, e.g., $54 \degree \, 45.34'\, \textrm{N}$ $23 \degree \, 5.33'\, \textrm{E}$ 
+\item  \label{item-position} \textbf{Position}: A location on the surface of the Earth, expressed in latitude and longitude, e.g., $54 \degree \, 45.34'\, \textrm{N}$ $23 \degree \, 5.33'\, \textrm{E}$. 
 
 \item \label{item-route} \textbf{Route}: A trajectory on the surface of the Eearth, specified by 
 \begin{enumerate}
-  \item The route type \cite{bowditch2002the}: 
+  \item \label{item-route-type} The route type \cite{bowditch2002the}: 
   \begin{description}
   \item [loxodrome] a trajectory forming a constant angle with the meridians
   \item [orthodrome] a great circle
   \item [circle of equal altitude] the set of points from which an observer would see a celestial body at a given altitude above the horizon
   \end{description}
-  \item The azimuth $Z$, i.e., the angle between the route  and the local meridian at the route's starting point, e.g., $254 \degree \, 5.44'$
-  \item The length, e.g., $15$ \ac{nm} 
-  \item The start position, see \cref{item-position}
-  \item 
+  \item \label{item-route-azimuth} The azimuth $Z$, i.e., the angle between the route  and the local meridian at the route's starting point, e.g., $254 \degree \, 5.44'$
+  \item \label{item-route-length} The length, e.g., $15$ \ac{nm} 
+  \item \label{item-route-reference-position} The start position (for loxodromes and orthodromes) or the ground position (for circles of equal altitude), see \cref{item-position}
+  \item \label{item-route-aperture} For circles of equal altitude the aperture angle `omega'
+  \item \label{item-route-label} A label (optional)
 \end{enumerate}
 \end{enumerate}
 
 \subsection{The main frame}
 
-The main frame is shown in \cref{fig-list-frame}. It is composed of three boxes: 
+\thel main frame is shown in \cref{fig-list-frame}. It is composed of three boxes: 
 \begin{enumerate}
-  \item \label{item-sight-box} Sights: a table which contains the list of sights, i.e., sextant measurements. Each line in the table corresponds to a sight, and its columns are given by: The sight identifier, which will be assigned to the sight by \thel, by the fields related to \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}, respectively, and by the identifier if the route related to the sight, see \cref{item-route-box}
+  \item \label{item-sight-box} Sights: a table which contains the list of sights, i.e., sextant measurements. 
+  
+  Each line in the table corresponds to a sight, and its columns are given by: The sight identifier, which is automatically assigned by \thel,  the data in \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}, and the identifier if the route related to the sight, see \cref{item-route-box}. 
+
+  To enter a new sight, press the \inlinefigure{figures/plus-button.png} button at the bottom of the box. To modify or delete an existing sight, press  \inlinefigure{figures/modify-button.png} or  \inlinefigure{figures/delete-button.png}, respectively. To transport a sight, press \inlinefigure{figures/transport-button.png}. 
+   To disconnect a sight from its route, press  \inlinefigure{figures/disconnect-button.png}. 
+
   \item \label{item-position-box} Positions: a table which contains the list of entered positions. 
-  \item \label{item-route-box} Routes: 
+  
+  Each line corresponds to a position, and its columns are given by: The position identifier, automatically assigned by \thel,  latitude, longitude, and eventually a label. 
+
+To add a new position, modify, transport or delete it, use the buttons at the bottom of the box. 
+
+  \item \label{item-route-box} Routes: Each line corresponds to a route, and its columns are given by: The route identifier, automatically assigned by \thel, the data in \cref{item-route-type,item-route-azimuth,item-route-length,item-route-reference-position,item-route-aperture,item-route-label}. 
+  \item 
+  To add a new route, modify, transport, disconnect it from its sight or delete it, use the buttons at the bottom of the box. 
+
 \end{enumerate}
+
+To compute the astronomical position, press \inlinefigure{figures/position-button.png}, and to jump to the charts, press \inlinefigure{figures/chart-button.png}.  
+
 
 \subsection{The sight frame: taking a sight}
 

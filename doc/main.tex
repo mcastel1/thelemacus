@@ -140,11 +140,10 @@ If you would like to refer to \thel in a journal article, the recommended way is
 
 The main frame is shown in \cref{fig-list-frame}. It is composed of three boxes: 
 \begin{enumerate}
-  \item `Sight list', a table which contains the list of sights, i.e., sextant measurements. Each line in the table corresponds to a sight, and its columns are  
-  \begin{enumerate}
-    \item {ame}
+  \item \label{item-sight-box} Sights: a table which contains the list of sights, i.e., sextant measurements. Each line in the table corresponds to a sight, and its columns are given by: The sight identifier, which will be assigned to the sight by \thel, by the fields related to \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}, respectively, and by the identifier if the route related to the sight, see \cref{item-route-box}
+  \item \label{item-position-box} Positions: a table which contains the list of entered positions. 
+  \item \label{item-route-box} Routes: 
   \end{enumerate}
-\end{enumerate}
 
 \subsection{The sight frame: taking a sight}
 

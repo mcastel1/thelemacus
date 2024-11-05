@@ -136,6 +136,8 @@ If you would like to refer to \thel in a journal article, the recommended way is
 
 \section{Using \thel}
 
+In order to use \thel, the user needs to be familiar with taking a celestial sight with a sextant, and with the following simple concepts, see \cite{bowditch2002the} for details. 
+
 \subsection{Sights, positions and routes}
 
 In order to use \thel, one needs to know three basic concepts: 
@@ -166,9 +168,9 @@ Additional information, which is most likely the same across multiple sights, is
 \begin{enumerate}
   \item \label{item-route-type} The route type \cite{bowditch2002the}: 
   \begin{description}
-  \item [loxodrome] a trajectory forming a constant angle with the meridians
-  \item [orthodrome] a great circle
-  \item [circle of equal altitude] the set of points from which an observer would see a celestial body at a given altitude above the horizon
+  \item [loxodrome]: a trajectory forming a constant angle with the meridians
+  \item [orthodrome]: a part of a great circle
+  \item [circle of equal altitude]: a curve on the surface of the Earth from which an observer would see a celestial body at a given altitude above the horizon
   \end{description}
   \item \label{item-route-azimuth} The azimuth $Z$, i.e., the angle between the route  and the local meridian at the route's starting point, e.g., $254 \degree \, 5.44'$
   \item \label{item-route-length} The length, e.g., $15$ \ac{nm} 
@@ -176,6 +178,17 @@ Additional information, which is most likely the same across multiple sights, is
   \item \label{item-route-aperture} For circles of equal altitude the aperture angle `omega'
   \item \label{item-route-label} A label (optional)
 \end{enumerate}
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/route-types.png}
+  \caption{
+    \label{fig-route-types}
+    Three different route types: A loxodrome and an orthodrome with the same starting point (blue and green, respectively), and a circle of equal altitude (red), see \cref{item-route-type}. 
+  }
+  \end{figure}
+
 \end{enumerate}
 
 \subsection{The main frame}
@@ -201,13 +214,6 @@ To add a new position, modify, transport or delete it, use the buttons at the bo
 
 \end{enumerate}
 
-To compute the astronomical position, press \inlinefigure{figures/position-button.png}, and to jump to the charts, press \inlinefigure{figures/chart-button.png}.  
-
-
-\subsection{The sight frame: taking a sight}
-
-In order to use \thel, the user needs to be familiar with taking a celestial sight with a sextant, please see \cite{bowditch2002the} for details. 
-
 \begin{figure}
   \centering
   \includegraphics[width=1\textwidth]{figures/list-frame.png}
@@ -218,18 +224,44 @@ In order to use \thel, the user needs to be familiar with taking a celestial sig
   \end{figure}
 
 
-To enter a new sight, press on \inlinefigure{figures/plus-button.png} in the `Sights' box of the main frame, see \cref{fig-list-frame}. 
+To compute the astronomical position, press \inlinefigure{figures/position-button.png}, and to jump to the charts, press \inlinefigure{figures/chart-button.png}.  
 
 
+\subsection{Enter a sight}
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/sight-frame.png}
+    \caption{
+      \label{fig-sight-frame}
+      The sight frame with the entered data from \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}. 
+    }
+  \end{figure}
+  
+  
+
+
+To enter a new sight, press  \inlinefigure{figures/plus-button.png}, see \cref{fig-list-frame}, a sight frame will appear as in \cref{fig-sight-frame}, enter the sight fields in  \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}, and press \inlinefigure{figures/reduce-button.png}. 
+
+\textbf{\thel will produce, as output, a route}, and trigger a chart animation to it; \textbf{the observer is located  on this route}. This route is a circle of equal altitude, see \cref{fig-route-types}. 
+
+\subsection{Compute the position}
+
+By making multiple sights, one obtains multiple circles of equal altitude: the astronomical position is the crossing point between them. 
+
+To obtain it, click on \inlinefigure{figures/position-button.png} in the main frame: the position will be added to the position list with label `Astronomical position', and the charts will display it, see \cref{fig-astronomical-position}. The error on the astronomical position will be shown as a circle around it, and added to the route list. 
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.9\textwidth]{figures/sight-frame.png}
+  \includegraphics[width=0.9\textwidth]{figures/astronomical-position-mercator.png}
   \caption{
-    \label{fig-sight-frame}
-    The sight frame with the entered data from \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}. 
+    \label{fig-astronomical-position}
+    The crossing of the three routes (red, green and blue) yields the astronomical position (red dot).  
   }
-  \end{figure}
+\end{figure}
+
+
+
 
 
 

@@ -27,11 +27,17 @@ Data:
 			length format = length
 				length = 3000.0000000000000000 nm
 			label = X
+		Route #2:
+			type = loxodrome
+			start position:
+				latitude = 23° 3.00000000000004'
+				longitude = 356° 56.99999999999908'
+				label = 2024-09-20 21:56:30 UTC+2
+			starting heading = 245° 4.351999999998839'
+			length format = length
+				length = 3000.0000000000000000 nm
+			label = X	Positions:
 	Positions:
-		Position #1:
-			latitude = 23° 3.00000000000004'
-			longitude = 3° 2.999999999999996'
-			label = 2024-09-20 21:56:46 UTC+2
 Recent bodies = 12 10 8
 Recent projections = 1 0
 Recent length formats = 1 0

@@ -191,6 +191,9 @@ Additional information, which is most likely the same across multiple sights, is
 
 \end{enumerate}
 
+When the observer takes a sight, then we can conclude that he/she lies on a route---a circle of equal altitude---on the Earth's surface \cite{bowditch2002the}. 
+\textit{Reducing} a sight means computing this route given the sight data in \cref{item-route-reference-position}: we will say that this route is \textit{connected} to the sight. Importantly, not all routes are connected to sights: for example, a route denoting the ship's path, or a circle of equal altitude originally connected to a sight which has been later moved, are not. 
+
 \subsection{The main frame}
 
 \thel main frame is shown in \cref{fig-list-frame}. It is composed of three boxes: 
@@ -223,11 +226,13 @@ To add a new position, modify, transport or delete it, use the buttons at the bo
   }
   \end{figure}
 
+If you hover the mouse over a sight in the sight box, the sight will be highlighted. The route to which it is connected, both in in the route box and in the chart frame, will be highlighted so the user can see directly to what route the sight corresponds on the chart. Positions and routes are highlighted along the same lines. 
+
 
 To compute the astronomical position, press \inlinefigure{figures/position-button.png}, and to jump to the charts, press \inlinefigure{figures/chart-button.png}.  
 
 
-\subsection{Enter a sight}
+\subsection{Entering a sight: The sight frame}
 
   \begin{figure}
     \centering
@@ -238,8 +243,6 @@ To compute the astronomical position, press \inlinefigure{figures/position-butto
     }
   \end{figure}
   
-  
-
 
 To enter a new sight, press  \inlinefigure{figures/plus-button.png}, see \cref{fig-list-frame}, a sight frame will appear as in \cref{fig-sight-frame}, enter the sight fields in  \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}, and press \inlinefigure{figures/reduce-button.png}. 
 
@@ -249,22 +252,32 @@ To enter a new sight, press  \inlinefigure{figures/plus-button.png}, see \cref{f
 
 By making multiple sights, one obtains multiple circles of equal altitude: the astronomical position is the crossing point between them. 
 
-To obtain it, click on \inlinefigure{figures/position-button.png} in the main frame: the position will be added to the position list with label `Astronomical position', and the charts will display it, see \cref{fig-astronomical-position}. The error on the astronomical position will be shown as a circle around it, and added to the route list. 
+To obtain it, click on \inlinefigure{figures/position-button.png} in the main frame: the position will be added to the position list with label `Astronomical position', and the charts will display it, see \cref{fig-astronomical-position}. The error on the astronomical position is a circle around it, and added to the route list. 
 
 \begin{figure}
   \centering
   \includegraphics[width=0.9\textwidth]{figures/astronomical-position-mercator.png}
   \caption{
     \label{fig-astronomical-position}
-    The crossing of the three routes (red, green and blue) yields the astronomical position (red dot).  
+    The crossing of the three routes (red, green and blue) yields the astronomical position (red dot located at the routes' crossing).  
   }
 \end{figure}
 
 
+\subsection{Transporting a sight}
+
+If the course and speed of the ship are known, a sight taken in the past can be \textit{transported} and used after it was taken \cite{bowditch2002the,noauthor2017cours}. 
+
+For example, suppose that the observer takes a Sun sight (A) in the afternoon, and then a Moon sight at dawn (B). Sight A can be transported along the route which the ship sailed between the time of A and that of B. The ship position at the time of B is the crossing between A transported and B. 
+
+To transport a sight: 
+\begin{itemize}
+\item Select the sight in the main frame
+\item Click on \inlinefigure{figures/transport-button.png} at the bottom of the sight box
+\end{itemize}
 
 
-
-
+\pagebreak
 \printacronyms[pages={display=all,seq/use=false}]
 \bibliographystyle{unsrt}
 %\addcontentsline{toc}{section}{\refname}

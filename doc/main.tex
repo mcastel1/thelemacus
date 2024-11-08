@@ -248,11 +248,11 @@ To enter a new sight, press  \inlinefigure{figures/plus-button.png}, see \cref{f
 
 \textbf{\thel will produce, as output, a route}, and trigger a chart animation to it; \textbf{the observer is located  on this route}. This route is a circle of equal altitude, see \cref{fig-route-types}. 
 
-\subsection{Compute the position}
+\subsection{Astronomical fix}
 
-By making multiple sights, one obtains multiple circles of equal altitude: the astronomical position is the crossing point between them. 
+By making multiple sights, one obtains multiple circles of equal altitude: the astronomical position is the crossing point between them---this procedure is called a \textit{fix}. 
 
-To obtain it, click on \inlinefigure{figures/position-button.png} in the main frame: the position will be added to the position list with label `Astronomical position', and the charts will display it, see \cref{fig-astronomical-position}. The error on the astronomical position is a circle around it, and added to the route list. 
+To make an astronomical fix, click on \inlinefigure{figures/position-button.png} in the main frame: the position will be added to the position list with label `Astronomical position', and the charts will display it, see \cref{fig-astronomical-position}. The error on the astronomical position is a circle around it, and added to the route list. 
 
 \begin{figure}
   \centering
@@ -272,10 +272,32 @@ For example, suppose that the observer takes a Sun sight (A) in the afternoon, a
 
 To transport a sight: 
 \begin{itemize}
-\item Select the sight in the main frame
-\item Click on \inlinefigure{figures/transport-button.png} at the bottom of the sight box
+\item Click on the sight in the main frame
+\item Click on \inlinefigure{figures/transport-button.png} at the bottom of the sight box. You can transport the sight
+\begin{itemize}
+\item with an route which is already in the route box, then press \inlinefigure{figures/existing-route-button.png}. Then confirm and double click on the route with which you want to make the transport, or select it and press Enter. 
+\item with a new route which you will create, then press \includegraphics{figures/new-route-button.png}, enter the information in the route frame, and press \includegraphics{figures/routeframe-transport-button.png}. 
 \end{itemize}
+\end{itemize}
+An animation will move the transporting route in place, then transport the route sight, and move back the transporting route to its original position. 
 
+
+\subsection{Entering a position: The position frame}\label{section-position-frame}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.3\textwidth]{figures/position-frame.png}
+  \caption{
+    \label{fig-position-frame}
+    The position frame.  
+  }
+\end{figure}
+
+
+In order to enter a position in \thel (for example, the last estimated position, or the position where something worthwhile happened), go on the main frame and click on \inlinefigure{figures/plus-button.png} at the bottom of the position frame. The position frame will appear, see \cref{fig-position-frame}. 
+
+
+%%%%%%%%
 
 \pagebreak
 \printacronyms[pages={display=all,seq/use=false}]

@@ -231,8 +231,9 @@ If you hover the mouse over a sight in the sight box, the sight will be highligh
 
 To compute the astronomical position, press \inlinefigure{figures/position-button.png}, and to jump to the charts, press \inlinefigure{figures/chart-button.png}.  
 
+\subsection{Sights}
 
-\subsection{Entering a sight: The sight frame}
+\subsubsection{Entering a sight: The sight frame}
 
   \begin{figure}
     \centering
@@ -248,7 +249,7 @@ To enter a new sight, press  \inlinefigure{figures/plus-button.png}, see \cref{f
 
 \textbf{\thel will produce, as output, a route}, and trigger a chart animation to it; \textbf{the observer is located  on this route}. This route is a circle of equal altitude, see \cref{fig-route-types}. 
 
-\subsection{Astronomical fix}
+\subsubsection{Astronomical fix}
 
 By making multiple sights, one obtains multiple circles of equal altitude: the astronomical position is the crossing point between them---this procedure is called a \textit{fix}. 
 
@@ -264,7 +265,7 @@ To make an astronomical fix, click on \inlinefigure{figures/position-button.png}
 \end{figure}
 
 
-\subsection{Transporting a sight}
+\subsubsection{Transporting a sight}\label{section-transporting-sight}
 
 If the course and speed of the ship are known, a sight taken in the past can be \textit{transported} and used after it was taken \cite{bowditch2002the,noauthor2017cours}. 
 
@@ -282,19 +283,25 @@ To transport a sight:
 An animation will move the transporting route in place, then transport the route sight, and move back the transporting route to its original position. 
 
 
-\subsection{Entering a position: The position frame}\label{section-position-frame}
+\subsection{Positions}\label{section-position}
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.3\textwidth]{figures/position-frame.png}
+  \includegraphics[width=0.5\textwidth]{figures/position-frame.png}
   \caption{
     \label{fig-position-frame}
     The position frame.  
   }
 \end{figure}
 
+\subsubsection{Entering a position}\label{section-enter-position}
 
-In order to enter a position in \thel (for example, the last estimated position, or the position where something worthwhile happened), go on the main frame and click on \inlinefigure{figures/plus-button.png} at the bottom of the position frame. The position frame will appear, see \cref{fig-position-frame}. 
+In order to enter a position in \thel (for example, the last estimated position, or the position where something worthwhile happened), go on the main frame and click on \inlinefigure{figures/plus-button.png} at the bottom of the position frame. The position frame will appear, see \cref{fig-position-frame}. Fill in the position fields of \cref{item-position} and press \inlinefigure{figures/add-button.png}. 
+
+\subsubsection{Transporting a position}\label{section-transport-position}
+
+A position can be transported along a route along the lines of a sight transport, cf. \cref{section-transporting-sight}. This is useful, for instance, if one needs to transport the a past fix according to the recently sailed route, in order to obtain the current ship's position \cite{bowditch2002the}. 
+
 
 
 %%%%%%%%

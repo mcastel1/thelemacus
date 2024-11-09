@@ -181,7 +181,13 @@ A \textit{route} a trajectory on the surface of the Eearth, specified by
   \item [circle of equal altitude]: a curve on the surface of the Earth from which an observer would see a celestial body at a given altitude above the horizon,
   \end{description}
   \item \label{item-route-azimuth} The azimuth $Z$, i.e., the angle between the route  and the local meridian at the route's starting point, e.g., $254 \degree \, 5.44'$,
-  \item \label{item-route-length} The length, e.g., $15$ \ac{nm},
+  \item \label{item-route-length} The length, e.g., the length of the route sailed, which can be specified in two ways:
+  \begin{itemize}
+  \item by providing the time and speed of the ship, e.g.,from which  \thel will extract the length sailed,  
+  \item by providing directly the length sailed by the ship  $15$ \ac{nm}. 
+
+  \end{itemize}
+
   \item \label{item-route-reference-position} The start position (for loxodromes and orthodromes) or the ground position (for circles of equal altitude), see \cref{section-positions},
   \item \label{item-route-aperture} For circles of equal altitude the aperture angle `omega',
   \item \label{item-route-label} A label (optional). 
@@ -307,7 +313,7 @@ To enter a position  (for example, the last estimated position, or the position 
 
 \subsubsection{Transporting a position}\label{section-transport-position}
 
-A position can be transported along a route along the lines of a sight transport, cf. \cref{section-transporting-sight}. This is useful, for instance, if one needs to transport the a past fix according to the recently sailed route, in order to obtain the current ship's position \cite{bowditch2002the}. 
+A position can be transported with a route along the lines of a sight transport, cf. \cref{section-transporting-sight}. This is useful, for instance, if one needs to transport the a past fix according to the recently sailed route, in order to obtain the current ship's position \cite{bowditch2002the}. 
 
 
 \subsection{Dealing with routes}\label{section-routes}
@@ -328,6 +334,8 @@ A position can be transported along a route along the lines of a sight transport
 To enter a route, go on the main frame and click on \inlinefigure{figures/plus-button.png} at the bottom of the route frame. The route frame will appear, see \cref{fig-route-frame}. Fill in the route fields of \cref{section-positions} and press \inlinefigure{figures/add-button.png}. 
 
 \subsubsection{Transporting a Route}\label{section-transporting-route}
+
+A route can be transported with another route along the lines of a sight and position transport, cf. \cref{section-transporting-sight,section-transport-position}. This is useful, for instance, if one needs to transport the a  circle of equal altitude of a past sight according to the recently sailed route, in order to obtain the current circle of equal altitude \cite{bowditch2002the}. 
 
 %%%%%%%%
 

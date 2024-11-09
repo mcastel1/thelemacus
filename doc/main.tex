@@ -141,8 +141,9 @@ In order to use \thel, the user needs to be familiar with taking a celestial sig
 \subsection{Sights, positions and routes}
 
 In order to use \thel, one needs to know three basic concepts: 
-\begin{enumerate}
-\item \label{item-sight} \textbf{Sight} : a measurement of the angular altitude of a celestial body, made with a sextant. 
+\subsubsection{Sights} \label{section-sights} 
+
+A \textit{sight} is a measurement of the angular altitude of a celestial body, made with a sextant. 
 The results of this measurements are 
 \begin{enumerate}
 \item \label{item-name} The name of the celestial body, e.g. the star `Arcturus'
@@ -150,7 +151,7 @@ The results of this measurements are
 \item \label{item-body-height} The angular height of the  body over the horizon, expressed in degrees and arcminutes, e.g., $54 \degree \, 45.34'$
 \item \label{item-artificial-horizon} Whether the observer used an artificial horizon or not
 \item \label{item-time} \ac{UTC} date and time of the measurement, e.g., $2024$-$11$-$4$ $22$:$04$:$23$ \ac{UTC}
-\item \label{item-label} A label for the sight (optional), e.g., `First sight of my night shift'
+\item \label{item-label} A label (optional), e.g., `First sight of my night shift'
 \end{enumerate}
 
 Additional information, which is most likely the same across multiple sights, is: 
@@ -162,21 +163,28 @@ Additional information, which is most likely the same across multiple sights, is
   \item \label{item-tai-utc} The difference between \ac{TAI} and \ac{UTC} at the time of the measurement, e.g., $00$:$00$:$34$. 
 \end{enumerate}
 
-\item  \label{item-position} \textbf{Position}: A location on the surface of the Earth, expressed in latitude and longitude, e.g., $54 \degree \, 45.34'\, \textrm{N}$ $23 \degree \, 5.33'\, \textrm{E}$. 
+\subsubsection{Positions}  \label{section-positions} 
 
-\item \label{item-route} \textbf{Route}: A trajectory on the surface of the Eearth, specified by 
+A \textit{position} a  location on the surface of the Earth, specified by 
+\begin{itemize}
+\item latitude and longitude, e.g., $54 \degree \, 45.34'\, \textrm{N}$ $23 \degree \, 5.33'\, \textrm{E}$,
+\item a label (optional).
+\end{itemize}
+\subsubsection{Routes} \label{section-routes} 
+
+A \textit{route} a trajectory on the surface of the Eearth, specified by 
 \begin{enumerate}
   \item \label{item-route-type} The route type \cite{bowditch2002the}: 
   \begin{description}
-  \item [loxodrome]: a trajectory forming a constant angle with the meridians
-  \item [orthodrome]: a part of a great circle
-  \item [circle of equal altitude]: a curve on the surface of the Earth from which an observer would see a celestial body at a given altitude above the horizon
+  \item [loxodrome]: a trajectory forming a constant angle with the meridians,
+  \item [orthodrome]: a part of a great circle,
+  \item [circle of equal altitude]: a curve on the surface of the Earth from which an observer would see a celestial body at a given altitude above the horizon,
   \end{description}
-  \item \label{item-route-azimuth} The azimuth $Z$, i.e., the angle between the route  and the local meridian at the route's starting point, e.g., $254 \degree \, 5.44'$
-  \item \label{item-route-length} The length, e.g., $15$ \ac{nm} 
-  \item \label{item-route-reference-position} The start position (for loxodromes and orthodromes) or the ground position (for circles of equal altitude), see \cref{item-position}
-  \item \label{item-route-aperture} For circles of equal altitude the aperture angle `omega'
-  \item \label{item-route-label} A label (optional)
+  \item \label{item-route-azimuth} The azimuth $Z$, i.e., the angle between the route  and the local meridian at the route's starting point, e.g., $254 \degree \, 5.44'$,
+  \item \label{item-route-length} The length, e.g., $15$ \ac{nm},
+  \item \label{item-route-reference-position} The start position (for loxodromes and orthodromes) or the ground position (for circles of equal altitude), see \cref{section-positions},
+  \item \label{item-route-aperture} For circles of equal altitude the aperture angle `omega',
+  \item \label{item-route-label} A label (optional). 
 \end{enumerate}
 
 
@@ -189,7 +197,6 @@ Additional information, which is most likely the same across multiple sights, is
   }
   \end{figure}
 
-\end{enumerate}
 
 When the observer takes a sight, then we can conclude that he/she lies on a route---a circle of equal altitude---on the Earth's surface \cite{bowditch2002the}. 
 \textit{Reducing} a sight means computing this route given the sight data in \cref{item-route-reference-position}: we will say that this route is \textit{connected} to the sight. Importantly, not all routes are connected to sights: for example, a route denoting the ship's path, or a circle of equal altitude originally connected to a sight which has been later moved, are not. 
@@ -231,7 +238,7 @@ If you hover the mouse over a sight in the sight box, the sight will be highligh
 
 To compute the astronomical position, press \inlinefigure{figures/position-button.png}, and to jump to the charts, press \inlinefigure{figures/chart-button.png}.  
 
-\subsection{Sights}
+\subsection{Dealing with sights}
 
 \subsubsection{Entering a sight: The sight frame}
 
@@ -283,7 +290,7 @@ To transport a sight:
 An animation will move the transporting route in place, then transport the route sight, and move back the transporting route to its original position. 
 
 
-\subsection{Positions}\label{section-position}
+\subsection{Dealing with positions}\label{section-position}
 
 \begin{figure}
   \centering
@@ -296,13 +303,21 @@ An animation will move the transporting route in place, then transport the route
 
 \subsubsection{Entering a position}\label{section-enter-position}
 
-In order to enter a position in \thel (for example, the last estimated position, or the position where something worthwhile happened), go on the main frame and click on \inlinefigure{figures/plus-button.png} at the bottom of the position frame. The position frame will appear, see \cref{fig-position-frame}. Fill in the position fields of \cref{item-position} and press \inlinefigure{figures/add-button.png}. 
+To enter a position  (for example, the last estimated position, or the position where something worthwhile happened), go on the main frame and click on \inlinefigure{figures/plus-button.png} at the bottom of the position frame. The position frame will appear, see \cref{fig-position-frame}. Fill in the position fields of \cref{section-positions} and press \inlinefigure{figures/add-button.png}. 
 
 \subsubsection{Transporting a position}\label{section-transport-position}
 
 A position can be transported along a route along the lines of a sight transport, cf. \cref{section-transporting-sight}. This is useful, for instance, if one needs to transport the a past fix according to the recently sailed route, in order to obtain the current ship's position \cite{bowditch2002the}. 
 
 
+\subsection{Dealing with routes}\label{section-routes}
+
+
+\subsubsection{Entering a Route}\label{section-entering-route}
+
+To enter a route, go on the main frame and click on \inlinefigure{figures/plus-button.png} at the bottom of the route frame. The route frame will appear, see \cref{fig-route-frame}. Fill in the route fields of \cref{section-positions} and press \inlinefigure{figures/add-button.png}. 
+
+\subsubsection{Transporting a Route}\label{section-transporting-route}
 
 %%%%%%%%
 

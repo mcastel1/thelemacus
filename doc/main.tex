@@ -174,19 +174,19 @@ A \textit{position} a  location on the surface of the Earth, specified by
 
 A \textit{route} a trajectory on the surface of the Eearth, specified by 
 \begin{enumerate}
-  \item \label{item-route-type} The route type \cite{bowditch2002the}: 
-  \begin{description}
-  \item [loxodrome]: a trajectory forming a constant angle with the meridians,
-  \item [orthodrome]: a part of a great circle,
-  \item [circle of equal altitude]: a curve on the surface of the Earth from which an observer would see a celestial body at a given altitude above the horizon,
-  \end{description}
+  \item \label{item-route-type} The route type \cite{bowditch2002the}, which can be 
+  \begin{enumerate}
+  \item a loxodrome: a trajectory forming a constant angle with the meridians,
+  \item an orthodrome: a part of a great circle,
+  \item  a circle of equal altitude: a curve on the surface of the Earth from which an observer would see a celestial body at a given altitude above the horizon,
+  \end{enumerate}
   \item \label{item-route-azimuth} The azimuth $Z$, i.e., the angle between the route  and the local meridian at the route's starting point, e.g., $254 \degree \, 5.44'$,
   \item \label{item-route-length} The length, e.g., the length of the route sailed, which can be specified in two ways:
-  \begin{itemize}
-  \item by providing the time and speed of the ship, e.g.,from which  \thel will extract the length sailed,  
-  \item by providing directly the length sailed by the ship  $15$ \ac{nm}. 
+  \begin{enumerate}
+  \item by providing the time and speed of the ship, e.g.  $01$:$23$:$33$ and $5$ \acp{kt}, from which  \thel will extract the length sailed,  
+  \item by providing directly the length sailed by the ship  $15$ \acp{nm}. 
 
-  \end{itemize}
+  \end{enumerate}
 
   \item \label{item-route-reference-position} The start position (for loxodromes and orthodromes) or the ground position (for circles of equal altitude), see \cref{section-positions},
   \item \label{item-route-aperture} For circles of equal altitude the aperture angle `omega',

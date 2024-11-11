@@ -136,7 +136,27 @@ If you would like to refer to \thel in a journal article, the recommended way is
 
 \section{\thel for the impatient}
 
-For a quick use of \thel, the user may enter a sextant sight, with which he/she must be familiar, by going on the main frame an clicking on \inlinefigure{figures/plus-button.png}: a frame will appear, where the user will enter
+\begin{figure}
+  \centering
+  \includegraphics[width=1\textwidth]{figures/list-frame.png}
+  \caption{
+    \label{fig-list-frame}
+    The main frame of \thel. 
+  }
+  \end{figure}
+
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/sight-frame.png}
+    \caption{
+      \label{fig-sight-frame}
+      The sight frame with the entered data from \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}. 
+    }
+  \end{figure}
+  
+
+For a quick use of \thel, the user may enter a sextant sight, with which he/she must be familiar, by going on the main frame of \cref{fig-list-frame} an clicking on \inlinefigure{figures/plus-button.png}. A sight frame will appear, see \cref{fig-sight-frame}, where the user will enter
 \begin{enumerate}
   \item \label{item-name} The name of the celestial body, e.g. the star `Arcturus'
   \item \label{item-limb}  If the body is the Sun or the Moon, the limb (`upper', `center' or `lower') of the body which has been considered in the measurement
@@ -239,14 +259,7 @@ To add a new position, modify, transport or delete it, use the buttons at the bo
 
 \end{enumerate}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=1\textwidth]{figures/list-frame.png}
-  \caption{
-    \label{fig-list-frame}
-    The main frame of \thel. 
-  }
-  \end{figure}
+
 
 If you hover the mouse over a sight in the sight box, the sight will be highlighted. The route to which it is connected, both in in the route box and in the chart frame, will be highlighted so the user can see directly to what route the sight corresponds on the chart. Positions and routes are highlighted in the same way. 
 
@@ -257,15 +270,6 @@ To compute the astronomical position, press \inlinefigure{figures/position-butto
 
 \subsubsection{Entering a sight: The sight frame}
 
-  \begin{figure}
-    \centering
-    \includegraphics[width=0.9\textwidth]{figures/sight-frame.png}
-    \caption{
-      \label{fig-sight-frame}
-      The sight frame with the entered data from \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}. 
-    }
-  \end{figure}
-  
 
 To enter a new sight, press  \inlinefigure{figures/plus-button.png}, see \cref{fig-list-frame}, a sight frame will appear as in \cref{fig-sight-frame}, enter the sight fields in  \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}, and press \inlinefigure{figures/reduce-button.png}. 
 

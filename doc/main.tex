@@ -134,9 +134,35 @@ If you would like to refer to \thel in a journal article, the recommended way is
 
 \pagebreak
 
+\section{\thel for the impatient}
+
+For a quick use of \thel, the user may enter a sextant sight, with which he/she must be familiar, by going on the main frame an clicking on \inlinefigure{figures/plus-button.png}: a frame will appear, where the user will enter
+\begin{enumerate}
+  \item \label{item-name} The name of the celestial body, e.g. the star `Arcturus'
+  \item \label{item-limb}  If the body is the Sun or the Moon, the limb (`upper', `center' or `lower') of the body which has been considered in the measurement
+  \item \label{item-body-height} The angular height of the  body over the horizon, expressed in degrees and arcminutes, e.g., $54 \degree \, 45.34'$
+  \item \label{item-artificial-horizon} Whether the observer used an artificial horizon or not for the measurement
+  \item \label{item-time} \ac{UTC} date and time of the measurement, e.g., $2024$-$11$-$4$ $22$:$04$:$23$ \ac{UTC}
+  \item \label{item-label} A label (optional), e.g., `First sight of my night shift'
+  \end{enumerate}
+  
+  Additional information, which is most likely the same across multiple sights, is: 
+  \begin{enumerate}[resume]
+    \item \label{item-index-error} The index error \cite{bowditch2002the} of the sextant,  i.e., and angle expressed in degrees and arcminutes, e.g., $0 \degree \, 1.34'$
+    \item \label{item-observer-height} The height of the observer above sea level, e.g. $32.3$ \acp{ft}
+    \item \label{item-stopwatch} Whether the observer has used a stopwatch or not and, if so, the reading of the stopwatch, e.g., $1\hr \, 34 \min \, 12.43 \sec$
+    \item \label{item-tai-utc} The difference between \ac{TAI} and \ac{UTC} at the time of the measurement, e.g., $00$:$00$:$34$. 
+  \end{enumerate}
+
+  Then click on \inlinefigure{figures/reduce-button.png}: \thel will highglight for the user a curve on the surface of the Earth; the user is located somewhere on that curve. 
+
+To compute one's position, repeat the procedure above with another sextant sight, click on \inlinefigure{figures/position-button.png} in the main frame, and select \inlinefigure{figures/all-routes.png}: \thel will show on the chart the position, and list its coordinates in the `Positions' box in the main frame. 
+
+
 \section{Using \thel}
 
-In order to use \thel, the user needs to be familiar with taking a celestial sight with a sextant, and with the following simple concepts, see \cite{bowditch2002the} for details. 
+
+In order to use the full potential of \thel, we encourage the user to get familiar with the following simple concepts, see \cite{bowditch2002the} for details. 
 
 \subsection{Sights, positions and routes}
 
@@ -144,23 +170,8 @@ Let us get familiar with three basic concepts:
 \subsubsection{Sights} \label{section-sights} 
 
 A \textit{sight} is a measurement of the angular altitude of a celestial body, made with a sextant. 
-The results of this measurements are 
-\begin{enumerate}
-\item \label{item-name} The name of the celestial body, e.g. the star `Arcturus'
-\item \label{item-limb}  If the body is the Sun or the Moon, the limb (`upper', `center' or `lower') of the body which has been considered in the measurement
-\item \label{item-body-height} The angular height of the  body over the horizon, expressed in degrees and arcminutes, e.g., $54 \degree \, 45.34'$
-\item \label{item-artificial-horizon} Whether the observer used an artificial horizon or not for the measurement
-\item \label{item-time} \ac{UTC} date and time of the measurement, e.g., $2024$-$11$-$4$ $22$:$04$:$23$ \ac{UTC}
-\item \label{item-label} A label (optional), e.g., `First sight of my night shift'
-\end{enumerate}
+The results of this measurements are given in  \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}. 
 
-Additional information, which is most likely the same across multiple sights, is: 
-\begin{enumerate}[resume]
-  \item \label{item-index-error} The index error \cite{bowditch2002the} of the sextant,  i.e., and angle expressed in degrees and arcminutes, e.g., $0 \degree \, 1.34'$
-  \item \label{item-observer-height} The height of the observer above sea level, e.g. $32.3$ \acp{ft}
-  \item \label{item-stopwatch} Whether the observer has used a stopwatch or not and, if so, the reading of the stopwatch, e.g., $1\hr \, 34 \min \, 12.43 \sec$
-  \item \label{item-tai-utc} The difference between \ac{TAI} and \ac{UTC} at the time of the measurement, e.g., $00$:$00$:$34$. 
-\end{enumerate}
 
 \subsubsection{Positions}  \label{section-positions} 
 
@@ -191,7 +202,6 @@ A \textit{route} a trajectory on the surface of the Eearth, specified by
   \item \label{item-route-aperture} For circles of equal altitude the aperture angle `omega',
   \item \label{item-route-label} A label (optional). 
 \end{enumerate}
-
 
 \begin{figure}
   \centering

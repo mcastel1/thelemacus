@@ -193,9 +193,9 @@ To compute one's position, repeat the procedure above with another sextant sight
 
 In order to use the full potential of \thel, we encourage the user to get familiar with the following simple concepts, see \cite{bowditch2002the} for details. 
 
-\subsection{Sights, positions and routes}
+\subsection{Basic concepts}
 
-Let us get familiar with three basic concepts: 
+Let us introduce sights, positions and routes: 
 \subsubsection{Sights} \label{section-sights} 
 
 A \textit{sight} is a measurement of the angular altitude of a celestial body, made with a sextant. 
@@ -206,7 +206,7 @@ The results of this measurements are given in  \cref{item-name,item-limb,item-bo
 
 A \textit{position} a  location on the surface of the Earth, specified by 
 \begin{itemize}
-\item latitude and longitude, e.g., $54 \degree \, 45.34'\, \textrm{N}$ $23 \degree \, 5.33'\, \textrm{E}$,
+\item latitude and longitude, e.g., $54 \degree \, 45.34'$ \ac{N}, $23 \degree \, 5.33'$  \ac{E},
 \item a label (optional).
 \end{itemize}
 \subsubsection{Routes} \label{section-routes} 
@@ -222,8 +222,10 @@ A \textit{route} a trajectory on the surface of the Eearth, specified by
   \item \label{item-route-azimuth} The azimuth $Z$, i.e., the angle between the route  and the local meridian at the route starting position, e.g., $254 \degree \, 5.44'$,
   \item \label{item-route-length} The length, e.g., the length of the route sailed, which can be specified in two ways:
   \begin{enumerate}
-  \item by providing the time and speed of the ship, e.g.  $01$:$23$:$33$ and $5$ \acp{kt}, from which  \thel will extract the length sailed,  
+  \item by providing the time and speed of the ship, e.g.  $01$:$23$:$33$ and $5$ \acp{kt}, from which  \thel will extract the length sailed. Speeds can be entered in different units: \acp{kt}, \acp{km}/\ac{hr}  and \acp{m}/\ac{sec}. 
   \item by providing directly the length sailed by the ship  $15$ \acp{nm}. 
+  
+
 
   \end{enumerate}
 
@@ -289,20 +291,20 @@ The coordinates of the instantaneous mouse position are shown on the bottom left
 
 \subsubsection{Moving the chart}
 
-
+To move the chart to the \ac{N}, \ac{S}, \ac{E} or \ac{W}, respectively, use the buttons
 
 \begin{figure}
   \centering
   \includegraphics[width=0.9\textwidth]{figures/selection-rectangle.png}
   \caption{
     \label{fig-selection-rectangle}
-    Two chart frames with the Mercator (left) and 3D (right) projection, where a selection rectangle (blue) is being drawn. The coordinates in blue denote the top-left and bottom right vertices of the rectangle. 
+    Two chart frames with the Mercator (left) and 3D (right) projection, where a selection rectangle (blue) is being drawn. The coordinates in blue denote the \acl{N}-\ac{W} and \acl{S}-\acl{E} vertices of the rectangle. 
   }
 \end{figure}
 
 
 
-\subsection{Dealing with sights}
+\subsection{Sights}
 
 \subsubsection{Entering a sight: The sight frame}
 
@@ -349,7 +351,7 @@ To transport a sight:
 An animation will move the transporting route in place, then transport the route sight, and move back the transporting route to its original position. 
 
 
-\subsection{Dealing with positions}\label{section-position}
+\subsection{Positions}\label{section-position}
 
 \begin{figure}
   \centering
@@ -369,7 +371,7 @@ To enter a position  (for example, the last estimated position, or the position 
 A position can be transported with a route along the lines of a sight transport, cf. \cref{section-transporting-sight}. This is useful, for instance, if one needs to transport the a past fix according to the recently sailed route, in order to obtain the current ship's position \cite{bowditch2002the}. 
 
 
-\subsection{Dealing with routes}\label{section-routes}
+\subsection{Routes}\label{section-routes}
 
 
 \subsubsection{Entering a Route}\label{section-entering-route}

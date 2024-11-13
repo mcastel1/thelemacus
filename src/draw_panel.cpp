@@ -339,7 +339,7 @@ inline void DrawPanel::RenderAll(wxDC& dc) {
     
     //render selection_rectangle and its labels
     if ((parent->parent->selection_rectangle)) {
-        RenderSelectionRectangle(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderSelectionRectangle(dc, wxGetApp().selection_rectangle_color, wxGetApp().background_color);
     }
     
     if ((parent->parent->dragging_object)) {
@@ -490,7 +490,7 @@ inline void DrawPanel::RefreshWIN32(void) {
     if ((parent->parent->selection_rectangle)) {
 
         //re-draw the current selection rectangle
-        RenderSelectionRectangle(dc, wxGetApp().foreground_color, wxGetApp().background_color);
+        RenderSelectionRectangle(dc, wxGetApp().selection_rectangle_color, wxGetApp().background_color);
 
     }
     

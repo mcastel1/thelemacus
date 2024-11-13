@@ -423,6 +423,8 @@ bool MyApp::OnInit() {
     color_horizon.read_from_file(String("color horizon"), wxGetApp().path_file_init, String("R"), String(""));
     //read color selected item from file
     color_selected_item.read_from_file(String("color selected item"), wxGetApp().path_file_init, String("R"), String(""));
+    //read color selection rectangle from file
+    selection_rectangle_color.read_from_file(String("selection rectangle color"), wxGetApp().path_file_init, String("R"), String(""));
     //read tick length over width plot area from file_init
     tick_length_over_width_plot_area.read_from_file_to(String("tick length over width plot area"), wxGetApp().path_file_init, String("R"), String(""));
     //read tick length over width plot area from file_init

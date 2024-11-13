@@ -95,6 +95,7 @@ chart transport zoom factor coefficient = 0.5
 night foreground color = (255,255,255)
 day background color = (224,224,224)
 night background color = (40,40,43)
+selection rectangle color = (51,153,255)
 point size = 1
 load sample sight = y
 #files in code directory

@@ -46,7 +46,7 @@ public:
     //the size of small and large buttons of the app
     wxSize size_small_button, size_large_button;
     //The default fore/background color for day/night vision of the app of all objects in *this. background_color also represents the default, plain background color of fields, such as BodyNameFields, and it is thus conceptally equivalent to 'white' color
-    Color foreground_color, background_color, error_color, highlight_color, /*the color with which an item is highlighted in ListFrame, when mouse hovers over the related route or position in the plot area*/ color_selected_item,  /*the color of the horizon circle for the 3D projection*/ color_horizon;
+    Color foreground_color, background_color, error_color, highlight_color, /*the color with which an item is highlighted in ListFrame, when mouse hovers over the related route or position in the plot area*/ color_selected_item,  /*the color of the horizon circle for the 3D projection*/ color_horizon, /*the color of the selection rectangle*/selection_rectangle_color;
     vector<Color> color_list;
     //the default font used by the operating system, and a bold font obtained by the defalult font by setting its weight to wxFONTWEIGHT_BOLD
     wxFont default_font, error_font, highlight_font;

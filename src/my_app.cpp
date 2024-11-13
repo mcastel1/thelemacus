@@ -455,12 +455,9 @@ bool MyApp::OnInit() {
         bool hasAlpha = splash_image.HasAlpha() || splash_image.HasMask();
         
         
-//#ifdef _WIN32
-        //on WIN32 the image needs to be resized
-
-        splash_image.Rescale(rectangle_display.height, rectangle_display.height);
+        //rescale the image by keeping its aspect ratio
+        splash_image.Rescale((rectangle_display.height)/2.0 * splash_image.GetWidth()/splash_image.GetHeight(), (rectangle_display.height)/2.0);
         
-//#endif
 
         wxRegion splashRgn;
         if (hasAlpha) {

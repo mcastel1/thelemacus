@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="257.49484mm"
-   height="79.735291mm"
-   viewBox="0 0 257.49484 79.735291"
+   width="270.78021mm"
+   height="77.011147mm"
+   viewBox="0 0 270.78021 77.011147"
    version="1.1"
    id="svg1"
    inkscape:version="1.3.2 (091e20e, 2023-11-25)"
@@ -27,17 +27,41 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.46334924"
-     inkscape:cx="596.74211"
-     inkscape:cy="124.09646"
-     inkscape:window-width="1920"
-     inkscape:window-height="976"
+     inkscape:zoom="0.40534628"
+     inkscape:cx="689.5339"
+     inkscape:cy="180.09293"
+     inkscape:window-width="1512"
+     inkscape:window-height="865"
      inkscape:window-x="0"
-     inkscape:window-y="25"
-     inkscape:window-maximized="1"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
      inkscape:current-layer="layer1" />
   <defs
      id="defs1">
+    <linearGradient
+       id="linearGradient1"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#00ff00;stop-opacity:1"
+         offset="0"
+         id="stop1" />
+      <stop
+         style="stop-color:#0000ff;stop-opacity:1"
+         offset="1"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#0066ff;stop-opacity:1"
+         offset="0"
+         id="stop3" />
+      <stop
+         style="stop-color:#00ff00;stop-opacity:1"
+         offset="1"
+         id="stop4" />
+    </linearGradient>
     <radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient15"
@@ -85,68 +109,92 @@
        gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient5"
-       id="linearGradient7"
-       x1="-125.48953"
-       y1="2247.783"
-       x2="198.88547"
-       y2="2333.4666"
+       xlink:href="#linearGradient3"
+       id="linearGradient4"
+       x1="-23.783333"
+       y1="170.08701"
+       x2="215.6021"
+       y2="170.08701"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.26458333,0,0,0.26458333,9.5691137,-441.50349)" />
+       gradientTransform="translate(85.685449,2.2422374)" />
     <linearGradient
-       id="linearGradient5"
-       inkscape:collect="always">
-      <stop
-         style="stop-color:#00ff00;stop-opacity:1"
-         offset="0"
-         id="stop6" />
-      <stop
-         style="stop-color:#00aad4;stop-opacity:1"
-         offset="1"
-         id="stop7" />
-    </linearGradient>
+       inkscape:collect="always"
+       xlink:href="#linearGradient3"
+       id="linearGradient4-1"
+       x1="-23.783333"
+       y1="170.08701"
+       x2="215.6021"
+       y2="170.08701"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(8.8350859,5.7575783)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1"
+       id="linearGradient2"
+       x1="231.05933"
+       y1="102.66885"
+       x2="246.94687"
+       y2="118.58106"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(23.783331,-108.50831)">
+     transform="translate(23.783331,-102.61885)">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:49.389px;font-family:Kefa;-inkscape-font-specification:'Kefa, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#radialGradient16);fill-opacity:1;stroke:#0066ff;stroke-width:1;stroke-dasharray:none;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:49.389px;font-family:Kefa;-inkscape-font-specification:'Kefa, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#radialGradient16);fill-opacity:1;stroke:#00222b;stroke-width:1;stroke-dasharray:none;stroke-opacity:1"
        x="-23.524488"
        y="143.37321"
        id="text15"><tspan
          sodipodi:role="line"
          x="-23.524488"
          y="143.37321"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:49.389px;font-family:Kefa;-inkscape-font-specification:'Kefa, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#radialGradient16);fill-opacity:1;stroke:#0066ff;stroke-width:1;stroke-dasharray:none"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:49.389px;font-family:Kefa;-inkscape-font-specification:'Kefa, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#radialGradient16);fill-opacity:1;stroke:#00222b;stroke-width:1;stroke-dasharray:none"
          id="tspan19">Thelemacus </tspan><tspan
          sodipodi:role="line"
          x="-23.524488"
          y="205.10947"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:49.389px;font-family:Kefa;-inkscape-font-specification:'Kefa, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#radialGradient16);fill-opacity:1;stroke:#0066ff;stroke-width:1;stroke-dasharray:none"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:49.389px;font-family:Kefa;-inkscape-font-specification:'Kefa, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#radialGradient16);fill-opacity:1;stroke:#00222b;stroke-width:1;stroke-dasharray:none"
          id="tspan16" /></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.5833px;font-family:Kefa;-inkscape-font-specification:'Kefa, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#linearGradient7);fill-opacity:1;stroke:#0066ff;stroke-width:0.3;stroke-dasharray:none;stroke-opacity:1"
-       x="-23.710846"
-       y="160.38995"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.5833px;font-family:Kefa;-inkscape-font-specification:'Kefa, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#linearGradient4);fill-opacity:1;stroke:#0b2822;stroke-width:0.3;stroke-dasharray:none;stroke-opacity:1"
+       x="61.974602"
+       y="162.63219"
        id="text20-3"><tspan
          sodipodi:role="line"
-         id="tspan20-7"
-         x="-23.710846"
-         y="160.38995"
-         style="fill:url(#linearGradient7);fill-opacity:1;stroke:#0066ff;stroke-width:0.3;stroke-dasharray:none">Version 1.0</tspan><tspan
+         x="61.974602"
+         y="162.63219"
+         style="fill:url(#linearGradient4);fill-opacity:1;stroke:#0b2822;stroke-width:0.3;stroke-dasharray:none"
+         id="tspan7">All Right Reserved</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.5833px;font-family:Kefa;-inkscape-font-specification:'Kefa, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#linearGradient4-1);fill-opacity:1;stroke:#0b2822;stroke-width:0.3;stroke-dasharray:none;stroke-opacity:1"
+       x="-14.87576"
+       y="166.14752"
+       id="text20-3-4"><tspan
          sodipodi:role="line"
-         x="-23.710846"
-         y="173.61908"
-         id="tspan21-9"
-         style="fill:url(#linearGradient7);fill-opacity:1;stroke:#0066ff;stroke-width:0.3;stroke-dasharray:none">All Right Reserved</tspan><tspan
+         x="-14.87576"
+         y="166.14752"
+         id="tspan21-9-1"
+         style="fill:url(#linearGradient4-1);fill-opacity:1;stroke:#0b2822;stroke-width:0.3;stroke-dasharray:none" /><tspan
          sodipodi:role="line"
-         x="-23.710846"
-         y="186.84821"
-         style="fill:url(#linearGradient7);fill-opacity:1;stroke:#0066ff;stroke-width:0.3;stroke-dasharray:none"
-         id="tspan7">IDDN.FR.001.380018.000.S.P.2024.000.30800</tspan></text>
+         x="-14.87576"
+         y="179.37665"
+         style="fill:url(#linearGradient4-1);fill-opacity:1;stroke:#0b2822;stroke-width:0.3;stroke-dasharray:none"
+         id="tspan7-8">IDDN.FR.001.380018.000.S.P.2024.000.30800</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.4px;font-family:Kefa;-inkscape-font-specification:'Kefa, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#linearGradient2);fill-opacity:1;stroke:#280b0b;stroke-width:0.1;stroke-dasharray:none;stroke-opacity:1"
+       x="229.86877"
+       y="120.34219"
+       id="text22"><tspan
+         sodipodi:role="line"
+         id="tspan22"
+         x="229.86877"
+         y="120.34219"
+         style="fill:url(#linearGradient2);fill-opacity:1;stroke:#280b0b;stroke-width:0.1;stroke-dasharray:none">®</tspan></text>
   </g>
 </svg>

@@ -32,8 +32,7 @@ warning_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/
 //splash_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/splash_icon.gif"
 jolly_rogers RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/jolly_rogers.png"
 //note that splash_icon needs to be stored here with the MYDATA format, not with other formats
-splash_icon  MYDATA  "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/splash_icon_boat.gif"
-
+splash_icon  MYDATA  "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/splash_icon.gif"
 
 // this icon is used with wxFrame::SetIcon()
 sample ICON  "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/app_icon.ico"

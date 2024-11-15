@@ -140,9 +140,29 @@ Any questions about the use and installation of \thel can be asked by \href{\con
 If you would like to refer to \thel in a journal article, the recommended way is to cite this reference manual \cite{castellana2024thelemacus-documentation}. If you want to give a url, use  \href{\thelemacusurl}{this one}. 
 
 
-\pagebreak
-
 \section{\thel for the impatient}
+
+For a quick use of \thel, the user may enter a sextant sight, with which he/she must be familiar, by going on the main frame of \cref{fig-list-frame} an clicking on \inlinefigure{1.3}{figures/plus-button.png}. A sight frame will appear, see \cref{fig-sight-frame}, where the user will enter
+\begin{enumerate}
+  \item \label{item-name} The name of the celestial body, e.g. the star `\href{https://fr.wikipedia.org/wiki/Arcturus}{Arcturus}.' \thel supports the following celestial bodies: Altair, Alpheratz, Arcturus, Capella, Jupiter, Hamal, Kochab, the Moon, Saturn, Sirius, Spica, the Sun and Vega. More bodies will be added in future versions. 
+  \item \label{item-limb}  If the body is the Sun or the Moon, the  limb (`upper', `center' or `lower') of the body which has been considered in the measurement (yes/no).
+  \item \label{item-body-height} The angular height of the  body over the horizon, expressed in degrees and arcminutes,e.g., \myangle{54}{45.34}.
+  \item \label{item-artificial-horizon} Whether the observer used an artificial horizon or not for the measurement.
+  \item \label{item-time} \ac{UTC} date and time of the measurement, e.g., $2024$-$11$-$4$ $22$:$04$:$23$ \ac{UTC}.
+  \item \label{item-label} A label to identify the sight (optional), e.g., `First sight of my night shift.' If no label is entered, \thel will automatically enter as a label the time at which the sight was entered. 
+  \end{enumerate}
+  
+  Additional information which, most likely, will have to be modified only once in a while, is: 
+  \begin{enumerate}[resume]
+    \item \label{item-index-error} The index error \cite{bowditch2002the} of the sextant,  i.e., and angle expressed in degrees and arcminutes, e.g., \myangle{-0}{1.2} (the index error can be positive or negative).
+    \item \label{item-observer-height} The height of the observer above sea level, e.g. $32.3$ \acp{ft}.
+    \item \label{item-stopwatch} Whether the observer has used a stopwatch or not and, if so, the reading of the stopwatch, e.g., $1$ \ac{hr}  $34$ \acp{min} $12.43$ \acp{sec}.
+    \item \label{item-tai-utc} The difference between \ac{TAI} and \ac{UTC} at the time of the measurement, e.g., \chrono{00}{00}{37}.  This is the current value  \ac{TAI}-\ac{UTC} when this documentation has been written; you can find the up-to-date value  \href{https://en.wikipedia.org/wiki/Leap_second}{here} at any time. 
+  \end{enumerate}
+
+  Then click on \inlinefigure{1.3}{figures/reduce-button.png}: \thel will highglight for the user a curve on the surface of the Earth; the user is located somewhere on that curve. 
+
+To compute one's position, repeat the procedure above with another sextant sight, click on \inlinefigure{1.3}{figures/position-button.png} in the main frame, and select \inlinefigure{1.3}{figures/all-routes.png}: \thel will show on the chart the position, and list its coordinates in the `Positions' box in the main frame. 
 
 \begin{figure}
   \centering
@@ -162,30 +182,6 @@ If you would like to refer to \thel in a journal article, the recommended way is
       The sight frame with the entered data from \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}. 
     }
   \end{figure}
-  
-
-For a quick use of \thel, the user may enter a sextant sight, with which he/she must be familiar, by going on the main frame of \cref{fig-list-frame} an clicking on \inlinefigure{1.3}{figures/plus-button.png}. A sight frame will appear, see \cref{fig-sight-frame}, where the user will enter
-\begin{enumerate}
-  \item \label{item-name} The name of the celestial body, e.g. the star `Arcturus'
-  \item \label{item-limb}  If the body is the Sun or the Moon, the limb (`upper', `center' or `lower') of the body which has been considered in the measurement
-  \item \label{item-body-height} The angular height of the  body over the horizon, expressed in degrees and arcminutes, e.g., $54 \degree \, 45.34'$
-  \item \label{item-artificial-horizon} Whether the observer used an artificial horizon or not for the measurement
-  \item \label{item-time} \ac{UTC} date and time of the measurement, e.g., $2024$-$11$-$4$ $22$:$04$:$23$ \ac{UTC}
-  \item \label{item-label} A label (optional), e.g., `First sight of my night shift'
-  \end{enumerate}
-  
-  Additional information, which is most likely the same across multiple sights, is: 
-  \begin{enumerate}[resume]
-    \item \label{item-index-error} The index error \cite{bowditch2002the} of the sextant,  i.e., and angle expressed in degrees and arcminutes, e.g., $0 \degree \, 1.34'$
-    \item \label{item-observer-height} The height of the observer above sea level, e.g. $32.3$ \acp{ft}
-    \item \label{item-stopwatch} Whether the observer has used a stopwatch or not and, if so, the reading of the stopwatch, e.g., $1\hr \, 34 \min \, 12.43 \sec$
-    \item \label{item-tai-utc} The difference between \ac{TAI} and \ac{UTC} at the time of the measurement, e.g., $00$:$00$:$34$. 
-  \end{enumerate}
-
-  Then click on \inlinefigure{1.3}{figures/reduce-button.png}: \thel will highglight for the user a curve on the surface of the Earth; the user is located somewhere on that curve. 
-
-To compute one's position, repeat the procedure above with another sextant sight, click on \inlinefigure{1.3}{figures/position-button.png} in the main frame, and select \inlinefigure{1.3}{figures/all-routes.png}: \thel will show on the chart the position, and list its coordinates in the `Positions' box in the main frame. 
-
 
 \section{Using \thel}
 

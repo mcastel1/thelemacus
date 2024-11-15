@@ -201,24 +201,26 @@ The results of this measurements are given in  \cref{item-name,item-limb,item-bo
 
 A \textit{position} a  location on the surface of the Earth, specified by 
 \begin{itemize}
-\item latitude and longitude, e.g., $54 \degree \, 45.34'$ \ac{N}, $23 \degree \, 5.33'$  \ac{E},
+\item latitude and longitude, e.g., \latlon{54}{45.34}{\ac{N}}, \latlon{156}{42.04}{\ac{E}},
 \item a label (optional).
 \end{itemize}
 \subsubsection{Routes} \label{section-routes} 
 
 A \textit{route} a trajectory on the surface of the Eearth, specified by 
 \begin{enumerate}
-  \item \label{item-route-type} The route type \cite{bowditch2002the}, which can be 
+  \item \label{item-route-type} The route type \cite{bowditch2002the}, see \cref{fig-route-types}, which can be 
   \begin{enumerate}
   \item a loxodrome: a trajectory forming a constant angle with the meridians,
   \item an orthodrome: a part of a great circle,
-  \item  a circle of equal altitude: a curve on the surface of the Earth from which an observer would see a celestial body at a given altitude above the horizon,
+  \item  a circle of equal altitude: a curve on the surface of the Earth from which an observer would see a celestial body at a given, constant altitude above the horizon,
   \end{enumerate}
-  \item \label{item-route-azimuth} The azimuth $Z$, i.e., the angle between the route  and the local meridian at the route starting position, e.g., $254 \degree \, 5.44'$,
+  \item \label{item-route-azimuth} The azimuth $Z$, i.e., the angle between the route  and the local meridian at the route starting position, e.g., \myangle{234}{03.35}.
   \item \label{item-route-length} The length, e.g., the length of the route sailed, which can be specified in two ways:
   \begin{enumerate}
-  \item by providing the time and speed of the ship, e.g.  $01$:$23$:$33$ and $5$ \acp{kt}, from which  \thel will extract the length sailed. Speeds can be entered in different units: \acp{kt}, \acp{km}/\ac{hr}  and \acp{m}/\ac{sec}. 
-  \item by providing directly the length sailed by the ship  $15$ \acp{nm}. 
+  \item by providing the time and speed of the ship, e.g.  \chrono{01}{23}{32} and $5$ \acp{kt}, from which  \thel will extract the length sailed. Speeds can be entered in different units: \acp{kt}, \acp{km}/\ac{hr},  and \acp{m}/\ac{sec}. 
+  
+  This option is handy when reading off speed and sailed time  on the navigational instruments. 
+  \item by providing directly the length sailed by the ship, e.g.,  $15$ \acp{nm}. 
   
 
 

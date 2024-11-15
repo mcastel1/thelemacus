@@ -51,6 +51,7 @@
 \usepackage[most]{tcolorbox}
 \usepackage{tocloft}
 \usepackage{eurosym}
+\usepackage{wrapfig}
 % \usepackage[colorlinks]{hyperref}
 
  % for setting page size and margins
@@ -160,6 +161,14 @@ For a quick use of \thel, the user may enter a sextant sight, with which he/she 
     \item \label{item-tai-utc} The difference between \ac{TAI} and \ac{UTC} at the time of the measurement, e.g., \chrono{00}{00}{37}.  This is the current value  \ac{TAI}-\ac{UTC} when this documentation has been written; you can find the up-to-date value  \href{https://en.wikipedia.org/wiki/Leap_second}{here} at any time. 
   \end{enumerate}
 
+  \begin{wrapfigure}{r}{0.6\textwidth}
+    \includegraphics[width=0.6\textwidth]{figures/route-types.png}
+    \caption{
+      \label{fig-route-types}
+      The chart frame in the 3d projection showing different route types: A loxodrome and an orthodrome with the same starting point (blue and green, respectively), and a circle of equal altitude (red), see \cref{item-route-type}. 
+    }
+    \end{wrapfigure}
+
   Then click on \inlinefigure{1.3}{figures/reduce-button.png}: \thel will highglight for the user a curve on the surface of the Earth; the user is located somewhere on that curve. 
 
 To compute one's position, repeat the procedure above with another sextant sight, click on \inlinefigure{1.3}{figures/position-button.png} in the main frame, and select \inlinefigure{1.3}{figures/all-routes.png}: \thel will show on the chart the position, and list its coordinates in the `Positions' box in the main frame. 
@@ -197,6 +206,7 @@ A \textit{sight} is a measurement of the angular altitude of a celestial body, m
 The results of this measurements are given in  \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}. 
 
 
+
 \subsubsection{Positions}  \label{section-positions} 
 
 A \textit{position} a  location on the surface of the Earth, specified by 
@@ -221,9 +231,6 @@ A \textit{route} a trajectory on the surface of the Eearth, specified by
   
   This option is handy when reading off speed and sailed time  on the navigational instruments. 
   \item by providing directly the length sailed by the ship, e.g.,  $15$ \acp{nm}. 
-  
-
-
   \end{enumerate}
 
   \item \label{item-route-reference-position} The start position (for loxodromes and orthodromes) or the ground position (for circles of equal altitude), see \cref{section-positions},
@@ -231,18 +238,10 @@ A \textit{route} a trajectory on the surface of the Eearth, specified by
   \item \label{item-route-label} A label (optional). 
 \end{enumerate}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.9\textwidth]{figures/route-types.png}
-  \caption{
-    \label{fig-route-types}
-    The chart frame in the 3d projection showing different route types: A loxodrome and an orthodrome with the same starting point (blue and green, respectively), and a circle of equal altitude (red), see \cref{item-route-type}. 
-  }
-  \end{figure}
-
-
 When the observer takes a sight, then we can conclude that he/she lies on a route---a circle of equal altitude---on the Earth's surface \cite{bowditch2002the}. 
 \textit{Reducing} a sight means computing this route given the sight data in \cref{item-route-reference-position}: we will say that this route is \textit{connected} to the sight. Importantly, not all routes are connected to sights: for example, a route denoting the ship's path, or a circle of equal altitude originally connected to a sight which has been later transported, are not. 
+
+
 
 \subsection{The main frame}
 
@@ -353,14 +352,13 @@ An animation will move the transporting route in place, then transport the route
 
 \subsection{Positions}\label{section-position}
 
-\begin{figure}
-  \centering
+\begin{wrapfigure}{r}{0.5\textwidth}
   \includegraphics[width=0.5\textwidth]{figures/position-frame.png}
   \caption{
     \label{fig-position-frame}
     The position frame.  
   }
-\end{figure}
+\end{wrapfigure}
 
 \subsubsection{Entering a position}\label{section-enter-position}
 
@@ -373,18 +371,15 @@ A position can be transported with a route along the lines of a sight transport,
 
 \subsection{Routes}\label{section-routes}
 
-
 \subsubsection{Entering a Route}\label{section-entering-route}
 
-\begin{figure}
-  \centering
+\begin{wrapfigure}{r}{0.5\textwidth}
   \includegraphics[width=0.5\textwidth]{figures/route-frame.png}
   \caption{
     \label{fig-route-frame}
     The route frame.  
   }
-\end{figure}
-
+\end{wrapfigure}
 
 To enter a route, go on the main frame and click on \inlinefigure{1.3}{figures/plus-button.png} at the bottom of the route frame. The route frame will appear, see \cref{fig-route-frame}. Fill in the route fields of \cref{section-positions} and press \inlinefigure{1.3}{figures/add-button.png}. 
 

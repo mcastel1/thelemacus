@@ -54,7 +54,7 @@ standard thickness over length screen = 1e-3
 time check light dark = 00:00:01
 time splash image = 00:00:01
 #this is used only on WIN32
-time refresh = 00:00:00.05
+time refresh = 00:00:00.01
 #the temporal length of animations
 animation time = 00:00:1
 number of animation steps = 50

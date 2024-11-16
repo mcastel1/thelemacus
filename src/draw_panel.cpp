@@ -2735,14 +2735,10 @@ void DrawPanel::OnMouseMovement(wxMouseEvent& event) {
                 //the charts can be Refresh()ed -> I call refresh on all DrawPanels, set parent->parent->refresh = false and re-start parent->parent->timer which will start again counting time until the next Refresh() will be authorized
                 
                 parent->parent->MyRefreshAll();
-                
-                for (i = 0; i < parent->parent->chart_frames.size(); i++) {
-                    
-                    parent->parent->refresh = false;
-                    parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
-                    
-                }
-                
+                                    
+                parent->parent->refresh = false;
+                parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
+
             }
             
 #endif
@@ -3698,12 +3694,8 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                         
                         parent->parent->MyRefreshAll();
                         
-                        for (i = 0; i < parent->parent->chart_frames.size(); i++) {
-                            
-                            parent->parent->refresh = false;
-                            parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
-                            
-                        }
+                        parent->parent->refresh = false;
+                        parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
                         
                     }
 #endif

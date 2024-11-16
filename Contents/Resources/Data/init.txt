@@ -107,7 +107,7 @@ name file n line = n_line_map_conv_blocked.txt
 name file sample sight = sample_sight.nav
 #name file sample sight = paris_sights.nav
 #files in image directory
-name file app icon = planet.png
+name file app icon = app_icon.png
 name file question icon = question_icon.png
 name file error icon = error_icon.png
 name file warning icon = warning_icon.png

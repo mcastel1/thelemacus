@@ -11,7 +11,7 @@ clear; clear;
 #the name of the app that you want to create
 APP_NAME='Thelemacus'
 #the path to the icon of the app
-ICON_PATH='/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/Light/jolly_roger.icns'
+ICON_PATH='/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/app_icon.icns'
 #the path to the .cpp file
 INPUT_PATH='/Users/michelecastellana/Documents/thelemacus'
 OUTPUT_PATH='/Users/michelecastellana/Desktop'

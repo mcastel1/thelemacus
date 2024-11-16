@@ -40,13 +40,13 @@ void MyApp::OnTimer([[maybe_unused]] wxTimerEvent& event) {
         if ((settings->GetAppearance().IsDark())) {
             //the system is in dark mode -> set image path equal to the /Dark folder
             
-            image_directory = root_directory.append(String("Contents/Resources/Images/Dark/"));
+            image_directory_light_dark = root_directory.append(String("Contents/Resources/Images/Dark/"));
             
         }
         else {
             //the system is in light mode ->  set image path equal to the /Light folder
             
-            image_directory = root_directory.append(String("Contents/Resources/Images/Light/"));
+            image_directory_light_dark = root_directory.append(String("Contents/Resources/Images/Light/"));
             
         }
         
@@ -235,20 +235,20 @@ void MyApp::where_am_I([[maybe_unused]] String prefix) {
 void MyApp::set_icon_paths(void){
     
     //files in image directory
-    path_file_app_icon = image_directory.append(read_from_file(String("name file app icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_error_icon = image_directory.append(read_from_file(String("name file error icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_warning_icon = image_directory.append(read_from_file(String("name file warning icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_info_icon = image_directory.append(read_from_file(String("name file info icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_question_icon = image_directory.append(read_from_file(String("name file question icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_plus_icon = image_directory.append(read_from_file(String("name file plus icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_list_icon = image_directory.append(read_from_file(String("name file list icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_reset_icon = image_directory.append(read_from_file(String("name file reset icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_position_icon = image_directory.append(read_from_file(String("name file position icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_map_icon = image_directory.append(read_from_file(String("name file map icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_pencil_icon = image_directory.append(read_from_file(String("name file pencil icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_trash_icon = image_directory.append(read_from_file(String("name file trash icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_transport_icon = image_directory.append(read_from_file(String("name file transport icon"), wxGetApp().path_file_init, String("R"), String("")));
-    path_file_disconnect_icon = image_directory.append(read_from_file(String("name file disconnect icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_app_icon = image_directory_light_dark.append(read_from_file(String("name file app icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_error_icon = image_directory_light_dark.append(read_from_file(String("name file error icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_warning_icon = image_directory_light_dark.append(read_from_file(String("name file warning icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_info_icon = image_directory_light_dark.append(read_from_file(String("name file info icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_question_icon = image_directory_light_dark.append(read_from_file(String("name file question icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_plus_icon = image_directory_light_dark.append(read_from_file(String("name file plus icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_list_icon = image_directory_light_dark.append(read_from_file(String("name file list icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_reset_icon = image_directory_light_dark.append(read_from_file(String("name file reset icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_position_icon = image_directory_light_dark.append(read_from_file(String("name file position icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_map_icon = image_directory_light_dark.append(read_from_file(String("name file map icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_pencil_icon = image_directory_light_dark.append(read_from_file(String("name file pencil icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_trash_icon = image_directory_light_dark.append(read_from_file(String("name file trash icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_transport_icon = image_directory_light_dark.append(read_from_file(String("name file transport icon"), wxGetApp().path_file_init, String("R"), String("")));
+    path_file_disconnect_icon = image_directory_light_dark.append(read_from_file(String("name file disconnect icon"), wxGetApp().path_file_init, String("R"), String("")));
     path_file_splash_icon = image_directory.append(read_from_file(String("name file splash icon"), wxGetApp().path_file_init, String("R"), String("")));
     
 }
@@ -305,7 +305,7 @@ bool MyApp::OnInit() {
     cout << "You have Apple Operating System" << "\n";
     
     //to build the app on mac
-    //            where_am_I(String(""));
+//                where_am_I(String(""));
     //to develop the app with Xcode on OSX (new MAC)
     root_directory = String("/Users/michelecastellana/Documents/thelemacus/");
     //to develop the app with Xcode on OSX (old MAC)
@@ -343,13 +343,13 @@ bool MyApp::OnInit() {
     //directories are set dynamically from root_directory
     path_file_init = root_directory.append(String("Contents/Resources/Data/init.txt"));
     data_directory = root_directory.append(String("Contents/Resources/Data/"));
+    image_directory = root_directory.append(String("Contents/Resources/Images/"));
     if ((settings->GetAppearance().IsDark())) {
         //the system is in dark mode
-        image_directory = root_directory.append(String("Contents/Resources/Images/Dark/"));
-    }
-    else {
+        image_directory_light_dark = image_directory.append(String("Dark/"));
+    }else{
         //the system is in light mode
-        image_directory = root_directory.append(String("Contents/Resources/Images/Light/"));
+        image_directory_light_dark = image_directory.append(String("Light/"));
     }
     default_open_directory = root_directory;
     

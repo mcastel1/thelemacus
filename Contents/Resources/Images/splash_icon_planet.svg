@@ -187,9 +187,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.21556367"
-     inkscape:cx="2171.0523"
-     inkscape:cy="876.77112"
+     inkscape:zoom="0.16021754"
+     inkscape:cx="1937.9901"
+     inkscape:cy="1023.6083"
      inkscape:window-width="1512"
      inkscape:window-height="865"
      inkscape:window-x="0"
@@ -275,7 +275,13 @@
          id="tspan22"
          x="1091.5015"
          y="1572.149"
-         style="stroke-width:0">®</tspan></text></g><g
+         style="stroke-width:0">®</tspan></text><ellipse
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:19.053;stroke-dasharray:none"
+       id="path1"
+       cx="1736.2098"
+       cy="982"
+       rx="985.87933"
+       ry="944.8819" /></g><g
      id="g1-9"
      inkscape:groupmode="layer"
      inkscape:label="1"

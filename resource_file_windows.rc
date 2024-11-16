@@ -15,7 +15,7 @@
 // first icon in the executable and the icons are sorted both by their order
 // and alphabetically (!), so put this icon first and give it a name
 // starting with "a"
-app_icon ICON "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/app_icon.ico"
+app_icon ICON "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/app_icon.ico"
 transport_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/transport_icon.png"
 disconnect_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/disconnect_icon.png"
 error_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/error_icon.png"
@@ -29,13 +29,12 @@ question_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images
 info_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/info_icon.png"
 trash_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/trash_icon.png"
 warning_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/warning_icon.png"
-//splash_icon RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/splash_icon.gif"
-jolly_rogers RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/jolly_rogers.png"
+//jolly_rogers RCDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/app_icon.png"
 //note that splash_icon needs to be stored here with the MYDATA format, not with other formats
-splash_icon  MYDATA  "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/splash_icon.gif"
+splash_icon MYDATA "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/splash_icon.gif"
 
 // this icon is used with wxFrame::SetIcon()
-sample ICON  "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/Light/app_icon.ico"
+sample ICON  "C:/Mac/Home/Documents/thelemacus/Contents/Resources/Images/app_icon.ico"
 
 // set this to 1 if you don't want to use manifest resource provided by wxWidgets.
 // An aplication manifest is needed for the application UI to look properly and other

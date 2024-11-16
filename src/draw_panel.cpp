@@ -3046,9 +3046,7 @@ void DrawPanel::OnMouseLeftUp(wxMouseEvent& event) {
                 parent->parent->RefreshAll();
                 
 #endif
-                
 #ifdef WIN32
-                
                 
                 for (i = 0; i < (parent->parent->chart_frames).size(); i++) {
                     (parent->parent->chart_frames[i])->draw_panel->RefreshWIN32();
@@ -3505,12 +3503,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             y_max = y_max_start_drag + ((double)((position_now_drag.y) - (position_start_drag.y))) / ((double)(size_plot_area.GetHeight())) * (y_max_start_drag - y_min_start_drag);
                             
                             (this->*Set_lambda_phi_min_max)();
-                            (this->*PreRender)();
-                            MyRefresh();
-                            
-                            //                            }
-                            
-                            
+                                                    
                             break;
                             
                         }
@@ -3522,18 +3515,37 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                             //compose rotation_start_drag with the rotation resulting from the drag, so as to rotate the entire earth according to the mouse drag
                             rotation->set(rotation_start_end(position_start_drag, position_now_drag) * (*rotation_start_drag));
                             
-                            (this->*PreRender)();
-                            MyRefresh();
-                            
                             break;
                             
                         }
                             
                     }
                     
+#ifdef __APPLE__
+                    //I am on APPLE operating systme: I call PreRender() and MyRefresh() to refresh the charts after the drag event
+
+                    (this->*PreRender)();
+                    MyRefresh();
                     
-                }
-                else {
+#endif
+#ifdef WIN32
+                    
+                    if(parent->parent->refresh){
+                        //I am on WIN32 operating system -> a Refresh() of the charts called too often may cause ugly flashes on the chart -> I call PreRender() and MyRefresh() only if enough time has passed since the last one, by checking the refresh variable
+                        
+                        //the charts can be Refresh()ed -> I call MyRefresh(), set parent->parent->refresh = false and re-start parent->parent->timer which will start again counting time until the next Refresh() will be authorized
+                        
+                        (this->*PreRender)();
+                        MyRefresh();
+                        
+                        parent->parent->refresh = false;
+                        parent->parent->timer->Start(wxGetApp().time_refresh.to_milliseconds(), wxTIMER_CONTINUOUS);
+                        
+                        
+                    }
+#endif
+                    
+                }else{
                     //an object is being dragged (a Position or a Route)
                     
                     unsigned int i;
@@ -3672,6 +3684,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     
                     
 #ifdef __APPLE__
+                    
                     //I am on APPLE operating systme: I call MyRefresh() to refresh the charts after the drag event
                     parent->parent->MyRefreshAll();
                     
@@ -3697,8 +3710,7 @@ void DrawPanel::OnMouseDrag(wxMouseEvent& event) {
                     
                 }
                 
-            }
-            else {
+            }else{
                 //in this case, position_drag_now is not a valid position : in the Mercator projection, this does not make sense and I do nothing. In the 3D projection, I am dragging the chart from outside circle observer (I am rotating the earth) -> I proceed implementing this rotation
                 
                 switch (position_in_vector(parent->projection, Projection_types)) {

@@ -10,6 +10,7 @@ clear; clear;
 
 #the name of the app that you want to create
 APP_NAME='Thelemacus'
+APP_VERSION='1.0'
 #the path to the icon of the app
 ICON_PATH='/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/app_icon.icns'
 #the path to the .cpp file
@@ -188,8 +189,8 @@ sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_EXECUTABLE_NAME}/$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_BUNDLE_NAME}/$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2022 wxWidgets/" \
-    -e "s/\${MACOSX_BUNDLE_BUNDLE_VERSION}/3.2.0/" \
-    -e "s/\${MACOSX_BUNDLE_INFO_STRING}/$APP_NAME version 3.2.0, (c) 2002-2022 wxWidgets/" \
+    -e "s/\${MACOSX_BUNDLE_BUNDLE_VERSION}/$APP_VERSION/" \
+    -e "s/\${MACOSX_BUNDLE_INFO_STRING}/$APP_NAME version $APP_VERSION, (c) 2002-2022 wxWidgets/" \
     -e "s/\${MACOSX_BUNDLE_LONG_VERSION_STRING}/3.2.0, (c) 2002-2022 wxWidgets/" \
     -e "s/\${MACOSX_BUNDLE_SHORT_VERSION_STRING}/3.2/" \
     $WXWIDGETS_ROOT_DIRECTORY/src/osx/carbon/Info.plist.in >$OUTPUT_PATH/$APP_NAME.app/Contents/Info.plist

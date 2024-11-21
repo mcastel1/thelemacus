@@ -13,7 +13,8 @@ APP_NAME='Thelemacus'
 APP_VERSION='1.0'
 MINIMUM_SYSTEM_VERSION='10.13'
 #the path to the icon of the app
-ICON_PATH='/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/app_icon.icns'
+ICON_NAME='app_icon.icns'
+ICON_PATH='/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/'$ICON_NAME
 #the path to the .cpp file
 INPUT_PATH='/Users/michelecastellana/Documents/thelemacus'
 OUTPUT_PATH='/Users/michelecastellana/Desktop'
@@ -186,7 +187,7 @@ LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_L
 LIB_B='libwx_baseu-3.3.0.0.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 
 #create the .app folder and subfolders
-sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$APP_NAME/" \
+sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_EXECUTABLE_NAME}/$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_BUNDLE_NAME}/$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_COPYRIGHT}/Copyright CNRS/" \
@@ -195,10 +196,11 @@ sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_LONG_VERSION_STRING}/$APP_VERSION/" \
     -e "s/\${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$APP_VERSION/" \
     -e "s/\${MACOSX_MINIMUM_SYSTEM_VERSION}/$MINIMUM_SYSTEM_VERSION/" \
+    -e "s/\${MACOSX_ICON_NAME}/$ICON_NAME/" \
     $WXWIDGETS_ROOT_DIRECTORY/src/osx/carbon/Info.plist.in >$OUTPUT_PATH/$APP_NAME.app/Contents/Info.plist
 /bin/echo "APPL????" >$OUTPUT_PATH/$APP_NAME.app/Contents/PkgInfo
 ln -f $APP_NAME $OUTPUT_PATH/$APP_NAME.app/Contents/MacOS/$APP_NAME
-cp -f $ICON_PATH $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/wxmac.icns
+cp -f $ICON_PATH $OUTPUT_PATH/$APP_NAME.app/Contents/Resources
 
 #clean up
 rm -rf $APP_NAME

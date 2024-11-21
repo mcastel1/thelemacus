@@ -197,7 +197,7 @@ sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$APP_VERSION/" \
     -e "s/\${MACOSX_MINIMUM_SYSTEM_VERSION}/$MINIMUM_SYSTEM_VERSION/" \
     -e "s/\${MACOSX_ICON_NAME}/$ICON_NAME/" \
-    $WXWIDGETS_ROOT_DIRECTORY/src/osx/carbon/Info.plist.in >$OUTPUT_PATH/$APP_NAME.app/Contents/Info.plist
+    $INPUT_PATH/Info.plist.in > $OUTPUT_PATH/$APP_NAME.app/Contents/Info.plist
 /bin/echo "APPL????" >$OUTPUT_PATH/$APP_NAME.app/Contents/PkgInfo
 ln -f $APP_NAME $OUTPUT_PATH/$APP_NAME.app/Contents/MacOS/$APP_NAME
 cp -f $ICON_PATH $OUTPUT_PATH/$APP_NAME.app/Contents/Resources

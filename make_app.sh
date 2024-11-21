@@ -188,11 +188,11 @@ LIB_B='libwx_baseu-3.3.0.0.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install
 sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_EXECUTABLE_NAME}/$APP_NAME/" \
     -e "s/\${MACOSX_BUNDLE_BUNDLE_NAME}/$APP_NAME/" \
-    -e "s/\${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2022 wxWidgets/" \
+    -e "s/\${MACOSX_BUNDLE_COPYRIGHT}/Copyright CNRS/" \
     -e "s/\${MACOSX_BUNDLE_BUNDLE_VERSION}/$APP_VERSION/" \
-    -e "s/\${MACOSX_BUNDLE_INFO_STRING}/$APP_NAME version $APP_VERSION, (c) 2002-2022 wxWidgets/" \
-    -e "s/\${MACOSX_BUNDLE_LONG_VERSION_STRING}/3.2.0, (c) 2002-2022 wxWidgets/" \
-    -e "s/\${MACOSX_BUNDLE_SHORT_VERSION_STRING}/3.2/" \
+    -e "s/\${MACOSX_BUNDLE_INFO_STRING}/$APP_NAME version $APP_VERSION, (c) 2024 $APP_NAME/" \
+    -e "s/\${MACOSX_BUNDLE_LONG_VERSION_STRING}/$APP_VERSION/" \
+    -e "s/\${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$APP_VERSION/" \
     $WXWIDGETS_ROOT_DIRECTORY/src/osx/carbon/Info.plist.in >$OUTPUT_PATH/$APP_NAME.app/Contents/Info.plist
 /bin/echo "APPL????" >$OUTPUT_PATH/$APP_NAME.app/Contents/PkgInfo
 ln -f $APP_NAME $OUTPUT_PATH/$APP_NAME.app/Contents/MacOS/$APP_NAME

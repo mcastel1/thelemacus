@@ -12,12 +12,12 @@ clear; clear;
 APP_NAME='Thelemacus'
 APP_VERSION='1.0'
 #the path to the icon of the app
-ICON_PATH='/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/app_icon.icns'
+ICON_PATH='/Users/macbookpro/Documents/thelemacus/Contents/Resources/Images/app_icon.icns'
 #the path to the .cpp file
-INPUT_PATH='/Users/michelecastellana/Documents/thelemacus'
-OUTPUT_PATH='/Users/michelecastellana/Desktop'
+INPUT_PATH='/Users/macbookpro/Documents/thelemacus'
+OUTPUT_PATH='/Users/macbookpro/Desktop'
 APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries'
-WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2-beta'
+WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6'
 WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
 BOOST_INCLUDE_DIRECTORY='/Applications/boost_1_83_0/'
 BOOST_LIB_DIRECTORY='/Applications/boost_1_83_0/stage/lib'

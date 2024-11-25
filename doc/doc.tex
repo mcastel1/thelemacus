@@ -14,6 +14,7 @@
 % \setminted{style=friendly,fontsize=\small}
 % \renewcommand{\listoflistingscaption}{List of Code Listings}
 \usepackage[a4paper,top=4.2cm,bottom=4.2cm,left=3.5cm,right=3.5cm]{geometry}
+\usepackage{menukeys}
 \usepackage{authblk}
 \usepackage{pdfsync}
 \usepackage{boldline}
@@ -24,7 +25,6 @@
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{anysize}
 % \marginsize{2cm}{2cm}{1.cm}               {1.cm}
-\usepackage{graphicx}
 \usepackage{epsfig}
 \usepackage{verbatim} 
 \usepackage{bm}
@@ -54,7 +54,7 @@
 \usepackage{eurosym}
 \usepackage{wrapfig}
 
-\definecolor{glossary-link-color}{RGB}{0,0,128}
+\definecolor{glossary-link-color}{RGB}{8,24,168}
 \renewcommand*{\glstextformat}[1]{\textcolor{glossary-link-color}{#1}}
 \makenoidxglossaries% use TeX to sort
 
@@ -82,6 +82,11 @@
 \let\@glslink\glsplainhyperlink
 \makeatother
 
+\makeatletter
+\def\setmenukeyswin{\def\tw@mk@os{win}}
+\def\setmenukeysmac{\def\tw@mk@os{mac}}
+\makeatother
+
 \input{acronyms}
 \input{glossary}
 \input{definitions}
@@ -94,11 +99,13 @@
 \version{1.0}
 \author{Michele Castellana}
 \date{\today\\
-\includegraphics[height=0.2\textwidth]{figures/qr-code-my-website.png}
+\includegraphics[height=0.2\textwidth]{figures/qr-code-thelemacus.png}
 \hspace{\stretch{2}} \includegraphics[height=0.2\textwidth]{figures/logo-cnrs.pdf}
 }
 \softwarelogo{\includegraphics[width=0.8\textwidth]{figures/title.png}}
 \begin{document}
+\setlength\intextsep{0pt}
+
 
 \maketitle
 
@@ -108,7 +115,14 @@
 \section{Introduction}
 
 
-\thel  is a navigational-astronomy application, which allows to compute one's \gls{position} on the surface of the Earth, on both land and sea, based on sextant measurements. \thel is conceived to make the user's life easy is designed for an intuitive and quick use, 
+\thel  is a navigational-astronomy application, which allows to compute one's \gls{position} on the surface of the Earth, on both land and sea, based on \gls{sextant} measurements. 
+
+
+\subsection{Why \thel?}
+
+Compared to the existing navigational-astronomy softwares, \thel requires the user to enter a smaller amount of data in order to determine his/her \gls{position}; the assumed \gls{position} is not needed. Not only this reduces the chances of making errors, but it also increases the accuracy of the result. 
+
+Also, \thel is conceived to make the user's life easy, and it is designed for an intuitive and ergonomic   use.
 
 \subsection{\thel license}\label{sec-license}
 
@@ -116,7 +130,7 @@
 
 \subsection{Obtaining \thel}
 
-The source code for the library can be obtained from its  GitHub \href{https://github.com/mcastel1/thelemacus}{repository}. The executable can be downloaded from my \href{\thelemacusurl}{website}, for OSx and Windows.  Announcements of new releases, updates and other relevant events are made \href{\thelemacusurl}{online}. 
+The source code for the library can be obtained from its  GitHub \href{https://github.com/mcastel1/thelemacus}{repository}. The executable can be downloaded from my \href{\thelemacusurl}{website}, for both OSx and Windows.  Announcements of new releases, updates and other  events are made \href{\thelemacusurl}{online}. 
 
 \subsection{No warranty}
 
@@ -145,52 +159,24 @@ If you have any suggestions to improve \thel or some additional features which y
 
 
 Additional information, including online copies of this manual, links to related projects, and mailing list archives are available from \thel \href{\thelemacusurl}{website}  .
-Any questions about the use and installation of \thel can be asked by \href{\contactemail}{email}. This mailing address can be used to ask questions not covered by this manual, and to contact the developers of the library.
+Any questions about the use and installation of \thel can be asked by \href{\contactemail}{email}. This mailing address can be used to ask questions not covered by this manual, and to contact \thel developers.
 
 If you would like to refer to \thel in a journal article, the recommended way is to cite this reference manual \cite{castellana2024thelemacus-documentation}. If you want to give a url, use  \href{\thelemacusurl}{this one}. 
 
+\pagebreak
 
-\section{\thel for the impatient}
+Note that in this manual, if you click on words displayed in {\color{glossary-link-color} this color}, you will be directed to their definition. 
 
-For a quick use of \thel the user may enter a sextant \gls{sight} (the measurement of the height of a celestial body over the horizon) with which he/she must be familiar, by going on the main frame of \cref{fig-list-frame} an clicking on \inlinefigure{1.3}{figures/plus-button.png}. A \gls{sight} frame will appear, see \cref{fig-sight-frame}, where the user will enter
-\begin{enumerate}
-  \item \label{item-name} The name of the celestial \gls{body}, e.g. the star `\href{https://fr.wikipedia.org/wiki/Arcturus}{Arcturus}.' \thel supports the following celestial bodies: Altair, Alpheratz, Arcturus, Capella, Jupiter, Hamal, Kochab, the Moon, Saturn, Sirius, Spica, the Sun and Vega. Other bodies will be added the future. 
-  \item \label{item-limb}  If the \gls{body} is the Sun or the Moon, the  limb (`upper', `center' or `lower') of the \gls{body} which has been considered in the measurement (yes/no).
-  \item \label{item-body-height} The angular height of the  \gls{body} over the horizon, expressed in degrees and arcminutes,e.g., \myangle{54}{45.34}.
-  \item \label{item-artificial-horizon} Whether the observer used an artificial horizon or not for the measurement.
-  \item \label{item-time} \ac{UTC} date and time of the measurement, e.g., $2024$-$11$-$4$ $22$:$04$:$23$ \ac{UTC}.
-  \item \label{item-label} A label to identify the \gls{sight} (optional), e.g., `First \gls{sight} of my night shift.' If no label is entered, \thel will automatically enter as a label the time at which the \gls{sight} was entered. 
-  \end{enumerate}
-  
-  Additional information which, most likely, will have to be modified only once in a while, is: 
-  \begin{enumerate}[resume]
-    \item \label{item-index-error} The index error \cite{bowditch2002the} of the sextant,  i.e., and angle expressed in degrees and arcminutes, e.g., \myangle{-0}{1.2} (the index error can be positive or negative).
-    \item \label{item-observer-height} The height of the observer above sea level, e.g. $32.3$ \acp{ft}.
-    \item \label{item-stopwatch} Whether the observer has used a stopwatch or not and, if so, the reading of the stopwatch, e.g., $1$ \ac{hr}  $34$ \acp{min} $12.43$ \acp{sec}.
-    \item \label{item-tai-utc} The difference between \ac{TAI} and \ac{UTC} at the time of the measurement, e.g., \chrono{00}{00}{37}.  This is the current value  \ac{TAI}-\ac{UTC} when this documentation has been written; you can find the up-to-date value  \href{https://en.wikipedia.org/wiki/Leap_second}{here} at any time. 
-  \end{enumerate}
-
-  \begin{wrapfigure}{r}{0.6\textwidth}
-    \includegraphics[width=0.6\textwidth]{figures/route-types.png}
-    \caption{
-      \label{fig-route-types}
-      The chart frame in the 3d projection showing different \gls{route} types: A \gls{loxodrome} and an \gls{orthodrome} with the same starting point (blue and green, respectively), and a \gls{circle-of-equal-altitude} (red), see \cref{item-route-type}. 
-    }
-    \end{wrapfigure}
-
-  Then click on \inlinefigure{1.3}{figures/reduce-button.png}: \thel will highlight for the user a curve on the surface of the Earth; the user is located somewhere on that curve. 
-
-To compute one's \gls{position}, repeat the procedure above with another sextant \gls{sight}, click on \inlinefigure{1.3}{figures/position-button.png} in the main frame, and select \inlinefigure{1.3}{figures/all-routes.png}: \thel will show on the chart the \gls{position}, and list its coordinates in the `Positions' box in the main frame. 
+\section{\thel for the impatient}\label{sec-impatient}
 
 \begin{figure}
   \centering
   \includegraphics[width=1\textwidth]{figures/list-frame.png}
   \caption{
     \label{fig-list-frame}
-    The main frame. 
+    The main frame, where  \gls{sight} and the related \gls{circle-of-equal-altitude} are highlighted in blue.  
   }
   \end{figure}
-
 
   \begin{figure}
     \centering
@@ -201,22 +187,61 @@ To compute one's \gls{position}, repeat the procedure above with another sextant
     }
   \end{figure}
 
-\section{Using \thel}
+For a quick use of \thel the user may enter a \gls{sextant} \gls{sight}---the measurement of the height of a celestial body over the horizon, with which he/she must be familiar---by going on the main frame of \cref{fig-list-frame} an clicking on \inlinefigure{1.3}{figures/plus-button.png}. A \gls{sight} frame will appear, see \cref{fig-sight-frame}, where the user will enter
+\begin{enumerate}
+  \item \label{item-name} The name of the celestial \gls{body}, e.g. the star `\href{https://fr.wikipedia.org/wiki/Arcturus}{Arcturus}.' \thel supports the following celestial bodies: Altair, Alpheratz, Arcturus, Capella, Jupiter, Hamal, Kochab, the Moon, Saturn, Sirius, Spica, the Sun and Vega. Other bodies will be added the future. 
+  \item \label{item-limb}  If the \gls{body} is the Sun or the Moon, the  limb (`upper', `center' or `lower') of the \gls{body} which has been considered in the measurement (yes/no).
+  \item \label{item-body-height} The angular height of the  \gls{body} over the horizon, expressed in degrees and arcminutes,e.g., \myangle{54}{45.34}.
+  \item \label{item-artificial-horizon} Whether the observer used an artificial horizon or not for the measurement.
+  \item \label{item-time} \ac{UTC} date and time of the measurement, e.g.,
+  November 4 2024, $23$ \ac{hr}  $04$ \acp{min} $11$ \acp{sec} \ac{UTC}, which we will write as 
+  \mydate{2024}{11}{04} \chrono{23}{4}{11} \ac{UTC}.
+  \item \label{item-label} A label to identify the \gls{sight} (optional), e.g., `First \gls{sight} of my night shift.' If no label is entered, \thel will automatically enter as a label the time at which the \gls{sight} was entered. 
+  \end{enumerate}
+  
+  Additional information which, most likely, will have to be modified only once in a while, is: 
+  \begin{enumerate}[resume]
+    \item \label{item-index-error} The index error \cite{bowditch2002the} of the \gls{sextant}---an angle expressed in degrees and arcminutes, it can be positive or negative---e.g., \myangle{-0}{1.2}.
+    \item \label{item-observer-height} The height of the observer above sea level, e.g. $32.3$ \acp{ft}.
+    \item \label{item-stopwatch} Whether the observer has used a stopwatch or not and, if so, the stopwatch reading, e.g., \chrono{01}{34}{22}.
+    \item \label{item-tai-utc} The difference between \ac{TAI} and \ac{UTC} at the time of the measurement, e.g., \chrono{00}{00}{37}.  You can find the up-to-date value  \href{https://en.wikipedia.org/wiki/Leap_second}{here}. 
+  \end{enumerate}
+
+  \begin{figure}
+    \includegraphics[width=0.6\textwidth]{figures/route-types.png}
+    \centering
+    \caption{
+      \label{fig-route-types}
+      The chart frame in the 3d projection showing different \gls{route} types: A \gls{loxodrome} and an \gls{orthodrome} with the same starting point (blue and green, respectively), and a \gls{circle-of-equal-altitude} (red), see \cref{item-route-type}. 
+    }
+    \end{figure}
+
+  Then click on \inlinefigure{1.3}{figures/button-reduce.png}: \thel will highlight for the user a curve on the surface of the Earth; the user is located somewhere on that curve. 
+
+To compute one's \gls{position}, repeat the procedure above with another \gls{sextant} \gls{sight}, click on the button in \cref{fig-position-button} in the main frame, and select \inlinefigure{1.4}{figures/button-all-routes.png}: \thel will show on the chart the \gls{position}, and list its coordinates in the `\Glspl{position}' box in the main frame. 
+
+
+
+
+\acresetall
+
+
+\section{\thel complete documentation}
+
 
 
 In order to use the full potential of \thel, we encourage the user to get familiar with the following simple concepts, see \cite{bowditch2002the} for details. 
 
 \subsection{Basic concepts}
 
-Let us introduce \glspl{sight}, \glspl{position} and \glspl{route}: 
 \subsubsection{\Glspl{sight}} \label{section-sights} 
 
-A \gls{sight} is a measurement of the angular altitude of a celestial \gls{body}, made with a sextant. 
+A \gls{sight} is a measurement of the angular altitude of a celestial \gls{body}, made with a \gls{sextant}. 
 The results of this measurements are given in  \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}. 
 
 
 
-\subsubsection{Positions}  \label{section-positions} 
+\subsubsection{\Glspl{position}}  \label{section-positions} 
 
 A \gls{position} a  location on the surface of the Earth, specified by 
 \begin{itemize}
@@ -225,15 +250,15 @@ A \gls{position} a  location on the surface of the Earth, specified by
 \end{itemize}
 \subsubsection{\Glspl{route}} \label{section-routes} 
 
-A \gls{route} is a trajectory on the surface of the Earth, specified by 
+A \gls{route} is a trajectory, or a curve, on the surface of the Earth, specified by 
 \begin{enumerate}
-  \item \label{item-route-type} The \gls{route} type \cite{bowditch2002the}, see \cref{fig-route-types}, which can be 
+  \item \label{item-route-type} The \gls{route} type , see \cref{fig-route-types}, which can be \cite{bowditch2002the}
   \begin{enumerate}
-  \item a \gls{loxodrome}: a trajectory forming a constant angle with the meridians,
-  \item an \gls{orthodrome}: a part of a great circle,
-  \item  a \gls{circle-of-equal-altitude}: a curve on the surface of the Earth from which an observer would see a celestial \gls{body} at a given, constant altitude above the horizon,
+  \item a \gls{loxodrome}: a curve forming a constant angle with the meridians,
+  \item an \gls{orthodrome}: a curve given by a part of a great circle,
+  \item  a \gls{circle-of-equal-altitude}: a circle on the surface of the Earth from which an observer would see a celestial \gls{body} at a given, constant altitude above the horizon,
   \end{enumerate}
-  \item \label{item-route-azimuth} The azimuth $Z$, i.e., the angle between the \gls{route}  and the local meridian at the \gls{route} starting \gls{position}, e.g., \myangle{234}{03.35}.
+  \item \label{item-route-azimuth} The \gls{azimuth} $Z$, i.e., the angle between the \gls{route}  and the local meridian at the \gls{route} starting \gls{position}, e.g., \myangle{234}{03.35}.
   \item \label{item-route-length} The length, e.g., the length of the \gls{route} sailed, which can be specified in two ways:
   \begin{enumerate}
   \item by providing the time and speed of the ship, e.g.  \chrono{01}{23}{32} and $5$ \acp{kt}, from which  \thel will extract the length sailed. Speeds can be entered in different units: \acp{kt}, \acp{km}/\ac{hr},  and \acp{m}/\ac{sec}. 
@@ -247,6 +272,12 @@ A \gls{route} is a trajectory on the surface of the Earth, specified by
   \item \label{item-route-label} A label (optional). 
 \end{enumerate}
 
+\begin{wrapfigure}[10]{R}{0.2\textwidth}
+  \centering
+  \includegraphics[width=0.2\textwidth]{figures/position-button.png}
+  \caption{\label{fig-position-button} The button to compute the astronomical position.}
+  \end{wrapfigure}
+
 When the observer takes a \gls{sight}, then we can conclude that he/she lies on a \gls{route}---a \gls{circle-of-equal-altitude}---on the Earth's surface \cite{bowditch2002the}. 
 \textit{Reducing} a \gls{sight} means computing this \gls{route} given the \gls{sight} data in \cref{item-route-reference-position}: we will say that this \gls{route} is \textit{connected} to the \gls{sight}. Importantly, not all \glspl{route} are connected to \glspl{sight}: for example, a \gls{route} denoting the ship's path, or a \gls{circle-of-equal-altitude} originally connected to a \gls{sight} which has been later \gls{transported}, are not. 
 
@@ -254,14 +285,22 @@ When the observer takes a \gls{sight}, then we can conclude that he/she lies on 
 
 \subsection{The main frame}
 
-\thel main frame is shown in \cref{fig-list-frame}. It is composed of three boxes: 
+\thel main frame is shown in \cref{fig-list-frame}, in dark mode.
+In this regard, we recall that on macOS \thel switches to light or dark mode automatically, according to the mode of the operating system, while on Windows only light mode is available. 
+
+
+
+It is composed of three boxes: 
 \begin{enumerate}
-  \item \label{item-sight-box} \Gls{sight} box: a table which contains the list of sights, i.e., sextant measurements. 
+  \item \label{item-sight-box} \Gls{sight} box: a table which contains the list of \glspl{sight}---\gls{sextant} measurements of the altitude of a celestial \gls{body} over the horizon. 
   
   Each line in the table corresponds to a \gls{sight}, and its columns are given by: The \gls{sight} identifier, which is automatically assigned by \thel,  the data in \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}, and the identifier if the \gls{route} related to the \gls{sight}, see \cref{item-route-box}. 
 
-  To enter a new \gls{sight}, press the \inlinefigure{1.3}{figures/plus-button.png} button at the bottom of the box. To modify or delete an existing \gls{sight}, press  \inlinefigure{1.3}{figures/modify-button.png} or  \inlinefigure{1.3}{figures/delete-button.png}, respectively. To transport a \gls{sight}, press \inlinefigure{1.3}{figures/transport-button.png}. 
+  To enter a new \gls{sight}, press the \inlinefigure{1.3}{figures/plus-button.png} button at the bottom of the box. To modify or delete an existing \gls{sight}, press  \inlinefigure{1.4}{figures/modify-button.png} or \inlinefigure{1.5}{figures/delete-button.png}, respectively. To transport a \gls{sight}, press \inlinefigure{1.3}{figures/transport-button.png}. 
    To disconnect a \gls{sight} from its \gls{route}, press  \inlinefigure{1.3}{figures/disconnect-button.png}. 
+
+
+ 
 
   \item \label{item-position-box} Position box: a table which contains the list of entered \glspl{position}. 
   
@@ -270,36 +309,76 @@ When the observer takes a \gls{sight}, then we can conclude that he/she lies on 
 To add a new \gls{position}, modify, transport or delete it, use the buttons at the bottom of the box. 
 
   \item \label{item-route-box} Route box: Each line corresponds to a \gls{route}, and its columns are given by: The \gls{route} identifier, automatically assigned by \thel, the data in \cref{item-route-type,item-route-azimuth,item-route-length,item-route-reference-position,item-route-aperture,item-route-label}. 
-  \item 
+
   To add a new \gls{route}, modify, transport, disconnect it from its \gls{sight} or delete it, use the buttons at the bottom of the box. 
 
 \end{enumerate}
 
 
 
+
+
 If you hover the mouse over a \gls{sight} in the \gls{sight} box, the \gls{sight} will be highlighted. The \gls{route} to which it is connected, both in in the \gls{route} box and in the chart frame, will be highlighted so the user can see directly to what \gls{route} the \gls{sight} corresponds on the chart. Positions and \glspl{route} are highlighted in the same way. 
 
+\begin{wrapfigure}[8]{R}{0.2\textwidth}
+  \includegraphics[width=0.2\textwidth]{figures/tooltip.png}
+  \caption{\label{fig-tooltip} Tooltip on the button to show charts in the main frame.}
+\end{wrapfigure}
 
-To compute the astronomical \gls{position}, press \inlinefigure{1.3}{figures/position-button.png}, and to jump to the charts, press \inlinefigure{1.3}{figures/chart-button.png}. 
 
-Each button in \thel is equipped with a tooltip: when the mouse lies above the button, a text describing the button's function pops up. 
+
+To compute the astronomical \gls{position}, press the position button in \cref{fig-position-button}, and to jump to the charts, press the button in \cref{fig-tooltip}. 
+
+
+Each button in \thel is equipped with a tooltip: when the mouse lies above the button, a text describing the button's function pops up, see \cref{fig-tooltip}. 
+
+
 
 
 \subsection{The chart frame}\label{section-chart-frame}
 
 The chart frame visually shows  \glspl{route} and \glspl{position} on the surface of the Earth. 
-The user can select two projections \cite{bowditch2002the}, the Mercator projection (\cref{fig-astronomical-position}) and the 3D projection (\cref{fig-route-types}), which shows the Earth as seen from an observer in space. The altitude of the observer is shown as \inlinefigure{1.3}{figures/altitude-field.png}, where the user can change the units of measure to \acp{m}, \acp{ft} or \acp{nm}. 
 
-To reset the chart to the original configurations, press \inlinefigure{1.3}{figures/reset-button.png}, while to jump to the main frame, press \inlinefigure{1.3}{figures/list-frame-button.png}. 
+\begin{wrapfigure}[10]{l}{0.2\textwidth}
+  \includegraphics[width=\linewidth]{figures/reset-button.png}
+  \caption{\label{fig-reset-button} Button to reset the chart to its original configuration.}
+  \end{wrapfigure}
+
+  The user can select two projections \cite{bowditch2002the}, the Mercator projection (\cref{fig-astronomical-position}) and the 3D projection (\cref{fig-route-types}), which shows the Earth as seen from an observer in space. The altitude of the observer is shown as \inlinefigure{1.3}{figures/altitude-field.png}, where the user can change the units of measure to \acp{m}, \acp{ft} or \acp{nm}. 
+
+  \setlength\parfillskip{0pt}\par\setlength\parfillskip{0pt plus 1fil}
+
+\begin{wrapfigure}[10]{r}{0.2\textwidth}
+  \includegraphics[width=\linewidth]{figures/list-frame-button.png}
+  \caption{\label{fig-list-frame-button} Button to switch from the chart frame to the main frame.}
+  \end{wrapfigure}
+  \noindent
+
+  
+  
+
+To reset the chart to the original configurations, press the button in \cref{fig-reset-button}, while to jump to the main frame, press the button in \cref{fig-list-frame-button}. 
+
+
 
 The coordinates of the instantaneous mouse \gls{position} are shown on the bottom left corner of the chart frame, as \inlinefigure{1.3}{figures/mouse-position.png}. 
 
 
-\subsubsection{Zooming into the chart} The user can zoom into the chart by either using the mouse wheel, or by using the scroll bar on the top right of the chart frame. Also, one can zoom in a specific area by right-clicking on the chart, moving the mouse to draw a selection rectangle, and right-clicking again, see \cref{fig-selection-rectangle}. To cancel the drawing of the rectangle, press Esc. 
+
+
+\subsubsection{Zooming into the chart} The user can zoom into the chart by either using the mouse wheel, or by using the scroll bar on the top right of the chart frame. Also, one can zoom in a specific area by right-clicking on the chart, moving the mouse to draw a selection rectangle, and right-clicking again, see \cref{fig-selection-rectangle}. To cancel the drawing of the rectangle, press \setmenukeyswin \keys{\esc}. 
 
 \subsubsection{Moving the chart}
 
-To move the chart to the \ac{N}, \ac{S}, \ac{E} or \ac{W}, respectively, use the buttons \inlinefigure{1.3}{figures/button-n.png}, \inlinefigure{1.3}{figures/button-s.png}, \inlinefigure{1.3}{figures/button-e.png} and \inlinefigure{1.3}{figures/button-w.png}, respectively.  
+
+
+
+To move the chart to the \ac{N}, \ac{S}, \ac{E} or \ac{W}, respectively, use the buttons in \cref{fig-directional-buttons}, or the keyboard keys \keys{\arrowkeyup}, \keys{\arrowkeydown}, \keys{\arrowkeyright} and \keys{\arrowkeyleft}, respectively.  
+
+\begin{wrapfigure}[6]{R}{0.2\textwidth}
+  \includegraphics[width=0.2\textwidth]{figures/directional-buttons.png}
+  \caption{\label{fig-directional-buttons} Buttons to move the chart \ac{N}, \ac{S}, \ac{E} and \ac{W}. }
+  \end{wrapfigure}
 
 \begin{figure}
   \includegraphics[height=0.4\textwidth]{figures/selection-rectangle-mercator.png}
@@ -316,15 +395,10 @@ To move the chart to the \ac{N}, \ac{S}, \ac{E} or \ac{W}, respectively, use the
 
 \subsubsection{Entering a \gls{sight}: The \gls{sight} frame}
 
-To enter a new \gls{sight}, press  \inlinefigure{1.3}{figures/plus-button.png}, see \cref{fig-list-frame}, a \gls{sight} frame will appear as in \cref{fig-sight-frame}, enter the \gls{sight} fields in  \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc}, and press \inlinefigure{1.3}{figures/reduce-button.png}. 
+To enter a  \gls{sight}, read  \cref{sec-impatient}  first.  Press  \inlinefigure{1.3}{figures/plus-button.png}, see \cref{fig-list-frame}, a \gls{sight} frame will appear as in \cref{fig-sight-frame}, enter the \gls{sight} fields in  \cref{item-name,item-limb,item-body-height,item-artificial-horizon,item-time,item-label,item-index-error,item-observer-height,item-tai-utc,item-stopwatch,item-tai-utc} of \cref{sec-impatient}, and press \inlinefigure{1.3}{figures/button-reduce.png}.
 
 \textbf{\thel will produce, as output, a \gls{route}}, and trigger a chart animation to it; \textbf{the observer is located  on this route}. This \gls{route} is a \gls{circle-of-equal-altitude}, see \cref{fig-route-types}. 
 
-\subsubsection{Astronomical \gls{fix}}
-
-By making multiple \glspl{sight}, one obtains multiple \glspl{circle-of-equal-altitude}: the astronomical \gls{position} is the crossing point between them---this procedure is called a \gls{fix}. 
-
-To make an astronomical \gls{fix}, click on \inlinefigure{1.3}{figures/position-button.png} in the main frame: the \gls{position} will be added to the \gls{position} list with label `Astronomical \gls{position}', and the charts will display it, see \cref{fig-astronomical-position}. The error on the astronomical \gls{position} is a circle around it, and added to the \gls{route} list. 
 
 \begin{figure}
   \centering
@@ -335,24 +409,32 @@ To make an astronomical \gls{fix}, click on \inlinefigure{1.3}{figures/position-
   }
 \end{figure}
 
+\subsubsection{Astronomical \gls{fix}}
+
+By making multiple \glspl{sight}, one obtains multiple \glspl{circle-of-equal-altitude}: the astronomical \gls{position} is the crossing point between them---this procedure is called a \gls{fix}. 
+
+To make an astronomical \gls{fix}, click on \inlinefigure{1.3}{figures/position-button.png} in the main frame: the \gls{position} will be added to the \gls{position} list with label `Astronomical \gls{position}', and the charts will display it, see \cref{fig-astronomical-position}. \thel will draw the error on the astronomical \gls{position} as  circle around it, and add it to the \gls{route} list. 
+
+
+
 
 \subsubsection{Transporting a \gls{sight}}\label{section-transporting-sight}
 
 If the course and speed of the ship are known, a \gls{sight} taken in the past can be \gls{transported} and used after it was taken \cite{bowditch2002the,noauthor2017cours}. 
 
-For example, suppose that the observer takes a Sun \gls{sight} (A) in the afternoon, and then a Moon \gls{sight} at dawn (B). \Gls{sight} A can be \gls{transported} along the \gls{route} which the ship sailed between the time of A and that of B. The ship \gls{position} at the time of B is the crossing between A \gls{transported} and B. 
+For example, suppose that the observer takes a Sun \gls{sight} (A) in the afternoon, and then a Moon \gls{sight} at dawn (B). \Gls{sight} A can be \gls{transported} along the \gls{route} which the ship sailed between the time of A and that of B. The ship \gls{position} at the time of B is the crossing between A \gls{transported}, and B. 
 
 To transport a sight: 
 \begin{itemize}
 \item Click on the \gls{sight} in the main frame
-\item Click on \inlinefigure{1.3}{figures/transport-button.png} at the bottom of the \gls{sight} box. You can transport the sight
+\item Click on \inlinefigure{1.3}{figures/transport-button.png} at the bottom of the \gls{sight} box. You can transport the \gls{sight}
 \begin{itemize}
 \item with a \gls{route} which is already in the \gls{route} box, then press \inlinefigure{1.3}{figures/existing-route-button.png}. Then confirm and select the \gls{route} with which to do the transport by either
 \begin{itemize}
   \item double clicking on it, or
   \item selecting it and pressing Enter on the keyboard. 
 \end{itemize}
-\item with a new \gls{route} which you will create, then press \includegraphics{figures/new-route-button.png}, enter the information in the \gls{route} frame, and press \includegraphics{figures/routeframe-transport-button.png}. 
+\item with a new \gls{route}: Press \inlinefigure{1.4}{figures/button-new-route.png}, enter the information in the \gls{route} frame, and press \inlinefigure{1.5}{figures/routeframe-transport-button.png}. 
 \end{itemize}
 \end{itemize}
 An animation will move the transporting \gls{route} in place, then transport the \gls{route} related to the \gls{sight}, and move back the transporting \gls{route} to its original \gls{position}. 
@@ -360,42 +442,65 @@ An animation will move the transporting \gls{route} in place, then transport the
 
 \subsection{Positions}\label{section-position}
 
-\begin{wrapfigure}{r}{0.5\textwidth}
-  \includegraphics[width=0.5\textwidth]{figures/position-frame.png}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.4\textwidth]{figures/position-frame.png}
+  \includegraphics[width=0.4\textwidth]{figures/route-frame.png}
   \caption{
-    \label{fig-position-frame}
-    The \gls{position} frame.  
+    \label{fig-position-route-frame}
+    The \gls{position} frame (left) and the  \gls{route} frame (right).  
   }
-\end{wrapfigure}
+\end{figure}
+
 
 \subsubsection{Entering a \gls{position}}\label{section-enter-position}
 
-To enter a \gls{position}  (for example, the last estimated \gls{position}, or the \gls{position} where something worthwhile happened), go on the main frame and click on \inlinefigure{1.3}{figures/plus-button.png} at the bottom of the \gls{position} frame. The \gls{position} frame will appear, see \cref{fig-position-frame}. Fill in the \gls{position} fields of \cref{section-positions} and press \inlinefigure{1.3}{figures/add-button.png}. 
+To enter a \gls{position}  (for example, the last estimated \gls{position}, or the \gls{position} where something worthwhile happened), go on the main frame and click on \inlinefigure{1.3}{figures/plus-button.png} at the bottom of the \gls{position} frame. The \gls{position} frame will appear, see \cref{fig-position-route-frame}. Fill in the \gls{position} fields of \cref{section-positions} and press \inlinefigure{1.3}{figures/add-button.png}. 
 
 \subsubsection{Transporting a \gls{position}}\label{section-transport-position}
 
-A \gls{position} can be \gls{transported} with a \gls{route} along the lines of a \gls{sight} transport, cf. \cref{section-transporting-sight}. This is useful, for instance, if one needs to transport the a past \gls{fix} according to the recently sailed \gls{route}, in order to obtain the current ship's \gls{position} \cite{bowditch2002the}. 
+A \gls{position} can be \gls{transported} with a \gls{route} along the lines of a \gls{sight} transport, cf. \cref{section-transporting-sight}. This is useful, for instance, if one needs to transport the a past \gls{fix} according to the recently sailed \gls{route}, in order to obtain the current  \gls{position} \cite{bowditch2002the}. 
 
 
 \subsection{Routes}\label{section-handle-routes}
 
+
 \subsubsection{Entering a \gls{route}}\label{section-entering-route}
 
-\begin{wrapfigure}{r}{0.5\textwidth}
-  \includegraphics[width=0.5\textwidth]{figures/route-frame.png}
-  \caption{
-    \label{fig-route-frame}
-    The \gls{route} frame.  
-  }
-\end{wrapfigure}
+To enter a \gls{route}, go on the main frame and click on \inlinefigure{1.3}{figures/plus-button.png} at the bottom of the \gls{route} frame. The \gls{route} frame will appear, see \cref{fig-position-route-frame}. Fill in the \gls{route} fields of \cref{section-positions} and press \inlinefigure{1.3}{figures/add-button.png}. 
 
-To enter a \gls{route}, go on the main frame and click on \inlinefigure{1.3}{figures/plus-button.png} at the bottom of the \gls{route} frame. The \gls{route} frame will appear, see \cref{fig-route-frame}. Fill in the \gls{route} fields of \cref{section-positions} and press \inlinefigure{1.3}{figures/add-button.png}. 
+
+
+
 
 \subsubsection{Transporting a \gls{route}}\label{section-transporting-route}
 
-A \gls{route} can be \gls{transported} with another \gls{route} along the lines of a \gls{sight} and \gls{position} transport, cf. \cref{section-transporting-sight,section-transport-position}. This is useful, for instance, if one needs to transport the a  \gls{circle-of-equal-altitude} of a past \gls{sight} according to the recently sailed \gls{route}, in order to obtain the current \gls{circle-of-equal-altitude} \cite{bowditch2002the}.
+A \gls{route} can be \gls{transported} along another \gls{route} just as a  \gls{sight} and \gls{position}, cf. \cref{section-transporting-sight,section-transport-position}. This is useful, for instance, if one needs to transport the a  \gls{circle-of-equal-altitude} of a past \gls{sight} according to the recently sailed \gls{route}, in order to obtain the current \gls{circle-of-equal-altitude} \cite{bowditch2002the}.
+
+\subsection{Loading and saving}\label{sec-load-save}
+
+In \thel, \glspl{sight}, \glspl{position} and \glspl{route} are stored in .nav files. The path of the .nav file where your data is stored is displayed on the top of the main frame, see \cref{fig-list-frame}. 
+
+
+
+
+
+
+
+
+You can load, save, and `save as' files as by either using \thel menu bar, or the keyboard shortcuts 
+\setmenukeysmac
+\keys{\cmd + O}, \keys{\cmd + S}, \keys{\cmd + \shift  + S } on OSx, and  
+\setmenukeyswin
+\keys{\ctrl + O}, \keys{\ctrl + S}, \keys{\ctrl +   \shift + S} on Windows, respectively.  
+
 
 \pagebreak
+
+\section*{Acknowledgments}
+
+Thanks to Lionel Chiron, Enrico Filippi and Mathieu Coppey for helping me testing \thel and giving useful insights, and Patrick Moreau for his counsel on the software license. 
+
 \printacronyms[pages={display=all,seq/use=false}]
 
 % \printnoidxglossary[style=long]

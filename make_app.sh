@@ -59,7 +59,7 @@ install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_osx_cocoau_core-3.2.0.3
 install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_baseu_xml-3.2.0.3.0.dylib @rpath/libwx_baseu_xml-3.2.0.3.0.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_baseu_net-3.2.0.3.0.dylib @rpath/libwx_baseu_net-3.2.0.3.0.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_LIB_DIRECTORY/libwx_baseu-3.2.0.3.0.dylib @rpath/libwx_baseu-3.2.0.3.0.dylib $APP_NAME
-install_name_tool -change $LIBGSL_LIB_DIRECTORY/libgsl.28.dylib @rpath/libgsl.28.dylib $APP_NAME
+install_name_tool -change $LIBGSL_LIB_DIRECTORY/libgsl.27.dylib @rpath/libgsl.27.dylib $APP_NAME
 
 
 ##copy data and images
@@ -83,7 +83,7 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY/libwx_
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY/libwx_baseu_net-3.2.0.3.0.dylib
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY/libwx_baseu-3.2.0.3.0.dylib
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBICONV_LIB_DIRECTORY/libiconv.2.dylib
-LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBGSL_LIB_DIRECTORY/libgsl.28.dylib
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBGSL_LIB_DIRECTORY/libgsl.27.dylib
 #copy the list
 cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
 

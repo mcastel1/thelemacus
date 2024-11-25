@@ -2321,7 +2321,8 @@ inline bool DrawPanel::GeoToMercator(const Position& q, PositionProjection* p, b
 
 
 // convert the geographic position q into the DrawPanel position p, reckoned with respect to the origin of the  DrawPanel. If q is a valid Position, it returns true and (if p!=NULL), it writes the resulting DrawPanel coordinates in p. If q is not a valid position, it returns false and, if write = true and p!=NULL, it writes the drawpanel position in p.
-inline bool DrawPanel::GeoToDrawPanel(const Position& q, wxPoint* p, bool write) {
+//inline
+bool DrawPanel::GeoToDrawPanel(const Position& q, wxPoint* p, bool write) {
     
     PositionProjection temp;
     bool check;

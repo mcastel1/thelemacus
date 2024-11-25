@@ -35,8 +35,15 @@
                 7. To make breakpoints in included files to work in Xcode, create file  ~/.lldbinit and write in it 'settings set target.inline-breakpoint-strategy always'
                 8. To build the app with make_app.sh:
                     * download the libpng library from https://sourceforge.net/projects/libpng/
-                    
-        - to build the a sample:
+        - to build wxWidgets in order to build Thelemacus with ./make_app.sh:
+                * unzip wxWidgets-xxxx.tar.gz in, say, wxWidgets-3.2.2
+                * cd  wxWidgets-3.2.2
+                * mkdir my_build
+                * cd my_build
+                * ../configure
+                * make
+                * sudo make install
+        - to build a sample:
                 * unzip wxWidgets-xxxx.tar.gz in, say, wxWidgets-3.2.2
                 * cd  wxWidgets-3.2.2
                 * mkdir my_build

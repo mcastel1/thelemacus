@@ -36,7 +36,7 @@
                 8. To build the app with make_app.sh:
                     * download the libpng library from https://sourceforge.net/projects/libpng/
                     
-        - to build the a sample:
+        - to build a sample:
                 * unzip wxWidgets-xxxx.tar.gz in, say, wxWidgets-3.2.2
                 * cd  wxWidgets-3.2.2
                 * mkdir my_build

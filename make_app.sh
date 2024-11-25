@@ -22,7 +22,7 @@ WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
 BOOST_INCLUDE_DIRECTORY='/Applications/boost_1_83_0/'
 BOOST_LIB_DIRECTORY='/Applications/boost_1_83_0/stage/lib'
 LIBPNG_LIB_DIRECTORY='/usr/local/Cellar/libpng/1.6.44/lib'
-LIBJPEG_LIB_DIRECTORY='/usr/local/opt/jpeg/lib'
+LIBJPEG_LIB_DIRECTORY='/usr/local/opt/jpeg/turbo/lib'
 LIBPCRE2_LIB_DIRECTORY='/usr/local/opt/pcre2/lib'
 LIBTIFF_LIB_DIRECTORY='/usr/local/opt/libtiff/lib'
 LIBICONV_LIB_DIRECTORY='/usr/local/Cellar/libiconv/1.17/lib'
@@ -107,6 +107,7 @@ LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_L
 LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+LIB_B='libjpeg.8.dylib'; DIR_LIB_B=$LIBJPEG_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 
 
 #libraries called by libwx_osx_cocoau_html-3.2.0.3.0.dylib
@@ -119,6 +120,7 @@ LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_L
 LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+LIB_B='libjpeg.8.dylib'; DIR_LIB_B=$LIBJPEG_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 
 
 #libraries called by libwx_baseu-3.2.0.3.0.dylib
@@ -150,6 +152,7 @@ LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_L
 LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+LIB_B='libjpeg.8.dylib'; DIR_LIB_B=$LIBJPEG_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 
 
 #libraries called by libwx_osx_cocoau_html-3.2.0.3.0.dylib
@@ -174,6 +177,7 @@ LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_L
 LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+LIB_B='libjpeg.8.dylib'; DIR_LIB_B=$LIBJPEG_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 
 
 #libraries called by libwx_baseu_net-3.2.0.3.0.dylib

@@ -28,6 +28,8 @@ LIBTIFF_LIB_DIRECTORY='/usr/local/opt/libtiff/lib'
 LIBICONV_LIB_DIRECTORY='/usr/local/Cellar/libiconv/1.17/lib'
 LIBCURL_LIB_DIRECTORY='/usr/lib'
 LIBZ_LIB_DIRECTORY='/usr/local/Cellar/zlib/1.3.1/lib'
+LIBZSTD_LIB_DIRECTORY='/usr/local/opt/zstd/lib'
+LIBLZMA_LIB_DIRECTORY='/usr/local/opt/xz/lib'
 LIBGSL_LIB_DIRECTORY='/usr/local/lib'
 SYSTEM_LIB_DIRECTORY='/usr/local/lib'
 LIST_LIBRARIES_TO_COPY=''
@@ -88,6 +90,8 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBGSL_LIB_DIRECTORY/libgsl.27
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBJPEG_LIB_DIRECTORY/libjpeg.8.dylib
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPCRE2_LIB_DIRECTORY/libpcre2-32.0.dylib
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBTIFF_LIB_DIRECTORY/libtiff.6.dylib
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZSTD_LIB_DIRECTORY/libzstd.1.dylib
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBLZMA_LIB_DIRECTORY/liblzma.5.dylib
 #copy the list
 cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
 
@@ -211,6 +215,16 @@ LIB_B='libiconv.2.dylib'; DIR_LIB_B=$LIBICONV_LIB_DIRECTORY; install_name_tool -
 LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libcurl.4.dylib'; DIR_LIB_B=$LIBCURL_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 LIB_B='libpcre2-32.0.dylib'; DIR_LIB_B=$LIBPCRE2_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+
+
+#libraries called by libtiff.6.dylib
+LIB_A='libtiff.6.dylib'
+DIR_LIB_A=$APP_LIBRARY_DIRECTORY
+install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
+LIB_B='libzstd.1.dylib'; DIR_LIB_B=$LIBZSTD_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+LIB_B='libjpeg.8.dylib'; DIR_LIB_B=$LIBJPEG_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+LIB_B='liblzma.5.dylib'; DIR_LIB_B=$LIBLZMA_LIB_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+
 
 
 #create the .app folder and subfolders

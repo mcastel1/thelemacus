@@ -15,6 +15,7 @@
     - declare progress dialogs on the heap (i.e., not as wxProgressDialog* progress_dialog; progress_dialog = new ...,) but on the stack (i.e., as  wxProgressDialog progress_dialog([constructor arguments])). This is because if you declare them on the heap, the progress dialog will stay forever open and it will prevent the app from closing. On the other hand, if you declare it on the stack , it will be destroyed authomatically once the method that calls it stops running
     - be careful when you debug with breakpoints stuff that include timers ! You may stop at a breakpoint, but the timer in the code has started running and is running while you are stopped at the breakpoint
     - to use a lambda capture with CallAfter: `CallAfter([=] {FillAndRaiseOtherFrame();});`
+    - the folder where Xcode builds the app is   /Users/michelecastellana/Library/Developer/Xcode/DerivedData/minimal_cocoa-aaxuwbexostgarbglusbwfoanlsj/Build/Products/Debug/minimal_cocoa.app/Contents/MacOS/../../  
     - on APPLE:
         - replace SetMercatorAndNormalize whenever you can
         - the cmd (apple) key corresponds to WXK_CONTROL

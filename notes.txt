@@ -28,7 +28,7 @@
                     * remove minimal.cpp, click on 'minimal_cocoa' with the blue icon on its left, then 'build phases' -> 'compile sources' -> add main.cpp and all .cpp files in src/
                     * select app-dynamic -> add /usr/local/include/gsl/ /usr/local/include/ /Applications/boost_1_83_0/ /Applications/wxWidgets-x.x.x/build/osx/setup/cocoa/include/ and /Applications/wxWidgets-xxx/include/ and /Users/michelecastellana/Documents/thelemacus/include/ to 'User header search path' (you need to split this in multiple lines when you add)
                     * select app-dynamic -> add -lgsl -lcblas -lboost_filesystem -lboost_system to 'Other linker flags' (you need to split this in multiple lines when you add)
-                    * select app-dynamic -> add '/Applications/boost_1_83_0/stage/lib/' to 'Runpath search paths' and to 'Library Search Paths'
+                    * select app-dynamic -> add '/Applications/boost_1_83_0/stage/lib/' (/Applications/boost_1_86_0/universal) to 'Runpath search paths' and to 'Library Search Paths'
                     * select app-dynamic -> add '/usr/local/lib' to Library Search Paths
                     * select app-dynamic  set 'Always search user paths (deprecated)' to 'Yes'
                     * set Product -> scheme -> app-dynamic
@@ -55,7 +55,23 @@
                 * cd samples/
                 * cd [name of the sample that you want to build, e.g. `calendar`]
                 * make
-     
+        - to build boost library for both arm64 and x86_64 architectures:
+                * download boost_1_86_0 from https://www.boost.org/users/download/
+                * unzip boost_1_86_0.tar.gz into, say, /Applications/boost_1_86_0
+                * copy build_boost_universal.sh into /Applications/boost_1_86_0
+                * cd /Applications/boost_1_86_0
+                * ./build_boost_universal.sh
+                * the libaries for both architectures will be in /Applications/boost_1_86_0/universal
+        - to build gsl for architecture x86_64:
+                * download gsl-latest.tar.gz
+                * unzip it in, say, /Applications/gsl-2.8
+                * cd /Applications/gsl-2.8
+                * ./configure CC="gcc  -arch x86_64" CXX="g++  -arch x86_64" CPP="gcc -E" CXXCPP="g++ -E"
+                * make
+                * make install
+                * check the architecture with
+                    $ lipo -info /usr/local/lib/libgsl.28.dylib
+                    Non-fat file: /usr/local/lib/libgsl.28.dylib is architecture: x86_64
  
      - on WIN32:
             - remember that the command ((chart_frames[i])->draw_panel)->FitAll(); makes a flash because it obliges the program to re-initialize from scratch the chartframe, avoid it!

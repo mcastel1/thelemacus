@@ -21,7 +21,7 @@
         - replace SetMercatorAndNormalize whenever you can
         - the cmd (apple) key corresponds to WXK_CONTROL
          - to setup everything:
-                1. Download and install boost_1_83_0 from https://www.boost.org/users/history/version_1_83_0.html
+                1. Download and install boost_1_86_0 from https://www.boost.org/users/history/version_1_83_0.html and run build_boost.sh
                 2. Download and install gsl (gnu scientifc library) from https://www.gnu.org/software/gsl/
                 3. Download and install wxWidgets from https://www.wxwidgets.org/downloads/
                 4. Open wxWidgets-xxx/build/osx/wxcocoa.xcodeproj/ with Xcode and build it
@@ -32,13 +32,13 @@
                         - /usr/local/include/
                         - /Applications/boost_1_86_0/
                         - /Users/michelecastellana/Documents/thelemacus/include/
-                    * select minimal cocoa (in blue) -> app-dynamic ->  'Other linker flags' and add (split this in multiple lines when you add)
+                    * select minimal cocoa (in blue) -> app-dynamic -> build settings ->  'Other linker flags' and add (split this in multiple lines when you add)
                         * -lgsl
                         * -lcblas
                         * -lboost_filesystem
-                        * -lboost_system 
-                    * select app-dynamic -> add '/Applications/boost_1_83_0/stage/lib/' (/Applications/boost_1_86_0/universal) to 'Runpath search paths' and to 'Library Search Paths'
-                    * select app-dynamic -> add '/usr/local/lib' to Library Search Paths
+                        * -lboost_system
+                    * select minimal_cocoa (blue) -> app-dynamic -> build settings -> add /Applications/boost_1_86_0/universal to 'Runpath search paths' and to 'Library Search Paths'
+                    * select minimal_cocoa (blue) -> app-dynamic -> build settings -> Library Search Paths -> add '/usr/local/lib' to
                     * select app-dynamic  set 'Always search user paths (deprecated)' to 'Yes'
                     * set Product -> scheme -> app-dynamic
                 6. Add all necessary paths by adding, say, 'export PATH="/Applications/wxWidgets-3.2.4/build-cocoa-debug:$PATH"' to ~/.zprofile
@@ -67,9 +67,9 @@
         - to build boost library for both arm64 and x86_64 architectures:
                 * download boost_1_86_0 from https://www.boost.org/users/download/
                 * unzip boost_1_86_0.tar.gz into, say, /Applications/boost_1_86_0
-                * copy build_boost_universal.sh into /Applications/boost_1_86_0
+                * copy build_boost.sh into /Applications/boost_1_86_0
                 * cd /Applications/boost_1_86_0
-                * ./build_boost_universal.sh
+                * ./build_boost.sh
                 * the libaries for both architectures will be in /Applications/boost_1_86_0/universal
         - to build gsl library for both arm64 and x86_64 architectures:
                 * download gsl-latest.tar.gz

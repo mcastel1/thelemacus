@@ -1,4 +1,12 @@
 #!/bin/sh
+:'
+this script builds gsl for both architectures x86_64 and arm64
+run with  
+sudo ./build_gsl.sh [path where you decompressed the GSL .tar.gz file] [temporary path where to store the libarries, it will be deleted at the end]
+example:
+sudo ./build_gsl.sh /Applications/gsl-2.8 /Users/michelecastellana/Desktop
+'
+
 
 GSL_DIR=$1
 TEMP_DIR=$2

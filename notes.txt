@@ -63,17 +63,13 @@
                 * cd /Applications/boost_1_86_0
                 * ./build_boost_universal.sh
                 * the libaries for both architectures will be in /Applications/boost_1_86_0/universal
-        - to build gsl for architecture x86_64:
+        - to build gsl library for both arm64 and x86_64 architectures:
                 * download gsl-latest.tar.gz
                 * unzip it in, say, /Applications/gsl-2.8
-                * cd /Applications/gsl-2.8
-                * ./configure CC="gcc  -arch x86_64" CXX="g++  -arch x86_64" CPP="gcc -E" CXXCPP="g++ -E"
-                * make
-                * make install
-                * check the architecture with
-                    $ lipo -info /usr/local/lib/libgsl.28.dylib
-                    Non-fat file: /usr/local/lib/libgsl.28.dylib is architecture: x86_64
- 
+                * cd into, say, /Documents/michelecastellana/thelemacus
+                * $sudo ./build_gsl.sh /Applications/gsl-2.8 /Users/michelecastellana/Desktop
+                * the libaries for both architectures will be in /usr/local/lib
+
      - on WIN32:
             - remember that the command ((chart_frames[i])->draw_panel)->FitAll(); makes a flash because it obliges the program to re-initialize from scratch the chartframe, avoid it!
             - whenever you add a new .cpp and .h file, remember to add it in 'Source Files' in the Visual Studio file, e.g., C:\wxWidgets-3.2.4_debug\samples\minimal\minimal_vc17.sln

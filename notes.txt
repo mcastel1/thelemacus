@@ -17,6 +17,7 @@
     - to use a lambda capture with CallAfter: `CallAfter([=] {FillAndRaiseOtherFrame();});`
     - the folder where Xcode builds the app is   /Users/michelecastellana/Library/Developer/Xcode/DerivedData/minimal_cocoa-aaxuwbexostgarbglusbwfoanlsj/Build/Products/Debug/minimal_cocoa.app/Contents/MacOS/../../  
     - on APPLE:
+    - on APPLE:
         - replace SetMercatorAndNormalize whenever you can
         - the cmd (apple) key corresponds to WXK_CONTROL
          - to setup everything:

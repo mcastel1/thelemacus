@@ -37,7 +37,7 @@
                         * -lcblas
                         * -lboost_filesystem
                         * -lboost_system
-                    * select minimal_cocoa (blue) -> app-dynamic -> build settings -> add /Applications/boost_1_86_0/universal to 'Runpath search paths' and to 'Library Search Paths'
+                    * select minimal_cocoa (blue) -> app-dynamic -> build settings -> add '/Applications/boost_1_83_0/stage/lib/' universal to 'Runpath search paths' and to 'Library Search Paths'
                     * select minimal_cocoa (blue) -> app-dynamic -> build settings -> Library Search Paths -> add '/usr/local/lib' to
                     * select app-dynamic  set 'Always search user paths (deprecated)' to 'Yes'
                     * set Product -> scheme -> app-dynamic

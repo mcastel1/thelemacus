@@ -15,13 +15,13 @@
     - declare progress dialogs on the heap (i.e., not as wxProgressDialog* progress_dialog; progress_dialog = new ...,) but on the stack (i.e., as  wxProgressDialog progress_dialog([constructor arguments])). This is because if you declare them on the heap, the progress dialog will stay forever open and it will prevent the app from closing. On the other hand, if you declare it on the stack , it will be destroyed authomatically once the method that calls it stops running
     - be careful when you debug with breakpoints stuff that include timers ! You may stop at a breakpoint, but the timer in the code has started running and is running while you are stopped at the breakpoint
     - to use a lambda capture with CallAfter: `CallAfter([=] {FillAndRaiseOtherFrame();});`
-    - the folder where Xcode builds the app is   /Users/michelecastellana/Library/Developer/Xcode/DerivedData/minimal_cocoa-aaxuwbexostgarbglusbwfoanlsj/Build/Products/Debug/minimal_cocoa.app/Contents/MacOS/../../  
+    - the folder where Xcode builds the app is   /Users/michelecastellana/Library/Developer/Xcode/DerivedData/minimal_cocoa-xxx/Build/Products/Debug/minimal_cocoa.app/
     - on APPLE:
         - replace SetMercatorAndNormalize whenever you can
         - the cmd (apple) key corresponds to WXK_CONTROL
 
         - to build thelemacus with XCode in debug (release) mode:
-                1. Download and install boost_1_86_0 from https://www.boost.org/users/history/version_1_83_0.html and  build boost library for both arm64 and x86_64 architectures as follows:
+                1. Download and install boost_1_86_0 from https://www.boost.org/users/history/version_1_83_0.html for both arm64 and x86_64 architectures as follows:
                     * download boost_1_86_0 from https://www.boost.org/users/download/
                     * unzip boost_1_86_0.tar.gz into, say, /Applications/boost_1_86_0
                     * copy build_boost.sh into /Applications/boost_1_86_0
@@ -31,8 +31,8 @@
                 2. Download and install gsl (gnu scientifc library) from https://www.gnu.org/software/gsl/ build it for both arm64 and x86_64 architectures:
                     * download gsl-latest.tar.gz
                     * unzip it in, say, /Applications/gsl-2.8
-                    * cd into, say, /Documents/michelecastellana/thelemacus
-                    * $sudo ./build_gsl.sh /Applications/gsl-2.8 /Users/michelecastellana/Desktop
+                    * $cd /Documents/michelecastellana/thelemacus
+                    * $sudo ./build_gsl.sh /Applications/gsl-2.8 /usr/local/lib/my_gsl
                     * the libraries for both architectures will be in /usr/local/lib
                 3. Download wxWidgets from https://www.wxwidgets.org/downloads/ and unzip it in, say, wxWidgets-xxx
                 4. Open wxWidgets-xxx/build/osx/wxcocoa.xcodeproj/ with Xcode
@@ -46,7 +46,7 @@
                         - /usr/local/include/
                         - /Applications/boost_1_86_0/
                         - /Users/michelecastellana/Documents/thelemacus/include/
-                    * select minimal cocoa (in blue) -> app-dynamic -> build settings ->  'Other linker flags' and add (split this in multiple lines when you add)
+                    * select minimal cocoa (in blue) -> app-dynamic -> build settings ->  'Other linker flags' (if you don't find it make sure that the 'All' text in the bar on the top is selected ) and add (split this in multiple lines when you add)
                         * -lgsl
                         * -lcblas
                         * -lboost_filesystem
@@ -55,15 +55,15 @@
                     * select minimal_cocoa (blue) -> app-dynamic -> build settings -> Library Search Paths -> add '/usr/local/lib' to
                     * select app-dynamic  set 'Always search user paths (deprecated)' to 'Yes'
                     * set Product -> scheme -> app-dynamic
-                    * Product -> Scheme -> Edit Scheme -> Build Configuration -> Set it to Debug (Release)
+                    * Product -> Scheme -> Edit Scheme -> Run -> Build Configuration -> Set it to Debug (Release)
                 6. include the app icon, say my_icon.icns, as follows: 
                     * click on minimal_cocoa (in blue) -> app-dynamic -> build phases -> Copy Files
                     * set 'Resources' in 'Destination'
                     * click on '+'
                     * add my_icon.icns
-                    * click on minimal_cocoa -> Info_cocoa -> Icon file and enter 'my_icon.icns'
+                    * click on minimal_cocoa (in blue) -> Info_cocoa -> Icon file and enter 'my_icon.icns'
                     * Product -> Clean Build folder
-                    * Run
+                    * Build and run
                 6. Add all necessary paths by adding, say, 'export PATH="/Applications/wxWidgets-3.2.4/build-cocoa-debug:$PATH"' to ~/.zprofile
                 7. To make breakpoints in included files to work in Xcode, create file  ~/.lldbinit and write in it 'settings set target.inline-breakpoint-strategy always'
                 8. To build the app with make_app.sh:

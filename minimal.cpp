@@ -121,7 +121,7 @@ bool MyApp::OnInit()
         return false;
 
     // create the main application window
-    MyFrame *frame = new MyFrame("Minimal wxWidgets App");
+    MyFrame *frame = new MyFrame("ToyThelemacus!");
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)

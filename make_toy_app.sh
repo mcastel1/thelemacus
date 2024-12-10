@@ -12,12 +12,13 @@ clear; clear;
 APP_NAME='ToyThelemacus'
 APP_VERSION='1.0'
 MINIMUM_SYSTEM_VERSION='10.13'
-#the path to the icon of the app
-ICON_NAME='app_icon.icns'
-ICON_PATH='/Users/michelecastellana/Documents/thelemacus/Contents/Resources/Images/'$ICON_NAME
 #the path to the .cpp file
-INPUT_PATH='/Applications/wxWidgets-3.2.6/samples/minimal'
+INPUT_PATH='/Users/michelecastellana/Documents/thelemacus'
+MINIMAL_PATH="/Applications/wxWidgets-3.2.6/samples/minimal"
 OUTPUT_PATH='/Users/michelecastellana/Desktop'
+#the path to the icon of the app
+ICON_NAME='sample.icns'
+ICON_PATH=$MINIMAL_PATH'/'$ICON_NAME
 APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries'
 WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
 WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
@@ -45,7 +46,7 @@ mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 
 #compile Thelemacus
-g++ $INPUT_PATH/*.cpp -o $APP_NAME  `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -I/Applications/boost_1_83_0 -L/Applications/boost_1_83_0/stage/lib/ -lboost_filesystem -lboost_system   -Wall -Wno-c++11-extensions --std=c++17  -O3 -rpath /Applications/boost_1_83_0/stage/lib -I$INPUT_PATH/include -I$INPUT_PATH/src
+g++ $INPUT_PATH/*.cpp -o $APP_NAME  `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -I/Applications/boost_1_83_0 -L/Applications/boost_1_83_0/stage/lib/ -lboost_filesystem -lboost_system   -Wall -Wno-c++11-extensions --std=c++17  -O3 -rpath /Applications/boost_1_83_0/stage/lib -I$INPUT_PATH/include -I$INPUT_PATH/src -I$MINIMAL_PATH/
 
 
 #set links fo $APP_NAME

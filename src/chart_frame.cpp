@@ -1115,8 +1115,25 @@ void ChartFrame::GetCoastLineData3D(void) {
         for(p=0, i=0, l=0, n_added_polygons=0, curves.clear(), new_polygon = true; i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
             
-            if((l != (curves.positions.back())) && new_polygon){
-                curves.positions.push_back(l);
+            if(new_polygon){
+                //I am adding a new polygon
+                
+                if(curves.positions.size() > 0){
+                    //curves.positions already has some entries -> push back l into curves.positions if l is not a double of the last entry of curves.positions
+                    
+                    if(l != (curves.positions.back())){
+                        
+                        curves.positions.push_back(l);
+                        
+                    }
+                    
+                }else{
+                    //curves.positions has no entries -> push back l into curves.positions
+                    
+                    curves.positions.push_back(l);
+
+                }
+                
             }
             
             //the id of the polygon that is being added, i.e. , the # of the polygon as entry of coastline_polygons_Position
@@ -1231,10 +1248,28 @@ void ChartFrame::GetCoastLineDataMercator(void) {
         
         for(p=0, i=0, l=0, n_added_polygons=0, new_polygon = true; i<parent->coastline_polygons_area_observer.size(); i++) {
             //run through polygons
-            
-            if((l != (curves.positions.back())) && new_polygon){
-                curves.positions.push_back(l);
+  
+            if(new_polygon){
+                //I am adding a new polygon
+                
+                if(curves.positions.size() > 0){
+                    //curves.positions already has some entries -> push back l into curves.positions if l is not a double of the last entry of curves.positions
+                    
+                    if(l != (curves.positions.back())){
+                        
+                        curves.positions.push_back(l);
+                        
+                    }
+                    
+                }else{
+                    //curves.positions has no entries -> push back l into curves.positions
+                    
+                    curves.positions.push_back(l);
+
+                }
+                
             }
+            
             
             //the id of the polygon that is being added, i.e. , the # of the polygon as entry of coastline_polygons_Position
             m = (parent->coastline_polygons_area_observer)[i];

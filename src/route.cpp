@@ -1100,7 +1100,7 @@ int Route::inclusion(PositionRectangle rectangle, bool write_t, vector<Angle>* t
         );
 
 
-        //compute the intersections between *this and side_N/S/E/W, and writes in temp the values of the parametric angle t of *this at which *this crosses side_N/S/E/W: temps are then appended to u, which, at the end, will contain all intersections
+        //compute the intersections between *this and side_N/S/E/W, and write in temp the values of the parametric angle t of *this at which *this crosses side_N/S/E/W: temps are then appended to u, which, at the end, will contain all intersections
         intersection(side_N, true, &temp, String(""));
         u.insert(u.end(), temp.begin(), temp.end());
         temp.clear();

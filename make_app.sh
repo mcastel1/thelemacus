@@ -17,7 +17,7 @@ INPUT_PATH='/Users/michelecastellana/Documents/thelemacus'
 MINIMAL_PATH="/Applications/wxWidgets-3.2.6/samples/minimal"
 OUTPUT_PATH='/Users/michelecastellana/Desktop'
 #the path to the icon of the app
-ICON_NAME='sample.icns'
+ICON_NAME='juventus-icon.icns'
 ICON_PATH=$MINIMAL_PATH'/'$ICON_NAME
 APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries'
 WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
@@ -91,7 +91,7 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBGSL_LIB_DIRECTORY/libgsl.28
 #copy the list
 cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
 
-
+WXWIDGETS_TO_REPLACE_DIRECTORY='/Applications/wxWidgets-3.2.6-release/my_build/lib'
 
 ##libraries called by libpng16.16.dylib
 LIB_A='libpng16.16.dylib'

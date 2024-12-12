@@ -32,7 +32,7 @@ LIBTIFF_LIB_DIRECTORY='/opt/homebrew/opt/libtiff/lib'
 LIBICONV_LIB_DIRECTORY='/opt/homebrew/Cellar/libiconv/1.17/lib'
 LIBCURL_LIB_DIRECTORY='/opt/homebrew/Cellar/curl/8.5.0/lib'
 LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3.1/lib'
-LIBGSL_LIB_DIRECTORY='/usr/local/lib'
+LIBGSL_LIB_DIRECTORY='/usr/local/lib/my_gsl/arm64/lib'
 LIST_LIBRARIES_TO_COPY=''
 
 

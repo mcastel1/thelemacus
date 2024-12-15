@@ -28,13 +28,22 @@ WXWIDGETS_TO_REPLACE_DIRECTORY='/usr/local/lib'
 BOOST_NAME='boost_1_87_0'
 BOOST_INCLUDE_DIRECTORY='/Applications/'$BOOST_NAME'/'
 BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
+
 LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.44/lib'
+#LIBPNG_LIB_DIRECTORY='/usr/local/Cellar/libpng/1.6.44/lib'
+
 LIBJPEG_LIB_DIRECTORY='/opt/homebrew/opt/jpeg/lib'
 LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/opt/pcre2/lib'
 LIBTIFF_LIB_DIRECTORY='/opt/homebrew/opt/libtiff/lib'
+
 LIBICONV_LIB_DIRECTORY='/opt/homebrew/Cellar/libiconv/1.17/lib'
+#LIBICONV_LIB_DIRECTORY='/usr/local/Cellar/libiconv/1.17/lib'
+
 LIBCURL_LIB_DIRECTORY='/opt/homebrew/Cellar/curl/8.5.0/lib'
+
 LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3.1/lib'
+#LIBZ_LIB_DIRECTORY='/usr/local/Cellar/zlib/1.3.1/lib'
+
 LIBGSL_LIB_DIRECTORY='/usr/local/lib/my_gsl/arm64/lib'
 LIST_LIBRARIES_TO_COPY=''
 

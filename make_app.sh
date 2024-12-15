@@ -25,6 +25,7 @@ APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries
 WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
 WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
 WXWIDGETS_TO_REPLACE_DIRECTORY='/usr/local/lib'
+BOOST_NAME='boost_1_87_0'
 BOOST_INCLUDE_DIRECTORY='/Applications/'$BOOST_NAME'/'
 BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
 LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.44/lib'

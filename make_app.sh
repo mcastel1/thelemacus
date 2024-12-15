@@ -16,7 +16,7 @@ USER_NAME='michelecastellana'
 MINIMUM_SYSTEM_VERSION='10.13'
 #the path to the .cpp file
 INPUT_PATH='/Users/'$USER_NAME'/Documents/thelemacus'
-MINIMAL_PATH="/Applications/wxWidgets-3.2.6/samples/minimal"
+MINIMAL_PATH="/Applications/wxWidgets-3.2.6-release/samples/minimal"
 OUTPUT_PATH='/Users/'$USER_NAME'/Desktop'
 #the path to the icon of the app
 ICON_NAME='juventus-icon.icns'

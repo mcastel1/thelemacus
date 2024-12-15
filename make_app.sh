@@ -11,11 +11,13 @@ clear; clear;
 #the name of the app that you want to create
 APP_NAME='ToyThelemacus'
 APP_VERSION='1.0'
+USER_NAME='michelecastellana'
+# USER_NAME='macbookpro'
 MINIMUM_SYSTEM_VERSION='10.13'
 #the path to the .cpp file
-INPUT_PATH='/Users/michelecastellana/Documents/thelemacus'
+INPUT_PATH='/Users/'$USER_NAME'/Documents/thelemacus'
 MINIMAL_PATH="/Applications/wxWidgets-3.2.6/samples/minimal"
-OUTPUT_PATH='/Users/michelecastellana/Desktop'
+OUTPUT_PATH='/Users/'$USER_NAME'/Desktop'
 #the path to the icon of the app
 ICON_NAME='juventus-icon.icns'
 ICON_PATH=$MINIMAL_PATH'/'$ICON_NAME
@@ -23,15 +25,25 @@ APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries
 WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
 WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
 WXWIDGETS_TO_REPLACE_DIRECTORY='/usr/local/lib'
-BOOST_INCLUDE_DIRECTORY='/Applications/boost_1_86_0/'
-BOOST_LIB_DIRECTORY='/Applications/boost_1_86_0/universal'
+BOOST_NAME='boost_1_86_0'
+BOOST_INCLUDE_DIRECTORY='/Applications/'$BOOST_NAME'/'
+BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
+
 LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.44/lib'
+#LIBPNG_LIB_DIRECTORY='/usr/local/Cellar/libpng/1.6.44/lib'
+
 LIBJPEG_LIB_DIRECTORY='/opt/homebrew/opt/jpeg/lib'
 LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/opt/pcre2/lib'
 LIBTIFF_LIB_DIRECTORY='/opt/homebrew/opt/libtiff/lib'
+
 LIBICONV_LIB_DIRECTORY='/opt/homebrew/Cellar/libiconv/1.17/lib'
+#LIBICONV_LIB_DIRECTORY='/usr/local/Cellar/libiconv/1.17/lib'
+
 LIBCURL_LIB_DIRECTORY='/opt/homebrew/Cellar/curl/8.5.0/lib'
+
 LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3.1/lib'
+#LIBZ_LIB_DIRECTORY='/usr/local/Cellar/zlib/1.3.1/lib'
+
 LIBGSL_LIB_DIRECTORY='/usr/local/lib/my_gsl/arm64/lib'
 LIST_LIBRARIES_TO_COPY=''
 
@@ -47,7 +59,7 @@ mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
 
 #compile Thelemacus
-g++ $INPUT_PATH/*.cpp -o $APP_NAME  `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -I/Applications/boost_1_86_0 -L$BOOST_LIB_DIRECTORY -lboost_filesystem -lboost_system   -Wall -Wno-c++11-extensions --std=c++17  -O3 -rpath $BOOST_LIB_DIRECTORY -I$INPUT_PATH/include -I$INPUT_PATH/src -I$MINIMAL_PATH/
+g++ $INPUT_PATH/*.cpp -o $APP_NAME  `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -I/Applications/$BOOST_NAME -L$BOOST_LIB_DIRECTORY -lboost_filesystem -lboost_system   -Wall -Wno-c++11-extensions --std=c++17  -O3 -rpath $BOOST_LIB_DIRECTORY -I$INPUT_PATH/include -I$INPUT_PATH/src -I$MINIMAL_PATH/
 
 
 #set links fo $APP_NAME

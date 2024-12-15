@@ -11,11 +11,13 @@ clear; clear;
 #the name of the app that you want to create
 APP_NAME='ToyThelemacus'
 APP_VERSION='1.0'
+USER_NAME='michelecastellana'
+#USER_NAME='macbookpro'
 MINIMUM_SYSTEM_VERSION='10.13'
 #the path to the .cpp file
-INPUT_PATH='/Users/michelecastellana/Documents/thelemacus'
+INPUT_PATH='/Users/'$USER_NAME'/Documents/thelemacus'
 MINIMAL_PATH="/Applications/wxWidgets-3.2.6/samples/minimal"
-OUTPUT_PATH='/Users/michelecastellana/Desktop'
+OUTPUT_PATH='/Users/'$USER_NAME'/Desktop'
 #the path to the icon of the app
 ICON_NAME='juventus-icon.icns'
 ICON_PATH=$MINIMAL_PATH'/'$ICON_NAME

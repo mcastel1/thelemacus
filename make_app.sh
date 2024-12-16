@@ -37,6 +37,8 @@ BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
 #settings for old mac
 #: <<'END'
 LIBPNG_LIB_DIRECTORY='/usr/local/Cellar/libpng/1.6.44/lib'
+LIBPNG_NAME='libpng16.16.dylib'
+
 LIBJPEG_LIB_DIRECTORY='/usr/local/opt/jpeg-turbo/lib'
 LIBPCRE2_LIB_DIRECTORY='/usr/local/Cellar/pcre2/10.44/lib'
 LIBTIFF_LIB_DIRECTORY='/usr/local/Cellar/libtiff/4.7.0/lib'
@@ -126,7 +128,7 @@ install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $APP_NAME
 #install_name_tool -change /usr/lib/libz.1.dylib @rpath/libz.1.dylib $APP_NAME
 install_name_tool -change $BOOST_LIB_DIRECTORY/libboost_filesystem.dylib @rpath/libboost_filesystem.dylib $APP_NAME
 install_name_tool -change $BOOST_LIB_DIRECTORY/libboost_system.dylib @rpath/libboost_system.dylib $APP_NAME
-install_name_tool -change $LIBPNG_LIB_DIRECTORY/libpng16.16.dylib @rpath/libpng16.16.dylib $APP_NAME
+install_name_tool -change $LIBPNG_LIB_DIRECTORY/$LIBPNG_NAME @rpath/$LIBPNG_NAME $APP_NAME
 install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/libwx_osx_cocoau_xrc-3.2.0.3.0.dylib @rpath/libwx_osx_cocoau_xrc-3.2.0.3.0.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/libwx_osx_cocoau_html-3.2.0.3.0.dylib @rpath/libwx_osx_cocoau_html-3.2.0.3.0.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/libwx_osx_cocoau_qa-3.2.0.3.0.dylib @rpath/libwx_osx_cocoau_qa-3.2.0.3.0.dylib $APP_NAME
@@ -147,7 +149,7 @@ cp -r $INPUT_PATH/Contents/Resources/Images/* $OUTPUT_PATH/$APP_NAME.app/Content
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$BOOST_LIB_DIRECTORY'/libboost_filesystem.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$BOOST_LIB_DIRECTORY'/libboost_system.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$BOOST_LIB_DIRECTORY'/libboost_atomic.dylib'
-LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPNG_LIB_DIRECTORY'/libpng16.16.dylib'
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPNG_LIB_DIRECTORY'/'$LIBPNG_NAME
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBTIFF_LIB_DIRECTORY'/libtiff.6.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBJPEG_LIB_DIRECTORY'/libjpeg.8.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZ_LIB_DIRECTORY'/libz.1.dylib'
@@ -169,7 +171,7 @@ cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
 WXWIDGETS_TO_REPLACE_DIRECTORY='/Applications/wxWidgets-3.2.6-release/my_build/lib'
 
 #link libraries to libraries contained in the application bundle, so the app is self-sufficient
-link_list "libpng16.16.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libjpeg.8.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+link_list "$LIBPNG_NAME" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libjpeg.8.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
 link_list "libwx_osx_cocoau_xrc-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.8.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
 link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.8.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
 link_list "libwx_baseu-3.2.0.3.0.dylib" "libiconv.2.dylib libjpeg.8.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"

@@ -11,8 +11,8 @@ clear; clear;
 #the name of the app that you want to create
 APP_NAME='ToyThelemacus'
 APP_VERSION='1.0'
-USER_NAME='michelecastellana'
-#  USER_NAME='macbookpro'
+# USER_NAME='michelecastellana'
+ USER_NAME='macbookpro'
 MINIMUM_SYSTEM_VERSION='10.13'
 #the path to the .cpp file
 INPUT_PATH='/Users/'$USER_NAME'/Documents/thelemacus'
@@ -25,27 +25,32 @@ APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries
 WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
 WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
 WXWIDGETS_TO_REPLACE_DIRECTORY='/usr/local/lib'
-BOOST_NAME='boost_1_86_0'
+# BOOST_NAME='boost_1_86_0'
+BOOST_NAME='boost_1_87_0'
 BOOST_INCLUDE_DIRECTORY='/Applications/'$BOOST_NAME'/'
 BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
 
-LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.44/lib'
-# LIBPNG_LIB_DIRECTORY='/usr/local/Cellar/libpng/1.6.44/lib'
+# LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.44/lib'
+LIBPNG_LIB_DIRECTORY='/usr/local/Cellar/libpng/1.6.44/lib'
 
-LIBJPEG_LIB_DIRECTORY='/opt/homebrew/opt/jpeg/lib'
-LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/opt/pcre2/lib'
+# LIBJPEG_LIB_DIRECTORY='/opt/homebrew/opt/jpeg/lib'
+LIBJPEG_LIB_DIRECTORY='/usr/local/Cellar/jpeg/9f/lib'
+
+# LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/opt/pcre2/lib'
+LIBPCRE2_LIB_DIRECTORY='/usr/local/Cellar/pcre2/10.44/lib'
+
 LIBTIFF_LIB_DIRECTORY='/opt/homebrew/opt/libtiff/lib'
 
-LIBICONV_LIB_DIRECTORY='/opt/homebrew/Cellar/libiconv/1.17/lib'
-# LIBICONV_LIB_DIRECTORY='/usr/local/Cellar/libiconv/1.17/lib'
+# LIBICONV_LIB_DIRECTORY='/opt/homebrew/Cellar/libiconv/1.17/lib'
+LIBICONV_LIB_DIRECTORY='/usr/local/Cellar/libiconv/1.17/lib'
 
 LIBCURL_LIB_DIRECTORY='/opt/homebrew/Cellar/curl/8.5.0/lib'
 
-LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3.1/lib'
-# LIBZ_LIB_DIRECTORY='/usr/local/Cellar/zlib/1.3.1/lib'
+# LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3.1/lib'
+LIBZ_LIB_DIRECTORY='/usr/local/Cellar/zlib/1.3.1/lib'
 
-LIBGSL_LIB_DIRECTORY='/usr/local/lib/my_gsl/arm64/lib'
-# LIBGSL_LIB_DIRECTORY='/usr/local/lib'
+# LIBGSL_LIB_DIRECTORY='/usr/local/lib/my_gsl/arm64/lib'
+LIBGSL_LIB_DIRECTORY='/usr/local/lib'
 
 
 
@@ -144,100 +149,112 @@ cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
 
 WXWIDGETS_TO_REPLACE_DIRECTORY='/Applications/wxWidgets-3.2.6-release/my_build/lib'
 
-##libraries called by libpng16.16.dylib
-LIB_A='libpng16.16.dylib'
-DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+#link libraries to libraries contained in the application bundle, so the app is self-sufficient
+link_list "libpng16.16.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libz.1.dylib"
+link_list "libwx_osx_cocoau_xrc-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libz.1.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib"
+link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libz.1.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib"
+link_list "libwx_baseu-3.2.0.3.0.dylib" "libz.1.dylib libiconv.2.dylib"
+link_list "libwx_osx_cocoau_qa-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libz.1.dylib"
+link_list "libwx_osx_cocoau_core-3.2.0.3.0.dylib" "libz.1.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib"
+link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libz.1.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib"
+link_list "libwx_baseu_xml-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libz.1.dylib libiconv.2.dylib  libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib"
+link_list "libwx_baseu_net-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libz.1.dylib libiconv.2.dylib libwx_baseu-3.2.0.3.0.dylib" 
 
 
-#libraries called by libwx_osx_cocoau_xrc-3.2.0.3.0.dylib
-LIB_A='libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
-DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-#libraries called by libwx_osx_cocoau_html-3.2.0.3.0.dylib
-LIB_A='libwx_osx_cocoau_html-3.2.0.3.0.dylib'
-DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-#libraries called by libwx_baseu-3.2.0.3.0.dylib
-LIB_A='libwx_baseu-3.2.0.3.0.dylib'
-DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-#libraries called by libwx_osx_cocoau_qa-3.2.0.3.0.dylib
-LIB_A='libwx_osx_cocoau_qa-3.2.0.3.0.dylib'
-DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-#libraries called by libwx_osx_cocoau_core-3.2.0.3.0.dylib
-LIB_A='libwx_osx_cocoau_core-3.2.0.3.0.dylib'
-DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-#libraries called by libwx_osx_cocoau_html-3.2.0.3.0.dylib
-LIB_A='libwx_osx_cocoau_html-3.2.0.3.0.dylib'
-DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-#I comment this out otherwise I get an error when running this script (this path is already present so I get a dublicate error if I include it)
+# ##libraries called by libpng16.16.dylib
+# LIB_A='libpng16.16.dylib'
+# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
 # install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 
 
-#libraries called by libwx_baseu_xml-3.2.0.3.0.dylib
-LIB_A='libwx_baseu_xml-3.2.0.3.0.dylib'
-DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# #libraries called by libwx_osx_cocoau_xrc-3.2.0.3.0.dylib
+# LIB_A='libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
+# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
+# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
+# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 
 
-#libraries called by libwx_baseu_net-3.2.0.3.0.dylib
-LIB_A='libwx_baseu_net-3.2.0.3.0.dylib'
-DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# #libraries called by libwx_osx_cocoau_html-3.2.0.3.0.dylib
+# LIB_A='libwx_osx_cocoau_html-3.2.0.3.0.dylib'
+# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
+# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
+# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+
+
+# #libraries called by libwx_baseu-3.2.0.3.0.dylib
+# LIB_A='libwx_baseu-3.2.0.3.0.dylib'
+# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
+# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
+# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+
+
+# #libraries called by libwx_osx_cocoau_qa-3.2.0.3.0.dylib
+# LIB_A='libwx_osx_cocoau_qa-3.2.0.3.0.dylib'
+# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
+# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
+# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+
+
+# #libraries called by libwx_osx_cocoau_core-3.2.0.3.0.dylib
+# LIB_A='libwx_osx_cocoau_core-3.2.0.3.0.dylib'
+# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
+# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
+# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+
+
+# #libraries called by libwx_osx_cocoau_html-3.2.0.3.0.dylib
+# LIB_A='libwx_osx_cocoau_html-3.2.0.3.0.dylib'
+# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
+# #I comment this out otherwise I get an error when running this script (this path is already present so I get a dublicate error if I include it)
+# # install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
+# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+
+
+# #libraries called by libwx_baseu_xml-3.2.0.3.0.dylib
+# LIB_A='libwx_baseu_xml-3.2.0.3.0.dylib'
+# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
+# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
+# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+
+
+# #libraries called by libwx_baseu_net-3.2.0.3.0.dylib
+# LIB_A='libwx_baseu_net-3.2.0.3.0.dylib'
+# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
+# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
+# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
+# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 
 #create the .app folder and subfolders
 sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/$APP_NAME/" \

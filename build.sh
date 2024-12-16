@@ -49,11 +49,19 @@ LIBTIFF_LIB_DIRECTORY='/usr/local/Cellar/libtiff/4.7.0/lib'
 LIBTIFF_NAME='libtiff.6.dylib'
 
 LIBICONV_LIB_DIRECTORY='/usr/local/Cellar/libiconv/1.17/lib'
+LIBICONV_NAME='libiconv.2.dylib'
+
 LIBCURL_LIB_DIRECTORY=' /usr/local/Cellar/curl/8.11.0_1/lib'
-LIBZ_LIB_DIRECTORY='/usr/local/Cellar/zlib/1.3.1/lib'
+LIBCURL_NAME='libcurl.4.dylib'
+
 LIBGSL_LIB_DIRECTORY='/usr/local/lib'
+LIBGSL_NAME='libgsl.28.dylib'
+
 LIBLZMA_LIB_DIRECTORY='/usr/local/Cellar/xz/5.6.3/lib'
+LIBLZMA_NAME='liblzma.5.dylib'
+
 LIBZSTD_LIB_DIRECTORY='/usr/local/opt/zstd/lib'
+LIBZSTD_NAME='libzstd.1.dylib'
 #END
 
 #settings for new mac
@@ -131,7 +139,6 @@ g++ $INPUT_PATH/*.cpp -o $APP_NAME  `wx-config --cxxflags --libs` -lgsl -lcblas 
 
 #set links fo $APP_NAME
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $APP_NAME
-#install_name_tool -change /usr/lib/libz.1.dylib @rpath/libz.1.dylib $APP_NAME
 install_name_tool -change $BOOST_LIB_DIRECTORY/libboost_filesystem.dylib @rpath/libboost_filesystem.dylib $APP_NAME
 install_name_tool -change $BOOST_LIB_DIRECTORY/libboost_system.dylib @rpath/libboost_system.dylib $APP_NAME
 install_name_tool -change $LIBPNG_LIB_DIRECTORY/$LIBPNG_NAME @rpath/$LIBPNG_NAME $APP_NAME
@@ -158,10 +165,9 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$BOOST_LIB_DIRECTORY'/libboost_
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPNG_LIB_DIRECTORY'/'$LIBPNG_NAME
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBTIFF_LIB_DIRECTORY'/'$LIBTIFF_NAME
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBJPEG_LIB_DIRECTORY'/'$LIBJPEG_NAME
-LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZ_LIB_DIRECTORY'/libz.1.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZSTD_LIB_DIRECTORY'/libzstd.1.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBLZMA_LIB_DIRECTORY'/liblzma.5.dylib'
-LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBICONV_LIB_DIRECTORY'/libiconv.2.dylib'
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBICONV_LIB_DIRECTORY'/'$LIBICONV_NAME
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPCRE2_LIB_DIRECTORY'/'$LIBPCRE2_NAME
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx_osx_cocoau_html-3.2.0.3.0.dylib'
@@ -178,14 +184,14 @@ WXWIDGETS_TO_REPLACE_DIRECTORY='/Applications/wxWidgets-3.2.6-release/my_build/l
 
 #link libraries to libraries contained in the application bundle, so the app is self-sufficient
 link_list "$LIBPNG_NAME" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_osx_cocoau_xrc-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_baseu-3.2.0.3.0.dylib" "libiconv.2.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_osx_cocoau_qa-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_osx_cocoau_core-3.2.0.3.0.dylib" "libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_baseu_xml-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libiconv.2.dylib  libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_baseu_net-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libiconv.2.dylib libwx_baseu-3.2.0.3.0.dylib $LIBJPEG_NAME libcurl.4.dylib"
+link_list "libwx_osx_cocoau_xrc-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
+link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
+link_list "libwx_baseu-3.2.0.3.0.dylib" "$LIBICONV_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
+link_list "libwx_osx_cocoau_qa-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
+link_list "libwx_osx_cocoau_core-3.2.0.3.0.dylib" "$LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
+link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
+link_list "libwx_baseu_xml-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME  libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
+link_list "libwx_baseu_net-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu-3.2.0.3.0.dylib $LIBJPEG_NAME libcurl.4.dylib"
 link_list "$LIBTIFF_NAME" "libzstd.1.dylib liblzma.5.dylib $LIBJPEG_NAME"
 
 

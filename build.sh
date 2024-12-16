@@ -149,7 +149,7 @@ install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/libwx_osx_cocoau_core-
 install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/libwx_baseu_xml-3.2.0.3.0.dylib @rpath/libwx_baseu_xml-3.2.0.3.0.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/libwx_baseu_net-3.2.0.3.0.dylib @rpath/libwx_baseu_net-3.2.0.3.0.dylib $APP_NAME
 install_name_tool -change $WXWIDGETS_TO_REPLACE_DIRECTORY/libwx_baseu-3.2.0.3.0.dylib @rpath/libwx_baseu-3.2.0.3.0.dylib $APP_NAME
-install_name_tool -change $LIBGSL_LIB_DIRECTORY/libgsl.28.dylib @rpath/libgsl.28.dylib $APP_NAME
+install_name_tool -change $LIBGSL_LIB_DIRECTORY/$LIBGSL_NAME @rpath/$LIBGSL_NAME $APP_NAME
 
 
 ##copy data and images
@@ -165,8 +165,8 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$BOOST_LIB_DIRECTORY'/libboost_
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPNG_LIB_DIRECTORY'/'$LIBPNG_NAME
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBTIFF_LIB_DIRECTORY'/'$LIBTIFF_NAME
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBJPEG_LIB_DIRECTORY'/'$LIBJPEG_NAME
-LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZSTD_LIB_DIRECTORY'/libzstd.1.dylib'
-LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBLZMA_LIB_DIRECTORY'/liblzma.5.dylib'
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZSTD_LIB_DIRECTORY'/'$LIBZSTD_NAME
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBLZMA_LIB_DIRECTORY'/'$LIBLZMA_NAME
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBICONV_LIB_DIRECTORY'/'$LIBICONV_NAME
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPCRE2_LIB_DIRECTORY'/'$LIBPCRE2_NAME
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
@@ -176,23 +176,23 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx_baseu_xml-3.2.0.3.0.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx_baseu_net-3.2.0.3.0.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx_baseu-3.2.0.3.0.dylib'
-LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBGSL_LIB_DIRECTORY'/libgsl.28.dylib'
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBGSL_LIB_DIRECTORY'/'$LIBGSL_NAME
 #copy the list of libraries
 cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
 
 WXWIDGETS_TO_REPLACE_DIRECTORY='/Applications/wxWidgets-3.2.6-release/my_build/lib'
 
 #link libraries to libraries contained in the application bundle, so the app is self-sufficient
-link_list "$LIBPNG_NAME" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_osx_cocoau_xrc-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_baseu-3.2.0.3.0.dylib" "$LIBICONV_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_osx_cocoau_qa-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_osx_cocoau_core-3.2.0.3.0.dylib" "$LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_baseu_xml-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME  libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME libcurl.4.dylib"
-link_list "libwx_baseu_net-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu-3.2.0.3.0.dylib $LIBJPEG_NAME libcurl.4.dylib"
-link_list "$LIBTIFF_NAME" "libzstd.1.dylib liblzma.5.dylib $LIBJPEG_NAME"
+link_list "$LIBPNG_NAME" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "libwx_osx_cocoau_xrc-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "libwx_baseu-3.2.0.3.0.dylib" "$LIBICONV_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "libwx_osx_cocoau_qa-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "libwx_osx_cocoau_core-3.2.0.3.0.dylib" "$LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "libwx_baseu_xml-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME  libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"
+link_list "libwx_baseu_net-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib $LIBICONV_NAME libwx_baseu-3.2.0.3.0.dylib $LIBJPEG_NAME $LIBCURL_NAME $LIBPCRE2_NAME"
+link_list "$LIBTIFF_NAME" "$LIBZSTD_NAME $LIBLZMA_NAME $LIBJPEG_NAME"
 
 
 #create the .app folder and subfolders

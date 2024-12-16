@@ -173,6 +173,7 @@ link_list "libwx_osx_cocoau_core-3.2.0.3.0.dylib" "libz.1.dylib libiconv.2.dylib
 link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libz.1.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.8.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
 link_list "libwx_baseu_xml-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libz.1.dylib libiconv.2.dylib  libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.8.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
 link_list "libwx_baseu_net-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libz.1.dylib libiconv.2.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.8.dylib libcurl.4.dylib"
+link_list "libtiff.6.dylib" "libzstd.1.dylib libjpeg.8.dylib libz.1.dylib"
 
 
 

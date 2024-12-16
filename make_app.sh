@@ -34,32 +34,34 @@ BOOST_NAME='boost_1_87_0'
 BOOST_INCLUDE_DIRECTORY='/Applications/'$BOOST_NAME'/'
 BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
 
-# LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.44/lib'
+#settings for old mac
+#: <<'END'
 LIBPNG_LIB_DIRECTORY='/usr/local/Cellar/libpng/1.6.44/lib'
-
-# LIBJPEG_LIB_DIRECTORY='/opt/homebrew/opt/jpeg/lib'
 LIBJPEG_LIB_DIRECTORY='/usr/local/opt/jpeg-turbo/lib'
-
-# LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/opt/pcre2/lib'
 LIBPCRE2_LIB_DIRECTORY='/usr/local/Cellar/pcre2/10.44/lib'
-
-# LIBTIFF_LIB_DIRECTORY='/opt/homebrew/opt/libtiff/lib'
 LIBTIFF_LIB_DIRECTORY='/usr/local/Cellar/libtiff/4.7.0/lib'
-
-# LIBICONV_LIB_DIRECTORY='/opt/homebrew/Cellar/libiconv/1.17/lib'
 LIBICONV_LIB_DIRECTORY='/usr/local/Cellar/libiconv/1.17/lib'
-
-# LIBCURL_LIB_DIRECTORY='/opt/homebrew/Cellar/curl/8.5.0/lib'
 LIBCURL_LIB_DIRECTORY=' /usr/local/Cellar/curl/8.11.0_1/lib'
-
-# LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3.1/lib'
 LIBZ_LIB_DIRECTORY='/usr/local/Cellar/zlib/1.3.1/lib'
-
-# LIBGSL_LIB_DIRECTORY='/usr/local/lib/my_gsl/arm64/lib'
 LIBGSL_LIB_DIRECTORY='/usr/local/lib'
-
-# LIBLZMA_LIB_DIRECTORY=''
 LIBLZMA_LIB_DIRECTORY='/usr/local/Cellar/xz/5.6.3/lib'
+LIBZSTD_LIB_DIRECTORY='/usr/local/opt/zstd/lib'
+#END
+
+#settings for new mac
+: <<'END'
+# LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.44/lib'
+# LIBJPEG_LIB_DIRECTORY='/opt/homebrew/opt/jpeg/lib'
+# LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/opt/pcre2/lib'
+# LIBTIFF_LIB_DIRECTORY='/opt/homebrew/opt/libtiff/lib'
+# LIBICONV_LIB_DIRECTORY='/opt/homebrew/Cellar/libiconv/1.17/lib'
+# LIBCURL_LIB_DIRECTORY='/opt/homebrew/Cellar/curl/8.5.0/lib'
+# LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3.1/lib'
+# LIBGSL_LIB_DIRECTORY='/usr/local/lib/my_gsl/arm64/lib'
+# LIBLZMA_LIB_DIRECTORY=''
+# LIBZSTD_LIB_DIRECTORY=''
+END
+
 
 
 
@@ -116,10 +118,8 @@ mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Data
 mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Images
 mkdir -p $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Libraries
 
-
 #compile Thelemacus
 g++ $INPUT_PATH/*.cpp -o $APP_NAME  `wx-config --cxxflags --libs` -lgsl -lcblas -I/usr/local/include/gsl/ -L/usr/local/bin  -I/Applications/$BOOST_NAME -L$BOOST_LIB_DIRECTORY -lboost_filesystem -lboost_system   -Wall -Wno-c++11-extensions --std=c++17  -O3 -rpath $BOOST_LIB_DIRECTORY -I$INPUT_PATH/include -I$INPUT_PATH/src -I$MINIMAL_PATH/
-
 
 #set links fo $APP_NAME
 install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $APP_NAME
@@ -141,7 +141,6 @@ install_name_tool -change $LIBGSL_LIB_DIRECTORY/libgsl.28.dylib @rpath/libgsl.28
 cp -r $INPUT_PATH/Contents/Resources/Data/* $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Data
 cp -r $INPUT_PATH/Contents/Resources/Images/* $OUTPUT_PATH/$APP_NAME.app/Contents/Resources/Images
 
-
 #copy libraries
 #libraries called by $APP_NAME
 #built the list of the libraries to copy
@@ -152,6 +151,7 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPNG_LIB_DIRECTORY'/libpng16
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBTIFF_LIB_DIRECTORY'/libtiff.6.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBJPEG_LIB_DIRECTORY'/libjpeg.8.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZ_LIB_DIRECTORY'/libz.1.dylib'
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZSTD_LIB_DIRECTORY'/libzstd.1.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBLZMA_LIB_DIRECTORY'/liblzma.5.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBICONV_LIB_DIRECTORY'/libiconv.2.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPCRE2_LIB_DIRECTORY'/libpcre2-32.0.dylib'
@@ -163,7 +163,7 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx_baseu_net-3.2.0.3.0.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx_baseu-3.2.0.3.0.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBGSL_LIB_DIRECTORY'/libgsl.28.dylib'
-#copy the list
+#copy the list of libraries
 cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
 
 WXWIDGETS_TO_REPLACE_DIRECTORY='/Applications/wxWidgets-3.2.6-release/my_build/lib'
@@ -180,102 +180,6 @@ link_list "libwx_baseu_xml-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dyl
 link_list "libwx_baseu_net-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libiconv.2.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.8.dylib libcurl.4.dylib"
 link_list "libtiff.6.dylib" "libzstd.1.dylib liblzma.5.dylib libjpeg.8.dylib"
 
-
-
-# ##libraries called by libpng16.16.dylib
-# LIB_A='libpng16.16.dylib'
-# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-# #libraries called by libwx_osx_cocoau_xrc-3.2.0.3.0.dylib
-# LIB_A='libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
-# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-# #libraries called by libwx_osx_cocoau_html-3.2.0.3.0.dylib
-# LIB_A='libwx_osx_cocoau_html-3.2.0.3.0.dylib'
-# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-# #libraries called by libwx_baseu-3.2.0.3.0.dylib
-# LIB_A='libwx_baseu-3.2.0.3.0.dylib'
-# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-# #libraries called by libwx_osx_cocoau_qa-3.2.0.3.0.dylib
-# LIB_A='libwx_osx_cocoau_qa-3.2.0.3.0.dylib'
-# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-# #libraries called by libwx_osx_cocoau_core-3.2.0.3.0.dylib
-# LIB_A='libwx_osx_cocoau_core-3.2.0.3.0.dylib'
-# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-# #libraries called by libwx_osx_cocoau_html-3.2.0.3.0.dylib
-# LIB_A='libwx_osx_cocoau_html-3.2.0.3.0.dylib'
-# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-# #I comment this out otherwise I get an error when running this script (this path is already present so I get a dublicate error if I include it)
-# # install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-# #libraries called by libwx_baseu_xml-3.2.0.3.0.dylib
-# LIB_A='libwx_baseu_xml-3.2.0.3.0.dylib'
-# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu_xml-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_osx_cocoau_html-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-
-
-# #libraries called by libwx_baseu_net-3.2.0.3.0.dylib
-# LIB_A='libwx_baseu_net-3.2.0.3.0.dylib'
-# DIR_LIB_A=$APP_LIBRARY_DIRECTORY
-# install_name_tool -add_rpath @executable_path/../Resources/Libraries/ $DIR_LIB_A/$LIB_A
-# LIB_B='libwx_osx_cocoau_core-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libz.1.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libiconv.2.dylib'; DIR_LIB_B='/usr/lib'; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
-# LIB_B='libwx_baseu-3.2.0.3.0.dylib'; DIR_LIB_B=$WXWIDGETS_TO_REPLACE_DIRECTORY; install_name_tool -change $DIR_LIB_B/$LIB_B @rpath/$LIB_B $APP_LIBRARY_DIRECTORY/$LIB_A
 
 #create the .app folder and subfolders
 sed -e "s/\${MACOSX_BUNDLE_GUI_IDENTIFIER}/$APP_NAME/" \

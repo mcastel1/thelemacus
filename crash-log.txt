@@ -1,7 +1,7 @@
-Last login: Mon Dec 16 13:50:35 on ttys008
+Last login: Mon Dec 16 14:24:05 on ttys001
 /Applications/ToyThelemacus.app/Contents/MacOS/ToyThelemacus ; exit;
 macbookpro@ICR-C02QR11BG8WM ~ % /Applications/ToyThelemacus.app/Contents/MacOS/ToyThelemacus ; exit;
-dyld[58967]: Library not loaded: '@rpath/libzstd.1.dylib'
+dyld[75672]: Library not loaded: '@rpath/libzstd.1.dylib'
   Referenced from: '/Applications/ToyThelemacus.app/Contents/Resources/Libraries/libtiff.6.dylib'
   Reason: tried: '/Applications/boost_1_87_0/universal/libzstd.1.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libzstd.1.dylib' (no such file), '/Applications/boost_1_87_0/universal/libzstd.1.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libzstd.1.dylib' (no such file), '/usr/lib/libzstd.1.dylib' (no such file)
 zsh: abort      /Applications/ToyThelemacus.app/Contents/MacOS/ToyThelemacus
@@ -12,6 +12,5 @@ Saving session...
 ...completed.
 
 [Process completed]
-
 
 

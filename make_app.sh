@@ -47,6 +47,43 @@ LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3.1/lib'
 LIBGSL_LIB_DIRECTORY='/usr/local/lib/my_gsl/arm64/lib'
 # LIBGSL_LIB_DIRECTORY='/usr/local/lib'
 
+
+
+#this function links library $1 = LIB_A with library $2 = LIB_B, where $LIB_A and $LIB_B are the names of the libraries including their extensiosn. For example: $LIB_B='libpng16.16.dylib', $LIB_A= 'libz.1.dylib'. The function finds the path with which $1 calls $2 and it replaces it with the correct one (@rpath/$2). Usage: to link correctly libpng16.16.dylib and libz.1.dylib, put in this .sh file `link_pair 'libpng16.16.dylib' 'libz.1.dylib' `
+link_pair(){
+    rm -f out.txt; otool -L $APP_LIBRARY_DIRECTORY/$1 >> out.txt
+    # echo 'LIB_A = ' $1
+    # echo 'LIB_B = ' $2
+    local PATH_TO_REPLACE=$(grep -o '.*'$2 out.txt | sed 's/'$2'$//' | sed 's/[[:space:]]//g')
+    # echo 'path to replace = ' $PATH_TO_REPLACE
+    install_name_tool -change $PATH_TO_REPLACE$2 @rpath/$2 $APP_LIBRARY_DIRECTORY/$1
+}
+
+# Function to process the list and other arguments
+link_list() {
+
+  local source=$1
+  echo "Source library:\n\t" $source
+
+  # Capture the list (first argument)
+  list=($2)
+
+  # Process the list
+  echo "Target libraries:"
+  for item in "${list[@]}"; do
+    echo "\t$item"
+  done
+
+  # Process the list
+  for item in "${list[@]}"; do
+    link_pair $source $item
+  done
+
+  otool -L $APP_LIBRARY_DIRECTORY/$1
+
+}
+
+
 LIST_LIBRARIES_TO_COPY=''
 
 

@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 APP_NAME='ToyThelemacus'
 APP_VERSION='1.0'
 # USER_NAME='michelecastellana'
- USER_NAME='macbookpro'
+USER_NAME='macbookpro'
 MINIMUM_SYSTEM_VERSION='10.13'
 #the path to the .cpp file
 INPUT_PATH='/Users/'$USER_NAME'/Documents/thelemacus'

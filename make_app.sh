@@ -8,6 +8,10 @@
 
 clear; clear;
 
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+
 #the name of the app that you want to create
 APP_NAME='ToyThelemacus'
 APP_VERSION='1.0'
@@ -79,12 +83,17 @@ link_list() {
     echo "\t$item"
   done
 
+
+
   # Process the list
   for item in "${list[@]}"; do
     link_pair $source $item
   done
 
+
+  echo "${RED}\n*********** Printing inks ...${NC}"
   otool -L $APP_LIBRARY_DIRECTORY/$1
+  echo "${RED}*********** ... done.${NC}"
 
 }
 

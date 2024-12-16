@@ -58,6 +58,10 @@ LIBZ_LIB_DIRECTORY='/usr/local/Cellar/zlib/1.3.1/lib'
 # LIBGSL_LIB_DIRECTORY='/usr/local/lib/my_gsl/arm64/lib'
 LIBGSL_LIB_DIRECTORY='/usr/local/lib'
 
+# LIBLZMA_LIB_DIRECTORY=''
+LIBLZMA_LIB_DIRECTORY='/usr/local/Cellar/xz/5.6.3/lib'
+
+
 
 
 #this function links library $1 = LIB_A with library $2 = LIB_B, where $LIB_A and $LIB_B are the names of the libraries including their extensiosn. For example: $LIB_B='libpng16.16.dylib', $LIB_A= 'libz.1.dylib'. The function finds the path with which $1 calls $2 and it replaces it with the correct one (@rpath/$2). Usage: to link correctly libpng16.16.dylib and libz.1.dylib, put in this .sh file `link_pair 'libpng16.16.dylib' 'libz.1.dylib' `
@@ -148,6 +152,7 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPNG_LIB_DIRECTORY'/libpng16
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBTIFF_LIB_DIRECTORY'/libtiff.6.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBJPEG_LIB_DIRECTORY'/libjpeg.8.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZ_LIB_DIRECTORY'/libz.1.dylib'
+LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBLZMA_LIB_DIRECTORY'/liblzma.5.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBICONV_LIB_DIRECTORY'/libiconv.2.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPCRE2_LIB_DIRECTORY'/libpcre2-32.0.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
@@ -173,7 +178,7 @@ link_list "libwx_osx_cocoau_core-3.2.0.3.0.dylib" "libz.1.dylib libiconv.2.dylib
 link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libz.1.dylib libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.8.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
 link_list "libwx_baseu_xml-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libz.1.dylib libiconv.2.dylib  libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.8.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
 link_list "libwx_baseu_net-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libz.1.dylib libiconv.2.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.8.dylib libcurl.4.dylib"
-link_list "libtiff.6.dylib" "libzstd.1.dylib libjpeg.8.dylib libz.1.dylib"
+link_list "libtiff.6.dylib" "libzstd.1.dylib libjpeg.8.dylib libz.1.dylib liblzma.5.dylib"
 
 
 

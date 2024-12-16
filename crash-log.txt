@@ -1,0 +1,26 @@
+Last login: Mon Dec 16 11:42:50 on ttys006
+/Applications/ToyThelemacus.app/Contents/MacOS/ToyThelemacus ; exit;
+macbookpro@ICR-C02QR11BG8WM ~ % /Applications/ToyThelemacus.app/Contents/MacOS/ToyThelemacus ; exit;
+dyld[13917]: Library not loaded: '@rpath/libjpeg.8.dylib'
+  Referenced from: '/Applications/ToyThelemacus.app/Contents/Resources/Libraries/libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
+  Reason: tried: '/Applications/boost_1_87_0/universal/libjpeg.8.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libjpeg.8.dylib' (no such file), '/Applications/boost_1_87_0/universal/libjpeg.8.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libjpeg.8.dylib' (no such file), '/usr/lib/libjpeg.8.dylib' (no such file)Library not loaded: '@rpath/libjpeg.8.dylib'
+  Referenced from: '/Applications/ToyThelemacus.app/Contents/Resources/Libraries/libwx_osx_cocoau_html-3.2.0.3.0.dylib'
+  Reason: tried: '/Applications/boost_1_87_0/universal/libjpeg.8.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libjpeg.8.dylib' (no such file), '/Applications/boost_1_87_0/universal/libjpeg.8.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libjpeg.8.dylib' (no such file), '/usr/lib/libjpeg.8.dylib' (no such file)Library not loaded: '@rpath/libjpeg.8.dylib'
+  Referenced from: '/Applications/ToyThelemacus.app/Contents/Resources/Libraries/libwx_osx_cocoau_qa-3.2.0.3.0.dylib'
+  Reason: tried: '/Applications/boost_1_87_0/universal/libjpeg.8.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libjpeg.8.dylib' (no such file), '/Applications/boost_1_87_0/universal/libjpeg.8.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libjpeg.8.dylib' (no such file), '/usr/lib/libjpeg.8.dylib' (no such file)Library not loaded: '@rpath/libjpeg.8.dylib'
+  Referenced from: '/Applications/ToyThelemacus.app/Contents/Resources/Libraries/libwx_osx_cocoau_core-3.2.0.3.0.dylib'
+  Reason: tried: '/Applications/boost_1_87_0/universal/libjpeg.8.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libjpeg.8.dylib' (no such file), '/Applications/boost_1_87_0/universal/libjpeg.8.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libjpeg.8.dylib' (no such file), '/usr/lib/libjpeg.8.dylib' (no such file)Library not loaded: '@rpath/libpcre2-32.0.dylib'
+  Referenced from: '/Applications/ToyThelemacus.app/Contents/Resources/Libraries/libwx_baseu_xml-3.2.0.3.0.dylib'
+  Reason: tried: '/Applications/boost_1_87_0/universal/libpcre2-32.0.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libpcre2-32.0.dylib' (no such file), '/Applications/boost_1_87_0/universal/libpcre2-32.0.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libpcre2-32.0.dylib' (no such file), '/usr/lib/libpcre2-32.0.dylib' (no such file)Library not loaded: '@rpath/libpcre2-32.0.dylib'
+  Referenced from: '/Applications/ToyThelemacus.app/Contents/Resources/Libraries/libwx_baseu_net-3.2.0.3.0.dylib'
+  Reason: tried: '/Applications/boost_1_87_0/universal/libpcre2-32.0.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libpcre2-32.0.dylib' (no such file), '/Applications/boost_1_87_0/universal/libpcre2-32.0.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libpcre2-32.0.dylib' (no such file), '/usr/lib/libpcre2-32.0.dylib' (no such file)Library not loaded: '@rpath/libpcre2-32.0.dylib'
+  Referenced from: '/Applications/ToyThelemacus.app/Contents/Resources/Libraries/libwx_baseu-3.2.0.3.0.dylib'
+  Reason: tried: '/Applications/boost_1_87_0/universal/libpcre2-32.0.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libpcre2-32.0.dylib' (no such file), '/Applications/boost_1_87_0/universal/libpcre2-32.0.dylib' (no such file), '/Applications/ToyThelemacus.app/Contents/MacOS/../Resources/Libraries/libpcre2-32.0.dylib' (no such file), '/usr/lib/libpcre2-32.0.dylib' (no such file)
+zsh: abort      /Applications/ToyThelemacus.app/Contents/MacOS/ToyThelemacus
+
+Saving session...
+...copying shared history...
+...saving history...truncating history files...
+...completed.
+
+[Process completed]

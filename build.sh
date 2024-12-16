@@ -27,7 +27,6 @@ ICON_NAME='juventus-icon.icns'
 ICON_PATH=$MINIMAL_PATH'/'$ICON_NAME
 APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries'
 WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
-WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
 WXWIDGETS_TO_REPLACE_DIRECTORY='/usr/local/lib'
 # BOOST_NAME='boost_1_86_0'
 BOOST_NAME='boost_1_87_0'
@@ -36,6 +35,15 @@ BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
 
 #settings for old mac
 #: <<'END'
+WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
+LIBWX_COCOAU_XRC_NAME='libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
+LIBWX_COCOAU_HTML_NAME='libwx_osx_cocoau_html-3.2.0.3.0.dylib'
+LIBWX_COCOAU_QA_NAME='libwx_osx_cocoau_qa-3.2.0.3.0.dylib'
+LIBWX_COCOAU_CORE_NAME='libwx_osx_cocoau_core-3.2.0.3.0.dylib'
+LIBWX_BASEU_NAME='libwx_baseu-3.2.0.3.0.dylib'
+LIBWX_BASEU_XML_NAME='libwx_baseu_xml-3.2.0.3.0.dylib'
+LIBWX_BASEU_NET_NAME='libwx_baseu_net-3.2.0.3.0.dylib'
+
 LIBPNG_LIB_DIRECTORY='/usr/local/Cellar/libpng/1.6.44/lib'
 LIBPNG_NAME='libpng16.16.dylib'
 

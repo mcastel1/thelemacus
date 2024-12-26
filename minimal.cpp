@@ -173,7 +173,7 @@ MyFrame::MyFrame(const wxString& title)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText("Welcome to wxWidgets, Michele!");
+    SetStatusText("Welcome to ToyThelemacus!");
 #endif // wxUSE_STATUSBAR
 }
 
@@ -190,14 +190,13 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(wxString::Format
                  (
-                    "Welcome to %s!\n"
+                    "Welcome to ToyThelemacus!\n"
                     "\n"
-                    "This is the minimal wxWidgets sample Michele\n"
+                    "This is ToyThelemacus\n"
                     "running under %s.",
-                    wxGetLibraryVersionInfo().GetVersionString(),
                     wxGetOsDescription()
                  ),
-                 "About wxWidgets minimal sample",
+                 "About ToyThelemacus",
                  wxOK | wxICON_INFORMATION,
                  this);
 }

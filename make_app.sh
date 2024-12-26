@@ -29,6 +29,8 @@ APP_VERSION='1.0'
 # LIBGSL_LIB_DIRECTORY='/usr/local/lib'
 # LIBLZMA_LIB_DIRECTORY='/usr/local/Cellar/xz/5.6.3/lib'
 # LIBZSTD_LIB_DIRECTORY='/usr/local/opt/zstd/lib'
+# WXWIDGETS_TO_REPLACE_DIRECTORY='/Applications/wxWidgets-3.2.6-release/my_build/lib'
+
 
 #new mac
 USER_NAME='michelecastellana'
@@ -37,12 +39,12 @@ LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.44/lib'
 LIBJPEG_LIB_DIRECTORY='/opt/homebrew/opt/jpeg-turbo/lib'
 LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/opt/pcre2/lib'
 LIBTIFF_LIB_DIRECTORY='/opt/homebrew/opt/libtiff/lib'
-LIBICONV_LIB_DIRECTORY='/opt/homebrew/Cellar/libiconv/1.17/lib'
 LIBCURL_LIB_DIRECTORY='/opt/homebrew/Cellar/curl/8.5.0/lib'
 LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3.1/lib'
 LIBGSL_LIB_DIRECTORY='/usr/local/lib/my_gsl/arm64/lib'
 LIBLZMA_LIB_DIRECTORY='/opt/homebrew/opt/xz/lib'
 LIBZSTD_LIB_DIRECTORY='/opt/homebrew/opt/zstd/lib'
+WXWIDGETS_TO_REPLACE_DIRECTORY='/Applications/wxWidgets-3.2.6-release/my_build/lib'
 
 
 MINIMUM_SYSTEM_VERSION='10.13'
@@ -56,7 +58,6 @@ ICON_PATH=$MINIMAL_PATH'/'$ICON_NAME
 APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries'
 WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
 WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
-WXWIDGETS_TO_REPLACE_DIRECTORY='/usr/local/lib'
 BOOST_INCLUDE_DIRECTORY='/Applications/'$BOOST_NAME'/'
 BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
 
@@ -154,7 +155,6 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBJPEG_LIB_DIRECTORY'/libjpeg
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZ_LIB_DIRECTORY'/libz.1.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBZSTD_LIB_DIRECTORY'/libzstd.1.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBLZMA_LIB_DIRECTORY'/liblzma.5.dylib'
-LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBICONV_LIB_DIRECTORY'/libiconv.2.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBPCRE2_LIB_DIRECTORY'/libpcre2-32.0.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
 LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$WXWIDGETS_LIB_DIRECTORY'/libwx_osx_cocoau_html-3.2.0.3.0.dylib'
@@ -167,19 +167,18 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBGSL_LIB_DIRECTORY'/libgsl.2
 #copy the list
 cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
 
-WXWIDGETS_TO_REPLACE_DIRECTORY='/Applications/wxWidgets-3.2.6-release/my_build/lib'
 
-#link libraries to libraries contained in the application bundle, so the app is self-sufficient
-# link_list "libpng16.16.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-# link_list "libwx_osx_cocoau_xrc-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-# link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-# link_list "libwx_baseu-3.2.0.3.0.dylib" "libiconv.2.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-# link_list "libwx_osx_cocoau_qa-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-# link_list "libwx_osx_cocoau_core-3.2.0.3.0.dylib" "libiconv.2.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-# link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-# link_list "libwx_baseu_xml-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib  libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-# link_list "libwx_baseu_net-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.9.dylib libcurl.4.dylib"
-# link_list "libtiff.6.dylib" "libzstd.1.dylib liblzma.5.dylib libjpeg.8.dylib"
+  # link libraries to libraries contained in the application bundle, so the app is self-sufficient
+  link_list "libpng16.16.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "libwx_osx_cocoau_xrc-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "libwx_baseu-3.2.0.3.0.dylib" "libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "libwx_osx_cocoau_qa-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "libwx_osx_cocoau_core-3.2.0.3.0.dylib" "libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "libwx_baseu_xml-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib  libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "libwx_baseu_net-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.9.dylib libcurl.4.dylib"
+  link_list "libtiff.6.dylib" "libzstd.1.dylib liblzma.5.dylib libjpeg.8.dylib"
 
 
 

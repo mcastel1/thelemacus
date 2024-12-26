@@ -64,12 +64,12 @@ BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
 
 #this function links library $1 = LIB_A with library $2 = LIB_B, where $LIB_A and $LIB_B are the names of the libraries including their extensiosn. For example: $LIB_B='libpng16.16.dylib', $LIB_A= 'libz.1.dylib'. The function finds the path with which $1 calls $2 and it replaces it with the correct one (@rpath/$2). Usage: to link correctly libpng16.16.dylib and libz.1.dylib, put in this .sh file `link_pair 'libpng16.16.dylib' 'libz.1.dylib' `
 link_pair(){
-    rm -f out.txt; otool -L $APP_LIBRARY_DIRECTORY/$1 >> out.txt
+    rm -f out.txt; otool -L $1 >> out.txt
     # echo 'LIB_A = ' $1
     # echo 'LIB_B = ' $2
     local PATH_TO_REPLACE=$(grep -o '.*'$2 out.txt | sed 's/'$2'$//' | sed 's/[[:space:]]//g')
     # echo 'path to replace = ' $PATH_TO_REPLACE
-    install_name_tool -change $PATH_TO_REPLACE$2 @rpath/$2 $APP_LIBRARY_DIRECTORY/$1
+    install_name_tool -change $PATH_TO_REPLACE$2 @rpath/$2 $1
 }
 
 # Function to process the list and other arguments
@@ -96,7 +96,7 @@ link_list() {
 
 
   echo "${RED}\n*********** Printing inks ...${NC}"
-  otool -L $APP_LIBRARY_DIRECTORY/$1
+  otool -L $1
   echo "${RED}*********** ... done.${NC}"
 
 }
@@ -164,16 +164,16 @@ cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
 
 
   # link libraries to libraries contained in the application bundle, so the app is self-sufficient
-  link_list "libpng16.16.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-  link_list "libwx_osx_cocoau_xrc-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-  link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-  link_list "libwx_baseu-3.2.0.3.0.dylib" "libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-  link_list "libwx_osx_cocoau_qa-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-  link_list "libwx_osx_cocoau_core-3.2.0.3.0.dylib" "libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-  link_list "libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-  link_list "libwx_baseu_xml-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib  libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
-  link_list "libwx_baseu_net-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.9.dylib libcurl.4.dylib"
-  link_list "libtiff.6.dylib" "libzstd.1.dylib liblzma.5.dylib libjpeg.8.dylib"
+  link_list "$APP_LIBRARY_DIRECTORY/libpng16.16.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "$APP_LIBRARY_DIRECTORY/libwx_osx_cocoau_xrc-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "$APP_LIBRARY_DIRECTORY/libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "$APP_LIBRARY_DIRECTORY/libwx_baseu-3.2.0.3.0.dylib" "libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "$APP_LIBRARY_DIRECTORY/libwx_osx_cocoau_qa-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "$APP_LIBRARY_DIRECTORY/libwx_osx_cocoau_core-3.2.0.3.0.dylib" "libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "$APP_LIBRARY_DIRECTORY/libwx_osx_cocoau_html-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu_xml-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "$APP_LIBRARY_DIRECTORY/libwx_baseu_xml-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib  libwx_baseu-3.2.0.3.0.dylib libwx_osx_cocoau_html-3.2.0.3.0.dylib libjpeg.9.dylib libpcre2-32.0.dylib libtiff.6.dylib libcurl.4.dylib"
+  link_list "$APP_LIBRARY_DIRECTORY/libwx_baseu_net-3.2.0.3.0.dylib" "libwx_osx_cocoau_core-3.2.0.3.0.dylib libwx_baseu-3.2.0.3.0.dylib libjpeg.9.dylib libcurl.4.dylib"
+  link_list "$APP_LIBRARY_DIRECTORY/libtiff.6.dylib" "libzstd.1.dylib liblzma.5.dylib libjpeg.8.dylib"
 
 
 

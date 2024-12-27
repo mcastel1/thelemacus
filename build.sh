@@ -15,22 +15,12 @@ NC='\033[0m' # No Color
 #the name of the app that you want to create
 APP_NAME='ToyThelemacus'
 APP_VERSION='1.0'
-USER_NAME='michelecastellana'
-# USER_NAME='macbookpro'
-MINIMUM_SYSTEM_VERSION='10.13'
-#the path to the .cpp file
-INPUT_PATH='/Users/'$USER_NAME'/Documents/thelemacus'
-MINIMAL_PATH="/Applications/wxWidgets-3.2.6-release/samples/minimal"
-OUTPUT_PATH='/Users/'$USER_NAME'/Desktop'
-#the path to the icon of the app
-ICON_NAME='juventus-icon.icns'
-ICON_PATH=$MINIMAL_PATH'/'$ICON_NAME
-APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries'
-WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
 WXWIDGETS_TO_REPLACE_DIRECTORY='/usr/local/lib'
 
 #settings for old mac
-: <<'END'
+# : <<'END'
+USER_NAME='macbookpro'
+WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
 BOOST_NAME='boost_1_87_0'
 WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
 LIBWX_COCOAU_XRC_NAME='libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
@@ -67,10 +57,12 @@ LIBLZMA_NAME='liblzma.5.dylib'
 
 LIBZSTD_LIB_DIRECTORY='/usr/local/opt/zstd/lib'
 LIBZSTD_NAME='libzstd.1.dylib'
-END
+# END
 
 #settings for new mac
-# : <<'END'
+: <<'END'
+USER_NAME='michelecastellana'
+WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
 BOOST_NAME='boost_1_86_0'
 WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
 LIBWX_COCOAU_XRC_NAME='libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
@@ -107,8 +99,17 @@ LIBLZMA_NAME='liblzma.5.dylib'
 
 LIBZSTD_LIB_DIRECTORY='/opt/homebrew/opt/zstd/lib'
 LIBZSTD_NAME='libzstd.1.dylib'
-# END
+END
 
+MINIMUM_SYSTEM_VERSION='10.13'
+#the path to the .cpp file
+INPUT_PATH='/Users/'$USER_NAME'/Documents/thelemacus'
+MINIMAL_PATH="/Applications/wxWidgets-3.2.6-release/samples/minimal"
+OUTPUT_PATH='/Users/'$USER_NAME'/Desktop'
+#the path to the icon of the app
+ICON_NAME='juventus-icon.icns'
+ICON_PATH=$MINIMAL_PATH'/'$ICON_NAME
+APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries'
 BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
 
 
@@ -213,7 +214,6 @@ LIST_LIBRARIES_TO_COPY=$LIST_LIBRARIES_TO_COPY' '$LIBGSL_LIB_DIRECTORY'/'$LIBGSL
 #copy the list of libraries
 cp $LIST_LIBRARIES_TO_COPY $APP_LIBRARY_DIRECTORY
 
-WXWIDGETS_TO_REPLACE_DIRECTORY='/Applications/wxWidgets-3.2.6-release/my_build/lib'
 
 #link libraries to libraries contained in the application bundle, so the app is self-sufficient
 link_list "$LIBPNG_NAME" "$LIBWX_COCOAU_CORE_NAME $LIBJPEG_NAME $LIBPCRE2_NAME $LIBTIFF_NAME $LIBCURL_NAME"

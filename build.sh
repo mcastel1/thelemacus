@@ -15,8 +15,8 @@ NC='\033[0m' # No Color
 #the name of the app that you want to create
 APP_NAME='ToyThelemacus'
 APP_VERSION='1.0'
-# USER_NAME='michelecastellana'
-USER_NAME='macbookpro'
+USER_NAME='michelecastellana'
+# USER_NAME='macbookpro'
 MINIMUM_SYSTEM_VERSION='10.13'
 #the path to the .cpp file
 INPUT_PATH='/Users/'$USER_NAME'/Documents/thelemacus'
@@ -28,13 +28,10 @@ ICON_PATH=$MINIMAL_PATH'/'$ICON_NAME
 APP_LIBRARY_DIRECTORY=$OUTPUT_PATH'/'$APP_NAME'.app/Contents/Resources/Libraries'
 WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
 WXWIDGETS_TO_REPLACE_DIRECTORY='/usr/local/lib'
-# BOOST_NAME='boost_1_86_0'
-BOOST_NAME='boost_1_87_0'
-BOOST_INCLUDE_DIRECTORY='/Applications/'$BOOST_NAME'/'
-BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
 
 #settings for old mac
-#: <<'END'
+: <<'END'
+BOOST_NAME='boost_1_87_0'
 WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
 LIBWX_COCOAU_XRC_NAME='libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
 LIBWX_COCOAU_HTML_NAME='libwx_osx_cocoau_html-3.2.0.3.0.dylib'
@@ -70,21 +67,49 @@ LIBLZMA_NAME='liblzma.5.dylib'
 
 LIBZSTD_LIB_DIRECTORY='/usr/local/opt/zstd/lib'
 LIBZSTD_NAME='libzstd.1.dylib'
-#END
+END
 
 #settings for new mac
-: <<'END'
-# LIBPNG_LIB_DIRECTORY='/opt/homebrew/Cellar/libpng/1.6.44/lib'
-# LIBJPEG_LIB_DIRECTORY='/opt/homebrew/opt/jpeg/lib'
-# LIBPCRE2_LIB_DIRECTORY='/opt/homebrew/opt/pcre2/lib'
-# LIBTIFF_LIB_DIRECTORY='/opt/homebrew/opt/libtiff/lib'
-# LIBICONV_LIB_DIRECTORY='/opt/homebrew/Cellar/libiconv/1.17/lib'
-# LIBCURL_LIB_DIRECTORY='/opt/homebrew/Cellar/curl/8.5.0/lib'
-# LIBZ_LIB_DIRECTORY='/opt/homebrew/Cellar/zlib/1.3.1/lib'
-# LIBGSL_LIB_DIRECTORY='/usr/local/lib/my_gsl/arm64/lib'
-# LIBLZMA_LIB_DIRECTORY=''
-# LIBZSTD_LIB_DIRECTORY=''
-END
+# : <<'END'
+BOOST_NAME='boost_1_86_0'
+WXWIDGETS_LIB_DIRECTORY=$WXWIDGETS_ROOT_DIRECTORY'/my_build/lib'
+LIBWX_COCOAU_XRC_NAME='libwx_osx_cocoau_xrc-3.2.0.3.0.dylib'
+LIBWX_COCOAU_HTML_NAME='libwx_osx_cocoau_html-3.2.0.3.0.dylib'
+LIBWX_COCOAU_QA_NAME='libwx_osx_cocoau_qa-3.2.0.3.0.dylib'
+LIBWX_COCOAU_CORE_NAME='libwx_osx_cocoau_core-3.2.0.3.0.dylib'
+LIBWX_BASEU_NAME='libwx_baseu-3.2.0.3.0.dylib'
+LIBWX_BASEU_XML_NAME='libwx_baseu_xml-3.2.0.3.0.dylib'
+LIBWX_BASEU_NET_NAME='libwx_baseu_net-3.2.0.3.0.dylib'
+
+LIBPNG_LIB_DIRECTORY='/usr/local/Cellar/libpng/1.6.44/lib'
+LIBPNG_NAME='libpng16.16.dylib'
+
+LIBJPEG_LIB_DIRECTORY='/usr/local/opt/jpeg-turbo/lib'
+LIBJPEG_NAME='libjpeg.8.dylib'
+
+LIBPCRE2_LIB_DIRECTORY='/usr/local/Cellar/pcre2/10.44/lib'
+LIBPCRE2_NAME='libpcre2-32.0.dylib'
+
+LIBTIFF_LIB_DIRECTORY='/usr/local/Cellar/libtiff/4.7.0/lib'
+LIBTIFF_NAME='libtiff.6.dylib'
+
+LIBICONV_LIB_DIRECTORY='/usr/local/Cellar/libiconv/1.17/lib'
+LIBICONV_NAME='libiconv.2.dylib'
+
+LIBCURL_LIB_DIRECTORY=' /usr/local/Cellar/curl/8.11.0_1/lib'
+LIBCURL_NAME='libcurl.4.dylib'
+
+LIBGSL_LIB_DIRECTORY='/usr/local/lib'
+LIBGSL_NAME='libgsl.28.dylib'
+
+LIBLZMA_LIB_DIRECTORY='/usr/local/Cellar/xz/5.6.3/lib'
+LIBLZMA_NAME='liblzma.5.dylib'
+
+LIBZSTD_LIB_DIRECTORY='/usr/local/opt/zstd/lib'
+LIBZSTD_NAME='libzstd.1.dylib'
+# END
+
+BOOST_LIB_DIRECTORY='/Applications/'$BOOST_NAME'/universal'
 
 
 

@@ -18,7 +18,7 @@ APP_VERSION='1.0'
 WXWIDGETS_TO_REPLACE_DIRECTORY='/usr/local/lib'
 
 #settings for old mac
-# : <<'END'
+: <<'END'
 USER_NAME='macbookpro'
 WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
 BOOST_NAME='boost_1_87_0'
@@ -57,10 +57,10 @@ LIBLZMA_NAME='liblzma.5.dylib'
 
 LIBZSTD_LIB_DIRECTORY='/usr/local/opt/zstd/lib'
 LIBZSTD_NAME='libzstd.1.dylib'
-# END
+END
 
 #settings for new mac
-: <<'END'
+# : <<'END'
 USER_NAME='michelecastellana'
 WXWIDGETS_ROOT_DIRECTORY='/Applications/wxWidgets-3.2.6-release'
 BOOST_NAME='boost_1_86_0'
@@ -99,7 +99,7 @@ LIBLZMA_NAME='liblzma.5.dylib'
 
 LIBZSTD_LIB_DIRECTORY='/opt/homebrew/opt/zstd/lib'
 LIBZSTD_NAME='libzstd.1.dylib'
-END
+# END
 
 MINIMUM_SYSTEM_VERSION='10.13'
 #the path to the .cpp file
